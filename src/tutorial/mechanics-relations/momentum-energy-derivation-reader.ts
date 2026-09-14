@@ -1,6 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
-import { energyDerivationFocus, sampleEnergyDerivationPresentation } from "./energy-derivation-presentation.ts";
+import { energyDerivationFocus, sampleEnergyDerivationPresentation, resolveEnergyDerivationPosition } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
@@ -14,6 +14,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let session: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
   let selected = 0, tracing = false, loading = false, generation = 0;
+  let pendingSeek: number | undefined, seeking = false;
   let sourceTop = 0, rowDistance = 0;
   let anchors = [{ x: 0, y: 0 }, { x: 0, y: 0 }], pointerEnd = 0;
   const cue = get<HTMLElement>("[data-derivation-cue]");
@@ -46,7 +47,14 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       // prospective record, not another mathematical or material paint owner.
       row.dataset["visibleEquation"] = String(past || i > selected + 1 || (i === selected + 1 && p === 0));
     });
-    slider.value = String(p);
+    const position = selected + p;
+    root.dataset["derivationProgress"] = String(position);
+    if (!seeking) slider.value = String(position);
+    slider.setAttribute("aria-valuetext", Number.isInteger(position) ? `Equation ${position + 1}, ${position} of 3 moves completed` : `Move ${selected + 1} of 3, ${Math.round(p * 100)} percent`);
+    root.querySelectorAll<HTMLButtonElement>("[data-derivation-checkpoint]").forEach(button => {
+      if (Number(button.dataset["derivationCheckpoint"]) === position) button.setAttribute("aria-current", "step");
+      else button.removeAttribute("aria-current");
+    });
     count.value = `${selected + (p === 1 ? 1 : 0)} / 3 moves${p > 0 && p < 1 ? " · in progress" : ""}`;
     previous.disabled = selected === 0 && p === 0;
     next.disabled = selected === 2 && p === 1;
@@ -55,7 +63,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   clock.subscribe(project);
   const retire = () => { generation++; session?.dispose(); session = undefined; };
   const read = () => {
-    clock.pause(); retire(); tracing = false; loading = false;
+    pendingSeek = undefined; clock.pause(); retire(); tracing = false; loading = false;
     root.dataset["tracing"] = "false"; stage.hidden = true;
     rows.forEach(row => { row.hidden = false; delete row.dataset["traceRole"]; delete row.dataset["visibleEquation"]; });
     get("[data-derivation-notes]").hidden = false; get("[data-derivation-key]").hidden = true; pointer.setAttribute("hidden", "");
@@ -131,7 +139,26 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   }, opts);
   get("[data-derivation-replay]").addEventListener("click", () => { if (session && !loading) { clock.seek(0); play("forward"); } }, opts);
   get("[data-derivation-read]").addEventListener("click", read, opts);
-  slider.addEventListener("input", () => { if (!loading) clock.seek(Number(slider.value)); }, opts);
+  // Serialize native scene replacement and coalesce gesture samples. Dropping
+  // input while loading makes backwards gestures appear to lock at boundaries.
+  async function seekDerivation(position: number) {
+    resolveEnergyDerivationPosition(position);
+    clock.pause(); pendingSeek = position; slider.value = String(position);
+    if (seeking) return;
+    seeking = true;
+    try {
+      while (pendingSeek !== undefined && tracing) {
+        const requested = pendingSeek; pendingSeek = undefined;
+        const destination = resolveEnergyDerivationPosition(requested);
+        if (session && !loading && destination.move === selected) clock.seek(destination.progress);
+        else await mount(destination.move, destination.progress);
+      }
+    } finally { seeking = false; project(); }
+  }
+  slider.addEventListener("input", () => { void seekDerivation(Number(slider.value)); }, opts);
+  root.querySelectorAll<HTMLButtonElement>("[data-derivation-checkpoint]").forEach(button => {
+    button.addEventListener("click", () => { void seekDerivation(Number(button.dataset["derivationCheckpoint"])); }, opts);
+  });
   const pause = () => { clock.pause(); project(); };
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. Continue with the existing Next control afterward.

@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Momentum-energy relational reader",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at revised r2: fixed compact proof slots, intact carry then canonical algebra, anchored callouts. Resume r3 only after acceptance.",
+  "summary": "HUMAN_CHECKPOINT at r2 whole-derivation transport refinement. Resume only after visual acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,7 +46,7 @@
     {
       "id": "r2",
       "title": "Canonical reader exemplar and human review",
-      "summary": "HUMAN_CHECKPOINT: compact anticipatory four-row proof, carry-then-transform phases and anchored callouts implemented. Ten unit and six browser checks, types/build and architecture pass. Await visual approval before r3.",
+      "summary": "HUMAN_CHECKPOINT: whole-derivation slider and equation checkpoint buttons implemented. Local animated Next/Previous and compact proof preserved; verified cross-boundary rapid seek, keyboard, unit tests and build.",
       "status": "in-progress"
     },
     {

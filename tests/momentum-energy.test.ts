@@ -10,7 +10,18 @@ import { projectMomentumEnergyAttention } from "../src/tutorial/mechanics-relati
 import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMomentumEnergyDerivation } from "../domains/physics/momentum-energy-derivation.ts";
 import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createEnergyDerivationPlan, assertEnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
-import { sampleEnergyDerivationPresentation, energyDerivationFocus } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+import { sampleEnergyDerivationPresentation, energyDerivationFocus, resolveEnergyDerivationPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+
+test("whole-proof positions resolve to stable completed checkpoints and continuous local coordinates", () => {
+  assert.deepEqual(resolveEnergyDerivationPosition(0), { move: 0, progress: 0 });
+  for (const n of [1, 2, 3]) assert.deepEqual(resolveEnergyDerivationPosition(n), { move: n - 1, progress: 1 });
+  for (let i = 0; i <= 300; i++) {
+    const value = i / 100, resolved = resolveEnergyDerivationPosition(value);
+    assert.equal(resolved.move + resolved.progress, value);
+    assert.ok(resolved.progress >= 0 && resolved.progress <= 1);
+  }
+  for (const value of [-.1, 3.1, NaN, Infinity]) assert.throws(() => resolveEnergyDerivationPosition(value));
+});
 
 test("proof carry cannot advance algebra and all callout targets belong to the checked source", () => {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);

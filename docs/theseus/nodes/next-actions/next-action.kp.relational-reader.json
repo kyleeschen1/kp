@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: compact anticipatory derivation revision implemented and verified at mechanics-relations energy-from-momentum. Await visual acceptance; no r3-r5 work.",
+  "summary": "HUMAN_CHECKPOINT: review whole-derivation timeline at mechanics-relations energy-from-momentum. No scrolling viewport or r3-r5 work.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -188,6 +188,27 @@
       "scope": "compact proof integration",
       "checkedAt": "2026-09-14T19:41:04.574Z",
       "notes": "Full types, Svelte diagnostics, domain checks, production build and architecture gates pass. Existing large-chunk warnings remain."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "whole-derivation position mapping",
+      "checkedAt": "2026-09-14T19:52:00.153Z",
+      "notes": "Eleven tests; exact checkpoint identity, continuous coordinate round trips and invalid-position rejection."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "whole-derivation transport discovery",
+      "checkedAt": "2026-09-14T19:52:01.973Z",
+      "notes": "Seven Chromium tests; cross-step seek, latest rapid gesture, checkpoint buttons, keyboard endpoints, local replay, compact history and static reading."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "whole-derivation transport integration",
+      "checkedAt": "2026-09-14T19:52:33.922Z",
+      "notes": "Full type checks and production build pass; existing large-chunk warnings remain."
     }
   ],
   "expectedLearning": [

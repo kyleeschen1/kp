@@ -31,3 +31,12 @@ export const energyDerivationFocus = [
   { source: "energy.scale-magnitude.0.power", target: "energy.scale-magnitude.1.power-bottom" },
   { source: "energy.cancel-mass.0.scalar-before", target: "energy.cancel-mass.1.scalar-after" }
 ] as const;
+
+/** An integer denotes the completed equation, not the next move's opening
+ * frame. This makes checkpoint jumps and reverse agree at shared boundaries. */
+export function resolveEnergyDerivationPosition(position: number) {
+  const total = energyDerivationFocus.length;
+  if (!Number.isFinite(position) || position < 0 || position > total) throw new RangeError("Invalid derivation position");
+  const move = Math.max(0, Math.ceil(position) - 1);
+  return { move, progress: position - move };
+}

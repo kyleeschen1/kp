@@ -25,6 +25,8 @@ compositor extension. The candidate now animates three checked moves through the
 canonical native-KaTeX session. The September 14 refinement now uses compact
 fixed proof slots, upcoming previews, intact carry followed by local algebra,
 and a semantic-target callout beside the proof (docked above on phones).
+Its slider now spans the full derivation with equation checkpoint marks;
+Next/Previous remain local animated moves. Longer-proof scrolling is deferred.
 The scalar LaTeX probe remains unsupported; a
 bounded physics source supplies this exemplar instead. See the review packet for
 the current HUMAN_CHECKPOINT, exact limitations and verification. Do not start

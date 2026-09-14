@@ -12,6 +12,17 @@ fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
 
+### Accepted whole-derivation transport refinement (2026-09-14)
+
+The user approved one continuous slider across the existing three moves, with
+four equation checkpoints. Next/Previous still animate only to an adjacent
+mathematical endpoint; Replay repeats the local move. The slider never resets
+between moves. Exact checkpoint selection resolves to the completed equation,
+and rapid cross-boundary input must preserve the latest requested position.
+Keep the compact proof and current motifs unchanged. A scrolling proof viewport
+or chaptered timeline requires a longer exemplar and is not part of this slice.
+The rollback unit is the derivation transport/control projection; stop at r2 review.
+
 ### Accepted compact proof-history refinement (2026-09-14)
 
 The user approved revising the first derivation only: fixed compact rows with

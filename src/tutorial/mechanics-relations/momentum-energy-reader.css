@@ -60,6 +60,10 @@
 .energy-derivation [data-trace-role="prospective"] .energy-derivation-row-marker::after { content: "·"; }
 .energy-derivation-scrub { display: block; }
 .energy-derivation-scrub input { display: block; width: 100%; min-height: 2.75rem; accent-color: #236b8e; }
+.energy-derivation-checkpoints { display: flex; justify-content: space-between; }
+.energy-derivation-checkpoints button { position: relative; min-height: 2.75rem; padding: .2rem .4rem; border: 0; background: transparent; color: inherit; font: inherit; font-size: .8em; cursor: pointer; }
+.energy-derivation-checkpoints button::before { content: ""; display: block; width: 1px; height: .4rem; margin: auto; background: currentColor; }
+.energy-derivation-checkpoints button[aria-current] { color: #236b8e; text-decoration: underline; text-underline-offset: .2rem; }
 @media print { .energy-derivation-controls, .energy-derivation-stage, .energy-derivation-scrub { display: none !important; } .energy-derivation .energy-derivation-equation { visibility: visible !important; } }
 /* Printing must retain the whole argument even during a partial trace. */
 @media print { .energy-derivation .energy-derivation-history li[hidden], .energy-derivation .energy-derivation-history .energy-derivation-reason[hidden] { display: block !important; } .energy-derivation-active-cue { display: none !important; } }

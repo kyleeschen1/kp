@@ -1,6 +1,25 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: compact anticipatory proof (2026-09-14)
+## Current review: one whole-derivation timeline (2026-09-14)
+
+At <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>,
+select **Trace these steps**. The slider now spans the entire three-move
+argument, with Start and three completed-equation checkpoint buttons. Drag
+across any boundary or choose a checkpoint; Next/Previous still animate one
+local move and Replay repeats that move. Native Home/End reaches the full
+argument's endpoints. Screen-reader value text distinguishes the current move
+from a completed equation. Compact rows, callouts and canonical algebra remain
+unchanged; no scrolling viewport or longer-proof abstraction was introduced.
+
+The transport resolves exact boundaries to the preceding completed move.
+Scene replacements serialize and coalesce pending gesture samples rather than
+discarding them while loading. The thumb retains the latest requested position.
+Focused tests cover all boundaries, rapid forward/backward requests, checkpoint
+buttons, native keyboard endpoints and the existing per-move replay stops.
+Eleven focused unit tests and seven scoped Chromium checks pass; full build/type
+verification is recorded in Theseus. This is an r2 visual checkpoint, not r3.
+
+## Previous review: compact anticipatory proof (2026-09-14)
 
 Open <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>
 and select **Trace these steps**. The same three mathematical moves now use

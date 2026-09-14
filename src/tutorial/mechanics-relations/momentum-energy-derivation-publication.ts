@@ -38,7 +38,10 @@ export function renderEnergyDerivationPassage(markdown: string) {
     <aside class="energy-derivation-reason energy-derivation-active-cue" data-derivation-cue aria-label="Current step explanation" hidden></aside>
     </div>
     <p class="energy-derivation-key" data-derivation-key hidden>Numbered rows show the route. Muted rows are upcoming; completed rows remain for reference.</p>
-    <label class="energy-derivation-scrub" data-derivation-scrub hidden>Inspect this move <input type="range" min="0" max="1" step="any" value="0" aria-label="Derivation move progress"></label>
+    <div class="energy-derivation-scrub" data-derivation-scrub hidden>
+      <label>Inspect the whole derivation <input type="range" min="0" max="${compiled.moves.length}" step="any" value="0" aria-label="Whole derivation progress"></label>
+      <div class="energy-derivation-checkpoints" role="group" aria-label="Equation checkpoints">${momentumEnergyDerivationStates.map((_, i) => `<button type="button" data-derivation-checkpoint="${i}" aria-label="Go to equation ${i + 1}${i === 0 ? ', starting point' : `, ${i} completed moves`}">${i === 0 ? "Start" : `Eq. ${i + 1}`}</button>`).join("")}</div>
+    </div>
     <div data-derivation-notes>${compiled.moves.map(move => `<details class="energy-derivation-note"><summary>${move.title}</summary><div data-derivation-reason="${move.index}">${html(move.cue)}<details><summary>Why is this allowed?</summary>${html(move.why)}</details></div></details>`).join("")}</div>
     ${compiled.moves.map(move => `<template data-derivation-template="${move.index}"><div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div></template>`).join("")}
   </div>`;
