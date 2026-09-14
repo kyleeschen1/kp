@@ -4,7 +4,7 @@
   "title": "Kinetic Press delivery",
   "status": "active",
   "domain": "kp",
-  "summary": "Execute the approved reusable question-oriented algebra loop; explicit user start lifted the brainstorm pause. Stop at s12 visual review; later geometry and cross-domain reuse remain separately scoped.",
+  "summary": "Current priority is the relational reader under the September 13 decision. The motion run is USER_PAUSED and preserved. next-action.kp.relational-reader awaits explicit five-package scope approval; historical workflow contracts are provenance, not current scope.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -62,10 +62,15 @@
     {
       "kind": "file",
       "path": "docs/project/decisions/2026-09-10-visual-repertoire-and-queryable-intuitions.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-09-13-relational-reader-priority.md"
     }
   ],
   "decisions": [],
   "nextActions": [
+    "next-action.kp.relational-reader",
     "next-action.kp.perfect-the-reader-gold-equation-card-v0",
     "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
     "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
@@ -711,7 +716,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Execute approved R3 via run-contract.kp.bayesian-flagship-v2 until s09 visual acceptance; R1 R2 complete."
+    "summary": "September 13 priority: relational reader; motion action and run deferred by user. Current scope proposal is next-action.kp.relational-reader and awaits approval. Medium-term gates are in docs/project/decisions/2026-09-13-relational-reader-priority.md; historical algebra and curriculum runs are not current authority."
   },
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",

@@ -1,5 +1,14 @@
 # Describing motion: approved opening delivery
 
+> Project status: paused by explicit user request on 2026-09-13 (USER_PAUSED).
+> Current source of truth: `../roadmap.md`; active thread: `relational-reader.md`.
+> Preserve this proposal, its amendments, implementation and evidence. The Theseus
+> contract and target are deferred, not complete; no slice status is reset.
+> Return only on explicit user re-selection; retrieval and preserved commits:
+> `../decisions/2026-09-13-relational-reader-priority.md`.
+> The approval and instructions below are preserved historical scope, not current
+> authority to continue during the new priority.
+
 Status: approved by the user's “record it and then go” after the revised trajectory.
 Mode: interactive kp-delivery-loop; no minimum slice count.
 Accepted P2 amendment: the user accepted attention clarity, not the instructional

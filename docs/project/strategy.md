@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-09-11
+Last Updated: 2026-09-13
 
 ## North Star
 
@@ -18,6 +18,16 @@ inspectable and executable; the compiler is core machinery, not the complete
 learner-facing product definition.
 
 ## Product Thesis
+
+Accepted refinement (2026-09-13): realize the medium as excellent technical
+reading with relationships that can be inspected, unfolded, compared and reused
+without losing the argument. Preserve the semantic infrastructure; prioritize
+one integrated understanding repair, then demonstrated source-only reuse and a
+structurally different caller, then a small connected collection and repeatable
+authoring. Persistent stage means recoverable context, not permanent visibility.
+Cards are projections, not compulsory lesson units. Strong static explanations,
+independent reconstruction, authoring economics and browser cost are comparators.
+See `decisions/2026-09-13-relational-reader-priority.md`; roadmap owns live work.
 
 Accepted priority (2026-09-11): use question-led classical mechanics as the first
 sustained student/author case for deeper applied-mathematical and modelling

@@ -1,5 +1,11 @@
 # Typed Semantic Authoring Framework Thread
 
+> Project status: supporting/preserved thread as of 2026-09-13, not the active queue.
+> Current source of truth: `../roadmap.md`; active thread: `relational-reader.md`.
+> The user parked the motion loop and accepted the relational-reader direction.
+> Earlier imperative status entries below are historical; do not resume them.
+> Preservation and return: `../decisions/2026-09-13-relational-reader-priority.md`.
+
 Status: readiness complete; opening motion-description delivery approved
 Current review refinement: attention treatment accepted; P2 packaging not yet
 accepted. Apply `../principles/focus-card-medium-choice.md`: every card must earn

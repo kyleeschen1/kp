@@ -1,9 +1,10 @@
 # KP Roadmap
 
-Last Updated: 2026-09-12
+Last Updated: 2026-09-13
 Status: active
-Active Thread: `threads/typed-semantic-authoring-framework.md`
+Active Thread: `threads/relational-reader.md`
 Supporting Threads:
+- `threads/typed-semantic-authoring-framework.md`
 - `threads/focus-deck.md`
 - `threads/animation-catalogue.md`
 - `threads/generative-animation-compiler.md`
@@ -23,6 +24,28 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+Accepted priority (2026-09-13): a relational technical reader—excellent prose
+with inspectable comparisons, expandable reasoning, exact return, context and
+reconstruction. Canonical decision and medium-term gates:
+`decisions/2026-09-13-relational-reader-priority.md`.
+Current proposal: `threads/2026-09-13-relational-reader-delivery-proposal.md`.
+The direction is accepted; its five-package implementation scope awaits approval.
+Theseus target: `next-action.kp.relational-reader`. Issue its run contract only
+after that approval. Follow KP delivery policy, not a minimum-slice long-loop quota.
+
+The user explicitly parked `run-contract.kp.mechanics-motion-v1` and its action.
+The old plan, code and evidence remain resumable; do not execute its P2 checkpoint
+or P3/P4 without explicit re-selection. From-zero mechanics remains a learning
+path, not the active implementation queue. The medium-term order is one complete
+experience, source-only reuse/different caller, connected collection, and a proven
+authoring workflow. The decision owns details; Theseus owns execution status.
+
+## Preserved earlier direction — not current execution authority
+
+The following September 12 and older entries are provenance. Where they say
+"current", "approved delivery" or "proceed", the September 13 priority above
+controls. Completed readiness work remains evidence; the motion loop is paused.
 
 Accepted refinement (2026-09-12): focus cards must justify their perceptual gain
 over a static baseline; see `principles/focus-card-medium-choice.md`. The motion

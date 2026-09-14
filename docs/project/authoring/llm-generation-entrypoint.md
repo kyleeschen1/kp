@@ -12,8 +12,7 @@ animation object graph from prose.
 ## Context Loading Order
 
 1. `../roadmap.md`
-2. the active thread named by that roadmap (currently
-   `../threads/typed-semantic-authoring-framework.md`)
+2. the active thread named by that roadmap (do not hardcode a historical thread)
 3. `../principles/system-vocabulary.md`
 4. the exact task source and its canonical exemplar
 5. one relevant authoring contract or renderer guide

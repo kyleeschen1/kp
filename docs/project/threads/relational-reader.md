@@ -1,0 +1,42 @@
+# Relational reader delivery
+
+Status: active priority; first implementation proposal awaiting user approval
+Last Updated: 2026-09-13
+
+## Canonical direction
+
+Read the accepted [priority and medium-term gates](../decisions/2026-09-13-relational-reader-priority.md).
+The [assessment](../reviews/2026-09-13-next-step-review.md) supplies code evidence
+and rationale; the [handoff](../inbox/kinetic_press_relational_learning_codex_handoff.md)
+is provenance, not a competing queue.
+
+The current question is **How can a force change momentum without changing
+kinetic energy?** Build excellent reading plus a bounded inspectable comparison,
+not another card-first lesson. Article/vignette and domain-owned semantics remain
+authoritative. A persistent-stage reader is a projection/host integration.
+
+## Current proposal and control
+
+Only human-readable implementation proposal:
+`2026-09-13-relational-reader-delivery-proposal.md`.
+Theseus target: `next-action.kp.relational-reader`, awaiting scope approval.
+No executable run contract is issued until that proposal is approved. Its stable
+package IDs will bind the contract; this thread must not duplicate slice status.
+
+Subsequent loops follow the decision's outcome gates: complete experience,
+source-only reuse/different caller, connected collection, repeated authoring path.
+Select the next observed bottleneck, not tasks to fill a long-loop quota. Do not
+start future gates just because the first finishes with unused capacity.
+
+## Preservation and handoff
+
+The prior motion proposal and `run-contract.kp.mechanics-motion-v1` are parked,
+not abandoned or completed. See the decision for exact retrieval/resumption and
+preserved commits. The from-zero mechanics curriculum remains a learning path;
+it is not permission to build twelve lessons or a prerequisite to this exemplar.
+Existing equation, tax, gradient, Bayesian, code, 2D and 3D capabilities remain
+preserved. No generic theseus-long-loop requirement overrides this KP proposal.
+
+Start future sessions at the roadmap, this thread and `npm run theseus -- plan run`.
+Before implementation, use `llm-generation-entrypoint.md`, its selected domain
+packet, the explanation worksheet and the visual-salience skill as applicable.

@@ -2,7 +2,7 @@
   "id": "run-contract.kp.mechanics-motion-v1",
   "kind": "run-contract",
   "title": "Describing motion",
-  "status": "ready",
+  "status": "deferred",
   "sourceRefs": [
     {
       "kind": "file",
@@ -19,6 +19,9 @@
     "npm run typecheck",
     "npm run test",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "Explicit user decision to resume the preserved motion proposal after relational-reader priorities; retain p1 complete and unfinished p2-p4 without resetting evidence."
   ],
   "allowedWork": [
     "Approved four-package proposal; bounded nonvisual repairs; six active hours with final hour reserved"

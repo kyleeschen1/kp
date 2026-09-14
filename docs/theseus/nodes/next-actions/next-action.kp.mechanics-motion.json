@@ -2,7 +2,7 @@
   "id": "next-action.kp.mechanics-motion",
   "kind": "next-action",
   "title": "Describe motion through reusable position-time evidence",
-  "status": "ready",
+  "status": "deferred",
   "summary": "Approved opening unit and graph-reading bridge; origin change is supporting, not a whole lesson",
   "sourceRefs": [
     {
@@ -72,6 +72,9 @@
       "checkedAt": "2026-09-12T22:12:54.253Z",
       "notes": "Full app, Node, test, Svelte and domain types pass on the revised lesson. Dependency-direction and whitespace checks pass. No new package dependencies or shared font policy changes; full release/browser matrix remains P4 after visual acceptance."
     }
+  ],
+  "revisitWhen": [
+    "USER_PAUSED by explicit September 13 priority change. Return only if user reselects the preserved motion proposal; see docs/project/decisions/2026-09-13-relational-reader-priority.md."
   ],
   "expectedLearning": [
     "Can a motivated motion explanation reuse mathematical truth without competing time or renderer ownership?"

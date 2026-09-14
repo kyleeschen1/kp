@@ -1,0 +1,58 @@
+{
+  "id": "next-action.kp.relational-reader",
+  "kind": "next-action",
+  "title": "Deliver the momentum-energy relational reader",
+  "status": "blocked",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: accepted priority, awaiting explicit approval of the five-package September 13 delivery proposal. No implementation authorized yet.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md"
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "priority-and-parking-records-only",
+      "checkedAt": "2026-09-14T03:34:32.599Z",
+      "notes": "1132 nodes and 30743 events valid after deferring the old run/action, closing the interrupted receipt, and registering the blocked proposal. Documentation and control-plane evidence only; no new reader implementation or runtime certification."
+    }
+  ],
+  "expectedLearning": [
+    "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
+  ],
+  "allowedWork": [
+    "Approval-gated r1-r5 in docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md; direction accepted but runtime work waits for scope approval."
+  ],
+  "disallowedWork": [
+    "No old-loop resumption, universal runtime, cross-domain promotion, new font identity, accounts, tutor, analytics, paid calls, deployment, merge or push."
+  ],
+  "criteria": [
+    {
+      "id": "explanation",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-authority",
+      "weight": "high"
+    },
+    {
+      "id": "source-only-reuse",
+      "weight": "high"
+    },
+    {
+      "id": "reader-continuity",
+      "weight": "high"
+    }
+  ]
+}

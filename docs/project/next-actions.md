@@ -1,11 +1,23 @@
 # KP Next Actions
 
-Last Updated: 2026-09-07
+Last Updated: 2026-09-13
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
+
+Review/approve `threads/2026-09-13-relational-reader-delivery-proposal.md`.
+Accepted direction: `decisions/2026-09-13-relational-reader-priority.md`;
+active thread: `threads/relational-reader.md`. Theseus target:
+`next-action.kp.relational-reader`; no implementation contract until scope approval.
+The motion loop is deferred and recoverable, not completed. Medium-term outcome
+gates live in the decision; do not duplicate their tasks/status here.
+
+## Preserved September 7 queue — superseded as execution authority
+
+Use the roadmap for current priority. The following entries remain provenance,
+not permission to resume older contracts or exclude the accepted new work.
 
 The authoring-first integration direction is accepted in
 `decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
