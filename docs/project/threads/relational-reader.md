@@ -22,8 +22,10 @@ The user accepted the page's appearance but requested animated algebraic
 unfolding: persistent derivation history and local reasons, beginning with only
 the substitution chain. The user subsequently approved the bounded semantic and
 compositor extension. The candidate now animates three checked moves through the
-canonical native-KaTeX session, with persistent history and a stationary reason
-above the working expression. The scalar LaTeX probe remains unsupported; a
+canonical native-KaTeX session. The September 14 refinement now uses compact
+fixed proof slots, upcoming previews, intact carry followed by local algebra,
+and a semantic-target callout beside the proof (docked above on phones).
+The scalar LaTeX probe remains unsupported; a
 bounded physics source supplies this exemplar instead. See the review packet for
 the current HUMAN_CHECKPOINT, exact limitations and verification. Do not start
 differentiation, a second caller or motif promotion before visual acceptance.

@@ -55,6 +55,10 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
         // tracks; it never mutates DOM or creates an external material layer.
         const start = pose(0), end = pose(1);
         return Object.freeze({ ...track,
+          // These exact proof-selected contributors intentionally converge to
+          // one ink knot. Declare their contact, as the shared evaluation motif
+          // does, without exempting any persistent context from collision checks.
+          intentionalContactGroupId: `contact.physics.energy.${move.id}.ink-knot`,
           startRect: { ...native, left: native.left + start.translateX, top: native.top + start.translateY },
           endRect: { ...native, left: native.left + end.translateX, top: native.top + end.translateY },
           ...(paint ? { startPaintRect: { ...paint, left: paint.left + start.translateX, top: paint.top + start.translateY },

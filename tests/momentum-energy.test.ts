@@ -10,6 +10,26 @@ import { projectMomentumEnergyAttention } from "../src/tutorial/mechanics-relati
 import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMomentumEnergyDerivation } from "../domains/physics/momentum-energy-derivation.ts";
 import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createEnergyDerivationPlan, assertEnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
+import { sampleEnergyDerivationPresentation, energyDerivationFocus } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+
+test("proof carry cannot advance algebra and all callout targets belong to the checked source", () => {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(checked.status, "checked"); if (checked.status !== "checked") return;
+  const compiled = compileMomentumEnergyDerivation(checked.model);
+  for (const [i, focus] of energyDerivationFocus.entries()) {
+    assert.ok(compiled.moves[i]!.transformation.correspondenceMap!.records.some(r => r.sourceSelectorIds.includes(focus.source)));
+    assert.ok(compiled.moves[i]!.transformation.correspondenceMap!.records.some(r => r.targetSelectorIds.includes(focus.target)));
+  }
+  const forward = Array.from({ length: 101 }, (_, i) => sampleEnergyDerivationPresentation(i / 100));
+  for (const [i, frame] of forward.entries()) {
+    if (frame.carry < 1) assert.equal(frame.algebra, 0);
+    if (frame.phase === "orient") assert.equal(frame.algebra, 0);
+    assert.deepEqual(sampleEnergyDerivationPresentation(i / 100), frame);
+  }
+  for (let i = 100; i >= 0; i--) assert.deepEqual(sampleEnergyDerivationPresentation(i / 100), forward[i]);
+  assert.equal(forward[100]!.algebra, 1);
+  for (const bad of [NaN, -1, 1.01]) assert.throws(() => sampleEnergyDerivationPresentation(bad));
+});
 
 test("vector derivation accepts only its bounded assumptions and keeps runtime roles tied to governed source", () => {
   for (const input of [null, {}, { ...momentumEnergyDerivationSource, mass: "zero" },

@@ -12,6 +12,24 @@ fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
 
+### Accepted compact proof-history refinement (2026-09-14)
+
+The user approved revising the first derivation only: fixed compact rows with
+prospective equations and retained completed history; carry the entire working
+expression into its destination before changing its internal algebra; auto-show
+one stationary callout pointing to the relevant semantic fragment. On narrow
+screens dock the callout above the proof and mark the target. Keep longer reasons
+available by disclosure; opening a reason pauses playback. Preserve ordinary
+reading, static publication, typography, checked physics and existing compositor
+ownership. Preview is suitable for this explanatory chain, not a global policy
+for prediction exercises or long proofs.
+
+Acceptance: all four slots remain stable; carry cannot advance algebra; preview
+yields before live ink enters; history remains readable; callouts do not chase
+moving symbols or cover equations/controls. The rollback unit is this exemplar's
+presentation score and host/CSS treatment. No new mathematical operations or
+catalogue-wide type/motif promotion. Return to the same r2 human checkpoint.
+
 ### Accepted persistent animated derivation amendment
 
 The user approved one exemplar in the first substitution passage: a persistent

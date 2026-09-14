@@ -5,6 +5,7 @@ const seek = (input: Locator, seconds: number) => input.evaluate((element: HTMLI
   element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
 }, seconds);
 test("persistent energy derivation uses native motion and stops at each move", async ({ page }, info) => {
+  test.setTimeout(60000);
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
@@ -12,15 +13,36 @@ test("persistent energy derivation uses native motion and stops at each move", a
   const root = page.locator("[data-energy-derivation]");
   await root.locator("[data-derivation-trace]").click();
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session", { timeout: 30000 });
+  const slots = () => root.locator("[data-derivation-row]").evaluateAll(rows => rows.map(row => ({ top: (row as HTMLElement).offsetTop, height: row.getBoundingClientRect().height })));
+  const initialSlots = await slots();
+  expect(initialSlots.reduce((sum, row) => sum + row.height, 0)).toBeLessThan(240);
+  await expect(root.locator('[data-trace-role="prospective"]')).toHaveCount(3);
   for (let i = 0; i < 3; i++) {
     await root.locator("[data-derivation-next]").click();
-    await expect(root).toHaveAttribute("data-move", String(i));
+    await expect.poll(async () => {
+      if (errors.length) throw new Error(errors.join("\n"));
+      return root.getAttribute("data-move");
+    }).toBe(String(i));
     await expect.poll(async () => {
       if (errors.length) throw new Error(errors.join("\n"));
       return Number(await root.getAttribute("data-progress"));
     }).toBeGreaterThan(.05);
     await root.locator("[data-derivation-next]").click();
-    await seek(root.locator("input"), .5);
+    await seek(root.locator("input"), .09);
+    await expect(root).toHaveAttribute("data-phase", "carry");
+    await expect(root).toHaveAttribute("data-algebra-progress", "0");
+    await expect(root.locator("[data-derivation-cue]")).toBeHidden();
+    await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
+    await root.screenshot({ path: info.outputPath(`derivation-${i}-carry.png`) });
+    await seek(root.locator("input"), .33);
+    await expect(root).toHaveAttribute("data-phase", "orient");
+    await expect(root).toHaveAttribute("data-algebra-progress", "0");
+    await expect(root.locator("[data-derivation-cue]")).toBeVisible();
+    await root.screenshot({ path: info.outputPath(`derivation-${i}-orient.png`) });
+    const arrivedTransform = await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform);
+    await seek(root.locator("input"), .66);
+    expect(await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform)).toBe(arrivedTransform);
+    expect(await slots()).toEqual(initialSlots);
     await expect(root.locator("[data-kp-editor-equation-material-layer] [data-kp-equation-material-owner-id]").first()).toBeAttached();
     await root.screenshot({ path: info.outputPath(`derivation-${i}-mid.png`) });
     await seek(root.locator("input"), 1);
@@ -39,6 +61,7 @@ test("persistent energy derivation uses native motion and stops at each move", a
   await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeLessThan(.95);
   await root.locator("[data-derivation-read]").click();
   await expect(root).toHaveAttribute("data-tracing", "false");
+  expect(await slots()).toEqual(initialSlots);
   expect(errors).toEqual([]);
 });
 test("derivation keeps narrow keyboard endpoints and complete print history", async ({ page }, info) => {
@@ -53,6 +76,7 @@ test("derivation keeps narrow keyboard endpoints and complete print history", as
   await next.press("Enter");
   await expect(root).toHaveAttribute("data-progress", "1");
   await expect(root).toHaveAttribute("data-move", "0");
+  await root.screenshot({ path: info.outputPath("derivation-narrow-callout.png") });
   await root.locator("[data-derivation-previous]").click();
   await expect(root).toHaveAttribute("data-progress", "0");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

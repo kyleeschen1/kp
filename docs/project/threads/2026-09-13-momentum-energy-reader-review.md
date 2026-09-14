@@ -1,6 +1,45 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: persistent animated substitution
+## Current review: compact anticipatory proof (2026-09-14)
+
+Open <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>
+and select **Trace these steps**. The same three mathematical moves now use
+four fixed compact rows (about 218 px for the proof at the tested desktop size).
+Muted upcoming equations show the route; completed rows remain readable. Each
+move carries the whole expression into the next row before a callout appears
+and the local algebra begins. During the carry the compositor stays at its
+unchanged native source. During algebra the scene's row position is fixed.
+
+Callouts point to checked semantic selector roles, not matched glyph strings.
+They stay stationary and their connector withdraws during local motion. At the
+endpoint it points to the result role. On narrow screens the explanation docks
+above the proof and a dot marks its target. Expanding Why pauses playback.
+Show all steps restores a compact readable chain with optional reasons; the
+standalone static Article remains unchanged. History and preview are records,
+not extra mathematical fan-out or material owners.
+
+Please judge compactness, the carry/transform distinction, and whether the
+callout makes the intended subject clear. Preview is an exemplar choice, not a
+universal policy for prediction exercises. No global salience store, new
+mathematical operation, shared typography change or second caller was added.
+
+Verification: ten focused momentum-energy tests (including pure seek/reverse,
+carry/act separation and callout target closure), six scoped Chromium tests
+(fixed row geometry, phase captures, real replay stops, reverse, narrow and
+reduced-motion endpoints, print, existing physics and static reading), app types
+and architecture gates pass. Full production build is also checked before
+handoff. Browser captures are reproducible with `npm run visual:mechanics-relations`;
+the discovery run does not claim a full supported-browser release matrix.
+
+Discovery repaired two actual defects: the compact same-row scalar fusion
+needed its exact contributor contact group declared through the existing
+compositor port; persistent context remains collision-checked. KaTeX's invisible
+metric boxes could intercept compact controls, so all read-only math paint in
+this proof now yields hit-testing. No forced clicks or global collision bypass
+were used. One early app typecheck could not write its incremental cache in the
+sandbox; the no-cache check passed and the build uses approved filesystem access.
+
+## Previous review: persistent animated substitution
 
 Open <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
 Choose **Trace these steps**, then **Next** for each of three moves:

@@ -26,15 +26,20 @@ export function renderEnergyDerivationPassage(markdown: string) {
       <output data-derivation-count aria-live="polite"></output>
     </div>
     <p data-derivation-status role="status" hidden></p>
-    <div class="energy-derivation-reason energy-derivation-active-cue" data-derivation-cue hidden></div>
+    <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">
       <ol class="energy-derivation-history">${momentumEnergyDerivationStates.map((latex, i) => `<li data-derivation-row="${i}">
+        <span class="energy-derivation-row-marker" aria-hidden="true">${i + 1}</span>
         <div class="energy-derivation-equation">${math(latex)}</div>
-        ${compiled.moves[i] ? `<div class="energy-derivation-reason" data-derivation-reason="${i}">${html(compiled.moves[i]!.cue)}<details><summary>Why is this allowed?</summary>${html(compiled.moves[i]!.why)}</details></div>` : ""}
       </li>`).join("")}</ol>
       <div class="energy-derivation-stage" data-derivation-stage hidden></div>
+      <svg class="energy-derivation-pointer" data-derivation-pointer aria-hidden="true" hidden><path fill="none" stroke="currentColor"/><circle r="3" fill="currentColor"/></svg>
     </div>
+    <aside class="energy-derivation-reason energy-derivation-active-cue" data-derivation-cue aria-label="Current step explanation" hidden></aside>
+    </div>
+    <p class="energy-derivation-key" data-derivation-key hidden>Numbered rows show the route. Muted rows are upcoming; completed rows remain for reference.</p>
     <label class="energy-derivation-scrub" data-derivation-scrub hidden>Inspect this move <input type="range" min="0" max="1" step="any" value="0" aria-label="Derivation move progress"></label>
+    <div data-derivation-notes>${compiled.moves.map(move => `<details class="energy-derivation-note"><summary>${move.title}</summary><div data-derivation-reason="${move.index}">${html(move.cue)}<details><summary>Why is this allowed?</summary>${html(move.why)}</details></div></details>`).join("")}</div>
     ${compiled.moves.map(move => `<template data-derivation-template="${move.index}"><div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div></template>`).join("")}
   </div>`;
   return html(markdown.slice(0, match.index)) + trace + html(markdown.slice(match.index + match[0].length));

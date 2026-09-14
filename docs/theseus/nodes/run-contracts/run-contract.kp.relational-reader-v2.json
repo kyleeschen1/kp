@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Momentum-energy relational reader",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at r2: bounded vector derivation and canonical native motion implemented. Resume only after exemplar approval; preserve remaining r3-r5 scope.",
+  "summary": "HUMAN_CHECKPOINT at revised r2: fixed compact proof slots, intact carry then canonical algebra, anchored callouts. Resume r3 only after acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,7 +46,7 @@
     {
       "id": "r2",
       "title": "Canonical reader exemplar and human review",
-      "summary": "HUMAN_CHECKPOINT: three-move persistent substitution candidate implemented and checked. Review canonical mechanics-relations energy-from-momentum passage. No differentiation or r3-r5 work.",
+      "summary": "HUMAN_CHECKPOINT: compact anticipatory four-row proof, carry-then-transform phases and anchored callouts implemented. Ten unit and six browser checks, types/build and architecture pass. Await visual approval before r3.",
       "status": "in-progress"
     },
     {
