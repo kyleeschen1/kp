@@ -25,8 +25,10 @@ compositor extension. The candidate now animates three checked moves through the
 canonical native-KaTeX session. The September 14 refinement now uses compact
 fixed proof slots, upcoming previews, intact carry followed by local algebra,
 and a semantic-target callout beside the proof (docked above on phones).
-Its slider now spans the full derivation with equation checkpoint marks;
-Next/Previous remain local animated moves. Longer-proof scrolling is deferred.
+The current subtraction candidate opens transitions by selecting a result or
+dragging the pair bracket. One local playback button and an optional Inspect
+motion scrubber replace the toolbar and whole-derivation controls. Longer-proof
+scrolling is deferred.
 The scalar LaTeX probe remains unsupported; a
 bounded physics source supplies this exemplar instead. See the review packet for
 the current HUMAN_CHECKPOINT, exact limitations and verification. Do not start
@@ -79,8 +81,16 @@ Bounded exemplar choices, not catalogue-wide policy:
   Reuse semantic transition IDs and the existing playhead, not a second timeline
   or animation pipeline. Browsing a step does not imply mastery of earlier ones.
 
-Review the selection-first scope on the existing substitution exemplar. Retain
-the whole-derivation scrubber for comparison while the new control is evaluated.
+The first scope candidate was too busy: retaining the old navigation alongside
+the new scope duplicated controls. The user approved a subtraction experiment
+with "let's try this": default to a readable derivation and short dismissible
+hint; selecting a step shows one pair bracket, plain nearby explanation, one
+Play/Pause/Replay button and an explicit Inspect motion disclosure. Remove the
+whole-derivation slider, checkpoints, counter, Previous/Next toolbar and duplicate
+connector. Closing the explanation restores ordinary reading. This supersedes
+the earlier decision to keep both navigation surfaces visible for comparison.
+
+Review this quieter selection-first scope on the existing substitution exemplar.
 The scope remains a projection of existing semantic moves and the shared clock;
 no independent animation path or new mathematical authority is introduced.
 

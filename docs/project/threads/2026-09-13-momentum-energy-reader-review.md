@@ -1,6 +1,36 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: a transition-spanning reasoning scope (2026-09-14)
+## Current review: reading-first subtraction candidate (2026-09-14)
+
+Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
+The default view is the compact derivation and a short dismissible hint. Click a
+result to inspect its incoming transition. One gutter bracket marks the pair;
+plain nearby prose describes the transition. One button plays, pauses or replays.
+Inspect motion discloses the local scrubber and pauses playback for inspection.
+Close the explanation with the small close button or Escape to return to reading.
+
+Removed, not merely hidden: the Previous/Next toolbar, whole-derivation slider,
+checkpoint buttons, transition counter and second connector. The draggable
+scope remains available with keyboard selection and a generous invisible hit
+target. The no-JavaScript/print derivation and reasons remain available.
+
+Judge whether this reads as mathematics first, whether selection is discoverable
+without a control panel, and whether text clearly belongs to both equation lines.
+This remains the r2 HUMAN_CHECKPOINT; the motif audit and wider rollout are not
+included. Rollback is this projection/control subtraction; checked semantics,
+mathematical choreography, shared clock and native compositor are preserved.
+
+Verification: nine Chromium checks pass through `npm run visual:mechanics-relations`;
+eleven focused tests pass through
+`node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts`;
+full types and production build pass through `npm run build`. The retired
+whole-timeline UI checks were replaced with disclosed-local-control and rapid
+selection checks; native handoff, replay, reverse seek, compact geometry,
+keyboard, print and static-reading coverage remain. Desktop and phone captures
+were inspected. Existing large-chunk warnings remain; no Safari/device or
+catalogue-wide promotion claim is made. Runtime code and CSS are reduced.
+
+## Previous review: a transition-spanning reasoning scope (2026-09-14)
 
 At <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>,
 click any result equation to explain its incoming transition, or choose Trace

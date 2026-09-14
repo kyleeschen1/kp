@@ -1,218 +1,176 @@
 import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
-const seek = (input: Locator, seconds: number) => input.evaluate((element: HTMLInputElement, value) => {
+const seek = (input: Locator, progress: number) => input.evaluate((element: HTMLInputElement, value) => {
   element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
-}, seconds);
-test("transition scope selects pairs without playing intervening moves and preserves local control", async ({ page }, info) => {
+}, progress);
+const select = (root: Locator, index: number) => root.locator('[data-derivation-select="' + index + '"]').click();
+async function inspect(root: Locator) {
+  const details = root.locator("[data-derivation-scrub]");
+  if (!await details.evaluate((el: HTMLDetailsElement) => el.open)) await details.locator("summary").click();
+  return root.getByRole("slider", { name: "Selected transition progress" });
+}
+
+test("reading-first proof discloses only the selected explanation and optional scrubber", async ({ page }, info) => {
   await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
-  const select = (index: number) => root.locator(`[data-derivation-select="${index}"]`);
-  await select(0).click();
+  await expect(root.locator("[data-derivation-hint]")).toBeVisible();
+  await expect(root.getByRole("slider")).toHaveCount(0);
+  await expect(root.locator("[data-derivation-cue]")).toBeHidden();
+  await expect(root.locator("[data-derivation-global], [data-derivation-checkpoint], [data-derivation-pointer], [data-derivation-count]")).toHaveCount(0);
+  await root.screenshot({ path: info.outputPath("quiet-reading.png") });
+  await root.getByRole("button", { name: "Dismiss hint" }).click();
+  await expect(root.locator("[data-derivation-hint]")).toBeHidden();
+  await select(root, 0);
   await expect(root).toHaveAttribute("data-playing", "true");
-  const local = root.getByRole("slider", { name: "Selected transition progress" });
-  await seek(local, .33);
-  await expect(root).toHaveAttribute("data-progress", "0.33");
+  await expect(root.locator("[data-derivation-local]")).toBeHidden();
+  await expect(root.locator("[data-derivation-play]")).toHaveText("Pause");
+  const input = await inspect(root);
+  await expect(root).toHaveAttribute("data-playing", "false");
+  await seek(input, .33);
   const cue = root.locator("[data-derivation-cue]");
   await expect(cue).toHaveAttribute("aria-label", "Transition from equation 1 to 2");
   const before = await cue.boundingBox();
-  await seek(local, .65);
+  await seek(input, .65);
   expect(await cue.boundingBox()).toEqual(before);
-  const scope = root.locator("[data-derivation-scope]"), handle = root.getByRole("slider", { name: "Transition scope", exact: true });
-  const box = await handle.boundingBox();
-  const destination = await root.locator('[data-derivation-row="3"]').boundingBox();
-  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
+  await root.locator("[data-derivation-scrub] summary").click();
+  await root.screenshot({ path: info.outputPath("quiet-selected-transition.png") });
+  await root.getByRole("button", { name: "Close explanation" }).click();
+  await expect(cue).toBeHidden();
+  await expect(root.locator("[data-derivation-select='0']")).toBeFocused();
+  await expect(root.getByRole("slider")).toHaveCount(0);
+});
+
+test("scope dragging previews without intermediate playback and cancels safely", async ({ page }, info) => {
+  await page.goto(route + "#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await select(root, 0);
+  const input = await inspect(root);
+  await seek(input, .5);
+  const handle = root.getByRole("slider", { name: "Transition scope", exact: true });
+  const start = await handle.boundingBox();
+  const last = await root.locator("[data-derivation-row='3']").boundingBox();
+  await page.mouse.move(start!.x + start!.width / 2, start!.y + start!.height / 2);
   await page.mouse.down();
-  await page.mouse.move(box!.x + box!.width / 2, destination!.y, { steps: 6 });
+  await page.mouse.move(start!.x + start!.width / 2, last!.y, { steps: 6 });
   await expect(handle).toHaveAttribute("aria-valuenow", "3");
   await expect(root).toHaveAttribute("data-move", "0");
   await expect(root).toHaveAttribute("data-playing", "false");
   await page.mouse.up();
   await expect(root).toHaveAttribute("data-move", "2");
   await expect(root).toHaveAttribute("data-playing", "true");
-  await seek(local, .33);
-  const top = await root.locator('[data-derivation-row="2"]').boundingBox();
-  const bottom = await root.locator('[data-derivation-row="3"]').boundingBox();
-  const bracket = await scope.boundingBox();
-  expect(Math.abs(bracket!.y - (top!.y + top!.height / 2))).toBeLessThan(1);
-  expect(Math.abs(bracket!.y + bracket!.height - (bottom!.y + bottom!.height / 2))).toBeLessThan(1);
-  await root.screenshot({ path: info.outputPath("transition-scope-pair.png") });
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await handle.focus();
-  await handle.press("ArrowUp");
-  await expect(root).toHaveAttribute("data-move", "1");
-  await expect(root).toHaveAttribute("data-progress", "1");
-  await expect(cue).toHaveAttribute("aria-label", "Transition from equation 2 to 3");
-  await select(0).click();
-  await expect(root).toHaveAttribute("data-move", "0");
-  await expect(root).toHaveAttribute("data-progress", "1");
-  await page.mouse.wheel(0, 100);
-  await expect(root).toHaveAttribute("data-move", "0");
-  await expect(root).toHaveAttribute("data-progress", "1");
-  await handle.scrollIntoViewIfNeeded();
-  const start = await handle.boundingBox();
-  await page.mouse.move(start!.x + start!.width / 2, start!.y + start!.height / 2);
+  await seek(input, .33);
+  const source = await root.locator("[data-derivation-row='2']").boundingBox();
+  const target = await root.locator("[data-derivation-row='3']").boundingBox();
+  const bracket = await root.locator("[data-derivation-scope]").boundingBox();
+  expect(Math.abs(bracket!.y - source!.y - source!.height / 2)).toBeLessThan(1);
+  expect(Math.abs(bracket!.y + bracket!.height - target!.y - target!.height / 2)).toBeLessThan(1);
+  await root.screenshot({ path: info.outputPath("quiet-pair-scope.png") });
+  const current = await handle.boundingBox();
+  await page.mouse.move(current!.x + current!.width / 2, current!.y + current!.height / 2);
   await page.mouse.down();
-  await page.mouse.move(start!.x + start!.width / 2, start!.y + 120);
+  await page.mouse.move(current!.x + current!.width / 2, current!.y - 120);
   await handle.dispatchEvent("pointercancel", { pointerId: 1 });
   await page.mouse.up();
   await expect(root).not.toHaveAttribute("data-derivation-dragging", "true");
-  await expect(root).toHaveAttribute("data-move", "0");
-  await expect(handle).toHaveAttribute("aria-valuenow", "1");
-  await expect(cue).toBeVisible();
+  await expect(handle).toHaveAttribute("aria-valuenow", "3");
+  await expect(root.locator("[data-derivation-cue]")).toBeVisible();
 });
-test("persistent energy derivation uses native motion and stops at each move", async ({ page }, info) => {
+
+test("local playback preserves native phases, replay endpoints and rapid selection", async ({ page }, info) => {
   test.setTimeout(60000);
   const errors: string[] = [];
-  page.on("pageerror", e => errors.push(e.message));
+  page.on("pageerror", error => errors.push(error.message));
   page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
   await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
-  await root.locator("[data-derivation-trace]").click();
-  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session", { timeout: 30000 });
   const slots = () => root.locator("[data-derivation-row]").evaluateAll(rows => rows.map(row => ({ top: (row as HTMLElement).offsetTop, height: row.getBoundingClientRect().height })));
-  const initialSlots = await slots();
-  expect(initialSlots.reduce((sum, row) => sum + row.height, 0)).toBeLessThan(240);
-  await expect(root.locator('[data-trace-role="prospective"]')).toHaveCount(3);
+  const initial = await slots();
   for (let i = 0; i < 3; i++) {
-    await root.locator("[data-derivation-next]").click();
-    await expect.poll(async () => {
-      if (errors.length) throw new Error(errors.join("\n"));
-      return root.getAttribute("data-move");
-    }).toBe(String(i));
-    await expect.poll(async () => {
-      if (errors.length) throw new Error(errors.join("\n"));
-      return Number(await root.getAttribute("data-progress"));
-    }).toBeGreaterThan(.05);
-    await root.locator("[data-derivation-next]").click();
-    await seek(root.locator("[data-derivation-global]"), i + .09);
+    await select(root, i);
+    await expect(root).toHaveAttribute("data-move", String(i));
+    await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+    const input = await inspect(root);
+    await seek(input, .09);
     await expect(root).toHaveAttribute("data-phase", "carry");
     await expect(root).toHaveAttribute("data-algebra-progress", "0");
-    await expect(root.locator("[data-derivation-cue]")).toBeVisible();
-    await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
-    await root.screenshot({ path: info.outputPath(`derivation-${i}-carry.png`) });
-    await seek(root.locator("[data-derivation-global]"), i + .33);
+    await seek(input, .33);
     await expect(root).toHaveAttribute("data-phase", "orient");
-    await expect(root).toHaveAttribute("data-algebra-progress", "0");
-    await expect(root.locator("[data-derivation-cue]")).toBeVisible();
-    await root.screenshot({ path: info.outputPath(`derivation-${i}-orient.png`) });
-    const arrivedTransform = await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform);
-    await seek(root.locator("[data-derivation-global]"), i + .66);
-    expect(await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform)).toBe(arrivedTransform);
-    expect(await slots()).toEqual(initialSlots);
+    const pose = await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform);
+    await seek(input, .66);
+    expect(await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).transform)).toBe(pose);
     await expect(root.locator("[data-kp-editor-equation-material-layer] [data-kp-equation-material-owner-id]").first()).toBeAttached();
-    await root.screenshot({ path: info.outputPath(`derivation-${i}-mid.png`) });
-    await seek(root.locator("[data-derivation-global]"), i + 1);
-    await expect(root.locator("[data-derivation-count]")).toHaveText(`Transition ${i + 1} / 3`);
-    expect(await root.locator("[data-derivation-replay]").evaluate(el => {
-      const r = el.getBoundingClientRect(), hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
-      return hit === el || (hit !== null && el.contains(hit));
-    })).toBe(true);
-    await root.locator("[data-derivation-replay]").click();
+    expect(await slots()).toEqual(initial);
+    await root.screenshot({ path: info.outputPath("quiet-motion-" + i + ".png") });
+    await seek(input, 1);
+    await expect(root.locator("[data-derivation-play]")).toHaveText("Replay");
+    await root.locator("[data-derivation-play]").click();
     await expect(root).toHaveAttribute("data-progress", "1", { timeout: 10000 });
     await expect(root).toHaveAttribute("data-playing", "false");
-    await expect(root.locator("[data-derivation-global]")).toHaveValue(String(i + 1));
-    await expect(root).toHaveAttribute("data-move", String(i));
-    await root.screenshot({ path: info.outputPath(`derivation-${i}-end.png`) });
-  }
-  await root.locator("[data-derivation-previous]").click();
-  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeLessThan(.95);
-  await root.locator("[data-derivation-read]").click();
-  await expect(root).toHaveAttribute("data-tracing", "false");
-  expect(await slots()).toEqual(initialSlots);
-  expect(errors).toEqual([]);
-});
-test("whole derivation timeline crosses boundaries and keeps the latest rapid gesture", async ({ page }, info) => {
-  const errors: string[] = [];
-  page.on("pageerror", e => errors.push(e.message));
-  await page.goto(route + "#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]");
-  await root.locator("[data-derivation-trace]").click();
-  const input = root.getByRole("slider", { name: "Whole derivation progress" });
-  await expect(input).toBeVisible();
-  for (const value of [2.6, .7, 1, 2, 3, 0]) {
-    await seek(input, value);
-    await expect(root).toHaveAttribute("data-derivation-progress", String(value));
-    await expect(input).toHaveValue(String(value));
-  }
-  await input.evaluate((element: HTMLInputElement) => {
-    for (const value of [2.8, .2, 1.8, 2.4, .4]) {
-      element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
+    for (const value of [.8, .2, 0, 1]) {
+      await seek(input, value);
+      await expect(root).toHaveAttribute("data-progress", String(value));
     }
+  }
+  await root.evaluate(el => {
+    for (const i of [0, 2, 1, 2, 0]) el.querySelector<HTMLButtonElement>('[data-derivation-select="' + i + '"]')!.click();
   });
-  await expect(root).toHaveAttribute("data-derivation-progress", "0.4");
-  await expect(input).toHaveValue("0.4");
-  await root.locator('[data-derivation-checkpoint="2"]').click();
-  await expect(root).toHaveAttribute("data-derivation-progress", "2");
-  await expect(root.locator('[data-derivation-checkpoint="2"]')).toHaveAttribute("aria-current", "step");
-  await input.press("End");
-  await expect(root).toHaveAttribute("data-derivation-progress", "3");
-  await input.press("Home");
-  await expect(root).toHaveAttribute("data-derivation-progress", "0");
-  await root.screenshot({ path: info.outputPath("whole-derivation-timeline.png") });
+  await expect(root).toHaveAttribute("data-move", "0");
+  expect(await slots()).toEqual(initial);
   expect(errors).toEqual([]);
 });
-test("step handoffs retain visible geometry while preparing and keep callouts near the proof", async ({ page }, info) => {
+
+test("adjacent selections preserve native handoff without an origin flash", async ({ page }) => {
   await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
-  await root.locator("[data-derivation-trace]").click();
-  const input = root.getByRole("slider", { name: "Whole derivation progress" });
-  await expect(input).toBeVisible();
-  for (const boundary of [1, 2]) {
-    await seek(input, boundary);
-    await expect(root).toHaveAttribute("data-derivation-progress", String(boundary));
-    const prior = await root.locator('[data-derivation-stage] [data-derivation-target] [data-kp-semantic-entity-id$=".prefix"]').boundingBox();
-    const observation = await root.evaluate((el, value) => new Promise<{ stable: boolean; originFlash: boolean; loadingShift: boolean }>(resolve => {
-      const stage = el.querySelector<HTMLElement>("[data-derivation-stage]")!;
-      const y = stage.getBoundingClientRect().top;
-      const workspaceY = el.querySelector(".energy-derivation-workspace")!.getBoundingClientRect().top;
-      let originFlash = false, loadingShift = false;
+  await select(root, 0);
+  const input = await inspect(root);
+  for (const next of [1, 2]) {
+    await seek(input, 1);
+    const result = await root.evaluate((el, index) => new Promise<{ originFlash: boolean; shift: number; settled: boolean }>(resolve => {
+      const old = el.querySelector<HTMLElement>('[data-derivation-stage] [data-derivation-target] [data-kp-semantic-entity-id$=".prefix"]')!.getBoundingClientRect();
+      const top = el.querySelector("[data-derivation-stage]")!.getBoundingClientRect().top;
+      let originFlash = false;
       const observer = new MutationObserver(() => {
-        const current = el.querySelector<HTMLElement>("[data-derivation-stage]")!;
-        originFlash ||= current.getBoundingClientRect().top < y - .5;
-        loadingShift ||= Math.abs(el.querySelector(".energy-derivation-workspace")!.getBoundingClientRect().top - workspaceY) > .5;
-        if (el.getAttribute("data-derivation-progress") === String(value)) {
+        const current = el.querySelector("[data-derivation-stage]")!;
+        originFlash ||= current.getBoundingClientRect().top < top - .5;
+        if (el.getAttribute("data-move") === String(index)) {
+          const fresh = current.querySelector('[data-derivation-source] [data-kp-semantic-entity-id$=".prefix"]')!.getBoundingClientRect();
           observer.disconnect(); clearTimeout(timeout);
-          resolve({ stable: true, originFlash, loadingShift });
+          resolve({ originFlash, shift: Math.max(Math.abs(fresh.x - old.x), Math.abs(fresh.y - old.y)), settled: true });
         }
       });
       observer.observe(el, { subtree: true, attributes: true, childList: true });
-      const timeout = setTimeout(() => { observer.disconnect(); resolve({ stable: false, originFlash, loadingShift }); }, 10000);
-      const slider = el.querySelector<HTMLInputElement>("[data-derivation-global]")!;
-      slider.value = String(value); slider.dispatchEvent(new Event("input", { bubbles: true }));
-    }), boundary + .000001);
-    expect(observation).toEqual({ stable: true, originFlash: false, loadingShift: false });
-    const next = await root.locator('[data-derivation-stage] [data-derivation-source] [data-kp-semantic-entity-id$=".prefix"]').boundingBox();
-    expect(Math.abs(next!.y - prior!.y)).toBeLessThan(.5);
-    expect(Math.abs(next!.x - prior!.x)).toBeLessThan(.5);
+      const timeout = setTimeout(() => { observer.disconnect(); resolve({ originFlash, shift: 999, settled: false }); }, 10000);
+      el.querySelector<HTMLButtonElement>('[data-derivation-select="' + index + '"]')!.click();
+    }), next);
+    expect(result.settled).toBe(true);
+    expect(result.originFlash).toBe(false);
+    expect(result.shift).toBeLessThan(.5);
   }
-  await seek(input, 2.33);
-  await expect(root).toHaveAttribute("data-phase", "orient");
-  const cue = await root.locator("[data-derivation-cue]").boundingBox();
-  const chain = await root.locator(".energy-derivation-chain").boundingBox();
-  expect(cue!.x - chain!.x - chain!.width).toBeLessThan(20);
-  expect(chain!.width).toBeLessThan(240);
-  await root.screenshot({ path: info.outputPath("near-callout-stable-handoff.png") });
 });
-test("derivation keeps narrow keyboard endpoints and complete print history", async ({ page }, info) => {
+
+test("narrow keyboard selection, reduced motion, scrolling and print retain the argument", async ({ page }, info) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
-  await root.locator("[data-derivation-trace]").click();
-  const next = root.locator("[data-derivation-next]");
-  await expect(next).toBeEnabled();
-  await next.focus();
-  await next.press("Enter");
+  await select(root, 0);
   await expect(root).toHaveAttribute("data-progress", "1");
-  await expect(root).toHaveAttribute("data-move", "0");
-  await root.screenshot({ path: info.outputPath("derivation-narrow-callout.png") });
-  await root.locator("[data-derivation-previous]").click();
-  await expect(root).toHaveAttribute("data-progress", "0");
+  const handle = root.getByRole("slider", { name: "Transition scope", exact: true });
+  await handle.focus(); await handle.press("End");
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-progress", "1");
+  await root.screenshot({ path: info.outputPath("quiet-narrow.png") });
+  const input = await inspect(root);
+  await input.press("Home"); await expect(root).toHaveAttribute("data-progress", "0");
+  await input.press("End"); await expect(root).toHaveAttribute("data-progress", "1");
+  await page.mouse.wheel(0, 100);
+  await expect(root).toHaveAttribute("data-progress", "1");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await root.screenshot({ path: info.outputPath("derivation-narrow.png") });
   await page.emulateMedia({ media: "print" });
-  for (const row of await root.locator(".energy-derivation-history li").all()) await expect(row).toBeVisible();
+  for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
+  await expect(root.locator("[data-derivation-notes]")).toBeVisible();
 });
 test("native reading, continuous local control, exact reverse and held prose", async ({ page }, info) => {
   const errors: string[] = [];

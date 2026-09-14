@@ -235,11 +235,23 @@
       "status": "passed",
       "scope": "transition scope discovery: nine Chromium checks",
       "checkedAt": "2026-09-14T21:25:08.401Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "reading-first subtraction: nine Chromium checks",
+      "checkedAt": "2026-09-14T21:45:37.554Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "reading-first subtraction integration",
+      "checkedAt": "2026-09-14T21:45:57.647Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: review the transition-spanning scope, click-to-explain selection and stable before/after annotation on the energy derivation. Motif audit and r3 remain deferred."
+    "summary": "HUMAN_CHECKPOINT: review reading-first subtraction candidate. Redundant navigation and duplicate connector removed; one pair scope, plain annotation, playback and optional local scrubber remain. Motif audit deferred."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
