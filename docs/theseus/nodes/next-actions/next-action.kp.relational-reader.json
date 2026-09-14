@@ -247,11 +247,23 @@
       "status": "passed",
       "scope": "reading-first subtraction integration",
       "checkedAt": "2026-09-14T21:45:57.647Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "compact transport: nine Chromium checks",
+      "checkedAt": "2026-09-14T21:52:56.820Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "compact transport integration",
+      "checkedAt": "2026-09-14T21:53:33.701Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: review reading-first subtraction candidate. Redundant navigation and duplicate connector removed; one pair scope, plain annotation, playback and optional local scrubber remain. Motif audit deferred."
+    "summary": "HUMAN_CHECKPOINT: review compact-control compromise: Previous Play Next, selected-transition count and visible local scrubber beneath the paired derivation. Mathematical motif audit and broader delivery remain deferred."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

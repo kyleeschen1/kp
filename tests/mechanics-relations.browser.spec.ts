@@ -6,34 +6,35 @@ const seek = (input: Locator, progress: number) => input.evaluate((element: HTML
 }, progress);
 const select = (root: Locator, index: number) => root.locator('[data-derivation-select="' + index + '"]').click();
 async function inspect(root: Locator) {
-  const details = root.locator("[data-derivation-scrub]");
-  if (!await details.evaluate((el: HTMLDetailsElement) => el.open)) await details.locator("summary").click();
   return root.getByRole("slider", { name: "Selected transition progress" });
 }
 
-test("reading-first proof discloses only the selected explanation and optional scrubber", async ({ page }, info) => {
+test("selected proof has one compact transport and a continuously available local scrubber", async ({ page }, info) => {
   await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
   await expect(root.locator("[data-derivation-hint]")).toBeVisible();
   await expect(root.getByRole("slider")).toHaveCount(0);
   await expect(root.locator("[data-derivation-cue]")).toBeHidden();
-  await expect(root.locator("[data-derivation-global], [data-derivation-checkpoint], [data-derivation-pointer], [data-derivation-count]")).toHaveCount(0);
+  await expect(root.locator("[data-derivation-global], [data-derivation-checkpoint], [data-derivation-pointer], [data-derivation-scrub]")).toHaveCount(0);
   await root.screenshot({ path: info.outputPath("quiet-reading.png") });
   await root.getByRole("button", { name: "Dismiss hint" }).click();
   await expect(root.locator("[data-derivation-hint]")).toBeHidden();
   await select(root, 0);
   await expect(root).toHaveAttribute("data-playing", "true");
-  await expect(root.locator("[data-derivation-local]")).toBeHidden();
+  await expect(root.locator("[data-derivation-local]")).toBeVisible();
+  await expect(root.locator("[data-derivation-previous]")).toBeDisabled();
+  await expect(root.locator("[data-derivation-count]")).toHaveText("1 / 3");
+  await expect(root.locator("[data-derivation-cue] [data-derivation-play]")).toHaveCount(0);
   await expect(root.locator("[data-derivation-play]")).toHaveText("Pause");
   const input = await inspect(root);
-  await expect(root).toHaveAttribute("data-playing", "false");
   await seek(input, .33);
+  await expect(root).toHaveAttribute("data-playing", "false");
   const cue = root.locator("[data-derivation-cue]");
   await expect(cue).toHaveAttribute("aria-label", "Transition from equation 1 to 2");
   const before = await cue.boundingBox();
   await seek(input, .65);
   expect(await cue.boundingBox()).toEqual(before);
-  await root.locator("[data-derivation-scrub] summary").click();
+  await expect(root.locator("[data-derivation-count]")).toHaveText("1 / 3");
   await root.screenshot({ path: info.outputPath("quiet-selected-transition.png") });
   await root.getByRole("button", { name: "Close explanation" }).click();
   await expect(cue).toBeHidden();
@@ -87,8 +88,13 @@ test("local playback preserves native phases, replay endpoints and rapid selecti
   const slots = () => root.locator("[data-derivation-row]").evaluateAll(rows => rows.map(row => ({ top: (row as HTMLElement).offsetTop, height: row.getBoundingClientRect().height })));
   const initial = await slots();
   for (let i = 0; i < 3; i++) {
-    await select(root, i);
+    if (i === 0) await select(root, i);
+    else await root.getByRole("button", { name: "Next transition", exact: true }).click();
     await expect(root).toHaveAttribute("data-move", String(i));
+    await expect(root.locator("[data-derivation-count]")).toHaveText(`${i + 1} / 3`);
+    await expect(root).toHaveAttribute("data-playing", "true");
+    await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeGreaterThan(0);
+    expect(Number(await root.getAttribute("data-progress"))).toBeLessThan(.9);
     await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
     const input = await inspect(root);
     await seek(input, .09);
@@ -107,11 +113,18 @@ test("local playback preserves native phases, replay endpoints and rapid selecti
     await root.locator("[data-derivation-play]").click();
     await expect(root).toHaveAttribute("data-progress", "1", { timeout: 10000 });
     await expect(root).toHaveAttribute("data-playing", "false");
+    await expect(root.locator("[data-derivation-count]")).toHaveText(`${i + 1} / 3`);
     for (const value of [.8, .2, 0, 1]) {
       await seek(input, value);
       await expect(root).toHaveAttribute("data-progress", String(value));
     }
   }
+  await expect(root.locator("[data-derivation-next]")).toBeDisabled();
+  await root.getByRole("button", { name: "Previous transition", exact: true }).click();
+  await expect(root).toHaveAttribute("data-move", "1");
+  await expect(root.locator("[data-derivation-count]")).toHaveText("2 / 3");
+  await expect(root).toHaveAttribute("data-playing", "true");
+  expect(Number(await root.getAttribute("data-progress"))).toBeLessThan(.9);
   await root.evaluate(el => {
     for (const i of [0, 2, 1, 2, 0]) el.querySelector<HTMLButtonElement>('[data-derivation-select="' + i + '"]')!.click();
   });

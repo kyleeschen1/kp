@@ -1,6 +1,36 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: reading-first subtraction candidate (2026-09-14)
+## Current review: compact-control compromise (2026-09-14)
+
+Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
+Select an equation to open its incoming transition. Beneath the derivation,
+one compact strip provides Previous / Play-Pause-Replay / Next and the selected
+transition fraction. One visible slider inspects that transition continuously;
+there is no Inspect motion disclosure. Previous and Next select and animate
+adjacent transitions from their sources rather than jumping to the result.
+
+The fraction identifies the selected transition (for example 2 / 3), not completed
+work. Direct equation selection, the draggable pair bracket, nearby plain prose
+and close/Escape remain. Playback has moved out of the annotation into the one
+transport strip. The global slider, checkpoint buttons, second connector and
+Show all steps remain absent. Initial reading still needs no playback.
+
+This is the r2 HUMAN_CHECKPOINT: judge the balance between obvious control and
+uncluttered mathematics. The reversible unit is this reader's transport/layout;
+checked physics, canonical native-KaTeX, timing and mathematical motifs remain
+unchanged. The motif audit and wider delivery remain deferred.
+
+Verification: nine scoped Chromium checks pass via
+`npm run visual:mechanics-relations`, including real intermediate playback from
+Previous/Next, stable selected-transition counts, endpoint disabling, native
+handoff, replay, direct selection, reverse scrubbing and narrow/print behavior.
+Eleven focused unit tests pass via
+`node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts`.
+Full typecheck/production build passes via `npm run build`; existing large-chunk
+warnings remain. Desktop and phone captures were inspected. This remains
+exemplar discovery, not supported-browser or catalogue-wide certification.
+
+## Previous review: reading-first subtraction candidate (2026-09-14)
 
 Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
 The default view is the compact derivation and a short dismissible hint. Click a

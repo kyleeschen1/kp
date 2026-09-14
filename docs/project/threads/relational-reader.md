@@ -25,10 +25,11 @@ compositor extension. The candidate now animates three checked moves through the
 canonical native-KaTeX session. The September 14 refinement now uses compact
 fixed proof slots, upcoming previews, intact carry followed by local algebra,
 and a semantic-target callout beside the proof (docked above on phones).
-The current subtraction candidate opens transitions by selecting a result or
-dragging the pair bracket. One local playback button and an optional Inspect
-motion scrubber replace the toolbar and whole-derivation controls. Longer-proof
-scrolling is deferred.
+The current compromise candidate opens transitions by selecting a result or
+dragging the pair bracket. A compact Previous / Play / Next strip, selected
+transition fraction and visible local slider support inspection beneath the
+derivation. Whole-derivation controls remain removed. Longer-proof scrolling
+is deferred.
 The scalar LaTeX probe remains unsupported; a
 bounded physics source supplies this exemplar instead. See the review packet for
 the current HUMAN_CHECKPOINT, exact limitations and verification. Do not start
@@ -90,7 +91,16 @@ whole-derivation slider, checkpoints, counter, Previous/Next toolbar and duplica
 connector. Closing the explanation restores ordinary reading. This supersedes
 the earlier decision to keep both navigation surfaces visible for comparison.
 
-Review this quieter selection-first scope on the existing substitution exemplar.
+The subtraction candidate removed too much guidance. The user approved the
+compromise: after selection, restore one compact Previous / Play-Pause-Replay /
+Next strip and a visible local slider beneath the proof. Previous/Next select
+and animate adjacent transitions from their sources; the fraction means selected
+transition, never completion or mastery. Remove the Inspect motion disclosure
+and move playback out of the prose so it has one owner. Keep the pair bracket,
+plain annotation, direct selection and normal scrolling. Do not restore the
+global slider, checkpoint buttons, duplicate connector or Show all steps button.
+
+Review this compact-control compromise on the existing substitution exemplar.
 The scope remains a projection of existing semantic moves and the shared clock;
 no independent animation path or new mathematical authority is introduced.
 

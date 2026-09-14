@@ -20,7 +20,10 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const scope = get<HTMLElement>("[data-derivation-scope]");
   const handle = get<HTMLButtonElement>("[data-derivation-handle]");
   const local = get<HTMLInputElement>("[data-derivation-local]");
-  const inspect = get<HTMLDetailsElement>("[data-derivation-scrub]");
+  const transport = get<HTMLElement>("[data-derivation-transport]");
+  const previous = get<HTMLButtonElement>("[data-derivation-previous]");
+  const next = get<HTMLButtonElement>("[data-derivation-next]");
+  const count = get<HTMLOutputElement>("[data-derivation-count]");
   const playback = get<HTMLButtonElement>("[data-derivation-play]");
   const hint = get<HTMLElement>("[data-derivation-hint]");
   const selectors = [...root.querySelectorAll<HTMLButtonElement>("[data-derivation-select]")];
@@ -65,6 +68,13 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     local.value = String(p);
     local.setAttribute("aria-valuetext", `Transition ${selected + 1}, ${Math.round(p * 100)} percent`);
     playback.textContent = clock.getStatus() === "playing" ? "Pause" : p === 1 ? "Replay" : "Play";
+    previous.disabled = loading || selected === 0;
+    next.disabled = loading || selected === selectors.length - 1;
+    playback.disabled = local.disabled = loading;
+    // Selection is not completion: this fraction does not change mid-move.
+    const label = `${selected + 1} / ${selectors.length}`;
+    if (count.value !== label) count.value = label;
+    count.setAttribute("aria-label", `Selected transition ${selected + 1} of ${selectors.length}`);
   };
   clock.subscribe(project);
   const retire = () => { generation++; session?.dispose(); session = undefined; };
@@ -75,12 +85,12 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     root.dataset["tracing"] = "false"; stage.hidden = true;
     rows.forEach(row => { row.hidden = false; delete row.dataset["traceRole"]; delete row.dataset["visibleEquation"]; });
     get("[data-derivation-cue]").hidden = true;
-    inspect.hidden = true; inspect.open = false; status.hidden = true;
+    transport.hidden = true; status.hidden = true;
     selectors.forEach(button => button.setAttribute("aria-pressed", "false"));
     scope.hidden = true;
   };
   async function mount(index: number, progress: number) {
-    clock.pause(); const token = ++generation; loading = true;
+    clock.pause(); const token = ++generation; loading = true; project();
     // Keep the current paint and layout while fonts/measurement prepare the
     // successor. A visible stage reset to row zero is not an animation phase.
     status.hidden = tracing; status.textContent = "Preparing this move…";
@@ -144,7 +154,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       const proofHeight = get<HTMLElement>(".energy-derivation-history").offsetHeight;
       cue.style.setProperty("--derivation-cue-top", `${Math.max(0, Math.min(midpoint - cue.offsetHeight / 2, proofHeight - cue.offsetHeight))}px`);
       loading = false; status.hidden = true;
-      inspect.hidden = false;
+      transport.hidden = false;
       scope.hidden = false; selectors.forEach(button => { button.hidden = false; });
       clock.seek(progress); project();
       stage.style.opacity = "";
@@ -217,6 +227,14 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     if (clock.getSnapshot().progress === 1) clock.seek(0);
     play("forward");
   }, opts);
+  // Navigation chooses a neighboring relation and plays it from its source;
+  // it must not borrow the previous relation's progress or skip to an endpoint.
+  previous.addEventListener("click", () => {
+    if (!loading && selected > 0) void selectTransition(selected - 1);
+  }, opts);
+  next.addEventListener("click", () => {
+    if (!loading && selected < selectors.length - 1) void selectTransition(selected + 1);
+  }, opts);
   const close = () => { const button = selectors[selected]; read(); button?.focus({ preventScroll: true }); };
   get("[data-derivation-close]").addEventListener("click", close, opts);
   get("[data-derivation-dismiss]").addEventListener("click", () => { hint.hidden = true; selectors[0]?.focus({ preventScroll: true }); }, opts);
@@ -225,7 +243,6 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. Continue with the single playback control afterward.
   cue.addEventListener("toggle", event => { if (event.target instanceof HTMLDetailsElement && event.target.open) pause(); }, { ...opts, capture: true });
-  inspect.addEventListener("toggle", () => { if (inspect.open) pause(); }, opts);
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, opts);
   reduced.addEventListener("change", pause, opts);
   const visibility = new IntersectionObserver(entries => { if (!entries[0]?.isIntersecting) pause(); }); visibility.observe(root);
