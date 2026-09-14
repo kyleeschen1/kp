@@ -27,12 +27,10 @@
 .physics-after { margin-top: 1.25rem; }
 .energy-derivation { --derivation-inspection-accent: #986417; margin-block: 1.5rem; }
 .energy-derivation-actions { display: flex; align-items: center; gap: .5rem; }
-.energy-derivation-actions button, [data-derivation-dismiss], [data-derivation-close] { font: inherit; color: #52616d; background: transparent; border: 0; padding: .2rem .5rem; min-height: 2.75rem; cursor: pointer; }
+.energy-derivation-actions button { font: inherit; color: #52616d; background: transparent; border: 0; padding: .2rem .5rem; min-height: 2.75rem; cursor: pointer; }
 .energy-derivation-actions button:hover:not(:disabled) { text-decoration: underline; text-underline-offset: .2em; }
 .energy-derivation-actions button:disabled { opacity: .45; cursor: default; }
-.energy-derivation-actions [data-derivation-play] { min-width: 4.5rem; color: #236b8e; }
-.energy-derivation-actions output { margin-left: auto; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.energy-derivation-actions button:focus-visible, [data-derivation-dismiss]:focus-visible, [data-derivation-close]:focus-visible { outline: 2px solid #236b8e; }
+.energy-derivation-actions button:focus-visible { outline: 2px solid #236b8e; }
 .energy-derivation [hidden] { display: none !important; }
 .energy-derivation-chain { position: relative; margin-left: 2.75rem; }
 .energy-derivation-history { list-style: none; padding: 0; margin: 0; }
@@ -49,11 +47,10 @@
 .energy-derivation-active-cue { position: relative; align-self: start; margin: var(--derivation-cue-top, 0px) 0 0; padding: .3rem .7rem; border: 1px solid var(--derivation-inspection-accent); border-radius: .3rem; background: var(--kp-page-background, #f8fafc); }
 /* The pointer names the relation's boundary, never follows changing glyph ink. */
 .energy-derivation-active-cue::before { content: ""; position: absolute; left: -.35rem; top: var(--derivation-pointer-top, 50%); width: .6rem; height: .6rem; transform: translateY(-50%) rotate(45deg); border-left: 1px solid var(--derivation-inspection-accent); border-bottom: 1px solid var(--derivation-inspection-accent); background: inherit; }
-.energy-derivation-select { position: absolute; inset: 0; width: 100%; border: 0; background: transparent; cursor: pointer; z-index: 2; }
-.energy-derivation-select:hover { border-left: 1px solid #84909b; }
-.energy-derivation-select:focus-visible, [data-derivation-handle]:focus-visible { outline: 2px solid #236b8e; outline-offset: 2px; }
-.energy-derivation-scope { position: absolute; left: -1rem; width: .5rem; border: 2px solid var(--derivation-inspection-accent); border-right: 0; box-sizing: border-box; pointer-events: none; }
-[data-derivation-handle] { position: absolute; top: 50%; right: 0; transform: translateY(-50%); width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: .3rem; color: #236b8e; background: transparent; font: inherit; cursor: ns-resize; touch-action: none; pointer-events: auto; }
+[data-derivation-handle]:focus-visible { outline: 2px solid #236b8e; outline-offset: 2px; }
+.energy-derivation-scope { position: absolute; left: -1rem; width: 1rem; height: 0; border-top: 2px solid var(--derivation-inspection-accent); pointer-events: none; }
+[data-derivation-handle] { position: absolute; top: 0; right: .6rem; transform: translateY(-50%); width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: .3rem; color: var(--derivation-inspection-accent); background: transparent; font: inherit; cursor: ns-resize; touch-action: none; pointer-events: auto; }
+[data-derivation-handle] span { display: inline-grid; place-items: center; width: 1.3rem; height: 1.8rem; border: 1px solid currentColor; border-radius: .6rem; background: var(--kp-page-background, #f8fafc); }
 [data-derivation-handle]:hover, [data-derivation-dragging="true"] [data-derivation-handle] { background: #f2e8d6; }
 .energy-derivation-key { font-size: .8em; color: #52616d; }
 .energy-derivation-note { font-size: .9em; }
@@ -68,7 +65,6 @@
 .energy-derivation [data-trace-role="prospective"] .energy-derivation-equation { color: #84909b; }
 .energy-derivation [data-trace-role="live"] .energy-derivation-row-marker { color: var(--derivation-inspection-accent); }
 .energy-derivation-transport { width: 100%; max-width: 30rem; font-size: .9em; color: #52616d; }
-.energy-derivation-transport input { display: block; width: 100%; margin: 0; min-height: 2.75rem; accent-color: #236b8e; }
 @media print { .energy-derivation-stage, .energy-derivation-transport { display: none !important; } .energy-derivation .energy-derivation-equation { visibility: visible !important; } }
 /* Printing must retain the whole argument even during a partial trace. */
 @media print { .energy-derivation .energy-derivation-history li[hidden], .energy-derivation .energy-derivation-history .energy-derivation-reason[hidden] { display: block !important; } .energy-derivation-active-cue { display: none !important; } }

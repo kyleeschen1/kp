@@ -271,11 +271,29 @@
       "status": "passed",
       "scope": "boundary callout and directional continuity: ten Chromium checks",
       "checkedAt": "2026-09-14T22:44:19.236Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "direct-manipulation lens discovery: eight Chromium checks",
+      "checkedAt": "2026-09-14T23:18:24.784Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "lens mapping and preserved semantics: fourteen tests",
+      "checkedAt": "2026-09-14T23:18:27.702Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "direct-manipulation lens integration",
+      "checkedAt": "2026-09-14T23:19:22.926Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: review warm boundary callout, actual upward rewind and first-substitution carry/rewrite overlap. Ten Chromium checks, thirteen unit checks and build pass. Other motifs and later delivery remain deferred."
+    "summary": "HUMAN_CHECKPOINT: review direct-manipulation derivation lens; persistent handle drives continuous carry and canonical rewrite, reverse and held interiors. No wider rollout."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

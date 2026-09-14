@@ -123,6 +123,28 @@ tail. Preserve the shared act gate and canonical paint ownership. The other
 two moves retain their sequential score; broader operation/motif repair remains
 pending. Review this treatment before promoting timing or colors.
 
+Accepted replacement (2026-09-14): prototype a **direct-manipulation reasoning
+lens** on this derivation. The persistent gutter handle owns continuous spatial
+progress through all four fixed equation rows, rather than selecting a pair for
+a separate local slider. The live expression follows its position while the
+canonical algebra unfolds; upward motion samples the same transformation in
+reverse. Interior release holds exactly; small continuous endpoint plateaus
+make complete equations easy to rest on. Explicit Previous/Next and keyboard
+navigation still animate. Ordinary page scrolling never advances the proof.
+
+The current candidate removes the local slider, Play button, selection fraction,
+close control and whole-row click overlays. One stable transition callout remains;
+symbol meaning/definition/lineage inspection is deferred, not a fake clickable
+affordance. The spatial carry score is local to this exemplar; mathematical
+operation authority and native KaTeX composition are preserved. Coalesced seeks
+retain the latest input through asynchronous scene handoffs. Loading starts only
+when the proof enters view, not for every offscreen proof on page load.
+
+This supersedes the interaction hypotheses above, not their provenance or the
+pending mathematical motif audit. Review handle coupling, resting zones, text
+attachment and compactness before promotion. r2 remains HUMAN_CHECKPOINT; no
+other caller, new semantic operation or wider delivery package is authorized.
+
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
 Theseus target: `next-action.kp.relational-reader`; executable contract:

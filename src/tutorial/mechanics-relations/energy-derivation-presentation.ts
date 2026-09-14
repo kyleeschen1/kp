@@ -67,3 +67,20 @@ export function resolveEnergyDerivationPosition(position: number) {
   const move = Math.max(0, Math.ceil(position) - 1);
   return { move, progress: position - move };
 }
+
+/** Spatial control owns carry; the existing attention gate still owns algebra.
+ * Both sample the same position, so reversing cannot choose a different motif. */
+export function sampleEnergyDerivationLens(progress: number): EnergyDerivationPresentation {
+  const frame = sampleSubstitutionPresentation(progress);
+  return { ...frame, carry: progress };
+}
+
+/** Small endpoint plateaus make complete lines easy to hold without snapping
+ * an arbitrary intermediate release. The mapping is continuous and reversible. */
+export function resolveEnergyDerivationLensPosition(position: number) {
+  if (!Number.isFinite(position)) throw new RangeError("Invalid lens position");
+  const bounded = Math.max(0, Math.min(energyDerivationFocus.length, position));
+  const line = Math.floor(bounded), fraction = bounded - line;
+  const restingZone = .055;
+  return line + Math.max(0, Math.min(1, (fraction - restingZone) / (1 - 2 * restingZone)));
+}

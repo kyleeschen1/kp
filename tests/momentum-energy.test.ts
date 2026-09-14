@@ -11,6 +11,28 @@ import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMo
 import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createEnergyDerivationPlan, assertEnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
 import { sampleEnergyDerivationPresentation, sampleSubstitutionPresentation, energyDerivationNavigationTarget, energyDerivationFocus, resolveEnergyDerivationPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+import { sampleEnergyDerivationLens, resolveEnergyDerivationLensPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+
+test("lens position is continuous, reversible and rests only near complete lines", () => {
+  let previous = 0;
+  for (let i = 0; i <= 300; i++) {
+    const raw = i / 100, position = resolveEnergyDerivationLensPosition(raw);
+    assert.ok(position >= previous && position - previous < .012);
+    assert.equal(resolveEnergyDerivationLensPosition(raw), position);
+    const { progress } = resolveEnergyDerivationPosition(position);
+    const frame = sampleEnergyDerivationLens(progress);
+    assert.equal(frame.carry, progress);
+    if (frame.phase === "orient") assert.equal(frame.algebra, 0);
+    previous = position;
+  }
+  for (const line of [0, 1, 2, 3]) {
+    for (const delta of [-.04, 0, .04]) assert.equal(resolveEnergyDerivationLensPosition(line + delta), line);
+  }
+  for (const value of [.3, .5, .7]) assert.ok(resolveEnergyDerivationLensPosition(value) > 0 && resolveEnergyDerivationLensPosition(value) < 1);
+  assert.equal(sampleEnergyDerivationLens(0).algebra, 0);
+  assert.equal(sampleEnergyDerivationLens(1).algebra, 1);
+  assert.throws(() => resolveEnergyDerivationLensPosition(NaN));
+});
 
 test("directional navigation retraces interiors before crossing shared endpoints", () => {
   for (let move = 0; move < 3; move++) {

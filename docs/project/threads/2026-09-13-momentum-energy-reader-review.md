@@ -1,6 +1,40 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: boundary callout, directional rewind and substitution overlap (2026-09-14)
+## Current review: direct-manipulation reasoning lens (2026-09-14)
+
+Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
+Drag the visible gutter handle down through the fixed derivation, then back up.
+The live expression follows the handle while the existing algebra compositor
+rewrites it. Release between rows to hold an intermediate state. Small endpoint
+plateaus make complete equations easy to land on without forcing every release
+to a line. Previous/Next and Up/Down animate; Home/End traverse to the ends;
+Escape pauses. Reduced motion makes explicit navigation immediate, while direct
+dragging remains continuous. Ordinary page scroll remains ordinary page scroll.
+
+The separate slider, Play button, fraction, close button and row-wide click
+overlays are removed. A callout describes the current relation in either
+direction and stays stationary within that transition. Symbol inspection is
+deferred. The proof prepares its native session when it enters view; static and
+print editions retain the full argument and reasons.
+
+HUMAN_CHECKPOINT: does this feel like holding and unfolding the reasoning rather
+than operating a player? Check the grip, endpoint resting zones, reverse motion,
+and whether the callout stays clearly attached. Rollback unit is this reader's
+lens projection and controls. Checked physics, canonical native KaTeX and the
+pending mathematical motif audit are preserved; no catalogue promotion follows.
+
+Verification: eight scoped Chromium checks via `npm run visual:mechanics-relations`
+cover real dragging, handle/expression alignment, held interiors, exact reverse,
+latest-sample cross-edge seeks, cancellation, native handoff, animated navigation,
+narrow keyboard/reduced motion, ordinary scrolling and static/print preservation.
+Fourteen focused tests pass via
+`node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts`.
+Full types and production build pass through `npm run build`, with existing
+large-chunk warnings. Desktop and narrow captures were inspected. This is a
+bounded Chromium discovery pass, not Safari/device certification or human visual
+approval. Prior UI tests were replaced rather than retained against dead controls.
+
+## Previous review: boundary callout, directional rewind and substitution overlap (2026-09-14)
 
 Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
 The active scope and lightly outlined callout use a warm inspection accent.
