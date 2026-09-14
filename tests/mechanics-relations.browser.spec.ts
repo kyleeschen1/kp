@@ -95,6 +95,48 @@ test("whole derivation timeline crosses boundaries and keeps the latest rapid ge
   await root.screenshot({ path: info.outputPath("whole-derivation-timeline.png") });
   expect(errors).toEqual([]);
 });
+test("step handoffs retain visible geometry while preparing and keep callouts near the proof", async ({ page }, info) => {
+  await page.goto(route + "#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await root.locator("[data-derivation-trace]").click();
+  const input = root.getByRole("slider", { name: "Whole derivation progress" });
+  await expect(input).toBeVisible();
+  for (const boundary of [1, 2]) {
+    await seek(input, boundary);
+    await expect(root).toHaveAttribute("data-derivation-progress", String(boundary));
+    const prior = await root.locator('[data-derivation-stage] [data-derivation-target] [data-kp-semantic-entity-id$=".prefix"]').boundingBox();
+    const observation = await root.evaluate((el, value) => new Promise<{ stable: boolean; originFlash: boolean; loadingShift: boolean }>(resolve => {
+      const stage = el.querySelector<HTMLElement>("[data-derivation-stage]")!;
+      const y = stage.getBoundingClientRect().top;
+      const workspaceY = el.querySelector(".energy-derivation-workspace")!.getBoundingClientRect().top;
+      let originFlash = false, loadingShift = false;
+      const observer = new MutationObserver(() => {
+        const current = el.querySelector<HTMLElement>("[data-derivation-stage]")!;
+        originFlash ||= current.getBoundingClientRect().top < y - .5;
+        loadingShift ||= Math.abs(el.querySelector(".energy-derivation-workspace")!.getBoundingClientRect().top - workspaceY) > .5;
+        if (el.getAttribute("data-derivation-progress") === String(value)) {
+          observer.disconnect(); clearTimeout(timeout);
+          resolve({ stable: true, originFlash, loadingShift });
+        }
+      });
+      observer.observe(el, { subtree: true, attributes: true, childList: true });
+      const timeout = setTimeout(() => { observer.disconnect(); resolve({ stable: false, originFlash, loadingShift }); }, 10000);
+      const slider = el.querySelector<HTMLInputElement>("input")!;
+      slider.value = String(value); slider.dispatchEvent(new Event("input", { bubbles: true }));
+    }), boundary + .000001);
+    expect(observation).toEqual({ stable: true, originFlash: false, loadingShift: false });
+    const next = await root.locator('[data-derivation-stage] [data-derivation-source] [data-kp-semantic-entity-id$=".prefix"]').boundingBox();
+    expect(Math.abs(next!.y - prior!.y)).toBeLessThan(.5);
+    expect(Math.abs(next!.x - prior!.x)).toBeLessThan(.5);
+  }
+  await seek(input, 2.33);
+  await expect(root).toHaveAttribute("data-phase", "orient");
+  const cue = await root.locator("[data-derivation-cue]").boundingBox();
+  const chain = await root.locator(".energy-derivation-chain").boundingBox();
+  expect(cue!.x - chain!.x - chain!.width).toBeLessThan(20);
+  expect(chain!.width).toBeLessThan(240);
+  await root.screenshot({ path: info.outputPath("near-callout-stable-handoff.png") });
+});
 test("derivation keeps narrow keyboard endpoints and complete print history", async ({ page }, info) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });

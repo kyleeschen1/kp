@@ -1,6 +1,33 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: one whole-derivation timeline (2026-09-14)
+## Current review: closer callouts and continuous step handoff (2026-09-14)
+
+The same canonical page now places the callout beside an intrinsic-width math
+column, rather than half a page away. Its vertical placement stays inside the
+proof envelope so automatic step changes do not grow the surrounding layout.
+Phone docking, the whole-derivation slider and all existing algebra remain.
+
+The jump had two demonstrated presentation causes: the host reset its visible
+stage to the origin before awaiting native readiness and inserted a loading
+paragraph; adjacent native expression envelopes also differed by about 1.3 px
+in vertical alignment. Replacement scenes now prepare invisibly while the old
+scene remains visible, then swap atomically at the requested position. Native
+history and endpoints share annotated markup and align by the measured invariant
+semantic prefix, not expression-box centering or glyph-specific offsets.
+
+Eight Chromium checks pass, including a new observer-based handoff regression
+that catches intermediate origin flashes/layout shifts and checks adjacent
+prefix positions within half a pixel. Eleven focused unit tests and the full
+typecheck/production build pass. A transient server reset interrupted one earlier
+attempt before navigation; the final complete scoped run passed. No shared
+compositor, semantic law, global easing policy or second caller changed.
+
+Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>:
+advance through all three moves and scrub across the boundaries. Confirm the
+remaining visible motion is intentional carry/algebra and the callout is close
+enough without competing with the expression. This remains the r2 checkpoint.
+
+## Previous review: one whole-derivation timeline (2026-09-14)
 
 At <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>,
 select **Trace these steps**. The slider now spans the entire three-move

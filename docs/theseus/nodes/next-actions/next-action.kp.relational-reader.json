@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review whole-derivation timeline at mechanics-relations energy-from-momentum. No scrolling viewport or r3-r5 work.",
+  "summary": "HUMAN_CHECKPOINT: review closer callout and repaired step-boundary handoff at mechanics-relations energy-from-momentum.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -209,6 +209,20 @@
       "scope": "whole-derivation transport integration",
       "checkedAt": "2026-09-14T19:52:33.922Z",
       "notes": "Full type checks and production build pass; existing large-chunk warnings remain."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "callout proximity and atomic native handoff",
+      "checkedAt": "2026-09-14T20:18:46.037Z",
+      "notes": "Eight Chromium tests pass. Observer regression catches origin flash and loading layout shifts; adjacent semantic prefix positions agree within half a pixel. Earlier 1.34px failure repaired by measured alignment; a separate attempt hit server reset before navigation."
+    },
+    {
+      "command": "npm run build && node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "handoff repair integration",
+      "checkedAt": "2026-09-14T20:18:47.883Z",
+      "notes": "Full types and production build pass with existing chunk warnings; eleven focused tests pass."
     }
   ],
   "expectedLearning": [

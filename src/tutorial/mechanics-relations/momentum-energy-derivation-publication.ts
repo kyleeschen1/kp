@@ -28,9 +28,9 @@ export function renderEnergyDerivationPassage(markdown: string) {
     <p data-derivation-status role="status" hidden></p>
     <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">
-      <ol class="energy-derivation-history">${momentumEnergyDerivationStates.map((latex, i) => `<li data-derivation-row="${i}">
+      <ol class="energy-derivation-history">${momentumEnergyDerivationStates.map((_, i) => `<li data-derivation-row="${i}">
         <span class="energy-derivation-row-marker" aria-hidden="true">${i + 1}</span>
-        <div class="energy-derivation-equation">${math(latex)}</div>
+        <div class="energy-derivation-equation">${math(compiled.moves[i]?.annotated[0] ?? compiled.moves.at(-1)!.annotated[1]!)}</div>
       </li>`).join("")}</ol>
       <div class="energy-derivation-stage" data-derivation-stage hidden></div>
       <svg class="energy-derivation-pointer" data-derivation-pointer aria-hidden="true" hidden><path fill="none" stroke="currentColor"/><circle r="3" fill="currentColor"/></svg>

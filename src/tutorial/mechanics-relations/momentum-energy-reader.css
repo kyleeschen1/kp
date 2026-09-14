@@ -34,7 +34,7 @@
 .energy-derivation-chain { position: relative; }
 .energy-derivation-history { list-style: none; padding: 0; margin: 0; }
 .energy-derivation-workspace { position: relative; margin-block: 1rem; }
-.energy-derivation[data-tracing="true"] .energy-derivation-workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; }
+.energy-derivation[data-tracing="true"] .energy-derivation-workspace { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .75rem; }
 .energy-derivation-history li { position: relative; height: 3.4rem; }
 .energy-derivation-equation, .energy-derivation-endpoint { height: 3.4rem; display: grid; align-items: center; width: 100%; padding-left: 1.5rem; box-sizing: border-box; }
 .energy-derivation-equation .katex-display, .energy-derivation-endpoint .katex-display { margin: 0; text-align: left; }

@@ -12,6 +12,15 @@ fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
 
+### Accepted callout and handoff repair (2026-09-14)
+
+Bring the popup closer to its equation and remove the reported between-step
+jump. Preserve existing proof slots, whole-derivation transport, semantic laws
+and algebra motifs. The bounded repair owns only host preparation, native
+baseline alignment and callout layout. Verify intermediate handoff frames as
+well as endpoints; do not mask discontinuities with extra easing. Return to the
+same r2 visual review. No shared compositor changes or broader promotion implied.
+
 ### Accepted whole-derivation transport refinement (2026-09-14)
 
 The user approved one continuous slider across the existing three moves, with

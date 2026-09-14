@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Momentum-energy relational reader",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at r2 whole-derivation transport refinement. Resume only after visual acceptance.",
+  "summary": "HUMAN_CHECKPOINT at r2 callout and step-handoff repair. Await visual acceptance before later slices.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,7 +46,7 @@
     {
       "id": "r2",
       "title": "Canonical reader exemplar and human review",
-      "summary": "HUMAN_CHECKPOINT: whole-derivation slider and equation checkpoint buttons implemented. Local animated Next/Previous and compact proof preserved; verified cross-boundary rapid seek, keyboard, unit tests and build.",
+      "summary": "HUMAN_CHECKPOINT: closer callouts, atomic prepared scene replacement and measured baseline continuity. Eight browser regressions, eleven unit tests and full build pass; no r3-r5 work.",
       "status": "in-progress"
     },
     {

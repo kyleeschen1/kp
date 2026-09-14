@@ -7,7 +7,7 @@ import { energyDerivationFocus, sampleEnergyDerivationPresentation, resolveEnerg
  * participating in that move's semantic fan-out. */
 export function enhanceEnergyDerivation(root: HTMLElement) {
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
-  const stage = get<HTMLElement>("[data-derivation-stage]");
+  let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
   const clock = createKpReaderTimelinePlaybackClock({ id: "energy.derivation.clock", durationMs: 4400 });
   const abort = new AbortController(), opts = { signal: abort.signal };
@@ -72,8 +72,12 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     get("[data-derivation-scrub]").hidden = true; count.value = "";
   };
   async function mount(index: number, progress: number) {
-    clock.pause(); retire(); const token = generation; loading = true;
-    status.hidden = false; status.textContent = "Preparing this move…";
+    clock.pause(); const token = ++generation; loading = true;
+    // Keep the current paint and layout while fonts/measurement prepare the
+    // successor. A visible stage reset to row zero is not an animation phase.
+    status.hidden = tracing; status.textContent = "Preparing this move…";
+    let candidate: HTMLElement | undefined;
+    let created: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
     try {
       const [{ mountMomentumEnergyDerivationSession }, { createEnergyDerivationPlan }, domain] = await Promise.all([
         import("../../rendering/momentum-energy-derivation-session.ts"),
@@ -83,41 +87,72 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       if (token !== generation) return;
       const checked = domain.checkMomentumEnergyDerivation(domain.momentumEnergyDerivationSource);
       if (checked.status !== "checked") throw new Error(checked.code);
-      selected = index; tracing = true;
+      tracing = true;
       root.dataset["tracing"] = "true";
       rows.forEach(row => { row.hidden = false; });
       get("[data-derivation-notes]").hidden = true; get("[data-derivation-key]").hidden = false;
-      cue.replaceChildren(...[...get<HTMLElement>(`[data-derivation-reason="${index}"]`).childNodes].map(node => node.cloneNode(true)));
       cue.hidden = false;
       const template = get<HTMLTemplateElement>(`[data-derivation-template="${index}"]`);
-      stage.replaceChildren(template.content.cloneNode(true)); stage.hidden = false;
-      stage.style.top = "0px"; stage.style.transform = "none";
-      sourceTop = rows[index]!.offsetTop;
-      rowDistance = rows[index + 1]!.offsetTop - sourceTop;
-      const target = get<HTMLElement>("[data-derivation-target]");
+      candidate = stage.cloneNode(false) as HTMLElement;
+      candidate.removeAttribute("data-derivation-stage");
+      candidate.setAttribute("data-derivation-preparing", "");
+      candidate.setAttribute("aria-hidden", "true");
+      candidate.replaceChildren(template.content.cloneNode(true)); candidate.hidden = false;
+      candidate.style.opacity = "0"; candidate.style.top = "0px"; candidate.style.transform = "none";
+      stage.parentElement!.append(candidate);
+      const nextSourceTop = rows[index]!.offsetTop;
+      const nextRowDistance = rows[index + 1]!.offsetTop - nextSourceTop;
+      const target = candidate.querySelector<HTMLElement>("[data-derivation-target]")!;
       target.style.top = "0px";
-      const created = await mountMomentumEnergyDerivationSession(stage, createEnergyDerivationPlan(checked.model), index);
-      if (token !== generation) { created.dispose(); return; }
-      session = created;
-      const stageRect = stage.getBoundingClientRect();
+      await document.fonts.ready;
+      if (token !== generation) return;
+      // Center the invariant semantic prefix, not each expression's changing
+      // fraction/strut envelope. History and both endpoints use the same native
+      // markup and measured anchor; no glyph-specific pixel correction.
+      const equations = [...rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!),
+        ...candidate.querySelectorAll<HTMLElement>(".energy-derivation-endpoint")];
+      for (const equation of equations) {
+        const paint = equation.querySelector<HTMLElement>(".katex-display")!;
+        paint.style.transform = "none";
+        const prefix = equation.querySelector<HTMLElement>('[data-kp-semantic-entity-id$=".prefix"]');
+        if (!prefix) throw new Error("Derivation baseline requires its invariant semantic prefix");
+        const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
+        paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
+      }
+      created = await mountMomentumEnergyDerivationSession(candidate, createEnergyDerivationPlan(checked.model), index);
+      if (token !== generation) return;
+      const stageRect = candidate.getBoundingClientRect();
       const focus = energyDerivationFocus[index]!;
-      anchors = [focus.source, focus.target].map(id => {
-        const element = stage.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${id}"]`);
+      const nextAnchors = [focus.source, focus.target].map(id => {
+        const element = candidate!.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${id}"]`);
         if (!element) throw new Error(`Missing derivation callout target ${id}`);
         const box = element.getBoundingClientRect();
-        return { x: box.right - stageRect.left + 3, y: sourceTop + rowDistance + box.top + box.height / 2 - stageRect.top };
+        return { x: box.right - stageRect.left + 3, y: nextSourceTop + nextRowDistance + box.top + box.height / 2 - stageRect.top };
       });
+      // Commit one ready native scene atomically; no intermediate unmeasured
+      // source, duplicate endpoints, or origin-position paint reaches a frame.
+      session?.dispose(); stage.remove();
+      stage = candidate; candidate = undefined;
+      stage.removeAttribute("data-derivation-preparing"); stage.removeAttribute("aria-hidden");
+      stage.setAttribute("data-derivation-stage", "");
+      session = created; created = undefined;
+      selected = index; sourceTop = nextSourceTop; rowDistance = nextRowDistance; anchors = nextAnchors;
+      cue.replaceChildren(...[...get<HTMLElement>(`[data-derivation-reason="${index}"]`).childNodes].map(node => node.cloneNode(true)));
       pointerEnd = stageRect.width;
-      cue.style.setProperty("--derivation-cue-top", `${sourceTop + rowDistance}px`);
+      const proofHeight = get<HTMLElement>(".energy-derivation-history").offsetHeight;
+      cue.style.setProperty("--derivation-cue-top", `${Math.min(sourceTop + rowDistance, Math.max(0, proofHeight - cue.offsetHeight))}px`);
       loading = false; status.hidden = true;
       get("[data-derivation-navigation]").hidden = false; get("[data-derivation-trace]").hidden = true;
       get("[data-derivation-scrub]").hidden = false;
       clock.seek(progress); project();
+      stage.style.opacity = "";
     } catch (error) {
       if (token !== generation) return;
       read(); root.dataset["repair"] = "true"; status.hidden = false;
       status.textContent = "This animation needs repair. The complete derivation is still available below.";
       console.error("Energy derivation repair", error);
+    } finally {
+      created?.dispose(); candidate?.remove();
     }
   }
   const play = (direction: "forward" | "rewind") => {
