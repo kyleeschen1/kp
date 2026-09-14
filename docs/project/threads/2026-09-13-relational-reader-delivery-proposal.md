@@ -1,12 +1,14 @@
 # Momentum and energy: first relational-reader delivery
 
 Date: 2026-09-13
-Status: proposed; explicit scope approval required before implementation
+Status: approved by the user's “approve”; execute the unchanged r1-r5 scope
 Mode: interactive `kp-delivery-loop`; no minimum slice count
 Authority: [accepted direction](../decisions/2026-09-13-relational-reader-priority.md)
 Evidence: [source-based assessment](../reviews/2026-09-13-next-step-review.md)
 Theseus target: `next-action.kp.relational-reader`
-Proposed contract after approval: `run-contract.kp.relational-reader-v1`
+Executable contract: `run-contract.kp.relational-reader-v2`.
+V1 is deferred issuance-only history: scoped CLI help omitted mandatory control
+fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
 

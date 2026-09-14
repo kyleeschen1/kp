@@ -1,4 +1,15 @@
 export {
+  assertMomentumEnergy,
+  checkMomentumEnergy,
+  momentumEnergyExamples,
+  physicalTime,
+  sampleMomentumEnergy,
+  type CheckedMomentumEnergy,
+  type MomentumEnergySource,
+  type PhysicalTime
+} from "./physics/momentum-energy.ts";
+
+export {
   validateKpLinearEquationTrace,
   type KpExactRational,
   type KpLinearEquation,

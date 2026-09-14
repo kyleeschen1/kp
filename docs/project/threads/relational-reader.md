@@ -1,6 +1,6 @@
 # Relational reader delivery
 
-Status: active priority; first implementation proposal awaiting user approval
+Status: active; first five-package implementation proposal approved
 Last Updated: 2026-09-13
 
 ## Canonical direction
@@ -19,9 +19,9 @@ authoritative. A persistent-stage reader is a projection/host integration.
 
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
-Theseus target: `next-action.kp.relational-reader`, awaiting scope approval.
-No executable run contract is issued until that proposal is approved. Its stable
-package IDs will bind the contract; this thread must not duplicate slice status.
+Theseus target: `next-action.kp.relational-reader`; executable contract:
+`run-contract.kp.relational-reader-v2`. V1 is deferred issuance-only history,
+not a second run. Theseus owns r1-r5 progress; this thread does not duplicate it.
 
 Subsequent loops follow the decision's outcome gates: complete experience,
 source-only reuse/different caller, connected collection, repeated authoring path.

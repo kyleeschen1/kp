@@ -1,0 +1,66 @@
+{
+  "id": "run-contract.kp.relational-reader-v2",
+  "kind": "run-contract",
+  "title": "Momentum-energy relational reader",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md",
+      "summary": "Approved five-package scope; v2 corrects issuance-only v1 missing control metadata, no scope change"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Approved proposal only; bounded shared-owner repairs; no implementation beyond a pending subjective gate"
+  ],
+  "disallowedWork": [
+    "No old-loop resumption, universal framework, paid calls, deployment, merge or push"
+  ],
+  "goal": "Deliver approved r1-r5 reading, comparison, return, reconstruction and reuse",
+  "target": "next-action.kp.relational-reader",
+  "runMode": "run",
+  "maxSlices": 5,
+  "commitCadence": "Verified reversible package with evidence",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop at r2 and r5 human checkpoints; eight active hours with final 90 minutes reserved; initial capability investigation 45 minutes maximum; stop for safety, unsupported authority, new scope or user pause"
+  ],
+  "slices": [
+    {
+      "id": "r1",
+      "title": "Explanation and checked physics",
+      "summary": "Explanation and checked physics with static Article baseline verified; continue approved r2 exemplar.",
+      "status": "complete"
+    },
+    {
+      "id": "r2",
+      "title": "Canonical reader exemplar and human review",
+      "status": "planned"
+    },
+    {
+      "id": "r3",
+      "title": "Reasoning context and exact return",
+      "status": "planned"
+    },
+    {
+      "id": "r4",
+      "title": "Source-only encounter and publication",
+      "status": "planned"
+    },
+    {
+      "id": "r5",
+      "title": "Integration release and final human review",
+      "status": "planned"
+    }
+  ]
+}

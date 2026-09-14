@@ -2,15 +2,20 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: accepted priority, awaiting explicit approval of the five-package September 13 delivery proposal. No implementation authorized yet.",
+  "summary": "User approved the exact five-package September 13 proposal. Execute r1-r5 with r2 and r5 human checkpoints, eight active hours and final 90 minute reserve; old motion run remains deferred.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.architecture-cost-semantic-readiness"
+    ]
+  },
   "affects": [
     "workflow.kp.delivery"
   ],
@@ -26,13 +31,34 @@
       "scope": "priority-and-parking-records-only",
       "checkedAt": "2026-09-14T03:34:32.599Z",
       "notes": "1132 nodes and 30743 events valid after deferring the old run/action, closing the interrupted receipt, and registering the blocked proposal. Documentation and control-plane evidence only; no new reader implementation or runtime certification."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "r1",
+      "checkedAt": "2026-09-14T04:13:10.845Z",
+      "notes": "Six tests pass: physics, source authority, governance and locked static Article compilation."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "r1",
+      "checkedAt": "2026-09-14T04:13:13.730Z",
+      "notes": "Full architecture gate passes after repairing public import boundaries; initial run failed deep imports."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r1",
+      "checkedAt": "2026-09-14T04:14:26.910Z",
+      "notes": "Full app, node, test, Svelte and domains checks pass. Prior test project OOM and diagnostic failure repaired with measured 3 GB test-only heap and narrowed assertion; see authoring evidence."
     }
   ],
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
   ],
   "allowedWork": [
-    "Approval-gated r1-r5 in docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md; direction accepted but runtime work waits for scope approval."
+    "Approved r1-r5 in the September 13 proposal; execute through v2, stop at r2 and r5 human gates."
   ],
   "disallowedWork": [
     "No old-loop resumption, universal runtime, cross-domain promotion, new font identity, accounts, tutor, analytics, paid calls, deployment, merge or push."

@@ -30,9 +30,10 @@ with inspectable comparisons, expandable reasoning, exact return, context and
 reconstruction. Canonical decision and medium-term gates:
 `decisions/2026-09-13-relational-reader-priority.md`.
 Current proposal: `threads/2026-09-13-relational-reader-delivery-proposal.md`.
-The direction is accepted; its five-package implementation scope awaits approval.
-Theseus target: `next-action.kp.relational-reader`. Issue its run contract only
-after that approval. Follow KP delivery policy, not a minimum-slice long-loop quota.
+The user approved its five-package implementation scope. Execute only
+`run-contract.kp.relational-reader-v2`, target `next-action.kp.relational-reader`;
+v1 is issuance-only history. Stop at the r2 and r5 human checkpoints. Follow KP
+delivery policy, not a minimum-slice long-loop quota.
 
 The user explicitly parked `run-contract.kp.mechanics-motion-v1` and its action.
 The old plan, code and evidence remain resumable; do not execute its P2 checkpoint

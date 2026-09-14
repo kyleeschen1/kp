@@ -7,10 +7,10 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-Review/approve `threads/2026-09-13-relational-reader-delivery-proposal.md`.
+Execute the approved `threads/2026-09-13-relational-reader-delivery-proposal.md`.
 Accepted direction: `decisions/2026-09-13-relational-reader-priority.md`;
 active thread: `threads/relational-reader.md`. Theseus target:
-`next-action.kp.relational-reader`; no implementation contract until scope approval.
+`next-action.kp.relational-reader`, under `run-contract.kp.relational-reader-v2`.
 The motion loop is deferred and recoverable, not completed. Medium-term outcome
 gates live in the decision; do not duplicate their tasks/status here.
 

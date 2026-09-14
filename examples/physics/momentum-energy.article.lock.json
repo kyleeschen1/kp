@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "kp.article-import-lock.v1",
+  "documentId": "lesson.physics.momentum-energy",
+  "entries": [
+    {
+      "alias": "straight",
+      "request": "vignette.physics.momentum-energy-straight@1",
+      "vignetteId": "vignette.physics.momentum-energy-straight",
+      "requestedMajor": 1,
+      "version": "1.0.0",
+      "integrity": "sha256:372572136655c33ee85adfdfffd8019c030d2700328059dfe138989e71ffc024",
+      "moduleSpecifier": "../../tutorial/mechanics-relations/momentum-energy-figure.ts"
+    },
+    {
+      "alias": "turning",
+      "request": "vignette.physics.momentum-energy-turning@1",
+      "vignetteId": "vignette.physics.momentum-energy-turning",
+      "requestedMajor": 1,
+      "version": "1.0.0",
+      "integrity": "sha256:06903bd1835a84856024ba7c41ef1e5df6f30711326865f628d7fe9ea5d393b7",
+      "moduleSpecifier": "../../tutorial/mechanics-relations/momentum-energy-figure.ts"
+    }
+  ]
+}

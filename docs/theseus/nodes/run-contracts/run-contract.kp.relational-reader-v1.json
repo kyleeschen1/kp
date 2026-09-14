@@ -1,0 +1,61 @@
+{
+  "id": "run-contract.kp.relational-reader-v1",
+  "kind": "run-contract",
+  "title": "Momentum-energy relational reader",
+  "status": "deferred",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md",
+      "summary": "User approved exact five-package scope; r2 and r5 mandatory subjective checkpoints"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "Issuance-only predecessor: CLI help omitted run limits and stop-condition fields. Identical approved scope is reissued with complete typed control fields as v2; do not execute v1."
+  ],
+  "allowedWork": [
+    "Approved r1-r5 only; eight active hours excluding waits, last 90 minutes verification reserve; 45 minute initial authority investigation ceiling"
+  ],
+  "disallowedWork": [
+    "Stop at r2 before extending treatment and r5 before completion; stop on unsupported authority, safety, new scope, user pause or resource ceiling. No old-loop resumption, universal framework, paid calls, deployment, merge or push."
+  ],
+  "goal": "Deliver the approved reading, comparison, exact return, reconstruction and source-only reuse experience",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "r1",
+      "title": "Explanation and checked physics",
+      "status": "in-progress"
+    },
+    {
+      "id": "r2",
+      "title": "Canonical reader exemplar and human review",
+      "status": "planned"
+    },
+    {
+      "id": "r3",
+      "title": "Reasoning context and exact return",
+      "status": "planned"
+    },
+    {
+      "id": "r4",
+      "title": "Source-only encounter and publication",
+      "status": "planned"
+    },
+    {
+      "id": "r5",
+      "title": "Integration release and final human review",
+      "status": "planned"
+    }
+  ]
+}
