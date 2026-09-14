@@ -25,13 +25,15 @@ export function projectMomentumEnergyFigure(frame: MomentumEnergyFrame) {
 
 export function renderMomentumEnergySvg(model: CheckedMomentumEnergy, time: PhysicalTime): string {
   const frame = sampleMomentumEnergy(model, time), p = projectMomentumEnergyFigure(frame);
+  // Explicit data-attribute values keep this identical markup valid as XML
+  // standalone SVG as well as the browser's more permissive inline HTML.
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 250" role="img" aria-label="Particle trajectory, momentum arrow, force arrow, and kinetic energy bar">
-    <path data-trajectory d="${p.trajectory}" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-dasharray="3 5"/>
-    <path data-force d="${p.force}" fill="none" stroke="#a55b24" stroke-width="3"/>
-    <path data-momentum d="${p.momentum}" fill="none" stroke="#236b8e" stroke-width="3"/>
-    <circle data-particle cx="${p.x}" cy="${p.y}" r="5" fill="currentColor"/>
+    <path data-trajectory="" d="${p.trajectory}" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-dasharray="3 5"/>
+    <path data-force="" d="${p.force}" fill="none" stroke="#a55b24" stroke-width="3"/>
+    <path data-momentum="" d="${p.momentum}" fill="none" stroke="#236b8e" stroke-width="3"/>
+    <circle data-particle="" cx="${p.x}" cy="${p.y}" r="5" fill="currentColor"/>
     <path d="M35 228H335" stroke="#a3a3a3" stroke-width="2"/>
-    <rect data-energy x="35" y="218" width="${p.energyWidth}" height="10" fill="#236b8e"/>
+    <rect data-energy="" x="35" y="218" width="${p.energyWidth}" height="10" fill="#236b8e"/>
   </svg>`;
 }
 

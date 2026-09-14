@@ -1,0 +1,29 @@
+.physics-reader { max-width: 46rem; margin: auto; padding: 2rem 1.25rem 5rem; font-family: var(--kp-focus-card-passage-font, Georgia, "Times New Roman", serif); line-height: 1.65; }
+.physics-reader nav { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; margin-bottom: 3rem; }
+.physics-reader h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.2; }
+.physics-reader h2 { margin-top: 2.5rem; font-size: 1.4rem; line-height: 1.3; }
+.physics-reader p { margin-block: 1rem; }
+.physics-reader .kp-article-math { overflow-x: auto; }
+.physics-reader figure { margin: 1.25rem 0; }
+.physics-reader figure img { display: block; width: min(100%, 30rem); margin-inline: auto; }
+.physics-reader figcaption { font-size: .9rem; line-height: 1.45; margin-top: .75rem; }
+.physics-motion { scroll-margin-top: 1rem; }
+.physics-cue p { margin-bottom: .6rem; }
+.physics-figure { border-block: 1px solid #c9c9c9; padding-block: 1rem; }
+.physics-figure svg { display: block; width: min(100%, 30rem); height: auto; margin: auto; }
+.physics-figure svg * { vector-effect: non-scaling-stroke; }
+.physics-quantities { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .25rem 1rem; font-variant-numeric: tabular-nums; }
+/* Typography stays in screen-space HTML, including static initial labels. */
+.physics-figure .kp-focus-deck__annotation { position: static; }
+.physics-legend { display: grid; gap: .2rem; }
+.physics-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin-top: .8rem; }
+.physics-controls[hidden] { display: none; }
+.physics-playback-note { flex-basis: 100%; font-size: .9rem; }
+.physics-controls button { min-height: 2.75rem; padding: .4rem .8rem; border: 1px solid #aaa; border-radius: .3rem; background: transparent; color: inherit; }
+.physics-controls label { margin-left: auto; font-size: 1rem; font-variant-numeric: tabular-nums; }
+.physics-controls input { flex-basis: 100%; width: 100%; min-height: 2.5rem; accent-color: #236b8e; }
+.physics-controls :focus-visible { outline: 2px solid #236b8e; outline-offset: 3px; }
+.physics-figure [data-physics-description] { min-height: 2.9em; font-variant-numeric: tabular-nums; }
+.physics-after { margin-top: 1.25rem; }
+@media (max-width: 520px) { .physics-reader { padding: 1rem .85rem 3rem; } .physics-reader nav { margin-bottom: 2rem; } }
+@media print { .physics-controls { display: none; } .physics-reader { max-width: none; padding: 0; } .physics-figure { break-inside: avoid; } }

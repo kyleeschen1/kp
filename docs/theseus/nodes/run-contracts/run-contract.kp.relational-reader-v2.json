@@ -2,7 +2,8 @@
   "id": "run-contract.kp.relational-reader-v2",
   "kind": "run-contract",
   "title": "Momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT at r2. Scope remains approved; await visual acceptance before marking r2 complete and continuing r3. No implementation is authorized past this gate.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,7 +46,8 @@
     {
       "id": "r2",
       "title": "Canonical reader exemplar and human review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: implementation and checks complete; awaiting visual acceptance at localhost:8000/experiments/mechanics-relations/. Do not begin r3 before acceptance.",
+      "status": "in-progress"
     },
     {
       "id": "r3",

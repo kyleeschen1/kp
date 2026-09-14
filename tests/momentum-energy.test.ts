@@ -4,6 +4,9 @@ import { checkMomentumEnergy, momentumEnergyExamples, physicalTime, sampleMoment
 import { compileMomentumEnergyAsset } from "../src/authoring/momentum-energy-authoring.ts";
 import { readFileSync } from "node:fs";
 import { compileMomentumEnergyPublication, momentumEnergySourcePath } from "../src/tutorial/mechanics-relations/momentum-energy-publication.ts";
+import { renderMomentumEnergyReader } from "../src/tutorial/mechanics-relations/momentum-energy-reader-publication.ts";
+import { loadMomentumEnergyRuntimeSource, momentumEnergyTimeAtProgress } from "../src/tutorial/mechanics-relations/momentum-energy-runtime-source.ts";
+import { projectMomentumEnergyAttention } from "../src/tutorial/mechanics-relations/momentum-energy-attention.ts";
 
 function model(index: number, massKg = 1) {
   const result = checkMomentumEnergy({ ...momentumEnergyExamples[index], massKg });
@@ -86,4 +89,20 @@ test("the canonical Article resolves governed vignettes and complete no-script s
   assert.deepEqual(compileMomentumEnergyPublication(text, publication.article.document.importLock).article.document, publication.article.document);
   assert.throws(() => compileMomentumEnergyPublication(text.replace("straight/advance", "straight/unsupported")));
   for (const svg of publication.assets.values()) assert.match(svg, /data-momentum/);
+  const reader = renderMomentumEnergyReader(publication);
+  assert.equal(reader.document.blocks.filter(block => block.kind === "animation-story").length, 2);
+  assert.match(reader.html, /type="application\/json"/);
+});
+
+test("runtime transport rejects stale or unsupported authority and keeps time separate from attention", () => {
+  const compiled = compileMomentumEnergyAsset(model(1));
+  const input = { schemaVersion: "kp.physics.momentum-energy.runtime.v1", source: compiled.model.source,
+    revisionId: compiled.revisionId, representationId: "representation.physics.momentum-energy.native-2d.v1" };
+  const checked = loadMomentumEnergyRuntimeSource(input);
+  assert.equal(momentumEnergyTimeAtProgress(checked, .5).seconds, Math.PI / 4);
+  assert.equal(projectMomentumEnergyAttention("test", .5).primaryTarget, "visual");
+  assert.equal(projectMomentumEnergyAttention("test", 1).primaryTarget, "correspondence");
+  for (const patch of [{ revisionId: "stale" }, { representationId: "generic-fade" }, { extra: true }, { source: { ...input.source, massKg: 3 } }])
+    assert.throws(() => loadMomentumEnergyRuntimeSource({ ...input, ...patch }));
+  assert.throws(() => momentumEnergyTimeAtProgress(checked, NaN));
 });

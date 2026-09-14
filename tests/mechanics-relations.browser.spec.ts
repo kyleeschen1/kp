@@ -1,0 +1,82 @@
+import { test, expect, type Locator } from "@playwright/test";
+
+const route = "/experiments/mechanics-relations/";
+const seek = (input: Locator, seconds: number) => input.evaluate((element: HTMLInputElement, value) => {
+  element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
+}, seconds);
+test("native reading, continuous local control, exact reverse and held prose", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(route);
+  const straight = page.locator('[data-episode="straight"]'), turning = page.locator('[data-episode="turning"]');
+  await straight.scrollIntoViewIfNeeded();
+  await expect(straight).toHaveAttribute("data-enhanced", "true");
+  const prose = await straight.locator(".physics-cue").innerText();
+  await straight.locator("[data-physics-play]").click();
+  await expect.poll(async () => Number(await straight.getAttribute("data-physical-time"))).toBeGreaterThan(.05);
+  const time = Number(await straight.getAttribute("data-physical-time"));
+  expect(time).toBeLessThan(2);
+  await straight.locator("[data-physics-play]").click();
+  await expect(straight.locator(".physics-cue")).toHaveText(prose);
+  await seek(straight.locator("input"), 1);
+  const midway = await straight.locator("[data-momentum]").getAttribute("d");
+  await expect(straight).toHaveAttribute("data-energy", "2");
+  await seek(straight.locator("input"), 2);
+  await expect(straight).toHaveAttribute("data-energy", "8");
+  await seek(straight.locator("input"), 1);
+  await expect(straight.locator("[data-momentum]")).toHaveAttribute("d", midway!);
+  await straight.locator("input").press("ArrowLeft");
+  expect(Number(await straight.getAttribute("data-physical-time"))).toBeLessThan(1);
+  await turning.scrollIntoViewIfNeeded();
+  await expect(turning).toHaveAttribute("data-enhanced", "true");
+  const slider = turning.locator("input"), box = await slider.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.move(box!.x + box!.width * .2, box!.y + box!.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(box!.x + box!.width * .7, box!.y + box!.height / 2, { steps: 8 });
+  await page.mouse.up();
+  expect(Number(await turning.getAttribute("data-physical-time"))).toBeGreaterThan(.5);
+  expect(Number(await turning.getAttribute("data-physical-time"))).toBeLessThan(Math.PI / 2);
+  await seek(slider, Math.PI / 4);
+  await expect(turning).toHaveAttribute("data-energy", "0.5");
+  await expect(turning.locator("[data-physics-description]")).toContainText("(-0.71, 0.71)");
+  await turning.screenshot({ path: info.outputPath("turning-intermediate.png") });
+  const beforeScroll = await turning.getAttribute("data-physical-time");
+  await page.mouse.wheel(0, 150);
+  await expect(turning).toHaveAttribute("data-physical-time", beforeScroll!);
+  await turning.locator("[data-physics-play]").click();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(turning).toHaveAttribute("data-playing", "false");
+  await page.screenshot({ path: info.outputPath("reading-start.png"), fullPage: true });
+  expect(errors).toEqual([]);
+});
+
+test("source-owned static reading needs no JavaScript", async ({ browser }, info) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(`http://localhost:8000${route}`);
+  await expect(page.locator("h1")).toContainText("momentum");
+  await expect(page.locator("[data-particle]")).toHaveCount(2);
+  await expect(page.locator('[data-episode="turning"] [data-kp-focus-deck-annotation="physics.momentum"]')).toContainText("(0, 1)");
+  await page.goto(`http://localhost:8000${route}static.html`);
+  const images = page.locator("figure img");
+  await expect(images).toHaveCount(4);
+  for (const img of await images.all()) await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+  await page.screenshot({ path: info.outputPath("static-reading.png"), fullPage: true });
+  await context.close();
+});
+
+test("narrow layout and reduced-motion controls retain explicit endpoints", async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(route);
+  const turning = page.locator('[data-episode="turning"]');
+  await turning.scrollIntoViewIfNeeded();
+  await turning.locator("[data-physics-play]").click();
+  await expect(turning).toHaveAttribute("data-physical-time", String(Math.PI / 2));
+  await expect(turning).toHaveAttribute("data-playing", "false");
+  await turning.locator("[data-physics-reset]").click();
+  await expect(turning).toHaveAttribute("data-physical-time", "0");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await turning.screenshot({ path: info.outputPath("narrow-turning.png") });
+});

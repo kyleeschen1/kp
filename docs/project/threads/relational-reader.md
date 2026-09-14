@@ -37,6 +37,11 @@ it is not permission to build twelve lessons or a prerequisite to this exemplar.
 Existing equation, tax, gradient, Bayesian, code, 2D and 3D capabilities remain
 preserved. No generic theseus-long-loop requirement overrides this KP proposal.
 
+The implemented candidate's canonical URLs and review questions are in the
+[reader review packet](2026-09-13-momentum-energy-reader-review.md). Its checked
+source path and medium-choice rationale are in the
+[authoring evidence](2026-09-13-momentum-energy-authoring-evidence.md).
+
 Start future sessions at the roadmap, this thread and `npm run theseus -- plan run`.
 Before implementation, use `llm-generation-entrypoint.md`, its selected domain
 packet, the explanation worksheet and the visual-salience skill as applicable.

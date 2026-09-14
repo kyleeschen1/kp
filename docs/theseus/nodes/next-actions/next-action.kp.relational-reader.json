@@ -2,13 +2,17 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved the exact five-package September 13 proposal. Execute r1-r5 with r2 and r5 human checkpoints, eight active hours and final 90 minute reserve; old motion run remains deferred.",
+  "summary": "HUMAN_CHECKPOINT required by approved r2: review the native-scroll momentum-energy reader and static edition. On acceptance restore ready, complete r2 and continue approved r3-r5.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-13-momentum-energy-reader-review.md"
     }
   ],
   "dependsOn": {
@@ -52,6 +56,41 @@
       "scope": "r1",
       "checkedAt": "2026-09-14T04:14:26.910Z",
       "notes": "Full app, node, test, Svelte and domains checks pass. Prior test project OOM and diagnostic failure repaired with measured 3 GB test-only heap and narrowed assertion; see authoring evidence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-14T04:32:13.798Z",
+      "notes": "Seven tests pass, including reader document validation and stale runtime manifest rejection."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-14T04:32:15.326Z",
+      "notes": "Final complete Chromium discovery run: three tests pass. Includes real drag, keyboard, reverse, scroll independence, offscreen pause, no-JS SVG decoding and narrow reduced-motion. Prior failures and repairs recorded in review packet."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-14T04:32:16.723Z",
+      "notes": "Final full application, node, tests, Svelte and domain check passes after lazy activation and playback label."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-14T04:32:18.120Z",
+      "notes": "Final production build passes with both reader editions and SVG assets. Existing unrelated large-chunk warnings remain. Approximate new route closure 25 KB gzip JS/CSS excluding fonts."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-14T04:32:19.518Z",
+      "notes": "Full architecture and cross-domain gateway checks pass; no accepted exemplar migrated."
     }
   ],
   "expectedLearning": [

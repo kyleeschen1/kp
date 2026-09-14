@@ -5,6 +5,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
 import { kpViteAuthoringMarketPreview } from "./scripts/vite-authoring-market-preview.ts";
 import { kpViteAuthoringStructuralPreview } from "./scripts/vite-authoring-structural-preview.ts";
+import { kpViteMechanicsRelations } from "./scripts/vite-mechanics-relations.ts";
 
 import {
   kpProductionDevelopmentErasurePlugin
@@ -153,6 +154,7 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
   },
   plugins: [
+    kpViteMechanicsRelations(projectRoot),
     {
       name: "kp-canonical-tax-static-reading",
       transformIndexHtml: {
@@ -332,6 +334,8 @@ export default defineConfig({
     // All supported publication targets implement modulepreload. Shipping the
     // legacy polyfill would add a startup request to every route.
     entries: {
+      mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
+      mechanicsRelationsStatic: resolve(projectRoot, "experiments/mechanics-relations/static.html"),
       canonicalSupplyTax: resolve(projectRoot, "experiments/kinetic-figure/supply-tax/index.html"),
       ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [
         entry.name,
