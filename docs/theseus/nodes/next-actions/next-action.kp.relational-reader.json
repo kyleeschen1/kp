@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT required by approved r2: review the native-scroll momentum-energy reader and static edition. On acceptance restore ready, complete r2 and continue approved r3-r5.",
+  "summary": "HUMAN_CHECKPOINT: review revised algebra-first orientation at localhost:8000/experiments/mechanics-relations/ before r3. Implementation verified; awaiting pedagogical acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -91,6 +91,34 @@
       "scope": "r2",
       "checkedAt": "2026-09-14T04:32:19.518Z",
       "notes": "Full architecture and cross-domain gateway checks pass; no accepted exemplar migrated."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "r2-algebra-orientation",
+      "checkedAt": "2026-09-14T05:13:08.486Z",
+      "notes": "Four scoped Chromium checks passed, including both editions, no-script reading, existing controls, native algebra inspection links and narrow layout. Initial held-prose comparison mixed innerText and textContent after KaTeX addition; repaired test to compare innerText consistently without removing accessibility math. Screenshots inspected; human pedagogical review remains required."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "r2-algebra-orientation",
+      "checkedAt": "2026-09-14T05:13:09.230Z",
+      "notes": "Eight focused tests passed: checked physics, algebraic identities against fixtures, source-owned title, and passage-link closure in both editions. Numerical fixture agreement is not symbolic proof certification."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r2-algebra-orientation",
+      "checkedAt": "2026-09-14T05:13:32.509Z",
+      "notes": "Full application, node, tests, Svelte and domain checks pass; Svelte reports zero errors and warnings."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "r2-algebra-orientation",
+      "checkedAt": "2026-09-14T05:13:50.391Z",
+      "notes": "Production build and its full typecheck pass. Both editions and static figures emitted. Existing large-chunk warnings remain; this amendment adds no browser runtime or stylesheet."
     }
   ],
   "expectedLearning": [

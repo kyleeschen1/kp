@@ -35,6 +35,12 @@ The user approved its five-package implementation scope. Execute only
 v1 is issuance-only history. Stop at the r2 and r5 human checkpoints. Follow KP
 delivery policy, not a minimum-slice long-loop quota.
 
+Accepted r2 refinement: orient the learner to the relationship between force,
+momentum and energy through an algebraic spine, with explicit definitions, laws,
+assumptions and deductions. Keep the particle demos as supporting inspections.
+The proposal's amendment owns scope; the earlier demo approval does not accept
+the revised explanation or waive its next checkpoint.
+
 The user explicitly parked `run-contract.kp.mechanics-motion-v1` and its action.
 The old plan, code and evidence remain resumable; do not execute its P2 checkpoint
 or P3/P4 without explicit re-selection. From-zero mechanics remains a learning

@@ -1,7 +1,7 @@
 # Momentum and energy: first relational-reader delivery
 
 Date: 2026-09-13
-Status: approved by the user's “approve”; execute the unchanged r1-r5 scope
+Status: approved; r2 explanation amended by “i agree with the rec and caution. implement”
 Mode: interactive `kp-delivery-loop`; no minimum slice count
 Authority: [accepted direction](../decisions/2026-09-13-relational-reader-priority.md)
 Evidence: [source-based assessment](../reviews/2026-09-13-next-step-review.md)
@@ -11,6 +11,24 @@ V1 is deferred issuance-only history: scoped CLI help omitted mandatory control
 fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
+
+### Accepted algebra-grounded orientation amendment
+
+The opening question is now **What is the relationship between force, momentum
+and energy?** The user needs orientation before the turning counterexample is
+meaningful. Authentic algebra is the explanatory spine: substitute to obtain
+K=|p|²/(2m), differentiate to obtain dK/dt=F·v, then accumulate to distinguish
+impulse from work. Distinguish definitions, physical laws, assumptions and
+deductions. Provide a compact navigable chain and connecting reasons; the
+existing physical demos become supporting inspections.
+
+This is a reversible r2 revision of the same Article and projection. Preserve
+the checked fixtures, pinned vignettes, clocks and renderers. Native KaTeX
+presents the authored argument; do not invent unsupported vector-calculus
+animation. Arbitrary algebra manipulation, new animation authority and curriculum
+expansion are not implied. Keep r1's historical evidence and r2/r5 human gates;
+r3-r5 remain subsequent work. The original narrower question below is preserved
+as rationale for the supporting turning example, not the new entry point.
 
 The reader can explain how force changes momentum without necessarily changing
 kinetic energy, inspect a useful comparison, unfold its reasoning, and return to

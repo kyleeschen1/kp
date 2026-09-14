@@ -7,109 +7,243 @@ kp:
     turning: vignette.physics.momentum-energy-turning@1
 ---
 
-# How can a force change momentum without changing kinetic energy?
+# Force, momentum and energy: how the relationships fit together
 
-Imagine guiding a moving puck around a bend without making it go any faster.
-Its motion changes: it leaves in a different direction. Yet its speed stays the
-same. Has the force changed its momentum, its kinetic energy, or both?
+Push a cart and it speeds up. Stop pushing and, if resistance is negligible,
+it keeps moving. Brake it and it slows down. Force, momentum and energy let us
+ask different questions about this same event. Why do we need all three?
 
-The distinction matters when choosing what to calculate. Momentum keeps track
-of **which way** something moves as well as how fast. Kinetic energy describes
-its motion using **speed alone**. Turning exposes the information that energy
-leaves out.
+Our route is algebraic: start with three relationships, substitute to connect
+them, differentiate to find what changes, and integrate to accumulate that
+change. The equations are the argument; the moving figures are examples you
+can inspect afterward.
 
-## Two descriptions of the same motion
+:::kp-passage{#model-scope}
+**Assumptions.** Treat the cart as a Newtonian point particle of fixed positive
+mass $m$, viewed in one inertial frame: a reference frame in which a free
+particle moves at constant velocity. We ignore rotation and deformation.
+Throughout, $\mathbf F$ means the **net force**, the vector sum of the forces
+acting on the particle. We discuss kinetic energy $K$, not every form of energy.
+:::
 
-Velocity, $\mathbf v$, is an arrow: its direction tells us where the object is
-heading and its length represents speed. For a particle of constant mass $m$,
-momentum is that arrow multiplied by mass:
+## Three starting relationships
+
+Velocity $\mathbf v=d\mathbf r/dt$ describes how position changes. It is a
+vector: its direction tells us where the particle is heading, and its magnitude
+$|\mathbf v|$ is speed. Bold symbols below are vectors; $m$ and $K$ are scalars.
+
+**Definition — momentum.** Weight velocity by mass:
 
 $$\mathbf p=m\mathbf v.$$
 
-Kinetic energy is a number, not an arrow:
+Momentum records directed motion. Two carts at the same velocity have different
+momenta if their masses differ. It is not a force stored inside a cart.
 
-$$K=\tfrac12m|\mathbf v|^2.$$
+**Definition in this model — kinetic energy.** Associate a scalar with motion:
 
-Changing direction changes the velocity arrow and therefore the momentum
-arrow. It need not change the arrow's length, so it need not change kinetic
-energy. This is the first part of the answer. Now ask what the force must do.
+$$K=\frac12m|\mathbf v|^2.$$
 
-## First, push along the motion
+Why this expression is useful, rather than merely another way to label speed,
+will emerge when we connect its change to work. Energy also includes forms
+other than kinetic energy; that broader accounting comes later.
+
+**Physical law — Newton's second law.** Interactions change momentum:
+
+$$\frac{d\mathbf p}{dt}=\mathbf F.$$
+
+This is a physical claim about the model, not an algebraic consequence of the
+two definitions. With fixed mass it gives $\mathbf F=m\,d\mathbf v/dt=m\mathbf a$.
+If the net force is zero, momentum stays constant; it need not be zero.
+Continuing motion does not require continuing net force.
+
+:::kp-passage{#relationship-map}
+## The route at a glance
+
+These are the three connections we will build. Read the whole route, or jump
+to the reason behind a particular move.
+
+**Substitute:** describe kinetic energy directly in terms of momentum.
+
+$$\mathbf v=\frac{\mathbf p}{m}
+\quad\Longrightarrow\quad K=\frac{|\mathbf p|^2}{2m}.$$
+
+[Inspect the substitution](#energy-from-momentum).
+
+**Differentiate:** use Newton's law to connect force to energy change.
+
+$$\frac{dK}{dt}
+=\frac{\mathbf p}{m}\cdot\frac{d\mathbf p}{dt}
+=\mathbf v\cdot\mathbf F.$$
+
+[Inspect the differentiation](#force-to-energy).
+
+**Accumulate:** force over time gives impulse; force along displacement gives work.
+
+$$\Delta\mathbf p=\int_{t_0}^{t_1}\mathbf F\,dt,$$
+
+$$\Delta K=\int_{t_0}^{t_1}\mathbf F\cdot\mathbf v\,dt=W_{\mathrm{net}}.$$
+
+[Inspect the accumulation](#impulse-and-work).
+:::
+
+:::kp-passage{#energy-from-momentum}
+## 1. Substitute: energy in terms of momentum
+
+**Deduction.** Since $m>0$, rearrange $\mathbf p=m\mathbf v$ and substitute:
+
+$$\begin{aligned}
+K&=\frac12m|\mathbf v|^2\\
+ &=\frac12m\left|\frac{\mathbf p}{m}\right|^2\\
+ &=\frac12m\frac{|\mathbf p|^2}{m^2}\\
+ &=\frac{|\mathbf p|^2}{2m}.
+\end{aligned}$$
+
+The squared magnitude divides by $m^2$, not $m$. One factor of $m$ then cancels.
+No new physics entered: this is the same energy written using a different variable.
+
+The equation also tells us what information energy leaves out. For fixed mass,
+$K$ depends on the **length** of the momentum vector, not its direction. Inverting
+gives $|\mathbf p|=\sqrt{2mK}$, but does not recover the direction of $\mathbf p$.
+
+**Ask what is held fixed.** At equal speed, doubling mass doubles kinetic energy:
+$K=mv^2/2$. At equal momentum magnitude, doubling mass halves kinetic energy:
+$K=|\mathbf p|^2/(2m)$. These are not contradictory predictions; they compare
+different situations. Here $v=|\mathbf v|$ denotes speed.
+
+[Back to the relationship map](#relationship-map).
+:::
+
+:::kp-passage{#force-to-energy}
+## 2. Differentiate: how force changes energy
+
+**Deduction using the physical law.** Write the squared magnitude as a dot
+product, $|\mathbf p|^2=\mathbf p\cdot\mathbf p$. Then differentiate:
+
+$$\begin{aligned}
+K&=\frac{\mathbf p\cdot\mathbf p}{2m},\\
+\frac{dK}{dt}
+ &=\frac{1}{2m}\left(
+ \frac{d\mathbf p}{dt}\cdot\mathbf p
+ +\mathbf p\cdot\frac{d\mathbf p}{dt}\right)\\
+ &=\frac{\mathbf p}{m}\cdot\frac{d\mathbf p}{dt}\\
+ &=\mathbf v\cdot\mathbf F.
+\end{aligned}$$
+
+Read the moves: **fixed mass** lets $1/(2m)$ stay outside the derivative;
+the **product rule** differentiates each factor; symmetry of the dot product
+makes the two terms equal. Finally, substitute $\mathbf p/m=\mathbf v$ and
+**Newton's law** $d\mathbf p/dt=\mathbf F$.
+
+This dot product is not unfamiliar calculus in disguise. In Cartesian
+components, it is $F_xv_x+F_yv_y+F_zv_z$. Geometrically, for nonzero vectors,
+it is $|\mathbf F||\mathbf v|\cos\theta$, where $\theta$ is their angle.
+It measures the force component along velocity, multiplied by speed.
+
+So a force component along the motion increases kinetic energy; an opposing
+component decreases it. A perpendicular force contributes zero instantaneous
+power, even though it can change the momentum's direction. At an instant of
+rest the power is also zero; a force can nevertheless start accelerating the
+particle, after which the energy can grow.
+
+The rate $dK/dt$ is the **net power delivered to the particle's kinetic energy**.
+We have connected a vector law about changing momentum to a scalar account of
+changing kinetic energy. The diagram will illustrate this deduction, not prove it.
+
+[Back to the relationship map](#relationship-map).
+:::
+
+:::kp-passage{#impulse-and-work}
+## 3. Accumulate: impulse and work
+
+**Definitions of interval quantities.** Impulse accumulates net force over time;
+net work accumulates its dot product with the actual displacement:
+
+$$\mathbf J=\int_{t_0}^{t_1}\mathbf F(t)\,dt,$$
+
+$$W_{\mathrm{net}}=\int_{\mathbf r(t_0)}^{\mathbf r(t_1)}
+\mathbf F\cdot d\mathbf r.$$
+
+The work integral follows the particle's actual path, not an arbitrary straight
+line between endpoints. Since $d\mathbf r=\mathbf v\,dt$, we can use time to
+describe that same accumulation. Now integrate the two rate equations:
+
+$$\begin{aligned}
+\mathbf J&=\int_{t_0}^{t_1}\frac{d\mathbf p}{dt}\,dt
+=\mathbf p(t_1)-\mathbf p(t_0),\\
+W_{\mathrm{net}}&=\int_{t_0}^{t_1}\mathbf F\cdot\mathbf v\,dt\\
+ &=\int_{t_0}^{t_1}\frac{dK}{dt}\,dt
+=K(t_1)-K(t_0).
+\end{aligned}$$
+
+**Deductions — impulse–momentum and work–energy.** These are the fundamental
+theorem of calculus applied to the relationships we already established.
+They are not extra independent laws to memorize.
+
+This is why the descriptions are useful: momentum change tracks the accumulated
+vector effect of force; kinetic-energy change tracks net work along the motion.
+They answer different questions about the same event. Force history alone does
+not specify work without the motion or enough information to determine it.
+Net work is not automatically the work done by any single force.
+
+[Back to the relationship map](#relationship-map).
+:::
+
+## Inspect a straight push
+
+Use the figure to check the connections we derived. It represents the same
+particle in each view, with time as the shared coordinate.
 
 :::kp-stage{#straight use=straight}
 :::
 
 :::kp-motion{#speed-up stage=straight run=straight/advance}
-Start a 1 kg particle from rest and push right with a constant net force of
-2 newtons. As time passes, its rightward momentum grows and its kinetic energy
-grows. Follow the length of the momentum arrow; its direction stays fixed.
+Start a 1 kg particle from rest with constant net force $(2,0)$ N. In SI units,
+$\mathbf p(t)=(2t,0)$ and $K(t)=2t^2$. Follow the momentum arrow's growing
+length and compare it with the energy bar: doubling momentum magnitude
+quadruples kinetic energy. The relationship is quadratic, not proportional.
 
 ::after
 
-After 2 seconds the momentum is $(4,0)$ kg m/s, speed is 4 m/s, and kinetic
-energy is 8 joules. During the same interval the particle moves 4 metres, so
-the force does 8 joules of net work. This example makes the quantities change
-together—but that is not a rule that they must always do so.
+After 2 s, momentum is $(4,0)$ kg m/s and kinetic energy is 8 J. The impulse
+is $(2,0)\times2=(4,0)$ kg m/s. The particle travels 4 m in the force's
+direction, so net work is $2\times4=8$ J. One event satisfies both accounts.
 :::
 
-## Now, turn without speeding up
+## Inspect a turn
+
+Now the initially puzzling case has a place in the map: changing direction
+changes momentum without necessarily changing its magnitude or kinetic energy.
 
 :::kp-stage{#turning use=turning}
 :::
 
 :::kp-motion{#turn stage=turning run=turning/advance}
-Keep a 1 kg particle moving at 1 m/s around a circle of radius 1 metre. The
-momentum arrow points along its motion. The net force points inward, at right
-angles to that arrow. Follow the momentum arrow as it turns: its direction
-changes while its length stays the same.
+Keep a 1 kg particle moving at 1 m/s around a circle of radius 1 m. Follow the
+momentum arrow as it turns without changing length. The inward force remains
+perpendicular to it: $\mathbf F\cdot\mathbf v=0$, while
+$K=|\mathbf p|^2/(2m)=0.5$ J throughout.
 
 ::after
 
 Across a quarter circle, momentum changes from $(0,1)$ to $(-1,0)$ kg m/s.
-Its change is $(-1,-1)$ kg m/s—not zero. Kinetic energy stays at half a joule.
-There is a force throughout, but it does no net work on the particle.
+The impulse is therefore $\Delta\mathbf p=(-1,-1)$ kg m/s. Yet
+$W_{\mathrm{net}}=\Delta K=0$: a nonzero impulse need not mean nonzero work.
+Energy alone cannot tell us the new direction.
 :::
 
-## What makes the two cases different?
+## What to carry forward
 
-Net force is the rate of change of the **momentum vector**:
+Momentum describes directed motion. Net force governs how it changes. Kinetic
+energy describes a scalar aspect of that motion, and its change is net work.
+The connections come from substitution, differentiation and accumulation under
+our stated model—not from visual resemblance between formulas.
 
-$$\frac{d\mathbf p}{dt}=\mathbf F.$$
+Try reading $K=|\mathbf p|^2/(2m)$ without the figures: at fixed mass, doubling
+momentum magnitude quadruples kinetic energy; reversing direction at unchanged
+magnitude leaves it unchanged. That is information you can extract directly
+from the algebra.
 
-The rate of change of kinetic energy is instead
-
-$$\frac{dK}{dt}=\mathbf F\cdot\mathbf v.$$
-
-The dot product measures the part of the force along the velocity, multiplied
-by speed. A force along the motion increases kinetic energy; an opposing
-component decreases it. A perpendicular force contributes zero at that instant.
-In circular motion it remains perpendicular throughout, so the energy stays
-constant even while momentum keeps changing.
-
-This is not an extra rule to memorize. Differentiate
-$K=\tfrac12m\mathbf v\cdot\mathbf v$ with constant $m$:
-
-$$\frac{dK}{dt}=m\frac{d\mathbf v}{dt}\cdot\mathbf v=\mathbf F\cdot\mathbf v.$$
-
-Only the component that changes speed enters the energy calculation. Momentum
-still records the turning that the energy calculation leaves out.
-
-## Accumulate the change
-
-Over an interval, accumulating force **over time** gives momentum change:
-
-$$\Delta\mathbf p=\int\mathbf F\,dt.$$
-
-Accumulating force **along the actual displacement** gives net work and kinetic
-energy change:
-
-$$\Delta K=\int\mathbf F\cdot\mathbf v\,dt=\int\mathbf F\cdot d\mathbf r=W_{\mathrm{net}}.$$
-
-These are two ways of asking about the same motion, not competing laws. Force
-history alone does not tell you the work: you also need the motion. If you want
-to know the new direction, energy alone has discarded information you need.
-
-We have treated a constant-mass Newtonian point particle in one fixed inertial
-frame. Work here means work by the **net** force, not automatically by any one
-force, and these statements are not a complete energy account for a deforming
-or heating object.
+These results are not a complete energy account for an object that rotates,
+deforms or heats, and the fixed-mass derivation cannot be carried unchanged
+into a mass-exchanging system. [Revisit the assumptions](#model-scope) or
+[recover the compact relationship map](#relationship-map).

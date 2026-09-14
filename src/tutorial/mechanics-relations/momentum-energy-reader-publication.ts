@@ -23,7 +23,11 @@ export function renderMomentumEnergyReader(publication: Publication) {
     if (block.kind === "markdown" || block.kind === "passage") {
       const id = block.kind === "markdown" ? block.key : block.fullId;
       blocks.push(kpLesson.paragraph({ id, content: [block.markdown] }));
-      return html(block.markdown);
+      // Passage addresses must survive projection so source-owned inspection
+      // links work in both editions without a second navigation table.
+      return block.kind === "passage"
+        ? `<section id="${attribute(block.id)}">${html(block.markdown)}</section>`
+        : html(block.markdown);
     }
     if (block.kind !== "motion" || block.transition.kind !== "run" || !block.transition.path.endsWith("/advance"))
       throw new Error("This candidate reader requires an explicit supported physics motion; no generic projection fallback.");
@@ -57,7 +61,9 @@ export function renderMomentumEnergyReader(publication: Publication) {
       <script type="application/json" data-physics-source>${JSON.stringify(manifest).replaceAll("<", "\\u003c")}</script>
     </section>`;
   }).join("\n");
-  const document = defineKpLessonDocument({ id: publication.article.document.id, version: "1.0.0",
-    title: "How can a force change momentum without changing kinetic energy?", blocks });
+  const titleBlock = publication.article.document.blocks.find(block => block.kind === "markdown");
+  const title = titleBlock?.kind === "markdown" ? /^# (.+)$/m.exec(titleBlock.markdown)?.[1] : undefined;
+  if (!title) throw new Error("Physics Article requires a source-owned title");
+  const document = defineKpLessonDocument({ id: publication.article.document.id, version: "1.0.0", title, blocks });
   return { document, html: `<article data-kp-article="${attribute(document.id)}">${body}</article>` };
 }

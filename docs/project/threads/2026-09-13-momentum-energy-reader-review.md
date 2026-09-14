@@ -1,5 +1,32 @@
 # Momentum–energy reader: first visual checkpoint
 
+## Current review: algebra-grounded orientation
+
+The user accepted the demos' clarity, then requested a broader, algebra-grounded
+entry point. The page now begins with the relationship between force, momentum
+and energy. Read the starting definitions and law, scan the compact relationship
+map, then use its links to inspect substitution, differentiation or accumulation.
+The existing particle figures follow as examples. The original packet below is
+historical evidence for the earlier narrow opening, not the new review question.
+
+Please judge whether the mathematical relationships now feel connected and
+motivated, whether each deduction makes its assumptions and reasons clear, and
+whether scanning the chain versus reading a step's explanation feels natural.
+No new symbolic manipulation or vector-calculus animation is claimed. This
+revision adds source content and a small passage-anchor/title projection repair,
+not new browser runtime, styling or physics. The full controls/no-JavaScript
+checks remain; the new browser check traverses the links in both editions.
+
+The first revised browser run caught a test-only mismatch between innerText and
+textContent once the cue contained KaTeX. The held-prose check now compares the
+same representation before and after playback; no accessibility math was removed.
+
+The revised discovery checks pass: eight focused tests and four scoped Chromium
+checks, including link closure in both editions and the narrow differentiation
+layout. Full type checking also passes. These checks establish implementation
+behavior, not whether the explanation teaches at the right level; that remains
+the current human checkpoint.
+
 Canonical interactive host: <http://localhost:8000/experiments/mechanics-relations/>.
 Static host: <http://localhost:8000/experiments/mechanics-relations/static.html>.
 Both use the existing shared development server, not an additional server.

@@ -17,7 +17,9 @@ test("native reading, continuous local control, exact reverse and held prose", a
   const time = Number(await straight.getAttribute("data-physical-time"));
   expect(time).toBeLessThan(2);
   await straight.locator("[data-physics-play]").click();
-  await expect(straight.locator(".physics-cue")).toHaveText(prose);
+  // Compare the same rendered-text representation: KaTeX also carries hidden
+  // MathML/source text, so textContent is not equivalent to innerText.
+  await expect.poll(() => straight.locator(".physics-cue").innerText()).toBe(prose);
   await seek(straight.locator("input"), 1);
   const midway = await straight.locator("[data-momentum]").getAttribute("d");
   await expect(straight).toHaveAttribute("data-energy", "2");
@@ -79,4 +81,24 @@ test("narrow layout and reduced-motion controls retain explicit endpoints", asyn
   await expect(turning).toHaveAttribute("data-physical-time", "0");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await turning.screenshot({ path: info.outputPath("narrow-turning.png") });
+});
+
+test("the algebraic argument is navigable in both editions without playback", async ({ page }, info) => {
+  for (const edition of ["", "static.html"]) {
+    await page.goto(route + edition);
+    await expect(page.locator("h1")).toHaveText("Force, momentum and energy: how the relationships fit together");
+    for (const [label, target] of [["Inspect the substitution", "energy-from-momentum"], ["Inspect the differentiation", "force-to-energy"], ["Inspect the accumulation", "impulse-and-work"]]) {
+      await page.getByRole("link", { name: label!, exact: true }).click();
+      await expect(page).toHaveURL(new RegExp(`#${target}$`));
+      await expect(page.locator(`#${target}`)).toBeAttached();
+    }
+    await page.getByRole("link", { name: "Back to the relationship map", exact: true }).last().click();
+    await expect(page).toHaveURL(/#relationship-map$/);
+  }
+  await page.goto(route + "#relationship-map");
+  await page.locator("#relationship-map").screenshot({ path: info.outputPath("algebraic-map.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("link", { name: "Inspect the differentiation", exact: true }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.locator("#force-to-energy").screenshot({ path: info.outputPath("algebraic-reason-narrow.png") });
 });

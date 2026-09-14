@@ -1,5 +1,26 @@
 # Momentum and energy: authoring evidence
 
+## Accepted orientation repair
+
+The original worksheet below records the first candidate. The user found the
+demos clear but the opening puzzle premature. The revised learner task is to
+understand how force, momentum and energy fit together, grounded in authentic
+algebra and the user's single-variable calculus background. Accepted direction:
+`../decisions/2026-09-13-algebra-grounded-relationship-orientation.md`.
+
+The Article now introduces definitions and Newton's law under explicit fixed-mass
+inertial-frame assumptions, then offers a compact linked relationship map.
+Detailed substitution, product-rule and integral chains expose their reasons.
+Equal-speed versus equal-momentum comparisons prevent an ambiguous mass inference;
+direction loss is read directly from the scalar expression. The two unchanged
+fixtures illustrate these results afterward. The same source and stable passage
+IDs drive both editions. Native links are not yet the exact-state excursion
+feature planned in r3; displayed deductions are not certified symbolic rewrites.
+
+Focused checks test source-to-title propagation, passage link closure, algebra
+before figures, compiled MathML and agreement with analytical fixture samples.
+They do not prove the general physical law or establish learning effectiveness.
+
 Canonical source: `examples/physics/momentum-energy.article.md`.
 Candidate host: `/experiments/mechanics-relations/` (not live at r1).
 Governed assets: `animation.physics.momentum-energy.straight` and

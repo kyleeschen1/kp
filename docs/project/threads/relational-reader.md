@@ -10,10 +10,13 @@ The [assessment](../reviews/2026-09-13-next-step-review.md) supplies code eviden
 and rationale; the [handoff](../inbox/kinetic_press_relational_learning_codex_handoff.md)
 is provenance, not a competing queue.
 
-The current question is **How can a force change momentum without changing
-kinetic energy?** Build excellent reading plus a bounded inspectable comparison,
-not another card-first lesson. Article/vignette and domain-owned semantics remain
-authoritative. A persistent-stage reader is a projection/host integration.
+The current question is **What is the relationship between force, momentum and
+energy?** The accepted r2 amendment makes authentic algebra the explanatory
+spine: substitution, differentiation and accumulation, with definitions, laws,
+assumptions and deductions distinguished. The earlier turning puzzle is a
+supporting consequence, not the learner's entry point. Build a traversable
+argument, not a collection of widgets. Article/vignette and domain-owned
+semantics remain authoritative; the reader is a projection/host integration.
 
 ## Current proposal and control
 

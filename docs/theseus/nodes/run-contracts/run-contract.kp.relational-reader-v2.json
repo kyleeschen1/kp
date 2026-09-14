@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Momentum-energy relational reader",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at r2. Scope remains approved; await visual acceptance before marking r2 complete and continuing r3. No implementation is authorized past this gate.",
+  "summary": "HUMAN_CHECKPOINT at amended r2. One of five slices complete; r2 awaits revised explanation review, r3-r5 not started.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,7 +46,7 @@
     {
       "id": "r2",
       "title": "Canonical reader exemplar and human review",
-      "summary": "HUMAN_CHECKPOINT: implementation and checks complete; awaiting visual acceptance at localhost:8000/experiments/mechanics-relations/. Do not begin r3 before acceptance.",
+      "summary": "HUMAN_CHECKPOINT: algebra-grounded force, momentum and energy orientation implemented and verified. Revised explanation needs human review; r1 complete, r3-r5 remain planned. Original demo approval does not waive this checkpoint.",
       "status": "in-progress"
     },
     {

@@ -19,6 +19,14 @@ learner-facing product definition.
 
 ## Product Thesis
 
+Accepted algebra-grounded refinement: compact formal relationships are a medium
+of explanation, not decorative summaries. Let learners traverse a mathematical
+argument rapidly and inspect unfamiliar joints without losing context. Prose
+supplies motivation and interpretation; visuals clarify transformations or
+correspondences. Distinguish definitions, physical laws, modeling assumptions
+and deductions. A technically sharp question may still be premature for the
+learner; establish the relationship map before its puzzles.
+
 Accepted refinement (2026-09-13): realize the medium as excellent technical
 reading with relationships that can be inspected, unfolded, compared and reused
 without losing the argument. Preserve the semantic infrastructure; prioritize

@@ -92,6 +92,33 @@ test("the canonical Article resolves governed vignettes and complete no-script s
   const reader = renderMomentumEnergyReader(publication);
   assert.equal(reader.document.blocks.filter(block => block.kind === "animation-story").length, 2);
   assert.match(reader.html, /type="application\/json"/);
+  assert.equal(reader.document.title, "Force, momentum and energy: how the relationships fit together");
+  for (const rendered of [reader.html, publication.staticHtml.articleHtml]) {
+    const ids = new Set([...rendered.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
+    for (const link of rendered.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.has(link[1]), `Unresolved inspection link ${link[1]}`);
+    assert.ok(rendered.indexOf('id="energy-from-momentum"') < rendered.indexOf("<figure"));
+    for (const label of ["Assumptions", "Definition", "Physical law", "Deduction"]) assert.ok(rendered.includes(label));
+  }
+  const revised = text.replace("# Force, momentum and energy: how the relationships fit together", "# A revised source title");
+  assert.equal(renderMomentumEnergyReader(compileMomentumEnergyPublication(revised)).document.title, "A revised source title");
+});
+
+test("the displayed momentum-energy deductions agree with both checked physical fixtures", () => {
+  for (const index of [0, 1]) for (const mass of [1, 2, 4]) {
+    const checked = model(index, mass);
+    const f = sampleMomentumEnergy(checked, physicalTime(checked.durationSeconds * .6));
+    near((f.momentum.x ** 2 + f.momentum.y ** 2) / (2 * mass), f.kineticEnergy);
+    near(Math.sqrt(2 * mass * f.kineticEnergy), Math.hypot(f.momentum.x, f.momentum.y));
+    near((f.momentum.x * f.force.x + f.momentum.y * f.force.y) / mass, f.power);
+  }
+  // Equal time under this fixed force means equal momentum, not equal speed.
+  const light = sampleMomentumEnergy(model(0, 1), physicalTime(1));
+  const heavy = sampleMomentumEnergy(model(0, 2), physicalTime(1));
+  assert.deepEqual(light.momentum, heavy.momentum);
+  near(heavy.kineticEnergy, light.kineticEnergy / 2);
+  const equalSpeed = sampleMomentumEnergy(model(0, 2), physicalTime(2));
+  near(equalSpeed.speed, light.speed);
+  near(equalSpeed.kineticEnergy, light.kineticEnergy * 2);
 });
 
 test("runtime transport rejects stale or unsupported authority and keeps time separate from attention", () => {
