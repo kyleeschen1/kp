@@ -59,7 +59,7 @@ was found in the equation-series registry. Do not replace it with distribution,
 strip the vector/magnitude notation, or use generic enter/exit as a substitute.
 The proposed intents in the retained JSON are not resolved operations or proofs.
 
-Recommended scope amendment, requiring selection before implementation:
+Scope amendment accepted by “agree with the rec. implement” on 2026-09-13:
 
 1. Add a bounded domain-owned source for this four-state identity, distinguishing
    vectors from positive scalar mass, with exact algebraic proof/assumptions and
@@ -240,3 +240,23 @@ Permitted early outcomes: HUMAN_CHECKPOINT, STOP_CONDITION for the active-work
 ceiling, BLOCKED for unsupported authority/safety, USER_PAUSED, or
 SESSION_INTERRUPTED with resumable state. Record incomplete packages as incomplete.
 Scope approval authorizes this proposal only, not all medium-term gates.
+
+## Accepted extension outcome
+
+The bounded physics frontend and first persistent derivation are implemented as
+a reversible candidate. Semantic source is
+`domains/physics/momentum-energy-derivation.ts`; governed compilation is
+`src/authoring/momentum-energy-derivation-authoring.ts`. A proof-derived runtime
+plan binds the three exact transformations to native observation, shared optical
+ink sampling and the canonical Native KaTeX session. Existing operation contracts
+did not directly certify this vector substitution; the new project operation pack
+is explicitly bounded, not a claim of generic registered-motif support.
+
+One demonstrated shared repair measures compound subtree ink for scaled native
+glyph owners, retaining the missing-measurement guard. Candidate projection and
+shared repair remain distinct boundaries. Full types/build, architecture gates,
+focused semantic/compositor tests and a bounded Chromium checkpoint were run;
+the review packet records their results and the current browser cost. The earlier
+scalar-frontend failure remains historical evidence, not an outstanding scope
+selection. The next stop is human review of this first animation, with r3-r5
+still untouched.

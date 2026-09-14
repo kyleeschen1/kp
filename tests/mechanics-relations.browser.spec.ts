@@ -4,6 +4,62 @@ const route = "/experiments/mechanics-relations/";
 const seek = (input: Locator, seconds: number) => input.evaluate((element: HTMLInputElement, value) => {
   element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
 }, seconds);
+test("persistent energy derivation uses native motion and stops at each move", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", e => errors.push(e.message));
+  page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+  await page.goto(route + "#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await root.locator("[data-derivation-trace]").click();
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session", { timeout: 30000 });
+  for (let i = 0; i < 3; i++) {
+    await root.locator("[data-derivation-next]").click();
+    await expect(root).toHaveAttribute("data-move", String(i));
+    await expect.poll(async () => {
+      if (errors.length) throw new Error(errors.join("\n"));
+      return Number(await root.getAttribute("data-progress"));
+    }).toBeGreaterThan(.05);
+    await root.locator("[data-derivation-next]").click();
+    await seek(root.locator("input"), .5);
+    await expect(root.locator("[data-kp-editor-equation-material-layer] [data-kp-equation-material-owner-id]").first()).toBeAttached();
+    await root.screenshot({ path: info.outputPath(`derivation-${i}-mid.png`) });
+    await seek(root.locator("input"), 1);
+    await expect(root.locator("[data-derivation-count]")).toHaveText(`${i + 1} / 3 moves`);
+    expect(await root.locator("[data-derivation-replay]").evaluate(el => {
+      const r = el.getBoundingClientRect(), hit = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
+      return hit === el || (hit !== null && el.contains(hit));
+    })).toBe(true);
+    await root.locator("[data-derivation-replay]").click();
+    await expect(root).toHaveAttribute("data-progress", "1", { timeout: 10000 });
+    await expect(root).toHaveAttribute("data-playing", "false");
+    await expect(root).toHaveAttribute("data-move", String(i));
+    await root.screenshot({ path: info.outputPath(`derivation-${i}-end.png`) });
+  }
+  await root.locator("[data-derivation-previous]").click();
+  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeLessThan(.95);
+  await root.locator("[data-derivation-read]").click();
+  await expect(root).toHaveAttribute("data-tracing", "false");
+  expect(errors).toEqual([]);
+});
+test("derivation keeps narrow keyboard endpoints and complete print history", async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(route + "#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await root.locator("[data-derivation-trace]").click();
+  const next = root.locator("[data-derivation-next]");
+  await expect(next).toBeEnabled();
+  await next.focus();
+  await next.press("Enter");
+  await expect(root).toHaveAttribute("data-progress", "1");
+  await expect(root).toHaveAttribute("data-move", "0");
+  await root.locator("[data-derivation-previous]").click();
+  await expect(root).toHaveAttribute("data-progress", "0");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await root.screenshot({ path: info.outputPath("derivation-narrow.png") });
+  await page.emulateMedia({ media: "print" });
+  for (const row of await root.locator(".energy-derivation-history li").all()) await expect(row).toBeVisible();
+});
 test("native reading, continuous local control, exact reverse and held prose", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));

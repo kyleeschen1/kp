@@ -25,5 +25,34 @@
 .physics-controls :focus-visible { outline: 2px solid #236b8e; outline-offset: 3px; }
 .physics-figure [data-physics-description] { min-height: 2.9em; font-variant-numeric: tabular-nums; }
 .physics-after { margin-top: 1.25rem; }
+.energy-derivation { margin-block: 1.5rem; }
+.energy-derivation-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.energy-derivation-controls button { font: inherit; color: inherit; background: transparent; border: 1px solid #aaa; border-radius: .3rem; padding: .35rem .65rem; min-height: 2.75rem; }
+.energy-derivation-controls button:disabled { opacity: .45; }
+.energy-derivation-controls output { font-variant-numeric: tabular-nums; }
+.energy-derivation [hidden] { display: none !important; }
+.energy-derivation-chain { position: relative; }
+.energy-derivation-history { list-style: none; padding: 0; margin: 0; }
+.energy-derivation-history li { position: relative; min-height: 10rem; }
+.energy-derivation[data-tracing="true"] .energy-derivation-history li { min-height: 6rem; }
+.energy-derivation-equation, .energy-derivation-endpoint { min-height: 4.5rem; display: grid; align-items: center; width: 100%; }
+.energy-derivation-equation .katex-display, .energy-derivation-endpoint .katex-display { margin: 0; }
+.energy-derivation-reason { border-left: 2px solid #236b8e; padding-left: .75rem; margin-inline: 1rem; font-size: .9em; }
+.energy-derivation-reason p { margin: .3rem 0; }
+.energy-derivation-reason summary { cursor: pointer; }
+.energy-derivation-active-cue { margin-block: 1rem; }
+/* KaTeX superscript metric boxes extend beyond visible ink. Read-only cue
+ * paint must not intercept controls above it; the disclosure stays interactive. */
+.energy-derivation-active-cue .katex-html { pointer-events: none; }
+.energy-derivation-stage { position: absolute; left: 0; width: 100%; height: 20rem; pointer-events: none; }
+.energy-derivation-endpoint { position: absolute; left: 0; top: 0; }
+.energy-derivation-stage [data-kp-editor-equation-material-layer] { position: absolute; inset: 0; pointer-events: none; }
+.energy-derivation[data-tracing="true"] [data-visible-equation="false"] .energy-derivation-equation { visibility: hidden; }
+.energy-derivation[data-tracing="true"] [data-historical="true"] .energy-derivation-equation { color: #666; }
+.energy-derivation-scrub { display: block; }
+.energy-derivation-scrub input { display: block; width: 100%; min-height: 2.75rem; accent-color: #236b8e; }
+@media print { .energy-derivation-controls, .energy-derivation-stage, .energy-derivation-scrub { display: none !important; } .energy-derivation .energy-derivation-equation { visibility: visible !important; } }
+/* Printing must retain the whole argument even during a partial trace. */
+@media print { .energy-derivation .energy-derivation-history li[hidden], .energy-derivation .energy-derivation-history .energy-derivation-reason[hidden] { display: block !important; } .energy-derivation-active-cue { display: none !important; } }
 @media (max-width: 520px) { .physics-reader { padding: 1rem .85rem 3rem; } .physics-reader nav { margin-bottom: 2rem; } }
 @media print { .physics-controls { display: none; } .physics-reader { max-width: none; padding: 0; } .physics-figure { break-inside: avoid; } }

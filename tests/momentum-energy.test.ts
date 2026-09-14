@@ -7,6 +7,33 @@ import { compileMomentumEnergyPublication, momentumEnergySourcePath } from "../s
 import { renderMomentumEnergyReader } from "../src/tutorial/mechanics-relations/momentum-energy-reader-publication.ts";
 import { loadMomentumEnergyRuntimeSource, momentumEnergyTimeAtProgress } from "../src/tutorial/mechanics-relations/momentum-energy-runtime-source.ts";
 import { projectMomentumEnergyAttention } from "../src/tutorial/mechanics-relations/momentum-energy-attention.ts";
+import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMomentumEnergyDerivation } from "../domains/physics/momentum-energy-derivation.ts";
+import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
+import { createEnergyDerivationPlan, assertEnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
+
+test("vector derivation accepts only its bounded assumptions and keeps runtime roles tied to governed source", () => {
+  for (const input of [null, {}, { ...momentumEnergyDerivationSource, mass: "zero" },
+    { ...momentumEnergyDerivationSource, velocity: "real-scalar" }, { ...momentumEnergyDerivationSource, proof: "trust-me" }])
+    assert.equal(checkMomentumEnergyDerivation(input).status, "repair-required");
+  let invoked = false;
+  assert.equal(checkMomentumEnergyDerivation({ ...momentumEnergyDerivationSource, get mass() { invoked = true; return "positive-real"; } }).status, "repair-required");
+  assert.equal(invoked, false);
+  const result = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(result.status, "checked"); if (result.status !== "checked") return;
+  assert.throws(() => assertMomentumEnergyDerivation({ ...result.model }));
+  const plan = createEnergyDerivationPlan(result.model), compiled = compileMomentumEnergyDerivation(result.model);
+  assert.throws(() => assertEnergyDerivationPlan({ ...plan }));
+  assert.equal(compiled.animation.transformations.length, 3);
+  assert.ok(compiled.construction);
+  for (const [i, move] of compiled.moves.entries()) {
+    assert.deepEqual(move.persist, plan.moves[i]!.persist);
+    assert.deepEqual(move.exits, plan.moves[i]!.exits);
+    assert.deepEqual(move.entries, plan.moves[i]!.entries);
+    const records = move.transformation.correspondenceMap!.records;
+    assert.equal(new Set(records.flatMap(r => r.sourceSelectorIds)).size, move.sourceRoles.length);
+    assert.equal(new Set(records.flatMap(r => r.targetSelectorIds)).size, move.targetRoles.length);
+  }
+});
 
 function model(index: number, massKg = 1) {
   const result = checkMomentumEnergy({ ...momentumEnergyExamples[index], massKg });
@@ -93,6 +120,8 @@ test("the canonical Article resolves governed vignettes and complete no-script s
   assert.equal(reader.document.blocks.filter(block => block.kind === "animation-story").length, 2);
   assert.match(reader.html, /type="application\/json"/);
   assert.equal(reader.document.title, "Force, momentum and energy: how the relationships fit together");
+  assert.match(reader.html, /data-energy-derivation/);
+  assert.throws(() => renderMomentumEnergyReader(compileMomentumEnergyPublication(text.replace("K&=\\frac12m", "K&=\\frac13m"))), /repair the bounded semantic binding/);
   for (const rendered of [reader.html, publication.staticHtml.articleHtml]) {
     const ids = new Set([...rendered.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
     for (const link of rendered.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.has(link[1]), `Unresolved inspection link ${link[1]}`);

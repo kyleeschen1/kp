@@ -1,6 +1,68 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: algebra-grounded orientation
+## Current review: persistent animated substitution
+
+Open <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
+Choose **Trace these steps**, then **Next** for each of three moves:
+substitute v=p/m, square the quotient's magnitude, cancel the mass factors.
+The completed equations remain as history. A stationary cue precedes motion;
+“Why is this allowed?” expands the local justification. Previous reverses,
+Replay repeats the current move, the slider inspects it, and Show all steps
+restores complete reading. Scrolling never advances algebra.
+
+Please judge whether the moving parts are trackable and the explanation points
+to the right operation without competing for attention. This is the first
+candidate, not a promoted visual language. Differentiation and accumulation
+remain readable static derivations; no other lesson has been migrated.
+
+Canonical Article: `examples/physics/momentum-energy.article.md`. Checked
+semantic source: `domains/physics/momentum-energy-derivation.ts`, restricted to
+positive scalar mass and Euclidean vectors with p=mv. The fixed authored
+component argument licenses the three transformations; it is not a general
+symbolic prover. Governed authoring emits the annotated endpoints; a small
+proof-derived runtime plan feeds `createKpCanonicalNativeKatexSceneSession`.
+The original scalar equation-series probe remains unsupported. No generic fade,
+replacement token engine or authoring compiler is loaded to make it appear to work.
+
+Discovery found a real shared compositor gap: a scaled compound glyph owner had
+no measured target ink frame. The repair measures native subtree paint, retains
+fail-closed behavior without measurement, and has a focused regression. The
+candidate also avoids rebuilding on its own height changes and separates the
+moving equation from its explanatory text. Real replay clicks also exposed
+KaTeX superscript metric boxes intercepting controls outside visible ink; the
+read-only cue paint now ignores pointer events, preserving the Why disclosure.
+Shared ink-knot optical sampling is
+reused; this vector-operation binding is new and not globally certified.
+
+Current verification:
+
+- 70 semantic and compositor tests pass:
+  `node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/native-katex-rendered-scene.test.ts`.
+- `npm run visual:mechanics-relations`: six Chromium tests cover all three
+  moving transitions, replay stopping at the current endpoint, reverse,
+  canonical material ownership, narrow keyboard/reduced-motion use, print
+  history, existing physical controls, static/no-JavaScript reading and links.
+- `npm run visual:native-katex-compositor-conformance`: existing digit/italic
+  native-to-material-to-native canary completes. This is bounded preservation
+  evidence, not certification of every compositor mechanism.
+- `npm run check:architecture` and `npm run build` pass. Existing application
+  chunk-size warnings remain; no full supported-browser release claim is made.
+
+Production manifest measurement with `scripts/bundle-closure-attribution.ts`
+finds 28,426 gzip bytes for initial reachable JS/CSS and 130,844 bytes including
+the lazy derivation closure: about 102 KB additional when tracing is activated.
+These exclude HTML, fonts, protocol overhead and device CPU. KaTeX runtime,
+authoring compiler, editors and Three.js are absent; the shared compositor still
+pulls some unrelated choreography helpers. Reducing that closure is a potential
+measured engineering follow-up, not permission for broad bundler surgery here.
+The historical 25 KB figure below predates animated algebra.
+
+This was engine work plus a new candidate projection, not source-only authoring.
+Visual rollback is the first derivation enhancement; preserve checked semantics,
+shared paint measurement and existing physical demonstrations. After acceptance,
+resume the same r2/r3 contract, not a new long-loop quota.
+
+## Previous review: algebra-grounded orientation
 
 The user accepted the demos' clarity, then requested a broader, algebra-grounded
 entry point. The page now begins with the relationship between force, momentum

@@ -6,6 +6,7 @@ import { describeMomentumEnergyFrame, displayNumber, renderMomentumEnergySvg } f
 import { momentumEnergyAttention } from "./momentum-energy-attention.ts";
 import type { MomentumEnergyRuntimeSource } from "./momentum-energy-runtime-source.ts";
 import type { compileMomentumEnergyPublication } from "./momentum-energy-publication.ts";
+import { renderEnergyDerivationPassage } from "./momentum-energy-derivation-publication.ts";
 
 type Publication = ReturnType<typeof compileMomentumEnergyPublication>;
 const html = compileKpArticleMarkdownFragmentHtml;
@@ -26,7 +27,7 @@ export function renderMomentumEnergyReader(publication: Publication) {
       // Passage addresses must survive projection so source-owned inspection
       // links work in both editions without a second navigation table.
       return block.kind === "passage"
-        ? `<section id="${attribute(block.id)}">${html(block.markdown)}</section>`
+        ? `<section id="${attribute(block.id)}">${block.id === "energy-from-momentum" ? renderEnergyDerivationPassage(block.markdown) : html(block.markdown)}</section>`
         : html(block.markdown);
     }
     if (block.kind !== "motion" || block.transition.kind !== "run" || !block.transition.path.endsWith("/advance"))

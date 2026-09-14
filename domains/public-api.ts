@@ -1,4 +1,10 @@
 export {
+  assertMomentumEnergyDerivation, checkMomentumEnergyDerivation,
+  momentumEnergyDerivationSource, momentumEnergyDerivationStates,
+  momentumEnergyDerivationSteps, type CheckedMomentumEnergyDerivation
+} from "./physics/momentum-energy-derivation.ts";
+
+export {
   assertMomentumEnergy,
   checkMomentumEnergy,
   momentumEnergyExamples,

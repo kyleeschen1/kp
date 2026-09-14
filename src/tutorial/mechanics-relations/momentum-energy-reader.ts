@@ -3,6 +3,9 @@ import { loadMomentumEnergyRuntimeSource } from "./momentum-energy-runtime-sourc
 import { mountMomentumEnergyStage } from "./momentum-energy-stage.ts";
 import { displayNumber } from "./momentum-energy-figure.ts";
 import { projectMomentumEnergyAttention } from "./momentum-energy-attention.ts";
+import { enhanceEnergyDerivation } from "./momentum-energy-derivation-reader.ts";
+
+for (const root of document.querySelectorAll<HTMLElement>("[data-energy-derivation]")) enhanceEnergyDerivation(root);
 
 /** Enhancement leaves prose and its source order intact. Native document scroll
  * never consumes a beat, and no global key or wheel handler owns the page. */

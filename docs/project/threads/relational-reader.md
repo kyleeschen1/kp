@@ -20,11 +20,13 @@ semantics remain authoritative; the reader is a projection/host integration.
 
 The user accepted the page's appearance but requested animated algebraic
 unfolding: persistent derivation history and local reasons, beginning with only
-the substitution chain. The proposal now records that approved exemplar and a
-bounded capability investigation. The exact request fails the semantic frontend
-on vector-magnitude notation; it is not an executable animation. The page remains
-unchanged while the proposal's compiler/compositor repair boundary awaits scope
-selection. This is an authority blocker, not a repeated visual review request.
+the substitution chain. The user subsequently approved the bounded semantic and
+compositor extension. The candidate now animates three checked moves through the
+canonical native-KaTeX session, with persistent history and a stationary reason
+above the working expression. The scalar LaTeX probe remains unsupported; a
+bounded physics source supplies this exemplar instead. See the review packet for
+the current HUMAN_CHECKPOINT, exact limitations and verification. Do not start
+differentiation, a second caller or motif promotion before visual acceptance.
 
 ## Current proposal and control
 

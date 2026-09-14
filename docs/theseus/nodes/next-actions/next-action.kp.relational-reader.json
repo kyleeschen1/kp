@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "BLOCKED: animated substitution needs bounded vector-magnitude semantic authority and canonical compositor integration, not only reader projection. Proposal records executable failure and recommended repair scope. No visual review needed for unchanged page.",
+  "summary": "HUMAN_CHECKPOINT: review the implemented three-move persistent derivation at localhost:8000/experiments/mechanics-relations/#energy-from-momentum. Approved engineering complete for this exemplar; r2 awaits visual acceptance, r3-r5 untouched.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -133,6 +133,40 @@
       "scope": "r2-animated-derivation",
       "checkedAt": "2026-09-14T05:26:32.117Z",
       "notes": "Thirteen existing checks pass: last-good preservation, typed repairs and no silent fallback, plus the unchanged physics and Article checks. No new runtime or tests added. Impact selector used broad unmatched-path fallback; bounded investigation changes only a proposed JSON input and documentation, so full build and browser matrix were not rerun."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/native-katex-rendered-scene.test.ts",
+      "status": "passed",
+      "scope": "bounded vector source and measured compound paint",
+      "checkedAt": "2026-09-14T05:58:32.271Z",
+      "notes": "70 tests passed; rejects forged authority and stale Article math."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor && npm run test:canonical-equation-renderer && npm run visual:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "shared compositor preservation",
+      "checkedAt": "2026-09-14T05:58:33.194Z",
+      "notes": "82 glyph tests, 33 canonical renderer tests and existing Chromium digit/italic canary passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "domain and renderer authority boundaries",
+      "checkedAt": "2026-09-14T05:58:33.737Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "persistent derivation discovery",
+      "checkedAt": "2026-09-14T05:58:51.093Z",
+      "notes": "Six Chromium tests pass including actual replay completion on every move, hit targets, reverse, narrow keyboard reduced motion, print and existing static reading."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "final types and production build",
+      "checkedAt": "2026-09-14T05:59:33.302Z",
+      "notes": "All typecheck stages pass; production builds with pre-existing large-chunk warnings. Initial reader closure approximately 28 KB gzip; lazy derivation adds approximately 102 KB excluding fonts and HTML."
     }
   ],
   "expectedLearning": [
