@@ -1272,6 +1272,14 @@ test("introduced target glyphs compose motif scale around measured ink", () => {
     }, 0.5, [sceneFrame]),
     /requires measured target ink/
   );
+  // Compound native replacements retain their subtree clone, but still need
+  // measured target ink to compose the same optical contraction accurately.
+  const subtree = { ...withoutTargetPaint, paintRealization: "preserve-structural-paint" as const,
+    targetSubtreePaintFrame: _targetPaint };
+  assert.deepEqual(sampleKpNativeKatexTypographyStylePlan({ ...plan, entries: [subtree] }, .5, [sceneFrame]).entries[0],
+    sampleKpNativeKatexTypographyStylePlan(plan, .5, [sceneFrame]).entries[0]);
+  assert.throws(() => sampleKpNativeKatexTypographyStylePlan({ ...plan,
+    entries: [{ ...subtree, targetSubtreePaintFrame: undefined }] }, .5, [sceneFrame]), /requires measured target ink/);
 });
 
 test("handoff telemetry rejects invalid geometry and document boundaries", () => {

@@ -28,7 +28,8 @@ import {
 } from "./native-katex-structural-succession-renderer.ts";
 import {
   attachKpNativeKatexTrackPaintGeometry,
-  measureKpNativeKatexTextInkRect
+  measureKpNativeKatexTextInkRect,
+  measureKpNativeKatexSubtreePaintRect
 } from "./native-katex-paint-geometry.ts";
 import {
   composeKpNativeKatexSceneMaterialOwners
@@ -325,6 +326,7 @@ export type KpNativeKatexTypographyStylePlanEntry =
       readonly paintRealization: "preserve-structural-paint";
       readonly glyphPaintFrame?: undefined;
       readonly targetGlyphPaintFrame?: undefined;
+      readonly targetSubtreePaintFrame?: KpNativeKatexTargetGlyphPaintFrame | undefined;
     }
   );
 
@@ -830,10 +832,19 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
         native.paintKind !== "glyph" ||
         native.paintMeasurement === "subtree"
       ) {
+        // A compound native fragment is not a text glyph. Its measured ink
+        // includes descendant rules as well as letters when a motif scales it.
+        const subtree = native.paintMeasurement === "subtree" && native.paintKind === "glyph"
+          && typeof native.element.querySelectorAll === "function"
+          ? measureKpNativeKatexSubtreePaintRect(input.telemetry.stage, native.element) : undefined;
         return freezeTypographyStylePlanEntry({
           ...shared,
           paintKind: native.paintKind,
-          paintRealization: "preserve-structural-paint"
+          paintRealization: "preserve-structural-paint",
+          ...(subtree === undefined ? {} : { targetSubtreePaintFrame: {
+            targetInsetX: subtree.left - native.rect.left, targetInsetY: subtree.top - native.rect.top,
+            targetWidth: subtree.width, targetHeight: subtree.height
+          } })
         });
       }
       const glyphPaintFrame = source === undefined
@@ -976,7 +987,7 @@ export function sampleKpNativeKatexTypographyStylePlan(
       const scaleY = baseScaleY * materialScale;
       const targetPaint = entry.paintRealization ===
           "preserve-structural-paint"
-        ? undefined
+        ? entry.targetSubtreePaintFrame
         : entry.targetGlyphPaintFrame;
       if (
         materialScale !== 1 &&
@@ -2583,7 +2594,10 @@ function freezeTypographyStylePlanEntry(
   if (entry.paintRealization === "preserve-structural-paint") {
     return Object.freeze({
       ...entry,
-      targetRect: Object.freeze({ ...entry.targetRect })
+      targetRect: Object.freeze({ ...entry.targetRect }),
+      ...(entry.targetSubtreePaintFrame === undefined ? {} : {
+        targetSubtreePaintFrame: Object.freeze({ ...entry.targetSubtreePaintFrame })
+      })
     });
   }
   return Object.freeze({
