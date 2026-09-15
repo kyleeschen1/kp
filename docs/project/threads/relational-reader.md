@@ -220,6 +220,19 @@ global policy; review fragmentation, docking, and attention before promotion.
 The branch remains `feature/20260913-relational-reader` until human review;
 no merge or wider run continuation is authorized by this checkpoint.
 
+Accepted extension: try participant-only inspection on the remaining two moves
+of this same derivation. Squared-norm homogeneity carries the norm/quotient and
+both exponent destinations; cancellation carries the scalar factors and fraction
+rule while the squared momentum norm remains contextual. All three use the same
+reversible departure/docking and native/material binding path. Explicit
+record-to-live role mappings accommodate different semantic partitions of a
+shared equation row; owned-paint binding prevents a fraction wrapper from dimming
+its contextual numerator. Cross-edge commits clear previous record bindings
+atomically. Preserve the existing algebraic motifs and whole-equation comparison.
+This approval extends the experiment within this page only, not across cards or
+domains. Review particularly whether cancellation's separated factors remain
+intelligible before addressing the previously parked motif audit.
+
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
 Theseus target: `next-action.kp.relational-reader`; executable contract:

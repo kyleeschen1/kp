@@ -12,7 +12,8 @@ import { easedProgressBetweenSemanticBeat, linearEquationDemoBeatTimeline } from
  * material ownership, optical ink-knot sampling and endpoint handoff are shared.
  * Only the bounded proof selects which fragments persist or are rewritten. */
 export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number,
-  focus?: { readonly source: string; readonly target: string; readonly extent?: "participants" | "equation" }) {
+  focus?: { readonly source: readonly string[]; readonly target: readonly string[]; readonly extent?: "participants" | "equation";
+    readonly records?: readonly { readonly root: HTMLElement; readonly entityIds: readonly string[] }[] }) {
   assertEnergyDerivationPlan(compiled);
   const move = compiled.moves[index];
   if (!move) throw new Error("Unsupported energy derivation step");
@@ -86,25 +87,31 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
   // compositor. Its correlations, not glyph spelling or travel distance, bind
   // the inspection treatment to the same participants across paint handoffs.
   const pendingOwners = new Map<string, { entityId: string; participant: boolean }>();
+  const recordAtoms: { element: HTMLElement; entityId: string }[] = [];
   if (focus) {
-    for (const [root, id] of [[sourceRoot, focus.source], [targetRoot, focus.target]] as const) {
-      const element = root.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${CSS.escape(id)}"]`);
-      if (!element || !plan.handoffCorrelations.some(c => c.semanticEntityId === id))
-        throw new Error(`Missing derivation emphasis binding: ${id}`);
-      element.dataset["derivationParticipant"] = id;
-    }
-    if (focus.extent === "participants") {
-      // Context still participates in measurement and the checked algebra, but
-      // its inspection copy is absent: the permanent document supplies it.
-      for (const atom of [...source.atoms, ...target.atoms]) {
-        if (atom.semanticEntityId !== focus.source && atom.semanticEntityId !== focus.target)
-          atom.sourceElement.dataset["derivationInspectionContext"] = "";
+    for (const [scene, ids] of [[source, focus.source], [target, focus.target]] as const) {
+      for (const id of ids) {
+        if (!scene.atoms.some(atom => atom.semanticEntityId === id)) throw new Error(`Missing derivation emphasis binding: ${id}`);
+      }
+      // Bind owned paint, not an enclosing fraction wrapper: its numerator may
+      // be context while the rule and denominator participate in cancellation.
+      for (const atom of scene.atoms) {
+        if (ids.includes(atom.semanticEntityId)) atom.sourceElement.dataset["derivationParticipant"] = atom.semanticEntityId;
+        else if (focus.extent === "participants") atom.sourceElement.dataset["derivationInspectionContext"] = "";
       }
     }
     for (const correlation of plan.handoffCorrelations) {
-      const participant = correlation.semanticEntityId === focus.source || correlation.semanticEntityId === focus.target;
+      const participant = focus.source.includes(correlation.semanticEntityId) || focus.target.includes(correlation.semanticEntityId);
       if (participant || focus.extent === "participants")
         pendingOwners.set(correlation.materialOwnerId, { entityId: correlation.semanticEntityId, participant });
+    }
+    for (const record of focus.records ?? []) {
+      const scene = observe("source", record.root);
+      for (const id of record.entityIds) {
+        const atoms = scene.atoms.filter(atom => atom.semanticEntityId === id);
+        if (!atoms.length) throw new Error(`Missing permanent participant record: ${id}`);
+        atoms.forEach(atom => recordAtoms.push({ element: atom.sourceElement, entityId: id }));
+      }
     }
   }
   stage.dataset["derivationRenderer"] = canonical.kind;
@@ -122,6 +129,7 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
         }
       }
     }, sample: canonical.session.sample,
+    activateRecords() { recordAtoms.forEach(({ element, entityId }) => { element.dataset["derivationRecordParticipant"] = entityId; }); },
     dispose() { canonical.session.retire({ kind: "native-katex-paint-preserving-retirement", reason: "scene-replaced", structuralSuccession: "retire-preserving-paint" }); font.dispose(); } };
 }
 

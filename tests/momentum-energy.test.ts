@@ -1,6 +1,25 @@
 import { test } from "node:test";
-import { sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
+
+test("each inspection names complete semantic cohorts and explicit permanent-row bindings", () => {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(checked.status, "checked");
+  if (checked.status !== "checked") return;
+  const compiled = compileMomentumEnergyDerivation(checked.model);
+  const recordMath = [compiled.moves[0]!.annotated[0]!, compiled.moves[0]!.annotated[1]!, compiled.moves[2]!.annotated[0]!, compiled.moves[2]!.annotated[1]!];
+  energyDerivationInspection.forEach((focus, i) => {
+    const move = compiled.moves[i]!;
+    for (const [ids, math] of [[focus.source, move.annotated[0]!], [focus.target, move.annotated[1]!],
+      [focus.recordSource, recordMath[i]!], [focus.recordTarget, recordMath[i + 1]!]] as const) {
+      assert.ok(ids.length > 0);
+      assert.equal(new Set(ids).size, ids.length);
+      ids.forEach(id => assert.ok(math.includes(`kp-semantic-entity-id=${id},`), id));
+    }
+  });
+  assert.ok(energyDerivationInspection[1].source.includes("energy.scale-magnitude.0.momentum"));
+  assert.ok(!energyDerivationInspection[2].source.includes("energy.cancel-mass.0.norm"));
+});
 
 test("substitution emphasis follows semantic participants and reverses to neutral docks", () => {
   const samples = Array.from({ length: 101 }, (_, i) => sampleSubstitutionEmphasis(i / 100));

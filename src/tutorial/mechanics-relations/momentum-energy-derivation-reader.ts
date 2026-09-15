@@ -1,6 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
-import { sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
+import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
@@ -62,15 +62,15 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     // The host relocates one intact scene. Internal native/material ownership
     // remains exclusively compositor-owned, with co-located algebra endpoints.
     stage.style.transform = `translateY(${sourceTop + rowDistance * frame.carry}px)`;
-    session.apply(frame.algebra, selected === 0 && accented ? sampleSubstitutionEmphasis(p).strength : 0);
+    session.apply(frame.algebra, accented ? sampleSubstitutionEmphasis(p).strength : 0);
     root.dataset["phase"] = frame.phase;
     root.dataset["algebraProgress"] = String(frame.algebra);
-    // Discovery treatment on substitution only. All records remain permanent;
-    // other moves retain full inspection emphasis except at exact native docks.
+    // All three inspections share reversible departure/docking. The permanent
+    // record remains independent of the compositor's internal paint ownership.
     const record = sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
-    root.dataset["inspectionExtent"] = selected === 0 && participantOnly ? "participants" : "equation";
+    root.dataset["inspectionExtent"] = participantOnly ? "participants" : "equation";
     root.style.setProperty("--derivation-record-participant-opacity", String(1 - .78 * record.inspectionOpacity));
-    stage.style.opacity = String(selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
+    stage.style.opacity = String(participantOnly || selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
     root.dataset["inspectionOwner"] = record.kind;
     positionScope(selected + p);
     root.dataset["move"] = String(selected); root.dataset["progress"] = String(p);
@@ -144,20 +144,17 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
         const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
         paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
       }
-      const focus = sampleSubstitutionEmphasis(0);
-      if (index === 0 && participantOnly) {
-        for (const [row, id] of [[rows[0]!, focus.source], [rows[1]!, focus.target]] as const) {
-          const fragment = row.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${CSS.escape(id)}"]`);
-          if (!fragment) throw new Error(`Missing permanent participant record: ${id}`);
-          fragment.dataset["derivationRecordParticipant"] = id;
-        }
-      }
+      const focus = energyDerivationInspection[index]!;
       created = await mountMomentumEnergyDerivationSession(candidate, createEnergyDerivationPlan(checked.model), index,
-        index === 0 && (accented || participantOnly) ? { ...focus, extent: participantOnly ? "participants" : "equation" } : undefined);
+        accented || participantOnly ? { ...focus, extent: participantOnly ? "participants" : "equation",
+          records: participantOnly ? [{ root: equationSlots[index]!, entityIds: focus.recordSource },
+            { root: equationSlots[index + 1]!, entityIds: focus.recordTarget }] : [] } : undefined);
       if (token !== generation) return;
       // Commit one ready native scene atomically; no intermediate unmeasured
       // source, duplicate endpoints, or origin-position paint reaches a frame.
       session?.dispose(); stage.remove();
+      root.querySelectorAll<HTMLElement>("[data-derivation-record-participant]").forEach(element => { delete element.dataset["derivationRecordParticipant"]; });
+      created.activateRecords();
       stage = candidate; candidate = undefined;
       stage.removeAttribute("data-derivation-preparing");
       stage.setAttribute("data-derivation-stage", "");

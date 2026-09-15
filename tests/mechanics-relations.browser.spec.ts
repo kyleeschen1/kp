@@ -59,7 +59,7 @@ test("semantic accent reaches native and material participants without coloring 
   await root.screenshot({ path: info.outputPath("contrast-only.png") });
 });
 
-test("participant inspection moves only the substitution while retaining stationary context and traces", async ({ page }, info) => {
+test("participant inspection retains stationary context and traces across all three moves", async ({ page }, info) => {
   const root = await ready(page), stage = root.locator("[data-derivation-stage]");
   const records = root.locator(".energy-derivation-equation");
   const initial = await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()));
@@ -80,10 +80,28 @@ test("participant inspection moves only the substitution while retaining station
     }
     await root.screenshot({ path: info.outputPath(`participant-only-${position}.png`) });
   }
-  await dragTo(page, root, 1.5);
-  await expect(root).toHaveAttribute("data-inspection-extent", "equation");
-  expect(await traces.evaluateAll(els => els.every(el => getComputedStyle(el).opacity === "1"))).toBe(true);
-  await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
+  for (const position of [1.25, 1.6, 1.85, 2, 2.25, 2.6, 2.85, 3, 2.6, 1.6, .25]) {
+    await dragTo(page, root, position);
+    const move = Math.max(0, Math.ceil(position) - 1);
+    await expect(root).toHaveAttribute("data-move", String(move));
+    await expect(root).toHaveAttribute("data-inspection-extent", "participants");
+    expect(await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()))).toEqual(initial);
+    const activeRows = await traces.evaluateAll(els => [...new Set(els.map(el => el.closest("[data-derivation-row]")!.getAttribute("data-derivation-row")))]);
+    expect(activeRows.sort()).toEqual([String(move), String(move + 1)]);
+    if (Number.isInteger(position)) {
+      expect(await traces.evaluateAll(els => els.every(el => getComputedStyle(el).opacity === "1"))).toBe(true);
+    } else {
+      const owners = stage.locator("[data-kp-equation-material-owner-id]");
+      expect(await owners.evaluateAll(els => els.every(el => el.hasAttribute("data-derivation-participant") || getComputedStyle(el).visibility === "hidden"))).toBe(true);
+      // A scalar cancellation must not hide or dim the retained norm merely
+      // because it is nested inside the participating fraction's wrapper.
+      if (move === 2) {
+        const norm = root.locator('[data-derivation-row="2"] [data-kp-semantic-entity-id="energy.cancel-mass.0.norm"]');
+        expect(await norm.evaluate(el => { let opacity = 1; for (let node: Element | null = el; node; node = node.parentElement) opacity *= Number(getComputedStyle(node).opacity); return opacity; })).toBe(1);
+      }
+    }
+    await root.screenshot({ path: info.outputPath(`participant-chain-${position}.png`) });
+  }
   await page.goto(route + "?derivation-motion=equation#energy-from-momentum");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await dragTo(page, root, .25);

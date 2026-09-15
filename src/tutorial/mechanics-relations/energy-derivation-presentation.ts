@@ -59,6 +59,22 @@ export const energyDerivationFocus = [
   { source: "energy.cancel-mass.0.scalar-before", target: "energy.cancel-mass.1.scalar-after" }
 ] as const;
 
+const inspectionIds = (move: string, side: number, roles: readonly string[]) => roles.map(role => `energy.${move}.${side}.${role}`);
+// Live endpoints and permanent rows may partition the same expression
+// differently. Name both bindings explicitly; never infer them from glyphs.
+export const energyDerivationInspection = [
+  { source: inspectionIds("substitute", 0, ["velocity"]), target: inspectionIds("substitute", 1, ["replacement"]),
+    recordSource: inspectionIds("substitute", 0, ["velocity"]), recordTarget: inspectionIds("substitute", 1, ["replacement"]) },
+  { source: inspectionIds("scale-magnitude", 0, ["left", "right", "rule", "momentum", "denominator", "power"]),
+    target: inspectionIds("scale-magnitude", 1, ["left", "right", "rule", "momentum", "denominator", "power-top", "power-bottom"]),
+    recordSource: inspectionIds("substitute", 1, ["left", "right", "replacement", "power"]),
+    recordTarget: inspectionIds("cancel-mass", 0, ["rule", "norm", "scalar-before"]) },
+  { source: inspectionIds("cancel-mass", 0, ["half", "mass", "rule", "scalar-before"]),
+    target: inspectionIds("cancel-mass", 1, ["rule", "scalar-after"]),
+    recordSource: inspectionIds("cancel-mass", 0, ["half", "mass", "rule", "scalar-before"]),
+    recordTarget: inspectionIds("cancel-mass", 1, ["rule", "scalar-after"]) }
+] as const;
+
 /** Local discovery envelope: orient before the act gate, retain correspondence
  * through recognition, then reconcile at the dock. Pointer release is irrelevant. */
 export function sampleSubstitutionEmphasis(progress: number) {

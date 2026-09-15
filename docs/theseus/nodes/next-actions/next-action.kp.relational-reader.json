@@ -337,11 +337,17 @@
       "status": "passed",
       "scope": "participant-only exemplar: twelve Chromium checks; full rerun passed after one initialization timeout in focused run",
       "checkedAt": "2026-09-15T04:18:58.877Z"
+    },
+    {
+      "command": "npm run typecheck; node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts; npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "three-move participant experiment: eighteen focused tests and twelve Chromium checks",
+      "checkedAt": "2026-09-15T04:30:38.293Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: participant-only first substitution with dimmed corresponding records and stable invariant context. Whole-equation comparison remains available; other moves and canonical algebra are preserved."
+    "summary": "HUMAN_CHECKPOINT: all three derivation moves now support participant-only inspection; review squared-norm group and separated cancellation factors. Canonical motifs and whole-equation comparison preserved."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
