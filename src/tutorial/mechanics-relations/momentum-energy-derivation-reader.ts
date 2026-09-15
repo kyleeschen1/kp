@@ -144,7 +144,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     const parent = passage.dataset["parentStep"];
     if (parent !== undefined && !/^[1-9]\d*$/.test(parent)) throw new Error("Invalid published parent step");
     const backToParent = parent ? `<button type="button" data-refinement-collapse data-refinement-local-return hidden><span aria-hidden="true">↑ </span>Back to step ${parent}</button>` : "";
-    controls.innerHTML = `<div class="energy-derivation-actions"><button type="button" data-derivation-entry="${i}" aria-pressed="false">Inspect step ${labels[i]}</button>${backToParent}<button type="button" data-derivation-restart hidden>Restart</button></div>
+    controls.innerHTML = `<div class="energy-derivation-actions"><button type="button" data-derivation-entry="${i}" aria-pressed="false">Inspect step ${labels[i]}</button>${backToParent}<button type="button" data-derivation-restart style="visibility: hidden" disabled>Restart</button></div>
       <div class="energy-derivation-mobile-well" hidden><small>Inspection · step ${labels[i]}</small><div data-derivation-mobile-slot></div><input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect step ${labels[i]}"><div class="energy-derivation-actions"><button type="button" data-local-back>Back</button><button type="button" data-local-forward>Forward</button><button type="button" data-local-close>Done</button></div></div>`;
     const context = passage.querySelector("[data-nested-context]");
     if (context) context.after(controls); else passage.prepend(controls);
@@ -250,8 +250,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     localControls.forEach((controls, i) => {
       const active = i === selected && (!isPhone() || mobileInspect);
       controls.entry.setAttribute("aria-pressed", String(active));
-      controls.restart.hidden = !active;
-      controls.restart.disabled = loading || p === 0;
+      // Activation must not reflow the very interval being dragged. Reserve
+      // the contextual control's space even when a narrow toolbar wraps.
+      controls.restart.style.visibility = active ? "visible" : "hidden";
+      controls.restart.disabled = !active || loading || p === 0;
       if (i === selected) {
         controls.range.value = String(p);
         controls.range.setAttribute("aria-valuetext", `${Math.round(p * 100)} percent, ${p === 0 ? "source" : p === 1 ? "result" : "between states"}`);

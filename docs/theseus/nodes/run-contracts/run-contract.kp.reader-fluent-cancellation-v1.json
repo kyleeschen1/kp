@@ -2,8 +2,8 @@
   "id": "run-contract.kp.reader-fluent-cancellation-v1",
   "kind": "run-contract",
   "title": "Fluent physics cancellation",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: fluent physics cancellation exemplar awaits visual feedback; no generalization authorized.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -36,8 +36,8 @@
     {
       "id": "fluent.review",
       "title": "Verification-and-visual-review",
-      "summary": "HUMAN_CHECKPOINT: review physics step 3 and local smaller-step return. 28 browser checks pass; tests are not aesthetic approval.",
-      "status": "in-progress"
+      "summary": "User visual approval recorded; reproduced drag-layout checkpoint regression repaired and verified by 29 browser checks and full types. Viewport-edge auto-scroll remains a separately recorded gap.",
+      "status": "complete"
     }
   ]
 }

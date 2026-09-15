@@ -44,6 +44,33 @@ just whether it is smooth. Passing tests is not visual or pedagogical approval.
 
 ## Review packet
 
+The user accepted the fluent visual treatment (“it looks good!”), then reported
+drag difficulty around expanded steps 3.2–3.3. Preserve that visual approval;
+the interaction regression is a bounded checkpoint repair, not another motif
+redesign. A continuous held-drag test passes at 1280px and 560px but reproduces
+incorrect progress at 521px: activation reveals Restart, wraps the substep
+toolbar and shifts the record beneath the pointer. Fix the control's layout
+participation, not the semantic playhead or compositor. Viewport-edge auto-scroll
+is separately absent; do not claim this layout repair supplies it or establishes
+that it was the user's exact trigger without their viewport clarification.
+
+The repair reserves Restart's footprint while making it invisible and disabled
+outside the active step. Interaction changes paint/access, not the geometry it
+uses to interpret the pointer. The new held-drag regression first failed at
+521px (expected progress 0.5, actual 0.597735); it now traverses 3.1–3.3 in both
+directions at 1280px and 521px while asserting unchanged record rectangles,
+correct progress and uninterrupted pointer capture. An initial harness retry
+also needed a fresh document between viewport cases; navigating to the same
+hash URL had retained the expanded view.
+
+Follow-up verification: `npm run visual:mechanics-relations` **29/29 Chromium**
+checks pass and `npm run typecheck` passes all projects. No semantic/motif,
+compositor, stylesheet, clock or dependency changes. The prior build/closure
+measurements below describe `cd2b8bf8d`; they were not rerun for this bounded
+control-layout repair. The accepted visual checkpoint and reproduced regression
+are handled; exact attribution of the user's remaining experience still needs
+their viewport clarification if the difficulty persists.
+
 Open <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
 Choose **Inspect step 3**, then drag or use Next/Previous. The outside mass and
 superscript withdraw with the shared ink-shrink treatment; the denominator base

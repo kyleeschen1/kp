@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: fluent physics step 3 review; scalar composition accepted. Deferred later loops remain parked.",
+  "summary": "Fluent exemplar accepted and bounded drag-layout repair complete. Await remaining drag clarification or separately approved next scope; later loops remain parked and viewport-edge autoscroll is not implemented.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -807,6 +807,27 @@
       "scope": "fluent integration",
       "checkedAt": "2026-09-15T21:32:33.480Z",
       "notes": "Production build passes; unrelated existing large chunk warnings remain. Physics gzip initial 36035 and reachable 147207 bytes; scalar 33091 and 145046. Measurement commands and exclusions in review packet."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "failed",
+      "scope": "expanded held-drag regression before repair",
+      "checkedAt": "2026-09-15T21:48:34.365Z",
+      "notes": "At 521px, toolbar activation changes row geometry: requested midpoint resolved to 0.597735 instead of 0.5. Wide case passed. Initial harness also required fresh document between viewport cases rather than same-hash navigation."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "expanded drag layout repair",
+      "checkedAt": "2026-09-15T21:48:35.631Z",
+      "notes": "29/29 Chromium checks pass after reserving Restart control layout space. New continuous pointer-capture test crosses both expanded boundaries forward/reverse at 1280px and 521px with invariant record geometry and correct midpoint progress. Does not add viewport-edge auto-scroll."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "expanded drag layout repair",
+      "checkedAt": "2026-09-15T21:48:36.665Z",
+      "notes": "All application, node, test, Svelte and domain projects pass."
     }
   ],
   "progress": {

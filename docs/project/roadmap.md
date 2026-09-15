@@ -26,8 +26,11 @@ nor its evidence. The ledger remains retrievable at
 ## Executive Direction
 
 The scalar composed-cancellation exemplar is visually accepted (“beautiful”).
-The next approved bounded repair is fluent cancellation in the physics reader,
-with its explanatory expansion preserved and the scalar lesson unchanged.
+Fluent cancellation in the physics reader is also visually accepted, with its
+explanatory expansion preserved and the scalar lesson unchanged. The subsequent
+expanded-drag report exposed narrow-toolbar reflow; reserving Restart's layout
+space repairs that reproduced defect. Viewport-edge auto-scroll is a separate
+unimplemented interaction, not covered by this repair.
 Policy: `principles/fluent-reasoning.md`; approved scope/checkpoint:
 `threads/2026-09-15-fluent-cancellation.md`. This supersedes the pending scalar
 checkpoint below, not the deferred broader reader horizon.

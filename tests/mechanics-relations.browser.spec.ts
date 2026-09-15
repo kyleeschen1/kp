@@ -286,6 +286,38 @@ test("expandable cancellation uses canonical fine steps and restores the compact
   expect(errors).toEqual([]);
 });
 
+test("expanded handle crosses both fine-step boundaries in one held drag without moving its record", async ({ page }) => {
+  for (const width of [1280, 521]) {
+    await page.setViewportSize({ width, height: 1800 });
+    await page.goto("about:blank");
+    const root = await ready(page);
+    await root.locator("[data-refinement-expand]").click();
+    await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
+    await expect(root).toHaveAttribute("data-move", "2");
+    await lens(root).scrollIntoViewIfNeeded();
+    const records = root.locator(".energy-derivation-equation");
+    const before = await documentBoxes(records);
+    const centers = await records.evaluateAll(els => els.map(el => {
+      const box = el.getBoundingClientRect(); return box.top + box.height / 2;
+    }));
+    const handle = (await lens(root).boundingBox())!;
+    const x = handle.x + handle.width / 2;
+    await page.mouse.move(x, handle.y + handle.height / 2);
+    await page.mouse.down();
+    try {
+      for (const position of [2.5, 3.5, 4.5, 3.5, 2.5]) {
+        const move = Math.floor(position), y = (centers[move]! + centers[move + 1]!) / 2;
+        expect(y).toBeGreaterThan(0); expect(y).toBeLessThan(1800);
+        await page.mouse.move(x, y, { steps: 16 });
+        await expect(root).toHaveAttribute("data-move", String(move));
+        await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeCloseTo(.5, 2);
+        expect(await documentBoxes(records), `record moved at width ${width}, step ${position}`).toEqual(before);
+        await expect(root).toHaveAttribute("data-derivation-dragging", "true");
+      }
+    } finally { await page.mouse.up(); }
+  }
+});
+
 test("unavailable refinement restores the checked compact inspection without a substitute animation", async ({ page }) => {
   await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");

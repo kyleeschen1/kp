@@ -5,11 +5,14 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
-Scalar composed cancellation is visually accepted (“beautiful”). The user
-approved [fluent physics cancellation](2026-09-15-fluent-cancellation.md) next,
-with [explicit authoring policy](../principles/fluent-reasoning.md). Preserve
-the explanatory scalar and local finer-step access. This is one physics
-exemplar through visual review, not catalogue promotion or resumed later loops.
+Scalar composed cancellation and [fluent physics cancellation](2026-09-15-fluent-cancellation.md)
+are visually accepted. The follow-up drag report exposed control reflow in a
+tight desktop viewport: revealing Restart moved the substep rows. The bounded
+repair reserves its layout space; 29 Chromium reader checks and full types pass.
+Viewport-edge auto-scroll is still absent and may be a separate part of the
+reported difficulty; await the user's clarification rather than claiming it
+fixed. Preserve [authoring policy](../principles/fluent-reasoning.md), the scalar
+explanation and local finer-step access. Later loops remain parked.
 
 Current review packet: [independent scalar reader](2026-09-15-scalar-reader-review.md).
 The preceding [expandable cancellation](2026-09-15-cancellation-refinement-review.md)
