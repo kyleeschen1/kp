@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Accepted successive-loop direction, including local access when the active knob
+is offscreen: `reviews/2026-09-15-next-step-review.md`. That single source owns
+the revised six-loop sequence and detailed first-run proposal. Next: reader.l1
+adoption, local activation/bookmarks and mobile reading, then visual review and
+long-document pressure. Its proposed four-hour ceiling and five-package scope
+await approval; no new run is executing. Later order: expandable cancellation
+and earlier-result use, source-only reuse, code, richer mechanics, graph linkage.
+Do not substitute a generic frontier/refill task or restart the deferred v2.
+
 September 15 checkpoint approval closes the bounded away portfolio: contextual
 inspection and local provenance/exact return are accepted. Review/evidence:
 `threads/2026-09-15-relational-reader-away-review.md`. They remain opt-in;

@@ -5,6 +5,15 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+Accepted next-loop sequence; detailed first-run approval pending:
+[September 15 next-step review](../reviews/2026-09-15-next-step-review.md).
+Adopt/readability/local lens access → verified expansion and earlier-result use
+→ authoring reuse → code → force/energy argument → graph correspondence.
+The review owns the six-loop horizon and the bounded reader.l1 run proposal;
+Theseus will own live status after scope approval. It reconciles deferred v2
+packages
+without restarting them or declaring their remaining outcomes complete.
+
 September 15 approval accepts the contextual working-expression treatment and
 local provenance/exact return in the away review packet. The bounded away
 portfolio is complete, including its gap investigation (not a fine-step feature).

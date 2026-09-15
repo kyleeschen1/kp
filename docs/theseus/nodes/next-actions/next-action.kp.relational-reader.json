@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-15-relational-reader-away-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-15-next-step-review.md"
     }
   ],
   "dependsOn": {
@@ -427,7 +431,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Away visual checkpoints accepted; bounded portfolio complete, not whole relational-reader roadmap. Default adoption, phone repair and finer cancellation not implemented by approval recording."
+    "summary": "Six-loop direction durably updated: local lens access/mobile; expandable cancellation and earlier-result use; authoring reuse; code; mechanics; graph. Detailed reader.l1 five-package four-hour proposal awaits scope approval. No implementation started or old v2 resumed."
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation."
