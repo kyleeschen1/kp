@@ -11,7 +11,8 @@ import { easedProgressBetweenSemanticBeat, linearEquationDemoBeatTimeline } from
 /** One candidate renderer binding, not a new paint owner. Native observation,
  * material ownership, optical ink-knot sampling and endpoint handoff are shared.
  * Only the bounded proof selects which fragments persist or are rewritten. */
-export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number) {
+export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number,
+  focus?: { readonly source: string; readonly target: string }) {
   assertEnergyDerivationPlan(compiled);
   const move = compiled.moves[index];
   if (!move) throw new Error("Unsupported energy derivation step");
@@ -81,8 +82,33 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
     ...(projection ? { trackProjection: projection } : {}), copyFanOutRouting: move.split });
   if (plan.disposition.mode !== "motion") throw new Error(`Energy derivation requires repair: ${plan.disposition.reason}`);
   const canonical = createKpCanonicalNativeKatexSceneSession(plan);
+  // Resolve semantic targets once; material paint stays owned by the canonical
+  // compositor. Its correlations, not glyph spelling or travel distance, bind
+  // the inspection treatment to the same participants across paint handoffs.
+  const pendingOwners = new Map<string, string>();
+  if (focus) {
+    for (const [root, id] of [[sourceRoot, focus.source], [targetRoot, focus.target]] as const) {
+      const element = root.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${CSS.escape(id)}"]`);
+      if (!element || !plan.handoffCorrelations.some(c => c.semanticEntityId === id))
+        throw new Error(`Missing derivation emphasis binding: ${id}`);
+      element.dataset["derivationParticipant"] = id;
+    }
+    for (const correlation of plan.handoffCorrelations) {
+      if (correlation.semanticEntityId === focus.source || correlation.semanticEntityId === focus.target)
+        pendingOwners.set(correlation.materialOwnerId, correlation.semanticEntityId);
+    }
+  }
   stage.dataset["derivationRenderer"] = canonical.kind;
-  return { apply: canonical.session.apply, sample: canonical.session.sample,
+  return { apply(progress: number, emphasis = 0) {
+      canonical.session.apply(progress);
+      stage.style.setProperty("--derivation-participant-strength", `${emphasis * 100}%`);
+      // Material owners may be allocated on first transit. Cache their binding;
+      // no geometry reads or per-frame descendant recoloring are necessary.
+      for (const [ownerId, entityId] of pendingOwners) {
+        const owner = stage.querySelector<HTMLElement>(`[data-kp-equation-material-owner-id="${CSS.escape(ownerId)}"]`);
+        if (owner) { owner.dataset["derivationParticipant"] = entityId; pendingOwners.delete(ownerId); }
+      }
+    }, sample: canonical.session.sample,
     dispose() { canonical.session.retire({ kind: "native-katex-paint-preserving-retirement", reason: "scene-replaced", structuralSuccession: "retire-preserving-paint" }); font.dispose(); } };
 }
 

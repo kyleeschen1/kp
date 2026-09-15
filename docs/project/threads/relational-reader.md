@@ -187,6 +187,25 @@ taller phone document before promoting the envelope across transitions. The
 canonical semantic plan, compositor and internal mathematical motifs remain
 unchanged; all treatment is local to the reader projection.
 
+Recorded discussion experiments (not execution authority): nonlocal substitution
+and provenance/return in the current equation exemplar; then a tiny graph with
+one consequential change per beat; then a small code example or multiline system
+to pressure scope and expandable granularity. The self-contained current-layout
+description, experiment questions and implementation/proposal distinctions are in
+`2026-09-14-reasoning-record-layout-handoff.md`. Retrieve that document for the
+cross-medium discussion rather than inferring a shared renderer or new run.
+
+Accepted salience discovery follow-up: on the first substitution, distinguish
+readable neutral fenceposts, dark live context, and a cool accent on the semantic
+velocity/replacement participants. Bind native and material paint through the
+existing compositor correlations; geometric movement is not emphasis authority.
+The existing playhead owns orientation, recognition and neutral docking, including
+rewind and held interiors. Keep warm gutter navigation separate. The URL option
+`?derivation-emphasis=contrast` supplies the same quiet-record treatment without
+participant color for comparison. No other move, mathematical motif, global
+palette or salience architecture is promoted by this experiment. Review the first
+substitution before generalization; r2 remains at its human checkpoint.
+
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
 Theseus target: `next-action.kp.relational-reader`; executable contract:

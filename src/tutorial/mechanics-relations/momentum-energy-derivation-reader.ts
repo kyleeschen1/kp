@@ -1,11 +1,13 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
-import { sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
+import { sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
  * participating in that move's semantic fan-out. */
 export function enhanceEnergyDerivation(root: HTMLElement) {
+  // Internal exemplar comparison, not an additional learner control or policy.
+  const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
@@ -59,7 +61,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     // The host relocates one intact scene. Internal native/material ownership
     // remains exclusively compositor-owned, with co-located algebra endpoints.
     stage.style.transform = `translateY(${sourceTop + rowDistance * frame.carry}px)`;
-    session.apply(frame.algebra);
+    session.apply(frame.algebra, selected === 0 && accented ? sampleSubstitutionEmphasis(p).strength : 0);
     root.dataset["phase"] = frame.phase;
     root.dataset["algebraProgress"] = String(frame.algebra);
     // Discovery treatment on substitution only. All records remain permanent;
@@ -139,7 +141,8 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
         const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
         paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
       }
-      created = await mountMomentumEnergyDerivationSession(candidate, createEnergyDerivationPlan(checked.model), index);
+      created = await mountMomentumEnergyDerivationSession(candidate, createEnergyDerivationPlan(checked.model), index,
+        index === 0 && accented ? sampleSubstitutionEmphasis(0) : undefined);
       if (token !== generation) return;
       // Commit one ready native scene atomically; no intermediate unmeasured
       // source, duplicate endpoints, or origin-position paint reaches a frame.

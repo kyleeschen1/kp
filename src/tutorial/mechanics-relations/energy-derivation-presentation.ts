@@ -59,6 +59,14 @@ export const energyDerivationFocus = [
   { source: "energy.cancel-mass.0.scalar-before", target: "energy.cancel-mass.1.scalar-after" }
 ] as const;
 
+/** Local discovery envelope: orient before the act gate, retain correspondence
+ * through recognition, then reconcile at the dock. Pointer release is irrelevant. */
+export function sampleSubstitutionEmphasis(progress: number) {
+  sampleSubstitutionPresentation(progress);
+  const t = Math.max(0, Math.min(1, progress / .2, (1 - progress) / .1));
+  return { ...energyDerivationFocus[0], strength: t * t * (3 - 2 * t) };
+}
+
 /** An integer denotes the completed equation, not the next move's opening
  * frame. This makes checkpoint jumps and reverse agree at shared boundaries. */
 export function resolveEnergyDerivationPosition(position: number) {

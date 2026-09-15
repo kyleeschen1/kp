@@ -66,6 +66,25 @@
 .energy-derivation-endpoint { position: absolute; left: 0; top: 0; }
 .energy-derivation-stage [data-kp-editor-equation-material-layer] { position: absolute; inset: 0; pointer-events: none; }
 .energy-derivation[data-tracing="true"] .energy-derivation-equation { color: color-mix(in srgb, #52616d, #1b1b1b calc(var(--derivation-record-emphasis, 0) * 100%)); }
+/* Exemplar-only hierarchy: permanent records remain readable; moving context
+ * stays dark. The cool participant accent is separate from warm navigation. */
+.energy-derivation[data-tracing="true"][data-move="0"] .energy-derivation-equation { color: color-mix(in srgb, #727272, #1b1b1b calc(var(--derivation-record-emphasis, 0) * 100%)); }
+.energy-derivation-stage { color: #1b1b1b; --derivation-participant-accent: #006b91; }
+/* Material clones freeze native computed colors. Override only semantically
+ * bound paint, including the fraction rule, without changing its geometry. */
+.energy-derivation-stage [data-derivation-participant],
+.energy-derivation-stage [data-derivation-participant] * {
+  /* Computed-style clones snapshot custom properties too. Restore live
+   * inheritance throughout the participant, not just its outer paint owner. */
+  --derivation-participant-strength: inherit !important;
+  --derivation-participant-accent: inherit !important;
+  color: color-mix(in srgb, #1b1b1b, var(--derivation-participant-accent) var(--derivation-participant-strength, 0%)) !important;
+  border-color: currentColor !important;
+}
+@media (forced-colors: active) {
+  .energy-derivation-stage { --derivation-participant-accent: Highlight; }
+  .energy-derivation-stage [data-derivation-participant] { outline: 1px dotted Highlight; }
+}
 .energy-derivation [data-trace-role="live"] .energy-derivation-row-marker { color: var(--derivation-inspection-accent); }
 .energy-derivation-transport { width: 100%; max-width: 30rem; font-size: .9em; color: #52616d; }
 @media print { .energy-derivation-stage, .energy-derivation-transport { display: none !important; } .energy-derivation .energy-derivation-equation { visibility: visible !important; } }

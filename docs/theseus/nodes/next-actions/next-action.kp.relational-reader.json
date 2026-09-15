@@ -325,11 +325,17 @@
       "status": "passed",
       "scope": "permanent record integration",
       "checkedAt": "2026-09-15T00:09:41.211Z"
+    },
+    {
+      "command": "npm run typecheck; node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts; npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T03:44:24.160Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: all reasons permanently interleaved; equation audit trail never withdrawn. First substitution tests distance-based inspection-copy departure and docking; canonical mathematical compositor unchanged."
+    "summary": "HUMAN_CHECKPOINT: first substitution compares quiet permanent fenceposts with optional semantic participant accent across native and material paint. Existing motion and other moves preserved; review before promotion."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

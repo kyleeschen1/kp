@@ -1,6 +1,21 @@
 import { test } from "node:test";
-import { sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+import { sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
+
+test("substitution emphasis follows semantic participants and reverses to neutral docks", () => {
+  const samples = Array.from({ length: 101 }, (_, i) => sampleSubstitutionEmphasis(i / 100));
+  for (let i = 100; i >= 0; i--) {
+    assert.deepEqual(sampleSubstitutionEmphasis(i / 100), samples[i]);
+    assert.equal(samples[i]!.source, "energy.substitute.0.velocity");
+    assert.equal(samples[i]!.target, "energy.substitute.1.replacement");
+    assert.ok(samples[i]!.strength >= 0 && samples[i]!.strength <= 1);
+  }
+  assert.equal(samples[0]!.strength, 0);
+  assert.equal(samples[100]!.strength, 0);
+  assert.equal(samples[25]!.strength, 1);
+  assert.equal(samples[90]!.strength, 1);
+  assert.throws(() => sampleSubstitutionEmphasis(NaN));
+});
 
 test("record inspection has exclusive docks and a reversible continuous emphasis envelope", () => {
   const frames = Array.from({ length: 101 }, (_, i) => sampleDerivationRecordInspection(i / 100, 180, 54));

@@ -22,6 +22,41 @@ async function ready(page: import("@playwright/test").Page) {
   return root;
 }
 
+test("semantic accent reaches native and material participants without coloring persistent context", async ({ page }, info) => {
+  const root = await ready(page);
+  const stage = root.locator("[data-derivation-stage]");
+  for (const position of [.25, .55, .85, .55, 0, 1]) {
+    await dragTo(page, root, position);
+    const strength = await stage.evaluate(el => (el as HTMLElement).style.getPropertyValue("--derivation-participant-strength"));
+    if (position === 0 || position === 1) expect(strength).toBe("0%");
+    else {
+      expect(parseFloat(strength)).toBeGreaterThan(90);
+      const participants = stage.locator("[data-derivation-participant]");
+      expect(await participants.count()).toBeGreaterThanOrEqual(2);
+      const ids = await participants.evaluateAll(els => els.map(el => el.getAttribute("data-derivation-participant")));
+      expect(ids.every(id => id === "energy.substitute.0.velocity" || id === "energy.substitute.1.replacement")).toBe(true);
+      const focal = await participants.first().evaluate(el => getComputedStyle(el).color);
+      expect(focal).toBe("color(srgb 0 0.419608 0.568627)");
+      const context = await stage.locator('[data-derivation-source] [data-kp-semantic-entity-id$=".prefix"]').evaluate(el => getComputedStyle(el).color);
+      expect(focal).not.toBe(context);
+      const innerColors = await participants.locator("*").evaluateAll(els => els.map(el => getComputedStyle(el).color));
+      expect(innerColors.every(color => color === focal)).toBe(true);
+      await root.screenshot({ path: info.outputPath(`semantic-accent-${position}.png`) });
+      if (position === .55) {
+        const material = stage.locator('[data-kp-equation-material-owner-id][data-derivation-participant]');
+        expect(await material.count()).toBeGreaterThan(0);
+        expect(await material.first().locator("*").first().evaluate(el => getComputedStyle(el).color)).toBe(focal);
+        await root.screenshot({ path: info.outputPath("semantic-accent.png") });
+      }
+    }
+  }
+  await page.goto(route + "?derivation-emphasis=contrast#energy-from-momentum");
+  await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await dragTo(page, root, .55);
+  await expect(stage.locator("[data-derivation-participant]")).toHaveCount(0);
+  await root.screenshot({ path: info.outputPath("contrast-only.png") });
+});
+
 test("persistent lens follows the expression, holds interiors and rewinds exactly", async ({ page }, info) => {
   const root = await ready(page);
   await expect(root.getByRole("slider")).toHaveCount(1);
