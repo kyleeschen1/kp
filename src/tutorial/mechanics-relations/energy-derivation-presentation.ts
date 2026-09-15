@@ -97,3 +97,18 @@ export function resolveEnergyDerivationMeasuredPosition(y: number, centers: read
   }
   return centers.length - 1;
 }
+
+type DerivationRecordInspection =
+  | { kind: "docked"; endpoint: "source" | "target"; inspectionOpacity: 0; sourceEmphasis: number; targetEmphasis: number }
+  | { kind: "inspection"; inspectionOpacity: number; sourceEmphasis: number; targetEmphasis: number };
+
+/** The document record is never withdrawn. Only its explanatory inspection
+ * copy yields at a dock; this is not a mathematical split/merge operation. */
+export function sampleDerivationRecordInspection(progress: number, distance: number, equationHeight: number): DerivationRecordInspection {
+  if (!Number.isFinite(progress) || progress < 0 || progress > 1 || !Number.isFinite(distance) || distance <= 0 || !Number.isFinite(equationHeight) || equationHeight <= 0)
+    throw new RangeError("Invalid record inspection geometry");
+  if (progress === 0 || progress === 1) return { kind: "docked", endpoint: progress === 0 ? "source" : "target", inspectionOpacity: 0, sourceEmphasis: 1 - progress, targetEmphasis: progress };
+  const t = Math.min(1, Math.min(progress, 1 - progress) * distance / (equationHeight * .35));
+  const opacity = t * t * (3 - 2 * t);
+  return { kind: "inspection", inspectionOpacity: opacity, sourceEmphasis: progress < .5 ? 1 - opacity : 0, targetEmphasis: progress > .5 ? 1 - opacity : 0 };
+}

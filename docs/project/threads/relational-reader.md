@@ -166,6 +166,27 @@ precision, and remains legible on a phone. The reversible unit is this first
 transition's publication layout plus reader geometry adapter; the checkpoint
 does not approve shared choreography, new mathematical motifs or broader rollout.
 
+Accepted follow-up: all three reasons are permanent interleaved passages, not
+selected-step callouts. The floating callout and duplicate fallback notes are
+removed; the static document already contains the complete argument. Opening any
+reason pauses and remeasures the spatial intervals without resetting progress.
+
+The audit trail is a permanent document record, distinct from the moving
+inspection copy. Equation rows never disappear or change layout during motion.
+Exact docks have one visible equation: the inspection layer is transparent and
+the stationary native record owns visible ink. On the first substitution only,
+a reversible, distance-based emphasis envelope introduces the inspection copy
+as it separates and yields it back on approach, while record emphasis changes
+without withdrawing the record. This is explanatory repetition, not a new
+mathematical copy/split/merge operation. The other two moves keep full inspection
+emphasis between their exact docks pending review of the first treatment.
+
+Principle for this reader: inspection may change emphasis, but must not erase
+the argument being inspected. Review departure/arrival crowding and the now
+taller phone document before promoting the envelope across transitions. The
+canonical semantic plan, compositor and internal mathematical motifs remain
+unchanged; all treatment is local to the reader projection.
+
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
 Theseus target: `next-action.kp.relational-reader`; executable contract:

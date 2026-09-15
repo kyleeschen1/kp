@@ -1,6 +1,36 @@
 # Momentum–energy reader: first visual checkpoint
 
-## Current review: first interleaved transition (2026-09-14)
+## Current review: permanent explanations and retained equation record
+
+Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
+All three reasons are permanently interleaved. The floating callout, duplicate
+fallback notes and proximity-based equation disappearance are removed. All four
+stationary equations remain legible and in place, including during inspection.
+
+The first substitution tests a reversible departure/reconciliation envelope:
+the explanatory inspection copy gains emphasis as it separates and yields as
+it approaches a dock. At exact endpoints only the stationary equation paints;
+the inspection copy is transparent. Stationary record emphasis changes without
+hiding a row. This is not a mathematical fan-out motif or a new compositor path.
+The remaining moves retain full inspection emphasis between exact docks pending
+approval of the first treatment. The complete static equations remain available
+to assistive technology; the redundant inspection stage is aria-hidden.
+
+HUMAN_CHECKPOINT: inspect a slow departure, reverse, and arrival on the first
+substitution. Does the permanent record keep the argument clear without making
+the inspection copy confusing? The phone document is taller now that all reasons
+are present; ordinary scrolling remains independent of mathematical progress.
+Rollback unit is the local record-inspection profile and reader projection.
+Previous reference: `789dbf6ad`. No shared renderer or mathematical motif is promoted.
+
+Focused evidence: sixteen unit checks and ten Chromium checks cover the pure
+reversible emphasis envelope, exclusive exact docks, visible unchanged records,
+permanent reasons, variable-spacing gestures, reverse, native handoff, keyboard,
+reduced motion, no-JavaScript and print. Full build/types pass with existing
+large-chunk warnings. Captures were inspected; Safari/device certification and
+human judgment of departure/reconciliation are not claimed.
+
+## Previous review: first interleaved transition (2026-09-14)
 
 Review <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
 The first substitution now reads equation → reason → equation. Its short label

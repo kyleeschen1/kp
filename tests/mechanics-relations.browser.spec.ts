@@ -31,7 +31,7 @@ test("persistent lens follows the expression, holds interiors and rewinds exactl
   await dragTo(page, root, .55, false);
   await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeGreaterThan(.5);
   await expect(root).toHaveAttribute("data-playing", "false");
-  const cue = root.locator("[data-derivation-interleave]"), cueBox = await cue.boundingBox();
+  const cue = root.locator("[data-derivation-interleave]").first(), cueBox = await cue.boundingBox();
   const expression = await root.locator("[data-derivation-stage]").boundingBox(), knob = await lens(root).boundingBox();
   expect(Math.abs(expression!.y + expression!.height / 2 - knob!.y - knob!.height / 2)).toBeLessThan(2);
   expect(Number(await root.getAttribute("data-algebra-progress"))).toBeGreaterThan(0);
@@ -51,10 +51,11 @@ test("persistent lens follows the expression, holds interiors and rewinds exactl
 test("interleaved reason preserves its endpoints, readable lane and disclosure geometry", async ({ page }, info) => {
   for (const width of [1000, 390]) {
     await page.setViewportSize({ width, height: 844 });
-    const root = await ready(page), passage = root.locator("[data-derivation-interleave]");
+    const root = await ready(page), passage = root.locator("[data-derivation-interleave]").first();
     const source = root.locator('[data-derivation-row="0"] .energy-derivation-equation');
     const target = root.locator('[data-derivation-row="1"] .energy-derivation-equation');
-    await expect(root.locator("[data-derivation-cue]")).toBeHidden();
+    await expect(root.locator("[data-derivation-cue], [data-derivation-notes]")).toHaveCount(0);
+    await expect(root.locator("[data-derivation-interleave]")).toHaveCount(3);
     await expect(root.locator("[data-derivation-rail] span")).toHaveCount(4);
     const textBox = await passage.locator(".energy-derivation-interleave-text").boundingBox();
     expect(textBox!.y).toBeGreaterThan((await source.boundingBox())!.y);
@@ -79,14 +80,33 @@ test("interleaved reason preserves its endpoints, readable lane and disclosure g
   }
 });
 
+test("the audit trail never disappears and exact docks have one visible expression", async ({ page }, info) => {
+  const root = await ready(page);
+  const records = root.locator(".energy-derivation-equation");
+  const initial = await records.evaluateAll(nodes => nodes.map(n => n.getBoundingClientRect().y));
+  for (const position of [0, .07, .15, .5, .85, .93, 1, .5, 0]) {
+    await dragTo(page, root, position);
+    for (const record of await records.all()) await expect(record).toBeVisible();
+    expect(await records.evaluateAll(nodes => nodes.map(n => n.getBoundingClientRect().y))).toEqual(initial);
+    for (const reason of await root.locator("[data-derivation-interleave]").all()) await expect(reason).toBeVisible();
+    const opacity = Number(await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).opacity));
+    if (position === 0 || position === 1) {
+      expect(opacity).toBe(0);
+      await expect(root).toHaveAttribute("data-inspection-owner", "docked");
+      await expect(root.locator('[data-derivation-row="2"]')).toHaveAttribute("data-trace-role", "prospective");
+    } else if (position === .5) expect(opacity).toBe(1);
+    else expect(opacity).toBeGreaterThan(0);
+    if (position === .07 || position === .5 || position === 1)
+      await root.screenshot({ path: info.outputPath("retained-record-" + position + ".png") });
+  }
+});
+
 test("fast cross-edge dragging keeps the latest sample and cancels without autoplay", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
   const root = await ready(page);
   await dragTo(page, root, 2.5);
   await expect(root).toHaveAttribute("data-move", "2");
-  const explanation = await root.locator("[data-derivation-interleave]").boundingBox();
-  expect((await root.locator("[data-derivation-cue]").boundingBox())!.y).toBeGreaterThanOrEqual(explanation!.y + explanation!.height);
   await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeCloseTo(.5, 1);
   await expect(root.locator("[data-kp-editor-equation-material-layer] [data-kp-equation-material-owner-id]").first()).toBeAttached();
   await dragTo(page, root, .5, false);
@@ -151,7 +171,7 @@ test("narrow keyboard lens, reduced motion, ordinary scroll and print preserve r
   await root.screenshot({ path: info.outputPath("lens-narrow.png") });
   await page.emulateMedia({ media: "print" });
   for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
-  await expect(root.locator("[data-derivation-notes]")).toBeVisible();
+  for (const reason of await root.locator("[data-derivation-interleave]").all()) await expect(reason).toBeVisible();
 });
 test("native reading, continuous local control, exact reverse and held prose", async ({ page }, info) => {
   const errors: string[] = [];

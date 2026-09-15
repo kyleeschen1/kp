@@ -1,5 +1,21 @@
 import { test } from "node:test";
+import { sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
+
+test("record inspection has exclusive docks and a reversible continuous emphasis envelope", () => {
+  const frames = Array.from({ length: 101 }, (_, i) => sampleDerivationRecordInspection(i / 100, 180, 54));
+  for (let i = 100; i >= 0; i--) {
+    assert.deepEqual(sampleDerivationRecordInspection(i / 100, 180, 54), frames[i]);
+    const frame = frames[i]!;
+    assert.ok(frame.inspectionOpacity >= 0 && frame.inspectionOpacity <= 1);
+    if (frame.kind === "docked") assert.equal(frame.inspectionOpacity, 0);
+    if (i > 0) assert.ok(Math.abs(frame.inspectionOpacity - frames[i - 1]!.inspectionOpacity) < .15);
+  }
+  assert.equal(frames[0]!.sourceEmphasis, 1);
+  assert.equal(frames[100]!.targetEmphasis, 1);
+  assert.equal(frames[50]!.inspectionOpacity, 1);
+  assert.throws(() => sampleDerivationRecordInspection(.5, 0, 54));
+});
 import { checkMomentumEnergy, momentumEnergyExamples, physicalTime, sampleMomentumEnergy } from "../domains/physics/momentum-energy.ts";
 import { compileMomentumEnergyAsset } from "../src/authoring/momentum-energy-authoring.ts";
 import { readFileSync } from "node:fs";

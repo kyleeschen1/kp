@@ -307,11 +307,29 @@
       "status": "passed",
       "scope": "interleaved transition integration",
       "checkedAt": "2026-09-14T23:47:41.045Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "permanent record: ten Chromium checks",
+      "checkedAt": "2026-09-15T00:09:03.738Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "inspection ownership and preserved semantics: sixteen tests",
+      "checkedAt": "2026-09-15T00:09:06.145Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "permanent record integration",
+      "checkedAt": "2026-09-15T00:09:41.211Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: first substitution interleaves its explanation between equations, with a readable text lane, gutter rail, endpoint traces and measured unequal-spacing drag. Other transitions retain callouts; no promotion."
+    "summary": "HUMAN_CHECKPOINT: all reasons permanently interleaved; equation audit trail never withdrawn. First substitution tests distance-based inspection-copy departure and docking; canonical mathematical compositor unchanged."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

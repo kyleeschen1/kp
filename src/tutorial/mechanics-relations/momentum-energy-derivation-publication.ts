@@ -24,7 +24,7 @@ export function renderEnergyDerivationPassage(markdown: string) {
       <ol class="energy-derivation-history">${momentumEnergyDerivationStates.map((_, i) => `<li data-derivation-row="${i}">
         <span class="energy-derivation-row-marker" aria-hidden="true">${i + 1}</span>
         <div class="energy-derivation-equation">${math(compiled.moves[i]?.annotated[0] ?? compiled.moves.at(-1)!.annotated[1]!)}</div>
-        ${i === 0 ? `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave aria-label="Transition from equation 1 to 2"><div class="energy-derivation-interleave-text"><strong>${compiled.moves[0]!.title}</strong>${html(compiled.moves[0]!.cue)}<details><summary>Why is this allowed?</summary>${html(compiled.moves[0]!.why)}</details></div></div>` : ""}
+        ${i < compiled.moves.length ? `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave="${i}" aria-label="Transition from equation ${i + 1} to ${i + 2}"><div class="energy-derivation-interleave-text"><strong>${compiled.moves[i]!.title}</strong>${html(compiled.moves[i]!.cue)}<details><summary>Why is this allowed?</summary>${html(compiled.moves[i]!.why)}</details></div></div>` : ""}
       </li>`).join("")}</ol>
       <div class="energy-derivation-rail" data-derivation-rail aria-hidden="true" hidden>${momentumEnergyDerivationStates.map(() => `<span></span>`).join("")}</div>
       <div class="energy-derivation-stage" data-derivation-stage hidden></div>
@@ -32,9 +32,6 @@ export function renderEnergyDerivationPassage(markdown: string) {
         <button type="button" data-derivation-handle role="slider" aria-orientation="vertical" aria-label="Derivation lens" aria-valuemin="0" aria-valuemax="${compiled.moves.length}" aria-valuenow="0" title="Drag to follow the derivation"><span aria-hidden="true">↕</span></button>
       </div>
     </div>
-    <aside class="energy-derivation-reason energy-derivation-active-cue" data-derivation-cue aria-label="Current transition explanation" hidden>
-      <div data-derivation-cue-body></div>
-    </aside>
     </div>
     <p class="energy-derivation-key" data-derivation-hint hidden>Drag the handle down to follow the derivation; up to retrace it.</p>
     <div class="energy-derivation-transport" data-derivation-transport hidden>
@@ -43,7 +40,6 @@ export function renderEnergyDerivationPassage(markdown: string) {
         <button type="button" data-derivation-next aria-label="Next transition">Next ›</button>
       </div>
     </div>
-    <div data-derivation-notes>${compiled.moves.map(move => `<details class="energy-derivation-note"><summary>${move.title}</summary><div data-derivation-reason="${move.index}"><strong>${move.title}</strong>${html(move.cue)}<details><summary>Why is this allowed?</summary>${html(move.why)}</details></div></details>`).join("")}</div>
     ${compiled.moves.map(move => `<template data-derivation-template="${move.index}"><div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div></template>`).join("")}
   </div>`;
   return html(markdown.slice(0, match.index)) + trace + html(markdown.slice(match.index + match[0].length));

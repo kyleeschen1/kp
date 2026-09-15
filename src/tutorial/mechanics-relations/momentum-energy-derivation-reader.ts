@@ -1,6 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
-import { sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
+import { sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
@@ -10,7 +10,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
   const equationSlots = rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!);
-  const interleave = get<HTMLElement>("[data-derivation-interleave]");
+  const interleaves = [...root.querySelectorAll<HTMLElement>("[data-derivation-interleave]")];
   const rail = get<HTMLElement>("[data-derivation-rail]");
   let centers: number[] = [];
   let equationHeights: number[] = [];
@@ -20,8 +20,6 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   let session: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
   let selected = 0, tracing = false, loading = false, generation = 0;
   let sourceTop = 0, rowDistance = 0;
-  const cue = get<HTMLElement>("[data-derivation-cue]");
-  const cueBody = get<HTMLElement>("[data-derivation-cue-body]");
   const scope = get<HTMLElement>("[data-derivation-scope]");
   const handle = get<HTMLButtonElement>("[data-derivation-handle]");
   const transport = get<HTMLElement>("[data-derivation-transport]");
@@ -54,15 +52,6 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       ? `Equation ${position + 1} of ${rows.length}`
       : `Between equations ${move + 1} and ${move + 2}, ${Math.round(progress * 100)} percent`);
   };
-  const positionCue = () => {
-    const midpoint = centers[selected]! + rowDistance / 2;
-    const proofHeight = get<HTMLElement>(".energy-derivation-history").offsetHeight;
-    // Later callouts must not cover the first step's persistent prose, including
-    // after a disclosure changes its height without changing semantic progress.
-    const cueTop = Math.max(rows[1]!.offsetTop, Math.min(midpoint - cue.offsetHeight / 2, proofHeight - cue.offsetHeight));
-    cue.style.setProperty("--derivation-cue-top", `${cueTop}px`);
-    cue.style.setProperty("--derivation-pointer-top", `${midpoint - cueTop}px`);
-  };
   const project = () => {
     const p = clock.getSnapshot().progress;
     if (!tracing || !session) return;
@@ -73,20 +62,19 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     session.apply(frame.algebra);
     root.dataset["phase"] = frame.phase;
     root.dataset["algebraProgress"] = String(frame.algebra);
-    // The explanation refers to the relation, not the currently moving ink.
-    // Keep its callout stable throughout this transition.
-    cue.style.visibility = "visible";
-    cue.hidden = selected === 0;
+    // Discovery treatment on substitution only. All records remain permanent;
+    // other moves retain full inspection emphasis except at exact native docks.
+    const record = sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
+    stage.style.opacity = String(selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
+    root.dataset["inspectionOwner"] = record.kind;
     positionScope(selected + p);
     root.dataset["move"] = String(selected); root.dataset["progress"] = String(p);
     root.dataset["playing"] = String(clock.getStatus() === "playing");
     rows.forEach((row, i) => {
       const past = i <= selected && (i < selected || p > 0);
-      row.dataset["traceRole"] = past ? "historical" : i >= selected + 1 && p < 1 ? "prospective" : "live";
-      // Keep both endpoints as records when separated from the live expression.
-      // Yield only near occupied ink, not throughout the entire source/target pair.
-      const liveCenter = centers[selected]! + rowDistance * frame.carry;
-      row.dataset["visibleEquation"] = String(Math.abs(centers[i]! - liveCenter) > equationHeights[i]! * 1.1);
+      row.dataset["traceRole"] = past ? "historical" : i > selected + 1 || (i === selected + 1 && p < 1) ? "prospective" : "live";
+      const emphasis = i === selected ? record.sourceEmphasis : i === selected + 1 ? record.targetEmphasis : 0;
+      row.style.setProperty("--derivation-record-emphasis", String(emphasis));
     });
     const position = selected + p;
     root.dataset["derivationProgress"] = String(position);
@@ -101,8 +89,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     clock.pause(); retire(); tracing = false; loading = false;
     delete root.dataset["derivationDragging"];
     root.dataset["tracing"] = "false"; stage.hidden = true;
-    rows.forEach(row => { row.hidden = false; delete row.dataset["traceRole"]; delete row.dataset["visibleEquation"]; });
-    get("[data-derivation-cue]").hidden = true;
+    rows.forEach(row => { row.hidden = false; delete row.dataset["traceRole"]; row.style.removeProperty("--derivation-record-emphasis"); });
     transport.hidden = true; status.hidden = true;
     scope.hidden = true;
   };
@@ -125,7 +112,6 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       tracing = true;
       root.dataset["tracing"] = "true";
       rows.forEach(row => { row.hidden = false; });
-      cue.hidden = index === 0;
       const template = get<HTMLTemplateElement>(`[data-derivation-template="${index}"]`);
       candidate = stage.cloneNode(false) as HTMLElement;
       candidate.removeAttribute("data-derivation-stage");
@@ -159,23 +145,18 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       // source, duplicate endpoints, or origin-position paint reaches a frame.
       session?.dispose(); stage.remove();
       stage = candidate; candidate = undefined;
-      stage.removeAttribute("data-derivation-preparing"); stage.removeAttribute("aria-hidden");
+      stage.removeAttribute("data-derivation-preparing");
       stage.setAttribute("data-derivation-stage", "");
       session = created; created = undefined;
       selected = index; sourceTop = nextSourceTop; rowDistance = nextRowDistance;
       measureRows();
-      cueBody.replaceChildren(...[...get<HTMLElement>(`[data-derivation-reason="${index}"]`).childNodes].map(node => node.cloneNode(true)));
-      cue.setAttribute("aria-label", `Transition from equation ${index + 1} to ${index + 2}`);
-      positionCue();
       loading = false; status.hidden = true;
       transport.hidden = false;
       scope.hidden = false;
       clock.seek(progress); project();
-      stage.style.opacity = "";
     } catch (error) {
       if (token !== generation) return;
       read(); root.dataset["repair"] = "true"; status.hidden = false;
-      get("[data-derivation-notes]").hidden = false;
       status.textContent = "This animation needs repair. The complete derivation is still available below.";
       console.error("Energy derivation repair", error);
     } finally {
@@ -276,8 +257,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const pause = () => { journey = undefined; selectionRequest++; clock.pause(); project(); };
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. The handle or explicit step controls resume inspection.
-  cue.addEventListener("toggle", event => { if (event.target instanceof HTMLDetailsElement && event.target.open) pause(); }, { ...opts, capture: true });
-  interleave.addEventListener("toggle", () => { pause(); measureRows(); positionCue(); project(); }, { ...opts, capture: true });
+  interleaves.forEach(passage => passage.addEventListener("toggle", () => { pause(); measureRows(); project(); }, { ...opts, capture: true }));
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, opts);
   reduced.addEventListener("change", pause, opts);
   const visibility = new IntersectionObserver(entries => {
@@ -295,7 +275,6 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   }); resize.observe(root);
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) { retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose(); } }, opts);
   hint.hidden = false;
-  get("[data-derivation-notes]").hidden = true;
   measureRows(); rail.hidden = false;
   scope.hidden = false; transport.hidden = false; positionScope(0); previous.disabled = true;
 }
