@@ -48,6 +48,12 @@ For the accepted equation/code parent–reason–return exemplars, use
 checker, exact supported edits and typed repair examples. It does not expand
 either domain's semantic or generation authority.
 
+For the independent scalar cancellation persistent-reader candidate, use
+`scalar-cancellation-reader-packet.md`. It documents the file-based checked
+source/Article workflow, shared physics-reader pipeline, supported notation
+edits and repair limits. This is not yet an `author:check` task or a visually
+promoted general algebra generator.
+
 For the accepted binary-probability exemplar, use `bayesian-reasoning-packet.md`.
 Exact joint masses or prior/likelihoods enter the probability-owned checker,
 then existing governed construction, card, readings, practice and edition paths.

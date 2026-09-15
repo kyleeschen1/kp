@@ -34,8 +34,12 @@ test("governed construction has one explicit public authoring seam", () => {
   assert.equal(surface.disposition, "retain-public-boundary");
   // The internal distribution caller now imports the same narrow owners directly;
   // authoring-entrypoint-imports.test.ts protects that cost cut and facade identity.
+  // The physical model and shared derivation compiler also enter through this
+  // governed seam; domain checkers, not this facade, retain mathematical authority.
   assert.deepEqual(surface.sourceCallers, [
-    "src/article/vignettes/typescript-free-shipping-vignette.ts"
+    "src/article/vignettes/typescript-free-shipping-vignette.ts",
+    "src/authoring/momentum-energy-authoring.ts",
+    "src/authoring/momentum-energy-derivation-authoring.ts"
   ]);
   assert.deepEqual(surface.scriptCallers, []);
   assert.deepEqual(surface.otherCallers, []);
@@ -53,6 +57,7 @@ test("governed construction has one explicit public authoring seam", () => {
     "tests/governed-fraction-split-merge-variation.test.ts",
     "tests/governed-integration-power-rule-fixture.test.ts",
     "tests/governed-radical-succession-fixture.test.ts",
+    "tests/momentum-energy.test.ts",
     "tests/pre-expansion-llm-generation-benchmark.test.ts",
     "tests/typescript-free-shipping-vignette.test.ts"
   ]);

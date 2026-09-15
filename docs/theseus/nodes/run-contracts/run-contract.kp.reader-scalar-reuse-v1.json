@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader-scalar-reuse-v1",
   "kind": "run-contract",
   "title": "Independent scalar reading through shared native reader",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: two implementation packages complete; scalar.checkpoint awaits visual acceptance. No additional scope authorized.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -42,7 +43,8 @@
     {
       "id": "scalar.checkpoint",
       "title": "Verify two callers and prepare human visual checkpoint",
-      "status": "planned"
+      "summary": "Engineering verification passed: 7104 tests, 25 browsers, full types and build. HUMAN_CHECKPOINT: scalar visual acceptance remains; contract blocked at review, slice intentionally not complete.",
+      "status": "in-progress"
     }
   ]
 }

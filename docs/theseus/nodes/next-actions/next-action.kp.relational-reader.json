@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved bounded scalar authority, shared reader binding and second exemplar through visual review; September 15 reuse boundary proposal owns scope.",
+  "summary": "HUMAN_CHECKPOINT: review docs/project/threads/2026-09-15-scalar-reader-review.md; engineering verification complete, scalar visual judgment outstanding.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,14 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-15-reader-local-inspection-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-scalar-reader-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/scalar-cancellation-reader-packet.md"
     }
   ],
   "dependsOn": {
@@ -676,11 +684,46 @@
       "scope": "scalar.reader",
       "checkedAt": "2026-09-15T19:27:16.413Z",
       "notes": "Full app/node/tests/Svelte/domain check passed for both callers."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "Two-reader Chromium integration",
+      "checkedAt": "2026-09-15T19:52:03.892Z",
+      "notes": "25 checks passed: scalar and physics native reader, reverse and held progress, nested collapse, exact return, source mismatch, static no-JS and print. Human scalar visual approval remains open; phone coverage provisional."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full app, node, tests, Svelte and domains",
+      "checkedAt": "2026-09-15T19:52:05.472Z",
+      "notes": "Passed after shared reader integration; test-only routing repair additionally passed typecheck:tests."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Production two-reader closure",
+      "checkedAt": "2026-09-15T19:52:06.731Z",
+      "notes": "Build passed. Scalar initial JS/CSS gzip 32871 bytes, all reachable 139581, HTML gzip 6586. Physics 35833, 141744, 21679. Measured with measure:mechanics-relations-closure physics and scalar. Excludes fonts, images and device CPU; not causal before/after."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "scalar.checkpoint initial full integration",
+      "checkedAt": "2026-09-15T19:53:40.394Z",
+      "notes": "Initial full run found three stale assertions: current-thread routing, governed caller inventory, and generated reachability graph. Repaired without removing gates; focused routing 3/3 and reachability/caller 12/12 passed. Clean full rerun in progress."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "scalar.checkpoint clean full integration rerun",
+      "checkedAt": "2026-09-15T20:02:07.103Z",
+      "notes": "Architecture, inference, concept catalog and promotion-memory gates passed; all 7104 tests passed, zero failed or skipped. Initial routing and inventory failures repaired, not waived."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Stable outline plus local whole-refinement return implemented; 24 units, five browser checks and full types pass. Review placement; phone and later loops remain provisional or unapproved."
+    "summary": "Independent scalar source and Article now reuse physics governed lowering, native compositor, controls and styles. All 7104 tests, 25 browser checks, full types and build pass. HUMAN_CHECKPOINT: scalar exemplar awaits visual acceptance; later loops remain parked."
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation.",

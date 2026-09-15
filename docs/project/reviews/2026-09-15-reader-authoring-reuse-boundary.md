@@ -1,5 +1,13 @@
 # Reader authoring reuse: boundary result and proposed repair
 
+Implementation follow-up: the user approved this proposal, and its scalar
+exemplar is now implemented under `run-contract.kp.reader-scalar-reuse-v1`.
+Current evidence and visual checkpoint:
+`../threads/2026-09-15-scalar-reader-review.md`. The assessment below records the
+pre-repair boundary, not the current capability state.
+
+## Original assessment before the approved repair
+
 The user accepted the cancellation, nested outline and local return exemplar,
 then resumed the next step. The bounded authoring-reuse assessment is complete;
 the independent scalar reading is **not implemented**. The accepted visual

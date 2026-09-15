@@ -1,16 +1,20 @@
 # Relational reader delivery
 
 Status: active; first five-package implementation proposal approved
-Last Updated: 2026-09-14
+Last Updated: 2026-09-15
 
 ## Canonical direction
 
-Current review packet: [expandable cancellation](2026-09-15-cancellation-refinement-review.md).
-The user accepted this exemplar, including outline and child returns. The bounded
+Current review packet: [independent scalar reader](2026-09-15-scalar-reader-review.md).
+The preceding [expandable cancellation](2026-09-15-cancellation-refinement-review.md)
+was accepted, including outline and child returns. The bounded
 next-step reuse assessment is recorded in
 [authoring reuse boundary](../reviews/2026-09-15-reader-authoring-reuse-boundary.md).
-Editorial reuse is supported; independent scalar cancellation needs the proposed
-checked-authority/shared-binding repair. That expansion is not implemented.
+The approved checked-authority/shared-binding repair is implemented for the
+physics and scalar callers; its new scalar exemplar awaits visual review.
+Shared motion, publication, controls and CSS now support both checked sources;
+subsequent coherent scalar symbol/prose edits need no engine change. This is
+bounded cancellation reuse, not arbitrary LaTeX derivation authoring.
 Accepted outline principle: opening detail changes depth, not position in the
 argument. Number transitions from stable parent/child identity, not visible
 equation-row offsets; preserve major labels and identify nested scope explicitly.

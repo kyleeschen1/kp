@@ -11,10 +11,10 @@ const stateDecision =
 const stateProposal =
   "2026-09-02-persistent-semantic-state-foundation-long-loop-proposal.md";
 
-test("current project direction advances semantic state and preserves Focus Deck", async () => {
+test("roadmap-selected delivery preserves semantic-state authority and Focus Deck", async () => {
   const [
     roadmap,
-    activeThread,
+    semanticStateThread,
     focusDeckThread,
     catalogueThread,
     nextActions,
@@ -37,17 +37,22 @@ test("current project direction advances semantic state and preserves Focus Deck
     readFile(`docs/project/reviews/${stateProposal}`, "utf8")
   ]);
 
-  assert.match(
-    roadmap,
-    /Active Thread: `threads\/typed-semantic-authoring-framework\.md`/
-  );
+  // A completed foundation remains authority, not a permanently active queue.
+  // Follow the canonical routing field so accepted product pivots do not have
+  // to falsify roadmap state just to satisfy this preservation test.
+  const activePath = /^Active Thread: `(threads\/[a-z0-9-]+\.md)`$/m.exec(roadmap)?.[1];
+  assert.ok(activePath, "Roadmap must select one repo-owned active thread");
+  const activeThread = await readFile(`docs/project/${activePath}`, "utf8");
+  assert.match(activeThread, /^Status: active\b/m);
+  const currentQueue = nextActions.split(/^## Current Queue\s*$/m)[1]?.split(/^## /m)[0] ?? "";
+  assert.ok(currentQueue.includes(activePath), "Current queue must retain the roadmap-selected thread, not only its history");
   assert.match(roadmap, /Supporting Threads:[\s\S]*`threads\/focus-deck\.md`/);
   assert.match(roadmap, new RegExp(stateDecision.replaceAll(".", "\\.")));
   assert.match(roadmap, /flashcard capability remains preserved/i);
-  assert.match(activeThread,
+  assert.match(semanticStateThread,
     /Accepted Semantic State Architecture Direction/);
-  assert.match(activeThread, /unit-scalar helper/i);
-  assert.match(activeThread, /nonvisual persistent[\s\S]{0,80}snapshot/i);
+  assert.match(semanticStateThread, /unit-scalar helper/i);
+  assert.match(semanticStateThread, /nonvisual persistent[\s\S]{0,80}snapshot/i);
   assert.match(focusDeckThread,
     /animation\.algebra\.log-product\.equivalence-frame/);
   assert.match(focusDeckThread, /supply-tax caller/i);

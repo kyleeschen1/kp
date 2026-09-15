@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4669,
+  "scannedFileCount": 4703,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -782,6 +782,9 @@
         "src/animation/witnessed-annihilation.ts",
         "src/architecture/equation-surface-preservation-matrix.ts",
         "src/authoring/governed-exponent-radical-promotion.ts",
+        "src/authoring/momentum-energy-authoring.ts",
+        "src/authoring/momentum-energy-derivation-authoring.ts",
+        "src/authoring/motion-observation-authoring.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
         "src/domain-ir/derivative-power-migration-v2.ts",
         "src/domain-ir/equation-asset-migration-role-bindings-v2.ts",
@@ -1375,6 +1378,9 @@
         "src/authoring/composed-algebra-presentation-v2.ts",
         "src/authoring/composed-algebra-presentation.ts",
         "src/authoring/governed-canonical-construction-compiler.ts",
+        "src/authoring/momentum-energy-authoring.ts",
+        "src/authoring/momentum-energy-derivation-authoring.ts",
+        "src/authoring/motion-observation-authoring.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
         "src/domain-ir/derivative-power-migration-v2.ts",
         "src/domain-ir/equation-asset-migration-role-bindings-v2.ts",
@@ -1506,6 +1512,7 @@
         "tests/matrix-linear-map-canonical-asset.test.ts",
         "tests/matrix-linear-map-placeholder-retirement-audit.test.ts",
         "tests/matrix-linear-map-semantics.test.ts",
+        "tests/motion-observation-asset.test.ts",
         "tests/native-katex-rendered-scene.test.ts",
         "tests/normal-matrix-proof-vignette.test.ts",
         "tests/numerator-split-merge-material-totality.test.ts",
@@ -1726,6 +1733,9 @@
         "src/animation/witnessed-annihilation.ts",
         "src/architecture/equation-surface-preservation-matrix.ts",
         "src/authoring/governed-exponent-radical-promotion.ts",
+        "src/authoring/momentum-energy-authoring.ts",
+        "src/authoring/momentum-energy-derivation-authoring.ts",
+        "src/authoring/motion-observation-authoring.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
         "src/domain-ir/derivative-power-migration-v2.ts",
         "src/domain-ir/equation-asset-migration-role-bindings-v2.ts",
@@ -2267,6 +2277,9 @@
         "src/authoring/composed-algebra-presentation-v2.ts",
         "src/authoring/composed-algebra-presentation.ts",
         "src/authoring/governed-canonical-construction-compiler.ts",
+        "src/authoring/momentum-energy-authoring.ts",
+        "src/authoring/momentum-energy-derivation-authoring.ts",
+        "src/authoring/motion-observation-authoring.ts",
         "src/domain-ir/antiderivative-power-migration-v2.ts",
         "src/domain-ir/derivative-power-migration-v2.ts",
         "src/domain-ir/equation-asset-migration-role-bindings-v2.ts",
@@ -2398,6 +2411,7 @@
         "tests/matrix-linear-map-canonical-asset.test.ts",
         "tests/matrix-linear-map-placeholder-retirement-audit.test.ts",
         "tests/matrix-linear-map-semantics.test.ts",
+        "tests/motion-observation-asset.test.ts",
         "tests/native-katex-rendered-scene.test.ts",
         "tests/normal-matrix-proof-vignette.test.ts",
         "tests/numerator-split-merge-material-totality.test.ts",
@@ -2666,7 +2680,9 @@
       "sourcePath": "src/authoring/canonical-animation-public-api.ts",
       "authorityId": "facade.canonical-animation-construction",
       "sourceCallers": [
-        "src/article/vignettes/typescript-free-shipping-vignette.ts"
+        "src/article/vignettes/typescript-free-shipping-vignette.ts",
+        "src/authoring/momentum-energy-authoring.ts",
+        "src/authoring/momentum-energy-derivation-authoring.ts"
       ],
       "testCallers": [
         "tests/authoring-entrypoint-imports.test.ts",
@@ -2682,6 +2698,7 @@
         "tests/governed-fraction-split-merge-variation.test.ts",
         "tests/governed-integration-power-rule-fixture.test.ts",
         "tests/governed-radical-succession-fixture.test.ts",
+        "tests/momentum-energy.test.ts",
         "tests/pre-expansion-llm-generation-benchmark.test.ts",
         "tests/typescript-free-shipping-vignette.test.ts"
       ],

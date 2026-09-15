@@ -6,7 +6,7 @@ import { createKpCanonicalOperationPack } from "../semantic/canonical-operation-
 import { compileKpGovernedCanonicalConstruction, createKpGovernedCanonicalConstructionRequest } from "./canonical-animation-public-api.ts";
 import { assertEnergyDerivationPlan, createEnergyDerivationPlan, createScalarCancellationPlan, type EnergyDerivationPlan } from "../semantic/momentum-energy-derivation-plan.ts";
 
-import type { CheckedScalarCancellation } from "../../domains/algebra/scalar-cancellation.ts";
+import type { CheckedScalarCancellation } from "../../domains/public-api.ts";
 
 export function compileMomentumEnergyDerivation(model: CheckedMomentumEnergyDerivation, detail: EnergyDerivationDetail = "coarse") {
   return compileCheckedDerivation(createEnergyDerivationPlan(model, detail));

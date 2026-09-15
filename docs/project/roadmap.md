@@ -28,19 +28,24 @@ nor its evidence. The ledger remains retrievable at
 Expandable cancellation, nested outline and local returns are visually accepted;
 `run-contract.kp.reader-cancellation-refinement-v1` is complete. Keep its current
 opt-in selection and provisional phone status; approval is not a broad rollout.
-The next-step reuse assessment found that editorial reuse works, but independent
-scalar cancellation needs bounded semantic authority and shared reader bindings.
-Evidence and proposed next implementation:
-`reviews/2026-09-15-reader-authoring-reuse-boundary.md`. Do not duplicate the
-physics renderer or infer arbitrary algebra support. Theseus owns live progress.
+The approved scalar-authority/shared-binding repair now supplies an independent
+scalar reading through the same native compositor, controls and stylesheet.
+Its visual review packet is `threads/2026-09-15-scalar-reader-review.md`;
+`run-contract.kp.reader-scalar-reuse-v1` owns remaining verification/review.
+The assessment/proposal remains at
+`reviews/2026-09-15-reader-authoring-reuse-boundary.md`. Subsequent bounded
+symbol/prose edits are source-only; creating this second caller required engine
+intervention. Do not infer arbitrary algebra support or resume later loops
+before the named visual checkpoint. Theseus owns live progress.
 
 Accepted successive-loop direction, including local access when the active knob
 is offscreen: `reviews/2026-09-15-next-step-review.md`. That single source owns
 the revised six-loop sequence and detailed first-run proposal. The desktop
 portion of reader.l1 is delivered; phone layout remains provisional under the
 accepted continuation amendment. Its four-hour ceiling and five-package scope
-are preserved under `run-contract.kp.reader-local-inspection-v1`. Next scope to review: expandable cancellation
-and earlier-result use, source-only reuse, code, richer mechanics, graph linkage.
+are preserved under `run-contract.kp.reader-local-inspection-v1`. The remaining
+horizon includes earlier-result use, code, richer mechanics and graph linkage;
+accepted cancellation and current scalar reuse are recorded above.
 Do not substitute a generic frontier/refill task or restart the deferred v2.
 
 September 15 checkpoint approval closes the bounded away portfolio: contextual

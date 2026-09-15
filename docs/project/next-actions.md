@@ -7,12 +7,16 @@ with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-Execute the approved `threads/2026-09-13-relational-reader-delivery-proposal.md`.
-Accepted direction: `decisions/2026-09-13-relational-reader-priority.md`;
-active thread: `threads/relational-reader.md`. Theseus target:
-`next-action.kp.relational-reader`, under `run-contract.kp.relational-reader-v2`.
-The motion loop is deferred and recoverable, not completed. Medium-term outcome
-gates live in the decision; do not duplicate their tasks/status here.
+Follow the roadmap-selected `threads/relational-reader.md` and the approved
+`reviews/2026-09-15-reader-authoring-reuse-boundary.md` repair, controlled by
+`run-contract.kp.reader-scalar-reuse-v1` and `next-action.kp.relational-reader`.
+The scalar exemplar needs its named visual checkpoint before further promotion.
+The older relational-reader-v2 and mechanics motion loops remain deferred, not
+completed or automatically resumed. Theseus owns execution status.
+
+Keep `Apply a 2 × 2 matrix to a vector` tabled in
+`threads/animation-library-promotion.md`; this queue does not reactivate or
+rerank that frontier.
 
 ## Preserved September 7 queue — superseded as execution authority
 
