@@ -1,4 +1,5 @@
 export {
+  momentumEnergyDerivationView, type EnergyDerivationDetail,
   assertMomentumEnergyDerivation, checkMomentumEnergyDerivation,
   momentumEnergyDerivationSource, momentumEnergyDerivationStates,
   momentumEnergyDerivationSteps, type CheckedMomentumEnergyDerivation

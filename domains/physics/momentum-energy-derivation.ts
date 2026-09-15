@@ -55,3 +55,44 @@ export const momentumEnergyDerivationSteps = Object.freeze([
   { id: "cancel-mass", title: "Cancel one mass factor", cue: String.raw`For positive mass, $m/m^2=1/m$. Both forms have the same scalar factor; the squared momentum magnitude is unchanged.`,
     why: String.raw`Write $m^2=m\cdot m$. Then $m/(m\cdot m)=1/m$, because $m>0$. The squared momentum magnitude is unchanged.` }
 ] as const);
+
+export type EnergyDerivationDetail = "coarse" | "mass-refinement";
+// The squared vector norm is an unchanged subtree. Only its real scalar
+// coefficient is normalized; no scalar rule acquires authority over vectors.
+const coefficients = [
+  { half: true, numeratorMass: true, identity: false, denominator: "square" },
+  { half: true, numeratorMass: true, identity: false, denominator: "product" },
+  { half: true, numeratorMass: false, identity: true, denominator: "mass" },
+  { half: false, numeratorMass: false, identity: false, denominator: "twice-mass" }
+] as const;
+const denominator = { square: "m^2", product: String.raw`m\cdot m`, mass: "m", "twice-mass": "2m" } as const;
+const refinedStates = Object.freeze(coefficients.map(c => `K=${c.half ? String.raw`\frac{1}{2}` : ""}${c.numeratorMass ? "m" : ""}${c.identity ? String.raw`\cdot1` : ""}`
+  + String.raw`\frac{|\mathbf p|^2}{${denominator[c.denominator]}}`));
+const refinementSteps = Object.freeze([
+  { id: "expand-mass-square", title: "Expose the two mass factors", cue: String.raw`Write $m^2=m\cdot m$. Now the denominator's two factors are explicit.`,
+    why: "A square means multiplying the same scalar by itself. Nothing about the squared momentum magnitude changes." },
+  { id: "cancel-mass-pair", title: "Cancel one nonzero mass factor", cue: String.raw`One numerator $m$ and one denominator $m$ give $1$. The other denominator $m$ remains.`,
+    why: String.raw`Because $m>0$, the pair $m/m$ is defined and equals $1$. Cancellation removes one pair, not both denominator factors.` },
+  { id: "collect-energy-coefficient", title: "Collect the remaining denominator", cue: String.raw`Multiplying by $1/2$ puts the factor $2$ beside the remaining $m$ in the denominator.`,
+    why: String.raw`The scalar identity $(1/2)(1/m)=1/(2m)$ changes notation, not value. The numerator $|\mathbf p|^2$ persists.` }
+] as const);
+
+/** Exact bounded proof over positive scalar monomials, not numerical samples.
+ * A checked parent is required before any fine transition can be issued. */
+export function momentumEnergyDerivationView(model: CheckedMomentumEnergyDerivation, detail: EnergyDerivationDetail = "coarse") {
+  assertMomentumEnergyDerivation(model);
+  if (detail === "coarse") return Object.freeze({ states: momentumEnergyDerivationStates, steps: momentumEnergyDerivationSteps, proof: model.proof, refinement: undefined });
+  if (detail !== "mass-refinement") throw new Error("Unsupported energy derivation detail");
+  for (const c of coefficients) {
+    const power = Number(c.numeratorMass) - (c.denominator === "square" || c.denominator === "product" ? 2 : 1);
+    const divisor = (c.half ? 2 : 1) * (c.denominator === "twice-mass" ? 2 : 1);
+    if (power !== -1 || divisor !== 2) throw new Error("Invalid scalar cancellation refinement");
+  }
+  if (refinedStates[0] !== momentumEnergyDerivationStates[2] || refinedStates.at(-1) !== momentumEnergyDerivationStates[3])
+    throw new Error("Cancellation refinement changed its outer endpoints");
+  return Object.freeze({ states: Object.freeze([...momentumEnergyDerivationStates.slice(0, 2), ...refinedStates]),
+    steps: Object.freeze([...momentumEnergyDerivationSteps.slice(0, 2), ...refinementSteps].map(step => Object.freeze({ ...step }))),
+    proof: Object.freeze([...model.proof.slice(0, 2), "square-definition", "nonzero-inverse-cancellation", "scalar-product-association"]),
+    refinement: Object.freeze({ parentTransitionId: "physics.energy.cancel-mass", sourceStateId: "energy.cancel-mass.0", targetStateId: "energy.cancel-mass.1",
+      childOperationIds: Object.freeze(refinementSteps.map(step => `physics.energy.${step.id}`)) }) });
+}

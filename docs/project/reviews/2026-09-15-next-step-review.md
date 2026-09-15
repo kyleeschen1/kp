@@ -1,5 +1,40 @@
 # Next loops after contextual inspection acceptance
 
+## Approved bounded cancellation-refinement run
+
+The user approved the proposed expandable-cancellation loop after desktop l1.
+Execute `run-contract.kp.reader-cancellation-refinement-v1`, targeting the existing
+reader action. This approval covers one opt-in exemplar, not the entire l2 horizon.
+
+Outcome: expand the final coarse cancellation into three domain-checked steps,
+inspect them through the existing reader/native-KaTeX compositor, then collapse
+to exactly the prior coarse transition/progress and reading location. Preserve
+the same outer equations, positive-mass assumption, squared-norm context, first
+two moves, static reasoning record, and approved desktop interaction. No invented
+equivalence between coarse and fine percentages.
+
+Canonical article/host: `examples/physics/momentum-energy.article.md` at
+`/experiments/mechanics-relations/` on localhost port 8000. Semantic authority:
+the physics-owned checked derivation and a bounded issued refinement. Authoring:
+the existing governed energy compiler. Renderer: existing energy session through
+the canonical native KaTeX compositor and its shared ink-rewrite treatment.
+
+Packages: `r2.authority` adds exact source-bound refinement, role correspondence
+and governed construction; `r2.view` adds opt-in expand/collapse using one active
+reader session; `r2.checkpoint` verifies endpoints, reverse/hold, static detail,
+collapse restoration and a canonical Chromium capture, then stops for visual
+review. Two rollback units: semantic authority/compiler and opt-in reader view.
+Retain the documented experiment branch. No agents, new renderer, global stores,
+arbitrary proof solver, source-only authoring claim, phone promotion, LAN changes,
+later repertoire, merge or deployment.
+
+Use a conservative two-active-hour ceiling including a final 30-minute closeout
+reserve. Focused unit/type checks and one scoped browser harness precede review;
+expensive cross-browser promotion and second callers follow separate approval.
+Stop at the visual checkpoint, repeated failed repairs, an unsupported shared
+mechanism, or the ceiling. A typed gap is preferable to a substituted motif.
+Theseus alone owns live package status and evidence.
+
 Status: accepted sequence to preserve for successive delivery; detailed first-run
 scope and resource ceiling approved. No automatic six-loop execution.
 

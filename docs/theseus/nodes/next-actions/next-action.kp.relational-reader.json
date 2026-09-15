@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "deferred",
+  "status": "ready",
   "domain": "kp",
-  "summary": "Desktop reader.l1 delivery finished; phone provisional by user direction. Next semantic/repertoire loop requires its concrete scope approval; do not restart deferred v2.",
+  "summary": "User approved bounded cancellation refinement; phone and broader older scopes remain deferred.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -522,6 +522,13 @@
       "scope": "integration",
       "checkedAt": "2026-09-15T15:51:55.530Z",
       "notes": "Correctly quoted replay command for the passed 15-check representative cohort; prior record omitted shell quoting around the filter."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "Bounded cancellation authority",
+      "checkedAt": "2026-09-15T16:26:10.219Z",
+      "notes": "22 tests pass; exact coarse/fine endpoints, checked-parent rejection, governed operation issuance and persistent norm and surviving mass roles."
     }
   ],
   "progress": {
@@ -536,10 +543,10 @@
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
   ],
   "allowedWork": [
-    "Execute reader.l1 only under run-contract.kp.reader-local-inspection-v1 and the approved September 15 review"
+    "Approved bounded expandable cancellation exemplar under run-contract.kp.reader-cancellation-refinement-v1"
   ],
   "disallowedWork": [
-    "No older v2 or later loops; phone promotion and LAN exposure deferred. Desktop pressure and integration approved by continuation amendment."
+    "No phone promotion, old v2 resumption, later loops or new renderer"
   ],
   "criteria": [
     {

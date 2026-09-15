@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
+import { momentumEnergyDerivationView } from "../domains/public-api.ts";
 import { createEnergyInspectionBookmarks } from "../src/tutorial/mechanics-relations/energy-derivation-bookmarks.ts";
 import { compileKpGovernedCanonicalConstruction, planKpGovernedConstructionRepairs,
   type KpGovernedCanonicalConstructionRequest } from "../src/authoring/canonical-animation-public-api.ts";
@@ -23,6 +24,28 @@ test("local bookmarks preserve transition identity, held progress and revision b
   ids[0] = "mutated";
   assert.equal(marks.recall("r1", "substitute").progress, 1);
   assert.throws(() => createEnergyInspectionBookmarks("r1", ["same", "same"]));
+});
+
+test("cancellation refinement preserves exact outer states and requires the checked parent", () => {
+  const result = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(result.status, "checked");
+  if (result.status !== "checked") return;
+  const coarse = momentumEnergyDerivationView(result.model);
+  const fine = momentumEnergyDerivationView(result.model, "mass-refinement");
+  assert.equal(fine.states.length, 6);
+  assert.deepEqual(fine.states.slice(0, 3), coarse.states.slice(0, 3));
+  assert.equal(fine.states.at(-1), coarse.states.at(-1));
+  assert.equal(fine.refinement?.parentTransitionId, "physics.energy.cancel-mass");
+  assert.equal(fine.refinement?.childOperationIds.length, 3);
+  assert.equal(fine.states[3], String.raw`K=\frac{1}{2}m\frac{|\mathbf p|^2}{m\cdot m}`);
+  assert.equal(fine.states[4], String.raw`K=\frac{1}{2}\cdot1\frac{|\mathbf p|^2}{m}`);
+  assert.throws(() => momentumEnergyDerivationView({ ...result.model }, "mass-refinement"));
+  const compilation = compileMomentumEnergyDerivation(result.model, "mass-refinement");
+  assert.equal(compilation.moves.length, 5);
+  assert.deepEqual(compilation.moves.slice(2).map(move => move.transformation.id), fine.refinement?.childOperationIds);
+  assert.ok(compilation.moves.slice(2).every(move => move.persist.includes("norm")));
+  assert.ok(compilation.moves.slice(3).every(move => move.persist.includes("factor-retain")));
+  assert.equal(compilation.construction.mathematicalVerification.revisionId, "revision.physics.energy-derivation.refinement.v1");
 });
 
 test("finer mass cancellation requires source authority, not an existing motif name", () => {

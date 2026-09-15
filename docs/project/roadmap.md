@@ -25,6 +25,11 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current approved run: bounded expandable cancellation under
+`run-contract.kp.reader-cancellation-refinement-v1`; scope and checkpoint are in
+`reviews/2026-09-15-next-step-review.md`. One opt-in exemplar through existing
+semantic/compiler/compositor owners, then human review. Phone remains provisional.
+
 Accepted successive-loop direction, including local access when the active knob
 is offscreen: `reviews/2026-09-15-next-step-review.md`. That single source owns
 the revised six-loop sequence and detailed first-run proposal. The desktop

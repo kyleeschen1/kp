@@ -1,0 +1,56 @@
+{
+  "id": "run-contract.kp.reader-cancellation-refinement-v1",
+  "kind": "run-contract",
+  "title": "Expandable cancellation exemplar",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-15-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+    "npm run typecheck",
+    "npm run visual:mechanics-relations"
+  ],
+  "allowedWork": [
+    "Only the approved bounded cancellation-refinement run in the September 15 review"
+  ],
+  "disallowedWork": [
+    "No unrelated motifs, new renderer, phone promotion, LAN changes, agents, later loops, merge or deploy"
+  ],
+  "goal": "Inspect verified finer cancellation and collapse to the exact prior coarse reading state",
+  "target": "next-action.kp.relational-reader",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Verified authority; reversible opt-in reader checkpoint",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human visual checkpoint before promotion",
+    "Two active hours including final 30-minute closeout reserve; repeated failed repair or unsupported shared mechanism"
+  ],
+  "slices": [
+    {
+      "id": "r2.authority",
+      "title": "Issue bounded cancellation refinement and governed lowering",
+      "summary": "Issue exact fine-step authority before rendering.",
+      "status": "complete"
+    },
+    {
+      "id": "r2.view",
+      "title": "Expandable reader with exact collapse restoration",
+      "status": "in-progress"
+    },
+    {
+      "id": "r2.checkpoint",
+      "title": "Canonical visual exemplar and preservation evidence",
+      "status": "planned"
+    }
+  ]
+}

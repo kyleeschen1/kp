@@ -1,5 +1,5 @@
-import { assertMomentumEnergyDerivation, momentumEnergyDerivationSteps, momentumEnergyDerivationStates,
-  type CheckedMomentumEnergyDerivation } from "../../domains/public-api.ts";
+import { assertMomentumEnergyDerivation, momentumEnergyDerivationSteps,
+  momentumEnergyDerivationView, type EnergyDerivationDetail, type CheckedMomentumEnergyDerivation } from "../../domains/public-api.ts";
 import { createKpAnimationAssetBuilder } from "../animation/asset.ts";
 import { createKpImmutableSemanticAssetObject } from "../semantic/immutable-asset.ts";
 import { createKpSemanticTransformation } from "../semantic/asset-transformation.ts";
@@ -12,8 +12,11 @@ const pack = createKpCanonicalOperationPack({ id: "project.physics.energy-deriva
 
 // Semantic fragments are named by the bounded proof, never inferred from equal
 // glyphs. The native renderer may measure them, but cannot choose their lineage.
-export function compileMomentumEnergyDerivation(model: CheckedMomentumEnergyDerivation) {
+export function compileMomentumEnergyDerivation(model: CheckedMomentumEnergyDerivation, detail: EnergyDerivationDetail = "coarse") {
   assertMomentumEnergyDerivation(model);
+  const view = momentumEnergyDerivationView(model, detail);
+  const selectedPack = detail === "coarse" ? pack : createKpCanonicalOperationPack({ id: "project.physics.energy-refinement", scope: "project", version: "1.0.0",
+    title: "Checked positive-mass cancellation refinement", operationIds: view.steps.map(s => `physics.energy.${s.id}`) });
   const part = (id: string, latex: string) => String.raw`\htmlData{kp-semantic-entity-id=${id},kp-presentation-group-id=group.${id}}{${latex}}`;
   const p = (id: string, latex: string) => part(`energy.${id}`, latex);
   const prefix = p("prefix", "K=");
@@ -32,15 +35,23 @@ export function compileMomentumEnergyDerivation(model: CheckedMomentumEnergyDeri
   const normP = p("norm", String.raw`|\mathbf p|^2`);
   const third = [fixed + quotient(normP, p("scalar-before", "m^2")),
     prefix + quotient(normP, p("scalar-after", "2m"))];
-  const specs = createEnergyDerivationPlan(model).moves.map((move, i) => ({ ...move, endpoints: [first, second, third][i]! }));
+  const factors = p("factor-cancel", "m") + p("times", String.raw`\cdot`) + p("factor-retain", "m");
+  const identity = p("identity", String.raw`\cdot1`);
+  const fine = [
+    [fixed + quotient(normP, p("scalar-before", "m^2")), fixed + quotient(normP, factors)],
+    [fixed + quotient(normP, factors), prefix + half + identity + quotient(normP, p("factor-retain", "m"))],
+    [prefix + half + identity + quotient(normP, p("factor-retain", "m")), prefix + quotient(normP, p("two", "2") + p("factor-retain", "m"))]
+  ];
+  const endpoints = detail === "coarse" ? [first, second, third] : [first, second, ...fine];
+  const specs = createEnergyDerivationPlan(model, detail).moves.map((move, i) => ({ ...move, endpoints: endpoints[i]! }));
   const builder = createKpAnimationAssetBuilder({ id: "animation.physics.energy-derivation", title: "Energy in terms of momentum" });
   const moves = specs.map((spec, i) => {
-    const step = momentumEnergyDerivationSteps[i]!;
+    const step = view.steps[i]!;
     const sourceRoles = [...spec.persist, ...spec.exits, ...(spec.split ? ["power"] : [])];
     const targetRoles = [...spec.persist, ...spec.entries, ...(spec.split ? ["power-top", "power-bottom"] : [])];
     const objects = [sourceRoles, targetRoles].map((roles, side) => createKpImmutableSemanticAssetObject({
       id: `energy.${step.id}.${side}`, objectType: "equation", title: `${step.title} ${side}`,
-      value: { latex: momentumEnergyDerivationStates[i + side]! },
+      value: { latex: view.states[i + side]! },
       selectors: roles.map(role => ({ id: `energy.${step.id}.${side}.${role}`, kind: "semantic", label: role }))
     }));
     objects.forEach(o => builder.addObject(o));
@@ -48,9 +59,9 @@ export function compileMomentumEnergyDerivation(model: CheckedMomentumEnergyDeri
       ...spec.persist.map(role => ({ id: `lineage.${step.id}.${role}`, relation: "identity" as const,
         sourceSelectorIds: [`energy.${step.id}.0.${role}`], targetSelectorIds: [`energy.${step.id}.1.${role}`], summary: `The ${role} persists.` })),
       ...spec.exits.map(role => ({ id: `lineage.${step.id}.exit.${role}`, relation: "removal" as const,
-        sourceSelectorIds: [`energy.${step.id}.0.${role}`], targetSelectorIds: [], summary: `${role} is rewritten by ${model.proof[i]}.` })),
+        sourceSelectorIds: [`energy.${step.id}.0.${role}`], targetSelectorIds: [], summary: `${role} is rewritten by ${view.proof[i]}.` })),
       ...spec.entries.map(role => ({ id: `lineage.${step.id}.enter.${role}`, relation: "introduction" as const,
-        sourceSelectorIds: [], targetSelectorIds: [`energy.${step.id}.1.${role}`], summary: `${role} follows from ${model.proof[i]}.` })),
+        sourceSelectorIds: [], targetSelectorIds: [`energy.${step.id}.1.${role}`], summary: `${role} follows from ${view.proof[i]}.` })),
       ...(spec.split ? [{ id: "lineage.scale-magnitude.power", relation: "fan-out" as const,
         sourceSelectorIds: ["energy.scale-magnitude.0.power"], targetSelectorIds: ["energy.scale-magnitude.1.power-top", "energy.scale-magnitude.1.power-bottom"],
         summary: "Squared norm homogeneity retains numerator exponent and squares the denominator." }] : [])
@@ -58,7 +69,7 @@ export function compileMomentumEnergyDerivation(model: CheckedMomentumEnergyDeri
     const transformation = createKpSemanticTransformation({ id: `physics.energy.${step.id}`, definitionId: `definition.physics.energy.${step.id}`,
       transformType: `physics.energy.${step.id}`, title: step.title, sourceObjectIds: [objects[0]!.id], targetObjectIds: [objects[1]!.id],
       preserves: ["value"], assumptions: ["m is a positive real scalar; p=m v; Euclidean vectors"],
-      lawRefs: [{ id: `physics.energy.${model.proof[i]}`, level: "strict" }], correspondenceMap: { id: `map.energy.${step.id}`, records } });
+      lawRefs: [{ id: `physics.energy.${view.proof[i]}`, level: "strict" }], correspondenceMap: { id: `map.energy.${step.id}`, records } });
     builder.addTransformation(transformation);
     // Endpoint-local selector IDs distinguish successive records of the same
     // entity while maintaining a shared semantic role in renderer bindings.
@@ -70,7 +81,7 @@ export function compileMomentumEnergyDerivation(model: CheckedMomentumEnergyDeri
     objectIds: moves.flatMap(m => [...m.transformation.sourceObjectIds, ...m.transformation.targetObjectIds]),
     transformationIds: moves.map(m => m.transformation.id), summary: "Candidate canonical native KaTeX derivation" });
   const animation = builder.build();
-  const source = { sourceId: "source.physics.energy-derivation", revisionId: "revision.physics.energy-derivation.v1", operationPacks: [{ packId: pack.id, version: pack.version }] };
+  const source = { sourceId: "source.physics.energy-derivation", revisionId: detail === "coarse" ? "revision.physics.energy-derivation.v1" : "revision.physics.energy-derivation.refinement.v1", operationPacks: [{ packId: selectedPack.id, version: selectedPack.version }] };
   const request = createKpGovernedCanonicalConstructionRequest({ schemaVersion: "kp.governed-semantic-authoring-request.v2", id: "request.physics.energy-derivation.v1",
     source: { kind: "verified-semantic-source", ...source }, approvedObjectIds: animation.bundle.objects.map(o => o.id),
     approvedOperationIds: moves.map(m => m.transformation.id), explanationPurpose: { kind: "cause", objectIds: animation.bundle.objects.map(o => o.id), operationIds: moves.map(m => m.transformation.id) },

@@ -5,6 +5,10 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+Expandable cancellation is approved as one bounded opt-in exemplar. Execute
+`run-contract.kp.reader-cancellation-refinement-v1` under the reviewed proposal,
+not the deferred phone package or broader l2 horizon.
+
 Desktop local access approved; phone work explicitly provisional. The accepted
 continuation amendment in the September 15 review permits long-document pressure
 and desktop integration without phone promotion or LAN-server changes.
