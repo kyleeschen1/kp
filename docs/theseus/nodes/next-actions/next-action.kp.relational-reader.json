@@ -331,11 +331,17 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-09-15T03:44:24.160Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "participant-only exemplar: twelve Chromium checks; full rerun passed after one initialization timeout in focused run",
+      "checkedAt": "2026-09-15T04:18:58.877Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: first substitution compares quiet permanent fenceposts with optional semantic participant accent across native and material paint. Existing motion and other moves preserved; review before promotion."
+    "summary": "HUMAN_CHECKPOINT: participant-only first substitution with dimmed corresponding records and stable invariant context. Whole-equation comparison remains available; other moves and canonical algebra are preserved."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

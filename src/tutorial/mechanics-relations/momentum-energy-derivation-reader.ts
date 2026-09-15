@@ -8,6 +8,7 @@ import { sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEne
 export function enhanceEnergyDerivation(root: HTMLElement) {
   // Internal exemplar comparison, not an additional learner control or policy.
   const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
+  const participantOnly = new URL(location.href).searchParams.get("derivation-motion") !== "equation";
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
@@ -67,6 +68,8 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     // Discovery treatment on substitution only. All records remain permanent;
     // other moves retain full inspection emphasis except at exact native docks.
     const record = sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
+    root.dataset["inspectionExtent"] = selected === 0 && participantOnly ? "participants" : "equation";
+    root.style.setProperty("--derivation-record-participant-opacity", String(1 - .78 * record.inspectionOpacity));
     stage.style.opacity = String(selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
     root.dataset["inspectionOwner"] = record.kind;
     positionScope(selected + p);
@@ -141,8 +144,16 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
         const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
         paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
       }
+      const focus = sampleSubstitutionEmphasis(0);
+      if (index === 0 && participantOnly) {
+        for (const [row, id] of [[rows[0]!, focus.source], [rows[1]!, focus.target]] as const) {
+          const fragment = row.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${CSS.escape(id)}"]`);
+          if (!fragment) throw new Error(`Missing permanent participant record: ${id}`);
+          fragment.dataset["derivationRecordParticipant"] = id;
+        }
+      }
       created = await mountMomentumEnergyDerivationSession(candidate, createEnergyDerivationPlan(checked.model), index,
-        index === 0 && accented ? sampleSubstitutionEmphasis(0) : undefined);
+        index === 0 && (accented || participantOnly) ? { ...focus, extent: participantOnly ? "participants" : "equation" } : undefined);
       if (token !== generation) return;
       // Commit one ready native scene atomically; no intermediate unmeasured
       // source, duplicate endpoints, or origin-position paint reaches a frame.

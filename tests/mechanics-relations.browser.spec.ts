@@ -41,6 +41,8 @@ test("semantic accent reaches native and material participants without coloring 
       expect(focal).not.toBe(context);
       const innerColors = await participants.locator("*").evaluateAll(els => els.map(el => getComputedStyle(el).color));
       expect(innerColors.every(color => color === focal)).toBe(true);
+      const inkColors = await participants.locator("*").evaluateAll(els => els.map(el => getComputedStyle(el).webkitTextFillColor));
+      expect(inkColors.every(color => color === focal)).toBe(true);
       await root.screenshot({ path: info.outputPath(`semantic-accent-${position}.png`) });
       if (position === .55) {
         const material = stage.locator('[data-kp-equation-material-owner-id][data-derivation-participant]');
@@ -50,11 +52,44 @@ test("semantic accent reaches native and material participants without coloring 
       }
     }
   }
-  await page.goto(route + "?derivation-emphasis=contrast#energy-from-momentum");
+  await page.goto(route + "?derivation-motion=equation&derivation-emphasis=contrast#energy-from-momentum");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await dragTo(page, root, .55);
   await expect(stage.locator("[data-derivation-participant]")).toHaveCount(0);
   await root.screenshot({ path: info.outputPath("contrast-only.png") });
+});
+
+test("participant inspection moves only the substitution while retaining stationary context and traces", async ({ page }, info) => {
+  const root = await ready(page), stage = root.locator("[data-derivation-stage]");
+  const records = root.locator(".energy-derivation-equation");
+  const initial = await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()));
+  const traces = root.locator("[data-derivation-record-participant]");
+  await expect(traces).toHaveCount(2);
+  for (const position of [.25, .55, .85, .25, 0, 1]) {
+    await dragTo(page, root, position);
+    await expect(root).toHaveAttribute("data-inspection-extent", "participants");
+    const hidden = stage.locator("[data-derivation-inspection-context]");
+    expect(await hidden.count()).toBeGreaterThan(0);
+    expect(await hidden.evaluateAll(els => els.every(el => getComputedStyle(el).visibility === "hidden"))).toBe(true);
+    expect(await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()))).toEqual(initial);
+    const opacities = await traces.evaluateAll(els => els.map(el => Number(getComputedStyle(el).opacity)));
+    expect(opacities.every(value => position === 0 || position === 1 ? value === 1 : value > 0 && value < .3)).toBe(true);
+    if (position === .55) {
+      const owners = stage.locator("[data-kp-equation-material-owner-id]");
+      expect(await owners.evaluateAll(els => els.every(el => el.hasAttribute("data-derivation-participant") || getComputedStyle(el).visibility === "hidden"))).toBe(true);
+    }
+    await root.screenshot({ path: info.outputPath(`participant-only-${position}.png`) });
+  }
+  await dragTo(page, root, 1.5);
+  await expect(root).toHaveAttribute("data-inspection-extent", "equation");
+  expect(await traces.evaluateAll(els => els.every(el => getComputedStyle(el).opacity === "1"))).toBe(true);
+  await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
+  await page.goto(route + "?derivation-motion=equation#energy-from-momentum");
+  await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await dragTo(page, root, .25);
+  await expect(root).toHaveAttribute("data-inspection-extent", "equation");
+  await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
+  await root.screenshot({ path: info.outputPath("whole-equation-comparison.png") });
 });
 
 test("persistent lens follows the expression, holds interiors and rewinds exactly", async ({ page }, info) => {

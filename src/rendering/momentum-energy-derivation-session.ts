@@ -12,7 +12,7 @@ import { easedProgressBetweenSemanticBeat, linearEquationDemoBeatTimeline } from
  * material ownership, optical ink-knot sampling and endpoint handoff are shared.
  * Only the bounded proof selects which fragments persist or are rewritten. */
 export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number,
-  focus?: { readonly source: string; readonly target: string }) {
+  focus?: { readonly source: string; readonly target: string; readonly extent?: "participants" | "equation" }) {
   assertEnergyDerivationPlan(compiled);
   const move = compiled.moves[index];
   if (!move) throw new Error("Unsupported energy derivation step");
@@ -85,7 +85,7 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
   // Resolve semantic targets once; material paint stays owned by the canonical
   // compositor. Its correlations, not glyph spelling or travel distance, bind
   // the inspection treatment to the same participants across paint handoffs.
-  const pendingOwners = new Map<string, string>();
+  const pendingOwners = new Map<string, { entityId: string; participant: boolean }>();
   if (focus) {
     for (const [root, id] of [[sourceRoot, focus.source], [targetRoot, focus.target]] as const) {
       const element = root.querySelector<HTMLElement>(`[data-kp-semantic-entity-id="${CSS.escape(id)}"]`);
@@ -93,9 +93,18 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
         throw new Error(`Missing derivation emphasis binding: ${id}`);
       element.dataset["derivationParticipant"] = id;
     }
+    if (focus.extent === "participants") {
+      // Context still participates in measurement and the checked algebra, but
+      // its inspection copy is absent: the permanent document supplies it.
+      for (const atom of [...source.atoms, ...target.atoms]) {
+        if (atom.semanticEntityId !== focus.source && atom.semanticEntityId !== focus.target)
+          atom.sourceElement.dataset["derivationInspectionContext"] = "";
+      }
+    }
     for (const correlation of plan.handoffCorrelations) {
-      if (correlation.semanticEntityId === focus.source || correlation.semanticEntityId === focus.target)
-        pendingOwners.set(correlation.materialOwnerId, correlation.semanticEntityId);
+      const participant = correlation.semanticEntityId === focus.source || correlation.semanticEntityId === focus.target;
+      if (participant || focus.extent === "participants")
+        pendingOwners.set(correlation.materialOwnerId, { entityId: correlation.semanticEntityId, participant });
     }
   }
   stage.dataset["derivationRenderer"] = canonical.kind;
@@ -104,9 +113,13 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
       stage.style.setProperty("--derivation-participant-strength", `${emphasis * 100}%`);
       // Material owners may be allocated on first transit. Cache their binding;
       // no geometry reads or per-frame descendant recoloring are necessary.
-      for (const [ownerId, entityId] of pendingOwners) {
+      for (const [ownerId, binding] of pendingOwners) {
         const owner = stage.querySelector<HTMLElement>(`[data-kp-equation-material-owner-id="${CSS.escape(ownerId)}"]`);
-        if (owner) { owner.dataset["derivationParticipant"] = entityId; pendingOwners.delete(ownerId); }
+        if (owner) {
+          if (binding.participant) owner.dataset["derivationParticipant"] = binding.entityId;
+          else owner.dataset["derivationInspectionContext"] = "";
+          pendingOwners.delete(ownerId);
+        }
       }
     }, sample: canonical.session.sample,
     dispose() { canonical.session.retire({ kind: "native-katex-paint-preserving-retirement", reason: "scene-replaced", structuralSuccession: "retire-preserving-paint" }); font.dispose(); } };

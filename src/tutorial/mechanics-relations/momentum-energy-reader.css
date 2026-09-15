@@ -65,10 +65,16 @@
 .energy-derivation-stage { position: absolute; left: 0; width: 100%; height: 3.4rem; pointer-events: none; }
 .energy-derivation-endpoint { position: absolute; left: 0; top: 0; }
 .energy-derivation-stage [data-kp-editor-equation-material-layer] { position: absolute; inset: 0; pointer-events: none; }
+/* A presentation mask, not a new algebra or paint owner. Keep measurement
+ * geometry intact while the permanent equations supply invariant context. */
+.energy-derivation-stage [data-derivation-inspection-context],
+.energy-derivation-stage [data-derivation-inspection-context] * { visibility: hidden !important; }
+.energy-derivation[data-tracing="true"][data-inspection-extent="participants"] [data-derivation-record-participant] { opacity: var(--derivation-record-participant-opacity, 1); }
 .energy-derivation[data-tracing="true"] .energy-derivation-equation { color: color-mix(in srgb, #52616d, #1b1b1b calc(var(--derivation-record-emphasis, 0) * 100%)); }
 /* Exemplar-only hierarchy: permanent records remain readable; moving context
  * stays dark. The cool participant accent is separate from warm navigation. */
 .energy-derivation[data-tracing="true"][data-move="0"] .energy-derivation-equation { color: color-mix(in srgb, #727272, #1b1b1b calc(var(--derivation-record-emphasis, 0) * 100%)); }
+.energy-derivation[data-tracing="true"][data-inspection-extent="participants"] .energy-derivation-equation { color: #52616d; }
 .energy-derivation-stage { color: #1b1b1b; --derivation-participant-accent: #006b91; }
 /* Material clones freeze native computed colors. Override only semantically
  * bound paint, including the fraction rule, without changing its geometry. */
@@ -79,6 +85,7 @@
   --derivation-participant-strength: inherit !important;
   --derivation-participant-accent: inherit !important;
   color: color-mix(in srgb, #1b1b1b, var(--derivation-participant-accent) var(--derivation-participant-strength, 0%)) !important;
+  -webkit-text-fill-color: currentColor !important;
   border-color: currentColor !important;
 }
 @media (forced-colors: active) {
@@ -90,6 +97,7 @@
 @media print { .energy-derivation-stage, .energy-derivation-transport { display: none !important; } .energy-derivation .energy-derivation-equation { visibility: visible !important; } }
 @media (forced-colors: active) { .energy-derivation { --derivation-inspection-accent: Highlight; } }
 @media print {
+  .energy-derivation [data-derivation-record-participant] { opacity: 1 !important; }
   .energy-derivation[data-tracing="true"] .energy-derivation-workspace { display: block; }
   .energy-derivation-key, .energy-derivation-scope, .energy-derivation-rail { display: none !important; }
   .energy-derivation-interleave { padding-left: 1.5rem; }

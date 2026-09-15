@@ -17,13 +17,15 @@ export function renderEnergyDerivationPassage(markdown: string) {
   const compiled = compileMomentumEnergyDerivation(checked.model);
   const math = (latex: string) => katex.renderToString(latex, { displayMode: true, throwOnError: true, strict: "ignore",
     trust: context => context.command === "\\htmlData" });
+  // The first destination keeps the substitution's compound fragment identity
+  // for record/inspection correspondence. Later moves retain their own templates.
   const trace = `<div class="energy-derivation" data-energy-derivation>
     <p data-derivation-status role="status" hidden></p>
     <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">
       <ol class="energy-derivation-history">${momentumEnergyDerivationStates.map((_, i) => `<li data-derivation-row="${i}">
         <span class="energy-derivation-row-marker" aria-hidden="true">${i + 1}</span>
-        <div class="energy-derivation-equation">${math(compiled.moves[i]?.annotated[0] ?? compiled.moves.at(-1)!.annotated[1]!)}</div>
+        <div class="energy-derivation-equation">${math(i === 1 ? compiled.moves[0]!.annotated[1]! : compiled.moves[i]?.annotated[0] ?? compiled.moves.at(-1)!.annotated[1]!)}</div>
         ${i < compiled.moves.length ? `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave="${i}" aria-label="Transition from equation ${i + 1} to ${i + 2}"><div class="energy-derivation-interleave-text"><strong>${compiled.moves[i]!.title}</strong>${html(compiled.moves[i]!.cue)}<details><summary>Why is this allowed?</summary>${html(compiled.moves[i]!.why)}</details></div></div>` : ""}
       </li>`).join("")}</ol>
       <div class="energy-derivation-rail" data-derivation-rail aria-hidden="true" hidden>${momentumEnergyDerivationStates.map(() => `<span></span>`).join("")}</div>

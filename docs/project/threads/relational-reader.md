@@ -206,6 +206,20 @@ participant color for comparison. No other move, mathematical motif, global
 palette or salience architecture is promoted by this experiment. Review the first
 substitution before generalization; r2 remains at its human checkpoint.
 
+Accepted next discovery candidate: participant-only inspection on the first
+substitution. Animate the smallest semantically complete group that explains
+the move, not everything whose coordinates change. The `velocity`/`replacement`
+pair travels through the existing canonical rewrite; invariant context remains
+in the stationary document. Dim only the corresponding permanent fragments
+during inspection, restore them at exact docks, and retain all equations and
+prose for static reading and print. The renderer masks context copies after
+canonical measurement; it does not introduce another mathematical or paint owner.
+`?derivation-motion=equation` retains whole-equation carry for comparison.
+The other two transitions are unchanged. This is a reversible exemplar, not
+global policy; review fragmentation, docking, and attention before promotion.
+The branch remains `feature/20260913-relational-reader` until human review;
+no merge or wider run continuation is authorized by this checkpoint.
+
 Only human-readable implementation proposal:
 `2026-09-13-relational-reader-delivery-proposal.md`.
 Theseus target: `next-action.kp.relational-reader`; executable contract:
