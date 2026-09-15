@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import type { Plugin } from "vite";
 import { compileMomentumEnergyPublication, momentumEnergySourcePath } from "../src/tutorial/mechanics-relations/momentum-energy-publication.ts";
 import { renderMomentumEnergyReader } from "../src/tutorial/mechanics-relations/momentum-energy-reader-publication.ts";
+import { compileScalarCancellationPublication, scalarCancellationArticlePath, scalarCancellationSourcePath } from "../src/tutorial/mechanics-relations/scalar-cancellation-publication.ts";
 
 /** Compile on request so editing the canonical Markdown is visible on reload.
  * Authoring, KaTeX and governed construction never enter the browser graph. */
@@ -12,6 +13,11 @@ export function kpViteMechanicsRelations(projectRoot: string): Plugin {
   const directory = "experiments/mechanics-relations/";
   return { name: "kp-mechanics-relations-publication",
     transformIndexHtml: { order: "pre", handler(html, context) {
+      if (context.filename === resolve(projectRoot, "experiments/scalar-cancellation/index.html")) {
+        const publication = compileScalarCancellationPublication(readFileSync(resolve(projectRoot, scalarCancellationArticlePath), "utf8"),
+          JSON.parse(readFileSync(resolve(projectRoot, scalarCancellationSourcePath), "utf8")));
+        return html.replace("<!-- kp:scalar-cancellation -->", publication.html);
+      }
       const interactive = context.filename === resolve(projectRoot, directory, "index.html");
       if (!interactive && context.filename !== resolve(projectRoot, directory, "static.html")) return html;
       const publication = compile();

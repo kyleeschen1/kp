@@ -1,11 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { checkScalarCancellation, scalarCancellationSource, scalarCancellationView, checkMomentumEnergyDerivation,
   momentumEnergyDerivationSource } from "../domains/public-api.ts";
 import { createScalarCancellationPlan, assertEnergyDerivationPlan, type EnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
 import { compileScalarCancellation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createDerivationOutline } from "../src/tutorial/mechanics-relations/energy-derivation-outline.ts";
 import { renderCheckedDerivationPassage } from "../src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts";
+import { compileScalarCancellationPublication, scalarCancellationArticlePath, scalarCancellationSourcePath } from "../src/tutorial/mechanics-relations/scalar-cancellation-publication.ts";
 
 const checked = () => {
   const result = checkScalarCancellation(scalarCancellationSource);
@@ -13,6 +15,23 @@ const checked = () => {
   return result.model;
 };
 const chain = (states: readonly string[]) => String.raw`$$\begin{aligned}${states.join(String.raw`\\`)}\end{aligned}$$`;
+
+test("scalar Article builds from files, and fresh source edits do not mutate an earlier publication", () => {
+  const text = readFileSync(scalarCancellationArticlePath, "utf8");
+  const source: unknown = JSON.parse(readFileSync(scalarCancellationSourcePath, "utf8"));
+  const original = compileScalarCancellationPublication(text, source);
+  assert.equal(original.document.id, "lesson.algebra.scalar-cancellation");
+  const bytes = original.html;
+  const edited = compileScalarCancellationPublication(text.replaceAll(/(?<![A-Za-z])x(?![A-Za-z])/g, "a").replace("Counting the factors", "Tracking the factors"),
+    { ...scalarCancellationSource, factor: "a" });
+  assert.notEqual(edited.revision, original.revision);
+  assert.notEqual(edited.html, bytes);
+  assert.equal(original.html, bytes);
+  assert.ok(edited.html.includes('"factor":"a"'));
+  assert.ok(edited.html.includes("data-derivation-source-revision"));
+  assert.throws(() => compileScalarCancellationPublication(text, { ...scalarCancellationSource, factor: "a" }), /source changed/);
+  assert.throws(() => compileScalarCancellationPublication(text, { ...scalarCancellationSource, factorDomain: "real" }), /unsupported-source at \$\.factorDomain/);
+});
 
 test("scalar authority is distinct, bounded, immutable and cannot be forged", () => {
   const model = checked();

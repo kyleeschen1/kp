@@ -335,6 +335,7 @@ export default defineConfig({
     // legacy polyfill would add a startup request to every route.
     entries: {
       mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
+      scalarCancellation: resolve(projectRoot, "experiments/scalar-cancellation/index.html"),
       mechanicsRelationsStatic: resolve(projectRoot, "experiments/mechanics-relations/static.html"),
       canonicalSupplyTax: resolve(projectRoot, "experiments/kinetic-figure/supply-tax/index.html"),
       ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [

@@ -36,7 +36,8 @@
     {
       "id": "scalar.reader",
       "title": "Source-driven scalar reading and shared reader integration",
-      "status": "planned"
+      "summary": "Independent scalar source and Article published on same server; 31 focused tests, full types and 25 browser tests pass. Visual judgment remains in scalar.checkpoint.",
+      "status": "complete"
     },
     {
       "id": "scalar.checkpoint",

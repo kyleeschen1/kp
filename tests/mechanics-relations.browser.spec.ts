@@ -1,6 +1,7 @@
 import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
+const scalarRoute = "/experiments/scalar-cancellation/?derivation-detail=expandable#remaining-factor";
 const seek = (input: Locator, progress: number) => input.evaluate((element: HTMLInputElement, value) => {
   element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
 }, progress);
@@ -33,6 +34,79 @@ async function ready(page: import("@playwright/test").Page) {
   await expect(root.locator("[data-transition-number]")).toHaveText(["1", "2", "3"]);
   return root;
 }
+
+test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collapse with exact return", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(scalarRoute);
+  const root = page.locator("[data-energy-derivation]");
+  const stage = root.locator("[data-derivation-stage]");
+  await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await expect(root.locator("[data-transition-number]")).toHaveText(["1"]);
+  await expect(root.locator("[data-derivation-recall]")).toHaveCount(0);
+  await dragTo(page, root, .55);
+  const held = await root.getAttribute("data-progress");
+  await root.screenshot({ path: info.outputPath("scalar-coarse.png") });
+  await root.locator("[data-refinement-expand]").click();
+  await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
+  await expect(root.locator("[data-transition-number]")).toHaveText(["1.1", "1.2", "1.3"]);
+  await expect(root.locator("[data-nested-context]")).toContainText("Inside step 1");
+  await expect(lens(root)).toHaveAttribute("aria-valuemax", "3");
+  for (const position of [.55, 1.55, 2.55, 3, 2.55, 1.55, .55, 0]) {
+    await dragTo(page, root, position);
+    await expect(root).toHaveAttribute("data-move", String(Math.max(0, Math.ceil(position) - 1)));
+    await expect(root).not.toHaveAttribute("data-repair", "true");
+    await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+    await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
+    await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
+    if (position === 1.55) await root.screenshot({ path: info.outputPath("scalar-expanded.png") });
+  }
+  await root.locator("[data-refinement-local-return]").last().click();
+  await expect(root).toHaveAttribute("data-derivation-detail", "coarse");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+  await expect(root.locator("[data-derivation-row]")).toHaveCount(2);
+  expect(errors).toEqual([]);
+});
+
+test("scalar source mismatch fails closed while the static argument stays readable", async ({ page }) => {
+  await page.route("**/experiments/scalar-cancellation/**", async route => {
+    if (route.request().resourceType() !== "document") return route.continue();
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).replace('"factor":"x"', '"factor":"z"') });
+  });
+  await page.goto(scalarRoute);
+  const root = page.locator("[data-energy-derivation]");
+  await expect(root).toHaveAttribute("data-repair", "true");
+  await expect(root.locator("[data-derivation-status]")).toContainText("needs repair");
+  for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
+});
+
+test("scalar static reading and shared style repairs work without JavaScript for both callers", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  // Simulate a new shared stylesheet build, not a script-driven page mutation:
+  // the proof of repair propagation must also work with scripting disabled.
+  await context.route("**/momentum-energy-reader.css*", async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()) + "\n:root { --derivation-reason-measure: 16rem; }" });
+  });
+  const page = await context.newPage();
+  for (const url of [scalarRoute, route + "#energy-from-momentum"]) {
+    await page.goto(url);
+    const root = page.locator("[data-energy-derivation]");
+    for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
+    // One presentation token changes both fresh documents. No caller-specific
+    // CSS or edits to mathematical source are needed for this repair.
+    await expect(root.locator(".energy-derivation-interleave-text").first()).toHaveCSS("max-width", "256px");
+    const detail = root.locator("[data-refinement-static]");
+    await detail.locator("summary").click();
+    await expect(detail.locator("[data-static-transition-number]")).toHaveCount(3);
+    await page.emulateMedia({ media: "print" });
+    for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
+    await page.emulateMedia({ media: "screen" });
+  }
+  await context.close();
+});
 
 test("expandable cancellation uses canonical fine steps and restores the compact inspection", async ({ page }, info) => {
   const errors: string[] = [];

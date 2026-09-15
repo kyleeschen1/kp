@@ -655,6 +655,27 @@
       "scope": "scalar.authority",
       "checkedAt": "2026-09-15T19:16:46.727Z",
       "notes": "Exact executed four-test command; previous shortened command field described this same selection. Four pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/scalar-cancellation-reader.test.ts tests/momentum-energy.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "scalar.reader",
+      "checkedAt": "2026-09-15T19:27:13.749Z",
+      "notes": "31 pass including canonical scalar Article compilation, coherent symbol edits and old-publication immutability. Empty-import syntax and incomplete test renaming repaired before clean rerun."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "scalar.reader",
+      "checkedAt": "2026-09-15T19:27:15.182Z",
+      "notes": "25 Chromium tests pass: canonical scalar reversal/refinement/collapse, mismatched source fails closed, no-JS shared stylesheet repair, physics preservation. Initial source-format and test-only no-JS style injection errors repaired; full rerun clean."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "scalar.reader",
+      "checkedAt": "2026-09-15T19:27:16.413Z",
+      "notes": "Full app/node/tests/Svelte/domain check passed for both callers."
     }
   ],
   "progress": {

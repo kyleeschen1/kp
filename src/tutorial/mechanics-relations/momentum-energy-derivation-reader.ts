@@ -4,9 +4,6 @@ import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
 import { createEnergyInspectionBookmarks, type EnergyInspectionPosition } from "./energy-derivation-bookmarks.ts";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
-/** Page scroll never owns derivation progress. One shared-clock instance owns
- * the active move; completed lines are static historical records, not copies
- * participating in that move's semantic fan-out. */
 import type { EnergyDerivationPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
 import type { EnergyDerivationDetail } from "../../../domains/physics/momentum-energy-derivation.ts";
 
@@ -28,6 +25,8 @@ const energyBinding: DerivationReaderBinding = {
   inspection(plan, index) { return !plan.view.refinement || index < 2 ? energyDerivationInspection[index] : undefined; }
 };
 
+/** Page scroll never owns derivation progress. One shared-clock instance owns
+ * the active move; completed lines remain independent historical records. */
 interface EnergyReaderState {
   revision: string; transition: string; progress: number;
   bookmarks: readonly EnergyInspectionPosition[]; disclosures: readonly boolean[];
@@ -277,7 +276,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail)
       ]);
       if (token !== generation) return;
-      if (proofPlan.namespace !== root.dataset["derivationNamespace"] || proofPlan.moves.length !== ids.length ||
+      if (proofPlan.namespace !== root.dataset["derivationNamespace"] || proofPlan.sourceRevision !== root.dataset["derivationSourceRevision"] || proofPlan.moves.length !== ids.length ||
           proofPlan.moves.some((move, i) => move.id !== ids[i])) throw new Error("Published derivation does not match checked runtime binding");
       tracing = true;
       root.dataset["tracing"] = "true";

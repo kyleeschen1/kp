@@ -1,6 +1,7 @@
 import { assertMomentumEnergyDerivation, momentumEnergyDerivationSteps, momentumEnergyDerivationView, type EnergyDerivationDetail, type CheckedMomentumEnergyDerivation } from "../../domains/public-api.ts";
 
 import { assertScalarCancellation, scalarCancellationView, type CheckedScalarCancellation } from "../../domains/algebra/scalar-cancellation.ts";
+import { sha256 } from "../kernel/sha256.ts";
 
 export interface DerivationStep { readonly id: string; readonly title: string; readonly cue: string; readonly why: string }
 export interface DerivationView {
@@ -13,6 +14,7 @@ const issuedPlan: unique symbol = Symbol("checked-derivation-plan");
 export interface EnergyDerivationPlan {
   readonly model: CheckedMomentumEnergyDerivation | CheckedScalarCancellation;
   readonly namespace: string;
+  readonly sourceRevision: string;
   readonly artifactId: string;
   readonly packId: string;
   readonly operationPrefix: string;
@@ -50,7 +52,7 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
   const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, moves: Object.freeze(moves), namespace: "energy", artifactId: "physics.energy-derivation", packId: detail === "coarse" ? "project.physics.energy-derivation" : "project.physics.energy-refinement", operationPrefix: "physics.energy",
     title: "Energy in terms of momentum", assumptions: Object.freeze(["m is a positive real scalar; p=m v; Euclidean vectors"]),
     notation: Object.freeze({ result: "K", factor: "m", numerator: String.raw`|\mathbf p|^2` }),
-    view, majorSteps: momentumEnergyDerivationSteps });
+    sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: momentumEnergyDerivationSteps });
   issued.add(plan);
   return plan;
 }
@@ -70,7 +72,7 @@ export function createScalarCancellationPlan(model: CheckedScalarCancellation, d
   const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, namespace: "scalar", artifactId: "algebra.scalar-cancellation", packId: `project.algebra.scalar-cancellation.${detail}`, operationPrefix: "algebra.scalar",
     title: "Why does one denominator factor remain?", assumptions: Object.freeze([`${model.source.factor}>0; ${model.source.numerator} is real`]),
     notation: Object.freeze({ result: model.source.result, factor: model.source.factor, numerator: `${model.source.numerator}^2` }),
-    view, majorSteps: view.majorSteps, moves: Object.freeze(moves) });
+    sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: view.majorSteps, moves: Object.freeze(moves) });
   issued.add(plan);
   return plan;
 }
