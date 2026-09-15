@@ -93,6 +93,11 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
   const equationSlots = rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!);
   const interleaves = [...root.querySelectorAll<HTMLElement>("[data-derivation-interleave]")];
+  const labels = interleaves.map(passage => {
+    const label = passage.dataset["stepLabel"];
+    if (!label || !/^[1-9]\d*(\.[1-9]\d*)?$/.test(label)) throw new Error("Missing published transition label");
+    return label;
+  });
   const ids = [...root.querySelectorAll<HTMLElement>("[data-derivation-template]")].map(el => el.dataset["transitionId"]!);
   const bookmarks = createEnergyInspectionBookmarks(root.dataset["derivationRevision"]!, ids);
   if (initial) {
@@ -107,9 +112,10 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
   const localControls = localAccess ? interleaves.map((passage, i) => {
     const controls = document.createElement("div");
     controls.className = "energy-derivation-local-access";
-    controls.innerHTML = `<div class="energy-derivation-actions"><button type="button" data-derivation-entry="${i}" aria-pressed="false">Inspect ${i + 1} → ${i + 2}</button><button type="button" data-derivation-restart hidden>Restart</button></div>
-      <div class="energy-derivation-mobile-well" hidden><small>Inspection · ${i + 1} → ${i + 2}</small><div data-derivation-mobile-slot></div><input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect transition ${i + 1} to ${i + 2}"><div class="energy-derivation-actions"><button type="button" data-local-back>Back</button><button type="button" data-local-forward>Forward</button><button type="button" data-local-close>Done</button></div></div>`;
-    passage.prepend(controls);
+    controls.innerHTML = `<div class="energy-derivation-actions"><button type="button" data-derivation-entry="${i}" aria-pressed="false">Inspect step ${labels[i]}</button><button type="button" data-derivation-restart hidden>Restart</button></div>
+      <div class="energy-derivation-mobile-well" hidden><small>Inspection · step ${labels[i]}</small><div data-derivation-mobile-slot></div><input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect step ${labels[i]}"><div class="energy-derivation-actions"><button type="button" data-local-back>Back</button><button type="button" data-local-forward>Forward</button><button type="button" data-local-close>Done</button></div></div>`;
+    const context = passage.querySelector("[data-nested-context]");
+    if (context) context.after(controls); else passage.prepend(controls);
     return { element: controls, entry: controls.querySelector<HTMLButtonElement>("[data-derivation-entry]")!,
       restart: controls.querySelector<HTMLButtonElement>("[data-derivation-restart]")!,
       well: controls.querySelector<HTMLElement>(".energy-derivation-mobile-well")!,
@@ -166,13 +172,11 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
     if (isPhone() && mobileInspect) localTop = localControls[selected]!.well.querySelector<HTMLElement>("[data-derivation-mobile-slot]")!.getBoundingClientRect().top
       - get(".energy-derivation-chain").getBoundingClientRect().top;
   };
-  const positionScope = (position: number) => {
-    const { move, progress } = resolveEnergyDerivationPosition(position, total);
+  const positionScope = (move: number, progress: number) => {
+    const position = move + progress;
     scope.style.top = `${centers[move]! + (centers[move + 1]! - centers[move]!) * progress}px`;
     handle.setAttribute("aria-valuenow", String(position));
-    handle.setAttribute("aria-valuetext", Number.isInteger(position)
-      ? `Equation ${position + 1} of ${rows.length}`
-      : `Between equations ${move + 1} and ${move + 2}, ${Math.round(progress * 100)} percent`);
+    handle.setAttribute("aria-valuetext", `Step ${labels[move]}, ${progress === 0 ? "source" : progress === 1 ? "result" : `${Math.round(progress * 100)} percent`}`);
   };
   const project = () => {
     const p = clock.getSnapshot().progress;
@@ -196,7 +200,7 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
     // native endpoints stay visible inside the well, never atop the fenceposts.
     if (isPhone()) stage.style.opacity = mobileInspect ? "1" : "0";
     root.dataset["inspectionOwner"] = record.kind;
-    positionScope(selected + p);
+    positionScope(selected, p);
     root.dataset["move"] = String(selected); root.dataset["progress"] = String(p);
     root.dataset["playing"] = String(clock.getStatus() === "playing");
     rows.forEach((row, i) => {
@@ -484,7 +488,7 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) dispose(); }, opts);
   hint.hidden = false;
   measureRows(); rail.hidden = false;
-  scope.hidden = false; transport.hidden = false; positionScope(0); previous.disabled = true;
+  scope.hidden = false; transport.hidden = false; positionScope(0, 0); previous.disabled = true;
   const ready = initialPosition ? seekTransition(initialPosition) : Promise.resolve();
   return { ready, dispose, capture(): EnergyReaderState {
     pause();

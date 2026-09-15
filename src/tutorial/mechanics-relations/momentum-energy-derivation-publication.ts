@@ -2,6 +2,7 @@ import katex from "katex";
 import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, momentumEnergyDerivationStates, momentumEnergyDerivationView, type EnergyDerivationDetail } from "../../../domains/public-api.ts";
 import { compileMomentumEnergyDerivation } from "../../authoring/momentum-energy-derivation-authoring.ts";
 import { compileKpArticleMarkdownFragmentHtml as html } from "../../article/kp-article-static-html.ts";
+import { createEnergyDerivationOutline } from "./energy-derivation-outline.ts";
 
 export function renderEnergyDerivationPassage(markdown: string, publicationRevision: string) {
   const match = /\$\$\\begin\{aligned\}([\s\S]*?)\\end\{aligned\}\$\$/.exec(markdown);
@@ -16,20 +17,36 @@ export function renderEnergyDerivationPassage(markdown: string, publicationRevis
   if (checked.status !== "checked") throw new Error(checked.code);
   const math = (latex: string) => katex.renderToString(latex, { displayMode: true, throwOnError: true, strict: "ignore",
     trust: context => context.command === "\\htmlData" });
+  const staticRefinement = () => {
+    const fine = momentumEnergyDerivationView(checked.model, "mass-refinement");
+    const outline = createEnergyDerivationOutline(fine);
+    // The outer result already follows this disclosure in the written record.
+    return fine.steps.slice(2).map((step, offset) => `<p><strong><span data-static-transition-number>${outline[offset + 2]!.label}</span> · ${step.title}</strong></p>${html(step.cue)}${offset < 2 ? math(fine.states[offset + 3]!) : ""}`).join("");
+  };
   function renderTrace(detail: EnergyDerivationDetail): string {
   if (checked.status !== "checked") throw new Error("Missing checked derivation");
   const compiled = compileMomentumEnergyDerivation(checked.model, detail);
   const view = momentumEnergyDerivationView(checked.model, detail);
+  const outline = createEnergyDerivationOutline(view);
+  const reason = (i: number) => {
+    const step = compiled.moves[i];
+    if (!step) return "";
+    const node = outline[i]!;
+    const parent = node.depth === 1 && node.first
+      ? `<div class="energy-derivation-nested-context" data-nested-context><span>Inside step ${node.parent.label} · ${node.parent.title}</span><div class="energy-derivation-actions"><button type="button" data-refinement-collapse hidden>Collapse step ${node.parent.label}</button></div></div>` : "";
+    const staticDetail = i === 2 && detail === "coarse"
+      ? `<details data-refinement-static><summary>Smaller cancellation steps</summary>${staticRefinement()}</details><div class="energy-derivation-actions"><button type="button" data-refinement-expand hidden>Inspect smaller steps</button></div>` : "";
+    return `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave="${i}" data-step-label="${node.label}" aria-label="Step ${node.label}: ${step.title}">${parent}<div class="energy-derivation-interleave-text"><strong><span data-transition-number>${node.label}</span> · ${step.title}</strong>${html(step.cue)}<details><summary>Why is this allowed?</summary>${html(step.why)}</details>${staticDetail}</div></div>`;
+  };
   // The first destination keeps the substitution's compound fragment identity
   // for record/inspection correspondence. Later moves retain their own templates.
   return `<div class="energy-derivation" data-energy-derivation data-derivation-detail="${detail}" data-derivation-revision="${publicationRevision}${detail === "coarse" ? "" : ":mass-refinement.v1"}">
     <p data-derivation-status role="status" hidden></p>
     <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">
-      <ol class="energy-derivation-history">${view.states.map((_, i) => `<li data-derivation-row="${i}">
-        <span class="energy-derivation-row-marker" aria-hidden="true">${i + 1}</span>
+      <ol class="energy-derivation-history">${view.states.map((_, i) => `<li data-derivation-row="${i}"${outline[i]?.depth === 1 ? ` data-nested-step data-nested-first="${outline[i].first}" data-nested-last="${outline[i].last}"` : ""}>
         <div class="energy-derivation-equation">${math(i === 1 ? compiled.moves[0]!.annotated[1]! : compiled.moves[i]?.annotated[0] ?? compiled.moves.at(-1)!.annotated[1]!)}</div>
-        ${i < compiled.moves.length ? `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave="${i}" aria-label="Transition from equation ${i + 1} to ${i + 2}"><div class="energy-derivation-interleave-text"><strong>${compiled.moves[i]!.title}</strong>${html(compiled.moves[i]!.cue)}<details><summary>Why is this allowed?</summary>${html(compiled.moves[i]!.why)}</details>${i === 2 ? (detail === "coarse" ? `<details data-refinement-static><summary>Smaller cancellation steps</summary>${momentumEnergyDerivationView(checked.model, "mass-refinement").states.slice(3, 5).map(math).join("")}<p>Expose the denominator factors, cancel one nonzero mass pair, then collect the factor 2.</p></details><div class="energy-derivation-actions"><button type="button" data-refinement-expand hidden>Inspect smaller steps</button></div>` : `<div class="energy-derivation-actions"><button type="button" data-refinement-collapse hidden>Return to compact step</button></div>`) : ""}</div></div>` : ""}
+        ${reason(i)}
       </li>`).join("")}</ol>
       <div class="energy-derivation-rail" data-derivation-rail aria-hidden="true" hidden>${view.states.map(() => `<span></span>`).join("")}</div>
       <div class="energy-derivation-stage" data-derivation-stage hidden></div>

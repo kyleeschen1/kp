@@ -30,6 +30,7 @@ async function ready(page: import("@playwright/test").Page) {
   await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await expect(root.locator("[data-transition-number]")).toHaveText(["1", "2", "3"]);
   return root;
 }
 
@@ -52,6 +53,13 @@ test("expandable cancellation uses canonical fine steps and restores the compact
   await expect(root).toHaveAttribute("data-progress", "0");
   await expect(root.locator("[data-derivation-row]")).toHaveCount(6);
   await expect(lens(root)).toHaveAttribute("aria-valuemax", "5");
+  await expect(root.locator("[data-transition-number]")).toHaveText(["1", "2", "3.1", "3.2", "3.3"]);
+  await expect(root.locator("[data-nested-context]")).toContainText("Inside step 3 · Cancel one mass factor");
+  await expect(root.getByRole("button", { name: "Collapse step 3", exact: true })).toBeVisible();
+  await expect(root.locator("[data-nested-step]")).toHaveCount(3);
+  await expect(root.locator(".energy-derivation-row-marker")).toHaveCount(0);
+  await root.getByRole("button", { name: "Inspect step 3.2", exact: true }).click();
+  await expect(lens(root)).toHaveAttribute("aria-valuetext", "Step 3.2, source");
   for (const position of [2.55, 3.55, 4.55, 5, 4.55, 3.55, 2.55]) {
     await dragTo(page, root, position);
     const index = Math.max(0, Math.ceil(position) - 1);
@@ -66,6 +74,7 @@ test("expandable cancellation uses canonical fine steps and restores the compact
   await expect(root).toHaveAttribute("data-move", "2");
   await expect(root).toHaveAttribute("data-progress", held!);
   await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
+  await expect(root.locator("[data-transition-number]")).toHaveText(["1", "2", "3"]);
   await expect(root.locator('[data-derivation-interleave="2"] details').first()).toHaveAttribute("open", "");
   await expect(root.locator("[data-refinement-expand]")).toBeFocused();
   const restoredOffset = await root.locator('[data-derivation-row="2"]').evaluate(el => el.getBoundingClientRect().top);
@@ -215,7 +224,7 @@ test("phone local inspection keeps normal-width prose and holds a reversible loc
   await entry.click();
   await expect(root).toHaveAttribute("data-mobile-inspect", "true");
   expect(Math.abs((await entry.boundingBox())!.y - before)).toBeLessThan(1);
-  const range = root.getByRole("slider", { name: "Inspect transition 1 to 2", exact: true });
+  const range = root.getByRole("slider", { name: "Inspect step 1", exact: true });
   await seek(range, .55);
   await expect(root).toHaveAttribute("data-progress", "0.55");
   await expect(root).toHaveAttribute("data-playing", "false");
@@ -636,6 +645,7 @@ test("source-owned static reading needs no JavaScript", async ({ browser }, info
   await expect(derivation.locator("[data-derivation-row]")).toHaveCount(4);
   const detail = derivation.locator("[data-refinement-static]");
   await detail.locator("summary").click();
+  await expect(detail.locator("[data-static-transition-number]")).toHaveText(["3.1", "3.2", "3.3"]);
   await expect(detail.locator(".katex-display")).toHaveCount(2);
   for (const equation of await detail.locator(".katex-display").all()) await expect(equation).toBeVisible();
   await page.emulateMedia({ media: "print" });

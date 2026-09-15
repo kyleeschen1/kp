@@ -6,6 +6,9 @@ Last Updated: 2026-09-14
 ## Canonical direction
 
 Current review packet: [expandable cancellation](2026-09-15-cancellation-refinement-review.md).
+Accepted outline principle: opening detail changes depth, not position in the
+argument. Number transitions from stable parent/child identity, not visible
+equation-row offsets; preserve major labels and identify nested scope explicitly.
 The opt-in candidate adds verified finer steps and compact-position restoration;
 visual approval remains separate from executed endpoint/lifecycle checks.
 

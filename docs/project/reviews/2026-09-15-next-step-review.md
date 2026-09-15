@@ -2,6 +2,20 @@
 
 ## Approved bounded cancellation-refinement run
 
+### Approved checkpoint repair: stable outline numbering
+
+The user found the finer cancellation clear and approved the recommended nested
+outline repair. Within `r2.checkpoint`, label transitions rather than equation
+states: preserve major labels 1–3, and project the existing child-operation
+membership as 3.1–3.3. Add an explicit parent caption, light nesting bracket and
+“Collapse step 3” boundary control without reducing prose/equation width.
+Opening detail changes depth, not position in the argument. Keep identities,
+native compositor, motion, exact collapse restoration and provisional phone
+status unchanged. One reversible presentation commit, focused unit/browser and
+type checks, then a refreshed visual checkpoint; no broader promotion or new
+refinement architecture is authorized. This is bounded repair within the
+existing two-active-hour ceiling, not an extension of the six-loop horizon.
+
 The user approved the proposed expandable-cancellation loop after desktop l1.
 Execute `run-contract.kp.reader-cancellation-refinement-v1`, targeting the existing
 reader action. This approval covers one opt-in exemplar, not the entire l2 horizon.

@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review expandable cancellation at localhost:8000 with derivation-detail=expandable. Phone and later horizon remain unapproved.",
+  "summary": "HUMAN_CHECKPOINT: stable outline and nesting repair ready at derivation-detail=expandable. Do not start later loops or promote phone.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -571,11 +571,32 @@
       "scope": "r2",
       "checkedAt": "2026-09-15T16:35:10.957Z",
       "notes": "34803 initial and 138597 activated gzip JS/CSS bytes; increases 774 and 1699. HTML total 300234 raw, 21167 gzip; excluded from closure. Not device performance evidence."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "outline-repair",
+      "checkedAt": "2026-09-15T17:41:38.070Z",
+      "notes": "24 tests pass. Stable operation-derived labels, parent membership and static/runtime rejection of fine steps without refinement authority."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "outline-repair",
+      "checkedAt": "2026-09-15T17:41:39.284Z",
+      "notes": "Full types including tests, Svelte and domains pass. Negative fixture initially failed compilation; now explicitly asserts expected type rejection, without weakening the production type."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'expandable cancellation|unavailable refinement|source-owned static|local entry'",
+      "status": "passed",
+      "scope": "outline-repair",
+      "checkedAt": "2026-09-15T17:41:40.336Z",
+      "notes": "Entire four-check Chromium cohort passes after initial confirmed dev-server connection reset. Stable labels, parent caption, nesting, accessible selected-edge source, reverse/collapse, failure recovery and no-JS/print detail checked. Visual hierarchy remains at human checkpoint."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Bounded cancellation authority and opt-in view implemented and verified; canonical visual checkpoint remains. See docs/project/threads/2026-09-15-cancellation-refinement-review.md. Compact default and provisional phone preserved."
+    "summary": "Finer explanation clear to user; requested outline repair implemented and verified. Stable parent/child labels and explicit scope preserve motion and exact return. Hierarchy visual checkpoint remains; phone provisional."
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation.",

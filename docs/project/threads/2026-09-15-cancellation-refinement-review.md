@@ -5,7 +5,35 @@ Review the opt-in exemplar at:
 http://localhost:8000/experiments/mechanics-relations/?derivation-detail=expandable#energy-from-momentum
 
 The shared server remains localhost-only. Phone presentation remains provisional.
-Default desktop behavior is unchanged; this candidate is not promoted.
+The compact view remains the default; finer detail is not promoted. Both views
+now label transitions rather than equation rows.
+
+## Accepted outline direction and repaired checkpoint
+
+The user found the finer explanation clear and approved stable outline numbering:
+**opening detail changes depth, not your place in the argument**. Major steps
+remain 1, 2, 3; cancellation's child transitions are 3.1, 3.2, 3.3. A parent
+caption (“Inside step 3 · Cancel one mass factor”), light bracket and “Collapse
+step 3” control make the nested scope explicit without indenting mathematical
+or prose content. No-JavaScript detail uses the same child labels. There is no
+separate numbering of equation rows to confuse states with operations.
+
+The bounded outline projection derives labels from checked parent/child operation
+IDs, not row offsets. Controls and accessible slider text consume the published
+labels. A shared endpoint is announced as the selected transition's source or
+result, not silently reinterpreted as the preceding step. Motion, equations,
+identity, bookmark keys and canonical compositor remain unchanged.
+
+Focused repair evidence: 24 unit checks and four Chromium checks pass (outline
+membership, expansion/restoration, failure recovery, local entry, static detail
+and print). Replay the browser checks with
+`npm run visual:mechanics-relations -- --grep 'expandable cancellation|unavailable refinement|source-owned static|local entry'`.
+An initial browser load was interrupted by confirmed dev-server connection
+resets; the entire four-check cohort passed on rerun. The invalid fine-without-
+parent fixture is explicitly a compile-time rejection as well as a runtime
+negative test. Theseus records the final type-check result. Review the new
+hierarchy treatment at the same URL; this does not promote phone presentation
+or introduce an arbitrary-depth outline framework.
 
 ## What to review
 
@@ -13,7 +41,7 @@ In the final compact transition, choose **Inspect smaller steps**. The four-stat
 record becomes six states: expose the denominator's two mass factors, cancel one
 nonzero numerator/denominator pair to 1, then collect the coefficient into 2m.
 Use the existing local entries or drag the lens forward and backward. Choose
-**Return to compact step** to restore the prior compact transition, held progress,
+**Collapse step 3** to restore the prior compact transition, held progress,
 open explanations, and the expansion anchor's viewport offset. Focus returns to
 the expansion button. Fine percentages are not treated as coarse percentages.
 
@@ -28,8 +56,10 @@ endpoints and a functioning control do not establish explanatory effectiveness.
 Canonical article: `examples/physics/momentum-energy.article.md`; canonical host:
 the URL above. The physics-owned checked positive-mass derivation issues bounded
 fine-step authority. The existing governed energy compiler lowers it into the
-existing native KaTeX energy session/compositor. No renderer, CSS, dependency,
+existing native KaTeX energy session/compositor. No renderer, dependency,
 global store, alternative clock, or generic animation fallback was introduced.
+The outline repair adds a few local caption/bracket CSS rules and removes the
+obsolete equation-row marker styles.
 
 The squared momentum norm persists through all three moves. The surviving mass
 factor has persistent correspondence in cancellation and coefficient collection.
@@ -45,7 +75,7 @@ preflight rejects missing transitions before allocating listeners or a clock,
 and disposal is idempotent. No-JavaScript readers can open ordinary static detail.
 The default enhanced reader does not allocate a saved clone for this experiment.
 
-## Executed evidence
+## Original refinement evidence (before the outline repair)
 
 - `node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts`:
   23 passing checks, including bounded authority, endpoint identity, persistent

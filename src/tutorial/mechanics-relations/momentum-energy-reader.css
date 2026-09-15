@@ -47,7 +47,11 @@
 .energy-derivation-equation, .energy-derivation-endpoint { height: 3.4rem; display: grid; align-items: center; width: 100%; padding-left: 1.5rem; box-sizing: border-box; }
 .energy-derivation-equation .katex-display, .energy-derivation-endpoint .katex-display { margin: 0; text-align: left; }
 .energy-derivation-equation .katex-display > .katex, .energy-derivation-endpoint .katex-display > .katex { text-align: left; }
-.energy-derivation-row-marker { position: absolute; inset: 1rem auto auto 0; font-size: .7rem; color: #52616d; }
+.energy-derivation-nested-context { color: #52616d; font-size: .9em; margin-bottom: .65rem; }
+/* Bracket the refinement without indenting equations or stealing prose width. */
+.energy-derivation-history [data-nested-step]::before { content: ""; position: absolute; inset: 0 auto 0 -.65rem; width: .35rem; border-left: 1px solid #84909b; pointer-events: none; }
+.energy-derivation-history [data-nested-first="true"]::before { border-top: 1px solid #84909b; }
+.energy-derivation-history [data-nested-last="true"]::before { border-bottom: 1px solid #84909b; }
 .energy-derivation-reason { font-size: .9em; }
 .energy-derivation-reason p { margin: .3rem 0; }
 .energy-derivation-reason summary { cursor: pointer; }
@@ -92,7 +96,6 @@
   .energy-derivation-stage { --derivation-participant-accent: Highlight; }
   .energy-derivation-stage [data-derivation-participant] { outline: 1px dotted Highlight; }
 }
-.energy-derivation [data-trace-role="live"] .energy-derivation-row-marker { color: var(--derivation-inspection-accent); }
 .energy-derivation-transport { width: 100%; max-width: 30rem; font-size: .9em; color: #52616d; }
 @media print { .energy-derivation-stage, .energy-derivation-transport { display: none !important; } .energy-derivation .energy-derivation-equation { visibility: visible !important; } }
 @media (forced-colors: active) { .energy-derivation { --derivation-inspection-accent: Highlight; } }

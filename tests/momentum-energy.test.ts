@@ -2,6 +2,7 @@ import { test } from "node:test";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
 import { momentumEnergyDerivationView } from "../domains/public-api.ts";
+import { createEnergyDerivationOutline } from "../src/tutorial/mechanics-relations/energy-derivation-outline.ts";
 import { createEnergyInspectionBookmarks } from "../src/tutorial/mechanics-relations/energy-derivation-bookmarks.ts";
 import { compileKpGovernedCanonicalConstruction, planKpGovernedConstructionRepairs,
   type KpGovernedCanonicalConstructionRequest } from "../src/authoring/canonical-animation-public-api.ts";
@@ -79,6 +80,24 @@ test("finer mass cancellation requires source authority, not an existing motif n
   const product = normalizeKpFiniteProductSourceEndpoint("m^2");
   assert.equal(product.status, "unsupported-shape");
   if (product.status === "unsupported-shape") assert.equal(product.diagnostic.code, "finite-product-endpoint.unsupported-shape");
+});
+
+test("transition outline preserves parent labels across expansion without numbering equation rows", () => {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(checked.status, "checked");
+  if (checked.status !== "checked") return;
+  const coarse = momentumEnergyDerivationView(checked.model);
+  const fine = momentumEnergyDerivationView(checked.model, "mass-refinement");
+  assert.deepEqual(createEnergyDerivationOutline(coarse).map(node => node.label), ["1", "2", "3"]);
+  const outline = createEnergyDerivationOutline(fine);
+  assert.deepEqual(outline.map(node => node.label), ["1", "2", "3.1", "3.2", "3.3"]);
+  for (const child of outline.slice(2)) {
+    assert.equal(child.depth, 1);
+    if (child.depth === 1) assert.equal(child.parent.label, "3");
+  }
+  assert.deepEqual(createEnergyDerivationOutline(coarse).slice(0, 2), outline.slice(0, 2));
+  // @ts-expect-error Fine steps without their parent are illegal at the type boundary too.
+  assert.throws(() => createEnergyDerivationOutline({ ...fine, refinement: undefined }));
 });
 
 test("each inspection names complete semantic cohorts and explicit permanent-row bindings", () => {
