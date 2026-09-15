@@ -13,9 +13,12 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const motion = new URL(location.href).searchParams.get("derivation-motion");
   const participantOnly = motion === "participants";
   const contextual = motion !== "equation" && !participantOnly;
-  const localAccess = new URL(location.href).searchParams.get("derivation-access") === "local";
+  const access = new URL(location.href).searchParams.get("derivation-access");
+  const localAccess = access !== "off";
+  // Desktop access is accepted; the separate phone presentation is not.
+  const mobileCandidate = access === "local";
   const phone = matchMedia("(max-width: 520px)");
-  const isPhone = () => localAccess && phone.matches;
+  const isPhone = () => mobileCandidate && phone.matches;
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
@@ -40,6 +43,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       forward: controls.querySelector<HTMLButtonElement>("[data-local-forward]")! };
   }) : [];
   root.dataset["localAccess"] = String(localAccess);
+  root.dataset["mobileCandidate"] = String(mobileCandidate);
   const rail = get<HTMLElement>("[data-derivation-rail]");
   let centers: number[] = [];
   let equationHeights: number[] = [];

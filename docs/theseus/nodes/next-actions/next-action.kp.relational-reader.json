@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "blocked",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: reader.l1 local-entry/mobile candidate awaits visual approval; follow named review URL. No new scope, old v2 resumption or post-checkpoint pressure until accepted.",
+  "summary": "Desktop reader.l1 delivery finished; phone provisional by user direction. Next semantic/repertoire loop requires its concrete scope approval; do not restart deferred v2.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -473,14 +473,64 @@
       "scope": "standard",
       "checkedAt": "2026-09-15T15:15:12.187Z",
       "notes": "Final full application, node, tests, Svelte and domain typecheck passes after the candidate and measurement-cadence repair."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T15:50:28.730Z",
+      "notes": "21 tests pass; no semantic source or compositor changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T15:50:30.639Z",
+      "notes": "Full application, node, test, Svelte and domain typechecks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T15:50:32.279Z",
+      "notes": "Production build and canonical publication prechecks pass. Existing large-chunk warning remains; no new dependencies."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T15:50:34.211Z",
+      "notes": "Clean final 19-test Chromium run passes. Earlier run failed because test driver started dragging an offscreen handle; helper now scrolls to a visible starting handle. Separate local-entry test verifies activation without scrolling back to the old handle."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep local entry|long-document|desktop integration|source-owned static|narrow keyboard",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T15:50:35.913Z",
+      "notes": "15 representative checks pass across Chromium, Firefox and WebKit: local access, long prose, return/reflow, enlarged text, keyboard/reduced motion, print and no-JS. Not real-device phone certification."
+    },
+    {
+      "command": "npm run measure:mechanics-relations-closure",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T15:50:37.404Z",
+      "notes": "34029 initial and 136898 activated JS/CSS gzip bytes; +1244 versus prior baseline, additional activation unchanged at 102869. Excludes HTML, fonts, images and execution cost."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'local entry|long-document|desktop integration|source-owned static|narrow keyboard'",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T15:51:55.530Z",
+      "notes": "Correctly quoted replay command for the passed 15-check representative cohort; prior record omitted shell quoting around the filter."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "reader.l1 defaults adopted; local entry and phone candidate ready for combined visual checkpoint. Candidate URL and decisions in September 15 local-inspection review. Long-document pressure and cross-browser integration remain behind approval; v2 remains deferred."
+    "summary": "Four desktop-eligible packages complete; phone checkpoint explicitly deferred, not approved. Source and renderer unchanged. Long-document access/reflow verified with bounded three-move fixture; future always-nearby inspection is a separate decision."
   },
   "revisitWhen": [
-    "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation."
+    "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation.",
+    "User selects phone review or approves a concrete successor loop."
   ],
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
@@ -489,7 +539,7 @@
     "Execute reader.l1 only under run-contract.kp.reader-local-inspection-v1 and the approved September 15 review"
   ],
   "disallowedWork": [
-    "No older v2 resumption; no new semantic operations or later loops; stop at mobile checkpoint"
+    "No older v2 or later loops; phone promotion and LAN exposure deferred. Desktop pressure and integration approved by continuation amendment."
   ],
   "criteria": [
     {

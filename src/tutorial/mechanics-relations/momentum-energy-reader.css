@@ -111,11 +111,12 @@
 [data-derivation-mobile-slot] { height: 3.4rem; }
 .energy-derivation-mobile-well input { display: block; width: 100%; min-height: 2.75rem; accent-color: #986417; touch-action: pan-y; }
 @media (max-width: 520px) {
-  .energy-derivation[data-local-access="true"] .energy-derivation-chain { margin-left: .5rem; }
-  .energy-derivation[data-local-access="true"] .energy-derivation-interleave { padding-left: 0; min-height: 0; }
-  .energy-derivation[data-local-access="true"] .energy-derivation-interleave-text { max-width: none; }
-  .energy-derivation[data-local-access="true"] :is(.energy-derivation-rail, .energy-derivation-scope, .energy-derivation-key, .energy-derivation-transport) { display: none; }
-  .energy-derivation[data-local-access="true"][data-mobile-inspect="false"] .energy-derivation-equation { color: inherit; }
+  .energy-derivation[data-mobile-candidate="false"] .energy-derivation-local-access { display: none; }
+  .energy-derivation[data-mobile-candidate="true"] .energy-derivation-chain { margin-left: .5rem; }
+  .energy-derivation[data-mobile-candidate="true"] .energy-derivation-interleave { padding-left: 0; min-height: 0; }
+  .energy-derivation[data-mobile-candidate="true"] .energy-derivation-interleave-text { max-width: none; }
+  .energy-derivation[data-mobile-candidate="true"] :is(.energy-derivation-rail, .energy-derivation-scope, .energy-derivation-key, .energy-derivation-transport) { display: none; }
+  .energy-derivation[data-mobile-candidate="true"][data-mobile-inspect="false"] .energy-derivation-equation { color: inherit; }
 }
 @media print { .energy-derivation-local-access { display: none !important; } }
 @media print { .physics-controls { display: none; } .physics-reader { max-width: none; padding: 0; } .physics-figure { break-inside: avoid; } }

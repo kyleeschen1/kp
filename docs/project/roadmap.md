@@ -27,10 +27,10 @@ nor its evidence. The ledger remains retrievable at
 
 Accepted successive-loop direction, including local access when the active knob
 is offscreen: `reviews/2026-09-15-next-step-review.md`. That single source owns
-the revised six-loop sequence and detailed first-run proposal. Next: reader.l1
-adoption, local activation/bookmarks and mobile reading, then visual review and
-long-document pressure. Its proposed four-hour ceiling and five-package scope
-are approved under `run-contract.kp.reader-local-inspection-v1`. Later order: expandable cancellation
+the revised six-loop sequence and detailed first-run proposal. The desktop
+portion of reader.l1 is delivered; phone layout remains provisional under the
+accepted continuation amendment. Its four-hour ceiling and five-package scope
+are preserved under `run-contract.kp.reader-local-inspection-v1`. Next scope to review: expandable cancellation
 and earlier-result use, source-only reuse, code, richer mechanics, graph linkage.
 Do not substitute a generic frontier/refill task or restart the deferred v2.
 
@@ -41,6 +41,13 @@ and recall/return are now exemplar defaults. The new local-entry/mobile candidat
 is opt-in for the approved reader.l1 visual checkpoint; see
 `threads/2026-09-15-reader-local-inspection-review.md`. Finer cancellation retains its recorded
 semantic-authority gap. Older v2 work remains deferred.
+
+Desktop local access is visually approved and its long-document pressure and
+desktop integration are verified; phone layout remains provisional
+and opt-in, with its checkpoint deferred rather than blocking desktop delivery.
+The continuation amendment in the reviewed proposal owns this boundary.
+Desktop entries are now the base-URL default. The review packet records the
+long-document evidence and limits; phone and old v2 remain unpromoted/deferred.
 
 Latest accepted priority: retain the persistent reasoning record, but repair
 participant-only motion's loss of explanatory context **first**. Then pursue

@@ -1,5 +1,33 @@
 # Local inspection access: visual checkpoint
 
+Desktop access approved on September 15. Phone treatment remains provisional by
+explicit user direction; its review does not block the approved desktop pressure
+and integration work. Keep the candidate URL below for phone experimentation;
+do not interpret desktop approval as mobile or LAN-exposure approval.
+
+Desktop local access is now the default on the base URL. Use
+`derivation-access=off` for the earlier no-entry comparison; `derivation-access=local`
+still explicitly opts into the provisional phone layout. Server binding remains
+localhost-only.
+
+The committed long-prose fixture reuses the same four permanent states with
+unequal explanation lengths. It verifies selecting a nearby transition while
+the previous handle is offscreen, held-position restoration, justification,
+and provenance return after resizing. This tests document geometry, not authoring
+arbitrary-length reasoning or new mathematical operations.
+
+Do not overstate reachability: entries sit at transition boundaries, not at
+every point within long prose. Restoring a held pose preserves its document-based
+lens position; this is not a guarantee that the restored lens is in the viewport.
+A viewport-local inspection or additional local transport would be a separate
+interaction decision, not something these tests silently certify.
+
+Production closure after local-access integration: 34,029 initial and 136,898
+activated JS/CSS gzip bytes, +1,244 versus the previous 32,785/135,654 baseline.
+Additional activation remains 102,869 bytes. Measured with the committed closure
+command after `build:bundle`; excludes HTML, fonts, images, network overhead and
+CPU/paint cost. No new dependencies or semantic renderer changes.
+
 Scope: reader.l1 in [the approved delivery proposal](../reviews/2026-09-15-next-step-review.md).
 Live package status and evidence belong only to
 `run-contract.kp.reader-local-inspection-v1`.
@@ -67,11 +95,15 @@ are recorded in Theseus; screenshots are disposable harness outputs, not goldens
 This is reader-engine work, not evidence of source-only authoring reuse. The
 bookmarks are same-mounted-document only, not reload persistence or cross-document
 history. The original three-move derivation is still the only semantic chain.
-Long prose/offscreen-knob pressure, candidate-specific reflow/return stress,
-Firefox/WebKit and release closure measurement remain **after human approval**.
-The current narrow capture is Chromium desktop emulation, not real-device touch
-or Safari certification. No broader mobile/layout or catalogue promotion is implied.
+Desktop long-prose/offscreen-knob pressure and reflow/return stress now pass,
+along with full types/build, 21 unit checks, 19 Chromium checks and a 15-check
+representative Chromium/Firefox/WebKit cohort. An initial Chromium run exposed
+an offscreen pointer-start assumption in the test helper; the repaired full run
+passes. These are executable checks, not a learning-outcome study.
+The phone capture remains desktop emulation, not real-device touch or Safari
+certification. No broader mobile/layout or catalogue promotion is implied.
 
-Resume after acceptance through the same contract: complete the checkpoint,
-then l1.pressure and l1.integrate. Do not start later repertoire/semantic loops
-or resume deferred v2 under this approval.
+Eligible desktop work is finished; phone review remains deferred under the
+continuation amendment. Do not start later repertoire/semantic loops or resume
+deferred v2 under this approval. Retrieve the parked run explicitly with
+`npm run theseus -- work context run-contract.kp.reader-local-inspection-v1 --mode brief`.

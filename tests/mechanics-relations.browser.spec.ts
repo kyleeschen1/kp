@@ -12,7 +12,11 @@ const documentBoxes = (elements: Locator) => elements.evaluateAll(els => els.map
   return { x: box.x + scrollX, y: box.y + scrollY, width: box.width, height: box.height };
 }));
 async function dragTo(page: import("@playwright/test").Page, root: Locator, position: number, release = true) {
-  const handle = lens(root), box = await handle.boundingBox();
+  const handle = lens(root);
+  // Pointer capture can cross viewport edges, but starting a drag must hit a
+  // visible handle. Taller approved records can put its previous dock offscreen.
+  await handle.scrollIntoViewIfNeeded();
+  const box = await handle.boundingBox();
   const move = Math.min(2, Math.floor(position)), fraction = position - move;
   const first = await root.locator(`[data-derivation-row="${move}"] .energy-derivation-equation`).boundingBox();
   const last = await root.locator(`[data-derivation-row="${move + 1}"] .energy-derivation-equation`).boundingBox();
@@ -29,7 +33,7 @@ async function ready(page: import("@playwright/test").Page) {
 }
 
 test("local entry preserves edge identity and bookmarks without scrolling or autoplay", async ({ page }, info) => {
-  await page.goto(route + "?derivation-access=local#energy-from-momentum");
+  await page.goto(route + "#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]"), entries = root.locator("[data-derivation-entry]");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await entries.nth(1).scrollIntoViewIfNeeded();
@@ -73,6 +77,68 @@ test("local entry preserves edge identity and bookmarks without scrolling or aut
   await entries.nth(1).click();
   await expect(root.locator("[data-derivation-status]")).toContainText("older revision");
   await expect(root).toHaveAttribute("data-move", "2");
+});
+
+test("long-document local access preserves held transitions and exact return after reflow", async ({ page }) => {
+  await page.goto(route + "#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await dragTo(page, root, .55);
+  const held = await root.getAttribute("data-progress");
+  // Layout pressure only, not fabricated mathematical states or authoring
+  // support for a longer proof. Unequal prose intervals reuse all three moves.
+  await root.locator(".energy-derivation-interleave-text").evaluateAll(passages => passages.forEach((passage, i) => {
+    for (let j = 0; j < [22, 11, 5][i]!; j++) {
+      const p = document.createElement("p");
+      p.textContent = "Layout fixture: a longer explanation occupies reading space without adding a mathematical state or changing the transition's meaning.";
+      passage.append(p);
+    }
+  }));
+  const why = root.locator('[data-derivation-interleave="0"] summary').first();
+  await why.click();
+  const entry = root.locator('[data-derivation-entry="2"]');
+  await entry.scrollIntoViewIfNeeded();
+  const before = await page.evaluate(() => scrollY);
+  expect(before).toBeGreaterThan(3000);
+  expect((await lens(root).boundingBox())!.y).toBeLessThan(0);
+  await entry.click();
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  expect(await page.evaluate(() => scrollY)).toBe(before);
+  expect((await lens(root).boundingBox())!.y).toBeGreaterThan(0);
+  await root.locator('[data-derivation-entry="0"]').click();
+  await expect(root).toHaveAttribute("data-move", "0");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  const recall = root.locator("[data-derivation-recall]");
+  await recall.locator("summary").click();
+  const origin = recall.locator("a");
+  await origin.scrollIntoViewIfNeeded();
+  const offset = await root.locator('[data-derivation-row="0"]').evaluate(el => el.getBoundingClientRect().top);
+  await origin.click();
+  const back = page.locator("[data-derivation-return]");
+  await expect(back).toBeFocused();
+  await page.setViewportSize({ width: 960, height: 800 });
+  await back.click();
+  await expect(origin).toBeFocused();
+  await expect(root).toHaveAttribute("data-progress", held!);
+  expect(Math.abs(await root.locator('[data-derivation-row="0"]').evaluate(el => el.getBoundingClientRect().top) - offset)).toBeLessThan(2);
+  await expect(root).toHaveAttribute("data-playing", "false");
+  await expect(root.locator(".energy-derivation-equation")).toHaveCount(4);
+});
+
+test("desktop integration preserves enlarged reading and keeps phone presentation opt-in", async ({ page }) => {
+  await page.addInitScript(() => document.addEventListener("DOMContentLoaded", () => { document.documentElement.style.fontSize = "24px"; }));
+  const root = await ready(page);
+  await expect(root.locator("[data-derivation-entry]")).toHaveCount(3);
+  await root.locator('[data-derivation-entry="1"]').click();
+  await expect(root).toHaveAttribute("data-move", "1");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(root).toHaveAttribute("data-mobile-candidate", "false");
+  await expect(root.locator('[data-derivation-entry="0"]')).toBeHidden();
+  await expect(lens(root)).toBeVisible();
+  await expect(root.locator(".energy-derivation-mobile-well").first()).toBeHidden();
 });
 
 test("phone local inspection keeps normal-width prose and holds a reversible local animation", async ({ page }, info) => {

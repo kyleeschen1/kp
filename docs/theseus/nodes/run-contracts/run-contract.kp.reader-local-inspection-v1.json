@@ -2,8 +2,8 @@
   "id": "run-contract.kp.reader-local-inspection-v1",
   "kind": "run-contract",
   "title": "Reader local inspection delivery",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at l1.mobile: review local entry and phone inspection candidate before l1.pressure or l1.integrate. About 35 minutes of four active hours used including preflight; preserve remaining ceiling and 45-minute closeout reserve across human wait.",
+  "status": "deferred",
+  "summary": "CONTRACT_EXHAUSTED for eligible desktop work: four packages complete. l1.mobile remains planned with explicit user deferral, not accepted. Original ceiling retained; about 55 active minutes used in total. No automatic later loop or v2 resumption.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,11 +21,14 @@
     "npm run visual:mechanics-relations",
     "npm run typecheck"
   ],
+  "revisitWhen": [
+    "User selects phone review or explicitly approves a successor scope."
+  ],
   "allowedWork": [
-    "Only reader.l1 in the approved September 15 review; existing semantic source and compositor"
+    "Approved reader.l1 continuation amendment: desktop pressure and integration after local-access approval; phone remains opt-in and deferred, not a desktop gate"
   ],
   "disallowedWork": [
-    "No semantic operations, new renderers, loops 2-6, agents, deployments, merge or push; older v2 remains deferred"
+    "No phone promotion, LAN exposure, new semantic operations, later loops, agents, deployment, merge or push"
   ],
   "goal": "Adopt accepted contextual inspection and enable local access with comfortable mobile reading",
   "target": "next-action.kp.relational-reader",
@@ -53,18 +56,20 @@
     {
       "id": "l1.mobile",
       "title": "Opt-in normal-width mobile inspection checkpoint",
-      "summary": "REVIEW_READY: normal-width phone prose with one labeled fixed local stage using the canonical animation; unit, desktop and phone Chromium checks pass. Human judgment required before completion or promotion.",
-      "status": "in-progress"
+      "summary": "DEFERRED by user: phone provisional, not accepted. Explicit continuation amendment permits desktop pressure and integration independently; retain opt-in candidate.",
+      "status": "planned"
     },
     {
       "id": "l1.pressure",
       "title": "Post-approval long-document access pressure",
-      "status": "planned"
+      "summary": "Long-prose unequal-interval fixture passes offscreen-handle local access, held bookmark restore, disclosure and provenance exact return after resize. No runtime repair required; remains a three-move semantic chain.",
+      "status": "complete"
     },
     {
       "id": "l1.integrate",
       "title": "Post-approval adoption and release verification",
-      "status": "planned"
+      "summary": "Desktop-only integration complete under accepted amendment: default entries; phone candidate remains opt-in; full types/build, 21 units, 19 Chromium and 15 representative three-browser checks pass; closure measured.",
+      "status": "complete"
     }
   ]
 }

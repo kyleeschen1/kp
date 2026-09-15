@@ -5,6 +5,10 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+Desktop local access approved; phone work explicitly provisional. The accepted
+continuation amendment in the September 15 review permits long-document pressure
+and desktop integration without phone promotion or LAN-server changes.
+
 Accepted next-loop sequence and approved first run:
 [September 15 next-step review](../reviews/2026-09-15-next-step-review.md).
 Adopt/readability/local lens access → verified expansion and earlier-result use

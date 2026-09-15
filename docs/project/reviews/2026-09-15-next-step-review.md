@@ -142,6 +142,15 @@ Status: **scope/resource approved on September 15**. Execute through
 The four-active-hour ceiling and mobile human checkpoint below are binding.
 Default mode is interactive.
 
+September 15 continuation amendment: the user approved desktop local access
+and explicitly kept phone work provisional. Continue l1.pressure and the desktop
+portion of l1.integrate without another visual gate. The phone checkpoint remains
+deferred, not passed; retain its opt-in URL and do not enable LAN access. Desktop
+local entry may become the default, while the phone layout remains opt-in.
+Keep the original four-active-hour ceiling (about 35 minutes already used).
+Finish eligible desktop work and report the deferred phone outcome honestly;
+this amendment does not authorize subsequent semantic/repertoire loops.
+
 ### Outcome and ownership
 
 A reader can comfortably read the accepted explanation, scroll away from its
