@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.reader-fluent-cancellation-v1",
+  "kind": "run-contract",
+  "title": "Fluent physics cancellation",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: fluent physics cancellation exemplar awaits visual feedback; no generalization authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-fluent-cancellation.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations"
+  ],
+  "allowedWork": [
+    "Approved physics exemplar, shared motif reuse, policy and focused verification; two hour ceiling including thirty minute reserve"
+  ],
+  "disallowedWork": [
+    "No catalogue promotion, new renderer or clock, arbitrary solver, phone promotion, merge or deferred loops"
+  ],
+  "goal": "Preserve cancellation lineage without routine identity stops, with local explanation",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "fluent.exemplar",
+      "title": "Implementation",
+      "summary": "Policy recorded, bounded fluent physics presentation implemented and engineering checks pass; mandatory visual review remains.",
+      "status": "complete"
+    },
+    {
+      "id": "fluent.review",
+      "title": "Verification-and-visual-review",
+      "summary": "HUMAN_CHECKPOINT: review physics step 3 and local smaller-step return. 28 browser checks pass; tests are not aesthetic approval.",
+      "status": "in-progress"
+    }
+  ]
+}

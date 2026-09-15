@@ -22,7 +22,11 @@ const energyBinding: DerivationReaderBinding = {
     if (checked.status !== "checked") throw new Error(checked.code);
     return createEnergyDerivationPlan(checked.model, detail);
   },
-  inspection(plan, index) { return !plan.view.refinement || index < 2 ? energyDerivationInspection[index] : undefined; }
+  inspection(plan, index) {
+    if (plan.view.refinement && index === 1) return { ...energyDerivationInspection[1],
+      recordTarget: ["rule", "norm", "scalar-before"].map(role => `energy.expand-mass-square.0.${role}`) };
+    return !plan.view.refinement || index < 2 ? energyDerivationInspection[index] : undefined;
+  }
 };
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
@@ -35,7 +39,10 @@ interface EnergyReaderState {
 /** Coarse and fine are two projections, never two simultaneously active
  * timelines. Retire the old compositor/clock before mounting the next view. */
 export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: DerivationReaderBinding = energyBinding) {
-  const enabled = new URL(location.href).searchParams.get("derivation-detail") === "expandable";
+  // Local explanation is part of the fluent reading, not an expert/beginner
+  // setting. Keep the explicit comparison opt-out for existing review URLs.
+  const detailMode = new URL(location.href).searchParams.get("derivation-detail");
+  const enabled = detailMode === "expandable" || (detailMode === null && initialRoot.dataset["derivationReading"] === "fluent");
   if (!enabled) {
     const staticDetail = initialRoot.querySelector<HTMLElement>("[data-refinement-static]");
     if (staticDetail) staticDetail.hidden = true;

@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review revised docs/project/threads/2026-09-15-scalar-reader-review.md. Compound inspection implemented and verified; visual cadence awaits user judgment.",
+  "summary": "HUMAN_CHECKPOINT: fluent physics step 3 review; scalar composition accepted. Deferred later loops remain parked.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -33,6 +33,10 @@
     {
       "kind": "file",
       "path": "docs/project/authoring/scalar-cancellation-reader-packet.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-fluent-cancellation.md"
     }
   ],
   "dependsOn": {
@@ -754,6 +758,55 @@
       "scope": "scalar compound production closure",
       "checkedAt": "2026-09-15T20:50:49.733Z",
       "notes": "Scalar initial JS/CSS gzip 32966 bytes, reachable 142467, HTML 8241 gzip. Relative to prior measured scalar build, 95 initial and 2886 reachable bytes added. No new dependency, renderer, or clock. Physical-device performance not measured."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "fluent physics exemplar",
+      "checkedAt": "2026-09-15T21:32:26.736Z",
+      "notes": "33 tests pass; privately issued fluent score requires local expansion, retained mass and coefficient identity, no transient identity, unchanged checked endpoints and scalar authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/carrier-preserving-simplification-native-endpoints.test.ts tests/carrier-preserving-simplification-optical-profile.test.ts tests/carrier-preserving-simplification-semantic.test.ts tests/reader-equation-presentation-mode.test.ts tests/reader-equation-identity-witness.test.ts tests/exact-equation-reachability-graph.test.ts tests/animation-api-caller-ledger.test.ts",
+      "status": "passed",
+      "scope": "shared ink withdrawal preservation",
+      "checkedAt": "2026-09-15T21:32:27.778Z",
+      "notes": "33 tests pass; no duplicated renderer or optical profile, existing carrier and identity behavior preserved."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "failed",
+      "scope": "fluent initial browser probe",
+      "checkedAt": "2026-09-15T21:32:28.863Z",
+      "notes": "Probe scrubbed inactive step 3 without selecting it; repaired test to use local entry. Runtime ignored inactive control as designed. No runtime constraint was weakened."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "fluent final integration",
+      "checkedAt": "2026-09-15T21:32:30.105Z",
+      "notes": "28/28 Chromium checks pass: retained base and coefficient visible exclusive owners, ink shrink, no transient identity, reverse and direct seek equality, default local expansion, exact return; scalar and existing reader behavior preserved. Human visual judgment pending; phone not promoted."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "fluent integration",
+      "checkedAt": "2026-09-15T21:32:31.217Z",
+      "notes": "All app, node, test, Svelte and domain checks pass. An initial nonexistent typecheck:app script was replaced by this supported full command."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "fluent integration",
+      "checkedAt": "2026-09-15T21:32:32.338Z",
+      "notes": "Architecture and eight gateway tests pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "fluent integration",
+      "checkedAt": "2026-09-15T21:32:33.480Z",
+      "notes": "Production build passes; unrelated existing large chunk warnings remain. Physics gzip initial 36035 and reachable 147207 bytes; scalar 33091 and 145046. Measurement commands and exclusions in review packet."
     }
   ],
   "progress": {

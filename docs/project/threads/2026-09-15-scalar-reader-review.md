@@ -1,7 +1,8 @@
 # Independent scalar reader: visual checkpoint
 
-Status: HUMAN_CHECKPOINT — implementation and integration verification delivered;
-scalar visual acceptance remains open.
+Status: accepted — the user called the composed cancellation “beautiful” on
+2026-09-15. The review request below is checkpoint history. The separate next
+physics candidate is [fluent cancellation](2026-09-15-fluent-cancellation.md).
 Control: `run-contract.kp.reader-scalar-reuse-v1`.
 Scope/rationale: `../reviews/2026-09-15-reader-authoring-reuse-boundary.md`.
 

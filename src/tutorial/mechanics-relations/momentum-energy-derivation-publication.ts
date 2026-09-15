@@ -66,7 +66,7 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
   };
   // The first destination keeps the substitution's compound fragment identity
   // for record/inspection correspondence. Later moves retain their own templates.
-  return `<div class="energy-derivation" data-energy-derivation data-derivation-source-revision="${plan.sourceRevision}" data-derivation-namespace="${plan.namespace}" data-refinement-first="${plans.fine.moves[parentIndex]!.id}" data-derivation-detail="${detail}" data-derivation-revision="${publicationRevision}${detail === "coarse" ? "" : ":mass-refinement.v1"}">
+  return `<div class="energy-derivation" data-energy-derivation data-derivation-reading="${plan.cancellationScore.kind}" data-derivation-source-revision="${plan.sourceRevision}" data-derivation-namespace="${plan.namespace}" data-refinement-first="${plans.fine.moves[parentIndex]!.id}" data-derivation-detail="${detail}" data-derivation-revision="${publicationRevision}${detail === "coarse" ? "" : ":mass-refinement.v1"}">
     <p data-derivation-status role="status" hidden></p>
     <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">

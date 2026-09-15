@@ -53,6 +53,37 @@ test("cancellation refinement preserves exact outer states and requires the chec
   assert.equal(compilation.construction.mathematicalVerification.revisionId, "revision.physics.energy-derivation.refinement.v1");
 });
 
+test("fluent cancellation is a checked reading with persistent base and coefficient, not a faster opaque rewrite", () => {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(checked.status, "checked"); if (checked.status !== "checked") return;
+  const plan = createEnergyDerivationPlan(checked.model);
+  assert.deepEqual(plan.cancellationScore, { kind: "fluent", purpose: "relate-energy-and-momentum",
+    prerequisites: ["nonzero-scalar-cancellation", "unit-exponent-notation"], expansion: "mass-refinement" });
+  assert.ok(Object.isFrozen(plan.cancellationScore));
+  // @ts-expect-error A fluent score cannot omit its recoverable explanation.
+  const invalid: typeof plan.cancellationScore = { kind: "fluent", purpose: "relate-energy-and-momentum", prerequisites: ["nonzero-scalar-cancellation", "unit-exponent-notation"] };
+  void invalid;
+  const move = compileMomentumEnergyDerivation(checked.model).moves[2]!;
+  assert.equal(move.operationKind, "cancel-unit-power");
+  for (const role of ["factor-retain", "two", "norm"]) {
+    assert.ok(move.persist.includes(role));
+    assert.ok(!move.exits.includes(role));
+    const lineage = move.transformation.correspondenceMap!.records.find(record => record.id === `lineage.cancel-mass.${role}`)!;
+    assert.equal(lineage.relation, "identity");
+    assert.deepEqual(lineage.sourceSelectorIds, [`energy.cancel-mass.0.${role}`]);
+    assert.deepEqual(lineage.targetSelectorIds, [`energy.cancel-mass.1.${role}`]);
+  }
+  assert.deepEqual(move.entries, []);
+  assert.ok(move.exits.includes("power")); // 2-1=1; omit exponent notation, not the surviving base.
+  assert.ok(move.exits.includes("mass"));
+  assert.doesNotMatch(move.annotated.join(""), /\.identity[,}]/);
+  const fine = createEnergyDerivationPlan(checked.model, "mass-refinement");
+  assert.equal(fine.cancellationScore.kind, "explanatory");
+  assert.equal(fine.view.states[2], plan.view.states[2]);
+  assert.equal(fine.view.states.at(-1), plan.view.states.at(-1));
+  assert.ok(fine.moves.some(child => child.entries.includes("identity")));
+});
+
 test("finer mass cancellation requires source authority, not an existing motif name", () => {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
   assert.equal(checked.status, "checked");

@@ -56,7 +56,7 @@ export function sampleEnergyDerivationPresentation(progress: number): EnergyDeri
 export const energyDerivationFocus = [
   { source: "energy.substitute.0.velocity", target: "energy.substitute.1.replacement" },
   { source: "energy.scale-magnitude.0.power", target: "energy.scale-magnitude.1.power-bottom" },
-  { source: "energy.cancel-mass.0.scalar-before", target: "energy.cancel-mass.1.scalar-after" }
+  { source: "energy.cancel-mass.0.power", target: "energy.cancel-mass.1.factor-retain" }
 ] as const;
 
 const inspectionIds = (move: string, side: number, roles: readonly string[]) => roles.map(role => `energy.${move}.${side}.${role}`);
@@ -68,11 +68,11 @@ export const energyDerivationInspection = [
   { source: inspectionIds("scale-magnitude", 0, ["left", "right", "rule", "momentum", "denominator", "power"]),
     target: inspectionIds("scale-magnitude", 1, ["left", "right", "rule", "momentum", "denominator", "power-top", "power-bottom"]),
     recordSource: inspectionIds("substitute", 1, ["left", "right", "replacement", "power"]),
-    recordTarget: inspectionIds("cancel-mass", 0, ["rule", "norm", "scalar-before"]) },
-  { source: inspectionIds("cancel-mass", 0, ["half", "mass", "rule", "scalar-before"]),
-    target: inspectionIds("cancel-mass", 1, ["rule", "scalar-after"]),
-    recordSource: inspectionIds("cancel-mass", 0, ["half", "mass", "rule", "scalar-before"]),
-    recordTarget: inspectionIds("cancel-mass", 1, ["rule", "scalar-after"]) }
+    recordTarget: inspectionIds("cancel-mass", 0, ["rule", "norm", "factor-retain", "power"]) },
+  { source: inspectionIds("cancel-mass", 0, ["half", "coefficient-one", "two", "mass", "power", "factor-retain"]),
+    target: inspectionIds("cancel-mass", 1, ["two", "factor-retain"]),
+    recordSource: inspectionIds("cancel-mass", 0, ["half", "coefficient-one", "two", "mass", "power", "factor-retain"]),
+    recordTarget: inspectionIds("cancel-mass", 1, ["two", "factor-retain"]) }
 ] as const;
 
 /** Local discovery envelope: orient before the act gate, retain correspondence

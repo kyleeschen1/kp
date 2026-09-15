@@ -23,6 +23,11 @@ export interface EnergyDerivationPlan {
   readonly notation: { readonly result: string; readonly factor: string; readonly numerator: string };
   readonly coefficientGranularity: "fraction" | "factors";
   readonly compactInspection: "atomic" | "refinement";
+  readonly cancellationScore: Readonly<
+    | { kind: "explanatory"; purpose: "expose-factor-cancellation" }
+    | { kind: "fluent"; purpose: "relate-energy-and-momentum";
+        prerequisites: readonly ["nonzero-scalar-cancellation", "unit-exponent-notation"];
+        expansion: "mass-refinement" }>;
   readonly view: DerivationView;
   readonly majorSteps: readonly DerivationStep[];
   readonly moves: readonly EnergyDerivationMove[];
@@ -30,7 +35,7 @@ export interface EnergyDerivationPlan {
 }
 export interface EnergyDerivationMove {
   readonly id: string;
-  readonly operationKind: "substitute" | "scale-magnitude" | "cancel-factor" | "expand-square" | "cancel-pair" | "collect-coefficient";
+  readonly operationKind: "substitute" | "scale-magnitude" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient";
   readonly persist: readonly string[];
   readonly exits: readonly string[];
   readonly entries: readonly string[];
@@ -47,7 +52,10 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
   const roles: Omit<EnergyDerivationMove, "id">[] = [
     { operationKind: "substitute", persist: ["prefix", "half", "mass", "left", "right", "power"], exits: ["velocity"], entries: ["replacement"], split: false },
     { operationKind: "scale-magnitude", persist: ["prefix", "half", "mass", "left", "right", "momentum", "denominator", "rule"], exits: [], entries: [], split: true },
-    ...cancellationRoles(detail)
+    ...(detail === "coarse" ? [{ operationKind: "cancel-unit-power" as const,
+      persist: ["prefix", "norm", "rule", "factor-retain", "two"],
+      exits: ["mass", "power", "half", "coefficient-one"], entries: [], split: false,
+      notice: Object.freeze(["factor-retain", "two"]) }] : cancellationRoles(detail))
   ];
   const view = momentumEnergyDerivationView(model, detail);
   const moves = roles.map((role, i) => Object.freeze({ ...role, id: view.steps[i]!.id,
@@ -55,6 +63,9 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
   const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, moves: Object.freeze(moves), namespace: "energy", artifactId: "physics.energy-derivation", packId: detail === "coarse" ? "project.physics.energy-derivation" : "project.physics.energy-refinement", operationPrefix: "physics.energy",
     title: "Energy in terms of momentum", assumptions: Object.freeze(["m is a positive real scalar; p=m v; Euclidean vectors"]),
     notation: Object.freeze({ result: "K", factor: "m", numerator: String.raw`|\mathbf p|^2` }), coefficientGranularity: "fraction", compactInspection: "atomic",
+    cancellationScore: detail === "coarse" ? Object.freeze({ kind: "fluent", purpose: "relate-energy-and-momentum",
+      prerequisites: Object.freeze(["nonzero-scalar-cancellation", "unit-exponent-notation"] as const), expansion: "mass-refinement" })
+      : Object.freeze({ kind: "explanatory", purpose: "expose-factor-cancellation" }),
     sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: momentumEnergyDerivationSteps });
   issued.add(plan);
   return plan;
@@ -84,6 +95,7 @@ export function createScalarCancellationPlan(model: CheckedScalarCancellation, d
     title: "Why does one denominator factor remain?", assumptions: Object.freeze([`${model.source.factor}>0; ${model.source.numerator} is real`]),
     notation: Object.freeze({ result: model.source.result, factor: model.source.factor, numerator: `${model.source.numerator}^2` }),
     coefficientGranularity: "factors", compactInspection: detail === "coarse" ? "refinement" : "atomic",
+    cancellationScore: Object.freeze({ kind: "explanatory", purpose: "expose-factor-cancellation" }),
     sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: view.majorSteps, moves: Object.freeze(moves) });
   issued.add(plan);
   return plan;

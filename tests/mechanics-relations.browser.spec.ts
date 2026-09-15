@@ -35,6 +35,61 @@ async function ready(page: import("@playwright/test").Page) {
   return root;
 }
 
+test("fluent physics cancellation keeps its carriers, omits identity stops and offers local explanation by default", async ({ page }, info) => {
+  const root = await ready(page), stage = root.locator("[data-derivation-stage]");
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await expect(root).toHaveAttribute("data-derivation-reading", "fluent");
+  await expect(root.locator("[data-refinement-expand]")).toBeVisible();
+  await root.locator('[data-derivation-entry="2"]').click();
+  await expect(root).toHaveAttribute("data-move", "2");
+  const input = root.locator('input[aria-label="Inspect step 3"]');
+  const at = async (algebra: number) => {
+    await seek(input, .32 + .58 * algebra);
+    await expect(root).toHaveAttribute("data-move", "2");
+    await expect(root).not.toHaveAttribute("data-repair", "true");
+    await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  };
+  const owners = stage.locator("[data-kp-equation-material-owner-id]");
+  const carrier = (role: string) => stage.locator(`[data-kp-equation-material-semantic-entity-id$=".${role}"]`);
+  await at(.16);
+  const record = await documentBoxes(root.locator(".energy-derivation-equation"));
+  const retained = await carrier("factor-retain").getAttribute("data-kp-equation-material-owner-id");
+  const coefficient = await carrier("two").getAttribute("data-kp-equation-material-owner-id");
+  const massWidth = (await carrier("mass").boundingBox())!.width;
+  await at(.3);
+  expect((await carrier("mass").boundingBox())!.width).toBeLessThan(massWidth);
+  await root.screenshot({ path: info.outputPath("fluent-withdrawal.png") });
+  for (const p of [.65, .3, .8]) {
+    await at(p);
+    await expect(carrier("factor-retain")).toHaveCount(1);
+    await expect(carrier("two")).toHaveCount(1);
+    await expect(carrier("factor-retain")).toHaveAttribute("data-kp-equation-material-owner-id", retained!);
+    await expect(carrier("two")).toHaveAttribute("data-kp-equation-material-owner-id", coefficient!);
+    for (const role of ["factor-retain", "two", "norm"])
+      expect(await carrier(role).evaluate(el => el.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true }))).toBe(true);
+    await expect(stage.locator('[data-kp-semantic-entity-id$=".identity"]')).toHaveCount(0);
+    expect(await documentBoxes(root.locator(".energy-derivation-equation"))).toEqual(record);
+  }
+  expect(await carrier("power").evaluate(el => el.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true }))).toBe(false);
+  const pose = await owners.evaluateAll(els => els.map(el => (el as HTMLElement).style.cssText));
+  await at(.1); await at(.8);
+  expect(await owners.evaluateAll(els => els.map(el => (el as HTMLElement).style.cssText))).toEqual(pose);
+  await root.screenshot({ path: info.outputPath("fluent-retained-factor.png") });
+  const held = await root.getAttribute("data-progress");
+  await root.locator('[data-derivation-interleave="2"] details:not([data-refinement-static]) summary').click();
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await root.locator("[data-refinement-expand]").click();
+  await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
+  await expect(root.locator("[data-transition-number]")).toHaveText(["1", "2", "3.1", "3.2", "3.3"]);
+  await root.locator("[data-refinement-collapse]").first().click();
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await expect(root).toHaveAttribute("data-derivation-reading", "fluent");
+  await seek(input, 0); await expect(root).toHaveAttribute("data-progress", "0");
+  await seek(input, 1); await expect(root).toHaveAttribute("data-progress", "1");
+  expect(errors).toEqual([]);
+});
+
 test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collapse with exact return", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));

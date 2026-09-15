@@ -42,6 +42,12 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
   const normP = p("norm", notation.numerator);
   const third = [fixed + quotient(normP, p("scalar-before", `${notation.factor}^2`)),
     prefix + quotient(normP, p("scalar-after", `2${notation.factor}`))];
+  // The checked quotient has residual denominator exponent 2-1=1. Its base
+  // survives; only the exponent notation is omitted. Coefficient two has its
+  // own identity rather than being recreated with the denominator.
+  const fluentHalf = p("half", String.raw`\frac{${p("coefficient-one", "1")}}{${p("two", "2")}}`);
+  const fluent = [prefix + fluentHalf + mass + quotient(normP, p("factor-retain", notation.factor) + `^{${power}}`),
+    prefix + quotient(normP, p("two", "2") + p("factor-retain", notation.factor))];
   const factors = p("factor-cancel", notation.factor) + p("times", String.raw`\cdot`) + p("factor-retain", notation.factor);
   const identity = p("identity", String.raw`\cdot1`);
   const fine = [
@@ -49,7 +55,7 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
     [fixed + quotient(normP, factors), prefix + half + identity + quotient(normP, p("factor-retain", notation.factor))],
     [prefix + half + identity + quotient(normP, p("factor-retain", notation.factor)), prefix + quotient(normP, p("two", "2") + p("factor-retain", notation.factor))]
   ];
-  const endpoints = { substitute: first, "scale-magnitude": second, "cancel-factor": third,
+  const endpoints = { substitute: first, "scale-magnitude": second, "cancel-factor": third, "cancel-unit-power": fluent,
     "expand-square": fine[0]!, "cancel-pair": fine[1]!, "collect-coefficient": fine[2]! };
   const specs = plan.moves.map(move => ({ ...move, endpoints: endpoints[move.operationKind] }));
   const builder = createKpAnimationAssetBuilder({ id: `animation.${artifactId}`, title: plan.title });

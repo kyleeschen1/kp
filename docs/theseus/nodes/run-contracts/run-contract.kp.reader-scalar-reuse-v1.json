@@ -2,8 +2,8 @@
   "id": "run-contract.kp.reader-scalar-reuse-v1",
   "kind": "run-contract",
   "title": "Independent scalar reading through shared native reader",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: compound scalar exemplar ready at existing URL. Two packages complete; checkpoint visual judgment remains. Stop before pressure caller, concurrency or automatic rewrite inference.",
+  "status": "resolved",
+  "summary": "Scalar visual checkpoint accepted by user.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -43,8 +43,8 @@
     {
       "id": "scalar.checkpoint",
       "title": "Verify two callers and prepare human visual checkpoint",
-      "summary": "HUMAN_CHECKPOINT: revised scalar composition ready; 64 tests, 27 browsers, full types, architecture and build pass. One written step exposes checked child sequence. Do not complete until visual acceptance.",
-      "status": "in-progress"
+      "summary": "User accepted composed scalar cancellation as beautiful; physics fluent successor is separately approved.",
+      "status": "complete"
     }
   ]
 }

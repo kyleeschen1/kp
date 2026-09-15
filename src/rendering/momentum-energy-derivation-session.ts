@@ -9,6 +9,8 @@ import type { KpNativeKatexPaintMeasuredSceneTrack } from "./native-katex-base-s
 import { easedProgressBetweenSemanticBeat, linearEquationDemoBeatTimeline } from "./semantic-beat-compiler.ts";
 import { createDerivationInspectionComposition } from "../animation/derivation-inspection-composition.ts";
 import { createKpNativeKatexCompoundScenePlan } from "./native-katex-compound-scene-plan.ts";
+import { projectKpNativeKatexInkWithdrawal } from "./native-katex-carrier-preserving-simplification-motion.ts";
+import { sampleKpNativeKatexCarrierPreservingSimplificationOptics } from "./native-katex-carrier-preserving-simplification-profile.ts";
 
 type InspectionFocus = { readonly source: readonly string[]; readonly target: readonly string[]; readonly extent?: "participants" | "equation";
   readonly records?: readonly { readonly root: HTMLElement; readonly entityIds: readonly string[] }[] };
@@ -84,6 +86,18 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
     project({ tracks }) {
       const before = source.atoms.filter(a => move.exits.some(role => a.semanticEntityId === sid(role)));
       const after = target.atoms.filter(a => move.entries.some(role => a.semanticEntityId === tid(role)));
+      if (move.operationKind === "cancel-unit-power") {
+        if (compiled.cancellationScore.kind !== "fluent" || !before.length || after.length)
+          throw new Error("Fluent cancellation requires checked retained carriers and omitted syntax");
+        const removed = new Set(before.map(atom => atom.id));
+        return tracks.map(track => {
+          if (track.sourceAtomId && removed.has(track.sourceAtomId))
+            return projectKpNativeKatexInkWithdrawal(track, `cohort.${move.id}.consumed-syntax`);
+          if (track.lifecycle !== "persist") throw new Error("Unclassified fluent cancellation paint");
+          return Object.freeze({ ...track, sampleProgress: (p: number) =>
+            sampleKpNativeKatexCarrierPreservingSimplificationOptics(p).carrier.transitProgress });
+        });
+      }
       if (!before.length || !after.length) throw new Error("Missing checked substitution/cancellation paint cohort");
       const input = (atoms: typeof before) => atoms.map(a => ({ rect: a.rect,
         pivot: { x: a.rect.left + a.rect.width / 2, y: a.rect.top + a.rect.height / 2 }, role: "successor-source:material-input" }));

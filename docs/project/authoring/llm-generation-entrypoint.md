@@ -71,6 +71,11 @@ the same canonical owners, plus contextual subquestions and static publication.
 
 ## Route The Task Before Generating
 
+For compact versus explanatory algebra, follow
+`../principles/fluent-reasoning.md`: select from teaching purpose and explicit
+prerequisites, retain checked lineage/assumptions and a local finer explanation.
+Fluent is not faster playback or permission to erase a surviving base.
+
 Every new focus card needs a medium-choice justification under
 `../principles/focus-card-medium-choice.md`. Explain what becomes easier to see,
 track or reconstruct than with the simplest static baseline. Use its candidate

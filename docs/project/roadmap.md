@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The scalar composed-cancellation exemplar is visually accepted (“beautiful”).
+The next approved bounded repair is fluent cancellation in the physics reader,
+with its explanatory expansion preserved and the scalar lesson unchanged.
+Policy: `principles/fluent-reasoning.md`; approved scope/checkpoint:
+`threads/2026-09-15-fluent-cancellation.md`. This supersedes the pending scalar
+checkpoint below, not the deferred broader reader horizon.
+
 Expandable cancellation, nested outline and local returns are visually accepted;
 `run-contract.kp.reader-cancellation-refinement-v1` is complete. Keep its current
 opt-in selection and provisional phone status; approval is not a broad rollout.

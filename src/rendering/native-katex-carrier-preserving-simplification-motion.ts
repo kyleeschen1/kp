@@ -1,5 +1,6 @@
 import {
   projectKpNativeKatexSemanticPaintRelations,
+  type KpNativeKatexPaintMeasuredSceneTrack,
   type KpNativeKatexRendererReadyScenePlan,
   type KpNativeKatexSemanticPaintRelation
 } from "./native-katex-base-scene-plan.ts";
@@ -23,6 +24,19 @@ import {
 
 const REMOVED_SYNTAX_COHORT_ID =
   "cohort.carrier-preserving-simplification.removed-syntax";
+
+/** Shared ink withdrawal: only a proof-selected elimination may use this.
+ * The surviving carrier never enters the shrinking cohort. */
+export function projectKpNativeKatexInkWithdrawal(track: KpNativeKatexPaintMeasuredSceneTrack,
+  cohortId: string, profile = kpNativeKatexCarrierPreservingSimplificationOpticalProfile): KpNativeKatexPaintMeasuredSceneTrack {
+  if (track.lifecycle !== "eliminate") throw new Error("Ink withdrawal requires a checked elimination track");
+  const withdrawal = (p: number) => optics(p, profile).removedSyntaxCohort.withdrawalProgress;
+  return Object.freeze({ ...track, endRect: Object.freeze({ ...track.startRect }),
+    endPaintRect: track.startPaintRect, timingGroupId: cohortId,
+    opacityScheduleAuthority: "semantic-choreography" as const, sampleProgress: () => 0,
+    sampleOpacityProgress: (p: number) => Number(withdrawal(p) === 1),
+    sampleMaterialScale: (p: number) => Math.max(Number.EPSILON, 1 - withdrawal(p)) });
+}
 
 export interface KpNativeKatexCarrierPreservingSimplificationMotionPlan {
   readonly kind:
@@ -120,6 +134,7 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
           track.lifecycle === "eliminate"
         ) {
           removedSyntaxTrackIds.push(track.id);
+          if (input.identityInkShrinkReview) return projectKpNativeKatexInkWithdrawal(track, REMOVED_SYNTAX_COHORT_ID, profile);
           return Object.freeze({
             ...track,
             // Removed syntax owns no result paint. The review treatment reuses
@@ -130,14 +145,7 @@ export function compileKpNativeKatexCarrierPreservingSimplificationMotion(
             timingGroupId: REMOVED_SYNTAX_COHORT_ID,
             opacityScheduleAuthority: "semantic-choreography" as const,
             sampleProgress: () => 0,
-            sampleOpacityProgress: (progress: number) =>
-              input.identityInkShrinkReview
-                ? Number(optics(progress, profile).removedSyntaxCohort.withdrawalProgress === 1)
-                : optics(progress, profile).removedSyntaxCohort.withdrawalProgress,
-            ...(input.identityInkShrinkReview ? {
-              sampleMaterialScale: (progress: number) => Math.max(Number.EPSILON,
-                1 - optics(progress, profile).removedSyntaxCohort.withdrawalProgress)
-            } : {})
+            sampleOpacityProgress: (progress: number) => optics(progress, profile).removedSyntaxCohort.withdrawalProgress
           });
         }
         if (track.lifecycle === "persist") {
