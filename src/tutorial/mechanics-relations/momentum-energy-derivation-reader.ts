@@ -8,7 +8,9 @@ import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivatio
 export function enhanceEnergyDerivation(root: HTMLElement) {
   // Internal exemplar comparison, not an additional learner control or policy.
   const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
-  const participantOnly = new URL(location.href).searchParams.get("derivation-motion") !== "equation";
+  const motion = new URL(location.href).searchParams.get("derivation-motion");
+  const contextual = motion === "contextual";
+  const participantOnly = motion !== "equation" && !contextual;
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
@@ -70,7 +72,9 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     const record = sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
     root.dataset["inspectionExtent"] = participantOnly ? "participants" : "equation";
     root.style.setProperty("--derivation-record-participant-opacity", String(1 - .78 * record.inspectionOpacity));
-    stage.style.opacity = String(participantOnly || selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
+    // Context belongs in the working expression too. The opt-in candidate
+    // keeps the whole scene and uses the same continuous handoff on every edge.
+    stage.style.opacity = String(contextual || participantOnly || selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
     root.dataset["inspectionOwner"] = record.kind;
     positionScope(selected + p);
     root.dataset["move"] = String(selected); root.dataset["progress"] = String(p);

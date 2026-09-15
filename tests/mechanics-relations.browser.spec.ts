@@ -110,6 +110,36 @@ test("participant inspection retains stationary context and traces across all th
   await root.screenshot({ path: info.outputPath("whole-equation-comparison.png") });
 });
 
+test("contextual inspection keeps the complete working equation through forward and reverse handoffs", async ({ page }, info) => {
+  await page.goto(route + "?derivation-motion=contextual#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]"), stage = root.locator("[data-derivation-stage]");
+  await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  const records = root.locator(".energy-derivation-equation");
+  const geometry = await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()));
+  for (const position of [.55, 1, 1.55, 2, 2.55, 3, 2.55, 1.55, .55, 0]) {
+    await dragTo(page, root, position);
+    await expect(root).toHaveAttribute("data-inspection-extent", "equation");
+    await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
+    await expect(records).toHaveCount(4);
+    expect(await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()))).toEqual(geometry);
+    const opacity = await stage.evaluate(el => Number(getComputedStyle(el).opacity));
+    expect(opacity).toBe(Number.isInteger(position) ? 0 : 1);
+    if (!Number.isInteger(position)) {
+      const owners = stage.locator("[data-kp-equation-material-owner-id]");
+      expect(await owners.count()).toBeGreaterThan(0);
+      // Visible contextual material, not merely a hidden native source or an
+      // endpoint elsewhere on the page, must accompany the semantic change.
+      const context = owners.filter({ hasNot: stage.locator("[data-derivation-participant]") });
+      expect(await context.evaluateAll(els => els.some(el => !el.hasAttribute("data-derivation-participant") && getComputedStyle(el).visibility !== "hidden"))).toBe(true);
+      expect(await stage.locator("[data-derivation-participant]").count()).toBeGreaterThan(0);
+      await root.screenshot({ path: info.outputPath(`contextual-${position}.png`) });
+    }
+  }
+  await page.emulateMedia({ media: "print" });
+  await expect(stage).toBeHidden();
+  for (const record of await records.all()) await expect(record).toBeVisible();
+});
+
 test("persistent lens follows the expression, holds interiors and rewinds exactly", async ({ page }, info) => {
   const root = await ready(page);
   await expect(root.getByRole("slider")).toHaveCount(1);

@@ -19,6 +19,15 @@ learner-facing product definition.
 
 ## Product Thesis
 
+Accepted September 14 clarification: the persistent reasoning record is the lead
+product hypothesis, with coherent static reading and optional local inspection.
+Semantic authority remains domain-owned. Preserve sufficient context inside the
+inspection representation: the participant-only motion trial lost intelligibility.
+Repair that first, then test provenance/exact return and expandable granularity,
+with behavioral clarification and marginal authoring cost as separate measures.
+See `threads/2026-09-14-persistent-reasoning-record-assessment.md` for qualifications;
+the roadmap and approved contract, not this rationale, own execution order.
+
 Accepted algebra-grounded refinement: compact formal relationships are a medium
 of explanation, not decorative summaries. Let learners traverse a mathematical
 argument rapidly and inspect unfamiliar joints without losing context. Prose

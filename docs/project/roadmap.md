@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Latest accepted priority: retain the persistent reasoning record, but repair
+participant-only motion's loss of explanatory context **first**. Then pursue
+bounded provenance/exact-return and granularity experiments. The away-mode
+amendment at the end of `threads/2026-09-13-relational-reader-delivery-proposal.md`
+was approved on 2026-09-15. Execute `run-contract.kp.relational-reader-away-v1`;
+v2 is explicitly deferred with its incomplete history preserved. Visual candidates
+remain opt-in and their local gates do not block independent approved packages.
+
 Recorded assessment for subsequent planning (not new execution scope):
 `threads/2026-09-14-persistent-reasoning-record-assessment.md` synthesizes the
 persistent-record product hypothesis, qualified acceptance criteria and staged
@@ -36,7 +44,8 @@ with inspectable comparisons, expandable reasoning, exact return, context and
 reconstruction. Canonical decision and medium-term gates:
 `decisions/2026-09-13-relational-reader-priority.md`.
 Current proposal: `threads/2026-09-13-relational-reader-delivery-proposal.md`.
-The user approved its five-package implementation scope. Execute only
+The user approved its five-package implementation scope, now deferred during the
+approved away amendment above. Original control:
 `run-contract.kp.relational-reader-v2`, target `next-action.kp.relational-reader`;
 v1 is issuance-only history. Stop at the r2 and r5 human checkpoints. Follow KP
 delivery policy, not a minimum-slice long-loop quota.

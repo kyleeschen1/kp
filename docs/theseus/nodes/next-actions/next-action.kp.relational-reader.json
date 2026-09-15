@@ -343,11 +343,31 @@
       "status": "passed",
       "scope": "three-move participant experiment: eighteen focused tests and twelve Chromium checks",
       "checkedAt": "2026-09-15T04:30:38.293Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T05:42:30.367Z",
+      "notes": "13 Chromium checks including opt-in contextual forward/reverse docks; no human aesthetic acceptance claimed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-15T05:42:32.010Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T05:42:33.454Z",
+      "notes": "18 tests passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: all three derivation moves now support participant-only inspection; review squared-norm group and separated cancellation factors. Canonical motifs and whole-equation comparison preserved."
+    "summary": "HUMAN_CHECKPOINT: user rejected participant-only motion for loss of context. Restore contextual working expression first. Persistent-record recommendations accepted; four-hour away amendment proposed, awaiting scope/resource and local-gate approval. No execution started."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

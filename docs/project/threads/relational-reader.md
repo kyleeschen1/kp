@@ -5,6 +5,17 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+Latest user finding: participant-only extraction loses necessary explanatory
+context. **First repair: restore an intelligible contextual working expression,
+with semantic participants emphasized rather than isolated.** The three-move
+extraction experiment is not visually accepted or promoted. Preserve its evidence
+and semantic bindings; do not roll back the domain or compositor architecture.
+The qualified persistent-record recommendations are accepted direction. An
+away-mode amendment was approved on 2026-09-15 in the existing delivery proposal.
+Execute `run-contract.kp.relational-reader-away-v1`; v2 is explicitly deferred,
+not completed. Opt-in visual candidates have local review gates; only approved
+independent packages may proceed past them.
+
 Recorded product-hypothesis assessment (not additional execution authority):
 [persistent reasoning record and acceptance ledger](2026-09-14-persistent-reasoning-record-assessment.md).
 Use it when planning the next approved scope: preserve a coherent static record,

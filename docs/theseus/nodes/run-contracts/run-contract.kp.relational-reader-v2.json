@@ -2,8 +2,8 @@
   "id": "run-contract.kp.relational-reader-v2",
   "kind": "run-contract",
   "title": "Momentum-energy relational reader",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at r2 callout and step-handoff repair. Await visual acceptance before later slices.",
+  "status": "deferred",
+  "summary": "User approved four-hour away successor; preserve r1 completion and unaccepted r2, with r3-r5 deferred, not completed.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,9 @@
     "npm run typecheck",
     "npm run build",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "After away review reconcile explicit continuation with preserved r2-r5 scope."
   ],
   "allowedWork": [
     "Approved proposal only; bounded shared-owner repairs; no implementation beyond a pending subjective gate"

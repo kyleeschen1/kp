@@ -12,6 +12,10 @@ fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
 
+An away-mode amendment is proposed at the end of this document. It is not yet
+approved and does not silently relax v2's global r2 checkpoint. The user's latest
+negative finding makes restoring explanatory context the first proposed repair.
+
 ### Accepted callout and handoff repair (2026-09-14)
 
 Bring the popup closer to its equation and remove the reported between-step
@@ -298,3 +302,123 @@ the review packet records their results and the current browser cost. The earlie
 scalar-frontend failure remains historical evidence, not an outstanding scope
 selection. The next stop is human review of this first animation, with r3-r5
 still untouched.
+
+## Proposed away amendment — context, provenance, granularity
+
+Status: approved on 2026-09-15; executing through `run-contract.kp.relational-reader-away-v1`, with v2 explicitly deferred and incomplete history preserved. The user accepted the
+persistent-record recommendations and rejected participant-only motion as
+insufficiently contextual; requesting `kp-delivery-loop away` does not itself
+approve this autonomous portfolio. This section is the single proposal for the
+amendment, not a competing implementation plan.
+
+### Outcome and canonical boundary
+
+Prepare one context-restoring inspection candidate, one independent local
+provenance/return candidate, and a bounded executable granularity investigation.
+The reader should retain the argument's context while inspecting it and be able
+to revisit the premise behind substitution without losing their place. The author
+should learn whether verified refinement can reuse existing operations rather
+than paying for another bespoke animation path.
+
+Canonical artifact: `examples/physics/momentum-energy.article.md` and its current
+four-state derivation. Host: `/experiments/mechanics-relations/` on shared port
+8000. Semantic source: `domains/physics/momentum-energy-derivation.ts`; governed
+authoring: `src/authoring/momentum-energy-derivation-authoring.ts`; renderer:
+`src/rendering/momentum-energy-derivation-session.ts` through the canonical Native
+KaTeX compositor. Existing local clock, native record and semantic IDs remain
+authoritative. No new lesson, mathematical solver or renderer is implicit.
+
+Preserve permanent equations/prose, no-JS and print reading, native endpoint
+ownership, existing algebra motifs, direct seek/reverse, held interiors,
+independent page scroll and current physics figures. Unreviewed visual candidates
+must be opt-in on this host, not changes to default production behavior. Retain
+the whole-expression and extraction comparisons. A later visual acceptance
+controls adoption; no catalogue-wide palette or motif promotion while away.
+
+### Required packages and ranked fallback
+
+| ID | Benefit and allowed outcome | Dependencies, acceptance and verification | Ceiling / rollback / review |
+| --- | --- | --- | --- |
+| away.context | First repair for the reader: restore the complete working expression, or enough explicit surrounding structure to make each existing transformation intelligible. Keep participants strongest, supporting structure readable and permanent records distinct. Implement one recommended opt-in treatment, not an open-ended layout search. | Start first. Reuse existing whole-expression path and semantic cohorts; no new mathematical operation. Verify all three native endpoints, reverse/hold, context paint, layout stability, no-JS/print and narrow smoke captures. Focused discovery plus affected types. Human judgment of intelligibility remains unresolved. | Up to 60 minutes including focused checks. One local presentation/host commit; park at visual review. No dependent visual promotion while away. |
+| away.provenance | Reader can locally recall `p = mv` and the positive-mass assumption behind `v = p/m`, navigate to the earlier explanation, and return to the same logical place. Implement a bounded opt-in local reference/return journey. | Does not depend on choosing away.context aesthetics: use the stable existing reading/clock interface, with separate opt-in entry. Inspect existing reasoning navigation owners before adding a narrow adapter. Snapshot revision, transition ID/progress, disclosures, local focus and relative viewport anchor; pause on departure. Test reflow, return, malformed/stale restoration, keyboard and no unwanted autoplay. No promise of restoration across arbitrary edited revisions. Standard verification. | Up to 90 minutes. Separate navigation/adapter commit. Park its visible presentation for review; deterministic tests can finish unattended. Recheck parked context candidate if shared host files change. |
+| away.granularity | Author gets an executable answer to whether one cancellation can expand into verified finer reasoning with unchanged outer endpoints and assumptions. Investigate existing supported operations, then implement a headless bounded refinement/collapse model and tests only if those owners support it. | Independent of both visual selections. Choose only the current positive-mass simplification; no new mathematical operation pack or generic refinement framework. Validate every substep through existing authority, outer endpoints, references and coarse/fine logical-location mapping. If unsupported, finish with a precise reproducible repair-gap report rather than synthetic animation or claimed delivery. Standard for code, focused for investigation. | Up to 45 minutes. Separate model/tests or diagnosis commit. Visible expansion integration remains deferred; no unsupported animation fallback. |
+| away.closeout | User receives one review packet and resumable evidence; author sees actual added code and browser cost rather than commit counts alone. | Required after work taken. Inspect impact plans, run combined focused/browser checks and full affected types; production build/closure if runtime dependencies change. Record initial/activated dependency changes, timings where measured, engine versus source edits, failures/reruns and remaining gaps. Validate Theseus. | Final 45 minutes reserved. Do not start new implementation in reserve. No global browser certification of an unapproved aesthetic. |
+| reserve.evaluation | If an implementation package is blocked early, prepare a small static-versus-inspected evaluation brief and authoring-cost measurement worksheet using the current argument. Report only; no recruitment, analytics or new UI. | Fallback-only after parking blocked work, behind remaining ready required packages. Specify prerequisites, genuinely confusing steps, reconstruction questions and confounds. | Up to 20 minutes within the same total ceiling. One bounded document; unused reserve is not an obligation. |
+
+Rank reflects evidence: context repairs an observed failure; provenance tests
+the central curiosity/return promise; headless refinement resolves the next
+capability uncertainty without requiring unreviewed layout. Evaluation preparation
+is useful fallback, not a reason to keep working after the required outcomes.
+
+### Away selection and existing-contract amendment
+
+Approval would explicitly authorize parking a review-ready visual package and
+selecting the highest-ranked independent eligible package above. It would not
+approve the visual result or make an unreviewed package a valid dependency.
+Keep shared-file changes serial; rerun the parked exemplar's preservation checks
+after any overlapping change. No subagents or extra worktrees are authorized.
+
+The installed v2 contract stops all work at r2 and has r3 dependent on its visual
+acceptance. Thus approval must also authorize a supported amendment, or a
+successor contract `run-contract.kp.relational-reader-away-v1` linked to this same
+proposal while v2 is explicitly deferred. Preserve r1's completion and r2's
+unaccepted status; r3-r5 are not marked complete, skipped or silently rewritten.
+The new run contains only the package IDs above with local visual gates and
+global safety/authority stops. It is not a second concurrently active run.
+
+After approval, inspect the actual installed schema and use supported Theseus
+commands/actor input to encode limits, scope, slices and stops. Scoped CLI help
+alone previously omitted required control fields. If safe nonterminal parking or
+scope amendment cannot be represented, stop with the exact limitation; never edit
+graph JSON or Theseus itself to force execution. Review-ready visual slices stay
+nonterminal with a pending-decision summary; investigation completion does not
+mean a missing feature was implemented. Theseus owns all live package status.
+
+The old r3 prediction/overview work, r4 second encounter and r5 release are not
+automatically part of this away scope. Nor is the parked mechanics-motion loop.
+After review, reconcile completed away work into the broader run through an
+explicit supported continuation rather than repeating it.
+
+### Resources, preflight and stop rule
+
+Proposed maximum: **four active hours**, including a final **45-minute
+verification/closeout reserve**. Estimates are uncertain and are ceilings, not
+targets. No token budget. Local tool availability/approval may prevent uninterrupted
+work; away mode does not schedule a background job or keep the machine awake.
+
+Preflight at proposal time: worktree was clean on the existing feature branch;
+shared port 8000 returned HTTP 200 with network-capable permission. A sandboxed
+connection attempt failed, so browser/network execution needs the established
+scoped permission. `npm run visual:mechanics-relations` and checked fixtures exist;
+browser launch must be reconfirmed at execution start, not inferred from HTTP.
+Source writes and Git index writes may require existing managed-workspace review.
+Do not request broad interpreter/Git authority. Use exact paths and stable npm
+commands; `verify:impact` selects affected checks before implementation.
+
+Allowed repairs: typed validation, narrow source binding, geometry, lifecycle,
+input and restoration bugs directly blocking these packages, with invariant
+tests. Engineering-budget authority remains bounded to these outcomes. After
+repeated failures or a package ceiling, record diagnosis and park rather than
+expand scope. Broader mathematics, semantic decisions and new product choices
+remain human decisions.
+
+Excluded: new global state/navigation/salience frameworks, new operation packs,
+6–10-state content expansion, code/graph rollout, replacing the rail, automatic
+learner studies, external messages, paid calls, deployment, merge/push, new services,
+agents/worktrees, universal renderer/solver, broad CSS cleanup or coverage quotas.
+
+Done-for-this-away-session means all required packages have either satisfied
+their bounded engineering acceptance or reached an honest resumable blocker or
+human gate, combined verification and a review packet are recorded, and no other
+approved independent required work fits/is eligible. A remaining visual judgment
+means `HUMAN_CHECKPOINT`, not product completion. A ceiling with eligible work left
+means `STOP_CONDITION`. A blocked required feature remains incomplete even if its
+diagnosis is useful. Stop early when the portfolio is exhausted; do not run the
+reserve merely because time remains.
+
+Morning handoff: exact working opt-in URLs, context comparison, one provenance
+journey, granularity capability result, measurements/checks, commit IDs and one
+batched set of decisions. First decision is whether restored context makes the
+existing transformations intelligible; do not ask the user to approve isolated
+fragments again. Scope approved on 2026-09-15; the named away contract owns live
+progress, evidence and remaining gates.

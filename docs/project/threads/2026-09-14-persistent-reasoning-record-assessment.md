@@ -1,10 +1,28 @@
 # Persistent reasoning record: product hypothesis and evaluation brief
 
 Date: 2026-09-14 (local)
-Status: recorded proposal and qualified assessment; not new execution authority
+Status: qualified recommendations accepted; execution requires approved scope
 Source: the user's pasted ChatGPT analysis and concrete acceptance criteria,
 following the three-move participant-inspection experiment (`77b30a788`).
 This document is a synthesis, not a verbatim transcript.
+
+## Subsequent acceptance and first repair
+
+The user accepted these qualified recommendations and requested an away-mode
+delivery proposal. Product direction is now accepted; the larger implementation
+programme remains subject to the reviewed run's scope and approval.
+
+Crucial negative result: the participant-only experiment does **not** provide
+enough context to understand the transformations. Restoring explanatory context
+is the first repair, ahead of provenance and granularity. The smallest moving
+fragment is not necessarily the smallest intelligible explanation. Retain enough
+surrounding structure to interpret the operation; emphasize participants within
+that context instead of assuming the static endpoints compensate for its absence.
+Keep extraction as experimental provenance, not the preferred default or a
+globally promoted rule. This qualifies earlier recommendations in this document.
+
+The proposed away amendment lives in the existing
+`2026-09-13-relational-reader-delivery-proposal.md`; do not create a second plan.
 
 ## Authority and interpretation
 

@@ -1,0 +1,66 @@
+{
+  "id": "run-contract.kp.relational-reader-away-v1",
+  "kind": "run-contract",
+  "title": "Contextual inspection away delivery",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-13-relational-reader-delivery-proposal.md",
+      "summary": "User approved four-hour away amendment; v2 deferred with incomplete history preserved."
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations",
+    "npm run typecheck",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Approved away amendment only. Context first; park unreviewed visuals as planned with pending-decision summary and explicitly select independent packages. Required context, provenance, granularity investigation, closeout. Evaluation fallback only."
+  ],
+  "disallowedWork": [
+    "No visual promotion, new operation packs, universal frameworks, old r3-r5 execution, agents, deployment, merge or push."
+  ],
+  "goal": "Restore contextual inspection; prototype local provenance and exact return; investigate verified granularity",
+  "target": "next-action.kp.relational-reader",
+  "runMode": "run",
+  "maxSlices": 5,
+  "commitCadence": "Verified reversible package with evidence; visual candidates stay opt-in",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Four active hours including final 45-minute closeout reserve. Package ceilings in proposal. Local visual gates block dependent work only; global safety, authority, new scope, user pause and resource ceiling stop run. Human checkpoint when eligible independent portfolio exhausted with visuals pending."
+  ],
+  "slices": [
+    {
+      "id": "away.context",
+      "title": "Contextual-inspection",
+      "summary": "REVIEW_READY: derivation-motion=contextual restores contextual expression and continuous handoff on all edges. Tests pass; human intelligibility decision pending. Independent provenance and headless granularity eligible.",
+      "status": "planned"
+    },
+    {
+      "id": "away.provenance",
+      "title": "Provenance-and-return",
+      "status": "planned"
+    },
+    {
+      "id": "away.granularity",
+      "title": "Verified-refinement-investigation",
+      "status": "planned"
+    },
+    {
+      "id": "reserve.evaluation",
+      "title": "Optional-evaluation-brief",
+      "status": "planned"
+    },
+    {
+      "id": "away.closeout",
+      "title": "Combined-verification-and-handoff",
+      "status": "planned"
+    }
+  ]
+}
