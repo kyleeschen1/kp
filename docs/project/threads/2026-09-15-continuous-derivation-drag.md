@@ -1,5 +1,8 @@
 # Continuous derivation drag repair
 
+Visual acceptance: the user said “perfect” and requested the next step after
+commit `87ab4b036`. The bounded repair is complete.
+
 Approved request: “it's still catching on the edge of substep, then jumps to
 the end. I want smooth sliding all the way” (2026-09-15).
 

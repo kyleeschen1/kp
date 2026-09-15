@@ -31,6 +31,10 @@ export interface EnergyDerivationPlan {
   readonly view: DerivationView;
   readonly majorSteps: readonly DerivationStep[];
   readonly moves: readonly EnergyDerivationMove[];
+  readonly recall?: Readonly<{
+    id: string; passageId: string; premise: string; result: string; assumption: string;
+    transitionId: string; sourceEntityId: string; targetEntityId: string;
+  }>;
   readonly [issuedPlan]: true;
 }
 export interface EnergyDerivationMove {
@@ -66,12 +70,32 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
     cancellationScore: detail === "coarse" ? Object.freeze({ kind: "fluent", purpose: "relate-energy-and-momentum",
       prerequisites: Object.freeze(["nonzero-scalar-cancellation", "unit-exponent-notation"] as const), expansion: "mass-refinement" })
       : Object.freeze({ kind: "explanatory", purpose: "expose-factor-cancellation" }),
-    sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: momentumEnergyDerivationSteps });
+    sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: momentumEnergyDerivationSteps,
+    // This bounded reference is issued from the same checked p=m v authority
+    // as substitution; a matching fragment of display text is not provenance.
+    recall: Object.freeze({ id: "physics.velocity-from-momentum", passageId: "momentum-definition",
+      premise: String.raw`\mathbf p=m\mathbf v`, result: String.raw`\mathbf v=\frac{\mathbf p}{m}`,
+      assumption: String.raw`m>0`, transitionId: "substitute",
+      sourceEntityId: "energy.substitute.0.velocity", targetEntityId: "energy.substitute.1.replacement" }) });
   issued.add(plan);
   return plan;
 }
 export function assertEnergyDerivationPlan(plan: EnergyDerivationPlan) {
   if (!issued.has(plan)) throw new Error("Energy derivation paint requires an original proof-derived plan");
+}
+
+export function resolveDerivationRecallUse(plan: EnergyDerivationPlan, resultId: string, sourceRevision: string) {
+  assertEnergyDerivationPlan(plan);
+  const reference = plan.recall;
+  const move = reference ? plan.moves.findIndex(step => step.id === reference.transitionId) : -1;
+  if (!reference || reference.id !== resultId || plan.sourceRevision !== sourceRevision || move < 0)
+    return { status: "repair-required", code: "derivation.recall.unbound-use" } as const;
+  const operation = plan.moves[move]!;
+  if (operation.operationKind !== "substitute" ||
+      !operation.exits.some(role => `${plan.namespace}.${operation.id}.0.${role}` === reference.sourceEntityId) ||
+      !operation.entries.some(role => `${plan.namespace}.${operation.id}.1.${role}` === reference.targetEntityId))
+    return { status: "repair-required", code: "derivation.recall.invalid-correspondence" } as const;
+  return { status: "ready", move, reference } as const;
 }
 
 /** Separate issuer: scalar input never acquires the physics proof. The renderer

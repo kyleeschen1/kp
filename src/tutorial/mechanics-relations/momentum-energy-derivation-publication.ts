@@ -7,12 +7,31 @@ import { createDerivationInspectionComposition } from "../../animation/derivatio
 
 import { assertEnergyDerivationPlan, createEnergyDerivationPlan, type EnergyDerivationPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
 
+/** The local quote must match the published passage, not just a remembered
+ * formula in the renderer. This is a bounded source check, not a LaTeX prover. */
+export function assertEnergyRecallPassage(markdown: string) {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  if (checked.status !== "checked") throw new Error(checked.code);
+  const reference = createEnergyDerivationPlan(checked.model).recall!;
+  const normalize = (text: string) => text.replaceAll(/\s/g, "").replace(/\.$/, "");
+  const equations = [...markdown.matchAll(/\$\$([\s\S]*?)\$\$/g)].map(match => normalize(match[1]!));
+  if (![reference.premise, reference.result].every(equation => equations.includes(normalize(equation))) ||
+      !markdown.includes(`$${reference.assumption}$`))
+    throw new Error("physics.derivation.recall-source-mismatch: restore the checked definition, result and positive-mass assumption");
+}
+
 export function renderEnergyDerivationPassage(markdown: string, publicationRevision: string) {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
   if (checked.status !== "checked") throw new Error(checked.code);
+  const coarse = createEnergyDerivationPlan(checked.model), reference = coarse.recall!;
   return renderCheckedDerivationPassage(markdown, publicationRevision, {
-    coarse: createEnergyDerivationPlan(checked.model), fine: createEnergyDerivationPlan(checked.model, "mass-refinement")
-  }, `<template data-derivation-recall-template data-provenance-target="momentum-definition"><details data-derivation-recall><summary>Recall the momentum definition</summary>${html(String.raw`From the earlier definition, $\mathbf p=m\mathbf v$. Since $m>0$, we may divide by mass to obtain $\mathbf v=\mathbf p/m$.`)}<a href="#momentum-definition">Visit the original definition</a></details></template>`);
+    coarse, fine: createEnergyDerivationPlan(checked.model, "mass-refinement")
+  }, `<template data-derivation-recall-template data-provenance-target="${reference.passageId}"><details data-derivation-recall><summary>Recall the momentum definition</summary>${html(String.raw`From the earlier definition, $\mathbf p=m\mathbf v$. Since $m>0$, we may divide by mass to obtain $\mathbf v=\mathbf p/m$.`)}<a href="#${reference.passageId}">Visit the original definition</a></details></template>
+  <template data-derivation-use-template data-provenance-target="${reference.passageId}"><details data-derivation-recall><summary>Recall the momentum definition</summary>
+  ${html(`**Earlier:** $${reference.premise}$. With $${reference.assumption}$, dividing by mass gives the result we need:\n\n$$${reference.result}.$$\n\n**Use here:** replace the velocity inside the squared magnitude with the whole quotient $\\mathbf p/m$. The surrounding $\\tfrac12 m$ and the square stay in place. We are changing variables, not changing the energy.`)}
+  <div class="energy-derivation-actions"><button type="button" data-derivation-use-result="${reference.id}">Show this substitution</button></div>
+  <p data-derivation-use-status role="status" hidden></p>
+  <a href="#${reference.passageId}">Visit the original definition</a></details></template>`);
 }
 
 /** A shared static record and progressive enhancement scaffold. Both plans

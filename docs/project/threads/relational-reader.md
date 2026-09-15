@@ -5,6 +5,15 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+The continuous-drag repair is accepted (“perfect”); the user requested the next
+step. Current exemplar: [earlier result → local use](2026-09-15-recall-to-use.md).
+It completes the still-open recall-to-use question in reader.l2 before code
+transfer, not another cancellation or layout redesign. The opt-in candidate
+uses a proof-issued reference and the existing substitution/clock; its contract
+owns the pending visual checkpoint. Earlier pending scalar/drag text below is
+checkpoint history, not a competing queue. Phone promotion and code remain
+outside this bounded run.
+
 Scalar composed cancellation and [fluent physics cancellation](2026-09-15-fluent-cancellation.md)
 are visually accepted. The follow-up drag report exposed control reflow in a
 tight desktop viewport: revealing Restart moved the substep rows. The bounded

@@ -6,7 +6,7 @@ import { describeMomentumEnergyFrame, displayNumber, renderMomentumEnergySvg } f
 import { momentumEnergyAttention } from "./momentum-energy-attention.ts";
 import type { MomentumEnergyRuntimeSource } from "./momentum-energy-runtime-source.ts";
 import type { compileMomentumEnergyPublication } from "./momentum-energy-publication.ts";
-import { renderEnergyDerivationPassage } from "./momentum-energy-derivation-publication.ts";
+import { assertEnergyRecallPassage, renderEnergyDerivationPassage } from "./momentum-energy-derivation-publication.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 
 type Publication = ReturnType<typeof compileMomentumEnergyPublication>;
@@ -18,6 +18,9 @@ const annotation = (id: string, text: string) => renderKpFocusDeckAnnotation({ e
  * Article owns the displayed Markdown; the existing lesson contract owns the
  * addressable motion/attention structure used by reader extensions. */
 export function renderMomentumEnergyReader(publication: Publication) {
+  const origin = publication.article.document.blocks.find(block => block.kind === "passage" && block.id === "momentum-definition");
+  if (!origin || origin.kind !== "passage") throw new Error("Missing momentum definition for the recalled result");
+  assertEnergyRecallPassage(origin.markdown);
   const revision = sha256(JSON.stringify(publication.article.document));
   const blocks: KpLessonBlock[] = [];
   const stages = new Map(publication.article.document.blocks.filter(block => block.kind === "stage").map(block => [block.id, block]));

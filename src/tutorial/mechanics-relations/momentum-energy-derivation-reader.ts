@@ -129,6 +129,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   });
   const ids = [...root.querySelectorAll<HTMLElement>("[data-derivation-template]")].map(el => el.dataset["transitionId"]!);
   const bookmarks = createEnergyInspectionBookmarks(root.dataset["derivationRevision"]!, ids);
+  const publicationRevision = root.dataset["derivationRevision"]!;
   if (initial) {
     if (initial.revision !== root.dataset["derivationRevision"]) throw new Error("Stale energy reader state");
     initial.bookmarks.forEach(position => bookmarks.remember(position.transition, position.progress));
@@ -166,6 +167,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   let session: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
   type PreparedScene = { element: HTMLElement; session: NonNullable<typeof session> };
   let prepared: PreparedScene[] = [];
+  let preparedPlan: EnergyDerivationPlan | undefined;
   let selected = 0, tracing = false, loading = false, generation = 0;
   let sourceTop = 0, rowDistance = 0;
   const scope = get<HTMLElement>("[data-derivation-scope]");
@@ -270,7 +272,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const retire = () => {
     generation++;
     for (const scene of prepared) { scene.session.dispose(); if (scene.element !== stage) scene.element.remove(); }
-    prepared = []; session = undefined; handle.disabled = true;
+    prepared = []; preparedPlan = undefined; session = undefined; handle.disabled = true;
   };
   const activate = (index: number, progress: number) => {
     const scene = prepared[index]!;
@@ -360,6 +362,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       }
       stage.remove();
       prepared = pending.splice(0);
+      preparedPlan = proofPlan;
       activate(index, progress);
     } catch (error) {
       if (token !== generation) return;
@@ -499,6 +502,22 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   if (new URL(location.href).searchParams.get("derivation-provenance") !== "off") {
     bindEnergyDerivationReturn(root, {
       pause,
+      async inspectUse(resultId) {
+        const request = selectionRequest;
+        const { resolveDerivationRecallUse } = await import("../../semantic/momentum-energy-derivation-plan.ts");
+        if (abort.signal.aborted || request !== selectionRequest) return;
+        if (!preparedPlan || loading || seeking || drag || publicationRevision !== root.dataset["derivationRevision"])
+          throw new Error("Derivation reference is not ready in this publication");
+        const use = resolveDerivationRecallUse(preparedPlan, resultId, root.dataset["derivationSourceRevision"]!);
+        if (use.status !== "ready") throw new Error(use.code);
+        // Reference identity chooses the operation; neither a DOM row number
+        // nor matching LaTeX can authorize replay. One existing clock owns it.
+        const selecting = seekTransition({ move: use.move, progress: 0 });
+        const selectedRequest = selectionRequest;
+        await selecting;
+        if (abort.signal.aborted || selectedRequest !== selectionRequest || !session || loading) return;
+        hint.hidden = true; play("forward");
+      },
       async capturePosition() {
         // Finish the latest requested seek before saving a revision-pinned
         // bookmark; never capture a previous edge while its successor prepares.

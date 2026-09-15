@@ -696,6 +696,44 @@ test("contextual inspection keeps the complete working equation through forward 
   for (const record of await records.all()) await expect(record).toBeVisible();
 });
 
+test("recalled result plays only its licensed use and rejects stale references without moving the held state", async ({ page }, info) => {
+  await page.goto(route + "?derivation-recall=use#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]"), recall = root.locator("[data-derivation-recall]");
+  await expect(lens(root)).toBeEnabled();
+  await recall.locator("summary").click();
+  await expect(recall).toContainText("Use here:");
+  await expect(root).toHaveAttribute("data-playing", "false");
+  const button = recall.getByRole("button", { name: "Show this substitution" });
+  await button.click();
+  await expect(root).toHaveAttribute("data-move", "0");
+  await expect(root).toHaveAttribute("data-playing", "true");
+  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeGreaterThan(.1);
+  expect(Number(await root.getAttribute("data-progress"))).toBeLessThan(1);
+  await expect(root).toHaveAttribute("data-progress", "1", { timeout: 7000 });
+  await expect(root).toHaveAttribute("data-playing", "false");
+  await expect(root).toHaveAttribute("data-move", "0");
+  await dragTo(page, root, .55);
+  await root.screenshot({ path: info.outputPath("recall-to-use.png") });
+  const held = await root.getAttribute("data-progress");
+  const link = recall.getByRole("link", { name: "Visit the original definition" });
+  await link.click();
+  await page.getByRole("button", { name: "Return to your derivation" }).click();
+  await expect(link).toBeFocused();
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await expect(recall).toHaveAttribute("open", "");
+  await button.evaluate(el => { (el as HTMLElement).dataset["derivationUseResult"] = "invented"; });
+  await button.click();
+  await expect(recall.locator("[data-derivation-use-status]")).toBeVisible();
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await button.evaluate(el => { (el as HTMLElement).dataset["derivationUseResult"] = "physics.velocity-from-momentum"; });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await button.click();
+  await expect(root).toHaveAttribute("data-progress", "1");
+  await expect(root).toHaveAttribute("data-playing", "false");
+  await page.goto("/experiments/scalar-cancellation/?derivation-recall=use#remaining-factor");
+  await expect(page.locator("[data-derivation-use-result]")).toHaveCount(0);
+});
+
 test("local provenance returns to the same logical position, disclosures and focus after reflow", async ({ page }, info) => {
   await page.goto(route + "?derivation-motion=contextual&derivation-provenance=local#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");

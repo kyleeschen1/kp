@@ -188,7 +188,33 @@ import { loadMomentumEnergyRuntimeSource, momentumEnergyTimeAtProgress } from ".
 import { projectMomentumEnergyAttention } from "../src/tutorial/mechanics-relations/momentum-energy-attention.ts";
 import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMomentumEnergyDerivation } from "../domains/physics/momentum-energy-derivation.ts";
 import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
-import { createEnergyDerivationPlan, assertEnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
+import { createEnergyDerivationPlan, assertEnergyDerivationPlan, resolveDerivationRecallUse } from "../src/semantic/momentum-energy-derivation-plan.ts";
+import { assertEnergyRecallPassage } from "../src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts";
+
+test("earlier result resolves only to its issued substitution and published source", () => {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(checked.status, "checked"); if (checked.status !== "checked") return;
+  for (const detail of ["coarse", "mass-refinement"] as const) {
+    const plan = createEnergyDerivationPlan(checked.model, detail), ref = plan.recall!;
+    const resolved = resolveDerivationRecallUse(plan, ref.id, plan.sourceRevision);
+    assert.equal(resolved.status, "ready"); if (resolved.status !== "ready") continue;
+    assert.equal(plan.moves[resolved.move]!.id, ref.transitionId);
+    const compilation: ReturnType<typeof compileMomentumEnergyDerivation> = compileMomentumEnergyDerivation(checked.model, detail);
+    const records = compilation.moves[resolved.move]!.transformation.correspondenceMap!.records;
+    // Substitution replaces an expression; it does not claim that a velocity
+    // glyph and the recalled quotient are the same persistent paint object.
+    assert.ok(records.some(record => record.sourceSelectorIds.includes(ref.sourceEntityId)));
+    assert.ok(records.some(record => record.targetSelectorIds.includes(ref.targetEntityId)));
+    assert.ok(Object.isFrozen(ref));
+    assert.equal(resolveDerivationRecallUse(plan, "invented-result", plan.sourceRevision).status, "repair-required");
+    assert.equal(resolveDerivationRecallUse(plan, ref.id, "stale").status, "repair-required");
+    assert.throws(() => resolveDerivationRecallUse({ ...plan }, ref.id, plan.sourceRevision));
+    const original = `$$${ref.premise}.$$\n\nSince $${ref.assumption}$, divide by mass:\n\n$$${ref.result}.$$`;
+    assert.doesNotThrow(() => assertEnergyRecallPassage(original));
+    assert.throws(() => assertEnergyRecallPassage(original.replace(ref.result, String.raw`\mathbf v=m\mathbf p`)), /recall-source-mismatch/);
+    assert.throws(() => assertEnergyRecallPassage(original.replace(ref.assumption, "m=0")), /recall-source-mismatch/);
+  }
+});
 import { sampleEnergyDerivationPresentation, sampleSubstitutionPresentation, energyDerivationNavigationTarget, energyDerivationFocus, resolveEnergyDerivationPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import { sampleEnergyDerivationLens, resolveEnergyDerivationLensPosition, resolveEnergyDerivationMeasuredPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 

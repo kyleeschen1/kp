@@ -39,6 +39,14 @@ $$\mathbf p=m\mathbf v.$$
 
 Momentum records directed motion. Two carts at the same velocity have different
 momenta if their masses differ. It is not a force stored inside a cart.
+
+We will reuse this definition in the energy calculation. Since $m>0$, divide
+both sides by mass to isolate velocity:
+
+$$\mathbf v=\frac{\mathbf p}{m}.$$
+
+This is the same relationship solved for a different variable, not another
+physical law. It lets us replace velocity when momentum is the quantity we know.
 :::
 
 **Definition in this model — kinetic energy.** Associate a scalar with motion:

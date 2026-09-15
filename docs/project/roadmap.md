@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The user accepted continuous dragging (“perfect”) and resumed the saved next
+step. Current bounded work is the earlier-result **recall-to-use** exemplar:
+`threads/2026-09-15-recall-to-use.md`, controlled by
+`run-contract.kp.reader-recall-use-v1`. Its opt-in control connects the checked
+velocity result to the existing substitution, preserving the accepted reader.
+Stop for its visual checkpoint before promotion or code transfer. The older
+pending scalar/drag statements below are provenance, not active blockers.
+
 The scalar composed-cancellation exemplar is visually accepted (“beautiful”).
 Fluent cancellation in the physics reader is also visually accepted, with its
 explanatory expansion preserved and the scalar lesson unchanged. The subsequent

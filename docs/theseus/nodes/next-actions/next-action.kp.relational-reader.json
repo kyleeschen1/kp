@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "Continuous drag repair complete; broader reader loops and provisional phone work remain parked pending separately selected scope.",
+  "summary": "Recall-to-use candidate verified; awaiting visual checkpoint before promotion or next code loop.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -37,6 +37,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-15-fluent-cancellation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-recall-to-use.md"
     }
   ],
   "dependsOn": {
@@ -856,6 +860,34 @@
       "scope": "continuous drag final integration",
       "checkedAt": "2026-09-15T22:17:54.470Z",
       "notes": "Clean full run: 30 of 30 Chromium checks pass. Immediate 112-event pointer tracking, scene reuse and width replacement, local return, reverse, semantic accent, native docks, scalar caller and static reading preserved. Earlier failed and interrupted runs documented in the repair record."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "failed",
+      "scope": "recall-to-use candidate",
+      "checkedAt": "2026-09-15T22:39:53.613Z",
+      "notes": "First full run: 30 pass, first readiness assertion timed out at five seconds during concurrent build. Focused initial run also had a screenshot interrupt autoplay; capture moved to a held pose. Clean full rerun in progress; failures not waived."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "recall-to-use candidate",
+      "checkedAt": "2026-09-15T22:39:55.677Z",
+      "notes": "Final 34 tests pass; issued reference, role endpoints, unknown/stale rejection and source-passage mismatch checks. Initial incorrect persistent-correspondence assertion corrected to replacement semantics."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run build:bundle",
+      "status": "passed",
+      "scope": "recall-to-use candidate",
+      "checkedAt": "2026-09-15T22:39:57.092Z",
+      "notes": "Full typecheck and architecture pass; build passes with existing large-chunk warnings. Initial test inference issue repaired with explicit compilation type."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "recall-to-use final candidate",
+      "checkedAt": "2026-09-15T22:41:59.279Z",
+      "notes": "Clean full rerun: 31 of 31 Chromium checks pass, including source-bound use, exact return, held-state rejection, reduced motion, scalar preservation and continuous drag. No browser-family or phone promotion."
     }
   ],
   "progress": {

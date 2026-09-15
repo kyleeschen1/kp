@@ -40,6 +40,7 @@ export interface EnergyReturnPort {
   capturePosition(): Promise<{ transition: string; progress: number }>;
   restorePosition(transition: string, progress: number): Promise<void>;
   remeasure(): void;
+  inspectUse(resultId: string): Promise<void>;
 }
 
 /** Local adapter. Native links still work without enhancement. Keeping
@@ -47,7 +48,8 @@ export interface EnergyReturnPort {
  * makes its same-revision, same-document limit explicit. */
 export function bindEnergyDerivationReturn(root: HTMLElement, port: EnergyReturnPort, signal: AbortSignal) {
   const doc = root.ownerDocument;
-  const template = root.querySelector<HTMLTemplateElement>("[data-derivation-recall-template]");
+  const candidate = new URL(location.href).searchParams.get("derivation-recall") === "use";
+  const template = root.querySelector<HTMLTemplateElement>(candidate ? "[data-derivation-use-template]" : "[data-derivation-recall-template]");
   // A scalar argument need not invent a physics provenance link. If the source
   // declares one, however, missing targets remain an explicit repair.
   if (!template) return;
@@ -70,6 +72,19 @@ export function bindEnergyDerivationReturn(root: HTMLElement, port: EnergyReturn
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
   let frame: EnergyReturnFrame | undefined, busy = false;
   const opts = { signal };
+  const use = recall.querySelector<HTMLButtonElement>("[data-derivation-use-result]");
+  use?.addEventListener("click", async () => {
+    if (busy) return;
+    busy = true; use.disabled = true;
+    const feedback = recall.querySelector<HTMLElement>("[data-derivation-use-status]")!;
+    feedback.hidden = true;
+    try { await port.inspectUse(use.dataset["derivationUseResult"]!); }
+    catch (error) {
+      feedback.hidden = false;
+      feedback.textContent = "This result cannot be linked to the current step. Your held inspection is unchanged.";
+      console.error("Derivation reference repair", error);
+    } finally { busy = false; use.disabled = false; }
+  }, opts);
   const fail = (error: unknown) => {
     notice.hidden = false; notice.textContent = "This return needs repair; your written derivation is unchanged.";
     console.error("Derivation return repair", error);

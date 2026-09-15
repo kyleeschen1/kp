@@ -1,0 +1,38 @@
+{
+  "id": "run-contract.kp.reader-recall-use-v1",
+  "kind": "run-contract",
+  "title": "Earlier result to local use",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review the local recalled result and Show this substitution connection at the recorded opt-in URL.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-recall-to-use.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "One opt-in checked physics reference and existing substitution playback, focused tests, documentation, ninety minutes with twenty-minute reserve"
+  ],
+  "disallowedWork": [
+    "No new renderer, clock, motion, universal graph, code or phone promotion; stop at visual review"
+  ],
+  "goal": "Inspect the recalled velocity result being used in the existing energy substitution",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "recall.use",
+      "title": "Recall-to-use-exemplar",
+      "summary": "Implementation and checks complete; HUMAN_CHECKPOINT pending review of the opt-in earlier-result-to-use connection. No default promotion.",
+      "status": "in-progress"
+    }
+  ]
+}
