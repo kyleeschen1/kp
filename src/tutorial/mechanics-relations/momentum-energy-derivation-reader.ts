@@ -30,10 +30,11 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement) {
   const bind = () => {
     const staticDetail = root.querySelector<HTMLElement>("[data-refinement-static]");
     if (staticDetail) staticDetail.hidden = true;
-    const button = root.querySelector<HTMLButtonElement>(saved ? "[data-refinement-collapse]" : "[data-refinement-expand]");
-    if (!button || !enabled || !expanded) return;
-    button.hidden = false;
-    button.addEventListener("click", async () => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>(saved ? "[data-refinement-collapse]" : "[data-refinement-expand]");
+    if (!buttons.length || !enabled || !expanded) return;
+    // Header and child affordances enter one transition, never independent
+    // collapse states. The busy guard also covers overlapping activations.
+    const toggle = async () => {
       if (busy) return;
       busy = true;
       try {
@@ -70,7 +71,8 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement) {
         status.hidden = false; status.textContent = "This detail needs repair; the written reasoning remains available.";
         console.error("Energy refinement repair", error);
       } finally { busy = false; }
-    });
+    };
+    buttons.forEach(button => { button.hidden = false; button.addEventListener("click", toggle); });
   };
   bind();
 }
@@ -112,7 +114,10 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
   const localControls = localAccess ? interleaves.map((passage, i) => {
     const controls = document.createElement("div");
     controls.className = "energy-derivation-local-access";
-    controls.innerHTML = `<div class="energy-derivation-actions"><button type="button" data-derivation-entry="${i}" aria-pressed="false">Inspect step ${labels[i]}</button><button type="button" data-derivation-restart hidden>Restart</button></div>
+    const parent = passage.dataset["parentStep"];
+    if (parent !== undefined && !/^[1-9]\d*$/.test(parent)) throw new Error("Invalid published parent step");
+    const backToParent = parent ? `<button type="button" data-refinement-collapse data-refinement-local-return hidden><span aria-hidden="true">↑ </span>Back to step ${parent}</button>` : "";
+    controls.innerHTML = `<div class="energy-derivation-actions"><button type="button" data-derivation-entry="${i}" aria-pressed="false">Inspect step ${labels[i]}</button>${backToParent}<button type="button" data-derivation-restart hidden>Restart</button></div>
       <div class="energy-derivation-mobile-well" hidden><small>Inspection · step ${labels[i]}</small><div data-derivation-mobile-slot></div><input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect step ${labels[i]}"><div class="energy-derivation-actions"><button type="button" data-local-back>Back</button><button type="button" data-local-forward>Forward</button><button type="button" data-local-close>Done</button></div></div>`;
     const context = passage.querySelector("[data-nested-context]");
     if (context) context.after(controls); else passage.prepend(controls);

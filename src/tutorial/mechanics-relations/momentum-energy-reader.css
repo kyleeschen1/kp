@@ -108,6 +108,7 @@
 }
 @media (max-width: 520px) { .physics-reader { padding: 1rem .85rem 3rem; } .physics-reader nav { margin-bottom: 2rem; } }
 .energy-derivation-local-access { margin-bottom: .3rem; font-size: .9rem; }
+.energy-derivation-local-access .energy-derivation-actions { flex-wrap: wrap; }
 .energy-derivation-local-access [aria-pressed="true"] { color: #986417; text-decoration: underline; text-underline-offset: .2em; }
 .energy-derivation-mobile-well { border-block: 1px solid #c9c9c9; padding: .5rem 0; margin-block: .5rem; }
 .energy-derivation-mobile-well small { color: #52616d; }

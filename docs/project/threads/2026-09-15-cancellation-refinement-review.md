@@ -10,6 +10,24 @@ now label transitions rather than equation rows.
 
 ## Accepted outline direction and repaired checkpoint
 
+Approved local-return follow-up: each substep now offers “↑ Back to step 3”
+beside Inspect, always visible on the desktop local-control surface. It shares
+the parent “Collapse step 3” handler, restores the entire compact refinement and
+its saved progress/disclosures, and returns focus to “Inspect smaller steps.”
+Return uses instant position restoration, not animated travel up the document.
+The bracket is not clickable and individual substeps cannot be partly collapsed.
+Parent labels come from the existing checked outline projection; no new motion,
+semantic operation, global state, dependency, or renderer is introduced. Local
+action rows may wrap instead of overflowing. Phone approval remains provisional.
+
+The local-return check visits all three children and exercises keyboard return
+from the last child, asserting saved progress, one compact record, focused and
+in-viewport expansion control, and removal of the child affordances. Together
+with prior expansion/failure/static/local-entry checks, all five Chromium tests
+pass using `npm run visual:mechanics-relations -- --grep 'every substep|expandable cancellation|unavailable refinement|source-owned static|local entry'`.
+The 24 unit checks pass; Theseus records full type checking. Review placement at
+the same URL. The earlier four-test outline evidence below is retained provenance.
+
 The user found the finer explanation clear and approved stable outline numbering:
 **opening detail changes depth, not your place in the argument**. Major steps
 remain 1, 2, 3; cancellation's child transitions are 3.1, 3.2, 3.3. A parent

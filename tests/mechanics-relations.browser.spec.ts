@@ -69,7 +69,7 @@ test("expandable cancellation uses canonical fine steps and restores the compact
     await expect(root).toHaveAttribute("data-playing", "false");
     if (position === 3.55) await root.screenshot({ path: info.outputPath("expanded-cancellation.png") });
   }
-  await root.locator("[data-refinement-collapse]").click();
+  await root.getByRole("button", { name: "Collapse step 3", exact: true }).click();
   await expect(root).toHaveAttribute("data-derivation-detail", "coarse");
   await expect(root).toHaveAttribute("data-move", "2");
   await expect(root).toHaveAttribute("data-progress", held!);
@@ -100,6 +100,36 @@ test("unavailable refinement restores the checked compact inspection without a s
   await expect(root).toHaveAttribute("data-progress", held!);
   await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
   await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+});
+
+test("every substep returns through the whole-refinement collapse with saved progress and focus", async ({ page }, info) => {
+  await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await root.locator('[data-derivation-entry="2"]').click();
+  await dragTo(page, root, 2.55);
+  const held = await root.getAttribute("data-progress");
+  for (const index of [2, 3, 4]) {
+    await root.locator("[data-refinement-expand]").click();
+    await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
+    await expect(root.locator("[data-refinement-local-return]")).toHaveCount(3);
+    const passage = root.locator(`[data-derivation-interleave="${index}"]`);
+    const back = passage.getByRole("button", { name: "Back to step 3", exact: true });
+    await expect(back).toBeVisible();
+    await passage.locator("[data-derivation-entry]").click();
+    await expect(root).toHaveAttribute("data-move", String(index));
+    if (index === 4) {
+      await passage.screenshot({ path: info.outputPath("local-collapse-affordance.png") });
+      await back.focus(); await page.keyboard.press("Enter");
+    } else await back.click();
+    await expect(root).toHaveAttribute("data-derivation-detail", "coarse");
+    await expect(root).toHaveAttribute("data-progress", held!);
+    await expect(root).toHaveAttribute("data-move", "2");
+    await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
+    await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+    await expect(root.locator("[data-refinement-expand]")).toBeInViewport();
+    await expect(root.locator("[data-refinement-local-return]")).toHaveCount(0);
+  }
 });
 
 test("local entry preserves edge identity and bookmarks without scrolling or autoplay", async ({ page }, info) => {

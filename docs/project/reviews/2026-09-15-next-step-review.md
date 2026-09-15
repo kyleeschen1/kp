@@ -4,6 +4,13 @@
 
 ### Approved checkpoint repair: stable outline numbering
 
+Approved follow-up: add “↑ Back to step 3” beside each child Inspect control,
+using the same whole-refinement collapse handler as the parent control. Preserve
+saved compact progress/disclosures and return focus to its expansion control,
+without animated page travel. Keep the parent control; no clickable bracket or
+partially collapsed child states. This is a small reversible UI checkpoint repair
+within the existing scope and ceiling, not a new loop or motion change.
+
 The user found the finer cancellation clear and approved the recommended nested
 outline repair. Within `r2.checkpoint`, label transitions rather than equation
 states: preserve major labels 1–3, and project the existing child-operation

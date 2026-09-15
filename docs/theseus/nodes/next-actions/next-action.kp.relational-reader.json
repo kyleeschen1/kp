@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: stable outline and nesting repair ready at derivation-detail=expandable. Do not start later loops or promote phone.",
+  "summary": "HUMAN_CHECKPOINT: review local child return affordances at the expandable cancellation URL; no later-loop or phone promotion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -592,11 +592,32 @@
       "scope": "outline-repair",
       "checkedAt": "2026-09-15T17:41:40.336Z",
       "notes": "Entire four-check Chromium cohort passes after initial confirmed dev-server connection reset. Stable labels, parent caption, nesting, accessible selected-edge source, reverse/collapse, failure recovery and no-JS/print detail checked. Visual hierarchy remains at human checkpoint."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "local-collapse",
+      "checkedAt": "2026-09-15T17:52:10.783Z",
+      "notes": "24 unit checks pass; semantic and outline authority unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "local-collapse",
+      "checkedAt": "2026-09-15T17:52:12.076Z",
+      "notes": "Full app, node, tests, Svelte and domain types pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'every substep|expandable cancellation|unavailable refinement|source-owned static|local entry'",
+      "status": "passed",
+      "scope": "local-collapse",
+      "checkedAt": "2026-09-15T17:52:13.155Z",
+      "notes": "Five Chromium checks pass. Return exercised from every child, keyboard from final child, saved compact progress and focus/in-viewport expansion control preserved. Parent collapse, failed refinement, static reading and local access preserved. Capture inspected; placement awaits human judgment."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Finer explanation clear to user; requested outline repair implemented and verified. Stable parent/child labels and explicit scope preserve motion and exact return. Hierarchy visual checkpoint remains; phone provisional."
+    "summary": "Stable outline plus local whole-refinement return implemented; 24 units, five browser checks and full types pass. Review placement; phone and later loops remain provisional or unapproved."
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation.",
