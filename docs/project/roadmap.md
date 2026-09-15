@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Recorded assessment for subsequent planning (not new execution scope):
+`threads/2026-09-14-persistent-reasoning-record-assessment.md` synthesizes the
+persistent-record product hypothesis, qualified acceptance criteria and staged
+provenance/granularity experiments. The active contract and visual checkpoint
+below remain controlling; this does not authorize a new long loop.
+
 Accepted priority (2026-09-13): a relational technical reader—excellent prose
 with inspectable comparisons, expandable reasoning, exact return, context and
 reconstruction. Canonical decision and medium-term gates:

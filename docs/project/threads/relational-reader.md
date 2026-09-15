@@ -5,6 +5,14 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+Recorded product-hypothesis assessment (not additional execution authority):
+[persistent reasoning record and acceptance ledger](2026-09-14-persistent-reasoning-record-assessment.md).
+Use it when planning the next approved scope: preserve a coherent static record,
+separate document geometry from inspection motion, test granularity/provenance
+and exact return, and measure spontaneous clarification plus authoring cost.
+Its 6–10-state heterogeneous prototype is a staged recommendation, not an
+approved replacement run. The current three-move visual checkpoint remains open.
+
 Read the accepted [priority and medium-term gates](../decisions/2026-09-13-relational-reader-priority.md).
 The [assessment](../reviews/2026-09-13-next-step-review.md) supplies code evidence
 and rationale; the [handoff](../inbox/kinetic_press_relational_learning_codex_handoff.md)
