@@ -318,6 +318,58 @@ test("expanded handle crosses both fine-step boundaries in one held drag without
   }
 });
 
+test("expanded drag follows every pointer sample across boundaries without waiting for a new scene", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
+  const root = await ready(page);
+  await root.locator("[data-refinement-expand]").click();
+  await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
+  await expect(root).toHaveAttribute("data-move", "2");
+  await lens(root).scrollIntoViewIfNeeded();
+  const centers = await root.locator(".energy-derivation-equation").evaluateAll(els => els.map(el => {
+    const box = el.getBoundingClientRect(); return box.top + box.height / 2;
+  }));
+  const handle = (await lens(root).boundingBox())!, x = handle.x + handle.width / 2;
+  const preparedScenes = await root.evaluateHandle(el => [...el.querySelectorAll(".energy-derivation-stage")]);
+  expect(await preparedScenes.evaluate(scenes => scenes.length)).toBe(5);
+  // Observe after the handle's event handler, before asynchronous preparation
+  // could conceal a missed input. Eventual endpoint assertions miss the catch.
+  await root.evaluate(element => {
+    const errors: number[] = [];
+    element.addEventListener("pointermove", event => {
+      if (!(event instanceof PointerEvent) || element.getAttribute("data-derivation-dragging") !== "true") return;
+      const box = element.querySelector("[data-derivation-handle]")!.getBoundingClientRect();
+      errors.push(Math.abs(box.top + box.height / 2 - event.clientY));
+      element.setAttribute("data-test-pointer-errors", JSON.stringify(errors));
+    });
+  });
+  await page.mouse.move(x, handle.y + handle.height / 2); await page.mouse.down();
+  try {
+    for (const [from, to] of [[2, 4.8], [4.8, 2.2]] as const) {
+      for (let i = 1; i <= 56; i++) {
+        const position = from + (to - from) * i / 56, move = Math.floor(position);
+        const y = centers[move]! + (centers[move + 1]! - centers[move]!) * (position - move);
+        expect(y).toBeGreaterThan(0); expect(y).toBeLessThan(1800);
+        await page.mouse.move(x, y);
+      }
+    }
+  } finally { await page.mouse.up(); }
+  const errors = JSON.parse((await root.getAttribute("data-test-pointer-errors"))!) as number[];
+  expect(errors.length).toBeGreaterThan(100);
+  expect(Math.max(...errors), "handle must track each input, not catch up after a boundary").toBeLessThan(1.5);
+  await expect(root).toHaveAttribute("data-playing", "false");
+  await expect.poll(async () => Number(await root.getAttribute("data-derivation-progress"))).toBeCloseTo(2.2, 3);
+  expect(await preparedScenes.evaluate(scenes => scenes.every(scene => scene.isConnected))).toBe(true);
+  await expect(root.locator(".energy-derivation-stage")).toHaveCount(5);
+  const preparedWidth = (await root.boundingBox())!.width;
+  await page.setViewportSize({ width: 521, height: 1800 });
+  expect((await root.boundingBox())!.width).toBeLessThan(preparedWidth);
+  await expect.poll(() => preparedScenes.evaluate(scenes => scenes.every(scene => !scene.isConnected))).toBe(true);
+  await expect(lens(root)).toBeEnabled();
+  await expect(root.locator(".energy-derivation-stage")).toHaveCount(5);
+  await expect.poll(async () => Number(await root.getAttribute("data-derivation-progress"))).toBeCloseTo(2.2, 3);
+  await preparedScenes.dispose();
+});
+
 test("unavailable refinement restores the checked compact inspection without a substitute animation", async ({ page }) => {
   await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]");
@@ -794,7 +846,7 @@ test("fast cross-edge dragging keeps the latest sample and cancels without autop
   await expect(root).toHaveAttribute("data-playing", "false");
   for (const position of [1.02, 2.02, 3, 0]) {
     await dragTo(page, root, position);
-    await expect(lens(root)).toHaveAttribute("aria-valuenow", String(Math.round(position)));
+    await expect.poll(async () => Number(await lens(root).getAttribute("aria-valuenow"))).toBeCloseTo(position, 2);
   }
   await root.screenshot({ path: info.outputPath("lens-source.png") });
   expect(errors).toEqual([]);

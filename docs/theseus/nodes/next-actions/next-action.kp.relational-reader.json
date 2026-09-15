@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "Fluent exemplar accepted and bounded drag-layout repair complete. Await remaining drag clarification or separately approved next scope; later loops remain parked and viewport-edge autoscroll is not implemented.",
+  "summary": "Continuous drag repair complete; broader reader loops and provisional phone work remain parked pending separately selected scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -828,6 +828,34 @@
       "scope": "expanded drag layout repair",
       "checkedAt": "2026-09-15T21:48:36.665Z",
       "notes": "All application, node, test, Svelte and domain projects pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "failed",
+      "scope": "continuous drag integration",
+      "checkedAt": "2026-09-15T22:10:06.738Z",
+      "notes": "Initial per-event regression exposed 44px stale expansion geometry; first full run exposed endpoint rounding and obsolete plateau expectation, repaired. Subsequent full run exposed a local-entry reset during resize; repair and clean full rerun still required."
+    },
+    {
+      "command": "npm run typecheck; npm run typecheck:tests; node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts; npm run check:architecture; npm run build:bundle",
+      "status": "passed",
+      "scope": "continuous drag types, laws, architecture and production build",
+      "checkedAt": "2026-09-15T22:16:01.415Z",
+      "notes": "Full types and refreshed test types pass; 33 focused tests pass; architecture passes; production build passes with existing large-chunk warnings. Final reader browser run tracked separately."
+    },
+    {
+      "command": "npm run measure:mechanics-relations-closure -- physics; npm run measure:mechanics-relations-closure -- scalar",
+      "status": "passed",
+      "scope": "production JS and CSS closure",
+      "checkedAt": "2026-09-15T22:17:11.333Z",
+      "notes": "Physics gzip initial 36191 and all reachable 147363 bytes; scalar 33245 and 145200. Versus fluent baseline +156 and +154 bytes respectively. Excludes fonts/images and runtime memory; up to five ready scenes retained per current checked view, no long-document performance claim."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "continuous drag final integration",
+      "checkedAt": "2026-09-15T22:17:54.470Z",
+      "notes": "Clean full run: 30 of 30 Chromium checks pass. Immediate 112-event pointer tracking, scene reuse and width replacement, local return, reverse, semantic accent, native docks, scalar caller and static reading preserved. Earlier failed and interrupted runs documented in the repair record."
     }
   ],
   "progress": {

@@ -1,0 +1,37 @@
+{
+  "id": "run-contract.kp.reader-continuous-drag-v1",
+  "kind": "run-contract",
+  "title": "Continuous derivation dragging",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-continuous-derivation-drag.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations"
+  ],
+  "allowedWork": [
+    "Shared bounded reader scene preparation, continuous input mapping, deterministic regressions and evidence; ninety minutes including twenty minute reserve"
+  ],
+  "disallowedWork": [
+    "No new semantic authority, renderer, clock, motif, catalogue rollout, auto-scroll, or later loops"
+  ],
+  "goal": "Every pointer sample crosses ready substeps without stalls or endpoint jumps",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "continuous.scrub",
+      "title": "Continuous-drag-repair",
+      "summary": "Continuous forward/reverse pointer tracking and scene reuse verified; types, architecture, build and closure pass. Accepted motifs preserved; no later scope resumed.",
+      "status": "complete"
+    }
+  ]
+}

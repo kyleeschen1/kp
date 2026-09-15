@@ -99,15 +99,12 @@ export function sampleEnergyDerivationLens(progress: number): EnergyDerivationPr
   return { ...frame, carry: progress };
 }
 
-/** Small endpoint plateaus make complete lines easy to hold without snapping
- * an arbitrary intermediate release. The mapping is continuous and reversible. */
+/** Direct manipulation tracks distance without endpoint dead zones. Explicit
+ * navigation reaches exact endpoints without making dragging sticky. */
 export function resolveEnergyDerivationLensPosition(position: number, total: number = energyDerivationFocus.length) {
   if (!Number.isInteger(total) || total < 1) throw new RangeError("Invalid transition count");
   if (!Number.isFinite(position)) throw new RangeError("Invalid lens position");
-  const bounded = Math.max(0, Math.min(total, position));
-  const line = Math.floor(bounded), fraction = bounded - line;
-  const restingZone = .055;
-  return line + Math.max(0, Math.min(1, (fraction - restingZone) / (1 - 2 * restingZone)));
+  return Math.max(0, Math.min(total, position));
 }
 
 /** Equation positions are measured by the host. Prose may enlarge one interval
@@ -116,6 +113,10 @@ export function resolveEnergyDerivationMeasuredPosition(y: number, centers: read
   if (!Number.isFinite(y) || centers.length < 2 ||
       centers.some((value, i) => !Number.isFinite(value) || (i > 0 && value <= centers[i - 1]!)))
     throw new RangeError("Invalid derivation geometry");
+  // Resolve subpixel pointer/layout rounding to native endpoints. Unlike a
+  // proportional resting zone, this never grows with a long prose interval.
+  const endpoint = centers.findIndex(center => Math.abs(y - center) <= .5);
+  if (endpoint >= 0) return endpoint;
   if (y <= centers[0]!) return 0;
   for (let i = 0; i < centers.length - 1; i++) {
     if (y <= centers[i + 1]!) return resolveEnergyDerivationLensPosition(i + (y - centers[i]!) / (centers[i + 1]! - centers[i]!), centers.length - 1);

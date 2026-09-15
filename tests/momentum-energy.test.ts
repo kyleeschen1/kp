@@ -198,10 +198,15 @@ test("interleaved prose changes spatial intervals without changing semantic chec
   for (let i = 0; i < 3; i++) assert.equal(resolveEnergyDerivationMeasuredPosition((centers[i]! + centers[i + 1]!) / 2, centers), i + .5);
   assert.equal(resolveEnergyDerivationMeasuredPosition(-100, centers), 0);
   assert.equal(resolveEnergyDerivationMeasuredPosition(1000, centers), 3);
+  for (const distance of [100, 10000]) {
+    assert.equal(resolveEnergyDerivationMeasuredPosition(distance + .4, [0, distance, 2 * distance]), 1);
+    assert.ok(resolveEnergyDerivationMeasuredPosition(distance + 1, [0, distance, 2 * distance]) > 1);
+    assert.ok(resolveEnergyDerivationMeasuredPosition(distance - 1, [0, distance, 2 * distance]) < 1);
+  }
   assert.throws(() => resolveEnergyDerivationMeasuredPosition(10, [0, 0, 10, 20]));
 });
 
-test("lens position is continuous, reversible and rests only near complete lines", () => {
+test("lens position follows direct input continuously without boundary dead zones", () => {
   let previous = 0;
   for (let i = 0; i <= 300; i++) {
     const raw = i / 100, position = resolveEnergyDerivationLensPosition(raw);
@@ -214,7 +219,7 @@ test("lens position is continuous, reversible and rests only near complete lines
     previous = position;
   }
   for (const line of [0, 1, 2, 3]) {
-    for (const delta of [-.04, 0, .04]) assert.equal(resolveEnergyDerivationLensPosition(line + delta), line);
+    for (const delta of [-.04, 0, .04]) assert.equal(resolveEnergyDerivationLensPosition(line + delta), Math.max(0, Math.min(3, line + delta)));
   }
   for (const value of [.3, .5, .7]) assert.ok(resolveEnergyDerivationLensPosition(value) > 0 && resolveEnergyDerivationLensPosition(value) < 1);
   assert.equal(sampleEnergyDerivationLens(0).algebra, 0);

@@ -164,6 +164,8 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const abort = new AbortController(), opts = { signal: abort.signal };
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let session: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
+  type PreparedScene = { element: HTMLElement; session: NonNullable<typeof session> };
+  let prepared: PreparedScene[] = [];
   let selected = 0, tracing = false, loading = false, generation = 0;
   let sourceTop = 0, rowDistance = 0;
   const scope = get<HTMLElement>("[data-derivation-scope]");
@@ -194,8 +196,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     }
   };
   const measureRows = () => {
-    equationHeights = equationSlots.map(slot => slot.offsetHeight);
-    centers = rows.map((row, i) => row.offsetTop + equationHeights[i]! / 2);
+    const origin = get(".energy-derivation-chain").getBoundingClientRect().top;
+    const boxes = equationSlots.map(slot => slot.getBoundingClientRect());
+    equationHeights = boxes.map(box => box.height);
+    centers = boxes.map(box => box.top - origin + box.height / 2);
     sourceTop = rows[selected]!.offsetTop;
     rowDistance = rows[selected + 1]!.offsetTop - sourceTop;
     rail.style.top = `${centers[0]}px`;
@@ -263,7 +267,23 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     });
   };
   clock.subscribe(project);
-  const retire = () => { generation++; session?.dispose(); session = undefined; };
+  const retire = () => {
+    generation++;
+    for (const scene of prepared) { scene.session.dispose(); if (scene.element !== stage) scene.element.remove(); }
+    prepared = []; session = undefined; handle.disabled = true;
+  };
+  const activate = (index: number, progress: number) => {
+    const scene = prepared[index]!;
+    stage.hidden = true; stage.removeAttribute("data-derivation-stage");
+    stage = scene.element; session = scene.session;
+    stage.hidden = false; stage.setAttribute("data-derivation-stage", "");
+    root.querySelectorAll<HTMLElement>("[data-derivation-record-participant]").forEach(element => { delete element.dataset["derivationRecordParticipant"]; });
+    session.activateRecords(); selected = index;
+    syncLocalLayout(); measureRows();
+    loading = false; status.hidden = true; handle.disabled = false;
+    transport.hidden = false; scope.hidden = false;
+    clock.seek(progress); project();
+  };
   const read = () => {
     selectionRequest++; drag = undefined; journey = undefined; pendingSeek = undefined;
     clock.pause(); retire(); tracing = false; loading = false;
@@ -274,12 +294,16 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     scope.hidden = true;
   };
   async function mount(index: number, progress: number) {
+    // Every scene in this bounded checked view is ready before direct input.
+    // Crossing an edge must not await fonts, compilation, or native measurement.
+    if (prepared.length === total) { activate(index, progress); return; }
     clock.pause(); const token = ++generation; loading = true; project();
     // Keep the current paint and layout while fonts/measurement prepare the
     // successor. A visible stage reset to row zero is not an animation phase.
     status.hidden = tracing; status.textContent = "Preparing this move…";
     let candidate: HTMLElement | undefined;
     let created: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
+    const pending: PreparedScene[] = [];
     try {
       const [{ mountMomentumEnergyDerivationSession }, proofPlan] = await Promise.all([
         import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail)
@@ -290,60 +314,53 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       tracing = true;
       root.dataset["tracing"] = "true";
       rows.forEach(row => { row.hidden = false; });
-      const template = get<HTMLTemplateElement>(`[data-derivation-template="${index}"]`);
-      candidate = stage.cloneNode(false) as HTMLElement;
-      candidate.removeAttribute("data-derivation-stage");
-      candidate.setAttribute("data-derivation-preparing", "");
-      candidate.setAttribute("aria-hidden", "true");
-      candidate.replaceChildren(template.content.cloneNode(true)); candidate.hidden = false;
-      candidate.style.opacity = "0"; candidate.style.top = "0px"; candidate.style.transform = "none";
-      stage.parentElement!.append(candidate);
-      const nextSourceTop = rows[index]!.offsetTop;
-      const nextRowDistance = rows[index + 1]!.offsetTop - nextSourceTop;
-      const target = candidate.querySelector<HTMLElement>("[data-derivation-target]")!;
-      target.style.top = "0px";
+      const refinement = proofPlan.compactInspection === "refinement" ? await binding.loadPlan("mass-refinement") : undefined;
       await document.fonts.ready;
       if (token !== generation) return;
-      // Center the invariant semantic prefix, not each expression's changing
-      // fraction/strut envelope. History and both endpoints use the same native
-      // markup and measured anchor; no glyph-specific pixel correction.
-      const equations = [...rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!),
-        ...candidate.querySelectorAll<HTMLElement>(".energy-derivation-endpoint")];
-      for (const equation of equations) {
-        const paint = equation.querySelector<HTMLElement>(".katex-display")!;
-        paint.style.transform = "none";
-        const prefix = equation.querySelector<HTMLElement>('[data-kp-semantic-entity-id$=".prefix"]');
-        if (!prefix) throw new Error("Derivation baseline requires its invariant semantic prefix");
-        const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
-        paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
+      for (let sceneIndex = 0; sceneIndex < total; sceneIndex++) {
+        const template = get<HTMLTemplateElement>(`[data-derivation-template="${sceneIndex}"]`);
+        candidate = stage.cloneNode(false) as HTMLElement;
+        candidate.removeAttribute("data-derivation-stage");
+        candidate.setAttribute("data-derivation-preparing", "");
+        candidate.setAttribute("aria-hidden", "true");
+        candidate.replaceChildren(template.content.cloneNode(true)); candidate.hidden = false;
+        candidate.style.opacity = "0"; candidate.style.top = "0px"; candidate.style.transform = "none";
+        stage.parentElement!.append(candidate);
+        const target = candidate.querySelector<HTMLElement>("[data-derivation-target]")!;
+        target.style.top = "0px";
+        await document.fonts.ready;
+        if (token !== generation) return;
+        // Center the invariant semantic prefix, not each expression's changing
+        // fraction/strut envelope. History and both endpoints use the same native
+        // markup and measured anchor; no glyph-specific pixel correction.
+        const equations = [...rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!),
+          ...candidate.querySelectorAll<HTMLElement>(".energy-derivation-endpoint")];
+        for (const equation of equations) {
+          const paint = equation.querySelector<HTMLElement>(".katex-display")!;
+          paint.style.transform = "none";
+          const prefix = equation.querySelector<HTMLElement>('[data-kp-semantic-entity-id$=".prefix"]');
+          if (!prefix) throw new Error("Derivation baseline requires its invariant semantic prefix");
+          const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
+          paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
+        }
+        const move = proofPlan.moves[sceneIndex]!;
+        const focus = binding.inspection?.(proofPlan, sceneIndex) ?? {
+          source: [...move.exits, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.0.${role}`), target: [...move.entries, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.1.${role}`),
+          recordSource: [], recordTarget: []
+        };
+        if (token !== generation) return;
+        created = await mountMomentumEnergyDerivationSession(candidate, proofPlan, sceneIndex,
+          accented || participantOnly ? { ...focus, extent: participantOnly ? "participants" : "equation",
+            records: participantOnly ? [{ root: equationSlots[sceneIndex]!, entityIds: focus.recordSource },
+              { root: equationSlots[sceneIndex + 1]!, entityIds: focus.recordTarget }] : [] } : undefined, refinement);
+        if (token !== generation) return;
+        candidate.hidden = true; candidate.removeAttribute("data-derivation-preparing");
+        pending.push({ element: candidate, session: created });
+        candidate = undefined; created = undefined;
       }
-      const move = proofPlan.moves[index]!;
-      const focus = binding.inspection?.(proofPlan, index) ?? {
-        source: [...move.exits, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.0.${role}`), target: [...move.entries, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.1.${role}`),
-        recordSource: [], recordTarget: []
-      };
-      const refinement = proofPlan.compactInspection === "refinement" ? await binding.loadPlan("mass-refinement") : undefined;
-      if (token !== generation) return;
-      created = await mountMomentumEnergyDerivationSession(candidate, proofPlan, index,
-        accented || participantOnly ? { ...focus, extent: participantOnly ? "participants" : "equation",
-          records: participantOnly ? [{ root: equationSlots[index]!, entityIds: focus.recordSource },
-            { root: equationSlots[index + 1]!, entityIds: focus.recordTarget }] : [] } : undefined, refinement);
-      if (token !== generation) return;
-      // Commit one ready native scene atomically; no intermediate unmeasured
-      // source, duplicate endpoints, or origin-position paint reaches a frame.
-      session?.dispose(); stage.remove();
-      root.querySelectorAll<HTMLElement>("[data-derivation-record-participant]").forEach(element => { delete element.dataset["derivationRecordParticipant"]; });
-      created.activateRecords();
-      stage = candidate; candidate = undefined;
-      stage.removeAttribute("data-derivation-preparing");
-      stage.setAttribute("data-derivation-stage", "");
-      session = created; created = undefined;
-      selected = index; sourceTop = nextSourceTop; rowDistance = nextRowDistance;
-      syncLocalLayout(); measureRows();
-      loading = false; status.hidden = true;
-      transport.hidden = false;
-      scope.hidden = false;
-      clock.seek(progress); project();
+      stage.remove();
+      prepared = pending.splice(0);
+      activate(index, progress);
     } catch (error) {
       if (token !== generation) return;
       read(); root.dataset["repair"] = "true"; status.hidden = false;
@@ -351,6 +368,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       console.error("Energy derivation repair", error);
     } finally {
       created?.dispose(); candidate?.remove();
+      for (const scene of pending) { scene.session.dispose(); scene.element.remove(); }
     }
   }
   const play = (requested: Direction) => {
@@ -419,6 +437,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     event.preventDefault();
     journey = undefined; selectionRequest++; clock.pause();
     hint.hidden = true;
+    // Expansion can reveal parent-return controls after scene preparation.
+    // Capture current document geometry before the first sample, not at the
+    // first crossed edge (which would jump the handle by the added height).
+    measureRows();
     const box = handle.getBoundingClientRect();
     drag = { pointer: event.pointerId, offset: event.clientY - box.top - box.height / 2 };
     handle.setPointerCapture(event.pointerId);
@@ -501,7 +523,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   reduced.addEventListener("change", pause, opts);
   const visibility = new IntersectionObserver(entries => {
     if (!entries[0]?.isIntersecting) pause();
-    else if (!session && !seeking && root.dataset["repair"] !== "true") void seekPosition(0);
+    else if (!session && !loading && !seeking && root.dataset["repair"] !== "true") void seekPosition(0);
   }); visibility.observe(root);
   // Our own cue/control disclosure changes height. Only available width
   // invalidates equation geometry; rebuilding on height could interrupt Next.
@@ -510,7 +532,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     const nextWidth = entries[0]?.contentRect.width;
     if (nextWidth === undefined || Math.abs(nextWidth - width) < .5) return;
     width = nextWidth;
-    if (tracing && session && !loading) void mount(selected, clock.getSnapshot().progress);
+    if (tracing && session && !loading) {
+      const progress = clock.getSnapshot().progress;
+      retire(); void mount(selected, progress);
+    }
   }); resize.observe(root);
   let disposed = false;
   const dispose = () => {
@@ -520,6 +545,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   };
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) dispose(); }, opts);
   hint.hidden = false;
+  handle.disabled = true;
   measureRows(); rail.hidden = false;
   scope.hidden = false; transport.hidden = false; positionScope(0, 0); previous.disabled = true;
   const ready = initialPosition ? seekTransition(initialPosition) : Promise.resolve();

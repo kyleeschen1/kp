@@ -30,7 +30,11 @@ Fluent cancellation in the physics reader is also visually accepted, with its
 explanatory expansion preserved and the scalar lesson unchanged. The subsequent
 expanded-drag report exposed narrow-toolbar reflow; reserving Restart's layout
 space repairs that reproduced defect. Viewport-edge auto-scroll is a separate
-unimplemented interaction, not covered by this repair.
+unimplemented interaction, not covered by this repair. The clarified boundary
+catch is now the bounded priority: remove proportional drag plateaus, prepare
+the current checked view before input, and measure expanded layout before a
+gesture. Scope and evidence: `threads/2026-09-15-continuous-derivation-drag.md`;
+execution: `run-contract.kp.reader-continuous-drag-v1`. Later loops stay parked.
 Policy: `principles/fluent-reasoning.md`; approved scope/checkpoint:
 `threads/2026-09-15-fluent-cancellation.md`. This supersedes the pending scalar
 checkpoint below, not the deferred broader reader horizon.

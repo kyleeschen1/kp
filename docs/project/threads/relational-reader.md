@@ -9,9 +9,12 @@ Scalar composed cancellation and [fluent physics cancellation](2026-09-15-fluent
 are visually accepted. The follow-up drag report exposed control reflow in a
 tight desktop viewport: revealing Restart moved the substep rows. The bounded
 repair reserves its layout space; 29 Chromium reader checks and full types pass.
-Viewport-edge auto-scroll is still absent and may be a separate part of the
-reported difficulty; await the user's clarification rather than claiming it
-fixed. Preserve [authoring policy](../principles/fluent-reasoning.md), the scalar
+The user clarified that the remaining defect is catching at substep boundaries
+and jumping forward, not a request for viewport auto-scroll. The bounded
+[continuous-drag repair](2026-09-15-continuous-derivation-drag.md) addresses
+proportional resting zones, on-demand scene construction and stale expanded
+geometry. Its Theseus contract owns verification and completion; auto-scroll
+remains outside scope. Preserve [authoring policy](../principles/fluent-reasoning.md), the scalar
 explanation and local finer-step access. Later loops remain parked.
 
 Current review packet: [independent scalar reader](2026-09-15-scalar-reader-review.md).
