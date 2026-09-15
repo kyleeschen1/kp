@@ -3,7 +3,7 @@ import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, momentum
 import { compileMomentumEnergyDerivation } from "../../authoring/momentum-energy-derivation-authoring.ts";
 import { compileKpArticleMarkdownFragmentHtml as html } from "../../article/kp-article-static-html.ts";
 
-export function renderEnergyDerivationPassage(markdown: string) {
+export function renderEnergyDerivationPassage(markdown: string, publicationRevision: string) {
   const match = /\$\$\\begin\{aligned\}([\s\S]*?)\\end\{aligned\}\$\$/.exec(markdown);
   if (!match || match.index === undefined) throw new Error("Energy derivation requires its source-owned aligned chain");
   const normalize = (s: string) => s.replaceAll(/\s|&|\\left|\\right/g, "").replaceAll(String.raw`\frac12`, String.raw`\frac{1}{2}`);
@@ -19,7 +19,7 @@ export function renderEnergyDerivationPassage(markdown: string) {
     trust: context => context.command === "\\htmlData" });
   // The first destination keeps the substitution's compound fragment identity
   // for record/inspection correspondence. Later moves retain their own templates.
-  const trace = `<div class="energy-derivation" data-energy-derivation>
+  const trace = `<div class="energy-derivation" data-energy-derivation data-derivation-revision="${publicationRevision}">
     <p data-derivation-status role="status" hidden></p>
     <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">
@@ -42,7 +42,8 @@ export function renderEnergyDerivationPassage(markdown: string) {
         <button type="button" data-derivation-next aria-label="Next transition">Next ›</button>
       </div>
     </div>
-    ${compiled.moves.map(move => `<template data-derivation-template="${move.index}"><div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div></template>`).join("")}
+    <template data-derivation-recall-template><details data-derivation-recall><summary>Recall the momentum definition</summary>${html(String.raw`From the earlier definition, $\mathbf p=m\mathbf v$. Since $m>0$, we may divide by mass to obtain $\mathbf v=\mathbf p/m$.`)}<a href="#momentum-definition">Visit the original definition</a></details></template>
+    ${compiled.moves.map(move => `<template data-derivation-template="${move.index}" data-transition-id="${move.id}"><div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div></template>`).join("")}
   </div>`;
   return html(markdown.slice(0, match.index)) + trace + html(markdown.slice(match.index + match[0].length));
 }

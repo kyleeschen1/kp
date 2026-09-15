@@ -1,5 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
+import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
@@ -270,6 +271,26 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     if (event.key === "Escape") { event.preventDefault(); journey = undefined; clock.pause(); project(); }
   }, opts);
   const pause = () => { journey = undefined; selectionRequest++; clock.pause(); project(); };
+  if (new URL(location.href).searchParams.get("derivation-provenance") === "local") {
+    const ids = [...root.querySelectorAll<HTMLElement>("[data-derivation-template]")].map(el => el.dataset["transitionId"]!);
+    bindEnergyDerivationReturn(root, {
+      pause,
+      async capturePosition() {
+        // Finish the latest requested seek before saving a revision-pinned
+        // bookmark; never capture a previous edge while its successor prepares.
+        if (seeking || loading) throw new Error("Wait for the current derivation seek to finish");
+        if (!session) await seekPosition(0);
+        return { transition: ids[selected]!, progress: clock.getSnapshot().progress };
+      },
+      async restorePosition(id, progress) {
+        const index = ids.indexOf(id);
+        if (index < 0) throw new Error("Unknown derivation return transition");
+        await mount(index, progress);
+        if (!session) throw new Error("Derivation return scene could not be prepared");
+      },
+      remeasure() { measureRows(); project(); }
+    }, abort.signal);
+  }
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. The handle or explicit step controls resume inspection.
   interleaves.forEach(passage => passage.addEventListener("toggle", () => { pause(); measureRows(); project(); }, { ...opts, capture: true }));

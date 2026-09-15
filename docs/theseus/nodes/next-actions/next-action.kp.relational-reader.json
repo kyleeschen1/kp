@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review closer callout and repaired step-boundary handoff at mechanics-relations energy-from-momentum.",
+  "summary": "Away amendment approved; contextual repair parked for review, independent provenance and granularity eligible.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -363,6 +363,27 @@
       "scope": "focused",
       "checkedAt": "2026-09-15T05:42:33.454Z",
       "notes": "18 tests passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-15T05:50:09.726Z",
+      "notes": "Initial run failed strict index-signature access in new validator; repaired unknown-field narrowing and reran full typecheck cleanly."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T05:50:11.340Z",
+      "notes": "15 Chromium checks pass, including combined contextual/provenance, exact return after reflow, stale rejection, and narrow captures."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T05:50:12.739Z",
+      "notes": "19 tests pass including malformed return frames."
     }
   ],
   "progress": {
@@ -373,7 +394,7 @@
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
   ],
   "allowedWork": [
-    "Approved r1-r5 in the September 13 proposal; execute through v2, stop at r2 and r5 human gates."
+    "Approved four-hour away amendment through run-contract.kp.relational-reader-away-v1; v2 deferred with incomplete r2-r5 preserved. Context first, independent provenance and headless granularity, opt-in visuals and local review gates."
   ],
   "disallowedWork": [
     "No old-loop resumption, universal runtime, cross-domain promotion, new font identity, accounts, tutor, analytics, paid calls, deployment, merge or push."

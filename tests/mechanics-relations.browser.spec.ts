@@ -140,6 +140,57 @@ test("contextual inspection keeps the complete working equation through forward 
   for (const record of await records.all()) await expect(record).toBeVisible();
 });
 
+test("local provenance returns to the same logical position, disclosures and focus after reflow", async ({ page }, info) => {
+  await page.goto(route + "?derivation-motion=contextual&derivation-provenance=local#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  const recall = root.locator("[data-derivation-recall]");
+  await recall.locator("summary").click();
+  await root.locator('[data-derivation-interleave="1"] summary').click();
+  await dragTo(page, root, 1.55);
+  const link = recall.getByRole("link", { name: "Visit the original definition" });
+  await link.focus();
+  const before = await root.evaluate(el => ({ progress: el.getAttribute("data-derivation-progress"),
+    offset: el.querySelector('[data-derivation-row="1"]')!.getBoundingClientRect().top,
+    disclosures: [...el.querySelectorAll("details")].map(detail => detail.open) }));
+  await link.press("Enter");
+  const back = page.getByRole("button", { name: "Return to your derivation" });
+  await expect(back).toBeFocused();
+  await expect(root).toHaveAttribute("data-playing", "false");
+  await page.locator("#momentum-definition").evaluate(el => { (el as HTMLElement).style.paddingBottom = "120px"; });
+  await page.setViewportSize({ width: 800, height: 900 });
+  await back.click();
+  await expect(link).toBeFocused();
+  await expect(back).toBeHidden();
+  await expect(root).toHaveAttribute("data-derivation-progress", before.progress!);
+  const after = await root.evaluate(el => ({ offset: el.querySelector('[data-derivation-row="1"]')!.getBoundingClientRect().top,
+    disclosures: [...el.querySelectorAll("details")].map(detail => detail.open) }));
+  expect(after.disclosures).toEqual(before.disclosures);
+  expect(Math.abs(after.offset - before.offset)).toBeLessThan(2);
+  await expect(root).toHaveAttribute("data-playing", "false");
+  await root.screenshot({ path: info.outputPath("provenance-return.png") });
+  // Stale publication bookmarks fail without changing the held mathematical state.
+  await link.press("Enter");
+  await expect(back).toBeFocused();
+  await root.evaluate(el => { (el as HTMLElement).dataset["derivationRevision"] = "edited"; });
+  await back.click();
+  await expect(page.getByText("This return needs repair; your written derivation is unchanged.")).toBeVisible();
+  await expect(root).toHaveAttribute("data-derivation-progress", before.progress!);
+  await expect(back).toBeVisible();
+});
+
+test("provenance is opt-in and contextual inspection fits a narrow reading surface", async ({ page }, info) => {
+  const root = await ready(page);
+  await expect(root.locator("[data-derivation-recall]")).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route + "?derivation-motion=contextual&derivation-provenance=local#energy-from-momentum");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await root.locator("[data-derivation-recall] summary").click();
+  await dragTo(page, root, .55);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await root.screenshot({ path: info.outputPath("contextual-narrow.png") });
+});
+
 test("persistent lens follows the expression, holds interiors and rewinds exactly", async ({ page }, info) => {
   const root = await ready(page);
   await expect(root.getByRole("slider")).toHaveCount(1);

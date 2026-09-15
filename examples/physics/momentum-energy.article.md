@@ -32,12 +32,14 @@ Velocity $\mathbf v=d\mathbf r/dt$ describes how position changes. It is a
 vector: its direction tells us where the particle is heading, and its magnitude
 $|\mathbf v|$ is speed. Bold symbols below are vectors; $m$ and $K$ are scalars.
 
+:::kp-passage{#momentum-definition}
 **Definition — momentum.** Weight velocity by mass:
 
 $$\mathbf p=m\mathbf v.$$
 
 Momentum records directed motion. Two carts at the same velocity have different
 momenta if their masses differ. It is not a force stored inside a cart.
+:::
 
 **Definition in this model — kinetic energy.** Associate a scalar with motion:
 

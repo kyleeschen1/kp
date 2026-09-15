@@ -45,6 +45,7 @@
     {
       "id": "away.provenance",
       "title": "Provenance-and-return",
+      "summary": "REVIEW_READY: derivation-provenance=local. Same-document return tested after reflow and revision rejection; context candidate rechecked. Visible recall UI needs review; headless granularity independent.",
       "status": "planned"
     },
     {

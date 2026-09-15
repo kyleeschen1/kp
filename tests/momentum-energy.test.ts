@@ -301,3 +301,21 @@ test("runtime transport rejects stale or unsupported authority and keeps time se
     assert.throws(() => loadMomentumEnergyRuntimeSource({ ...input, ...patch }));
   assert.throws(() => momentumEnergyTimeAtProgress(checked, NaN));
 });
+import { validateEnergyReturn } from "../src/tutorial/mechanics-relations/energy-derivation-return.ts";
+
+test("local return validates the entire revision-pinned frame before restoration", () => {
+  const boundary = { revision: "publication.a", transitions: ["substitute", "scale-magnitude", "cancel-mass"], disclosureCount: 4, focusIds: ["focus.0"] };
+  const frame = { revision: boundary.revision, transition: "scale-magnitude", progress: .42,
+    disclosures: [true, false, true, false], focus: "focus.0", anchorRow: 1, anchorOffset: -125.5 };
+  const saved = validateEnergyReturn(frame, boundary);
+  assert.deepEqual(saved, frame); assert.ok(Object.isFrozen(saved.disclosures));
+  frame.disclosures[0] = false;
+  assert.equal(saved.disclosures[0], true);
+  for (const patch of [{ revision: "publication.old" }, { transition: "guessed" }, { progress: NaN }, { progress: 1.1 },
+    { disclosures: [] }, { disclosures: [true, false, "yes", false] }, { focus: "missing" },
+    { anchorRow: -1 }, { anchorRow: 4 }, { anchorOffset: Infinity }, { extra: true }])
+    assert.throws(() => validateEnergyReturn({ ...frame, ...patch }, boundary));
+  let called = false;
+  assert.throws(() => validateEnergyReturn({ ...frame, get progress() { called = true; return .5; } }, boundary));
+  assert.equal(called, false);
+});

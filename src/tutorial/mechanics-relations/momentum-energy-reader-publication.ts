@@ -7,6 +7,7 @@ import { momentumEnergyAttention } from "./momentum-energy-attention.ts";
 import type { MomentumEnergyRuntimeSource } from "./momentum-energy-runtime-source.ts";
 import type { compileMomentumEnergyPublication } from "./momentum-energy-publication.ts";
 import { renderEnergyDerivationPassage } from "./momentum-energy-derivation-publication.ts";
+import { sha256 } from "../../kernel/sha256.ts";
 
 type Publication = ReturnType<typeof compileMomentumEnergyPublication>;
 const html = compileKpArticleMarkdownFragmentHtml;
@@ -17,6 +18,7 @@ const annotation = (id: string, text: string) => renderKpFocusDeckAnnotation({ e
  * Article owns the displayed Markdown; the existing lesson contract owns the
  * addressable motion/attention structure used by reader extensions. */
 export function renderMomentumEnergyReader(publication: Publication) {
+  const revision = sha256(JSON.stringify(publication.article.document));
   const blocks: KpLessonBlock[] = [];
   const stages = new Map(publication.article.document.blocks.filter(block => block.kind === "stage").map(block => [block.id, block]));
   const body = publication.article.document.blocks.map(block => {
@@ -27,7 +29,7 @@ export function renderMomentumEnergyReader(publication: Publication) {
       // Passage addresses must survive projection so source-owned inspection
       // links work in both editions without a second navigation table.
       return block.kind === "passage"
-        ? `<section id="${attribute(block.id)}">${block.id === "energy-from-momentum" ? renderEnergyDerivationPassage(block.markdown) : html(block.markdown)}</section>`
+        ? `<section id="${attribute(block.id)}">${block.id === "energy-from-momentum" ? renderEnergyDerivationPassage(block.markdown, revision) : html(block.markdown)}</section>`
         : html(block.markdown);
     }
     if (block.kind !== "motion" || block.transition.kind !== "run" || !block.transition.path.endsWith("/advance"))
