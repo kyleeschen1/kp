@@ -12,9 +12,10 @@ fields. V2 retains the identical approved scope with explicit limits and stops.
 
 ## Primary outcome
 
-An away-mode amendment is proposed at the end of this document. It is not yet
-approved and does not silently relax v2's global r2 checkpoint. The user's latest
-negative finding makes restoring explanatory context the first proposed repair.
+The away-mode amendment at the end of this document was approved on 2026-09-15.
+Its successor contract defers v2 explicitly and permits independent work past
+local visual gates. Restoring explanatory context is the first repair; neither
+this approval nor automated checks accept the resulting visual treatment.
 
 ### Accepted callout and handoff repair (2026-09-14)
 

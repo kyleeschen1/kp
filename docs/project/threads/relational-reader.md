@@ -5,6 +5,11 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+Away review packet: [contextual inspection and provenance](2026-09-15-relational-reader-away-review.md).
+It contains opt-in URLs, preservation evidence and the bounded cancellation
+refinement gap. Visual candidates are not defaults; follow the named contract
+for their pending decisions rather than restarting the deferred v2 loop.
+
 Latest user finding: participant-only extraction loses necessary explanatory
 context. **First repair: restore an intelligible contextual working expression,
 with semantic participants emphasized rather than isolated.** The three-move

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.relational-reader-away-v1",
   "kind": "run-contract",
   "title": "Contextual inspection away delivery",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: contextual and provenance candidates await batched review; independent investigation and closeout done, reserve unused.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -51,17 +52,20 @@
     {
       "id": "away.granularity",
       "title": "Verified-refinement-investigation",
-      "status": "planned"
+      "summary": "INVESTIGATION_COMPLETE, feature not delivered: tests reproduce governed-verification.operation and finite-product-endpoint.unsupported-shape. See 2026-09-15-energy-cancellation-refinement-gap.md. Requires separately approved source-bound subproof extension.",
+      "status": "complete"
     },
     {
       "id": "reserve.evaluation",
       "title": "Optional-evaluation-brief",
-      "status": "planned"
+      "summary": "Optional fallback unused: bounded required investigations finished; proceed to required closeout rather than filling unused time.",
+      "status": "skipped"
     },
     {
       "id": "away.closeout",
       "title": "Combined-verification-and-handoff",
-      "status": "planned"
+      "summary": "Combined verification, production closure measurement and batched review packet recorded. Human decisions remain on contextual and provenance candidates; no promotion or fine-step feature claimed.",
+      "status": "complete"
     }
   ]
 }

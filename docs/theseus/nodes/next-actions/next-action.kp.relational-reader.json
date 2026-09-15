@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "Away amendment approved; contextual repair parked for review, independent provenance and granularity eligible.",
+  "summary": "HUMAN_CHECKPOINT: review contextual inspection and local provenance at the opt-in URLs in September 15 away packet. Granularity requires separately approved semantic extension.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-13-momentum-energy-reader-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-relational-reader-away-review.md"
     }
   ],
   "dependsOn": {
@@ -384,11 +388,46 @@
       "scope": "focused",
       "checkedAt": "2026-09-15T05:50:12.739Z",
       "notes": "19 tests pass including malformed return frames."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T05:58:24.724Z",
+      "notes": "Production build passes; existing large-chunk warning remains, no threshold change."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-15T05:58:26.240Z",
+      "notes": "Final full typecheck clean after unknown-field narrowing and anchor-transition consistency guard."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T05:58:27.640Z",
+      "notes": "20 tests pass, including source-authority refinement gaps and invalid bookmark anchor rejection."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T05:58:58.591Z",
+      "notes": "Final combined suite: 15 Chromium checks passed in 44.6 seconds; subjective clarity and mobile reading comfort remain human judgments."
+    },
+    {
+      "command": "npm run measure:mechanics-relations-closure",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-09-15T05:59:00.115Z",
+      "notes": "Approximately 32.8 KB initial and 135.7 KB activated reachable JS/CSS gzip; excludes fonts, HTML and device CPU. Existing lazy compositor closure retained."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: user rejected participant-only motion for loss of context. Restore contextual working expression first. Persistent-record recommendations accepted; four-hour away amendment proposed, awaiting scope/resource and local-gate approval. No execution started."
+    "summary": "HUMAN_CHECKPOINT: approved away portfolio exhausted. Context and provenance opt-in candidates review-ready; granularity investigation found typed authority gap, no fine-step feature delivered. Combined tests/types/build pass. See September 15 away review packet. V2 remains deferred."
   },
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"

@@ -28,7 +28,7 @@ export function validateEnergyReturn(value: unknown, boundary: EnergyReturnBound
     || !Array.isArray(v.disclosures) || v.disclosures.length !== boundary.disclosureCount
     || Array.from(v.disclosures).some(item => typeof item !== "boolean")
     || typeof v.focus !== "string" || !boundary.focusIds.includes(v.focus) || typeof v.anchorRow !== "number" || !Number.isInteger(v.anchorRow)
-    || v.anchorRow < 0 || v.anchorRow > boundary.transitions.length || typeof v.anchorOffset !== "number" || !Number.isFinite(v.anchorOffset))
+    || v.anchorRow !== boundary.transitions.indexOf(v.transition) || typeof v.anchorOffset !== "number" || !Number.isFinite(v.anchorOffset))
     throw new Error("Stale or invalid derivation return frame");
   return Object.freeze({ revision: v.revision, transition: v.transition, progress: v.progress,
     disclosures: Object.freeze([...v.disclosures]), focus: v.focus,

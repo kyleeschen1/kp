@@ -1,6 +1,38 @@
 import { test } from "node:test";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
+import { compileKpGovernedCanonicalConstruction, planKpGovernedConstructionRepairs,
+  type KpGovernedCanonicalConstructionRequest } from "../src/authoring/canonical-animation-public-api.ts";
+import { normalizeKpFiniteProductSourceEndpoint } from "../src/semantic/finite-product-endpoint-normalizer.ts";
+
+test("finer mass cancellation requires source authority, not an existing motif name", () => {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(checked.status, "checked");
+  if (checked.status !== "checked") return;
+  const compiled = compileMomentumEnergyDerivation(checked.model);
+  const { sourceId, revisionId, operationPacks } = compiled.construction.mathematicalVerification;
+  const authority = { sourceId, revisionId, operationPacks, animation: compiled.animation };
+  const fineOperation = "kp.algebra.cancel-multiplicative-inverses";
+  const request: KpGovernedCanonicalConstructionRequest = {
+    schemaVersion: "kp.governed-semantic-authoring-request.v2", id: "request.physics.cancellation-refinement-probe",
+    source: { kind: "verified-semantic-source", sourceId, revisionId, operationPacks },
+    approvedObjectIds: compiled.animation.bundle.objects.map(object => object.id), approvedOperationIds: [fineOperation],
+    explanationPurpose: { kind: "cause", objectIds: compiled.animation.bundle.objects.map(object => object.id), operationIds: [fineOperation] },
+    detailLevel: "complete", compositionIntent: { kind: "sequence", operationIds: [fineOperation] }
+  };
+  const repairs = planKpGovernedConstructionRepairs({ request, authority });
+  const operationRepair = repairs.find(repair => repair.issueCode === "governed-verification.operation");
+  assert.ok(operationRepair);
+  assert.equal(operationRepair.action.kind, "choose-approved-operation");
+  if (operationRepair.action.kind === "choose-approved-operation") {
+    assert.deepEqual(operationRepair.action.allowedOperationIds, ["physics.energy.cancel-mass", "physics.energy.scale-magnitude", "physics.energy.substitute"]);
+  }
+  assert.throws(() => compileKpGovernedCanonicalConstruction({ request, authority }));
+  assert.equal(compiled.moves.length, 3); // Failed refinement leaves the original argument intact.
+  const product = normalizeKpFiniteProductSourceEndpoint("m^2");
+  assert.equal(product.status, "unsupported-shape");
+  if (product.status === "unsupported-shape") assert.equal(product.diagnostic.code, "finite-product-endpoint.unsupported-shape");
+});
 
 test("each inspection names complete semantic cohorts and explicit permanent-row bindings", () => {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
@@ -313,7 +345,7 @@ test("local return validates the entire revision-pinned frame before restoration
   assert.equal(saved.disclosures[0], true);
   for (const patch of [{ revision: "publication.old" }, { transition: "guessed" }, { progress: NaN }, { progress: 1.1 },
     { disclosures: [] }, { disclosures: [true, false, "yes", false] }, { focus: "missing" },
-    { anchorRow: -1 }, { anchorRow: 4 }, { anchorOffset: Infinity }, { extra: true }])
+    { anchorRow: -1 }, { anchorRow: 4 }, { anchorRow: 0 }, { anchorOffset: Infinity }, { extra: true }])
     assert.throws(() => validateEnergyReturn({ ...frame, ...patch }, boundary));
   let called = false;
   assert.throws(() => validateEnergyReturn({ ...frame, get progress() { called = true; return .5; } }, boundary));
