@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved bounded cancellation refinement; phone and broader older scopes remain deferred.",
+  "summary": "HUMAN_CHECKPOINT: review expandable cancellation at localhost:8000 with derivation-detail=expandable. Phone and later horizon remain unapproved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -529,11 +529,53 @@
       "scope": "Bounded cancellation authority",
       "checkedAt": "2026-09-15T16:26:10.219Z",
       "notes": "22 tests pass; exact coarse/fine endpoints, checked-parent rejection, governed operation issuance and persistent norm and surviving mass roles."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-15T16:35:05.280Z",
+      "notes": "23 final tests pass, including immutable snapshots and expanded timeline bounds."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-15T16:35:06.540Z",
+      "notes": "Full app, node, tests, Svelte and domains passed; final test-only additions also passed typecheck:tests. Initial unused import and literal-three count errors were repaired."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-15T16:35:07.725Z",
+      "notes": "Full boundary gates and eight gateway tests passed. No renderer or CSS changes."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-15T16:35:08.778Z",
+      "notes": "Production publication/build pass; existing repository-wide large-chunk advisory remains."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'expandable cancellation|unavailable refinement|source-owned static|contextual inspection|local provenance|local entry'",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-15T16:35:09.887Z",
+      "notes": "Final entire six-check Chromium cohort passed; earlier double-disposal failure repaired with preflight/idempotence, server reset rerun. No-JS detail and print checked. Human visual judgment pending."
+    },
+    {
+      "command": "npm run measure:mechanics-relations-closure",
+      "status": "passed",
+      "scope": "r2",
+      "checkedAt": "2026-09-15T16:35:10.957Z",
+      "notes": "34803 initial and 138597 activated gzip JS/CSS bytes; increases 774 and 1699. HTML total 300234 raw, 21167 gzip; excluded from closure. Not device performance evidence."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Four desktop-eligible packages complete; phone checkpoint explicitly deferred, not approved. Source and renderer unchanged. Long-document access/reflow verified with bounded three-move fixture; future always-nearby inspection is a separate decision."
+    "summary": "Bounded cancellation authority and opt-in view implemented and verified; canonical visual checkpoint remains. See docs/project/threads/2026-09-15-cancellation-refinement-review.md. Compact default and provisional phone preserved."
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation.",

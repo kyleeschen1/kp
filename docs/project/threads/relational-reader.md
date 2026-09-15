@@ -5,6 +5,10 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+Current review packet: [expandable cancellation](2026-09-15-cancellation-refinement-review.md).
+The opt-in candidate adds verified finer steps and compact-position restoration;
+visual approval remains separate from executed endpoint/lifecycle checks.
+
 Expandable cancellation is approved as one bounded opt-in exemplar. Execute
 `run-contract.kp.reader-cancellation-refinement-v1` under the reviewed proposal,
 not the deferred phone package or broader l2 horizon.

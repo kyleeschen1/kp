@@ -17,7 +17,8 @@ async function dragTo(page: import("@playwright/test").Page, root: Locator, posi
   // visible handle. Taller approved records can put its previous dock offscreen.
   await handle.scrollIntoViewIfNeeded();
   const box = await handle.boundingBox();
-  const move = Math.min(2, Math.floor(position)), fraction = position - move;
+  const total = await root.locator("[data-derivation-row]").count() - 1;
+  const move = Math.min(total - 1, Math.floor(position)), fraction = position - move;
   const first = await root.locator(`[data-derivation-row="${move}"] .energy-derivation-equation`).boundingBox();
   const last = await root.locator(`[data-derivation-row="${move + 1}"] .energy-derivation-equation`).boundingBox();
   await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2);
@@ -31,6 +32,66 @@ async function ready(page: import("@playwright/test").Page) {
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   return root;
 }
+
+test("expandable cancellation uses canonical fine steps and restores the compact inspection", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await root.locator('[data-derivation-entry="2"]').click();
+  await dragTo(page, root, 2.55);
+  const held = await root.getAttribute("data-progress");
+  await root.locator('[data-derivation-interleave="2"] summary').first().click();
+  const expand = root.locator("[data-refinement-expand]");
+  await expand.scrollIntoViewIfNeeded();
+  const offset = await root.locator('[data-derivation-row="2"]').evaluate(el => el.getBoundingClientRect().top);
+  await expand.click();
+  await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await expect(root.locator("[data-derivation-row]")).toHaveCount(6);
+  await expect(lens(root)).toHaveAttribute("aria-valuemax", "5");
+  for (const position of [2.55, 3.55, 4.55, 5, 4.55, 3.55, 2.55]) {
+    await dragTo(page, root, position);
+    const index = Math.max(0, Math.ceil(position) - 1);
+    await expect(root).toHaveAttribute("data-move", String(index));
+    await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+    await expect(root).not.toHaveAttribute("data-repair", "true");
+    await expect(root).toHaveAttribute("data-playing", "false");
+    if (position === 3.55) await root.screenshot({ path: info.outputPath("expanded-cancellation.png") });
+  }
+  await root.locator("[data-refinement-collapse]").click();
+  await expect(root).toHaveAttribute("data-derivation-detail", "coarse");
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
+  await expect(root.locator('[data-derivation-interleave="2"] details').first()).toHaveAttribute("open", "");
+  await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+  const restoredOffset = await root.locator('[data-derivation-row="2"]').evaluate(el => el.getBoundingClientRect().top);
+  expect(Math.abs(restoredOffset - offset)).toBeLessThan(2);
+  await expect(root.locator("[data-derivation-stage]")).toHaveCount(1);
+  expect(errors).toEqual([]);
+});
+
+test("unavailable refinement restores the checked compact inspection without a substitute animation", async ({ page }) => {
+  await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await root.locator('[data-derivation-entry="2"]').click();
+  await dragTo(page, root, 2.55);
+  const held = await root.getAttribute("data-progress");
+  await root.locator("[data-refinement-view]").evaluate((el: HTMLTemplateElement) => {
+    el.content.querySelector('[data-derivation-template="2"]')!.remove();
+  });
+  await root.locator("[data-refinement-expand]").click();
+  await expect(root.locator("[data-derivation-status]")).toContainText("needs repair");
+  await expect(root).toHaveAttribute("data-derivation-detail", "coarse");
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
+  await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+});
 
 test("local entry preserves edge identity and bookmarks without scrolling or autoplay", async ({ page }, info) => {
   await page.goto(route + "#energy-from-momentum");
@@ -571,6 +632,15 @@ test("source-owned static reading needs no JavaScript", async ({ browser }, info
   await expect(page.locator("h1")).toContainText("momentum");
   await expect(page.locator("[data-particle]")).toHaveCount(2);
   await expect(page.locator('[data-episode="turning"] [data-kp-focus-deck-annotation="physics.momentum"]')).toContainText("(0, 1)");
+  const derivation = page.locator("[data-energy-derivation]");
+  await expect(derivation.locator("[data-derivation-row]")).toHaveCount(4);
+  const detail = derivation.locator("[data-refinement-static]");
+  await detail.locator("summary").click();
+  await expect(detail.locator(".katex-display")).toHaveCount(2);
+  for (const equation of await detail.locator(".katex-display").all()) await expect(equation).toBeVisible();
+  await page.emulateMedia({ media: "print" });
+  for (const row of await derivation.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
+  await page.emulateMedia({ media: "screen" });
   await page.goto(`http://localhost:8000${route}static.html`);
   const images = page.locator("figure img");
   await expect(images).toHaveCount(4);

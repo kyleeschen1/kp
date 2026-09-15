@@ -32,8 +32,8 @@ export function sampleSubstitutionPresentation(progress: number): EnergyDerivati
 
 /** A directional step first finishes/retraces the current edge. Crossing to a
  * neighbor is legal only at the shared endpoint, never from an interior pose. */
-export function energyDerivationNavigationTarget(move: number, progress: number, direction: "forward" | "rewind") {
-  const total = energyDerivationFocus.length;
+export function energyDerivationNavigationTarget(move: number, progress: number, direction: "forward" | "rewind", total: number = energyDerivationFocus.length) {
+  if (!Number.isInteger(total) || total < 1) throw new RangeError("Invalid transition count");
   if (!Number.isInteger(move) || move < 0 || move >= total || !Number.isFinite(progress) || progress < 0 || progress > 1)
     throw new RangeError("Invalid derivation navigation position");
   return direction === "forward"
@@ -85,8 +85,8 @@ export function sampleSubstitutionEmphasis(progress: number) {
 
 /** An integer denotes the completed equation, not the next move's opening
  * frame. This makes checkpoint jumps and reverse agree at shared boundaries. */
-export function resolveEnergyDerivationPosition(position: number) {
-  const total = energyDerivationFocus.length;
+export function resolveEnergyDerivationPosition(position: number, total: number = energyDerivationFocus.length) {
+  if (!Number.isInteger(total) || total < 1) throw new RangeError("Invalid transition count");
   if (!Number.isFinite(position) || position < 0 || position > total) throw new RangeError("Invalid derivation position");
   const move = Math.max(0, Math.ceil(position) - 1);
   return { move, progress: position - move };
@@ -101,9 +101,10 @@ export function sampleEnergyDerivationLens(progress: number): EnergyDerivationPr
 
 /** Small endpoint plateaus make complete lines easy to hold without snapping
  * an arbitrary intermediate release. The mapping is continuous and reversible. */
-export function resolveEnergyDerivationLensPosition(position: number) {
+export function resolveEnergyDerivationLensPosition(position: number, total: number = energyDerivationFocus.length) {
+  if (!Number.isInteger(total) || total < 1) throw new RangeError("Invalid transition count");
   if (!Number.isFinite(position)) throw new RangeError("Invalid lens position");
-  const bounded = Math.max(0, Math.min(energyDerivationFocus.length, position));
+  const bounded = Math.max(0, Math.min(total, position));
   const line = Math.floor(bounded), fraction = bounded - line;
   const restingZone = .055;
   return line + Math.max(0, Math.min(1, (fraction - restingZone) / (1 - 2 * restingZone)));
@@ -112,12 +113,12 @@ export function resolveEnergyDerivationLensPosition(position: number) {
 /** Equation positions are measured by the host. Prose may enlarge one interval
  * without changing its semantic endpoints or the duration of explicit playback. */
 export function resolveEnergyDerivationMeasuredPosition(y: number, centers: readonly number[]) {
-  if (!Number.isFinite(y) || centers.length !== energyDerivationFocus.length + 1 ||
+  if (!Number.isFinite(y) || centers.length < 2 ||
       centers.some((value, i) => !Number.isFinite(value) || (i > 0 && value <= centers[i - 1]!)))
     throw new RangeError("Invalid derivation geometry");
   if (y <= centers[0]!) return 0;
   for (let i = 0; i < centers.length - 1; i++) {
-    if (y <= centers[i + 1]!) return resolveEnergyDerivationLensPosition(i + (y - centers[i]!) / (centers[i + 1]! - centers[i]!));
+    if (y <= centers[i + 1]!) return resolveEnergyDerivationLensPosition(i + (y - centers[i]!) / (centers[i + 1]! - centers[i]!), centers.length - 1);
   }
   return centers.length - 1;
 }

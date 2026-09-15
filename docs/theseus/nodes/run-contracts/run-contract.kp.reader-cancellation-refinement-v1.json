@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader-cancellation-refinement-v1",
   "kind": "run-contract",
   "title": "Expandable cancellation exemplar",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: approve canonical expandable cancellation exemplar before promotion; two slices complete, one visual checkpoint pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,12 +46,14 @@
     {
       "id": "r2.view",
       "title": "Expandable reader with exact collapse restoration",
-      "status": "in-progress"
+      "summary": "Opt-in fine view uses one canonical session; exact compact progress, disclosure, anchor and focus restoration plus failure recovery pass.",
+      "status": "complete"
     },
     {
       "id": "r2.checkpoint",
       "title": "Canonical visual exemplar and preservation evidence",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: six Chromium checks pass; canonical capture and review URL in September 15 cancellation refinement review. Await visual judgment before promotion.",
+      "status": "in-progress"
     }
   ]
 }

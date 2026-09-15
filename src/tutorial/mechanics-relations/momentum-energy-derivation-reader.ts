@@ -1,13 +1,82 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
-import { createEnergyInspectionBookmarks } from "./energy-derivation-bookmarks.ts";
+import { createEnergyInspectionBookmarks, type EnergyInspectionPosition } from "./energy-derivation-bookmarks.ts";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
  * participating in that move's semantic fan-out. */
-export function enhanceEnergyDerivation(root: HTMLElement) {
+interface EnergyReaderState {
+  revision: string; transition: string; progress: number;
+  bookmarks: readonly EnergyInspectionPosition[]; disclosures: readonly boolean[];
+}
+
+/** Coarse and fine are two projections, never two simultaneously active
+ * timelines. Retire the old compositor/clock before mounting the next view. */
+export function enhanceEnergyDerivation(initialRoot: HTMLElement) {
+  const enabled = new URL(location.href).searchParams.get("derivation-detail") === "expandable";
+  if (!enabled) {
+    const staticDetail = initialRoot.querySelector<HTMLElement>("[data-refinement-static]");
+    if (staticDetail) staticDetail.hidden = true;
+    mountEnergyDerivation(initialRoot);
+    return;
+  }
+  const prototype = initialRoot.cloneNode(true) as HTMLElement;
+  const expanded = initialRoot.querySelector<HTMLTemplateElement>("[data-refinement-view]");
+  let root = initialRoot, active = mountEnergyDerivation(root);
+  let saved: { state: EnergyReaderState; offset: number } | undefined;
+  let busy = false;
+  const bind = () => {
+    const staticDetail = root.querySelector<HTMLElement>("[data-refinement-static]");
+    if (staticDetail) staticDetail.hidden = true;
+    const button = root.querySelector<HTMLButtonElement>(saved ? "[data-refinement-collapse]" : "[data-refinement-expand]");
+    if (!button || !enabled || !expanded) return;
+    button.hidden = false;
+    button.addEventListener("click", async () => {
+      if (busy) return;
+      busy = true;
+      try {
+        const collapsing = saved !== undefined;
+        const anchor = root.querySelector<HTMLElement>('[data-derivation-row="2"]')!;
+        if (!collapsing) saved = { state: active.capture(), offset: anchor.getBoundingClientRect().top };
+        const next = collapsing ? prototype.cloneNode(true) as HTMLElement : expanded.content.firstElementChild!.cloneNode(true) as HTMLElement;
+        const destination = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: "expand-mass-square", progress: 0, bookmarks: [], disclosures: [] };
+        const offset = collapsing ? saved!.offset : anchor.getBoundingClientRect().top;
+        active.dispose(); root.replaceWith(next); root = next;
+        active = mountEnergyDerivation(root, destination);
+        await active.ready;
+        if (root.dataset["repair"] === "true") throw new Error("Refinement scene requires repair");
+        if (collapsing) saved = undefined;
+        bind();
+        window.scrollBy({ top: root.querySelector<HTMLElement>('[data-derivation-row="2"]')!.getBoundingClientRect().top - offset, behavior: "instant" });
+        root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")?.focus({ preventScroll: true });
+      } catch (error) {
+        // A failed optional view must not strand the reader or grant a visual
+        // fallback authority. Restore the already checked compact inspection.
+        if (saved && root.dataset["derivationDetail"] === "mass-refinement") {
+          const previous = saved;
+          active.dispose();
+          const next = prototype.cloneNode(true) as HTMLElement;
+          root.replaceWith(next); root = next;
+          active = mountEnergyDerivation(root, previous.state);
+          saved = undefined;
+          await active.ready;
+          bind();
+          window.scrollBy({ top: root.querySelector<HTMLElement>('[data-derivation-row="2"]')!.getBoundingClientRect().top - previous.offset, behavior: "instant" });
+          root.querySelector<HTMLElement>("[data-refinement-expand]")?.focus({ preventScroll: true });
+        }
+        const status = root.querySelector<HTMLElement>("[data-derivation-status]")!;
+        status.hidden = false; status.textContent = "This detail needs repair; the written reasoning remains available.";
+        console.error("Energy refinement repair", error);
+      } finally { busy = false; }
+    });
+  };
+  bind();
+}
+
+function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
+  const detail = root.dataset["derivationDetail"] === "mass-refinement" ? "mass-refinement" : "coarse";
   // Internal exemplar comparison, not an additional learner control or policy.
   const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
   const motion = new URL(location.href).searchParams.get("derivation-motion");
@@ -26,6 +95,12 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const interleaves = [...root.querySelectorAll<HTMLElement>("[data-derivation-interleave]")];
   const ids = [...root.querySelectorAll<HTMLElement>("[data-derivation-template]")].map(el => el.dataset["transitionId"]!);
   const bookmarks = createEnergyInspectionBookmarks(root.dataset["derivationRevision"]!, ids);
+  if (initial) {
+    if (initial.revision !== root.dataset["derivationRevision"]) throw new Error("Stale energy reader state");
+    initial.bookmarks.forEach(position => bookmarks.remember(position.transition, position.progress));
+  }
+  // Reject a stale/missing transition before allocating a clock or listeners.
+  const initialPosition = initial ? bookmarks.position(initial.revision, initial.transition, initial.progress) : undefined;
   let mobileInspect = false, localTop = 0;
   // Controls are enhancement only. The authoritative static states and prose
   // are neither cloned nor made clickable, preserving text selection.
@@ -92,7 +167,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       - get(".energy-derivation-chain").getBoundingClientRect().top;
   };
   const positionScope = (position: number) => {
-    const { move, progress } = resolveEnergyDerivationPosition(position);
+    const { move, progress } = resolveEnergyDerivationPosition(position, total);
     scope.style.top = `${centers[move]! + (centers[move + 1]! - centers[move]!) * progress}px`;
     handle.setAttribute("aria-valuenow", String(position));
     handle.setAttribute("aria-valuetext", Number.isInteger(position)
@@ -206,8 +281,13 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
         const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
         paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
       }
-      const focus = energyDerivationInspection[index]!;
-      created = await mountMomentumEnergyDerivationSession(candidate, createEnergyDerivationPlan(checked.model), index,
+      const proofPlan = createEnergyDerivationPlan(checked.model, detail);
+      const move = proofPlan.moves[index]!;
+      const focus = detail === "coarse" || index < 2 ? energyDerivationInspection[index]! : {
+        source: move.exits.map(role => `energy.${move.id}.0.${role}`), target: move.entries.map(role => `energy.${move.id}.1.${role}`),
+        recordSource: [], recordTarget: []
+      };
+      created = await mountMomentumEnergyDerivationSession(candidate, proofPlan, index,
         accented || participantOnly ? { ...focus, extent: participantOnly ? "participants" : "equation",
           records: participantOnly ? [{ root: equationSlots[index]!, entityIds: focus.recordSource },
             { root: equationSlots[index + 1]!, entityIds: focus.recordTarget }] : [] } : undefined);
@@ -254,7 +334,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   clock.subscribe(sample => {
     if (sample.source === "autoplay" && sample.settled && journey) void continueJourney();
   });
-  function navigate(requested: Direction, target = energyDerivationNavigationTarget(selected, clock.getSnapshot().progress, requested)) {
+  function navigate(requested: Direction, target = energyDerivationNavigationTarget(selected, clock.getSnapshot().progress, requested, total)) {
     if (loading || !session) return;
     selectionRequest++;
     journey = { direction: requested, target };
@@ -263,7 +343,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   // Coalesce cross-edge seeks while a native scene prepares. Never discard the
   // last pointer sample just because an asynchronous handoff is in progress.
   async function seekPosition(position: number) {
-    return seekTransition(resolveEnergyDerivationPosition(position));
+    return seekTransition(resolveEnergyDerivationPosition(position, total));
   }
   async function seekTransition(position: { move: number; progress: number }) {
     pendingSeek = position;
@@ -376,6 +456,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       remeasure() { measureRows(); project(); }
     }, abort.signal);
   }
+  if (initial?.disclosures.length) [...root.querySelectorAll<HTMLDetailsElement>("details")].forEach((el, i) => { el.open = initial.disclosures[i] ?? false; });
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. The handle or explicit step controls resume inspection.
   interleaves.forEach(passage => passage.addEventListener("toggle", () => { pause(); measureRows(); project(); }, { ...opts, capture: true }));
@@ -394,8 +475,21 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     width = nextWidth;
     if (tracing && session && !loading) void mount(selected, clock.getSnapshot().progress);
   }); resize.observe(root);
-  window.addEventListener("pagehide", event => { pause(); if (!event.persisted) { retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose(); } }, opts);
+  let disposed = false;
+  const dispose = () => {
+    if (disposed) return;
+    disposed = true;
+    pause(); retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose();
+  };
+  window.addEventListener("pagehide", event => { pause(); if (!event.persisted) dispose(); }, opts);
   hint.hidden = false;
   measureRows(); rail.hidden = false;
   scope.hidden = false; transport.hidden = false; positionScope(0); previous.disabled = true;
+  const ready = initialPosition ? seekTransition(initialPosition) : Promise.resolve();
+  return { ready, dispose, capture(): EnergyReaderState {
+    pause();
+    if (loading || seeking || !session) throw new Error("Wait for the active derivation scene to finish preparing");
+    return { revision: root.dataset["derivationRevision"]!, transition: ids[selected]!, progress: clock.getSnapshot().progress,
+      bookmarks: bookmarks.snapshot(), disclosures: [...root.querySelectorAll<HTMLDetailsElement>("details")].map(el => el.open) };
+  } };
 }

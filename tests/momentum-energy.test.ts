@@ -15,6 +15,10 @@ test("local bookmarks preserve transition identity, held progress and revision b
   marks.remember("scale", .43);
   assert.deepEqual(marks.recall("r1", "substitute"), { transition: "substitute", move: 0, progress: 1 });
   assert.equal(marks.recall("r1", "scale").progress, .43);
+  const saved = marks.snapshot();
+  marks.remember("scale", .7);
+  assert.equal(saved.find(position => position.transition === "scale")!.progress, .43);
+  marks.remember("scale", .43);
   assert.equal(marks.recall("r1", "scale", true).progress, 0);
   assert.equal(marks.recall("r1", "scale").progress, .43, "restart is a requested seek, not a second playhead mutation");
   assert.throws(() => marks.recall("r2", "scale"));
@@ -178,6 +182,20 @@ test("directional navigation retraces interiors before crossing shared endpoints
     assert.equal(energyDerivationNavigationTarget(move, 1, "forward"), Math.min(2, move + 1));
   }
   assert.throws(() => energyDerivationNavigationTarget(3, .5, "rewind"));
+});
+
+test("expanded timeline uses its own bounded transition count", () => {
+  assert.deepEqual(resolveEnergyDerivationPosition(5, 5), { move: 4, progress: 1 });
+  assert.deepEqual(resolveEnergyDerivationPosition(4.5, 5), { move: 4, progress: .5 });
+  assert.equal(energyDerivationNavigationTarget(4, 1, "forward", 5), 4);
+  assert.equal(energyDerivationNavigationTarget(4, 0, "rewind", 5), 3);
+  assert.equal(resolveEnergyDerivationLensPosition(5.03, 5), 5);
+  assert.equal(resolveEnergyDerivationMeasuredPosition(550, [0, 100, 200, 300, 400, 500]), 5);
+  for (const total of [0, -1, 2.5, Infinity, NaN]) {
+    assert.throws(() => resolveEnergyDerivationPosition(0, total));
+    assert.throws(() => resolveEnergyDerivationLensPosition(0, total));
+    assert.throws(() => energyDerivationNavigationTarget(0, 0, "forward", total));
+  }
 });
 
 test("substitution overlap is reversible, act-gated and retains native endpoints", () => {

@@ -25,6 +25,10 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Expandable cancellation is ready for its opt-in visual checkpoint:
+`threads/2026-09-15-cancellation-refinement-review.md`. Keep the compact default
+and provisional phone status until that judgment; Theseus owns live progress.
+
 Current approved run: bounded expandable cancellation under
 `run-contract.kp.reader-cancellation-refinement-v1`; scope and checkpoint are in
 `reviews/2026-09-15-next-step-review.md`. One opt-in exemplar through existing

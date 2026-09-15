@@ -18,6 +18,7 @@ export function createEnergyInspectionBookmarks(revision: string, transitions: r
     return Object.freeze({ transition, move, progress });
   };
   return {
+    snapshot: () => Object.freeze([...saved].map(([transition, progress]) => position(revision, transition, progress))),
     position,
     remember(transition: string, progress: number) {
       const checked = position(revision, transition, progress);
