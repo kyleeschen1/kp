@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "blocked",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review contextual inspection and local provenance at the opt-in URLs in September 15 away packet. Granularity requires separately approved semantic extension.",
+  "summary": "Away portfolio accepted and complete; broader relational-reader v2 remains deferred. Recommend default adoption and narrow-phone prose repair next; finer cancellation requires semantic extension.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -427,8 +427,11 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: approved away portfolio exhausted. Context and provenance opt-in candidates review-ready; granularity investigation found typed authority gap, no fine-step feature delivered. Combined tests/types/build pass. See September 15 away review packet. V2 remains deferred."
+    "summary": "Away visual checkpoints accepted; bounded portfolio complete, not whole relational-reader roadmap. Default adoption, phone repair and finer cancellation not implemented by approval recording."
   },
+  "revisitWhen": [
+    "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation."
+  ],
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
   ],

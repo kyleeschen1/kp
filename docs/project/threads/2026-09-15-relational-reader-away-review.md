@@ -1,8 +1,13 @@
 # Contextual inspection and provenance: away review
 
-Outcome: **HUMAN_CHECKPOINT**, not product completion. The approved independent
-work is exhausted; two opt-in visual candidates await one batched review.
+Outcome: **COMPLETE for the bounded away portfolio**. On September 15 the user
+approved the contextual inspection and local provenance/return checkpoint.
+This does not approve the acknowledged phone-prose limitation or supply missing
+fine-step semantic authority. The accepted treatments remain opt-in until a
+separately selected adoption step; no default change is implied by this record.
 Theseus owns live status in `run-contract.kp.relational-reader-away-v1`.
+
+The review instructions and judgments below preserve the checkpoint as presented.
 
 ## Review the candidate
 

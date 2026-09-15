@@ -5,6 +5,14 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
+September 15 approval accepts the contextual working-expression treatment and
+local provenance/exact return in the away review packet. The bounded away
+portfolio is complete, including its gap investigation (not a fine-step feature).
+Treat the pending-review statements below as checkpoint provenance. No default
+or catalogue promotion has occurred. Recommended next scope: adopt the accepted
+local treatments and repair narrow-phone prose, then consider verified finer
+cancellation. The older v2 scope remains deferred, not silently resumed.
+
 Away review packet: [contextual inspection and provenance](2026-09-15-relational-reader-away-review.md).
 It contains opt-in URLs, preservation evidence and the bounded cancellation
 refinement gap. Visual candidates are not defaults; follow the named contract

@@ -25,11 +25,19 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+September 15 checkpoint approval closes the bounded away portfolio: contextual
+inspection and local provenance/exact return are accepted. Review/evidence:
+`threads/2026-09-15-relational-reader-away-review.md`. They remain opt-in;
+default adoption and narrow-phone prose repair are recommended next scope,
+not an automatically started successor. Finer cancellation retains its recorded
+semantic-authority gap. Older v2 work remains deferred.
+
 Latest accepted priority: retain the persistent reasoning record, but repair
 participant-only motion's loss of explanatory context **first**. Then pursue
 bounded provenance/exact-return and granularity experiments. The away-mode
 amendment at the end of `threads/2026-09-13-relational-reader-delivery-proposal.md`
-was approved on 2026-09-15. Execute `run-contract.kp.relational-reader-away-v1`;
+was approved on 2026-09-15 and completed after visual acceptance through
+`run-contract.kp.relational-reader-away-v1`;
 v2 is explicitly deferred with its incomplete history preserved. Visual candidates
 remain opt-in and their local gates do not block independent approved packages.
 

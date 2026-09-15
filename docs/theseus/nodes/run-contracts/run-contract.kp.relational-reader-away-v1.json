@@ -2,8 +2,8 @@
   "id": "run-contract.kp.relational-reader-away-v1",
   "kind": "run-contract",
   "title": "Contextual inspection away delivery",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: contextual and provenance candidates await batched review; independent investigation and closeout done, reserve unused.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -40,14 +40,14 @@
     {
       "id": "away.context",
       "title": "Contextual-inspection",
-      "summary": "REVIEW_READY: derivation-motion=contextual restores contextual expression and continuous handoff on all edges. Tests pass; human intelligibility decision pending. Independent provenance and headless granularity eligible.",
-      "status": "planned"
+      "summary": "User approved contextual working-expression checkpoint on September 15. Accepted local treatment; default adoption and mobile prose repair remain separate scope.",
+      "status": "complete"
     },
     {
       "id": "away.provenance",
       "title": "Provenance-and-return",
-      "summary": "REVIEW_READY: derivation-provenance=local. Same-document return tested after reflow and revision rejection; context candidate rechecked. Visible recall UI needs review; headless granularity independent.",
-      "status": "planned"
+      "summary": "User approved local recall and exact-return checkpoint on September 15. Same-document/revision limits preserved; no global navigation promotion.",
+      "status": "complete"
     },
     {
       "id": "away.granularity",
