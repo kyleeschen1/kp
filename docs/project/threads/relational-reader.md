@@ -6,15 +6,19 @@ Last Updated: 2026-09-14
 ## Canonical direction
 
 Current review packet: [expandable cancellation](2026-09-15-cancellation-refinement-review.md).
+The user accepted this exemplar, including outline and child returns. The bounded
+next-step reuse assessment is recorded in
+[authoring reuse boundary](../reviews/2026-09-15-reader-authoring-reuse-boundary.md).
+Editorial reuse is supported; independent scalar cancellation needs the proposed
+checked-authority/shared-binding repair. That expansion is not implemented.
 Accepted outline principle: opening detail changes depth, not position in the
 argument. Number transitions from stable parent/child identity, not visible
 equation-row offsets; preserve major labels and identify nested scope explicitly.
-The opt-in candidate adds verified finer steps and compact-position restoration;
-visual approval remains separate from executed endpoint/lifecycle checks.
+The accepted opt-in exemplar adds verified finer steps and compact-position
+restoration; phone remains provisional and no broad rollout is implied.
 
-Expandable cancellation is approved as one bounded opt-in exemplar. Execute
-`run-contract.kp.reader-cancellation-refinement-v1` under the reviewed proposal,
-not the deferred phone package or broader l2 horizon.
+Expandable cancellation's bounded contract is complete. Do not resume it, the
+deferred phone package or broader l2 horizon in place of the named reuse decision.
 
 Desktop local access approved; phone work explicitly provisional. The accepted
 continuation amendment in the September 15 review permits long-document pressure

@@ -2,8 +2,8 @@
   "id": "run-contract.kp.reader-cancellation-refinement-v1",
   "kind": "run-contract",
   "title": "Expandable cancellation exemplar",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: local return affordance placement ready. Two packages complete; visual checkpoint remains.",
+  "status": "resolved",
+  "summary": "COMPLETE: three approved packages delivered and canonical visual checkpoint accepted.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -52,8 +52,8 @@
     {
       "id": "r2.checkpoint",
       "title": "Canonical visual exemplar and preservation evidence",
-      "summary": "HUMAN_CHECKPOINT: local Back to step 3 actions implemented and verified from all children; same collapse owner. Review placement at existing opt-in URL.",
-      "status": "in-progress"
+      "summary": "User visually approved the cancellation, outline and local return exemplar; existing checks recorded. No phone promotion or broader rollout implied.",
+      "status": "complete"
     }
   ]
 }

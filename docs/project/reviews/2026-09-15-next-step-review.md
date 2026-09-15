@@ -1,5 +1,22 @@
 # Next loops after contextual inspection acceptance
 
+## Accepted checkpoint and next-step reuse boundary
+
+The user's “Perfect! Resume next step of the loop” accepts the cancellation,
+nested outline and child-return exemplar. Close its three-package contract.
+The next eligible step is a bounded authoring-reuse check toward reader.l3,
+not permission to silently broaden scalar mathematics or replace the renderer.
+Run `run-contract.kp.reader-reuse-boundary-v1`: inspect the supported authoring
+path, attempt one independent scalar cancellation at the current authority and
+publication boundaries, preserve any typed gap, and record a concrete minimum
+repair. Ceiling: 45 active minutes including 15 minutes for evidence/closeout.
+One package, `reuse.boundary`; focused executable checks and Theseus validation.
+No visible changes, renderer/clock/CSS rewrites, new scalar authority, phone
+promotion, automatic enablement, or later-loop execution. The rollback unit is
+one evidence/plan commit. Finish with supported reuse evidence or an explicit
+gap and proposed repair, not an imitation second caller. The broader l2
+recall-to-use bridge remains recorded work, not completed by a provenance link.
+
 ## Approved bounded cancellation-refinement run
 
 ### Approved checkpoint repair: stable outline numbering

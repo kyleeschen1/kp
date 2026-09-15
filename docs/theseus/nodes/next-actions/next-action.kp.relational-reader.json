@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review local child return affordances at the expandable cancellation URL; no later-loop or phone promotion.",
+  "summary": "STOP_CONDITION: independent scalar authority and shared binding expansion require concrete proposal approval; see docs/project/reviews/2026-09-15-reader-authoring-reuse-boundary.md.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -613,6 +613,20 @@
       "scope": "local-collapse",
       "checkedAt": "2026-09-15T17:52:13.155Z",
       "notes": "Five Chromium checks pass. Return exercised from every child, keyboard from final child, saved compact progress and focus/in-viewport expansion control preserved. Parent collapse, failed refinement, static reading and local access preserved. Capture inspected; placement awaits human judgment."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/energy-derivation-reuse-boundary.test.ts tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "reuse-boundary",
+      "checkedAt": "2026-09-15T18:07:27.000Z",
+      "notes": "27 tests passed; assessment and bounded repair proposal in docs/project/reviews/2026-09-15-reader-authoring-reuse-boundary.md"
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "reuse-boundary",
+      "checkedAt": "2026-09-15T18:07:28.197Z",
+      "notes": "Test types pass; no runtime changes."
     }
   ],
   "progress": {

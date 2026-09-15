@@ -1,5 +1,12 @@
 # Expandable cancellation: visual checkpoint
 
+Accepted by the user on September 15: “Perfect! Resume next step of the loop.”
+This accepts the finer cancellation, nested outline and local return affordances.
+Pending-review wording below is checkpoint provenance. The existing opt-in URL
+is preserved; approval does not by itself enable phone presentation or a broad
+rollout. The next bounded step is authoring-reuse boundary assessment under the
+September 15 next-step review.
+
 Review the opt-in exemplar at:
 
 http://localhost:8000/experiments/mechanics-relations/?derivation-detail=expandable#energy-from-momentum

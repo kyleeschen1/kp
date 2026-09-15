@@ -1,0 +1,37 @@
+{
+  "id": "run-contract.kp.reader-reuse-boundary-v1",
+  "kind": "run-contract",
+  "title": "Reader authoring reuse boundary",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-15-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/energy-derivation-reuse-boundary.test.ts"
+  ],
+  "allowedWork": [
+    "Only bounded reuse assessment in September 15 next-step review; tests and planning evidence"
+  ],
+  "disallowedWork": [
+    "No new scalar authority, visible changes, renderer or clock or CSS rewrite, agents, phone promotion, merge or deployment"
+  ],
+  "goal": "Determine whether an independent scalar cancellation can reuse the accepted reader without engine edits; record exact gaps and bounded repair if not",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "reuse.boundary",
+      "title": "Exercise source-only reuse boundary and record next repair",
+      "summary": "COMPLETE: editorial reuse and independent scalar rejection verified; bounded repair proposal recorded in docs/project/reviews/2026-09-15-reader-authoring-reuse-boundary.md. No runtime implementation.",
+      "status": "complete"
+    }
+  ]
+}

@@ -25,14 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Expandable cancellation is ready for its opt-in visual checkpoint:
-`threads/2026-09-15-cancellation-refinement-review.md`. Keep the compact default
-and provisional phone status until that judgment; Theseus owns live progress.
-
-Current approved run: bounded expandable cancellation under
-`run-contract.kp.reader-cancellation-refinement-v1`; scope and checkpoint are in
-`reviews/2026-09-15-next-step-review.md`. One opt-in exemplar through existing
-semantic/compiler/compositor owners, then human review. Phone remains provisional.
+Expandable cancellation, nested outline and local returns are visually accepted;
+`run-contract.kp.reader-cancellation-refinement-v1` is complete. Keep its current
+opt-in selection and provisional phone status; approval is not a broad rollout.
+The next-step reuse assessment found that editorial reuse works, but independent
+scalar cancellation needs bounded semantic authority and shared reader bindings.
+Evidence and proposed next implementation:
+`reviews/2026-09-15-reader-authoring-reuse-boundary.md`. Do not duplicate the
+physics renderer or infer arbitrary algebra support. Theseus owns live progress.
 
 Accepted successive-loop direction, including local access when the active knob
 is offscreen: `reviews/2026-09-15-next-step-review.md`. That single source owns
