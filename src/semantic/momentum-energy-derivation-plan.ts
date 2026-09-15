@@ -21,6 +21,8 @@ export interface EnergyDerivationPlan {
   readonly title: string;
   readonly assumptions: readonly string[];
   readonly notation: { readonly result: string; readonly factor: string; readonly numerator: string };
+  readonly coefficientGranularity: "fraction" | "factors";
+  readonly compactInspection: "atomic" | "refinement";
   readonly view: DerivationView;
   readonly majorSteps: readonly DerivationStep[];
   readonly moves: readonly EnergyDerivationMove[];
@@ -33,6 +35,7 @@ export interface EnergyDerivationMove {
   readonly exits: readonly string[];
   readonly entries: readonly string[];
   readonly split: boolean;
+  readonly notice?: readonly string[];
 }
 const issued = new WeakSet<object>();
 
@@ -51,7 +54,7 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
     persist: Object.freeze(role.persist), exits: Object.freeze(role.exits), entries: Object.freeze(role.entries) }));
   const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, moves: Object.freeze(moves), namespace: "energy", artifactId: "physics.energy-derivation", packId: detail === "coarse" ? "project.physics.energy-derivation" : "project.physics.energy-refinement", operationPrefix: "physics.energy",
     title: "Energy in terms of momentum", assumptions: Object.freeze(["m is a positive real scalar; p=m v; Euclidean vectors"]),
-    notation: Object.freeze({ result: "K", factor: "m", numerator: String.raw`|\mathbf p|^2` }),
+    notation: Object.freeze({ result: "K", factor: "m", numerator: String.raw`|\mathbf p|^2` }), coefficientGranularity: "fraction", compactInspection: "atomic",
     sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: momentumEnergyDerivationSteps });
   issued.add(plan);
   return plan;
@@ -66,12 +69,21 @@ export function createScalarCancellationPlan(model: CheckedScalarCancellation, d
   assertScalarCancellation(model);
   if (detail !== "coarse" && detail !== "mass-refinement") throw new Error("Unsupported scalar derivation detail");
   const view = scalarCancellationView(model, detail !== "coarse");
-  const roles = cancellationRoles(detail);
+  const roles = cancellationRoles(detail).map(role => {
+    // Tracking the coefficient's denominator is a lineage choice, not a new
+    // motion. The same native persistent track carries it during collection.
+    const collecting = role.operationKind === "collect-coefficient";
+    const coarse = role.operationKind === "cancel-factor";
+    return { ...role, persist: [...role.persist, ...(!coarse ? ["two", ...(!collecting ? ["coefficient-one"] : [])] : [])],
+      exits: [...role.exits, ...(coarse ? ["coefficient-one", "two"] : collecting ? ["coefficient-one"] : [])],
+      entries: role.entries.filter(id => !collecting || id !== "two"), notice: Object.freeze(collecting ? ["two"] : []) };
+  });
   const moves = roles.map((role, i) => Object.freeze({ ...role, id: view.steps[i]!.id,
     persist: Object.freeze(role.persist), exits: Object.freeze(role.exits), entries: Object.freeze(role.entries) }));
   const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, namespace: "scalar", artifactId: "algebra.scalar-cancellation", packId: `project.algebra.scalar-cancellation.${detail}`, operationPrefix: "algebra.scalar",
     title: "Why does one denominator factor remain?", assumptions: Object.freeze([`${model.source.factor}>0; ${model.source.numerator} is real`]),
     notation: Object.freeze({ result: model.source.result, factor: model.source.factor, numerator: `${model.source.numerator}^2` }),
+    coefficientGranularity: "factors", compactInspection: detail === "coarse" ? "refinement" : "atomic",
     sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: view.majorSteps, moves: Object.freeze(moves) });
   issued.add(plan);
   return plan;

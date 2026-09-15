@@ -310,13 +310,15 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       }
       const move = proofPlan.moves[index]!;
       const focus = binding.inspection?.(proofPlan, index) ?? {
-        source: move.exits.map(role => `${proofPlan.namespace}.${move.id}.0.${role}`), target: move.entries.map(role => `${proofPlan.namespace}.${move.id}.1.${role}`),
+        source: [...move.exits, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.0.${role}`), target: [...move.entries, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.1.${role}`),
         recordSource: [], recordTarget: []
       };
+      const refinement = proofPlan.compactInspection === "refinement" ? await binding.loadPlan("mass-refinement") : undefined;
+      if (token !== generation) return;
       created = await mountMomentumEnergyDerivationSession(candidate, proofPlan, index,
         accented || participantOnly ? { ...focus, extent: participantOnly ? "participants" : "equation",
           records: participantOnly ? [{ root: equationSlots[index]!, entityIds: focus.recordSource },
-            { root: equationSlots[index + 1]!, entityIds: focus.recordTarget }] : [] } : undefined);
+            { root: equationSlots[index + 1]!, entityIds: focus.recordTarget }] : [] } : undefined, refinement);
       if (token !== generation) return;
       // Commit one ready native scene atomically; no intermediate unmeasured
       // source, duplicate endpoints, or origin-position paint reaches a frame.

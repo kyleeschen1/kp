@@ -69,6 +69,80 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
   expect(errors).toEqual([]);
 });
 
+test("scalar compact inspection executes checked children with continuous native handoffs", async ({ page }, info) => {
+  await page.goto(scalarRoute);
+  const root = page.locator("[data-energy-derivation]"), stage = root.locator("[data-derivation-stage]");
+  await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  const input = root.locator('input[aria-label="Inspect step 1"]');
+  const at = async (algebra: number) => {
+    // Exercise the actual shared input/clock path, not a second test playhead.
+    await seek(input, .32 + .58 * algebra);
+    await expect(root).not.toHaveAttribute("data-repair", "true");
+    await expect(stage.locator("[data-derivation-child]:not([hidden])")).toHaveCount(1);
+  };
+  const paintGeometry = () => stage.evaluate(element => {
+    const parent = element.getBoundingClientRect();
+    return [...element.querySelectorAll<HTMLElement>('[data-derivation-child]:not([hidden]) [data-kp-equation-material-owner-id]')]
+      // Native ownership uses ancestor opacity, not only visibility. Hidden
+      // endpoint scaffolds must not masquerade as simultaneously painted ink.
+      .filter(el => el.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true }))
+      .map(el => { const box = el.getBoundingClientRect(); return { role: el.dataset["kpEquationMaterialSemanticEntityId"]!.split(".").at(-1)!,
+        x: box.x - parent.x, y: box.y - parent.y, width: box.width, height: box.height }; }).sort((a, b) => a.role.localeCompare(b.role));
+  });
+  const originalRecord = await documentBoxes(root.locator(".energy-derivation-equation"));
+  for (const [algebra, operation] of [[.16, "expand-square"], [.5, "cancel-pair"], [.83, "collect-coefficient"], [.5, "cancel-pair"], [.16, "expand-square"]] as const) {
+    await at(algebra);
+    await expect(stage).toHaveAttribute("data-inspection-operation", `algebra.scalar.${operation}`);
+    await expect(root.locator("[data-transition-number]")).toHaveText(["1"]);
+    expect(await documentBoxes(root.locator(".energy-derivation-equation"))).toEqual(originalRecord);
+    await root.screenshot({ path: info.outputPath(`compact-${operation}.png`) });
+  }
+  for (const boundary of [1 / 3, 2 / 3]) {
+    await at(boundary - .001);
+    const before = await paintGeometry();
+    await at(boundary + .001);
+    const after = await paintGeometry();
+    expect(before.length).toBeGreaterThan(3);
+    expect(after.map(({ role }) => role)).toEqual(before.map(({ role }) => role));
+    for (let i = 0; i < before.length; i++) for (const key of ["x", "y", "width", "height"] as const)
+      expect(Math.abs(after[i]![key] - before[i]![key])).toBeLessThan(.25);
+    await at(boundary - .001);
+    expect(await paintGeometry()).toEqual(before);
+  }
+  await at(.69);
+  const two = stage.locator('[data-derivation-child]:not([hidden]) [data-kp-equation-material-semantic-entity-id$=".two"]');
+  await expect(two).toHaveCount(1);
+  expect(await two.evaluate(el => el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }))).toBe(true);
+  const owner = await two.getAttribute("data-kp-equation-material-owner-id");
+  await at(.84);
+  await expect(two).toHaveCount(1);
+  await expect(two).toHaveAttribute("data-kp-equation-material-owner-id", owner!);
+  // These native layouts happen to align the coefficient's horizontal
+  // position. Role change requires continuous identity, not decorative travel.
+  expect(await two.evaluate(el => el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }))).toBe(true);
+  const pose = await stage.locator('[data-derivation-child]:not([hidden]) [data-kp-equation-material-owner-id]').evaluateAll(els => els.map(el => (el as HTMLElement).style.cssText));
+  await at(.1); await at(.84);
+  expect(await stage.locator('[data-derivation-child]:not([hidden]) [data-kp-equation-material-owner-id]').evaluateAll(els => els.map(el => (el as HTMLElement).style.cssText))).toEqual(pose);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await root.locator("[data-derivation-next]").click();
+  await expect(root).toHaveAttribute("data-progress", "1");
+  await expect(stage).toHaveAttribute("data-inspection-child-progress", "1");
+});
+
+test("scalar missing compound child rejects enhancement without atomic fallback", async ({ page }) => {
+  await page.route("**/experiments/scalar-cancellation/**", async route => {
+    if (route.request().resourceType() !== "document") return route.continue();
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).replace('data-child-operation="cancel-pair"', 'data-child-operation="unknown"') });
+  });
+  await page.goto(scalarRoute);
+  const root = page.locator("[data-energy-derivation]");
+  await expect(root).toHaveAttribute("data-repair", "true");
+  await expect(root.locator("[data-derivation-stage]")).toBeHidden();
+  await expect(root.locator("[data-derivation-row]")).toHaveCount(2);
+  for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
+});
+
 test("scalar source mismatch fails closed while the static argument stays readable", async ({ page }) => {
   await page.route("**/experiments/scalar-cancellation/**", async route => {
     if (route.request().resourceType() !== "document") return route.continue();

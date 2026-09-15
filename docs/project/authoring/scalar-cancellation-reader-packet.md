@@ -48,6 +48,12 @@ Article's chain without matching checked mathematics rejects publication.
 The browser rechecks source and compares its fingerprint with the published
 binding before inspection. There is no silent replacement animation.
 
+Compact inspection now composes the same checked child operations exposed by
+the expanded view. It does not infer a proof from endpoint LaTeX or substitute
+a coarse generic fusion when children are unavailable. The coefficient's `2`
+has persistent lineage through collection. This scalar treatment is pending
+visual acceptance; do not apply it to other callers without the review gate.
+
 `npm run visual:mechanics-relations -- --grep scalar` checks the real caller.
 `node --disable-warning=ExperimentalWarning --test tests/scalar-cancellation-reader.test.ts`
 checks the retained source, a coherent symbol/prose variation and rejected

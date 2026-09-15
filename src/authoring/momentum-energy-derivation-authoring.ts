@@ -26,7 +26,8 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
   const part = (id: string, latex: string) => String.raw`\htmlData{kp-semantic-entity-id=${id},kp-presentation-group-id=group.${id}}{${latex}}`;
   const p = (id: string, latex: string) => part(`${ns}.${id}`, latex);
   const prefix = p("prefix", `${notation.result}=`);
-  const half = p("half", String.raw`\frac{1}{2}`), mass = p("mass", notation.factor);
+  const half = p("half", plan.coefficientGranularity === "factors"
+    ? String.raw`\frac{${p("coefficient-one", "1")}}{${p("two", "2")}}` : String.raw`\frac{1}{2}`), mass = p("mass", notation.factor);
   // left/right delimiters must be paired within native KaTeX grammar, so the
   // ownership wrappers enclose delimiter glyphs rather than unmatched \left.
   const magnitude = (inside: string) => `${p("left", "|")}${inside}${p("right", "|")}`;

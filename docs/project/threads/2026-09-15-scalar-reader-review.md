@@ -5,6 +5,47 @@ scalar visual acceptance remains open.
 Control: `run-contract.kp.reader-scalar-reuse-v1`.
 Scope/rationale: `../reviews/2026-09-15-reader-authoring-reuse-boundary.md`.
 
+## Current checkpoint repair: one written step, composed reasoning
+
+The user accepted the page layout but requested that its compact animation
+explain the algebra inside the step. The approved repair is now implemented:
+the coarse scalar inspection samples its existing checked fine operations—
+expose the denominator square, cancel a nonzero pair, collect the fractions.
+There is no independent coarse fusion fallback. The coefficient's `2` retains
+identity through collection; its native horizontal positions happen to align,
+so the implementation does not add decorative travel just to make it move.
+
+`src/animation/derivation-inspection-composition.ts` validates the proof-issued
+parent/children and their exact outer endpoints. Existing causal-chain and
+native compound-scene plans partition the single host playhead. Child scenes
+are prepared before display and exchange exclusive visibility synchronously.
+Fine and coarse use the same child binding, native compositor and ink-glyph
+evaluation treatment. Physics keeps its accepted atomic presentation.
+
+This is sequential composition, not certification of concurrent rewrites or
+automatic decomposition of arbitrary endpoints. A missing/incorrect child
+rejects enhancement while retaining the static record. The old experimental
+participant-only mode is deliberately unsupported for this full-context
+compound inspection; physics comparison modes are preserved.
+
+Current repair verification: 64 focused semantic/composition/inventory tests,
+full typecheck plus final test typecheck, architecture gate, production build,
+and **27/27 Chromium reader checks** passed. The browser checks exercise actual
+material-paint geometry across both internal boundaries, reverse/direct seek,
+one visible child scene, continuous coefficient ownership, reduced motion,
+missing-child rejection and physics preservation. Initial probe failures came
+from counting transparent native scaffolds and requiring horizontal travel
+where native positions coincide; probes now measure the actual paint invariant.
+The full repository test run below predates this repair and was not rerun for
+this bounded visual discovery checkpoint. No browser cohort or phone promotion
+is claimed.
+
+Review the same URL below: does the compact inspection now make the three
+algebraic actions intelligible as one continuous manipulation? In particular,
+check whether the internal cadence feels fluent and the remaining factor and
+coefficient stay understandable. Stop here for visual judgment before the
+structurally different pressure caller or automatic rewrite discovery.
+
 ## Review
 
 Open <http://localhost:8000/experiments/scalar-cancellation/?derivation-detail=expandable#remaining-factor>.
@@ -54,7 +95,7 @@ Unsupported input example: changing `factorDomain` to `real` yields
 `positive-real`. Changing mathematical assumptions needs new authority, not a
 renderer fallback. Free editorial claims remain reviewable, not proof-checked.
 
-## Evidence and limits
+## Initial reuse-delivery evidence and limits (before composition repair)
 
 - 31 focused tests cover authority separation, private issuer types, runtime
   forgery rejection, exact outer endpoints, selector roles, outline numbering,
@@ -80,10 +121,13 @@ with `scalar` measure the emitted production manifest. Figures are gzip bytes:
 
 | Reading | Initial JS/CSS | All reachable JS/CSS, including activation | HTML |
 | --- | ---: | ---: | ---: |
-| Physics | 35,833 | 141,744 | 21,679 |
-| Scalar | 32,871 | 139,581 | 6,586 |
+| Physics | 35,912 | 144,630 | 21,680 |
+| Scalar | 32,966 | 142,467 | 8,241 |
 
-Raw HTML is 305,938 bytes for physics and 100,632 for scalar, including retained
+Figures above are from the post-repair production build. The preceding scalar
+build measured 32,871 initial and 139,581 reachable JS/CSS gzip bytes: this
+composition adds 95 initial and 2,886 reachable bytes, with no new dependency.
+Raw HTML is 305,938 bytes for physics and 131,216 for scalar, including retained
 record and optional inspection templates. These are closure/transfer estimates,
 not network traces or device-performance measurements. Fonts, images, HTTP
 overhead, parsing, execution and paint costs are excluded. A pre-run retained

@@ -62,7 +62,7 @@ export function scalarCancellationView(model: CheckedScalarCancellation, refined
       (c.identity ? String.raw`\cdot1` : "") + String.raw`\frac{${y}^2}{${denominator.latex}}`;
   });
   const major = Object.freeze({ id: "cancel-factor", title: "Cancel one factor, not both",
-    cue: `One numerator $${x}$ cancels one denominator $${x}$. The other denominator factor remains.`,
+    cue: `Expose the two denominator factors, cancel one matching pair, then collect the fractions. One denominator $${x}$ remains; the $2$ comes from $1/2$.`,
     why: `Since $${x}>0$, division by $${x}$ is allowed. Write its square as two factors and cancel just one matching pair.` });
   const children = [
     { id: "expand-square", title: "Expose the two denominator factors", cue: `Write $${x}^2=${x}\\cdot ${x}$. A square contains two copies of the factor.`, why: "This is the definition of squaring. The numerator is unchanged." },

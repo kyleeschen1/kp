@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Independent scalar reading through shared native reader",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: two implementation packages complete; scalar.checkpoint awaits visual acceptance. No additional scope authorized.",
+  "summary": "HUMAN_CHECKPOINT: compound scalar exemplar ready at existing URL. Two packages complete; checkpoint visual judgment remains. Stop before pressure caller, concurrency or automatic rewrite inference.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -43,7 +43,7 @@
     {
       "id": "scalar.checkpoint",
       "title": "Verify two callers and prepare human visual checkpoint",
-      "summary": "Engineering verification passed: 7104 tests, 25 browsers, full types and build. HUMAN_CHECKPOINT: scalar visual acceptance remains; contract blocked at review, slice intentionally not complete.",
+      "summary": "HUMAN_CHECKPOINT: revised scalar composition ready; 64 tests, 27 browsers, full types, architecture and build pass. One written step exposes checked child sequence. Do not complete until visual acceptance.",
       "status": "in-progress"
     }
   ]

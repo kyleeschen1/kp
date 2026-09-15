@@ -25,8 +25,9 @@ denominator. Cancellation removes a matching pair, not every occurrence of the
 letter. The remaining denominator factor is why, with $y$ fixed, doubling $x$
 halves $Q$.
 
-If that cancellation feels too quick, inspect its smaller steps. Watch the
-unchanged numerator while one pair of factors becomes $1$.
+The single written step contains several moves. Inspect it to expose the two
+denominator factors, cancel one pair, then follow the $2$ from $1/2$ into the
+remaining denominator. Open the smaller steps to examine each move separately.
 :::
 
 The condition $x>0$ guarantees that none of these divisions is by zero.

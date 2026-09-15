@@ -8,6 +8,7 @@ import { compileScalarCancellation } from "../src/authoring/momentum-energy-deri
 import { createDerivationOutline } from "../src/tutorial/mechanics-relations/energy-derivation-outline.ts";
 import { renderCheckedDerivationPassage } from "../src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts";
 import { compileScalarCancellationPublication, scalarCancellationArticlePath, scalarCancellationSourcePath } from "../src/tutorial/mechanics-relations/scalar-cancellation-publication.ts";
+import { createDerivationInspectionComposition } from "../src/animation/derivation-inspection-composition.ts";
 
 const checked = () => {
   const result = checkScalarCancellation(scalarCancellationSource);
@@ -15,6 +16,22 @@ const checked = () => {
   return result.model;
 };
 const chain = (states: readonly string[]) => String.raw`$$\begin{aligned}${states.join(String.raw`\\`)}\end{aligned}$$`;
+
+test("compact inspection retains the checked causal children and coefficient lineage", () => {
+  const model = checked(), coarse = createScalarCancellationPlan(model), fine = createScalarCancellationPlan(model, "mass-refinement");
+  const composition = createDerivationInspectionComposition(coarse, fine, 0);
+  assert.deepEqual(composition.indices, [0, 1, 2]);
+  assert.deepEqual(composition.clock.actions.map(action => action.canonicalOperationId), fine.view.refinement!.childOperationIds);
+  assert.deepEqual(composition.clock.actions.map(action => action.dependsOnActionIds), [[], ["expand-square"], ["cancel-pair"]]);
+  assert.throws(() => createDerivationInspectionComposition(coarse, createScalarCancellationPlan(checked(), "mass-refinement"), 0), /same checked/);
+  assert.throws(() => createDerivationInspectionComposition(coarse, coarse, 0), /refinement authority/);
+  assert.throws(() => createDerivationInspectionComposition(coarse, fine, 1), /refinement authority/);
+  assert.throws(() => createDerivationInspectionComposition({ ...coarse }, fine, 0), /original proof-derived/);
+  assert.ok(fine.moves.every(move => move.persist.includes("two")));
+  const collection = compileScalarCancellation(model, "mass-refinement").moves[2]!;
+  assert.ok(collection.transformation.correspondenceMap!.records.some(record => record.relation === "identity" && record.id.endsWith(".two")));
+  assert.ok(!collection.entries.includes("two"));
+});
 
 test("scalar Article builds from files, and fresh source edits do not mutate an earlier publication", () => {
   const text = readFileSync(scalarCancellationArticlePath, "utf8");

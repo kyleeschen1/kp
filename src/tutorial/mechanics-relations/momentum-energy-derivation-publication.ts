@@ -3,6 +3,7 @@ import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, type Ene
 import { compileCheckedDerivation } from "../../authoring/momentum-energy-derivation-authoring.ts";
 import { compileKpArticleMarkdownFragmentHtml as html } from "../../article/kp-article-static-html.ts";
 import { createDerivationOutline } from "./energy-derivation-outline.ts";
+import { createDerivationInspectionComposition } from "../../animation/derivation-inspection-composition.ts";
 
 import { assertEnergyDerivationPlan, createEnergyDerivationPlan, type EnergyDerivationPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
 
@@ -44,6 +45,13 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
   function renderTrace(detail: EnergyDerivationDetail): string {
   const plan = detail === "coarse" ? plans.coarse : plans.fine;
   const compiled = compileCheckedDerivation(plan);
+  const endpoints = (move: (typeof compiled.moves)[number]) => `<div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div>`;
+  const inspection = (move: (typeof compiled.moves)[number]) => {
+    if (plan.compactInspection !== "refinement") return endpoints(move);
+    const composition = createDerivationInspectionComposition(plan, plans.fine, move.index);
+    const children = compileCheckedDerivation(plans.fine);
+    return composition.indices.map(index => `<div class="energy-derivation-stage" data-derivation-child="${index}" data-child-operation="${children.moves[index]!.id}">${endpoints(children.moves[index]!)}</div>`).join("");
+  };
   const view = plan.view;
   const outline = createDerivationOutline(view, plan.majorSteps, plan.operationPrefix);
   const reason = (i: number) => {
@@ -81,7 +89,7 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
       </div>
     </div>
     ${recall}
-    ${compiled.moves.map(move => `<template data-derivation-template="${move.index}" data-transition-id="${move.id}"><div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div></template>`).join("")}
+    ${compiled.moves.map(move => `<template data-derivation-template="${move.index}" data-transition-id="${move.id}">${inspection(move)}</template>`).join("")}
     ${detail === "coarse" ? `<template data-refinement-view>${renderTrace("mass-refinement")}</template>` : ""}
   </div>`;
   }

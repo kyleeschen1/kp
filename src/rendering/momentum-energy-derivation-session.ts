@@ -7,13 +7,61 @@ import { createKpNativeKatexTrackProjection } from "./native-katex-track-project
 import { sampleKpNativeKatexContributorFusionPaint } from "./native-katex-contributor-fusion-sampling.ts";
 import type { KpNativeKatexPaintMeasuredSceneTrack } from "./native-katex-base-scene-plan.ts";
 import { easedProgressBetweenSemanticBeat, linearEquationDemoBeatTimeline } from "./semantic-beat-compiler.ts";
+import { createDerivationInspectionComposition } from "../animation/derivation-inspection-composition.ts";
+import { createKpNativeKatexCompoundScenePlan } from "./native-katex-compound-scene-plan.ts";
+
+type InspectionFocus = { readonly source: readonly string[]; readonly target: readonly string[]; readonly extent?: "participants" | "equation";
+  readonly records?: readonly { readonly root: HTMLElement; readonly entityIds: readonly string[] }[] };
+
+/** One parent playhead selects a child native scene. Every child is prepared
+ * before publication, so crossing a boundary never waits on mounting or fonts.
+ * Endpoint-equivalent scenes exchange visibility atomically; only their native
+ * compositor sessions may own equation paint. */
+export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number,
+  focus?: InspectionFocus, refinement?: EnergyDerivationPlan) {
+  assertEnergyDerivationPlan(compiled);
+  if (compiled.compactInspection !== "refinement") return mountDerivationLeaf(stage, compiled, index, focus);
+  if (focus?.extent === "participants") throw new Error("Compound inspection requires full equation context");
+  if (!refinement) throw new Error("Compound inspection requires its checked children; atomic fallback is forbidden");
+  const composition = createDerivationInspectionComposition(compiled, refinement, index);
+  const roots = [...stage.querySelectorAll<HTMLElement>(":scope > [data-derivation-child]")];
+  if (roots.length !== composition.indices.length || roots.some((root, i) =>
+    root.dataset["childOperation"] !== refinement.moves[composition.indices[i]!]!.id))
+    throw new Error("Published compound inspection does not match checked child operations");
+  const sessions: Awaited<ReturnType<typeof mountDerivationLeaf>>[] = [];
+  try {
+    for (const [i, child] of composition.indices.entries()) {
+      const move = refinement.moves[child]!;
+      const childFocus = focus ? { extent: "equation" as const,
+        source: [...move.exits, ...(move.notice ?? [])].map(role => `${refinement.namespace}.${move.id}.0.${role}`),
+        target: [...move.entries, ...(move.notice ?? [])].map(role => `${refinement.namespace}.${move.id}.1.${role}`) } : undefined;
+      sessions.push(await mountDerivationLeaf(roots[i]!, refinement, child, childFocus));
+    }
+    const timeline = composition.clock;
+    const compound = createKpNativeKatexCompoundScenePlan({ timeline: {
+      operationIds: timeline.segments.map(segment => segment.canonicalOperationId),
+      compressedDurationMs: timeline.totalDurationMs,
+      segments: timeline.segments.map(segment => ({ ...segment, operationId: segment.canonicalOperationId }))
+    }, scenes: sessions.map((session, i) => ({ id: `inspection.${i}`, operationId: timeline.segments[i]!.canonicalOperationId, tracks: session.tracks })) });
+    stage.dataset["derivationRenderer"] = "canonical-native-katex-scene-session";
+    const apply = (progress: number, emphasis = 0) => {
+      const frame = compound.sample(progress);
+      roots.forEach((root, i) => { root.hidden = i !== frame.activeSceneIndex; });
+      sessions[frame.activeSceneIndex]!.apply(frame.localProgress, emphasis);
+      stage.dataset["inspectionOperation"] = frame.operationId;
+      stage.dataset["inspectionChildProgress"] = String(frame.localProgress);
+    };
+    apply(0);
+    return { apply, sample(progress: number) { const frame = compound.sample(progress); return sessions[frame.activeSceneIndex]!.sample(frame.localProgress); },
+      tracks: sessions.flatMap(session => session.tracks),
+      activateRecords() {}, dispose() { sessions.forEach(session => session.dispose()); } };
+  } catch (error) { sessions.forEach(session => session.dispose()); throw error; }
+}
 
 /** One candidate renderer binding, not a new paint owner. Native observation,
  * material ownership, optical ink-knot sampling and endpoint handoff are shared.
  * Only the bounded proof selects which fragments persist or are rewritten. */
-export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number,
-  focus?: { readonly source: readonly string[]; readonly target: readonly string[]; readonly extent?: "participants" | "equation";
-    readonly records?: readonly { readonly root: HTMLElement; readonly entityIds: readonly string[] }[] }) {
+async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number, focus?: InspectionFocus) {
   assertEnergyDerivationPlan(compiled);
   const move = compiled.moves[index];
   if (!move) throw new Error("Unsupported energy derivation step");
@@ -128,7 +176,7 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
           pendingOwners.delete(ownerId);
         }
       }
-    }, sample: canonical.session.sample,
+    }, sample: canonical.session.sample, tracks: plan.tracks,
     activateRecords() { recordAtoms.forEach(({ element, entityId }) => { element.dataset["derivationRecordParticipant"] = entityId; }); },
     dispose() { canonical.session.retire({ kind: "native-katex-paint-preserving-retirement", reason: "scene-replaced", structuralSuccession: "retire-preserving-paint" }); font.dispose(); } };
 }

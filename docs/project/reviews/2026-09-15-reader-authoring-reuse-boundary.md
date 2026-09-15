@@ -1,5 +1,36 @@
 # Reader authoring reuse: boundary result and proposed repair
 
+## Approved checkpoint repair: preserve compound reasoning
+
+After reviewing the scalar page, the user approved composing its coarse
+inspection from its already checked finer reasoning. One written transition
+must not erase factor exposure, nonzero-pair cancellation and coefficient
+collection. This is a repair within `scalar.checkpoint`, not approval of later
+loops or of arbitrary rewrite detection.
+
+Canonical source: `examples/algebra/scalar-cancellation.json` and its Article;
+host: `/experiments/scalar-cancellation/`; authority: the scalar checker and
+issued fine plan; renderer: existing native KaTeX compositor. Reuse the checked
+child operations and existing causal-chain composition rather than another
+scalar animation. Preserve the physics presentation, static record, controls,
+source checks, reverse/seek and expand/collapse return. Track the coefficient's
+denominator through collection instead of replacing that continuant.
+
+Acceptance: one coarse interval visibly traverses its child reasoning, with
+full expression context, continuous shared native handoffs and one active paint
+scene. Fine and coarse derive from the same operations. Missing refinement or
+changed outer endpoints must reject enhancement, never fall back to the old
+undifferentiated fusion. Start sequentially; no concurrent ownership of shared
+syntax or new timing engine. Automatic decomposition and a structurally
+different pressure caller follow visual acceptance as separately scoped work.
+
+One reversible exemplar commit owns implementation, focused semantic tests,
+types and scoped Chromium continuity/ownership checks. The impact selector has
+no focused rule for this binding and suggests broad checks; during visual
+discovery use this smaller explicit gate before promotion. Ceiling: two active
+hours, including a 30-minute verification/closeout reserve. Stop at the revised
+scalar HUMAN_CHECKPOINT; do not spend remaining capacity on unrelated work.
+
 Implementation follow-up: the user approved this proposal, and its scalar
 exemplar is now implemented under `run-contract.kp.reader-scalar-reuse-v1`.
 Current evidence and visual checkpoint:

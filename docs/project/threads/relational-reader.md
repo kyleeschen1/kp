@@ -15,6 +15,11 @@ physics and scalar callers; its new scalar exemplar awaits visual review.
 Shared motion, publication, controls and CSS now support both checked sources;
 subsequent coherent scalar symbol/prose edits need no engine change. This is
 bounded cancellation reuse, not arbitrary LaTeX derivation authoring.
+Latest approved checkpoint repair: the scalar's one written step now inspects
+its checked finer sequence rather than an independent coarse fusion. Its
+revised review packet above owns evidence and limitations; physics presentation
+is preserved. Concurrency, automatic decomposition and a pressure caller remain
+after the scalar visual checkpoint, not implied by this repair.
 Accepted outline principle: opening detail changes depth, not position in the
 argument. Number transitions from stable parent/child identity, not visible
 equation-row offsets; preserve major labels and identify nested scope explicitly.

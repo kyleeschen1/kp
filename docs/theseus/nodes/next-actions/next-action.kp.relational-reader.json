@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: review docs/project/threads/2026-09-15-scalar-reader-review.md; engineering verification complete, scalar visual judgment outstanding.",
+  "summary": "HUMAN_CHECKPOINT: review revised docs/project/threads/2026-09-15-scalar-reader-review.md. Compound inspection implemented and verified; visual cadence awaits user judgment.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -719,11 +719,46 @@
       "scope": "scalar.checkpoint clean full integration rerun",
       "checkedAt": "2026-09-15T20:02:07.103Z",
       "notes": "Architecture, inference, concept catalog and promotion-memory gates passed; all 7104 tests passed, zero failed or skipped. Initial routing and inventory failures repaired, not waived."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "failed",
+      "scope": "scalar compound inspection initial probes",
+      "checkedAt": "2026-09-15T20:50:43.640Z",
+      "notes": "Initial handoff probe included transparent endpoint scaffolds, then omitted material paint; corrected to measure actual visible material owners. Later coefficient assertion required horizontal travel despite coincident native x positions; replaced with continuous visible owner invariant. No runtime gate or motion was weakened to satisfy these probes."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "scalar compound inspection clean rerun",
+      "checkedAt": "2026-09-15T20:50:45.665Z",
+      "notes": "27/27 Chromium checks pass. Actual material geometry matches across both internal handoffs, reverse/direct seek deterministic, exactly one visible child, coefficient keeps one visible owner, missing child rejects without fallback. Physics, collapse, static reading and reduced motion preserved. Visual acceptance and phone promotion remain open."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/scalar-cancellation-reader.test.ts tests/momentum-energy.test.ts tests/energy-derivation-reuse-boundary.test.ts tests/compressed-causal-chain.test.ts tests/causal-chain-drilldown.test.ts tests/visual-motif-composition.test.ts tests/exact-equation-reachability-graph.test.ts tests/animation-api-caller-ledger.test.ts",
+      "status": "passed",
+      "scope": "scalar composition semantics and preservation",
+      "checkedAt": "2026-09-15T20:50:47.038Z",
+      "notes": "64/64 passed: source authority, exact endpoints, child ordering, coefficient lineage, existing composition laws, physics and inventories."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "scalar compound integration",
+      "checkedAt": "2026-09-15T20:50:48.459Z",
+      "notes": "Full app/node/tests/Svelte/domain types pass; final test-only probe edits additionally checked with typecheck:tests. Architecture gate and build:bundle also passed. Full repository npm test not rerun for this bounded visual discovery repair."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "scalar compound production closure",
+      "checkedAt": "2026-09-15T20:50:49.733Z",
+      "notes": "Scalar initial JS/CSS gzip 32966 bytes, reachable 142467, HTML 8241 gzip. Relative to prior measured scalar build, 95 initial and 2886 reachable bytes added. No new dependency, renderer, or clock. Physical-device performance not measured."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Independent scalar source and Article now reuse physics governed lowering, native compositor, controls and styles. All 7104 tests, 25 browser checks, full types and build pass. HUMAN_CHECKPOINT: scalar exemplar awaits visual acceptance; later loops remain parked."
+    "summary": "Compact scalar inspection now composes verified factor exposure, pair cancellation and fraction collection through existing native child sessions and one clock. Coefficient identity preserved. Engineering checks pass; revised scalar HUMAN_CHECKPOINT awaits visual review."
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation.",
