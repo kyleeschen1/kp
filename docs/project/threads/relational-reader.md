@@ -5,12 +5,12 @@ Last Updated: 2026-09-14
 
 ## Canonical direction
 
-Accepted next-loop sequence; detailed first-run approval pending:
+Accepted next-loop sequence and approved first run:
 [September 15 next-step review](../reviews/2026-09-15-next-step-review.md).
 Adopt/readability/local lens access → verified expansion and earlier-result use
 → authoring reuse → code → force/energy argument → graph correspondence.
 The review owns the six-loop horizon and the bounded reader.l1 run proposal;
-Theseus will own live status after scope approval. It reconciles deferred v2
+`run-contract.kp.reader-local-inspection-v1` owns live status. It reconciles deferred v2
 packages
 without restarting them or declaring their remaining outcomes complete.
 

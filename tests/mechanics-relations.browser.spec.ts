@@ -5,6 +5,12 @@ const seek = (input: Locator, progress: number) => input.evaluate((element: HTML
   element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
 }, progress);
 const lens = (root: Locator) => root.getByRole("slider", { name: "Derivation lens", exact: true });
+// Element screenshots may scroll a taller record into view. Compare document
+// geometry to detect reflow without mistaking viewport movement for layout.
+const documentBoxes = (elements: Locator) => elements.evaluateAll(els => els.map(el => {
+  const box = el.getBoundingClientRect();
+  return { x: box.x + scrollX, y: box.y + scrollY, width: box.width, height: box.height };
+}));
 async function dragTo(page: import("@playwright/test").Page, root: Locator, position: number, release = true) {
   const handle = lens(root), box = await handle.boundingBox();
   const move = Math.min(2, Math.floor(position)), fraction = position - move;
@@ -61,8 +67,10 @@ test("semantic accent reaches native and material participants without coloring 
 
 test("participant inspection retains stationary context and traces across all three moves", async ({ page }, info) => {
   const root = await ready(page), stage = root.locator("[data-derivation-stage]");
+  await page.goto(route + "?derivation-motion=participants#energy-from-momentum");
+  await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const records = root.locator(".energy-derivation-equation");
-  const initial = await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()));
+  const initial = await documentBoxes(records);
   const traces = root.locator("[data-derivation-record-participant]");
   await expect(traces).toHaveCount(2);
   for (const position of [.25, .55, .85, .25, 0, 1]) {
@@ -71,7 +79,7 @@ test("participant inspection retains stationary context and traces across all th
     const hidden = stage.locator("[data-derivation-inspection-context]");
     expect(await hidden.count()).toBeGreaterThan(0);
     expect(await hidden.evaluateAll(els => els.every(el => getComputedStyle(el).visibility === "hidden"))).toBe(true);
-    expect(await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()))).toEqual(initial);
+    expect(await documentBoxes(records)).toEqual(initial);
     const opacities = await traces.evaluateAll(els => els.map(el => Number(getComputedStyle(el).opacity)));
     expect(opacities.every(value => position === 0 || position === 1 ? value === 1 : value > 0 && value < .3)).toBe(true);
     if (position === .55) {
@@ -85,7 +93,7 @@ test("participant inspection retains stationary context and traces across all th
     const move = Math.max(0, Math.ceil(position) - 1);
     await expect(root).toHaveAttribute("data-move", String(move));
     await expect(root).toHaveAttribute("data-inspection-extent", "participants");
-    expect(await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()))).toEqual(initial);
+    expect(await documentBoxes(records)).toEqual(initial);
     const activeRows = await traces.evaluateAll(els => [...new Set(els.map(el => el.closest("[data-derivation-row]")!.getAttribute("data-derivation-row")))]);
     expect(activeRows.sort()).toEqual([String(move), String(move + 1)]);
     if (Number.isInteger(position)) {
@@ -115,13 +123,13 @@ test("contextual inspection keeps the complete working equation through forward 
   const root = page.locator("[data-energy-derivation]"), stage = root.locator("[data-derivation-stage]");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const records = root.locator(".energy-derivation-equation");
-  const geometry = await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()));
+  const geometry = await documentBoxes(records);
   for (const position of [.55, 1, 1.55, 2, 2.55, 3, 2.55, 1.55, .55, 0]) {
     await dragTo(page, root, position);
     await expect(root).toHaveAttribute("data-inspection-extent", "equation");
     await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
     await expect(records).toHaveCount(4);
-    expect(await records.evaluateAll(els => els.map(el => el.getBoundingClientRect().toJSON()))).toEqual(geometry);
+    expect(await documentBoxes(records)).toEqual(geometry);
     const opacity = await stage.evaluate(el => Number(getComputedStyle(el).opacity));
     expect(opacity).toBe(Number.isInteger(position) ? 0 : 1);
     if (!Number.isInteger(position)) {
@@ -179,8 +187,12 @@ test("local provenance returns to the same logical position, disclosures and foc
   await expect(back).toBeVisible();
 });
 
-test("provenance is opt-in and contextual inspection fits a narrow reading surface", async ({ page }, info) => {
+test("accepted context and provenance are defaults with explicit legacy comparisons", async ({ page }, info) => {
   const root = await ready(page);
+  await expect(root.locator("[data-derivation-recall]")).toHaveCount(1);
+  await expect(root).toHaveAttribute("data-inspection-extent", "equation");
+  await page.goto(route + "?derivation-provenance=off#energy-from-momentum");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await expect(root.locator("[data-derivation-recall]")).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(route + "?derivation-motion=contextual&derivation-provenance=local#energy-from-momentum");
@@ -200,7 +212,7 @@ test("persistent lens follows the expression, holds interiors and rewinds exactl
   await dragTo(page, root, .55, false);
   await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeGreaterThan(.5);
   await expect(root).toHaveAttribute("data-playing", "false");
-  const cue = root.locator("[data-derivation-interleave]").first(), cueBox = await cue.boundingBox();
+  const cue = root.locator("[data-derivation-interleave]").first(), cueBox = await documentBoxes(cue);
   const expression = await root.locator("[data-derivation-stage]").boundingBox(), knob = await lens(root).boundingBox();
   expect(Math.abs(expression!.y + expression!.height / 2 - knob!.y - knob!.height / 2)).toBeLessThan(2);
   expect(Number(await root.getAttribute("data-algebra-progress"))).toBeGreaterThan(0);
@@ -211,7 +223,7 @@ test("persistent lens follows the expression, holds interiors and rewinds exactl
   await root.screenshot({ path: info.outputPath("lens-interior.png") });
   await dragTo(page, root, .4);
   expect(Number(await root.getAttribute("data-derivation-progress"))).toBeLessThan(Number(held));
-  expect(await cue.boundingBox()).toEqual(cueBox);
+  expect(await documentBoxes(cue)).toEqual(cueBox);
   await dragTo(page, root, .55);
   await expect(root).toHaveAttribute("data-derivation-progress", held!);
   expect(await root.locator("[data-derivation-row]").evaluateAll(rows => rows.map(row => (row as HTMLElement).offsetTop))).toEqual(slots);
@@ -237,13 +249,13 @@ test("interleaved reason preserves its endpoints, readable lane and disclosure g
     const nativeRight = await root.locator("[data-derivation-stage] [data-derivation-target] .katex-html > .base")
       .evaluateAll(bases => Math.max(...bases.map(base => base.getBoundingClientRect().right)));
     expect(textBox!.x).toBeGreaterThan(nativeRight);
-    await passage.locator("summary").click();
+    await passage.getByText("Why is this allowed?", { exact: true }).click();
     await expect(root).toHaveAttribute("data-playing", "false");
     await dragTo(page, root, 1);
     await expect(lens(root)).toHaveAttribute("aria-valuenow", "1");
     const knob = await lens(root).boundingBox(), dock = await target.boundingBox();
     expect(Math.abs(knob!.y + knob!.height / 2 - dock!.y - dock!.height / 2)).toBeLessThan(2);
-    await passage.locator("summary").click();
+    await passage.getByText("Why is this allowed?", { exact: true }).click();
     await dragTo(page, root, .5);
     await root.screenshot({ path: info.outputPath(`interleaved-${width}.png`) });
   }
@@ -252,11 +264,11 @@ test("interleaved reason preserves its endpoints, readable lane and disclosure g
 test("the audit trail never disappears and exact docks have one visible expression", async ({ page }, info) => {
   const root = await ready(page);
   const records = root.locator(".energy-derivation-equation");
-  const initial = await records.evaluateAll(nodes => nodes.map(n => n.getBoundingClientRect().y));
+  const initial = await documentBoxes(records);
   for (const position of [0, .07, .15, .5, .85, .93, 1, .5, 0]) {
     await dragTo(page, root, position);
     for (const record of await records.all()) await expect(record).toBeVisible();
-    expect(await records.evaluateAll(nodes => nodes.map(n => n.getBoundingClientRect().y))).toEqual(initial);
+    expect(await documentBoxes(records)).toEqual(initial);
     for (const reason of await root.locator("[data-derivation-interleave]").all()) await expect(reason).toBeVisible();
     const opacity = Number(await root.locator("[data-derivation-stage]").evaluate(el => getComputedStyle(el).opacity));
     if (position === 0 || position === 1) {

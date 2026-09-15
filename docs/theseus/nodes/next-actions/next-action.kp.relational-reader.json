@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "deferred",
+  "status": "ready",
   "domain": "kp",
-  "summary": "Away portfolio accepted and complete; broader relational-reader v2 remains deferred. Recommend default adoption and narrow-phone prose repair next; finer cancellation requires semantic extension.",
+  "summary": "User approved reader.l1 scope; five packages with mobile checkpoint; away resolved and v2 deferred",
   "sourceRefs": [
     {
       "kind": "file",
@@ -427,6 +427,27 @@
       "scope": "integration",
       "checkedAt": "2026-09-15T05:59:00.115Z",
       "notes": "Approximately 32.8 KB initial and 135.7 KB activated reachable JS/CSS gzip; excludes fonts, HTML and device CPU. Existing lazy compositor closure retained."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T15:02:19.103Z",
+      "notes": "20 tests pass; initially attempted unavailable tsx runner was cancelled without dependency installation; used repository native Node runner."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-15T15:02:21.180Z",
+      "notes": "Full application, node, test, Svelte and domains types pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T15:02:23.019Z",
+      "notes": "Final clean rerun: 15 Chromium tests pass in 56 seconds. Earlier runs exposed stale selectors and viewport-relative screenshot assertions; repaired without weakening document-layout checks. One prior timeout did not recur."
     }
   ],
   "progress": {
@@ -440,10 +461,10 @@
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
   ],
   "allowedWork": [
-    "Approved four-hour away amendment through run-contract.kp.relational-reader-away-v1; v2 deferred with incomplete r2-r5 preserved. Context first, independent provenance and headless granularity, opt-in visuals and local review gates."
+    "Execute reader.l1 only under run-contract.kp.reader-local-inspection-v1 and the approved September 15 review"
   ],
   "disallowedWork": [
-    "No old-loop resumption, universal runtime, cross-domain promotion, new font identity, accounts, tutor, analytics, paid calls, deployment, merge or push."
+    "No older v2 resumption; no new semantic operations or later loops; stop at mobile checkpoint"
   ],
   "criteria": [
     {

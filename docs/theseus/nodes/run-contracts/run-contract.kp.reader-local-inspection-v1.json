@@ -1,0 +1,67 @@
+{
+  "id": "run-contract.kp.reader-local-inspection-v1",
+  "kind": "run-contract",
+  "title": "Reader local inspection delivery",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-15-next-step-review.md",
+      "summary": "User approved first delivery run reader.l1 with five packages and one batched visual checkpoint"
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+    "npm run visual:mechanics-relations",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Only reader.l1 in the approved September 15 review; existing semantic source and compositor"
+  ],
+  "disallowedWork": [
+    "No semantic operations, new renderers, loops 2-6, agents, deployments, merge or push; older v2 remains deferred"
+  ],
+  "goal": "Adopt accepted contextual inspection and enable local access with comfortable mobile reading",
+  "target": "next-action.kp.relational-reader",
+  "runMode": "run",
+  "maxSlices": 5,
+  "commitCadence": "Verified default adoption; local-access mobile checkpoint; post-approval integration",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "HUMAN_CHECKPOINT after l1.mobile before pressure or promotion",
+    "Four active hours including final 45-minute verification reserve; safety or repeated failed repairs"
+  ],
+  "slices": [
+    {
+      "id": "l1.adopt",
+      "title": "Adopt accepted contextual inspection and local recall defaults",
+      "summary": "Accepted contextual equation and recall defaults adopted; explicit legacy comparisons preserved; unit, types and 15 browser checks pass.",
+      "status": "complete"
+    },
+    {
+      "id": "l1.access",
+      "title": "Local transition entry and revision-bound bookmarks",
+      "status": "planned"
+    },
+    {
+      "id": "l1.mobile",
+      "title": "Opt-in normal-width mobile inspection checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "l1.pressure",
+      "title": "Post-approval long-document access pressure",
+      "status": "planned"
+    },
+    {
+      "id": "l1.integrate",
+      "title": "Post-approval adoption and release verification",
+      "status": "planned"
+    }
+  ]
+}

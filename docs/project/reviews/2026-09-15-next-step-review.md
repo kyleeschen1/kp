@@ -137,9 +137,10 @@ an explicitly approved away contract with local gates.
 
 ## First delivery run proposal: reader.l1
 
-Status: **awaiting scope/resource approval**. The request to record and invoke
-the delivery loop selected this sequence; the detailed run is proposed here so
-“as long as possible” has concrete boundaries. Default mode is interactive.
+Status: **scope/resource approved on September 15**. Execute through
+`run-contract.kp.reader-local-inspection-v1`; it owns live progress and evidence.
+The four-active-hour ceiling and mobile human checkpoint below are binding.
+Default mode is interactive.
 
 ### Outcome and ownership
 

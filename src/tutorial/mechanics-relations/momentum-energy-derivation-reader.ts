@@ -10,8 +10,8 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   // Internal exemplar comparison, not an additional learner control or policy.
   const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
   const motion = new URL(location.href).searchParams.get("derivation-motion");
-  const contextual = motion === "contextual";
-  const participantOnly = motion !== "equation" && !contextual;
+  const participantOnly = motion === "participants";
+  const contextual = motion !== "equation" && !participantOnly;
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
@@ -73,7 +73,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     const record = sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
     root.dataset["inspectionExtent"] = participantOnly ? "participants" : "equation";
     root.style.setProperty("--derivation-record-participant-opacity", String(1 - .78 * record.inspectionOpacity));
-    // Context belongs in the working expression too. The opt-in candidate
+    // Context belongs in the working expression too. The accepted treatment
     // keeps the whole scene and uses the same continuous handoff on every edge.
     stage.style.opacity = String(contextual || participantOnly || selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
     root.dataset["inspectionOwner"] = record.kind;
@@ -271,7 +271,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     if (event.key === "Escape") { event.preventDefault(); journey = undefined; clock.pause(); project(); }
   }, opts);
   const pause = () => { journey = undefined; selectionRequest++; clock.pause(); project(); };
-  if (new URL(location.href).searchParams.get("derivation-provenance") === "local") {
+  if (new URL(location.href).searchParams.get("derivation-provenance") !== "off") {
     const ids = [...root.querySelectorAll<HTMLElement>("[data-derivation-template]")].map(el => el.dataset["transitionId"]!);
     bindEnergyDerivationReturn(root, {
       pause,

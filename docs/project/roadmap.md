@@ -30,7 +30,7 @@ is offscreen: `reviews/2026-09-15-next-step-review.md`. That single source owns
 the revised six-loop sequence and detailed first-run proposal. Next: reader.l1
 adoption, local activation/bookmarks and mobile reading, then visual review and
 long-document pressure. Its proposed four-hour ceiling and five-package scope
-await approval; no new run is executing. Later order: expandable cancellation
+are approved under `run-contract.kp.reader-local-inspection-v1`. Later order: expandable cancellation
 and earlier-result use, source-only reuse, code, richer mechanics, graph linkage.
 Do not substitute a generic frontier/refill task or restart the deferred v2.
 
