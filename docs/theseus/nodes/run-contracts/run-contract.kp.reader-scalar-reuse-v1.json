@@ -1,0 +1,47 @@
+{
+  "id": "run-contract.kp.reader-scalar-reuse-v1",
+  "kind": "run-contract",
+  "title": "Independent scalar reading through shared native reader",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-15-reader-authoring-reuse-boundary.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:tests",
+    "npm run visual:mechanics-relations"
+  ],
+  "allowedWork": [
+    "Two callers, one cancellation family; scoped shared binding repair and source-only authoring proof; three active hours including 45-minute reserve"
+  ],
+  "disallowedWork": [
+    "No universal solver, new renderer, new clock, phone promotion, code or graphs, merge or deployment; stop at scalar visual checkpoint"
+  ],
+  "goal": "Deliver checked scalar cancellation with expandable 1.1–1.3 steps through the physics reader pipeline without duplicate renderer",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "scalar.authority",
+      "title": "Checked scalar authority and shared governed native binding",
+      "summary": "Verified authority and shared binding repair: 30 tests, full types and four physics browser checks. Scalar article/host follows in scalar.reader.",
+      "status": "complete"
+    },
+    {
+      "id": "scalar.reader",
+      "title": "Source-driven scalar reading and shared reader integration",
+      "status": "planned"
+    },
+    {
+      "id": "scalar.checkpoint",
+      "title": "Verify two callers and prepare human visual checkpoint",
+      "status": "planned"
+    }
+  ]
+}

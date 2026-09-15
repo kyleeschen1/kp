@@ -27,3 +27,6 @@ export {
   type KpLinearTraceDiagnostic,
   type KpLinearTraceProvenance
 } from "./algebra/linear-equation-trace.ts";
+
+export { checkScalarCancellation, assertScalarCancellation, scalarCancellationSource, scalarCancellationView,
+  type ScalarCancellationSource, type CheckedScalarCancellation } from "./algebra/scalar-cancellation.ts";

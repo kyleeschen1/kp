@@ -7,6 +7,27 @@ import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivatio
 /** Page scroll never owns derivation progress. One shared-clock instance owns
  * the active move; completed lines are static historical records, not copies
  * participating in that move's semantic fan-out. */
+import type { EnergyDerivationPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
+import type { EnergyDerivationDetail } from "../../../domains/physics/momentum-energy-derivation.ts";
+
+export interface DerivationReaderBinding {
+  loadPlan(detail: EnergyDerivationDetail): Promise<EnergyDerivationPlan>;
+  inspection?(plan: EnergyDerivationPlan, index: number): {
+    source: readonly string[]; target: readonly string[]; recordSource: readonly string[]; recordTarget: readonly string[];
+  } | undefined;
+}
+const energyBinding: DerivationReaderBinding = {
+  async loadPlan(detail) {
+    const [{ createEnergyDerivationPlan }, domain] = await Promise.all([
+      import("../../semantic/momentum-energy-derivation-plan.ts"), import("../../../domains/public-api.ts")
+    ]);
+    const checked = domain.checkMomentumEnergyDerivation(domain.momentumEnergyDerivationSource);
+    if (checked.status !== "checked") throw new Error(checked.code);
+    return createEnergyDerivationPlan(checked.model, detail);
+  },
+  inspection(plan, index) { return !plan.view.refinement || index < 2 ? energyDerivationInspection[index] : undefined; }
+};
+
 interface EnergyReaderState {
   revision: string; transition: string; progress: number;
   bookmarks: readonly EnergyInspectionPosition[]; disclosures: readonly boolean[];
@@ -14,17 +35,17 @@ interface EnergyReaderState {
 
 /** Coarse and fine are two projections, never two simultaneously active
  * timelines. Retire the old compositor/clock before mounting the next view. */
-export function enhanceEnergyDerivation(initialRoot: HTMLElement) {
+export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: DerivationReaderBinding = energyBinding) {
   const enabled = new URL(location.href).searchParams.get("derivation-detail") === "expandable";
   if (!enabled) {
     const staticDetail = initialRoot.querySelector<HTMLElement>("[data-refinement-static]");
     if (staticDetail) staticDetail.hidden = true;
-    mountEnergyDerivation(initialRoot);
+    mountEnergyDerivation(initialRoot, binding);
     return;
   }
   const prototype = initialRoot.cloneNode(true) as HTMLElement;
   const expanded = initialRoot.querySelector<HTMLTemplateElement>("[data-refinement-view]");
-  let root = initialRoot, active = mountEnergyDerivation(root);
+  let root = initialRoot, active = mountEnergyDerivation(root, binding);
   let saved: { state: EnergyReaderState; offset: number } | undefined;
   let busy = false;
   const bind = () => {
@@ -39,18 +60,18 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement) {
       busy = true;
       try {
         const collapsing = saved !== undefined;
-        const anchor = root.querySelector<HTMLElement>('[data-derivation-row="2"]')!;
+        const anchor = root.querySelector<HTMLElement>("[data-refinement-anchor]")!;
         if (!collapsing) saved = { state: active.capture(), offset: anchor.getBoundingClientRect().top };
         const next = collapsing ? prototype.cloneNode(true) as HTMLElement : expanded.content.firstElementChild!.cloneNode(true) as HTMLElement;
-        const destination = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: "expand-mass-square", progress: 0, bookmarks: [], disclosures: [] };
+        const destination = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
         const offset = collapsing ? saved!.offset : anchor.getBoundingClientRect().top;
         active.dispose(); root.replaceWith(next); root = next;
-        active = mountEnergyDerivation(root, destination);
+        active = mountEnergyDerivation(root, binding, destination);
         await active.ready;
         if (root.dataset["repair"] === "true") throw new Error("Refinement scene requires repair");
         if (collapsing) saved = undefined;
         bind();
-        window.scrollBy({ top: root.querySelector<HTMLElement>('[data-derivation-row="2"]')!.getBoundingClientRect().top - offset, behavior: "instant" });
+        window.scrollBy({ top: root.querySelector<HTMLElement>("[data-refinement-anchor]")!.getBoundingClientRect().top - offset, behavior: "instant" });
         root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")?.focus({ preventScroll: true });
       } catch (error) {
         // A failed optional view must not strand the reader or grant a visual
@@ -60,11 +81,11 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement) {
           active.dispose();
           const next = prototype.cloneNode(true) as HTMLElement;
           root.replaceWith(next); root = next;
-          active = mountEnergyDerivation(root, previous.state);
+          active = mountEnergyDerivation(root, binding, previous.state);
           saved = undefined;
           await active.ready;
           bind();
-          window.scrollBy({ top: root.querySelector<HTMLElement>('[data-derivation-row="2"]')!.getBoundingClientRect().top - previous.offset, behavior: "instant" });
+          window.scrollBy({ top: root.querySelector<HTMLElement>("[data-refinement-anchor]")!.getBoundingClientRect().top - previous.offset, behavior: "instant" });
           root.querySelector<HTMLElement>("[data-refinement-expand]")?.focus({ preventScroll: true });
         }
         const status = root.querySelector<HTMLElement>("[data-derivation-status]")!;
@@ -77,7 +98,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement) {
   bind();
 }
 
-function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
+function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBinding, initial?: EnergyReaderState) {
   const detail = root.dataset["derivationDetail"] === "mass-refinement" ? "mass-refinement" : "coarse";
   // Internal exemplar comparison, not an additional learner control or policy.
   const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
@@ -252,14 +273,12 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
     let candidate: HTMLElement | undefined;
     let created: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
     try {
-      const [{ mountMomentumEnergyDerivationSession }, { createEnergyDerivationPlan }, domain] = await Promise.all([
-        import("../../rendering/momentum-energy-derivation-session.ts"),
-        import("../../semantic/momentum-energy-derivation-plan.ts"),
-        import("../../../domains/public-api.ts")
+      const [{ mountMomentumEnergyDerivationSession }, proofPlan] = await Promise.all([
+        import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail)
       ]);
       if (token !== generation) return;
-      const checked = domain.checkMomentumEnergyDerivation(domain.momentumEnergyDerivationSource);
-      if (checked.status !== "checked") throw new Error(checked.code);
+      if (proofPlan.namespace !== root.dataset["derivationNamespace"] || proofPlan.moves.length !== ids.length ||
+          proofPlan.moves.some((move, i) => move.id !== ids[i])) throw new Error("Published derivation does not match checked runtime binding");
       tracing = true;
       root.dataset["tracing"] = "true";
       rows.forEach(row => { row.hidden = false; });
@@ -290,10 +309,9 @@ function mountEnergyDerivation(root: HTMLElement, initial?: EnergyReaderState) {
         const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
         paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
       }
-      const proofPlan = createEnergyDerivationPlan(checked.model, detail);
       const move = proofPlan.moves[index]!;
-      const focus = detail === "coarse" || index < 2 ? energyDerivationInspection[index]! : {
-        source: move.exits.map(role => `energy.${move.id}.0.${role}`), target: move.entries.map(role => `energy.${move.id}.1.${role}`),
+      const focus = binding.inspection?.(proofPlan, index) ?? {
+        source: move.exits.map(role => `${proofPlan.namespace}.${move.id}.0.${role}`), target: move.entries.map(role => `${proofPlan.namespace}.${move.id}.1.${role}`),
         recordSource: [], recordTarget: []
       };
       created = await mountMomentumEnergyDerivationSession(candidate, proofPlan, index,

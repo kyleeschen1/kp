@@ -47,9 +47,12 @@ export interface EnergyReturnPort {
  * makes its same-revision, same-document limit explicit. */
 export function bindEnergyDerivationReturn(root: HTMLElement, port: EnergyReturnPort, signal: AbortSignal) {
   const doc = root.ownerDocument;
-  const original = doc.getElementById("momentum-definition");
   const template = root.querySelector<HTMLTemplateElement>("[data-derivation-recall-template]");
-  if (!original || !template) throw new Error("Missing momentum provenance binding");
+  // A scalar argument need not invent a physics provenance link. If the source
+  // declares one, however, missing targets remain an explicit repair.
+  if (!template) return;
+  const original = doc.getElementById(template.dataset["provenanceTarget"] ?? "");
+  if (!original) throw new Error("Missing declared provenance binding");
   const passage = root.querySelector<HTMLElement>('[data-derivation-interleave="0"] .energy-derivation-interleave-text')!;
   passage.append(template.content.cloneNode(true));
   const recall = passage.querySelector<HTMLDetailsElement>("[data-derivation-recall]")!;

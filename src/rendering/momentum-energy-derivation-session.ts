@@ -22,17 +22,17 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
   const font = createKpEquationFontReadiness(stage.ownerDocument);
   await font.whenReady();
   const observe = (endpoint: "source" | "target", root: HTMLElement) => compactGroups(observeKpNativeKatexRenderedScene({
-    endpoint, stage, root, semanticEntityId: "energy", presentationGroupId: "group.energy", fontReadiness: font
+    endpoint, stage, root, semanticEntityId: compiled.namespace, presentationGroupId: `group.${compiled.namespace}`, fontReadiness: font
   }));
   const source = observe("source", sourceRoot), target = observe("target", targetRoot);
-  const sid = (role: string) => `energy.${move.id}.0.${role}`;
-  const tid = (role: string) => `energy.${move.id}.1.${role}`;
+  const sid = (role: string) => `${compiled.namespace}.${move.id}.0.${role}`;
+  const tid = (role: string) => `${compiled.namespace}.${move.id}.1.${role}`;
   const relations = move.persist.map(role => ({ id: `persist.${role}`, relation: "persist" as const,
     sourceEntityIds: [sid(role)], targetEntityIds: [tid(role)] }));
   const split = move.split ? [{ id: "square-homogeneity", relation: "split" as const,
     sourceEntityIds: [sid("power")], targetEntityIds: [tid("power-top"), tid("power-bottom")] }] : [];
   const projection = move.exits.length === 0 ? undefined : createKpNativeKatexTrackProjection({
-    id: `projection.physics.energy.${move.id}`,
+    id: `projection.${compiled.operationPrefix}.${move.id}`,
     project({ tracks }) {
       const before = source.atoms.filter(a => move.exits.some(role => a.semanticEntityId === sid(role)));
       const after = target.atoms.filter(a => move.entries.some(role => a.semanticEntityId === tid(role)));
@@ -60,7 +60,7 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
           // These exact proof-selected contributors intentionally converge to
           // one ink knot. Declare their contact, as the shared evaluation motif
           // does, without exempting any persistent context from collision checks.
-          intentionalContactGroupId: `contact.physics.energy.${move.id}.ink-knot`,
+          intentionalContactGroupId: `contact.${compiled.operationPrefix}.${move.id}.ink-knot`,
           startRect: { ...native, left: native.left + start.translateX, top: native.top + start.translateY },
           endRect: { ...native, left: native.left + end.translateX, top: native.top + end.translateY },
           ...(paint ? { startPaintRect: { ...paint, left: paint.left + start.translateX, top: paint.top + start.translateY },

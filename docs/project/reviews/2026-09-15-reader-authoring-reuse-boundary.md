@@ -49,6 +49,21 @@ certification follows from this source inspection.
 
 ## Recommended next implementation (proposal, not executed)
 
+### Execution approval
+
+The user approved this bounded repair: “run the next loop -- go as long as you
+can”. Execute the three packages below under
+`run-contract.kp.reader-scalar-reuse-v1`, with the three-active-hour ceiling and
+45-minute verification reserve. Stop at the scalar exemplar's visual checkpoint;
+unused capacity does not authorize another mathematical family. The canonical
+reference is `examples/physics/momentum-energy.article.md` at the shared
+port-8000 mechanics-relations host. The scalar artifact will live in
+`examples/algebra/`, on that same server, using the existing native KaTeX
+compositor and separately checked scalar authority. Preserve physics source,
+motion, exact return and static truth. Authority/binding and the second exemplar
+are separate verified rollback commits. Tests and browser smoke establish
+mechanics; human review still owns clarity and visual parity.
+
 Use a small scalar reading: **why does one denominator factor remain?**
 Start with a declared positive real x and real y, and the coarse transformation
 `Q = (1/2) x (y²/x²) → Q = y²/(2x)`.

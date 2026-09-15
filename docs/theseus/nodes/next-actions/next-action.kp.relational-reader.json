@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "STOP_CONDITION: independent scalar authority and shared binding expansion require concrete proposal approval; see docs/project/reviews/2026-09-15-reader-authoring-reuse-boundary.md.",
+  "summary": "User approved bounded scalar authority, shared reader binding and second exemplar through visual review; September 15 reuse boundary proposal owns scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -627,6 +627,34 @@
       "scope": "reuse-boundary",
       "checkedAt": "2026-09-15T18:07:28.197Z",
       "notes": "Test types pass; no runtime changes."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/scalar-cancellation-reader.test.ts tests/momentum-energy.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "scalar.authority",
+      "checkedAt": "2026-09-15T19:16:19.119Z",
+      "notes": "30 pass. Initial physics revision-ID regression repaired by retaining original identity; focused suite rerun clean."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "scalar.authority",
+      "checkedAt": "2026-09-15T19:16:20.299Z",
+      "notes": "Full app, node, tests, Svelte and domains pass after issuer-brand and test-narrowing repairs."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep expandable",
+      "status": "passed",
+      "scope": "scalar.authority",
+      "checkedAt": "2026-09-15T19:16:21.394Z",
+      "notes": "Actual four-test selection: expandable cancellation, every substep return, local provenance and source-owned static. All four Chromium tests passed; timing/CSS/compositor unchanged."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"expandable cancellation|every substep|local provenance|source-owned static\"",
+      "status": "passed",
+      "scope": "scalar.authority",
+      "checkedAt": "2026-09-15T19:16:46.727Z",
+      "notes": "Exact executed four-test command; previous shortened command field described this same selection. Four pass."
     }
   ],
   "progress": {
