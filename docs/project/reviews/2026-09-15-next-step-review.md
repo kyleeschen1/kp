@@ -1,7 +1,7 @@
 # Next loops after contextual inspection acceptance
 
 Status: accepted sequence to preserve for successive delivery; detailed first-run
-scope and resource ceiling below await approval. No automatic six-loop execution.
+scope and resource ceiling approved. No automatic six-loop execution.
 
 ## Evidence and priority
 

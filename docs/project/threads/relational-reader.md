@@ -17,10 +17,11 @@ without restarting them or declaring their remaining outcomes complete.
 September 15 approval accepts the contextual working-expression treatment and
 local provenance/exact return in the away review packet. The bounded away
 portfolio is complete, including its gap investigation (not a fine-step feature).
-Treat the pending-review statements below as checkpoint provenance. No default
-or catalogue promotion has occurred. Recommended next scope: adopt the accepted
-local treatments and repair narrow-phone prose, then consider verified finer
-cancellation. The older v2 scope remains deferred, not silently resumed.
+Treat the pending-review statements below as checkpoint provenance. Accepted
+context and recall/return are now defaults in this exemplar, not catalogue policy.
+The new local-entry/mobile candidate remains opt-in at the approved reader.l1
+checkpoint: [review packet](2026-09-15-reader-local-inspection-review.md).
+The older v2 scope remains deferred, not silently resumed.
 
 Away review packet: [contextual inspection and provenance](2026-09-15-relational-reader-away-review.md).
 It contains opt-in URLs, preservation evidence and the bounded cancellation

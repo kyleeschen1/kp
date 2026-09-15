@@ -28,6 +28,101 @@ async function ready(page: import("@playwright/test").Page) {
   return root;
 }
 
+test("local entry preserves edge identity and bookmarks without scrolling or autoplay", async ({ page }, info) => {
+  await page.goto(route + "?derivation-access=local#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]"), entries = root.locator("[data-derivation-entry]");
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await entries.nth(1).scrollIntoViewIfNeeded();
+  const scroll = await page.evaluate(() => scrollY);
+  await entries.nth(1).click();
+  await expect(root).toHaveAttribute("data-move", "1");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await expect(root).toHaveAttribute("data-playing", "false");
+  expect(await page.evaluate(() => scrollY)).toBe(scroll);
+  await dragTo(page, root, 1.55);
+  const held = await root.getAttribute("data-progress");
+  await entries.nth(2).click();
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await entries.nth(1).click();
+  await expect(root).toHaveAttribute("data-move", "1");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  // Latest local request wins during preparation; adjacent source endpoints
+  // must not silently resolve to the preceding edge's destination.
+  await entries.evaluateAll(buttons => { (buttons[2] as HTMLElement).click(); (buttons[1] as HTMLElement).click(); (buttons[0] as HTMLElement).click(); });
+  await expect(root).toHaveAttribute("data-move", "0");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await entries.nth(1).click();
+  await expect(root).toHaveAttribute("data-move", "1");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await root.locator('[data-derivation-interleave="1"] [data-derivation-restart]').click();
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await entries.nth(2).focus();
+  await page.keyboard.press("Enter");
+  await expect(root).toHaveAttribute("data-move", "2");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  expect(await root.locator("[data-derivation-stage]").count()).toBe(1);
+  await page.mouse.wheel(0, 90);
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await root.screenshot({ path: info.outputPath("local-entry-desktop.png") });
+  const written = root.locator(".energy-derivation-interleave-text").last();
+  await written.evaluate(el => { const range = document.createRange(); range.selectNodeContents(el); getSelection()!.removeAllRanges(); getSelection()!.addRange(range); });
+  expect(await page.evaluate(() => getSelection()!.toString())).toContain("Cancel one mass factor");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await root.evaluate(el => { (el as HTMLElement).dataset["derivationRevision"] = "edited"; });
+  await entries.nth(1).click();
+  await expect(root.locator("[data-derivation-status]")).toContainText("older revision");
+  await expect(root).toHaveAttribute("data-move", "2");
+});
+
+test("phone local inspection keeps normal-width prose and holds a reversible local animation", async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route + "?derivation-access=local#energy-from-momentum");
+  const root = page.locator("[data-energy-derivation]"), entry = root.locator('[data-derivation-entry="0"]');
+  await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
+  await expect(lens(root)).toBeHidden();
+  const text = root.locator(".energy-derivation-interleave-text").first();
+  expect((await text.boundingBox())!.width).toBeGreaterThan(310);
+  await entry.scrollIntoViewIfNeeded();
+  const before = (await entry.boundingBox())!.y;
+  await entry.click();
+  await expect(root).toHaveAttribute("data-mobile-inspect", "true");
+  expect(Math.abs((await entry.boundingBox())!.y - before)).toBeLessThan(1);
+  const range = root.getByRole("slider", { name: "Inspect transition 1 to 2", exact: true });
+  await seek(range, .55);
+  await expect(root).toHaveAttribute("data-progress", "0.55");
+  await expect(root).toHaveAttribute("data-playing", "false");
+  const stage = root.locator("[data-derivation-stage]");
+  const stageBox = await stage.boundingBox(), textBox = await text.boundingBox();
+  expect(stageBox!.y + stageBox!.height).toBeLessThan(textBox!.y);
+  await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
+  await page.mouse.wheel(0, 100);
+  await expect(root).toHaveAttribute("data-progress", "0.55");
+  await seek(range, .35);
+  await expect(root).toHaveAttribute("data-direction", "rewind");
+  await seek(range, .55);
+  await root.screenshot({ path: info.outputPath("local-inspection-phone.png") });
+  const close = root.locator('[data-derivation-interleave="0"] [data-local-close]');
+  await close.click();
+  await expect(root).toHaveAttribute("data-mobile-inspect", "false");
+  await expect(entry).toBeFocused();
+  await entry.click();
+  await expect(root).toHaveAttribute("data-progress", "0.55");
+  await root.locator('[data-derivation-interleave="0"] [data-local-back]').click();
+  await expect.poll(async () => Number(await root.getAttribute("data-progress"))).toBeLessThan(.55);
+  await expect(root).toHaveAttribute("data-progress", "0");
+  await range.focus();
+  await page.keyboard.press("End");
+  await expect(root).toHaveAttribute("data-progress", "1");
+  await page.keyboard.press("Home");
+  await expect(root).toHaveAttribute("data-progress", "0");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.emulateMedia({ media: "print" });
+  await expect(stage).toBeHidden();
+  await expect(entry).toBeHidden();
+  for (const record of await root.locator(".energy-derivation-equation").all()) await expect(record).toBeVisible();
+});
+
 test("semantic accent reaches native and material participants without coloring persistent context", async ({ page }, info) => {
   const root = await ready(page);
   const stage = root.locator("[data-derivation-stage]");

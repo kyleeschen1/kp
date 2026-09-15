@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader-local-inspection-v1",
   "kind": "run-contract",
   "title": "Reader local inspection delivery",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT at l1.mobile: review local entry and phone inspection candidate before l1.pressure or l1.integrate. About 35 minutes of four active hours used including preflight; preserve remaining ceiling and 45-minute closeout reserve across human wait.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,12 +47,14 @@
     {
       "id": "l1.access",
       "title": "Local transition entry and revision-bound bookmarks",
-      "status": "planned"
+      "summary": "Opt-in local entries, identity-specific paused restoration and restart implemented; rapid selection, keyboard, scroll independence, text selection and stale revision checks pass. Aesthetic promotion remains at l1.mobile checkpoint.",
+      "status": "complete"
     },
     {
       "id": "l1.mobile",
       "title": "Opt-in normal-width mobile inspection checkpoint",
-      "status": "planned"
+      "summary": "REVIEW_READY: normal-width phone prose with one labeled fixed local stage using the canonical animation; unit, desktop and phone Chromium checks pass. Human judgment required before completion or promotion.",
+      "status": "in-progress"
     },
     {
       "id": "l1.pressure",

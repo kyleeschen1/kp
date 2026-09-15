@@ -42,7 +42,7 @@ export interface EnergyReturnPort {
   remeasure(): void;
 }
 
-/** Local opt-in adapter. Native links still work without enhancement. Keeping
+/** Local adapter. Native links still work without enhancement. Keeping
  * the bookmark in this mounted document avoids a global navigation store and
  * makes its same-revision, same-document limit explicit. */
 export function bindEnergyDerivationReturn(root: HTMLElement, port: EnergyReturnPort, signal: AbortSignal) {

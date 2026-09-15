@@ -104,4 +104,18 @@
   .energy-derivation .energy-derivation-equation { color: inherit !important; }
 }
 @media (max-width: 520px) { .physics-reader { padding: 1rem .85rem 3rem; } .physics-reader nav { margin-bottom: 2rem; } }
+.energy-derivation-local-access { margin-bottom: .3rem; font-size: .9rem; }
+.energy-derivation-local-access [aria-pressed="true"] { color: #986417; text-decoration: underline; text-underline-offset: .2em; }
+.energy-derivation-mobile-well { border-block: 1px solid #c9c9c9; padding: .5rem 0; margin-block: .5rem; }
+.energy-derivation-mobile-well small { color: #52616d; }
+[data-derivation-mobile-slot] { height: 3.4rem; }
+.energy-derivation-mobile-well input { display: block; width: 100%; min-height: 2.75rem; accent-color: #986417; touch-action: pan-y; }
+@media (max-width: 520px) {
+  .energy-derivation[data-local-access="true"] .energy-derivation-chain { margin-left: .5rem; }
+  .energy-derivation[data-local-access="true"] .energy-derivation-interleave { padding-left: 0; min-height: 0; }
+  .energy-derivation[data-local-access="true"] .energy-derivation-interleave-text { max-width: none; }
+  .energy-derivation[data-local-access="true"] :is(.energy-derivation-rail, .energy-derivation-scope, .energy-derivation-key, .energy-derivation-transport) { display: none; }
+  .energy-derivation[data-local-access="true"][data-mobile-inspect="false"] .energy-derivation-equation { color: inherit; }
+}
+@media print { .energy-derivation-local-access { display: none !important; } }
 @media print { .physics-controls { display: none; } .physics-reader { max-width: none; padding: 0; } .physics-figure { break-inside: avoid; } }

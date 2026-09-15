@@ -1,6 +1,7 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
+import { createEnergyInspectionBookmarks } from "./energy-derivation-bookmarks.ts";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 /** Page scroll never owns derivation progress. One shared-clock instance owns
@@ -12,11 +13,33 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   const motion = new URL(location.href).searchParams.get("derivation-motion");
   const participantOnly = motion === "participants";
   const contextual = motion !== "equation" && !participantOnly;
+  const localAccess = new URL(location.href).searchParams.get("derivation-access") === "local";
+  const phone = matchMedia("(max-width: 520px)");
+  const isPhone = () => localAccess && phone.matches;
   const get = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
   let stage = get<HTMLElement>("[data-derivation-stage]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-derivation-row]")];
   const equationSlots = rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!);
   const interleaves = [...root.querySelectorAll<HTMLElement>("[data-derivation-interleave]")];
+  const ids = [...root.querySelectorAll<HTMLElement>("[data-derivation-template]")].map(el => el.dataset["transitionId"]!);
+  const bookmarks = createEnergyInspectionBookmarks(root.dataset["derivationRevision"]!, ids);
+  let mobileInspect = false, localTop = 0;
+  // Controls are enhancement only. The authoritative static states and prose
+  // are neither cloned nor made clickable, preserving text selection.
+  const localControls = localAccess ? interleaves.map((passage, i) => {
+    const controls = document.createElement("div");
+    controls.className = "energy-derivation-local-access";
+    controls.innerHTML = `<div class="energy-derivation-actions"><button type="button" data-derivation-entry="${i}" aria-pressed="false">Inspect ${i + 1} → ${i + 2}</button><button type="button" data-derivation-restart hidden>Restart</button></div>
+      <div class="energy-derivation-mobile-well" hidden><small>Inspection · ${i + 1} → ${i + 2}</small><div data-derivation-mobile-slot></div><input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect transition ${i + 1} to ${i + 2}"><div class="energy-derivation-actions"><button type="button" data-local-back>Back</button><button type="button" data-local-forward>Forward</button><button type="button" data-local-close>Done</button></div></div>`;
+    passage.prepend(controls);
+    return { element: controls, entry: controls.querySelector<HTMLButtonElement>("[data-derivation-entry]")!,
+      restart: controls.querySelector<HTMLButtonElement>("[data-derivation-restart]")!,
+      well: controls.querySelector<HTMLElement>(".energy-derivation-mobile-well")!,
+      range: controls.querySelector<HTMLInputElement>("input")!,
+      back: controls.querySelector<HTMLButtonElement>("[data-local-back]")!,
+      forward: controls.querySelector<HTMLButtonElement>("[data-local-forward]")! };
+  }) : [];
+  root.dataset["localAccess"] = String(localAccess);
   const rail = get<HTMLElement>("[data-derivation-rail]");
   let centers: number[] = [];
   let equationHeights: number[] = [];
@@ -37,10 +60,22 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   let direction: Direction = "forward";
   let journey: { direction: Direction; target: number } | undefined;
   let drag: { pointer: number; offset: number } | undefined;
-  let pendingSeek: number | undefined;
+  let pendingSeek: { move: number; progress: number } | undefined;
   let seeking = false;
   let selectionRequest = 0;
   const status = get<HTMLElement>("[data-derivation-status]");
+  const syncLocalLayout = () => {
+    const anchor = localControls[selected]?.entry;
+    const before = anchor?.getBoundingClientRect().top;
+    root.dataset["mobileInspect"] = String(mobileInspect);
+    localControls.forEach((controls, i) => { controls.well.hidden = !(isPhone() && mobileInspect && i === selected); });
+    // Opening a local well can close an earlier one above the viewport. Keep
+    // the selected entry at its reading offset, not at an old document pixel.
+    if (isPhone() && anchor && before !== undefined) {
+      const shift = anchor.getBoundingClientRect().top - before;
+      if (shift) window.scrollBy({ top: shift, behavior: "instant" });
+    }
+  };
   const measureRows = () => {
     equationHeights = equationSlots.map(slot => slot.offsetHeight);
     centers = rows.map((row, i) => row.offsetTop + equationHeights[i]! / 2);
@@ -49,6 +84,8 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     rail.style.top = `${centers[0]}px`;
     rail.style.height = `${centers[total]! - centers[0]!}px`;
     [...rail.children].forEach((tick, i) => { (tick as HTMLElement).style.top = `${centers[i]! - centers[0]!}px`; });
+    if (isPhone() && mobileInspect) localTop = localControls[selected]!.well.querySelector<HTMLElement>("[data-derivation-mobile-slot]")!.getBoundingClientRect().top
+      - get(".energy-derivation-chain").getBoundingClientRect().top;
   };
   const positionScope = (position: number) => {
     const { move, progress } = resolveEnergyDerivationPosition(position);
@@ -64,7 +101,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     const frame = sampleEnergyDerivationLens(p);
     // The host relocates one intact scene. Internal native/material ownership
     // remains exclusively compositor-owned, with co-located algebra endpoints.
-    stage.style.transform = `translateY(${sourceTop + rowDistance * frame.carry}px)`;
+    stage.style.transform = `translateY(${isPhone() ? localTop : sourceTop + rowDistance * frame.carry}px)`;
     session.apply(frame.algebra, accented ? sampleSubstitutionEmphasis(p).strength : 0);
     root.dataset["phase"] = frame.phase;
     root.dataset["algebraProgress"] = String(frame.algebra);
@@ -76,6 +113,9 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     // Context belongs in the working expression too. The accepted treatment
     // keeps the whole scene and uses the same continuous handoff on every edge.
     stage.style.opacity = String(contextual || participantOnly || selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
+    // A labeled local inspection is not another statement in the record. Its
+    // native endpoints stay visible inside the well, never atop the fenceposts.
+    if (isPhone()) stage.style.opacity = mobileInspect ? "1" : "0";
     root.dataset["inspectionOwner"] = record.kind;
     positionScope(selected + p);
     root.dataset["move"] = String(selected); root.dataset["progress"] = String(p);
@@ -91,6 +131,19 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     root.dataset["direction"] = direction;
     previous.disabled = loading || (selected === 0 && p === 0);
     next.disabled = loading || (selected === total - 1 && p === 1);
+    if (!loading) bookmarks.remember(ids[selected]!, p);
+    localControls.forEach((controls, i) => {
+      const active = i === selected && (!isPhone() || mobileInspect);
+      controls.entry.setAttribute("aria-pressed", String(active));
+      controls.restart.hidden = !active;
+      controls.restart.disabled = loading || p === 0;
+      if (i === selected) {
+        controls.range.value = String(p);
+        controls.range.setAttribute("aria-valuetext", `${Math.round(p * 100)} percent, ${p === 0 ? "source" : p === 1 ? "result" : "between states"}`);
+        controls.back.disabled = loading || p === 0;
+        controls.forward.disabled = loading || p === 1;
+      }
+    });
   };
   clock.subscribe(project);
   const retire = () => { generation++; session?.dispose(); session = undefined; };
@@ -165,7 +218,7 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
       stage.setAttribute("data-derivation-stage", "");
       session = created; created = undefined;
       selected = index; sourceTop = nextSourceTop; rowDistance = nextRowDistance;
-      measureRows();
+      syncLocalLayout(); measureRows();
       loading = false; status.hidden = true;
       transport.hidden = false;
       scope.hidden = false;
@@ -206,6 +259,9 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
   // Coalesce cross-edge seeks while a native scene prepares. Never discard the
   // last pointer sample just because an asynchronous handoff is in progress.
   async function seekPosition(position: number) {
+    return seekTransition(resolveEnergyDerivationPosition(position));
+  }
+  async function seekTransition(position: { move: number; progress: number }) {
     pendingSeek = position;
     journey = undefined; selectionRequest++; clock.pause();
     if (seeking) return;
@@ -213,10 +269,9 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     try {
       while (pendingSeek !== undefined && !abort.signal.aborted) {
         const wanted = pendingSeek; pendingSeek = undefined;
-        const destination = resolveEnergyDerivationPosition(wanted);
-        direction = wanted < selected + clock.getSnapshot().progress ? "rewind" : "forward";
-        if (session && !loading && selected === destination.move) clock.seek(destination.progress);
-        else await mount(destination.move, destination.progress);
+        direction = wanted.move + wanted.progress < selected + clock.getSnapshot().progress ? "rewind" : "forward";
+        if (session && !loading && selected === wanted.move) clock.seek(wanted.progress);
+        else await mount(wanted.move, wanted.progress);
         if (root.dataset["repair"] === "true") break;
         project();
       }
@@ -271,8 +326,34 @@ export function enhanceEnergyDerivation(root: HTMLElement) {
     if (event.key === "Escape") { event.preventDefault(); journey = undefined; clock.pause(); project(); }
   }, opts);
   const pause = () => { journey = undefined; selectionRequest++; clock.pause(); project(); };
+  localControls.forEach((controls, index) => {
+    const activate = (restart = false) => {
+      pause();
+      try {
+        const destination = bookmarks.recall(root.dataset["derivationRevision"]!, ids[index]!, restart);
+        mobileInspect = true;
+        // Measure only when entering/changing layout, never on scrub samples.
+        if (session && !loading && selected === index) { syncLocalLayout(); measureRows(); }
+        void seekTransition(destination);
+      } catch (error) {
+        status.hidden = false; status.textContent = "This inspection belongs to an older revision. Reload before inspecting.";
+        console.error("Derivation selection repair", error);
+      }
+    };
+    controls.entry.addEventListener("click", () => activate(), opts);
+    controls.restart.addEventListener("click", () => activate(true), opts);
+    controls.range.addEventListener("input", () => {
+      if (index === selected) void seekTransition(bookmarks.position(root.dataset["derivationRevision"]!, ids[index]!, Number(controls.range.value)));
+    }, opts);
+    controls.back.addEventListener("click", () => { pause(); play("rewind"); }, opts);
+    controls.forward.addEventListener("click", () => { pause(); play("forward"); }, opts);
+    controls.element.querySelector("[data-local-close]")!.addEventListener("click", () => {
+      pause(); mobileInspect = false; syncLocalLayout(); measureRows(); project();
+      controls.entry.focus({ preventScroll: true });
+    }, opts);
+  });
+  phone.addEventListener("change", () => { pause(); syncLocalLayout(); measureRows(); project(); }, opts);
   if (new URL(location.href).searchParams.get("derivation-provenance") !== "off") {
-    const ids = [...root.querySelectorAll<HTMLElement>("[data-derivation-template]")].map(el => el.dataset["transitionId"]!);
     bindEnergyDerivationReturn(root, {
       pause,
       async capturePosition() {

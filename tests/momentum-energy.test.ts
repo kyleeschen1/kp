@@ -1,9 +1,29 @@
 import { test } from "node:test";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
+import { createEnergyInspectionBookmarks } from "../src/tutorial/mechanics-relations/energy-derivation-bookmarks.ts";
 import { compileKpGovernedCanonicalConstruction, planKpGovernedConstructionRepairs,
   type KpGovernedCanonicalConstructionRequest } from "../src/authoring/canonical-animation-public-api.ts";
 import { normalizeKpFiniteProductSourceEndpoint } from "../src/semantic/finite-product-endpoint-normalizer.ts";
+
+test("local bookmarks preserve transition identity, held progress and revision boundaries", () => {
+  const ids = ["substitute", "scale", "cancel"];
+  const marks = createEnergyInspectionBookmarks("r1", ids);
+  assert.deepEqual(marks.recall("r1", "scale"), { transition: "scale", move: 1, progress: 0 });
+  marks.remember("substitute", 1);
+  marks.remember("scale", .43);
+  assert.deepEqual(marks.recall("r1", "substitute"), { transition: "substitute", move: 0, progress: 1 });
+  assert.equal(marks.recall("r1", "scale").progress, .43);
+  assert.equal(marks.recall("r1", "scale", true).progress, 0);
+  assert.equal(marks.recall("r1", "scale").progress, .43, "restart is a requested seek, not a second playhead mutation");
+  assert.throws(() => marks.recall("r2", "scale"));
+  assert.throws(() => marks.recall("r1", "unknown"));
+  for (const invalid of [NaN, Infinity, -.1, 1.1]) assert.throws(() => marks.remember("scale", invalid));
+  assert.equal(marks.recall("r1", "scale").progress, .43);
+  ids[0] = "mutated";
+  assert.equal(marks.recall("r1", "substitute").progress, 1);
+  assert.throws(() => createEnergyInspectionBookmarks("r1", ["same", "same"]));
+});
 
 test("finer mass cancellation requires source authority, not an existing motif name", () => {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);

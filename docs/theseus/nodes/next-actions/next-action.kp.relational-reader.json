@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User approved reader.l1 scope; five packages with mobile checkpoint; away resolved and v2 deferred",
+  "summary": "HUMAN_CHECKPOINT: reader.l1 local-entry/mobile candidate awaits visual approval; follow named review URL. No new scope, old v2 resumption or post-checkpoint pressure until accepted.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-15-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-reader-local-inspection-review.md"
     }
   ],
   "dependsOn": {
@@ -448,11 +452,32 @@
       "scope": "focused",
       "checkedAt": "2026-09-15T15:02:23.019Z",
       "notes": "Final clean rerun: 15 Chromium tests pass in 56 seconds. Earlier runs exposed stale selectors and viewport-relative screenshot assertions; repaired without weakening document-layout checks. One prior timeout did not recur."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T15:14:36.291Z",
+      "notes": "21 tests pass, including revision-bound bookmarks, explicit edge identity at shared endpoints, restart and non-mutating rejection."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-15T15:14:43.166Z",
+      "notes": "17 Chromium tests pass in 57.7 seconds for local-access/mobile candidate and existing canonical behavior. Final measurement-cadence adjustment reran all four local checks successfully in 18.5 seconds; full browser matrix deferred until visual approval."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-15T15:15:12.187Z",
+      "notes": "Final full application, node, tests, Svelte and domain typecheck passes after the candidate and measurement-cadence repair."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Six-loop direction durably updated: local lens access/mobile; expandable cancellation and earlier-result use; authoring reuse; code; mechanics; graph. Detailed reader.l1 five-package four-hour proposal awaits scope approval. No implementation started or old v2 resumed."
+    "summary": "reader.l1 defaults adopted; local entry and phone candidate ready for combined visual checkpoint. Candidate URL and decisions in September 15 local-inspection review. Long-document pressure and cross-browser integration remain behind approval; v2 remains deferred."
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation."

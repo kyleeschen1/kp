@@ -36,9 +36,10 @@ Do not substitute a generic frontier/refill task or restart the deferred v2.
 
 September 15 checkpoint approval closes the bounded away portfolio: contextual
 inspection and local provenance/exact return are accepted. Review/evidence:
-`threads/2026-09-15-relational-reader-away-review.md`. They remain opt-in;
-default adoption and narrow-phone prose repair are recommended next scope,
-not an automatically started successor. Finer cancellation retains its recorded
+`threads/2026-09-15-relational-reader-away-review.md`. Their accepted context
+and recall/return are now exemplar defaults. The new local-entry/mobile candidate
+is opt-in for the approved reader.l1 visual checkpoint; see
+`threads/2026-09-15-reader-local-inspection-review.md`. Finer cancellation retains its recorded
 semantic-authority gap. Older v2 work remains deferred.
 
 Latest accepted priority: retain the persistent reasoning record, but repair
