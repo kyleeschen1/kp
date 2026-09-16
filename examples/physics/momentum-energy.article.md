@@ -148,6 +148,8 @@ $$\frac{dK}{dt}=\mathbf v\cdot\mathbf F.$$
 
 [Why does only force along velocity matter?](#power-correspondence)
 
+[See the geometry: energy circles in momentum space](#momentum-space).
+
 This dot product is not unfamiliar calculus in disguise. In Cartesian
 components, it is $F_xv_x+F_yv_y+F_zv_z$. Geometrically, for nonzero vectors,
 it is $\lVert\mathbf F\rVert\lVert\mathbf v\rVert\cos\theta$, where $\theta$ is their angle.
@@ -170,6 +172,49 @@ changes momentum. If its direction is held fixed while velocity turns, the
 force need not remain perpendicular later.
 
 [Back to the relationship map](#relationship-map).
+:::
+
+:::kp-passage{#momentum-space}
+## How can momentum change while energy stays the same?
+
+Move the tip of a momentum arrow without changing its length. Its direction
+changes, but its kinetic energy does not. We can make that distinction visible
+by drawing **momentum space**: each point represents a momentum, not a place
+the particle visits. The origin means zero momentum. Here the mass is fixed at
+$m=1.00$ kg, and $K=\lVert\mathbf p\rVert^2/(2m)$.
+
+### Read distance as energy
+
+The arrow runs from zero to the particle’s momentum. Every point on a circle
+has the same distance from zero, so it has the same kinetic energy. The outer
+circle has twice the radius and **four times the energy**.
+
+### Push outward
+
+In the straight push, the momentum tip moves outward from the inner circle to
+the outer one. Its growing distance from zero is growing kinetic energy.
+Force points along the tip’s motion because $\mathbf F=d\mathbf p/dt$.
+
+### Turn without moving outward
+
+In the circular-motion example, the momentum tip follows the inner circle.
+The arrow turns through a quarter turn but keeps its length. Force is tangent
+to this circle: it changes the direction of momentum without changing energy.
+The tangent describes the **instantaneous** direction; a finite straight step
+along that tangent would leave the circle.
+:::
+
+:::kp-passage{#momentum-space-conclusion}
+Only the outward or inward part of force changes distance from zero. Since
+$\mathbf p$ and $\mathbf v$ point in the same direction, this is also the part
+along velocity. That is the geometry behind $dK/dt=\mathbf v\cdot\mathbf F$.
+
+**Predict:** if the force points inward, toward zero momentum, is kinetic
+energy increasing or decreasing at that instant?
+
+It is decreasing: the momentum tip is moving toward smaller energy circles.
+
+[Return to the force–energy argument](#force-to-energy).
 :::
 
 :::kp-passage{#power-correspondence}

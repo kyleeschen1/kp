@@ -10,6 +10,7 @@ import type { compileMomentumEnergyPublication } from "./momentum-energy-publica
 import { renderEnergyDerivationPassage, renderForceEnergyPassage } from "./momentum-energy-derivation-publication.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 import { renderPowerCorrespondencePassage } from "./power-correspondence-publication.ts";
+import { renderMomentumSpacePassage } from "./momentum-space-publication.ts";
 
 type Publication = ReturnType<typeof compileMomentumEnergyPublication>;
 const html = compileKpArticleMarkdownFragmentHtml;
@@ -38,6 +39,7 @@ export function renderMomentumEnergyReader(publication: Publication) {
       return block.kind === "passage"
         ? `<section id="${attribute(block.id)}">${block.id === "power-correspondence"
           ? renderPowerCorrespondencePassage(block.markdown, publication.capabilities.map(capability => capability.compiled.model))
+          : block.id === "momentum-space" ? renderMomentumSpacePassage(block.markdown, publication.capabilities.map(capability => capability.compiled.model))
           : derivations.get(block.id)?.(block.markdown, revision) ?? html(block.markdown)}</section>`
         : html(block.markdown);
     }

@@ -2,6 +2,26 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("momentum storyboard is readable without JavaScript with prose above each compact sketch", async ({ browser }, info) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  for (const width of [1000, 390]) {
+    await page.setViewportSize({ width, height: 1100 });
+    await page.goto(`http://localhost:8000${route}#momentum-space`);
+    const root = page.locator('[data-momentum-space]');
+    await expect(root.locator('svg')).toHaveCount(3);
+    expect(await root.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+    for (const figure of await root.locator('figure').all()) {
+      const prose = (await figure.locator('figcaption').boundingBox())!;
+      const sketch = (await figure.locator('svg').boundingBox())!;
+      expect(prose.y + prose.height).toBeLessThanOrEqual(sketch.y + 1);
+      expect(sketch.width).toBeLessThanOrEqual(288);
+    }
+    await root.screenshot({ path: info.outputPath(`momentum-story-${width}.png`) });
+  }
+  await context.close();
+});
+
 test("power meaning inspection compares static reading with reversible term-to-evidence selection", async ({ page }, info) => {
   await page.setViewportSize({ width: 1000, height: 1100 });
   await page.goto(route);

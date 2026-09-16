@@ -5,6 +5,36 @@ Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome
 
+Latest approved pivot (2026-09-16): the user found the correspondence interfaces
+unhelpful and approved the recommended momentum-space **still-frame storyboard**
+before further interaction. This supersedes the selection-interface hypothesis
+below. The new local passage is `#momentum-space` in the canonical momentum-energy
+Article, hosted at `/experiments/mechanics-relations/`, with native SVG/KaTeX
+and samples from `domains/physics/momentum-energy.ts` as authority.
+
+Teaching job: make energy depend visibly on distance from zero momentum; compare
+outward growth with turning on an equal-energy circle. Prerequisites are vector
+length and the previously derived fixed-mass energy formula. Explicitly introduce
+momentum space rather than assuming readers recognize a change of coordinates.
+Force is the momentum tip's instantaneous velocity, not a finite tangent step.
+The inward-force prediction checks transfer of the geometry to negative power.
+
+Observable checkpoint: can the reader explain constant energy during turning
+from the circles before relying on the dot-product formula? Explanation stays
+above each sketch, native text stays readable, plots stay compact, and values
+retain fixed precision. This candidate has no new controls or runtime animation;
+the distinctive value of a future KP inspection remains an unproven hypothesis.
+Inspiration: 3Blue1Brown's geometric dot-product and power-rule explanations,
+not a claim to reproduce a specific Sanderson design.
+
+Rollback unit: the momentum-space Article passages, local static projection/CSS,
+and focused tests. Preserve earlier interfaces as closed comparison material,
+accepted calculus/code, existing physics fixtures and readout safeguards. No
+shared abstraction, second caller, arbitrary-force model or promotion is approved.
+Review: `http://localhost:8000/experiments/mechanics-relations/#momentum-space`.
+
+## Earlier correspondence candidate (provenance)
+
 Latest approved refinement: the compact treatment is acceptable, but the user
 does not yet see pedagogical value or a distinctive KP contribution. Do not
 equate the passing simulation checks with a successful learning experience.

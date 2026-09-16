@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Inspect force-energy graph correspondence",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: compare Read together with Inspect connections at localhost:8000/experiments/mechanics-relations/#power-correspondence. Top-first explanation, checked static samples and semantic term selection implemented. 38 unit tests, 8 focused browser checks, final 3-check rerun, full types and build pass. Learning value remains unproven.",
+  "summary": "HUMAN_CHECKPOINT: review localhost:8000/experiments/mechanics-relations/#momentum-space. Static equal-energy circles use checked physics; desktop/narrow no-JS checks, existing readouts, full types and build pass. No new interactive scope until pedagogical review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -115,6 +115,34 @@
       "scope": "Final pedagogy refinement production build",
       "checkedAt": "2026-09-16T21:53:53.570Z",
       "notes": "Build passes with existing chunk warnings. Initial/activated JS-CSS closure 41559/158095 gzip bytes, each +3040 from compact-readout baseline. HTML 41735, +2665. No new dependency, renderer or clock; no CPU or learning-effect claim."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-space.test.ts tests/power-correspondence.test.ts tests/physics-readout.test.ts",
+      "status": "passed",
+      "scope": "Momentum-space semantic and static preservation",
+      "checkedAt": "2026-09-16T23:51:05.710Z",
+      "notes": "Six tests pass: checked fixtures, source meaning bindings, fixed energy precision, existing correspondence and numeric bounds."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Storyboard full types",
+      "checkedAt": "2026-09-16T23:51:07.200Z",
+      "notes": "Full application, node, test, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Storyboard production build",
+      "checkedAt": "2026-09-16T23:51:08.304Z",
+      "notes": "Production build passes with existing large-chunk warnings. New projection runs at publication time; no new browser JavaScript or dependency. Final spacing-only CSS refinement follows this build and is browser-checked."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"momentum storyboard|physics readouts|power meaning\"",
+      "status": "passed",
+      "scope": "Storyboard discovery and existing UI preservation",
+      "checkedAt": "2026-09-16T23:51:31.421Z",
+      "notes": "Four Chromium tests pass. Desktop and narrow no-JS storyboard, top-first prose, compact sketches, previous correspondence navigation and numeric layout stability. Final spacing-only rerun of momentum storyboard passes; screenshots inspected and discarded. Learning value remains subject to human review."
     }
   ],
   "allowedWork": [
@@ -129,7 +157,7 @@
     {
       "id": "graph.correspondence",
       "title": "Graph and symbolic power correspondence",
-      "summary": "HUMAN_CHECKPOINT: static explanation versus local power-term inspection implemented and verified. Await judgment of pedagogical value and control cost. Compact treatment accepted; no shared or catalogue promotion.",
+      "summary": "HUMAN_CHECKPOINT: momentum-space static storyboard implemented and verified. Review geometric explanation of outward versus tangential momentum change before any interaction or promotion.",
       "status": "in-progress"
     }
   ]

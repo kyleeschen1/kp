@@ -5,6 +5,13 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+Current approved pivot: momentum-space still-frame storyboard, following the
+user's rejection of the correspondence interfaces as unhelpful. See the
+[graph proposal](2026-09-16-force-energy-graph.md) for scope and review URL.
+The circles must explain the geometry before another interaction is built.
+Preserve existing checked physics and accepted calculus/code/readout behavior.
+Stop for pedagogical review; the older comparison checkpoint below is provenance.
+
 The compact physics figures are accepted as presentation, not as a pedagogical
 success. The approved [power-correspondence refinement](2026-09-16-force-energy-graph.md)
 compares a complete static explanation with a local inspectable connection from

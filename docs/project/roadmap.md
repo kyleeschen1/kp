@@ -25,7 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-The compact graph treatment is accepted, but its teaching value is unresolved.
+The user rejected the correspondence interfaces as unhelpful and approved a
+momentum-space still-frame storyboard before further interaction. Current scope
+and review URL are in the [graph proposal](threads/2026-09-16-force-energy-graph.md).
+Review whether equal-energy circles explain turning without energy change;
+preserve existing checked physics, calculus and numeric stability. No promotion.
+
+Earlier checkpoint: the compact graph treatment is accepted, but its teaching value is unresolved.
 The approved [graph refinement](threads/2026-09-16-force-energy-graph.md) now
 compares a static explanation with a local equation–geometry correspondence
 inspection. Explanatory purpose belongs above its evidence. Preserve the accepted

@@ -1,0 +1,20 @@
+.momentum-space { margin-block: 1.5rem; scroll-margin-top: 1rem; }
+.momentum-space-story { display: grid; gap: 1.5rem; }
+.physics-reader .momentum-space-story figure { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem); column-gap: 1rem; align-items: center; }
+.physics-reader .momentum-space-story figcaption { grid-column: 1 / -1; margin: 0; font: inherit; }
+.momentum-space-story h3 { font-size: inherit; margin-block: 0 .4rem; }
+.momentum-space-story figcaption p { margin-block: .4rem; }
+.momentum-space-story svg { width: 100%; max-width: 18rem; height: auto; justify-self: center; }
+.momentum-space-story svg path, .momentum-space-story svg circle { vector-effect: non-scaling-stroke; }
+.momentum-space-grid { fill: none; stroke: currentColor; stroke-width: 1; opacity: .3; }
+.momentum-space-momentum { stroke: #306b99; stroke-width: 2; fill: none; }
+.momentum-space-force { stroke: #965b2f; stroke-width: 2.5; fill: none; }
+.momentum-space-trace { stroke: #306b99; stroke-width: 3; fill: none; }
+.momentum-space-reading { white-space: nowrap; }
+@media (max-width: 600px) {
+  .physics-reader .momentum-space-story figure { grid-template-columns: minmax(0, 1fr); }
+  .momentum-space-reading { margin-block: .25rem; text-align: center; }
+}
+@media (forced-colors: active) {
+  .momentum-space-momentum, .momentum-space-force, .momentum-space-trace { stroke: CanvasText; }
+}
