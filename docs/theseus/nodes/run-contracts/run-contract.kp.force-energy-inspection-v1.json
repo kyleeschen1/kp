@@ -2,8 +2,8 @@
   "id": "run-contract.kp.force-energy-inspection-v1",
   "kind": "run-contract",
   "title": "Inspect the force-energy calculus bridge",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review expanded step 1.3 at force-to-energy; coefficient grows concurrently with both contributors. Cancellation and reassociation unchanged; no graph work.",
+  "status": "resolved",
+  "summary": "COMPLETE: user accepted final concurrent consolidation on September 16. Preserve canonical motion; graph correspondence is the next bounded proposal, not catalogue promotion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -152,8 +152,8 @@
     {
       "id": "power.bridge",
       "title": "Checked calculus and local inspection",
-      "summary": "Concurrent coefficient growth and contributor motion implemented; measured forward/reverse check passes. Await human judgment of the revised consolidation.",
-      "status": "in-progress"
+      "summary": "User visually accepted concurrent collection and requested continuation; checked calculus bridge and optional five-child inspection complete.",
+      "status": "complete"
     }
   ]
 }

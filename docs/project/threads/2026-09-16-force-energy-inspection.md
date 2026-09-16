@@ -1,5 +1,14 @@
 # Force–energy: inspect the calculus bridge
 
+## Accepted checkpoint
+
+The user approved the concurrent consolidation and requested continuation.
+The bounded calculus bridge is complete, including the five-child view and
+the tested collection/cancellation repairs. Preserve this accepted exemplar;
+approval is not shared-family promotion. Resume the saved graph correspondence
+boundary through [the bounded successor proposal](2026-09-16-force-energy-graph.md).
+Earlier checkpoint language below is retained as implementation provenance.
+
 ## Approved refinement: concurrent consolidation
 
 Both contributing terms move toward their shared native destination while the

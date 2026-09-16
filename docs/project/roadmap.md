@@ -25,11 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Current approved work: [force–energy calculus inspection](threads/2026-09-16-force-energy-inspection.md),
-under `run-contract.kp.force-energy-inspection-v1`. The accepted code exemplar is
-preserved. Inspect the fixed-mass product-rule bridge through the existing reader
-and native KaTeX pipeline, then stop for visual review. Graph correspondence is
-the saved successor; it is not authorized by this bounded calculus approval.
+The [force–energy calculus inspection](threads/2026-09-16-force-energy-inspection.md)
+is visually accepted and its bounded contract is complete. Preserve concurrent
+collection, exact cancellation and separate reassociation. Next is the saved
+graph correspondence boundary, now scoped in the
+[successor proposal](threads/2026-09-16-force-energy-graph.md); its concrete run
+requires approval. Code and calculus acceptance do not imply catalogue promotion.
 
 Current successor: [centroid first-loop inspection](threads/2026-09-16-centroid-motion.md).
 User accepted the [static example](threads/2026-09-16-centroid-static-example.md)
