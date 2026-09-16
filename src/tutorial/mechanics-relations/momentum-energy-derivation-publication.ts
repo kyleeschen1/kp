@@ -55,9 +55,10 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
   const compiled = compileCheckedDerivation(plan);
   const endpoints = (move: (typeof compiled.moves)[number]) => `<div class="energy-derivation-endpoint" data-derivation-source>${math(move.annotated[0]!)}</div><div class="energy-derivation-endpoint" data-derivation-target>${math(move.annotated[1]!)}</div><div data-kp-editor-equation-material-layer></div>`;
   const inspection = (move: (typeof compiled.moves)[number]) => {
-    if (plan.compactInspection !== "refinement") return endpoints(move);
-    const composition = createDerivationInspectionComposition(plan, plans.fine, move.index);
-    const children = compileCheckedDerivation(plans.fine);
+    const childPlan = plan.inspections?.[move.id] ?? (plan.compactInspection === "refinement" ? plans.fine : undefined);
+    if (!childPlan) return endpoints(move);
+    const composition = createDerivationInspectionComposition(plan, childPlan, move.index);
+    const children = compileCheckedDerivation(childPlan);
     return composition.indices.map(index => `<div class="energy-derivation-stage" data-derivation-child="${index}" data-child-operation="${children.moves[index]!.id}">${endpoints(children.moves[index]!)}</div>`).join("");
   };
   const view = plan.view;
@@ -70,7 +71,10 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
       ? `<div class="energy-derivation-nested-context" data-nested-context><span>Inside step ${node.parent.label} · ${node.parent.title}</span><div class="energy-derivation-actions"><button type="button" data-refinement-collapse hidden>Collapse step ${node.parent.label}</button></div></div>` : "";
     const staticDetail = i === parentIndex && detail === "coarse"
       ? `<details data-refinement-static><summary>Smaller cancellation steps</summary>${staticRefinement()}</details><div class="energy-derivation-actions"><button type="button" data-refinement-expand hidden>Inspect smaller steps</button></div>` : "";
-    return `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave="${i}" data-step-label="${node.label}"${node.depth === 1 ? ` data-parent-step="${node.parent.label}"` : ""} aria-label="Step ${node.label}: ${step.title}">${parent}<div class="energy-derivation-interleave-text"><strong><span data-transition-number>${node.label}</span> · ${step.title}</strong>${html(step.cue)}<details><summary>Why is this allowed?</summary>${html(step.why)}</details>${staticDetail}</div></div>`;
+    const childPlan = plan.inspections?.[step.id];
+    const composedReason = childPlan ? `<details data-composed-reason><summary>See the two operations</summary>${childPlan.view.steps.map((child, j) =>
+      `<p><strong>${child.title}</strong></p>${html(child.cue)}${math(childPlan.view.states[j + 1]!)}${html(child.why)}`).join("")}</details>` : "";
+    return `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave="${i}" data-step-label="${node.label}"${node.depth === 1 ? ` data-parent-step="${node.parent.label}"` : ""} aria-label="Step ${node.label}: ${step.title}">${parent}<div class="energy-derivation-interleave-text"><strong><span data-transition-number>${node.label}</span> · ${step.title}</strong>${html(step.cue)}<details><summary>Why is this allowed?</summary>${html(step.why)}</details>${composedReason}${staticDetail}</div></div>`;
   };
   // The first destination keeps the substitution's compound fragment identity
   // for record/inspection correspondence. Later moves retain their own templates.

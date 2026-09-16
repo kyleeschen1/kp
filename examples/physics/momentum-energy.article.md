@@ -30,7 +30,8 @@ acting on the particle. We discuss kinetic energy $K$, not every form of energy.
 
 Velocity $\mathbf v=d\mathbf r/dt$ describes how position changes. It is a
 vector: its direction tells us where the particle is heading, and its magnitude
-$|\mathbf v|$ is speed. Bold symbols below are vectors; $m$ and $K$ are scalars.
+$\lVert\mathbf v\rVert$ is speed. Double bars denote the Euclidean norm: the length
+of a vector. Bold symbols below are vectors; $m$ and $K$ are scalars.
 
 :::kp-passage{#momentum-definition}
 {{kp-concept:physics.newtonian-momentum@1.0.0/definition}}
@@ -46,7 +47,7 @@ We will reuse this definition in the energy calculation.
 
 **Definition in this model — kinetic energy.** Associate a scalar with motion:
 
-$$K=\frac12m|\mathbf v|^2.$$
+$$K=\frac12m\lVert\mathbf v\rVert^2.$$
 
 Why this expression is useful, rather than merely another way to label speed,
 will emerge when we connect its change to work. Energy also includes forms
@@ -70,7 +71,7 @@ to the reason behind a particular move.
 **Substitute:** describe kinetic energy directly in terms of momentum.
 
 $$\mathbf v=\frac{\mathbf p}{m}
-\quad\Longrightarrow\quad K=\frac{|\mathbf p|^2}{2m}.$$
+\quad\Longrightarrow\quad K=\frac{\lVert\mathbf p\rVert^2}{2m}.$$
 
 [Inspect the substitution](#energy-from-momentum).
 
@@ -97,10 +98,10 @@ $$\Delta K=\int_{t_0}^{t_1}\mathbf F\cdot\mathbf v\,dt=W_{\mathrm{net}}.$$
 **Deduction.** Since $m>0$, rearrange $\mathbf p=m\mathbf v$ and substitute:
 
 $$\begin{aligned}
-K&=\frac12m|\mathbf v|^2\\
- &=\frac12m\left|\frac{\mathbf p}{m}\right|^2\\
- &=\frac12m\frac{|\mathbf p|^2}{m^2}\\
- &=\frac{|\mathbf p|^2}{2m}.
+K&=\frac12m\lVert\mathbf v\rVert^2\\
+ &=\frac12m\left\lVert\frac{\mathbf p}{m}\right\rVert^2\\
+ &=\frac12m\frac{\lVert\mathbf p\rVert^2}{m^2}\\
+ &=\frac{\lVert\mathbf p\rVert^2}{2m}.
 \end{aligned}$$
 
 The squared magnitude divides by $m^2$, not $m$. One factor of $m$ then cancels.
@@ -108,12 +109,12 @@ No new physics entered: this is the same energy written using a different variab
 
 The equation also tells us what information energy leaves out. For fixed mass,
 $K$ depends on the **length** of the momentum vector, not its direction. Inverting
-gives $|\mathbf p|=\sqrt{2mK}$, but does not recover the direction of $\mathbf p$.
+gives $\lVert\mathbf p\rVert=\sqrt{2mK}$, but does not recover the direction of $\mathbf p$.
 
 **Ask what is held fixed.** At equal speed, doubling mass doubles kinetic energy:
 $K=mv^2/2$. At equal momentum magnitude, doubling mass halves kinetic energy:
-$K=|\mathbf p|^2/(2m)$. These are not contradictory predictions; they compare
-different situations. Here $v=|\mathbf v|$ denotes speed.
+$K=\lVert\mathbf p\rVert^2/(2m)$. These are not contradictory predictions; they compare
+different situations. Here $v=\lVert\mathbf v\rVert$ denotes speed.
 
 [Back to the relationship map](#relationship-map).
 :::
@@ -122,7 +123,7 @@ different situations. Here $v=|\mathbf v|$ denotes speed.
 ## 2. Differentiate: how force changes energy
 
 **Deduction using the physical law.** Write the squared magnitude as a dot
-product, $|\mathbf p|^2=\mathbf p\cdot\mathbf p$. Then differentiate:
+product, $\lVert\mathbf p\rVert^2=\mathbf p\cdot\mathbf p$. Then differentiate:
 
 $$\begin{aligned}
 K&=\frac{\mathbf p\cdot\mathbf p}{2m},\\
@@ -141,7 +142,7 @@ makes the two terms equal. Finally, substitute $\mathbf p/m=\mathbf v$ and
 
 This dot product is not unfamiliar calculus in disguise. In Cartesian
 components, it is $F_xv_x+F_yv_y+F_zv_z$. Geometrically, for nonzero vectors,
-it is $|\mathbf F||\mathbf v|\cos\theta$, where $\theta$ is their angle.
+it is $\lVert\mathbf F\rVert\lVert\mathbf v\rVert\cos\theta$, where $\theta$ is their angle.
 It measures the force component along velocity, multiplied by speed.
 
 So a force component along the motion increases kinetic energy; an opposing
@@ -231,7 +232,7 @@ changes momentum without necessarily changing its magnitude or kinetic energy.
 Keep a 1 kg particle moving at 1 m/s around a circle of radius 1 m. Follow the
 momentum arrow as it turns without changing length. The inward force remains
 perpendicular to it: $\mathbf F\cdot\mathbf v=0$, while
-$K=|\mathbf p|^2/(2m)=0.5$ J throughout.
+$K=\lVert\mathbf p\rVert^2/(2m)=0.5$ J throughout.
 
 ::after
 
@@ -248,7 +249,7 @@ energy describes a scalar aspect of that motion, and its change is net work.
 The connections come from substitution, differentiation and accumulation under
 our stated model—not from visual resemblance between formulas.
 
-Try reading $K=|\mathbf p|^2/(2m)$ without the figures: at fixed mass, doubling
+Try reading $K=\lVert\mathbf p\rVert^2/(2m)$ without the figures: at fixed mass, doubling
 momentum magnitude quadruples kinetic energy; reversing direction at unchanged
 magnitude leaves it unchanged. That is information you can extract directly
 from the algebra.

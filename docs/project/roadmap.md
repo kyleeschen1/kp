@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+First priority: [norm scaling and quotient-square composition](threads/2026-09-16-norm-scaling-composition.md),
+approved before continuing the saved queue. Use unambiguous vector norms and
+compose checked homogeneity then quotient squaring; review one canonical
+exemplar before second-caller promotion. The dependency-reuse detour is accepted.
+After this repair return to code transfer, force/energy, then graph correspondence.
+Preserve provisional phone status and parked older plans.
+
 The recall-to-use exemplar is now visually accepted. The approved bounded detour
 is [conceptual dependency reuse](threads/2026-09-15-concept-dependency-reuse.md),
 controlled by `run-contract.kp.concept-dependency-reuse-v1`: one pinned momentum

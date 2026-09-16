@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: pinned momentum source, nested division explanation and impulse reuse verified. Return to reader.l4 after acceptance and remaining l2/l3 evidence reconciliation.",
+  "summary": "HUMAN_CHECKPOINT: canonical norm scaling exemplar ready at mechanics-relations energy-from-momentum step 2. After approval pressure reuse and resolve legacy comparison gap, then resume code, force-energy, graph queue.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -927,6 +927,27 @@
       "scope": "dependency-reuse",
       "checkedAt": "2026-09-16T00:56:26.491Z",
       "notes": "Locked production publication passes; architecture separately passes. Existing large-chunk warnings. Initial physics closure unchanged at 36523 gzip bytes, reachable 148121, HTML 23921."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "norm-exemplar",
+      "checkedAt": "2026-09-16T02:13:28.730Z",
+      "notes": "36 tests pass; full typecheck, architecture and production build also pass. Six focused Chromium checks pass; detailed evidence and limitations in norm composition proposal."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'participant inspection retains'",
+      "status": "failed",
+      "scope": "legacy-comparison",
+      "checkedAt": "2026-09-16T02:13:29.835Z",
+      "notes": "Legacy participant-only URL rejects new compound inspection, which requires full context. Canonical six-test contextual cohort passes. Preserve failure and resolve or explicitly retire comparison before integration; no atomic fallback. Optional SVG stretched norm experiment also failed material cloning and was reverted."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'norm scaling|expanded drag follows|scalar compact inspection|local provenance|source-owned static|contextual inspection keeps'",
+      "status": "passed",
+      "scope": "canonical-exemplar",
+      "checkedAt": "2026-09-16T02:13:47.127Z",
+      "notes": "Six Chromium tests pass. Not a full suite or cross-browser certification."
     }
   ],
   "progress": {

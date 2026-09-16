@@ -2,7 +2,7 @@ import { assertMomentumEnergyDerivation, momentumEnergyDerivationSteps, momentum
 
 import { assertScalarCancellation, scalarCancellationView, type CheckedScalarCancellation } from "../../domains/algebra/scalar-cancellation.ts";
 import { sha256 } from "../kernel/sha256.ts";
-import { newtonianMomentumV1 } from "../../domains/public-api.ts";
+import { newtonianMomentumV1, momentumNormScalingView } from "../../domains/public-api.ts";
 
 export interface DerivationStep { readonly id: string; readonly title: string; readonly cue: string; readonly why: string }
 export interface DerivationView {
@@ -24,6 +24,7 @@ export interface EnergyDerivationPlan {
   readonly notation: { readonly result: string; readonly factor: string; readonly numerator: string };
   readonly coefficientGranularity: "fraction" | "factors";
   readonly compactInspection: "atomic" | "refinement";
+  readonly inspections?: Readonly<Record<string, EnergyDerivationPlan>>;
   readonly cancellationScore: Readonly<
     | { kind: "explanatory"; purpose: "expose-factor-cancellation" }
     | { kind: "fluent"; purpose: "relate-energy-and-momentum";
@@ -41,7 +42,8 @@ export interface EnergyDerivationPlan {
 }
 export interface EnergyDerivationMove {
   readonly id: string;
-  readonly operationKind: "substitute" | "scale-magnitude" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient";
+  readonly operationKind: "substitute" | "scale-magnitude" | "extract-norm-scale" | "square-quotient" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient";
+  readonly syntaxOnly?: true;
   readonly persist: readonly string[];
   readonly exits: readonly string[];
   readonly entries: readonly string[];
@@ -68,7 +70,7 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
     persist: Object.freeze(role.persist), exits: Object.freeze(role.exits), entries: Object.freeze(role.entries) }));
   const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, moves: Object.freeze(moves), namespace: "energy", artifactId: "physics.energy-derivation", packId: detail === "coarse" ? "project.physics.energy-derivation" : "project.physics.energy-refinement", operationPrefix: "physics.energy",
     title: "Energy in terms of momentum", assumptions: Object.freeze(["m is a positive real scalar; p=m v; Euclidean vectors"]),
-    notation: Object.freeze({ result: "K", factor: "m", numerator: String.raw`|\mathbf p|^2` }), coefficientGranularity: "fraction", compactInspection: "atomic",
+    notation: Object.freeze({ result: "K", factor: "m", numerator: String.raw`\lVert\mathbf p\rVert^2` }), coefficientGranularity: "fraction", compactInspection: "atomic",
     cancellationScore: detail === "coarse" ? Object.freeze({ kind: "fluent", purpose: "relate-energy-and-momentum",
       prerequisites: Object.freeze(["nonzero-scalar-cancellation", "unit-exponent-notation"] as const), expansion: "mass-refinement" })
       : Object.freeze({ kind: "explanatory", purpose: "expose-factor-cancellation" }),
@@ -81,7 +83,23 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
       assumption: newtonianMomentumV1.assumption, transitionId: "substitute",
       sourceEntityId: "energy.substitute.0.velocity", targetEntityId: "energy.substitute.1.replacement" }) });
   issued.add(plan);
-  return plan;
+  const childView = momentumNormScalingView(model);
+  const childMoves: readonly EnergyDerivationMove[] = Object.freeze([
+    Object.freeze({ id: "extract-norm-scale", operationKind: "extract-norm-scale", syntaxOnly: true,
+      persist: Object.freeze(["prefix", "half", "mass", "left", "right", "momentum", "denominator", "rule", "power"]),
+      exits: Object.freeze([]), entries: Object.freeze(["paren-left", "paren-right"]), split: false,
+      notice: Object.freeze(["left", "right", "denominator"]) }),
+    Object.freeze({ id: "square-quotient", operationKind: "square-quotient", syntaxOnly: true,
+      persist: Object.freeze(["prefix", "half", "mass", "norm", "denominator", "rule"]),
+      exits: Object.freeze(["paren-left", "paren-right"]), entries: Object.freeze([]), split: true,
+      notice: Object.freeze(["norm", "denominator"]) })
+  ]);
+  const children: EnergyDerivationPlan = Object.freeze({ ...plan, view: childView, moves: childMoves,
+    packId: "project.physics.norm-scaling-refinement", artifactId: "physics.norm-scaling-refinement" });
+  issued.add(children);
+  const composed: EnergyDerivationPlan = Object.freeze({ ...plan, inspections: Object.freeze({ "scale-magnitude": children }) });
+  issued.add(composed);
+  return composed;
 }
 export function assertEnergyDerivationPlan(plan: EnergyDerivationPlan) {
   if (!issued.has(plan)) throw new Error("Energy derivation paint requires an original proof-derived plan");

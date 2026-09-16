@@ -5,6 +5,11 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+The user prioritised [norm-scaling composition](2026-09-16-norm-scaling-composition.md)
+before the remaining queue. Dependency reuse is accepted. Repair ambiguous norm
+notation and simultaneous delimiter/exponent movement using checked causal
+children, then return to code → force/energy → graph with the usual visual gates.
+
 Recall-to-use is visually accepted. The approved
 [conceptual-dependency detour](2026-09-15-concept-dependency-reuse.md) replaces
 duplicated momentum explanation sources with bounded pinned reuse and one nested

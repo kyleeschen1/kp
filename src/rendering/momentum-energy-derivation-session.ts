@@ -22,7 +22,9 @@ type InspectionFocus = { readonly source: readonly string[]; readonly target: re
 export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, compiled: EnergyDerivationPlan, index: number,
   focus?: InspectionFocus, refinement?: EnergyDerivationPlan) {
   assertEnergyDerivationPlan(compiled);
-  if (compiled.compactInspection !== "refinement") return mountDerivationLeaf(stage, compiled, index, focus);
+  const nested = compiled.inspections?.[compiled.moves[index]!.id];
+  if (compiled.compactInspection !== "refinement" && !nested) return mountDerivationLeaf(stage, compiled, index, focus);
+  refinement = nested ?? refinement;
   if (focus?.extent === "participants") throw new Error("Compound inspection requires full equation context");
   if (!refinement) throw new Error("Compound inspection requires its checked children; atomic fallback is forbidden");
   const composition = createDerivationInspectionComposition(compiled, refinement, index);
@@ -35,8 +37,8 @@ export async function mountMomentumEnergyDerivationSession(stage: HTMLElement, c
     for (const [i, child] of composition.indices.entries()) {
       const move = refinement.moves[child]!;
       const childFocus = focus ? { extent: "equation" as const,
-        source: [...move.exits, ...(move.notice ?? [])].map(role => `${refinement.namespace}.${move.id}.0.${role}`),
-        target: [...move.entries, ...(move.notice ?? [])].map(role => `${refinement.namespace}.${move.id}.1.${role}`) } : undefined;
+        source: [...move.exits, ...(move.notice ?? []), ...(move.split ? ["power"] : [])].map(role => `${refinement.namespace}.${move.id}.0.${role}`),
+        target: [...move.entries, ...(move.notice ?? []), ...(move.split ? ["power-top", "power-bottom"] : [])].map(role => `${refinement.namespace}.${move.id}.1.${role}`) } : undefined;
       sessions.push(await mountDerivationLeaf(roots[i]!, refinement, child, childFocus));
     }
     const timeline = composition.clock;
@@ -81,11 +83,28 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
     sourceEntityIds: [sid(role)], targetEntityIds: [tid(role)] }));
   const split = move.split ? [{ id: "square-homogeneity", relation: "split" as const,
     sourceEntityIds: [sid("power")], targetEntityIds: [tid("power-top"), tid("power-bottom")] }] : [];
-  const projection = move.exits.length === 0 ? undefined : createKpNativeKatexTrackProjection({
+  const projection = move.exits.length === 0 && !move.syntaxOnly ? undefined : createKpNativeKatexTrackProjection({
     id: `projection.${compiled.operationPrefix}.${move.id}`,
     project({ tracks }) {
       const before = source.atoms.filter(a => move.exits.some(role => a.semanticEntityId === sid(role)));
       const after = target.atoms.filter(a => move.entries.some(role => a.semanticEntityId === tid(role)));
+      if (move.syntaxOnly) {
+        // Parentheses are explicit grouping syntax, never successors of norm
+        // bars or the power. Reuse ink withdrawal/reception, not glyph matching.
+        const removed = new Set(before.map(atom => atom.id)), added = new Set(after.map(atom => atom.id));
+        return tracks.map(track => {
+          if (track.lifecycle === "eliminate" && track.sourceAtomId && removed.has(track.sourceAtomId))
+            return projectKpNativeKatexInkWithdrawal(track, `syntax.${move.id}`);
+          if (track.lifecycle === "introduce" && track.targetAtomId && added.has(track.targetAtomId)) {
+            const growth = (p: number) => 1 - sampleKpNativeKatexCarrierPreservingSimplificationOptics(1 - p).removedSyntaxCohort.withdrawalProgress;
+            return Object.freeze({ ...track, startRect: track.endRect, startPaintRect: track.endPaintRect,
+              sampleProgress: () => 1, sampleMaterialScale: (p: number) => Math.max(Number.EPSILON, growth(p)),
+              samplePaintPresence: (p: number) => Number(growth(p) > 0), opacityScheduleAuthority: "semantic-choreography" as const });
+          }
+          if (track.lifecycle === "introduce" || track.lifecycle === "eliminate") throw new Error("Unclassified grouping syntax");
+          return track;
+        });
+      }
       if (move.operationKind === "cancel-unit-power") {
         if (compiled.cancellationScore.kind !== "fluent" || !before.length || after.length)
           throw new Error("Fluent cancellation requires checked retained carriers and omitted syntax");

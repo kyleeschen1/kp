@@ -1,0 +1,41 @@
+{
+  "id": "run-contract.kp.norm-scaling-composition-v1",
+  "kind": "run-contract",
+  "title": "Norm scaling and quotient-square composition",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review norm scaling step 2 before second-caller pressure. Preserve norm.pressure pending; resolve recorded legacy comparison gap before integration.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-norm-scaling-composition.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:mechanics-relations"
+  ],
+  "allowedWork": [
+    "Checked child composition, norm notation, one exemplar then post-approval second caller; three-hour ceiling with thirty-minute reserve."
+  ],
+  "disallowedWork": [
+    "No new renderer, clock, universal solver, phone promotion or broad rollout; stop for exemplar visual review."
+  ],
+  "goal": "Explain norm homogeneity and quotient squaring without delimiter-exponent crossing, then resume the preserved queue.",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "norm.exemplar",
+      "summary": "Review candidate implemented; HUMAN_CHECKPOINT on two-phase choreography. Six canonical Chromium checks and 36 units pass; legacy participants comparison gap recorded. Not yet promoted.",
+      "status": "in-progress"
+    },
+    {
+      "id": "norm.pressure",
+      "status": "planned"
+    }
+  ]
+}

@@ -2,11 +2,38 @@ import { test } from "node:test";
 import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import assert from "node:assert/strict";
 import { momentumEnergyDerivationView } from "../domains/public-api.ts";
+import { compileCheckedDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
+import { createDerivationInspectionComposition } from "../src/animation/derivation-inspection-composition.ts";
 import { createEnergyDerivationOutline } from "../src/tutorial/mechanics-relations/energy-derivation-outline.ts";
 import { createEnergyInspectionBookmarks } from "../src/tutorial/mechanics-relations/energy-derivation-bookmarks.ts";
 import { compileKpGovernedCanonicalConstruction, planKpGovernedConstructionRepairs,
   type KpGovernedCanonicalConstructionRequest } from "../src/authoring/canonical-animation-public-api.ts";
 import { normalizeKpFiniteProductSourceEndpoint } from "../src/semantic/finite-product-endpoint-normalizer.ts";
+
+test("norm scaling composes homogeneity before quotient squaring with exact outer endpoints", () => {
+  const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
+  assert.equal(checked.status, "checked"); if (checked.status !== "checked") return;
+  for (const detail of ["coarse", "mass-refinement"] as const) {
+    const plan = createEnergyDerivationPlan(checked.model, detail);
+    const child = plan.inspections!["scale-magnitude"]!;
+    const composed = createDerivationInspectionComposition(plan, child, 1);
+    assert.deepEqual(composed.indices, [0, 1]);
+    assert.equal(child.view.states[0], plan.view.states[1]);
+    assert.equal(child.view.states[2], plan.view.states[2]);
+    assert.deepEqual(child.moves.map(move => move.operationKind), ["extract-norm-scale", "square-quotient"]);
+    assert.equal(child.moves[0]!.split, false);
+    assert.ok(child.moves[0]!.persist.includes("power"));
+    assert.ok(child.moves[1]!.persist.includes("norm"));
+    const compiled = compileCheckedDerivation(child);
+    const fans = compiled.moves.flatMap(move => move.transformation.correspondenceMap!.records.filter(record => record.relation === "fan-out"));
+    assert.equal(fans.length, 1);
+    assert.deepEqual(fans[0]!.sourceSelectorIds, ["energy.square-quotient.0.power"]);
+    assert.deepEqual(fans[0]!.targetSelectorIds, ["energy.square-quotient.1.power-top", "energy.square-quotient.1.power-bottom"]);
+    assert.ok(child.view.states.every(state => state.includes(String.raw`\lVert`)));
+    assert.throws(() => createDerivationInspectionComposition(plan, child, 0), /authority/);
+    assert.throws(() => createDerivationInspectionComposition(plan, { ...child }, 1), /proof-derived/);
+  }
+});
 
 test("local bookmarks preserve transition identity, held progress and revision boundaries", () => {
   const ids = ["substitute", "scale", "cancel"];
@@ -42,8 +69,8 @@ test("cancellation refinement preserves exact outer states and requires the chec
   assert.equal(fine.states.at(-1), coarse.states.at(-1));
   assert.equal(fine.refinement?.parentTransitionId, "physics.energy.cancel-mass");
   assert.equal(fine.refinement?.childOperationIds.length, 3);
-  assert.equal(fine.states[3], String.raw`K=\frac{1}{2}m\frac{|\mathbf p|^2}{m\cdot m}`);
-  assert.equal(fine.states[4], String.raw`K=\frac{1}{2}\cdot1\frac{|\mathbf p|^2}{m}`);
+  assert.equal(fine.states[3], String.raw`K=\frac{1}{2}m\frac{\lVert\mathbf p\rVert^2}{m\cdot m}`);
+  assert.equal(fine.states[4], String.raw`K=\frac{1}{2}\cdot1\frac{\lVert\mathbf p\rVert^2}{m}`);
   assert.throws(() => momentumEnergyDerivationView({ ...result.model }, "mass-refinement"));
   const compilation = compileMomentumEnergyDerivation(result.model, "mass-refinement");
   assert.equal(compilation.moves.length, 5);

@@ -30,7 +30,7 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
     ? String.raw`\frac{${p("coefficient-one", "1")}}{${p("two", "2")}}` : String.raw`\frac{1}{2}`), mass = p("mass", notation.factor);
   // left/right delimiters must be paired within native KaTeX grammar, so the
   // ownership wrappers enclose delimiter glyphs rather than unmatched \left.
-  const magnitude = (inside: string) => `${p("left", "|")}${inside}${p("right", "|")}`;
+  const magnitude = (inside: string) => `${p("left", String.raw`\lVert`)}${inside}${p("right", String.raw`\rVert`)}`;
   const power = p("power", "2");
   const fixed = prefix + half + mass;
   const first = [fixed + magnitude(p("velocity", String.raw`\mathbf v`)) + `^{${power}}`,
@@ -39,6 +39,11 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
   const numerator = p("momentum", String.raw`\mathbf p`), denominator = p("denominator", "m");
   const second = [fixed + magnitude(quotient(numerator, denominator)) + `^{${power}}`,
     fixed + quotient(magnitude(numerator) + `^{${p("power-top", "2")}}`, denominator + `^{${p("power-bottom", "2")}}`)];
+  const parentheses = (inside: string) => p("paren-left", String.raw`\Bigl(`) + inside + p("paren-right", String.raw`\Bigr)`);
+  const norm = p("norm", String.raw`\lVert\mathbf p\rVert`);
+  const homogeneity = [second[0]!, fixed + parentheses(quotient(magnitude(numerator), denominator)) + `^{${power}}`];
+  const quotientSquare = [fixed + parentheses(quotient(norm, denominator)) + `^{${power}}`,
+    fixed + quotient(norm + `^{${p("power-top", "2")}}`, denominator + `^{${p("power-bottom", "2")}}`)];
   const normP = p("norm", notation.numerator);
   const third = [fixed + quotient(normP, p("scalar-before", `${notation.factor}^2`)),
     prefix + quotient(normP, p("scalar-after", `2${notation.factor}`))];
@@ -56,6 +61,7 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
     [prefix + half + identity + quotient(normP, p("factor-retain", notation.factor)), prefix + quotient(normP, p("two", "2") + p("factor-retain", notation.factor))]
   ];
   const endpoints = { substitute: first, "scale-magnitude": second, "cancel-factor": third, "cancel-unit-power": fluent,
+    "extract-norm-scale": homogeneity, "square-quotient": quotientSquare,
     "expand-square": fine[0]!, "cancel-pair": fine[1]!, "collect-coefficient": fine[2]! };
   const specs = plan.moves.map(move => ({ ...move, endpoints: endpoints[move.operationKind] }));
   const builder = createKpAnimationAssetBuilder({ id: `animation.${artifactId}`, title: plan.title });
@@ -76,9 +82,9 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
         sourceSelectorIds: [`${ns}.${step.id}.0.${role}`], targetSelectorIds: [], summary: `${role} is rewritten by ${view.proof[i]}.` })),
       ...spec.entries.map(role => ({ id: `lineage.${step.id}.enter.${role}`, relation: "introduction" as const,
         sourceSelectorIds: [], targetSelectorIds: [`${ns}.${step.id}.1.${role}`], summary: `${role} follows from ${view.proof[i]}.` })),
-      ...(spec.split ? [{ id: "lineage.scale-magnitude.power", relation: "fan-out" as const,
-        sourceSelectorIds: ["energy.scale-magnitude.0.power"], targetSelectorIds: ["energy.scale-magnitude.1.power-top", "energy.scale-magnitude.1.power-bottom"],
-        summary: "Squared norm homogeneity retains numerator exponent and squares the denominator." }] : [])
+      ...(spec.split ? [{ id: `lineage.${step.id}.power`, relation: "fan-out" as const,
+        sourceSelectorIds: [`${ns}.${step.id}.0.power`], targetSelectorIds: [`${ns}.${step.id}.1.power-top`, `${ns}.${step.id}.1.power-bottom`],
+        summary: "The checked quotient square applies the exponent to numerator and denominator." }] : [])
     ];
     const transformation = createKpSemanticTransformation({ id: `${op}.${step.id}`, definitionId: `definition.${op}.${step.id}`,
       transformType: `${op}.${step.id}`, title: step.title, sourceObjectIds: [objects[0]!.id], targetObjectIds: [objects[1]!.id],

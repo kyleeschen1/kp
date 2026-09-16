@@ -31,3 +31,4 @@ export {
 export { checkScalarCancellation, assertScalarCancellation, scalarCancellationSource, scalarCancellationView,
   type ScalarCancellationSource, type CheckedScalarCancellation } from "./algebra/scalar-cancellation.ts";
 export { newtonianMomentumV1 } from "./physics/newtonian-momentum.ts";
+export { momentumNormScalingView } from "./physics/momentum-energy-derivation.ts";

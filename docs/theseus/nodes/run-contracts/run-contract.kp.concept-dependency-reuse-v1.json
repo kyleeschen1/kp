@@ -2,8 +2,8 @@
   "id": "run-contract.kp.concept-dependency-reuse-v1",
   "kind": "run-contract",
   "title": "Pinned momentum dependency reuse",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: implementation verified; review nested dependency depth before promotion and returning to saved code-transfer boundary.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,8 +30,8 @@
   "slices": [
     {
       "id": "dependency.reuse",
-      "summary": "Implement the approved pinned source and local nested reuse.",
-      "status": "in-progress"
+      "summary": "User accepted dependency reuse and authorised prioritising norm-scaling repair before the saved queue.",
+      "status": "complete"
     }
   ]
 }

@@ -35,6 +35,28 @@ async function ready(page: import("@playwright/test").Page) {
   return root;
 }
 
+test("norm scaling preserves enclosure identity through two reversible checked children", async ({ page }, info) => {
+  const root = await ready(page);
+  const stage = root.locator("[data-derivation-stage]");
+  for (const [position, operation] of [[1.5, "extract-norm-scale"], [1.62, "square-quotient"], [1.7, "square-quotient"], [1.5, "extract-norm-scale"]] as const) {
+    await dragTo(page, root, position);
+    await expect(stage).toHaveAttribute("data-inspection-operation", `physics.energy.${operation}`);
+    await expect(stage.locator(":scope > [data-derivation-child]:not([hidden])")).toHaveCount(1);
+    await expect(root).not.toHaveAttribute("data-repair", "true");
+    await root.screenshot({ path: info.outputPath(`norm-${position}-${operation}.png`) });
+  }
+  const depth = root.locator("[data-composed-reason]");
+  const held = await root.getAttribute("data-progress");
+  await depth.locator("summary").click();
+  await expect(depth).toContainText("Take scalar scaling outside the norm");
+  await expect(depth).toContainText("Square numerator and denominator");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await depth.screenshot({ path: info.outputPath("norm-explanation.png") });
+  await dragTo(page, root, 2);
+  await dragTo(page, root, 1);
+  await expect(root).toHaveAttribute("data-derivation-progress", "1");
+});
+
 test("fluent physics cancellation keeps its carriers, omits identity stops and offers local explanation by default", async ({ page }, info) => {
   const root = await ready(page), stage = root.locator("[data-derivation-stage]");
   const errors: string[] = [];
@@ -330,7 +352,10 @@ test("expanded drag follows every pointer sample across boundaries without waiti
   }));
   const handle = (await lens(root).boundingBox())!, x = handle.x + handle.width / 2;
   const preparedScenes = await root.evaluateHandle(el => [...el.querySelectorAll(".energy-derivation-stage")]);
-  expect(await preparedScenes.evaluate(scenes => scenes.length)).toBe(5);
+  // Five major-stage containers plus the two prebuilt norm-scaling children.
+  // Both children must already exist; no mounting is allowed during dragging.
+  expect(await preparedScenes.evaluate(scenes => scenes.length)).toBe(7);
+  await expect(root.locator("[data-derivation-child]")).toHaveCount(2);
   // Observe after the handle's event handler, before asynchronous preparation
   // could conceal a missed input. Eventual endpoint assertions miss the catch.
   await root.evaluate(element => {
@@ -359,13 +384,13 @@ test("expanded drag follows every pointer sample across boundaries without waiti
   await expect(root).toHaveAttribute("data-playing", "false");
   await expect.poll(async () => Number(await root.getAttribute("data-derivation-progress"))).toBeCloseTo(2.2, 3);
   expect(await preparedScenes.evaluate(scenes => scenes.every(scene => scene.isConnected))).toBe(true);
-  await expect(root.locator(".energy-derivation-stage")).toHaveCount(5);
+  await expect(root.locator(".energy-derivation-stage")).toHaveCount(7);
   const preparedWidth = (await root.boundingBox())!.width;
   await page.setViewportSize({ width: 521, height: 1800 });
   expect((await root.boundingBox())!.width).toBeLessThan(preparedWidth);
   await expect.poll(() => preparedScenes.evaluate(scenes => scenes.every(scene => !scene.isConnected))).toBe(true);
   await expect(lens(root)).toBeEnabled();
-  await expect(root.locator(".energy-derivation-stage")).toHaveCount(5);
+  await expect(root.locator(".energy-derivation-stage")).toHaveCount(7);
   await expect.poll(async () => Number(await root.getAttribute("data-derivation-progress"))).toBeCloseTo(2.2, 3);
   await preparedScenes.dispose();
 });
@@ -746,7 +771,7 @@ test("local provenance returns to the same logical position, disclosures and foc
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const recall = root.locator("[data-derivation-recall]");
   await recall.locator(":scope > summary").click();
-  await root.locator('[data-derivation-interleave="1"] summary').click();
+  await root.locator('[data-derivation-interleave="1"] summary').first().click();
   await dragTo(page, root, 1.55);
   const link = recall.getByRole("link", { name: "Visit the original definition" });
   await link.focus();
