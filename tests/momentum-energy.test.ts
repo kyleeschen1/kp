@@ -24,6 +24,14 @@ test("norm scaling composes homogeneity before quotient squaring with exact oute
     assert.equal(child.moves[0]!.split, false);
     assert.ok(child.moves[0]!.persist.includes("power"));
     assert.ok(child.moves[1]!.persist.includes("norm"));
+    const square = child.moves[1]!;
+    assert.ok(square.split);
+    assert.equal(square.branching, "scope-propagation");
+    // A branching correspondence without an instructional role cannot choose
+    // distribution choreography merely because it has two descendants.
+    // @ts-expect-error A semantic split must declare its branching meaning.
+    const unclassified: import("../src/semantic/momentum-energy-derivation-plan.ts").EnergyDerivationMove = { id: "unclassified", operationKind: "square-quotient", persist: [], entries: [], exits: [], split: true };
+    void unclassified;
     const compiled = compileCheckedDerivation(child);
     const fans = compiled.moves.flatMap(move => move.transformation.correspondenceMap!.records.filter(record => record.relation === "fan-out"));
     assert.equal(fans.length, 1);

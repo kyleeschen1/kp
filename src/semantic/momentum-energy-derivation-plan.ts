@@ -40,16 +40,22 @@ export interface EnergyDerivationPlan {
   }>;
   readonly [issuedPlan]: true;
 }
-export interface EnergyDerivationMove {
+export type EnergyDerivationMove = {
   readonly id: string;
   readonly operationKind: "substitute" | "scale-magnitude" | "extract-norm-scale" | "square-quotient" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient";
   readonly syntaxOnly?: true;
   readonly persist: readonly string[];
   readonly exits: readonly string[];
   readonly entries: readonly string[];
-  readonly split: boolean;
   readonly notice?: readonly string[];
-}
+} & ({ readonly split: false } | {
+  readonly split: true;
+  // Lineage alone cannot select choreography: scope propagation is not
+  // operand distribution, even when both produce two descendants.
+  readonly branching: "scope-propagation" | "operand-distribution";
+});
+type DerivationMoveRoles = EnergyDerivationMove extends infer Move
+  ? Move extends EnergyDerivationMove ? Omit<Move, "id"> : never : never;
 const issued = new WeakSet<object>();
 
 /** Endpoint roles belong to the bounded semantic proof. Both build-time
@@ -57,12 +63,12 @@ const issued = new WeakSet<object>();
  * the browser need not load authoring compilers or trust a serialized proof. */
 export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivation, detail: EnergyDerivationDetail = "coarse"): EnergyDerivationPlan {
   assertMomentumEnergyDerivation(model);
-  const roles: Omit<EnergyDerivationMove, "id">[] = [
+  const roles: DerivationMoveRoles[] = [
     { operationKind: "substitute", persist: ["prefix", "half", "mass", "left", "right", "power"], exits: ["velocity"], entries: ["replacement"], split: false },
-    { operationKind: "scale-magnitude", persist: ["prefix", "half", "mass", "left", "right", "momentum", "denominator", "rule"], exits: [], entries: [], split: true },
+    { operationKind: "scale-magnitude", persist: ["prefix", "half", "mass", "left", "right", "momentum", "denominator", "rule"], exits: [], entries: [], split: true, branching: "scope-propagation" },
     ...(detail === "coarse" ? [{ operationKind: "cancel-unit-power" as const,
       persist: ["prefix", "norm", "rule", "factor-retain", "two"],
-      exits: ["mass", "power", "half", "coefficient-one"], entries: [], split: false,
+      exits: ["mass", "power", "half", "coefficient-one"], entries: [], split: false as const,
       notice: Object.freeze(["factor-retain", "two"]) }] : cancellationRoles(detail))
   ];
   const view = momentumEnergyDerivationView(model, detail);
@@ -91,7 +97,7 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
       notice: Object.freeze(["left", "right", "denominator"]) }),
     Object.freeze({ id: "square-quotient", operationKind: "square-quotient", syntaxOnly: true,
       persist: Object.freeze(["prefix", "half", "mass", "norm", "denominator", "rule"]),
-      exits: Object.freeze(["paren-left", "paren-right"]), entries: Object.freeze([]), split: true,
+      exits: Object.freeze(["paren-left", "paren-right"]), entries: Object.freeze([]), split: true, branching: "scope-propagation",
       notice: Object.freeze(["norm", "denominator"]) })
   ]);
   const children: EnergyDerivationPlan = Object.freeze({ ...plan, view: childView, moves: childMoves,
@@ -148,7 +154,7 @@ export function createScalarCancellationPlan(model: CheckedScalarCancellation, d
 
 /** Shared topology, licensed independently by each domain. Legacy role names
  * stay stable for physics publications; they do not grant physics authority. */
-function cancellationRoles(detail: EnergyDerivationDetail): readonly Omit<EnergyDerivationMove, "id">[] {
+function cancellationRoles(detail: EnergyDerivationDetail): readonly DerivationMoveRoles[] {
   return detail === "coarse" ? [
     { operationKind: "cancel-factor", persist: ["prefix", "norm"], exits: ["half", "mass", "rule", "scalar-before"], entries: ["rule", "scalar-after"], split: false }
   ] : [

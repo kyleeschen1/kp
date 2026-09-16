@@ -53,6 +53,38 @@ intelligible. Preserve the domain proof and compositor, repair the decomposition
 
 ## Exemplar evidence and bounded limitations
 
+### Accepted scope-branching amendment
+
+The initial large arcs were not accepted. User approved a more general rule:
+animate mathematical structure using the shortest clear motion; split lineage
+does not itself authorize distribution choreography. Scope propagation (quotient
+power) uses local branching and stable operand context. Operand distribution can
+use arcs where they clarify operand-to-term relationships. Squaring a sum requires
+cross-interactions, not the false rule of independently squaring its summands.
+Curvature must clarify correspondence, a meaningful structural operation or an
+actual collision, rather than merely avoid every brief overlap. Slow starts remain
+available; this is a routing distinction, not a ban on easing.
+
+Implement within the same norm.exemplar checkpoint: explicit typed branching
+intent selects existing compositor routing, preserving checked child operations,
+native endpoints and the complete equation. No new universal renderer or shared
+trajectory family is justified yet. Rollback unit is the local selection/type/test
+commit. After visual acceptance pressure quotient versus sum-expansion behavior;
+do not silently change established distribution motifs. The later queue and
+previously recorded legacy-comparison/SVG-delimiter limitations remain intact.
+
+The local candidate disables distribution fan-out routing only for declared scope
+propagation, using the canonical compositor's existing direct transport. Both
+physics views declare that intent, and a compile-time negative test rejects an
+unclassified split. No CSS, dependency, global routing change or clock was added.
+The 36 focused unit tests and three Chromium tests (norm scaling, scalar compact
+inspection, expanded drag) pass; the local midpoint screenshot was inspected.
+Architecture and production build pass. Initial typechecks caught a union-erasing
+`Omit` helper and a widened boolean literal; those were repaired rather than
+weakening the split contract. Broad impact selection defaults to the full suite
+for this unmatched path; discovery deliberately uses these bounded checks under
+the visual skill, with full promotion evidence deferred until exemplar approval.
+
 The candidate uses domain-issued homogeneity and quotient-square children with
 validated outer endpoints. Both compact playback and the local “See the two
 operations” explanation consume these children. Norm bars retain their semantic

@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Norm scaling and quotient-square composition",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review norm scaling step 2 before second-caller pressure. Preserve norm.pressure pending; resolve recorded legacy comparison gap before integration.",
+  "summary": "HUMAN_CHECKPOINT: review revised local quotient-square motion in step 2 before pressure/promotion. Existing comparison-mode gap remains pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,7 +30,7 @@
   "slices": [
     {
       "id": "norm.exemplar",
-      "summary": "Review candidate implemented; HUMAN_CHECKPOINT on two-phase choreography. Six canonical Chromium checks and 36 units pass; legacy participants comparison gap recorded. Not yet promoted.",
+      "summary": "Revised local-scope exemplar ready for HUMAN_CHECKPOINT. Large quotient arcs removed by typed scope versus operand distinction; later pressure remains pending.",
       "status": "in-progress"
     },
     {

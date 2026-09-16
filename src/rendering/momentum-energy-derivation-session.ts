@@ -161,7 +161,10 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
     }
   });
   const plan = compileKpCanonicalNativeKatexScenePlan({ source, target, relations: [...relations, ...split],
-    ...(projection ? { trackProjection: projection } : {}), copyFanOutRouting: move.split });
+    ...(projection ? { trackProjection: projection } : {}),
+    // Quotient powers change scope locally; the shared distribution routing
+    // is reserved for operand-to-term travel, not inferred from split lineage.
+    copyFanOutRouting: move.split && move.branching === "operand-distribution" });
   if (plan.disposition.mode !== "motion") throw new Error(`Energy derivation requires repair: ${plan.disposition.reason}`);
   const canonical = createKpCanonicalNativeKatexSceneSession(plan);
   // Resolve semantic targets once; material paint stays owned by the canonical

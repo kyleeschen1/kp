@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: canonical norm scaling exemplar ready at mechanics-relations energy-from-momentum step 2. After approval pressure reuse and resolve legacy comparison gap, then resume code, force-energy, graph queue.",
+  "summary": "HUMAN_CHECKPOINT: local scope branching replaces quotient distribution arcs. Review step 2; then second-caller pressure and saved code, force-energy, graph queue.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -948,6 +948,27 @@
       "scope": "canonical-exemplar",
       "checkedAt": "2026-09-16T02:13:47.127Z",
       "notes": "Six Chromium tests pass. Not a full suite or cross-browser certification."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'norm scaling|scalar compact inspection|expanded drag follows'",
+      "status": "passed",
+      "scope": "scope-branching-exemplar",
+      "checkedAt": "2026-09-16T02:26:28.045Z",
+      "notes": "Three Chromium checks pass: local quotient scope branching forward/reverse, scalar composition and continuous expanded dragging. Screenshot inspected. Existing participant-only comparison limitation remains; full browser suite not claimed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "scope-branching-exemplar",
+      "checkedAt": "2026-09-16T02:26:30.379Z",
+      "notes": "36 tests pass; bounded plan requires an explicit branching meaning for split lineage. Build passes with existing unrelated chunk warnings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "scope-branching-exemplar",
+      "checkedAt": "2026-09-16T02:27:38.679Z",
+      "notes": "Clean full rerun passes app, node, tests, Svelte and domains. Initial failures identified union-erasing Omit and widened boolean; fixed with distributive roles and literal preservation. Architecture and production build also pass."
     }
   ],
   "progress": {
