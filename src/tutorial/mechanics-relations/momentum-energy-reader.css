@@ -40,6 +40,13 @@
 /* Interleaved prose reserves its own ink lane, so it stays
  * readable even when the equation is held in the explanation corridor. */
 .energy-derivation-interleave { padding: .7rem 0 .7rem 10rem; min-height: 6rem; box-sizing: border-box; }
+/* Exemplar opt-in: wide intermediate states must not compete with the prose.
+   The measured extent includes the compound's children, not just fenceposts. */
+@media screen and (min-width: 700px) {
+  .energy-derivation[data-measured-inspection-lane] .energy-derivation-interleave {
+    padding-left: max(10rem, calc(var(--derivation-inspection-lane, 0px) + 1rem));
+  }
+}
 .energy-derivation-interleave-text { max-width: var(--derivation-reason-measure, 27rem); border-left: 1px solid #c9c9c9; padding-left: .75rem; }
 .energy-derivation-interleave strong { font-weight: 600; }
 .energy-derivation-rail { position: absolute; left: -1.75rem; width: 1px; background: #c9c9c9; pointer-events: none; }

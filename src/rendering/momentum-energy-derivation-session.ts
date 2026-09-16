@@ -82,8 +82,10 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
   const tid = (role: string) => `${compiled.namespace}.${move.id}.1.${role}`;
   const relations = move.persist.map(role => ({ id: `persist.${role}`, relation: "persist" as const,
     sourceEntityIds: [sid(role)], targetEntityIds: [tid(role)] }));
-  const split = move.split ? [{ id: "square-homogeneity", relation: "split" as const,
-    sourceEntityIds: [sid("power")], targetEntityIds: [tid("power-top"), tid("power-bottom")] }] : [];
+  const split = [...(move.split ? [{ id: "square-homogeneity", relation: "split" as const,
+    sourceEntityIds: [sid("power")], targetEntityIds: [tid("power-top"), tid("power-bottom")] }] : []),
+    ...(move.copies ?? []).map(copy => ({ id: `copy.${copy.source}`, relation: "split" as const,
+      sourceEntityIds: [sid(copy.source)], targetEntityIds: copy.targets.map(tid) }))];
   const projection = move.exits.length === 0 && !move.syntaxOnly ? undefined : createKpNativeKatexTrackProjection({
     id: `projection.${compiled.operationPrefix}.${move.id}`,
     project({ tracks }) {

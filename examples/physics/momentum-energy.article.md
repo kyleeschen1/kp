@@ -122,23 +122,29 @@ different situations. Here $v=\lVert\mathbf v\rVert$ denotes speed.
 :::kp-passage{#force-to-energy}
 ## 2. Differentiate: how force changes energy
 
-**Deduction using the physical law.** Write the squared magnitude as a dot
-product, $\lVert\mathbf p\rVert^2=\mathbf p\cdot\mathbf p$. Then differentiate:
+Momentum can change in size, direction, or both. Energy tracks only its squared
+size. To find which changes matter, take the time derivative of the energy we
+just derived. Write $K=(\mathbf p\cdot\mathbf p)/(2m)$: the two factors are the
+same changing vector, so **both contribute to the derivative**.
+
+Keep the positive mass constant. Below, $\dot{\mathbf p}$ means
+$d\mathbf p/dt$ (a dot **over** a vector is a time derivative; the dot **between**
+vectors is a dot product). Start with the derivative still unevaluated:
 
 $$\begin{aligned}
-K&=\frac{\mathbf p\cdot\mathbf p}{2m},\\
-\frac{dK}{dt}
- &=\frac{1}{2m}\left(
- \frac{d\mathbf p}{dt}\cdot\mathbf p
- +\mathbf p\cdot\frac{d\mathbf p}{dt}\right)\\
- &=\frac{\mathbf p}{m}\cdot\frac{d\mathbf p}{dt}\\
- &=\mathbf v\cdot\mathbf F.
+\frac{dK}{dt}&=\frac{1}{2m}\frac{d}{dt}(\mathbf p\cdot\mathbf p)\\
+ &=\frac{\mathbf p}{m}\cdot\dot{\mathbf p}.
 \end{aligned}$$
 
-Read the moves: **fixed mass** lets $1/(2m)$ stay outside the derivative;
-the **product rule** differentiates each factor; symmetry of the dot product
-makes the two terms equal. Finally, substitute $\mathbf p/m=\mathbf v$ and
-**Newton's law** $d\mathbf p/dt=\mathbf F$.
+The product rule gives $\dot{\mathbf p}\cdot\mathbf p+\mathbf p\cdot\dot{\mathbf p}$.
+Symmetry of the dot product makes these two terms equal, and their factor of
+$2$ cancels the denominator's $2$. This part is calculus, not a new physical law.
+
+**Now use the physical model.** Recall [$\mathbf p/m=\mathbf v$](#momentum-definition).
+Newton's law identifies $\dot{\mathbf p}$ with the **net** force $\mathbf F$.
+Substituting those two meanings gives
+
+$$\frac{dK}{dt}=\mathbf v\cdot\mathbf F.$$
 
 This dot product is not unfamiliar calculus in disguise. In Cartesian
 components, it is $F_xv_x+F_yv_y+F_zv_z$. Geometrically, for nonzero vectors,
@@ -154,6 +160,12 @@ particle, after which the energy can grow.
 The rate $dK/dt$ is the **net power delivered to the particle's kinetic energy**.
 We have connected a vector law about changing momentum to a scalar account of
 changing kinetic energy. The diagram will illustrate this deduction, not prove it.
+
+**Try the distinction:** a particle is moving right. Would an upward force,
+acting perpendicular to its velocity at that instant, increase its kinetic
+energy immediately? No: its instantaneous power is zero. The force still
+changes momentum. If its direction is held fixed while velocity turns, the
+force need not remain perpendicular later.
 
 [Back to the relationship map](#relationship-map).
 :::

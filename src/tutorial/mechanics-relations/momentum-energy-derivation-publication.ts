@@ -7,6 +7,16 @@ import { createDerivationInspectionComposition } from "../../animation/derivatio
 import { momentumDependency, resolveMomentumDependency, renderMomentumDivisionDepth } from "./momentum-dependency-publication.ts";
 
 import { assertEnergyDerivationPlan, createEnergyDerivationPlan, type EnergyDerivationPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
+import { createForceEnergyPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
+import { checkForceEnergy, forceEnergySource } from "../../../domains/physics/force-energy-derivation.ts";
+
+export function renderForceEnergyPassage(markdown: string, revision: string) {
+  const checked = checkForceEnergy(forceEnergySource);
+  if (checked.status !== "checked") throw new Error(checked.code);
+  return renderCheckedDerivationPassage(markdown, revision, {
+    coarse: createForceEnergyPlan(checked.model), fine: createForceEnergyPlan(checked.model, "mass-refinement"), measuredInspectionLane: true
+  });
+}
 
 export function renderEnergyDerivationPassage(markdown: string, publicationRevision: string) {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
@@ -26,7 +36,7 @@ export function renderEnergyDerivationPassage(markdown: string, publicationRevis
 /** A shared static record and progressive enhancement scaffold. Both plans
  * must be proof-issued; text cannot silently replace the mathematical source. */
 export function renderCheckedDerivationPassage(markdown: string, publicationRevision: string,
-  plans: { readonly coarse: EnergyDerivationPlan; readonly fine: EnergyDerivationPlan }, recall = "") {
+  plans: { readonly coarse: EnergyDerivationPlan; readonly fine: EnergyDerivationPlan; readonly measuredInspectionLane?: true }, recall = "") {
   assertEnergyDerivationPlan(plans.coarse); assertEnergyDerivationPlan(plans.fine);
   const refinement = plans.fine.view.refinement;
   const parentIndex = plans.coarse.moves.findIndex(move => `${plans.coarse.operationPrefix}.${move.id}` === refinement?.parentTransitionId);
@@ -70,7 +80,7 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
     const parent = node.depth === 1 && node.first
       ? `<div class="energy-derivation-nested-context" data-nested-context><span>Inside step ${node.parent.label} · ${node.parent.title}</span><div class="energy-derivation-actions"><button type="button" data-refinement-collapse hidden>Collapse step ${node.parent.label}</button></div></div>` : "";
     const staticDetail = i === parentIndex && detail === "coarse"
-      ? `<details data-refinement-static><summary>Smaller cancellation steps</summary>${staticRefinement()}</details><div class="energy-derivation-actions"><button type="button" data-refinement-expand hidden>Inspect smaller steps</button></div>` : "";
+      ? `<details data-refinement-static><summary>${plan.refinementLabel ?? "Smaller cancellation steps"}</summary>${staticRefinement()}</details><div class="energy-derivation-actions"><button type="button" data-refinement-expand hidden>Inspect smaller steps</button></div>` : "";
     const childPlan = plan.inspections?.[step.id];
     const composedReason = childPlan ? `<details data-composed-reason><summary>See the two operations</summary>${childPlan.view.steps.map((child, j) =>
       `<p><strong>${child.title}</strong></p>${html(child.cue)}${math(childPlan.view.states[j + 1]!)}${html(child.why)}`).join("")}</details>` : "";
@@ -78,7 +88,7 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
   };
   // The first destination keeps the substitution's compound fragment identity
   // for record/inspection correspondence. Later moves retain their own templates.
-  return `<div class="energy-derivation" data-energy-derivation data-derivation-reading="${plan.cancellationScore.kind}" data-derivation-source-revision="${plan.sourceRevision}" data-derivation-namespace="${plan.namespace}" data-refinement-first="${plans.fine.moves[parentIndex]!.id}" data-derivation-detail="${detail}" data-derivation-revision="${publicationRevision}${detail === "coarse" ? "" : ":mass-refinement.v1"}">
+  return `<div class="energy-derivation" data-energy-derivation${plans.measuredInspectionLane ? ' data-measured-inspection-lane' : ''} data-refinement-default="${plan.refinementDefault === true}" data-derivation-reading="${plan.cancellationScore.kind}" data-derivation-source-revision="${plan.sourceRevision}" data-derivation-namespace="${plan.namespace}" data-refinement-first="${plans.fine.moves[parentIndex]!.id}" data-derivation-detail="${detail}" data-derivation-revision="${publicationRevision}${detail === "coarse" ? "" : ":mass-refinement.v1"}">
     <p data-derivation-status role="status" hidden></p>
     <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">

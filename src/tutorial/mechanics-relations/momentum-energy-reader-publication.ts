@@ -6,7 +6,7 @@ import { describeMomentumEnergyFrame, displayNumber, renderMomentumEnergySvg } f
 import { momentumEnergyAttention } from "./momentum-energy-attention.ts";
 import type { MomentumEnergyRuntimeSource } from "./momentum-energy-runtime-source.ts";
 import type { compileMomentumEnergyPublication } from "./momentum-energy-publication.ts";
-import { renderEnergyDerivationPassage } from "./momentum-energy-derivation-publication.ts";
+import { renderEnergyDerivationPassage, renderForceEnergyPassage } from "./momentum-energy-derivation-publication.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 
 type Publication = ReturnType<typeof compileMomentumEnergyPublication>;
@@ -23,6 +23,9 @@ export function renderMomentumEnergyReader(publication: Publication) {
   const revision = sha256(JSON.stringify(publication.article.document));
   const blocks: KpLessonBlock[] = [];
   const stages = new Map(publication.article.document.blocks.filter(block => block.kind === "stage").map(block => [block.id, block]));
+  const derivations = new Map([
+    ["energy-from-momentum", renderEnergyDerivationPassage], ["force-to-energy", renderForceEnergyPassage]
+  ]);
   const body = publication.article.document.blocks.map(block => {
     if (block.kind === "stage") return "";
     if (block.kind === "markdown" || block.kind === "passage") {
@@ -31,7 +34,7 @@ export function renderMomentumEnergyReader(publication: Publication) {
       // Passage addresses must survive projection so source-owned inspection
       // links work in both editions without a second navigation table.
       return block.kind === "passage"
-        ? `<section id="${attribute(block.id)}">${block.id === "energy-from-momentum" ? renderEnergyDerivationPassage(block.markdown, revision) : html(block.markdown)}</section>`
+        ? `<section id="${attribute(block.id)}">${derivations.get(block.id)?.(block.markdown, revision) ?? html(block.markdown)}</section>`
         : html(block.markdown);
     }
     if (block.kind !== "motion" || block.transition.kind !== "run" || !block.transition.path.endsWith("/advance"))

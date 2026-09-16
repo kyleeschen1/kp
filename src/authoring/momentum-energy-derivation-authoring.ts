@@ -60,15 +60,32 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
     [fixed + quotient(normP, factors), prefix + half + identity + quotient(normP, p("factor-retain", notation.factor))],
     [prefix + half + identity + quotient(normP, p("factor-retain", notation.factor)), prefix + quotient(normP, p("two", "2") + p("factor-retain", notation.factor))]
   ];
+  const rate = String.raw`\dot{\mathbf p}`, momentum = String.raw`\mathbf p`;
+  const powerPrefix = p("prefix", String.raw`\frac{dK}{dt}=`), powerHalf = p("half", String.raw`\frac{1}{2m}`);
+  const left = p("left", "("), right = p("right", ")"), dot = p("dot", String.raw`\cdot`), plus = p("plus", "+");
+  const dotted = (syntax: string, role: string) => p(syntax, String.raw`\dot{${p(role, momentum)}}`);
+  const productSource = powerPrefix + powerHalf + p("derivative", String.raw`\frac{d}{dt}`) + left + p("p-first", momentum) + dot + p("p-second", momentum) + right;
+  const productTarget = powerPrefix + powerHalf + left + dotted("derivative-first", "p-first") + dot + p("p-second", momentum) + plus
+    + p("p-first-copy", momentum) + p("dot-second", String.raw`\cdot`) + dotted("derivative-second", "p-second-copy") + right;
+  const secondTerm = p("second-term", String.raw`\mathbf p\cdot\dot{\mathbf p}`);
+  const symmetry = [powerPrefix + powerHalf + left + p("first-rate", rate) + dot + p("first-momentum", momentum) + plus + secondTerm + right,
+    powerPrefix + powerHalf + left + p("first-momentum", momentum) + dot + p("first-rate", rate) + plus + secondTerm + right];
+  const collect = [powerPrefix + powerHalf + left + p("first-term", String.raw`\mathbf p\cdot\dot{\mathbf p}`) + plus + secondTerm + right,
+    powerPrefix + powerHalf + p("two", "2") + secondTerm];
+  const cancelTwo = [powerPrefix + powerHalf + p("two", "2") + p("momentum", momentum) + dot + p("rate", rate),
+    powerPrefix + p("inverse", String.raw`\frac{${p("momentum", momentum)}}{m}`) + dot + p("rate", rate)];
   const endpoints = { substitute: first, "scale-magnitude": second, "cancel-factor": third, "cancel-unit-power": fluent,
     "extract-norm-scale": homogeneity, "square-quotient": quotientSquare,
-    "expand-square": fine[0]!, "cancel-pair": fine[1]!, "collect-coefficient": fine[2]! };
+    "expand-square": fine[0]!, "cancel-pair": fine[1]!, "collect-coefficient": fine[2]!,
+    "product-rule": [productSource, productTarget], "dot-symmetry": symmetry, "collect-terms": collect, "cancel-two": cancelTwo,
+    "differentiate-energy": [powerPrefix + p("before", String.raw`\frac{1}{2m}\frac{d}{dt}(\mathbf p\cdot\mathbf p)`),
+      powerPrefix + p("after", String.raw`\frac{\mathbf p}{m}\cdot\dot{\mathbf p}`)] };
   const specs = plan.moves.map(move => ({ ...move, endpoints: endpoints[move.operationKind] }));
   const builder = createKpAnimationAssetBuilder({ id: `animation.${artifactId}`, title: plan.title });
   const moves = specs.map((spec, i) => {
     const step = view.steps[i]!;
-    const sourceRoles = [...spec.persist, ...spec.exits, ...(spec.split ? ["power"] : [])];
-    const targetRoles = [...spec.persist, ...spec.entries, ...(spec.split ? ["power-top", "power-bottom"] : [])];
+    const sourceRoles = [...spec.persist, ...spec.exits, ...(spec.copies ?? []).map(copy => copy.source), ...(spec.split ? ["power"] : [])];
+    const targetRoles = [...spec.persist, ...spec.entries, ...(spec.copies ?? []).flatMap(copy => copy.targets), ...(spec.split ? ["power-top", "power-bottom"] : [])];
     const objects = [sourceRoles, targetRoles].map((roles, side) => createKpImmutableSemanticAssetObject({
       id: `${ns}.${step.id}.${side}`, objectType: "equation", title: `${step.title} ${side}`,
       value: { latex: view.states[i + side]! },
@@ -82,6 +99,9 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
         sourceSelectorIds: [`${ns}.${step.id}.0.${role}`], targetSelectorIds: [], summary: `${role} is rewritten by ${view.proof[i]}.` })),
       ...spec.entries.map(role => ({ id: `lineage.${step.id}.enter.${role}`, relation: "introduction" as const,
         sourceSelectorIds: [], targetSelectorIds: [`${ns}.${step.id}.1.${role}`], summary: `${role} follows from ${view.proof[i]}.` })),
+      ...(spec.copies ?? []).map(copy => ({ id: `lineage.${step.id}.copy.${copy.source}`, relation: "fan-out" as const,
+        sourceSelectorIds: [`${ns}.${step.id}.0.${copy.source}`], targetSelectorIds: copy.targets.map(role => `${ns}.${step.id}.1.${role}`),
+        summary: `The product rule uses this factor in both contributions; derivative syntax identifies which occurrence changes.` })),
       ...(spec.split ? [{ id: `lineage.${step.id}.power`, relation: "fan-out" as const,
         sourceSelectorIds: [`${ns}.${step.id}.0.power`], targetSelectorIds: [`${ns}.${step.id}.1.power-top`, `${ns}.${step.id}.1.power-bottom`],
         summary: "The checked quotient square applies the exponent to numerator and denominator." }] : [])

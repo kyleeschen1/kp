@@ -3,6 +3,7 @@ import { assertMomentumEnergyDerivation, momentumEnergyDerivationSteps, momentum
 import { assertScalarCancellation, scalarCancellationView, type CheckedScalarCancellation } from "../../domains/algebra/scalar-cancellation.ts";
 import { sha256 } from "../kernel/sha256.ts";
 import { newtonianMomentumV1, momentumNormScalingView } from "../../domains/public-api.ts";
+import { assertForceEnergy, forceEnergyView, forceEnergyMajorSteps, type CheckedForceEnergy } from "../../domains/physics/force-energy-derivation.ts";
 
 export interface DerivationStep { readonly id: string; readonly title: string; readonly cue: string; readonly why: string }
 export interface DerivationView {
@@ -13,7 +14,9 @@ export interface DerivationView {
 }
 const issuedPlan: unique symbol = Symbol("checked-derivation-plan");
 export interface EnergyDerivationPlan {
-  readonly model: CheckedMomentumEnergyDerivation | CheckedScalarCancellation;
+  readonly model: CheckedMomentumEnergyDerivation | CheckedScalarCancellation | CheckedForceEnergy;
+  readonly refinementLabel?: string;
+  readonly refinementDefault?: true;
   readonly namespace: string;
   readonly sourceRevision: string;
   readonly artifactId: string;
@@ -26,7 +29,7 @@ export interface EnergyDerivationPlan {
   readonly compactInspection: "atomic" | "refinement";
   readonly inspections?: Readonly<Record<string, EnergyDerivationPlan>>;
   readonly cancellationScore: Readonly<
-    | { kind: "explanatory"; purpose: "expose-factor-cancellation" }
+    | { kind: "explanatory"; purpose: "expose-factor-cancellation" | "expose-product-rule" }
     | { kind: "fluent"; purpose: "relate-energy-and-momentum";
         prerequisites: readonly ["nonzero-scalar-cancellation", "unit-exponent-notation"];
         expansion: "mass-refinement" }>;
@@ -42,7 +45,8 @@ export interface EnergyDerivationPlan {
 }
 export type EnergyDerivationMove = {
   readonly id: string;
-  readonly operationKind: "substitute" | "scale-magnitude" | "extract-norm-scale" | "square-quotient" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient";
+  readonly operationKind: "substitute" | "scale-magnitude" | "extract-norm-scale" | "square-quotient" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient" | "differentiate-energy" | "product-rule" | "dot-symmetry" | "collect-terms" | "cancel-two";
+  readonly copies?: readonly { readonly source: string; readonly targets: readonly string[] }[];
   readonly syntaxOnly?: true;
   readonly persist: readonly string[];
   readonly exits: readonly string[];
@@ -109,6 +113,41 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
 }
 export function assertEnergyDerivationPlan(plan: EnergyDerivationPlan) {
   if (!issued.has(plan)) throw new Error("Energy derivation paint requires an original proof-derived plan");
+}
+
+/** Calculus has its own checked issuer. Static energy identities alone do not
+ * license differentiation or Newton's law. The existing reader owns access. */
+export function createForceEnergyPlan(model: CheckedForceEnergy, detail: EnergyDerivationDetail = "coarse"): EnergyDerivationPlan {
+  assertForceEnergy(model);
+  if (detail !== "coarse" && detail !== "mass-refinement") throw new Error("Unsupported power detail");
+  const fine = detail !== "coarse", view = forceEnergyView(model, fine);
+  const roles: DerivationMoveRoles[] = fine ? [
+    { operationKind: "product-rule", syntaxOnly: true, split: false,
+      persist: ["prefix", "half", "left", "right", "dot"], exits: ["derivative"],
+      entries: ["derivative-first", "derivative-second", "plus", "dot-second"],
+      copies: [{ source: "p-first", targets: ["p-first", "p-first-copy"] }, { source: "p-second", targets: ["p-second", "p-second-copy"] }],
+      notice: [] },
+    { operationKind: "dot-symmetry", split: false,
+      persist: ["prefix", "half", "left", "right", "first-rate", "first-momentum", "dot", "plus", "second-term"], exits: [], entries: [],
+      notice: ["first-rate", "first-momentum"] },
+    { operationKind: "collect-terms", split: false,
+      persist: ["prefix", "half", "second-term"], exits: ["first-term", "plus", "left", "right"], entries: ["two"] },
+    { operationKind: "cancel-two", split: false,
+      persist: ["prefix", "momentum", "dot", "rate"], exits: ["half", "two"], entries: ["inverse"] }
+  ] : [{ operationKind: "differentiate-energy", split: false, persist: ["prefix"], exits: ["before"], entries: ["after"] }];
+  const moves = Object.freeze(roles.map((role, i) => Object.freeze({ ...role, id: view.steps[i]!.id,
+    persist: Object.freeze(role.persist), exits: Object.freeze(role.exits), entries: Object.freeze(role.entries),
+    ...(role.copies ? { copies: Object.freeze(role.copies.map(copy => Object.freeze({ source: copy.source, targets: Object.freeze(copy.targets) }))) } : {}) })));
+  const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, moves,
+    namespace: "power", artifactId: `physics.force-energy.${detail}`, packId: `project.physics.force-energy.${detail}`, operationPrefix: "physics.power",
+    title: "Why does force along motion change energy?", assumptions: Object.freeze(Object.values(model.source).slice(1)),
+    notation: Object.freeze({ result: String.raw`\frac{dK}{dt}`, factor: "m", numerator: String.raw`\mathbf p\cdot\mathbf p` }),
+    coefficientGranularity: "fraction", compactInspection: fine ? "atomic" : "refinement",
+    cancellationScore: Object.freeze({ kind: "explanatory", purpose: "expose-product-rule" }),
+    refinementLabel: "Smaller product-rule steps", refinementDefault: true,
+    sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: forceEnergyMajorSteps });
+  issued.add(plan);
+  return plan;
 }
 
 export function resolveDerivationRecallUse(plan: EnergyDerivationPlan, resultId: string, sourceRevision: string) {

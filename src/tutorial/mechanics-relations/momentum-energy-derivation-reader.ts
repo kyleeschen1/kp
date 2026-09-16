@@ -42,7 +42,8 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   // Local explanation is part of the fluent reading, not an expert/beginner
   // setting. Keep the explicit comparison opt-out for existing review URLs.
   const detailMode = new URL(location.href).searchParams.get("derivation-detail");
-  const enabled = detailMode === "expandable" || (detailMode === null && initialRoot.dataset["derivationReading"] === "fluent");
+  const enabled = detailMode === "expandable" || (detailMode === null &&
+    (initialRoot.dataset["derivationReading"] === "fluent" || initialRoot.dataset["refinementDefault"] === "true"));
   if (!enabled) {
     const staticDetail = initialRoot.querySelector<HTMLElement>("[data-refinement-static]");
     if (staticDetail) staticDetail.hidden = true;
@@ -308,6 +309,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     let candidate: HTMLElement | undefined;
     let created: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
     const pending: PreparedScene[] = [];
+    let inspectionRight = 0;
     try {
       const [{ mountMomentumEnergyDerivationSession }, proofPlan] = await Promise.all([
         import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail)
@@ -347,6 +349,13 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
           const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
           paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
         }
+        if (root.hasAttribute("data-measured-inspection-lane")) {
+          // Interior child states can exceed both coarse endpoints. Reserve
+          // their native ink extent once before input, never during a drag.
+          const origin = root.getBoundingClientRect().left;
+          for (const ink of candidate.querySelectorAll<HTMLElement>(".katex-html > .base"))
+            inspectionRight = Math.max(inspectionRight, ink.getBoundingClientRect().right - origin);
+        }
         const move = proofPlan.moves[sceneIndex]!;
         const focus = binding.inspection?.(proofPlan, sceneIndex) ?? {
           source: [...move.exits, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.0.${role}`), target: [...move.entries, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.1.${role}`),
@@ -363,6 +372,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       stage.remove();
       prepared = pending.splice(0);
       preparedPlan = proofPlan;
+      if (inspectionRight > 0) root.style.setProperty("--derivation-inspection-lane", `${Math.ceil(inspectionRight)}px`);
       activate(index, progress);
     } catch (error) {
       if (token !== generation) return;

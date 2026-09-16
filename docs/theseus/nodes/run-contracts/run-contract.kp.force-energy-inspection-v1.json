@@ -1,0 +1,89 @@
+{
+  "id": "run-contract.kp.force-energy-inspection-v1",
+  "kind": "run-contract",
+  "title": "Inspect the force-energy calculus bridge",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review http://localhost:8000/experiments/mechanics-relations/#force-to-energy and Inspect smaller steps. One package implemented; visual acceptance pending.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-force-energy-inspection.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:mechanics-relations"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/force-energy-derivation.test.ts tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "Bounded calculus authority and reader preservation",
+      "checkedAt": "2026-09-16T16:13:22.038Z",
+      "notes": "39 pass on final rerun. Source assumptions, original issuer, explicit factor correspondence, coarse-fine endpoints and stale publication rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full repository types",
+      "checkedAt": "2026-09-16T16:13:23.843Z",
+      "notes": "Full application, node, tests, Svelte and domains pass after adding explicit correspondence-map assertion in the test. Final measurement-only selector repair followed by test typecheck."
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "Final test changes",
+      "checkedAt": "2026-09-16T16:13:26.366Z",
+      "notes": "Final test types pass including readable-lane geometry assertions."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Existing architecture gates",
+      "checkedAt": "2026-09-16T16:13:28.162Z",
+      "notes": "Dependency direction, framework-neutral boundaries, compiler and governance ratchets, and eight conformance checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Final production build",
+      "checkedAt": "2026-09-16T16:13:30.209Z",
+      "notes": "Final build passes; existing global large-chunk warnings remain. No new dependency."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/measure-mechanics-relations-closure.ts physics",
+      "status": "passed",
+      "scope": "Reachable production closure",
+      "checkedAt": "2026-09-16T16:13:32.077Z",
+      "notes": "JS/CSS initial 37306 gzip bytes; activated total 152111; HTML 36425 gzip bytes. Includes existing graph and equation runtime; excludes fonts, images, HTTP and CPU. Not an incremental-cost or device-performance claim."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "Final Chromium exemplar and reader preservation",
+      "checkedAt": "2026-09-16T16:14:11.830Z",
+      "notes": "Final full rerun: 35 pass. Two readiness timeouts passed unchanged reruns; one full run was intentionally interrupted during layout correction. Final checks include no-JS, print, held reverse, expansion/collapse and measured paint/prose clearance; human motif judgment remains pending."
+    }
+  ],
+  "allowedWork": [
+    "Bounded physics proof, governed construction, existing reader and native compositor integration; stop for visual review"
+  ],
+  "disallowedWork": [
+    "Graph redesign, universal calculus solver, shared promotion, phone promotion, merge or push"
+  ],
+  "goal": "Show how differentiating kinetic energy yields velocity dot force, with optional product-rule detail",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "power.bridge",
+      "title": "Checked calculus and local inspection",
+      "summary": "Implementation and final verification ready; HUMAN_CHECKPOINT for product-rule choreography and explanatory value. No graph promotion.",
+      "status": "in-progress"
+    }
+  ]
+}

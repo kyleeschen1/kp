@@ -1,6 +1,65 @@
 import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
+
+test("power bridge uses native reversible inspection with expandable product-rule reasoning", async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  page.on("console", async message => {
+    if (message.type() === "error") errors.push(...await Promise.all(message.args().map(arg => arg.evaluate(value => value instanceof Error ? value.message : String(value)))));
+  });
+  await page.setViewportSize({ width: 1280, height: 1500 });
+  await page.goto(route + "#force-to-energy");
+  const root = page.locator('[data-derivation-namespace="power"]');
+  try {
+    await expect(lens(root)).toBeEnabled();
+    await expect(root.locator('[data-derivation-stage]')).toHaveAttribute('data-derivation-renderer', 'canonical-native-katex-scene-session');
+    for (const p of [.4, .55, .7, .85, .55]) {
+      await dragTo(page, root, p);
+      await expect(root).not.toHaveAttribute("data-repair", "true");
+      const lane = await root.evaluate(el => {
+        const reason = el.querySelector('.energy-derivation-interleave-text')!.getBoundingClientRect();
+        const stage = el.querySelector('[data-derivation-stage]')!;
+        const paint = [...stage.querySelectorAll<HTMLElement>('[data-kp-equation-material-owner-id]')]
+          .filter(owner => owner.getBoundingClientRect().width > 0 && getComputedStyle(owner).visibility !== 'hidden' && Number(getComputedStyle(owner).opacity) > 0)
+          .map(owner => owner.getBoundingClientRect().right);
+        return { textLeft: reason.left, textRight: reason.right, textWidth: reason.width,
+          rootRight: el.getBoundingClientRect().right, inkRight: Math.max(0, ...paint) };
+      });
+      expect(lane.inkRight).toBeLessThan(lane.textLeft);
+      expect(lane.textRight).toBeLessThanOrEqual(lane.rootRight + 1);
+      expect(lane.textWidth).toBeGreaterThan(200);
+      await root.screenshot({ path: info.outputPath(`power-${p}.png`) });
+    }
+    await lens(root).press("End");
+    await expect(root).toHaveAttribute("data-derivation-progress", "1");
+    await lens(root).press("Home");
+    await expect(root).toHaveAttribute("data-derivation-progress", "0");
+    await root.locator('[data-refinement-expand]').click();
+    await expect(root.locator('[data-transition-number]')).toHaveText(['1.1', '1.2', '1.3', '1.4']);
+    await expect(lens(root)).toBeEnabled();
+    await root.screenshot({ path: info.outputPath("power-expanded.png") });
+    await root.locator('[data-refinement-collapse]').first().click();
+    await expect(root.locator('[data-transition-number]')).toHaveText(['1']);
+    await expect(lens(root)).toBeEnabled();
+  } catch (error) { throw new Error(`Power inspection errors: ${errors.join('; ')}`, { cause: error }); }
+  expect(errors).toEqual([]);
+});
+
+test("power bridge remains a readable static argument without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('http://localhost:8000' + route + '#force-to-energy');
+  const section = page.locator('#force-to-energy');
+  await expect(section).toContainText('both contribute');
+  await expect(section.locator('[data-derivation-row]')).toHaveCount(2);
+  await section.locator('[data-refinement-static] summary').click();
+  await expect(section).toContainText('Differentiate each factor once');
+  await expect(section).toContainText('Newton');
+  await page.emulateMedia({ media: 'print' });
+  await expect(section.locator('[data-derivation-row]').last()).toBeVisible();
+  await context.close();
+});
 const scalarRoute = "/experiments/scalar-cancellation/?derivation-detail=expandable#remaining-factor";
 const seek = (input: Locator, progress: number) => input.evaluate((element: HTMLInputElement, value) => {
   element.value = String(value); element.dispatchEvent(new Event("input", { bubbles: true }));
@@ -34,7 +93,7 @@ async function ready(page: import("@playwright/test").Page) {
       arg.evaluate(value => value instanceof Error ? `${value.message}\n${value.stack ?? ""}` : String(value)))));
   });
   await page.goto(route + "#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   try {
     await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   } catch (error) {
@@ -175,7 +234,7 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(scalarRoute);
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   const stage = root.locator("[data-derivation-stage]");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await expect(root.locator("[data-transition-number]")).toHaveText(["1"]);
@@ -207,7 +266,7 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
 
 test("scalar compact inspection executes checked children with continuous native handoffs", async ({ page }, info) => {
   await page.goto(scalarRoute);
-  const root = page.locator("[data-energy-derivation]"), stage = root.locator("[data-derivation-stage]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])"), stage = root.locator("[data-derivation-stage]");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const input = root.locator('input[aria-label="Inspect step 1"]');
   const at = async (algebra: number) => {
@@ -272,7 +331,7 @@ test("scalar missing compound child rejects enhancement without atomic fallback"
     await route.fulfill({ response, body: (await response.text()).replace('data-child-operation="cancel-pair"', 'data-child-operation="unknown"') });
   });
   await page.goto(scalarRoute);
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root).toHaveAttribute("data-repair", "true");
   await expect(root.locator("[data-derivation-stage]")).toBeHidden();
   await expect(root.locator("[data-derivation-row]")).toHaveCount(2);
@@ -286,7 +345,7 @@ test("scalar source mismatch fails closed while the static argument stays readab
     await route.fulfill({ response, body: (await response.text()).replace('"factor":"x"', '"factor":"z"') });
   });
   await page.goto(scalarRoute);
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root).toHaveAttribute("data-repair", "true");
   await expect(root.locator("[data-derivation-status]")).toContainText("needs repair");
   for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
@@ -303,7 +362,7 @@ test("scalar static reading and shared style repairs work without JavaScript for
   const page = await context.newPage();
   for (const url of [scalarRoute, route + "#energy-from-momentum"]) {
     await page.goto(url);
-    const root = page.locator("[data-energy-derivation]");
+    const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
     for (const row of await root.locator("[data-derivation-row]").all()) await expect(row).toBeVisible();
     // One presentation token changes both fresh documents. No caller-specific
     // CSS or edits to mathematical source are needed for this repair.
@@ -322,7 +381,7 @@ test("expandable cancellation uses canonical fine steps and restores the compact
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await root.locator('[data-derivation-entry="2"]').click();
   await dragTo(page, root, 2.55);
@@ -456,7 +515,7 @@ test("expanded drag follows every pointer sample across boundaries without waiti
 
 test("unavailable refinement restores the checked compact inspection without a substitute animation", async ({ page }) => {
   await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await root.locator('[data-derivation-entry="2"]').click();
   await dragTo(page, root, 2.55);
@@ -475,7 +534,7 @@ test("unavailable refinement restores the checked compact inspection without a s
 
 test("every substep returns through the whole-refinement collapse with saved progress and focus", async ({ page }, info) => {
   await page.goto(route + "?derivation-detail=expandable#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await root.locator('[data-derivation-entry="2"]').click();
   await dragTo(page, root, 2.55);
@@ -505,7 +564,7 @@ test("every substep returns through the whole-refinement collapse with saved pro
 
 test("local entry preserves edge identity and bookmarks without scrolling or autoplay", async ({ page }, info) => {
   await page.goto(route + "#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]"), entries = root.locator("[data-derivation-entry]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])"), entries = root.locator("[data-derivation-entry]");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await entries.nth(1).scrollIntoViewIfNeeded();
   const scroll = await page.evaluate(() => scrollY);
@@ -552,7 +611,7 @@ test("local entry preserves edge identity and bookmarks without scrolling or aut
 
 test("long-document local access preserves held transitions and exact return after reflow", async ({ page }) => {
   await page.goto(route + "#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await dragTo(page, root, .55);
   const held = await root.getAttribute("data-progress");
@@ -615,7 +674,7 @@ test("desktop integration preserves enlarged reading and keeps phone presentatio
 test("phone local inspection keeps normal-width prose and holds a reversible local animation", async ({ page }, info) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(route + "?derivation-access=local#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]"), entry = root.locator('[data-derivation-entry="0"]');
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])"), entry = root.locator('[data-derivation-entry="0"]');
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await expect(lens(root)).toBeHidden();
   const text = root.locator(".energy-derivation-interleave-text").first();
@@ -726,7 +785,7 @@ test("retired participant comparison preserves full context and a working handle
 
 test("contextual inspection keeps the complete working equation through forward and reverse handoffs", async ({ page }, info) => {
   await page.goto(route + "?derivation-motion=contextual#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]"), stage = root.locator("[data-derivation-stage]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])"), stage = root.locator("[data-derivation-stage]");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const records = root.locator(".energy-derivation-equation");
   const geometry = await documentBoxes(records);
@@ -756,7 +815,7 @@ test("contextual inspection keeps the complete working equation through forward 
 
 test("recalled result plays only its licensed use and rejects stale references without moving the held state", async ({ page }, info) => {
   await page.goto(route + "?derivation-recall=use#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]"), recall = root.locator("[data-derivation-recall]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])"), recall = root.locator("[data-derivation-recall]");
   await expect(lens(root)).toBeEnabled();
   await recall.locator(":scope > summary").click();
   await expect(recall).toContainText("Use here:");
@@ -800,7 +859,7 @@ test("recalled result plays only its licensed use and rejects stale references w
 
 test("local provenance returns to the same logical position, disclosures and focus after reflow", async ({ page }, info) => {
   await page.goto(route + "?derivation-motion=contextual&derivation-provenance=local#energy-from-momentum");
-  const root = page.locator("[data-energy-derivation]");
+  const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const recall = root.locator("[data-derivation-recall]");
   await recall.locator(":scope > summary").click();
@@ -1060,7 +1119,7 @@ test("source-owned static reading needs no JavaScript", async ({ browser }, info
   await expect(page.locator("h1")).toContainText("momentum");
   await expect(page.locator("[data-particle]")).toHaveCount(2);
   await expect(page.locator('[data-episode="turning"] [data-kp-focus-deck-annotation="physics.momentum"]')).toContainText("(0, 1)");
-  const derivation = page.locator("[data-energy-derivation]");
+  const derivation = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(derivation.locator("[data-derivation-row]")).toHaveCount(4);
   const detail = derivation.locator("[data-refinement-static]");
   await detail.locator("summary").click();

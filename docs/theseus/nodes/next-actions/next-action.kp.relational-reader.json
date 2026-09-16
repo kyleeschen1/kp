@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "Centroid first-loop exemplar visually accepted; static syntax parity repaired. Saved force-energy then graph queue remains available for next scope selection; no catalogue-wide motion promotion authorized.",
+  "summary": "Force-energy calculus exemplar ready for visual review under force-energy-inspection-v1. Centroid code remains accepted; graph correspondence stays next after this checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,6 +45,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-15-concept-dependency-reuse.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-force-energy-inspection.md"
     }
   ],
   "dependsOn": {

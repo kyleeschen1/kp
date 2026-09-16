@@ -5,6 +5,12 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+The user approved the bounded [force–energy calculus bridge](2026-09-16-force-energy-inspection.md)
+after accepted centroid motion and static syntax parity. This resumes reader.l5.
+`run-contract.kp.force-energy-inspection-v1` owns progress and the visual gate;
+preserve the code exemplar and earlier equation treatments. Graph correspondence
+remains next after review, not simultaneous scope or automatic promotion.
+
 User accepted the [centroid static example](2026-09-16-centroid-static-example.md)
 and visually accepted [first-loop inspection](2026-09-16-centroid-motion.md).
 Static excerpts now reuse its syntax paint; this is not a new motion checkpoint.

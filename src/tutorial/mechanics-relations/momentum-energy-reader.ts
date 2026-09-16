@@ -5,7 +5,29 @@ import { displayNumber } from "./momentum-energy-figure.ts";
 import { projectMomentumEnergyAttention } from "./momentum-energy-attention.ts";
 import { enhanceEnergyDerivation } from "./momentum-energy-derivation-reader.ts";
 
-for (const root of document.querySelectorAll<HTMLElement>("[data-energy-derivation]")) enhanceEnergyDerivation(root);
+import type { DerivationReaderBinding } from "./momentum-energy-derivation-reader.ts";
+import type { CheckedForceEnergy } from "../../../domains/physics/force-energy-derivation.ts";
+
+let powerModel: CheckedForceEnergy | undefined;
+const powerBinding: DerivationReaderBinding = {
+  async loadPlan(detail) {
+    const [{ createForceEnergyPlan }, { checkForceEnergy, forceEnergySource }] = await Promise.all([
+      import("../../semantic/momentum-energy-derivation-plan.ts"), import("../../../domains/physics/force-energy-derivation.ts")
+    ]);
+    if (!powerModel) {
+      const checked = checkForceEnergy(forceEnergySource);
+      if (checked.status !== "checked") throw new Error(checked.code);
+      powerModel = checked.model;
+    }
+    return createForceEnergyPlan(powerModel, detail);
+  }
+};
+const bindings = new Map<string, DerivationReaderBinding | undefined>([["energy", undefined], ["power", powerBinding]]);
+for (const root of document.querySelectorAll<HTMLElement>("[data-energy-derivation]")) {
+  const namespace = root.dataset["derivationNamespace"]!;
+  if (!bindings.has(namespace)) throw new Error(`Unsupported derivation authority: ${namespace}`);
+  enhanceEnergyDerivation(root, bindings.get(namespace));
+}
 
 /** Enhancement leaves prose and its source order intact. Native document scroll
  * never consumes a beat, and no global key or wheel handler owns the page. */
