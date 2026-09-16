@@ -8,8 +8,8 @@ Last Updated: 2026-09-15
 The force–energy calculus checkpoint is visually accepted and complete. Preserve
 its concurrent collection and exact cancellation; the saved reader.l6 graph
 boundary is now the [bounded successor proposal](2026-09-16-force-energy-graph.md).
-Concrete successor scope awaits approval; older pending-calculus wording below
-is provenance, not an active visual blocker.
+Concrete successor scope is approved under `run-contract.kp.force-energy-graph-v1`;
+older pending-calculus wording below is provenance, not an active visual blocker.
 
 The user approved the bounded [force–energy calculus bridge](2026-09-16-force-energy-inspection.md)
 after accepted centroid motion and static syntax parity. This resumes reader.l5.

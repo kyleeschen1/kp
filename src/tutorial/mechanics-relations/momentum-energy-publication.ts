@@ -5,7 +5,7 @@ import { compileKpArticleDocument } from "../../article/kp-article-document.ts";
 import { createKpArticleSource } from "../../article/kp-article-source.ts";
 import { compileKpArticleStaticHtml } from "../../article/kp-article-static-html.ts";
 import { sha256 } from "../../kernel/sha256.ts";
-import { describeMomentumEnergyFrame, renderMomentumEnergySvg } from "./momentum-energy-figure.ts";
+import { describeMomentumEnergyFrame, describeMomentumEnergyPower, renderMomentumEnergySvg } from "./momentum-energy-figure.ts";
 import { compileMomentumDependencies, momentumDependencyIntegrity } from "./momentum-dependency-publication.ts";
 
 export const momentumEnergySourcePath = "examples/physics/momentum-energy.article.md";
@@ -30,11 +30,12 @@ export function compileMomentumEnergyPublication(text: string, lock?: KpArticleI
       const assetPath = `./kp-static/momentum-energy-${source.episode}-${id}.svg`;
       assets.set(assetPath, renderMomentumEnergySvg(checked.model, time));
       const summary = describeMomentumEnergyFrame(sampleMomentumEnergy(checked.model, time));
+      const power = describeMomentumEnergyPower(sampleMomentumEnergy(checked.model, time));
       return { id, label: id === "initial" ? "Starting state" : "After the interval", alt: summary,
-        caption: `${summary} Blue arrow: momentum. Brown arrow: net force (a separate scale). Bottom bar: kinetic energy, on a 0–8 J scale.`, assetPath };
+        caption: `${summary} Blue arrow: momentum, along velocity. Brown arrow: net force (a separate scale). Bottom bar: kinetic energy, on a 0–8 J scale. Speed × force along motion = power: ${power.calculation}. ${power.explanation}`, assetPath };
     });
     const draft = createKpVignetteRelease({ schemaVersion: "kp.vignette-release.v1",
-      id: `vignette.physics.momentum-energy-${source.episode}`, version: "1.0.0", integrity: `sha256:${"0".repeat(64)}`,
+      id: `vignette.physics.momentum-energy-${source.episode}`, version: "1.0.1", integrity: `sha256:${"0".repeat(64)}`,
       moduleSpecifier: "../../tutorial/mechanics-relations/momentum-energy-figure.ts", animationId: compiled.animation.id,
       objectPaths: ["particle", "momentum", "force", "energy"], transitionPaths: ["advance"], checkpointPaths: ["initial", "settled"],
       staticProjection: { checkpoints, transitions: [{ id: "advance", from: "initial", to: "settled" }] },

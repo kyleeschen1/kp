@@ -2,6 +2,42 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("graph power correspondence follows one physical sample and reverses without scrolling time", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1000, height: 1100 });
+  await page.goto(route);
+  const turn = page.locator('[data-episode="turning"]');
+  await turn.scrollIntoViewIfNeeded();
+  await expect(turn).toHaveAttribute('data-enhanced', 'true');
+  const slider = turn.locator('input');
+  await seek(slider, Math.PI / 4);
+  await expect.poll(async () => Number(await turn.getAttribute('data-physical-time'))).toBeCloseTo(Math.PI / 4, 12);
+  const marker = await turn.locator('[data-right-angle]').getAttribute('d');
+  expect(marker).not.toBe('');
+  await expect(turn).toHaveAttribute('data-power', '0');
+  await expect(turn.locator('[data-physics-power-calculation]')).toHaveText('1 m/s × 0 N = 0 W');
+  await expect(turn.locator('[data-physics-power-explanation]')).toContainText('Momentum turns');
+  await seek(slider, Math.PI / 2);
+  await expect(turn.locator('[data-right-angle]')).not.toHaveAttribute('d', marker!);
+  await expect(turn).toHaveAttribute('data-physical-time', String(Math.PI / 2));
+  await seek(slider, Math.PI / 4);
+  await expect(turn.locator('[data-right-angle]')).toHaveAttribute('d', marker!);
+  await turn.screenshot({ path: info.outputPath('graph-power-turn.png') });
+  const heldTime = await turn.getAttribute('data-physical-time');
+  await page.mouse.wheel(0, 100);
+  await expect(turn).toHaveAttribute('data-physical-time', heldTime!);
+  const straight = page.locator('[data-episode="straight"]');
+  await straight.scrollIntoViewIfNeeded();
+  await expect(straight).toHaveAttribute('data-enhanced', 'true');
+  await expect(straight.locator('[data-physics-power-explanation]')).toContainText('no direction');
+  await seek(straight.locator('input'), 1);
+  await expect(straight.locator('[data-physics-power-calculation]')).toHaveText('2 m/s × 2 N = 4 W');
+  await expect(straight).toHaveAttribute('data-energy', '2');
+  await expect(straight).toHaveAttribute('data-power', '4');
+  await straight.screenshot({ path: info.outputPath('graph-power-straight.png') });
+  await seek(straight.locator('input'), 0);
+  await expect(straight.locator('[data-physics-power-calculation]')).toHaveText('Velocity is zero → power is 0 W');
+});
+
 test("power bridge uses native reversible inspection with expandable product-rule reasoning", async ({ page }, info) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -1163,6 +1199,8 @@ test("source-owned static reading needs no JavaScript", async ({ browser }, info
   await expect(page.locator("h1")).toContainText("momentum");
   await expect(page.locator("[data-particle]")).toHaveCount(2);
   await expect(page.locator('[data-episode="turning"] [data-kp-focus-deck-annotation="physics.momentum"]')).toContainText("(0, 1)");
+  await expect(page.locator('[data-episode="turning"] [data-physics-power-calculation]')).toHaveText('1 m/s × 0 N = 0 W');
+  await expect(page.locator('[data-episode="straight"] [data-physics-power-explanation]')).toContainText('no direction');
   const derivation = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(derivation.locator("[data-derivation-row]")).toHaveCount(4);
   const detail = derivation.locator("[data-refinement-static]");

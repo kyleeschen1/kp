@@ -7,8 +7,8 @@
       "request": "vignette.physics.momentum-energy-straight@1",
       "vignetteId": "vignette.physics.momentum-energy-straight",
       "requestedMajor": 1,
-      "version": "1.0.0",
-      "integrity": "sha256:372572136655c33ee85adfdfffd8019c030d2700328059dfe138989e71ffc024",
+      "version": "1.0.1",
+      "integrity": "sha256:f2b70e164d4be7540a05321c84122cf916a646071669b2fd6fa53b167abe9c2a",
       "moduleSpecifier": "../../tutorial/mechanics-relations/momentum-energy-figure.ts"
     },
     {
@@ -16,8 +16,8 @@
       "request": "vignette.physics.momentum-energy-turning@1",
       "vignetteId": "vignette.physics.momentum-energy-turning",
       "requestedMajor": 1,
-      "version": "1.0.0",
-      "integrity": "sha256:06903bd1835a84856024ba7c41ef1e5df6f30711326865f628d7fe9ea5d393b7",
+      "version": "1.0.1",
+      "integrity": "sha256:ac31a66d259a301c1bf8d1da3e8beea13b90c8af79faab6becb59e1d8e70c3ff",
       "moduleSpecifier": "../../tutorial/mechanics-relations/momentum-energy-figure.ts"
     }
   ]

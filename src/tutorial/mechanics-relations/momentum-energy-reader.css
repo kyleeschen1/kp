@@ -16,6 +16,11 @@
 /* Typography stays in screen-space HTML, including static initial labels. */
 .physics-figure .kp-focus-deck__annotation { position: static; }
 .physics-legend { display: grid; gap: .2rem; }
+.physics-power-relation { margin-block: .75rem; padding-block: .6rem; border-top: 1px solid #c9c9c9; font-variant-numeric: tabular-nums; }
+.physics-power-relation p { margin: 0 0 .35rem; }
+.physics-power-relation > div { margin-top: .3rem; }
+/* Reserve the longest explanation so beginning motion cannot move its control. */
+.physics-power-relation [data-physics-power-explanation] { min-height: 5em; }
 .physics-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin-top: .8rem; }
 .physics-controls[hidden] { display: none; }
 .physics-playback-note { flex-basis: 100%; font-size: .9rem; }

@@ -2,7 +2,7 @@ import { compileKpArticleMarkdownFragmentHtml } from "../../article/kp-article-s
 import { defineKpLessonDocument, kpLesson, type KpLessonBlock } from "../../reader/document/public-api.ts";
 import { renderKpFocusDeckAnnotation } from "../focus-deck-annotation.ts";
 import { physicalTime, sampleMomentumEnergy } from "../../../domains/physics/momentum-energy.ts";
-import { describeMomentumEnergyFrame, displayNumber, renderMomentumEnergySvg } from "./momentum-energy-figure.ts";
+import { describeMomentumEnergyFrame, describeMomentumEnergyPower, displayNumber, renderMomentumEnergySvg } from "./momentum-energy-figure.ts";
 import { momentumEnergyAttention } from "./momentum-energy-attention.ts";
 import type { MomentumEnergyRuntimeSource } from "./momentum-energy-runtime-source.ts";
 import type { compileMomentumEnergyPublication } from "./momentum-energy-publication.ts";
@@ -44,6 +44,7 @@ export function renderMomentumEnergyReader(publication: Publication) {
     if (!capability) throw new Error("Physics motion is not bound to a governed vignette");
     const { model, revisionId } = capability.compiled;
     const id = block.fullId, initial = sampleMomentumEnergy(model, physicalTime(0));
+    const power = describeMomentumEnergyPower(initial);
     const manifest: MomentumEnergyRuntimeSource = { schemaVersion: "kp.physics.momentum-energy.runtime.v1", source: model.source,
       revisionId, representationId: "representation.physics.momentum-energy.native-2d.v1" };
     blocks.push(kpLesson.animationStory({ id, asset: { id: capability.compiled.animation.id, version: revisionId }, presentation: "step",
@@ -56,7 +57,13 @@ export function renderMomentumEnergyReader(publication: Publication) {
       <figure class="physics-figure">
         <div class="physics-quantities">${annotation("physics.momentum", `Momentum (${displayNumber(initial.momentum.x)}, ${displayNumber(initial.momentum.y)}) kg m/s`)}${annotation("physics.energy", `Kinetic energy ${displayNumber(initial.kineticEnergy)} J`)}</div>
         ${renderMomentumEnergySvg(model, physicalTime(0))}
-        <div class="physics-legend">${annotation("physics.legend", "Blue arrow: momentum · Brown arrow: net force")}${annotation("physics.scale", "Arrow lengths use separate scales. Energy bar: 0–8 J.")}</div>
+        <div class="physics-legend">${annotation("physics.legend", "Blue arrow: momentum (same direction as velocity) · Brown arrow: net force")}${annotation("physics.scale", "Arrow lengths use separate scales. Energy bar: 0–8 J.")}</div>
+        <div class="physics-power-relation" data-physics-power-relation>
+          ${html(String.raw`$\displaystyle\frac{dK}{dt}=\mathbf v\cdot\mathbf F$`)}
+          ${annotation("physics.power-reading", "Speed × force along motion = energy change per second")}
+          <div data-physics-power-calculation>${annotation("physics.power-value", power.calculation)}</div>
+          <div data-physics-power-explanation>${annotation("physics.power-explanation", power.explanation)}</div>
+        </div>
         <div class="physics-controls" data-physics-controls hidden>
           <span class="physics-playback-note">Playback at 0.4× speed · drag to inspect</span>
           <button type="button" data-physics-play>Play</button><button type="button" data-physics-reset>Reset</button>

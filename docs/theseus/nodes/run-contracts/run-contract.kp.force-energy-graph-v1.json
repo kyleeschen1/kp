@@ -1,0 +1,82 @@
+{
+  "id": "run-contract.kp.force-energy-graph-v1",
+  "kind": "run-contract",
+  "title": "Inspect force-energy graph correspondence",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review straight push and turn near the end of mechanics-relations; judge whether local geometry and power relation clarify why momentum can change without kinetic-energy change.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-force-energy-graph.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:mechanics-relations"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/force-energy-derivation.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "Physics relation and reader preservation",
+      "checkedAt": "2026-09-16T17:48:35.024Z",
+      "notes": "41 pass. Rest/moving distinction, dot product and projected component across both fixtures and masses 1,2,4; canonical static publication and accepted algebra preserved."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Existing architecture gates",
+      "checkedAt": "2026-09-16T17:48:36.519Z",
+      "notes": "Dependency direction, framework neutrality, semantic/compiler governance and conformance checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Final production build",
+      "checkedAt": "2026-09-16T17:48:37.735Z",
+      "notes": "Final build passes; existing global large-chunk warnings remain. No new dependency or renderer."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Final full repository types",
+      "checkedAt": "2026-09-16T17:49:19.755Z",
+      "notes": "Application, node, tests, Svelte and domain checks pass on final source."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/measure-mechanics-relations-closure.ts physics",
+      "status": "passed",
+      "scope": "Reachable production closure",
+      "checkedAt": "2026-09-16T17:49:21.250Z",
+      "notes": "Initial JS/CSS 37938 gzip bytes; activated total 154474; HTML 38730. Previous recorded initial/activated 37304/153857. Excludes fonts, images, HTTP and CPU; no device-performance claim."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "Final Chromium graph and reader preservation",
+      "checkedAt": "2026-09-16T17:50:23.260Z",
+      "notes": "36 pass. Graph values and marker track held physical samples, reverse, exact irrational-duration endpoint, ordinary-scroll independence; static/no-JS/print and existing algebra preserved. Earlier smoke failures: stale build-time compiler, missing viewport activation, strict float-string equality, then real range overshoot repaired at input boundary. Human comprehension and cross-browser promotion not claimed."
+    }
+  ],
+  "allowedWork": [
+    "Existing checked physics frames, Graph2D stage, static Article and one bounded visual checkpoint; two active hours including thirty-minute closeout"
+  ],
+  "disallowedWork": [
+    "New renderer, solver, global state, algebra motifs, catalogue promotion, agents, merge or push"
+  ],
+  "goal": "Connect perpendicular and parallel force geometry to instantaneous power through existing physics graphs",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "graph.correspondence",
+      "title": "Graph and symbolic power correspondence",
+      "summary": "Graph power correspondence implemented with rest-safe physical relation, right-angle cue, static parity and native slider endpoint repair. Await visual acceptance.",
+      "status": "in-progress"
+    }
+  ]
+}

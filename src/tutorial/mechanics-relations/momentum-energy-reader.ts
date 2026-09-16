@@ -57,7 +57,9 @@ function enhance(root: HTMLElement) {
   };
   const pause = () => { clock.pause(); update(); };
   clock.subscribe(update);
-  slider.addEventListener("input", () => clock.seek(Number(slider.value) / model.durationSeconds), options);
+  // Native range serialization can round an irrational maximum slightly above
+  // the physical duration. Clamp at the input boundary, not in the physics model.
+  slider.addEventListener("input", () => clock.seek(Math.min(1, Math.max(0, Number(slider.value) / model.durationSeconds))), options);
   play.addEventListener("click", () => {
     if (clock.getStatus() === "playing") { pause(); return; }
     if (clock.getSnapshot().progress === 1) clock.seek(0);

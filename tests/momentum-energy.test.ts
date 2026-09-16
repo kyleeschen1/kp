@@ -214,7 +214,8 @@ test("record inspection has exclusive docks and a reversible continuous emphasis
   assert.equal(frames[50]!.inspectionOpacity, 1);
   assert.throws(() => sampleDerivationRecordInspection(.5, 0, 54));
 });
-import { checkMomentumEnergy, momentumEnergyExamples, physicalTime, sampleMomentumEnergy } from "../domains/physics/momentum-energy.ts";
+import { checkMomentumEnergy, momentumEnergyExamples, physicalTime, sampleMomentumEnergy, momentumEnergyPowerRelation } from "../domains/physics/momentum-energy.ts";
+import { projectMomentumEnergyFigure, describeMomentumEnergyPower } from "../src/tutorial/mechanics-relations/momentum-energy-figure.ts";
 import { compileMomentumEnergyAsset } from "../src/authoring/momentum-energy-authoring.ts";
 import { readFileSync } from "node:fs";
 import { compileMomentumEnergyPublication, momentumEnergySourcePath } from "../src/tutorial/mechanics-relations/momentum-energy-publication.ts";
@@ -460,6 +461,31 @@ test("source boundary rejects unsupported claims, geometry, mass and getters wit
   const input = { ...momentumEnergyExamples[0]!, massKg: 1 }, result = checkMomentumEnergy(input);
   assert.equal(result.status, "checked"); if (result.status !== "checked") return;
   input.massKg = 4; assert.equal(result.model.source.massKg, 1); assert.ok(Object.isFrozen(result.model.source));
+});
+
+test("power correspondence uses physical samples and never invents a direction at rest", () => {
+  for (const index of [0, 1]) for (const mass of [1, 2, 4]) {
+    const checked = model(index, mass);
+    for (const fraction of [0, .2, .5, .8, 1, .5]) {
+      const frame = sampleMomentumEnergy(checked, physicalTime(fraction * checked.durationSeconds));
+      const relation = momentumEnergyPowerRelation(frame);
+      near(frame.velocity.x * frame.force.x + frame.velocity.y * frame.force.y, relation.power);
+      if (relation.kind === "at-rest") {
+        assert.equal(frame.speed, 0);
+        assert.equal(relation.power, 0);
+        assert.equal("direction" in relation, false);
+        assert.match(describeMomentumEnergyPower(frame).explanation, /no direction/);
+      } else {
+        near(Math.hypot(relation.direction.x, relation.direction.y), 1);
+        near(relation.direction.x * frame.force.x + relation.direction.y * frame.force.y, relation.forceAlongMotion);
+        near(frame.speed * relation.forceAlongMotion, frame.power);
+        assert.equal(relation.alignment, index === 1 ? "perpendicular" : "parallel");
+      }
+      const figure = projectMomentumEnergyFigure(frame);
+      assert.equal(figure.rightAngle.length > 0, index === 1);
+      assert.doesNotMatch(JSON.stringify(figure), /NaN|Infinity/);
+    }
+  }
 });
 
 test("physical seconds cannot be confused with presentation progress or forged models", () => {

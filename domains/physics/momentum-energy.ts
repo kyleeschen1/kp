@@ -85,3 +85,16 @@ export function sampleMomentumEnergy(model: CheckedMomentumEnergy, time: Physica
     energyChange: kineticEnergy - initialEnergy, work, power });
 }
 export type MomentumEnergyFrame = ReturnType<typeof sampleMomentumEnergy>;
+
+/** At rest there is no velocity direction onto which force can be projected.
+ * Keep that case distinct rather than assigning a fictitious angle or dividing
+ * by zero. Both moving fixtures have exact analytically known alignment. */
+export function momentumEnergyPowerRelation(frame: MomentumEnergyFrame):
+  | { readonly kind: "at-rest"; readonly power: number }
+  | { readonly kind: "moving"; readonly alignment: "parallel" | "perpendicular";
+      readonly direction: PhysicsVector; readonly forceAlongMotion: number; readonly power: number } {
+  if (frame.speed === 0) return Object.freeze({ kind: "at-rest", power: frame.power });
+  return Object.freeze({ kind: "moving", alignment: frame.episode === "turning" ? "perpendicular" : "parallel",
+    direction: vector(frame.velocity.x / frame.speed, frame.velocity.y / frame.speed),
+    forceAlongMotion: frame.power / frame.speed, power: frame.power });
+}

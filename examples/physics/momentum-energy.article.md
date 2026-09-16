@@ -216,26 +216,39 @@ Net work is not automatically the work done by any single force.
 Use the figure to check the connections we derived. It represents the same
 particle in each view, with time as the shared coordinate.
 
+Read the dot product as **speed × the component of force along motion**.
+The second factor asks how much of the force points in the direction of velocity.
+Since $\mathbf p=m\mathbf v$ with positive mass, the momentum arrow also shows
+that direction. Its length is momentum, not speed; the two have different units.
+At rest there is no velocity direction, but $\mathbf v\cdot\mathbf F=0$ still
+makes sense directly. The local power reading uses that zero-vector case.
+
 :::kp-stage{#straight use=straight}
 :::
 
 :::kp-motion{#speed-up stage=straight run=straight/advance}
-Start a 1 kg particle from rest with constant net force $(2,0)$ N. In SI units,
-$\mathbf p(t)=(2t,0)$ and $K(t)=2t^2$. Follow the momentum arrow's growing
-length and compare it with the energy bar: doubling momentum magnitude
-quadruples kinetic energy. The relationship is quadratic, not proportional.
+Start a 1 kg particle from rest with constant net force $(2,0)$ N. Advance time:
+the brown force stays constant, while the blue momentum arrow grows. Once the
+particle is moving, both arrows point the same way, so all 2 N contribute to
+power. Watch **speed × 2 N** increase: the same force adds more energy each
+second as the particle speeds up.
 
 ::after
 
 After 2 s, momentum is $(4,0)$ kg m/s and kinetic energy is 8 J. The impulse
 is $(2,0)\times2=(4,0)$ kg m/s. The particle travels 4 m in the force's
 direction, so net work is $2\times4=8$ J. One event satisfies both accounts.
+Here $\mathbf p(t)=(2t,0)$ and $K(t)=2t^2$: doubling momentum magnitude
+quadruples kinetic energy, rather than merely doubling it.
 :::
 
 ## Inspect a turn
 
 Now the initially puzzling case has a place in the map: changing direction
 changes momentum without necessarily changing its magnitude or kinetic energy.
+Watch the small right-angle marker: it rotates with the particle, but the angle
+between force and velocity stays perpendicular. That persistence, not the
+particle standing still, is why the force contributes no instantaneous power.
 
 :::kp-stage{#turning use=turning}
 :::
