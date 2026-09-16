@@ -70,6 +70,59 @@ second-caller evidence. Theseus owns execution status.
 
 ## Review packet
 
+### Approved checkpoint refinement: stable, compact figures
+
+The user approved fixed-precision, bounded numeric slots and stationary labels,
+units, explanations and controls during playback. Implement this in the existing
+physics presentation boundary, shared by initial HTML and live paint. Reserve
+signs and digit growth, normalize rounded negative zero, reject nonfinite or
+out-of-range values, and exercise both fixtures plus formatting edge cases.
+CSS must size explanation slots from their actual supported variants at the
+current width; viewport/text-size changes may reflow, time changes must not.
+
+Reduce plot slack without reducing inherited typography or control targets.
+The compact candidate requires human review before its size becomes an accepted
+regression envelope. Browser checks enforce stationary surroundings, no clipping,
+and native endpoints now; a different numerical caller and shared API promotion
+remain outside this refinement. The rollback unit is figure presentation and
+its focused tests, preserving Article semantics, physics, clocks and equation
+motion. Continue on the documented experiment branch. The existing contract
+owns the reopened graph.correspondence slice and visual gate. Verification:
+focused numeric/physics tests, full types and the scoped Chromium review command;
+no full aesthetic certification matrix before approval.
+
+The implementation follows [stable simulation readouts](../principles/stable-simulation-readouts.md).
+The candidate caps plot width at 24rem (previously 30rem) and crops fixed vertical
+bounds to each complete fixture, including mass-dependent turning arrow extents.
+At 16px root size the desktop plots are approximately 384 × 101px (straight)
+and 384 × 165px (unit-mass turn), previously 480 × 286px. These dimensions are
+computed from CSS/SVG bounds, not accepted perceptual minima. Explanations use
+overlapping CSS grid cells so actual text wrapping reserves space without runtime
+measurement. Unknown readout IDs, invalid values and range overflow fail at the
+presentation boundary. No new renderer, clock or dependency is added.
+
+Review the same two figures: scrub across rest and back, watch stationary labels,
+units, buttons and following prose, then judge whether the smaller arrows and
+right-angle marker remain clear. Two decimals are retained throughout. At rest,
+the projected force component reads “—” because velocity has no direction; the
+explanation and zero power remain explicit. The final size envelope and shared
+promotion remain pending human review and a different caller respectively.
+
+Refinement verification: 44 focused tests pass, full repository types pass, and
+the final production build passes with its existing global chunk warnings.
+The new numeric/geometry suite covers supported masses, fixed precision,
+rounded digit growth and negative zero. Initial failures included expected
+import-pin drift, an incorrect lock export corrected before final verification,
+a stopped server, and a test parsing CSS `px` widths with `Number` instead of
+`parseFloat`. A server restart during the earlier full browser run interrupted
+static image loading; retain that failed run and require a clean rerun.
+The SVG callback also needed an actual `SVGSVGElement` guard for type safety.
+Theseus records the final browser result. Measured production JS/CSS closure is
+38,519 gzip bytes initially and 155,055 activated (both +581); HTML is 39,070
+gzip bytes (+340). Fonts, images, HTTP and runtime CPU are excluded. The added
+runtime work is bounded numeric-leaf formatting/paint and explanation visibility;
+CSS owns wrapping and reservation, with no per-frame geometry measurement.
+
 Open <http://localhost:8000/experiments/mechanics-relations/> and inspect the
 **Inspect a straight push** and **Inspect a turn** figures near the end. In the
 turn, scrub while following the right-angle marker: the arrow directions change,

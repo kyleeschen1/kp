@@ -10,25 +10,33 @@
 .physics-motion { scroll-margin-top: 1rem; }
 .physics-cue p { margin-bottom: .6rem; }
 .physics-figure { border-block: 1px solid #c9c9c9; padding-block: 1rem; }
-.physics-figure svg { display: block; width: min(100%, 30rem); height: auto; margin: auto; }
+.physics-figure svg { display: block; width: min(100%, 24rem); height: auto; margin: auto; }
 .physics-figure svg * { vector-effect: non-scaling-stroke; }
 .physics-quantities { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .25rem 1rem; font-variant-numeric: tabular-nums; }
 /* Typography stays in screen-space HTML, including static initial labels. */
 .physics-figure .kp-focus-deck__annotation { position: static; }
+.physics-quantities .kp-focus-deck__annotation { display: inline; }
+.physics-quantities > span { white-space: nowrap; }
+.physics-readout { display: inline-block; white-space: nowrap; }
+.physics-readout [data-physics-number] { display: inline-block; inline-size: calc(var(--physics-number-columns) * 1ch); text-align: right; font-variant-numeric: tabular-nums; }
 .physics-legend { display: grid; gap: .2rem; }
 .physics-power-relation { margin-block: .75rem; padding-block: .6rem; border-top: 1px solid #c9c9c9; font-variant-numeric: tabular-nums; }
 .physics-power-relation p { margin: 0 0 .35rem; }
 .physics-power-relation > div { margin-top: .3rem; }
-/* Reserve the longest explanation so beginning motion cannot move its control. */
-.physics-power-relation [data-physics-power-explanation] { min-height: 5em; }
+/* All supported variants participate in layout at the current text size/width.
+   Only the current explanation is painted or exposed to assistive technology. */
+.physics-power-relation [data-physics-power-explanation] { display: grid; }
+[data-physics-explanation] { grid-area: 1 / 1; }
+[data-physics-explanation][aria-hidden="true"] { visibility: hidden; }
 .physics-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin-top: .8rem; }
 .physics-controls[hidden] { display: none; }
 .physics-playback-note { flex-basis: 100%; font-size: .9rem; }
 .physics-controls button { min-height: 2.75rem; padding: .4rem .8rem; border: 1px solid #aaa; border-radius: .3rem; background: transparent; color: inherit; }
+.physics-controls [data-physics-play] { min-inline-size: 9ch; }
 .physics-controls label { margin-left: auto; font-size: 1rem; font-variant-numeric: tabular-nums; }
 .physics-controls input { flex-basis: 100%; width: 100%; min-height: 2.5rem; accent-color: #236b8e; }
 .physics-controls :focus-visible { outline: 2px solid #236b8e; outline-offset: 3px; }
-.physics-figure [data-physics-description] { min-height: 2.9em; font-variant-numeric: tabular-nums; }
+.physics-figure [data-physics-description] { font-variant-numeric: tabular-nums; }
 .physics-after { margin-top: 1.25rem; }
 .energy-derivation { --derivation-inspection-accent: #986417; margin-block: 1.5rem; }
 .energy-derivation-actions { display: flex; align-items: center; gap: .5rem; }

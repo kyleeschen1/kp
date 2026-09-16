@@ -41,7 +41,7 @@ function enhance(root: HTMLElement) {
   const model = loadMomentumEnergyRuntimeSource(JSON.parse(manifest.textContent ?? "null"));
   const stage = mountMomentumEnergyStage(root, model);
   const slider = get<HTMLInputElement>("input[type=range]"), play = get<HTMLButtonElement>("[data-physics-play]");
-  const output = get<HTMLOutputElement>("output"), controls = get<HTMLElement>("[data-physics-controls]");
+  const controls = get<HTMLElement>("[data-physics-controls]");
   const clock = createKpReaderTimelinePlaybackClock({ id: `${root.id}.clock`, durationMs: model.durationSeconds * 2500 });
   const abort = new AbortController(), options = { signal: abort.signal };
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -50,7 +50,6 @@ function enhance(root: HTMLElement) {
     stage.project(progress);
     slider.value = String(progress * model.durationSeconds);
     slider.setAttribute("aria-valuetext", `${displayNumber(progress * model.durationSeconds)} seconds`);
-    output.value = `${displayNumber(progress * model.durationSeconds)} / ${displayNumber(model.durationSeconds)} s`;
     play.textContent = clock.getStatus() === "playing" ? "Pause" : progress === 1 ? "Replay" : reduced.matches ? "Show end" : "Play";
     root.dataset["playing"] = String(clock.getStatus() === "playing");
     root.dataset["attention"] = projectMomentumEnergyAttention(root.id, progress).primaryTarget;

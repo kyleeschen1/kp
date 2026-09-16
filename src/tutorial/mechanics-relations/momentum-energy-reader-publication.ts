@@ -2,7 +2,8 @@ import { compileKpArticleMarkdownFragmentHtml } from "../../article/kp-article-s
 import { defineKpLessonDocument, kpLesson, type KpLessonBlock } from "../../reader/document/public-api.ts";
 import { renderKpFocusDeckAnnotation } from "../focus-deck-annotation.ts";
 import { physicalTime, sampleMomentumEnergy } from "../../../domains/physics/momentum-energy.ts";
-import { describeMomentumEnergyFrame, describeMomentumEnergyPower, displayNumber, renderMomentumEnergySvg } from "./momentum-energy-figure.ts";
+import { describeMomentumEnergyPower, displayNumber, powerExplanations, renderMomentumEnergySvg } from "./momentum-energy-figure.ts";
+import { physicsReadoutValues, renderPhysicsReadout, type PhysicsReadoutId } from "./physics-readout.ts";
 import { momentumEnergyAttention } from "./momentum-energy-attention.ts";
 import type { MomentumEnergyRuntimeSource } from "./momentum-energy-runtime-source.ts";
 import type { compileMomentumEnergyPublication } from "./momentum-energy-publication.ts";
@@ -45,6 +46,10 @@ export function renderMomentumEnergyReader(publication: Publication) {
     const { model, revisionId } = capability.compiled;
     const id = block.fullId, initial = sampleMomentumEnergy(model, physicalTime(0));
     const power = describeMomentumEnergyPower(initial);
+    const values = physicsReadoutValues(initial);
+    const number = (id: PhysicsReadoutId, unit = true) => renderPhysicsReadout(id, values[id], unit);
+    const vector = `(${number("momentumX", false)}, ${number("momentumY", false)}) <span class="physics-readout-unit">kg m/s</span>`;
+    const explanationIds = model.source.episode === "straight" ? ["rest", "parallel"] as const : ["perpendicular"] as const;
     const manifest: MomentumEnergyRuntimeSource = { schemaVersion: "kp.physics.momentum-energy.runtime.v1", source: model.source,
       revisionId, representationId: "representation.physics.momentum-energy.native-2d.v1" };
     blocks.push(kpLesson.animationStory({ id, asset: { id: capability.compiled.animation.id, version: revisionId }, presentation: "step",
@@ -55,22 +60,22 @@ export function renderMomentumEnergyReader(publication: Publication) {
     return `<section class="physics-motion kp-focus-deck" id="${attribute(id)}" data-physics-motion data-episode="${model.source.episode}">
       <div class="physics-cue">${html(block.beforeMarkdown)}</div>
       <figure class="physics-figure">
-        <div class="physics-quantities">${annotation("physics.momentum", `Momentum (${displayNumber(initial.momentum.x)}, ${displayNumber(initial.momentum.y)}) kg m/s`)}${annotation("physics.energy", `Kinetic energy ${displayNumber(initial.kineticEnergy)} J`)}</div>
+        <div class="physics-quantities" data-kp-focus-deck-type="support"><span data-kp-focus-deck-annotation="physics.momentum">${annotation("physics.momentum-label", "Momentum")} ${vector}</span><span data-kp-focus-deck-annotation="physics.energy">${annotation("physics.energy-label", "Kinetic energy")} ${number("kineticEnergy")}</span></div>
         ${renderMomentumEnergySvg(model, physicalTime(0))}
         <div class="physics-legend">${annotation("physics.legend", "Blue arrow: momentum (same direction as velocity) · Brown arrow: net force")}${annotation("physics.scale", "Arrow lengths use separate scales. Energy bar: 0–8 J.")}</div>
         <div class="physics-power-relation" data-physics-power-relation>
           ${html(String.raw`$\displaystyle\frac{dK}{dt}=\mathbf v\cdot\mathbf F$`)}
           ${annotation("physics.power-reading", "Speed × force along motion = energy change per second")}
-          <div data-physics-power-calculation>${annotation("physics.power-value", power.calculation)}</div>
-          <div data-physics-power-explanation>${annotation("physics.power-explanation", power.explanation)}</div>
+          <div data-physics-power-calculation data-kp-focus-deck-type="support">${number("speed")} × ${number("forceAlongMotion")} = ${number("power")}</div>
+          <div data-physics-power-explanation>${explanationIds.map(id => `<div data-physics-explanation="${id}"${id === power.explanationId ? "" : ' aria-hidden="true" inert'}>${annotation(`physics.power-explanation.${id}`, powerExplanations[id])}</div>`).join("")}</div>
         </div>
         <div class="physics-controls" data-physics-controls hidden>
           <span class="physics-playback-note">Playback at 0.4× speed · drag to inspect</span>
           <button type="button" data-physics-play>Play</button><button type="button" data-physics-reset>Reset</button>
-          <label for="${attribute(id)}.time">Time <output>0 / ${displayNumber(model.durationSeconds)} s</output></label>
+          <label for="${attribute(id)}.time"><span class="physics-readout-label">Time</span> <output>${number("time", false)} / ${displayNumber(model.durationSeconds)} <span class="physics-readout-unit">s</span></output></label>
           <input id="${attribute(id)}.time" type="range" min="0" max="${model.durationSeconds}" step="any" value="0" aria-label="${model.source.episode} motion time">
         </div>
-        <figcaption data-physics-description>${describeMomentumEnergyFrame(initial)}</figcaption>
+        <figcaption data-physics-description>Time ${number("time")}; momentum ${vector}; speed ${number("speed")}; kinetic energy ${number("kineticEnergy")}; net work since the start ${number("work")}; instantaneous power ${number("power")}.</figcaption>
       </figure>
       <div class="physics-after">${html(block.afterMarkdown ?? "")}</div>
       <script type="application/json" data-physics-source>${JSON.stringify(manifest).replaceAll("<", "\\u003c")}</script>

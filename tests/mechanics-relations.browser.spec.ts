@@ -2,6 +2,64 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("physics readouts keep labels, controls and following prose stationary during seeks", async ({ page }, info) => {
+  for (const [width, textSize] of [[1000, 16], [390, 16], [390, 20]] as const) {
+    await page.setViewportSize({ width, height: 1100 });
+    await page.goto(route);
+    await page.evaluate(size => { document.documentElement.style.fontSize = `${size}px`; }, textSize);
+    await page.evaluate(() => document.fonts.ready);
+    for (const episode of ["straight", "turning"]) {
+      const root = page.locator(`[data-episode="${episode}"]`);
+      await root.scrollIntoViewIfNeeded();
+      await expect(root).toHaveAttribute("data-enhanced", "true");
+      const slider = root.locator('input[type="range"]');
+      const max = Number(await slider.getAttribute("max"));
+      const boxes = () => root.evaluate(element => {
+        const origin = element.getBoundingClientRect();
+        return Array.from(element.querySelectorAll(".physics-readout-unit, .physics-readout-label, .physics-quantities .kp-focus-deck__annotation, [data-physics-power-explanation], .physics-controls button, .physics-controls input, .physics-after, figcaption")).map(node => {
+          const rect = node.getBoundingClientRect();
+          return { x: rect.x - origin.x, y: rect.y - origin.y, width: rect.width, height: rect.height };
+        });
+      });
+      await seek(slider, 0);
+      const initial = await boxes();
+      for (const fraction of [.001, .249, .25, .499, .5, .999, 1, .5, 0]) {
+        await seek(slider, fraction * max);
+        const current = await boxes();
+        expect(current.length).toBe(initial.length);
+        current.forEach((box, index) => {
+          const before = initial[index]!;
+          for (const key of ["x", "y", "width", "height"] as const)
+            expect(Math.abs(box[key] - before[key]), `${episode} ${width}px ${fraction}: ${index}.${key}`).toBeLessThan(.5);
+        });
+        expect(await root.locator('[data-physics-number]').evaluateAll(elements => elements.every(element => {
+          const range = document.createRange(); range.selectNodeContents(element);
+          return range.getBoundingClientRect().width <= element.getBoundingClientRect().width + .5;
+        }))).toBe(true);
+        expect(await root.locator('svg').evaluate(svg => {
+          if (!(svg instanceof SVGSVGElement)) throw new Error("Expected the native physics SVG");
+          const view = svg.viewBox.baseVal;
+          return Array.from(svg.querySelectorAll<SVGGraphicsElement>('path, rect, circle')).every(element => {
+            const box = element.getBBox(), style = getComputedStyle(element);
+            const scale = svg.getBoundingClientRect().width / view.width;
+            const padding = style.stroke === "none" ? 0 : parseFloat(style.strokeWidth) / (2 * scale);
+            if (!box.width && !box.height) return true;
+            return box.x - padding >= view.x && box.y - padding >= view.y &&
+              box.x + box.width + padding <= view.x + view.width && box.y + box.height + padding <= view.y + view.height;
+          });
+        })).toBe(true);
+      }
+      const activeExplanation = root.locator('[data-physics-explanation]:not([aria-hidden])');
+      await expect(activeExplanation).toHaveCount(1);
+      await expect(activeExplanation).toBeVisible();
+      expect(await root.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+      // This is a readable-fit floor, not certification of an unreviewed size.
+      for (const button of await root.locator('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      await root.screenshot({ path: info.outputPath(`stable-${episode}-${width}-${textSize}.png`) });
+    }
+  }
+});
+
 test("graph power correspondence follows one physical sample and reverses without scrolling time", async ({ page }, info) => {
   await page.setViewportSize({ width: 1000, height: 1100 });
   await page.goto(route);
@@ -14,7 +72,7 @@ test("graph power correspondence follows one physical sample and reverses withou
   const marker = await turn.locator('[data-right-angle]').getAttribute('d');
   expect(marker).not.toBe('');
   await expect(turn).toHaveAttribute('data-power', '0');
-  await expect(turn.locator('[data-physics-power-calculation]')).toHaveText('1 m/s × 0 N = 0 W');
+  await expect(turn.locator('[data-physics-power-calculation]')).toHaveText('1.00 m/s × 0.00 N = 0.00 W');
   await expect(turn.locator('[data-physics-power-explanation]')).toContainText('Momentum turns');
   await seek(slider, Math.PI / 2);
   await expect(turn.locator('[data-right-angle]')).not.toHaveAttribute('d', marker!);
@@ -30,12 +88,12 @@ test("graph power correspondence follows one physical sample and reverses withou
   await expect(straight).toHaveAttribute('data-enhanced', 'true');
   await expect(straight.locator('[data-physics-power-explanation]')).toContainText('no direction');
   await seek(straight.locator('input'), 1);
-  await expect(straight.locator('[data-physics-power-calculation]')).toHaveText('2 m/s × 2 N = 4 W');
+  await expect(straight.locator('[data-physics-power-calculation]')).toHaveText('2.00 m/s × 2.00 N = 4.00 W');
   await expect(straight).toHaveAttribute('data-energy', '2');
   await expect(straight).toHaveAttribute('data-power', '4');
   await straight.screenshot({ path: info.outputPath('graph-power-straight.png') });
   await seek(straight.locator('input'), 0);
-  await expect(straight.locator('[data-physics-power-calculation]')).toHaveText('Velocity is zero → power is 0 W');
+  await expect(straight.locator('[data-physics-power-calculation]')).toHaveText('0.00 m/s × — N = 0.00 W');
 });
 
 test("power bridge uses native reversible inspection with expandable product-rule reasoning", async ({ page }, info) => {
@@ -1198,8 +1256,8 @@ test("source-owned static reading needs no JavaScript", async ({ browser }, info
   await page.goto(`http://localhost:8000${route}`);
   await expect(page.locator("h1")).toContainText("momentum");
   await expect(page.locator("[data-particle]")).toHaveCount(2);
-  await expect(page.locator('[data-episode="turning"] [data-kp-focus-deck-annotation="physics.momentum"]')).toContainText("(0, 1)");
-  await expect(page.locator('[data-episode="turning"] [data-physics-power-calculation]')).toHaveText('1 m/s × 0 N = 0 W');
+  await expect(page.locator('[data-episode="turning"] [data-kp-focus-deck-annotation="physics.momentum"]')).toContainText("(0.00, 1.00)");
+  await expect(page.locator('[data-episode="turning"] [data-physics-power-calculation]')).toHaveText('1.00 m/s × 0.00 N = 0.00 W');
   await expect(page.locator('[data-episode="straight"] [data-physics-power-explanation]')).toContainText('no direction');
   const derivation = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(derivation.locator("[data-derivation-row]")).toHaveCount(4);

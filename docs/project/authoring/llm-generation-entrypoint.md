@@ -103,6 +103,11 @@ Use the canonical scaffold's inherited typography and shared plain-language
 annotation helper; do not author local font/size values or scaled SVG reading
 labels. Preserve native math/code renderers and their typography contracts.
 
+For numerical simulation readouts, follow
+`../principles/stable-simulation-readouts.md`: declared precision/range, stable
+value slots and executable geometry checks. Compactness requires an exemplar
+review before freezing size limits; do not shrink typography to meet a budget.
+
 | Intended change | Canonical target |
 | --- | --- |
 | Revise learner prose or sparse semantic references | `kp.article.v1` source |

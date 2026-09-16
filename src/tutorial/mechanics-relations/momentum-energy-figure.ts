@@ -1,7 +1,11 @@
 import { sampleMomentumEnergy, momentumEnergyPowerRelation, type CheckedMomentumEnergy, type PhysicalTime } from "../../../domains/physics/momentum-energy.ts";
 
 export type MomentumEnergyFrame = ReturnType<typeof sampleMomentumEnergy>;
-export const displayNumber = (value: number): string => Number(value.toFixed(2)).toString();
+export const displayNumber = (value: number): string => {
+  if (!Number.isFinite(value)) throw new RangeError("Display numbers must be finite");
+  const text = value.toFixed(2);
+  return Number(text) === 0 ? "0.00" : text;
+};
 
 /** Representation coordinates are derived from physics, never fed back into it.
  * Momentum and force have different units and deliberately separate scales. */
@@ -33,9 +37,15 @@ export function projectMomentumEnergyFigure(frame: MomentumEnergyFrame) {
 
 export function renderMomentumEnergySvg(model: CheckedMomentumEnergy, time: PhysicalTime): string {
   const frame = sampleMomentumEnergy(model, time), p = projectMomentumEnergyFigure(frame);
+  // Fixed bounds contain the complete fixture trajectory and arrow extents.
+  // Crop unused vertical space once; never auto-fit to the current sample.
+  // For a turn, the highest momentum tip is 175 - hypot(100, 25m).
+  // Include the arrowhead and every supported mass, even when it is not 1 kg.
+  const turnTop = Math.floor((175 - Math.hypot(100, 25 * model.source.massKg) - 10) / 10) * 10;
+  const viewBox = frame.episode === "straight" ? "0 130 420 110" : `0 ${turnTop} 420 ${240 - turnTop}`;
   // Explicit data-attribute values keep this identical markup valid as XML
   // standalone SVG as well as the browser's more permissive inline HTML.
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 250" role="img" aria-label="Particle trajectory, momentum arrow, force arrow, and kinetic energy bar">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" role="img" aria-label="Particle trajectory, momentum arrow, force arrow, and kinetic energy bar">
     <path data-trajectory="" d="${p.trajectory}" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-dasharray="3 5"/>
     <path data-force="" d="${p.force}" fill="none" stroke="#a55b24" stroke-width="3"/>
     <path data-momentum="" d="${p.momentum}" fill="none" stroke="#236b8e" stroke-width="3"/>
@@ -59,10 +69,13 @@ export function describeMomentumEnergyPower(frame: MomentumEnergyFrame) {
     calculation: relation.kind === "at-rest"
       ? `Velocity is zero → power is ${n(relation.power)} W`
       : `${n(frame.speed)} m/s × ${n(relation.forceAlongMotion)} N = ${n(relation.power)} W`,
-    explanation: relation.kind === "at-rest"
-      ? "At this instant there is no direction of motion. Force is nonzero and starts changing momentum; the energy rate is zero only at this instant."
-      : relation.alignment === "perpendicular"
-        ? "The right angle persists: force has no component along velocity. Momentum turns, but kinetic energy stays constant."
-        : "Force points along velocity. As speed grows, the same force transfers more energy each second."
+    explanation: powerExplanations[relation.kind === "at-rest" ? "rest" : relation.alignment],
+    explanationId: relation.kind === "at-rest" ? "rest" : relation.alignment
   });
 }
+
+export const powerExplanations = Object.freeze({
+  rest: "At this instant there is no direction of motion (—). Force is nonzero and starts changing momentum; the energy rate is zero only at this instant.",
+  perpendicular: "The right angle persists: force has no component along velocity. Momentum turns, but kinetic energy stays constant.",
+  parallel: "Force points along velocity. As speed grows, the same force transfers more energy each second."
+});

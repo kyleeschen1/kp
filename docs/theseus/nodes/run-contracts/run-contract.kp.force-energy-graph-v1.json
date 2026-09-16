@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Inspect force-energy graph correspondence",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review straight push and turn near the end of mechanics-relations; judge whether local geometry and power relation clarify why momentum can change without kinetic-energy change.",
+  "summary": "HUMAN_CHECKPOINT: review compact straight-push and turn figures with stable two-decimal readouts at localhost:8000/experiments/mechanics-relations/. Implementation and checks complete; clarity and final size envelope await visual acceptance. Shared promotion remains deferred.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -61,6 +61,32 @@
       "scope": "Final Chromium graph and reader preservation",
       "checkedAt": "2026-09-16T17:50:23.260Z",
       "notes": "36 pass. Graph values and marker track held physical samples, reverse, exact irrational-duration endpoint, ordinary-scroll independence; static/no-JS/print and existing algebra preserved. Earlier smoke failures: stale build-time compiler, missing viewport activation, strict float-string equality, then real range overshoot repaired at input boundary. Human comprehension and cross-browser promotion not claimed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/physics-readout.test.ts tests/momentum-energy.test.ts tests/force-energy-derivation.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "Stable readouts and physics preservation",
+      "checkedAt": "2026-09-16T21:33:16.237Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full repository types",
+      "checkedAt": "2026-09-16T21:33:18.354Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Final compact-readout production build",
+      "checkedAt": "2026-09-16T21:34:07.935Z",
+      "notes": "Build passes; existing large-chunk warnings remain. No new renderer or dependency. Measured initial JS/CSS is 38519 gzip bytes versus 37938 previously; activated total 155055 versus 154474; HTML 39070 versus 38730. Excludes fonts, images and runtime CPU."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "Final compact figures and reader preservation",
+      "checkedAt": "2026-09-16T21:34:56.067Z",
+      "notes": "37 pass in clean Chromium run. Numeric labels, units, controls and following prose stay within 0.5 px through endpoints, rest and reversal at 1000px, 390px and enlarged text. Slots fit and SVG bounds retain geometry; static/no-JS/print, calculus and scalar preservation pass. Earlier full run had a CSS parsing bug in the new assertion and static image loading interrupted by a dev-server restart; both corrected before this clean run. Compact size still requires human judgment."
     }
   ],
   "allowedWork": [
@@ -75,7 +101,7 @@
     {
       "id": "graph.correspondence",
       "title": "Graph and symbolic power correspondence",
-      "summary": "Graph power correspondence implemented with rest-safe physical relation, right-angle cue, static parity and native slider endpoint repair. Await visual acceptance.",
+      "summary": "Implementation and verification complete; HUMAN_CHECKPOINT pending on compact figure clarity and final size envelope. 44 focused tests, full types, production build and 37 Chromium checks pass. Shared API promotion is deferred.",
       "status": "in-progress"
     }
   ]

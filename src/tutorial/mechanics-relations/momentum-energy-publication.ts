@@ -35,7 +35,7 @@ export function compileMomentumEnergyPublication(text: string, lock?: KpArticleI
         caption: `${summary} Blue arrow: momentum, along velocity. Brown arrow: net force (a separate scale). Bottom bar: kinetic energy, on a 0–8 J scale. Speed × force along motion = power: ${power.calculation}. ${power.explanation}`, assetPath };
     });
     const draft = createKpVignetteRelease({ schemaVersion: "kp.vignette-release.v1",
-      id: `vignette.physics.momentum-energy-${source.episode}`, version: "1.0.1", integrity: `sha256:${"0".repeat(64)}`,
+      id: `vignette.physics.momentum-energy-${source.episode}`, version: "1.0.2", integrity: `sha256:${"0".repeat(64)}`,
       moduleSpecifier: "../../tutorial/mechanics-relations/momentum-energy-figure.ts", animationId: compiled.animation.id,
       objectPaths: ["particle", "momentum", "force", "energy"], transitionPaths: ["advance"], checkpointPaths: ["initial", "settled"],
       staticProjection: { checkpoints, transitions: [{ id: "advance", from: "initial", to: "settled" }] },
