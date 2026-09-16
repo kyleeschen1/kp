@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "Handle restored by ink-center path correction. Six three-engine checks pass. Original direct-penetration visual checkpoint remains before pressure and saved queue.",
+  "summary": "Norm repair COMPLETE. Resume bounded code-transfer proposal reader.l4 from September 15 next-step review; preserve existing code semantic authority and renderer. Then force/energy and graph. Phone and v2 remain parked.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -990,6 +990,48 @@
       "scope": "missing-handle-repair",
       "checkedAt": "2026-09-16T02:52:47.074Z",
       "notes": "Six checks pass across Chromium Firefox WebKit: visible enabled handle, composed norm steps, direct trajectories and reverse. Initial Firefox failure reproduced incorrect layout-centered path endpoints; repaired to ink centers without relaxed collision tolerances. Initial harness failures fixed by in-window disclosure drag and separate keyboard endpoint assertions. 36 focused units, test types and build also pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "norm.pressure",
+      "checkedAt": "2026-09-16T03:05:15.372Z",
+      "notes": "Full app, node, test, Svelte and domain types pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "norm.pressure",
+      "checkedAt": "2026-09-16T03:05:16.981Z",
+      "notes": "Dependency, semantic, governed compiler and cross-domain boundaries pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "norm.pressure",
+      "checkedAt": "2026-09-16T03:05:18.249Z",
+      "notes": "Production build passes with existing large-chunk warnings. Closure physics initial 36542 activated 149297 gzip bytes; scalar 33598 and 147136."
+    },
+    {
+      "command": "npm run visual:authoring-distribution-card -- --grep coherent",
+      "status": "passed",
+      "scope": "norm.pressure",
+      "checkedAt": "2026-09-16T03:05:19.558Z",
+      "notes": "Two Chromium and Firefox canonical coherent-fraction forward/reverse checks pass. Preservation, not promotion of a new power motif."
+    },
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "norm.pressure",
+      "checkedAt": "2026-09-16T03:05:20.847Z",
+      "notes": "103 tests pass; separately 36 focused momentum-energy, scalar and authority-reuse tests pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'norm scaling|scope penetration|retired participant|scalar compact inspection|scalar static reading'",
+      "status": "passed",
+      "scope": "norm.pressure",
+      "checkedAt": "2026-09-16T03:06:25.022Z",
+      "notes": "Clean final cohort: 15 pass across Chromium Firefox WebKit. Initial run 14 passed and one Firefox out-of-window synthetic-drag failure; repaired harness viewport, no production gesture change."
     }
   ],
   "progress": {

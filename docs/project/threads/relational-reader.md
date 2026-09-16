@@ -5,6 +5,14 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+The direct inward quotient-square motion and restored handle are now visually
+accepted (“much better. proceed”). The [norm repair record](2026-09-16-norm-scaling-composition.md)
+owns its compatibility and pressure conclusions; Theseus owns integration
+status. Retire the rejected participant-only comparison, preserve complete
+equation context, and return to the saved bounded code-transfer boundary.
+Force/energy then graph retain their order. This does not promote arbitrary
+power/enclosure animation or the provisional phone treatment.
+
 The user prioritised [norm-scaling composition](2026-09-16-norm-scaling-composition.md)
 before the remaining queue. Dependency reuse is accepted. Repair ambiguous norm
 notation and simultaneous delimiter/exponent movement using checked causal

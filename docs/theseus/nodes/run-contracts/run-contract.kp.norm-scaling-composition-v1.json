@@ -2,8 +2,8 @@
   "id": "run-contract.kp.norm-scaling-composition-v1",
   "kind": "run-contract",
   "title": "Norm scaling and quotient-square composition",
-  "status": "blocked",
-  "summary": "Missing-handle regression repaired and verified on Chromium Firefox WebKit. Return to original HUMAN_CHECKPOINT for direct penetration; pressure still pending.",
+  "status": "resolved",
+  "summary": "COMPLETE: both packages finished after user acceptance. Return to reader.l4 code-transfer proposal; no new code-medium implementation in this contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,12 +30,13 @@
   "slices": [
     {
       "id": "norm.exemplar",
-      "summary": "Direct penetration candidate verified in canonical browser; renewed HUMAN_CHECKPOINT. Earlier apparent approval was withdrawn before pressure; norm.pressure remains planned.",
-      "status": "in-progress"
+      "summary": "User approved canonical direct penetration after Firefox paint-center repair.",
+      "status": "complete"
     },
     {
       "id": "norm.pressure",
-      "status": "planned"
+      "summary": "Compatibility retirement, independent scalar compositor preservation, distribution contrast, three-engine cohort, types architecture build and closure complete. Scope binding remains bounded; no catalogue promotion.",
+      "status": "complete"
     }
   ]
 }

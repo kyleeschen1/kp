@@ -109,8 +109,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   // Internal exemplar comparison, not an additional learner control or policy.
   const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
   const motion = new URL(location.href).searchParams.get("derivation-motion");
-  const participantOnly = motion === "participants";
-  const contextual = motion !== "equation" && !participantOnly;
+  // Retired comparison URLs use the accepted full-context presentation. The
+  // participant-only experiment cannot represent checked compound transitions.
+  const contextual = motion !== "equation";
+  if (motion === "participants") root.dataset["retiredComparison"] = "participants";
   const access = new URL(location.href).searchParams.get("derivation-access");
   const localAccess = access !== "off";
   // Desktop access is accepted; the separate phone presentation is not.
@@ -229,11 +231,11 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     // All three inspections share reversible departure/docking. The permanent
     // record remains independent of the compositor's internal paint ownership.
     const record = sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
-    root.dataset["inspectionExtent"] = participantOnly ? "participants" : "equation";
+    root.dataset["inspectionExtent"] = "equation";
     root.style.setProperty("--derivation-record-participant-opacity", String(1 - .78 * record.inspectionOpacity));
     // Context belongs in the working expression too. The accepted treatment
     // keeps the whole scene and uses the same continuous handoff on every edge.
-    stage.style.opacity = String(contextual || participantOnly || selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
+    stage.style.opacity = String(contextual || selected === 0 ? record.inspectionOpacity : record.kind === "docked" ? 0 : 1);
     // A labeled local inspection is not another statement in the record. Its
     // native endpoints stay visible inside the well, never atop the fenceposts.
     if (isPhone()) stage.style.opacity = mobileInspect ? "1" : "0";
@@ -352,9 +354,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         };
         if (token !== generation) return;
         created = await mountMomentumEnergyDerivationSession(candidate, proofPlan, sceneIndex,
-          accented || participantOnly ? { ...focus, extent: participantOnly ? "participants" : "equation",
-            records: participantOnly ? [{ root: equationSlots[sceneIndex]!, entityIds: focus.recordSource },
-              { root: equationSlots[sceneIndex + 1]!, entityIds: focus.recordTarget }] : [] } : undefined, refinement);
+          accented ? { ...focus, extent: "equation", records: [] } : undefined, refinement);
         if (token !== generation) return;
         candidate.hidden = true; candidate.removeAttribute("data-derivation-preparing");
         pending.push({ element: candidate, session: created });

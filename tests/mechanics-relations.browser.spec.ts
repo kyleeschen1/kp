@@ -697,50 +697,24 @@ test("semantic accent reaches native and material participants without coloring 
   await root.screenshot({ path: info.outputPath("contrast-only.png") });
 });
 
-test("participant inspection retains stationary context and traces across all three moves", async ({ page }, info) => {
+test("retired participant comparison preserves full context and a working handle", async ({ page }, info) => {
+  // Keep the whole scripted chain inside the window: Firefox does not deliver
+  // synthetic mouse release outside it. Default-size drag coverage is separate.
+  await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page), stage = root.locator("[data-derivation-stage]");
   await page.goto(route + "?derivation-motion=participants#energy-from-momentum");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const records = root.locator(".energy-derivation-equation");
   const initial = await documentBoxes(records);
-  const traces = root.locator("[data-derivation-record-participant]");
-  await expect(traces).toHaveCount(2);
-  for (const position of [.25, .55, .85, .25, 0, 1]) {
-    await dragTo(page, root, position);
-    await expect(root).toHaveAttribute("data-inspection-extent", "participants");
-    const hidden = stage.locator("[data-derivation-inspection-context]");
-    expect(await hidden.count()).toBeGreaterThan(0);
-    expect(await hidden.evaluateAll(els => els.every(el => getComputedStyle(el).visibility === "hidden"))).toBe(true);
-    expect(await documentBoxes(records)).toEqual(initial);
-    const opacities = await traces.evaluateAll(els => els.map(el => Number(getComputedStyle(el).opacity)));
-    expect(opacities.every(value => position === 0 || position === 1 ? value === 1 : value > 0 && value < .3)).toBe(true);
-    if (position === .55) {
-      const owners = stage.locator("[data-kp-equation-material-owner-id]");
-      expect(await owners.evaluateAll(els => els.every(el => el.hasAttribute("data-derivation-participant") || getComputedStyle(el).visibility === "hidden"))).toBe(true);
-    }
-    await root.screenshot({ path: info.outputPath(`participant-only-${position}.png`) });
-  }
+  await expect(root).toHaveAttribute("data-retired-comparison", "participants");
+  await expect(lens(root)).toBeVisible();
   for (const position of [1.25, 1.6, 1.85, 2, 2.25, 2.6, 2.85, 3, 2.6, 1.6, .25]) {
     await dragTo(page, root, position);
     const move = Math.max(0, Math.ceil(position) - 1);
     await expect(root).toHaveAttribute("data-move", String(move));
-    await expect(root).toHaveAttribute("data-inspection-extent", "participants");
+    await expect(root).toHaveAttribute("data-inspection-extent", "equation");
     expect(await documentBoxes(records)).toEqual(initial);
-    const activeRows = await traces.evaluateAll(els => [...new Set(els.map(el => el.closest("[data-derivation-row]")!.getAttribute("data-derivation-row")))]);
-    expect(activeRows.sort()).toEqual([String(move), String(move + 1)]);
-    if (Number.isInteger(position)) {
-      expect(await traces.evaluateAll(els => els.every(el => getComputedStyle(el).opacity === "1"))).toBe(true);
-    } else {
-      const owners = stage.locator("[data-kp-equation-material-owner-id]");
-      expect(await owners.evaluateAll(els => els.every(el => el.hasAttribute("data-derivation-participant") || getComputedStyle(el).visibility === "hidden"))).toBe(true);
-      // A scalar cancellation must not hide or dim the retained norm merely
-      // because it is nested inside the participating fraction's wrapper.
-      if (move === 2) {
-        const norm = root.locator('[data-derivation-row="2"] [data-kp-semantic-entity-id="energy.cancel-mass.0.norm"]');
-        expect(await norm.evaluate(el => { let opacity = 1; for (let node: Element | null = el; node; node = node.parentElement) opacity *= Number(getComputedStyle(node).opacity); return opacity; })).toBe(1);
-      }
-    }
-    await root.screenshot({ path: info.outputPath(`participant-chain-${position}.png`) });
+    await expect(stage.locator("[data-derivation-inspection-context]")).toHaveCount(0);
   }
   await page.goto(route + "?derivation-motion=equation#energy-from-momentum");
   await expect(stage).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");

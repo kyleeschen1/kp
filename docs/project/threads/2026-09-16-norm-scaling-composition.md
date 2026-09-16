@@ -53,6 +53,40 @@ intelligible. Preserve the domain proof and compositor, repair the decomposition
 
 ## Exemplar evidence and bounded limitations
 
+### Accepted direct penetration and integration boundary
+
+The user's “much better. proceed” accepts the direct inward motion and the
+restored handle. Earlier pending-checkpoint statements below are historical.
+The rejected participant-only URL comparison is now explicitly retired: its
+query selects the accepted contextual presentation and exposes a diagnostic
+`data-retired-comparison="participants"` marker. The equation comparison remains.
+No checked child is replaced by an unrelated atomic animation.
+
+Pressure uses the existing independently checked scalar-cancellation caller
+through the same compositor, publication, controls and CSS, plus the established
+operand-distribution reference. This is shared-path preservation evidence, not
+a second mathematical issuer of quotient squaring. The direct quotient binding
+remains bounded to checked physics children; no universal power-through-enclosure
+motif or additional authoring capability is promoted. A new scalar quotient
+lesson solely to manufacture a second caller is not needed to resume the queue.
+
+Integration removes the rejected reader branch; no new renderer, dependency,
+clock, stylesheet or publication source is added. Full types, architecture and
+production build pass, with existing unrelated large-chunk warnings. The 36
+focused reasoning/reuse tests and 103 foldable-distribution tests pass. Production
+closure is physics 36,542 initial / 149,297 activated gzip bytes, and scalar
+33,598 / 147,136; HTML separately 27,109 and 8,262 gzip bytes. These exclude fonts,
+images and parse/paint cost, and compare against the earlier recorded build,
+not an isolated measurement of this compatibility cleanup.
+
+The initial fifteen-test browser cohort passed fourteen checks; Firefox's legacy
+comparison-chain drag escaped the window and lost its synthetic release. The
+test now uses the existing norm-test tall-viewport convention; the default-size
+trajectory test remains. Final browser evidence belongs to the Theseus record.
+Phone remains provisional and stretched SVG norm delimiters remain unsupported.
+Next is the saved bounded code-transfer proposal, not another equation layout
+or catalogue-wide motion generalization.
+
 ### Accepted scope-branching amendment
 
 Follow-up missing-handle regression: Firefox rejected the direct scene during
