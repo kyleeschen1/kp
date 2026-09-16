@@ -37,6 +37,8 @@ Required safeguards at the responsible presentation boundary:
 
 Current evidence commands: `node --disable-warning=ExperimentalWarning --test
 tests/physics-readout.test.ts` and `npm run visual:mechanics-relations`.
-The graph review packet owns the pending compact exemplar checkpoint. A
+The compact simulation treatment was accepted on 2026-09-16; its local width and
+aspect-ratio ceilings now run in the browser check. Pedagogical value remains
+under review through the graph packet's static/inspection comparison. A
 structurally different caller must justify a shared readout API before promotion.
 Do not treat these two fixtures as proof of universal graph layout support.

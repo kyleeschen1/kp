@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The compact graph treatment is accepted, but its teaching value is unresolved.
+The approved [graph refinement](threads/2026-09-16-force-energy-graph.md) now
+compares a static explanation with a local equation–geometry correspondence
+inspection. Explanatory purpose belongs above its evidence. Preserve the accepted
+readout safeguards and stop for pedagogical review, not simulation promotion.
+
 The [force–energy calculus inspection](threads/2026-09-16-force-energy-inspection.md)
 is visually accepted and its bounded contract is complete. Preserve concurrent
 collection, exact cancellation and separate reassociation. Next is the saved

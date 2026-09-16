@@ -1,0 +1,37 @@
+.power-correspondence { margin-block: 1rem; padding-block: .6rem; border-block: 1px solid #c9c9c9; scroll-margin-top: 1rem; }
+.power-correspondence summary { cursor: pointer; }
+.power-correspondence [hidden] { display: none !important; }
+.power-correspondence .kp-focus-deck__annotation { position: static; }
+.power-correspondence-mode { display: flex; flex-wrap: wrap; gap: .5rem; margin-block: .75rem; }
+.power-correspondence button { font: inherit; color: inherit; background: transparent; border: 1px solid #aaa; border-radius: .25rem; padding: .35rem .65rem; min-height: 2.75rem; cursor: pointer; }
+.power-correspondence button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.power-correspondence-mode [aria-pressed="true"] { text-decoration: underline; text-underline-offset: .2em; }
+.power-correspondence-equation { display: flex; align-items: center; justify-content: center; gap: .6rem; }
+.power-correspondence-equation button:disabled { border-color: transparent; opacity: 1; cursor: default; }
+.power-correspondence [data-power-salience="focus"]:not(path) { outline: 2px solid currentColor; outline-offset: 3px; }
+.power-correspondence [data-power-reason][data-power-salience="focus"] { outline: none; border-inline-start: 2px solid currentColor; }
+.power-correspondence [data-power-reason] { padding-inline: .65rem; border-inline-start: 2px solid transparent; }
+.power-correspondence [data-power-reason] h3 { font-size: inherit; margin: .4rem 0; }
+.power-correspondence [data-power-reason] p { margin: .4rem 0; }
+/* Inspection changes explanatory depth, not the plot's location. The complete
+   static reading remains available; only selected inspection prose is exposed. */
+.power-correspondence[data-power-view="inspect"] .power-correspondence-reasons { display: grid; }
+.power-correspondence[data-power-view="inspect"] [data-power-reason] { grid-area: 1 / 1; }
+.power-correspondence [data-power-reason][aria-hidden="true"] { visibility: hidden; }
+.power-correspondence-sketches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block: 1rem; }
+.power-correspondence-sketches figure { display: grid; grid-template-rows: auto 9rem auto; margin: 0; gap: .65rem; }
+.power-correspondence-sketches figcaption { margin: 0; }
+.power-correspondence-sketches svg { display: block; width: 100%; height: 100%; }
+.power-correspondence-sketches svg * { vector-effect: non-scaling-stroke; }
+.power-correspondence-sketches path[data-power-salience="focus"] { stroke-width: 5px; }
+.power-case-reading { text-align: center; white-space: nowrap; }
+.power-correspondence-key { margin-block: .5rem; }
+.power-transfer { margin-block: .75rem; }
+@media (max-width: 600px) { .power-correspondence-sketches { grid-template-columns: minmax(0, 1fr); } }
+@media (forced-colors: active) { .power-correspondence-sketches svg path { stroke: CanvasText; } .power-correspondence-sketches circle { fill: CanvasText; } }
+@media print {
+  .power-correspondence-mode, .power-correspondence [data-power-instruction], .power-correspondence [data-power-close] { display: none !important; }
+  .power-correspondence .power-correspondence-reasons { display: block !important; }
+  .power-correspondence [data-power-reason] { visibility: visible !important; }
+  .power-correspondence [data-power-salience] { outline: none !important; }
+}

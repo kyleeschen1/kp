@@ -146,6 +146,8 @@ Substituting those two meanings gives
 
 $$\frac{dK}{dt}=\mathbf v\cdot\mathbf F.$$
 
+[Why does only force along velocity matter?](#power-correspondence)
+
 This dot product is not unfamiliar calculus in disguise. In Cartesian
 components, it is $F_xv_x+F_yv_y+F_zv_z$. Geometrically, for nonzero vectors,
 it is $\lVert\mathbf F\rVert\lVert\mathbf v\rVert\cos\theta$, where $\theta$ is their angle.
@@ -168,6 +170,36 @@ changes momentum. If its direction is held fixed while velocity turns, the
 force need not remain perpendicular later.
 
 [Back to the relationship map](#relationship-map).
+:::
+
+:::kp-passage{#power-correspondence}
+## Why does only force along velocity matter?
+
+Read the same dot product in two situations. The blue momentum arrow gives the
+velocity direction because $\mathbf p=m\mathbf v$ with positive mass; its length
+still measures momentum, not speed. The brown arrow is net force, on a separate
+scale. Each sketch below is one checked instant, not an animation you need to watch.
+
+### Speed and direction
+
+For a moving particle, velocity supplies a direction and a speed
+$\lVert\mathbf v\rVert$. First locate that direction in each sketch. A changing
+direction is already a change in momentum, even when speed stays constant.
+
+### Force along motion
+
+$F_{\parallel}$ means the **signed component of force along velocity**.
+In the straight push, all the force points along motion: $F_{\parallel}=2$ N.
+In the turn, force is perpendicular: $F_{\parallel}=0$ N despite a nonzero force.
+The right angle is the geometric reason for the zero; zero force is not the reason.
+
+### Energy change
+
+Now read the product: $dK/dt=\lVert\mathbf v\rVert F_{\parallel}$.
+In the push, $2\times2=4$ J of kinetic energy are added per second at this instant.
+In the turn, $1\times0=0$: momentum changes direction, but kinetic energy does not
+change. This is an energy **rate**, not the amount of energy the particle has.
+At rest there is no velocity direction; use $\mathbf v\cdot\mathbf F=0$ directly.
 :::
 
 :::kp-passage{#impulse-and-work}

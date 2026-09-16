@@ -5,6 +5,13 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+The compact physics figures are accepted as presentation, not as a pedagogical
+success. The approved [power-correspondence refinement](2026-09-16-force-energy-graph.md)
+compares a complete static explanation with a local inspectable connection from
+the equation to geometry and energy rate. Explanatory purpose belongs above its
+evidence. Keep the existing calculus/code and readout safeguards; stop for this
+comparison checkpoint before promotion.
+
 The force–energy calculus checkpoint is visually accepted and complete. Preserve
 its concurrent collection and exact cancellation; the saved reader.l6 graph
 boundary is now the [bounded successor proposal](2026-09-16-force-energy-graph.md).

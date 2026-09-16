@@ -5,6 +5,35 @@ Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome
 
+Latest approved refinement: the compact treatment is acceptable, but the user
+does not yet see pedagogical value or a distinctive KP contribution. Do not
+equate the passing simulation checks with a successful learning experience.
+Build one local, recoverable inspection at the power identity, compared with a
+complete static explanation. Instructional text goes above the evidence it
+guides; labels/readouts remain adjacent to their referents. This principle is
+not restricted to focus cards and does not authorize a catalogue migration.
+
+Learner question: why does only force along velocity affect kinetic energy?
+Assumed background: the already-derived power identity and vector direction.
+Introduce the signed component along motion, connect it to the dot product,
+then to the sign/rate of energy change. Static baseline: parallel/perpendicular
+checked samples plus the complete argument. Meaningful inspection: select a
+term in that relationship and recover its geometric/numerical meaning in both
+cases without leaving the argument. Motion is not compulsory and is not the
+learning claim. Transfer: explain why force opposite velocity gives negative
+power; this is a prose question, not a new supported force fixture.
+
+Use existing physical samples, SVG projection, native KaTeX, semantic focus and
+cross-view correspondence owners. Preserve accepted algebra/code and the compact
+stable-readout safeguards. The reversible unit is this local Article passage,
+its static/interactive projection and focused checks. Existing time simulations
+remain supporting evidence, not the centerpiece. Stop for one comparison review:
+does selection make a connection easier to understand than the static reading?
+No new solver, animated algebra motif, clock, renderer or shared API is licensed.
+Use focused semantic, static, direct-selection/reversal and keyboard smoke checks
+before review; retain existing numeric-layout regression. Final size envelopes,
+second-caller pressure and a broader certification matrix follow acceptance.
+
 Medium choice: the learner has just inspected the calculus but may still confuse
 momentum change with energy change. Static perpendicular/parallel sketches plus
 the power identity are the baseline. Scrubbing earns its place by showing that
@@ -69,6 +98,44 @@ do not substitute an unlicensed animation. Promotion needs its own approved
 second-caller evidence. Theseus owns execution status.
 
 ## Review packet
+
+### Current comparison: static meaning versus term inspection
+
+Open <http://localhost:8000/experiments/mechanics-relations/#power-correspondence>.
+The same disclosure is linked immediately after the power identity in the
+calculus passage. First read **Read together**, then choose **Inspect connections**
+and select the speed, signed-force-component and energy-rate terms. Compare the
+parallel and perpendicular samples. Explanatory text is above the sketches;
+numeric substitutions remain adjacent. **Return to the argument** restores focus
+and reading position to the source link when entered from it.
+
+The samples are fixed checked physical instants. This interaction adds semantic
+selection, not time motion: the existing reader-focus service and cross-view
+correspondence map resolve native KaTeX, source prose and SVG/numeric evidence
+together. An energy amount bar is deliberately absent from this rate inspection.
+No physical equations, solver, compositor, animation clock or runtime store was
+added. The original time simulations remain available as supporting examples;
+their explanatory text now precedes their figures too.
+
+This requires bounded reader-projection work, not source-only authoring: one
+local semantic map, publication adapter, focus adapter and stylesheet (223 lines
+total) plus the Article passage. The original compact plots now have accepted
+local size ceilings in the existing browser regression. The new comparison's
+size, outlines and selected-reading arrangement are still provisional.
+Focused evidence: 38 unit tests, eight Chromium discovery/preservation checks,
+and a final three-check rerun covering print restoration and the accepted size
+envelope. Full types/build and final statuses are recorded on the contract.
+Measured initial JS/CSS is 41,559 gzip bytes (+3,040), activated total 158,095
+(+3,040), and HTML 41,735 (+2,665) relative to the compact-readout commit.
+These are transferred asset measurements, not CPU/learning measurements; fonts,
+images and HTTP overhead are excluded. No perpetual animation or layout sampling
+is added. The full aesthetic/browser promotion matrix remains deferred.
+
+Judge whether selecting an unfamiliar term makes the relationship easier to
+recover than the static reading, and whether the extra controls earn their space.
+Use the opposing-force transfer question to check the sign reasoning. This is
+an experiment, not a claim that highlighting improves learning. The reusable
+readout safeguards are retained; new selection styling remains unpromoted.
 
 ### Approved checkpoint refinement: stable, compact figures
 
@@ -140,7 +207,7 @@ This required bounded engine intervention: a physics-owned rest/moving projectio
 marker geometry and power labels in the existing Graph2D adapter, and shared
 initial/live wording. No new renderer, clock, global salience store, dependency or
 solver. The original source still owns physical facts. The internal fixture's
-static release is now 1.0.1 with a checked updated import pin; no archived immutable
+static release was 1.0.1 (the compact refinement uses 1.0.2); no archived immutable
 edition was rewritten. Existing calculus and scalar animation code is untouched.
 
 Verification found a genuine input-boundary defect: native range serialization

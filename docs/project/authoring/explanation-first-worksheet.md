@@ -37,6 +37,13 @@ expression. Do not infer mastery from silence or an attractive animation.
 
 ## 3. Map the reasoning and assign visual jobs
 
+Accepted presentation principle (2026-09-16): put explanatory purpose and the
+current instructional reading above the evidence they guide, including inline
+inspections outside focus cards. Labels and numerical readouts may remain beside
+their referents. Compare interaction with a complete static explanation; neither
+synchronized values nor semantic highlighting alone establishes pedagogical gain.
+This is an authoring default, not authorization for a catalogue-wide migration.
+
 Before creating a focus card, complete the medium-choice brief in
 `../principles/focus-card-medium-choice.md`: learner obstacle, static baseline,
 perceptual gain, meaningful control, transfer check, and cost/limits. A visual job

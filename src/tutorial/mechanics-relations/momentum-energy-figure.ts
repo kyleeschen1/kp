@@ -35,24 +35,25 @@ export function projectMomentumEnergyFigure(frame: MomentumEnergyFrame) {
   });
 }
 
-export function renderMomentumEnergySvg(model: CheckedMomentumEnergy, time: PhysicalTime): string {
+export function renderMomentumEnergySvg(model: CheckedMomentumEnergy, time: PhysicalTime, options: { readonly showEnergy?: boolean } = {}): string {
   const frame = sampleMomentumEnergy(model, time), p = projectMomentumEnergyFigure(frame);
   // Fixed bounds contain the complete fixture trajectory and arrow extents.
   // Crop unused vertical space once; never auto-fit to the current sample.
   // For a turn, the highest momentum tip is 175 - hypot(100, 25m).
   // Include the arrowhead and every supported mass, even when it is not 1 kg.
   const turnTop = Math.floor((175 - Math.hypot(100, 25 * model.source.massKg) - 10) / 10) * 10;
-  const viewBox = frame.episode === "straight" ? "0 130 420 110" : `0 ${turnTop} 420 ${240 - turnTop}`;
+  const bottom = options.showEnergy === false ? 190 : 240;
+  const viewBox = frame.episode === "straight" ? `0 130 420 ${bottom - 130}` : `0 ${turnTop} 420 ${bottom - turnTop}`;
   // Explicit data-attribute values keep this identical markup valid as XML
   // standalone SVG as well as the browser's more permissive inline HTML.
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" role="img" aria-label="Particle trajectory, momentum arrow, force arrow, and kinetic energy bar">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" role="img" aria-label="${options.showEnergy === false ? "Particle trajectory, momentum along velocity, and net force" : "Particle trajectory, momentum arrow, force arrow, and kinetic energy bar"}">
     <path data-trajectory="" d="${p.trajectory}" fill="none" stroke="#a3a3a3" stroke-width="2" stroke-dasharray="3 5"/>
     <path data-force="" d="${p.force}" fill="none" stroke="#a55b24" stroke-width="3"/>
     <path data-momentum="" d="${p.momentum}" fill="none" stroke="#236b8e" stroke-width="3"/>
     <path data-right-angle="" d="${p.rightAngle}" fill="none" stroke="currentColor" stroke-width="1.5"/>
     <circle data-particle="" cx="${p.x}" cy="${p.y}" r="5" fill="currentColor"/>
-    <path d="M35 228H335" stroke="#a3a3a3" stroke-width="2"/>
-    <rect data-energy="" x="35" y="218" width="${p.energyWidth}" height="10" fill="#236b8e"/>
+    ${options.showEnergy === false ? "" : `<path d="M35 228H335" stroke="#a3a3a3" stroke-width="2"/>
+    <rect data-energy="" x="35" y="218" width="${p.energyWidth}" height="10" fill="#236b8e"/>`}
   </svg>`;
 }
 

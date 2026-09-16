@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Inspect force-energy graph correspondence",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review compact straight-push and turn figures with stable two-decimal readouts at localhost:8000/experiments/mechanics-relations/. Implementation and checks complete; clarity and final size envelope await visual acceptance. Shared promotion remains deferred.",
+  "summary": "HUMAN_CHECKPOINT: compare Read together with Inspect connections at localhost:8000/experiments/mechanics-relations/#power-correspondence. Top-first explanation, checked static samples and semantic term selection implemented. 38 unit tests, 8 focused browser checks, final 3-check rerun, full types and build pass. Learning value remains unproven.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -87,6 +87,34 @@
       "scope": "Final compact figures and reader preservation",
       "checkedAt": "2026-09-16T21:34:56.067Z",
       "notes": "37 pass in clean Chromium run. Numeric labels, units, controls and following prose stay within 0.5 px through endpoints, rest and reversal at 1000px, 390px and enlarged text. Slots fit and SVG bounds retain geometry; static/no-JS/print, calculus and scalar preservation pass. Earlier full run had a CSS parsing bug in the new assertion and static image loading interrupted by a dev-server restart; both corrected before this clean run. Compact size still requires human judgment."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/power-correspondence.test.ts tests/physics-readout.test.ts tests/momentum-energy.test.ts tests/force-energy-derivation.test.ts",
+      "status": "passed",
+      "scope": "Pedagogical comparison semantic and source boundaries",
+      "checkedAt": "2026-09-16T21:53:49.994Z",
+      "notes": "38 pass. Closed cross-view map and complete realized bindings; pure direct/reverse selection; static source and checked sample values; rate distinct from amount; physical and calculus preservation."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"power meaning|physics readouts|graph power correspondence|power bridge|scalar compact|source-owned static\"",
+      "status": "passed",
+      "scope": "Bounded discovery and preservation",
+      "checkedAt": "2026-09-16T21:53:51.355Z",
+      "notes": "8 Chromium tests pass. New static/inspection selection, keyboard, direct hash and history restoration, exact source-link return, narrow no-JS truth; existing numeric stability, graph and calculus/scalar preservation. Final 3-test rerun of power meaning and physics readouts also passes after print restoration and accepted local size ceilings were added. No full aesthetic certification claimed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Final pedagogy refinement types",
+      "checkedAt": "2026-09-16T21:53:52.453Z",
+      "notes": "Full application, node, test, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Final pedagogy refinement production build",
+      "checkedAt": "2026-09-16T21:53:53.570Z",
+      "notes": "Build passes with existing chunk warnings. Initial/activated JS-CSS closure 41559/158095 gzip bytes, each +3040 from compact-readout baseline. HTML 41735, +2665. No new dependency, renderer or clock; no CPU or learning-effect claim."
     }
   ],
   "allowedWork": [
@@ -101,7 +129,7 @@
     {
       "id": "graph.correspondence",
       "title": "Graph and symbolic power correspondence",
-      "summary": "Implementation and verification complete; HUMAN_CHECKPOINT pending on compact figure clarity and final size envelope. 44 focused tests, full types, production build and 37 Chromium checks pass. Shared API promotion is deferred.",
+      "summary": "HUMAN_CHECKPOINT: static explanation versus local power-term inspection implemented and verified. Await judgment of pedagogical value and control cost. Compact treatment accepted; no shared or catalogue promotion.",
       "status": "in-progress"
     }
   ]

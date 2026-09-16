@@ -2,6 +2,69 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("power meaning inspection compares static reading with reversible term-to-evidence selection", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1000, height: 1100 });
+  await page.goto(route);
+  const link = page.locator('a[href="#power-correspondence"]');
+  await link.scrollIntoViewIfNeeded();
+  const entryTop = (await link.boundingBox())!.y;
+  await link.click();
+  const root = page.locator('[data-power-correspondence]');
+  await expect(root).toHaveAttribute('open', '');
+  await expect(root).toHaveAttribute('data-power-view', 'static');
+  await expect(root.locator('[data-power-reason]')).toHaveCount(3);
+  for (const reason of await root.locator('[data-power-reason]').all()) await expect(reason).toBeVisible();
+  await root.screenshot({ path: info.outputPath('power-meaning-static.png') });
+  await root.getByRole('button', { name: 'Inspect connections', exact: true }).click();
+  const sketches = root.locator('.power-correspondence-sketches');
+  const relativeTop = () => sketches.evaluate(el => el.getBoundingClientRect().top - el.closest('[data-power-correspondence]')!.getBoundingClientRect().top);
+  const top = await relativeTop();
+  for (const term of ['force', 'energy', 'speed', 'force']) {
+    const button = root.locator(`[data-power-term="${term}"]`);
+    await button.focus(); await button.press('Enter');
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
+    await expect(root.locator('[data-power-reason]:not([aria-hidden])')).toHaveAttribute('data-power-reason', term);
+    expect(Math.abs(await relativeTop() - top)).toBeLessThan(.5);
+    for (const episode of ['straight', 'turning'])
+      await expect(root.locator(`[data-power-case="${episode}"] .power-case-reading [data-power-entity="physics.power.${term}.${episode}"]`)).toHaveAttribute('data-power-salience', 'focus');
+  }
+  await root.screenshot({ path: info.outputPath('power-meaning-force.png') });
+  await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+  for (const reason of await root.locator('[data-power-reason]').all()) await expect(reason).toBeVisible();
+  await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+  await expect(root.locator('[data-power-term="force"]')).toHaveAttribute('aria-pressed', 'true');
+  await root.getByRole('button', { name: 'Read together', exact: true }).click();
+  for (const reason of await root.locator('[data-power-reason]').all()) await expect(reason).toBeVisible();
+  await root.getByRole('button', { name: 'Return to the argument', exact: true }).click();
+  await expect(link).toBeFocused();
+  expect(Math.abs((await link.boundingBox())!.y - entryTop)).toBeLessThan(2);
+  await expect(root).not.toHaveAttribute('open', '');
+  await page.goto(`${route}#power-correspondence-force`);
+  await expect(root.locator('[data-power-term="force"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.evaluate(() => { location.hash = 'power-correspondence-energy'; });
+  await expect(root.locator('[data-power-term="energy"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.goBack();
+  await expect(root.locator('[data-power-term="force"]')).toHaveAttribute('aria-pressed', 'true');
+});
+
+test("power meaning remains a complete static explanation and fits a narrow reading", async ({ browser }, info) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 1100 } });
+  const page = await context.newPage();
+  await page.goto(`http://localhost:8000${route}#power-correspondence`);
+  const root = page.locator('[data-power-correspondence]');
+  await root.locator('summary').first().click();
+  await expect(root.locator('[data-power-case]')).toHaveCount(2);
+  await expect(root.locator('[data-power-modes]')).toBeHidden();
+  for (const reason of await root.locator('[data-power-reason]').all()) await expect(reason).toBeVisible();
+  await expect(root.locator('[data-power-reason="energy"]')).toContainText('rate');
+  expect(await root.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+  const firstSketch = (await root.locator('[data-power-case]').first().boundingBox())!;
+  const lastExplanation = (await root.locator('[data-power-reason]').last().boundingBox())!;
+  expect(firstSketch.y).toBeGreaterThan(lastExplanation.y + lastExplanation.height);
+  await root.screenshot({ path: info.outputPath('power-meaning-static-narrow.png') });
+  await context.close();
+});
+
 test("physics readouts keep labels, controls and following prose stationary during seeks", async ({ page }, info) => {
   for (const [width, textSize] of [[1000, 16], [390, 16], [390, 20]] as const) {
     await page.setViewportSize({ width, height: 1100 });
@@ -53,6 +116,11 @@ test("physics readouts keep labels, controls and following prose stationary duri
       await expect(activeExplanation).toHaveCount(1);
       await expect(activeExplanation).toBeVisible();
       expect(await root.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+      const plot = (await root.locator('svg').boundingBox())!;
+      // Accepted compact envelope is local to these unit-mass fixtures. A new
+      // aesthetic or different caller needs its own review, not a global size.
+      expect(plot.width).toBeLessThanOrEqual(24 * textSize + .5);
+      expect(plot.height).toBeLessThanOrEqual(plot.width * (episode === 'straight' ? 110 : 180) / 420 + .5);
       // This is a readable-fit floor, not certification of an unreviewed size.
       for (const button of await root.locator('button').all()) expect((await button.boundingBox())!.height).toBeGreaterThanOrEqual(44);
       await root.screenshot({ path: info.outputPath(`stable-${episode}-${width}-${textSize}.png`) });
@@ -1255,7 +1323,7 @@ test("source-owned static reading needs no JavaScript", async ({ browser }, info
   const page = await context.newPage();
   await page.goto(`http://localhost:8000${route}`);
   await expect(page.locator("h1")).toContainText("momentum");
-  await expect(page.locator("[data-particle]")).toHaveCount(2);
+  await expect(page.locator("[data-physics-motion] [data-particle]")).toHaveCount(2);
   await expect(page.locator('[data-episode="turning"] [data-kp-focus-deck-annotation="physics.momentum"]')).toContainText("(0.00, 1.00)");
   await expect(page.locator('[data-episode="turning"] [data-physics-power-calculation]')).toHaveText('1.00 m/s × 0.00 N = 0.00 W');
   await expect(page.locator('[data-episode="straight"] [data-physics-power-explanation]')).toContainText('no direction');

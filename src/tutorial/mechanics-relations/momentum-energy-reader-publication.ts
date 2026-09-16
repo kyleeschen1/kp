@@ -9,6 +9,7 @@ import type { MomentumEnergyRuntimeSource } from "./momentum-energy-runtime-sour
 import type { compileMomentumEnergyPublication } from "./momentum-energy-publication.ts";
 import { renderEnergyDerivationPassage, renderForceEnergyPassage } from "./momentum-energy-derivation-publication.ts";
 import { sha256 } from "../../kernel/sha256.ts";
+import { renderPowerCorrespondencePassage } from "./power-correspondence-publication.ts";
 
 type Publication = ReturnType<typeof compileMomentumEnergyPublication>;
 const html = compileKpArticleMarkdownFragmentHtml;
@@ -35,7 +36,9 @@ export function renderMomentumEnergyReader(publication: Publication) {
       // Passage addresses must survive projection so source-owned inspection
       // links work in both editions without a second navigation table.
       return block.kind === "passage"
-        ? `<section id="${attribute(block.id)}">${derivations.get(block.id)?.(block.markdown, revision) ?? html(block.markdown)}</section>`
+        ? `<section id="${attribute(block.id)}">${block.id === "power-correspondence"
+          ? renderPowerCorrespondencePassage(block.markdown, publication.capabilities.map(capability => capability.compiled.model))
+          : derivations.get(block.id)?.(block.markdown, revision) ?? html(block.markdown)}</section>`
         : html(block.markdown);
     }
     if (block.kind !== "motion" || block.transition.kind !== "run" || !block.transition.path.endsWith("/advance"))
@@ -60,15 +63,15 @@ export function renderMomentumEnergyReader(publication: Publication) {
     return `<section class="physics-motion kp-focus-deck" id="${attribute(id)}" data-physics-motion data-episode="${model.source.episode}">
       <div class="physics-cue">${html(block.beforeMarkdown)}</div>
       <figure class="physics-figure">
-        <div class="physics-quantities" data-kp-focus-deck-type="support"><span data-kp-focus-deck-annotation="physics.momentum">${annotation("physics.momentum-label", "Momentum")} ${vector}</span><span data-kp-focus-deck-annotation="physics.energy">${annotation("physics.energy-label", "Kinetic energy")} ${number("kineticEnergy")}</span></div>
-        ${renderMomentumEnergySvg(model, physicalTime(0))}
-        <div class="physics-legend">${annotation("physics.legend", "Blue arrow: momentum (same direction as velocity) · Brown arrow: net force")}${annotation("physics.scale", "Arrow lengths use separate scales. Energy bar: 0–8 J.")}</div>
         <div class="physics-power-relation" data-physics-power-relation>
           ${html(String.raw`$\displaystyle\frac{dK}{dt}=\mathbf v\cdot\mathbf F$`)}
           ${annotation("physics.power-reading", "Speed × force along motion = energy change per second")}
           <div data-physics-power-calculation data-kp-focus-deck-type="support">${number("speed")} × ${number("forceAlongMotion")} = ${number("power")}</div>
           <div data-physics-power-explanation>${explanationIds.map(id => `<div data-physics-explanation="${id}"${id === power.explanationId ? "" : ' aria-hidden="true" inert'}>${annotation(`physics.power-explanation.${id}`, powerExplanations[id])}</div>`).join("")}</div>
         </div>
+        <div class="physics-quantities" data-kp-focus-deck-type="support"><span data-kp-focus-deck-annotation="physics.momentum">${annotation("physics.momentum-label", "Momentum")} ${vector}</span><span data-kp-focus-deck-annotation="physics.energy">${annotation("physics.energy-label", "Kinetic energy")} ${number("kineticEnergy")}</span></div>
+        ${renderMomentumEnergySvg(model, physicalTime(0))}
+        <div class="physics-legend">${annotation("physics.legend", "Blue arrow: momentum (same direction as velocity) · Brown arrow: net force")}${annotation("physics.scale", "Arrow lengths use separate scales. Energy bar: 0–8 J.")}</div>
         <div class="physics-controls" data-physics-controls hidden>
           <span class="physics-playback-note">Playback at 0.4× speed · drag to inspect</span>
           <button type="button" data-physics-play>Play</button><button type="button" data-physics-reset>Reset</button>
