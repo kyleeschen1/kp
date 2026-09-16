@@ -12,6 +12,8 @@ import { createKpNativeKatexCompoundScenePlan } from "./native-katex-compound-sc
 import { projectKpNativeKatexInkWithdrawal } from "./native-katex-carrier-preserving-simplification-motion.ts";
 import { sampleKpNativeKatexCarrierPreservingSimplificationOptics, kpNativeKatexCarrierPreservingSimplificationOpticalProfile } from "./native-katex-carrier-preserving-simplification-profile.ts";
 import { planKpEquationMotionPathBetweenPoints } from "./equation-motion-path-planner.ts";
+import { projectDerivationLocalRewrite } from "./derivation-local-rewrite-motion.ts";
+import { DerivationLocalRewriteGap } from "../semantic/derivation-local-rewrite.ts";
 
 type InspectionFocus = { readonly source: readonly string[]; readonly target: readonly string[]; readonly extent?: "participants" | "equation";
   readonly records?: readonly { readonly root: HTMLElement; readonly entityIds: readonly string[] }[] };
@@ -80,8 +82,11 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
   const source = observe("source", sourceRoot), target = observe("target", targetRoot);
   const sid = (role: string) => `${compiled.namespace}.${move.id}.0.${role}`;
   const tid = (role: string) => `${compiled.namespace}.${move.id}.1.${role}`;
-  const relations = move.persist.map(role => ({ id: `persist.${role}`, relation: "persist" as const,
-    sourceEntityIds: [sid(role)], targetEntityIds: [tid(role)] }));
+  const collection = move.rewrite?.kind === "equal-term-collection" ? move.rewrite : undefined;
+  const relations = [...move.persist.filter(role => role !== collection?.anchor).map(role => ({ id: `persist.${role}`, relation: "persist" as const,
+    sourceEntityIds: [sid(role)], targetEntityIds: [tid(role)] })),
+    ...(collection ? [{ id: "collect-equal-terms", relation: "merge" as const,
+      sourceEntityIds: [sid(collection.anchor), sid(collection.duplicate)], targetEntityIds: [tid(collection.anchor)] }] : [])];
   const split = [...(move.split ? [{ id: "square-homogeneity", relation: "split" as const,
     sourceEntityIds: [sid("power")], targetEntityIds: [tid("power-top"), tid("power-bottom")] }] : []),
     ...(move.copies ?? []).map(copy => ({ id: `copy.${copy.source}`, relation: "split" as const,
@@ -89,6 +94,8 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
   const projection = move.exits.length === 0 && !move.syntaxOnly ? undefined : createKpNativeKatexTrackProjection({
     id: `projection.${compiled.operationPrefix}.${move.id}`,
     project({ tracks }) {
+      if (move.rewrite) return projectDerivationLocalRewrite({ rewrite: move.rewrite, tracks, source, target,
+        sourceId: sid, targetId: tid, id: `${compiled.operationPrefix}.${move.id}` });
       const before = source.atoms.filter(a => move.exits.some(role => a.semanticEntityId === sid(role)));
       const after = target.atoms.filter(a => move.entries.some(role => a.semanticEntityId === tid(role)));
       if (move.syntaxOnly) {
@@ -197,6 +204,9 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
     // is reserved for operand-to-term travel, not inferred from split lineage.
     copyFanOutRouting: move.split && move.branching === "operand-distribution" });
   if (plan.disposition.mode !== "motion") throw new Error(`Energy derivation requires repair: ${plan.disposition.reason}`);
+  if (move.rewrite && plan.tracks.some(track => (track.lifecycle === "persist" || track.lifecycle === "merge") &&
+      track.motionPath?.variant !== "direct"))
+    throw new DerivationLocalRewriteGap("A local rewrite acquired a nonlocal downstream route");
   if (move.split && move.branching === "scope-propagation" && plan.tracks.some(track =>
     track.motionPath !== undefined && track.motionPath.variant !== "direct"))
     throw new Error("Scope propagation cannot acquire a downstream clearance detour");

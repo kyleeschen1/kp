@@ -30,6 +30,7 @@ export const forceEnergyStates = Object.freeze([
   r`\frac{dK}{dt}=\frac{1}{2m}(\dot{\mathbf p}\cdot\mathbf p+\mathbf p\cdot\dot{\mathbf p})`,
   r`\frac{dK}{dt}=\frac{1}{2m}(\mathbf p\cdot\dot{\mathbf p}+\mathbf p\cdot\dot{\mathbf p})`,
   r`\frac{dK}{dt}=\frac{1}{2m}2\mathbf p\cdot\dot{\mathbf p}`,
+  r`\frac{dK}{dt}=\frac{1}{m}\mathbf p\cdot\dot{\mathbf p}`,
   r`\frac{dK}{dt}=\frac{\mathbf p}{m}\cdot\dot{\mathbf p}`
 ]);
 export const forceEnergySteps = Object.freeze([
@@ -42,9 +43,12 @@ export const forceEnergySteps = Object.freeze([
   { id: "collect-terms", title: "Two equal contributions",
     cue: r`The sum is twice $\mathbf p\cdot\dot{\mathbf p}$. The factor $2$ comes from differentiating both factors, not from an extra force.`,
     why: r`Each dot product is a scalar. Adding that scalar to itself gives twice the scalar.` },
-  { id: "cancel-two", title: "Cancel the factor of two",
-    cue: r`The product rule's $2$ cancels the $2$ in kinetic energy. The remaining $1/m$ can multiply $\mathbf p$.`,
-    why: r`Since $m>0$, $(1/(2m))2=1/m$. Bilinearity allows $(1/m)(\mathbf p\cdot\dot{\mathbf p})=(\mathbf p/m)\cdot\dot{\mathbf p}$.` }
+  { id: "cancel-two", title: "Cancel the matched factors of two",
+    cue: r`The product rule's $2$ cancels the denominator's $2$. The mass and the dot product remain; only the matched factors cancel.`,
+    why: r`Since $2\ne0$ and $m>0$, $(1/(2m))2=1/m$. Cancellation consumes one numerator/denominator pair, not the whole coefficient.` },
+  { id: "absorb-scalar", title: "Put the remaining scalar with momentum",
+    cue: r`Now write the factor $1/m$ with $\mathbf p$: momentum divided by mass, dotted with its rate of change.`,
+    why: r`Bilinearity allows $(1/m)(\mathbf p\cdot\dot{\mathbf p})=(\mathbf p/m)\cdot\dot{\mathbf p}$. This is reassociation after cancellation, not another canceled factor.` }
 ].map(step => Object.freeze(step)));
 export const forceEnergyMajorSteps = Object.freeze([Object.freeze({ id: "differentiate-energy", title: "Differentiate the squared momentum",
   cue: r`Differentiating $\mathbf p\cdot\mathbf p$ gives two equal contributions. They cancel the $2$ in $1/(2m)$, leaving momentum divided by mass, dotted with its rate of change.`,
@@ -53,7 +57,7 @@ export function forceEnergyView(model: CheckedForceEnergy, fine: boolean) {
   assertForceEnergy(model);
   return Object.freeze({ states: fine ? forceEnergyStates : Object.freeze([forceEnergyStates[0]!, forceEnergyStates.at(-1)!]),
     steps: fine ? forceEnergySteps : forceEnergyMajorSteps,
-    proof: Object.freeze(fine ? ["component-product-rule", "euclidean-dot-symmetry", "scalar-like-term-addition", "nonzero-scalar-bilinearity"] : ["fixed-mass-quadratic-derivative"]),
+    proof: Object.freeze(fine ? ["component-product-rule", "euclidean-dot-symmetry", "scalar-like-term-addition", "nonzero-scalar-cancellation", "dot-product-bilinearity"] : ["fixed-mass-quadratic-derivative"]),
     refinement: fine ? Object.freeze({ parentTransitionId: "physics.power.differentiate-energy", sourceStateId: "power.differentiate-energy.0", targetStateId: "power.differentiate-energy.1",
       childOperationIds: Object.freeze(forceEnergySteps.map(step => `physics.power.${step.id}`)) }) : undefined });
 }

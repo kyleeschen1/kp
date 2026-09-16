@@ -4,6 +4,7 @@ import { assertScalarCancellation, scalarCancellationView, type CheckedScalarCan
 import { sha256 } from "../kernel/sha256.ts";
 import { newtonianMomentumV1, momentumNormScalingView } from "../../domains/public-api.ts";
 import { assertForceEnergy, forceEnergyView, forceEnergyMajorSteps, type CheckedForceEnergy } from "../../domains/physics/force-energy-derivation.ts";
+import { assertDerivationLocalRewrite, type DerivationLocalRewrite } from "./derivation-local-rewrite.ts";
 
 export interface DerivationStep { readonly id: string; readonly title: string; readonly cue: string; readonly why: string }
 export interface DerivationView {
@@ -45,14 +46,18 @@ export interface EnergyDerivationPlan {
 }
 export type EnergyDerivationMove = {
   readonly id: string;
-  readonly operationKind: "substitute" | "scale-magnitude" | "extract-norm-scale" | "square-quotient" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient" | "differentiate-energy" | "product-rule" | "dot-symmetry" | "collect-terms" | "cancel-two";
   readonly copies?: readonly { readonly source: string; readonly targets: readonly string[] }[];
   readonly syntaxOnly?: true;
   readonly persist: readonly string[];
   readonly exits: readonly string[];
   readonly entries: readonly string[];
   readonly notice?: readonly string[];
-} & ({ readonly split: false } | {
+} & (
+  | { readonly operationKind: "collect-terms"; readonly rewrite: Extract<DerivationLocalRewrite, { kind: "equal-term-collection" }> }
+  | { readonly operationKind: "cancel-two"; readonly rewrite: Extract<DerivationLocalRewrite, { kind: "matched-factor-cancellation" }> }
+  | { readonly operationKind: "absorb-scalar"; readonly rewrite: Extract<DerivationLocalRewrite, { kind: "scalar-reassociation" }> }
+  | { readonly operationKind: "substitute" | "scale-magnitude" | "extract-norm-scale" | "square-quotient" | "cancel-factor" | "cancel-unit-power" | "expand-square" | "cancel-pair" | "collect-coefficient" | "differentiate-energy" | "product-rule" | "dot-symmetry"; readonly rewrite?: never }
+) & ({ readonly split: false } | {
   readonly split: true;
   // Lineage alone cannot select choreography: scope propagation is not
   // operand distribution, even when both produce two descendants.
@@ -113,6 +118,7 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
 }
 export function assertEnergyDerivationPlan(plan: EnergyDerivationPlan) {
   if (!issued.has(plan)) throw new Error("Energy derivation paint requires an original proof-derived plan");
+  for (const move of plan.moves) if (move.rewrite) assertDerivationLocalRewrite(move.rewrite, move);
 }
 
 /** Calculus has its own checked issuer. Static energy identities alone do not
@@ -131,9 +137,15 @@ export function createForceEnergyPlan(model: CheckedForceEnergy, detail: EnergyD
       persist: ["prefix", "half", "left", "right", "first-rate", "first-momentum", "dot", "plus", "second-term"], exits: [], entries: [],
       notice: ["first-rate", "first-momentum"] },
     { operationKind: "collect-terms", split: false,
-      persist: ["prefix", "half", "second-term"], exits: ["first-term", "plus", "left", "right"], entries: ["two"] },
+      persist: ["prefix", "half", "first-term"], exits: ["second-term", "plus", "left", "right"], entries: ["two"],
+      rewrite: Object.freeze({ kind: "equal-term-collection", anchor: "first-term", duplicate: "second-term", coefficient: "two", removedSyntax: Object.freeze(["plus", "left", "right"]) }),
+      notice: ["first-term"] },
     { operationKind: "cancel-two", split: false,
-      persist: ["prefix", "momentum", "dot", "rate"], exits: ["half", "two"], entries: ["inverse"] }
+      persist: ["prefix", "one", "rule", "mass", "term"], exits: ["denominator-two", "two"], entries: [],
+      rewrite: Object.freeze({ kind: "matched-factor-cancellation", pair: Object.freeze(["denominator-two", "two"] as const), survivors: Object.freeze(["mass", "term", "rule", "one"]) }), notice: ["mass"] },
+    { operationKind: "absorb-scalar", split: false,
+      persist: ["prefix", "mass", "rule", "momentum", "dot", "rate"], exits: ["one"], entries: [],
+      rewrite: Object.freeze({ kind: "scalar-reassociation", carrier: "momentum", unit: "one", fractionRule: "rule", survivors: Object.freeze(["mass", "rule", "dot", "rate"]) }), notice: ["momentum", "mass"] }
   ] : [{ operationKind: "differentiate-energy", split: false, persist: ["prefix"], exits: ["before"], entries: ["after"] }];
   const moves = Object.freeze(roles.map((role, i) => Object.freeze({ ...role, id: view.steps[i]!.id,
     persist: Object.freeze(role.persist), exits: Object.freeze(role.exits), entries: Object.freeze(role.entries),
@@ -147,6 +159,7 @@ export function createForceEnergyPlan(model: CheckedForceEnergy, detail: EnergyD
     refinementLabel: "Smaller product-rule steps", refinementDefault: true,
     sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: forceEnergyMajorSteps });
   issued.add(plan);
+  assertEnergyDerivationPlan(plan);
   return plan;
 }
 

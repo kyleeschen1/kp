@@ -70,14 +70,20 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
   const secondTerm = p("second-term", String.raw`\mathbf p\cdot\dot{\mathbf p}`);
   const symmetry = [powerPrefix + powerHalf + left + p("first-rate", rate) + dot + p("first-momentum", momentum) + plus + secondTerm + right,
     powerPrefix + powerHalf + left + p("first-momentum", momentum) + dot + p("first-rate", rate) + plus + secondTerm + right];
-  const collect = [powerPrefix + powerHalf + left + p("first-term", String.raw`\mathbf p\cdot\dot{\mathbf p}`) + plus + secondTerm + right,
-    powerPrefix + powerHalf + p("two", "2") + secondTerm];
-  const cancelTwo = [powerPrefix + powerHalf + p("two", "2") + p("momentum", momentum) + dot + p("rate", rate),
-    powerPrefix + p("inverse", String.raw`\frac{${p("momentum", momentum)}}{m}`) + dot + p("rate", rate)];
+  const firstTerm = p("first-term", String.raw`\mathbf p\cdot\dot{\mathbf p}`);
+  const collect = [powerPrefix + powerHalf + left + firstTerm + plus + secondTerm + right,
+    powerPrefix + powerHalf + p("two", "2") + firstTerm];
+  const unit = p("one", "1"), retainedMass = p("mass", "m"), wholeTerm = p("term", String.raw`\mathbf p\cdot\dot{\mathbf p}`);
+  const fraction = (top: string, bottom: string) => p("rule", String.raw`\frac{${top}}{${bottom}}`);
+  const cancelTwo = [powerPrefix + fraction(unit, p("denominator-two", "2") + retainedMass) + p("two", "2") + wholeTerm,
+    powerPrefix + fraction(unit, retainedMass) + wholeTerm];
+  const absorbScalar = [powerPrefix + fraction(unit, retainedMass) + p("momentum", momentum) + dot + p("rate", rate),
+    powerPrefix + fraction(p("momentum", momentum), retainedMass) + dot + p("rate", rate)];
   const endpoints = { substitute: first, "scale-magnitude": second, "cancel-factor": third, "cancel-unit-power": fluent,
     "extract-norm-scale": homogeneity, "square-quotient": quotientSquare,
     "expand-square": fine[0]!, "cancel-pair": fine[1]!, "collect-coefficient": fine[2]!,
     "product-rule": [productSource, productTarget], "dot-symmetry": symmetry, "collect-terms": collect, "cancel-two": cancelTwo,
+    "absorb-scalar": absorbScalar,
     "differentiate-energy": [powerPrefix + p("before", String.raw`\frac{1}{2m}\frac{d}{dt}(\mathbf p\cdot\mathbf p)`),
       powerPrefix + p("after", String.raw`\frac{\mathbf p}{m}\cdot\dot{\mathbf p}`)] };
   const specs = plan.moves.map(move => ({ ...move, endpoints: endpoints[move.operationKind] }));
@@ -92,13 +98,21 @@ export function compileCheckedDerivation(plan: EnergyDerivationPlan) {
       selectors: roles.map(role => ({ id: `${ns}.${step.id}.${side}.${role}`, kind: "semantic", label: role }))
     }));
     objects.forEach(o => builder.addObject(o));
+    const collection = spec.rewrite?.kind === "equal-term-collection" ? spec.rewrite : undefined;
+    const cancellation = spec.rewrite?.kind === "matched-factor-cancellation" ? spec.rewrite : undefined;
     const records = [
-      ...spec.persist.map(role => ({ id: `lineage.${step.id}.${role}`, relation: "identity" as const,
+      ...spec.persist.filter(role => role !== collection?.anchor).map(role => ({ id: `lineage.${step.id}.${role}`, relation: "identity" as const,
         sourceSelectorIds: [`${ns}.${step.id}.0.${role}`], targetSelectorIds: [`${ns}.${step.id}.1.${role}`], summary: `The ${role} persists.` })),
-      ...spec.exits.map(role => ({ id: `lineage.${step.id}.exit.${role}`, relation: "removal" as const,
+      ...spec.exits.filter(role => role !== collection?.duplicate && !cancellation?.pair.includes(role)).map(role => ({ id: `lineage.${step.id}.exit.${role}`, relation: "removal" as const,
         sourceSelectorIds: [`${ns}.${step.id}.0.${role}`], targetSelectorIds: [], summary: `${role} is rewritten by ${view.proof[i]}.` })),
       ...spec.entries.map(role => ({ id: `lineage.${step.id}.enter.${role}`, relation: "introduction" as const,
         sourceSelectorIds: [], targetSelectorIds: [`${ns}.${step.id}.1.${role}`], summary: `${role} follows from ${view.proof[i]}.` })),
+      ...(collection ? [{ id: `lineage.${step.id}.common-term`, relation: "fan-in" as const,
+        sourceSelectorIds: [collection.anchor, collection.duplicate].map(role => `${ns}.${step.id}.0.${role}`),
+        targetSelectorIds: [`${ns}.${step.id}.1.${collection.anchor}`], summary: "Equal scalar terms share one anchored representative; their unit coefficients sum to two." }] : []),
+      ...(cancellation ? [{ id: `lineage.${step.id}.matched-pair`, relation: "cancelation" as const,
+        sourceSelectorIds: cancellation.pair.map(role => `${ns}.${step.id}.0.${role}`), targetSelectorIds: [],
+        summary: "The nonzero numerator and denominator factors cancel; mass, fraction rule and dot product survive." }] : []),
       ...(spec.copies ?? []).map(copy => ({ id: `lineage.${step.id}.copy.${copy.source}`, relation: "fan-out" as const,
         sourceSelectorIds: [`${ns}.${step.id}.0.${copy.source}`], targetSelectorIds: copy.targets.map(role => `${ns}.${step.id}.1.${role}`),
         summary: `The product rule uses this factor in both contributions; derivative syntax identifies which occurrence changes.` })),

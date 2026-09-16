@@ -1,5 +1,24 @@
 # Force–energy: inspect the calculus bridge
 
+## Approved checkpoint repair: collection and exact cancellation
+
+The user found the initial collection arc too large and cancellation imprecise,
+then approved semantic bindings rather than a radius-only patch. Within the
+existing `power.bridge` package, anchor the first equal term, consolidate the
+duplicate locally, identify the matched twos, preserve the remaining mass, and
+compose cancellation before scalar reassociation. Keep the same outer endpoints;
+the optional finer view may expose that last distinction as a fifth substep.
+Product-rule introduction, symmetry, reader layout, earlier physics/scalar/code
+exemplars and graph queue are preservation boundaries. One reversible repair
+commit; focused authority/type checks and scoped browser evidence, then renewed
+human review. No shared-family promotion before a different caller proves reuse.
+
+For these principles, record the owner, executable check and remaining human
+judgment. Types require operation-specific roles; source validation checks the
+declared algebra and surviving roles; the native projection must reject missing
+bindings or inappropriate fallback; actual paint tests check locality and
+survivor continuity. Documentation alone is guidance, not enforcement.
+
 Approved by the user after the accepted centroid code exemplar. Resume reader.l5;
 graph correspondence remains next, not part of this checkpoint.
 
@@ -42,23 +61,27 @@ Theseus owns progress and evidence; this document owns scope and rationale.
 ## Review packet
 
 Open <http://localhost:8000/experiments/mechanics-relations/#force-to-energy>.
-The compact derivative is one transition with four checked child operations:
-product rule, dot-product symmetry, equal-term collection, then scalar-factor
-cancellation. Drag or use Next/Previous; open **Inspect smaller steps** for
-1.1–1.4 and use **Back to step 1** to restore the held compact view. Newton's-law
+The compact derivative is one transition with five checked child operations:
+product rule, dot-product symmetry, equal-term collection, matched-factor
+cancellation, then scalar reassociation. Drag or use Next/Previous; open **Inspect smaller steps** for
+1.1–1.5 and use **Back to step 1** to restore the held compact view. Newton's-law
 substitution and the perpendicular-force interpretation remain permanent prose
 and equations after the inspection, not additional unlicensed animations.
 
 Judge whether the two contributions make the factor of two intelligible,
 whether the dot-over-vector derivative notation stays distinguishable from the
 centered dot product, and whether the compact/expanded readings preserve context.
+For the repair, especially inspect 1.3–1.5: local equal-term consolidation,
+withdrawal of only the matched twos with mass retained, then numerator entry.
+The remaining subjective question is whether brief convergence of the equal
+terms reads clearly; direct-route validation alone cannot establish that.
 This is a desktop exemplar; phone behavior and broader motif promotion remain
 provisional. The graph follow-up is still queued.
 
 This required engine intervention: one bounded physics proof issuer, a plan
 adapter, explicit factor-copy correspondence, and build-time annotated endpoints.
 It reuses governed construction, native compositor, syntax reception/withdrawal,
-ink-fusion collection, deterministic child composition, controls and refinement
+operation-bound local collection, deterministic child composition, controls and refinement
 restoration. No new dependency, renderer or independent timing implementation.
 The source checker admits only the declared fixed-mass, differentiable Euclidean
 momentum and inertial-frame assumptions. This is an authored bounded theorem,
@@ -80,6 +103,12 @@ dev-server latency is suspected, not established as the cause. A full
 rerun was deliberately interrupted while correcting the wrapper measurement.
 Final commands and results are recorded on the Theseus contract rather than
 duplicated here. Full repository unit and cross-browser matrices are not claimed.
+
+Repair verification exposed an undeclared carrier/fraction-bar intersection
+during numerator entry. The binding now names that bar and licenses only its
+contact with the incoming carrier, keeping unrelated paint protected. A later
+browser attempt failed on a stopped-server connection reset; the shared server
+was restarted before rerunning. Neither failure was treated as a visual pass.
 
 Resume context: `theseus work context run-contract.kp.force-energy-inspection-v1 --mode brief`.
 Wait for the visual decision; do not interpret a completed engineering check as

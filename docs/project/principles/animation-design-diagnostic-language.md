@@ -155,6 +155,29 @@ while its native KaTeX source has `overflow: visible`. Repair: preserve the
 source element's computed overflow contract, reserving hidden overflow for
 named KaTeX structural crops such as radical tails.
 
+## Executable obligations: force–energy candidate
+
+Governing prose is not enforcement. The force–energy exemplar binds collection,
+matched-factor cancellation and scalar reassociation through
+`src/semantic/derivation-local-rewrite.ts`. Its discriminated operations require
+roles at compile time; runtime validation rejects missing or replaced survivors.
+The physics issuer supplies mathematical authority, not the visual binding checker.
+
+`src/rendering/derivation-local-rewrite-motion.ts` lowers these roles through the
+existing native compositor. Collection retains the first common-term lineage;
+only the declared cancellation pair withdraws; reassociation is a separate child.
+Direct paths are checked after compilation. Intentional contact is limited to
+equal terms consolidating or the named carrier entering its fraction bar; other
+paint remains subject to compositor collision checks. Missing mechanisms fail
+with a typed repair gap, never generic fusion.
+
+`tests/force-energy-derivation.test.ts` checks role and type obligations;
+`npm run visual:mechanics-relations` exercises the real native path, reverse,
+endpoints and expansion. These checks do not prove perceived clarity or certify
+all mathematical shapes. Timing, consolidation and handoff still require human
+review; these bindings remain exemplar-local until a different caller establishes
+the reusable boundary. Do not treat this candidate as a catalogue-wide policy.
+
 ## Review Order
 
 Fix problems in this order:

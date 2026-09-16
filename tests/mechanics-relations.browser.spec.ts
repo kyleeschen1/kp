@@ -36,9 +36,17 @@ test("power bridge uses native reversible inspection with expandable product-rul
     await lens(root).press("Home");
     await expect(root).toHaveAttribute("data-derivation-progress", "0");
     await root.locator('[data-refinement-expand]').click();
-    await expect(root.locator('[data-transition-number]')).toHaveText(['1.1', '1.2', '1.3', '1.4']);
+    await expect(root.locator('[data-transition-number]')).toHaveText(['1.1', '1.2', '1.3', '1.4', '1.5']);
     await expect(lens(root)).toBeEnabled();
     await root.screenshot({ path: info.outputPath("power-expanded.png") });
+    // Exercise the actual governed tracks in both directions, not just their
+    // declared roles. Compilation also checks direct routes and paint contacts.
+    for (const position of [2.55, 2.75, 3.55, 3.75, 4.55, 4.75, 3.55, 2.55]) {
+      await dragTo(page, root, position);
+      await expect(root).not.toHaveAttribute('data-repair', 'true');
+      await expect(lens(root)).toBeEnabled();
+      await root.screenshot({ path: info.outputPath(`power-local-${position}.png`) });
+    }
     await root.locator('[data-refinement-collapse]').first().click();
     await expect(root.locator('[data-transition-number]')).toHaveText(['1']);
     await expect(lens(root)).toBeEnabled();

@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Inspect the force-energy calculus bridge",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review http://localhost:8000/experiments/mechanics-relations/#force-to-energy and Inspect smaller steps. One package implemented; visual acceptance pending.",
+  "summary": "HUMAN_CHECKPOINT: review repaired local collection, matched-two withdrawal and separate numerator entry at the force-to-energy section. No graph or catalogue promotion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -68,6 +68,48 @@
       "scope": "Final Chromium exemplar and reader preservation",
       "checkedAt": "2026-09-16T16:14:11.830Z",
       "notes": "Final full rerun: 35 pass. Two readiness timeouts passed unchanged reruns; one full run was intentionally interrupted during layout correction. Final checks include no-JS, print, held reverse, expansion/collapse and measured paint/prose clearance; human motif judgment remains pending."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/force-energy-derivation.test.ts tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "Checkpoint repair semantic obligations",
+      "checkedAt": "2026-09-16T16:39:44.787Z",
+      "notes": "40 pass on final rerun. Includes required operation bindings, negative type fixtures, survivor rejection, five-child endpoint equality and existing reader preservation."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Checkpoint repair architecture",
+      "checkedAt": "2026-09-16T16:39:47.468Z",
+      "notes": "Existing dependency, semantic/compiler governance and conformance gates pass. No shared-family promotion."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Checkpoint repair production build",
+      "checkedAt": "2026-09-16T16:39:48.957Z",
+      "notes": "Pass; existing large-chunk warnings remain. No dependency or new renderer."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Checkpoint repair full types",
+      "checkedAt": "2026-09-16T16:40:24.771Z",
+      "notes": "Final application, node, tests, Svelte and domain checks pass; required-operation negative fixtures are typechecked."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning scripts/measure-mechanics-relations-closure.ts physics",
+      "status": "passed",
+      "scope": "Checkpoint repair production closure",
+      "checkedAt": "2026-09-16T16:40:26.503Z",
+      "notes": "Initial JS/CSS 37304 gzip bytes, activated 153857, HTML 37920. Prior checkpoint 37306/152111/36425: activated delta 1746, HTML delta 1495. Excludes fonts, images, HTTP and CPU; not a device-performance claim."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "Checkpoint repair final Chromium preservation",
+      "checkedAt": "2026-09-16T16:41:29.449Z",
+      "notes": "35 pass, including real expanded collection/cancellation/reassociation forward and reverse, static/no-JS, print, controls and earlier reader preservation. Initial smoke failed on undeclared numerator/bar contact; repaired with named binding. Next attempt connection-reset due stopped shared server; restarted and final full suite passed. Human convergence/timing review remains pending."
     }
   ],
   "allowedWork": [
@@ -82,7 +124,7 @@
     {
       "id": "power.bridge",
       "title": "Checked calculus and local inspection",
-      "summary": "Implementation and final verification ready; HUMAN_CHECKPOINT for product-rule choreography and explanatory value. No graph promotion.",
+      "summary": "Typed local collection, exact cancellation and separate reassociation implemented; renewed visual decision required before completion or graph work.",
       "status": "in-progress"
     }
   ]
