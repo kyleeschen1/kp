@@ -339,6 +339,7 @@ export default defineConfig({
       mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
       scalarCancellation: resolve(projectRoot, "experiments/scalar-cancellation/index.html"),
       codeReasoning: resolve(projectRoot, "experiments/code-reasoning/index.html"),
+      centroidReasoning: resolve(projectRoot, "experiments/centroid-reasoning/index.html"),
       mechanicsRelationsStatic: resolve(projectRoot, "experiments/mechanics-relations/static.html"),
       canonicalSupplyTax: resolve(projectRoot, "experiments/kinetic-figure/supply-tax/index.html"),
       ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [

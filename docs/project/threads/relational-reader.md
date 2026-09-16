@@ -5,11 +5,12 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
-User approved the next implementation: [persistent code reasoning](2026-09-16-code-reasoning-record.md),
-the bounded reader.l4 successor. Its proposal owns scope and visual review;
-`run-contract.kp.code-reasoning-record-v1` owns progress. Preserve the existing
-TypeScript source authority/native renderer and both permanent code endpoints.
-Force/energy and graph remain next, not part of this code checkpoint.
+User approved [centroid static example](2026-09-16-centroid-static-example.md):
+build the clearer, substantial `mean` extraction example before working on motion.
+`run-contract.kp.centroid-static-v1` owns execution. The rejected shipping
+interface/contract is deferred, not visually accepted or deleted. Preserve its
+source authority and renderer; do not relabel its motion as centroid support.
+Force/energy and graph remain next after the code investigation.
 
 The direct inward quotient-square motion and restored handle are now visually
 accepted (“much better. proceed”). The [norm repair record](2026-09-16-norm-scaling-composition.md)

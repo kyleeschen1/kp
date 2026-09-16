@@ -1,0 +1,20 @@
+.centroid-reader figure { margin: 1.25rem 0; min-width: 0; }
+.centroid-reader figcaption { font: 0.8rem/1.5 system-ui, sans-serif; margin-bottom: 0.5rem; }
+.centroid-reader pre { margin: 0; padding: 1rem; background: #f5f6f7; border-left: 2px solid #ccd1d8; overflow-x: auto; white-space: pre; }
+.centroid-reader pre code { font: inherit; }
+.centroid-pair, .centroid-extraction { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem; }
+.centroid-extraction dl { margin-top: 1.25rem; }
+.centroid-extraction dt { font-weight: 600; }
+.centroid-extraction dd { margin: 0.3rem 0 1rem; line-height: 1.6; }
+.centroid-reader details { margin: 1.5rem 0; }
+.centroid-reader summary { cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em; }
+.centroid-reader section { scroll-margin-top: 1.5rem; }
+@media (max-width: 650px) {
+  .centroid-pair, .centroid-extraction { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .centroid-reader pre { padding: 0.75rem; }
+}
+@media print {
+  .centroid-reader details::details-content { display: block; content-visibility: visible; }
+  .centroid-reader pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .centroid-reader figure { break-inside: avoid; }
+}

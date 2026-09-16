@@ -1,0 +1,73 @@
+{
+  "id": "run-contract.kp.centroid-static-v1",
+  "kind": "run-contract",
+  "title": "Centroid annotated static example",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: static centroid reading ready at http://localhost:8000/experiments/centroid-reasoning/. Review example and annotations before semantic animation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-centroid-static-example.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:code-reasoning"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/centroid-reasoning.test.ts tests/code-reasoning.test.ts",
+      "status": "passed",
+      "scope": "Static centroid and preserved shipping publication",
+      "checkedAt": "2026-09-16T05:07:29.855Z",
+      "notes": "Six tests pass; source-derived excerpts, rejected structural drift, five declared numerical cases and independent call accumulators. Not a proof of arbitrary refactor equivalence."
+    },
+    {
+      "command": "npm run visual:code-reasoning",
+      "status": "passed",
+      "scope": "Single Chromium discovery cohort",
+      "checkedAt": "2026-09-16T05:07:31.407Z",
+      "notes": "Five checks pass including no-JS centroid record, exact complete sources, keyboard disclosure, print and narrow overflow; four shipping preservation checks. Screenshots inspected. Human layout review remains pending."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Production route inclusion",
+      "checkedAt": "2026-09-16T05:07:32.497Z",
+      "notes": "Build passes; centroid HTML has no script tags. Existing global large-chunk warnings remain unrelated; no new dependency or client runtime."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Shared ownership preservation",
+      "checkedAt": "2026-09-16T05:07:33.632Z",
+      "notes": "All architecture gates and eight gateway tests pass. New TypeScript parsing is build-only."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full repository types",
+      "checkedAt": "2026-09-16T05:08:17.039Z",
+      "notes": "App, node, tests, Svelte and domain typechecks pass; zero Svelte errors or warnings."
+    }
+  ],
+  "allowedWork": [
+    "Build the approved centroid static exemplar, source fixtures, publication and focused checks"
+  ],
+  "disallowedWork": [
+    "Animation, shared renderer changes, broad promotion, merge or push"
+  ],
+  "goal": "Make helper extraction intelligible with a compact source-backed annotated record before adding animation",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "centroid.static",
+      "summary": "Implementation and checks complete; HUMAN_CHECKPOINT at experiments/centroid-reasoning before animation. Exemplar not yet visually accepted.",
+      "status": "in-progress"
+    }
+  ]
+}

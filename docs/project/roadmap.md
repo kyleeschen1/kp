@@ -25,11 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Current successor: [persistent code reasoning](threads/2026-09-16-code-reasoning-record.md),
-approved for implementation after the completed norm repair. Use the established
-TypeScript refactor as a bounded second-medium test, with permanent before/after
-source and local optional inspection. Human review precedes integration or
-shared UI abstraction. Then resume force/energy and graph in the saved order.
+Current successor: [centroid static example](threads/2026-09-16-centroid-static-example.md).
+User rejected the shipping interface and approved a less verbose, more substantial
+extraction example: two averaging loops become `mean`. Build the annotated static
+explanation first, then work on animation. The prior
+[persistent code reasoning](threads/2026-09-16-code-reasoning-record.md) candidate
+is preserved but not promoted. Human review precedes new motion or shared UI
+abstraction. Then resume force/energy and graph in the saved order.
 The norm and dependency paragraphs below retain checkpoint provenance.
 
 First priority: [norm scaling and quotient-square composition](threads/2026-09-16-norm-scaling-composition.md),
