@@ -27,7 +27,7 @@ nor its evidence. The ledger remains retrievable at
 
 Current successor: [centroid first-loop inspection](threads/2026-09-16-centroid-motion.md).
 User accepted the [static example](threads/2026-09-16-centroid-static-example.md)
-and approved proceeding to bounded motion: follow calculation extraction, then
+and visually accepted the bounded motion: follow calculation extraction, then
 parameter/local renaming, without merging runtime accumulators. The prior
 [persistent code reasoning](threads/2026-09-16-code-reasoning-record.md) candidate
 is preserved but not promoted. Human review precedes shared motion or UI

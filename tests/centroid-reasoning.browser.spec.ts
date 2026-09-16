@@ -8,6 +8,10 @@ test("centroid is a source-backed readable record without JavaScript", async ({ 
   await page.goto(route);
   await expect(page.getByRole("heading", { name: "Two loops, one idea" })).toBeVisible();
   await expect(page.locator("[data-centroid-excerpt]")).toHaveCount(4);
+  const keyword = page.locator('[data-centroid-excerpt="helper"] [data-kp-typescript-syntax-kind="keyword"]').first();
+  const identifier = page.locator('[data-centroid-excerpt="helper"] [data-kp-typescript-syntax-kind="identifier"]').first();
+  const keywordColor = await keyword.evaluate(node => getComputedStyle(node).color);
+  expect(keywordColor).not.toBe(await identifier.evaluate(node => getComputedStyle(node).color));
   await page.screenshot({ path: info.outputPath("centroid-desktop.png"), fullPage: true });
   const disclosure = page.getByText("See both complete source files", { exact: true });
   await disclosure.focus(); await page.keyboard.press("Enter");
@@ -19,6 +23,7 @@ test("centroid is a source-backed readable record without JavaScript", async ({ 
   await disclosure.click();
   await page.emulateMedia({ media: "print" });
   await expect(page.locator('[data-centroid-source="before"]')).toBeVisible();
+  await expect(keyword).toHaveCSS("color", keywordColor);
   await page.emulateMedia({ media: "screen" });
   await page.setViewportSize({ width: 390, height: 844 });
   await disclosure.click();
@@ -34,6 +39,9 @@ test("local extraction animates steps and rewinds names through the native paint
   const seek = page.getByRole("slider", { name: "Inspect first-loop extraction" });
   const native = root.locator("[data-centroid-native]");
   const theater = root.locator("[data-kp-typescript-token-theater]");
+  const staticKeyword = page.locator('[data-centroid-excerpt="x"] [data-kp-typescript-syntax-kind="keyword"]').first();
+  const staticColor = await staticKeyword.evaluate(node => getComputedStyle(node).color);
+  await expect(native.locator('[data-kp-typescript-syntax-kind="keyword"]').first()).toHaveCSS("color", staticColor);
   const sample = async (p: number) => { await seek.fill(String(p)); await seek.dispatchEvent("input"); };
   await expect(native).toContainText("const cx = sx / xs.length");
   await page.getByRole("button", { name: "Next", exact: true }).click();

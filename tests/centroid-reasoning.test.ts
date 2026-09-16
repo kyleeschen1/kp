@@ -4,7 +4,8 @@ import { readFileSync } from "node:fs";
 import { centroid as beforeCentroid } from "../examples/programming/centroid-before.ts";
 import { centroid as afterCentroid, mean } from "../examples/programming/centroid-after.ts";
 import { centroidPaths, compileCentroidPublication } from "../scripts/centroid-publication.ts";
-import { encodeKpHtmlText } from "../src/rendering/html-output-encoding.ts";
+import { renderCentroidNativeCode } from "../src/rendering/centroid-native-code-html.ts";
+import { tokenizeKpTypeScriptSource } from "../src/semantic/typescript-source-tokens.ts";
 
 const read = (path: string) => readFileSync(path, "utf8");
 const markdown = read(centroidPaths.article), before = read(centroidPaths.before), after = read(centroidPaths.after);
@@ -28,7 +29,9 @@ test("publication excerpts preserve source, while complete files remain availabl
   assert.equal(excerpts.x, "let sx = 0;\nfor (const x of xs) {\n  sx += x;\n}\nconst cx = sx / xs.length;");
   assert.equal(excerpts.y, excerpts.x.replaceAll("x", "y"));
   assert.ok(after.includes(excerpts.helper));
-  for (const source of [before, after]) assert.ok(html.includes(encodeKpHtmlText(source)));
+  for (const source of [before, after, ...Object.values(excerpts)]) {
+    assert.ok(html.includes(renderCentroidNativeCode({ source, tokens: tokenizeKpTypeScriptSource(source) })));
+  }
   assert.equal([...html.matchAll(/data-centroid-excerpt=/g)].length, 4);
   assert.doesNotMatch(html, /<script/);
   assert.match(html, /data-centroid-open hidden/);

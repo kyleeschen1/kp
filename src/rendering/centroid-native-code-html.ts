@@ -1,8 +1,8 @@
-import type { KpCentroidExtractionState } from "../semantic/centroid-extraction-model.ts";
+import type { KpTypeScriptSourceToken } from "../semantic/typescript-source-tokens.ts";
 import { encodeKpHtmlText } from "./html-output-encoding.ts";
 
 /** Native endpoint typography and syntax roles match the shared token painter. */
-export function renderCentroidNativeCode(state: KpCentroidExtractionState): string {
+export function renderCentroidNativeCode(state: { readonly source: string; readonly tokens: readonly KpTypeScriptSourceToken[] }): string {
   let offset = 0;
   const html = state.tokens.map(token => {
     const whitespace = encodeKpHtmlText(state.source.slice(offset, token.startOffset));

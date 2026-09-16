@@ -2,8 +2,8 @@
   "id": "run-contract.kp.centroid-motion-v1",
   "kind": "run-contract",
   "title": "Centroid first-loop inspection",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: section 2 Trace the first loop at http://localhost:8000/experiments/centroid-reasoning/. Review two transitions before further expansion.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -68,6 +68,13 @@
       "scope": "Checked-in source evidence",
       "checkedAt": "2026-09-16T05:36:46.903Z",
       "notes": "Generated artifact matches current frontend and fixtures."
+    },
+    {
+      "command": "npm run visual:code-reasoning",
+      "status": "passed",
+      "scope": "Static syntax parity and motion preservation",
+      "checkedAt": "2026-09-16T07:08:40.611Z",
+      "notes": "Seven pass on unchanged rerun; initial run lacked new static markup during dev update. No-JS highlighting, print colors, static/native color parity and exact source text verified."
     }
   ],
   "allowedWork": [
@@ -81,8 +88,8 @@
   "slices": [
     {
       "id": "centroid.motion",
-      "summary": "Implementation and verification ready; HUMAN_CHECKPOINT for local first-loop extraction and rename choreography.",
-      "status": "in-progress"
+      "summary": "User visually accepted first-loop animation. Static syntax highlighting now matches its native palette; source and motion preserved.",
+      "status": "complete"
     }
   ]
 }

@@ -1,5 +1,12 @@
 # Centroid: first-loop inspection
 
+The user visually accepted this motion ("yes, it does! it looks great").
+The follow-up static-highlighting repair uses the same TypeScript token markup
+and optical palette for all four excerpts and both complete-source disclosures.
+It changes no source, correspondence, typography metrics or choreography and
+adds no client dependency. Acceptance remains exemplar-local, not promotion of
+a general statement-extraction or code-reader framework.
+
 The user accepted the static centroid explanation and asked to proceed. One
 bounded motion exemplar follows; later code generalization and the saved
 force/energy → graph queue remain outside this slice.

@@ -3,7 +3,8 @@ import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import { resolveKpArticleImports } from "../src/article/kp-article-import-lock.ts";
 import { compileKpArticleDocument } from "../src/article/kp-article-document.ts";
 import { compileKpArticleMarkdownFragmentHtml as markdownHtml } from "../src/article/kp-article-static-html.ts";
-import { encodeKpHtmlText as text } from "../src/rendering/html-output-encoding.ts";
+import { renderCentroidNativeCode } from "../src/rendering/centroid-native-code-html.ts";
+import { tokenizeKpTypeScriptSource } from "../src/semantic/typescript-source-tokens.ts";
 import generated from "../src/semantic/centroid-extraction.generated.json" with { type: "json" };
 import { sha256 } from "../src/kernel/sha256.ts";
 import { resolveKpTypeScriptRefactorOpticalEndpoint, serializeKpTypeScriptRefactorOpticalEndpoint } from "../src/rendering/typescript-refactor-optical-theme.ts";
@@ -57,7 +58,8 @@ export function compileCentroidPublication(markdown: string, before: string, aft
     helper: helper.whole.replace(/^export /, ""),
     calls: unindentBody(result.statements)
   };
-  const code = (id: keyof typeof excerpts) => `<pre class="kp-typescript-refactor__revision" data-centroid-excerpt="${id}"><code>${text(excerpts[id])}</code></pre>`;
+  const highlight = (source: string) => renderCentroidNativeCode({ source, tokens: tokenizeKpTypeScriptSource(source) });
+  const code = (id: keyof typeof excerpts) => `<pre class="kp-typescript-refactor__revision" data-centroid-excerpt="${id}"><code>${highlight(excerpts[id])}</code></pre>`;
   const figure = (label: string, id: keyof typeof excerpts) => `<figure><figcaption>${label}</figcaption>${code(id)}</figure>`;
   const sourcePin = sha256(JSON.stringify([before, after]));
   const inspection = `<figure data-centroid-local-inspection data-centroid-source-pin="${sourcePin}">
@@ -84,7 +86,7 @@ export function compileCentroidPublication(markdown: string, before: string, aft
       <dt>Local work · sx or sy → s</dt><dd>The sum and loop stay inside the helper. Each call gets its own locals.</dd>
       <dt>Output · assigned average → return</dt><dd>The same division supplies the value back to the caller.</dd>
     </dl></div>`,
-    reuse: `${figure("The centroid body after extraction", "calls")}<details><summary>See both complete source files</summary><h3>Before</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="before"><code>${text(before)}</code></pre><h3>After</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="after"><code>${text(after)}</code></pre></details>`,
+    reuse: `${figure("The centroid body after extraction", "calls")}<details><summary>See both complete source files</summary><h3>Before</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="before"><code>${highlight(before)}</code></pre><h3>After</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="after"><code>${highlight(after)}</code></pre></details>`,
     check: `<details><summary>Check your reasoning</summary><p><code>const cz = mean(zs);</code> reuses the same procedure. It gets a fresh local sum, just like the other calls.</p></details>`
   };
   const html = article.document.blocks.map(block => {
@@ -92,5 +94,5 @@ export function compileCentroidPublication(markdown: string, before: string, aft
     if (block.kind !== "passage") throw new Error("The centroid static draft supports Article prose only");
     return `<section id="${block.id}">${markdownHtml(block.markdown)}${attachments[block.id]}</section>`;
   }).join("\n");
-  return { html: `<article data-centroid-reading>${html}</article>`, excerpts };
+  return { html: `<article data-centroid-reading class="kp-typescript-source" style="${serializeKpTypeScriptRefactorOpticalEndpoint(resolveKpTypeScriptRefactorOpticalEndpoint("light"))}">${html}</article>`, excerpts };
 }

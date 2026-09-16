@@ -1,4 +1,5 @@
-.kp-typescript-refactor {
+.kp-typescript-refactor,
+.kp-typescript-source {
   /* Compatibility aliases stay TypeScript-local even though their semantic
      values now come from the promoted cross-language DOM optical profile. */
   --kp-code-foreground: var(--kp-typescript-paint-foreground-primary);
@@ -14,7 +15,9 @@
   --kp-code-comment: var(--kp-typescript-paint-syntax-comment);
   --kp-code-delimiter: var(--kp-typescript-paint-syntax-punctuation);
   --kp-code-highlight-background: var(--kp-typescript-paint-focus-wash);
+}
 
+.kp-typescript-refactor {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   width: min(100% - 2rem, 54rem);
@@ -114,56 +117,67 @@
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="keyword"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="keyword"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="keyword"] {
   color: var(--kp-code-keyword);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="identifier"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="identifier"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="identifier"] {
   color: var(--kp-typescript-paint-syntax-identifier);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="function"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="function"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="function"] {
   color: var(--kp-code-function);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="property"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="property"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="property"] {
   color: var(--kp-code-property);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="type"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="type"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="type"] {
   color: var(--kp-code-type);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="boolean"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="boolean"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="boolean"] {
   color: var(--kp-code-boolean);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="number"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="number"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="number"] {
   color: var(--kp-typescript-paint-syntax-number);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="string"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="string"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="string"] {
   color: var(--kp-code-string);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="comment"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="comment"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="comment"] {
   color: var(--kp-code-comment);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="operator"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="operator"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="operator"] {
   color: var(--kp-typescript-paint-syntax-operator);
 }
 
 .kp-typescript-refactor [data-kp-typescript-syntax-kind="punctuation"],
+.kp-typescript-source [data-kp-typescript-syntax-kind="punctuation"],
 .kp-typescript-refactor__token-theater [data-kp-typescript-token-kind="punctuation"] {
   color: var(--kp-typescript-paint-syntax-punctuation);
 }

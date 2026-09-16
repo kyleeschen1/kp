@@ -6,7 +6,8 @@ Last Updated: 2026-09-15
 ## Canonical direction
 
 User accepted the [centroid static example](2026-09-16-centroid-static-example.md)
-and approved [first-loop inspection](2026-09-16-centroid-motion.md).
+and visually accepted [first-loop inspection](2026-09-16-centroid-motion.md).
+Static excerpts now reuse its syntax paint; this is not a new motion checkpoint.
 `run-contract.kp.centroid-motion-v1` owns execution. The rejected shipping
 interface/contract is deferred, not visually accepted or deleted. Preserve its
 source authority and renderer; do not relabel its motion as centroid support.
