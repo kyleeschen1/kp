@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Norm scaling and quotient-square composition",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review direct inward quotient-power branching and rule crossing; old arc-producing candidate superseded.",
+  "summary": "Missing-handle regression repaired and verified on Chromium Firefox WebKit. Return to original HUMAN_CHECKPOINT for direct penetration; pressure still pending.",
   "sourceRefs": [
     {
       "kind": "file",

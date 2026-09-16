@@ -112,7 +112,11 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
             // planner. Declare the direct route so it cannot invent an arc.
             const center = (r: typeof track.startRect) => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
             const path = planKpEquationMotionPathBetweenPoints({ id: `scope.${track.id}`,
-              start: center(track.startRect), end: center(track.endRect), variants: ["direct"] });
+              // Paths are ink-centered, not wrapper-centered. Firefox's
+              // different glyph bearings expose an endpoint displacement if
+              // layout rectangles are used with the paint-aware sampler.
+              start: center(track.startPaintRect ?? track.startRect),
+              end: center(track.endPaintRect ?? track.endRect), variants: ["direct"] });
             // Withdraw obsolete grouping before transit. The denominator
             // power deliberately crosses its own rule in front, not around
             // the fraction; only that reciprocal pair permits contact.

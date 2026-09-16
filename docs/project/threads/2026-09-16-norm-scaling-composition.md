@@ -55,6 +55,21 @@ intelligible. Preserve the domain proof and compositor, repair the decomposition
 
 ### Accepted scope-branching amendment
 
+Follow-up missing-handle regression: Firefox rejected the direct scene during
+eager preparation and the reader correctly withheld nonfunctional controls.
+The binding supplied layout-box centers to the ink-centered path sampler.
+Different glyph bearings displaced endpoint paint, creating false denominator /
+exponent collisions even at settled progress. Repair uses measured paint centers,
+not browser offsets or relaxed collision tolerance. Regression checks now require
+a visible enabled handle and exercise the canonical norm/penetration tests on
+Chromium, Firefox and WebKit. Browser console diagnostics include Error.message
+as well as stack (Firefox stacks omit the message). WebKit's fractional pointer
+rounding is checked within .005 progress; Home verifies exact keyboard docking.
+The expanded-disclosure pointer test uses a tall viewport so Firefox receives
+mouse release inside the window; the separate trajectory test retains the default
+desktop viewport. Initial three-engine runs exposed this harness issue and the
+WebKit rounding assumption after the actual initialization failure was repaired.
+
 The later apparent approval was withdrawn before pressure work: arcs remained.
 Disabling copy fan-out only disabled one sampler; the protected-transit collision
 solver still introduced detours around the departing right parenthesis and the

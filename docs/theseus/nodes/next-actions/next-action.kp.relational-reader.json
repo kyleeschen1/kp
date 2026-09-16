@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT at mechanics-relations step 2: direct penetration candidate. After acceptance resume pressure, compatibility repair, and preserved code-force-energy-graph queue.",
+  "summary": "Handle restored by ink-center path correction. Six three-engine checks pass. Original direct-penetration visual checkpoint remains before pressure and saved queue.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -983,6 +983,13 @@
       "scope": "direct-penetration-exemplar",
       "checkedAt": "2026-09-16T02:42:58.436Z",
       "notes": "Full types passed; after final guard/test edits, test typecheck also passes. Focused unit cohort 36 passes and production build passes with existing chunk warnings. No complete browser or cross-browser certification claimed."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'norm scaling|scope penetration'",
+      "status": "passed",
+      "scope": "missing-handle-repair",
+      "checkedAt": "2026-09-16T02:52:47.074Z",
+      "notes": "Six checks pass across Chromium Firefox WebKit: visible enabled handle, composed norm steps, direct trajectories and reverse. Initial Firefox failure reproduced incorrect layout-centered path endpoints; repaired to ink centers without relaxed collision tolerances. Initial harness failures fixed by in-window disclosure drag and separate keyboard endpoint assertions. 36 focused units, test types and build also pass."
     }
   ],
   "progress": {
