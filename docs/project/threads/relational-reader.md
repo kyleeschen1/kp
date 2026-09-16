@@ -5,6 +5,13 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+Recall-to-use is visually accepted. The approved
+[conceptual-dependency detour](2026-09-15-concept-dependency-reuse.md) replaces
+duplicated momentum explanation sources with bounded pinned reuse and one nested
+justification. Its explicit return point is code transfer (reader.l4), after
+reconciling any remaining l2/l3 release evidence; later force/energy and graph
+work retain their order. Theseus owns the live contract and checkpoint.
+
 The continuous-drag repair is accepted (“perfect”); the user requested the next
 step. Current exemplar: [earlier result → local use](2026-09-15-recall-to-use.md).
 It completes the still-open recall-to-use question in reader.l2 before code

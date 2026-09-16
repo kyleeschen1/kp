@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "Recall-to-use candidate verified; awaiting visual checkpoint before promotion or next code loop.",
+  "summary": "HUMAN_CHECKPOINT: pinned momentum source, nested division explanation and impulse reuse verified. Return to reader.l4 after acceptance and remaining l2/l3 evidence reconciliation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -41,6 +41,10 @@
     {
       "kind": "file",
       "path": "docs/project/threads/2026-09-15-recall-to-use.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-concept-dependency-reuse.md"
     }
   ],
   "dependsOn": {
@@ -888,6 +892,41 @@
       "scope": "recall-to-use final candidate",
       "checkedAt": "2026-09-15T22:41:59.279Z",
       "notes": "Clean full rerun: 31 of 31 Chromium checks pass, including source-bound use, exact return, held-state rejection, reduced motion, scalar preservation and continuous drag. No browser-family or phone promotion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "failed",
+      "scope": "dependency-reuse-initial",
+      "checkedAt": "2026-09-16T00:56:22.104Z",
+      "notes": "Test referenced a nonexistent compiled Article lock property. Corrected and full check rerun; no gate waived."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "dependency-reuse-final",
+      "checkedAt": "2026-09-16T00:56:23.146Z",
+      "notes": "Full app, node, test, Svelte and domain checks pass after the test-only correction."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/energy-derivation-reuse-boundary.test.ts",
+      "status": "passed",
+      "scope": "dependency-reuse",
+      "checkedAt": "2026-09-16T00:56:24.229Z",
+      "notes": "35 tests pass including pinned source, unsupported reference/binding rejection, locked publication, static output and scalar preservation."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "dependency-reuse-focused",
+      "checkedAt": "2026-09-16T00:56:25.338Z",
+      "notes": "Two grep-selected cohorts pass four checks each, seven distinct Chromium checks. Nested justification preserves held pose, disclosure and exact return; static/no-JS and both editions pass. Full matrix not run."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "dependency-reuse",
+      "checkedAt": "2026-09-16T00:56:26.491Z",
+      "notes": "Locked production publication passes; architecture separately passes. Existing large-chunk warnings. Initial physics closure unchanged at 36523 gzip bytes, reachable 148121, HTML 23921."
     }
   ],
   "progress": {

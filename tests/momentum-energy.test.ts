@@ -189,7 +189,7 @@ import { projectMomentumEnergyAttention } from "../src/tutorial/mechanics-relati
 import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, assertMomentumEnergyDerivation } from "../domains/physics/momentum-energy-derivation.ts";
 import { compileMomentumEnergyDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createEnergyDerivationPlan, assertEnergyDerivationPlan, resolveDerivationRecallUse } from "../src/semantic/momentum-energy-derivation-plan.ts";
-import { assertEnergyRecallPassage } from "../src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts";
+import { compileMomentumDependencies, momentumDependency, resolveMomentumDependency } from "../src/tutorial/mechanics-relations/momentum-dependency-publication.ts";
 
 test("earlier result resolves only to its issued substitution and published source", () => {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);
@@ -209,11 +209,41 @@ test("earlier result resolves only to its issued substitution and published sour
     assert.equal(resolveDerivationRecallUse(plan, "invented-result", plan.sourceRevision).status, "repair-required");
     assert.equal(resolveDerivationRecallUse(plan, ref.id, "stale").status, "repair-required");
     assert.throws(() => resolveDerivationRecallUse({ ...plan }, ref.id, plan.sourceRevision));
-    const original = `$$${ref.premise}.$$\n\nSince $${ref.assumption}$, divide by mass:\n\n$$${ref.result}.$$`;
-    assert.doesNotThrow(() => assertEnergyRecallPassage(original));
-    assert.throws(() => assertEnergyRecallPassage(original.replace(ref.result, String.raw`\mathbf v=m\mathbf p`)), /recall-source-mismatch/);
-    assert.throws(() => assertEnergyRecallPassage(original.replace(ref.assumption, "m=0")), /recall-source-mismatch/);
+    assert.ok(resolveMomentumDependency(momentumDependency("definition")).includes(ref.premise));
+    assert.ok(resolveMomentumDependency(momentumDependency("velocity")).includes(ref.result));
+    assert.equal(ref.conceptId, momentumDependency("definition").concept);
   }
+});
+
+test("pinned dependencies compile once into both editions and reject unsupported includes", () => {
+  const source = readFileSync(momentumEnergySourcePath, "utf8");
+  const publication = compileMomentumEnergyPublication(source);
+  assert.equal(publication.dependencies.length, 4);
+  assert.equal(publication.dependencyLock, JSON.parse(readFileSync("examples/physics/momentum-energy.concepts.lock.json", "utf8")));
+  assert.equal(new Set(publication.dependencies.map(item => item.integrity)).size, 1);
+  assert.ok(publication.dependencies.some(item => item.passageId === "impulse-and-work"));
+  const reader = renderMomentumEnergyReader(publication).html;
+  for (const output of [reader, publication.staticHtml.articleHtml]) {
+    assert.ok(!output.includes("{{kp-concept:"));
+    assert.ok(output.includes("Positive mass is nonzero"));
+    assert.ok(output.includes("once impulse tells"));
+  }
+  assert.equal(compileMomentumEnergyPublication(source, undefined, publication.dependencyLock).dependencyLock,
+    publication.dependencyLock);
+  assert.throws(() => compileMomentumEnergyPublication(source, undefined, "stale"), /integrity-mismatch/);
+  assert.throws(() => resolveMomentumDependency({ ...momentumDependency("definition"), ...JSON.parse('{"version":"2.0.0"}') }), /Unsupported momentum/);
+  assert.throws(() => resolveMomentumDependency({ ...momentumDependency("definition"), ...JSON.parse('{"bindings":{"m":"x"}}') }), /Unsupported momentum/);
+  assert.throws(() => compileMomentumDependencies(source.replaceAll("@1.0.0/", "@2.0.0/")), /Unsupported concept include/);
+  assert.throws(() => compileMomentumDependencies("{{kp-concept:physics.newtonian-momentum@1.0.0/definition}}"), /explicit passage/);
+  assert.throws(() => compileMomentumDependencies(source.replace("/definition}}", "/definition?m=x}}")), /Unsupported concept include/);
+  const detached = source.replace("{{kp-concept:physics.newtonian-momentum@1.0.0/definition}}",
+    resolveMomentumDependency(momentumDependency("definition")));
+  assert.throws(() => renderMomentumEnergyReader(compileMomentumEnergyPublication(detached)), /missing-origin/);
+  // A built edition is a value, not a live view that mutates when source changes.
+  const snapshot = publication.staticHtml.articleHtml;
+  const revised = compileMomentumEnergyPublication(source.replace("once impulse tells", "after measuring impulse, we know"));
+  assert.notEqual(revised.staticHtml.articleHtml, snapshot);
+  assert.equal(publication.staticHtml.articleHtml, snapshot);
 });
 import { sampleEnergyDerivationPresentation, sampleSubstitutionPresentation, energyDerivationNavigationTarget, energyDerivationFocus, resolveEnergyDerivationPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 import { sampleEnergyDerivationLens, resolveEnergyDerivationLensPosition, resolveEnergyDerivationMeasuredPosition } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";

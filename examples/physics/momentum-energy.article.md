@@ -33,20 +33,15 @@ vector: its direction tells us where the particle is heading, and its magnitude
 $|\mathbf v|$ is speed. Bold symbols below are vectors; $m$ and $K$ are scalars.
 
 :::kp-passage{#momentum-definition}
-**Definition — momentum.** Weight velocity by mass:
+{{kp-concept:physics.newtonian-momentum@1.0.0/definition}}
 
-$$\mathbf p=m\mathbf v.$$
+We will reuse this definition in the energy calculation.
 
-Momentum records directed motion. Two carts at the same velocity have different
-momenta if their masses differ. It is not a force stored inside a cart.
+{{kp-concept:physics.newtonian-momentum@1.0.0/velocity}}
 
-We will reuse this definition in the energy calculation. Since $m>0$, divide
-both sides by mass to isolate velocity:
+**Why may we divide by mass?**
 
-$$\mathbf v=\frac{\mathbf p}{m}.$$
-
-This is the same relationship solved for a different variable, not another
-physical law. It lets us replace velocity when momentum is the quantity we know.
+{{kp-concept:physics.newtonian-momentum@1.0.0/division}}
 :::
 
 **Definition in this model — kinetic energy.** Associate a scalar with motion:
@@ -164,6 +159,11 @@ changing kinetic energy. The diagram will illustrate this deduction, not prove i
 
 :::kp-passage{#impulse-and-work}
 ## 3. Accumulate: impulse and work
+
+Here we reuse the same relationship for a different purpose: once impulse tells
+us the final momentum, it also tells us the final velocity for a known mass.
+
+{{kp-concept:physics.newtonian-momentum@1.0.0/reminder}}
 
 **Definitions of interval quantities.** Impulse accumulates net force over time;
 net work accumulates its dot product with the actual displacement:

@@ -2,8 +2,8 @@
   "id": "run-contract.kp.reader-recall-use-v1",
   "kind": "run-contract",
   "title": "Earlier result to local use",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review the local recalled result and Show this substitution connection at the recorded opt-in URL.",
+  "status": "resolved",
+  "summary": "Visual checkpoint accepted by the user; bounded recall-to-use run complete.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -31,8 +31,8 @@
     {
       "id": "recall.use",
       "title": "Recall-to-use-exemplar",
-      "summary": "Implementation and checks complete; HUMAN_CHECKPOINT pending review of the opt-in earlier-result-to-use connection. No default promotion.",
-      "status": "in-progress"
+      "summary": "User accepted the recall-to-use exemplar; approved bounded conceptual dependency reuse before returning to code transfer.",
+      "status": "complete"
     }
   ]
 }

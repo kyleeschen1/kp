@@ -2,6 +2,7 @@ import { assertMomentumEnergyDerivation, momentumEnergyDerivationSteps, momentum
 
 import { assertScalarCancellation, scalarCancellationView, type CheckedScalarCancellation } from "../../domains/algebra/scalar-cancellation.ts";
 import { sha256 } from "../kernel/sha256.ts";
+import { newtonianMomentumV1 } from "../../domains/public-api.ts";
 
 export interface DerivationStep { readonly id: string; readonly title: string; readonly cue: string; readonly why: string }
 export interface DerivationView {
@@ -33,6 +34,7 @@ export interface EnergyDerivationPlan {
   readonly moves: readonly EnergyDerivationMove[];
   readonly recall?: Readonly<{
     id: string; passageId: string; premise: string; result: string; assumption: string;
+    conceptId: typeof newtonianMomentumV1.id; conceptVersion: typeof newtonianMomentumV1.version;
     transitionId: string; sourceEntityId: string; targetEntityId: string;
   }>;
   readonly [issuedPlan]: true;
@@ -73,9 +75,10 @@ export function createEnergyDerivationPlan(model: CheckedMomentumEnergyDerivatio
     sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: momentumEnergyDerivationSteps,
     // This bounded reference is issued from the same checked p=m v authority
     // as substitution; a matching fragment of display text is not provenance.
-    recall: Object.freeze({ id: "physics.velocity-from-momentum", passageId: "momentum-definition",
-      premise: String.raw`\mathbf p=m\mathbf v`, result: String.raw`\mathbf v=\frac{\mathbf p}{m}`,
-      assumption: String.raw`m>0`, transitionId: "substitute",
+    recall: Object.freeze({ id: newtonianMomentumV1.resultId, passageId: "momentum-definition",
+      conceptId: newtonianMomentumV1.id, conceptVersion: newtonianMomentumV1.version,
+      premise: newtonianMomentumV1.premise, result: newtonianMomentumV1.result,
+      assumption: newtonianMomentumV1.assumption, transitionId: "substitute",
       sourceEntityId: "energy.substitute.0.velocity", targetEntityId: "energy.substitute.1.replacement" }) });
   issued.add(plan);
   return plan;

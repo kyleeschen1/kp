@@ -6,12 +6,20 @@ import { createKpArticleSource } from "../../article/kp-article-source.ts";
 import { compileKpArticleStaticHtml } from "../../article/kp-article-static-html.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 import { describeMomentumEnergyFrame, renderMomentumEnergySvg } from "./momentum-energy-figure.ts";
+import { compileMomentumDependencies, momentumDependencyIntegrity } from "./momentum-dependency-publication.ts";
 
 export const momentumEnergySourcePath = "examples/physics/momentum-energy.article.md";
 
 /** Build-only: imports bind to governed assets before any publication is emitted.
  * The browser receives physics inputs and compiled prose, not this compiler. */
-export function compileMomentumEnergyPublication(text: string, lock?: KpArticleImportLock) {
+export function compileMomentumEnergyPublication(text: string, lock?: KpArticleImportLock, dependencyLock?: string) {
+  if (dependencyLock !== undefined && dependencyLock !== momentumDependencyIntegrity)
+    throw new Error("physics.dependency.integrity-mismatch: restore the pinned source or explicitly upgrade the edition");
+  const dependencies = compileMomentumDependencies(text);
+  for (const view of ["definition", "velocity", "division"] as const) {
+    if (!dependencies.occurrences.some(item => item.passageId === "momentum-definition" && item.reference.view === view))
+      throw new Error("physics.dependency.missing-origin: the recall requires the pinned definition and derivation, not copied prose");
+  }
   const assets = new Map<string, string>();
   const capabilities = momentumEnergyExamples.map(source => {
     const checked = checkMomentumEnergy(source);
@@ -36,10 +44,11 @@ export function compileMomentumEnergyPublication(text: string, lock?: KpArticleI
     const release = createKpVignetteRelease({ ...draft, integrity: `sha256:${sha256(serializeKpVignetteReleasePayload(draft))}` });
     return Object.freeze({ compiled, release });
   });
-  const source = createKpArticleSource(momentumEnergySourcePath, text), registry = capabilities.map(c => c.release);
+  const source = createKpArticleSource(momentumEnergySourcePath, dependencies.markdown), registry = capabilities.map(c => c.release);
   const resolved = resolveKpArticleImports(source, registry, lock);
   const article = compileKpArticleDocument({ source, registry, lock: resolved.lock });
   const staticHtml = compileKpArticleStaticHtml(article.document);
   for (const asset of staticHtml.assets) if (!assets.has(asset.assetPath)) throw new Error(`Unresolved static physics asset: ${asset.assetPath}`);
-  return Object.freeze({ article, capabilities, staticHtml, assets });
+  return Object.freeze({ article, capabilities, staticHtml, assets, dependencies: dependencies.occurrences,
+    dependencyLock: momentumDependencyIntegrity });
 }

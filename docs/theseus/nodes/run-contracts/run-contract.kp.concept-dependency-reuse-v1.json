@@ -1,0 +1,37 @@
+{
+  "id": "run-contract.kp.concept-dependency-reuse-v1",
+  "kind": "run-contract",
+  "title": "Pinned momentum dependency reuse",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: implementation verified; review nested dependency depth before promotion and returning to saved code-transfer boundary.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-15-concept-dependency-reuse.md",
+      "summary": "Approved detour with explicit return bookmark and preservation gates."
+    }
+  ],
+  "verification": [
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Approved bounded source, publication, nested disclosure and second-context reuse; two-hour ceiling; stop for visual review."
+  ],
+  "disallowedWork": [
+    "Universal knowledge graph, new motion or renderer, mobile promotion, later loop implementation, merge or deployment."
+  ],
+  "goal": "Replace duplicated definition and recall sources with bounded versioned reuse and nested justification, then return to the saved code-transfer boundary.",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "dependency.reuse",
+      "summary": "Implement the approved pinned source and local nested reuse.",
+      "status": "in-progress"
+    }
+  ]
+}

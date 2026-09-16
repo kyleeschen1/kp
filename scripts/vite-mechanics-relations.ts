@@ -9,7 +9,8 @@ import { compileScalarCancellationPublication, scalarCancellationArticlePath, sc
  * Authoring, KaTeX and governed construction never enter the browser graph. */
 export function kpViteMechanicsRelations(projectRoot: string): Plugin {
   const compile = () => compileMomentumEnergyPublication(readFileSync(resolve(projectRoot, momentumEnergySourcePath), "utf8"),
-    JSON.parse(readFileSync(resolve(projectRoot, "examples/physics/momentum-energy.article.lock.json"), "utf8")));
+    JSON.parse(readFileSync(resolve(projectRoot, "examples/physics/momentum-energy.article.lock.json"), "utf8")),
+    JSON.parse(readFileSync(resolve(projectRoot, "examples/physics/momentum-energy.concepts.lock.json"), "utf8")));
   const directory = "experiments/mechanics-relations/";
   return { name: "kp-mechanics-relations-publication",
     transformIndexHtml: { order: "pre", handler(html, context) {

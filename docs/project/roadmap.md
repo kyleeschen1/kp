@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The recall-to-use exemplar is now visually accepted. The approved bounded detour
+is [conceptual dependency reuse](threads/2026-09-15-concept-dependency-reuse.md),
+controlled by `run-contract.kp.concept-dependency-reuse-v1`: one pinned momentum
+source, definition/recall projections, nested justification and second-context
+reuse. After its checks and visual review, return to the saved code-transfer
+boundary (reader.l4), reconciling remaining l2/l3 evidence first. Force/energy
+and graph correspondence retain their order; phone and old v2 remain parked.
+The proposal owns the queue bookmark; Theseus owns progress.
+
 The user accepted continuous dragging (“perfect”) and resumed the saved next
 step. Current bounded work is the earlier-result **recall-to-use** exemplar:
 `threads/2026-09-15-recall-to-use.md`, controlled by

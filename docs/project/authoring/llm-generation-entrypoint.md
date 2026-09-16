@@ -54,6 +54,13 @@ source/Article workflow, shared physics-reader pipeline, supported notation
 edits and repair limits. This is not yet an `author:check` task or a visually
 promoted general algebra generator.
 
+For the bounded momentum dependency-reuse exemplar, see
+`../threads/2026-09-15-concept-dependency-reuse.md`. Its mechanics publication
+resolves explicit versioned concept includes before Article compilation, with
+a checked-in content pin. Reuse the supported views and author local motivation;
+do not copy prerequisite prose or assume a general Article transclusion API,
+arbitrary notation bindings, or cross-document provenance support.
+
 For the accepted binary-probability exemplar, use `bayesian-reasoning-packet.md`.
 Exact joint masses or prior/likelihoods enter the probability-owned checker,
 then existing governed construction, card, readings, practice and edition paths.

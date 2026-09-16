@@ -497,7 +497,7 @@ test("long-document local access preserves held transitions and exact return aft
   await expect(root).toHaveAttribute("data-move", "0");
   await expect(root).toHaveAttribute("data-progress", held!);
   const recall = root.locator("[data-derivation-recall]");
-  await recall.locator("summary").click();
+  await recall.locator(":scope > summary").click();
   const origin = recall.locator("a");
   await origin.scrollIntoViewIfNeeded();
   const offset = await root.locator('[data-derivation-row="0"]').evaluate(el => el.getBoundingClientRect().top);
@@ -700,7 +700,7 @@ test("recalled result plays only its licensed use and rejects stale references w
   await page.goto(route + "?derivation-recall=use#energy-from-momentum");
   const root = page.locator("[data-energy-derivation]"), recall = root.locator("[data-derivation-recall]");
   await expect(lens(root)).toBeEnabled();
-  await recall.locator("summary").click();
+  await recall.locator(":scope > summary").click();
   await expect(recall).toContainText("Use here:");
   await expect(root).toHaveAttribute("data-playing", "false");
   const button = recall.getByRole("button", { name: "Show this substitution" });
@@ -715,12 +715,18 @@ test("recalled result plays only its licensed use and rejects stale references w
   await dragTo(page, root, .55);
   await root.screenshot({ path: info.outputPath("recall-to-use.png") });
   const held = await root.getAttribute("data-progress");
+  const depth = recall.locator("[data-momentum-dependency=division]");
+  await depth.locator("summary").click();
+  await expect(depth).toContainText("Mass need not be constant over time");
+  await expect(root).toHaveAttribute("data-progress", held!);
+  await recall.screenshot({ path: info.outputPath("momentum-dependency-depth.png") });
   const link = recall.getByRole("link", { name: "Visit the original definition" });
   await link.click();
   await page.getByRole("button", { name: "Return to your derivation" }).click();
   await expect(link).toBeFocused();
   await expect(root).toHaveAttribute("data-progress", held!);
   await expect(recall).toHaveAttribute("open", "");
+  await expect(depth).toHaveAttribute("open", "");
   await button.evaluate(el => { (el as HTMLElement).dataset["derivationUseResult"] = "invented"; });
   await button.click();
   await expect(recall.locator("[data-derivation-use-status]")).toBeVisible();
@@ -739,7 +745,7 @@ test("local provenance returns to the same logical position, disclosures and foc
   const root = page.locator("[data-energy-derivation]");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   const recall = root.locator("[data-derivation-recall]");
-  await recall.locator("summary").click();
+  await recall.locator(":scope > summary").click();
   await root.locator('[data-derivation-interleave="1"] summary').click();
   await dragTo(page, root, 1.55);
   const link = recall.getByRole("link", { name: "Visit the original definition" });
@@ -783,7 +789,7 @@ test("accepted context and provenance are defaults with explicit legacy comparis
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(route + "?derivation-motion=contextual&derivation-provenance=local#energy-from-momentum");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
-  await root.locator("[data-derivation-recall] summary").click();
+  await root.locator("[data-derivation-recall] > summary").click();
   await dragTo(page, root, .55);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await root.screenshot({ path: info.outputPath("contextual-narrow.png") });
