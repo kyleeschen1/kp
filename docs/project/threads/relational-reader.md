@@ -5,9 +5,9 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
-User approved [centroid static example](2026-09-16-centroid-static-example.md):
-build the clearer, substantial `mean` extraction example before working on motion.
-`run-contract.kp.centroid-static-v1` owns execution. The rejected shipping
+User accepted the [centroid static example](2026-09-16-centroid-static-example.md)
+and approved [first-loop inspection](2026-09-16-centroid-motion.md).
+`run-contract.kp.centroid-motion-v1` owns execution. The rejected shipping
 interface/contract is deferred, not visually accepted or deleted. Preserve its
 source authority and renderer; do not relabel its motion as centroid support.
 Force/energy and graph remain next after the code investigation.

@@ -25,12 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Current successor: [centroid static example](threads/2026-09-16-centroid-static-example.md).
-User rejected the shipping interface and approved a less verbose, more substantial
-extraction example: two averaging loops become `mean`. Build the annotated static
-explanation first, then work on animation. The prior
+Current successor: [centroid first-loop inspection](threads/2026-09-16-centroid-motion.md).
+User accepted the [static example](threads/2026-09-16-centroid-static-example.md)
+and approved proceeding to bounded motion: follow calculation extraction, then
+parameter/local renaming, without merging runtime accumulators. The prior
 [persistent code reasoning](threads/2026-09-16-code-reasoning-record.md) candidate
-is preserved but not promoted. Human review precedes new motion or shared UI
+is preserved but not promoted. Human review precedes shared motion or UI
 abstraction. Then resume force/energy and graph in the saved order.
 The norm and dependency paragraphs below retain checkpoint provenance.
 

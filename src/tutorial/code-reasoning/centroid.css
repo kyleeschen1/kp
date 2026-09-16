@@ -9,11 +9,24 @@
 .centroid-reader details { margin: 1.5rem 0; }
 .centroid-reader summary { cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em; }
 .centroid-reader section { scroll-margin-top: 1.5rem; }
+.centroid-reader [hidden] { display: none !important; }
+.centroid-reader [data-centroid-inspecting="true"] [data-centroid-static-helper] { display: none; }
+.centroid-reader .centroid-stage { position: relative; display: block; box-sizing: border-box; width: 100%; min-height: 0; margin: 0; padding: 0; border: 0; box-shadow: none; background: #f5f6f7; overflow-x: auto; }
+.centroid-reader .centroid-stage pre { min-height: calc(var(--centroid-lines, 9) * 1.75em + 2rem); }
+.centroid-reader .centroid-stage .kp-typescript-refactor__token-theater { position: absolute; top: 1rem; left: calc(1rem + 2px); min-width: 0; width: calc(100% - 2rem); }
+.centroid-reader [data-centroid-controls] { font: 0.85rem/1.5 system-ui, sans-serif; }
+.centroid-reader [data-centroid-narration] { min-height: 6em; }
+.centroid-reader .centroid-inspection-label { font-size: 0.75rem; }
+.centroid-reader [data-centroid-open] { margin-top: 0.4rem; display: block; font: inherit; cursor: pointer; }
 @media (max-width: 650px) {
   .centroid-pair, .centroid-extraction { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .centroid-reader pre { padding: 0.75rem; }
+  .centroid-reader .centroid-stage .kp-typescript-refactor__token-theater { top: 0.75rem; left: calc(0.75rem + 2px); }
+  .centroid-reader .centroid-stage pre { min-height: calc(var(--centroid-lines, 9) * 1.75em + 1.5rem); }
 }
 @media print {
+  .centroid-reader [data-centroid-open], .centroid-reader [data-centroid-stage], .centroid-reader [data-centroid-controls], .centroid-reader [data-centroid-error] { display: none !important; }
+  .centroid-reader [data-centroid-static-helper] { display: block !important; }
   .centroid-reader details::details-content { display: block; content-visibility: visible; }
   .centroid-reader pre { white-space: pre-wrap; overflow-wrap: anywhere; }
   .centroid-reader figure { break-inside: avoid; }

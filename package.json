@@ -131,6 +131,8 @@
     "generate:scheme-factorial-full-evaluation": "node --disable-warning=ExperimentalWarning scripts/generate-scheme-factorial-full-evaluation.ts",
     "check:scheme-factorial-full-evaluation": "node --disable-warning=ExperimentalWarning scripts/generate-scheme-factorial-full-evaluation.ts --check",
     "generate:typescript-refactor-semantics": "node --disable-warning=ExperimentalWarning scripts/generate-typescript-refactor-semantics.ts",
+    "generate:centroid-extraction": "node --disable-warning=ExperimentalWarning scripts/generate-centroid-extraction.ts",
+    "check:centroid-extraction": "node --disable-warning=ExperimentalWarning scripts/generate-centroid-extraction.ts --check",
     "check:typescript-refactor-semantics": "node --disable-warning=ExperimentalWarning scripts/generate-typescript-refactor-semantics.ts --check",
     "generate:python-refactor-semantics": "node --disable-warning=ExperimentalWarning scripts/generate-python-refactor-semantics.ts",
     "check:python-refactor-semantics": "node --disable-warning=ExperimentalWarning scripts/generate-python-refactor-semantics.ts --check",

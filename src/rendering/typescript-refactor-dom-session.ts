@@ -55,7 +55,7 @@ export function renderKpTypeScriptRefactorDomFrame(
       if (current) node.removeAttribute("aria-hidden");
       else node.setAttribute("aria-hidden", "true");
     });
-  syncTokenTheater(shell, theater);
+  renderKpTypeScriptTokenTheater(shell, theater);
   const focus = new Set(motion.stage.focusSelectorIds);
   shell.querySelectorAll<HTMLElement>("[data-kp-typescript-selector-id]")
     .forEach((node) => {
@@ -86,7 +86,9 @@ export function renderKpTypeScriptRefactorDomFrame(
     ?.replaceChildren(shell.ownerDocument.createTextNode(description));
 }
 
-function syncTokenTheater(
+/** Reuse the native painter for language-owned sampled frames; it does not
+ * discover correspondence or choose trajectories for a new operation. */
+export function renderKpTypeScriptTokenTheater(
   shell: HTMLElement,
   theater: KpTypeScriptTokenTheaterFrame
 ): void {
@@ -136,6 +138,9 @@ function syncTokenNode(
   node: HTMLElement,
   token: KpTypeScriptTheaterToken
 ): void {
+  // A checked alpha-renaming keeps its owner while changing its spelling.
+  // Updating only newly created nodes would make rewind depend on history.
+  if (node.textContent !== token.text) node.textContent = token.text;
   node.dataset["kpTypescriptTokenKind"] = token.kind;
   node.dataset["kpTypescriptTokenRole"] = token.role;
   node.dataset["kpTypescriptTokenEntityId"] = token.entityId;

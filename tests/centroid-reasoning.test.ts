@@ -30,7 +30,8 @@ test("publication excerpts preserve source, while complete files remain availabl
   assert.ok(after.includes(excerpts.helper));
   for (const source of [before, after]) assert.ok(html.includes(encodeKpHtmlText(source)));
   assert.equal([...html.matchAll(/data-centroid-excerpt=/g)].length, 4);
-  assert.doesNotMatch(html, /<script|<button|<input/);
+  assert.doesNotMatch(html, /<script/);
+  assert.match(html, /data-centroid-open hidden/);
   const changed = compileCentroidPublication(markdown, before.replace("sx += x", "sx += 2 * x"), after);
   assert.match(changed.excerpts.x, /sx \+= 2 \* x/);
   // Source fidelity is intentionally not an equivalence certificate.

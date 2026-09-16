@@ -1,0 +1,88 @@
+{
+  "id": "run-contract.kp.centroid-motion-v1",
+  "kind": "run-contract",
+  "title": "Centroid first-loop inspection",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: section 2 Trace the first loop at http://localhost:8000/experiments/centroid-reasoning/. Review two transitions before further expansion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-centroid-motion.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:code-reasoning",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/centroid-extraction.test.ts tests/centroid-reasoning.test.ts tests/code-reasoning.test.ts",
+      "status": "passed",
+      "scope": "Source evidence and sampled motion",
+      "checkedAt": "2026-09-16T05:36:39.881Z",
+      "notes": "Nine pass; exact generated evidence, typed rejection, endpoint ownership and deterministic rewind."
+    },
+    {
+      "command": "npm run visual:code-reasoning",
+      "status": "passed",
+      "scope": "Chromium exemplar and shipping preservation",
+      "checkedAt": "2026-09-16T05:36:41.328Z",
+      "notes": "Seven pass; direct drag hold reverse, animated keyboard/buttons, fixed stage height, reduced motion, print, no-JS and stale-pin rejection. Screenshots inspected; human judgment pending."
+    },
+    {
+      "command": "npm run test:typescript-refactor",
+      "status": "passed",
+      "scope": "Shared TypeScript painter preservation",
+      "checkedAt": "2026-09-16T05:36:42.421Z",
+      "notes": "116 pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full repository",
+      "checkedAt": "2026-09-16T05:36:43.520Z",
+      "notes": "Initial unchecked JSON cast failed; replaced by checked immutable reconstruction. Final full rerun passes including Svelte and domains."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Canonical ownership boundaries",
+      "checkedAt": "2026-09-16T05:36:44.608Z",
+      "notes": "All gates and eight conformance checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Production route",
+      "checkedAt": "2026-09-16T05:36:45.723Z",
+      "notes": "Pass; no language compiler or new dependency. Existing unrelated global chunk warnings remain."
+    },
+    {
+      "command": "npm run check:centroid-extraction",
+      "status": "passed",
+      "scope": "Checked-in source evidence",
+      "checkedAt": "2026-09-16T05:36:46.903Z",
+      "notes": "Generated artifact matches current frontend and fixtures."
+    }
+  ],
+  "allowedWork": [
+    "Bounded source checker, sampled TypeScript token motion and local host integration"
+  ],
+  "disallowedWork": [
+    "No universal extractor, shipping authority relabeling, second-caller promotion, merge or push"
+  ],
+  "goal": "Track calculation extraction and separate parameter-local binding roles in one local code inspection",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "centroid.motion",
+      "summary": "Implementation and verification ready; HUMAN_CHECKPOINT for local first-loop extraction and rename choreography.",
+      "status": "in-progress"
+    }
+  ]
+}

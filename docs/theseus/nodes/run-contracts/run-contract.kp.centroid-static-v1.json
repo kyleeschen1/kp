@@ -2,8 +2,8 @@
   "id": "run-contract.kp.centroid-static-v1",
   "kind": "run-contract",
   "title": "Centroid annotated static example",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: static centroid reading ready at http://localhost:8000/experiments/centroid-reasoning/. Review example and annotations before semantic animation.",
+  "status": "resolved",
+  "summary": "Static exemplar accepted; continue with bounded first-loop motion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -66,8 +66,8 @@
   "slices": [
     {
       "id": "centroid.static",
-      "summary": "Implementation and checks complete; HUMAN_CHECKPOINT at experiments/centroid-reasoning before animation. Exemplar not yet visually accepted.",
-      "status": "in-progress"
+      "summary": "User visually accepted the static centroid reading and requested motion.",
+      "status": "complete"
     }
   ]
 }

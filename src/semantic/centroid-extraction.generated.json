@@ -1,0 +1,1069 @@
+{
+  "schemaVersion": "kp.centroid-extraction.v1",
+  "sourcePin": "f4d11cf8304809885fda69a96fc5d6b08018206d179681af97b82411feecd8b4",
+  "causalContract": {
+    "schemaVersion": "kp.extract-helper-causal-contract.v1",
+    "kind": "extract-helper-causal-contract",
+    "contractId": "contract.centroid.extract-helper",
+    "operation": "extract-helper",
+    "sourceProgramRoleId": "role.centroid.before",
+    "targetProgramRoleId": "role.centroid.after",
+    "introducedHelper": {
+      "declarationRoleId": "role.centroid.helper",
+      "bodyRoleId": "role.centroid.helper.body"
+    },
+    "contributors": [
+      {
+        "sourceContributorRoleId": "role.centroid.x.calculation",
+        "targetCallRoleId": "role.centroid.x.call"
+      },
+      {
+        "sourceContributorRoleId": "role.centroid.y.calculation",
+        "targetCallRoleId": "role.centroid.y.call"
+      }
+    ],
+    "relations": [
+      {
+        "id": "contract.centroid.extract-helper.merge-contributors",
+        "kind": "merge-contributors",
+        "sourceRoleIds": [
+          "role.centroid.x.calculation",
+          "role.centroid.y.calculation"
+        ],
+        "targetRoleIds": [
+          "role.centroid.helper.body"
+        ]
+      },
+      {
+        "id": "contract.centroid.extract-helper.introduce-helper",
+        "kind": "introduce-helper",
+        "sourceRoleIds": [],
+        "targetRoleIds": [
+          "role.centroid.helper"
+        ]
+      },
+      {
+        "id": "contract.centroid.extract-helper.change-contributor-1",
+        "kind": "change-contributor-role",
+        "sourceRoleIds": [
+          "role.centroid.x.calculation"
+        ],
+        "targetRoleIds": [
+          "role.centroid.x.call"
+        ]
+      },
+      {
+        "id": "contract.centroid.extract-helper.change-contributor-2",
+        "kind": "change-contributor-role",
+        "sourceRoleIds": [
+          "role.centroid.y.calculation"
+        ],
+        "targetRoleIds": [
+          "role.centroid.y.call"
+        ]
+      },
+      {
+        "id": "contract.centroid.extract-helper.succeed-program",
+        "kind": "succeed-program",
+        "sourceRoleIds": [
+          "role.centroid.before"
+        ],
+        "targetRoleIds": [
+          "role.centroid.after"
+        ]
+      }
+    ]
+  },
+  "evidence": {
+    "sourceRevisionId": "centroid.before",
+    "targetRevisionId": "centroid.after",
+    "syntaxRecordIds": [
+      "centroid.before:syntax.263.76.339",
+      "centroid.before:syntax.251.165.203",
+      "centroid.before:syntax.251.250.288",
+      "centroid.before:syntax.254.321.337",
+      "centroid.after:syntax.263.0.123",
+      "centroid.after:syntax.251.60.97",
+      "centroid.after:syntax.254.100.121",
+      "centroid.after:syntax.263.195.334",
+      "centroid.after:syntax.254.316.332"
+    ],
+    "assumptions": [
+      "Ordinary finite nonempty number arrays, not proxies or custom iterators",
+      "Synchronous code; independent call-local accumulators",
+      "Same floating-point operation order, not exact-real arithmetic"
+    ]
+  },
+  "states": [
+    {
+      "id": "original",
+      "source": "let sx = 0;\nfor (const x of xs) {\n  sx += x;\n}\nconst cx = sx / xs.length;",
+      "tokens": [
+        {
+          "text": "let",
+          "startOffset": 0,
+          "endOffset": 3,
+          "kind": "keyword",
+          "id": "centroid.original.0",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "sx",
+          "startOffset": 4,
+          "endOffset": 6,
+          "kind": "identifier",
+          "id": "centroid.original.1",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "=",
+          "startOffset": 7,
+          "endOffset": 8,
+          "kind": "operator",
+          "id": "centroid.original.2",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "0",
+          "startOffset": 9,
+          "endOffset": 10,
+          "kind": "number",
+          "id": "centroid.original.3",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": ";",
+          "startOffset": 10,
+          "endOffset": 11,
+          "kind": "punctuation",
+          "id": "centroid.original.4",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "for",
+          "startOffset": 12,
+          "endOffset": 15,
+          "kind": "keyword",
+          "id": "centroid.original.5",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "(",
+          "startOffset": 16,
+          "endOffset": 17,
+          "kind": "punctuation",
+          "id": "centroid.original.6",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "const",
+          "startOffset": 17,
+          "endOffset": 22,
+          "kind": "keyword",
+          "id": "centroid.original.7",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "x",
+          "startOffset": 23,
+          "endOffset": 24,
+          "kind": "identifier",
+          "id": "centroid.original.8",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "of",
+          "startOffset": 25,
+          "endOffset": 27,
+          "kind": "keyword",
+          "id": "centroid.original.9",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "xs",
+          "startOffset": 28,
+          "endOffset": 30,
+          "kind": "identifier",
+          "id": "centroid.original.10",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": ")",
+          "startOffset": 30,
+          "endOffset": 31,
+          "kind": "punctuation",
+          "id": "centroid.original.11",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "{",
+          "startOffset": 32,
+          "endOffset": 33,
+          "kind": "punctuation",
+          "id": "centroid.original.12",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "sx",
+          "startOffset": 36,
+          "endOffset": 38,
+          "kind": "identifier",
+          "id": "centroid.original.13",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "+=",
+          "startOffset": 39,
+          "endOffset": 41,
+          "kind": "operator",
+          "id": "centroid.original.14",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "x",
+          "startOffset": 42,
+          "endOffset": 43,
+          "kind": "identifier",
+          "id": "centroid.original.15",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": ";",
+          "startOffset": 43,
+          "endOffset": 44,
+          "kind": "punctuation",
+          "id": "centroid.original.16",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "}",
+          "startOffset": 45,
+          "endOffset": 46,
+          "kind": "punctuation",
+          "id": "centroid.original.17",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "const",
+          "startOffset": 47,
+          "endOffset": 52,
+          "kind": "keyword",
+          "id": "centroid.original.18",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "cx",
+          "startOffset": 53,
+          "endOffset": 55,
+          "kind": "identifier",
+          "id": "centroid.original.19",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "=",
+          "startOffset": 56,
+          "endOffset": 57,
+          "kind": "operator",
+          "id": "centroid.original.20",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "sx",
+          "startOffset": 58,
+          "endOffset": 60,
+          "kind": "identifier",
+          "id": "centroid.original.21",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "/",
+          "startOffset": 61,
+          "endOffset": 62,
+          "kind": "operator",
+          "id": "centroid.original.22",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "xs",
+          "startOffset": 63,
+          "endOffset": 65,
+          "kind": "identifier",
+          "id": "centroid.original.23",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": ".",
+          "startOffset": 65,
+          "endOffset": 66,
+          "kind": "punctuation",
+          "id": "centroid.original.24",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "length",
+          "startOffset": 66,
+          "endOffset": 72,
+          "kind": "property",
+          "id": "centroid.original.25",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": ";",
+          "startOffset": 72,
+          "endOffset": 73,
+          "kind": "punctuation",
+          "id": "centroid.original.26",
+          "entityId": "centroid.caller.result"
+        }
+      ]
+    },
+    {
+      "id": "extracted",
+      "source": "function mean(xs: number[]): number {\n  let sx = 0;\n  for (const x of xs) {\n    sx += x;\n  }\n  return sx / xs.length;\n}\n\nconst cx = mean(xs);",
+      "tokens": [
+        {
+          "text": "function",
+          "startOffset": 0,
+          "endOffset": 8,
+          "kind": "keyword",
+          "id": "centroid.extracted.0",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "mean",
+          "startOffset": 9,
+          "endOffset": 13,
+          "kind": "function",
+          "id": "centroid.extracted.1",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "(",
+          "startOffset": 13,
+          "endOffset": 14,
+          "kind": "punctuation",
+          "id": "centroid.extracted.2",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "xs",
+          "startOffset": 14,
+          "endOffset": 16,
+          "kind": "identifier",
+          "id": "centroid.extracted.3",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ":",
+          "startOffset": 16,
+          "endOffset": 17,
+          "kind": "punctuation",
+          "id": "centroid.extracted.4",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "number",
+          "startOffset": 18,
+          "endOffset": 24,
+          "kind": "type",
+          "id": "centroid.extracted.5",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "[",
+          "startOffset": 24,
+          "endOffset": 25,
+          "kind": "punctuation",
+          "id": "centroid.extracted.6",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "]",
+          "startOffset": 25,
+          "endOffset": 26,
+          "kind": "punctuation",
+          "id": "centroid.extracted.7",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ")",
+          "startOffset": 26,
+          "endOffset": 27,
+          "kind": "punctuation",
+          "id": "centroid.extracted.8",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ":",
+          "startOffset": 27,
+          "endOffset": 28,
+          "kind": "punctuation",
+          "id": "centroid.extracted.9",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "number",
+          "startOffset": 29,
+          "endOffset": 35,
+          "kind": "type",
+          "id": "centroid.extracted.10",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "{",
+          "startOffset": 36,
+          "endOffset": 37,
+          "kind": "punctuation",
+          "id": "centroid.extracted.11",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "let",
+          "startOffset": 40,
+          "endOffset": 43,
+          "kind": "keyword",
+          "id": "centroid.original.0",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "sx",
+          "startOffset": 44,
+          "endOffset": 46,
+          "kind": "identifier",
+          "id": "centroid.original.1",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "=",
+          "startOffset": 47,
+          "endOffset": 48,
+          "kind": "operator",
+          "id": "centroid.original.2",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "0",
+          "startOffset": 49,
+          "endOffset": 50,
+          "kind": "number",
+          "id": "centroid.original.3",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": ";",
+          "startOffset": 50,
+          "endOffset": 51,
+          "kind": "punctuation",
+          "id": "centroid.original.4",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "for",
+          "startOffset": 54,
+          "endOffset": 57,
+          "kind": "keyword",
+          "id": "centroid.original.5",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "(",
+          "startOffset": 58,
+          "endOffset": 59,
+          "kind": "punctuation",
+          "id": "centroid.original.6",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "const",
+          "startOffset": 59,
+          "endOffset": 64,
+          "kind": "keyword",
+          "id": "centroid.original.7",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "x",
+          "startOffset": 65,
+          "endOffset": 66,
+          "kind": "identifier",
+          "id": "centroid.original.8",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "of",
+          "startOffset": 67,
+          "endOffset": 69,
+          "kind": "keyword",
+          "id": "centroid.original.9",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "xs",
+          "startOffset": 70,
+          "endOffset": 72,
+          "kind": "identifier",
+          "id": "centroid.original.10",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": ")",
+          "startOffset": 72,
+          "endOffset": 73,
+          "kind": "punctuation",
+          "id": "centroid.original.11",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "{",
+          "startOffset": 74,
+          "endOffset": 75,
+          "kind": "punctuation",
+          "id": "centroid.original.12",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "sx",
+          "startOffset": 80,
+          "endOffset": 82,
+          "kind": "identifier",
+          "id": "centroid.original.13",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "+=",
+          "startOffset": 83,
+          "endOffset": 85,
+          "kind": "operator",
+          "id": "centroid.original.14",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "x",
+          "startOffset": 86,
+          "endOffset": 87,
+          "kind": "identifier",
+          "id": "centroid.original.15",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": ";",
+          "startOffset": 87,
+          "endOffset": 88,
+          "kind": "punctuation",
+          "id": "centroid.original.16",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "}",
+          "startOffset": 91,
+          "endOffset": 92,
+          "kind": "punctuation",
+          "id": "centroid.original.17",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "return",
+          "startOffset": 95,
+          "endOffset": 101,
+          "kind": "keyword",
+          "id": "centroid.extracted.30",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "sx",
+          "startOffset": 102,
+          "endOffset": 104,
+          "kind": "identifier",
+          "id": "centroid.original.21",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "/",
+          "startOffset": 105,
+          "endOffset": 106,
+          "kind": "operator",
+          "id": "centroid.original.22",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "xs",
+          "startOffset": 107,
+          "endOffset": 109,
+          "kind": "identifier",
+          "id": "centroid.original.23",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": ".",
+          "startOffset": 109,
+          "endOffset": 110,
+          "kind": "punctuation",
+          "id": "centroid.original.24",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "length",
+          "startOffset": 110,
+          "endOffset": 116,
+          "kind": "property",
+          "id": "centroid.original.25",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": ";",
+          "startOffset": 116,
+          "endOffset": 117,
+          "kind": "punctuation",
+          "id": "centroid.extracted.36",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "}",
+          "startOffset": 118,
+          "endOffset": 119,
+          "kind": "punctuation",
+          "id": "centroid.extracted.37",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "const",
+          "startOffset": 121,
+          "endOffset": 126,
+          "kind": "keyword",
+          "id": "centroid.original.18",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "cx",
+          "startOffset": 127,
+          "endOffset": 129,
+          "kind": "identifier",
+          "id": "centroid.original.19",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "=",
+          "startOffset": 130,
+          "endOffset": 131,
+          "kind": "operator",
+          "id": "centroid.original.20",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "mean",
+          "startOffset": 132,
+          "endOffset": 136,
+          "kind": "function",
+          "id": "centroid.extracted.41",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "(",
+          "startOffset": 136,
+          "endOffset": 137,
+          "kind": "punctuation",
+          "id": "centroid.extracted.42",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "xs",
+          "startOffset": 137,
+          "endOffset": 139,
+          "kind": "identifier",
+          "id": "centroid.extracted.43",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ")",
+          "startOffset": 139,
+          "endOffset": 140,
+          "kind": "punctuation",
+          "id": "centroid.extracted.44",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ";",
+          "startOffset": 140,
+          "endOffset": 141,
+          "kind": "punctuation",
+          "id": "centroid.original.26",
+          "entityId": "centroid.caller.result"
+        }
+      ]
+    },
+    {
+      "id": "generalized",
+      "source": "function mean(vs: number[]): number {\n  let s = 0;\n  for (const v of vs) {\n    s += v;\n  }\n  return s / vs.length;\n}\n\nconst cx = mean(xs);",
+      "tokens": [
+        {
+          "text": "function",
+          "startOffset": 0,
+          "endOffset": 8,
+          "kind": "keyword",
+          "id": "centroid.extracted.0",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "mean",
+          "startOffset": 9,
+          "endOffset": 13,
+          "kind": "function",
+          "id": "centroid.extracted.1",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "(",
+          "startOffset": 13,
+          "endOffset": 14,
+          "kind": "punctuation",
+          "id": "centroid.extracted.2",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "vs",
+          "startOffset": 14,
+          "endOffset": 16,
+          "kind": "identifier",
+          "id": "centroid.extracted.3",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ":",
+          "startOffset": 16,
+          "endOffset": 17,
+          "kind": "punctuation",
+          "id": "centroid.extracted.4",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "number",
+          "startOffset": 18,
+          "endOffset": 24,
+          "kind": "type",
+          "id": "centroid.extracted.5",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "[",
+          "startOffset": 24,
+          "endOffset": 25,
+          "kind": "punctuation",
+          "id": "centroid.extracted.6",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "]",
+          "startOffset": 25,
+          "endOffset": 26,
+          "kind": "punctuation",
+          "id": "centroid.extracted.7",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ")",
+          "startOffset": 26,
+          "endOffset": 27,
+          "kind": "punctuation",
+          "id": "centroid.extracted.8",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ":",
+          "startOffset": 27,
+          "endOffset": 28,
+          "kind": "punctuation",
+          "id": "centroid.extracted.9",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "number",
+          "startOffset": 29,
+          "endOffset": 35,
+          "kind": "type",
+          "id": "centroid.extracted.10",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "{",
+          "startOffset": 36,
+          "endOffset": 37,
+          "kind": "punctuation",
+          "id": "centroid.extracted.11",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "let",
+          "startOffset": 40,
+          "endOffset": 43,
+          "kind": "keyword",
+          "id": "centroid.original.0",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "s",
+          "startOffset": 44,
+          "endOffset": 45,
+          "kind": "identifier",
+          "id": "centroid.original.1",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "=",
+          "startOffset": 46,
+          "endOffset": 47,
+          "kind": "operator",
+          "id": "centroid.original.2",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "0",
+          "startOffset": 48,
+          "endOffset": 49,
+          "kind": "number",
+          "id": "centroid.original.3",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": ";",
+          "startOffset": 49,
+          "endOffset": 50,
+          "kind": "punctuation",
+          "id": "centroid.original.4",
+          "entityId": "centroid.local.sum"
+        },
+        {
+          "text": "for",
+          "startOffset": 53,
+          "endOffset": 56,
+          "kind": "keyword",
+          "id": "centroid.original.5",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "(",
+          "startOffset": 57,
+          "endOffset": 58,
+          "kind": "punctuation",
+          "id": "centroid.original.6",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "const",
+          "startOffset": 58,
+          "endOffset": 63,
+          "kind": "keyword",
+          "id": "centroid.original.7",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "v",
+          "startOffset": 64,
+          "endOffset": 65,
+          "kind": "identifier",
+          "id": "centroid.original.8",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "of",
+          "startOffset": 66,
+          "endOffset": 68,
+          "kind": "keyword",
+          "id": "centroid.original.9",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "vs",
+          "startOffset": 69,
+          "endOffset": 71,
+          "kind": "identifier",
+          "id": "centroid.original.10",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": ")",
+          "startOffset": 71,
+          "endOffset": 72,
+          "kind": "punctuation",
+          "id": "centroid.original.11",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "{",
+          "startOffset": 73,
+          "endOffset": 74,
+          "kind": "punctuation",
+          "id": "centroid.original.12",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "s",
+          "startOffset": 79,
+          "endOffset": 80,
+          "kind": "identifier",
+          "id": "centroid.original.13",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "+=",
+          "startOffset": 81,
+          "endOffset": 83,
+          "kind": "operator",
+          "id": "centroid.original.14",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "v",
+          "startOffset": 84,
+          "endOffset": 85,
+          "kind": "identifier",
+          "id": "centroid.original.15",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": ";",
+          "startOffset": 85,
+          "endOffset": 86,
+          "kind": "punctuation",
+          "id": "centroid.original.16",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "}",
+          "startOffset": 89,
+          "endOffset": 90,
+          "kind": "punctuation",
+          "id": "centroid.original.17",
+          "entityId": "centroid.local.iteration"
+        },
+        {
+          "text": "return",
+          "startOffset": 93,
+          "endOffset": 99,
+          "kind": "keyword",
+          "id": "centroid.extracted.30",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "s",
+          "startOffset": 100,
+          "endOffset": 101,
+          "kind": "identifier",
+          "id": "centroid.original.21",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "/",
+          "startOffset": 102,
+          "endOffset": 103,
+          "kind": "operator",
+          "id": "centroid.original.22",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "vs",
+          "startOffset": 104,
+          "endOffset": 106,
+          "kind": "identifier",
+          "id": "centroid.original.23",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": ".",
+          "startOffset": 106,
+          "endOffset": 107,
+          "kind": "punctuation",
+          "id": "centroid.original.24",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": "length",
+          "startOffset": 107,
+          "endOffset": 113,
+          "kind": "property",
+          "id": "centroid.original.25",
+          "entityId": "centroid.result.expression"
+        },
+        {
+          "text": ";",
+          "startOffset": 113,
+          "endOffset": 114,
+          "kind": "punctuation",
+          "id": "centroid.extracted.36",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "}",
+          "startOffset": 115,
+          "endOffset": 116,
+          "kind": "punctuation",
+          "id": "centroid.extracted.37",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "const",
+          "startOffset": 118,
+          "endOffset": 123,
+          "kind": "keyword",
+          "id": "centroid.original.18",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "cx",
+          "startOffset": 124,
+          "endOffset": 126,
+          "kind": "identifier",
+          "id": "centroid.original.19",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "=",
+          "startOffset": 127,
+          "endOffset": 128,
+          "kind": "operator",
+          "id": "centroid.original.20",
+          "entityId": "centroid.caller.result"
+        },
+        {
+          "text": "mean",
+          "startOffset": 129,
+          "endOffset": 133,
+          "kind": "function",
+          "id": "centroid.extracted.41",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "(",
+          "startOffset": 133,
+          "endOffset": 134,
+          "kind": "punctuation",
+          "id": "centroid.extracted.42",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": "xs",
+          "startOffset": 134,
+          "endOffset": 136,
+          "kind": "identifier",
+          "id": "centroid.extracted.43",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ")",
+          "startOffset": 136,
+          "endOffset": 137,
+          "kind": "punctuation",
+          "id": "centroid.extracted.44",
+          "entityId": "centroid.parameterized.procedure"
+        },
+        {
+          "text": ";",
+          "startOffset": 137,
+          "endOffset": 138,
+          "kind": "punctuation",
+          "id": "centroid.original.26",
+          "entityId": "centroid.caller.result"
+        }
+      ]
+    }
+  ]
+}
