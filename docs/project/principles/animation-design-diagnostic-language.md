@@ -164,7 +164,9 @@ roles at compile time; runtime validation rejects missing or replaced survivors.
 The physics issuer supplies mathematical authority, not the visual binding checker.
 
 `src/rendering/derivation-local-rewrite-motion.ts` lowers these roles through the
-existing native compositor. Collection retains the first common-term lineage;
+existing native compositor. Collection retains the first common-term lineage,
+not a fixed position: both contributors move while their combined coefficient
+grows in the same reversible phase, reaching completion together;
 only the declared cancellation pair withdraws; reassociation is a separate child.
 Direct paths are checked after compilation. Intentional contact is limited to
 equal terms consolidating or the named carrier entering its fraction bar; other

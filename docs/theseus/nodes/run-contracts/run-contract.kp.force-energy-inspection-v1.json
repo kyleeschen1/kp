@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Inspect the force-energy calculus bridge",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review repaired local collection, matched-two withdrawal and separate numerator entry at the force-to-energy section. No graph or catalogue promotion.",
+  "summary": "HUMAN_CHECKPOINT: review expanded step 1.3 at force-to-energy; coefficient grows concurrently with both contributors. Cancellation and reassociation unchanged; no graph work.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -110,6 +110,34 @@
       "scope": "Checkpoint repair final Chromium preservation",
       "checkedAt": "2026-09-16T16:41:29.449Z",
       "notes": "35 pass, including real expanded collection/cancellation/reassociation forward and reverse, static/no-JS, print, controls and earlier reader preservation. Initial smoke failed on undeclared numerator/bar contact; repaired with named binding. Next attempt connection-reset due stopped shared server; restarted and final full suite passed. Human convergence/timing review remains pending."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Concurrent consolidation repair",
+      "checkedAt": "2026-09-16T17:19:00.470Z",
+      "notes": "Full types pass; final browser selector adjustment separately test-typechecked."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/force-energy-derivation.test.ts",
+      "status": "passed",
+      "scope": "Concurrent consolidation semantic preservation",
+      "checkedAt": "2026-09-16T17:19:03.083Z",
+      "notes": "Four checks pass; source assumptions, roles, coarse/fine endpoints and static publication unchanged."
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "Final concurrency regression types",
+      "checkedAt": "2026-09-16T17:19:45.664Z",
+      "notes": "Pass after correcting merge-owner selectors: both owners share destination semantic identity, with distinct material owner IDs."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "Concurrent consolidation final Chromium preservation",
+      "checkedAt": "2026-09-16T17:20:49.287Z",
+      "notes": "35 pass. New measured-paint assertion checks motion of both contributors while coefficient grows and exact reverse within pointer tolerance. Two focused attempts failed on a test selector expecting source-only identity; corrected to distinct owners of the shared target identity. Initial motion smoke and final full run passed. Visual judgment remains pending."
     }
   ],
   "allowedWork": [
@@ -124,7 +152,7 @@
     {
       "id": "power.bridge",
       "title": "Checked calculus and local inspection",
-      "summary": "Typed local collection, exact cancellation and separate reassociation implemented; renewed visual decision required before completion or graph work.",
+      "summary": "Concurrent coefficient growth and contributor motion implemented; measured forward/reverse check passes. Await human judgment of the revised consolidation.",
       "status": "in-progress"
     }
   ]

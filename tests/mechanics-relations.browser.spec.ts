@@ -39,6 +39,42 @@ test("power bridge uses native reversible inspection with expandable product-rul
     await expect(root.locator('[data-transition-number]')).toHaveText(['1.1', '1.2', '1.3', '1.4', '1.5']);
     await expect(lens(root)).toBeEnabled();
     await root.screenshot({ path: info.outputPath("power-expanded.png") });
+    const consolidation = [];
+    for (const position of [2.65, 2.75, 2.65]) {
+      await dragTo(page, root, position);
+      const sample = await root.locator('[data-derivation-stage]').evaluate(stage => {
+        const bounds = stage.getBoundingClientRect();
+        const owners = [...stage.querySelectorAll<HTMLElement>('[data-kp-equation-material-owner-id]')];
+        // Both merge tracks carry the common target identity; keep their
+        // distinct material owner IDs rather than expecting a source-only role.
+        const contributors = owners.filter(el => el.dataset['derivationParticipant']?.endsWith('.first-term'))
+          .sort((a, b) => a.dataset['kpEquationMaterialOwnerId']!.localeCompare(b.dataset['kpEquationMaterialOwnerId']!));
+        if (contributors.length !== 2) throw new Error('Expected both collection contributors');
+        const pose = (owner: HTMLElement | undefined) => {
+          if (!owner) throw new Error(`Missing consolidation paint owner: ${JSON.stringify(owners.map(el => ({ id: el.dataset['kpEquationMaterialOwnerId'], role: el.dataset['derivationParticipant'] })))}`);
+          const box = owner.getBoundingClientRect();
+          return { x: box.x - bounds.x, width: box.width, opacity: Number(getComputedStyle(owner).opacity) };
+        };
+        return {
+          first: pose(contributors[0]),
+          second: pose(contributors[1]),
+          coefficient: pose(owners.find(el => el.dataset['derivationParticipant']?.endsWith('.two')))
+        };
+      });
+      consolidation.push(sample);
+    }
+    const [early, later, reverse] = consolidation;
+    // Measure local paint, excluding the whole-equation carry. Both contributors
+    // move while the derived coefficient grows, and rewind restores that pose.
+    for (const role of ['first', 'second'] as const)
+      expect(Math.abs(later![role].x - early![role].x)).toBeGreaterThan(.1);
+    expect(early!.coefficient.width).toBeGreaterThan(.1);
+    expect(early!.coefficient.opacity).toBeGreaterThan(0);
+    expect(later!.coefficient.width).toBeGreaterThan(early!.coefficient.width + .1);
+    for (const role of ['first', 'second', 'coefficient'] as const) {
+      expect(Math.abs(reverse![role].x - early![role].x)).toBeLessThan(.25);
+      expect(Math.abs(reverse![role].width - early![role].width)).toBeLessThan(.25);
+    }
     // Exercise the actual governed tracks in both directions, not just their
     // declared roles. Compilation also checks direct routes and paint contacts.
     for (const position of [2.55, 2.75, 3.55, 3.75, 4.55, 4.75, 3.55, 2.55]) {

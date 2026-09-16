@@ -49,9 +49,10 @@ export function projectDerivationLocalRewrite(input: Input): readonly Track[] {
         if (track.lifecycle === "eliminate" && rewrite.removedSyntax.some(role => sourceRole(track, role)))
           return projectKpNativeKatexInkWithdrawal(track, `${id}.obsolete-syntax`);
         if (track.lifecycle === "introduce" && targetRole(track, rewrite.coefficient)) {
-          // The count resolves after the equal expressions have consolidated.
-          // Reuse the profile's settlement phase, not a lesson-local delay.
-          const growth = (p: number) => optics(p).carrier.nativeSettlementProgress;
+          // Multiplicity becomes visible as both contributors converge. The
+          // anchor preserves identity, not position; growth and transit share
+          // one reversible phase rather than implying a second operation.
+          const growth = (p: number) => optics(p).carrier.transitProgress;
           return Object.freeze({ ...track, startRect: track.endRect, startPaintRect: track.endPaintRect,
             sampleProgress: () => 1, sampleMaterialScale: (p: number) => Math.max(Number.EPSILON, growth(p)),
             samplePaintPresence: (p: number) => Number(growth(p) > 0), opacityScheduleAuthority: "semantic-choreography" as const });

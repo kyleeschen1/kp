@@ -1,5 +1,16 @@
 # Force–energy: inspect the calculus bridge
 
+## Approved refinement: concurrent consolidation
+
+Both contributing terms move toward their shared native destination while the
+coefficient grows in ink, completing together. "Anchor" preserves the first
+term's identity, not a fixed position. Unchanged context moves only as native
+spacing requires. This supersedes the sequential coefficient reveal below;
+cancellation, reassociation, semantics, endpoints and reader layout are preserved.
+Use one reversible presentation repair within the existing package and ceiling;
+verify actual contributor motion and concurrent growth, then stop for visual
+review before any promotion. No new timing profile or authoring API is needed.
+
 ## Approved checkpoint repair: collection and exact cancellation
 
 The user found the initial collection arc too large and cancellation imprecise,
