@@ -57,6 +57,47 @@ test("norm scaling preserves enclosure identity through two reversible checked c
   await expect(root).toHaveAttribute("data-derivation-progress", "1");
 });
 
+test("scope penetration follows straight realized paths without clearance detours", async ({ page }, info) => {
+  const root = await ready(page);
+  const points: { x: number; y: number }[] = [];
+  for (const position of [1.70, 1.73, 1.76, 1.79, 1.82, 1.85, 1.88]) {
+    await dragTo(page, root, position);
+    const child = root.locator('[data-derivation-child]:not([hidden])[data-child-operation="square-quotient"]');
+    const power = child.locator('[data-kp-equation-material-owner-id][data-derivation-participant$=".power-bottom"]');
+    await expect(power).toHaveCount(1);
+    const point = await power.evaluate(el => {
+      const box = el.getBoundingClientRect();
+      const stage = el.closest('[data-derivation-child]')!.getBoundingClientRect();
+      return { x: box.x + box.width / 2 - stage.x, y: box.y + box.height / 2 - stage.y };
+    });
+    points.push(point);
+    if (position === 1.82) await root.screenshot({ path: info.outputPath("scope-penetration.png") });
+  }
+  const first = points[0]!, last = points.at(-1)!;
+  const dx = last.x - first.x, dy = last.y - first.y, length = Math.hypot(dx, dy);
+  expect(length).toBeGreaterThan(10);
+  let previous = -1;
+  for (const point of points) {
+    // Measure actual DOM paint-owner travel, subtracting whole-scene carry.
+    // A correct routing flag alone did not catch the previous regression.
+    expect(Math.abs((point.x - first.x) * dy - (point.y - first.y) * dx) / length).toBeLessThan(.75);
+    const along = ((point.x - first.x) * dx + (point.y - first.y) * dy) / (length * length);
+    expect(along).toBeGreaterThanOrEqual(previous - .001);
+    previous = along;
+  }
+  await dragTo(page, root, 1.79);
+  const child = root.locator('[data-derivation-child]:not([hidden])[data-child-operation="square-quotient"]');
+  const power = child.locator('[data-kp-equation-material-owner-id][data-derivation-participant$=".power-bottom"]');
+  const reverse = await power.evaluate(el => {
+    const box = el.getBoundingClientRect(), stage = el.closest('[data-derivation-child]')!.getBoundingClientRect();
+    return { x: box.x + box.width / 2 - stage.x, y: box.y + box.height / 2 - stage.y };
+  });
+  // Pointer coordinates are rounded by the browser; compare within a quarter
+  // pixel rather than imposing finer precision than the input mechanism.
+  expect(Math.abs(reverse.x - points[3]!.x)).toBeLessThan(.25);
+  expect(Math.abs(reverse.y - points[3]!.y)).toBeLessThan(.25);
+});
+
 test("fluent physics cancellation keeps its carriers, omits identity stops and offers local explanation by default", async ({ page }, info) => {
   const root = await ready(page), stage = root.locator("[data-derivation-stage]");
   const errors: string[] = [];

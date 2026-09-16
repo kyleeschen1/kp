@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Norm scaling and quotient-square composition",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review revised local quotient-square motion in step 2 before pressure/promotion. Existing comparison-mode gap remains pending.",
+  "summary": "HUMAN_CHECKPOINT: review direct inward quotient-power branching and rule crossing; old arc-producing candidate superseded.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,7 +30,7 @@
   "slices": [
     {
       "id": "norm.exemplar",
-      "summary": "Revised local-scope exemplar ready for HUMAN_CHECKPOINT. Large quotient arcs removed by typed scope versus operand distinction; later pressure remains pending.",
+      "summary": "Direct penetration candidate verified in canonical browser; renewed HUMAN_CHECKPOINT. Earlier apparent approval was withdrawn before pressure; norm.pressure remains planned.",
       "status": "in-progress"
     },
     {

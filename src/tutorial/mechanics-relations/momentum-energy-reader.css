@@ -70,6 +70,7 @@
 .energy-derivation-stage > [data-derivation-child] { top: 0; }
 .energy-derivation-endpoint { position: absolute; left: 0; top: 0; }
 .energy-derivation-stage [data-kp-editor-equation-material-layer] { position: absolute; inset: 0; pointer-events: none; }
+.energy-derivation-stage [data-kp-equation-material-foreground-occlusion-role="occluder"] { z-index: 2; isolation: isolate; }
 /* A presentation mask, not a new algebra or paint owner. Keep measurement
  * geometry intact while the permanent equations supply invariant context. */
 .energy-derivation-stage [data-derivation-inspection-context],

@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: local scope branching replaces quotient distribution arcs. Review step 2; then second-caller pressure and saved code, force-energy, graph queue.",
+  "summary": "HUMAN_CHECKPOINT at mechanics-relations step 2: direct penetration candidate. After acceptance resume pressure, compatibility repair, and preserved code-force-energy-graph queue.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -969,6 +969,20 @@
       "scope": "scope-branching-exemplar",
       "checkedAt": "2026-09-16T02:27:38.679Z",
       "notes": "Clean full rerun passes app, node, tests, Svelte and domains. Initial failures identified union-erasing Omit and widened boolean; fixed with distributive roles and literal preservation. Architecture and production build also pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'scope penetration|norm scaling|scalar compact inspection|expanded drag follows'",
+      "status": "passed",
+      "scope": "direct-penetration-exemplar",
+      "checkedAt": "2026-09-16T02:42:37.151Z",
+      "notes": "Four Chromium checks pass. New actual DOM trajectory test measures straightness, monotonic travel and reverse parity. Explicit path-only trial first failed on parenthesis and fraction-rule contacts; repaired through existing syntax withdrawal and specific reciprocal foreground crossing. Initial reverse tolerance corrected from .05px to .25px for measured .078px pointer rounding. Prior legacy comparison gap remains."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "direct-penetration-exemplar",
+      "checkedAt": "2026-09-16T02:42:58.436Z",
+      "notes": "Full types passed; after final guard/test edits, test typecheck also passes. Focused unit cohort 36 passes and production build passes with existing chunk warnings. No complete browser or cross-browser certification claimed."
     }
   ],
   "progress": {

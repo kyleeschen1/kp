@@ -55,6 +55,27 @@ intelligible. Preserve the domain proof and compositor, repair the decomposition
 
 ### Accepted scope-branching amendment
 
+The later apparent approval was withdrawn before pressure work: arcs remained.
+Disabling copy fan-out only disabled one sampler; the protected-transit collision
+solver still introduced detours around the departing right parenthesis and the
+fraction rule. The approved repair is direct inward penetration, not a smaller
+distribution arc. Explicit direct routes now constrain scope tracks. Existing ink
+withdrawal clears obsolete parentheses before shared carrier transit; a reciprocal,
+bounded foreground-occlusion declaration permits only the denominator power to
+cross its own fraction rule. No backing plate or blanket collision waiver is used.
+The full-context canonical host, domain proof and distribution motifs remain
+unchanged; this is one reversible exemplar commit, not catalogue promotion.
+
+A post-composition guard rejects reintroduced clearance detours. A browser test
+measures actual denominator-power travel relative to the moving stage, checks
+collinearity and monotone progress, and verifies reverse sampling. This replaces
+the previous insufficient inference that the routing flag proved direct motion.
+The initial explicit-path-only experiment correctly failed collision inspection;
+that failure identified the two obstacles above. The first reverse test used an
+overprecise .05px bound and observed .078px pointer rounding; its tolerance is now
+.25px, while the separate straightness bound remains .75px. Visual review is still
+required before norm.pressure or the saved queue resumes.
+
 The initial large arcs were not accepted. User approved a more general rule:
 animate mathematical structure using the shortest clear motion; split lineage
 does not itself authorize distribution choreography. Scope propagation (quotient

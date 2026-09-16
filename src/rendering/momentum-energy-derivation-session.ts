@@ -10,7 +10,8 @@ import { easedProgressBetweenSemanticBeat, linearEquationDemoBeatTimeline } from
 import { createDerivationInspectionComposition } from "../animation/derivation-inspection-composition.ts";
 import { createKpNativeKatexCompoundScenePlan } from "./native-katex-compound-scene-plan.ts";
 import { projectKpNativeKatexInkWithdrawal } from "./native-katex-carrier-preserving-simplification-motion.ts";
-import { sampleKpNativeKatexCarrierPreservingSimplificationOptics } from "./native-katex-carrier-preserving-simplification-profile.ts";
+import { sampleKpNativeKatexCarrierPreservingSimplificationOptics, kpNativeKatexCarrierPreservingSimplificationOpticalProfile } from "./native-katex-carrier-preserving-simplification-profile.ts";
+import { planKpEquationMotionPathBetweenPoints } from "./equation-motion-path-planner.ts";
 
 type InspectionFocus = { readonly source: readonly string[]; readonly target: readonly string[]; readonly extent?: "participants" | "equation";
   readonly records?: readonly { readonly root: HTMLElement; readonly entityIds: readonly string[] }[] };
@@ -92,7 +93,31 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
         // Parentheses are explicit grouping syntax, never successors of norm
         // bars or the power. Reuse ink withdrawal/reception, not glyph matching.
         const removed = new Set(before.map(atom => atom.id)), added = new Set(after.map(atom => atom.id));
+        const scope = move.split && move.branching === "scope-propagation";
+        const roleTrack = (role: string) => tracks.find(track => target.atoms.some(atom =>
+          atom.id === track.targetAtomId && atom.semanticEntityId === tid(role)));
+        const denominatorPower = scope ? roleTrack("power-bottom") : undefined;
+        const fractionRule = scope ? roleTrack("rule") : undefined;
+        if (scope && (!denominatorPower || !fractionRule)) throw new Error("Scope penetration requires a denominator power and fraction rule");
+        const transit = (p: number) => sampleKpNativeKatexCarrierPreservingSimplificationOptics(p).carrier.transitProgress;
         return tracks.map(track => {
+          const crossing = scope && (track === denominatorPower || track === fractionRule) ? {
+            intentionalForegroundOcclusion: Object.freeze({ id: `scope.${move.id}.through-rule`,
+              role: track === denominatorPower ? "occluder" as const : "occluded" as const,
+              counterpartTrackId: (track === denominatorPower ? fractionRule : denominatorPower)!.id,
+              progressWindow: kpNativeKatexCarrierPreservingSimplificationOpticalProfile.carrierTransit })
+          } : {};
+          if (scope && (track.lifecycle === "split" || track.lifecycle === "persist")) {
+            // Disabling fan-out does not constrain the downstream collision
+            // planner. Declare the direct route so it cannot invent an arc.
+            const center = (r: typeof track.startRect) => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+            const path = planKpEquationMotionPathBetweenPoints({ id: `scope.${track.id}`,
+              start: center(track.startRect), end: center(track.endRect), variants: ["direct"] });
+            // Withdraw obsolete grouping before transit. The denominator
+            // power deliberately crosses its own rule in front, not around
+            // the fraction; only that reciprocal pair permits contact.
+            return Object.freeze({ ...track, ...crossing, motionPath: path.selected, sampleProgress: transit });
+          }
           if (track.lifecycle === "eliminate" && track.sourceAtomId && removed.has(track.sourceAtomId))
             return projectKpNativeKatexInkWithdrawal(track, `syntax.${move.id}`);
           if (track.lifecycle === "introduce" && track.targetAtomId && added.has(track.targetAtomId)) {
@@ -166,6 +191,9 @@ async function mountDerivationLeaf(stage: HTMLElement, compiled: EnergyDerivatio
     // is reserved for operand-to-term travel, not inferred from split lineage.
     copyFanOutRouting: move.split && move.branching === "operand-distribution" });
   if (plan.disposition.mode !== "motion") throw new Error(`Energy derivation requires repair: ${plan.disposition.reason}`);
+  if (move.split && move.branching === "scope-propagation" && plan.tracks.some(track =>
+    track.motionPath !== undefined && track.motionPath.variant !== "direct"))
+    throw new Error("Scope propagation cannot acquire a downstream clearance detour");
   const canonical = createKpCanonicalNativeKatexSceneSession(plan);
   // Resolve semantic targets once; material paint stays owned by the canonical
   // compositor. Its correlations, not glyph spelling or travel distance, bind
