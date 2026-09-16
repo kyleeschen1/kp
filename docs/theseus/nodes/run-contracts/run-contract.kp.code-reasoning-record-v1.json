@@ -1,0 +1,41 @@
+{
+  "id": "run-contract.kp.code-reasoning-record-v1",
+  "kind": "run-contract",
+  "title": "Persistent code reasoning exemplar",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: /experiments/code-reasoning/; judge reading versus local inspection. code.integrate awaits acceptance; no shared abstraction promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-code-reasoning-record.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:code-reasoning",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Bounded code host and Article through existing language authority native renderer and clock; two hours including twenty-five minute reserve"
+  ],
+  "disallowedWork": [
+    "No new language refactor renderer or universal abstraction; stop for exemplar review before integration"
+  ],
+  "goal": "Read and locally inspect the existing checked TypeScript refactor without losing its permanent argument",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "code.exemplar",
+      "summary": "Implemented and verified; HUMAN_CHECKPOINT for optional local code inspection and permanent before/after reading. Do not mark complete until visual acceptance.",
+      "status": "in-progress"
+    },
+    {
+      "id": "code.integrate",
+      "status": "planned"
+    }
+  ]
+}

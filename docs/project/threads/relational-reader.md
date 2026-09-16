@@ -5,6 +5,12 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+User approved the next implementation: [persistent code reasoning](2026-09-16-code-reasoning-record.md),
+the bounded reader.l4 successor. Its proposal owns scope and visual review;
+`run-contract.kp.code-reasoning-record-v1` owns progress. Preserve the existing
+TypeScript source authority/native renderer and both permanent code endpoints.
+Force/energy and graph remain next, not part of this code checkpoint.
+
 The direct inward quotient-square motion and restored handle are now visually
 accepted (“much better. proceed”). The [norm repair record](2026-09-16-norm-scaling-composition.md)
 owns its compatibility and pressure conclusions; Theseus owns integration

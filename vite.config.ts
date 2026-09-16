@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 import { kpViteAuthoringMarketPreview } from "./scripts/vite-authoring-market-preview.ts";
 import { kpViteAuthoringStructuralPreview } from "./scripts/vite-authoring-structural-preview.ts";
 import { kpViteMechanicsRelations } from "./scripts/vite-mechanics-relations.ts";
+import { kpViteCodeReasoning } from "./scripts/vite-code-reasoning.ts";
 
 import {
   kpProductionDevelopmentErasurePlugin
@@ -155,6 +156,7 @@ export default defineConfig({
   },
   plugins: [
     kpViteMechanicsRelations(projectRoot),
+    kpViteCodeReasoning(projectRoot),
     {
       name: "kp-canonical-tax-static-reading",
       transformIndexHtml: {
@@ -336,6 +338,7 @@ export default defineConfig({
     entries: {
       mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
       scalarCancellation: resolve(projectRoot, "experiments/scalar-cancellation/index.html"),
+      codeReasoning: resolve(projectRoot, "experiments/code-reasoning/index.html"),
       mechanicsRelationsStatic: resolve(projectRoot, "experiments/mechanics-relations/static.html"),
       canonicalSupplyTax: resolve(projectRoot, "experiments/kinetic-figure/supply-tax/index.html"),
       ...Object.fromEntries(kpProductionCompatibilityBuildEntries.map((entry) => [

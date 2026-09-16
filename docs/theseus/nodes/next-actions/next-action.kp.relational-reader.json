@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "Norm repair COMPLETE. Resume bounded code-transfer proposal reader.l4 from September 15 next-step review; preserve existing code semantic authority and renderer. Then force/energy and graph. Phone and v2 remain parked.",
+  "summary": "HUMAN_CHECKPOINT: bounded code reasoning exemplar ready at /experiments/code-reasoning/. Approved scope in docs/project/threads/2026-09-16-code-reasoning-record.md. After acceptance finish code.integrate then propose force/energy and graph.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -1032,6 +1032,41 @@
       "scope": "norm.pressure",
       "checkedAt": "2026-09-16T03:06:25.022Z",
       "notes": "Clean final cohort: 15 pass across Chromium Firefox WebKit. Initial run 14 passed and one Firefox out-of-window synthetic-drag failure; repaired harness viewport, no production gesture change."
+    },
+    {
+      "command": "npm run visual:code-reasoning",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T03:23:15.318Z",
+      "notes": "Final unchanged Chromium run: four checks pass. Source/print/no-JS, reversible native poses, actual pointer hold, keyboard playback, disclosure, reduced motion and stale-source rejection. Initial harness corrections and live-edit run failure documented in proposal."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/code-reasoning.test.ts tests/typescript-refactor-token-theater.test.ts tests/typescript-free-shipping-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T03:23:16.556Z",
+      "notes": "11 tests pass. No new dependency; canonical semantic and motion owners unchanged."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T03:23:17.598Z",
+      "notes": "Dependency direction, semantic ownership and governed construction gates pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T03:23:45.893Z",
+      "notes": "New route builds successfully with permanent source and lazy inspection entry. Existing unrelated large-chunk warnings remain; detailed production closure is postapproval integration work."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T03:23:46.951Z",
+      "notes": "Final full app node test Svelte and domain typecheck passes after removing the unavailable test-only jsdom import."
     }
   ],
   "progress": {

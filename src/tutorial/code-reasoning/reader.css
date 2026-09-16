@@ -1,0 +1,35 @@
+.code-reasoning-reader { max-width: 52rem; margin: auto; padding: 2rem 1.25rem 5rem; font-family: var(--kp-focus-card-passage-font, Georgia, "Times New Roman", serif); line-height: 1.65; }
+.code-reasoning-reader nav { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; margin-bottom: 3rem; }
+.code-reasoning-reader h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.2; }
+.code-reasoning-reader h2 { margin-top: 2rem; font-size: 1.3rem; }
+.code-reasoning-reader p { max-width: 42rem; }
+.code-reasoning-reader [hidden] { display: none !important; }
+.code-reasoning-reader summary { cursor: pointer; padding-block: .65rem; }
+.code-record { padding: 1rem; margin-block: 1rem; background: white; border-inline-start: 2px solid #c1cbd2; overflow-x: auto; white-space: pre; }
+.code-inspection { margin-block: 1.25rem; border-block: 1px solid #b6c9d1; }
+.code-inspection > summary { color: #205b74; }
+.code-inspection-label { font-size: .9rem; color: #52616d; }
+/* Only the host arrangement changes; native code geometry and sampled motion
+   remain owned by the established TypeScript renderer. */
+.code-inspection .kp-typescript-refactor { width: 100%; min-height: 0; box-shadow: none; }
+.code-inspection .kp-typescript-refactor__file { display: none; }
+.code-inspection .kp-typescript-refactor__narration { grid-row: 1; border-top: 0; border-bottom: 1px solid var(--kp-typescript-paint-border-divider); }
+.code-inspection .kp-typescript-refactor__revision { white-space: pre; }
+.code-inspection [data-kp-typescript-accessible-state] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.code-controls { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding-block: .75rem; }
+.code-controls button { color: inherit; background: transparent; border: 1px solid #b6c9d1; border-radius: .25rem; padding: .35rem .7rem; min-height: 2.75rem; cursor: pointer; }
+.code-controls button:disabled { opacity: .45; cursor: default; }
+.code-controls output { margin-left: auto; font-variant-numeric: tabular-nums; }
+.code-controls input { width: 100%; min-height: 2.75rem; accent-color: #205b74; }
+.code-reasoning-reader :focus-visible { outline: 2px solid #205b74; outline-offset: 3px; }
+.code-justification { margin-top: 1.5rem; }
+.code-justification table { width: 100%; border-collapse: collapse; text-align: left; font-size: .9rem; }
+.code-justification th, .code-justification td { padding: .5rem; border-bottom: 1px solid #ccd4db; }
+@media print {
+  .code-reasoning-reader { max-width: none; padding: 0; }
+  .code-reasoning-reader nav, .code-inspection { display: none !important; }
+  .code-record { white-space: pre-wrap; overflow: visible; break-inside: avoid; }
+  .code-justification::details-content { content-visibility: visible; display: block; }
+  .code-justification > * { display: block; }
+  .code-justification table { display: table; }
+}

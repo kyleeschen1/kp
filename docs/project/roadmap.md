@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current successor: [persistent code reasoning](threads/2026-09-16-code-reasoning-record.md),
+approved for implementation after the completed norm repair. Use the established
+TypeScript refactor as a bounded second-medium test, with permanent before/after
+source and local optional inspection. Human review precedes integration or
+shared UI abstraction. Then resume force/energy and graph in the saved order.
+The norm and dependency paragraphs below retain checkpoint provenance.
+
 First priority: [norm scaling and quotient-square composition](threads/2026-09-16-norm-scaling-composition.md),
 approved before continuing the saved queue. Use unambiguous vector norms and
 compose checked homogeneity then quotient squaring; review one canonical
