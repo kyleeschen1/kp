@@ -27,10 +27,11 @@ export function compileCodeReasoningPublication(markdown: string) {
     focusSelectorIds: first.focusSelectorIds, accessibleDescription: asset.accessibility.title, theme: "light" });
   const inspection = `<details class="code-inspection" data-code-inspection hidden>
     <summary>Inspect where the rule goes</summary>
-    <p class="code-inspection-label">Local inspection · drag to hold any moment; arrows move between beats</p>
-    <div data-code-stage-host></div><template data-code-stage-template>${stage}</template>
+    <p class="code-inspection-label">Inspecting the code above · the original is always available</p>
+    <template data-code-stage-template>${stage}</template>
     <div class="code-controls"><button type="button" data-code-previous disabled>Previous</button>
       <button type="button" data-code-play disabled>Play</button><button type="button" data-code-next disabled>Next</button>
+      <button type="button" data-code-original aria-pressed="false" disabled>Show original</button>
       <output data-code-position>1 / ${asset.score.stages.length}</output>
       <input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect the refactor" data-code-seek disabled>
     </div>
@@ -44,7 +45,9 @@ export function compileCodeReasoningPublication(markdown: string) {
     const body = markdownHtml(block.markdown);
     if (block.id === "why") return `<details class="code-justification" id="why"><summary>Why is this allowed? What has been checked?</summary>${body}
       <table><caption>Declared-case evidence · before and after</caption><thead><tr><th>Total</th><th>Cost</th><th>Message</th><th>After</th></tr></thead><tbody>${cases}</tbody></table></details>`;
-    return `<section id="${attribute(block.id)}">${body}${block.id === "before" || block.id === "after" ? endpoint(block.id) : block.id === "transition" ? inspection : ""}</section>`;
+    return `<section id="${attribute(block.id)}">${body}${block.id === "before"
+      ? `<div class="code-source-slot" data-code-source-slot><span class="code-source-label" data-code-source-label hidden>Inspection · original available below</span>${endpoint("before")}<div data-code-stage-host></div></div>${inspection}`
+      : block.id === "after" ? endpoint("after") : ""}</section>`;
   }).join("\n");
   return Object.freeze({ article, pin, html: `<article data-code-reasoning data-code-source-pin="${attribute(pin)}">${html}</article>` });
 }

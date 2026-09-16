@@ -4,7 +4,7 @@
   "title": "Deliver the momentum-energy relational reader",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: bounded code reasoning exemplar ready at /experiments/code-reasoning/. Approved scope in docs/project/threads/2026-09-16-code-reasoning-record.md. After acceptance finish code.integrate then propose force/energy and graph.",
+  "summary": "HUMAN_CHECKPOINT: code source-slot revision, not earlier embedded demo. Original comparison and closing restore record without losing progress. code.integrate remains after acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -1067,6 +1067,27 @@
       "scope": "code.exemplar",
       "checkedAt": "2026-09-16T03:23:46.951Z",
       "notes": "Final full app node test Svelte and domain typecheck passes after removing the unavailable test-only jsdom import."
+    },
+    {
+      "command": "npm run visual:code-reasoning",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T04:48:08.594Z",
+      "notes": "Revised source-slot candidate: four Chromium checks pass, including same-slot original comparison without reflow or seeking, restore on close, reverse and pointer control, print no-JS and fail-closed preservation. Screenshot inspected; visual approval pending."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/code-reasoning.test.ts",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T04:48:09.796Z",
+      "notes": "Three publication/source-fidelity checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "code.exemplar",
+      "checkedAt": "2026-09-16T04:48:27.809Z",
+      "notes": "Full types pass for source-slot inspection revision."
     }
   ],
   "progress": {

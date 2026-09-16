@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Persistent code reasoning exemplar",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: /experiments/code-reasoning/; judge reading versus local inspection. code.integrate awaits acceptance; no shared abstraction promotion.",
+  "summary": "HUMAN_CHECKPOINT: source-slot inspection replaces embedded demo; review /experiments/code-reasoning/ before integration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,7 +30,7 @@
   "slices": [
     {
       "id": "code.exemplar",
-      "summary": "Implemented and verified; HUMAN_CHECKPOINT for optional local code inspection and permanent before/after reading. Do not mark complete until visual acceptance.",
+      "summary": "Revised source-slot candidate verified; HUMAN_CHECKPOINT for original versus inspection view switch. Existing native animation unchanged.",
       "status": "in-progress"
     },
     {

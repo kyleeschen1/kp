@@ -4,12 +4,25 @@ if (root) {
   let session: ReturnType<typeof import("./inspection-session.ts").mountCodeReasoningInspection> | undefined;
   let loading: Promise<void> | undefined;
   let disposed = false;
+  const reading = () => {
+    delete root.dataset["codeView"];
+    root.querySelector<HTMLElement>("[data-code-source-label]")!.hidden = true;
+  };
+  const inspecting = () => {
+    root.dataset["codeView"] = "inspection";
+    root.querySelector<HTMLElement>("[data-code-source-label]")!.hidden = false;
+    root.querySelector<HTMLElement>("[data-code-source-label]")!.textContent = "Inspection · original available below";
+    const original = root.querySelector<HTMLButtonElement>("[data-code-original]")!;
+    original.textContent = "Show original";
+    original.setAttribute("aria-pressed", "false");
+  };
   const open = () => {
-    if (!inspection.open) { session?.pause(); return; }
+    if (!inspection.open) { session?.pause(); reading(); return; }
+    if (session) inspecting();
     loading ??= import("./inspection-session.ts").then(module => {
       if (disposed) return;
       session = module.mountCodeReasoningInspection(root);
-      if (!inspection.open) session.pause();
+      if (!inspection.open) session.pause(); else inspecting();
     }).catch(error => {
       if (disposed) return;
       const message = root.querySelector<HTMLElement>("[data-code-error]")!;
@@ -18,6 +31,7 @@ if (root) {
       root.querySelector<HTMLElement>(".code-controls")!.hidden = true;
       root.querySelector<HTMLElement>("[data-code-stage-host]")!.replaceChildren();
       root.dataset["codeReady"] = "repair";
+      reading();
     });
   };
   inspection.hidden = false;

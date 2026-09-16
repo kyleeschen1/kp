@@ -6,16 +6,28 @@
 .code-reasoning-reader [hidden] { display: none !important; }
 .code-reasoning-reader summary { cursor: pointer; padding-block: .65rem; }
 .code-record { padding: 1rem; margin-block: 1rem; background: white; border-inline-start: 2px solid #c1cbd2; overflow-x: auto; white-space: pre; }
-.code-inspection { margin-block: 1.25rem; border-block: 1px solid #b6c9d1; }
+.code-inspection { margin-block: .25rem 1.25rem; }
 .code-inspection > summary { color: #205b74; }
 .code-inspection-label { font-size: .9rem; color: #52616d; }
 /* Only the host arrangement changes; native code geometry and sampled motion
    remain owned by the established TypeScript renderer. */
-.code-inspection .kp-typescript-refactor { width: 100%; min-height: 0; box-shadow: none; }
-.code-inspection .kp-typescript-refactor__file { display: none; }
-.code-inspection .kp-typescript-refactor__narration { grid-row: 1; border-top: 0; border-bottom: 1px solid var(--kp-typescript-paint-border-divider); }
-.code-inspection .kp-typescript-refactor__revision { white-space: pre; }
-.code-inspection [data-kp-typescript-accessible-state] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.code-source-slot { display: grid; margin-block: 1rem; min-width: 0; }
+.code-source-slot > .code-record, .code-source-slot > [data-code-stage-host] { grid-area: 2 / 1; margin: 0; min-width: 0; }
+.code-source-slot > [data-code-stage-host] { display: none; }
+.code-source-label { grid-area: 1 / 1; font-size: .85rem; color: #205b74; }
+[data-code-view="inspection"] .code-source-slot > [data-code-stage-host],
+[data-code-view="original"] .code-source-slot > [data-code-stage-host] { display: block; }
+/* The source node and its accessible text stay intact. A labeled original-view
+   control recovers it without seeking or layering duplicate ink over the code. */
+[data-code-view="inspection"] .code-source-slot > .code-record { opacity: 0; pointer-events: none; }
+[data-code-view="original"] .code-source-slot > [data-code-stage-host] { visibility: hidden; }
+.code-source-slot .kp-typescript-refactor { width: 100%; min-height: 0; box-shadow: none; border: 0; border-inline-start: 2px solid #205b74; background: white; display: block; }
+.code-source-slot .kp-typescript-refactor__file,
+.code-source-slot .kp-typescript-refactor__narration { display: none; }
+.code-source-slot .kp-typescript-refactor__source { padding: 1rem; }
+.code-source-slot .kp-typescript-refactor__revision { white-space: pre; align-self: start; }
+.code-source-slot .kp-typescript-refactor__token-theater { align-self: start; }
+.code-source-slot [data-kp-typescript-accessible-state] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .code-controls { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; padding-block: .75rem; }
 .code-controls button { color: inherit; background: transparent; border: 1px solid #b6c9d1; border-radius: .25rem; padding: .35rem .7rem; min-height: 2.75rem; cursor: pointer; }
 .code-controls button:disabled { opacity: .45; cursor: default; }
@@ -28,6 +40,8 @@
 @media print {
   .code-reasoning-reader { max-width: none; padding: 0; }
   .code-reasoning-reader nav, .code-inspection { display: none !important; }
+  .code-source-slot > [data-code-stage-host], .code-source-label { display: none !important; }
+  .code-source-slot > .code-record { opacity: 1 !important; pointer-events: auto; }
   .code-record { white-space: pre-wrap; overflow: visible; break-inside: avoid; }
   .code-justification::details-content { content-visibility: visible; display: block; }
   .code-justification > * { display: block; }

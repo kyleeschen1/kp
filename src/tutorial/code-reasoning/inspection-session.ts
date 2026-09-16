@@ -21,6 +21,7 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   const play = required<HTMLButtonElement>("[data-code-play]");
   const previous = required<HTMLButtonElement>("[data-code-previous]");
   const next = required<HTMLButtonElement>("[data-code-next]");
+  const original = required<HTMLButtonElement>("[data-code-original]");
   const position = required<HTMLOutputElement>("[data-code-position]");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
   const program = createKpTypeScriptRefactorTokenProgram(asset.semantics);
@@ -50,6 +51,7 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   const off = clock.subscribe(render);
   const pause = () => { clock.pause(); render(); };
   const move = (direction: "forward" | "rewind") => {
+    resumeInspection();
     const p = clock.getSnapshot().progress;
     const target = direction === "forward" ? stops.find(stop => stop > p + .0001) ?? 1
       : stops.filter(stop => stop < p - .0001).at(-1) ?? 0;
@@ -59,10 +61,25 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   };
   const abort = new AbortController();
   const options = { signal: abort.signal };
-  seek.addEventListener("input", () => clock.seek(Number(seek.value)), options);
+  const resumeInspection = () => {
+    root.dataset["codeView"] = "inspection";
+    required<HTMLElement>("[data-code-source-label]").textContent = "Inspection · original available below";
+    original.setAttribute("aria-pressed", "false");
+    original.textContent = "Show original";
+  };
+  original.addEventListener("click", () => {
+    pause();
+    const show = root.dataset["codeView"] !== "original";
+    root.dataset["codeView"] = show ? "original" : "inspection";
+    required<HTMLElement>("[data-code-source-label]").textContent = show ? "Original · inspection paused" : "Inspection · original available below";
+    original.setAttribute("aria-pressed", String(show));
+    original.textContent = show ? "Return to inspection" : "Show original";
+  }, options);
+  seek.addEventListener("input", () => { resumeInspection(); clock.seek(Number(seek.value)); }, options);
   previous.addEventListener("click", () => move("rewind"), options);
   next.addEventListener("click", () => move("forward"), options);
   play.addEventListener("click", () => {
+    resumeInspection();
     if (clock.getStatus() === "playing") { pause(); return; }
     if (clock.getSnapshot().progress === 1) clock.seek(0);
     // Reduced motion keeps explicit access to each pedagogical endpoint.
@@ -74,7 +91,7 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
     const key = event as KeyboardEvent;
     if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(key.key)) return;
     key.preventDefault();
-    if (key.key === "Home" || key.key === "End") clock.seek(key.key === "Home" ? 0 : 1);
+    if (key.key === "Home" || key.key === "End") { resumeInspection(); clock.seek(key.key === "Home" ? 0 : 1); }
     else move(key.key === "ArrowRight" ? "forward" : "rewind");
   }, options);
   reduced.addEventListener("change", pause, options);
@@ -86,6 +103,7 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   render();
   seek.disabled = false;
   play.disabled = false;
+  original.disabled = false;
   root.dataset["codeReady"] = "true";
   return { pause, dispose() { abort.abort(); observer.disconnect(); off(); clock.dispose(); host.replaceChildren(); delete root.dataset["codeReady"]; } };
 }

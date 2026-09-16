@@ -24,12 +24,25 @@ test("persistent code survives continuous inspection, reverse, disclosure and pr
   // identity, paint attributes and text must still resolve to the same pose.
   const tokenPose = () => tokens.locator("[data-kp-typescript-token-id]").evaluateAll(nodes => nodes.map(node => node.outerHTML).sort());
   const pose = await tokenPose();
-  await root.locator("[data-code-inspection]").screenshot({ path: info.outputPath("inspection.png") });
+  await root.locator("#before").screenshot({ path: info.outputPath("inspection.png") });
   await sample(.73); await sample(.42);
+  expect(await tokenPose()).toEqual(pose);
+  await expect(root.locator("#before [data-code-stage-host]")).toBeVisible();
+  await expect(root.locator("#transition [data-code-stage-host]")).toHaveCount(0);
+  const frame = await root.locator("[data-code-source-slot]").boundingBox();
+  await page.getByRole("button", { name: "Show original", exact: true }).click();
+  await expect(root).toHaveAttribute("data-code-view", "original");
+  await expect(root.locator("[data-code-stage-host]")).toBeHidden();
+  await expect(root).toHaveAttribute("data-code-progress", "0.42");
+  expect(await root.locator("[data-code-source-slot]").boundingBox()).toEqual(frame);
+  await page.getByRole("button", { name: "Return to inspection", exact: true }).click();
+  await expect(root).toHaveAttribute("data-code-view", "inspection");
   expect(await tokenPose()).toEqual(pose);
   await page.getByText("Why is this allowed? What has been checked?", { exact: true }).click();
   await expect(root).toHaveAttribute("data-code-progress", "0.42");
   await page.getByText("Inspect where the rule goes", { exact: true }).click();
+  await expect(root.locator("[data-code-stage-host]")).toBeHidden();
+  await expect(root.locator('[data-code-record="before"]')).toHaveCSS("opacity", "1");
   await page.getByText("Inspect where the rule goes", { exact: true }).click();
   await expect(root).toHaveAttribute("data-code-progress", "0.42");
   await page.mouse.wheel(0, 200);

@@ -59,6 +59,29 @@ After both packages, return to force/energy (reader.l5), then graph (reader.l6).
 
 ## Exemplar review packet
 
+### Accepted revision: inspect the source, not an embedded demo
+
+User found the first candidate useful but correctly observed three competing
+copies: static before, old animation in a panel, static after. The agreed repair
+keeps the canonical renderer/authority but puts inspection in the before block's
+own slot, removes the boxed stage/file header/repeated narration, and retains
+interleaved explanatory prose. The original node and source remain intact, with
+an always-available **Show original** comparison that pauses without seeking;
+return restores the same pose. Closing inspection restores the normal reading
+layout. The after record is untouched. This is an explicit source/inspection
+view switch, not simultaneous visibility of two superposed programs. Judge that
+tradeoff; it is not yet a general document policy. No motion or semantic changes,
+one host-presentation rollback commit, same resource ceiling and visual gate.
+Earlier embedded-panel instructions below describe the first candidate.
+
+Revision smoke evidence: all four Chromium checks pass, including source-slot
+placement, unchanged frame dimensions when comparing the original, exact held
+pose on return, restoration on close, and original-source printing during active
+inspection. Three publication tests pass; the screenshot was inspected. No
+semantic artifact, motion plan, renderer or clock implementation was changed.
+The original source is accessible throughout but visually switched, not ghosted
+under the moving program. Human judgment of this tradeoff remains pending.
+
 Open <http://localhost:8000/experiments/code-reasoning/>. Read the unanimated
 argument, then open **Inspect where the rule goes**. Drag either way and hold an
 interior; Previous/Next and left/right keys play to pedagogical stops. Home/End
