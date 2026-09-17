@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.equation-rail-v1",
+  "kind": "run-contract",
+  "title": "Refine the equation inspection rail",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review energy-from-momentum rail at rest, during first/second moves and on return. Scoped implementation and verification finished; aesthetics await acceptance before a graph caller.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-equation-rail-refinement.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"rail refinement|font resizing|one held equation|equation endpoint ink\"",
+      "status": "passed",
+      "scope": "equation-rail-discovery",
+      "checkedAt": "2026-09-17T01:27:06.238Z",
+      "notes": "Six final Chromium checks pass. Captures reviewed at dock, during inspection and with keyboard forced colors. Checks cover centered 44px hit area, paint-only record stability, reversal, docking, font changes and endpoint ink. Earlier focused expanded cross-step scene reuse also passed. Visual quality awaits human judgment; no graph rollout."
+    },
+    {
+      "command": "npm run typecheck; npm run typecheck:tests; npm run build:bundle",
+      "status": "passed",
+      "scope": "equation-rail-types-build",
+      "checkedAt": "2026-09-17T01:27:08.058Z",
+      "notes": "Full types pass; final test types and final bundle build pass. Existing global chunk-size warnings remain. CSS import placement corrected before final capture/build."
+    }
+  ],
+  "allowedWork": [
+    "Energy equation rail presentation, existing reader projection, focused regression and visual checkpoint; two-hour ceiling with final-quarter closeout reserve"
+  ],
+  "disallowedWork": [
+    "Graph rollout, code changes, new semantic models or clocks, catalogue promotion, merge, push, deployment"
+  ],
+  "goal": "Distinguish stable equation stops, the active move, and the current inspection position in one exemplar",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "rail.exemplar",
+      "title": "Equation-rail-exemplar",
+      "summary": "HUMAN_CHECKPOINT: candidate and preservation checks ready; review centered smaller grip, equation stops, and active interval/prose cue before graph pressure.",
+      "status": "in-progress"
+    }
+  ]
+}

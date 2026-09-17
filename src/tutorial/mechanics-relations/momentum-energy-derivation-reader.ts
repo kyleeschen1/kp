@@ -163,6 +163,11 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   root.dataset["localAccess"] = String(localAccess);
   root.dataset["mobileCandidate"] = String(mobileCandidate);
   const rail = get<HTMLElement>("[data-derivation-rail]");
+  // Energy is the review exemplar. Other derivations keep their accepted rail
+  // until a second caller establishes which presentation choices should travel.
+  const refinedRail = root.dataset["derivationNamespace"] === "energy";
+  const railStops = [...rail.querySelectorAll<HTMLElement>(':scope > span')];
+  if (refinedRail) root.dataset["railRefinement"] = "true";
   let centers: number[] = [];
   let equationHeights: number[] = [];
   const clock = createKpReaderTimelinePlaybackClock({ id: "energy.derivation.clock", durationMs: 4400 });
@@ -180,6 +185,11 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const previous = get<HTMLButtonElement>("[data-derivation-previous]");
   const next = get<HTMLButtonElement>("[data-derivation-next]");
   const hint = get<HTMLElement>("[data-derivation-hint]");
+  if (refinedRail) {
+    get('.energy-derivation-workspace').before(hint);
+    hint.textContent = "Drag between equations to inspect a move. Arrow keys step forward or back.";
+    handle.querySelector('span')!.textContent = "";
+  }
   const total = rows.length - 1;
   type Direction = "forward" | "rewind";
   let direction: Direction = "forward";
@@ -210,7 +220,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     rowDistance = rows[selected + 1]!.offsetTop - sourceTop;
     rail.style.top = `${centers[0]}px`;
     rail.style.height = `${centers[total]! - centers[0]!}px`;
-    [...rail.children].forEach((tick, i) => { (tick as HTMLElement).style.top = `${centers[i]! - centers[0]!}px`; });
+    railStops.forEach((tick, i) => { tick.style.top = `${centers[i]! - centers[0]!}px`; });
     if (isPhone() && mobileInspect) localTop = localControls[selected]!.well.querySelector<HTMLElement>("[data-derivation-mobile-slot]")!.getBoundingClientRect().top
       - get(".energy-derivation-chain").getBoundingClientRect().top;
   };
@@ -219,6 +229,17 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     scope.style.top = `${centers[move]! + (centers[move + 1]! - centers[move]!) * progress}px`;
     handle.setAttribute("aria-valuenow", String(position));
     handle.setAttribute("aria-valuetext", `Step ${labels[move]}, ${progress === 0 ? "source" : progress === 1 ? "result" : `${Math.round(progress * 100)} percent`}`);
+    if (refinedRail) {
+      const between = progress > 0 && progress < 1;
+      const dock = progress === 0 ? move : move + 1;
+      root.dataset["railPosition"] = between ? "between" : "docked";
+      rail.style.setProperty('--rail-move-top', `${centers[move]! - centers[0]!}px`);
+      rail.style.setProperty('--rail-move-height', `${centers[move + 1]! - centers[move]!}px`);
+      railStops.forEach((stop, i) => {
+        stop.dataset["railStop"] = between && (i === move || i === move + 1) ? "boundary" : !between && i === dock ? "current" : "rest";
+      });
+      interleaves.forEach((passage, i) => { passage.dataset["railActive"] = String(between && i === move); });
+    }
   };
   const project = () => {
     const p = clock.getSnapshot().progress;
@@ -439,7 +460,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       if (request !== selectionRequest) return;
     }
     if (loading || !session || drag) return;
-    hint.hidden = true;
+    if (!refinedRail) hint.hidden = true;
     navigate(requested, target);
   }
   handle.addEventListener("keydown", event => {
@@ -473,7 +494,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     if (!event.isPrimary || event.button !== 0) return;
     event.preventDefault();
     journey = undefined; selectionRequest++; clock.pause();
-    hint.hidden = true;
+    if (!refinedRail) hint.hidden = true;
     // Expansion can reveal parent-return controls after scene preparation.
     // Capture current document geometry before the first sample, not at the
     // first crossed edge (which would jump the handle by the added height).
@@ -549,7 +570,8 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         const selectedRequest = selectionRequest;
         await selecting;
         if (abort.signal.aborted || selectedRequest !== selectionRequest || !session || loading) return;
-        hint.hidden = true; play("forward");
+        if (!refinedRail) hint.hidden = true;
+        play("forward");
       },
       async capturePosition() {
         // Finish the latest requested seek before saving a revision-pinned

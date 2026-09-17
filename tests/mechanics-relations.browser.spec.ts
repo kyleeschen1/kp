@@ -2,6 +2,36 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("equation rail refinement keeps stops and the active move aligned", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1280, height: 1100 });
+  const root = await ready(page), handle = lens(root), rail = root.locator('[data-derivation-rail]');
+  await expect(root).toHaveAttribute('data-rail-position', 'docked');
+  const records = root.locator('.energy-derivation-equation');
+  const before = await documentBoxes(records);
+  const grip = (await handle.boundingBox())!, line = (await rail.boundingBox())!;
+  expect(grip.width).toBeGreaterThanOrEqual(44);
+  expect(Math.abs(grip.x + grip.width / 2 - line.x - line.width / 2)).toBeLessThan(1);
+  await root.screenshot({ path: info.outputPath('rail-docked.png') });
+  await dragTo(page, root, .5);
+  await expect(root).toHaveAttribute('data-rail-position', 'between');
+  await expect(rail.locator('[data-rail-stop="boundary"]')).toHaveCount(2);
+  await expect(root.locator('[data-rail-active="true"]')).toHaveAttribute('data-derivation-interleave', '0');
+  expect(await documentBoxes(records)).toEqual(before);
+  await expect(root.locator('[data-derivation-hint]')).toBeVisible();
+  await root.screenshot({ path: info.outputPath('rail-inspecting.png') });
+  await dragTo(page, root, 1.5);
+  await expect(root.locator('[data-rail-active="true"]')).toHaveAttribute('data-derivation-interleave', '1');
+  await dragTo(page, root, .5);
+  await expect(root.locator('[data-rail-active="true"]')).toHaveAttribute('data-derivation-interleave', '0');
+  await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
+  await handle.focus(); await handle.press('Home');
+  await expect(root).toHaveAttribute('data-rail-position', 'docked');
+  await expect(root.locator('[data-rail-active="true"]')).toHaveCount(0);
+  await expect(rail.locator('[data-rail-stop="current"]')).toHaveCount(1);
+  await expect(handle).toBeFocused();
+  await root.screenshot({ path: info.outputPath('rail-keyboard-contrast.png') });
+});
+
 test("equation geometry survives font resizing without a width change", async ({ page }) => {
   await page.setViewportSize({ width: 1100, height: 1100 });
   const root = await ready(page), handle = lens(root);

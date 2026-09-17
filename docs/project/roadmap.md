@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The user confirmed the equation clipping is fixed and approved an equation-first
+rail refinement. Current scope is one energy-derivation exemplar: distinguish
+written equation stops, the active move and the inspection handle, then stop for
+visual review before graph pressure or shared promotion.
+[Scope and review](threads/2026-09-16-equation-rail-refinement.md).
+
 The text-coordinated graph is accepted. The current approved extension is bounded
 sticky evidence for longer text plus active-drag edge scrolling for graphs and
 equations. Preserve ordinary-scroll independence, physics/algebra ownership and

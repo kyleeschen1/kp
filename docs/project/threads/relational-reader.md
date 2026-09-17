@@ -5,6 +5,12 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+Current approved work: [equation rail refinement](2026-09-16-equation-rail-refinement.md),
+after user confirmation that top/bottom clipping is fixed. One energy exemplar
+clarifies statement stops, active move and handle position; preserve the accepted
+drag/font/edge behavior and stop for visual review before graph generalization.
+Theseus owns execution in `run-contract.kp.equation-rail-v1`.
+
 User accepted the text-coordinated graph and approved the long-text extension:
 bounded sticky graph, and continuous edge scrolling during graph/equation drags.
 Ordinary scroll is independent of progress. The [graph proposal](2026-09-16-force-energy-graph.md)
