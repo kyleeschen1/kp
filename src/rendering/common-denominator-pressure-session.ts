@@ -550,7 +550,7 @@ function same(
 function visibleContextRole(
   role: KpCommonDenominatorPressurePresentationPlan["equivalence"]["contextTransfers"][number]["role"]
 ): boolean {
-  return role === "addition-operator" ||
+  return role === "addition-operator" || role === "subtraction-operator" ||
     role === "untouched-division" ||
     role === "untouched-numerator" ||
     role === "untouched-denominator";

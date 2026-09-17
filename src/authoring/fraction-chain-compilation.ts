@@ -37,7 +37,7 @@ export function compileFractionChain(value: unknown): { status: "compiled"; comp
       if (move.hint === "align") {
         const authority = bindFractionChainAlignment(source, index);
         const multiplier = ({ entityId, semanticId, numerator, denominator }: typeof authority.equivalenceMultipliers[0]) => ({ entityId, semanticId, numerator, denominator });
-        const internal = verifyKpCommonDenominatorAlignment({ schemaVersion: authority.schemaVersion, id: `${authority.id}.products`,
+        const internal = verifyKpCommonDenominatorAlignment({ schemaVersion: authority.schemaVersion, operator: authority.operator, id: `${authority.id}.products`,
           operationAuthority: authority.operationAuthority, lawAuthority: authority.lawAuthority, source: authority.source,
           target: { ...authority.target, stateId: `${authority.target.stateId}.products` },
           equivalenceMultipliers: [multiplier(authority.equivalenceMultipliers[0]), multiplier(authority.equivalenceMultipliers[1])] });
@@ -74,7 +74,7 @@ function compilePair(source: FractionChainSource, index: number, semantic: KpEqu
       const factor = alignment.equivalenceMultipliers[index]!;
       return factor.numerator === 1n ? `\\frac{${term.numerator.value}}{${term.denominator.value}}`
         : `\\frac{${factor.numerator}*${term.numerator.value}}{${factor.denominator}*${term.denominator.value}}`;
-    }).join("+") } : undefined;
+    }).join(alignment.operator) } : undefined;
   // Scaling and arithmetic evaluation have different owners. Keep both checked
   // adjacencies inside the coarse authored move, with the original final ID.
   const request: KpEquationTransformSeriesRequest = { schemaVersion: "kp.equation-transform-series-request.v1", kind: "equation-transform-series-request",

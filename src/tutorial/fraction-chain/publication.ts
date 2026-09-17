@@ -20,12 +20,12 @@ export function compileFractionChainPublication(markdown: string, input: unknown
   const math = (latex: string) => renderLatexToHtml(latex, { displayMode: true });
   const pair = source.states[1]!.expression;
   if (pair.kind !== "pair") throw new Error("The canonical fraction passage requires its aligned pair.");
-  const intermediate = `\\frac{${pair.terms[0].numerator}+${pair.terms[1].numerator}}{${pair.terms[0].denominator}}`;
+  const intermediate = `\\frac{${pair.terms[0].numerator}${pair.operator}${pair.terms[1].numerator}}{${pair.terms[0].denominator}}`;
   const row = (position: number, latex: string, prose: string, detail = false) => `<li data-fraction-row data-position="${position}"${detail ? ' data-fraction-detail data-nested-step data-nested-first="true" data-nested-last="true" hidden' : ''}>
     <div class="energy-derivation-equation">${math(latex)}</div><div class="fraction-reason energy-derivation-reason"><div class="energy-derivation-interleave-text">${html(prose)}${position === 1
-      ? `<details data-fraction-static-detail><summary>Smaller addition steps</summary>${math(intermediate)}<p>Gather the numerators over one denominator, then evaluate their sum.</p></details><div class="energy-derivation-actions"><button type="button" data-fraction-disclosure aria-expanded="false" hidden>Inspect smaller steps</button></div>` : ""}</div></div></li>`;
+      ? `<details data-fraction-static-detail><summary>Smaller combination steps</summary>${math(intermediate)}<p>Gather the numerators over one denominator, then evaluate their ordered combination.</p></details><div class="energy-derivation-actions"><button type="button" data-fraction-disclosure aria-expanded="false" hidden>Inspect smaller steps</button></div>` : ""}</div></div></li>`;
   const rows = source.states.map((state, index) => row(index, state.latex, source.moves[index]?.prose ?? "The same quantity is now written as a single fraction.") +
-    (index === 1 ? row(1.5, intermediate, "Both counts now share one denominator. Add only the numerator terms.", true) : "")).join("");
+    (index === 1 ? row(1.5, intermediate, "Both counts now share one denominator. Combine only the numerator terms, preserving their operator.", true) : "")).join("");
   const passage = `<div class="energy-derivation fraction-passage" data-fraction-passage data-source-revision="${revision}" data-rail-refinement="true" data-inset-fenceposts="true">
     <p data-fraction-status role="status" hidden>Preparing inspection…</p>
     <p class="energy-derivation-key" data-fraction-help hidden>Click the rail to jump; drag the handle to inspect. Use arrow keys to move between equations.</p>

@@ -30,15 +30,26 @@ export interface KpConstantSumEvaluationAsset {
 export function createKpConstantSumEvaluationAsset(
   spec: KpConstantSumEvaluationSpec
 ): KpConstantSumEvaluationAsset {
+  return createConstantBinaryEvaluationAsset(spec, "+");
+}
+
+export function createKpConstantDifferenceEvaluationAsset(spec: KpConstantSumEvaluationSpec): KpConstantSumEvaluationAsset {
+  return createConstantBinaryEvaluationAsset(spec, "-");
+}
+
+function createConstantBinaryEvaluationAsset(spec: KpConstantSumEvaluationSpec, operator: "+" | "-"): KpConstantSumEvaluationAsset {
+  const sum = operator === "+";
+  const name = sum ? "sum" : "difference";
+  const word = sum ? "plus" : "minus";
   requireSafeId(spec.id);
   requireFinite(spec.left, "left");
   requireFinite(spec.right, "right");
-  const result = spec.left + spec.right;
+  const result = sum ? spec.left + spec.right : spec.left - spec.right;
   const baseId = `operation-evaluation.${spec.id}`;
   const sourceId = `expression.${baseId}.source`;
   const targetId = `expression.${baseId}.target`;
-  const transformationId = `transform.${baseId}.simplify-sum`;
-  const operationId = "kp.arithmetic.add";
+  const transformationId = `transform.${baseId}.simplify-${name}`;
+  const operationId = sum ? "kp.arithmetic.add" : "kp.arithmetic.subtract";
   const sourceSelectorIds = {
     left: `${sourceId}.left`,
     operator: `${sourceId}.operator`,
@@ -47,29 +58,29 @@ export function createKpConstantSumEvaluationAsset(
   const targetSelectorId = `${targetId}.result`;
   const bundle = createKpAssetBundle({
     id: `asset.${baseId}`,
-    title: `${spec.left} plus ${spec.right}`,
+    title: `${spec.left} ${word} ${spec.right}`,
     objects: [
       createKpSemanticAssetObject({
         id: sourceId,
         objectType: "expression",
-        title: "Constant sum",
-        value: { latex: `${spec.left} + ${spec.right}` },
+        title: `Constant ${name}`,
+        value: { latex: `${spec.left} ${operator} ${spec.right}` },
         selectors: [
           selector(sourceSelectorIds.left, String(spec.left), {
             successorContribution: "material-input",
-            successorRole: "addend",
+            successorRole: sum ? "addend" : "operand",
             successorRank: 0,
             successorOperationId: operationId
           }),
-          selector(sourceSelectorIds.operator, "+", {
+          selector(sourceSelectorIds.operator, operator, {
             successorContribution: "catalyst",
-            successorRole: "addition-operator",
+            successorRole: sum ? "addition-operator" : "subtraction-operator",
             successorRank: 1,
             successorOperationId: operationId
           }),
           selector(sourceSelectorIds.right, String(spec.right), {
             successorContribution: "material-input",
-            successorRole: "addend",
+            successorRole: sum ? "addend" : "operand",
             successorRank: 2,
             successorOperationId: operationId
           })
@@ -78,12 +89,12 @@ export function createKpConstantSumEvaluationAsset(
       createKpSemanticAssetObject({
         id: targetId,
         objectType: "expression",
-        title: "Evaluated sum",
+        title: `Evaluated ${name}`,
         value: { latex: String(result) },
         selectors: [
           selector(targetSelectorId, String(result), {
             successorTarget: true,
-            successorRole: "evaluated-sum",
+            successorRole: `evaluated-${name}`,
             successorRank: 0,
             successorOperationId: operationId
           })
@@ -99,16 +110,16 @@ export function createKpConstantSumEvaluationAsset(
   const transformation = createKpSemanticTransformation({
     id: transformationId,
     definitionId:
-      "definition.generated.linear-solve.simplify-constant-sum",
-    transformType: "simplifyConstantSum",
-    title: `Evaluate ${spec.left} plus ${spec.right}`,
+      `definition.generated.linear-solve.simplify-constant-${name}`,
+    transformType: sum ? "simplifyConstantSum" : "simplifyConstantDifference",
+    title: `Evaluate ${spec.left} ${word} ${spec.right}`,
     sourceObjectIds: [sourceId],
     targetObjectIds: [targetId],
     preserves: ["value"],
     correspondenceMap: {
       id: `${transformationId}.correspondence`,
       records: [{
-        id: `${transformationId}.sum-to-result`,
+        id: `${transformationId}.${name}-to-result`,
         relation: "fan-in",
         sourceSelectorIds: [
           sourceSelectorIds.left,
@@ -117,22 +128,22 @@ export function createKpConstantSumEvaluationAsset(
         ],
         targetSelectorIds: [targetSelectorId],
         summary:
-          "The two addends contribute material while the plus sign catalyzes " +
+          (sum ? "The two addends contribute material while the plus sign catalyzes " : "The ordered operands contribute material while the minus sign catalyzes ") +
           "their shared evaluated result."
       }]
     },
     assumptions: [
-      `The exact sum of ${spec.left} and ${spec.right} is ${result}.`
+      `The exact ${name} of ${spec.left} and ${spec.right} is ${result}.`
     ],
     lawRefs: [{
-      id: "law.arithmetic.constant-sum",
+      id: `law.arithmetic.constant-${name}`,
       level: "strict"
     }]
   });
 
   return Object.freeze({
     id: baseId,
-    title: `${spec.left} + ${spec.right} → ${result}`,
+    title: `${spec.left} ${operator} ${spec.right} → ${result}`,
     bundle,
     transformation
   });

@@ -149,7 +149,8 @@
     {
       "id": "chain.subtraction",
       "title": "Subtraction",
-      "status": "planned"
+      "summary": "Checked ordered subtraction and right-only scaling; existing difference evaluation, reader preservation, focused checks, full types and build passed.",
+      "status": "complete"
     },
     {
       "id": "chain.move-resolution",

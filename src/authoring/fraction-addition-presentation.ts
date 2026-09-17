@@ -22,7 +22,7 @@ export function resolveFractionAdditionPresentation(compilation: CompiledFractio
   const transformation = evaluation.transformations[0]!;
   const record = transformation.correspondenceMap!.records.find(record => record.relation === "fan-in")!;
   const migration = compileKpEquationAssetMigrationV2({ animation: evaluation,
-    operations: [{ transformationId: transformation.id, operationId: "kp.arithmetic.add", semanticClass: "evaluation",
+    operations: [{ transformationId: transformation.id, operationId: step.authority.operator === "+" ? "kp.arithmetic.add" : "kp.arithmetic.subtract", semanticClass: "evaluation",
       roleBindings: { "operands-before": record.sourceSelectorIds, "result-after": record.targetSelectorIds }, projectionIntent: "replacement" }] });
   const authority = migration.presentationPlan.transitions[0]?.evaluationAuthority;
   if (!authority) throw new FractionChainRepair("fraction-chain.presentation", `$.moves[${index}]`, "Missing canonical numerator evaluation authority.");

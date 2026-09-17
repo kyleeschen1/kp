@@ -1,5 +1,6 @@
 import {
   addKpRationals,
+  subtractKpRationals,
   createKpRational,
   equalKpRationals,
   type KpNormalizedRational
@@ -37,6 +38,7 @@ export interface KpCommonDenominatorMultiplierDraft {
 }
 
 export interface KpCommonDenominatorAlignmentDraft {
+  readonly operator?: "+" | "-";
   readonly schemaVersion: "kp.common-denominator-alignment.v1";
   readonly id: string;
   readonly operationAuthority:
@@ -81,6 +83,7 @@ extends KpCommonDenominatorMultiplierDraft {
 
 export interface KpVerifiedCommonDenominatorAlignment
 extends KpCommonDenominatorAlignmentDraft {
+  readonly operator: "+" | "-";
   readonly lawId: "law.fraction.equivalent-common-denominator";
   readonly sourceForms: readonly [KpExactFractionForm, KpExactFractionForm];
   readonly targetForms: readonly [KpExactFractionForm, KpExactFractionForm];
@@ -103,6 +106,7 @@ export interface KpCommonDenominatorCorrespondence {
 }
 
 export interface KpCommonDenominatorCertificate {
+  readonly operator: "+" | "-";
   readonly schemaVersion: "kp.common-denominator-certificate.v1";
   readonly id: string;
   readonly lawId: "law.fraction.equivalent-common-denominator";
@@ -156,6 +160,8 @@ export function verifyKpCommonDenominatorAlignment(
   draft: KpCommonDenominatorAlignmentDraft
 ): KpVerifiedCommonDenominatorAlignment {
   validateDraftShape(draft);
+  if (draft.operator !== undefined && draft.operator !== "+" && draft.operator !== "-")
+    fail("common-denominator.unsupported-contract", "Alignment requires an ordered addition or subtraction operator.");
   if (
     draft.schemaVersion !== "kp.common-denominator-alignment.v1" ||
     draft.operationAuthority !==
@@ -173,10 +179,11 @@ export function verifyKpCommonDenominatorAlignment(
     id: `${draft.id}.proof`,
     sourceForms: forms(draft.source.terms),
     targetForms: forms(draft.target.terms),
-    equivalenceMultipliers: draft.equivalenceMultipliers
+    equivalenceMultipliers: draft.equivalenceMultipliers, operator: draft.operator ?? "+"
   });
   const verified = deepFreeze({
     ...draft,
+    operator: draft.operator ?? "+",
     lawId: draft.lawAuthority.id,
     sourceForms: proof.sourceForms,
     targetForms: proof.targetForms,
@@ -191,6 +198,7 @@ export function verifyKpCommonDenominatorAlignment(
 
 function validateDraftShape(draft: KpCommonDenominatorAlignmentDraft): void {
   assertExactKeys(draft, [
+    ...("operator" in draft ? ["operator"] : []),
     "schemaVersion",
     "id",
     "operationAuthority",
@@ -352,7 +360,8 @@ function createCorrespondence(
       "identity",
       [draft.source.operatorEntityId],
       [draft.target.operatorEntityId],
-      "The addition operator persists across denominator alignment."
+      draft.operator === "-" ? "The subtraction operator persists across denominator alignment."
+        : "The addition operator persists across denominator alignment."
     )
   ];
   draft.source.terms.forEach((source, index) => {
@@ -433,6 +442,7 @@ function correspondence(
 }
 
 export function certifyKpCommonDenominator(input: Readonly<{
+  readonly operator?: "+" | "-";
   readonly id: string;
   readonly sourceForms: readonly [KpExactFractionForm, KpExactFractionForm];
   readonly targetForms: readonly [KpExactFractionForm, KpExactFractionForm];
@@ -473,9 +483,12 @@ export function certifyKpCommonDenominator(input: Readonly<{
       );
     }
   });
-  const sourceTotal = addKpRationals(sourceForms[0].value,
+  const operator = input.operator ?? "+";
+  if (operator !== "+" && operator !== "-") fail("common-denominator.unsupported-contract", "Invalid alignment operator.");
+  const combine = operator === "+" ? addKpRationals : subtractKpRationals;
+  const sourceTotal = combine(sourceForms[0].value,
     sourceForms[1].value);
-  const exactTotal = addKpRationals(targetForms[0].value,
+  const exactTotal = combine(targetForms[0].value,
     targetForms[1].value);
   if (!equalKpRationals(sourceTotal, exactTotal)) {
     fail(
@@ -486,6 +499,7 @@ export function certifyKpCommonDenominator(input: Readonly<{
   const proof = deepFreeze({
     schemaVersion: "kp.common-denominator-certificate.v1" as const,
     id: input.id,
+    operator,
     lawId: "law.fraction.equivalent-common-denominator" as const,
     sourceForms,
     targetForms,

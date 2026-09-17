@@ -70,15 +70,16 @@ export function createParameterizedNumeratorSplitMergeEquationKpAsset(
 /** Numeric callers arrive through exact fraction authority, never by inventing
  * a variable or treating arithmetic evaluation as structural merging. */
 export function createVerifiedIntegerNumeratorMergeAsset(proof: KpVerifiedLikeDenominatorCombination): NumeratorSplitMergeEquationKpAsset {
-  if (!isKpVerifiedLikeDenominatorCombination(proof) || proof.operator !== "+" ||
+  if (!isKpVerifiedLikeDenominatorCombination(proof) ||
       proof.source.terms.some(term => term.numerator.value <= 0n || term.numerator.value > 1000000n || term.denominator.value > 1000000n))
-    throw new TypeError("Numeric numerator merging requires issued bounded positive addition authority.");
-  return createSplitMergeAsset({ idStem: proof.id, coefficient: Number(proof.source.terms[0].numerator.value),
+    throw new TypeError("Numeric numerator merging requires issued bounded positive operand authority.");
+  return createSplitMergeAsset({ operator: proof.operator, idStem: proof.id, coefficient: Number(proof.source.terms[0].numerator.value),
     constant: Number(proof.source.terms[1].numerator.value), denominator: Number(proof.source.terms[0].denominator.value) });
 }
 
-type SplitMergeParameters = Omit<NumeratorSplitMergeEquationParameters, "variable"> & { readonly variable?: string };
+type SplitMergeParameters = Omit<NumeratorSplitMergeEquationParameters, "variable"> & { readonly variable?: string; readonly operator?: "+" | "-" };
 function createSplitMergeAsset(input: SplitMergeParameters): NumeratorSplitMergeEquationKpAsset {
+  const operator = input.operator ?? "+";
   const ids: NumeratorSplitMergeEquationAssetIds = {
     combined: `equation.${input.idStem}.combined`,
     split: `equation.${input.idStem}.split`,
@@ -94,10 +95,10 @@ function createSplitMergeAsset(input: SplitMergeParameters): NumeratorSplitMerge
     title: "Split and merge a fraction over a numerator sum",
     objects: [
       equationState(ids.combined, "One fraction over a sum",
-        `\\frac{${input.coefficient}${input.variable ?? ""} + ${input.constant}}{${input.denominator}}`, [
+        `\\frac{${input.coefficient}${input.variable ?? ""} ${operator} ${input.constant}}{${input.denominator}}`, [
         part(paths.combinedCoefficient, "term", String(input.coefficient), "coefficient"),
         ...(input.variable ? [part(paths.combinedVariable, "term", input.variable, "variable")] : []),
-        part("fraction.numerator.plus", "operator", "+", "numerator-operator"),
+        part("fraction.numerator.plus", "operator", operator, "numerator-operator"),
         part(paths.combinedConstant, "term", String(input.constant), "constant"),
         part("fraction.rule", "artifact", "fraction rule", "fraction-rule"),
         part(paths.combinedDenominator, "term", String(input.denominator), "denominator")
@@ -105,14 +106,14 @@ function createSplitMergeAsset(input: SplitMergeParameters): NumeratorSplitMerge
       equationState(
         ids.split,
         "Two fractions with a shared denominator",
-        `\\frac{${input.coefficient}${input.variable ?? ""}}{${input.denominator}} + ` +
+        `\\frac{${input.coefficient}${input.variable ?? ""}}{${input.denominator}} ${operator} ` +
           `\\frac{${input.constant}}{${input.denominator}}`,
         [
           part(paths.splitCoefficient, "term", String(input.coefficient), "coefficient"),
           ...(input.variable ? [part(paths.splitVariable, "term", input.variable, "variable")] : []),
           part("left.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
           part(paths.leftDenominator, "term", String(input.denominator), "denominator"),
-          part("between.plus", "operator", "+", "sum-operator"),
+          part("between.plus", "operator", operator, "sum-operator"),
           part(paths.splitConstant, "term", String(input.constant), "constant"),
           part("right.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
           part(paths.rightDenominator, "term", String(input.denominator), "denominator")
@@ -138,7 +139,7 @@ function createSplitMergeAsset(input: SplitMergeParameters): NumeratorSplitMerge
         targetObjectId: ids.split,
         correspondence: splitCorrespondence(ids, paths).filter(record => input.variable || record.id !== "variable-persists"),
         assumption: "Each term in the numerator shares the same non-zero denominator.",
-        lawId: "law.algebra.fraction-sum-split"
+        lawId: operator === "+" ? "law.algebra.fraction-sum-split" : "law.algebra.fraction-difference-split"
       }),
       transformation({
         id: ids.mergeTransform,
@@ -149,7 +150,7 @@ function createSplitMergeAsset(input: SplitMergeParameters): NumeratorSplitMerge
         targetObjectId: ids.combined,
         correspondence: mergeCorrespondence(ids, paths).filter(record => input.variable || record.id !== "variable-persists"),
         assumption: "Both fractions have the same non-zero denominator.",
-        lawId: "law.algebra.fraction-sum-merge"
+        lawId: operator === "+" ? "law.algebra.fraction-sum-merge" : "law.algebra.fraction-difference-merge"
       })
     ]
   };
@@ -254,7 +255,7 @@ function splitCorrespondence(
   return [
     identity("coefficient-persists", ids.combined, paths.combinedCoefficient, ids.split, paths.splitCoefficient),
     identity("variable-persists", ids.combined, paths.combinedVariable, ids.split, paths.splitVariable),
-    roleChange("plus-leaves-numerator", ids.combined, "fraction.numerator.plus", ids.split, "between.plus", "The numerator plus becomes the operator between the two fractions."),
+    roleChange("plus-leaves-numerator", ids.combined, "fraction.numerator.plus", ids.split, "between.plus", "The numerator operator becomes the operator between the two fractions."),
     identity("constant-persists", ids.combined, paths.combinedConstant, ids.split, paths.splitConstant),
     record(
       "fraction-rule-bifurcates",

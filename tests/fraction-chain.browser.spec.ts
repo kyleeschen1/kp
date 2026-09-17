@@ -16,6 +16,23 @@ async function seek(page: Page, position: number) {
   await expect.poll(async () => Number(await page.locator("[data-fraction-passage]").getAttribute("data-fraction-position"))).toBeCloseTo(position, 2);
 }
 
+test("subtraction retains the minus sign through right-hand scaling and numerator combination", async ({ page }) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/fraction-chain/subtraction/");
+  const root = page.locator("[data-fraction-passage]");
+  await expect(root).toHaveAttribute("data-fraction-ready", /true|repair/, { timeout: 20000 });
+  expect(await root.getAttribute("data-fraction-ready"), await root.locator("[data-fraction-status]").textContent() ?? "").toBe("true");
+  for (const position of [0, .18, .45, .85, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 2, 1.75, 1.25, .45, 0]) await seek(page, position);
+  await seek(page, 1.25);
+  await page.screenshot({ path: "tmp/codex/fraction-chain-review/subtraction-merge.png", fullPage: true });
+  const toggle = root.locator("[data-fraction-disclosure]"), held = Number(await root.getAttribute("data-fraction-position"));
+  await toggle.click();
+  await expect(root.locator('[data-fraction-detail] .katex-html')).toContainText(/5\s*[−-]\s*2/);
+  await seek(page, 1.75); await toggle.click();
+  expect(Number(await root.getAttribute("data-fraction-position"))).toBeCloseTo(held, 6);
+  expect(errors).toEqual([]);
+});
+
 test("two-sided alignment keeps two distinct factor joins inside one native owner", async ({ page }) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto("/experiments/fraction-chain/two-sided/");

@@ -42,7 +42,7 @@ export const KP_COMMON_DENOMINATOR_AUTHORING_ROLE_IDS = Object.freeze([
   "first-scale-factor",
   "target-first-numerator",
   "target-first-denominator",
-  "addition-operator",
+  "addition-operator", "subtraction-operator",
   "untouched-second-term",
   "source-second-numerator", "source-second-denominator", "second-scale-factor",
   "target-second-numerator", "target-second-denominator"
@@ -65,8 +65,7 @@ export interface KpEquationSeriesCommonDenominatorSemanticArguments {
     readonly "first-scale-factor": readonly [string];
     readonly "target-first-numerator": readonly [string];
     readonly "target-first-denominator": readonly [string];
-    readonly "addition-operator": readonly [string, string];
-  }> & (Readonly<{ "untouched-second-term": readonly [string, string] }> | Readonly<{
+  }> & (Readonly<{ "addition-operator": readonly [string, string] }> | Readonly<{ "subtraction-operator": readonly [string, string] }>) & (Readonly<{ "untouched-second-term": readonly [string, string] }> | Readonly<{
     "source-second-numerator": readonly [string]; "source-second-denominator": readonly [string];
     "second-scale-factor": readonly [string];
     "target-second-numerator": readonly [string]; "target-second-denominator": readonly [string];
@@ -295,7 +294,7 @@ function validateEndpoints(
     transformation.target.stateId === plan.toStateId &&
     source?.endpoint.kind === "expression" &&
     target?.endpoint.kind === "expression" &&
-    matchesState(source.endpoint.expression, transformation.source) &&
+    matchesState(source.endpoint.expression, transformation.source, transformation.operator) &&
     matchesAlignmentApplication(target.endpoint.expression, transformation);
   if (!matches) diagnostics.push(sourceDiagnostic(
     path,
@@ -307,7 +306,7 @@ function matchesAlignmentApplication(
   expression: ParsedLatexExpression,
   transformation: KpVerifiedCommonDenominatorAlignment
 ): boolean {
-  if (expression.kind !== "binary" || expression.operator !== "+") {
+  if (expression.kind !== "binary" || expression.operator !== transformation.operator) {
     return false;
   }
   return [expression.left, expression.right].every((term, index) => {
@@ -335,9 +334,10 @@ function matchesProduct(
 
 function matchesState(
   expression: ParsedLatexExpression,
-  stateValue: KpCommonDenominatorAlignmentDraft["source"]
+  stateValue: KpCommonDenominatorAlignmentDraft["source"],
+  operator: "+" | "-"
 ): boolean {
-  return expression.kind === "binary" && expression.operator === "+" &&
+  return expression.kind === "binary" && expression.operator === operator &&
     matchesTerm(expression.left, stateValue.terms[0]) &&
     matchesTerm(expression.right, stateValue.terms[1]);
 }
@@ -379,10 +379,9 @@ export function roleBindings(
     "target-first-denominator": [
       transformation.target.terms[0].denominator.entityId
     ],
-    "addition-operator": [
-      transformation.source.operatorEntityId,
-      transformation.target.operatorEntityId
-    ],
+    ...(transformation.operator === "+" ? {
+      "addition-operator": [transformation.source.operatorEntityId, transformation.target.operatorEntityId] as const
+    } : { "subtraction-operator": [transformation.source.operatorEntityId, transformation.target.operatorEntityId] as const }),
     ...(transformation.equivalenceMultipliers[1].numerator === 1n ? {
       "untouched-second-term": [transformation.source.terms[1].termEntityId, transformation.target.terms[1].termEntityId] as const
     } : {

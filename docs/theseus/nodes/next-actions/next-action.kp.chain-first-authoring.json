@@ -25,6 +25,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-17-chain-first-two-sided-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-17-chain-first-subtraction-evidence.md"
     }
   ],
   "dependsOn": {
@@ -892,6 +896,27 @@
       "scope": "chain.two-sided-variation",
       "checkedAt": "2026-09-17T22:04:49.652Z",
       "notes": "Full app, node, tests, Svelte and domain checks pass; test-boundary inference and optional-evidence narrowing repaired explicitly."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.subtraction",
+      "checkedAt": "2026-09-17T22:21:11.197Z",
+      "notes": "26 checks; ordered subtraction, right-hand native endpoints, sign and false-result negatives, existing negative and zero semantic pressure."
+    },
+    {
+      "command": "npm run visual:fraction-chain",
+      "status": "passed",
+      "scope": "chain.subtraction",
+      "checkedAt": "2026-09-17T22:21:12.427Z",
+      "notes": "Seven Chromium checks; direct and reverse signed motion, exact disclosure return, all earlier callers. Capture inspected."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "chain.subtraction",
+      "checkedAt": "2026-09-17T22:21:13.471Z",
+      "notes": "Full application, node, tests, Svelte and domain types plus production bundle. Architecture and common-denominator semantic/authoring preservation checks also passed."
     }
   ],
   "progress": {

@@ -58,23 +58,29 @@ export function createKpCommonDenominatorPressureNativeEndpoints(plan: KpCommonD
     if (!result) throw new Error(`Missing common-denominator context ${role}.`);
     return result;
   };
-  const sourceOperator = context("addition-operator");
+  const sourceOperator = context(plan.operator === "+" ? "addition-operator" : "subtraction-operator");
   const kinds = ["problem", "equivalence-source", "product", "evaluated"] as const;
   const endpoints = kinds.map(kind => {
     const source = kind === "problem" || kind === "equivalence-source";
-    const first = focusedFraction(plan.equivalence, kind, values.firstNumerator, values.firstDenominator,
-      values.factor, values.targetNumerator, values.targetDenominator, 0);
-    const second = plan.companion
-      ? focusedFraction(plan.companion, kind, values.secondNumerator, values.secondDenominator,
-        values.secondFactor, values.secondTargetNumerator, values.secondTargetDenominator, 2)
-      : fraction(
-        atom(context("untouched-numerator")[source ? "sourceEntityId" : "targetEntityId"],
-          "semantic.fraction.common-denominator.second.numerator", "operand", values.secondNumerator, kind),
-        atom(context("untouched-denominator")[source ? "sourceEntityId" : "targetEntityId"],
-          "semantic.fraction.common-denominator.second.denominator", "operand", values.secondDenominator, kind),
-        bar(context("untouched-division")[source ? "sourceEntityId" : "targetEntityId"], kind));
+    const part = (position: 0 | 1) => {
+      const primary = plan.equivalence.focus.position === (position === 0 ? "first-term" : "second-term");
+      const branch = primary ? plan.equivalence : plan.companion;
+      const numerator = position === 0 ? values.firstNumerator : values.secondNumerator;
+      const denominator = position === 0 ? values.firstDenominator : values.secondDenominator;
+      return branch ? focusedFraction(branch, kind, numerator, denominator,
+        position === 0 ? values.factor : values.secondFactor,
+        position === 0 ? values.targetNumerator : values.secondTargetNumerator,
+        position === 0 ? values.targetDenominator : values.secondTargetDenominator, primary ? 0 : 2)
+        : fraction(
+          atom(context("untouched-numerator")[source ? "sourceEntityId" : "targetEntityId"],
+            "semantic.fraction.common-denominator.context.numerator", "operand", numerator, kind),
+          atom(context("untouched-denominator")[source ? "sourceEntityId" : "targetEntityId"],
+            "semantic.fraction.common-denominator.context.denominator", "operand", denominator, kind),
+          bar(context("untouched-division")[source ? "sourceEntityId" : "targetEntityId"], kind));
+    };
+    const first = part(0), second = part(1);
     return endpoint(kind, sequence(first,
-      atom(sourceOperator[source ? "sourceEntityId" : "targetEntityId"], "semantic.operation.addition", "operator", "+", kind), second));
+      atom(sourceOperator[source ? "sourceEntityId" : "targetEntityId"], plan.operator === "+" ? "semantic.operation.addition" : "semantic.operation.subtraction", "operator", plan.operator, kind), second));
   });
   return Object.freeze([endpoints[0]!, endpoints[1]!, endpoints[2]!, endpoints[3]!] as const);
 
@@ -128,9 +134,9 @@ export function createKpCommonDenominatorPressureNativeEndpoints(plan: KpCommonD
       }]));
     const annotated = Object.freeze({ id: `common-denominator-pressure.${kind}`, kind: "selector-annotated-latex" as const,
       rawLatex: content.rawLatex, annotatedLatex: content.annotatedLatex, annotations });
-    const accessibleText = kind === "problem" ? `${values.firstNumerator} over ${values.firstDenominator} plus ${values.secondNumerator} over ${values.secondDenominator}`
-      : kind === "evaluated" ? `${values.targetNumerator} over ${values.targetDenominator} plus ${values.secondTargetNumerator} over ${values.secondTargetDenominator}`
-      : kind === "equivalence-source" ? `Introduce ${values.factor} over ${values.factor}${plan.companion ? ` and ${values.secondFactor} over ${values.secondFactor}` : ""}; each factor equals one`
+    const accessibleText = kind === "problem" ? `${values.firstNumerator} over ${values.firstDenominator} ${plan.operator === "+" ? "plus" : "minus"} ${values.secondNumerator} over ${values.secondDenominator}`
+      : kind === "evaluated" ? `${values.targetNumerator} over ${values.targetDenominator} ${plan.operator === "+" ? "plus" : "minus"} ${values.secondTargetNumerator} over ${values.secondTargetDenominator}`
+      : kind === "equivalence-source" ? `Introduce ${plan.equivalence.focus.position === "first-term" ? values.factor : values.secondFactor} over ${plan.equivalence.focus.position === "first-term" ? values.factor : values.secondFactor}${plan.companion ? ` and ${values.secondFactor} over ${values.secondFactor}` : ""}; each factor equals one`
       : "Multiply each selected numerator and denominator by its same factor";
     return Object.freeze({ schemaVersion: "kp.common-denominator-pressure-native-endpoint.v1" as const,
       kind, stateId: authority.stateId, accessibleText, rootPresentationGroupId: `group.${authority.stateId}`, annotated,

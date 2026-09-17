@@ -26,6 +26,7 @@ const kpCommonDenominatorPressurePresentationPlanBrand: unique symbol = Symbol("
 
 export type KpCommonDenominatorPressureContextRole =
   | "addition-operator"
+  | "subtraction-operator"
   | "untouched-term"
   | "untouched-fraction"
   | "untouched-division"
@@ -72,6 +73,7 @@ export interface KpCommonDenominatorPressureEndpoint {
 }
 
 export interface KpCommonDenominatorPressurePresentationPlan {
+  readonly operator: "+" | "-";
   readonly values: Readonly<{
     firstNumerator: string; firstDenominator: string;
     secondNumerator: string; secondDenominator: string;
@@ -243,9 +245,10 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
   alignment: KpVerifiedCommonDenominatorAlignment
 ): KpCommonDenominatorPressurePresentationPlan {
   const equivalence = compileKpCommonDenominatorPressureEquivalencePlan(
-    alignment
+    alignment, alignment.equivalenceMultipliers[0].numerator > 1n ? 0 : 1
   );
-  const companion = alignment.equivalenceMultipliers[1].numerator > 1n
+  const primary = equivalence.focus.position === "first-term" ? 0 : 1;
+  const companion = primary === 0 && alignment.equivalenceMultipliers[1].numerator > 1n
     ? compileKpCommonDenominatorPressureEquivalencePlan(alignment, 1) : undefined;
   const local = equivalence.focus.semantic;
   const evaluatedStateId = `${alignment.target.stateId}.evaluated-products`;
@@ -256,7 +259,7 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
       local.target.numeratorSourceOccurrenceEntityId
     ],
     catalystSelectorId: `${local.target.numeratorProductEntityId}.operator`,
-    targetSelectorId: alignment.target.terms[0].numerator.entityId
+    targetSelectorId: alignment.target.terms[primary].numerator.entityId
   });
   const denominator = compileEvaluationBinding({
     id: `${alignment.id}.pressure.evaluate-denominator`,
@@ -265,7 +268,7 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
       local.target.denominatorSourceOccurrenceEntityId
     ],
     catalystSelectorId: `${local.target.denominatorProductEntityId}.operator`,
-    targetSelectorId: alignment.target.terms[0].denominator.entityId
+    targetSelectorId: alignment.target.terms[primary].denominator.entityId
   });
   const companionBindings = companion ? ["numerator", "denominator"].map((axis) => {
     const target = companion.focus.semantic.target;
@@ -280,7 +283,7 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
   }) : [];
   const persistentEntityIds = Object.freeze([
     alignment.target.operatorEntityId,
-    ...alignment.target.terms.flatMap((term, index) => index === 0 || companion
+    ...alignment.target.terms.flatMap((term, index) => index === primary || companion
       ? [term.divisionEntityId]
       : [term.termEntityId, term.fractionEntityId, term.divisionEntityId, term.numerator.entityId, term.denominator.entityId])
   ]);
@@ -299,13 +302,14 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
     return scale === 1n ? sourceLatex[index] : `\\frac{${scale}\\cdot${term.numerator.value}}{${scale}\\cdot${term.denominator.value}}`;
   });
   const endpoints = Object.freeze([
-    endpoint("problem", alignment.source.stateId, sourceLatex.join("+")),
-    endpoint("equivalence-source", local.source.stateId, unitLatex.join("+")),
-    endpoint("product", local.target.stateId, productLatex.join("+")),
-    endpoint("evaluated", evaluatedStateId, alignment.target.terms.map(term => simple(term.numerator.value, term.denominator.value)).join("+"))
+    endpoint("problem", alignment.source.stateId, sourceLatex.join(alignment.operator)),
+    endpoint("equivalence-source", local.source.stateId, unitLatex.join(alignment.operator)),
+    endpoint("product", local.target.stateId, productLatex.join(alignment.operator)),
+    endpoint("evaluated", evaluatedStateId, alignment.target.terms.map(term => simple(term.numerator.value, term.denominator.value)).join(alignment.operator))
   ] as const);
   const plan: KpCommonDenominatorPressurePresentationPlan = deepFreeze({
     [kpCommonDenominatorPressurePresentationPlanBrand]: true as const,
+    operator: alignment.operator,
     schemaVersion:
       "kp.common-denominator-pressure-presentation-plan.v1" as const,
     id: `presentation.${alignment.id}.pressure`,
@@ -364,7 +368,7 @@ function createContextTransfers(
   const source = alignment.source.terms[other];
   const target = alignment.target.terms[other];
   const transfers = [
-    transfer("addition-operator", alignment.source.operatorEntityId,
+    transfer(alignment.operator === "+" ? "addition-operator" : "subtraction-operator", alignment.source.operatorEntityId,
       alignment.target.operatorEntityId),
     ...(alignment.equivalenceMultipliers[other].numerator === 1n ? [
       transfer("untouched-term", source.termEntityId, target.termEntityId),
