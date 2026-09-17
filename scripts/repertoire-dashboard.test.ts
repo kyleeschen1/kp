@@ -52,3 +52,14 @@ test('curriculum documentation and audit evidence contain no broken local file l
     }
   }
 });
+
+test('worked-problem traces refer only to existing stable curriculum rows', () => {
+  const ids = new Set(readRepertoire(process.cwd()).flatMap(d => d.topics.flatMap(t => [...t.moves, ...t.motifs].map(item => item.id))));
+  const directory = 'docs/project/repertoire-notes/traces';
+  for (const file of readdirSync(directory).filter(name => name.endsWith('.md'))) {
+    const text = readFileSync(resolve(directory, file), 'utf8');
+    const refs = [...text.matchAll(/`((?:motif|alg|calc|ode|pde|la|prob|stats|opt|num|econ|mech|code|reading)\.[a-z0-9.-]+)`/g)];
+    assert.ok(refs.length > 0, `${file}: trace needs row references`);
+    for (const ref of refs) assert.ok(ids.has(ref[1]), `${file}: unknown row ${ref[1]}`);
+  }
+});

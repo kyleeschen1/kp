@@ -53,7 +53,8 @@
     {
       "id": "curriculum.traces",
       "title": "Worked-problem-traces",
-      "status": "planned"
+      "summary": "Worked traces and references close; omissions repaired and isolated-step versus complete-path coverage distinguished",
+      "status": "complete"
     },
     {
       "id": "curriculum.integration",

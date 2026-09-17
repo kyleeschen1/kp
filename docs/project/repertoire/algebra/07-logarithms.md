@@ -4,6 +4,9 @@
 
 ### Semantic moves
 
+- [ ] `alg.log.injective` Infer equality of positive arguments from equal logarithms of the same valid base.
+  Example: ln(u)=ln(v) → u=v; u,v>0
+  Audit: unaudited
 - [ ] `alg.exp.sum-to-product` Rewrite an exponential of a sum as a product. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: e^(a+b) → e^a e^b
   Audit: partial — exponential-homomorphism asset exists; exact source/authoring scope needs its own audit

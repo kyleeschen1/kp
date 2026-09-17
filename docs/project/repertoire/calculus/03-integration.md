@@ -4,6 +4,15 @@
 
 ### Semantic moves
 
+- [ ] `calc.int.linearity` Split an integral across a finite linear combination.
+  Example: ∫(2f+3g) dx = 2∫f dx+3∫g dx on the common domain
+  Audit: unaudited
+- [ ] `calc.int.exp` Use an exponential antiderivative.
+  Example: ∫e^x dx=e^x+C; ∫a^x dx=a^x/ln(a)+C for a>0, a≠1
+  Audit: unaudited
+- [ ] `calc.int.trig` Use elementary trigonometric antiderivatives with their domains.
+  Example: ∫cos(x)dx=sin(x)+C; ∫sec²(x)dx=tan(x)+C on an interval avoiding poles
+  Audit: unaudited
 - [ ] `calc.int.riemann` Form a signed Riemann sum and take its refinement limit.
   Example: Σ f(x_i*)Δx → ∫ f(x) dx on a bounded interval
   Audit: unaudited
