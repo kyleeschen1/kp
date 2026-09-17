@@ -5,9 +5,11 @@ import { compileFractionChainPublication } from "../src/tutorial/fraction-chain/
 
 export function kpViteFractionChain(projectRoot: string): Plugin {
   return { name: "kp-fraction-chain-publication", transformIndexHtml: { order: "pre", handler(html, context) {
-    if (context.filename !== resolve(projectRoot, "experiments/fraction-chain/index.html")) return html;
+    const name = context.filename === resolve(projectRoot, "experiments/fraction-chain/index.html") ? "fraction-chain"
+      : context.filename === resolve(projectRoot, "experiments/fraction-chain/numeric/index.html") ? "fraction-chain-numeric" : undefined;
+    if (!name) return html;
     return html.replace("<!-- kp:fraction-chain -->", compileFractionChainPublication(
-      readFileSync(resolve(projectRoot, "examples/algebra/fraction-chain.article.md"), "utf8"),
-      JSON.parse(readFileSync(resolve(projectRoot, "examples/algebra/fraction-chain.json"), "utf8"))));
+      readFileSync(resolve(projectRoot, `examples/algebra/${name}.article.md`), "utf8"),
+      JSON.parse(readFileSync(resolve(projectRoot, `examples/algebra/${name}.json`), "utf8"))));
   } } };
 }

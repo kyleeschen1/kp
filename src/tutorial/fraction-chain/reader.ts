@@ -11,12 +11,14 @@ type Surface = { seek(progress: number): unknown; dispose(): void; invalidate?()
 /** This local passage composes the existing clock, measured rail, docking,
  * viewport and disclosure owners. It never schedules compositor animation. */
 export function mountFractionPassage(root: HTMLElement, surfaces: readonly Surface[]) {
-  if (surfaces.length !== 4) throw new Error("Prepare all four checked native surfaces before enabling the passage.");
   const get = <T extends HTMLElement>(selector: string) => root.querySelector<T>(selector)!;
   const history = get<HTMLElement>(".fraction-history"), rail = get<HTMLElement>("[data-fraction-rail]");
   const rows = [...root.querySelectorAll<HTMLElement>("[data-fraction-row]")];
   const inspection = get<HTMLElement>("[data-fraction-inspection]"), stages = [...root.querySelectorAll<HTMLElement>("[data-fraction-stage]")];
   const handle = get<HTMLButtonElement>("[data-derivation-handle]"), scope = get<HTMLElement>("[data-fraction-scope]");
+  const end = Number(handle.getAttribute("aria-valuemax"));
+  if ((end !== 2 && end !== 3) || surfaces.length !== end + 1 || stages.length !== surfaces.length)
+    throw new Error("Prepare exactly the checked native surfaces for this chain.");
   const disclosure = get<HTMLButtonElement>("[data-fraction-disclosure]");
   rail.setAttribute("data-derivation-rail", ""); disclosure.setAttribute("data-refinement-expand", "combine");
   preserveEnergyDisclosureFocus(root);
@@ -43,8 +45,8 @@ export function mountFractionPassage(root: HTMLElement, surfaces: readonly Surfa
   };
   const paint = () => {
     if (!history.isConnected || history.offsetWidth <= 0) return;
-    position = clock.getSnapshot().progress * 3;
-    const interval = fractionIntervalAt(position, points), scene = fractionSceneAt(position);
+    position = clock.getSnapshot().progress * end;
+    const interval = fractionIntervalAt(position, points), scene = fractionSceneAt(position, end);
     projectEquationRail({ root, rail, centers: points.map(point => point.y),
       stops: [...rail.querySelectorAll<HTMLElement>(":scope > span")].filter(stop => !stop.hidden)
         .sort((a, b) => Number(a.dataset["position"]) - Number(b.dataset["position"])),
@@ -65,9 +67,9 @@ export function mountFractionPassage(root: HTMLElement, surfaces: readonly Surfa
     });
     root.dataset["fractionPosition"] = position.toFixed(6);
     handle.setAttribute("aria-valuenow", String(position));
-    handle.setAttribute("aria-valuetext", `Move ${Math.min(3, Math.floor(position) + 1)}; ${position.toFixed(2)} of 3`);
+    handle.setAttribute("aria-valuetext", `Move ${Math.min(end, Math.floor(position) + 1)}; ${position.toFixed(2)} of ${end}`);
   };
-  const seek = (value: number) => clock.seek(Math.max(0, Math.min(3, value)) / 3);
+  const seek = (value: number) => clock.seek(Math.max(0, Math.min(end, value)) / end);
   const pointer = (clientY: number) => seek(fractionPositionAtY(clientY - history.getBoundingClientRect().top, points));
   const edge = createInspectionEdgeScroll({ signal: abort.signal,
     bounds: () => { const top = history.getBoundingClientRect().top; return { top: top + points[0]!.y, bottom: top + points.at(-1)!.y }; },
@@ -83,13 +85,13 @@ export function mountFractionPassage(root: HTMLElement, surfaces: readonly Surfa
   window.addEventListener("blur", stop, options);
   const navigate = (direction: number) => {
     const destinations = points.map(point => point.position);
-    seek(direction > 0 ? destinations.find(value => value > position + .000001) ?? 3 : [...destinations].reverse().find(value => value < position - .000001) ?? 0);
+    seek(direction > 0 ? destinations.find(value => value > position + .000001) ?? end : [...destinations].reverse().find(value => value < position - .000001) ?? 0);
     revealEquationInViewport(rows.find(row => Number(row.dataset["position"]) === position)?.querySelector<HTMLElement>(".energy-derivation-equation") ?? inspection);
   };
   handle.addEventListener("keydown", event => {
     if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
     event.preventDefault(); stop();
-    if (event.key === "Home" || event.key === "End") { seek(event.key === "Home" ? 0 : 3); revealEquationInViewport(rows[event.key === "Home" ? 0 : rows.length - 1]!); }
+    if (event.key === "Home" || event.key === "End") { seek(event.key === "Home" ? 0 : end); revealEquationInViewport(rows[event.key === "Home" ? 0 : rows.length - 1]!); }
     else navigate(event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1);
   }, options);
   get<HTMLButtonElement>("[data-fraction-back]").addEventListener("click", () => navigate(-1), options);

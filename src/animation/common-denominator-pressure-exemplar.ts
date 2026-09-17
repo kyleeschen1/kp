@@ -6,7 +6,9 @@ import {
   createKpCanonicalBalancedSolveEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
 import {
-  kpCanonicalCommonDenominatorPressurePresentationPlan
+  kpCanonicalCommonDenominatorPressurePresentationPlan,
+  isKpCommonDenominatorPressurePresentationPlan,
+  type KpCommonDenominatorPressurePresentationPlan
 } from "./common-denominator-pressure-presentation-plan.ts";
 import {
   createKpAssetBundle,
@@ -68,9 +70,11 @@ export function sampleKpCommonDenominatorPressureTimeline(
   return frame("evaluate-products", (bounded - start) / (1 - start));
 }
 
-export function createKpCommonDenominatorPressureAnimationAsset():
+export function createKpCommonDenominatorPressureAnimationAsset(
+  plan: KpCommonDenominatorPressurePresentationPlan = kpCanonicalCommonDenominatorPressurePresentationPlan
+):
 KpAnimationAsset {
-  const plan = kpCanonicalCommonDenominatorPressurePresentationPlan;
+  if (!isKpCommonDenominatorPressurePresentationPlan(plan)) throw new TypeError("Expected an issued pressure presentation plan.");
   const objects = plan.endpoints.map((entry) =>
     createKpSemanticAssetObject({
       id: entry.stateId,
@@ -80,7 +84,7 @@ KpAnimationAsset {
         latex: entry.latex,
         endpointKind: entry.kind
       }),
-      selectors: selectorsFor(entry.kind),
+      selectors: selectorsFor(entry.kind, plan),
       metadata: {
         latex: entry.latex,
         settledEndpointAuthority: "native-katex"
@@ -95,7 +99,7 @@ KpAnimationAsset {
     transformation({
       id: `${plan.id}.stage-unit-factor`,
       type: "introduceUnitFactor",
-      title: "Introduce two over two beside one third",
+      title: "Introduce a unit factor beside the first fraction",
       sourceId: requiredObject(byKind, "problem").id,
       targetId: requiredObject(byKind, "equivalence-source").id,
       preserves: ["identity", "value", "structure"]
@@ -119,7 +123,7 @@ KpAnimationAsset {
   ];
   const root = createSemanticTransformationSequence({
     id: `animation-tree.${kpCommonDenominatorPressureAnimationId}`,
-    label: "Give one third a denominator of six",
+    label: "Give the fractions a shared denominator",
     children: transformations.map((entry) =>
       createSemanticTransformationLeaf(createSemanticTransformationRef({
         id: entry.id,
@@ -136,7 +140,7 @@ KpAnimationAsset {
     "render.fraction-equivalence.common-denominator-pressure";
   return createKpAnimationAsset({
     id: kpCommonDenominatorPressureAnimationId,
-    title: "Give one third a denominator of six",
+    title: "Give the fractions a shared denominator",
     bundle: createKpAssetBundle({
       id: "bundle.fraction.common-denominator-pressure",
       title: "Common denominator pressure caller",
@@ -214,9 +218,9 @@ KpAnimationAsset {
 
 function selectorsFor(
   kind: typeof kpCanonicalCommonDenominatorPressurePresentationPlan
-    .endpoints[number]["kind"]
+    .endpoints[number]["kind"],
+  plan: KpCommonDenominatorPressurePresentationPlan
 ) {
-  const plan = kpCanonicalCommonDenominatorPressurePresentationPlan;
   const ids = kind === "problem"
     ? [
         ...plan.equivalence.focus.presentation.sourceSelectorIds,
@@ -295,10 +299,10 @@ function requiredObject(
 
 function endpointTitle(kind: string): string {
   switch (kind) {
-    case "problem": return "One third plus one sixth";
-    case "equivalence-source": return "Multiply one third by two over two";
+    case "problem": return "Fractions with unlike denominators";
+    case "equivalence-source": return "Multiply the first fraction by a unit factor";
     case "product": return "Equivalent products over a common denominator";
-    case "evaluated": return "Two sixths plus one sixth";
+    case "evaluated": return "Fractions with a shared denominator";
     default: throw new Error(`Unknown pressure endpoint ${kind}.`);
   }
 }

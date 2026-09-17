@@ -17,6 +17,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-17-chain-first-fraction-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-17-chain-first-numeric-variation.md"
     }
   ],
   "dependsOn": {
@@ -765,6 +769,48 @@
       "scope": "chain.fraction-review",
       "checkedAt": "2026-09-17T21:31:07.022Z",
       "notes": "22 fraction unit checks, complete typechecks, final app typecheck after moving rail projection into runtime, architecture, production build and seven transitive stylesheet closure checks passed. No budgets changed."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.numeric-variation",
+      "checkedAt": "2026-09-17T21:46:35.792Z",
+      "notes": "24 focused tests; source-derived endpoint identities, interleaved callers, copied plans, optional reduction and publication escaping."
+    },
+    {
+      "command": "npm run visual:fraction-chain",
+      "status": "passed",
+      "scope": "chain.numeric-variation",
+      "checkedAt": "2026-09-17T21:46:37.034Z",
+      "notes": "5 Chromium checks, including numeric reverse/disclosure/end navigation and original font/shared styling preservation."
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "scope": "chain.numeric-variation",
+      "checkedAt": "2026-09-17T21:46:38.082Z",
+      "notes": "6 existing canonical editor preservation checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.numeric-variation",
+      "checkedAt": "2026-09-17T21:46:39.116Z",
+      "notes": "Full app, node, test, Svelte and domain types pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.numeric-variation",
+      "checkedAt": "2026-09-17T21:46:40.317Z",
+      "notes": "All architecture and conformance gates pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.numeric-variation",
+      "checkedAt": "2026-09-17T21:46:41.505Z",
+      "notes": "Original and numeric publication routes build; existing large-chunk warnings remain."
     }
   ],
   "progress": {

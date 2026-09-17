@@ -5,20 +5,20 @@ import { fractionIntervalAt, fractionPositionAtY, fractionSceneAt } from "../src
 import { compileFractionChainPublication } from "../src/tutorial/fraction-chain/publication.ts";
 
 test("measured fraction rail round trips coarse and expanded positions at different font geometries", () => {
-  for (const scale of [.75, 1, 2]) for (const stops of [[0, 1, 2, 3], [0, 1, 1.5, 2, 3]]) {
+  for (const scale of [.75, 1, 2]) for (const stops of [[0, 1, 2], [0, 1, 1.5, 2], [0, 1, 2, 3], [0, 1, 1.5, 2, 3]]) {
     const points = stops.map((position, index) => ({ position, y: scale * (40 + index * index * 100) }));
-    for (let index = 0; index <= 300; index++) {
+    for (let index = 0; index <= stops.at(-1)! * 100; index++) {
       const position = index / 100, interval = fractionIntervalAt(position, points);
       assert.ok(Math.abs(fractionPositionAtY(interval.y, points) - position) < 1e-10);
       const scene = fractionSceneAt(position);
       assert.ok(scene.progress >= 0 && scene.progress <= 1);
     }
     assert.equal(fractionPositionAtY(-100, points), 0);
-    assert.equal(fractionPositionAtY(10000, points), 3);
+    assert.equal(fractionPositionAtY(10000, points), stops.at(-1));
   }
 });
 test("invalid and collapsed rail geometry cannot enter the playhead", () => {
-  for (const points of [[], [{position: 0, y: 0}], [{position: 0, y: 0}, {position: 3, y: 0}], [{position: 0, y: 0}, {position: 2, y: 10}]])
+  for (const points of [[], [{position: 0, y: 0}], [{position: 0, y: 0}, {position: 3, y: 0}], [{position: 0, y: 0}, {position: 4, y: 10}]])
     assert.throws(() => fractionPositionAtY(5, points), /measurements/);
   for (const position of [NaN, Infinity, -1, 4]) assert.throws(() => fractionSceneAt(position), /position/);
 });

@@ -12,7 +12,8 @@ import {
   createKpAdjacentPhaseEquivalentPoseSeamIntent
 } from "../animation/paint-continuity-plan-types.ts";
 import {
-  kpCanonicalCommonDenominatorPressurePresentationPlan
+  kpCanonicalCommonDenominatorPressurePresentationPlan,
+  type KpCommonDenominatorPressurePresentationPlan
 } from "../animation/common-denominator-pressure-presentation-plan.ts";
 import { createKpEquationFontReadiness } from
   "./equation-font-readiness.ts";
@@ -24,7 +25,7 @@ import {
 } from "./fraction-equivalence-transit-session.ts";
 import {
   bindKpCommonDenominatorPressureNativeEndpoint,
-  kpCanonicalCommonDenominatorPressureNativeEndpoints,
+  createKpCommonDenominatorPressureNativeEndpoints,
   type KpCommonDenominatorPressureNativeEndpoint
 } from "./common-denominator-pressure-native-endpoints.ts";
 import {
@@ -51,11 +52,9 @@ import {
 } from "./native-katex-equivalent-pose-seam.ts";
 interface PressureSample { readonly direction: "forward" | "rewind"; readonly progress: number }
 
-const canonicalGovernance = compileKpFractionRootMigrationV2(
-  createKpCommonDenominatorPressureAnimationAsset()
-);
-
 interface KpCommonDenominatorPressureSurfaceSession {
+  readonly plan: KpCommonDenominatorPressurePresentationPlan;
+  readonly endpoints: ReturnType<typeof createKpCommonDenominatorPressureNativeEndpoints>;
   readonly player: HTMLElement;
   readonly stage: HTMLElement;
   readonly roots: ReadonlyMap<
@@ -87,7 +86,6 @@ interface KpCommonDenominatorPressureSurfaceSession {
   disposed: boolean;
 }
 
-const plan = kpCanonicalCommonDenominatorPressurePresentationPlan;
 const introductionToEquivalenceIntent =
   createKpAdjacentPhaseEquivalentPoseSeamIntent({
     id: "seam.common-denominator-pressure.introduction-to-equivalence",
@@ -97,8 +95,9 @@ const introductionToEquivalenceIntent =
 
 /** One native owner for both editor and passage hosts. Hosts supply samples;
  * preparation, equivalent-pose seams and invalidation remain renderer-owned. */
-export function mountCanonicalCommonDenominatorPressure(player: HTMLElement, slot: HTMLElement) {
-  const session = mountSurface(player, slot, { direction: "forward", progress: 0 });
+export function mountCanonicalCommonDenominatorPressure(player: HTMLElement, slot: HTMLElement,
+  plan: KpCommonDenominatorPressurePresentationPlan = kpCanonicalCommonDenominatorPressurePresentationPlan) {
+  const session = mountSurface(player, slot, { direction: "forward", progress: 0 }, plan);
   const ready = prepareSurface(session, ++session.generation).then(() => {
     if (!isReady(session) || session.stage.dataset["kpCommonDenominatorPressureStage"] !== "ready")
       throw new Error(session.stage.dataset["kpCommonDenominatorPressureError"] ?? "Alignment preparation failed.");
@@ -118,23 +117,26 @@ export function mountCanonicalCommonDenominatorPressure(player: HTMLElement, slo
 function mountSurface(
   player: HTMLElement,
   slot: HTMLElement,
-  state: PressureSample
+  state: PressureSample,
+  plan: KpCommonDenominatorPressurePresentationPlan
 ): KpCommonDenominatorPressureSurfaceSession {
+  const governance = compileKpFractionRootMigrationV2(createKpCommonDenominatorPressureAnimationAsset(plan));
+  const endpoints = createKpCommonDenominatorPressureNativeEndpoints(plan);
   const document = player.ownerDocument;
   const stage = document.createElement("section");
   stage.className = "kp-common-denominator-pressure-stage";
   stage.dataset["kpCommonDenominatorPressureStage"] = "preparing";
   stage.dataset["kpEquationPresentationPlanId"] =
-    canonicalGovernance.presentationPlan.id;
+    governance.presentationPlan.id;
   stage.setAttribute(
     "aria-label",
-    "Give one third a denominator of six"
+    "Give the fractions a shared denominator"
   );
   const roots = new Map<
     KpCommonDenominatorPressureNativeEndpoint["kind"],
     HTMLElement
   >();
-  kpCanonicalCommonDenominatorPressureNativeEndpoints.forEach(
+  endpoints.forEach(
     (endpoint, index) => {
       const root = document.createElement("div");
       root.className =
@@ -156,10 +158,11 @@ function mountSurface(
   status.className = "kp-common-denominator-pressure-stage__status";
   status.dataset["kpCommonDenominatorPressureStatus"] = "true";
   status.setAttribute("aria-live", "polite");
-  status.textContent = "One third plus one sixth.";
+  status.textContent = endpoints[0].accessibleText;
   stage.append(materialLayer, status);
   slot.replaceChildren(stage);
   return {
+    plan, endpoints,
     player,
     stage,
     roots,
@@ -179,8 +182,9 @@ async function prepareSurface(
   session: KpCommonDenominatorPressureSurfaceSession,
   generation: number
 ): Promise<void> {
+  const plan = session.plan;
   const endpoints = Object.fromEntries(
-    kpCanonicalCommonDenominatorPressureNativeEndpoints.map((endpoint) => [
+    session.endpoints.map((endpoint) => [
       endpoint.kind,
       endpoint
     ])
@@ -190,7 +194,7 @@ async function prepareSurface(
   >;
   const measurements = new Set<string>();
   try {
-    kpCanonicalCommonDenominatorPressureNativeEndpoints.forEach((endpoint) =>
+    session.endpoints.forEach((endpoint) =>
       bindKpCommonDenominatorPressureNativeEndpoint({
         root: requiredRoot(session, endpoint.kind),
         endpoint
@@ -261,7 +265,7 @@ async function prepareSurface(
       compileKpCanonicalNativeKatexScenePlan({
         source: problemSource,
         target: equivalenceTarget,
-        relations: introductionRelations(),
+        relations: introductionRelations(plan),
         fanInRouting: false,
         copyFanOutRouting: false
       })
@@ -271,13 +275,13 @@ async function prepareSurface(
       target: productTarget,
       semantic: plan.equivalence.focus.semantic,
       presentation: plan.equivalence.focus.presentation,
-      contextRelations: equivalenceContextRelations()
+      contextRelations: equivalenceContextRelations(plan)
     });
     const evaluation = createKpCanonicalNativeKatexSceneSession(
       compileKpCanonicalNativeKatexScenePlan({
         source: productSource,
         target: evaluatedTarget,
-        relations: evaluationPersistenceRelations(),
+        relations: evaluationPersistenceRelations(plan),
         successorSyntheses: plan.evaluation.bindings.map((binding) => ({
           binding,
           direction: "forward" as const,
@@ -477,11 +481,11 @@ function applyFrame(
   );
   if (status !== null) status.textContent = statusText(
     sampled.segment,
-    sampled.localProgress
+    sampled.localProgress, session.endpoints
   );
 }
 
-function introductionRelations():
+function introductionRelations(plan: KpCommonDenominatorPressurePresentationPlan):
 readonly KpNativeKatexSemanticPaintRelation[] {
   const local = plan.equivalence.focus.semantic.source;
   return Object.freeze([
@@ -496,7 +500,7 @@ readonly KpNativeKatexSemanticPaintRelation[] {
   ]);
 }
 
-function equivalenceContextRelations():
+function equivalenceContextRelations(plan: KpCommonDenominatorPressurePresentationPlan):
 readonly KpNativeKatexSemanticPaintRelation[] {
   return Object.freeze(plan.equivalence.contextTransfers.flatMap(
     (transfer) => visibleContextRole(transfer.role) ? [oneToOne(
@@ -507,7 +511,7 @@ readonly KpNativeKatexSemanticPaintRelation[] {
   ));
 }
 
-function evaluationPersistenceRelations():
+function evaluationPersistenceRelations(plan: KpCommonDenominatorPressurePresentationPlan):
 readonly KpNativeKatexSemanticPaintRelation[] {
   const ids = [
     plan.equivalence.focus.semantic.target.divisionEntityId,
@@ -541,7 +545,7 @@ function same(
 }
 
 function visibleContextRole(
-  role: typeof plan.equivalence.contextTransfers[number]["role"]
+  role: KpCommonDenominatorPressurePresentationPlan["equivalence"]["contextTransfers"][number]["role"]
 ): boolean {
   return role === "addition-operator" ||
     role === "untouched-division" ||
@@ -583,18 +587,19 @@ function accessibleProgress(player: HTMLElement, progress: number): number {
 
 function statusText(
   segment: KpCommonDenominatorPressureTimelineSegment,
-  localProgress: number
+  localProgress: number,
+  endpoints: ReturnType<typeof createKpCommonDenominatorPressureNativeEndpoints>
 ): string {
   if (segment === "stage-unit-factor") {
     return localProgress === 0
-      ? "One third plus one sixth."
-      : "Introduce two over two, which equals one.";
+      ? endpoints[0].accessibleText
+      : endpoints[1].accessibleText;
   }
   if (segment === "join-equivalent-fraction") {
-    return "Join the unit factor with one third; one sixth stays fixed.";
+    return "Join the unit factor with the first fraction; the second stays fixed.";
   }
   return localProgress === 1
-    ? "Two sixths plus one sixth."
+    ? endpoints[3].accessibleText
     : "Evaluate the numerator and denominator products together.";
 }
 

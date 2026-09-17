@@ -72,6 +72,11 @@ export interface KpCommonDenominatorPressureEndpoint {
 }
 
 export interface KpCommonDenominatorPressurePresentationPlan {
+  readonly values: Readonly<{
+    firstNumerator: string; firstDenominator: string;
+    secondNumerator: string; secondDenominator: string;
+    targetNumerator: string; targetDenominator: string; factor: string;
+  }>;
   readonly schemaVersion:
     "kp.common-denominator-pressure-presentation-plan.v1";
   readonly id: string;
@@ -122,6 +127,11 @@ export function compileKpCommonDenominatorPressureEquivalencePlan(
     throw new TypeError(
       "Pressure presentation requires verified common-denominator authority."
     );
+  }
+  if (alignment.equivalenceMultipliers[0].numerator <= 1n ||
+      alignment.equivalenceMultipliers[1].numerator !== 1n ||
+      alignment.equivalenceMultipliers[1].denominator !== 1n) {
+    throw new TypeError("Pressure presentation requires first-term scaling and an unchanged second term.");
   }
   const sourceTerm = alignment.source.terms[0];
   const targetTerm = alignment.target.terms[0];
@@ -268,20 +278,30 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
     alignment.target.terms[1].numerator.entityId,
     alignment.target.terms[1].denominator.entityId
   ]);
+  const first = alignment.source.terms[0];
+  const second = alignment.source.terms[1];
+  const factor = alignment.equivalenceMultipliers[0].numerator;
+  const contextLatex = `+\\frac{${second.numerator.value}}{${second.denominator.value}}`;
   const endpoints = Object.freeze([
     endpoint("problem", alignment.source.stateId,
-      "\\frac{1}{3}+\\frac{1}{6}"),
+      `\\frac{${first.numerator.value}}{${first.denominator.value}}${contextLatex}`),
     endpoint("equivalence-source", local.source.stateId,
-      "\\frac{2}{2}\\cdot\\frac{1}{3}+\\frac{1}{6}"),
+      `\\frac{${factor}}{${factor}}\\cdot\\frac{${first.numerator.value}}{${first.denominator.value}}${contextLatex}`),
     endpoint("product", local.target.stateId,
-      "\\frac{2\\cdot1}{2\\cdot3}+\\frac{1}{6}"),
+      `\\frac{${factor}\\cdot${first.numerator.value}}{${factor}\\cdot${first.denominator.value}}${contextLatex}`),
     endpoint("evaluated", evaluatedStateId,
-      "\\frac{2}{6}+\\frac{1}{6}")
+      `\\frac{${alignment.target.terms[0].numerator.value}}{${alignment.target.terms[0].denominator.value}}${contextLatex}`)
   ] as const);
   const plan = deepFreeze({
     schemaVersion:
       "kp.common-denominator-pressure-presentation-plan.v1" as const,
     id: `presentation.${alignment.id}.pressure`,
+    values: {
+      firstNumerator: String(first.numerator.value), firstDenominator: String(first.denominator.value),
+      secondNumerator: String(second.numerator.value), secondDenominator: String(second.denominator.value),
+      targetNumerator: String(alignment.target.terms[0].numerator.value),
+      targetDenominator: String(alignment.target.terms[0].denominator.value), factor: String(factor)
+    },
     equivalence,
     evaluation: {
       transformationId: `${alignment.id}.pressure.evaluate-products`,

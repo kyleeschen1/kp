@@ -10,8 +10,10 @@ export function compileFractionChainPublication(markdown: string, input: unknown
   const result = compileFractionChain(input);
   if (result.status !== "compiled") throw new Error(`${result.code}: ${result.expected}`);
   const { source, revision } = result.compilation;
-  if (source.states.length !== 4 || result.compilation.steps.map(step => step.kind).join(",") !== "align,combine,reduce")
-    throw new Error("The canonical fraction passage requires alignment, addition, and reduction in order.");
+  const sequence = result.compilation.steps.map(step => step.kind).join(",");
+  if (!["align,combine", "align,combine,reduce"].includes(sequence))
+    throw new Error("The fraction passage requires alignment and addition, optionally followed by reduction.");
+  const end = source.states.length - 1;
   const articleSource = createKpArticleSource("examples/algebra/fraction-chain.article.md", markdown);
   const { lock } = resolveKpArticleImports(articleSource, []);
   const article = compileKpArticleDocument({ source: articleSource, registry: [], lock });
@@ -22,7 +24,7 @@ export function compileFractionChainPublication(markdown: string, input: unknown
   const row = (position: number, latex: string, prose: string, detail = false) => `<li data-fraction-row data-position="${position}"${detail ? ' data-fraction-detail data-nested-step data-nested-first="true" data-nested-last="true" hidden' : ''}>
     <div class="energy-derivation-equation">${math(latex)}</div><div class="fraction-reason energy-derivation-reason"><div class="energy-derivation-interleave-text">${html(prose)}${position === 1
       ? `<details data-fraction-static-detail><summary>Smaller addition steps</summary>${math(intermediate)}<p>Gather the numerators over one denominator, then evaluate their sum.</p></details><div class="energy-derivation-actions"><button type="button" data-fraction-disclosure aria-expanded="false" hidden>Inspect smaller steps</button></div>` : ""}</div></div></li>`;
-  const rows = source.states.map((state, index) => row(index, state.latex, source.moves[index]?.prose ?? "The same quantity is now written as one half.") +
+  const rows = source.states.map((state, index) => row(index, state.latex, source.moves[index]?.prose ?? "The same quantity is now written as a single fraction.") +
     (index === 1 ? row(1.5, intermediate, "Both counts now share one denominator. Add only the numerator terms.", true) : "")).join("");
   const passage = `<div class="energy-derivation fraction-passage" data-fraction-passage data-source-revision="${revision}" data-rail-refinement="true" data-inset-fenceposts="true">
     <p data-fraction-status role="status" hidden>Preparing inspection…</p>
@@ -30,9 +32,9 @@ export function compileFractionChainPublication(markdown: string, input: unknown
     <div class="fraction-history"><ol class="energy-derivation-history">${rows}</ol>
       <div class="energy-derivation-rail" data-fraction-rail hidden>${source.states.map((_, i) => `<span data-position="${i}"></span>`).join("")}<span data-position="1.5" data-fraction-detail hidden></span></div>
       <div class="fraction-inspection" data-fraction-inspection aria-hidden="true">
-        ${["alignment", "merge", "evaluation", "reduction"].map(kind => `<div class="fraction-stage" data-fraction-stage="${kind}" data-distribution-stage></div>`).join("")}
+        ${["alignment", "merge", "evaluation", ...(end === 3 ? ["reduction"] : [])].map(kind => `<div class="fraction-stage" data-fraction-stage="${kind}" data-distribution-stage></div>`).join("")}
       </div>
-      <div class="energy-derivation-scope" data-fraction-scope hidden><button type="button" data-derivation-handle role="slider" aria-label="Fraction derivation" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span aria-hidden="true"></span></button></div>
+      <div class="energy-derivation-scope" data-fraction-scope hidden><button type="button" data-derivation-handle role="slider" aria-label="Fraction derivation" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="${end}" aria-valuenow="0"><span aria-hidden="true"></span></button></div>
     </div><div class="energy-derivation-actions" data-fraction-navigation hidden><button type="button" data-fraction-back>Previous</button><button type="button" data-fraction-next>Next</button></div>
   </div>`;
   let found = false;
@@ -42,5 +44,7 @@ export function compileFractionChainPublication(markdown: string, input: unknown
     found = true; return `<section id="counting-parts">${html(block.markdown)}${passage}</section>`;
   }).join("\n");
   if (!found) throw new Error("Missing fraction passage.");
-  return `<article data-kp-article="${escape(article.document.id)}">${body}</article>`;
+  // The published and interactive views consume the same bytes; escaping '<'
+  // prevents source prose from terminating this inert JSON script element.
+  return `<article data-kp-article="${escape(article.document.id)}">${body}</article><script type="application/json" id="fraction-chain-source">${JSON.stringify(input).replaceAll("<", "\\u003c")}</script>`;
 }

@@ -16,6 +16,28 @@ async function seek(page: Page, position: number) {
   await expect.poll(async () => Number(await page.locator("[data-fraction-passage]").getAttribute("data-fraction-position"))).toBeCloseTo(position, 2);
 }
 
+test("numeric variant uses checked eighths throughout and ends without a reduction surface", async ({ page }) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/fraction-chain/numeric/");
+  const root = page.locator("[data-fraction-passage]");
+  await expect(root).toHaveAttribute("data-fraction-ready", /true|repair/, { timeout: 20000 });
+  expect(await root.getAttribute("data-fraction-ready"), await root.locator("[data-fraction-status]").textContent() ?? "").toBe("true");
+  await expect(root.locator("[data-fraction-stage]")).toHaveCount(3);
+  await expect(root.locator("[data-derivation-handle]")).toHaveAttribute("aria-valuemax", "2");
+  const latex = await root.locator('[data-fraction-stage="alignment"] .katex-mathml annotation').allTextContents();
+  expect(latex[0]).toContain("{4}"); expect(latex[3]).toContain("{8}");
+  for (const position of [0, .08, .3, .85, 1, 1.25, 1.5, 1.75, 2, 1.75, 1.25, .85, .3, 0]) await seek(page, position);
+  await seek(page, 1.25);
+  const held = Number(await root.getAttribute("data-fraction-position"));
+  const toggle = root.locator("[data-fraction-disclosure]");
+  await toggle.click(); await seek(page, 1.75); await toggle.click();
+  expect(Number(await root.getAttribute("data-fraction-position"))).toBeCloseTo(held, 6);
+  await root.locator("[data-derivation-handle]").focus(); await page.keyboard.press("End");
+  await expect(root).toHaveAttribute("data-fraction-position", "2.000000");
+  await page.screenshot({ path: "tmp/codex/fraction-chain-review/numeric-variant.png", fullPage: true });
+  expect(errors).toEqual([]);
+});
+
 test("persistent fraction passage seeks through canonical operations and retains disclosure state", async ({ page }) => {
   const errors: string[] = []; page.on("pageerror", error => { errors.push(error.message); console.error(error.stack); });
   await page.goto("/experiments/fraction-chain/");
