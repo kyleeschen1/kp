@@ -7,15 +7,33 @@ import { resolveKpReaderEquationPresentationProfile } from "../../reader/documen
 import { createKpNumeratorSplitMergeSelectorAnnotatedLatex } from "../../rendering/numerator-split-merge-selector-annotated-latex.ts";
 import { createKpSelectorAnnotatedLatex, type KpSelectorAnnotatedLatexSegment } from "../../rendering/selector-annotated-latex.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
+import { assertCompiledFractionChain, type CompiledFractionChain } from "../../authoring/fraction-chain-compilation.ts";
+import { createKpFractionSelectorAnnotatedLatex } from "../../rendering/generated-fraction-selector-annotated-latex.ts";
+import type { KpAnimationAsset } from "../../animation/asset.ts";
+import type { KpVerifiedEquationEvaluationFamilyCertificateV2 } from "../../domain-ir/equation-evaluation-family-certificate-v2.ts";
+import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 
 export async function mountFractionAdditionSurface(target: HTMLElement, presentation: FractionAdditionPresentation, kind: "merge" | "evaluation") {
   assertFractionAdditionPresentation(presentation);
-  const animation = presentation[kind], operation = animation.transformations[0]!;
+  return mountCheckedFractionSurface(target, presentation[kind], state => kind === "merge"
+    ? createKpNumeratorSplitMergeSelectorAnnotatedLatex(state)?.annotated : annotateNumeratorEvaluation(state),
+    kind === "evaluation" ? [presentation.evaluationCertificate] : []);
+}
+
+export async function mountFractionReductionSurface(target: HTMLElement, compilation: CompiledFractionChain, index: number) {
+  assertCompiledFractionChain(compilation);
+  const step = compilation.steps[index];
+  if (step?.kind !== "reduce") throw new TypeError("Select the checked reduction step.");
+  return mountCheckedFractionSurface(target, step.animation, state => createKpFractionSelectorAnnotatedLatex({ objectId: state.id, selectors: state.selectors }));
+}
+
+async function mountCheckedFractionSurface(target: HTMLElement, animation: KpAnimationAsset,
+  annotate: (state: KpSemanticAssetObject) => KpSelectorAnnotatedLatex | undefined,
+  evaluationCertificates: readonly KpVerifiedEquationEvaluationFamilyCertificateV2[] = []) {
   const endpoints = animation.bundle.objects.map(object => ({ objectId: object.id,
     groupEnvelopes: [{ id: `${object.id}.equation`, memberSelectorIds: [`${object.id}.whole`] }] }));
   const holder = document.createElement("div");
-  holder.innerHTML = compileKpEquationExemplarTemplate(animation, state => kind === "merge"
-    ? createKpNumeratorSplitMergeSelectorAnnotatedLatex(state)?.annotated : annotateNumeratorEvaluation(state));
+  holder.innerHTML = compileKpEquationExemplarTemplate(animation, annotate);
   const template = holder.querySelector<HTMLTemplateElement>("template")!;
   const shell = mountKpCanonicalEquationStageShell({ target, template, bindStructuralAnchors: root => {
     for (const object of animation.bundle.objects) {
@@ -37,9 +55,10 @@ export async function mountFractionAdditionSurface(target: HTMLElement, presenta
       stageLayoutCompiler: { apply: input => applyKpSemanticEnvelopeEquationStageLayout({ ...input, endpoints,
         envelopeDataKey: "kpEquationStageEnvelopeId", memberDataKey: "kpEquationStageMemberId", envelopeObservation: "member-paint-union", diagnosticLabel: "Fraction addition" }) } },
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: target,
-    evaluationCertificates: kind === "evaluation" ? [presentation.evaluationCertificate] : [], prewarmAdjacentTransitions: false,
+    evaluationCertificates, prewarmAdjacentTransitions: false,
     createStageLayoutIntent: () => ({ executionState: "intent", geometryAuthority: "native-measurement", operationSpecificCoordinates: false,
-      phases: [{ nodeId: operation.id, policy: "single-row", rows: [{ id: `${operation.id}.row`, role: "equation", envelopeIds: endpoints.map(e => e.groupEnvelopes[0]!.id) }] }] }) });
+      phases: animation.transformations.map(operation => ({ nodeId: operation.id, policy: "single-row", rows: [{ id: `${operation.id}.row`, role: "equation",
+        envelopeIds: endpoints.filter(e => [...operation.sourceObjectIds, ...operation.targetObjectIds].includes(e.objectId)).map(e => e.groupEnvelopes[0]!.id) }] })) }) });
   await document.fonts.ready;
   session.seek(0);
   return session;

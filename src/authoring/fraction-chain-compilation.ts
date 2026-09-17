@@ -93,7 +93,7 @@ function compileReduction(source: FractionChainSource, index: number, revision: 
   if (authority.source.term.numerator.value <= 0n || authority.target.term.numerator.value <= 0n)
     throw new FractionChainRepair("fraction-chain.presentation", path, "The current reduction presentation requires positive numerators; exact signed/zero reduction is not yet a supported visual caller.");
   try {
-    const animation = createFractionSimplificationAnimationAsset({ familyId: "generated.fraction-expression", id: `${source.id}.${source.moves[index]!.id}`,
+    const animation = createFractionSimplificationAnimationAsset({ familyId: "generated.fraction-expression", id: `generated.fraction-expression.${source.id}.${source.moves[index]!.id}`,
       title: source.moves[index]!.prose, numerator: Number(authority.source.term.numerator.value), denominator: Number(authority.source.term.denominator.value),
       simplifiedNumerator: Number(authority.target.term.numerator.value), simplifiedDenominator: Number(authority.target.term.denominator.value) });
     const operationPacks = [{ packId: "kp.algebra", version: "0.1.0" }] as const;

@@ -12,8 +12,8 @@ test("fraction addition uses native merge and numerator evaluation, reversibly",
     await expect(visible).toHaveCount(1);
     await expect(visible.locator("[data-kp-reader-equation-stage]")).toBeVisible();
     const inactive = root.locator('[data-fraction-stage][aria-hidden="true"]');
-    expect(await inactive.evaluate(element => [...element.querySelectorAll<HTMLElement>(".katex, [data-kp-equation-material-owner-id]")]
-      .some(owner => owner.checkVisibility({ opacityProperty: true, visibilityProperty: true })))).toBe(false);
+    expect(await inactive.evaluateAll(elements => elements.some(element => [...element.querySelectorAll<HTMLElement>(".katex, [data-kp-equation-material-owner-id]")]
+      .some(owner => owner.checkVisibility({ opacityProperty: true, visibilityProperty: true }))))).toBe(false);
     return visible.evaluate(element => [...element.querySelectorAll<HTMLElement>("[data-kp-equation-material-owner-id]")]
       .map(owner => ({ id: owner.dataset["kpEquationMaterialOwnerId"], transform: owner.style.transform, visibility: owner.style.visibility })));
   };
@@ -25,4 +25,9 @@ test("fraction addition uses native merge and numerator evaluation, reversibly",
   await page.screenshot({ path: "tmp/codex/fraction-chain-review/addition-numerator.png", fullPage: true });
   await sample(2);
   await page.screenshot({ path: "tmp/codex/fraction-chain-review/addition-settled.png", fullPage: true });
+  for (const position of [2.25, 2.5, 3, 3.5, 4, 4.5, 5]) await sample(position);
+  const reduction = await sample(3.5); await sample(5); expect(await sample(3.5)).toEqual(reduction);
+  await page.screenshot({ path: "tmp/codex/fraction-chain-review/reduction-transit.png", fullPage: true });
+  await sample(5);
+  await page.screenshot({ path: "tmp/codex/fraction-chain-review/reduction-settled.png", fullPage: true });
 });

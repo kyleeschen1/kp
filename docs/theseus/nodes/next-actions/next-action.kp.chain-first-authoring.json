@@ -656,6 +656,41 @@
       "scope": "chain.addition-exemplar",
       "checkedAt": "2026-09-17T20:42:27.053Z",
       "notes": "Chromium canonical merge and numerator fusion seek/reverse smoke passes. Captures inspected. Inactive compositor descendants cannot retain paint because stage display is withdrawn, with regression check. Visual judgment remains pending combined slice16 review."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-chain-reduction-presentation.test.ts tests/fraction-chain-compilation.test.ts tests/kp-fraction-animation-asset.test.ts tests/kp-fraction-choreography.test.ts tests/fraction-semantic-latex.test.ts",
+      "status": "passed",
+      "scope": "chain.reduction-exemplar",
+      "checkedAt": "2026-09-17T20:47:49.282Z",
+      "notes": "15 affected tests pass; generated endpoint annotations and three registered operations preserved. Final annotation binding assertion also passes."
+    },
+    {
+      "command": "npm run visual:fraction-chain",
+      "status": "passed",
+      "scope": "chain.reduction-exemplar",
+      "checkedAt": "2026-09-17T20:47:50.421Z",
+      "notes": "Chromium seeks across all three reduction operations and reverses to identical material owner poses; inactive stages emit no paint. Transit and exact one-half settlement captures inspected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.reduction-exemplar",
+      "checkedAt": "2026-09-17T20:47:51.436Z",
+      "notes": "Full types pass; shared generated fraction annotations moved to rendering with editor compatibility export."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.reduction-exemplar",
+      "checkedAt": "2026-09-17T20:47:52.525Z",
+      "notes": "All ownership and dependency gates pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.reduction-exemplar",
+      "checkedAt": "2026-09-17T20:47:53.599Z",
+      "notes": "Fraction addition and reduction route builds with production erasure preserved."
     }
   ],
   "progress": {

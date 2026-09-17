@@ -119,7 +119,8 @@
     {
       "id": "chain.reduction-exemplar",
       "title": "Reduction-exemplar",
-      "status": "planned"
+      "summary": "Native reduction reuses all three existing named operations, with exact endpoint/annotation, reverse, ownership, type, architecture and build evidence.",
+      "status": "complete"
     },
     {
       "id": "chain.fraction-passage",
