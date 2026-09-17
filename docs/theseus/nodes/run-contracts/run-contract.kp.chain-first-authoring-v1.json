@@ -4,7 +4,7 @@
   "title": "Chain-first authoring: transfer, fractions and checked inference",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: three slices complete; chain.energy-review packet ready, visual judgment pending. Do not execute scalar transfer until energy acceptance. Restore this contract and target to ready only after that acceptance.",
+  "summary": "HUMAN_CHECKPOINT: 3 of 24 complete. Revised energy-review candidate preserves visible handle and real compositor paint through checked-child disclosure. Resume only after visual acceptance; then scalar transfer remains approved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,7 +59,7 @@
     {
       "id": "chain.energy-review",
       "title": "Energy-review",
-      "summary": "HUMAN_CHECKPOINT: review packet prepared and automated evidence passes; await energy visual acceptance. Do not start scalar transfer or mark this review complete before acceptance.",
+      "summary": "HUMAN_CHECKPOINT: revised visible-handle and real-paint handoff passes frame geometry and lifecycle checks; awaiting visual acceptance before scalar transfer.",
       "status": "ready"
     },
     {

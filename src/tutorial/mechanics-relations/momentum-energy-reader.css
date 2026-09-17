@@ -91,6 +91,8 @@
  * read-only proof must yield hit-testing to controls; disclosures stay active. */
 .energy-derivation .katex-html { pointer-events: none; }
 .energy-derivation-stage { position: absolute; left: 0; width: 100%; height: 3.4rem; pointer-events: none; }
+/* Preparation keeps the previous real paint visible until atomic handoff. */
+.energy-derivation[data-disclosure-handoff] [data-derivation-stage] { opacity: 0 !important; }
 .energy-derivation-stage > [data-derivation-child] { top: 0; }
 .energy-derivation-endpoint { position: absolute; left: 0; top: 0; }
 .energy-derivation-stage [data-kp-editor-equation-material-layer] { position: absolute; inset: 0; pointer-events: none; }

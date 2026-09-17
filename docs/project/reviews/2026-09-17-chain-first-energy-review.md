@@ -6,6 +6,46 @@ is pending. Theseus owns live counts and execution under
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
 requires this judgment before scalar transfer. No later slice has started.
 
+## Revision: preserve the visuals around the handle
+
+User feedback: preserving the argument would work better if it preserved the
+visuals around the handle. The previous version anchored the disclosure button,
+retired the old paint, then restored a semantically equivalent child position.
+That did not preserve the reader's visual point of attention.
+
+The local energy adapter now anchors the on-screen handle. It retains the actual
+paused compositor paint while preparing the successor, then releases it in the
+same turn as the checked successor takes over. The retired clock relinquishes
+its paint reference before disposal, preventing its final snapshot from moving
+the held equation. No glyph snapshot, second visible paint owner, animation or
+new mathematical mapping is introduced. When the handle is off screen, the
+existing disclosure-button anchor remains the fallback.
+
+The retention capability is released on completion, recovery, reader input,
+resize, blur or page disposal. New paint remains hidden during preparation;
+interruption removes the retained paint rather than leaving a floating overlay.
+The change is a local helper, reader lifecycle handoff and presentation mask;
+semantic plans and the scalar caller are preserved. It is independently
+reversible without reverting the checked nonterminal correspondence.
+
+Current regression evidence: ten scoped Chromium checks pass, including
+frame-by-frame open/return at 16px and 24px, both refinement recovery cases,
+edge clearance and the off-screen button-anchor fallback. The frame check was
+then strengthened and passed again: every visible material fragment keeps its
+semantic identity and stays within two pixels in position/size; the handle is
+also stable and there is exactly one visible prefix owner per frame. Delayed
+font readiness pressures input interruption and page-disposal cleanup.
+The first run caught a roughly 400px displacement from the retiring clock's
+final projection; removing its write authority fixed the invariant.
+
+Repeat with `npm run visual:mechanics-relations -- --grep 'disclosure preserves the visible handle|pending disclosure paint|nonterminal unfolding|inline refinement|smaller steps preserves its anchor|rail jumps'`.
+38 semantic/unit checks, full typecheck, architecture, build and production
+closure/budget checks also pass. This is still an unaccepted visual exemplar.
+Exact paint correspondence is demonstrated for the norm's identical checked
+children; cancellation still has only shared endpoints and exact saved return,
+not a newly invented interior correspondence. A changed child position on
+collapse returns to the saved parent position by design.
+
 ## Try the exemplar
 
 Open [energy from momentum](http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum)
@@ -13,7 +53,9 @@ on the existing shared server (HTTP 200 verified). No comparison query is needed
 
 1. Find **2 · Square the denominator too**. Inspect that step and drag the rail
    into its middle; leave the handle held there.
-2. Click **Inspect smaller steps** beneath that explanation. The original
+2. With the handle and inspected equation visible, click **Inspect smaller steps**
+   beneath that explanation. The equation should stay with the handle while
+   surrounding material unfolds. The original
    equation and parent explanation remain; **2.1** and **2.2** open underneath.
    **3 · Cancel one mass factor** and the final result stay in the argument.
 3. Inspect step 3, then use **Collapse smaller steps** or **Back to step 2**.

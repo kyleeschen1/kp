@@ -3,6 +3,85 @@ import { sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/
 
 const route = "/experiments/mechanics-relations/";
 
+test("disclosure preserves the visible handle and real equation paint frame by frame", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
+  const root = await ready(page);
+  for (const font of ['16px', '24px']) {
+    await page.evaluate(size => { document.documentElement.style.fontSize = size; }, font);
+    await dragTo(page, root, 1.62);
+    for (const selector of ['[data-refinement-expand="scale-magnitude"]', '[data-refinement-collapse]']) {
+      const continuity = await root.evaluate(async (el, selector) => {
+        const handle = el.querySelector<HTMLElement>('[data-derivation-handle]')!;
+        const grip = handle.getBoundingClientRect();
+        const sample = () => {
+          const owners = [...el.querySelectorAll<HTMLElement>('[data-derivation-stage], [data-disclosure-paint]')]
+            .filter(stage => stage.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true }));
+          const ink = owners.flatMap(stage => [...stage.querySelectorAll<HTMLElement>('[data-kp-equation-material-semantic-entity-id$=".prefix"]')])
+            .filter(node => node.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true }));
+          const box = ink[0]?.getBoundingClientRect();
+          const paint = owners.flatMap(stage => [...stage.querySelectorAll<HTMLElement>('[data-kp-equation-material-owner-id]')])
+            .filter(node => node.checkVisibility({ checkVisibilityCSS: true, checkOpacity: true }))
+            .map(node => { const rect = node.getBoundingClientRect(); return {
+              id: node.dataset['kpEquationMaterialSemanticEntityId'], x: rect.x, y: rect.y, width: rect.width, height: rect.height
+            }; }).sort((a, b) => (a.id ?? '').localeCompare(b.id ?? ''));
+          return { count: ink.length, x: box?.x ?? NaN, y: box?.y ?? NaN, grip: handle.getBoundingClientRect().top, paint };
+        };
+        const before = sample(), frames = [];
+        el.querySelector<HTMLButtonElement>(selector)!.click();
+        const start = performance.now();
+        while (performance.now() - start < 900) {
+          await new Promise(requestAnimationFrame); frames.push(sample());
+        }
+        return { before, frames, grip: grip.top };
+      }, selector);
+      expect(continuity.before.count).toBe(1);
+      for (const frame of continuity.frames) {
+        expect(frame.count).toBe(1);
+        expect(Math.abs(frame.grip - continuity.grip)).toBeLessThan(2);
+        expect(Math.abs(frame.x - continuity.before.x)).toBeLessThan(2);
+        expect(Math.abs(frame.y - continuity.before.y)).toBeLessThan(2);
+        expect(frame.paint.map(ink => ink.id)).toEqual(continuity.before.paint.map(ink => ink.id));
+        frame.paint.forEach((ink, i) => {
+          for (const axis of ['x', 'y', 'width', 'height'] as const)
+            expect(Math.abs(ink[axis] - continuity.before.paint[i]![axis])).toBeLessThan(2);
+        });
+      }
+      await expect(root.locator('[data-disclosure-paint]')).toHaveCount(0);
+      await page.screenshot({ path: info.outputPath(`handle-continuity-${font}-${selector.includes('expand') ? 'open' : 'return'}.png`) });
+    }
+  }
+});
+
+test("pending disclosure paint yields to input and releases on page disposal", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
+  const root = await ready(page);
+  await dragTo(page, root, 1.62);
+  const delay = await page.evaluateHandle(() => {
+    let release!: () => void;
+    const pending = new Promise<void>(resolve => { release = resolve; });
+    Object.defineProperty(document.fonts, 'ready', { configurable: true, value: pending });
+    return { release };
+  });
+  await root.locator('[data-refinement-expand="scale-magnitude"]').click();
+  await expect(root.locator('[data-disclosure-paint]')).toHaveCount(1);
+  await page.mouse.wheel(0, 100);
+  await expect(root.locator('[data-disclosure-paint]')).toHaveCount(0);
+  expect(await lens(root).evaluate(el => el.style.position)).toBe('');
+  await delay.evaluate(control => control.release());
+  await expect(lens(root)).toBeEnabled();
+  await expect(root).not.toHaveAttribute('data-disclosure-handoff');
+  await root.locator('[data-refinement-collapse]').first().click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await dragTo(page, root, 1.62);
+  await page.evaluate(() => Object.defineProperty(document.fonts, 'ready', { configurable: true, value: new Promise(() => {}) }));
+  await root.locator('[data-refinement-expand="scale-magnitude"]').click();
+  await expect(root.locator('[data-disclosure-paint]')).toHaveCount(1);
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide')));
+  await expect(root.locator('[data-disclosure-paint]')).toHaveCount(0);
+  await expect(root).not.toHaveAttribute('data-disclosure-handoff');
+  expect(await lens(root).evaluate(el => el.style.position)).toBe('');
+});
+
 test("nonterminal unfolding retains downstream context and exact held return", async ({ page }, info) => {
   await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page);

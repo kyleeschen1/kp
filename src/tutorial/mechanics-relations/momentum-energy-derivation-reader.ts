@@ -2,6 +2,7 @@ import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeli
 import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
 import { createEnergyRefinementUnfolding } from "./energy-refinement-unfolding.ts";
+import { holdEnergyDisclosurePaint, visibleDerivationHandle } from "./energy-disclosure-paint.ts";
 import { lensProgressForAlgebra } from "./energy-derivation-presentation.ts";
 import { equationViewportBounds, revealEquationInViewport } from "../../reader/runtime/equation-viewport.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
@@ -83,7 +84,10 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
       const entry = event.currentTarget;
       if (!(entry instanceof HTMLElement)) return;
       busy = true;
-      const viewportAnchor = holdDisclosureViewportAnchor(entry);
+      const grip = unfold ? visibleDerivationHandle(root) : undefined;
+      const visualOffset = grip?.getBoundingClientRect().top;
+      const viewportAnchor = holdDisclosureViewportAnchor(grip ?? entry);
+      let paintHold: ReturnType<typeof holdEnergyDisclosurePaint> | undefined;
       try {
         const collapsing = saved !== undefined;
         if (!collapsing) saved = { state: active.capture(), offset: entry.getBoundingClientRect().top, parentId: entry.dataset['refinementExpand']! };
@@ -114,21 +118,22 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           }
         }
         const offset = saved!.offset;
+        if (grip) paintHold = holdEnergyDisclosurePaint(root, grip, active.detachPaint());
         active.dispose(); replace(next);
+        paintHold?.attach();
         active = mountEnergyDerivation(root, binding, destination);
         // Transfer before yielding: renderer preparation may span visible
         // frames, and a hidden control cannot supply an anchor rectangle.
         const restoredEntry = root.querySelector<HTMLElement>(collapsing ? `[data-refinement-expand="${saved!.parentId}"]` : "[data-refinement-collapse]")!;
         restoredEntry.hidden = false;
-        viewportAnchor.retarget(restoredEntry, offset);
+        viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? offset);
         await active.ready;
         if (root.dataset["repair"] === "true") throw new Error("Refinement scene requires repair");
+        paintHold?.release();
         if (collapsing) saved = undefined;
         bind();
-        // The clicked control is the reader's anchor. The parent equation can
-        // sit far above it once its explanation is open.
-        if (viewportAnchor.retarget(restoredEntry, offset)) restoredEntry.focus({ preventScroll: true });
-        active.reveal();
+        if (viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? offset)) restoredEntry.focus({ preventScroll: true });
+        if (!grip) active.reveal();
       } catch (error) {
         // A failed optional view must not strand the reader or grant a visual
         // fallback authority. Restore the already checked compact inspection.
@@ -137,14 +142,16 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           active.dispose();
           const next = prototype.cloneNode(true) as HTMLElement;
           replace(next);
+          paintHold?.attach();
           active = mountEnergyDerivation(root, binding, previous.state);
           saved = undefined;
           const restoredEntry = root.querySelector<HTMLElement>(`[data-refinement-expand="${previous.parentId}"]`)!;
           restoredEntry.hidden = false;
-          viewportAnchor.retarget(restoredEntry, previous.offset);
+          viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? previous.offset);
           await active.ready;
+          paintHold?.release();
           bind();
-          if (viewportAnchor.retarget(restoredEntry, previous.offset)) restoredEntry.focus({ preventScroll: true });
+          if (viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? previous.offset)) restoredEntry.focus({ preventScroll: true });
         }
         // Recovery survives later compositor rebuilds, which own the separate
         // transient preparation status.
@@ -157,7 +164,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         }
         status.hidden = false; status.textContent = "This detail needs repair; the written reasoning remains available.";
         console.error("Energy refinement repair", error);
-      } finally { busy = false; }
+      } finally { paintHold?.release(); busy = false; }
     };
     buttons.forEach(button => { button.hidden = false; button.addEventListener("click", toggle, { signal: controls.signal }); });
   };
@@ -765,7 +772,17 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   measureRows(); rail.hidden = false;
   scope.hidden = false; transport.hidden = false; positionScope(0, 0); previous.disabled = true;
   const ready = initialPosition ? seekTransition(initialPosition) : Promise.resolve();
-  return { ready, dispose, reveal() { revealRequested = true; scheduleReveal(); }, capture(): EnergyReaderState {
+  return { ready, dispose, detachPaint() {
+    pause();
+    const retained = prepared.find(scene => scene.element === stage);
+    if (!retained) throw new Error('Cannot retain an unprepared inspection');
+    prepared = prepared.filter(scene => scene !== retained);
+    // Retiring the clock may publish one final snapshot. Its projection no
+    // longer owns this leased paint, whose viewport position is now frozen.
+    session = undefined;
+    stage.removeAttribute('data-derivation-stage');
+    return { element: stage, dispose() { retained.session.dispose(); retained.element.remove(); } };
+  }, reveal() { revealRequested = true; scheduleReveal(); }, capture(): EnergyReaderState {
     pause();
     if (loading || seeking || !session) throw new Error("Wait for the active derivation scene to finish preparing");
     return { revision: root.dataset["derivationRevision"]!, transition: ids[selected]!, progress: clock.getSnapshot().progress,

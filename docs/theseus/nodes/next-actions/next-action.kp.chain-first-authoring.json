@@ -4,7 +4,7 @@
   "title": "Chain-first checked authoring and reader transfer",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT at energy review under the approved contract. See docs/project/reviews/2026-09-17-chain-first-energy-review.md. After human acceptance complete chain.energy-review and continue approved scalar transfer; no new scope approval needed.",
+  "summary": "HUMAN_CHECKPOINT: user-requested handle/paint continuity revision implemented and verified. Energy review still awaits acceptance; scalar transfer remains gated.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -145,6 +145,69 @@
       "scope": "chain.energy-review",
       "checkedAt": "2026-09-17T07:32:00.036Z",
       "notes": "Two Chromium checks pass; 16px and 24px review captures inspected. Native docks remain single-copy. Shared review URL returns HTTP 200. Human judgment pending."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'disclosure preserves the visible handle'",
+      "status": "failed",
+      "scope": "chain.energy-review.initial-paint",
+      "checkedAt": "2026-09-17T07:54:20.400Z",
+      "notes": "Frame check caught 399.875px movement: old clock disposal still projected into retained paint. Retired session reference now relinquishes write authority; final strengthened check passes."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'disclosure preserves the visible handle|pending disclosure paint|nonterminal unfolding|inline refinement|smaller steps preserves its anchor|rail jumps'",
+      "status": "passed",
+      "scope": "chain.energy-review.handle-revision",
+      "checkedAt": "2026-09-17T07:54:21.561Z",
+      "notes": "10 Chromium cases pass: visible handle continuity, delayed preparation interruption/disposal, both refinement recovery paths, fonts, edges and button fallback."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'disclosure preserves the visible handle'",
+      "status": "passed",
+      "scope": "chain.energy-review.complete-fragment-geometry",
+      "checkedAt": "2026-09-17T07:54:22.642Z",
+      "notes": "Strengthened check passes: every visible material fragment preserves identity and x/y/width/height within 2px through open/return at 16px and 24px; one visible prefix owner per frame."
+    },
+    {
+      "command": "node --experimental-strip-types --test tests/derivation-refinement-mapping.test.ts tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts",
+      "status": "passed",
+      "scope": "chain.energy-review.handle-revision",
+      "checkedAt": "2026-09-17T07:54:23.688Z",
+      "notes": "38 pass; mathematical authority and exact return remain preserved."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.energy-review.handle-revision",
+      "checkedAt": "2026-09-17T07:54:24.715Z",
+      "notes": "All TypeScript and Svelte projects pass; test types rechecked after stronger geometry assertions."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.energy-review.handle-revision",
+      "checkedAt": "2026-09-17T07:54:25.745Z",
+      "notes": "Architecture and 8 gateway checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.energy-review.handle-revision",
+      "checkedAt": "2026-09-17T07:54:26.753Z",
+      "notes": "Production build passes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.energy-review.handle-revision",
+      "checkedAt": "2026-09-17T07:54:27.791Z",
+      "notes": "All existing budget gates pass; no further ceiling changes."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "chain.energy-review.handle-revision",
+      "checkedAt": "2026-09-17T07:54:28.781Z",
+      "notes": "All 12 route closures pass."
     }
   ],
   "progress": {
