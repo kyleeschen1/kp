@@ -41,7 +41,8 @@
     {
       "id": "curriculum.algebra",
       "title": "Granular-algebra",
-      "status": "planned"
+      "summary": "Detailed algebra tasks, examples and bounded source audit; parser enforces consistent audit claims and references",
+      "status": "complete"
     },
     {
       "id": "curriculum.domains",

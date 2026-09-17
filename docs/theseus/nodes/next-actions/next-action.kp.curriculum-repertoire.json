@@ -11,6 +11,13 @@
       "scope": "curriculum.scope",
       "checkedAt": "2026-09-17T05:33:15.139Z",
       "notes": "Read curriculum scope pages; inclusion synthesis and audit semantics recorded in repertoire-notes/scope-and-sources.md"
+    },
+    {
+      "command": "npm run test:repertoire and npm run typecheck; Node tests for nine inspected algebra evidence files",
+      "status": "passed",
+      "scope": "curriculum.algebra",
+      "checkedAt": "2026-09-17T05:42:31.970Z",
+      "notes": "Four repertoire tests and 39 existing algebra tests pass. Initial repertoire test failed because it assumed one root file per discipline; repaired it to include grouped topic files and reran."
     }
   ]
 }

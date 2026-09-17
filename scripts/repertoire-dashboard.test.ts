@@ -1,7 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync } from 'node:fs';
-import { compileRepertoire, parseRepertoire } from './repertoire-dashboard.ts';
+import { compileRepertoire, parseRepertoire, readRepertoire } from './repertoire-dashboard.ts';
 
 const example = '# Algebra\n## Cancellation\n### Semantic moves\n- [x] Cancel a nonzero factor. [Evidence](proof.md)\n### Visual motifs\n- [ ] Retain the original.\n';
 test('topic headings separate semantic moves from visual treatments', () => {
@@ -17,10 +16,20 @@ test('unsupported or unsupported-by-evidence edits return located errors', () =>
 });
 test('the real checklists compile with evidence packaged as plain text', () => {
   const { html, assets } = compileRepertoire(process.cwd());
-  const files = readdirSync('docs/project/repertoire').filter(name => name.endsWith('.md') && name !== 'README.md');
-  assert.ok(files.length > 0);
-  assert.equal((html.match(/data-discipline=/g) ?? []).length, files.length);
+  const disciplines = readRepertoire(process.cwd());
+  assert.ok(disciplines.length > 0);
+  assert.equal((html.match(/data-discipline=/g) ?? []).length, disciplines.length);
+  assert.ok(disciplines.find(d => d.id === 'algebra')!.topics.some(t => t.file.endsWith('02-fractions.md')));
   assert.ok(html.includes('Projection'));
   for (const link of html.matchAll(/href="\/(experiments\/repertoire\/evidence\/[^\"]+)"/g)) assert.ok(assets.has(decodeURIComponent(link[1]!)));
   assert.ok(assets.size > 9);
+});
+
+const granular = '# Algebra\n## Fractions\n### Semantic moves\n- [ ] `alg.add` Add fractions.\n  Example: 1/3+1/3 → 2/3\n  Audit: unaudited\n### Visual motifs\n- [ ] Preserve the denominator.\n';
+test('granular claims require examples and honest audit states', () => {
+  assert.equal(parseRepertoire(granular, 'topic.md').topics[0]!.moves[0]!.id, 'alg.add');
+  assert.throws(() => parseRepertoire(granular.replace('  Example: 1/3+1/3 → 2/3\n', ''), 'topic.md'), /needs Example/);
+  assert.throws(() => parseRepertoire(granular.replace('Audit: unaudited', 'Audit: implemented'), 'topic.md'), /checkbox contradicts/);
+  assert.throws(() => parseRepertoire(granular.replace('Audit: unaudited', 'Audit: gap'), 'topic.md'), /audited claims require Evidence/);
+  assert.throws(() => parseRepertoire(granular.replace('Audit: unaudited', 'Audit: probably'), 'topic.md'), /valid Audit/);
 });

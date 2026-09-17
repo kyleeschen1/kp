@@ -7,7 +7,7 @@ development server running. Choose a discipline, then read its topics with
 separate lists for semantic moves and visual motifs.
 
 - [Shared reading](shared.md)
-- [Algebra](algebra.md)
+- [Algebra](algebra/01-arithmetic.md) (topic files in `algebra/`)
 - [Calculus and multivariable calculus](calculus.md)
 - [Linear algebra](linear-algebra.md)
 - [Probability and statistics](probability-statistics.md)
@@ -19,6 +19,10 @@ separate lists for semantic moves and visual motifs.
 **✓** Implemented at the scope stated on that row; follow the evidence link.
 **☐** Predicted need, not yet confirmed implemented at that scope. Some may
 already have partial machinery; this is a starter list, not an exhaustive audit.
+
+The curriculum expansion follows [scope and sources](../repertoire-notes/scope-and-sources.md).
+Granular rows distinguish `unaudited`, `partial` and an evidenced `gap` in a short
+audit note. These notes explain the checkbox; they are not additional UI columns.
 
 A **semantic move** is the reasoning operation. A **motif** is its visual
 treatment. One move can use several motifs; a motif can serve several moves.
@@ -36,17 +40,25 @@ Use this format in each discipline file:
 ## Topic name
 
 ### Semantic moves
-- [x] A bounded implemented reasoning operation. [Evidence](../relative/path.md)
-- [ ] A predicted reasoning operation.
+- [x] `discipline.topic.move` A bounded implemented reasoning operation. [Evidence](../relative/path.md)
+  Example: Before → after, with necessary assumptions
+  Audit: implemented
 
 ### Visual motifs
-- [ ] A predicted visual treatment.
+- [ ] `motif.discipline.treatment` A predicted visual treatment.
+  Example: The relationship a reader should be able to follow
+  Audit: unaudited
 ```
 
-Evidence paths are relative to the discipline file. Both lists are required per
+Evidence paths are relative to the containing file. Both lists are required per
 topic; checked items require an existing evidence file. `npm run test:repertoire`
 validates the content and evidence links. Add a discipline by adding a small
 Markdown file here and linking it in this index; the selector discovers it.
+For a larger discipline, use a folder named for its selector ID and small topic
+files with the same discipline heading. The compiler groups them automatically.
+Keep topic titles unique within a discipline and item IDs unique across the
+inventory. Optional `Uses: id.one, id.two` lines reference existing rows and are
+validated. Examples illustrate scope; they are not automatically certified tests.
 
 Edit only the relevant discipline file. Keep each item one line: checkbox,
 plain-language name, brief scope if needed, and an evidence link when checked.
