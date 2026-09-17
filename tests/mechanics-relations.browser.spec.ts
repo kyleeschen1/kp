@@ -2,6 +2,33 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("inset fenceposts hand overlapping paint to the moving equation and restore it at docks", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1280, height: 1100 });
+  const root = await ready(page), records = root.locator('.energy-derivation-equation');
+  const opacity = (el: Locator) => el.evaluate(node => Number(getComputedStyle(node).opacity));
+  const initial = await documentBoxes(records);
+  for (const p of [0, .03, .5, .97, 1, .97, .03, 0]) {
+    await dragTo(page, root, p);
+    const stage = root.locator('[data-derivation-stage]');
+    expect(await opacity(stage)).toBe(p === 0 || p === 1 ? 0 : 1);
+    if (p === .03) expect(await opacity(records.nth(0))).toBe(0);
+    if (p === .97) expect(await opacity(records.nth(1))).toBe(0);
+    if (p === 0 || p === 1 || p === .5) {
+      expect(await opacity(records.nth(0))).toBe(1);
+      expect(await opacity(records.nth(1))).toBe(1);
+    }
+    expect(await documentBoxes(records)).toEqual(initial);
+    if (p === .5 || p === .97 || p === 1) await root.screenshot({ path: info.outputPath(`inset-${p}.png`) });
+  }
+  await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; });
+  await expect(lens(root)).toBeEnabled();
+  await dragTo(page, root, .97);
+  expect(await opacity(records.nth(1))).toBe(0);
+  expect(await opacity(root.locator('[data-derivation-stage]'))).toBe(1);
+  await page.emulateMedia({ media: 'print' });
+  for (const record of await records.all()) expect(await opacity(record)).toBe(1);
+});
+
 test("equation rail refinement keeps stops and the active move aligned", async ({ page }, info) => {
   await page.setViewportSize({ width: 1280, height: 1100 });
   const root = await ready(page), handle = lens(root), rail = root.locator('[data-derivation-rail]');
@@ -1458,7 +1485,7 @@ test("interleaved reason preserves its endpoints, readable lane and disclosure g
   }
 });
 
-test("the audit trail never disappears and exact docks have one visible expression", async ({ page }, info) => {
+test("the audit trail keeps its layout and exact docks have one visible expression", async ({ page }, info) => {
   const root = await ready(page);
   const records = root.locator(".energy-derivation-equation");
   const initial = await documentBoxes(records);

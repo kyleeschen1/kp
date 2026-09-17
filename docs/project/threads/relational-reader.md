@@ -5,6 +5,12 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+The rail exemplar is accepted. The user approved
+[inset equation fenceposts](2026-09-16-inset-equation-fenceposts.md), clarifying
+visual inset rather than downward motion. One energy exemplar owns discovery;
+preserve accepted rails and stop for landing/legibility review before rollout.
+Execution: `run-contract.kp.inset-fenceposts-v1`.
+
 Current approved work: [equation rail refinement](2026-09-16-equation-rail-refinement.md),
 after user confirmation that top/bottom clipping is fixed. One energy exemplar
 clarifies statement stops, active move and handle position; preserve the accepted

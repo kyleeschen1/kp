@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The equation rail is visually accepted. Current approved experiment:
+[inset equation fenceposts](threads/2026-09-16-inset-equation-fenceposts.md),
+with subdued permanent equations and a clean single-copy docking handoff.
+Preserve the accepted rail, algebra, font handling and edge scrolling. Review
+the energy exemplar before any graph or wider equation rollout.
+
 The user confirmed the equation clipping is fixed and approved an equation-first
 rail refinement. Current scope is one energy-derivation exemplar: distinguish
 written equation stops, the active move and the inspection handle, then stop for

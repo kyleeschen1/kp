@@ -1,5 +1,9 @@
 # Equation rail refinement
 
+Visually accepted by the user: “looks great!” The next approved experiment is
+[inset fenceposts](2026-09-16-inset-equation-fenceposts.md); graph promotion is
+still separate.
+
 Approved by the user after the rail-cleanup recommendation. One equation
 exemplar precedes graph pressure and shared promotion.
 

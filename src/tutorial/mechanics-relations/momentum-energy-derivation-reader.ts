@@ -3,7 +3,7 @@ import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
 import { createEnergyInspectionBookmarks, type EnergyInspectionPosition } from "./energy-derivation-bookmarks.ts";
-import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
+import { energyDerivationInspection, sampleSubstitutionEmphasis, sampleDerivationRecordInspection, sampleInsetDerivationRecord, sampleEnergyDerivationLens, resolveEnergyDerivationMeasuredPosition, resolveEnergyDerivationPosition, energyDerivationNavigationTarget } from "./energy-derivation-presentation.ts";
 
 import type { EnergyDerivationPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
 import type { EnergyDerivationDetail } from "../../../domains/physics/momentum-energy-derivation.ts";
@@ -253,7 +253,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     root.dataset["algebraProgress"] = String(frame.algebra);
     // All three inspections share reversible departure/docking. The permanent
     // record remains independent of the compositor's internal paint ownership.
-    const record = sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
+    const inset = refinedRail && !isPhone()
+      ? sampleInsetDerivationRecord(p, rowDistance, Math.max(equationHeights[selected]!, equationHeights[selected + 1]!)) : undefined;
+    const record = inset ?? sampleDerivationRecordInspection(p, rowDistance, equationHeights[selected]!);
+    root.dataset["insetFenceposts"] = String(inset !== undefined);
     root.dataset["inspectionExtent"] = "equation";
     root.style.setProperty("--derivation-record-participant-opacity", String(1 - .78 * record.inspectionOpacity));
     // Context belongs in the working expression too. The accepted treatment
@@ -271,6 +274,8 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       row.dataset["traceRole"] = past ? "historical" : i > selected + 1 || (i === selected + 1 && p < 1) ? "prospective" : "live";
       const emphasis = i === selected ? record.sourceEmphasis : i === selected + 1 ? record.targetEmphasis : 0;
       row.style.setProperty("--derivation-record-emphasis", String(emphasis));
+      if (inset) row.style.setProperty('--derivation-record-presence', String(i === selected ? inset.sourcePresence : i === selected + 1 ? inset.targetPresence : 1));
+      else row.style.removeProperty('--derivation-record-presence');
     });
     const position = selected + p;
     root.dataset["derivationProgress"] = String(position);

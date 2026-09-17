@@ -2,8 +2,8 @@
   "id": "run-contract.kp.equation-rail-v1",
   "kind": "run-contract",
   "title": "Refine the equation inspection rail",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review energy-from-momentum rail at rest, during first/second moves and on return. Scoped implementation and verification finished; aesthetics await acceptance before a graph caller.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -47,8 +47,8 @@
     {
       "id": "rail.exemplar",
       "title": "Equation-rail-exemplar",
-      "summary": "HUMAN_CHECKPOINT: candidate and preservation checks ready; review centered smaller grip, equation stops, and active interval/prose cue before graph pressure.",
-      "status": "in-progress"
+      "summary": "User accepted the rail exemplar: looks great. Graph rollout remains outside this completed scope.",
+      "status": "complete"
     }
   ]
 }

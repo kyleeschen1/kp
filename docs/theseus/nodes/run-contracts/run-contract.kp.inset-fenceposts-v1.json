@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.inset-fenceposts-v1",
+  "kind": "run-contract",
+  "title": "Try inset equation fenceposts",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: energy inset fenceposts and clean docking handoff ready. Review depth, readability and landing before wider adoption.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-inset-equation-fenceposts.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"inset fenceposts|rail refinement|equation endpoint ink|expanded drag follows\"",
+      "status": "passed",
+      "scope": "inset-exemplar",
+      "checkedAt": "2026-09-17T01:35:41.652Z",
+      "notes": "Four Chromium checks pass: near-dock single-copy handoff, exact docks, reversal, larger text, print recovery, accepted rail alignment, endpoint ink and continuous expanded dragging. Midpoint, near-landing and landed captures inspected. Human review remains required for inset depth/legibility; no renderer-wide certification."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/inset-derivation-record.test.ts tests/momentum-energy.test.ts; npm run typecheck; npm run build:bundle",
+      "status": "passed",
+      "scope": "inset-preservation",
+      "checkedAt": "2026-09-17T01:35:43.443Z",
+      "notes": "30 unit tests pass, including overlap/presence symmetry and invalid geometry; full types and bundle build pass. Existing global chunk warnings remain. Impact selector lacks a focused mapping; approved discovery uses focused preservation instead of a premature full promotion matrix."
+    }
+  ],
+  "allowedWork": [
+    "Energy-only record appearance and docking paint handoff; focused checks; two-hour ceiling including final-quarter closeout"
+  ],
+  "disallowedWork": [
+    "Algebra changes, new clocks, physical displacement or scale, graph/code rollout, catalogue promotion, merge, push"
+  ],
+  "goal": "Reduce doubled landing ink and distinguish recessed statements from the active expression",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "fencepost.exemplar",
+      "title": "Inset-fencepost-exemplar",
+      "summary": "HUMAN_CHECKPOINT: candidate verified; inspect inset context, near-landing clarity and reverse at energy-from-momentum.",
+      "status": "in-progress"
+    }
+  ]
+}

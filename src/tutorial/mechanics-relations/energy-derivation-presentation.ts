@@ -138,3 +138,17 @@ export function sampleDerivationRecordInspection(progress: number, distance: num
   const opacity = t * t * (3 - 2 * t);
   return { kind: "inspection", inspectionOpacity: opacity, sourceEmphasis: progress < .5 ? 1 - opacity : 0, targetEmphasis: progress > .5 ? 1 - opacity : 0 };
 }
+
+/** Energy inset candidate: one crisp paint owner in the overlap corridor.
+ * The stationary record returns only after the moving expression clears it;
+ * an exact dock transfers ownership without a second displaced copy. */
+export function sampleInsetDerivationRecord(progress: number, distance: number, equationHeight: number) {
+  const record = sampleDerivationRecordInspection(progress, distance, equationHeight);
+  if (record.kind === 'docked') return { ...record, sourcePresence: 1, targetPresence: 1 };
+  const presence = (separation: number) => {
+    const t = Math.max(0, Math.min(1, (separation - equationHeight) / (equationHeight * .35)));
+    return t * t * (3 - 2 * t);
+  };
+  return { ...record, inspectionOpacity: 1, sourceEmphasis: 0, targetEmphasis: 0,
+    sourcePresence: presence(progress * distance), targetPresence: presence((1 - progress) * distance) };
+}

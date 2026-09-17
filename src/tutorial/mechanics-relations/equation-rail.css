@@ -74,3 +74,18 @@
   .energy-derivation[data-rail-refinement] .energy-derivation-rail > span { forced-color-adjust: none; }
   .energy-derivation[data-rail-refinement] [data-rail-active="true"] .energy-derivation-interleave-text { border-left-width: 2px; padding-left: calc(.75rem - 1px); }
 }
+
+/* The record is inset by light/ink alone. Its native coordinates, fraction
+   rules and font metrics remain the compositor's docking reference. */
+.energy-derivation[data-rail-refinement][data-inset-fenceposts="true"][data-tracing="true"] .energy-derivation-equation {
+  color: color-mix(in srgb, #7b858d, #1b1b1b calc(var(--derivation-record-emphasis, 0) * 100%));
+  text-shadow: 0 1px 0 #fff;
+  opacity: var(--derivation-record-presence, 1);
+}
+.energy-derivation[data-inset-fenceposts="true"][data-tracing="true"] [data-trace-role="live"] .energy-derivation-equation { text-shadow: none; }
+@media (forced-colors: active) {
+  .energy-derivation[data-rail-refinement][data-inset-fenceposts="true"][data-tracing="true"] .energy-derivation-equation { color: CanvasText; text-shadow: none; }
+}
+@media print {
+  .energy-derivation[data-inset-fenceposts="true"] .energy-derivation-equation { opacity: 1 !important; text-shadow: none !important; }
+}
