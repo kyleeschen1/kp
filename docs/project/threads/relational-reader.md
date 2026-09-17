@@ -11,7 +11,7 @@ the historical broad reader task is deferred with its evidence and judgments int
 Accepted reference: [middle-step energy unfolding](../reviews/2026-09-17-chain-first-energy-review.md).
 User resumed the approved loop. Independent scalar transfer and its source-only
 variation are verified; the [paired transfer checkpoint](../reviews/2026-09-17-chain-first-transfer-review.md)
-now awaits visual acceptance before fraction-chain work.
+is accepted. The user explicitly resumed the approved fraction-chain work.
 
 Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).
 The user wants mathematical chains plus sparse context to become correct KP

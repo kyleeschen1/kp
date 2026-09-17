@@ -2,9 +2,9 @@
   "id": "next-action.kp.chain-first-authoring",
   "kind": "next-action",
   "title": "Chain-first checked authoring and reader transfer",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: paired transfer visual review required by approved slice 07 before fraction-chain promotion.",
+  "summary": "User accepted paired scalar transfer and explicitly resumed the approved fraction chain work.",
   "sourceRefs": [
     {
       "kind": "file",

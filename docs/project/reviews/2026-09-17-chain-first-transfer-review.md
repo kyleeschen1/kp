@@ -1,8 +1,8 @@
 # Equation reader transfer
 
-Review state: HUMAN_CHECKPOINT. The paired transfer review in slice 07 is ready;
-six preceding slices are complete. No fraction work has started. The approved
-chain-first plan requires acceptance of this second caller before promotion.
+Review state: ACCEPTED. The user accepted the paired transfer and explicitly
+resumed the approved loop. This satisfies the second-caller prerequisite before
+the approved fraction-chain work; Theseus owns execution progress.
 
 Canonical reference: accepted energy reader at
 <http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum>.
