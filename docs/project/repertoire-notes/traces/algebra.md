@@ -14,7 +14,9 @@ Follow a row in the dashboard using `/experiments/repertoire/#<row-id>`.
 | → 1/2 | Reduce by a common divisor | `alg.fraction.reduce` |
 
 Finding: alignment is implemented in the exact one-third/one-sixth caller.
-Combination has inspected semantics and reduction has related machinery. The
+The [family audit](../algebra-family-audit.md) recovered addition in the quadratic
+reader and reduction in the two-fourths asset, with checked examples different
+from this trace. The
 existing alignment asset stops at 2/6+1/6; neither its checkbox nor the mathematical
 correctness of the remaining steps proves a complete source-authored addition
 passage. The [algebra audit](../algebra-audit.md) records these boundaries.

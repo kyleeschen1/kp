@@ -1,0 +1,51 @@
+{
+  "id": "run-contract.kp.algebra-coverage-audit-v1",
+  "kind": "run-contract",
+  "title": "Bounded algebra coverage audit",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.algebra-coverage-audit.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-16-repertoire-check-population-review.md"
+    }
+  ],
+  "verification": [
+    "npm run test:repertoire",
+    "Focused existing algebra tests",
+    "npm run build:bundle",
+    "npm run visual:repertoire",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Approved bounded algebra audit and focused validation"
+  ],
+  "disallowedWork": [
+    "New product capabilities, visual promotion, agents or old loops"
+  ],
+  "goal": "Recover existing algebra coverage with exact evidence and identify high-value shared gaps",
+  "target": "next-action.kp.algebra-coverage-audit",
+  "runMode": "run",
+  "maxSlices": 1,
+  "commitCadence": "One verified audit outcome",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "All partial algebra claims reviewed and evidence-backed updates delivered",
+    "Two-hour ceiling; last 20 minutes reserved for verification",
+    "Unexpected product or visual changes require new scope"
+  ],
+  "slices": [
+    {
+      "id": "algebra.audit",
+      "title": "Audit-and-closeout",
+      "summary": "COMPLETE: all partial algebra rows reviewed; 12 evidence-backed bounded checks recovered, 11 partials explained, next shared gaps ranked. Approved tests/build/browser gates pass. No runtime or renderer edits.",
+      "status": "complete"
+    }
+  ]
+}

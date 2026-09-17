@@ -20,6 +20,12 @@ scope, checks and limits. This expands the planning inventory, not lesson
 production or renderer authority. Nonterminal/scalar transfer remains the saved
 next experiment; the inventory's gap ranking does not start new work.
 
+The user accepted the expanded dashboard and approved its bounded algebra audit.
+[Audit findings](../repertoire-notes/algebra-family-audit.md) distinguish recovered
+implementations from reusable authoring: fraction addition exists in the quadratic
+reader, reduction in a separate asset, but their independent composition remains
+unproved. Preserve that distinction during the saved transfer experiment.
+
 The user approved an [inline unfolding trial](2026-09-16-disclosure-persistence.md#inline-unfolding-exemplar)
 after observing that anchored view replacement still loses visual continuity.
 Preserve native energy endpoints, parent prose and grip; reveal checked children

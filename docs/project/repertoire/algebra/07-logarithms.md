@@ -7,12 +7,12 @@
 - [ ] `alg.log.injective` Infer equality of positive arguments from equal logarithms of the same valid base.
   Example: ln(u)=ln(v) → u=v; u,v>0
   Audit: unaudited
-- [ ] `alg.exp.sum-to-product` Rewrite an exponential of a sum as a product. [Evidence](../../repertoire-notes/algebra-audit.md)
+- [x] `alg.exp.sum-to-product` Rewrite an exponential of a sum as a product — registered two-term caller. [Evidence](../../repertoire-notes/algebra-family-audit.md)
   Example: e^(a+b) → e^a e^b
-  Audit: partial — exponential-homomorphism asset exists; exact source/authoring scope needs its own audit
-- [ ] `alg.exp.difference-to-quotient` Rewrite an exponential of a difference as a quotient. [Evidence](../../repertoire-notes/algebra-audit.md)
+  Audit: implemented
+- [x] `alg.exp.difference-to-quotient` Rewrite an exponential of a difference as a quotient — registered two-term caller. [Evidence](../../repertoire-notes/algebra-family-audit.md)
   Example: e^(a-b) → e^a/e^b
-  Audit: partial — separate quotient pressure asset exists; general source path not established
+  Audit: implemented
 - [ ] `alg.exp.product-to-sum` Combine equal-base exponential factors as an authored inverse move.
   Example: e^a e^b → e^(a+b)
   Audit: unaudited
@@ -42,7 +42,7 @@
   Audit: partial — bounded 2^x solve is implemented; arbitrary structured argument not established
 - [ ] `alg.log.power-absorb` Absorb a coefficient into a logarithm's argument exponent. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: r ln(a) → ln(a^r); a>0
-  Audit: partial — exponent-absorption fixture exists; general authored route not established
+  Audit: partial — related exponent extraction exists, but its authored inverse is unverified; the unit-exponent absorption fixture is a different operation
 - [x] `alg.log.base-change` Change logarithm base — scalar argument/base exemplar. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: log_2(7) → ln(7)/ln(2)
   Audit: implemented

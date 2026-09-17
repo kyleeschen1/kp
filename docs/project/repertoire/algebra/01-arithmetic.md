@@ -33,16 +33,16 @@
   Audit: unaudited
 - [ ] `alg.distribute-nested` Distribute through nested sums. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: 2(x+3(y-1)) → 2x+6y-6
-  Audit: partial — nested product grouping exists; full source-to-result path not established
+  Audit: partial — nested-product choreography is tested, but it does not establish recursive distribution of this expression
 - [x] `alg.factor-common` Extract a shared scalar factor — bounded distribution inverse. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: ab+ac → a(b+c)
   Audit: implemented
 - [ ] `alg.identity` Remove additive and multiplicative identities.
   Example: x+0 → x; 1x → x
   Audit: unaudited
-- [ ] `alg.evaluate` Evaluate exact arithmetic separately from symbolic rewriting. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: 2·3x → 6x; the value calculation differs from distribution
-  Audit: partial — exact evaluation machinery exists; broad authorable arithmetic not audited
+- [x] `alg.evaluate` Evaluate exact arithmetic separately from symbolic rewriting — fractional-solve exemplar. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: x=2·4 → x=8; the value calculation is a separate checked operation
+  Audit: implemented
 - [ ] `alg.substitute` Substitute an expression without losing grouping.
   Example: x² with x=a+b → (a+b)²
   Audit: unaudited

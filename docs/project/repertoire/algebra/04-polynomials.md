@@ -9,7 +9,7 @@
   Audit: unaudited
 - [ ] `alg.poly.multiply` Multiply two sums with all cross terms. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: (x+2)(x+3) → x²+5x+6
-  Audit: partial — nested distribution machinery exists; complete caller not verified
+  Audit: partial — nested-product choreography does not prove the complete cross-term expansion and collection chain
 - [ ] `alg.poly.square-sum` Expand the square of a sum.
   Example: (a+b)² → a²+2ab+b²
   Audit: unaudited
@@ -31,9 +31,9 @@
 - [ ] `alg.poly.cubes` Factor a sum or difference of cubes.
   Example: a³-b³ → (a-b)(a²+ab+b²)
   Audit: unaudited
-- [ ] `alg.poly.complete-square` Complete the square in a quadratic. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: x²+6x+5 → (x+3)²-4
-  Audit: partial — quadratic authority and KaTeX machinery exist; full general caller not audited
+- [x] `alg.poly.complete-square` Complete the square in a quadratic — checked equation-reader exemplar. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: x²-5x=-6 → x²-5x+25/4=-6+25/4 → (x-5/2)²=1/4
+  Audit: implemented
 - [ ] `alg.poly.long-divide` Divide a polynomial and expose quotient plus remainder.
   Example: (x²+1)/(x-1) → x+1+2/(x-1); x≠1
   Audit: unaudited

@@ -38,6 +38,9 @@ evidence and worked-problem probes. See the
 [curriculum review](reviews/2026-09-16-curriculum-repertoire-review.md).
 Unaudited entries remain distinct from confirmed gaps. The saved transfer
 experiment above remains the next machinery direction; no old loop is resumed.
+The dashboard is accepted. A [bounded algebra audit](repertoire-notes/algebra-family-audit.md)
+recovers existing examples and identifies source-only reuse and fraction-chain
+composition as the next coverage bottlenecks, without promoting new capabilities.
 
 The entries below retain delivery context; the transfer decision above owns the
 next direction. Previously parked loops are not resumed by this change.

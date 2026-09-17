@@ -21,7 +21,9 @@ into specialized continuum mechanics, database systems or compiler lessons.
 
 1. **Complete a small fraction calculation through the same authoring path.**
    The alignment example stops before numerator combination and reduction.
-   Existing related semantics make this a promising audit/transfer candidate;
+   The follow-up [family audit](algebra-family-audit.md) found addition in the
+   quadratic reader and reduction in the two-fourths asset, but did not establish
+   their reuse in this chain. This remains a promising transfer candidate;
    measure needed engine edits before declaring a new motif necessary.
 2. **Separate log direction and structured-argument support.** Product expansion,
    quotient combination and exponent extraction have different bounded callers.

@@ -40,9 +40,9 @@
 - [ ] `alg.sequence.sum-geometric` Sum a finite geometric progression.
   Example: 1+r+...+r^(n-1)=(1-r^n)/(1-r); r≠1
   Audit: unaudited
-- [ ] `alg.sequence.sigma` Expand finite summation while respecting the index. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: Σ from k=1 to 3 of k² → 1²+2²+3²
-  Audit: partial — finite-sum exemplar exists; this specific source not verified
+- [x] `alg.sequence.sigma` Expand finite summation while respecting the index — three-term indexed exemplar. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: Σ from i=1 to 3 of a_i → a_1+a_2+a_3
+  Audit: implemented
 - [ ] `alg.sequence.reindex` Reindex a sum without changing the terms.
   Example: Σ from k=1 to n of a_k = Σ from j=0 to n-1 of a_(j+1)
   Audit: unaudited

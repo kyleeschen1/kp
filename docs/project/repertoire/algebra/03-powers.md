@@ -9,7 +9,7 @@
   Audit: implemented
 - [ ] `alg.power.expand-integer` Expand an arbitrary positive integer exponent. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: x⁴ → x·x·x·x
-  Audit: partial — bounded exponent lowering exists; arbitrary integer caller not established
+  Audit: partial — the registered square fixture does not establish arbitrary positive integer exponents
 - [ ] `alg.power.product` Combine powers with the same base.
   Example: x^m x^n → x^(m+n); positive x for arbitrary real exponents
   Audit: unaudited
@@ -22,9 +22,9 @@
 - [ ] `alg.power.product-expand` Distribute a power over a product.
   Example: (ab)² → a²b²; a,b real
   Audit: unaudited
-- [ ] `alg.power.quotient-expand` Distribute a power over a quotient. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: (a/b)² → a²/b²; b≠0
-  Audit: partial — mechanics quotient-square caller exists; general algebra source reuse unconfirmed
+- [x] `alg.power.quotient-expand` Distribute a square over a quotient — mechanics derivation caller. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: (‖p‖/m)² → ‖p‖²/m² inside the energy equation; m>0
+  Audit: implemented
 - [ ] `alg.power.zero` Use the zero-exponent law with its nonzero-base condition.
   Example: x⁰ → 1; x≠0
   Audit: unaudited
@@ -60,10 +60,10 @@
   Audit: unaudited
 - [ ] `alg.root.odd-equation` Solve an odd-power equation over the reals. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: x³=-8 → x=-2
-  Audit: partial — odd-root semantic exemplar exists; full visual path not verified
-- [ ] `alg.root.even-equation` Retain both branches when solving an even-power equation — bounded caller. [Evidence](../../repertoire-notes/algebra-audit.md)
+  Audit: partial — x³=8 → x=∛8 has native transit pressure; the negative radicand and numerical endpoint here are not established
+- [x] `alg.root.even-equation` Retain both branches when solving an even-power equation — nine-to-plus/minus-three caller. [Evidence](../../repertoire-notes/algebra-family-audit.md)
   Example: x²=9 → x=3 or x=-3
-  Audit: partial — even-root asset exists; exact stated caller needs verification
+  Audit: implemented
 - [ ] `alg.root.extraneous` Reject extraneous roots introduced by squaring.
   Example: √(x+2)=x → candidates 2,-1 → keep 2
   Audit: unaudited

@@ -79,3 +79,13 @@ Shared treatments belong in shared.md; link them instead of duplicating status.
 Keep lists curated and short. No scores, percentages, generated reports, or
 full-repository scan is needed for an ordinary update. Existing technical
 registries own technical support claims; this dashboard owns planning visibility.
+
+For capability changes, include the affected stable row IDs and evidence updates
+in the same delivery. Audit by operation family: inspect the semantic operation,
+direction, assumptions, exact endpoints and responsible presentation path, then
+run the relevant tests. Do not award a check from a fixture title, a registry entry
+alone, reverse playback, or a passing link check. Name bounded examples directly
+on checked rows and preserve broader reuse limits in their evidence note.
+After source or presentation changes, revisit those linked claims; the dashboard
+does not automatically detect semantic staleness. See the
+[algebra family audit](../repertoire-notes/algebra-family-audit.md) for an example.

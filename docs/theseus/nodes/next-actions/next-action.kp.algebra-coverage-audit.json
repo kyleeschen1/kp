@@ -1,0 +1,72 @@
+{
+  "id": "next-action.kp.algebra-coverage-audit",
+  "kind": "next-action",
+  "title": "Recover evidence-backed algebra coverage and rank shared gaps",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "COMPLETE: bounded algebra audit delivered with 94 checked rows overall and exact scope limits. Follow-up proposals do not start new implementation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-16-repertoire-check-population-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/repertoire-notes/algebra-family-audit.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.curriculum-repertoire"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:repertoire",
+    "Focused existing algebra tests"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test --test-concurrency=2 tests/kp-fraction-animation-asset.test.ts tests/kp-fraction-choreography.test.ts tests/governed-fraction-split-merge-variation.test.ts tests/fraction-like-denominator-combination-semantics.test.ts tests/fractional-linear-equation-animation-asset.test.ts tests/registered-both-sides-multiplicative-callers.test.ts tests/exponential-homomorphism-authoring.test.ts tests/exponential-homomorphism-catalogue-integration.test.ts tests/exponential-homomorphism-difference-pressure.test.ts tests/exponential-homomorphism-transit-session.test.ts tests/governed-exponent-absorption-fixture.test.ts tests/even-root-solve-exemplar.test.ts tests/even-root-catalogue-integration.test.ts tests/even-root-native-transit.test.ts tests/odd-root-pressure.test.ts tests/kp-inequality-sign-flip-animation.test.ts tests/finite-binder-sum-asset.test.ts tests/finite-binder-sum-catalogue.test.ts tests/finite-binder-sum-motion.test.ts tests/quadratic-completing-square-authority.test.ts tests/quadratic-completing-square-katex.test.ts tests/quadratic-formula-authority.test.ts tests/quadratic-formula-katex.test.ts tests/quadratic-branching-reader-surface.test.ts tests/quadratic-branching-animation-asset.test.ts tests/kp-distribution-choreography.test.ts tests/momentum-energy.test.ts",
+      "status": "passed",
+      "scope": "algebra.audit",
+      "checkedAt": "2026-09-17T06:51:26.169Z",
+      "notes": "155 existing tests passed. Exact evidence and scope limits recorded in docs/project/repertoire-notes/algebra-family-audit.md; no new browser paint certification."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test --test-concurrency=2 tests/kp-editor-fraction-visible-animation.test.ts tests/quadratic-route-presentation-governance.test.ts tests/fraction-composition-multiplicative-cancellation-plan.test.ts tests/fraction-composition-publication.test.ts tests/finite-binder-sum-presentation-plan.test.ts tests/log-product-semantic-caller.test.ts tests/log-quotient-contract.test.ts tests/log-exponent-exemplar-contract.test.ts",
+      "status": "passed",
+      "scope": "algebra.audit",
+      "checkedAt": "2026-09-17T06:51:27.516Z",
+      "notes": "27 existing tests passed. Exact evidence and scope limits recorded in docs/project/repertoire-notes/algebra-family-audit.md; no new browser paint certification."
+    },
+    {
+      "command": "npm run test:repertoire; npm run visual:repertoire; npm run build:bundle; git diff --check; npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "algebra.audit",
+      "checkedAt": "2026-09-17T06:51:28.954Z",
+      "notes": "Eight repertoire and four Chromium tests pass; production build and validation pass. Documentation-only audit recovered 12 bounded checks, all 23 partial algebra rows reviewed. Exact limits and shared gaps recorded; no engine changes."
+    }
+  ],
+  "expectedLearning": [
+    "Which partial algebra rows already reach canonical presentation and which shared boundaries remain"
+  ],
+  "allowedWork": [
+    "Bounded algebra source audit, focused tests, Markdown claims and evidence"
+  ],
+  "disallowedWork": [
+    "New capabilities, renderers, lessons, dashboard redesign, agents or parked-loop resumption"
+  ],
+  "criteria": [
+    {
+      "id": "evidence-backed-algebra-claims",
+      "weight": "high"
+    },
+    {
+      "id": "ranked-shared-gaps",
+      "weight": "high"
+    }
+  ]
+}

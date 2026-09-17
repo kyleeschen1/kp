@@ -10,9 +10,9 @@
 - [x] `alg.eq.subtract` Subtract the same quantity from both sides — registered linear caller. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: 2x+3=11 → 2x+3-3=11-3
   Audit: implemented
-- [ ] `alg.eq.multiply` Multiply both sides by a nonzero quantity. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: x/3=4 → x=12
-  Audit: partial — governed registration exists; this concrete visual path not verified
+- [x] `alg.eq.multiply` Multiply both sides by a nonzero quantity — fractional-linear caller. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: x/2=4 → 2(x/2)=2·4; cancellation and evaluation remain separate moves
+  Audit: implemented
 - [x] `alg.eq.divide` Divide both sides by a nonzero coefficient — three-x caller. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: 3x=12 → (3x)/3=12/3 → x=4
   Audit: implemented
@@ -30,7 +30,7 @@
   Audit: unaudited
 - [ ] `alg.eq.quadratic-formula` Apply the quadratic formula including discriminant cases. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: ax²+bx+c=0 → (-b±√(b²-4ac))/(2a), a≠0
-  Audit: partial — verified formula authority and native forms exist; general presentation scope not verified
+  Audit: partial — x²-5x+6=0 reaches the reader and roots 2,3; the requested full discriminant-case family is not established
 - [ ] `alg.eq.absolute` Split an absolute-value equation into valid branches.
   Example: |x-2|=3 → x=5 or x=-1
   Audit: unaudited
@@ -43,9 +43,9 @@
 - [ ] `alg.ineq.add` Preserve inequality direction under addition.
   Example: x-3<2 → x<5
   Audit: unaudited
-- [ ] `alg.ineq.negative` Reverse an inequality when multiplying by a negative. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: -2x<6 → x>-3
-  Audit: partial — inequality sign-flip asset found; complete scope not audited
+- [x] `alg.ineq.negative` Reverse an inequality when multiplying by a negative — declared semantic-transition exemplar. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: x<3 → -2x>-6; forward multiplication by -2
+  Audit: implemented
 - [ ] `alg.ineq.compound` Intersect or unite inequality solution intervals.
   Example: x>1 and x≤4 → (1,4]
   Audit: unaudited

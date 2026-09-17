@@ -7,18 +7,18 @@
 - [x] `alg.fraction.scale` Scale numerator and denominator by the same nonzero factor — paired exemplar. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: (2/2)·(a/b) → 2a/(2b), b≠0
   Audit: implemented
-- [ ] `alg.fraction.reduce` Reduce an integer fraction using a common divisor. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: 6/9 → 2/3
-  Audit: partial — fraction simplification asset exists; this numerical scope needs caller verification
+- [x] `alg.fraction.reduce` Reduce an integer fraction using a common divisor — two-fourths exemplar. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: 2/4 → (1·2)/(2·2) → (1/2)(2/2) → 1/2
+  Audit: implemented
 - [ ] `alg.fraction.sign` Normalize the sign of a fraction.
   Example: a/(-b) → -a/b; b≠0
   Audit: unaudited
-- [ ] `alg.fraction.same-add` Add fractions with the same denominator. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: 2/7 + 3/7 → 5/7
-  Audit: partial — verified raw-numerator combination; presentation for this scope not established
+- [x] `alg.fraction.same-add` Add fractions with the same denominator — quadratic-reader exemplar. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: -24/4 + 25/4 → 1/4, with the equation's left side retained
+  Audit: implemented
 - [ ] `alg.fraction.same-subtract` Subtract fractions with the same denominator. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: 5/7 - 2/7 → 3/7
-  Audit: partial — exact subtraction semantics; presentation for this scope not established
+  Audit: partial — raw subtraction verifier is tested; the quadratic addition caller does not establish a subtraction presentation
 - [x] `alg.fraction.align-multiple` Align when one denominator divides the other — one-third plus one-sixth. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: 1/3 + 1/6 → 2/6 + 1/6
   Audit: implemented
@@ -58,9 +58,9 @@
 - [ ] `alg.fraction.nested-both` Clear a compound fraction with sums on both levels.
   Example: (1+1/x)/(1-1/x) → (x+1)/(x-1); x≠0,1
   Audit: unaudited
-- [ ] `alg.fraction.split-numerator` Split a sum over a shared denominator. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: (a+b)/c → a/c+b/c; c≠0
-  Audit: partial — governed split/merge family exists; this general symbolic scope not established
+- [x] `alg.fraction.split-numerator` Split a sum over a shared denominator — governed linear-numerator variation. [Evidence](../../repertoire-notes/algebra-family-audit.md)
+  Example: (3y+9)/3 → 3y/3 + 9/3; fixed nonzero denominator
+  Audit: implemented
 - [ ] `alg.fraction.no-split-denominator` Reject distributing division over a denominator sum.
   Example: 1/(x+y) is generally not 1/x+1/y
   Audit: unaudited
