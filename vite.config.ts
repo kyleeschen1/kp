@@ -341,6 +341,7 @@ export default defineConfig({
       mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
       repertoire: resolve(projectRoot, "experiments/repertoire/index.html"),
       scalarCancellation: resolve(projectRoot, "experiments/scalar-cancellation/index.html"),
+      fractionChain: resolve(projectRoot, "experiments/fraction-chain/index.html"),
       codeReasoning: resolve(projectRoot, "experiments/code-reasoning/index.html"),
       centroidReasoning: resolve(projectRoot, "experiments/centroid-reasoning/index.html"),
       mechanicsRelationsStatic: resolve(projectRoot, "experiments/mechanics-relations/static.html"),

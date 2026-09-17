@@ -2,6 +2,7 @@ import { createKpAnimationAsset, type KpAnimationAsset } from "./asset.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
 import {
   createNumeratorSplitMergeEquationKpAsset,
+  createVerifiedIntegerNumeratorMergeAsset,
   type NumeratorSplitMergeEquationKpAsset
 } from "../semantic/numerator-split-merge-equation-asset.ts";
 import {
@@ -12,6 +13,11 @@ import {
 import {
   createKpContinuityEquationPresentationProfileV1
 } from "./equation-presentation-profile.ts";
+import type { KpVerifiedLikeDenominatorCombination } from "../semantic/fraction-like-denominator-combination.ts";
+
+export function createVerifiedIntegerNumeratorMergeAnimation(proof: KpVerifiedLikeDenominatorCombination): KpAnimationAsset {
+  return createNumeratorSplitMergeAnimationAsset({ includeMerge: true, mergeOnly: true, source: createVerifiedIntegerNumeratorMergeAsset(proof) });
+}
 
 /** Forward-only until the exact inverse merge clears its own motion slice. */
 export function createNumeratorSplitEquationAnimationAsset(): KpAnimationAsset {
@@ -33,6 +39,7 @@ export function createNumeratorSplitMergeEquationAnimationAsset(
 
 function createNumeratorSplitMergeAnimationAsset(input: {
   readonly includeMerge: boolean;
+  readonly mergeOnly?: boolean;
   readonly source: NumeratorSplitMergeEquationKpAsset;
 }): KpAnimationAsset {
   const { includeMerge, source } = input;
@@ -40,7 +47,7 @@ function createNumeratorSplitMergeAnimationAsset(input: {
   const stem = ids.combined
     .replace(/^equation\./, "")
     .replace(/\.combined$/, "");
-  const transformations = includeMerge
+  const transformations = input.mergeOnly ? source.transformations.filter(transformation => transformation.id === ids.mergeTransform) : includeMerge
     ? source.transformations
     : source.transformations.filter(
         (transformation) => transformation.id === ids.splitTransform
@@ -81,17 +88,17 @@ function createNumeratorSplitMergeAnimationAsset(input: {
     transformationTree: createEditableSemanticTransformationTree({
       root,
       annotations: [
-        {
+        ...(input.mergeOnly ? [] : [{
           id: `focus.${stem}.shared-structure`,
-          kind: "focus",
+          kind: "focus" as const,
           targetNodeId: ids.splitTransform,
-          placement: "during",
+          placement: "during" as const,
           selectorIds: [
             selectorByRole(source, ids.combined, "numerator-operator"),
             selectorByRole(source, ids.combined, "fraction-rule"),
             selectorByRole(source, ids.combined, "denominator")
           ]
-        },
+        }]),
         ...(includeMerge
           ? [{
               id: `focus.${stem}.compatible-structures`,

@@ -113,7 +113,8 @@
     {
       "id": "chain.addition-exemplar",
       "title": "Addition-exemplar",
-      "status": "planned"
+      "summary": "Local positive addition uses registered native fraction merge and numerator evaluation; browser ownership/reverse, types, architecture and production build verified. No family promotion.",
+      "status": "complete"
     },
     {
       "id": "chain.reduction-exemplar",

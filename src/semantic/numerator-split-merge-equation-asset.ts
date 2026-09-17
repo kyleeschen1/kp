@@ -9,6 +9,7 @@ import {
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
 import type { SelectorCorrespondenceRecord } from "./correspondence.ts";
+import { isKpVerifiedLikeDenominatorCombination, type KpVerifiedLikeDenominatorCombination } from "./fraction-like-denominator-combination.ts";
 
 export interface NumeratorSplitMergeEquationKpAsset {
   readonly sourceTraceId: string;
@@ -63,6 +64,21 @@ export function createParameterizedNumeratorSplitMergeEquationKpAsset(
   input: NumeratorSplitMergeEquationParameters
 ): NumeratorSplitMergeEquationKpAsset {
   assertParameters(input);
+  return createSplitMergeAsset(input);
+}
+
+/** Numeric callers arrive through exact fraction authority, never by inventing
+ * a variable or treating arithmetic evaluation as structural merging. */
+export function createVerifiedIntegerNumeratorMergeAsset(proof: KpVerifiedLikeDenominatorCombination): NumeratorSplitMergeEquationKpAsset {
+  if (!isKpVerifiedLikeDenominatorCombination(proof) || proof.operator !== "+" ||
+      proof.source.terms.some(term => term.numerator.value <= 0n || term.numerator.value > 1000000n || term.denominator.value > 1000000n))
+    throw new TypeError("Numeric numerator merging requires issued bounded positive addition authority.");
+  return createSplitMergeAsset({ idStem: proof.id, coefficient: Number(proof.source.terms[0].numerator.value),
+    constant: Number(proof.source.terms[1].numerator.value), denominator: Number(proof.source.terms[0].denominator.value) });
+}
+
+type SplitMergeParameters = Omit<NumeratorSplitMergeEquationParameters, "variable"> & { readonly variable?: string };
+function createSplitMergeAsset(input: SplitMergeParameters): NumeratorSplitMergeEquationKpAsset {
   const ids: NumeratorSplitMergeEquationAssetIds = {
     combined: `equation.${input.idStem}.combined`,
     split: `equation.${input.idStem}.split`,
@@ -78,9 +94,9 @@ export function createParameterizedNumeratorSplitMergeEquationKpAsset(
     title: "Split and merge a fraction over a numerator sum",
     objects: [
       equationState(ids.combined, "One fraction over a sum",
-        `\\frac{${input.coefficient}${input.variable} + ${input.constant}}{${input.denominator}}`, [
+        `\\frac{${input.coefficient}${input.variable ?? ""} + ${input.constant}}{${input.denominator}}`, [
         part(paths.combinedCoefficient, "term", String(input.coefficient), "coefficient"),
-        part(paths.combinedVariable, "term", input.variable, "variable"),
+        ...(input.variable ? [part(paths.combinedVariable, "term", input.variable, "variable")] : []),
         part("fraction.numerator.plus", "operator", "+", "numerator-operator"),
         part(paths.combinedConstant, "term", String(input.constant), "constant"),
         part("fraction.rule", "artifact", "fraction rule", "fraction-rule"),
@@ -89,11 +105,11 @@ export function createParameterizedNumeratorSplitMergeEquationKpAsset(
       equationState(
         ids.split,
         "Two fractions with a shared denominator",
-        `\\frac{${input.coefficient}${input.variable}}{${input.denominator}} + ` +
+        `\\frac{${input.coefficient}${input.variable ?? ""}}{${input.denominator}} + ` +
           `\\frac{${input.constant}}{${input.denominator}}`,
         [
           part(paths.splitCoefficient, "term", String(input.coefficient), "coefficient"),
-          part(paths.splitVariable, "term", input.variable, "variable"),
+          ...(input.variable ? [part(paths.splitVariable, "term", input.variable, "variable")] : []),
           part("left.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
           part(paths.leftDenominator, "term", String(input.denominator), "denominator"),
           part("between.plus", "operator", "+", "sum-operator"),
@@ -120,7 +136,7 @@ export function createParameterizedNumeratorSplitMergeEquationKpAsset(
         title: "Split the numerator sum",
         sourceObjectId: ids.combined,
         targetObjectId: ids.split,
-        correspondence: splitCorrespondence(ids, paths),
+        correspondence: splitCorrespondence(ids, paths).filter(record => input.variable || record.id !== "variable-persists"),
         assumption: "Each term in the numerator shares the same non-zero denominator.",
         lawId: "law.algebra.fraction-sum-split"
       }),
@@ -131,7 +147,7 @@ export function createParameterizedNumeratorSplitMergeEquationKpAsset(
         title: "Merge fractions over the common denominator",
         sourceObjectId: ids.split,
         targetObjectId: ids.combined,
-        correspondence: mergeCorrespondence(ids, paths),
+        correspondence: mergeCorrespondence(ids, paths).filter(record => input.variable || record.id !== "variable-persists"),
         assumption: "Both fractions have the same non-zero denominator.",
         lawId: "law.algebra.fraction-sum-merge"
       })
@@ -331,7 +347,7 @@ function selectors(objectId: string, ...paths: readonly string[]): readonly stri
 }
 
 function selectorPaths(
-  input: NumeratorSplitMergeEquationParameters
+  input: SplitMergeParameters
 ): NumeratorSplitMergeSelectorPaths {
   return {
     combinedCoefficient:

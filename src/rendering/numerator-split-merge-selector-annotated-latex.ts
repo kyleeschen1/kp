@@ -45,7 +45,7 @@ export function createKpNumeratorSplitMergeSelectorAnnotatedLatex(
     segments = [
       latex("\\frac{"),
       token("coefficient"),
-      token("variable"),
+      ...(byRole.has("variable") ? [token("variable")] : []),
       gap(), token("numerator-operator"), gap(),
       token("constant"),
       latex("}{"), token("denominator"), latex("}")
@@ -54,7 +54,7 @@ export function createKpNumeratorSplitMergeSelectorAnnotatedLatex(
     segments = [
       latex("\\frac{"),
       token("coefficient"),
-      token("variable"),
+      ...(byRole.has("variable") ? [token("variable")] : []),
       latex("}{"), token("denominator", 0), latex("}"),
       gap(), token("sum-operator"), gap(),
       latex("\\frac{"), token("constant"),

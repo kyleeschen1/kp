@@ -10,6 +10,7 @@
     "test:fraction-chain": "node --disable-warning=ExperimentalWarning --test tests/fraction-chain-*.test.ts",
     "visual:mechanics-motion": "playwright test --config playwright.mechanics-motion-review.config.ts --project=chromium --workers=1",
     "visual:mechanics-relations": "playwright test --config playwright.mechanics-relations-review.config.ts --project=chromium --workers=1",
+    "visual:fraction-chain": "playwright test --config playwright.fraction-chain.config.ts --project=chromium --workers=1",
     "visual:repertoire": "playwright test --config playwright.repertoire.config.ts --project=chromium --workers=1",
     "test:repertoire": "node --disable-warning=ExperimentalWarning --test scripts/repertoire-dashboard.test.ts",
     "visual:code-reasoning": "playwright test --config playwright.code-reasoning-review.config.ts --project=chromium --workers=1",

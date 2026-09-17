@@ -1,0 +1,13 @@
+#fraction-chain { max-width: 46rem; margin: 3rem auto; padding: 0 1.5rem; }
+#fraction-chain h1 { font-family: var(--kp-serif); }
+#fraction-chain p { max-width: 38rem; }
+#fraction-chain section { display: grid; gap: 1rem; }
+.fraction-stage { grid-area: 1 / 1; height: 15rem; min-width: 0; }
+.fraction-stage[hidden] { display: none !important; }
+#fraction-chain:not([data-fraction-ready="true"]) .fraction-stage { visibility: hidden; }
+#fraction-chain label { display: flex; align-items: center; gap: 1rem; }
+#fraction-chain input { flex: 1; }
+#fraction-chain output { min-height: 3em; }
+[data-distribution-stage] .kp-reader-equation-stage { min-height: 0; height: 100%; padding: 0; border: 0; box-shadow: none; background: transparent; }
+[data-distribution-stage] .kp-reader-equation-viewport { min-height: 0; height: 100%; }
+[data-distribution-stage] :is(.kp-reader-equation-stage-heading, .kp-reader-focus-stepper, .kp-reader-equation-hint, .kp-reader-equation-progress) { display: none; }

@@ -621,6 +621,41 @@
       "scope": "chain.compilation",
       "checkedAt": "2026-09-17T20:31:50.370Z",
       "notes": "20 tests pass: explicit chain, separate scaling/evaluation, exact middle state, unsupported two-sided and zero presentation repairs, negative inputs and existing operation preservation."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.addition-exemplar",
+      "checkedAt": "2026-09-17T20:42:22.588Z",
+      "notes": "17 source, proof, compilation and addition-presentation tests pass. Existing split/merge asset, totality, playback and governed variation checks also pass (12 affected tests)."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.addition-exemplar",
+      "checkedAt": "2026-09-17T20:42:23.816Z",
+      "notes": "Full app/node/test/Svelte/domain typecheck passes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.addition-exemplar",
+      "checkedAt": "2026-09-17T20:42:24.929Z",
+      "notes": "All architecture, equation governance and cross-domain gates pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.addition-exemplar",
+      "checkedAt": "2026-09-17T20:42:25.988Z",
+      "notes": "Production build includes fraction route. Host moved to tutorial boundary and imports canonical CSS directly; development-erasure gate preserved."
+    },
+    {
+      "command": "npm run visual:fraction-chain",
+      "status": "passed",
+      "scope": "chain.addition-exemplar",
+      "checkedAt": "2026-09-17T20:42:27.053Z",
+      "notes": "Chromium canonical merge and numerator fusion seek/reverse smoke passes. Captures inspected. Inactive compositor descendants cannot retain paint because stage display is withdrawn, with regression check. Visual judgment remains pending combined slice16 review."
     }
   ],
   "progress": {

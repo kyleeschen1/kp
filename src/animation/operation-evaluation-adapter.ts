@@ -38,8 +38,14 @@ import {
 import type { KpVerifiedComposedEvaluation } from "../semantic/composed-algebra-evaluation.ts";
 import { projectKpContextualConstantSum } from "../semantic/contextual-constant-sum-projection.ts";
 import { createKpAssetBundle } from "../semantic/asset.ts";
+import { createVerifiedFractionNumeratorEvaluation } from "../semantic/fraction-numerator-evaluation.ts";
+import type { KpVerifiedLikeDenominatorCombination } from "../semantic/fraction-like-denominator-combination.ts";
 import type { KpVerifiedComposedProductEvaluation } from "../semantic/composed-algebra-product-evaluation.ts";
 import { projectKpContextualConstantProduct } from "../semantic/contextual-constant-product-projection.ts";
+
+export function createVerifiedFractionNumeratorEvaluationAnimation(proof: KpVerifiedLikeDenominatorCombination): KpAnimationAsset {
+  return createKpOperationEvaluationAnimationAsset(createVerifiedFractionNumeratorEvaluation(proof));
+}
 
 export function createVerifiedContextualConstantProductAnimationAsset(proof: KpVerifiedComposedProductEvaluation): KpAnimationAsset {
   const projection = projectKpContextualConstantProduct(proof);
