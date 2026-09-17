@@ -101,7 +101,8 @@
     {
       "id": "chain.reduction",
       "title": "Reduction",
-      "status": "planned"
+      "summary": "Exact common-divisor reduction with retained occurrence lineage and copied-authority rejection verified; presentation limits remain explicit.",
+      "status": "complete"
     },
     {
       "id": "chain.compilation",

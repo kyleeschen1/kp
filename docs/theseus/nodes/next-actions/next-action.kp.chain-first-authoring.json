@@ -593,6 +593,13 @@
       "scope": "chain.combination",
       "checkedAt": "2026-09-17T20:16:42.781Z",
       "notes": "Nine chain tests plus eight existing combination/authoring tests passed. Raw numerator, signs, zero, ordered subtraction, hidden reduction rejection and adjacency occurrence identity covered. Full typecheck passed."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.reduction",
+      "checkedAt": "2026-09-17T20:22:21.381Z",
+      "notes": "Twelve chain tests plus ten existing fraction-animation/choreography/exact-rational tests pass. Full typecheck passes. Explicit divisor and partial/sign/zero cases verified; existing fixture accepts 3/6 but excludes zero presentation."
     }
   ],
   "progress": {
