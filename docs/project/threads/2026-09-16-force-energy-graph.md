@@ -5,6 +5,12 @@ Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome
 
+Upper-padding follow-up: the user requested more room above equations. The
+equation caller reserves an additional 48px above its opening bound, giving at
+least 96px top clearance with the shared margin. The bottom remains unchanged.
+The endpoint browser regression now checks the derivation's top reaches 96px
+while progress stays at zero; the focused rerun passes.
+
 Endpoint clipping repair: user reported clipped equations and graph explanations
 at drag extremes. The violated invariant was bounding page travel by handle
 centers rather than readable content. Both callers now supply measured content

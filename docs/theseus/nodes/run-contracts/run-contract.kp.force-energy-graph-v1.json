@@ -220,6 +220,13 @@
       "scope": "Endpoint exposure types",
       "checkedAt": "2026-09-17T00:51:33.625Z",
       "notes": "Full types pass; focused inspection-edge-scroll unit tests and production build also pass. Build retains existing chunk warnings."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"endpoint ink\"",
+      "status": "passed",
+      "scope": "Equation upper padding follow-up",
+      "checkedAt": "2026-09-17T00:59:25.695Z",
+      "notes": "First equation/derivation gets at least 96px top clearance; bottom clearance and clamped endpoint progress preserved. Focused browser regression passes."
     }
   ],
   "allowedWork": [

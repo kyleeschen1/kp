@@ -448,7 +448,9 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     void step(requested, event.key === "Home" ? 0 : event.key === "End" ? total - 1 : undefined);
   }, opts);
   const edgeScroll = createInspectionEdgeScroll({ signal: abort.signal,
-    readableBounds: () => ({ top: equationSlots[0]!.getBoundingClientRect().top,
+    // Reserve an extra upper reading margin in addition to the shared 48px
+    // clearance; a docked first equation must not hug the viewport edge.
+    readableBounds: () => ({ top: Math.min(root.getBoundingClientRect().top, equationSlots[0]!.getBoundingClientRect().top) - 48,
       bottom: equationSlots[total]!.getBoundingClientRect().bottom }),
     bounds: () => {
       const top = get(".energy-derivation-chain").getBoundingClientRect().top + (drag?.offset ?? 0);

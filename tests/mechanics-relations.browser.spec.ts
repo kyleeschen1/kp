@@ -87,6 +87,7 @@ test("equation endpoint ink remains inside viewport margins at both drag extreme
     const b = (await handle.boundingBox())!;
     await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await page.mouse.down();
     await expect.poll(async () => { const box = (await equation.boundingBox())!; return end ? box.y + box.height : -box.y; }).toBeLessThanOrEqual(end ? 603 : -47);
+    if (!end) await expect.poll(async () => -(await root.boundingBox())!.y).toBeLessThanOrEqual(-95);
     await expect(handle).toHaveAttribute('aria-valuenow', end ? '3' : '0');
     await page.mouse.up();
   }
