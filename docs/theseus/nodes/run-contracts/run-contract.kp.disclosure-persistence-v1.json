@@ -47,6 +47,20 @@
       "scope": "delayed-disclosure-anchor",
       "checkedAt": "2026-09-17T02:03:41.032Z",
       "notes": "Four anchor cases pass in both browsers; failure recovery passes in both after centering synthetic drag. Pre-fix late reflow reproduced 90px drift. Final recovery fixture confirmed a subsequent status-writer race: optional detail now owns its notice, retained through font resizing. This supersedes the earlier note about removing the status-owner change. Full types/build/architecture passed with this implementation; final test types pass. Natural user timing remains unidentified."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --grep \"first replacement frame|opening smaller steps preserves|disclosure anchor survives delayed|unavailable refinement restores\"",
+      "status": "passed",
+      "scope": "first-frame-disclosure",
+      "checkedAt": "2026-09-17T02:08:09.223Z",
+      "notes": "Eight focused cases pass; final first-frame test additionally covers collapse and passes separately in both browsers. Previously hidden replacement control measured zero during asynchronous readiness, around 220px away from entry. Transfer now occurs synchronously before awaiting readiness, including recovery; observer correction runs before paint. Existing delayed reflow, input release, saved-state return and failed recovery pass."
+    },
+    {
+      "command": "npm run typecheck; npm run build:bundle; npm run check:architecture",
+      "status": "passed",
+      "scope": "first-frame-preservation",
+      "checkedAt": "2026-09-17T02:08:36.355Z",
+      "notes": "Full final types pass after adding runtime HTML button narrowing to regression. Production build and architecture gates pass; existing global chunk warnings unchanged."
     }
   ],
   "allowedWork": [
@@ -61,7 +75,7 @@
     {
       "id": "disclosure.anchor",
       "title": "Disclosure-anchor",
-      "summary": "Delayed-layout anchor repair complete. Focused anchor and recovery cases pass in Chromium and Firefox; full types, build and architecture pass. No semantic or accepted visual treatment changes.",
+      "summary": "Synchronous first-frame anchor transfer and before-paint correction verified in Chromium and Firefox, entry/collapse and failure recovery. Full types, build and architecture pass.",
       "status": "complete"
     }
   ]

@@ -7,7 +7,7 @@ export function holdDisclosureViewportAnchor(initial: HTMLElement, signal?: Abor
   activeAnchors.get(doc)?.();
   const abort = new AbortController(), options = { capture: true, signal: abort.signal };
   let element = initial, top = initial.getBoundingClientRect().top;
-  let live = true, frame: number | undefined, expectedScroll = win.scrollY;
+  let live = true, expectedScroll = win.scrollY;
   const style = doc.documentElement.style;
   const previous = style.getPropertyValue('overflow-anchor'), priority = style.getPropertyPriority('overflow-anchor');
   // Browser anchoring must not independently compensate the same reflow.
@@ -18,11 +18,9 @@ export function holdDisclosureViewportAnchor(initial: HTMLElement, signal?: Abor
     if (Math.abs(delta) > .5) win.scrollBy({ top: delta, behavior: 'instant' });
     expectedScroll = win.scrollY;
   };
-  const schedule = () => {
-    if (!live || frame !== undefined) return;
-    frame = win.requestAnimationFrame(() => { frame = undefined; correct(); });
-  };
-  const resize = new ResizeObserver(schedule);
+  // ResizeObserver runs before paint. Deferring to another frame would expose
+  // one displaced frame every time renderer preparation changes the layout.
+  const resize = new ResizeObserver(correct);
   const observe = () => {
     resize.disconnect();
     for (let ancestor: HTMLElement | null = element; ancestor; ancestor = ancestor.parentElement) resize.observe(ancestor);
@@ -30,7 +28,6 @@ export function holdDisclosureViewportAnchor(initial: HTMLElement, signal?: Abor
   const release = () => {
     if (!live) return;
     live = false; resize.disconnect(); abort.abort();
-    if (frame !== undefined) win.cancelAnimationFrame(frame);
     if (style.getPropertyValue('overflow-anchor') === 'none') {
       if (previous) style.setProperty('overflow-anchor', previous, priority);
       else style.removeProperty('overflow-anchor');

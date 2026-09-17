@@ -2,6 +2,30 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("smaller steps preserves its anchor from the first replacement frame", async ({ page }) => {
+  const root = await ready(page);
+  const expand = root.locator('[data-refinement-expand]');
+  await expand.evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 220));
+  for (const entry of [expand, root.locator('[data-refinement-collapse]').first()]) {
+    const drift = await entry.evaluate(async el => {
+      if (!(el instanceof HTMLButtonElement)) throw new Error('Expected refinement button');
+      const top = el.getBoundingClientRect().top;
+      const selector = el.hasAttribute('data-refinement-expand') ? '[data-refinement-collapse]' : '[data-refinement-expand]';
+      const positions: number[] = [];
+      el.click();
+      const start = performance.now();
+      while (performance.now() - start < 1500) {
+        await new Promise(requestAnimationFrame);
+        const control = document.querySelector<HTMLElement>(`[data-energy-derivation]:not([data-derivation-namespace=power]) ${selector}`);
+        if (control) positions.push(control.getBoundingClientRect().top);
+      }
+      if (!positions.length) throw new Error('Replacement control never appeared');
+      return Math.max(...positions.map(y => Math.abs(y - top)));
+    });
+    expect(drift).toBeLessThan(2);
+  }
+});
+
 test("disclosure settling releases ownership on keyboard input and page disposal", async ({ page }) => {
   const root = await ready(page);
   const summary = root.locator('[data-derivation-interleave="0"] details > summary').first();

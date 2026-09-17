@@ -88,3 +88,26 @@ font resizing. Full types, production build and architecture gates pass; final
 test types pass. Existing global bundle-size warnings remain. This certifies the
 reproduced delayed-layout class, not an identified natural trigger for the user's
 particular timing. No new subjective visual treatment or promotion is introduced.
+
+## First-frame replacement follow-up
+
+The user clarified that smaller-step entry still jumps. The prior tests began
+sampling after the replacement control received focus, missing asynchronous
+preparation. A regression now samples from activation through the first 1.5
+seconds, on both entry and collapse. Before repair the new control was hidden
+during preparation, yielding a zero rectangle versus the roughly 220px entry
+offset. The replacement was therefore visible without a corresponding anchor.
+
+The replacement and recovery paths now reveal and retarget the control
+synchronously after mounting, before awaiting renderer readiness. The existing
+busy guard prevents activation during preparation; final focus still respects
+input cancellation. ResizeObserver now corrects directly before paint rather
+than scheduling a displaced frame. This supersedes the earlier pending-frame
+description; there is still no continuous sampling loop in production. The
+rollback unit is this synchronous transfer and before-paint correction.
+
+Eight focused Chromium/Firefox cases pass, including first-frame entry, delayed
+reflow, exact saved return and failed-detail recovery. The final first-frame
+regression additionally covers collapse. Build and architecture checks pass;
+the initial test type failure required an HTML button runtime guard before
+calling click, rather than an unchecked cast.

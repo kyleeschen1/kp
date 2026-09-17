@@ -78,13 +78,17 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         const offset = saved!.offset;
         active.dispose(); root.replaceWith(next); root = next;
         active = mountEnergyDerivation(root, binding, destination);
+        // Transfer before yielding: renderer preparation may span visible
+        // frames, and a hidden control cannot supply an anchor rectangle.
+        const restoredEntry = root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")!;
+        restoredEntry.hidden = false;
+        viewportAnchor.retarget(restoredEntry, offset);
         await active.ready;
         if (root.dataset["repair"] === "true") throw new Error("Refinement scene requires repair");
         if (collapsing) saved = undefined;
         bind();
         // The clicked control is the reader's anchor. The parent equation can
         // sit far above it once its explanation is open.
-        const restoredEntry = root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")!;
         if (viewportAnchor.retarget(restoredEntry, offset)) restoredEntry.focus({ preventScroll: true });
       } catch (error) {
         // A failed optional view must not strand the reader or grant a visual
@@ -96,9 +100,11 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           root.replaceWith(next); root = next;
           active = mountEnergyDerivation(root, binding, previous.state);
           saved = undefined;
+          const restoredEntry = root.querySelector<HTMLElement>("[data-refinement-expand]")!;
+          restoredEntry.hidden = false;
+          viewportAnchor.retarget(restoredEntry, previous.offset);
           await active.ready;
           bind();
-          const restoredEntry = root.querySelector<HTMLElement>("[data-refinement-expand]")!;
           if (viewportAnchor.retarget(restoredEntry, previous.offset)) restoredEntry.focus({ preventScroll: true });
         }
         // Recovery survives later compositor rebuilds, which own the separate
