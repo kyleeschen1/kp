@@ -1,6 +1,13 @@
 /** Discovery metadata only. Domain checkers still own acceptance and evidence;
  * a host reference cannot certify that a draft is applied or published. */
 export const supportedAuthorTasks = {
+  "equation.fraction-chain": {
+    owner: "src/authoring/fraction-chain-author-check.ts",
+    input: "Two to eight explicit integer-fraction states; positive denominators. Checked ordered alignment, raw addition/subtraction and common-divisor reduction. Optional hints select verified moves; prose is editorial. No arbitrary solver or automatic visual certification.",
+    preview: { kind: "local-source-build", url: "/experiments/fraction-chain/", reason: "The route builds the retained source and adjacent Article; checking another file does not apply it to this host." },
+    extraction: { kind: "domain-owned", owner: "src/tutorial/fraction-chain/publication.ts", scope: "Raw numerator combination detail and exact held return in the retained passage; no general extraction." },
+    publication: { kind: "unsupported", reason: "Local source/Article host exists; no selected-source immutable edition command." }
+  },
   "equation.algebra-intuition": {
     owner: "src/authoring/composed-algebra-author-check-v2.ts",
     input: "Four or five checked states: factor a repeated binary group, evaluate its integer count, distribute, optionally evaluate the final nonnegative integer product. Declared real scalars; ordered contributions; no arbitrary solver. Prose is editorial.",

@@ -931,6 +931,20 @@
       "scope": "chain.move-resolution",
       "checkedAt": "2026-09-17T22:24:22.862Z",
       "notes": "All five typecheck cohorts passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-cli.test.ts tests/authoring-entrypoint-inventory.test.ts tests/authoring-entrypoint-hardening.test.ts tests/authoring-entrypoint-packet.test.ts tests/fraction-chain-author-check.test.ts",
+      "status": "passed",
+      "scope": "chain.authoring-entrypoint",
+      "checkedAt": "2026-09-17T22:27:36.874Z",
+      "notes": "16 checks passed; all task examples and foreign-source matrix preserved; injected authority, stale reports, revision edits and repair round trip covered."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.authoring-entrypoint",
+      "checkedAt": "2026-09-17T22:27:37.970Z",
+      "notes": "Full type cohorts passed. Real author:check discovery and subtraction request also executed successfully."
     }
   ],
   "progress": {

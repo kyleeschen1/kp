@@ -53,6 +53,11 @@ For persistent equation passages, also read
 rail, disclosure and native-surface owners; do not copy a demo page's theme or
 recreate the accepted rail state in caller-local CSS.
 
+For bounded integer-fraction chains, select `equation.fraction-chain` and read
+`fraction-chain-authoring-packet.md`. Adjacent checked states can infer alignment,
+raw addition/subtraction and reduction without hints. This is not an arbitrary
+LaTeX solver or a claim that every checked numeric caller has certified paint.
+
 For the independent scalar cancellation persistent-reader candidate, use
 `scalar-cancellation-reader-packet.md`. It documents the file-based checked
 source/Article workflow, shared physics-reader pipeline, supported notation

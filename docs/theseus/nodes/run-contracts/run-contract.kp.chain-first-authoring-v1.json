@@ -161,7 +161,8 @@
     {
       "id": "chain.authoring-entrypoint",
       "title": "Authoring-entrypoint",
-      "status": "planned"
+      "summary": "Fraction task, hint-free example, serial report, concise packet, injection/repair and existing-task preservation checks implemented.",
+      "status": "complete"
     },
     {
       "id": "chain.inference-trial",
