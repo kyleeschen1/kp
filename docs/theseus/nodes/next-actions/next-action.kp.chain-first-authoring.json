@@ -600,6 +600,27 @@
       "scope": "chain.reduction",
       "checkedAt": "2026-09-17T20:22:21.381Z",
       "notes": "Twelve chain tests plus ten existing fraction-animation/choreography/exact-rational tests pass. Full typecheck passes. Explicit divisor and partial/sign/zero cases verified; existing fixture accepts 3/6 but excludes zero presentation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.compilation",
+      "checkedAt": "2026-09-17T20:31:48.239Z",
+      "notes": "Full app, node, tests, Svelte and domain checks pass; source tuple construction repaired."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.compilation",
+      "checkedAt": "2026-09-17T20:31:49.420Z",
+      "notes": "All architecture and governance gates pass after routing sha256 through the kernel public API."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-chain-compilation.test.ts tests/equation-series-common-denominator-authoring.test.ts tests/equation-series-like-denominator-authoring.test.ts tests/kp-fraction-animation-asset.test.ts tests/kp-fraction-choreography.test.ts",
+      "status": "passed",
+      "scope": "chain.compilation",
+      "checkedAt": "2026-09-17T20:31:50.370Z",
+      "notes": "20 tests pass: explicit chain, separate scaling/evaluation, exact middle state, unsupported two-sided and zero presentation repairs, negative inputs and existing operation preservation."
     }
   ],
   "progress": {

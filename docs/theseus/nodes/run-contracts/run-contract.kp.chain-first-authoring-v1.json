@@ -107,7 +107,8 @@
     {
       "id": "chain.compilation",
       "title": "Compilation",
-      "status": "planned"
+      "summary": "Source-bound governed four-state compilation and repair diagnostics verified; internal alignment evaluation remains explicit.",
+      "status": "complete"
     },
     {
       "id": "chain.addition-exemplar",

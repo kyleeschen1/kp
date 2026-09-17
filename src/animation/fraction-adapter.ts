@@ -8,7 +8,8 @@ import {
   type GeneratedFractionExpressionTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
 import {
-  getGeneratedFractionExpressionTutorialFixtureSpec
+  getGeneratedFractionExpressionTutorialFixtureSpec,
+  type GeneratedFractionExpressionTutorialFixtureSpec
 } from "../semantic/generated-algebra-fixture-registry.ts";
 import {
   createEditableSemanticTransformationTree,
@@ -23,7 +24,7 @@ export const defaultFractionSimplificationFixtureId =
   "generated.fraction-expression.two-fourths";
 
 export function createFractionSimplificationAnimationAsset(
-  fixtureId: string = defaultFractionSimplificationFixtureId
+  fixtureId: string | GeneratedFractionExpressionTutorialFixtureSpec = defaultFractionSimplificationFixtureId
 ): KpAnimationAsset {
   const fixture = createFractionExpressionFixture(fixtureId);
   const animationId = `animation.${fixture.id}`;
@@ -134,9 +135,11 @@ export function createFractionSimplificationAnimationAsset(
 }
 
 function createFractionExpressionFixture(
-  fixtureId: string
+  fixtureId: string | GeneratedFractionExpressionTutorialFixtureSpec
 ): GeneratedFractionExpressionTutorialFixture {
-  const spec = getGeneratedFractionExpressionTutorialFixtureSpec(fixtureId);
+  // Parameterized callers still pass through the existing exact common-factor
+  // fixture constructor; accepting a prebuilt animation would bypass that law.
+  const spec = typeof fixtureId === "string" ? getGeneratedFractionExpressionTutorialFixtureSpec(fixtureId) : fixtureId;
 
   if (spec === undefined) {
     throw new Error(

@@ -18,7 +18,7 @@ export interface FractionChainSource {
   readonly states: readonly FractionChainState[]; readonly moves: readonly FractionChainMove[];
 }
 export class FractionChainRepair extends Error {
-  readonly code: "fraction-chain.source" | "fraction-chain.notation" | "fraction-chain.operation";
+  readonly code: "fraction-chain.source" | "fraction-chain.notation" | "fraction-chain.operation" | "fraction-chain.presentation";
   readonly path: string;
   constructor(code: FractionChainRepair["code"], path: string, expected: string) {
     super(expected); this.name = "FractionChainRepair"; this.code = code; this.path = path;
