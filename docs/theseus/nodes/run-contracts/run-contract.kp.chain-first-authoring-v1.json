@@ -52,7 +52,8 @@
     {
       "id": "chain.nonterminal-reader",
       "title": "Nonterminal-reader",
-      "status": "planned"
+      "summary": "Middle-step norm refinement preserves surrounding native nodes, child pose, downstream selection/bookmarks and held return; legacy cancellation and scalar preserved. All focused/broad gates pass; human judgment is next.",
+      "status": "complete"
     },
     {
       "id": "chain.energy-review",

@@ -1,8 +1,54 @@
 import { test, expect, type Locator } from "@playwright/test";
+import { sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
 
 const route = "/experiments/mechanics-relations/";
 
-test("rail jumps directly and reveals endpoint ink at both viewport edges", async ({ page }) => {
+test("nonterminal unfolding retains downstream context and exact held return", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
+  const root = await ready(page);
+  const retained = await root.evaluateHandle(el => ({
+    equations: [...el.querySelectorAll('.energy-derivation-equation')],
+    prose: el.querySelector('[data-derivation-row="2"] .energy-derivation-interleave-text'),
+    grip: el.querySelector('[data-derivation-handle]')
+  }));
+  for (const font of ['16px', '24px']) {
+    await page.evaluate(size => { document.documentElement.style.fontSize = size; }, font);
+    await dragTo(page, root, 1.62);
+    const held = await root.getAttribute('data-progress');
+    const childProgress = Number(await root.locator('[data-derivation-stage]').getAttribute('data-inspection-child-progress'));
+    await root.locator('[data-refinement-expand="scale-magnitude"]').click();
+    await expect(root).toHaveAttribute('data-refinement-unfolding', 'true');
+    await expect(root).toHaveAttribute('data-move', '2');
+    await expect(root.locator('[data-transition-number]')).toHaveText(['1', '2', '2.1', '2.2', '3']);
+    await expect(root.locator('[data-derivation-row]')).toHaveCount(5);
+    expect(await retained.evaluate(saved => [...saved.equations, saved.prose, saved.grip].every(el => el?.isConnected))).toBe(true);
+    expect(sampleEnergyDerivationLens(Number(await root.getAttribute('data-progress'))).algebra).toBeCloseTo(childProgress, 8);
+    expect(childProgress).toBeGreaterThan(0);
+    await page.screenshot({ path: info.outputPath(`nonterminal-open-${font}.png`) });
+    await root.locator('[data-derivation-entry="3"]').click();
+    await expect(root).toHaveAttribute('data-move', '3');
+    await expect(root).not.toHaveAttribute('data-repair', 'true');
+    await root.locator('[data-refinement-collapse]').first().click();
+    await expect(root).toHaveAttribute('data-progress', held!);
+    await expect(root).toHaveAttribute('data-move', '1');
+    expect(await retained.evaluate(saved => [...saved.equations, saved.prose, saved.grip].every(el => el?.isConnected))).toBe(true);
+    await expect(root.locator('[data-refinement-expand="scale-magnitude"]')).toBeFocused();
+  }
+  await dragTo(page, root, 2.55);
+  const downstreamHeld = await root.getAttribute('data-progress');
+  await root.locator('[data-refinement-expand="scale-magnitude"]').click();
+  await expect(root).toHaveAttribute('data-move', '3');
+  await expect(root).toHaveAttribute('data-progress', downstreamHeld!);
+  await root.locator('[data-derivation-entry="0"]').click();
+  await expect(root).toHaveAttribute('data-move', '0');
+  await root.locator('[data-derivation-entry="3"]').click();
+  await expect(root).toHaveAttribute('data-progress', downstreamHeld!);
+  await root.locator('[data-refinement-collapse]').first().click();
+  await expect(root).toHaveAttribute('data-move', '2');
+  await expect(root).toHaveAttribute('data-progress', downstreamHeld!);
+});
+
+for (const parentId of ['cancel-mass', 'scale-magnitude']) test(`rail jumps directly and reveals endpoint ink at both viewport edges: ${parentId}`, async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 650 });
   const root = await ready(page);
   for (const font of ['16px', '24px']) {
@@ -22,7 +68,7 @@ test("rail jumps directly and reveals endpoint ink at both viewport edges", asyn
       })).toBe(true);
     }
   }
-  await root.locator('[data-refinement-expand]').click();
+  await root.locator(`[data-refinement-expand="${parentId}"]`).click();
   await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
   await root.locator('[data-refinement-collapse]').first().focus();
   const target = root.locator('[data-derivation-row="4"] .energy-derivation-equation');
@@ -30,7 +76,7 @@ test("rail jumps directly and reveals endpoint ink at both viewport edges", asyn
   const b = (await target.boundingBox())!, rail = (await root.locator('[data-derivation-rail]').boundingBox())!;
   await page.mouse.click(rail.x + 10, b.y + b.height / 2);
   await expect(lens(root)).toHaveAttribute('aria-valuenow', '4');
-  for (const index of [5, 0]) {
+  for (const index of [parentId === 'cancel-mass' ? 5 : 4, 0]) {
     const endpoint = root.locator(`[data-derivation-row="${index}"] .energy-derivation-equation`);
     await endpoint.evaluate((el, end) => {
       const box = el.getBoundingClientRect(); scrollBy(0, box.top + box.height / 2 - (end ? 625 : 20));
@@ -98,16 +144,16 @@ test("keyboard navigation reveals selected ink without capturing ordinary scroll
   await expect(handle).toHaveAttribute('aria-valuenow', position!);
 });
 
-test("inline refinement repair retains the original reading", async ({ page }) => {
+for (const parentId of ['cancel-mass', 'scale-magnitude']) test(`inline refinement repair retains the original reading: ${parentId}`, async ({ page }) => {
   const root = await ready(page);
   const source = await root.locator('[data-refinement-anchor] .energy-derivation-equation').elementHandle();
-  await root.locator('[data-refinement-view]').evaluate((el: HTMLTemplateElement) => {
+  await root.locator(`[data-refinement-view="${parentId}"]`).evaluate((el: HTMLTemplateElement) => {
     el.content.querySelector('[data-derivation-template="2"]')!.remove();
   });
-  await root.locator('[data-refinement-expand]').click();
+  await root.locator(`[data-refinement-expand="${parentId}"]`).click();
   await expect(root.locator('[data-refinement-status]')).toContainText('needs repair');
   await expect(root).toHaveAttribute('data-refinement-unfolding', 'false');
-  await expect(root.locator('[data-refinement-expand]')).toBeFocused();
+  await expect(root.locator(`[data-refinement-expand="${parentId}"]`)).toBeFocused();
   expect(await source!.evaluate(el => el.isConnected)).toBe(true);
   await expect(root.locator('[data-derivation-row]')).toHaveCount(4);
 });
@@ -123,12 +169,12 @@ test("inline refinement retains native endpoints parent explanation and grip", a
     target: el.querySelector('[data-derivation-row]:last-child .energy-derivation-equation'),
     prose: el.querySelector('[data-refinement-anchor] .energy-derivation-interleave-text'),
     grip: el.querySelector('[data-derivation-handle]'),
-    button: el.querySelector('[data-refinement-expand]')
+    button: el.querySelector('[data-refinement-expand]:not([data-refinement-norm])')
   }));
   await page.screenshot({ path: info.outputPath('inline-refinement-before.png') });
   for (let cycle = 0; cycle < 2; cycle++) {
     if (cycle === 1) await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; });
-    await root.locator('[data-refinement-expand]').click();
+    await root.locator('[data-refinement-expand]:not([data-refinement-norm])').click();
     await expect(root).toHaveAttribute('data-refinement-unfolding', 'true');
     await expect(root.locator('[data-refinement-collapse]').first()).toBeFocused();
     expect(await retained.evaluate(saved => Object.values(saved).every(node => node?.isConnected))).toBe(true);
@@ -139,21 +185,21 @@ test("inline refinement retains native endpoints parent explanation and grip", a
     await expect(root).toHaveAttribute('data-move', '3');
     await root.locator('[data-refinement-collapse]').first().click();
     await expect(root).toHaveAttribute('data-refinement-unfolding', 'false');
-    await expect(root.locator('[data-refinement-expand]')).toBeFocused();
+    await expect(root.locator('[data-refinement-expand]:not([data-refinement-norm])')).toBeFocused();
     expect(await retained.evaluate(saved => Object.values(saved).every(node => node?.isConnected))).toBe(true);
     await expect(root.locator('[data-derivation-row]')).toHaveCount(4);
   }
 });
 
-test("smaller steps preserves its anchor from the first replacement frame", async ({ page }) => {
+for (const parentId of ['cancel-mass', 'scale-magnitude']) test(`smaller steps preserves its anchor from the first replacement frame: ${parentId}`, async ({ page }) => {
   const root = await ready(page);
-  const expand = root.locator('[data-refinement-expand]');
+  const expand = root.locator(`[data-refinement-expand="${parentId}"]`);
   await expand.evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 220));
   for (const entry of [expand, root.locator('[data-refinement-collapse]').first()]) {
     const drift = await entry.evaluate(async el => {
       if (!(el instanceof HTMLButtonElement)) throw new Error('Expected refinement button');
       const top = el.getBoundingClientRect().top;
-      const selector = el.hasAttribute('data-refinement-expand') ? '[data-refinement-collapse]' : '[data-refinement-expand]';
+      const selector = el.hasAttribute('data-refinement-expand') ? '[data-refinement-collapse]' : `[data-refinement-expand="${el.getAttribute('data-refinement-collapse')}"]`;
       const positions: number[] = [];
       el.click();
       const start = performance.now();
@@ -211,7 +257,7 @@ test("opening smaller steps preserves the detail entry in the viewport", async (
   await root.locator('[data-derivation-entry="2"]').click();
   await dragTo(page, root, 2.55);
   const progress = await lens(root).getAttribute('aria-valuenow');
-  const expand = root.locator('[data-refinement-expand]');
+  const expand = root.locator('[data-refinement-expand]:not([data-refinement-norm])');
   await expand.evaluate(el => { scrollBy(0, el.getBoundingClientRect().top - 220); });
   const top = (await expand.boundingBox())!.y;
   await expand.click();
@@ -365,7 +411,7 @@ test("one held equation drag reaches both readable extremes without keyboard doc
 test("expanded equation font resizing cancels a held drag and rebuilds at the same position", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page), handle = lens(root);
-  await root.locator('[data-refinement-expand]').click();
+  await root.locator('[data-refinement-expand]:not([data-refinement-norm])').click();
   await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
   await expect(handle).toBeEnabled();
   await dragTo(page, root, 3.5, false);
@@ -768,7 +814,7 @@ test("power bridge uses native reversible inspection with expandable product-rul
     await expect(root).toHaveAttribute("data-derivation-progress", "1");
     await lens(root).press("Home");
     await expect(root).toHaveAttribute("data-derivation-progress", "0");
-    await root.locator('[data-refinement-expand]').click();
+    await root.locator('[data-refinement-expand]:not([data-refinement-norm])').click();
     await expect(root.locator('[data-transition-number]')).toHaveText(['1.1', '1.2', '1.3', '1.4', '1.5']);
     await expect(lens(root)).toBeEnabled();
     await root.screenshot({ path: info.outputPath("power-expanded.png") });
@@ -957,7 +1003,7 @@ test("fluent physics cancellation keeps its carriers, omits identity stops and o
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await expect(root).toHaveAttribute("data-derivation-reading", "fluent");
-  await expect(root.locator("[data-refinement-expand]")).toBeVisible();
+  await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeVisible();
   await root.locator('[data-derivation-entry="2"]').click();
   await expect(root).toHaveAttribute("data-move", "2");
   const input = root.locator('input[aria-label="Inspect step 3"]');
@@ -996,7 +1042,7 @@ test("fluent physics cancellation keeps its carriers, omits identity stops and o
   const held = await root.getAttribute("data-progress");
   await root.locator('[data-derivation-interleave="2"] details:not([data-refinement-static]) summary').click();
   await expect(root).toHaveAttribute("data-progress", held!);
-  await root.locator("[data-refinement-expand]").click();
+  await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
   await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
   await expect(root.locator("[data-transition-number]")).toHaveText(["1", "2", "3.1", "3.2", "3.3"]);
   await root.locator("[data-refinement-collapse]").first().click();
@@ -1019,7 +1065,7 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
   await dragTo(page, root, .55);
   const held = await root.getAttribute("data-progress");
   await root.screenshot({ path: info.outputPath("scalar-coarse.png") });
-  await root.locator("[data-refinement-expand]").click();
+  await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
   await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
   await expect(root.locator("[data-transition-number]")).toHaveText(["1.1", "1.2", "1.3"]);
   await expect(root.locator("[data-nested-context]")).toContainText("Inside step 1");
@@ -1036,7 +1082,7 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
   await root.locator("[data-refinement-local-return]").last().click();
   await expect(root).toHaveAttribute("data-derivation-detail", "coarse");
   await expect(root).toHaveAttribute("data-progress", held!);
-  await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+  await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeFocused();
   await expect(root.locator("[data-derivation-row]")).toHaveCount(2);
   expect(errors).toEqual([]);
 });
@@ -1164,7 +1210,7 @@ test("expandable cancellation uses canonical fine steps and restores the compact
   await dragTo(page, root, 2.55);
   const held = await root.getAttribute("data-progress");
   await root.locator('[data-derivation-interleave="2"] summary').first().click();
-  const expand = root.locator("[data-refinement-expand]");
+  const expand = root.locator("[data-refinement-expand]:not([data-refinement-norm])");
   await expand.scrollIntoViewIfNeeded();
   const offset = await root.locator('[data-derivation-row="2"]').evaluate(el => el.getBoundingClientRect().top);
   await expand.click();
@@ -1196,7 +1242,7 @@ test("expandable cancellation uses canonical fine steps and restores the compact
   await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
   await expect(root.locator("[data-transition-number]")).toHaveText(["1", "2", "3"]);
   await expect(root.locator('[data-derivation-interleave="2"] details').first()).toHaveAttribute("open", "");
-  await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+  await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeFocused();
   const restoredOffset = await root.locator('[data-derivation-row="2"]').evaluate(el => el.getBoundingClientRect().top);
   expect(Math.abs(restoredOffset - offset)).toBeLessThan(2);
   await expect(root.locator("[data-derivation-stage]")).toHaveCount(1);
@@ -1208,7 +1254,7 @@ test("expanded handle crosses both fine-step boundaries in one held drag without
     await page.setViewportSize({ width, height: 1800 });
     await page.goto("about:blank");
     const root = await ready(page);
-    await root.locator("[data-refinement-expand]").click();
+    await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
     await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
     await expect(root).toHaveAttribute("data-move", "2");
     await lens(root).scrollIntoViewIfNeeded();
@@ -1238,7 +1284,7 @@ test("expanded handle crosses both fine-step boundaries in one held drag without
 test("expanded drag follows every pointer sample across boundaries without waiting for a new scene", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page);
-  await root.locator("[data-refinement-expand]").click();
+  await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
   await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
   await expect(root).toHaveAttribute("data-move", "2");
   await lens(root).scrollIntoViewIfNeeded();
@@ -1300,10 +1346,10 @@ test("unavailable refinement restores the checked compact inspection without a s
   await lens(root).evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 240));
   await dragTo(page, root, 2.55);
   const held = await root.getAttribute("data-progress");
-  await root.locator("[data-refinement-view]").evaluate((el: HTMLTemplateElement) => {
+  await root.locator("[data-refinement-view]:not([data-refinement-norm])").evaluate((el: HTMLTemplateElement) => {
     el.content.querySelector('[data-derivation-template="2"]')!.remove();
   });
-  await root.locator("[data-refinement-expand]").click();
+  await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
   await expect(root.locator("[data-refinement-status]")).toContainText("needs repair");
   await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
   await page.waitForTimeout(500);
@@ -1313,7 +1359,7 @@ test("unavailable refinement restores the checked compact inspection without a s
   await expect(root).toHaveAttribute("data-move", "2");
   await expect(root).toHaveAttribute("data-progress", held!);
   await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
-  await expect(root.locator("[data-refinement-expand]")).toBeFocused();
+  await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeFocused();
 });
 
 test("every substep returns through the whole-refinement collapse with saved progress and focus", async ({ page }, info) => {
@@ -1324,7 +1370,7 @@ test("every substep returns through the whole-refinement collapse with saved pro
   await dragTo(page, root, 2.55);
   const held = await root.getAttribute("data-progress");
   for (const index of [2, 3, 4]) {
-    await root.locator("[data-refinement-expand]").click();
+    await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
     await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
     await expect(root.locator("[data-refinement-local-return]")).toHaveCount(3);
     const passage = root.locator(`[data-derivation-interleave="${index}"]`);
@@ -1340,8 +1386,8 @@ test("every substep returns through the whole-refinement collapse with saved pro
     await expect(root).toHaveAttribute("data-progress", held!);
     await expect(root).toHaveAttribute("data-move", "2");
     await expect(root.locator("[data-derivation-row]")).toHaveCount(4);
-    await expect(root.locator("[data-refinement-expand]")).toBeFocused();
-    await expect(root.locator("[data-refinement-expand]")).toBeInViewport();
+    await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeFocused();
+    await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeInViewport();
     await expect(root.locator("[data-refinement-local-return]")).toHaveCount(0);
   }
 });

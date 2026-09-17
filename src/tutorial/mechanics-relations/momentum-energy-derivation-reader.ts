@@ -2,6 +2,7 @@ import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeli
 import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
 import { createEnergyRefinementUnfolding } from "./energy-refinement-unfolding.ts";
+import { lensProgressForAlgebra } from "./energy-derivation-presentation.ts";
 import { equationViewportBounds, revealEquationInViewport } from "../../reader/runtime/equation-viewport.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
@@ -12,21 +13,24 @@ import type { EnergyDerivationPlan } from "../../semantic/momentum-energy-deriva
 import type { EnergyDerivationDetail } from "../../../domains/physics/momentum-energy-derivation.ts";
 
 export interface DerivationReaderBinding {
-  loadPlan(detail: EnergyDerivationDetail): Promise<EnergyDerivationPlan>;
+  loadPlan(detail: EnergyDerivationDetail, parentId?: string): Promise<EnergyDerivationPlan>;
   inspection?(plan: EnergyDerivationPlan, index: number): {
     source: readonly string[]; target: readonly string[]; recordSource: readonly string[]; recordTarget: readonly string[];
   } | undefined;
 }
 const energyBinding: DerivationReaderBinding = {
-  async loadPlan(detail) {
-    const [{ createEnergyDerivationPlan }, domain] = await Promise.all([
+  async loadPlan(detail, parentId) {
+    const [{ createEnergyDerivationPlan, unfoldDerivationInspection }, domain] = await Promise.all([
       import("../../semantic/momentum-energy-derivation-plan.ts"), import("../../../domains/public-api.ts")
     ]);
     const checked = domain.checkMomentumEnergyDerivation(domain.momentumEnergyDerivationSource);
     if (checked.status !== "checked") throw new Error(checked.code);
-    return createEnergyDerivationPlan(checked.model, detail);
+    return detail === "mass-refinement" && parentId === "scale-magnitude"
+      ? unfoldDerivationInspection(createEnergyDerivationPlan(checked.model), parentId)
+      : createEnergyDerivationPlan(checked.model, detail);
   },
   inspection(plan, index) {
+    if (plan.view.refinement?.parentTransitionId === 'physics.energy.scale-magnitude') return undefined;
     if (plan.view.refinement && index === 1) return { ...energyDerivationInspection[1],
       recordTarget: ["rule", "norm", "scalar-before"].map(role => `energy.expand-mass-square.0.${role}`) };
     return !plan.view.refinement || index < 2 ? energyDerivationInspection[index] : undefined;
@@ -55,11 +59,11 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
     return;
   }
   const prototype = initialRoot.cloneNode(true) as HTMLElement;
-  const expanded = initialRoot.querySelector<HTMLTemplateElement>("[data-refinement-view]");
+  const expansions = [...initialRoot.querySelectorAll<HTMLTemplateElement>("[data-refinement-view]")];
   const unfold = initialRoot.dataset['derivationNamespace'] === 'energy' && detailMode === null
     ? createEnergyRefinementUnfolding(initialRoot) : undefined;
   let root = initialRoot, active = mountEnergyDerivation(root, binding);
-  let saved: { state: EnergyReaderState; offset: number } | undefined;
+  let saved: { state: EnergyReaderState; offset: number; parentId: string } | undefined;
   let busy = false;
   let controls = new AbortController();
   const replace = (next: HTMLElement) => {
@@ -68,10 +72,10 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   };
   const bind = () => {
     controls.abort(); controls = new AbortController();
-    const staticDetail = root.querySelector<HTMLElement>("[data-refinement-static]");
-    if (staticDetail) staticDetail.hidden = true;
+    root.querySelectorAll<HTMLElement>("[data-refinement-static]").forEach(el => el.hidden = true);
+    root.querySelectorAll<HTMLElement>("[data-refinement-expand]").forEach(el => el.hidden = !!saved);
     const buttons = root.querySelectorAll<HTMLButtonElement>(saved ? "[data-refinement-collapse], [data-refinement-parent-return]" : "[data-refinement-expand]");
-    if (!buttons.length || !enabled || !expanded) return;
+    if (!buttons.length || !enabled || !expansions.length) return;
     // Header and child affordances enter one transition, never independent
     // collapse states. The busy guard also covers overlapping activations.
     const toggle = async (event: Event) => {
@@ -82,15 +86,39 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
       const viewportAnchor = holdDisclosureViewportAnchor(entry);
       try {
         const collapsing = saved !== undefined;
-        if (!collapsing) saved = { state: active.capture(), offset: entry.getBoundingClientRect().top };
+        if (!collapsing) saved = { state: active.capture(), offset: entry.getBoundingClientRect().top, parentId: entry.dataset['refinementExpand']! };
+        const expanded = expansions.find(template => template.dataset['refinementView'] === saved!.parentId)!;
         const next = collapsing ? prototype.cloneNode(true) as HTMLElement : expanded.content.firstElementChild!.cloneNode(true) as HTMLElement;
-        const destination = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
+        const destination: EnergyReaderState = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
+        if (!collapsing) {
+          const previous = saved!.state;
+          const ids = [...next.querySelectorAll<HTMLElement>('[data-derivation-template]')].map(el => el.dataset['transitionId']);
+          destination.bookmarks = previous.bookmarks.filter(position => ids.includes(position.transition))
+            .map(position => ({ ...position, move: ids.indexOf(position.transition) }));
+          if (ids.includes(previous.transition)) {
+            destination.transition = previous.transition; destination.progress = previous.progress;
+          } else if (previous.transition === saved!.parentId) {
+            const coarse = await binding.loadPlan('coarse');
+            if (coarse.inspections?.[saved!.parentId]) {
+              const [{ unfoldDerivationInspection }, { createDerivationRefinementMapping }] = await Promise.all([
+                import('../../semantic/momentum-energy-derivation-plan.ts'),
+                import('../../animation/derivation-inspection-composition.ts')
+              ]);
+              const mapping = createDerivationRefinementMapping(coarse, unfoldDerivationInspection(coarse, saved!.parentId));
+              const mapped = mapping.mapAlgebra(sampleEnergyDerivationLens(previous.progress).algebra);
+              if (mapped) {
+                destination.transition = mapped.transition;
+                destination.progress = lensProgressForAlgebra(mapped.progress);
+              }
+            }
+          }
+        }
         const offset = saved!.offset;
         active.dispose(); replace(next);
         active = mountEnergyDerivation(root, binding, destination);
         // Transfer before yielding: renderer preparation may span visible
         // frames, and a hidden control cannot supply an anchor rectangle.
-        const restoredEntry = root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")!;
+        const restoredEntry = root.querySelector<HTMLElement>(collapsing ? `[data-refinement-expand="${saved!.parentId}"]` : "[data-refinement-collapse]")!;
         restoredEntry.hidden = false;
         viewportAnchor.retarget(restoredEntry, offset);
         await active.ready;
@@ -111,7 +139,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           replace(next);
           active = mountEnergyDerivation(root, binding, previous.state);
           saved = undefined;
-          const restoredEntry = root.querySelector<HTMLElement>("[data-refinement-expand]")!;
+          const restoredEntry = root.querySelector<HTMLElement>(`[data-refinement-expand="${previous.parentId}"]`)!;
           restoredEntry.hidden = false;
           viewportAnchor.retarget(restoredEntry, previous.offset);
           await active.ready;
@@ -392,7 +420,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     let inspectionRight = 0;
     try {
       const [{ mountMomentumEnergyDerivationSession }, proofPlan] = await Promise.all([
-        import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail)
+        import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail, root.dataset['refinementParentId'])
       ]);
       if (token !== generation) return;
       if (proofPlan.namespace !== root.dataset["derivationNamespace"] || proofPlan.sourceRevision !== root.dataset["derivationSourceRevision"] || proofPlan.moves.length !== ids.length ||

@@ -99,6 +99,20 @@ export function sampleEnergyDerivationLens(progress: number): EnergyDerivationPr
   return { ...frame, carry: progress };
 }
 
+/** Invert the existing act gate, not the relative length of two visible rails.
+ * Endpoints dock natively; interiors preserve the checked child's algebra pose. */
+export function lensProgressForAlgebra(algebra: number): number {
+  if (!Number.isFinite(algebra) || algebra < 0 || algebra > 1) throw new RangeError('Invalid algebra position');
+  if (algebra === 0 || algebra === 1) return algebra;
+  let low = 0, high = 1;
+  for (let i = 0; i < 48; i++) {
+    const mid = (low + high) / 2;
+    if (sampleEnergyDerivationLens(mid).algebra < algebra) low = mid;
+    else high = mid;
+  }
+  return (low + high) / 2;
+}
+
 /** Direct manipulation tracks distance without endpoint dead zones. Explicit
  * navigation reaches exact endpoints without making dragging sticky. */
 export function resolveEnergyDerivationLensPosition(position: number, total: number = energyDerivationFocus.length) {

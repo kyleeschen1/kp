@@ -42,8 +42,103 @@
       "status": "passed",
       "scope": "chain.nonterminal-truth",
       "checkedAt": "2026-09-17T07:14:41.920Z"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "chain.nonterminal-reader.initial-budget",
+      "checkedAt": "2026-09-17T07:26:03.587Z",
+      "notes": "Three pre-existing HTML overruns reproduced identically at clean commit 7032e4798. Narrow measured baseline amendment documented in docs/project/reviews/2026-09-17-chain-first-reader-budget.md; later rerun passes."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep smaller-steps-anchor",
+      "status": "failed",
+      "scope": "chain.nonterminal-reader.interrupted-browser",
+      "checkedAt": "2026-09-17T07:26:05.027Z",
+      "notes": "First anchor run interrupted by Vite source reload during editing; next actual canonical cases passed but temporary nested baseline worktree was also discovered. Removed diagnostic worktree before final canonical rerun. No browser check waived."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep smaller-steps-anchor",
+      "status": "not-run",
+      "scope": "chain.nonterminal-reader.interrupted-browser",
+      "checkedAt": "2026-09-17T07:27:18.251Z",
+      "notes": "Correction: this was a shorthand label, not an executed command. Actual invocation used --grep with smaller steps preserves its anchor. Its canonical cases passed; a temporary diagnostic checkout was accidentally discovered too, then removed. Final canonical verification recorded separately."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"smaller steps preserves its anchor\"",
+      "status": "failed",
+      "scope": "chain.nonterminal-reader.diagnostic-discovery",
+      "checkedAt": "2026-09-17T07:27:19.382Z",
+      "notes": "Both canonical cases passed; nested temporary baseline checkout added an unintended third case. Diagnostic checkout removed. Subsequent broader run saw server navigation during norm anchor test; investigating reload origin before final steady-source rerun."
+    },
+    {
+      "command": "node --experimental-strip-types --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts tests/derivation-refinement-mapping.test.ts scripts/check-reader-route-budgets.test.ts",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:28:56.271Z",
+      "notes": "43 pass including exact semantic mappings and independent payload dimensions."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:28:57.332Z",
+      "notes": "All TypeScript projects and Svelte checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:28:58.333Z",
+      "notes": "Dependency, framework neutrality, semantic boundaries and governance gates pass; 8 gateway tests pass."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:28:59.344Z",
+      "notes": "11 preservation tests pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:29:00.371Z",
+      "notes": "Production build passes; standard existing large-chunk advisory remains."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:29:01.375Z",
+      "notes": "All 12 manifest route closures pass."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:29:02.383Z",
+      "notes": "All consumers pass after documented HTML-only baseline correction; unchanged pre-chain bytes reproduced."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'nonterminal unfolding|inline refinement|rail jumps|rail press|keyboard navigation|smaller steps preserves|disclosure settling|disclosure anchor|scalar reader reuses'",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:29:03.420Z",
+      "notes": "Final steady-source Chromium run: 14 pass in 54.2s. Earlier interrupted runs retained in evidence. Two fonts, both refinements, exact held return, downstream selection/bookmarks, edge clearance, input/disposal and repair recovery."
+    },
+    {
+      "command": "npm run measure:mechanics-relations-closure",
+      "status": "passed",
+      "scope": "chain.nonterminal-reader",
+      "checkedAt": "2026-09-17T07:29:04.444Z",
+      "notes": "Emitted physics JS/CSS closure: 47747 initial gzip bytes; 165344 activated. HTML 779276 raw / 52404 gzip. Transfer estimates exclude fonts/images and do not measure runtime latency."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Implemented checked nonterminal energy exemplar. Preparing required human review before scalar promotion; no claim of visual acceptance."
+  },
   "expectedLearning": [
     "Whether sparse mathematical chains can resolve checked operations and existing motifs with explicit repairs"
   ],

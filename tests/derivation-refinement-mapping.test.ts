@@ -4,6 +4,14 @@ import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource } from ".
 import { createEnergyDerivationPlan, unfoldDerivationInspection } from "../src/semantic/momentum-energy-derivation-plan.ts";
 import { createDerivationRefinementMapping } from "../src/animation/derivation-inspection-composition.ts";
 import { compileCheckedDerivation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
+import { lensProgressForAlgebra, sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/energy-derivation-presentation.ts";
+
+test("refinement pose uses the reader act gate instead of whole-rail percentages", () => {
+  for (const algebra of [0, .01, .1, .5, .9, .99, 1]) {
+    assert.ok(Math.abs(sampleEnergyDerivationLens(lensProgressForAlgebra(algebra)).algebra - algebra) < 1e-10);
+  }
+  for (const invalid of [NaN, Infinity, -.1, 1.1]) assert.throws(() => lensProgressForAlgebra(invalid));
+});
 
 function fixture() {
   const checked = checkMomentumEnergyDerivation(momentumEnergyDerivationSource);

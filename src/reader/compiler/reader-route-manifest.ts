@@ -76,6 +76,10 @@ function routeBudget(
 // The checker applies the repository-wide 5% growth allowance on top of it.
 const sharedEquationRuntimeGzipBaseline = 152_463;
 
+// Three HTML-only cohort corrections measured against an unchanged pre-chain
+// build; runtime ceilings and the 5% allowance stay fixed. See the September 17
+// chain-first reader budget review for complete before/after consumer evidence.
+
 const sharedEquationPresentation = {
   kind: "shared-certified-runtime",
   certificationId: "certification.reader.equation-dom.promoted-v1",
@@ -280,7 +284,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }
       ]
     },
-    budget: routeBudget(54_321, 4_914, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(54_321, 5_177, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-x/teacher-zero/",
@@ -371,7 +375,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
     // The typed factoring/contact proof is intentionally a separate preload;
     // this release baseline preserves that boundary instead of hiding it by
     // folding operation authority back into the generic renderer chunk.
-    budget: routeBudget(30_526, 4_161, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(32_097, 4_161, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/radical-succession/",
@@ -447,7 +451,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         }
       ]
     },
-    budget: routeBudget(122_705, 7_664, sharedEquationRuntimeGzipBaseline)
+    budget: routeBudget(122_705, 8_051, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/foldable-distribution/",
