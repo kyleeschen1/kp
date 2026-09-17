@@ -79,7 +79,7 @@
 .energy-derivation-reason { font-size: .9em; }
 .energy-derivation-reason p { margin: .3rem 0; }
 .energy-derivation-reason summary { cursor: pointer; }
-[data-derivation-handle]:focus-visible { outline: 2px solid #236b8e; outline-offset: 2px; }
+[data-derivation-handle]:is(:focus-visible, [data-disclosure-focus-visible]) { outline: 2px solid #236b8e; outline-offset: 2px; }
 .energy-derivation-scope { position: absolute; left: -1rem; width: 1rem; height: 0; pointer-events: none; }
 /* Paint the connector without a border that offsets the handle's origin. */
 .energy-derivation-scope::before { content: ""; position: absolute; inset: 0; border-top: 2px solid var(--derivation-inspection-accent); transform: translateY(-1px); }

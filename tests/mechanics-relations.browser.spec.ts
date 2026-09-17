@@ -281,10 +281,42 @@ test("disclosure preserves the visible handle and real equation paint frame by f
   }
 });
 
+test("disclosure preserves the handle outline without stealing keyboard focus", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
+  const root = await ready(page);
+  await dragTo(page, root, 1.62);
+  await lens(root).press('ArrowRight');
+  await expect(lens(root)).toHaveCSS('outline-style', 'solid');
+  for (const selector of ['[data-refinement-expand="scale-magnitude"]', '[data-refinement-collapse]']) {
+    const observation = await lens(root).evaluateHandle(handle => {
+      const samples: string[] = [];
+      let frame = 0;
+      const sample = () => { samples.push(getComputedStyle(handle).outlineStyle); frame = requestAnimationFrame(sample); };
+      sample();
+      return { finish() { cancelAnimationFrame(frame); return samples; } };
+    });
+    await root.locator(selector).first().click();
+    await expect(lens(root)).toBeEnabled();
+    await expect(root).not.toHaveAttribute('data-disclosure-handoff');
+    await expect(lens(root)).toHaveCSS('outline-style', 'solid');
+    await expect(lens(root)).not.toBeFocused();
+    expect(await observation.evaluate(state => state.finish())).not.toContain('none');
+    await observation.dispose();
+  }
+  // Moving to another control ends the retained cue; pointer-only disclosure
+  // must not manufacture a focus outline that was absent before it.
+  await root.locator('[data-refinement-expand="scale-magnitude"]').press('Tab');
+  await expect(lens(root)).toHaveCSS('outline-style', 'none');
+  await root.locator('[data-refinement-expand="scale-magnitude"]').click();
+  await expect(lens(root)).toBeEnabled();
+  await expect(lens(root)).toHaveCSS('outline-style', 'none');
+});
+
 test("pending disclosure paint yields to input and releases on page disposal", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page);
   await dragTo(page, root, 1.62);
+  await lens(root).press('ArrowRight');
   const delay = await page.evaluateHandle(() => {
     let release!: () => void;
     const pending = new Promise<void>(resolve => { release = resolve; });
@@ -293,6 +325,7 @@ test("pending disclosure paint yields to input and releases on page disposal", a
   });
   await root.locator('[data-refinement-expand="scale-magnitude"]').click();
   await expect(root.locator('[data-disclosure-paint]')).toHaveCount(1);
+  await expect(lens(root)).toHaveCSS('outline-style', 'solid');
   await page.mouse.wheel(0, 100);
   await expect(root.locator('[data-disclosure-paint]')).toHaveCount(0);
   expect(await lens(root).evaluate(el => el.style.position)).toBe('');
@@ -302,12 +335,14 @@ test("pending disclosure paint yields to input and releases on page disposal", a
   await root.locator('[data-refinement-collapse]').first().click();
   await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
   await dragTo(page, root, 1.62);
+  await lens(root).press('ArrowRight');
   await page.evaluate(() => Object.defineProperty(document.fonts, 'ready', { configurable: true, value: new Promise(() => {}) }));
   await root.locator('[data-refinement-expand="scale-magnitude"]').click();
   await expect(root.locator('[data-disclosure-paint]')).toHaveCount(1);
   await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide')));
   await expect(root.locator('[data-disclosure-paint]')).toHaveCount(0);
   await expect(root).not.toHaveAttribute('data-disclosure-handoff');
+  await expect(lens(root)).not.toHaveAttribute('data-disclosure-focus-visible');
   expect(await lens(root).evaluate(el => el.style.position)).toBe('');
 });
 

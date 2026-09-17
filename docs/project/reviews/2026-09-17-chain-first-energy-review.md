@@ -7,6 +7,24 @@ is pending. Theseus owns live counts and execution under
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
 requires this judgment before scalar transfer. No later slice has started.
 
+## Disclosure follow-up: retain the handle's blue outline
+
+The energy reader now retains an already visible handle focus outline across
+opening and closing substeps. Previously the browser's focus transfer to the
+disclosure removed the cue despite preserving the rail position. The reader
+captures presence before pointer focus transfers and retains it on the existing
+handle through remount. Actual keyboard focus stays with the disclosure;
+Tab, Escape, another pointer target or focus elsewhere clears the retained cue.
+An absent outline is not introduced by disclosure. Nonpersisted page disposal
+clears the cue and its listeners. This isolated reader helper and CSS selector
+are the rollback unit; semantic mappings and native compositor are unchanged.
+
+Validation: the regression failed before the fix, then passed with frame samples
+in Chromium, Firefox and WebKit. Delayed preparation/input/page-disposal checks
+also passed in all three engines (six tests total). Existing frame-by-frame
+equation/handle continuity passed in Chromium. Full typecheck and architecture
+gates passed. No claim is made that this repairs the separate larger-font gap.
+
 ## Startup follow-up: prepare the visible derivation first
 
 The user accepted the improved disclosure response and authorized profiling the

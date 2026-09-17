@@ -4,7 +4,7 @@
   "title": "Chain-first authoring: transfer, fractions and checked inference",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: energy review includes startup measurements and preservation evidence. Three of 24 complete.",
+  "summary": "HUMAN_CHECKPOINT: bounded energy disclosure refinement complete; no later slice started.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,7 +59,7 @@
     {
       "id": "chain.energy-review",
       "title": "Energy-review",
-      "summary": "HUMAN_CHECKPOINT: initial visible-rail wait reduced; no unseen next-section preparation. Preservation verified; review packet updated.",
+      "summary": "HUMAN_CHECKPOINT: requested handle outline continuity repaired and verified across three browsers; 3 of 24 complete, no scalar transfer.",
       "status": "ready"
     },
     {

@@ -3,6 +3,7 @@ import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
 import { createEnergyRefinementUnfolding } from "./energy-refinement-unfolding.ts";
 import { holdEnergyDisclosurePaint, visibleDerivationHandle } from "./energy-disclosure-paint.ts";
+import { preserveEnergyDisclosureFocus } from "./energy-disclosure-focus.ts";
 import { createDerivationScenePool } from "./derivation-scene-pool.ts";
 import { yieldDerivationPreparation } from "./derivation-preparation-yield.ts";
 import { sameDerivationNativeMetrics } from "./derivation-native-metrics.ts";
@@ -93,6 +94,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   const expansions = [...initialRoot.querySelectorAll<HTMLTemplateElement>("[data-refinement-view]")];
   const unfold = initialRoot.dataset['derivationNamespace'] === 'energy' && detailMode === null
     ? createEnergyRefinementUnfolding(initialRoot) : undefined;
+  if (unfold) preserveEnergyDisclosureFocus(initialRoot);
   const pool = unfold ? createDerivationScenePool<PreparedScene>(initialRoot.querySelectorAll('[data-derivation-template]').length +
     expansions.reduce((sum, template) => sum + template.content.querySelectorAll('[data-derivation-template]').length, 0)) : undefined;
   if (pool) window.addEventListener('pagehide', event => { if (!event.persisted) pool.close(); });

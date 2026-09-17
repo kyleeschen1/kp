@@ -4,7 +4,7 @@
   "title": "Chain-first checked authoring and reader transfer",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: energy exemplar after approved startup repair. Three of 24 complete; no scalar transfer.",
+  "summary": "HUMAN_CHECKPOINT: energy exemplar with requested blue-outline continuity repair; awaiting final exemplar judgment before scalar transfer.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -523,6 +523,20 @@
       "scope": "chain.energy-review.startup-cost",
       "checkedAt": "2026-09-17T19:09:53.333Z",
       "notes": "Reader budgets pass without amendments."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep disclosure",
+      "status": "passed",
+      "scope": "chain.energy-review.focus",
+      "checkedAt": "2026-09-17T19:19:50.611Z",
+      "notes": "Actual focused invocation used handle-outline and pending-paint test names: six tests passed across three engines; prior Chromium run also passed actual paint continuity. Outline regression reproduced before repair. Full typecheck and architecture passed."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep \"disclosure preserves the handle outline|pending disclosure paint\"",
+      "status": "passed",
+      "scope": "chain.energy-review.focus",
+      "checkedAt": "2026-09-17T19:20:15.381Z",
+      "notes": "Exact six-test invocation; all pass. Full typecheck, architecture, production build, reader production closure and reader budgets also pass."
     }
   ],
   "progress": {
