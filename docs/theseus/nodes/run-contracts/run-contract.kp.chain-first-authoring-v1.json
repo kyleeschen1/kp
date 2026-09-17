@@ -83,7 +83,8 @@
     {
       "id": "chain.fraction-source",
       "title": "Fraction-source",
-      "status": "planned"
+      "summary": "Bounded rational-chain source and canonical fixture pass shape, notation, size and exact-integer guards.",
+      "status": "complete"
     },
     {
       "id": "chain.alignment",

@@ -572,6 +572,13 @@
       "scope": "chain.transfer-review",
       "checkedAt": "2026-09-17T20:03:00.957Z",
       "notes": "Nine cross-browser checks passed, including scalar 16px/20px disclosure and exact return. 52 affected unit tests, full types, architecture, build, reader closure and budgets pass. Known energy large-font gap remains separate; review packet records bounds."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.fraction-source",
+      "checkedAt": "2026-09-17T20:10:34.342Z",
+      "notes": "Three source-boundary tests pass; full typecheck passes after repairing index-signature access. Existing tokenizer and parser reused; decimals rejected before floating-point parsing."
     }
   ],
   "progress": {
