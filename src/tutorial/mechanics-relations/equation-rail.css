@@ -6,6 +6,16 @@
 }
 .energy-derivation[data-rail-refinement] .energy-derivation-rail {
   background: var(--rail-context);
+  pointer-events: auto;
+  touch-action: none;
+  cursor: pointer;
+}
+/* Pointer target stays in the navigation gutter; the existing slider supplies
+   keyboard access without adding a second focus stop. */
+.energy-derivation[data-rail-refinement] .energy-derivation-rail::after {
+  content: "";
+  position: absolute;
+  inset: -.5rem -1.375rem;
 }
 .energy-derivation[data-rail-refinement] .energy-derivation-rail::before {
   content: "";

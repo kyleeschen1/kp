@@ -2,6 +2,7 @@ import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeli
 import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
 import { createEnergyRefinementUnfolding } from "./energy-refinement-unfolding.ts";
+import { equationViewportBounds, revealEquationInViewport } from "../../reader/runtime/equation-viewport.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
 import { createEnergyInspectionBookmarks, type EnergyInspectionPosition } from "./energy-derivation-bookmarks.ts";
@@ -99,6 +100,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         // The clicked control is the reader's anchor. The parent equation can
         // sit far above it once its explanation is open.
         if (viewportAnchor.retarget(restoredEntry, offset)) restoredEntry.focus({ preventScroll: true });
+        active.reveal();
       } catch (error) {
         // A failed optional view must not strand the reader or grant a visual
         // fallback authority. Restore the already checked compact inspection.
@@ -215,7 +217,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const hint = get<HTMLElement>("[data-derivation-hint]");
   if (refinedRail) {
     get('.energy-derivation-workspace').before(hint);
-    hint.textContent = "Drag between equations to inspect a move. Arrow keys step forward or back.";
+    hint.textContent = "Click the rail to jump; drag to inspect a move. Arrow keys step forward or back.";
     handle.querySelector('span')!.textContent = "";
   }
   const total = rows.length - 1;
@@ -226,6 +228,28 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   let pendingSeek: { move: number; progress: number } | undefined;
   let seeking = false;
   let selectionRequest = 0;
+  let revealRequested = false, revealFrame: number | undefined;
+  const revealSelection = () => {
+    if (!revealRequested || loading || seeking || drag || abort.signal.aborted) return;
+    revealRequested = false;
+    const p = clock.getSnapshot().progress;
+    revealEquationInViewport(p === 0 ? equationSlots[selected]! : p === 1 ? equationSlots[selected + 1]! : stage);
+  };
+  const scheduleReveal = () => {
+    if (revealFrame !== undefined) return;
+    revealFrame = requestAnimationFrame(() => { revealFrame = undefined; revealSelection(); });
+  };
+  const cancelReveal = () => {
+    revealRequested = false;
+    if (revealFrame !== undefined) cancelAnimationFrame(revealFrame);
+    revealFrame = undefined;
+  };
+  // Visibility follows explicit navigation, never ordinary reading scroll.
+  document.addEventListener('wheel', cancelReveal, { ...opts, passive: true });
+  document.addEventListener('touchstart', cancelReveal, { ...opts, passive: true });
+  document.addEventListener('pointerdown', cancelReveal, { ...opts, capture: true });
+  document.addEventListener('keydown', cancelReveal, { ...opts, capture: true });
+  window.addEventListener('blur', cancelReveal, opts);
   const status = get<HTMLElement>("[data-derivation-status]");
   const syncLocalLayout = () => {
     const anchor = localControls[selected]?.entry;
@@ -458,6 +482,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   }
   clock.subscribe(sample => {
     if (sample.source === "autoplay" && sample.settled && journey) void continueJourney();
+    if (sample.settled && revealRequested) scheduleReveal();
   });
   function navigate(requested: Direction, target = energyDerivationNavigationTarget(selected, clock.getSnapshot().progress, requested, total)) {
     if (loading || !session) return;
@@ -484,9 +509,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         if (root.dataset["repair"] === "true") break;
         project();
       }
-    } finally { seeking = false; }
+    } finally { seeking = false; if (revealRequested) scheduleReveal(); }
   }
   async function step(requested: Direction, target?: number) {
+    revealRequested = true;
     if (!session) {
       const initialization = seekPosition(0), request = selectionRequest;
       await initialization;
@@ -505,8 +531,8 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const edgeScroll = createInspectionEdgeScroll({ signal: abort.signal,
     // Reserve an extra upper reading margin in addition to the shared 48px
     // clearance; a docked first equation must not hug the viewport edge.
-    readableBounds: () => ({ top: Math.min(root.getBoundingClientRect().top, equationSlots[0]!.getBoundingClientRect().top) - 48,
-      bottom: equationSlots[total]!.getBoundingClientRect().bottom }),
+    readableBounds: () => ({ top: Math.min(root.getBoundingClientRect().top, equationViewportBounds(equationSlots[0]!).top) - 48,
+      bottom: equationViewportBounds(equationSlots[total]!).bottom }),
     bounds: () => {
       const top = get(".energy-derivation-chain").getBoundingClientRect().top + (drag?.offset ?? 0);
       return { top: top + centers[0]!, bottom: top + centers[total]! };
@@ -523,7 +549,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     delete root.dataset["derivationDragging"];
     if (pointer !== undefined && handle.hasPointerCapture(pointer)) handle.releasePointerCapture(pointer);
   };
-  handle.addEventListener("pointerdown", event => {
+  const beginInspection = (event: PointerEvent, jump: boolean) => {
     if (!event.isPrimary || event.button !== 0) return;
     event.preventDefault();
     journey = undefined; selectionRequest++; clock.pause();
@@ -533,13 +559,22 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     // first crossed edge (which would jump the handle by the added height).
     measureRows();
     const box = handle.getBoundingClientRect();
-    drag = { pointer: event.pointerId, offset: event.clientY - box.top - box.height / 2 };
+    let clientY = event.clientY;
+    if (jump) {
+      const origin = get('.energy-derivation-chain').getBoundingClientRect().top;
+      const stop = centers.find(center => Math.abs(origin + center - clientY) <= 6);
+      if (stop !== undefined) clientY = origin + stop;
+    }
+    drag = { pointer: event.pointerId, offset: jump ? event.clientY - clientY : event.clientY - box.top - box.height / 2 };
     handle.setPointerCapture(event.pointerId);
     root.dataset["derivationDragging"] = "true";
-    if (!session) void seekPosition(0);
+    if (!session && !jump) void seekPosition(0);
     project();
     edgeScroll.update(event.clientY);
-  }, opts);
+    handle.focus({ preventScroll: true });
+  };
+  handle.addEventListener('pointerdown', event => beginInspection(event, false), opts);
+  if (refinedRail) rail.addEventListener('pointerdown', event => beginInspection(event, true), opts);
   handle.addEventListener("pointermove", event => {
     if (!drag || event.pointerId !== drag.pointer) return;
     edgeScroll.update(event.clientY);
@@ -547,6 +582,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const endDrag = (event: PointerEvent) => {
     if (!drag || event.pointerId !== drag.pointer) return;
     cancelDrag();
+    if (event.type === 'pointerup') { revealRequested = true; scheduleReveal(); }
     // No release animation: the sampled pose, including an interior pose, holds.
   };
   handle.addEventListener("pointerup", endDrag, opts);
@@ -567,6 +603,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         mobileInspect = true;
         // Measure only when entering/changing layout, never on scrub samples.
         if (session && !loading && selected === index) { syncLocalLayout(); measureRows(); }
+        revealRequested = true;
         void seekTransition(destination);
       } catch (error) {
         status.hidden = false; status.textContent = "This inspection belongs to an older revision. Reload before inspecting.";
@@ -669,8 +706,13 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         metrics = next; measuredFontRevision = fontRevision;
         cancelDrag(); journey = undefined; clock.pause();
         if (tracing && session) {
+          const p = clock.getSnapshot().progress;
+          const current = equationViewportBounds(p === 0 ? equationSlots[selected]! : p === 1 ? equationSlots[selected + 1]! : stage);
+          // Resize a currently visible inspection without dragging the reader
+          // back to a selection they have already scrolled away from.
+          if (current.bottom > 0 && current.top < innerHeight) revealRequested = true;
           const progress = clock.getSnapshot().progress;
-          retire(); void mount(selected, progress); return;
+          retire(); void mount(selected, progress).then(() => { if (revealRequested) scheduleReveal(); }); return;
         }
       }
       const origin = get('.energy-derivation-chain').getBoundingClientRect().top;
@@ -686,6 +728,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     if (disposed) return;
     disposed = true;
     if (geometryFrame !== undefined) cancelAnimationFrame(geometryFrame);
+    if (revealFrame !== undefined) cancelAnimationFrame(revealFrame);
     pause(); retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose();
   };
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) dispose(); }, opts);
@@ -694,7 +737,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   measureRows(); rail.hidden = false;
   scope.hidden = false; transport.hidden = false; positionScope(0, 0); previous.disabled = true;
   const ready = initialPosition ? seekTransition(initialPosition) : Promise.resolve();
-  return { ready, dispose, capture(): EnergyReaderState {
+  return { ready, dispose, reveal() { revealRequested = true; scheduleReveal(); }, capture(): EnergyReaderState {
     pause();
     if (loading || seeking || !session) throw new Error("Wait for the active derivation scene to finish preparing");
     return { revision: root.dataset["derivationRevision"]!, transition: ids[selected]!, progress: clock.getSnapshot().progress,

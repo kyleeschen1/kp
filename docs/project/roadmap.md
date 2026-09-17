@@ -25,6 +25,10 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Approved refinement: [direct rail seeking and readable navigation](threads/2026-09-16-disclosure-persistence.md#rail-seeking-and-readable-navigation).
+Click to select a point, continue into dragging, and keep selected equation ink
+inside viewport margins at the current font size.
+
 Current visual trial: [unfold smaller steps in place](threads/2026-09-16-disclosure-persistence.md#inline-unfolding-exemplar).
 Keep the energy derivation's original equations, parent explanation and handle
 while revealing its checked children. Await one exemplar review before promotion.

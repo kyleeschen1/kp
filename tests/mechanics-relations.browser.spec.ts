@@ -2,6 +2,102 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("rail jumps directly and reveals endpoint ink at both viewport edges", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  const root = await ready(page);
+  for (const font of ['16px', '24px']) {
+    await page.evaluate(size => { document.documentElement.style.fontSize = size; }, font);
+    for (const index of [3, 0]) {
+      const row = root.locator(`[data-derivation-row="${index}"] .energy-derivation-equation`);
+      await row.evaluate((el, bottom) => {
+        const box = el.getBoundingClientRect(); scrollBy(0, box.top + box.height / 2 - (bottom ? 625 : 20));
+      }, index > 0);
+      const box = (await row.boundingBox())!, rail = (await root.locator('[data-derivation-rail]').boundingBox())!;
+      await page.mouse.click(rail.x + 10, box.y + box.height / 2);
+      await expect(lens(root)).toHaveAttribute('aria-valuenow', String(index));
+      await expect(root).toHaveAttribute('data-playing', 'false');
+      await expect.poll(() => row.evaluate(el => {
+        const boxes = [el, ...el.querySelectorAll('.katex-html .base, .katex-html .vlist')].map(n => n.getBoundingClientRect()).filter(b => b.width && b.height);
+        return Math.min(...boxes.map(b => b.top)) >= 47 && Math.max(...boxes.map(b => b.bottom)) <= innerHeight - 47;
+      })).toBe(true);
+    }
+  }
+  await root.locator('[data-refinement-expand]').click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
+  await root.locator('[data-refinement-collapse]').first().focus();
+  const target = root.locator('[data-derivation-row="4"] .energy-derivation-equation');
+  await target.evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 300));
+  const b = (await target.boundingBox())!, rail = (await root.locator('[data-derivation-rail]').boundingBox())!;
+  await page.mouse.click(rail.x + 10, b.y + b.height / 2);
+  await expect(lens(root)).toHaveAttribute('aria-valuenow', '4');
+  for (const index of [5, 0]) {
+    const endpoint = root.locator(`[data-derivation-row="${index}"] .energy-derivation-equation`);
+    await endpoint.evaluate((el, end) => {
+      const box = el.getBoundingClientRect(); scrollBy(0, box.top + box.height / 2 - (end ? 625 : 20));
+    }, index > 0);
+    const box = (await endpoint.boundingBox())!, track = (await root.locator('[data-derivation-rail]').boundingBox())!;
+    await page.mouse.click(track.x + 10, box.y + box.height / 2);
+    await expect(lens(root)).toHaveAttribute('aria-valuenow', String(index));
+    await expect.poll(() => endpoint.evaluate(el => {
+      const boxes = [el, ...el.querySelectorAll('.katex-html .base, .katex-html .vlist')].map(n => n.getBoundingClientRect()).filter(b => b.width && b.height);
+      return Math.min(...boxes.map(b => b.top)) >= 47 && Math.max(...boxes.map(b => b.bottom)) <= innerHeight - 47;
+    })).toBe(true);
+  }
+});
+
+test("rail press seeks a fractional position then continues dragging", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 1000 });
+  const root = await ready(page);
+  await root.locator('[data-derivation-row="1"]').evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 220));
+  const a = (await root.locator('[data-derivation-row="1"] .energy-derivation-equation').boundingBox())!;
+  const b = (await root.locator('[data-derivation-row="2"] .energy-derivation-equation').boundingBox())!;
+  const rail = (await root.locator('[data-derivation-rail]').boundingBox())!;
+  const point = (p: number) => a.y + a.height / 2 + (b.y - a.y) * p;
+  const timing = await root.evaluateHandle(el => {
+    const sample = { milliseconds: -1 };
+    el.addEventListener('pointerdown', () => {
+      const start = performance.now();
+      const observe = () => {
+        const p = Number(el.querySelector('[data-derivation-handle]')!.getAttribute('aria-valuenow'));
+        if (Math.abs(p - 1.25) < .01) sample.milliseconds = performance.now() - start;
+        else if (performance.now() - start < 1000) requestAnimationFrame(observe);
+      };
+      requestAnimationFrame(observe);
+    }, { once: true });
+    return sample;
+  });
+  await page.mouse.move(rail.x - 10, point(.25)); await page.mouse.down();
+  await expect.poll(async () => Number(await lens(root).getAttribute('aria-valuenow'))).toBeCloseTo(1.25, 2);
+  await expect.poll(() => timing.evaluate(sample => sample.milliseconds)).toBeGreaterThanOrEqual(0);
+  console.log('Prepared rail seek to next frame (ms):', await timing.evaluate(sample => sample.milliseconds));
+  await page.mouse.move(rail.x - 10, point(.7));
+  await expect.poll(async () => Number(await lens(root).getAttribute('aria-valuenow'))).toBeCloseTo(1.7, 2);
+  await page.mouse.up();
+  await expect(root).toHaveAttribute('data-playing', 'false');
+  await expect(root).not.toHaveAttribute('data-derivation-dragging', 'true');
+});
+
+test("keyboard navigation reveals selected ink without capturing ordinary scrolling", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1000, height: 650 });
+  const root = await ready(page), handle = lens(root);
+  for (const key of ['End', 'Home']) {
+    await handle.focus(); await handle.press(key);
+    await expect(handle).toHaveAttribute('aria-valuenow', key === 'End' ? '3' : '0');
+    const equation = key === 'End' ? root.locator('.energy-derivation-equation').last() : root.locator('.energy-derivation-equation').first();
+    await expect.poll(() => equation.evaluate(el => {
+      const b = el.getBoundingClientRect(); return b.top >= 47 && b.bottom <= innerHeight - 47;
+    })).toBe(true);
+  }
+  const position = await handle.getAttribute('aria-valuenow');
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 180);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 100);
+  await page.waitForTimeout(200);
+  expect(await page.evaluate(() => scrollY)).toBeGreaterThan(before + 100);
+  await expect(handle).toHaveAttribute('aria-valuenow', position!);
+});
+
 test("inline refinement repair retains the original reading", async ({ page }) => {
   const root = await ready(page);
   const source = await root.locator('[data-refinement-anchor] .energy-derivation-equation').elementHandle();

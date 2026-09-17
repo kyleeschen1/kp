@@ -1099,6 +1099,13 @@
       "scope": "inline-unfolding-exemplar",
       "checkedAt": "2026-09-17T02:15:57.322Z",
       "notes": "User-approved visual trial retains original root/native equations/parent explanation/toggle/grip. Two Chromium cases pass including larger text, repeated cycles, child inspection, collapse and failure recovery; additional anchor/return smoke passes. Full types, test types, build and architecture pass. HUMAN_CHECKPOINT at default energy host; no promotion. See disclosure persistence proposal inline-unfolding section."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --grep \"rail jumps directly|rail press seeks|keyboard navigation reveals|equation endpoint ink|equation edge scrolling\"",
+      "status": "passed",
+      "scope": "rail-navigation-visibility",
+      "checkedAt": "2026-09-17T02:30:33.742Z",
+      "notes": "Ten Chromium/Firefox checks pass. Final four-case follow-up additionally covers unfolded extremes and repeated inline refinement at larger text. Direct prepared seek reuses current owner; local next-RAF samples 25.6ms Chromium and 1ms Firefox, not a full paint benchmark. Full types/build/architecture pass; existing chunk warnings remain. Shared native-ink bounds and cancellable navigation visibility replace drag-only clearance. Canonical energy page ready for review."
     }
   ],
   "progress": {

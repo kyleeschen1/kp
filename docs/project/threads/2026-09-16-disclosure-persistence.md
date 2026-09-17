@@ -151,3 +151,43 @@ cases also pass with larger text, repeated cycles and injected failed-detail
 recovery. Full types, final test types, production build and architecture checks
 pass (existing global chunk warnings remain). Before/open screenshots were
 inspected locally. Status: HUMAN_CHECKPOINT; no cross-family or animation rollout.
+
+## Rail seeking and readable navigation
+
+User approved direct rail seeking plus a shared visibility rule after reporting
+top/bottom clipping. Energy remains the rail-interaction exemplar. Canonical
+article, host and checked native KaTeX plans are unchanged. Rollback unit: rail
+pointer binding/gutter hit area and navigation visibility scheduling.
+
+The rail now has a 2.75rem invisible gutter target. A primary press seeks to its
+measured coordinate, snaps within six pixels of a fencepost, and transfers pointer
+capture to the existing grip for continued dragging. Release holds the pose;
+pointer cancellation stops without a follow-up reveal. Existing slider keyboard
+access remains the accessible control. Seek uses prepared scenes and the existing
+coalescing seek owner; no intermediate playback, second clock or renderer.
+
+The violated visibility invariant was that selection could settle with equation
+ink outside the viewport: clearance existed only during active edge dragging and
+used fixed equation containers. `equation-viewport.ts` now measures native bases,
+vertical lists and material-owner bounds together with the line box. Navigation,
+local selection, detail changes and completed drags request a minimal scroll to
+48px clearance (bounded for short viewports). Edge scrolling uses the same ink
+extent. Font remeasurement requests visibility only for an inspection still
+intersecting the viewport. An expression taller than the available area aligns
+its start instead of oscillating between impossible constraints.
+
+Requests are event-driven and coalesced, not a continuous follow-scroll loop.
+Wheel, touch, pointer/keyboard input, blur and disposal cancel pending correction;
+navigation can request a fresh correction. Ordinary scrolling never changes the
+semantic playhead. Visibility can supersede disclosure-control anchoring only
+when needed to expose the selected equation.
+
+Ten Chromium/Firefox checks pass for exact rail endpoints at both viewport edges,
+two font sizes, fractional seeking/drag continuation, keyboard selection,
+ordinary-scroll independence, edge reversal/release and endpoint ink. The final
+endpoint test additionally covers the unfolded sequence's extremes. A prepared
+fractional seek was observed by the next RAF after 25.6ms in Chromium and 1ms in
+Firefox in one local run; these are next-frame samples, not paint instrumentation
+or a cross-device performance guarantee. Existing unfolding/return smoke checks
+pass; full types, production build and architecture gates pass with existing
+global chunk warnings. Human review remains on the canonical energy page.
