@@ -1066,7 +1066,7 @@
     {
       "schemaVersion": "kp.equation-asset-manifest-entry.v1",
       "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-      "title": "Give one third a denominator of six",
+      "title": "Give the fractions a shared denominator",
       "semanticSource": {
         "kind": "catalog-animation-asset",
         "sourcePath": "src/animation/catalog.ts",
@@ -1111,13 +1111,13 @@
           "selectionParameter": "artifact"
         },
         "semanticEndpointFingerprints": [
-          "fnv1a32-9ea895f4",
-          "fnv1a32-b2e8bb8e",
-          "fnv1a32-67f58633",
+          "fnv1a32-e2a85e08",
+          "fnv1a32-5e0f902b",
+          "fnv1a32-a18e15b3",
           "fnv1a32-9b6b8077",
           "fnv1a32-6c6e18ed",
           "fnv1a32-38ae6f6f",
-          "fnv1a32-603c6e64"
+          "fnv1a32-bc3b55da"
         ],
         "nativeSettlement": {
           "slotKind": "equation",
@@ -1140,7 +1140,7 @@
         "representations": [
           {
             "id": "editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-            "label": "Give one third a denominator of six",
+            "label": "Give the fractions a shared denominator",
             "kind": "editor",
             "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
             "role": "canonical-host"

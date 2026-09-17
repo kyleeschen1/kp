@@ -19,6 +19,21 @@ export type KpBundleManifest = Readonly<Record<string, {
   readonly css?: readonly string[] | undefined;
 }>>;
 
+/** Vite can coalesce identical HTML entries and omit their manifest keys.
+ * Actual emitted script/link roots still own their full dependency closure. */
+export function collectKpHtmlBundleFiles(html: string, manifest: KpBundleManifest, includeDynamicImports = false): readonly string[] {
+  const files = new Set([...html.matchAll(/(?:src|href)="\/?(assets\/[^\"]+\.(?:js|css))"/g)].map(match => match[1]!));
+  const byFile = new Map(Object.entries(manifest).map(([key, chunk]) => [chunk.file, key]));
+  const roots: string[] = [];
+  for (const file of files) {
+    const key = byFile.get(file);
+    if (key) roots.push(key);
+    else if (extname(file) === ".js") throw new Error(`Production manifest lacks HTML script ${file}.`);
+  }
+  for (const file of collectKpBundleManifestFiles(manifest, roots, includeDynamicImports)) files.add(file);
+  return Object.freeze([...files].sort());
+}
+
 /** Declared activation is a conservative reachable closure, not a claim that
  * every conditional capability is requested by one observed interaction. */
 export function collectKpBundleManifestFiles(

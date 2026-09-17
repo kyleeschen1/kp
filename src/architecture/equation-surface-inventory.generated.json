@@ -541,7 +541,7 @@
     {
       "schemaVersion": "kp.equation-surface-inventory-entry.v1",
       "animationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-      "title": "Give one third a denominator of six",
+      "title": "Give the fractions a shared denominator",
       "semanticOwner": {
         "kind": "catalog-animation-asset",
         "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",

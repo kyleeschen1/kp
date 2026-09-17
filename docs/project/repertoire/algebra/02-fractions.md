@@ -16,18 +16,18 @@
 - [x] `alg.fraction.same-add` Add fractions with the same denominator — quadratic-reader exemplar. [Evidence](../../repertoire-notes/algebra-family-audit.md)
   Example: -24/4 + 25/4 → 1/4, with the equation's left side retained
   Audit: implemented
-- [ ] `alg.fraction.same-subtract` Subtract fractions with the same denominator. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: 5/7 - 2/7 → 3/7
-  Audit: partial — raw subtraction verifier is tested; the quadratic addition caller does not establish a subtraction presentation
+- [x] `alg.fraction.same-subtract` Subtract fractions with the same denominator — ordered positive-operand passage. [Evidence](../../reviews/2026-09-17-chain-first-subtraction-evidence.md)
+  Example: 5/6 - 2/6 → (5-2)/6 → 3/6
+  Audit: implemented — retained caller, not general signed-result visual certification
 - [x] `alg.fraction.align-multiple` Align when one denominator divides the other — one-third plus one-sixth. [Evidence](../../repertoire-notes/algebra-audit.md)
   Example: 1/3 + 1/6 → 2/6 + 1/6
   Audit: implemented
 - [ ] `alg.fraction.align-coprime` Align two relatively prime integer denominators.
   Example: 1/3 + 1/5 → 5/15 + 3/15
   Audit: unaudited
-- [ ] `alg.fraction.align-shared` Align denominators with a nontrivial shared divisor.
+- [x] `alg.fraction.align-shared` Align denominators with a nontrivial shared divisor — accepted two-sided passage. [Evidence](../../reviews/2026-09-17-chain-first-two-sided-review.md)
   Example: 1/6 + 1/8 → 4/24 + 3/24
-  Audit: unaudited
+  Audit: implemented — checked 6/8 denominator caller with separate factor joins
 - [ ] `alg.fraction.align-symbolic` Find a common denominator from symbolic factors.
   Example: 1/[x(x+1)] + 1/(x+1) → [1+x]/[x(x+1)], x≠0,-1
   Audit: unaudited

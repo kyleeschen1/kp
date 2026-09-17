@@ -1,6 +1,6 @@
 # Bounded scalar cancellation in the persistent reader
 
-Status: implemented candidate; human visual checkpoint remains open.
+Status: accepted bounded transfer; see the paired review for scope.
 Current paired review: `../reviews/2026-09-17-chain-first-transfer-review.md`.
 Original canonical owners: `../threads/2026-09-15-scalar-reader-review.md`.
 This is not a task in the `author:check` inventory yet. Do not invent an inventory
@@ -52,8 +52,8 @@ binding before inspection. There is no silent replacement animation.
 Compact inspection now composes the same checked child operations exposed by
 the expanded view. It does not infer a proof from endpoint LaTeX or substitute
 a coarse generic fusion when children are unavailable. The coefficient's `2`
-has persistent lineage through collection. This scalar treatment is pending
-visual acceptance; do not apply it to other callers without the review gate.
+has persistent lineage through collection. This scalar treatment is accepted for
+the retained caller; a materially new treatment still needs its own exemplar review.
 
 `npm run visual:mechanics-relations -- --grep scalar` checks the real caller.
 `node --disable-warning=ExperimentalWarning --test tests/scalar-cancellation-reader.test.ts`

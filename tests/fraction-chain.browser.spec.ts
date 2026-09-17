@@ -12,7 +12,9 @@ async function seek(page: Page, position: number) {
     const rail = root.querySelector("[data-fraction-rail]")!.getBoundingClientRect();
     return { x: rail.left + rail.width / 2, y: center(left) + (center(next) - center(left)) * (value - Number(left.dataset["position"])) / (Number(next.dataset["position"]) - Number(left.dataset["position"])) };
   }, position);
-  await page.mouse.click(point.x, point.y);
+  // WebKit truncates fractional protocol coordinates. Choose the nearest pixel
+  // before dispatch so the input itself stays within half a CSS pixel.
+  await page.mouse.click(Math.round(point.x), Math.round(point.y));
   await expect.poll(async () => Number(await page.locator("[data-fraction-passage]").getAttribute("data-fraction-position"))).toBeCloseTo(position, 2);
 }
 

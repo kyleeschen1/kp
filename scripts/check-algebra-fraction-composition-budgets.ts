@@ -30,13 +30,14 @@ const commonReaderRoute = "/reader/fraction-composition/";
 const commonReaderBaselineGzipBytes = kpReaderRouteManifest.find(({ route }) => route === commonReaderRoute)!.budget.runtimeCodeGzipBytes;
 const commonReaderCeilingGzipBytes = allowedKpReaderRouteBytes(commonReaderBaselineGzipBytes);
 // The canonical native-reader migration retired the former lazy editor path.
-// Startup and HTML are explicitly rebaselined; activated and incremental
-// ceilings are retained independently. This amendment is not a speedup.
+// Startup and HTML are explicitly rebaselined. The September 17 release keeps
+// independent ceilings and amends activated capacity with bounded headroom;
+// see chain-first-release-budget evidence. Neither amendment is a speedup.
 export const kpAlgebraFractionCompositionBaseline = Object.freeze({
   htmlGzipBytes: 10_500,
   startupCodeAndCssGzipBytes: 216_218,
   activationIncrementGzipBytes: 274_397,
-  activeCodeAndCssGzipBytes: 310_616
+  activeCodeAndCssGzipBytes: 320_000
 });
 const authoringMarkers = [
   "@codemirror",

@@ -2,9 +2,9 @@
   "id": "next-action.kp.chain-first-authoring",
   "kind": "next-action",
   "title": "Chain-first checked authoring and reader transfer",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "User accepted paired scalar transfer and explicitly resumed the approved fraction chain work.",
+  "summary": "All approved outcomes and final release gates passed; remaining fluent reduction, startup cost and mechanics discovery gaps are explicitly outside completed scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,14 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-17-chain-first-subtraction-evidence.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-17-chain-first-authoring-closeout.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-17-chain-first-release-budget.md"
     }
   ],
   "dependsOn": {
@@ -973,11 +981,95 @@
       "scope": "chain.domain-boundaries",
       "checkedAt": "2026-09-17T22:32:51.062Z",
       "notes": "Domain probe types passed; no new domain engine or task fabricated."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:48:56.678Z",
+      "notes": "First complete release run: 7180 tests, 7173 passed, seven generated inventory equality failures. Reviewed diffs are generalized alignment titles/fingerprints and actual new compiler consumers; regenerated through existing commands and all 28 focused inventory/accounting checks pass. Full rerun required."
+    },
+    {
+      "command": "npm run visual:fraction-chain:cohort",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:48:58.067Z",
+      "notes": "21 checks across Chromium Firefox WebKit. All four callers, native direct/reverse seeking, static reading, shared style ownership, exact return, font/viewport/collapsed-host/reduced-motion and keyboard/drag extremes. Driver rounds protocol coordinates rather than relaxing assertions."
+    },
+    {
+      "command": "npm run visual:mechanics-relations",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:48:59.282Z",
+      "notes": "Four scoped Chromium preservation checks: nonterminal unfolding, scalar reader, scalar native children and stale source rejection."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:49:00.426Z",
+      "notes": "Full app node test Svelte domain types and production bundle passed; final manifest-only bundle refresh follows."
+    },
+    {
+      "command": "npm run test:repertoire",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:49:01.633Z",
+      "notes": "Eight checks pass with two bounded new fraction rows, complete evidence paths and no broad curriculum promotion."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:51:48.636Z",
+      "notes": "Second attempt stopped after early cross-manifest failures exposed a stale display projection downstream of the refreshed equation manifest. Refreshed the complete dependency set; 34 focused capability, readiness, coverage, display and manifest checks pass. Added one ordered generation command; clean full rerun active."
+    },
+    {
+      "command": "npm run generate:equation-catalog-evidence",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:51:49.881Z",
+      "notes": "Ordered regeneration of all eight dependent catalog evidence artifacts. Audited title/fingerprint and new caller diffs; no endpoints, promotions or verification laws relaxed."
+    },
+    {
+      "command": "npm run check:algebra-fraction-composition-budgets",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:51:51.052Z",
+      "notes": "330965 gzip bytes including complete declared activation. Explicit approved policy amendment: baseline 310616 to 320000, 5 percent ceiling 336000, 5035 measured headroom. Shared-reader, startup, HTML, incremental and leakage limits unchanged; not a speedup."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:51:52.273Z",
+      "notes": "Complete reader route closures pass unchanged ceilings and forbidden asset checks."
+    },
+    {
+      "command": "npm run check:canonical-animation-budgets",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:51:53.632Z",
+      "notes": "Construction 4.880ms p95, verification 3.718ms p95, compound sample 0.0072ms p95, projection 26725 bytes; no leaks. Machine-local timing, not visual quality."
+    },
+    {
+      "command": "npm run measure:mechanics-relations-closure -- fraction",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T22:51:55.288Z",
+      "notes": "Measured all six hosts. Fraction siblings share 450628 initial / 492302 activated gzip JS/CSS bytes; physics 59175 /176789; scalar 50670 /169170. HTML roots retain coalesced Vite entries; regression rejects missing script authority. Explicit startup debt, no parity claim."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "chain.release",
+      "checkedAt": "2026-09-17T23:04:32.706Z",
+      "notes": "Clean complete final run: 7181 tests passed, zero failed/skipped/cancelled, 702.6 seconds. Architecture, inference cost, concept catalog and promotion gates passed. Earlier generated-data failures fully repaired; no waived checks."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT at slice18: 17/24 complete. Numeric variant verified and committed e8bd90ef6; working two-sided native passage awaits simultaneous-join visual judgment under approved contract. Types, focused tests, Chromium preservation, architecture and bundle gates pass; subtraction/inference/release remain."
+    "state": "complete",
+    "summary": "COMPLETE 24/24 approved slices. Accepted reader transfer, bounded fraction authoring/inference, trial, domain boundaries and final release evidence. Next code/text transfer remains unapproved new scope."
   },
   "expectedLearning": [
     "Whether sparse mathematical chains can resolve checked operations and existing motifs with explicit repairs"

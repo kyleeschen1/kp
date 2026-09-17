@@ -1462,7 +1462,7 @@
   },
   {
     "animationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-    "title": "Give one third a denominator of six",
+    "title": "Give the fractions a shared denominator",
     "summary": "A conservative larger-expression caller for the approved fraction equivalence and product-evaluation motifs.",
     "tags": [
       "algebra",
@@ -1480,7 +1480,7 @@
     "representations": [
       {
         "id": "editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-        "label": "Give one third a denominator of six",
+        "label": "Give the fractions a shared denominator",
         "kind": "editor",
         "href": "/?animation=editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
         "role": "canonical-host"

@@ -2,9 +2,9 @@
   "id": "run-contract.kp.chain-first-authoring-v1",
   "kind": "run-contract",
   "title": "Chain-first authoring: transfer, fractions and checked inference",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Paired transfer accepted; continue approved fraction slices.",
+  "summary": "COMPLETE: 24 of 24 slices, required visual judgments accepted, full final verification passed. Stop condition: approved scope completed.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -179,7 +179,8 @@
     {
       "id": "chain.release",
       "title": "Release",
-      "status": "planned"
+      "summary": "7181 full tests; all types, architecture, build, budgets, 21 three-browser fraction checks, four mechanics/scalar checks and repertoire validation pass. Bounded outcome and remaining gaps recorded.",
+      "status": "complete"
     }
   ]
 }

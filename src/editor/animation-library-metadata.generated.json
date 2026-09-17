@@ -904,7 +904,7 @@
     "id": "editor-animation.animation.equation.fraction-equivalence.common-denominator-pressure.v1",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-    "title": "Give one third a denominator of six",
+    "title": "Give the fractions a shared denominator",
     "summary": "A conservative larger-expression caller for the approved fraction equivalence and product-evaluation motifs.",
     "renderTargetKinds": [
       "equation"

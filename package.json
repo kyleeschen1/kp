@@ -8,9 +8,11 @@
   },
   "scripts": {
     "test:fraction-chain": "node --disable-warning=ExperimentalWarning --test tests/fraction-chain-*.test.ts",
+    "generate:equation-catalog-evidence": "npm run generate:animation-governance-inventory && npm run generate:animation-library-metadata && npm run generate:equation-surface-inventory && npm run generate:equation-surface-preservation-matrix && npm run generate:equation-surface-disposition-ledger && npm run generate:equation-asset-manifest && npm run generate:animation-library-display-catalog && npm run generate:equation-reachability",
     "visual:mechanics-motion": "playwright test --config playwright.mechanics-motion-review.config.ts --project=chromium --workers=1",
     "visual:mechanics-relations": "playwright test --config playwright.mechanics-relations-review.config.ts --project=chromium --workers=1",
     "visual:fraction-chain": "playwright test --config playwright.fraction-chain.config.ts --project=chromium --workers=1",
+    "visual:fraction-chain:cohort": "playwright test --config playwright.fraction-chain.config.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "visual:repertoire": "playwright test --config playwright.repertoire.config.ts --project=chromium --workers=1",
     "test:repertoire": "node --disable-warning=ExperimentalWarning --test scripts/repertoire-dashboard.test.ts",
     "visual:code-reasoning": "playwright test --config playwright.code-reasoning-review.config.ts --project=chromium --workers=1",

@@ -2058,21 +2058,21 @@
         {
           "transformationId": "presentation.transformation.fraction.common-denominator.third-plus-sixth.pressure.stage-unit-factor",
           "transformationType": "introduceUnitFactor",
-          "transformationFingerprint": "fnv1a32-9ea895f4",
+          "transformationFingerprint": "fnv1a32-e2a85e08",
           "source": [
             {
               "objectId": "state.fraction.common-denominator.source",
               "objectType": "equation",
-              "title": "One third plus one sixth",
-              "semanticFingerprint": "fnv1a32-b2e8bb8e"
+              "title": "Fractions with unlike denominators",
+              "semanticFingerprint": "fnv1a32-5e0f902b"
             }
           ],
           "target": [
             {
               "objectId": "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
               "objectType": "equation",
-              "title": "Multiply one third by two over two",
-              "semanticFingerprint": "fnv1a32-67f58633"
+              "title": "Multiply the first fraction by a unit factor",
+              "semanticFingerprint": "fnv1a32-a18e15b3"
             }
           ]
         },
@@ -2084,8 +2084,8 @@
             {
               "objectId": "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
               "objectType": "equation",
-              "title": "Multiply one third by two over two",
-              "semanticFingerprint": "fnv1a32-67f58633"
+              "title": "Multiply the first fraction by a unit factor",
+              "semanticFingerprint": "fnv1a32-a18e15b3"
             }
           ],
           "target": [
@@ -2113,8 +2113,8 @@
             {
               "objectId": "state.fraction.common-denominator.target.evaluated-products",
               "objectType": "equation",
-              "title": "Two sixths plus one sixth",
-              "semanticFingerprint": "fnv1a32-603c6e64"
+              "title": "Fractions with a shared denominator",
+              "semanticFingerprint": "fnv1a32-bc3b55da"
             }
           ]
         }
@@ -2146,7 +2146,7 @@
       },
       "migrationObligations": {
         "semantic": {
-          "assetFingerprint": "fnv1a32-7356672c",
+          "assetFingerprint": "fnv1a32-981c9910",
           "objectIds": [
             "state.fraction.common-denominator.source",
             "transformation.fraction.common-denominator.third-plus-sixth.pressure.first-term.source",
@@ -2160,7 +2160,7 @@
           ]
         },
         "endpoints": {
-          "fingerprint": "fnv1a32-61a6f733",
+          "fingerprint": "fnv1a32-af4af878",
           "authority": "labelled-semantic-stage"
         },
         "renderer": {

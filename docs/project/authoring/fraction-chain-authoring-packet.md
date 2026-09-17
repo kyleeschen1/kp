@@ -14,7 +14,7 @@ a complete starter without hints. Do not return a check report as source.
 
 Each expression is an explicit integer fraction or an ordered pair joined by
 `+` or `-`. Integers have absolute value at most 1,000,000; denominators must be
-positive. Slash notation and `\\frac` are supported. No symbolic denominators,
+positive. Slash notation and `\frac` are supported. No symbolic denominators,
 decimals, undeclared assumptions or arbitrary algebra.
 
 Author meaningful stops: `1/3+1/6 → 2/6+1/6 → 3/6 → 1/2`. Alignment must preserve

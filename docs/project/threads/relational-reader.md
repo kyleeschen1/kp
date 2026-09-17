@@ -1,6 +1,6 @@
 # Relational reader delivery
 
-Status: active; first five-package implementation proposal approved
+Status: active direction; chain-first delivery complete, next execution scope unapproved
 Last Updated: 2026-09-17
 
 ## Canonical direction
@@ -30,6 +30,15 @@ is accepted: the user found the simultaneous factor joins very clear and directe
 continuation through the approved subtraction and inference work.
 Theseus retains the exact resume slice and verification evidence.
 
+The [delivery report](../reviews/2026-09-17-chain-first-authoring-closeout.md)
+now records the bounded fraction-chain authoring task, checked move inference,
+subtraction, retained trial and cross-domain gaps. All 24 approved slices and
+release gates passed; Theseus owns the verification evidence.
+Authoring checks succeeded through source alone in the trial, but first visual
+variations required engine repairs; keep those costs distinct. Fluent numeric
+reduction and lighter fraction startup remain open. The next recommended product
+transfer is the existing code/text passage, with new scope proposed separately.
+
 Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).
 The user wants mathematical chains plus sparse context to become correct KP
 reasoning passages through high-precision LLM inference. Models propose typed
@@ -37,7 +46,7 @@ moves; domain authority checks meaning and assumptions before motif projection.
 Transfer and the proposed fraction family are concrete tests of this target,
 not isolated demonstrations. The approved run authorizes no universal framework.
 
-Current next action: [nonterminal unfolding and independent scalar transfer](../decisions/2026-09-16-machinery-transfer-and-simple-coverage.md).
+Delivered transfer experiment: [nonterminal unfolding and independent scalar transfer](../decisions/2026-09-16-machinery-transfer-and-simple-coverage.md).
 The user accepted the reference-passage/transfer trajectory and its detailed
 next experiment. Preserve downstream context, checked parent/child meaning,
 valid interior-position mappings and exact return; measure source-only authoring
@@ -49,8 +58,8 @@ The approved [curriculum inventory plan](../2026-09-16-curriculum-repertoire-awa
 has delivered a systematic first-pass map and bounded implementation audit.
 [Review packet](../reviews/2026-09-16-curriculum-repertoire-review.md) records its
 scope, checks and limits. This expands the planning inventory, not lesson
-production or renderer authority. Nonterminal/scalar transfer remains the saved
-next experiment; the inventory's gap ranking does not start new work.
+production or renderer authority. Nonterminal/scalar transfer is now delivered;
+the inventory's gap ranking does not start new work.
 
 The user accepted the expanded dashboard and approved its bounded algebra audit.
 [Audit findings](../repertoire-notes/algebra-family-audit.md) distinguish recovered

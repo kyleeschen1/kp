@@ -1107,7 +1107,7 @@
     {
       "schemaVersion": "kp.animation-governance-inventory-entry.v1",
       "assetId": "animation.equation.fraction-equivalence.common-denominator-pressure.v1",
-      "title": "Give one third a denominator of six",
+      "title": "Give the fractions a shared denominator",
       "packId": "algebra",
       "renderTargetKinds": [
         "equation"

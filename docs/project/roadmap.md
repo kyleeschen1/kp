@@ -25,7 +25,7 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Approved execution: [chain-first authoring long loop](2026-09-17-chain-first-authoring-long-loop-proposal.md),
+Completed execution: [chain-first authoring long loop](2026-09-17-chain-first-authoring-long-loop-proposal.md),
 owned by `run-contract.kp.chain-first-authoring-v1`. The user accepted the
 nonterminal energy unfolding exemplar and resumed independent scalar transfer.
 Scalar transfer and a source-only notation/prose variation are verified; the
@@ -37,12 +37,22 @@ approved numeric variations and checked inference work.
 The [energy review packet](reviews/2026-09-17-chain-first-energy-review.md)
 provides the working URL, inspection actions and preservation evidence.
 
+The [chain-first delivery report](reviews/2026-09-17-chain-first-authoring-closeout.md)
+records checked subtraction, hint-free bounded move resolution, the new
+`equation.fraction-chain` authoring task, retained current-session trial and
+domain gaps. All 24 slices and final release gates are complete; Theseus owns
+the evidence and run status. The dashboard gains
+only bounded same-denominator subtraction and shared-divisor alignment checks.
+Fluent numeric reduction, mechanics task discovery and the fraction host's
+eager dependency cost remain explicit gaps.
+
 Current direction: [reusable machinery through deliberate transfer](decisions/2026-09-16-machinery-transfer-and-simple-coverage.md).
 Authoring target: [chains plus sparse intent, with inferred moves checked by domain authority](decisions/2026-09-16-chain-first-semantic-authoring-target.md).
 High-precision model inference should reuse supported operation/motif contracts
 and return explicit repair gaps; it does not replace semantic validation.
-Next: nonterminal equation unfolding, independent scalar reuse, then a supported
-source-only authoring variation. Follow with persistent code/text coordination.
+Nonterminal equation unfolding and independent scalar reuse are delivered.
+Next recommended transfer: persistent code/text coordination;
+new execution scope still requires approval.
 Use reference passages to expose reusable gaps; pause curriculum-scale polish.
 The [simple coverage dashboard](repertoire/README.md) tracks predicted semantic
 moves and motifs. It is a checklist, not an execution queue or technical certificate.

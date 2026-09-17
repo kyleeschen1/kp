@@ -1,19 +1,22 @@
 import { readFile } from "node:fs/promises";
 import { gzipSync } from "node:zlib";
-import { collectKpBundleManifestFiles, measureKpBundleClosureAttribution, type KpBundleManifest } from "./bundle-closure-attribution.ts";
+import { collectKpHtmlBundleFiles, measureKpBundleClosureAttribution, type KpBundleManifest } from "./bundle-closure-attribution.ts";
 
 const manifest = JSON.parse(await readFile("dist/.vite/manifest.json", "utf8")) as KpBundleManifest;
 const entries = new Map([
   ["physics", "experiments/mechanics-relations/index.html"],
-  ["scalar", "experiments/scalar-cancellation/index.html"]
+  ["scalar", "experiments/scalar-cancellation/index.html"],
+  ["fraction", "experiments/fraction-chain/index.html"],
+  ["fraction-numeric", "experiments/fraction-chain/numeric/index.html"],
+  ["fraction-two-sided", "experiments/fraction-chain/two-sided/index.html"],
+  ["fraction-subtraction", "experiments/fraction-chain/subtraction/index.html"]
 ]);
 const entry = process.argv[2] ?? "physics";
 const root = entries.get(entry);
-if (!root) throw new Error("Choose physics or scalar for the bounded reader closure measurement");
-const roots = [root];
-const initial = await measureKpBundleClosureAttribution("dist", collectKpBundleManifestFiles(manifest, roots));
-const activated = await measureKpBundleClosureAttribution("dist", collectKpBundleManifestFiles(manifest, roots, true));
+if (!root) throw new Error(`Choose one of ${[...entries.keys()].join(", ")} for the bounded reader closure measurement`);
 const html = await readFile(`dist/${root}`);
+const initial = await measureKpBundleClosureAttribution("dist", collectKpHtmlBundleFiles(html.toString("utf8"), manifest));
+const activated = await measureKpBundleClosureAttribution("dist", collectKpHtmlBundleFiles(html.toString("utf8"), manifest, true));
 // Reachable JS/CSS transfer, not a device benchmark or an observed network trace.
 console.log(JSON.stringify({ entry, initial, activated, html: { bytes: html.byteLength, gzipBytes: gzipSync(html).byteLength },
   additionalActivationGzipBytes: activated.gzipBytes - initial.gzipBytes,
