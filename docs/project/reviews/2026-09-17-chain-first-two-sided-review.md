@@ -1,8 +1,9 @@
 # Two-sided fraction alignment: local visual checkpoint
 
-Review state: HUMAN_CHECKPOINT. The approved run requires local judgment for a
-new visual topology before promotion. Slice 18 remains unfinished until that
-judgment; `run-contract.kp.chain-first-authoring-v1` owns execution status.
+Review state: ACCEPTED. After clarification of the two factor joins, the user
+said “very clear. proceed.” This accepts the simultaneous treatment and releases
+the remaining approved slices. `run-contract.kp.chain-first-authoring-v1` owns
+execution status.
 
 Open <http://localhost:8000/experiments/fraction-chain/two-sided/#counting-parts>.
 Source: `examples/algebra/fraction-chain-two-sided.json` and its adjacent Article.

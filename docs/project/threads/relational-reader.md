@@ -25,8 +25,9 @@ remains explicit in the review packet; an existing profile label is not a bindin
 The [numeric variation](../reviews/2026-09-17-chain-first-numeric-variation.md)
 now works through shared native owners with optional reduction; its first attempt
 required engine repairs and is not recorded as source-only. The
-[two-sided alignment candidate](../reviews/2026-09-17-chain-first-two-sided-review.md)
-awaits local visual judgment about simultaneous factor joins before promotion.
+[two-sided alignment](../reviews/2026-09-17-chain-first-two-sided-review.md)
+is accepted: the user found the simultaneous factor joins very clear and directed
+continuation through the approved subtraction and inference work.
 Theseus retains the exact resume slice and verification evidence.
 
 Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).

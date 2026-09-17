@@ -143,8 +143,8 @@
     {
       "id": "chain.two-sided-variation",
       "title": "Two-sided-variation",
-      "summary": "HUMAN_CHECKPOINT: two-sided passage is implemented and verified; simultaneous factor joins require local judgment before slice completion/promotion. See 2026-09-17-chain-first-two-sided-review.md. Preserve 17 completed slices and continue after acceptance.",
-      "status": "ready"
+      "summary": "User accepted simultaneous factor joins as very clear and said proceed. Native two-sided branch ownership, exact authoring roles and all scoped verification pass; continue approved subtraction and inference.",
+      "status": "complete"
     },
     {
       "id": "chain.subtraction",
