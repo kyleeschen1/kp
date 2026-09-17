@@ -6,6 +6,39 @@ is pending. Theseus owns live counts and execution under
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
 requires this judgment before scalar transfer. No later slice has started.
 
+## Revision: return destination and ready handle
+
+“Back to step 3” previously restored whichever transition was selected before
+opening detail, including step 1. The labeled child/parent return now targets
+its own parent and restores that parent's saved progress (or its source if
+unvisited). The global collapse continues to restore the exact earlier selection.
+
+Disclosure also disposed every prepared compositor and reissued the same plans.
+The energy exemplar now retains a bounded, local pool of detached scenes with
+exclusive ownership transfer and reuses its immutable issued plans. Scene keys
+include source, transition, native template and font/layout measurements. Native
+geometry changes invalidate the pool; page retirement disposes idle scenes and
+any outstanding paint lease returned later. Static records are baseline-aligned
+even when all compositor scenes are reused. No shared semantic or renderer
+contract changes; scalar presentation is not promoted.
+
+The initial new regression exposed two disabled frames even after scene reuse:
+repeated asynchronous module/plan loading still delayed activation. Reusing those
+resolved resources removed the gap. The final regression checks all 20 return
+frames, original scene identity, repeat opening by the next frame, and exact held
+parent progress. Fourteen scoped Chromium checks and full typecheck pass;
+three pool ownership/eviction/disposal unit checks pass. Two older browser
+expectations were corrected to the existing held-selection/visible-handle policy;
+their viewport stability and every-pointer drag assertions remain intact.
+
+First-time detail preparation and genuine font/layout invalidation can still
+require preparation; retained real paint covers that interval. This evidence
+does not claim zero cold-load latency on every device. Try opening step 3 while
+step 1 is selected, then **Back to step 3**, and repeat from a held step-3 position.
+The return should select step 3 immediately without disabling the handle.
+
+Repeat with `npm run visual:mechanics-relations -- --grep 'Back to step 3|disclosure preserves|pending disclosure|nonterminal unfolding|inline refinement|smaller steps preserves|every substep returns|expanded drag follows|equation geometry survives'`.
+
 ## Revision: preserve the visuals around the handle
 
 User feedback: preserving the argument would work better if it preserved the

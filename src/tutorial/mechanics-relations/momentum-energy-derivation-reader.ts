@@ -3,6 +3,7 @@ import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
 import { createEnergyRefinementUnfolding } from "./energy-refinement-unfolding.ts";
 import { holdEnergyDisclosurePaint, visibleDerivationHandle } from "./energy-disclosure-paint.ts";
+import { createDerivationScenePool } from "./derivation-scene-pool.ts";
 import { lensProgressForAlgebra } from "./energy-derivation-presentation.ts";
 import { equationViewportBounds, revealEquationInViewport } from "../../reader/runtime/equation-viewport.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
@@ -44,10 +45,26 @@ interface EnergyReaderState {
   revision: string; transition: string; progress: number;
   bookmarks: readonly EnergyInspectionPosition[]; disclosures: readonly boolean[];
 }
+type PreparedScene = { element: HTMLElement; session: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>>; cacheKey: string };
+type ScenePool = ReturnType<typeof createDerivationScenePool<PreparedScene>>;
+let rendererModule: Promise<typeof import('../../rendering/momentum-energy-derivation-session.ts')> | undefined;
 
 /** Coarse and fine are two projections, never two simultaneously active
  * timelines. Retire the old compositor/clock before mounting the next view. */
 export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: DerivationReaderBinding = energyBinding) {
+  // Issued plans are immutable within this published reader. Reuse their
+  // authority on disclosure instead of checking and compiling them again.
+  const sourceBinding = binding, plans = new Map<string, Promise<EnergyDerivationPlan>>();
+  binding = { ...sourceBinding, loadPlan(detail, parentId) {
+    const key = JSON.stringify([detail, parentId]);
+    let plan = plans.get(key);
+    if (!plan) {
+      plan = sourceBinding.loadPlan(detail, parentId);
+      plans.set(key, plan);
+      void plan.catch(() => plans.delete(key));
+    }
+    return plan;
+  } };
   // Local explanation is part of the fluent reading, not an expert/beginner
   // setting. Keep the explicit comparison opt-out for existing review URLs.
   const detailMode = new URL(location.href).searchParams.get("derivation-detail");
@@ -63,7 +80,10 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   const expansions = [...initialRoot.querySelectorAll<HTMLTemplateElement>("[data-refinement-view]")];
   const unfold = initialRoot.dataset['derivationNamespace'] === 'energy' && detailMode === null
     ? createEnergyRefinementUnfolding(initialRoot) : undefined;
-  let root = initialRoot, active = mountEnergyDerivation(root, binding);
+  const pool = unfold ? createDerivationScenePool<PreparedScene>(initialRoot.querySelectorAll('[data-derivation-template]').length +
+    expansions.reduce((sum, template) => sum + template.content.querySelectorAll('[data-derivation-template]').length, 0)) : undefined;
+  if (pool) window.addEventListener('pagehide', event => { if (!event.persisted) pool.close(); });
+  let root = initialRoot, active = mountEnergyDerivation(root, binding, undefined, pool);
   let saved: { state: EnergyReaderState; offset: number; parentId: string } | undefined;
   let busy = false;
   let controls = new AbortController();
@@ -93,7 +113,12 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         if (!collapsing) saved = { state: active.capture(), offset: entry.getBoundingClientRect().top, parentId: entry.dataset['refinementExpand']! };
         const expanded = expansions.find(template => template.dataset['refinementView'] === saved!.parentId)!;
         const next = collapsing ? prototype.cloneNode(true) as HTMLElement : expanded.content.firstElementChild!.cloneNode(true) as HTMLElement;
-        const destination: EnergyReaderState = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
+        const destination: EnergyReaderState = collapsing ? { ...saved!.state } : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
+        if (collapsing && (entry.hasAttribute('data-refinement-local-return') || entry.hasAttribute('data-refinement-parent-return'))) {
+          destination.transition = saved!.parentId;
+          destination.progress = saved!.state.transition === saved!.parentId ? saved!.state.progress :
+            saved!.state.bookmarks.find(position => position.transition === saved!.parentId)?.progress ?? 0;
+        }
         if (!collapsing) {
           const previous = saved!.state;
           const ids = [...next.querySelectorAll<HTMLElement>('[data-derivation-template]')].map(el => el.dataset['transitionId']);
@@ -119,9 +144,9 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         }
         const offset = saved!.offset;
         if (grip) paintHold = holdEnergyDisclosurePaint(root, grip, active.detachPaint());
-        active.dispose(); replace(next);
+        active.dispose(true); replace(next);
         paintHold?.attach();
-        active = mountEnergyDerivation(root, binding, destination);
+        active = mountEnergyDerivation(root, binding, destination, pool);
         // Transfer before yielding: renderer preparation may span visible
         // frames, and a hidden control cannot supply an anchor rectangle.
         const restoredEntry = root.querySelector<HTMLElement>(collapsing ? `[data-refinement-expand="${saved!.parentId}"]` : "[data-refinement-collapse]")!;
@@ -139,11 +164,11 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         // fallback authority. Restore the already checked compact inspection.
         if (saved && root.dataset["derivationDetail"] === "mass-refinement") {
           const previous = saved;
-          active.dispose();
+          active.dispose(true);
           const next = prototype.cloneNode(true) as HTMLElement;
           replace(next);
           paintHold?.attach();
-          active = mountEnergyDerivation(root, binding, previous.state);
+          active = mountEnergyDerivation(root, binding, previous.state, pool);
           saved = undefined;
           const restoredEntry = root.querySelector<HTMLElement>(`[data-refinement-expand="${previous.parentId}"]`)!;
           restoredEntry.hidden = false;
@@ -171,7 +196,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   bind();
 }
 
-function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBinding, initial?: EnergyReaderState) {
+function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBinding, initial?: EnergyReaderState, pool?: ScenePool) {
   const detail = root.dataset["derivationDetail"] === "mass-refinement" ? "mass-refinement" : "coarse";
   // Internal exemplar comparison, not an additional learner control or policy.
   const accented = new URL(location.href).searchParams.get("derivation-emphasis") !== "contrast";
@@ -239,7 +264,6 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const abort = new AbortController(), opts = { signal: abort.signal };
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   let session: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
-  type PreparedScene = { element: HTMLElement; session: NonNullable<typeof session> };
   let prepared: PreparedScene[] = [];
   let preparedPlan: EnergyDerivationPlan | undefined;
   let selected = 0, tracing = false, loading = false, generation = 0;
@@ -386,9 +410,13 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     });
   };
   clock.subscribe(project);
-  const retire = () => {
+  const retire = (recycle = false) => {
     generation++;
-    for (const scene of prepared) { scene.session.dispose(); if (scene.element !== stage) scene.element.remove(); }
+    if (!recycle) pool?.clear();
+    for (const scene of prepared) {
+      if (recycle && pool) pool.put(scene);
+      else { scene.session.dispose(); if (scene.element !== stage) scene.element.remove(); }
+    }
     prepared = []; preparedPlan = undefined; session = undefined; handle.disabled = true;
   };
   const activate = (index: number, progress: number) => {
@@ -427,7 +455,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     let inspectionRight = 0;
     try {
       const [{ mountMomentumEnergyDerivationSession }, proofPlan] = await Promise.all([
-        import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail, root.dataset['refinementParentId'])
+        rendererModule ??= import("../../rendering/momentum-energy-derivation-session.ts"), binding.loadPlan(detail, root.dataset['refinementParentId'])
       ]);
       if (token !== generation) return;
       if (proofPlan.namespace !== root.dataset["derivationNamespace"] || proofPlan.sourceRevision !== root.dataset["derivationSourceRevision"] || proofPlan.moves.length !== ids.length ||
@@ -438,8 +466,26 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       const refinement = proofPlan.compactInspection === "refinement" ? await binding.loadPlan("mass-refinement") : undefined;
       await document.fonts.ready;
       if (token !== generation) return;
+      const alignBaselines = (equations: HTMLElement[]) => {
+        // Align newly published records even when every compositor is reused.
+        // The semantic prefix, not the changing strut envelope, owns the dock.
+        for (const equation of equations) {
+          const paint = equation.querySelector<HTMLElement>('.katex-display')!;
+          paint.style.transform = 'none';
+          const prefix = equation.querySelector<HTMLElement>('[data-kp-semantic-entity-id$=".prefix"]');
+          if (!prefix) throw new Error('Derivation baseline requires its invariant semantic prefix');
+          const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
+          paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
+        }
+      };
+      alignBaselines(equationSlots);
       for (let sceneIndex = 0; sceneIndex < total; sceneIndex++) {
         const template = get<HTMLTemplateElement>(`[data-derivation-template="${sceneIndex}"]`);
+        const font = getComputedStyle(equationSlots[sceneIndex]!.querySelector('.katex')!);
+        const cacheKey = JSON.stringify([proofPlan.sourceRevision, ids[sceneIndex], template.innerHTML,
+          root.getBoundingClientRect().width, font.font, font.letterSpacing, font.lineHeight, fontRevision]);
+        const cached = pool?.take(cacheKey);
+        if (cached) { stage.parentElement!.append(cached.element); pending.push(cached); continue; }
         candidate = stage.cloneNode(false) as HTMLElement;
         candidate.removeAttribute("data-derivation-stage");
         candidate.setAttribute("data-derivation-preparing", "");
@@ -451,19 +497,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         target.style.top = "0px";
         await document.fonts.ready;
         if (token !== generation) return;
-        // Center the invariant semantic prefix, not each expression's changing
-        // fraction/strut envelope. History and both endpoints use the same native
-        // markup and measured anchor; no glyph-specific pixel correction.
-        const equations = [...rows.map(row => row.querySelector<HTMLElement>(".energy-derivation-equation")!),
-          ...candidate.querySelectorAll<HTMLElement>(".energy-derivation-endpoint")];
-        for (const equation of equations) {
-          const paint = equation.querySelector<HTMLElement>(".katex-display")!;
-          paint.style.transform = "none";
-          const prefix = equation.querySelector<HTMLElement>('[data-kp-semantic-entity-id$=".prefix"]');
-          if (!prefix) throw new Error("Derivation baseline requires its invariant semantic prefix");
-          const frame = equation.getBoundingClientRect(), ink = prefix.getBoundingClientRect();
-          paint.style.transform = `translateY(${frame.top + frame.height / 2 - ink.top - ink.height / 2}px)`;
-        }
+        alignBaselines([...candidate.querySelectorAll<HTMLElement>('.energy-derivation-endpoint')]);
         if (root.hasAttribute("data-measured-inspection-lane")) {
           // Interior child states can exceed both coarse endpoints. Reserve
           // their native ink extent once before input, never during a drag.
@@ -481,7 +515,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
           accented ? { ...focus, extent: "equation", records: [] } : undefined, refinement);
         if (token !== generation) return;
         candidate.hidden = true; candidate.removeAttribute("data-derivation-preparing");
-        pending.push({ element: candidate, session: created });
+        pending.push({ element: candidate, session: created, cacheKey });
         candidate = undefined; created = undefined;
       }
       stage.remove();
@@ -759,12 +793,12 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   [root, ...equationSlots, ...nativeInk, ...interleaves].forEach(element => resize.observe(element));
   document.fonts.addEventListener('loadingdone', () => { fontRevision++; scheduleGeometry(); }, opts);
   let disposed = false;
-  const dispose = () => {
+  const dispose = (recycle = false) => {
     if (disposed) return;
     disposed = true;
     if (geometryFrame !== undefined) cancelAnimationFrame(geometryFrame);
     if (revealFrame !== undefined) cancelAnimationFrame(revealFrame);
-    pause(); retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose();
+    pause(); retire(recycle); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose();
   };
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) dispose(); }, opts);
   hint.hidden = false;
@@ -781,7 +815,12 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     // longer owns this leased paint, whose viewport position is now frozen.
     session = undefined;
     stage.removeAttribute('data-derivation-stage');
-    return { element: stage, dispose() { retained.session.dispose(); retained.element.remove(); } };
+    const style = stage.getAttribute('style');
+    return { element: stage, dispose() {
+      if (style === null) retained.element.removeAttribute('style'); else retained.element.setAttribute('style', style);
+      delete retained.element.dataset['disclosurePaint'];
+      if (pool) pool.put(retained); else { retained.session.dispose(); retained.element.remove(); }
+    } };
   }, reveal() { revealRequested = true; scheduleReveal(); }, capture(): EnergyReaderState {
     pause();
     if (loading || seeking || !session) throw new Error("Wait for the active derivation scene to finish preparing");

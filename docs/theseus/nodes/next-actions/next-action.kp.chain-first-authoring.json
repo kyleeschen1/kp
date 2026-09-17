@@ -4,7 +4,7 @@
   "title": "Chain-first checked authoring and reader transfer",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: user-requested handle/paint continuity revision implemented and verified. Energy review still awaits acceptance; scalar transfer remains gated.",
+  "summary": "HUMAN_CHECKPOINT: energy return and handle repair ready at shared-server URL; wait for visual acceptance before scalar transfer.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -208,6 +208,76 @@
       "scope": "chain.energy-review.handle-revision",
       "checkedAt": "2026-09-17T07:54:28.781Z",
       "notes": "All 12 route closures pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'Back to step 3'",
+      "status": "failed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:37:39.662Z",
+      "notes": "Initial scene reuse still had two disabled frames; memoized issued plans and resolved renderer module repaired the delay."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'Back to step 3|disclosure preserves|pending disclosure|nonterminal unfolding|inline refinement|smaller steps preserves|every substep returns|expanded drag follows'",
+      "status": "failed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:37:40.794Z",
+      "notes": "11/13 passed. Two older assertions assumed button anchoring and unconditional first-child selection; aligned setup/assertions with the existing held-selection and handle-anchor policy, preserving viewport and direct-input checks."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'Back to step 3|opening smaller steps|expanded drag follows|pending disclosure|equation geometry survives'",
+      "status": "failed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:37:41.845Z",
+      "notes": "4/5 passed; exact boundary drag selected preceding move endpoint. Test now explicitly selects the parent interior before expansion."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'Back to step 3|disclosure preserves|pending disclosure|nonterminal unfolding|inline refinement|smaller steps preserves|every substep returns|expanded drag follows|equation geometry survives'",
+      "status": "passed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:37:42.863Z",
+      "notes": "14/14 pass. Frame-level immediate parent return and warmed reopening, scene identity reuse, exact held progress, font rebuild, uninterrupted drag and paint/lease preservation."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/derivation-scene-pool.test.ts",
+      "status": "passed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:37:43.856Z",
+      "notes": "3/3 ownership, bounded eviction/invalidation and late-lease page disposal checks."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:37:44.890Z",
+      "notes": "Full app, node, tests, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:37:45.894Z",
+      "notes": "Dependency, framework-neutral, semantic/reader, compiler authority and conformance gates pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:38:15.900Z",
+      "notes": "Production build and existing payload/closure gates pass without budget changes."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:38:17.038Z",
+      "notes": "Production build and existing payload/closure gates pass without budget changes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.energy-review.return-handoff",
+      "checkedAt": "2026-09-17T16:38:18.081Z",
+      "notes": "Production build and existing payload/closure gates pass without budget changes."
     }
   ],
   "progress": {

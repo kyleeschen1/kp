@@ -3,6 +3,42 @@ import { sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/
 
 const route = "/experiments/mechanics-relations/";
 
+test("Back to step 3 returns to its parent without rebuilding or a disabled frame", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
+  const root = await ready(page);
+  const original = await root.evaluateHandle(el => [...el.querySelectorAll('.energy-derivation-chain > .energy-derivation-stage')]);
+  // Open step 3's explanation while another edge is selected: the label must
+  // not secretly mean return to that unrelated previous selection.
+  await root.locator('[data-refinement-expand="cancel-mass"]').click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
+  await expect(lens(root)).toBeEnabled();
+  const frames = await root.evaluate(async el => {
+    const button = el.querySelector<HTMLButtonElement>('[data-refinement-local-return]')!;
+    button.click();
+    const frames: { move: string | undefined; disabled: boolean }[] = [];
+    for (let i = 0; i < 20; i++) {
+      await new Promise(requestAnimationFrame);
+      frames.push({ move: el.dataset['move'], disabled: el.querySelector<HTMLButtonElement>('[data-derivation-handle]')!.disabled });
+    }
+    return frames;
+  });
+  expect(frames).toEqual(Array.from({ length: 20 }, () => ({ move: '2', disabled: false })));
+  expect(await original.evaluate(scenes => scenes.every(scene => scene.isConnected))).toBe(true);
+  await expect(root).toHaveAttribute('data-progress', '0');
+  await dragTo(page, root, 2.55);
+  const held = await root.getAttribute('data-progress');
+  const reopening = await root.evaluate(async el => {
+    el.querySelector<HTMLButtonElement>('[data-refinement-expand="cancel-mass"]')!.click();
+    await new Promise(requestAnimationFrame);
+    return el.querySelector<HTMLButtonElement>('[data-derivation-handle]')!.disabled;
+  });
+  expect(reopening).toBe(false);
+  await expect(lens(root)).toBeEnabled();
+  await root.locator('[data-refinement-local-return]').last().click();
+  await expect(root).toHaveAttribute('data-move', '2');
+  await expect(root).toHaveAttribute('data-progress', held!);
+});
+
 test("disclosure preserves the visible handle and real equation paint frame by frame", async ({ page }, info) => {
   await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page);
@@ -329,7 +365,7 @@ test("disclosure anchor survives delayed reflow and yields to reader scrolling",
   expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('');
 });
 
-test("opening smaller steps preserves the detail entry in the viewport", async ({ page }) => {
+test("opening smaller steps preserves the visible reading anchor in the viewport", async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 650 });
   const root = await ready(page);
   // Enter the local move before dragging so release stays inside the viewport.
@@ -338,14 +374,17 @@ test("opening smaller steps preserves the detail entry in the viewport", async (
   const progress = await lens(root).getAttribute('aria-valuenow');
   const expand = root.locator('[data-refinement-expand]:not([data-refinement-norm])');
   await expand.evaluate(el => { scrollBy(0, el.getBoundingClientRect().top - 220); });
-  const top = (await expand.boundingBox())!.y;
+  const grip = (await lens(root).boundingBox())!;
+  const anchoredHandle = grip.y >= 0 && grip.y + grip.height <= 650;
+  const top = (await (anchoredHandle ? lens(root) : expand).boundingBox())!.y;
   await expand.click();
   await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
   const collapse = root.locator('[data-refinement-collapse]').first();
   await expect(collapse).toBeFocused();
   expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('none');
-  expect(Math.abs((await collapse.boundingBox())!.y - top)).toBeLessThan(2);
-  const entryDrift = await collapse.evaluate(async el => {
+  const openAnchor = anchoredHandle ? lens(root) : collapse;
+  expect(Math.abs((await openAnchor.boundingBox())!.y - top)).toBeLessThan(2);
+  const entryDrift = await openAnchor.evaluate(async el => {
     const start = performance.now(), positions: number[] = [];
     while (performance.now() - start < 1200) { await new Promise(requestAnimationFrame); positions.push(el.getBoundingClientRect().top); }
     return Math.max(...positions) - Math.min(...positions);
@@ -354,8 +393,9 @@ test("opening smaller steps preserves the detail entry in the viewport", async (
   await collapse.click();
   await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
   await expect(expand).toBeFocused();
-  expect(Math.abs((await expand.boundingBox())!.y - top)).toBeLessThan(2);
-  const returnDrift = await expand.evaluate(async el => {
+  const returnAnchor = anchoredHandle ? lens(root) : expand;
+  expect(Math.abs((await returnAnchor.boundingBox())!.y - top)).toBeLessThan(2);
+  const returnDrift = await returnAnchor.evaluate(async el => {
     const start = performance.now(), positions: number[] = [];
     while (performance.now() - start < 1200) { await new Promise(requestAnimationFrame); positions.push(el.getBoundingClientRect().top); }
     return Math.max(...positions) - Math.min(...positions);
@@ -1363,6 +1403,8 @@ test("expanded handle crosses both fine-step boundaries in one held drag without
 test("expanded drag follows every pointer sample across boundaries without waiting for a new scene", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page);
+  // Disclosure preserves the held selection; select this parent explicitly.
+  await dragTo(page, root, 2.01);
   await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
   await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
   await expect(root).toHaveAttribute("data-move", "2");

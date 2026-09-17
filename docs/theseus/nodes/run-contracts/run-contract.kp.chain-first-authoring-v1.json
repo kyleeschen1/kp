@@ -4,7 +4,7 @@
   "title": "Chain-first authoring: transfer, fractions and checked inference",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: 3 of 24 complete. Revised energy-review candidate preserves visible handle and real compositor paint through checked-child disclosure. Resume only after visual acceptance; then scalar transfer remains approved.",
+  "summary": "HUMAN_CHECKPOINT at slice 04: parent return and ready-handle repair verified; 3/24 complete. Energy visual acceptance required before scalar generalization.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,7 +59,7 @@
     {
       "id": "chain.energy-review",
       "title": "Energy-review",
-      "summary": "HUMAN_CHECKPOINT: revised visible-handle and real-paint handoff passes frame geometry and lifecycle checks; awaiting visual acceptance before scalar transfer.",
+      "summary": "Return to labeled parent and prepared-scene handoff repaired and verified. HUMAN_CHECKPOINT remains open for energy visual judgment; review packet updated.",
       "status": "ready"
     },
     {
