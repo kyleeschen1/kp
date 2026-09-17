@@ -1,7 +1,8 @@
 # Bounded scalar cancellation in the persistent reader
 
 Status: implemented candidate; human visual checkpoint remains open.
-Review and canonical owners: `../threads/2026-09-15-scalar-reader-review.md`.
+Current paired review: `../reviews/2026-09-17-chain-first-transfer-review.md`.
+Original canonical owners: `../threads/2026-09-15-scalar-reader-review.md`.
 This is not a task in the `author:check` inventory yet. Do not invent an inventory
 task ID or describe this file-based workflow as an editor Apply capability.
 

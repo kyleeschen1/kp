@@ -2,9 +2,9 @@
   "id": "next-action.kp.chain-first-authoring",
   "kind": "next-action",
   "title": "Chain-first checked authoring and reader transfer",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "User accepted the energy reader and explicitly requested resuming the approved loop.",
+  "summary": "HUMAN_CHECKPOINT: paired transfer visual review required by approved slice 07 before fraction-chain promotion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -565,11 +565,18 @@
       "scope": "chain.scalar-variation",
       "checkedAt": "2026-09-17T19:59:49.514Z",
       "notes": "Four Chromium tests and ten scalar/mapping unit tests passed on R,b notation and revised prose. Full typecheck passed. Zero engine renderer or CSS edits in this slice."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep \"scalar reader reuses|scalar compact inspection|disclosure preserves the handle outline\"",
+      "status": "passed",
+      "scope": "chain.transfer-review",
+      "checkedAt": "2026-09-17T20:03:00.957Z",
+      "notes": "Nine cross-browser checks passed, including scalar 16px/20px disclosure and exact return. 52 affected unit tests, full types, architecture, build, reader closure and budgets pass. Known energy large-font gap remains separate; review packet records bounds."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Implemented checked nonterminal energy exemplar. Preparing required human review before scalar promotion; no claim of visual acceptance."
+    "summary": "Energy accepted; scalar transfer and source-only variation verified. Paired transfer review ready, awaiting required visual acceptance before fraction work."
   },
   "expectedLearning": [
     "Whether sparse mathematical chains can resolve checked operations and existing motifs with explicit repairs"

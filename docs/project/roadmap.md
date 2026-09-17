@@ -28,6 +28,9 @@ nor its evidence. The ledger remains retrievable at
 Approved execution: [chain-first authoring long loop](2026-09-17-chain-first-authoring-long-loop-proposal.md),
 owned by `run-contract.kp.chain-first-authoring-v1`. The user accepted the
 nonterminal energy unfolding exemplar and resumed independent scalar transfer.
+Scalar transfer and a source-only notation/prose variation are verified; the
+[paired transfer review](reviews/2026-09-17-chain-first-transfer-review.md) is the
+current visual checkpoint before fraction-chain work.
 The [energy review packet](reviews/2026-09-17-chain-first-energy-review.md)
 provides the working URL, inspection actions and preservation evidence.
 

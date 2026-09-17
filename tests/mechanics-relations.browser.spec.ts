@@ -1453,8 +1453,20 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
   await expect(root).toHaveAttribute("data-progress", held!);
   await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeFocused();
   await expect(root.locator("[data-derivation-row]")).toHaveCount(2);
+  await expect(lens(root)).toHaveAttribute('aria-valuemax', '1');
   expect(await retained.evaluate(state => state.root.isConnected && state.handle?.isConnected &&
     state.prose?.isConnected && state.equations.every(equation => equation.isConnected))).toBe(true);
+  await page.evaluate(() => { document.documentElement.style.fontSize = '20px'; });
+  await dragTo(page, root, .55);
+  const resized = await root.getAttribute('data-progress');
+  await root.locator('[data-refinement-expand]').click();
+  await expect(lens(root)).toBeEnabled();
+  await expect(lens(root)).toHaveAttribute('aria-valuemax', '3');
+  await expect(root).toHaveAttribute('data-move', '1');
+  await root.locator('[data-refinement-parent-return]').click();
+  await expect(root).toHaveAttribute('data-progress', resized!);
+  await expect(lens(root)).toHaveAttribute('aria-valuemax', '1');
+  await expect(root).not.toHaveAttribute('data-repair', 'true');
   expect(errors).toEqual([]);
 });
 

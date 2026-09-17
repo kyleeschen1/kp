@@ -2,9 +2,9 @@
   "id": "run-contract.kp.chain-first-authoring-v1",
   "kind": "run-contract",
   "title": "Chain-first authoring: transfer, fractions and checked inference",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
-  "summary": "Energy visual checkpoint accepted; resume approved scalar transfer and source-only variation.",
+  "summary": "HUMAN_CHECKPOINT at paired energy/scalar transfer review. Six of 24 complete; no fraction work started.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -77,7 +77,8 @@
     {
       "id": "chain.transfer-review",
       "title": "Transfer-review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: scalar transfer and source-only variation verified; paired review packet ready. Six of 24 slices complete.",
+      "status": "ready"
     },
     {
       "id": "chain.fraction-source",
