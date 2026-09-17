@@ -1,6 +1,6 @@
 # KP machinery: reference passages and deliberate transfer
 
-Status: recommendation for discussion, not a new execution contract.
+Status: accepted direction; see [decision and detailed next experiment](../decisions/2026-09-16-machinery-transfer-and-simple-coverage.md). Not a new execution contract.
 User asks which development work advances reusable KP machinery without turning
 the personal classical-mechanics curriculum into a costly publishing programme.
 The earlier pruning discussion remains a proposed editorial direction; this
@@ -103,7 +103,7 @@ precise unsupported boundary, or a rejected design worth recording. It need not
 yield another finished chapter. Separate personal study from the product queue;
 capture interesting friction without converting every encounter into development.
 
-Current focus remains the accepted relational-reader work. Proposed next action
-is the nonterminal/independent equation transfer experiment, pending approval.
-No roadmap priority change, old-loop resumption, curriculum programme, external
-study, broad motif promotion or deployment is authorised by this review.
+Current focus is transferable relational-reader machinery. The user accepted
+the nonterminal/independent equation transfer experiment as the next step; the
+linked decision owns its elaboration. No old-loop resumption, curriculum
+programme, external study, broad motif promotion or deployment is authorised.

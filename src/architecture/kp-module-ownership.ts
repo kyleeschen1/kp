@@ -157,6 +157,7 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     ownershipRule("src/app-adapters/", "application"),
     ownershipRule("src/public-web/", "application"),
     ownershipRule("src/project-dashboard/", "application"),
+    ownershipRule("src/repertoire/", "application"),
     ownershipRule("src/internal-studio/", "application"),
     ownershipRule(
       "src/compatibility/",

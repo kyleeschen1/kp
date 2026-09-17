@@ -9,6 +9,8 @@
   "scripts": {
     "visual:mechanics-motion": "playwright test --config playwright.mechanics-motion-review.config.ts --project=chromium --workers=1",
     "visual:mechanics-relations": "playwright test --config playwright.mechanics-relations-review.config.ts --project=chromium --workers=1",
+    "visual:repertoire": "playwright test --config playwright.repertoire.config.ts --project=chromium --workers=1",
+    "test:repertoire": "node --disable-warning=ExperimentalWarning --test scripts/repertoire-dashboard.test.ts",
     "visual:code-reasoning": "playwright test --config playwright.code-reasoning-review.config.ts --project=chromium --workers=1",
     "measure:mechanics-relations-closure": "node --disable-warning=ExperimentalWarning scripts/measure-mechanics-relations-closure.ts",
     "audit:architecture-cost": "node --disable-warning=ExperimentalWarning scripts/audit-architecture-cost.ts",

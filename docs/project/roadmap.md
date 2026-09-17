@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-13
+Last Updated: 2026-09-16
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -24,6 +24,16 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+Current direction: [reusable machinery through deliberate transfer](decisions/2026-09-16-machinery-transfer-and-simple-coverage.md).
+Next: nonterminal equation unfolding, independent scalar reuse, then a supported
+source-only authoring variation. Follow with persistent code/text coordination.
+Use reference passages to expose reusable gaps; pause curriculum-scale polish.
+The [simple coverage dashboard](repertoire/README.md) tracks predicted semantic
+moves and motifs. It is a checklist, not an execution queue or technical certificate.
+
+The entries below retain delivery context; the transfer decision above owns the
+next direction. Previously parked loops are not resumed by this change.
 
 Approved refinement: [direct rail seeking and readable navigation](threads/2026-09-16-disclosure-persistence.md#rail-seeking-and-readable-navigation).
 Click to select a point, continue into dragging, and keep selected equation ink

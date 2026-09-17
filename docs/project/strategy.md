@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-09-13
+Last Updated: 2026-09-16
 
 ## North Star
 
@@ -18,6 +18,15 @@ inspectable and executable; the compiler is core machinery, not the complete
 learner-facing product definition.
 
 ## Product Thesis
+
+Accepted September 16 refinement: develop a small set of polished reference
+passages and deliberately test transfer before producing many lessons. Personal
+mechanics study supplies learning friction; internal-page polish earns product
+time when it tests reusable machinery. First pressure nonterminal unfolding and
+independent scalar/source-only reuse, then persistent code/text coordination.
+Expand motifs through consequential reasoning needs and retain modest checks
+of learning value. See [decision](decisions/2026-09-16-machinery-transfer-and-simple-coverage.md);
+the roadmap owns execution priority.
 
 Accepted September 14 clarification: the persistent reasoning record is the lead
 product hypothesis, with coherent static reading and optional local inspection.

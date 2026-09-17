@@ -7,6 +7,7 @@ import { kpViteAuthoringMarketPreview } from "./scripts/vite-authoring-market-pr
 import { kpViteAuthoringStructuralPreview } from "./scripts/vite-authoring-structural-preview.ts";
 import { kpViteMechanicsRelations } from "./scripts/vite-mechanics-relations.ts";
 import { kpViteCodeReasoning } from "./scripts/vite-code-reasoning.ts";
+import { kpViteRepertoireDashboard } from "./scripts/vite-repertoire-dashboard.ts";
 
 import {
   kpProductionDevelopmentErasurePlugin
@@ -155,6 +156,7 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
   },
   plugins: [
+    kpViteRepertoireDashboard(projectRoot),
     kpViteMechanicsRelations(projectRoot),
     kpViteCodeReasoning(projectRoot),
     {
@@ -337,6 +339,7 @@ export default defineConfig({
     // legacy polyfill would add a startup request to every route.
     entries: {
       mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
+      repertoire: resolve(projectRoot, "experiments/repertoire/index.html"),
       scalarCancellation: resolve(projectRoot, "experiments/scalar-cancellation/index.html"),
       codeReasoning: resolve(projectRoot, "experiments/code-reasoning/index.html"),
       centroidReasoning: resolve(projectRoot, "experiments/centroid-reasoning/index.html"),

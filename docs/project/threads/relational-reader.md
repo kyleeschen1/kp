@@ -1,9 +1,17 @@
 # Relational reader delivery
 
 Status: active; first five-package implementation proposal approved
-Last Updated: 2026-09-15
+Last Updated: 2026-09-16
 
 ## Canonical direction
+
+Current next action: [nonterminal unfolding and independent scalar transfer](../decisions/2026-09-16-machinery-transfer-and-simple-coverage.md).
+The user accepted the reference-passage/transfer trajectory and its detailed
+next experiment. Preserve downstream context, checked parent/child meaning,
+valid interior-position mappings and exact return; measure source-only authoring
+against engine intervention. Next medium: existing centroid code/text coordination.
+This records direction; it does not reopen old run contracts or start a curriculum.
+Track repertoire hypotheses in the [simple dashboard](../repertoire/README.md).
 
 The user approved an [inline unfolding trial](2026-09-16-disclosure-persistence.md#inline-unfolding-exemplar)
 after observing that anchored view replacement still loses visual continuity.
