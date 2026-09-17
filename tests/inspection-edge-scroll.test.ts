@@ -1,6 +1,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { inspectionEdgeVelocity } from "../src/reader/runtime/inspection-edge-scroll.ts";
+import { inspectionEdgeVelocity, inspectionScrollBounds } from "../src/reader/runtime/inspection-edge-scroll.ts";
+
+test("endpoint scrolling reserves room for content beyond the handle center", () => {
+  const bottom = inspectionScrollBounds({ top: -600, bottom: 630 }, { top: -630, bottom: 680 }, 630, 650);
+  assert.equal(bottom.bottom - 630, 78);
+  const top = inspectionScrollBounds({ top: 12, bottom: 1000 }, { top: -30, bottom: 1040 }, 12, 650);
+  assert.equal(top.top - 12, -78);
+  const settled = inspectionScrollBounds({ top: 80, bottom: 580 }, { top: 48, bottom: 602 }, 635, 650);
+  assert.equal(settled.bottom, 635);
+});
 
 test("edge velocity is symmetric, bounded, gradual and inactive in the reading area", () => {
   for (const height of [200, 600, 1200]) {

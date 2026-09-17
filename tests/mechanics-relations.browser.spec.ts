@@ -42,6 +42,7 @@ test("long graph argument keeps bounded sticky evidence and extends a held drag 
   await slider.evaluate(el => { (el as HTMLInputElement).value = '1'; el.dispatchEvent(new Event('input')); const box = el.getBoundingClientRect(); scrollBy(0, box.bottom - 640); });
   const end = (await slider.boundingBox())!;
   await page.mouse.move(x, end.y + end.height - 10); await page.mouse.down();
+  await expect.poll(async () => { const b = (await root.locator('.momentum-move-argument').boundingBox())!; return b.y + b.height; }).toBeLessThanOrEqual(603);
   const endpointScroll = await page.evaluate(() => scrollY);
   await page.waitForTimeout(160);
   expect(await page.evaluate(() => scrollY)).toBe(endpointScroll); expect(await p()).toBe(1);
@@ -71,6 +72,24 @@ test("equation edge scrolling resamples a stationary pointer and cancels on rele
   const stopped = await page.evaluate(() => scrollY);
   await page.waitForTimeout(160); expect(await page.evaluate(() => scrollY)).toBe(stopped);
   await expect(root).not.toHaveAttribute('data-derivation-dragging', 'true');
+});
+
+test("equation endpoint ink remains inside viewport margins at both drag extremes", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1000, height: 650 });
+  const root = await ready(page), handle = lens(root);
+  const equations = root.locator('.energy-derivation-equation');
+  for (const end of [true, false]) {
+    await handle.focus(); await handle.press(end ? 'End' : 'Home');
+    await expect(handle).toHaveAttribute('aria-valuenow', end ? '3' : '0');
+    const equation = end ? equations.last() : equations.first();
+    await equation.evaluate((el, bottom) => { const b = el.getBoundingClientRect(); scrollBy(0, b.top + b.height / 2 - (bottom ? 630 : 12)); }, end);
+    const b = (await handle.boundingBox())!;
+    await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await page.mouse.down();
+    await expect.poll(async () => { const box = (await equation.boundingBox())!; return end ? box.y + box.height : -box.y; }).toBeLessThanOrEqual(end ? 603 : -47);
+    await expect(handle).toHaveAttribute('aria-valuenow', end ? '3' : '0');
+    await page.mouse.up();
+  }
 });
 
 test("momentum move keeps its argument in place through forward, reverse, return and print", async ({ page }, info) => {

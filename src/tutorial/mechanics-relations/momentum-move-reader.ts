@@ -35,6 +35,7 @@ export function enhanceMomentumMove(root: HTMLElement) {
     return { top: box.top + 10, bottom: box.bottom - 10 };
   };
   const edgeScroll = createInspectionEdgeScroll({ signal: abort.signal,
+    readableBounds: () => require<HTMLElement>('.momentum-move-argument').getBoundingClientRect(),
     bounds: () => { const box = range(); return { top: box.top + (drag?.offset ?? 0), bottom: box.bottom + (drag?.offset ?? 0) }; },
     sample: clientY => {
       if (!drag) return;

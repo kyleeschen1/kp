@@ -10,6 +10,7 @@ export function inspectionEdgeVelocity(pointerY: number, viewportHeight: number)
 
 export function createInspectionEdgeScroll(input: {
   readonly bounds: () => { readonly top: number; readonly bottom: number };
+  readonly readableBounds?: () => { readonly top: number; readonly bottom: number };
   readonly sample: (clientY: number) => void;
   readonly signal: AbortSignal;
   readonly ownerWindow?: Window;
@@ -25,10 +26,10 @@ export function createInspectionEdgeScroll(input: {
   const tick = (now: number) => {
     frame = undefined;
     if (pointerY === undefined || input.signal.aborted) return;
-    const bounds = input.bounds();
+    const bounds = inspectionScrollBounds(input.bounds(), input.readableBounds?.(), pointerY, win.innerHeight);
     const velocity = inspectionEdgeVelocity(pointerY, win.innerHeight);
-    // The move's first/last handle positions bound travel, even when the page
-    // continues. Cap elapsed time so a suspended tab cannot cause a jump.
+    // Progress stays clamped by its caller, but scrolling may continue far
+    // enough to expose endpoint ink/prose. A center point is not a readable bound.
     const desired = velocity * Math.max(0, Math.min(50, now - previous)) / 1000 + remainder;
     const amount = Math.max(Math.min(0, bounds.top - pointerY), Math.min(Math.max(0, bounds.bottom - pointerY), desired));
     if (!Number.isFinite(amount) || !velocity) return;
@@ -59,4 +60,17 @@ export function createInspectionEdgeScroll(input: {
     pointerY = clientY; input.sample(clientY);
     if (!inspectionEdgeVelocity(clientY, win.innerHeight)) cancel(); else schedule();
   }, stop };
+}
+
+export function inspectionScrollBounds(
+  handles: { readonly top: number; readonly bottom: number },
+  content: { readonly top: number; readonly bottom: number } | undefined,
+  pointerY: number, viewportHeight: number
+) {
+  if (!content) return handles;
+  const margin = Math.min(48, viewportHeight / 4);
+  return {
+    top: Math.min(handles.top, pointerY + content.top - margin),
+    bottom: Math.max(handles.bottom, pointerY + content.bottom - (viewportHeight - margin))
+  };
 }

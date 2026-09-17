@@ -448,6 +448,8 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     void step(requested, event.key === "Home" ? 0 : event.key === "End" ? total - 1 : undefined);
   }, opts);
   const edgeScroll = createInspectionEdgeScroll({ signal: abort.signal,
+    readableBounds: () => ({ top: equationSlots[0]!.getBoundingClientRect().top,
+      bottom: equationSlots[total]!.getBoundingClientRect().bottom }),
     bounds: () => {
       const top = get(".energy-derivation-chain").getBoundingClientRect().top + (drag?.offset ?? 0);
       return { top: top + centers[0]!, bottom: top + centers[total]! };

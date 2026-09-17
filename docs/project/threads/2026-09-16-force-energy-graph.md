@@ -5,6 +5,17 @@ Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome
 
+Endpoint clipping repair: user reported clipped equations and graph explanations
+at drag extremes. The violated invariant was bounding page travel by handle
+centers rather than readable content. Both callers now supply measured content
+bounds to the shared edge-scroll controller. It may scroll past the handle's
+endpoint to expose the complete first/last content with 48px viewport clearance;
+semantic progress remains clamped. Unit checks cover this separation, and browser
+checks verify both equation endpoints and the expanded graph's final explanation.
+Release/cancel behavior is preserved. The initial new equation check timed out
+waiting for normal End playback; reduced-motion setup isolates endpoint exposure
+and the focused rerun passes. This corrects clipping within the existing treatment.
+
 Latest acceptance and approved extension: the user likes the text-coordinated
 graph. Extend it to long text with bounded sticky evidence, and add edge
 scrolling during active graph **and equation** drags. Ordinary scrolling must

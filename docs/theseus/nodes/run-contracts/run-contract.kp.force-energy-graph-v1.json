@@ -206,6 +206,20 @@
       "scope": "Final sticky and edge-scroll production build",
       "checkedAt": "2026-09-17T00:23:24.320Z",
       "notes": "Pass with existing chunk warnings. Closure: 44420 initial, 160956 activated JS/CSS gzip bytes; each +1285. HTML 45711 gzip, +872. No new dependency or idle sampling loop."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"edge scrolling|endpoint ink\"",
+      "status": "passed",
+      "scope": "Endpoint exposure regression",
+      "checkedAt": "2026-09-17T00:51:23.247Z",
+      "notes": "Graph and equation edge tests pass. New endpoint test initially timed out on normal End playback; changed setup to reduced motion to isolate geometry, then focused endpoint rerun passes. Both complete equation bounds and graph final explanation remain inside a 48px margin, without advancing past semantic endpoints."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Endpoint exposure types",
+      "checkedAt": "2026-09-17T00:51:33.625Z",
+      "notes": "Full types pass; focused inspection-edge-scroll unit tests and production build also pass. Build retains existing chunk warnings."
     }
   ],
   "allowedWork": [
