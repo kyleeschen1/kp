@@ -88,7 +88,7 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
     const staticDetail = available
       ? `<details data-refinement-static><summary>${available.plan === plans.fine ? plan.refinementLabel ?? "Smaller cancellation steps" : "Smaller norm-scaling steps"}</summary>${staticRefinement(available.plan, i)}</details><div class="energy-derivation-actions"><button type="button" data-refinement-expand="${step.id}"${available.plan === plans.fine ? "" : " data-refinement-norm"} hidden>Inspect smaller steps</button></div>` : "";
     const childPlan = plan.inspections?.[step.id];
-    const composedReason = childPlan ? `<details data-composed-reason><summary>See the two operations</summary>${childPlan.view.steps.map((child, j) =>
+    const composedReason = childPlan ? `<details data-composed-reason><summary>See the component operations</summary>${childPlan.view.steps.map((child, j) =>
       `<p><strong>${child.title}</strong></p>${html(child.cue)}${math(childPlan.view.states[j + 1]!)}${html(child.why)}`).join("")}</details>` : "";
     return `<div class="energy-derivation-interleave energy-derivation-reason" data-derivation-interleave="${i}" data-step-label="${node.label}"${node.depth === 1 ? ` data-parent-step="${node.parent.label}"` : ""} aria-label="Step ${node.label}: ${step.title}">${parent}<div class="energy-derivation-interleave-text"><strong><span data-transition-number>${node.label}</span> · ${step.title}</strong>${html(step.cue)}<details><summary>Why is this allowed?</summary>${html(step.why)}</details>${composedReason}${staticDetail}</div></div>`;
   };

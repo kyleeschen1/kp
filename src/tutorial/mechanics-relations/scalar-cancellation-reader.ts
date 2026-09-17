@@ -10,9 +10,12 @@ for (const article of document.querySelectorAll<HTMLElement>('[data-kp-article]'
     if (checked.status !== "checked") throw new Error(`${checked.code} at ${checked.path}`);
     // The browser reissues authority from source; it never trusts a transported
     // proof or imports the build-time governed compiler.
+    const plan = import("../../semantic/momentum-energy-derivation-plan.ts").then(module => ({
+      coarse: module.createScalarCancellationPlan(checked.model), unfold: module.unfoldDerivationInspection
+    }));
     enhanceEnergyDerivation(root, { async loadPlan(detail) {
-      const { createScalarCancellationPlan } = await import("../../semantic/momentum-energy-derivation-plan.ts");
-      return createScalarCancellationPlan(checked.model, detail);
+      const { coarse, unfold } = await plan;
+      return detail === "coarse" ? coarse : unfold(coarse, coarse.moves[0]!.id);
     } });
   } catch (error) {
     root.dataset["repair"] = "true";

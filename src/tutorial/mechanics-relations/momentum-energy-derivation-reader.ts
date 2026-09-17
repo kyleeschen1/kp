@@ -92,7 +92,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   }
   const prototype = initialRoot.cloneNode(true) as HTMLElement;
   const expansions = [...initialRoot.querySelectorAll<HTMLTemplateElement>("[data-refinement-view]")];
-  const unfold = initialRoot.dataset['derivationNamespace'] === 'energy' && detailMode === null
+  const unfold = (initialRoot.dataset['derivationNamespace'] === 'energy' && detailMode === null) || initialRoot.dataset['derivationNamespace'] === 'scalar'
     ? createEnergyRefinementUnfolding(initialRoot) : undefined;
   if (unfold) preserveEnergyDisclosureFocus(initialRoot);
   const pool = unfold ? createDerivationScenePool<PreparedScene>(initialRoot.querySelectorAll('[data-derivation-template]').length +
@@ -283,7 +283,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const rail = get<HTMLElement>("[data-derivation-rail]");
   // Energy is the review exemplar. Other derivations keep their accepted rail
   // until a second caller establishes which presentation choices should travel.
-  const refinedRail = root.dataset["derivationNamespace"] === "energy";
+  const refinedRail = ["energy", "scalar"].includes(root.dataset["derivationNamespace"] ?? "");
   const railStops = [...rail.querySelectorAll<HTMLElement>(':scope > span')];
   if (refinedRail) root.dataset["railRefinement"] = "true";
   let centers: number[] = [];
@@ -308,6 +308,8 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     handle.querySelector('span')!.textContent = "";
   }
   const total = rows.length - 1;
+  // The retained handle belongs to this view's interval count after unfolding.
+  handle.setAttribute('aria-valuemax', String(total));
   type Direction = "forward" | "rewind";
   let direction: Direction = "forward";
   let journey: { direction: Direction; target: number } | undefined;

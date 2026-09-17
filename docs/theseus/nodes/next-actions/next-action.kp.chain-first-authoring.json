@@ -544,6 +544,20 @@
       "scope": "chain.energy-review.focus",
       "checkedAt": "2026-09-17T19:45:34.011Z",
       "notes": "Post-disclosure drag reversal and keyboard-to-pointer regression reproduced before fix; six tests passed across Chromium Firefox WebKit after fix. Full npm run typecheck passed. Existing human checkpoint unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/scalar-cancellation-reader.test.ts tests/derivation-refinement-mapping.test.ts",
+      "status": "passed",
+      "scope": "chain.scalar-transfer",
+      "checkedAt": "2026-09-17T19:56:50.805Z",
+      "notes": "Ten tests passed, including strict issued-child mapping and rejection of matching but separately issued children."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"scalar reader reuses|scalar compact inspection|scalar missing|scalar source mismatch|scalar static|nonterminal unfolding|disclosure preserves the handle outline\"",
+      "status": "passed",
+      "scope": "chain.scalar-transfer",
+      "checkedAt": "2026-09-17T19:56:52.035Z",
+      "notes": "Seven Chromium checks passed. Full npm run typecheck passed. Retained slider maximum bug repaired; static cancellation selector updated for two energy disclosures."
     }
   ],
   "progress": {

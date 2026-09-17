@@ -65,7 +65,8 @@
     {
       "id": "chain.scalar-transfer",
       "title": "Scalar-transfer",
-      "status": "planned"
+      "summary": "Checked scalar in-place unfolding, mapped interior inspection, exact return and retained nodes verified.",
+      "status": "complete"
     },
     {
       "id": "chain.scalar-variation",

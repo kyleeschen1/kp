@@ -1,5 +1,5 @@
 import { checkScalarCancellation } from "../../../domains/public-api.ts";
-import { createScalarCancellationPlan } from "../../semantic/momentum-energy-derivation-plan.ts";
+import { createScalarCancellationPlan, unfoldDerivationInspection } from "../../semantic/momentum-energy-derivation-plan.ts";
 import { createKpArticleSource } from "../../article/kp-article-source.ts";
 import { resolveKpArticleImports } from "../../article/kp-article-import-lock.ts";
 import { compileKpArticleDocument } from "../../article/kp-article-document.ts";
@@ -20,7 +20,8 @@ export function compileScalarCancellationPublication(markdown: string, input: un
   const { lock } = resolveKpArticleImports(source, []);
   const article = compileKpArticleDocument({ source, registry: [], lock });
   const revision = sha256(JSON.stringify({ document: article.document, source: checked.model.source }));
-  const plans = { coarse: createScalarCancellationPlan(checked.model), fine: createScalarCancellationPlan(checked.model, "mass-refinement") };
+  const coarse = createScalarCancellationPlan(checked.model);
+  const plans = { coarse, fine: unfoldDerivationInspection(coarse, coarse.moves[0]!.id) };
   const blocks = article.document.blocks.map(block => {
     if (block.kind !== "markdown" && block.kind !== "passage") throw new Error("Scalar reading supports prose and its checked derivation, not arbitrary motion");
     return block;

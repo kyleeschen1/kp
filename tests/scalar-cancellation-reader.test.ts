@@ -3,12 +3,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { checkScalarCancellation, scalarCancellationSource, scalarCancellationView, checkMomentumEnergyDerivation,
   momentumEnergyDerivationSource } from "../domains/public-api.ts";
-import { createScalarCancellationPlan, assertEnergyDerivationPlan, type EnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
+import { createScalarCancellationPlan, assertEnergyDerivationPlan, unfoldDerivationInspection, type EnergyDerivationPlan } from "../src/semantic/momentum-energy-derivation-plan.ts";
 import { compileScalarCancellation } from "../src/authoring/momentum-energy-derivation-authoring.ts";
 import { createDerivationOutline } from "../src/tutorial/mechanics-relations/energy-derivation-outline.ts";
 import { renderCheckedDerivationPassage } from "../src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts";
 import { compileScalarCancellationPublication, scalarCancellationArticlePath, scalarCancellationSourcePath } from "../src/tutorial/mechanics-relations/scalar-cancellation-publication.ts";
-import { createDerivationInspectionComposition } from "../src/animation/derivation-inspection-composition.ts";
+import { createDerivationInspectionComposition, createDerivationRefinementMapping } from "../src/animation/derivation-inspection-composition.ts";
 
 const checked = () => {
   const result = checkScalarCancellation(scalarCancellationSource);
@@ -16,6 +16,22 @@ const checked = () => {
   return result.model;
 };
 const chain = (states: readonly string[]) => String.raw`$$\begin{aligned}${states.join(String.raw`\\`)}\end{aligned}$$`;
+
+test("scalar unfolding transfers only the parent's own issued child positions", () => {
+  const model = checked(), coarse = createScalarCancellationPlan(model);
+  const fine = unfoldDerivationInspection(coarse, coarse.moves[0]!.id);
+  assert.equal(fine.compactInspection, "atomic");
+  const mapping = createDerivationRefinementMapping(coarse, fine);
+  assert.deepEqual(mapping.rows, [{ coarse: 0, fine: 0 }, { coarse: 1, fine: 3 }]);
+  for (const [progress, index] of [[.1, 0], [.5, 1], [.9, 2]] as const) {
+    const position = mapping.mapAlgebra(progress)!;
+    assert.equal(position.transition, fine.moves[index]!.id);
+    assert.ok(Math.abs(position.progress - (progress * 3 - index)) < 1e-12);
+  }
+  // Matching equations alone do not grant an interior correspondence.
+  const separate = createScalarCancellationPlan(model, "mass-refinement");
+  assert.equal(createDerivationRefinementMapping(coarse, separate).mapAlgebra(.5), undefined);
+});
 
 test("compact inspection retains the checked causal children and coefficient lineage", () => {
   const model = checked(), coarse = createScalarCancellationPlan(model), fine = createScalarCancellationPlan(model, "mass-refinement");

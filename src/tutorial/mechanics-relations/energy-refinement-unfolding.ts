@@ -1,8 +1,8 @@
-/** Exemplar-only DOM continuity. Publication supplies checked row membership;
+/** Checked passage DOM continuity. Publication supplies checked row membership;
  * equation equality and proportional rail positions cannot create correspondence. */
 export function createEnergyRefinementUnfolding(root: HTMLElement) {
   const rows = [...root.querySelectorAll<HTMLElement>('[data-derivation-row]')];
-  if (root.dataset['derivationNamespace'] !== 'energy') throw new Error('Expected energy exemplar');
+  if (!['energy', 'scalar'].includes(root.dataset['derivationNamespace'] ?? '')) throw new Error('Unsupported unfolding caller');
   const equations = rows.map(row => row.querySelector<HTMLElement>('.energy-derivation-equation')!);
   const explanations = rows.map(row => row.querySelector<HTMLElement>('.energy-derivation-interleave-text'));
   const handle = root.querySelector<HTMLElement>('[data-derivation-handle]')!;

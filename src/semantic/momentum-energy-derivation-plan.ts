@@ -92,7 +92,7 @@ export function unfoldDerivationInspection(plan: EnergyDerivationPlan, parentId:
     proof: Object.freeze([...plan.view.proof, ...child.view.proof]), refinement
   });
   const expanded: EnergyDerivationPlan = Object.freeze({ ...plan, view, moves: Object.freeze(moves),
-    packId: child.packId, artifactId: child.artifactId });
+    compactInspection: "atomic", packId: child.packId, artifactId: child.artifactId });
   issued.add(expanded);
   return expanded;
 }
@@ -227,11 +227,17 @@ export function createScalarCancellationPlan(model: CheckedScalarCancellation, d
   const plan: EnergyDerivationPlan = Object.freeze({ [issuedPlan]: true as const, model, namespace: "scalar", artifactId: "algebra.scalar-cancellation", packId: `project.algebra.scalar-cancellation.${detail}`, operationPrefix: "algebra.scalar",
     title: "Why does one denominator factor remain?", assumptions: Object.freeze([`${model.source.factor}>0; ${model.source.numerator} is real`]),
     notation: Object.freeze({ result: model.source.result, factor: model.source.factor, numerator: `${model.source.numerator}^2` }),
-    coefficientGranularity: "factors", compactInspection: detail === "coarse" ? "refinement" : "atomic",
+    coefficientGranularity: "factors", compactInspection: detail === "coarse" ? "refinement" : "atomic", refinementDefault: true,
     cancellationScore: Object.freeze({ kind: "explanatory", purpose: "expose-factor-cancellation" }),
     sourceRevision: sha256(JSON.stringify(model.source)), view, majorSteps: view.majorSteps, moves: Object.freeze(moves) });
   issued.add(plan);
-  return plan;
+  if (detail !== "coarse") return plan;
+  // The compact and unfolded readers must consume the very same issued
+  // children before an interior inspection position can be transferred.
+  const composed: EnergyDerivationPlan = Object.freeze({ ...plan,
+    inspections: Object.freeze({ [moves[0]!.id]: createScalarCancellationPlan(model, "mass-refinement") }) });
+  issued.add(composed);
+  return composed;
 }
 
 /** Shared topology, licensed independently by each domain. Legacy role names

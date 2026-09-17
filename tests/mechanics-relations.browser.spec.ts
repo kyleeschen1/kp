@@ -1416,6 +1416,7 @@ test("fluent physics cancellation keeps its carriers, omits identity stops and o
 });
 
 test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collapse with exact return", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto(scalarRoute);
@@ -1425,12 +1426,18 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
   await expect(root.locator("[data-transition-number]")).toHaveText(["1"]);
   await expect(root.locator("[data-derivation-recall]")).toHaveCount(0);
   await dragTo(page, root, .55);
+  const retained = await root.evaluateHandle(el => ({ root: el, handle: el.querySelector('[data-derivation-handle]'),
+    equations: [...el.querySelectorAll('.energy-derivation-equation')], prose: el.querySelector('.energy-derivation-interleave-text') }));
   const held = await root.getAttribute("data-progress");
   await root.screenshot({ path: info.outputPath("scalar-coarse.png") });
   await root.locator("[data-refinement-expand]:not([data-refinement-norm])").click();
   await expect(root).toHaveAttribute("data-derivation-detail", "mass-refinement");
-  await expect(root.locator("[data-transition-number]")).toHaveText(["1.1", "1.2", "1.3"]);
-  await expect(root.locator("[data-nested-context]")).toContainText("Inside step 1");
+  await expect(root.locator("[data-transition-number]")).toHaveText(["1", "1.1", "1.2", "1.3"]);
+  await expect(root).toHaveAttribute('data-refinement-unfolding', 'true');
+  await expect(lens(root)).toBeEnabled();
+  await expect(root).toHaveAttribute('data-move', '1');
+  expect(await retained.evaluate(state => state.root.isConnected && state.handle?.isConnected &&
+    state.prose?.isConnected && state.equations.every(equation => equation.isConnected))).toBe(true);
   await expect(lens(root)).toHaveAttribute("aria-valuemax", "3");
   for (const position of [.55, 1.55, 2.55, 3, 2.55, 1.55, .55, 0]) {
     await dragTo(page, root, position);
@@ -1446,6 +1453,8 @@ test("scalar reader reuses canonical motion, 1.1–1.3 outline and local collaps
   await expect(root).toHaveAttribute("data-progress", held!);
   await expect(root.locator("[data-refinement-expand]:not([data-refinement-norm])")).toBeFocused();
   await expect(root.locator("[data-derivation-row]")).toHaveCount(2);
+  expect(await retained.evaluate(state => state.root.isConnected && state.handle?.isConnected &&
+    state.prose?.isConnected && state.equations.every(equation => equation.isConnected))).toBe(true);
   expect(errors).toEqual([]);
 });
 
@@ -1552,7 +1561,7 @@ test("scalar static reading and shared style repairs work without JavaScript for
     // One presentation token changes both fresh documents. No caller-specific
     // CSS or edits to mathematical source are needed for this repair.
     await expect(root.locator(".energy-derivation-interleave-text").first()).toHaveCSS("max-width", "256px");
-    const detail = root.locator("[data-refinement-static]");
+    const detail = root.locator("[data-refinement-static]").last();
     await detail.locator("summary").click();
     await expect(detail.locator("[data-static-transition-number]")).toHaveCount(3);
     await page.emulateMedia({ media: "print" });
