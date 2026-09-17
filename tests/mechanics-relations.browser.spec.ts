@@ -2,6 +2,98 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("equation geometry survives font resizing without a width change", async ({ page }) => {
+  await page.setViewportSize({ width: 1100, height: 1100 });
+  const root = await ready(page), handle = lens(root);
+  await root.evaluate(el => { el.style.width = `${el.getBoundingClientRect().width}px`; });
+  await dragTo(page, root, .4);
+  const progress = await handle.getAttribute('aria-valuenow');
+  const width = (await root.boundingBox())!.width;
+  for (const size of [24, 16, 28]) {
+    await page.evaluate(value => { document.documentElement.style.fontSize = `${value}px`; }, size);
+    await expect.poll(async () => {
+      const slots = await root.locator('.energy-derivation-equation').evaluateAll(els => els.map(el => { const b = el.getBoundingClientRect(); return b.top + b.height / 2; }));
+      const b = (await handle.boundingBox())!;
+      return Math.abs(b.y + b.height / 2 - (slots[0]! + .4 * (slots[1]! - slots[0]!)));
+    }).toBeLessThan(1.5);
+    expect((await root.boundingBox())!.width).toBeCloseTo(width, 1);
+    await expect(handle).toBeEnabled();
+    await expect(handle).toHaveAttribute('aria-valuenow', progress!);
+  }
+});
+
+test("one held equation drag reaches both readable extremes without keyboard docking", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  for (const namespace of ['energy', 'power']) {
+    await page.goto(`${route}#${namespace === 'energy' ? 'energy-from-momentum' : 'force-to-energy'}`);
+    const root = page.locator(`[data-derivation-namespace="${namespace}"]`), handle = lens(root);
+    await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; });
+    await expect(handle).toBeEnabled();
+    await handle.scrollIntoViewIfNeeded();
+    const b = (await handle.boundingBox())!, x = b.x + b.width / 2;
+    await page.mouse.move(x, b.y + b.height / 2); await page.mouse.down();
+    await page.mouse.move(x, 638, { steps: 12 });
+    const last = root.locator('.energy-derivation-equation').last();
+    await expect.poll(async () => { const box = (await last.boundingBox())!; return box.y + box.height; }, { timeout: 15000 }).toBeLessThanOrEqual(603);
+    await expect(handle).toHaveAttribute('aria-valuenow', await handle.getAttribute('aria-valuemax') ?? '');
+    await page.mouse.move(x, 10, { steps: 12 });
+    await expect.poll(async () => -(await root.boundingBox())!.y, { timeout: 15000 }).toBeLessThanOrEqual(-95);
+    await expect(handle).toHaveAttribute('aria-valuenow', '0');
+    await page.mouse.up();
+  }
+});
+
+test("expanded equation font resizing cancels a held drag and rebuilds at the same position", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 1800 });
+  const root = await ready(page), handle = lens(root);
+  await root.locator('[data-refinement-expand]').click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
+  await expect(handle).toBeEnabled();
+  await dragTo(page, root, 3.5, false);
+  await expect(root).toHaveAttribute('data-derivation-dragging', 'true');
+  const progress = await handle.getAttribute('aria-valuenow');
+  const scenes = await root.evaluateHandle(el => [...el.querySelectorAll('.energy-derivation-stage')]);
+  await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; });
+  await expect(root).not.toHaveAttribute('data-derivation-dragging', 'true');
+  await expect.poll(() => scenes.evaluate(els => els.every(el => !el.isConnected))).toBe(true);
+  await expect(handle).toBeEnabled();
+  await expect(handle).toHaveAttribute('aria-valuenow', progress!);
+  await page.mouse.move(200, 1790);
+  const stopped = await page.evaluate(() => scrollY);
+  await page.waitForTimeout(160);
+  expect(await page.evaluate(() => scrollY)).toBe(stopped);
+  await expect(handle).toHaveAttribute('aria-valuenow', progress!);
+  await page.mouse.up();
+  await dragTo(page, root, 3.2);
+  await expect.poll(async () => Number(await handle.getAttribute('aria-valuenow'))).toBeCloseTo(3.2, 2);
+  await expect(root.locator('.energy-derivation-stage')).toHaveCount(7);
+  await scenes.dispose();
+});
+
+test("long graph font resizing cancels edge scrolling and preserves inspection", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  await page.goto(`${route}#momentum-move`);
+  const root = page.locator('[data-momentum-move]'), slider = root.locator('[data-move-seek]');
+  for (const detail of await root.locator('[data-move-depth]').all()) await detail.locator('summary').click();
+  await root.locator('.momentum-move-layout').evaluate(el => el.scrollIntoView({ block: 'start' }));
+  const box = (await slider.boundingBox())!, x = box.x + box.width / 2;
+  await page.mouse.move(x, box.y + 10); await page.mouse.down(); await page.mouse.move(x, 635);
+  const initial = await page.evaluate(() => scrollY);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(initial + 40);
+  await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; });
+  await page.waitForTimeout(160);
+  const progress = await slider.inputValue(), stopped = await page.evaluate(() => scrollY);
+  await page.mouse.move(x, 638); await page.waitForTimeout(160);
+  expect(await page.evaluate(() => scrollY)).toBe(stopped);
+  await expect(slider).toHaveValue(progress);
+  await page.mouse.up();
+  await slider.evaluate(el => { (el as HTMLInputElement).value = '1'; el.dispatchEvent(new Event('input')); const b = el.getBoundingClientRect(); scrollBy(0, b.bottom - 648); });
+  const end = (await slider.boundingBox())!;
+  await page.mouse.move(end.x + end.width / 2, end.y + end.height - 10); await page.mouse.down();
+  await expect.poll(async () => { const b = (await root.locator('.momentum-move-argument').boundingBox())!; return b.y + b.height; }).toBeLessThanOrEqual(603);
+  await page.mouse.up();
+});
+
 test("long graph argument keeps bounded sticky evidence and extends a held drag with edge scrolling", async ({ page }, info) => {
   await page.setViewportSize({ width: 1000, height: 650 });
   await page.goto(`${route}#momentum-move`);

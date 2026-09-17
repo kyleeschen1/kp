@@ -4,18 +4,19 @@ import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge
 import { momentumMoveArrow, projectMomentumMove } from "./momentum-move.ts";
 
 export function enhanceMomentumMove(root: HTMLElement) {
-  const require = <T extends Element>(selector: string) => {
+  const binding = <T extends Element>(selector: string) => {
     const element = root.querySelector<T>(selector);
     if (!element) throw new Error(`Missing momentum move binding: ${selector}`);
     return element;
   };
-  const checked = checkMomentumEnergy(JSON.parse(require('[data-move-source]').textContent ?? "null"));
+  const checked = checkMomentumEnergy(JSON.parse(binding('[data-move-source]').textContent ?? "null"));
   if (checked.status !== "checked") throw new Error(checked.code);
-  const slider = require<HTMLInputElement>('[data-move-seek]');
-  const pointerSurface = require<HTMLElement>('[data-move-pointer]');
-  const details = require<HTMLDetailsElement>('details'), summary = require<HTMLElement>('summary');
-  const arrow = require<SVGPathElement>('[data-move-arrow]');
-  const close = require<HTMLButtonElement>('[data-move-close]');
+  const slider = binding<HTMLInputElement>('[data-move-seek]');
+  const pointerSurface = binding<HTMLElement>('[data-move-pointer]');
+  const details = binding<HTMLDetailsElement>('details'), summary = binding<HTMLElement>('summary');
+  const arrow = binding<SVGPathElement>('[data-move-arrow]');
+  const close = binding<HTMLButtonElement>('[data-move-close]');
+  const argument = binding<HTMLElement>('.momentum-move-argument');
   const bindings = Array.from(root.querySelectorAll('[data-move-entity]'));
   const clock = createKpReaderTimelinePlaybackClock({ id: "momentum.move", durationMs: 1000 });
   const abort = new AbortController(), options = { signal: abort.signal };
@@ -35,7 +36,7 @@ export function enhanceMomentumMove(root: HTMLElement) {
     return { top: box.top + 10, bottom: box.bottom - 10 };
   };
   const edgeScroll = createInspectionEdgeScroll({ signal: abort.signal,
-    readableBounds: () => require<HTMLElement>('.momentum-move-argument').getBoundingClientRect(),
+    readableBounds: () => argument.getBoundingClientRect(),
     bounds: () => { const box = range(); return { top: box.top + (drag?.offset ?? 0), bottom: box.bottom + (drag?.offset ?? 0) }; },
     sample: clientY => {
       if (!drag) return;
@@ -99,10 +100,19 @@ export function enhanceMomentumMove(root: HTMLElement) {
     if (event.persisted) return;
     stickySize.disconnect(); abort.abort(); off(); clock.dispose();
   }, options);
-  const figure = require<HTMLElement>('figure');
+  const figure = binding<HTMLElement>('figure');
   const fitSticky = () => { figure.dataset['stickyFit'] = String(figure.getBoundingClientRect().height + 32 < window.innerHeight); };
   const stickySize = new ResizeObserver(fitSticky); stickySize.observe(figure);
+  // Text zoom changes the track without a window resize. Retire the old grip
+  // rather than letting reflow become an unintended semantic seek.
+  let argumentHeight = argument.getBoundingClientRect().height;
+  const argumentSize = new ResizeObserver(() => {
+    const next = argument.getBoundingClientRect().height;
+    if (Math.abs(next - argumentHeight) > .5) { argumentHeight = next; stopDrag(); }
+  });
+  argumentSize.observe(argument);
+  abort.signal.addEventListener('abort', () => argumentSize.disconnect(), { once: true });
   window.addEventListener('resize', fitSticky, options);
-  require<HTMLElement>('[data-move-gutter]').hidden = false; close.hidden = false; require<HTMLElement>('[data-move-instruction]').hidden = false;
+  binding<HTMLElement>('[data-move-gutter]').hidden = false; close.hidden = false; binding<HTMLElement>('[data-move-instruction]').hidden = false;
   paint(); restore();
 }

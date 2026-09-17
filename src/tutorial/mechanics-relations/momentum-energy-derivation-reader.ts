@@ -384,6 +384,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     } finally {
       created?.dispose(); candidate?.remove();
       for (const scene of pending) { scene.session.dispose(); scene.element.remove(); }
+      scheduleGeometry();
     }
   }
   const play = (requested: Direction) => {
@@ -576,23 +577,44 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     if (!entries[0]?.isIntersecting) pause();
     else if (!session && !loading && !seeking && root.dataset["repair"] !== "true") void seekPosition(0);
   }); visibility.observe(root);
-  // Our own cue/control disclosure changes height. Only available width
-  // invalidates equation geometry; rebuilding on height could interrupt Next.
-  let width = root.getBoundingClientRect().width;
-  const resize = new ResizeObserver(entries => {
-    const nextWidth = entries[0]?.contentRect.width;
-    if (nextWidth === undefined || Math.abs(nextWidth - width) < .5) return;
-    width = nextWidth;
-    if (tracing && session && !loading) {
-      cancelDrag();
-      const progress = clock.getSnapshot().progress;
-      retire(); void mount(selected, progress);
-    }
-  }); resize.observe(root);
+  // Font-only zoom can change native ink and row spacing at unchanged width.
+  // Observe stationary records, never moving compositor paint. Only native
+  // metric changes rebuild scenes; prose reflow just remeasures the rail.
+  const nativeInk = equationSlots.flatMap(slot => [...slot.querySelectorAll<HTMLElement>('.katex-html > .base')]);
+  const nativeMetrics = () => JSON.stringify([root.getBoundingClientRect().width,
+    ...equationSlots.flatMap(slot => {
+      const box = slot.getBoundingClientRect(), font = getComputedStyle(slot.querySelector('.katex')!);
+      return [box.width, box.height, font.font, font.letterSpacing];
+    }), ...nativeInk.flatMap(ink => { const box = ink.getBoundingClientRect(); return [box.width, box.height]; })]);
+  let metrics = nativeMetrics(), fontRevision = 0, measuredFontRevision = 0;
+  let geometryFrame: number | undefined;
+  const scheduleGeometry = () => {
+    if (abort.signal.aborted || geometryFrame !== undefined) return;
+    geometryFrame = requestAnimationFrame(() => {
+      geometryFrame = undefined;
+      if (abort.signal.aborted || loading || seeking) return;
+      const next = nativeMetrics();
+      if (next !== metrics || fontRevision !== measuredFontRevision) {
+        metrics = next; measuredFontRevision = fontRevision;
+        cancelDrag(); journey = undefined; clock.pause();
+        if (tracing && session) {
+          const progress = clock.getSnapshot().progress;
+          retire(); void mount(selected, progress); return;
+        }
+      }
+      const origin = get('.energy-derivation-chain').getBoundingClientRect().top;
+      const shifted = equationSlots.some((slot, i) => { const box = slot.getBoundingClientRect(); return Math.abs(box.top - origin + box.height / 2 - centers[i]!) > .5; });
+      if (shifted) { cancelDrag(); measureRows(); project(); }
+    });
+  };
+  const resize = new ResizeObserver(scheduleGeometry);
+  [root, ...equationSlots, ...nativeInk, ...interleaves].forEach(element => resize.observe(element));
+  document.fonts.addEventListener('loadingdone', () => { fontRevision++; scheduleGeometry(); }, opts);
   let disposed = false;
   const dispose = () => {
     if (disposed) return;
     disposed = true;
+    if (geometryFrame !== undefined) cancelAnimationFrame(geometryFrame);
     pause(); retire(); visibility.disconnect(); resize.disconnect(); abort.abort(); clock.dispose();
   };
   window.addEventListener("pagehide", event => { pause(); if (!event.persisted) dispose(); }, opts);

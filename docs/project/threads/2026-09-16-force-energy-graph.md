@@ -5,6 +5,33 @@ Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome
 
+Font-resize repair: the user reported that both extremes still failed and asked
+for resizing robustness. A browser reproduction at unchanged reader width found
+the equation handle about 59.6px away from its intended row interpolation after
+enlarging text. The reader had invalidated native geometry only on width changes.
+It now observes stationary equation ink, equation slots and prose layout, rebuilds
+native scenes when their metrics or loaded fonts change, and remeasures row
+positions after prose reflow. Rebuilding retains the semantic position. Geometry
+changes retire an active grip and its edge scrolling; the next drag uses fresh
+measurements. The graph likewise cancels its grip when text reflows its track.
+Observers and queued work are disposed with their reader. Moving compositor
+paint is excluded, so ordinary cross-step dragging does not rebuild scenes.
+
+Regression coverage changes root font size through 24px, 16px and 28px while
+holding reader width fixed; resizes expanded equations during a captured drag;
+resizes long graph prose during edge scrolling; and reaches both equation ends
+with one uninterrupted drag at 24px. Tests also preserve native scene reuse
+across normal expanded-step crossings. An initial post-repair assertion compared
+a floating-point pointer position to the literal string `0.4`; it now compares
+the actual pre-resize position. Architecture verification found the DOM helper
+name `require` was being read as a module import; renaming it `binding` removes
+the ambiguity without weakening the checker. This is a geometry/lifecycle repair
+within the existing exemplar, not a new visual treatment or code rollout.
+Final verification: 14 focused Chromium/Firefox cases pass, as do the expanded
+cross-step preservation check, final graph smoke, full types, architecture gates,
+two edge-scroll unit laws and production build (existing global chunk warnings).
+This does not claim real-device touch or full cross-browser certification.
+
 Upper-padding follow-up: the user requested more room above equations. The
 equation caller reserves an additional 48px above its opening bound, giving at
 least 96px top clearance with the shared margin. The bottom remains unchanged.

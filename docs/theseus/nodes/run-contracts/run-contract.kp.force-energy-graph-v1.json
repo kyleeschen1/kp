@@ -227,6 +227,20 @@
       "scope": "Equation upper padding follow-up",
       "checkedAt": "2026-09-17T00:59:25.695Z",
       "notes": "First equation/derivation gets at least 96px top clearance; bottom clearance and clamped endpoint progress preserved. Focused browser regression passes."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --grep \"font resizing|one held equation|equation edge scrolling|equation endpoint ink|long graph argument\"",
+      "status": "passed",
+      "scope": "font-resize-geometry",
+      "checkedAt": "2026-09-17T01:14:32.952Z",
+      "notes": "14 Chromium/Firefox cases passed: fixed-width text resizing, expanded drag cancellation with preserved position, graph reflow cancellation and renewed edge dragging, enlarged-text held traversal, existing endpoint/release behavior. Before repair, fixed-width font resizing reproduced a 59.6px handle error. Expanded cross-step scene reuse also passed the separate focused Chromium check."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run build:bundle; node --disable-warning=ExperimentalWarning --test tests/inspection-edge-scroll.test.ts",
+      "status": "passed",
+      "scope": "font-resize-preservation",
+      "checkedAt": "2026-09-17T01:15:33.891Z",
+      "notes": "Final full types, architecture gates, bundle build and two edge-scroll laws pass. Build retains existing global chunk-size warnings. Final graph resize smoke passes after DOM binding-helper rename. Before repair, architecture interpreted selector calls named require as module imports; renamed the helper without changing the checker."
     }
   ],
   "allowedWork": [
