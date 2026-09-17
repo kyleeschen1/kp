@@ -69,10 +69,12 @@ function compilePair(source: FractionChainSource, index: number, semantic: KpEqu
   const from = source.states[index]!, to = source.states[index + 1]!;
   const first = { id: fractionChainStateId(source, from), latex: from.latex };
   const last = { id: fractionChainStateId(source, to), latex: to.latex };
-  if (alignment && alignment.equivalenceMultipliers[1].numerator !== 1n)
-    throw new FractionChainRepair("fraction-chain.presentation", `$.moves[${index}]`, "The current alignment construction preserves the second fraction; two-sided scaling needs its own checked construction.");
   const intermediate = alignment ? { id: alignment.target.stateId,
-    latex: `\\frac{${alignment.equivalenceMultipliers[0].numerator}*${alignment.source.terms[0].numerator.value}}{${alignment.equivalenceMultipliers[0].denominator}*${alignment.source.terms[0].denominator.value}}+\\frac{${alignment.source.terms[1].numerator.value}}{${alignment.source.terms[1].denominator.value}}` } : undefined;
+    latex: alignment.source.terms.map((term, index) => {
+      const factor = alignment.equivalenceMultipliers[index]!;
+      return factor.numerator === 1n ? `\\frac{${term.numerator.value}}{${term.denominator.value}}`
+        : `\\frac{${factor.numerator}*${term.numerator.value}}{${factor.denominator}*${term.denominator.value}}`;
+    }).join("+") } : undefined;
   // Scaling and arithmetic evaluation have different owners. Keep both checked
   // adjacencies inside the coarse authored move, with the original final ID.
   const request: KpEquationTransformSeriesRequest = { schemaVersion: "kp.equation-transform-series-request.v1", kind: "equation-transform-series-request",

@@ -175,6 +175,9 @@ export function compileKpFractionEquivalencePresentationPlan(
       "Fraction-equivalence presentation requires verifier-minted semantic truth."
     );
   }
+  // Material occurrences belong to the checked operation instance. Two
+  // fractions may introduce unit factors in the same native equation.
+  const occurrenceId = (id: string) => semantic === kpCanonicalFractionEquivalence ? id : `${semantic.id}.${id}`;
   const mode = options.mode ?? "explain-unit-factor";
   const sourceSelectorIds = Object.freeze([
     semantic.source.fractionEntityId,
@@ -204,16 +207,14 @@ export function compileKpFractionEquivalencePresentationPlan(
   const operationMaterialSelectorIds = explanatory
     ? Object.freeze([
         semantic.factor.entityId,
-        kpFractionEquivalencePresentationOccurrenceIds.unitFactorNumerator,
-        kpFractionEquivalencePresentationOccurrenceIds.unitFactorDenominator,
-        kpFractionEquivalencePresentationOccurrenceIds.unitFactorDivision
+        occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.unitFactorNumerator),
+        occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.unitFactorDenominator),
+        occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.unitFactorDivision)
       ])
     : Object.freeze([
         semantic.factor.entityId,
-        kpFractionEquivalencePresentationOccurrenceIds
-          .pairedOperationNumerator,
-        kpFractionEquivalencePresentationOccurrenceIds
-          .pairedOperationDenominator
+        occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.pairedOperationNumerator),
+        occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.pairedOperationDenominator)
       ]);
   requireUnique(sourceSelectorIds, "source selector");
   requireUnique(operationMaterialSelectorIds, "operation material selector");
@@ -226,8 +227,8 @@ export function compileKpFractionEquivalencePresentationPlan(
         relation: "paired-occurrences",
         sourceSemanticEntityId: semantic.factor.entityId,
         sourceOccurrenceEntityIds: [
-          kpFractionEquivalencePresentationOccurrenceIds.unitFactorNumerator,
-          kpFractionEquivalencePresentationOccurrenceIds.unitFactorDenominator
+          occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.unitFactorNumerator),
+          occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.unitFactorDenominator)
         ],
         targetEntityIds: targetFactorIds,
         targetRoles,
@@ -239,10 +240,8 @@ export function compileKpFractionEquivalencePresentationPlan(
         relation: "paired-occurrences",
         sourceSemanticEntityId: semantic.factor.entityId,
         sourceOccurrenceEntityIds: [
-          kpFractionEquivalencePresentationOccurrenceIds
-            .pairedOperationNumerator,
-          kpFractionEquivalencePresentationOccurrenceIds
-            .pairedOperationDenominator
+          occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.pairedOperationNumerator),
+          occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.pairedOperationDenominator)
         ],
         targetEntityIds: targetFactorIds,
         targetRoles,
@@ -255,7 +254,7 @@ export function compileKpFractionEquivalencePresentationPlan(
           "correspondence.fraction-equivalence.division",
         relation: "many-to-one",
         sourceDivisionEntityIds: [
-          kpFractionEquivalencePresentationOccurrenceIds.unitFactorDivision,
+          occurrenceId(kpFractionEquivalencePresentationOccurrenceIds.unitFactorDivision),
           semantic.source.divisionEntityId
         ],
         targetDivisionEntityIds: [semantic.target.divisionEntityId]

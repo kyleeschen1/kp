@@ -25,6 +25,9 @@ import type { KpEquationTransformSeriesRequest } from
   "../src/authoring/equation-transform-series-request.ts";
 import { kpCanonicalCommonDenominatorAlignment } from
   "../src/semantic/fraction-common-denominator.ts";
+import both from "../examples/algebra/fraction-chain-two-sided.json" with { type: "json" };
+import { readFractionChainSource } from "../src/authoring/fraction-chain-source.ts";
+import { bindFractionChainAlignment } from "../src/authoring/fraction-chain-alignment.ts";
 
 const adjacencyId = "adjacency.common-denominator.canonical";
 const source = createKpEquationSeriesCommonDenominatorSemanticSource({
@@ -32,6 +35,32 @@ const source = createKpEquationSeriesCommonDenominatorSemanticSource({
   revisionId: "revision.common-denominator.canonical.v1",
   adjacencyId,
   transformation: kpCanonicalCommonDenominatorAlignment
+});
+
+test("two-sided alignment cannot smuggle a changed addend into an untouched role or hide its product", () => {
+  const parsed = readFractionChainSource(both);
+  assert.equal(parsed.status, "parsed");
+  const authority = bindFractionChainAlignment(parsed.source, 0);
+  const source = createKpEquationSeriesCommonDenominatorSemanticSource({
+    sourceId: "source.both", revisionId: "revision.both", adjacencyId, transformation: authority
+  });
+  const request: KpEquationTransformSeriesRequest = { ...proposedRequest(),
+    states: [{ id: authority.source.stateId, latex: "1/6+1/8" }, { id: authority.target.stateId, latex: "(4*1)/(4*6)+(3*1)/(3*8)" }],
+    adjacencies: [{ id: adjacencyId, fromStateId: authority.source.stateId, toStateId: authority.target.stateId,
+      intent: { mode: "proposed", instruction: "Scale each fraction." } }] };
+  const proposals = [{ adjacencyId, kind: "single" as const, operationId: KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID }];
+  const bound = bindKpEquationSeriesGovernedRequest({ request, proposals, sources: [source] });
+  assert.equal(bound.status, "bound");
+  assert.equal(compileKpEquationTransformSeries({ value: bound.request, governedSources: [source] }).status, "compiled");
+  for (const latex of ["(4*1)/(4*6)+3/24", "(4*1)/(4*6)+1/8", "(3*1)/(3*8)+(4*1)/(4*6)"]) {
+    const changed: KpEquationTransformSeriesRequest = { ...bound.request, states: [bound.request.states[0]!, { id: authority.target.stateId, latex }] };
+    assert.equal(compileKpEquationTransformSeries({ value: changed, governedSources: [source] }).status, "repair-required");
+  }
+  assert.ok(source.adjacencyEvidence);
+  const falseRoles = { ...source, adjacencyEvidence: source.adjacencyEvidence.map(evidence => ({ ...evidence,
+    roleBindings: { ...evidence.roleBindings, "untouched-second-term": [authority.source.terms[1].termEntityId, authority.target.terms[1].termEntityId] }
+  })) };
+  assert.equal(bindKpEquationSeriesGovernedRequest({ request, proposals, sources: [falseRoles] }).status, "repair-required");
 });
 
 test("planner sees one canonical name while source aliases normalize", () => {

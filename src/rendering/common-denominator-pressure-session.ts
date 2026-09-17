@@ -275,6 +275,7 @@ async function prepareSurface(
       target: productTarget,
       semantic: plan.equivalence.focus.semantic,
       presentation: plan.equivalence.focus.presentation,
+      ...(plan.companion ? { companion: { semantic: plan.companion.focus.semantic, presentation: plan.companion.focus.presentation } } : {}),
       contextRelations: equivalenceContextRelations(plan)
     });
     const evaluation = createKpCanonicalNativeKatexSceneSession(
@@ -487,11 +488,13 @@ function applyFrame(
 
 function introductionRelations(plan: KpCommonDenominatorPressurePresentationPlan):
 readonly KpNativeKatexSemanticPaintRelation[] {
-  const local = plan.equivalence.focus.semantic.source;
   return Object.freeze([
-    same("intro.first.numerator", local.numerator.entityId),
-    same("intro.first.denominator", local.denominator.entityId),
-    same("intro.first.division", local.divisionEntityId),
+    ...[plan.equivalence, ...(plan.companion ? [plan.companion] : [])].flatMap(branch => {
+      const local = branch.focus.semantic.source;
+      return [same(`intro.${branch.focus.position}.numerator`, local.numerator.entityId),
+        same(`intro.${branch.focus.position}.denominator`, local.denominator.entityId),
+        same(`intro.${branch.focus.position}.division`, local.divisionEntityId)];
+    }),
     ...plan.equivalence.contextTransfers.flatMap((transfer) =>
       visibleContextRole(transfer.role)
         ? [same(`intro.${transfer.role}`, transfer.sourceEntityId)]
@@ -596,7 +599,7 @@ function statusText(
       : endpoints[1].accessibleText;
   }
   if (segment === "join-equivalent-fraction") {
-    return "Join the unit factor with the first fraction; the second stays fixed.";
+    return "Join each unit factor with its selected fraction.";
   }
   return localProgress === 1
     ? endpoints[3].accessibleText

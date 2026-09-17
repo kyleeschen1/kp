@@ -75,6 +75,25 @@ const binding: KpSuccessorSynthesisBinding = {
   }]
 };
 
+test("gather observability belongs to the cohort when one contributor already occupies the result center", () => {
+  const compiled = compileKpRegisteredSuccessorSynthesisPresentation({ transformationId: "transform.asymmetric-gather", transformationKind: "simplifyConstantSum", binding });
+  assert.equal(compiled.status, "compiled");
+  const registered = { ...binding, operationPresentationPlan: compiled.operationPresentationPlan,
+    paintContinuityPlan: compiled.paintContinuityPlan, continuityProgram: compiled.continuityProgram };
+  const compile = (left: number, right: number, target: number) => compileKpNativeKatexSuccessorSynthesisScenePlans({
+    source: scene("source", [atom("source.one", "selector.one", left, 20),
+      atom("source.plus", "selector.plus", (left + right) / 2, 20), atom("source.two", "selector.two", right, 20)]),
+    target: scene("target", [atom("target.three", "selector.three", target, 20)]),
+    intents: [{ binding: registered, direction: "forward", motion: "full" }]
+  });
+  for (const [left, right, target] of [[10, 46, 10], [10, 46, 46], [46, 10, 10]]) {
+    const plans = compile(left!, right!, target!);
+    for (const progress of [0, .16, .58, .8, 1, .58, 0])
+      assert.ok(sampleKpNativeKatexSuccessorSynthesisScenePlans({ plans, progress }).length > 0);
+  }
+  assert.throws(() => compile(10, 10, 10), /unobservable gather/);
+});
+
 test("native successor renderer co-presents opaque contributors and result", () => {
   const compilation = compileKpRegisteredSuccessorSynthesisPresentation({
     transformationId: "transform.test.one-plus-two",

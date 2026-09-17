@@ -2,6 +2,7 @@ import {
   kpCanonicalCommonDenominatorPressurePresentationPlan,
   isKpCommonDenominatorPressurePresentationPlan,
   type KpCommonDenominatorPressurePresentationPlan,
+  type KpCommonDenominatorPressureEquivalencePlan,
   type KpCommonDenominatorPressureEndpointKind
 } from "../animation/common-denominator-pressure-presentation-plan.ts";
 import { renderLatexToHtml } from "./katex-adapter.ts";
@@ -52,248 +53,90 @@ export const kpCanonicalCommonDenominatorPressureNativeEndpoints =
 export function createKpCommonDenominatorPressureNativeEndpoints(plan: KpCommonDenominatorPressurePresentationPlan) {
   if (!isKpCommonDenominatorPressurePresentationPlan(plan)) throw new TypeError("Expected an issued pressure presentation plan.");
   const values = plan.values;
-  const factor = values.factor;
-  const alignment = plan.equivalence;
-  const local = alignment.focus.semantic;
-  const sourceContext = alignment.contextTransfers;
-  const sourceOperator = context("addition-operator");
-  const sourceSecondNumerator = context("untouched-numerator");
-  const sourceSecondDenominator = context("untouched-denominator");
-  const sourceSecondDivision = context("untouched-division");
-  const firstFactorTransfer = alignment.focus.presentation.factorTransfer;
-
-  if (firstFactorTransfer.kind !== "paired-unit-factor-transfer") {
-    throw new Error(
-      "Common-denominator pressure endpoints require the approved unit-factor source."
-    );
-  }
-
-  const unitFactorDivisionId = alignment.focus.presentation
-    .operationMaterialSelectorIds.find((id) =>
-      id.includes("unit-factor.division")
-    );
-  if (unitFactorDivisionId === undefined) {
-    throw new Error(
-      "Common-denominator pressure endpoints require a unit-factor division."
-    );
-  }
-
-  return Object.freeze([
-    problemEndpoint(),
-    equivalenceSourceEndpoint(),
-    productEndpoint(),
-    evaluatedEndpoint()
-  ] as const);
-
-  function problemEndpoint(): KpCommonDenominatorPressureNativeEndpoint {
-    return endpoint("problem", `${values.firstNumerator} over ${values.firstDenominator} plus ${values.secondNumerator} over ${values.secondDenominator}`, sequence(
-      fraction(
-        atom(local.source.numerator.entityId,
-          local.source.numerator.semanticId, "operand", values.firstNumerator, "problem"),
-        atom(local.source.denominator.entityId,
-          local.source.denominator.semanticId, "operand", values.firstDenominator, "problem"),
-        bar(local.source.divisionEntityId, "problem")
-      ),
-      atom(sourceOperator.sourceEntityId,
-        "semantic.operation.addition", "operator", "+", "problem"),
-      secondFraction("source", "problem")
-    ));
-  }
-
-  function equivalenceSourceEndpoint():
-  KpCommonDenominatorPressureNativeEndpoint {
-    const [factorNumeratorId, factorDenominatorId] =
-      firstFactorTransfer.sourceOccurrenceEntityIds;
-    return endpoint(
-      "equivalence-source",
-      `Introduce ${factor} over ${factor}, which equals one`,
-      sequence(
-        introductionGroup(fraction(
-          atom(factorNumeratorId, local.factor.semanticId,
-            "factor", factor, "equivalence-source"),
-          atom(factorDenominatorId, local.factor.semanticId,
-            "factor", factor, "equivalence-source"),
-          bar(requiredUnitFactorDivisionId(), "equivalence-source")
-        ), `${local.source.stateId}.unit-factor`,
-        "semantic.fraction-equivalence.unit-factor", "equivalence-source"),
-        atom(`${local.source.stateId}.unit-factor-multiplication`,
-          "semantic.operation.multiplication", "operator", "\\cdot",
-          "equivalence-source"),
-        fraction(
-          atom(local.source.numerator.entityId,
-            local.source.numerator.semanticId, "operand", values.firstNumerator,
-            "equivalence-source"),
-          atom(local.source.denominator.entityId,
-            local.source.denominator.semanticId, "operand", values.firstDenominator,
-            "equivalence-source"),
-          bar(local.source.divisionEntityId, "equivalence-source")
-        ),
-        atom(sourceOperator.sourceEntityId,
-          "semantic.operation.addition", "operator", "+",
-          "equivalence-source"),
-        secondFraction("source", "equivalence-source")
-      )
-    );
-  }
-
-  function productEndpoint(): KpCommonDenominatorPressureNativeEndpoint {
-    const target = local.target;
-    return endpoint(
-      "product",
-      "Multiply the first numerator and denominator by the same factor",
-      sequence(
-        fraction(
-          sequence(
-            atom(target.numeratorFactorOccurrenceEntityId,
-              local.factor.semanticId, "factor", factor, "product"),
-            atom(`${target.numeratorProductEntityId}.operator`,
-              "semantic.operation.multiplication", "operator", "\\cdot",
-              "product"),
-            atom(target.numeratorSourceOccurrenceEntityId,
-              local.source.numerator.semanticId, "operand", values.firstNumerator, "product")
-          ),
-          sequence(
-            atom(target.denominatorFactorOccurrenceEntityId,
-              local.factor.semanticId, "factor", factor, "product"),
-            atom(`${target.denominatorProductEntityId}.operator`,
-              "semantic.operation.multiplication", "operator", "\\cdot",
-              "product"),
-            atom(target.denominatorSourceOccurrenceEntityId,
-              local.source.denominator.semanticId, "operand", values.firstDenominator, "product")
-          ),
-          bar(target.divisionEntityId, "product")
-        ),
-        atom(sourceOperator.targetEntityId,
-          "semantic.operation.addition", "operator", "+", "product"),
-        secondFraction("target", "product")
-      )
-    );
-  }
-
-  function evaluatedEndpoint(): KpCommonDenominatorPressureNativeEndpoint {
-    const target = plan.equivalence.focus.targetTermEntityId;
-    const firstTerm = plan.equivalence.focus.semantic.target;
-    const alignmentTarget =
-      plan.evaluation.bindings.map((binding) =>
-        binding.targetAnnotations[0]!.selectorIds[0]!
-      );
-    if (alignmentTarget.length !== 2) {
-      throw new Error(`Pressure target ${target} requires two evaluated owners.`);
-    }
-    return endpoint(
-      "evaluated",
-      `${values.targetNumerator} over ${values.targetDenominator} plus ${values.secondNumerator} over ${values.secondDenominator}`,
-      sequence(
-        fraction(
-          atom(alignmentTarget[0]!,
-            local.source.numerator.semanticId, "operand", values.targetNumerator, "evaluated"),
-          atom(alignmentTarget[1]!,
-            local.source.denominator.semanticId, "operand", values.targetDenominator, "evaluated"),
-          bar(firstTerm.divisionEntityId, "evaluated")
-        ),
-        atom(sourceOperator.targetEntityId,
-          "semantic.operation.addition", "operator", "+", "evaluated"),
-        secondFraction("target", "evaluated")
-      )
-    );
-  }
-
-  function secondFraction(
-    side: "source" | "target",
-    endpointKind: KpCommonDenominatorPressureEndpointKind
-  ): NativePart {
-    return fraction(
-      atom(
-        side === "source"
-          ? sourceSecondNumerator.sourceEntityId
-          : sourceSecondNumerator.targetEntityId,
-        "semantic.fraction.common-denominator.second.numerator",
-        "operand",
-        values.secondNumerator,
-        endpointKind
-      ),
-      atom(
-        side === "source"
-          ? sourceSecondDenominator.sourceEntityId
-          : sourceSecondDenominator.targetEntityId,
-        "semantic.fraction.common-denominator.second.denominator",
-        "operand",
-        values.secondDenominator,
-        endpointKind
-      ),
-      bar(
-        side === "source"
-          ? sourceSecondDivision.sourceEntityId
-          : sourceSecondDivision.targetEntityId,
-        endpointKind
-      )
-    );
-  }
-
-  function endpoint(
-    kind: KpCommonDenominatorPressureEndpointKind,
-    accessibleText: string,
-    content: NativePart
-  ): KpCommonDenominatorPressureNativeEndpoint {
-    const authority = plan.endpoints.find((entry) => entry.kind === kind);
-    if (authority === undefined || authority.latex !== content.rawLatex) {
-      throw new Error(
-        `Pressure ${kind} endpoint rendered ${content.rawLatex}; expected ` +
-        `${authority?.latex ?? "missing authority"}.`
-      );
-    }
-    const annotations: readonly KpSelectorLatexAnnotation[] = Object.freeze(
-      [...content.nodes, ...content.introductionNodes]
-        .flatMap((node) => node.kind === "fraction-bar" ? [] : [{
-        selectorId: node.occurrenceId,
-        motionId: node.motionId,
-        latex: latexForMotion(content.annotatedLatex, node.motionId)
-        }])
-    );
-    const annotated = Object.freeze({
-      id: `common-denominator-pressure.${kind}`,
-      kind: "selector-annotated-latex" as const,
-      rawLatex: content.rawLatex,
-      annotatedLatex: content.annotatedLatex,
-      annotations
-    });
-    return Object.freeze({
-      schemaVersion:
-        "kp.common-denominator-pressure-native-endpoint.v1" as const,
-      kind,
-      stateId: authority.stateId,
-      accessibleText,
-      rootPresentationGroupId: `group.${authority.stateId}`,
-      annotated,
-      nativeHtmlAndMathml: renderLatexToHtml(annotated.annotatedLatex, {
-        displayMode: true,
-        output: "htmlAndMathml",
-        trust: true
-      }),
-      nodes: content.nodes,
-      introductionNodes: content.introductionNodes
-    });
-  }
-
-  function context(
-    role: typeof sourceContext[number]["role"]
-  ) {
-    const result = sourceContext.find((entry) => entry.role === role);
-    if (result === undefined) {
-      throw new Error(`Missing common-denominator context ${role}.`);
-    }
+  const context = (role: KpCommonDenominatorPressureEquivalencePlan["contextTransfers"][number]["role"]) => {
+    const result = plan.equivalence.contextTransfers.find(entry => entry.role === role);
+    if (!result) throw new Error(`Missing common-denominator context ${role}.`);
     return result;
-  }
+  };
+  const sourceOperator = context("addition-operator");
+  const kinds = ["problem", "equivalence-source", "product", "evaluated"] as const;
+  const endpoints = kinds.map(kind => {
+    const source = kind === "problem" || kind === "equivalence-source";
+    const first = focusedFraction(plan.equivalence, kind, values.firstNumerator, values.firstDenominator,
+      values.factor, values.targetNumerator, values.targetDenominator, 0);
+    const second = plan.companion
+      ? focusedFraction(plan.companion, kind, values.secondNumerator, values.secondDenominator,
+        values.secondFactor, values.secondTargetNumerator, values.secondTargetDenominator, 2)
+      : fraction(
+        atom(context("untouched-numerator")[source ? "sourceEntityId" : "targetEntityId"],
+          "semantic.fraction.common-denominator.second.numerator", "operand", values.secondNumerator, kind),
+        atom(context("untouched-denominator")[source ? "sourceEntityId" : "targetEntityId"],
+          "semantic.fraction.common-denominator.second.denominator", "operand", values.secondDenominator, kind),
+        bar(context("untouched-division")[source ? "sourceEntityId" : "targetEntityId"], kind));
+    return endpoint(kind, sequence(first,
+      atom(sourceOperator[source ? "sourceEntityId" : "targetEntityId"], "semantic.operation.addition", "operator", "+", kind), second));
+  });
+  return Object.freeze([endpoints[0]!, endpoints[1]!, endpoints[2]!, endpoints[3]!] as const);
 
-  function requiredUnitFactorDivisionId(): string {
-    if (unitFactorDivisionId === undefined) {
-      throw new Error(
-        "Common-denominator pressure endpoints require a unit-factor division."
-      );
+  function focusedFraction(branch: KpCommonDenominatorPressureEquivalencePlan,
+    kind: KpCommonDenominatorPressureEndpointKind, numerator: string, denominator: string,
+    factor: string, resultNumerator: string, resultDenominator: string, bindingOffset: number): NativePart {
+    const local = branch.focus.semantic;
+    const sourceFraction = () => fraction(
+      atom(local.source.numerator.entityId, local.source.numerator.semanticId, "operand", numerator, kind),
+      atom(local.source.denominator.entityId, local.source.denominator.semanticId, "operand", denominator, kind),
+      bar(local.source.divisionEntityId, kind));
+    if (kind === "problem") return sourceFraction();
+    if (kind === "equivalence-source") {
+      const transfer = branch.focus.presentation.factorTransfer;
+      if (transfer.kind !== "paired-unit-factor-transfer") throw new Error("Expected the approved unit-factor source.");
+      const division = branch.focus.presentation.operationMaterialSelectorIds.find(id => id.includes("unit-factor.division"));
+      if (!division) throw new Error("Missing unit-factor division.");
+      return sequence(
+        introductionGroup(fraction(
+          atom(transfer.sourceOccurrenceEntityIds[0], local.factor.semanticId, "factor", factor, kind),
+          atom(transfer.sourceOccurrenceEntityIds[1], local.factor.semanticId, "factor", factor, kind),
+          bar(division, kind)), `${local.source.stateId}.unit-factor`, "semantic.fraction-equivalence.unit-factor", kind),
+        atom(`${local.source.stateId}.unit-factor-multiplication`, "semantic.operation.multiplication", "operator", "\\cdot", kind),
+        sourceFraction());
     }
-    return unitFactorDivisionId;
+    const target = local.target;
+    if (kind === "product") return fraction(
+      sequence(
+        atom(target.numeratorFactorOccurrenceEntityId, local.factor.semanticId, "factor", factor, kind),
+        atom(`${target.numeratorProductEntityId}.operator`, "semantic.operation.multiplication", "operator", "\\cdot", kind),
+        atom(target.numeratorSourceOccurrenceEntityId, local.source.numerator.semanticId, "operand", numerator, kind)),
+      sequence(
+        atom(target.denominatorFactorOccurrenceEntityId, local.factor.semanticId, "factor", factor, kind),
+        atom(`${target.denominatorProductEntityId}.operator`, "semantic.operation.multiplication", "operator", "\\cdot", kind),
+        atom(target.denominatorSourceOccurrenceEntityId, local.source.denominator.semanticId, "operand", denominator, kind)),
+      bar(target.divisionEntityId, kind));
+    const targetId = (offset: number) => plan.evaluation.bindings[bindingOffset + offset]!.targetAnnotations[0]!.selectorIds[0]!;
+    return fraction(
+      atom(targetId(0), local.source.numerator.semanticId, "operand", resultNumerator, kind),
+      atom(targetId(1), local.source.denominator.semanticId, "operand", resultDenominator, kind),
+      bar(target.divisionEntityId, kind));
   }
 
+  function endpoint(kind: KpCommonDenominatorPressureEndpointKind, content: NativePart): KpCommonDenominatorPressureNativeEndpoint {
+    const authority = plan.endpoints.find(entry => entry.kind === kind);
+    if (!authority || authority.latex !== content.rawLatex)
+      throw new Error(`Pressure ${kind} endpoint rendered ${content.rawLatex}; expected ${authority?.latex ?? "missing authority"}.`);
+    const annotations: readonly KpSelectorLatexAnnotation[] = Object.freeze(
+      [...content.nodes, ...content.introductionNodes].flatMap(node => node.kind === "fraction-bar" ? [] : [{
+        selectorId: node.occurrenceId, motionId: node.motionId, latex: latexForMotion(content.annotatedLatex, node.motionId)
+      }]));
+    const annotated = Object.freeze({ id: `common-denominator-pressure.${kind}`, kind: "selector-annotated-latex" as const,
+      rawLatex: content.rawLatex, annotatedLatex: content.annotatedLatex, annotations });
+    const accessibleText = kind === "problem" ? `${values.firstNumerator} over ${values.firstDenominator} plus ${values.secondNumerator} over ${values.secondDenominator}`
+      : kind === "evaluated" ? `${values.targetNumerator} over ${values.targetDenominator} plus ${values.secondTargetNumerator} over ${values.secondTargetDenominator}`
+      : kind === "equivalence-source" ? `Introduce ${values.factor} over ${values.factor}${plan.companion ? ` and ${values.secondFactor} over ${values.secondFactor}` : ""}; each factor equals one`
+      : "Multiply each selected numerator and denominator by its same factor";
+    return Object.freeze({ schemaVersion: "kp.common-denominator-pressure-native-endpoint.v1" as const,
+      kind, stateId: authority.stateId, accessibleText, rootPresentationGroupId: `group.${authority.stateId}`, annotated,
+      nativeHtmlAndMathml: renderLatexToHtml(annotated.annotatedLatex, { displayMode: true, output: "htmlAndMathml", trust: true }),
+      nodes: content.nodes, introductionNodes: content.introductionNodes });
+  }
 }
 
 export function bindKpCommonDenominatorPressureNativeEndpoint(input: {

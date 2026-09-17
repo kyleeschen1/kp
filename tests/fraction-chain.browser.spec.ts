@@ -16,6 +16,30 @@ async function seek(page: Page, position: number) {
   await expect.poll(async () => Number(await page.locator("[data-fraction-passage]").getAttribute("data-fraction-position"))).toBeCloseTo(position, 2);
 }
 
+test("two-sided alignment keeps two distinct factor joins inside one native owner", async ({ page }) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/experiments/fraction-chain/two-sided/");
+  const root = page.locator("[data-fraction-passage]");
+  await expect(root).toHaveAttribute("data-fraction-ready", /true|repair/, { timeout: 20000 });
+  expect(await root.getAttribute("data-fraction-ready"), await root.locator("[data-fraction-status]").textContent() ?? "").toBe("true");
+  const stage = root.locator("[data-kp-common-denominator-pressure-stage]");
+  await expect(stage).toHaveCount(1);
+  await expect(stage).toHaveAttribute("data-kp-common-denominator-pressure-seam", "verified");
+  for (const position of [0, .08, .18, .3, .5, .7, .85, 1, 1.25, 1.75, 2, 1, .7, .3, .18, 0]) {
+    await seek(page, position);
+    await expect(stage).toHaveAttribute("data-kp-common-denominator-pressure-stage", "ready");
+  }
+  for (const position of [.18, .45, 1]) {
+    await seek(page, position);
+    await page.screenshot({ path: `tmp/codex/fraction-chain-review/two-sided-${position}.png`, fullPage: true });
+  }
+  await seek(page, 1.25);
+  const toggle = root.locator("[data-fraction-disclosure]"), held = Number(await root.getAttribute("data-fraction-position"));
+  await toggle.click(); await seek(page, 1.75); await toggle.click();
+  expect(Number(await root.getAttribute("data-fraction-position"))).toBeCloseTo(held, 6);
+  expect(errors).toEqual([]);
+});
+
 test("numeric variant uses checked eighths throughout and ends without a reduction surface", async ({ page }) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto("/experiments/fraction-chain/numeric/");

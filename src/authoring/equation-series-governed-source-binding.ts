@@ -448,11 +448,10 @@ function bindCommonDenominator(
     "The source contract is not authenticated common-denominator authority."
   );
   const roleBindings = commonDenominatorRoleBindings(transformation);
-  const expectedRoleIds =
-    kpEquationSeriesCommonDenominatorAuthoringDeclaration.roleIds;
-  if (expectedRoleIds.some((roleId) =>
-    !equalIds(evidence.roleBindings[roleId], roleBindings[roleId])
-  )) return sourceRepair(
+  // The sealed transformation decides whether the second addend is context
+  // or another scaling branch; a declaration-wide union cannot decide that.
+  if (Object.keys(evidence.roleBindings).length !== Object.keys(roleBindings).length ||
+    Object.entries(roleBindings).some(([roleId, ids]) => !equalIds(evidence.roleBindings[roleId], ids))) return sourceRepair(
     input,
     "The source does not bind every common-denominator role exactly."
   );

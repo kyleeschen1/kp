@@ -6,7 +6,8 @@ import { compileFractionChainPublication } from "../src/tutorial/fraction-chain/
 export function kpViteFractionChain(projectRoot: string): Plugin {
   return { name: "kp-fraction-chain-publication", transformIndexHtml: { order: "pre", handler(html, context) {
     const name = context.filename === resolve(projectRoot, "experiments/fraction-chain/index.html") ? "fraction-chain"
-      : context.filename === resolve(projectRoot, "experiments/fraction-chain/numeric/index.html") ? "fraction-chain-numeric" : undefined;
+      : context.filename === resolve(projectRoot, "experiments/fraction-chain/numeric/index.html") ? "fraction-chain-numeric"
+      : context.filename === resolve(projectRoot, "experiments/fraction-chain/two-sided/index.html") ? "fraction-chain-two-sided" : undefined;
     if (!name) return html;
     return html.replace("<!-- kp:fraction-chain -->", compileFractionChainPublication(
       readFileSync(resolve(projectRoot, `examples/algebra/${name}.article.md`), "utf8"),

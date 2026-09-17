@@ -1,0 +1,14 @@
+{
+  "schema": "kp.algebra.fraction-chain.v1",
+  "id": "fraction-chain-two-sided",
+  "title": "Give both fractions a shared unit",
+  "states": [
+    { "id": "unlike", "latex": "\\frac{1}{6}+\\frac{1}{8}" },
+    { "id": "aligned", "latex": "\\frac{4}{24}+\\frac{3}{24}" },
+    { "id": "combined", "latex": "\\frac{7}{24}" }
+  ],
+  "moves": [
+    { "id": "align", "from": "unlike", "to": "aligned", "hint": "align", "prose": "A sixth is four twenty-fourths; an eighth is three twenty-fourths. Each fraction changes its expression while keeping its own value." },
+    { "id": "combine", "from": "aligned", "to": "combined", "hint": "combine", "prose": "Both fractions now count twenty-fourths. Add their counts and keep that shared unit." }
+  ]
+}

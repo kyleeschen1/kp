@@ -538,21 +538,18 @@ function certifyOpaqueGatherAndRecognizeRealization(
   plan: KpSuccessorSynthesisPlan
 ): KpCertifiedOpaqueGatherAndRecognizeRealization {
   const minimumSourceTravelPx = observableSuccessorMinimumTravel(plan);
-  const sourceTranslationPx = Math.min(
-    ...plan.materialInputs.map((source) =>
-      distance(center(source.rect), plan.sourceJunction)
-    )
-  );
-  const sourceContractionPx = Math.min(
-    ...plan.materialInputs.map(({ rect }) =>
-      Math.max(rect.width, rect.height) *
-      (1 - plan.inputJunctionScale) /
-      2
-    )
-  );
-  // A viewer observes the outer paint edge, whose motion includes both center
-  // translation and contraction. Center-only certification was viewport
-  // fragile and rejected visibly identical compact layouts by subpixels.
+  const travel = plan.materialInputs.map(({ rect }) => ({
+    translation: distance(center(rect), plan.sourceJunction),
+    contraction: Math.max(rect.width, rect.height) * (1 - plan.inputJunctionScale) / 2
+  }));
+  // Gather is a cohort event. A contributor may already occupy the result's
+  // center while its peers converge on it; forcing every contributor to travel
+  // would invent a detour. Measure one actual contributor's edge movement,
+  // never the sum of unrelated extrema. Opaque ownership remains per input.
+  const witness = travel.reduce((best, candidate) =>
+    candidate.translation + candidate.contraction > best.translation + best.contraction ? candidate : best);
+  const sourceTranslationPx = witness.translation;
+  const sourceContractionPx = witness.contraction;
   const sourceTravelPx = sourceTranslationPx + sourceContractionPx;
   if (sourceTravelPx + 0.001 < minimumSourceTravelPx) {
     throw new Error(

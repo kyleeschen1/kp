@@ -22,7 +22,7 @@ import {
 } from "../semantic/fraction-equivalence.ts";
 
 declare const kpCommonDenominatorPressureEquivalencePlanBrand: unique symbol;
-declare const kpCommonDenominatorPressurePresentationPlanBrand: unique symbol;
+const kpCommonDenominatorPressurePresentationPlanBrand: unique symbol = Symbol("checked-pressure-plan");
 
 export type KpCommonDenominatorPressureContextRole =
   | "addition-operator"
@@ -45,7 +45,7 @@ export interface KpCommonDenominatorPressureEquivalencePlan {
   readonly id: string;
   readonly semanticContractId: string;
   readonly focus: Readonly<{
-    readonly position: "first-term";
+    readonly position: "first-term" | "second-term";
     readonly sourceTermEntityId: string;
     readonly targetTermEntityId: string;
     readonly semantic: KpVerifiedFractionEquivalence;
@@ -76,21 +76,20 @@ export interface KpCommonDenominatorPressurePresentationPlan {
     firstNumerator: string; firstDenominator: string;
     secondNumerator: string; secondDenominator: string;
     targetNumerator: string; targetDenominator: string; factor: string;
+    secondTargetNumerator: string; secondTargetDenominator: string; secondFactor: string;
   }>;
   readonly schemaVersion:
     "kp.common-denominator-pressure-presentation-plan.v1";
   readonly id: string;
   readonly equivalence: KpCommonDenominatorPressureEquivalencePlan;
+  readonly companion?: KpCommonDenominatorPressureEquivalencePlan;
   readonly evaluation: Readonly<{
     readonly transformationId: string;
     readonly transformationKind: "simplifyConstantProduct";
     readonly fromStateId: string;
     readonly toStateId: string;
     readonly synchronization: "together";
-    readonly bindings: readonly [
-      KpRegisteredSuccessorSynthesisBinding,
-      KpRegisteredSuccessorSynthesisBinding
-    ];
+    readonly bindings: readonly KpRegisteredSuccessorSynthesisBinding[];
     readonly persistentEntityIds: readonly string[];
   }>;
   readonly endpoints: readonly [
@@ -121,21 +120,18 @@ const verifiedComposedPlans = new WeakSet<object>();
  * expression occurrence explicit so the host cannot repaint the whole sum.
  */
 export function compileKpCommonDenominatorPressureEquivalencePlan(
-  alignment: KpVerifiedCommonDenominatorAlignment
+  alignment: KpVerifiedCommonDenominatorAlignment,
+  position: 0 | 1 = 0
 ): KpCommonDenominatorPressureEquivalencePlan {
   if (!isKpVerifiedCommonDenominatorAlignment(alignment)) {
     throw new TypeError(
       "Pressure presentation requires verified common-denominator authority."
     );
   }
-  if (alignment.equivalenceMultipliers[0].numerator <= 1n ||
-      alignment.equivalenceMultipliers[1].numerator !== 1n ||
-      alignment.equivalenceMultipliers[1].denominator !== 1n) {
-    throw new TypeError("Pressure presentation requires first-term scaling and an unchanged second term.");
-  }
-  const sourceTerm = alignment.source.terms[0];
-  const targetTerm = alignment.target.terms[0];
-  const factor = alignment.equivalenceMultipliers[0];
+  const sourceTerm = alignment.source.terms[position];
+  const targetTerm = alignment.target.terms[position];
+  const factor = alignment.equivalenceMultipliers[position];
+  if (factor.numerator <= 1n) throw new TypeError("Pressure focus must scale its fraction.");
   if (factor.numerator !== factor.denominator) {
     throw new Error(
       "The approved fraction-equivalence motif requires one unit factor."
@@ -150,7 +146,7 @@ export function compileKpCommonDenominatorPressureEquivalencePlan(
     "source denominator"
   );
   const scaleFactor = safeNumber(factor.numerator, "scale factor");
-  const localPrefix = `${alignment.id}.pressure.first-term`;
+  const localPrefix = `${alignment.id}.pressure.${position === 0 ? "first" : "second"}-term`;
   const semantic = verifyKpFractionEquivalence({
     schemaVersion: "kp.fraction-equivalence.v1",
     id: `${localPrefix}.equivalence`,
@@ -205,14 +201,14 @@ export function compileKpCommonDenominatorPressureEquivalencePlan(
         `${localPrefix}.evidence.scale-factor-nonzero`
     }
   });
-  const contextTransfers = createContextTransfers(alignment);
+  const contextTransfers = createContextTransfers(alignment, position);
   const plan = deepFreeze({
     schemaVersion:
       "kp.common-denominator-pressure-equivalence-plan.v1" as const,
     id: `presentation.${alignment.id}.pressure-equivalence`,
     semanticContractId: alignment.id,
     focus: {
-      position: "first-term" as const,
+      position: position === 0 ? "first-term" as const : "second-term" as const,
       sourceTermEntityId: sourceTerm.termEntityId,
       targetTermEntityId: targetTerm.termEntityId,
       semantic,
@@ -249,6 +245,8 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
   const equivalence = compileKpCommonDenominatorPressureEquivalencePlan(
     alignment
   );
+  const companion = alignment.equivalenceMultipliers[1].numerator > 1n
+    ? compileKpCommonDenominatorPressureEquivalencePlan(alignment, 1) : undefined;
   const local = equivalence.focus.semantic;
   const evaluatedStateId = `${alignment.target.stateId}.evaluated-products`;
   const numerator = compileEvaluationBinding({
@@ -269,30 +267,45 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
     catalystSelectorId: `${local.target.denominatorProductEntityId}.operator`,
     targetSelectorId: alignment.target.terms[0].denominator.entityId
   });
+  const companionBindings = companion ? ["numerator", "denominator"].map((axis) => {
+    const target = companion.focus.semantic.target;
+    const numerator = axis === "numerator";
+    return compileEvaluationBinding({
+      id: `${alignment.id}.pressure.evaluate-second-${axis}`,
+      materialSelectorIds: numerator ? [target.numeratorFactorOccurrenceEntityId, target.numeratorSourceOccurrenceEntityId]
+        : [target.denominatorFactorOccurrenceEntityId, target.denominatorSourceOccurrenceEntityId],
+      catalystSelectorId: `${numerator ? target.numeratorProductEntityId : target.denominatorProductEntityId}.operator`,
+      targetSelectorId: (numerator ? alignment.target.terms[1].numerator : alignment.target.terms[1].denominator).entityId
+    });
+  }) : [];
   const persistentEntityIds = Object.freeze([
     alignment.target.operatorEntityId,
-    alignment.target.terms[0].divisionEntityId,
-    alignment.target.terms[1].termEntityId,
-    alignment.target.terms[1].fractionEntityId,
-    alignment.target.terms[1].divisionEntityId,
-    alignment.target.terms[1].numerator.entityId,
-    alignment.target.terms[1].denominator.entityId
+    ...alignment.target.terms.flatMap((term, index) => index === 0 || companion
+      ? [term.divisionEntityId]
+      : [term.termEntityId, term.fractionEntityId, term.divisionEntityId, term.numerator.entityId, term.denominator.entityId])
   ]);
   const first = alignment.source.terms[0];
   const second = alignment.source.terms[1];
   const factor = alignment.equivalenceMultipliers[0].numerator;
-  const contextLatex = `+\\frac{${second.numerator.value}}{${second.denominator.value}}`;
+  const secondFactor = alignment.equivalenceMultipliers[1].numerator;
+  const simple = (numerator: bigint, denominator: bigint) => `\\frac{${numerator}}{${denominator}}`;
+  const sourceLatex = alignment.source.terms.map(term => simple(term.numerator.value, term.denominator.value));
+  const unitLatex = alignment.source.terms.map((_, index) => {
+    const scale = alignment.equivalenceMultipliers[index]!.numerator;
+    return scale === 1n ? sourceLatex[index] : `${simple(scale, scale)}\\cdot${sourceLatex[index]}`;
+  });
+  const productLatex = alignment.source.terms.map((term, index) => {
+    const scale = alignment.equivalenceMultipliers[index]!.numerator;
+    return scale === 1n ? sourceLatex[index] : `\\frac{${scale}\\cdot${term.numerator.value}}{${scale}\\cdot${term.denominator.value}}`;
+  });
   const endpoints = Object.freeze([
-    endpoint("problem", alignment.source.stateId,
-      `\\frac{${first.numerator.value}}{${first.denominator.value}}${contextLatex}`),
-    endpoint("equivalence-source", local.source.stateId,
-      `\\frac{${factor}}{${factor}}\\cdot\\frac{${first.numerator.value}}{${first.denominator.value}}${contextLatex}`),
-    endpoint("product", local.target.stateId,
-      `\\frac{${factor}\\cdot${first.numerator.value}}{${factor}\\cdot${first.denominator.value}}${contextLatex}`),
-    endpoint("evaluated", evaluatedStateId,
-      `\\frac{${alignment.target.terms[0].numerator.value}}{${alignment.target.terms[0].denominator.value}}${contextLatex}`)
+    endpoint("problem", alignment.source.stateId, sourceLatex.join("+")),
+    endpoint("equivalence-source", local.source.stateId, unitLatex.join("+")),
+    endpoint("product", local.target.stateId, productLatex.join("+")),
+    endpoint("evaluated", evaluatedStateId, alignment.target.terms.map(term => simple(term.numerator.value, term.denominator.value)).join("+"))
   ] as const);
-  const plan = deepFreeze({
+  const plan: KpCommonDenominatorPressurePresentationPlan = deepFreeze({
+    [kpCommonDenominatorPressurePresentationPlanBrand]: true as const,
     schemaVersion:
       "kp.common-denominator-pressure-presentation-plan.v1" as const,
     id: `presentation.${alignment.id}.pressure`,
@@ -300,16 +313,19 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
       firstNumerator: String(first.numerator.value), firstDenominator: String(first.denominator.value),
       secondNumerator: String(second.numerator.value), secondDenominator: String(second.denominator.value),
       targetNumerator: String(alignment.target.terms[0].numerator.value),
-      targetDenominator: String(alignment.target.terms[0].denominator.value), factor: String(factor)
+      targetDenominator: String(alignment.target.terms[0].denominator.value), factor: String(factor),
+      secondTargetNumerator: String(alignment.target.terms[1].numerator.value),
+      secondTargetDenominator: String(alignment.target.terms[1].denominator.value), secondFactor: String(secondFactor)
     },
     equivalence,
+    ...(companion ? { companion } : {}),
     evaluation: {
       transformationId: `${alignment.id}.pressure.evaluate-products`,
       transformationKind: "simplifyConstantProduct" as const,
       fromStateId: local.target.stateId,
       toStateId: evaluatedStateId,
       synchronization: "together" as const,
-      bindings: [numerator, denominator] as const,
+      bindings: [numerator, denominator, ...companionBindings],
       persistentEntityIds
     },
     endpoints,
@@ -323,7 +339,7 @@ export function compileKpCommonDenominatorPressurePresentationPlan(
       "kp.algebra.simplify-constant-product"
     ] as const,
     newMotifIds: [] as const
-  }) as KpCommonDenominatorPressurePresentationPlan;
+  });
   verifiedComposedPlans.add(plan);
   return plan;
 }
@@ -341,23 +357,27 @@ export const kpCanonicalCommonDenominatorPressurePresentationPlan =
   );
 
 function createContextTransfers(
-  alignment: KpVerifiedCommonDenominatorAlignment
+  alignment: KpVerifiedCommonDenominatorAlignment,
+  focus: 0 | 1
 ): readonly KpCommonDenominatorPressureContextTransfer[] {
-  const source = alignment.source.terms[1];
-  const target = alignment.target.terms[1];
+  const other = focus === 0 ? 1 : 0;
+  const source = alignment.source.terms[other];
+  const target = alignment.target.terms[other];
   const transfers = [
     transfer("addition-operator", alignment.source.operatorEntityId,
       alignment.target.operatorEntityId),
-    transfer("untouched-term", source.termEntityId, target.termEntityId),
-    transfer("untouched-fraction", source.fractionEntityId,
-      target.fractionEntityId),
-    transfer("untouched-division", source.divisionEntityId,
-      target.divisionEntityId),
-    transfer("untouched-numerator", source.numerator.entityId,
-      target.numerator.entityId),
-    transfer("untouched-denominator", source.denominator.entityId,
-      target.denominator.entityId)
-  ] as const;
+    ...(alignment.equivalenceMultipliers[other].numerator === 1n ? [
+      transfer("untouched-term", source.termEntityId, target.termEntityId),
+      transfer("untouched-fraction", source.fractionEntityId,
+        target.fractionEntityId),
+      transfer("untouched-division", source.divisionEntityId,
+        target.divisionEntityId),
+      transfer("untouched-numerator", source.numerator.entityId,
+        target.numerator.entityId),
+      transfer("untouched-denominator", source.denominator.entityId,
+        target.denominator.entityId)
+    ] : [])
+  ];
   transfers.forEach((entry) => {
     const authority = alignment.correspondence.find((candidate) =>
       candidate.relation === "identity" &&

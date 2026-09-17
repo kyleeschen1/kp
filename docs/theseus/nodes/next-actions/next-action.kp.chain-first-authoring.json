@@ -21,6 +21,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-17-chain-first-numeric-variation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-17-chain-first-two-sided-review.md"
     }
   ],
   "dependsOn": {
@@ -811,11 +815,88 @@
       "scope": "chain.numeric-variation",
       "checkedAt": "2026-09-17T21:46:41.505Z",
       "notes": "Original and numeric publication routes build; existing large-chunk warnings remain."
+    },
+    {
+      "command": "npm run visual:fraction-chain",
+      "status": "failed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:14.634Z",
+      "notes": "First real two-sided sample exposed fixed material occurrence IDs, then a gather guard requiring every contributor to travel 11px; nearer numerator contribution measured 8.364px. Shared ownership and cohort-witness fixes retained motion and threshold."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:15.885Z",
+      "notes": "24 checks; both branches compile and all native endpoints carry distinct occurrence IDs, with exact source and target values."
+    },
+    {
+      "command": "npm run test:equation-series-common-denominator",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:17.006Z",
+      "notes": "7 tests; second-branch scale roles checked; false untouched role, hidden product evaluation, missing scaling and swapped addends rejected."
+    },
+    {
+      "command": "npm run test:common-denominator-pressure-presentation",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:18.045Z",
+      "notes": "10 original pressure presentation and asset checks pass."
+    },
+    {
+      "command": "npm run test:fraction-equivalence-exemplar",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:19.068Z",
+      "notes": "18 original motif and semantic checks pass after instance-scoped material identities."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/native-katex-successor-continuity.test.ts",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:20.125Z",
+      "notes": "5 checks, including either contributor already at the result center, reversed ordering, reverse sampling and still-rejected stationary cohort."
+    },
+    {
+      "command": "npm run visual:fraction-chain",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:21.164Z",
+      "notes": "All 6 Chromium checks pass after repairs. Real two-sided compositor seams and reverse/disclosure return; original and numeric callers preserved. Final two-sided-only rerun also passes after companion authority guard."
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:22.249Z",
+      "notes": "All 6 canonical editor preservation checks pass with unchanged one-sided timing and endpoints."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:23.482Z",
+      "notes": "Dependency, neutral entrypoints, owner boundaries, governance and cross-domain conformance pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:24.527Z",
+      "notes": "All three fraction Article routes build; existing large-chunk warnings remain. No budget ceiling changed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.two-sided-variation",
+      "checkedAt": "2026-09-17T22:04:49.652Z",
+      "notes": "Full app, node, tests, Svelte and domain checks pass; test-boundary inference and optional-evidence narrowing repaired explicitly."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Fraction review accepted; user resumed approved numeric variants and checked inference. Preserve centralized presentation and exact semantic authority. Fluent numeric reduction remains a separate gap."
+    "summary": "HUMAN_CHECKPOINT at slice18: 17/24 complete. Numeric variant verified and committed e8bd90ef6; working two-sided native passage awaits simultaneous-join visual judgment under approved contract. Types, focused tests, Chromium preservation, architecture and bundle gates pass; subtraction/inference/release remain."
   },
   "expectedLearning": [
     "Whether sparse mathematical chains can resolve checked operations and existing motifs with explicit repairs"

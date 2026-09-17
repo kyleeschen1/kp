@@ -43,7 +43,9 @@ export const KP_COMMON_DENOMINATOR_AUTHORING_ROLE_IDS = Object.freeze([
   "target-first-numerator",
   "target-first-denominator",
   "addition-operator",
-  "untouched-second-term"
+  "untouched-second-term",
+  "source-second-numerator", "source-second-denominator", "second-scale-factor",
+  "target-second-numerator", "target-second-denominator"
 ] as const);
 
 export interface KpEquationSeriesCommonDenominatorSemanticArguments {
@@ -64,8 +66,11 @@ export interface KpEquationSeriesCommonDenominatorSemanticArguments {
     readonly "target-first-numerator": readonly [string];
     readonly "target-first-denominator": readonly [string];
     readonly "addition-operator": readonly [string, string];
-    readonly "untouched-second-term": readonly [string, string];
-  }>;
+  }> & (Readonly<{ "untouched-second-term": readonly [string, string] }> | Readonly<{
+    "source-second-numerator": readonly [string]; "source-second-denominator": readonly [string];
+    "second-scale-factor": readonly [string];
+    "target-second-numerator": readonly [string]; "target-second-denominator": readonly [string];
+  }>);
   readonly correspondenceIds: readonly string[];
 }
 
@@ -305,21 +310,14 @@ function matchesAlignmentApplication(
   if (expression.kind !== "binary" || expression.operator !== "+") {
     return false;
   }
-  const source = transformation.source.terms[0];
-  const factor = transformation.equivalenceMultipliers[0];
-  return expression.left.kind === "binary" &&
-    expression.left.operator === "/" &&
-    matchesProduct(
-      expression.left.left,
-      source.numerator.value,
-      factor.numerator
-    ) &&
-    matchesProduct(
-      expression.left.right,
-      source.denominator.value,
-      factor.denominator
-    ) &&
-    matchesTerm(expression.right, transformation.target.terms[1]);
+  return [expression.left, expression.right].every((term, index) => {
+    const source = transformation.source.terms[index]!;
+    const factor = transformation.equivalenceMultipliers[index]!;
+    if (factor.numerator === 1n) return matchesTerm(term, source);
+    return term.kind === "binary" && term.operator === "/" &&
+      matchesProduct(term.left, source.numerator.value, factor.numerator) &&
+      matchesProduct(term.right, source.denominator.value, factor.denominator);
+  });
 }
 
 function matchesProduct(
@@ -385,10 +383,15 @@ export function roleBindings(
       transformation.source.operatorEntityId,
       transformation.target.operatorEntityId
     ],
-    "untouched-second-term": [
-      transformation.source.terms[1].termEntityId,
-      transformation.target.terms[1].termEntityId
-    ]
+    ...(transformation.equivalenceMultipliers[1].numerator === 1n ? {
+      "untouched-second-term": [transformation.source.terms[1].termEntityId, transformation.target.terms[1].termEntityId] as const
+    } : {
+      "source-second-numerator": [transformation.source.terms[1].numerator.entityId] as const,
+      "source-second-denominator": [transformation.source.terms[1].denominator.entityId] as const,
+      "second-scale-factor": [transformation.equivalenceMultipliers[1].entityId] as const,
+      "target-second-numerator": [transformation.target.terms[1].numerator.entityId] as const,
+      "target-second-denominator": [transformation.target.terms[1].denominator.entityId] as const
+    })
   });
 }
 

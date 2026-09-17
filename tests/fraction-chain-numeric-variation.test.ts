@@ -3,6 +3,7 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import source from "../examples/algebra/fraction-chain-numeric.json" with { type: "json" };
 import original from "../examples/algebra/fraction-chain.json" with { type: "json" };
+import both from "../examples/algebra/fraction-chain-two-sided.json" with { type: "json" };
 import { compileFractionChain } from "../src/authoring/fraction-chain-compilation.ts";
 import { compileKpCommonDenominatorPressurePresentationPlan } from "../src/animation/common-denominator-pressure-presentation-plan.ts";
 import { createKpCommonDenominatorPressureNativeEndpoints } from "../src/rendering/common-denominator-pressure-native-endpoints.ts";
@@ -10,7 +11,7 @@ import { compileFractionChainPublication } from "../src/tutorial/fraction-chain/
 import { fractionSceneAt } from "../src/tutorial/fraction-chain/position.ts";
 
 test("numeric callers derive every alignment endpoint from issued authority without cross-caller state", () => {
-  for (const input of [source, original, source]) {
+  for (const input of [source, original, both, source]) {
     const compiled = compileFractionChain(input);
     assert.equal(compiled.status, "compiled");
     const step = compiled.compilation.steps[0];
@@ -20,6 +21,14 @@ test("numeric callers derive every alignment endpoint from issued authority with
     assert.equal(endpoints[0].annotated.rawLatex, input.states[0]!.latex);
     assert.equal(endpoints[3].annotated.rawLatex, input.states[1]!.latex);
     assert.deepEqual(endpoints.map(e => e.annotated.rawLatex), plan.endpoints.map(e => e.latex));
+    if (input === both) {
+      assert.equal(plan.companion?.focus.position, "second-term");
+      assert.deepEqual(plan.equivalence.contextTransfers.map(t => t.role), ["addition-operator"]);
+      assert.equal(plan.evaluation.bindings.length, 4);
+      assert.equal(endpoints[1].introductionNodes.length, 2);
+      assert.match(endpoints[2].annotated.rawLatex, /4\\cdot1.*4\\cdot6.*3\\cdot1.*3\\cdot8/);
+      for (const endpoint of endpoints) assert.equal(new Set(endpoint.nodes.map(n => n.occurrenceId)).size, endpoint.nodes.length);
+    }
     assert.throws(() => createKpCommonDenominatorPressureNativeEndpoints({ ...plan }), /issued/);
   }
 });

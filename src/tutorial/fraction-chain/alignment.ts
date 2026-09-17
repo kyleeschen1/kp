@@ -10,7 +10,7 @@ export async function mountFractionAlignmentSurface(target: HTMLElement, compila
   if (step?.kind !== "align") throw new TypeError("Select the checked alignment.");
   let plan;
   try { plan = compileKpCommonDenominatorPressurePresentationPlan(step.authority); }
-  catch { throw new FractionChainRepair("fraction-chain.presentation", `$.moves[${index}]`, "This alignment host requires first-term scaling with the second term unchanged."); }
+  catch { throw new FractionChainRepair("fraction-chain.presentation", `$.moves[${index}]`, "This alignment host requires positive first-term scaling, optionally with positive second-term scaling."); }
   const session = mountCanonicalCommonDenominatorPressure(target, target, plan);
   try { await session.ready; } catch (error) { session.dispose(); throw error; }
   return { seek(progress: number) { session.sample({ direction: "forward", progress }); }, dispose: session.dispose };

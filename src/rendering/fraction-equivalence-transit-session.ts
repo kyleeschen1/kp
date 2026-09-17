@@ -1,10 +1,12 @@
 import {
   compileKpFractionEquivalencePresentationPlan,
+  isKpFractionEquivalencePresentationPlan,
   kpCanonicalFractionEquivalencePresentationPlan,
   type KpFractionEquivalencePresentationPlan
 } from "../animation/fraction-equivalence-presentation-plan.ts";
 import {
   kpCanonicalFractionEquivalence,
+  isKpVerifiedFractionEquivalence,
   type KpVerifiedFractionEquivalence
 } from "../semantic/fraction-equivalence.ts";
 import {
@@ -46,9 +48,11 @@ export function compileKpFractionEquivalencePaintRelations(
 ): readonly KpNativeKatexSemanticPaintRelation[] {
   const factorTransfer = presentation.factorTransfer;
   const divisionTransfer = presentation.structureContinuity.divisionTransfer;
+  const relationId = (id: string) => presentation.semanticContractId === kpCanonicalFractionEquivalence.id
+    ? id : `${presentation.semanticContractId}.${id}`;
   const factorRelations = factorTransfer.sourceOccurrenceEntityIds.map(
     (sourceEntityId, index) => ({
-      id: `${factorTransfer.correspondenceId}.${index}`,
+      id: relationId(`${factorTransfer.correspondenceId}.${index}`),
       kind: "one-to-one" as const,
       sourceEntityIds: [sourceEntityId],
       targetEntityIds: [factorTransfer.targetEntityIds[index]!]
@@ -56,12 +60,12 @@ export function compileKpFractionEquivalencePaintRelations(
   );
   return projectKpNativeKatexSemanticPaintRelations({
     groups: [{
-      id: divisionTransfer.correspondenceId,
+      id: relationId(divisionTransfer.correspondenceId),
       kind: divisionTransfer.relation,
       sourceEntityIds: divisionTransfer.sourceDivisionEntityIds,
       targetEntityIds: divisionTransfer.targetDivisionEntityIds
     }, ...presentation.operandTransfers.map((transfer) => ({
-      id: transfer.correspondenceId,
+      id: relationId(transfer.correspondenceId),
       kind: "one-to-one" as const,
       sourceEntityIds: [transfer.sourceEntityId],
       targetEntityIds: [transfer.targetEntityId]
@@ -78,7 +82,7 @@ export function createKpFractionEquivalenceJoinTrackProjection(input: {
     ...relation.targetEntityIds
   ]));
   return createKpNativeKatexTrackProjection({
-    id: `track-projection.${input.presentation.joinCohort.id}`,
+    id: `track-projection.${input.presentation.id}.${input.presentation.joinCohort.id}`,
     project({ tracks, source, target }) {
       const sourceEntities = new Map(source.atoms.map((atom) => [
         atom.id,
@@ -147,6 +151,10 @@ export function createKpFractionEquivalenceTransitSession(input: {
   readonly presentation?: KpFractionEquivalencePresentationPlan | undefined;
   readonly contextRelations?:
     readonly KpNativeKatexSemanticPaintRelation[] | undefined;
+  readonly companion?: Readonly<{
+    semantic: KpVerifiedFractionEquivalence;
+    presentation: KpFractionEquivalencePresentationPlan;
+  }>;
 }): KpFractionEquivalenceTransitSession {
   const source = resolveKpCanonicalNativeKatexEndpointInput(input.source);
   const target = resolveKpCanonicalNativeKatexEndpointInput(input.target);
@@ -169,17 +177,32 @@ export function createKpFractionEquivalenceTransitSession(input: {
       "Fraction-equivalence transit requires matching semantic and presentation authority."
     );
   }
+  if (input.companion && (!isKpVerifiedFractionEquivalence(input.companion.semantic) ||
+      !isKpFractionEquivalencePresentationPlan(input.companion.presentation) ||
+      input.companion.presentation.semanticContractId !== input.companion.semantic.id))
+    throw new Error("Companion fraction requires matching semantic and presentation authority.");
   // A larger expression may surround the canonical fraction operation. Its
   // explicitly verified context joins the reconciliation set without changing
   // the fraction motif or teaching the compositor any expression semantics.
-  const relations = Object.freeze([
+  const primaryRelations = Object.freeze([
     ...compileKpFractionEquivalencePaintRelations(presentation),
     ...(input.contextRelations ?? [])
   ]);
-  const trackProjection = createKpFractionEquivalenceJoinTrackProjection({
+  const primaryProjection = createKpFractionEquivalenceJoinTrackProjection({
     presentation,
-    relations
+    relations: primaryRelations
   });
+  const companionRelations = input.companion ? compileKpFractionEquivalencePaintRelations(input.companion.presentation) : [];
+  const relations = Object.freeze([...primaryRelations, ...companionRelations]);
+  const companionProjection = input.companion ? createKpFractionEquivalenceJoinTrackProjection({
+    presentation: input.companion.presentation, relations: companionRelations
+  }) : undefined;
+  // Each join owns disjoint addend entities. Compose their existing material
+  // projections inside one native scene, so no second session owns the root.
+  const trackProjection = companionProjection ? createKpNativeKatexTrackProjection({
+    id: `${primaryProjection.id}.with.${companionProjection.id}`,
+    project(input) { return companionProjection.project({ ...input, tracks: primaryProjection.project(input) }); }
+  }) : primaryProjection;
   const plan = compileKpCanonicalNativeKatexScenePlan({
     source,
     target,

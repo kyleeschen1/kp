@@ -22,6 +22,13 @@ Latest review requests centralized text, rail and step-disclosure styling; the
 records owners and parity checks. The separate fluent numeric reduction question
 remains explicit in the review packet; an existing profile label is not a binding.
 
+The [numeric variation](../reviews/2026-09-17-chain-first-numeric-variation.md)
+now works through shared native owners with optional reduction; its first attempt
+required engine repairs and is not recorded as source-only. The
+[two-sided alignment candidate](../reviews/2026-09-17-chain-first-two-sided-review.md)
+awaits local visual judgment about simultaneous factor joins before promotion.
+Theseus retains the exact resume slice and verification evidence.
+
 Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).
 The user wants mathematical chains plus sparse context to become correct KP
 reasoning passages through high-precision LLM inference. Models propose typed

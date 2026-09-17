@@ -221,24 +221,25 @@ function selectorsFor(
     .endpoints[number]["kind"],
   plan: KpCommonDenominatorPressurePresentationPlan
 ) {
+  const branches = [plan.equivalence, ...(plan.companion ? [plan.companion] : [])];
   const ids = kind === "problem"
     ? [
-        ...plan.equivalence.focus.presentation.sourceSelectorIds,
+        ...branches.flatMap(branch => branch.focus.presentation.sourceSelectorIds),
         ...plan.equivalence.contextTransfers.map(({ sourceEntityId }) =>
           sourceEntityId
         )
       ]
     : kind === "equivalence-source"
       ? [
-          ...plan.equivalence.focus.presentation.sourceSelectorIds,
-          ...plan.equivalence.focus.presentation.operationMaterialSelectorIds,
+          ...branches.flatMap(branch => branch.focus.presentation.sourceSelectorIds),
+          ...branches.flatMap(branch => branch.focus.presentation.operationMaterialSelectorIds),
           ...plan.equivalence.contextTransfers.map(({ sourceEntityId }) =>
             sourceEntityId
           )
         ]
       : kind === "product"
         ? [
-            ...plan.equivalence.focus.presentation.targetSelectorIds,
+            ...branches.flatMap(branch => branch.focus.presentation.targetSelectorIds),
             ...plan.equivalence.contextTransfers.map(({ targetEntityId }) =>
               targetEntityId
             )

@@ -26,12 +26,11 @@ test("explicit four-state chain compiles issued adjacent operations through gove
   assert.equal(fresh.status, "compiled");
   if (fresh.status === "compiled") assert.notEqual(fresh.compilation.revision, chain.revision);
 });
-test("true two-sided alignment reports its missing construction instead of hiding a changed addend", () => {
+test("true two-sided alignment preserves both scaling applications before evaluating products", () => {
   const result = compileFractionChain({ schema: "kp.algebra.fraction-chain.v1", id: "both", title: "Both terms",
     states: [{ id: "before", latex: "1/6+1/8" }, { id: "after", latex: "4/24+3/24" }],
     moves: [{ id: "align", from: "before", to: "after", hint: "align", prose: "Scale both fractions." }] });
-  assert.equal(result.status, "repair-required");
-  if (result.status === "repair-required") assert.equal(result.code, "fraction-chain.presentation");
+  assert.equal(result.status, "compiled", JSON.stringify(result, (_, value) => typeof value === "bigint" ? String(value) : value));
 });
 test("wrong, skipped, reordered, forged and unsupported adjacencies return explicit repairs", () => {
   for (const mutate of [
