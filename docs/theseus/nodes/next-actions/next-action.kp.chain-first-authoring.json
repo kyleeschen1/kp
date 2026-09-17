@@ -2,12 +2,17 @@
   "id": "next-action.kp.chain-first-authoring",
   "kind": "next-action",
   "title": "Chain-first checked authoring and reader transfer",
-  "status": "ready",
+  "status": "blocked",
   "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT at energy review under the approved contract. See docs/project/reviews/2026-09-17-chain-first-energy-review.md. After human acceptance complete chain.energy-review and continue approved scalar transfer; no new scope approval needed.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-09-17-chain-first-authoring-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-17-chain-first-energy-review.md"
     }
   ],
   "dependsOn": {
@@ -133,6 +138,13 @@
       "scope": "chain.nonterminal-reader",
       "checkedAt": "2026-09-17T07:29:04.444Z",
       "notes": "Emitted physics JS/CSS closure: 47747 initial gzip bytes; 165344 activated. HTML 779276 raw / 52404 gzip. Transfer estimates exclude fonts/images and do not measure runtime latency."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"nonterminal unfolding|audit trail keeps\"",
+      "status": "passed",
+      "scope": "chain.energy-review",
+      "checkedAt": "2026-09-17T07:32:00.036Z",
+      "notes": "Two Chromium checks pass; 16px and 24px review captures inspected. Native docks remain single-copy. Shared review URL returns HTTP 200. Human judgment pending."
     }
   ],
   "progress": {

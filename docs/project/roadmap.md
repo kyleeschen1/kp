@@ -28,6 +28,8 @@ nor its evidence. The ledger remains retrievable at
 Approved execution: [chain-first authoring long loop](2026-09-17-chain-first-authoring-long-loop-proposal.md),
 owned by `run-contract.kp.chain-first-authoring-v1`. The first checkpoint is the
 nonterminal energy unfolding exemplar, before independent scalar transfer.
+The [energy review packet](reviews/2026-09-17-chain-first-energy-review.md)
+provides the working URL, inspection actions and preservation evidence.
 
 Current direction: [reusable machinery through deliberate transfer](decisions/2026-09-16-machinery-transfer-and-simple-coverage.md).
 Authoring target: [chains plus sparse intent, with inferred moves checked by domain authority](decisions/2026-09-16-chain-first-semantic-authoring-target.md).
