@@ -959,6 +959,20 @@
       "scope": "chain.inference-trial",
       "checkedAt": "2026-09-17T22:31:01.646Z",
       "notes": "Retained trial runner and report diagnostics typecheck without assertions of transported authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-chain-domain-boundaries.test.ts tests/authoring-entrypoint-hardening.test.ts",
+      "status": "passed",
+      "scope": "chain.domain-boundaries",
+      "checkedAt": "2026-09-17T22:32:49.987Z",
+      "notes": "Seven checks: existing Bayes task and mechanics checker, invalid probability conditions, missing physical assumptions, foreign-source matrix and explicit absent mechanics task."
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "chain.domain-boundaries",
+      "checkedAt": "2026-09-17T22:32:51.062Z",
+      "notes": "Domain probe types passed; no new domain engine or task fabricated."
     }
   ],
   "progress": {

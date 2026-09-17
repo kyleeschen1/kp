@@ -173,7 +173,8 @@
     {
       "id": "chain.domain-boundaries",
       "title": "Domain-boundaries",
-      "status": "planned"
+      "summary": "Existing domain owners preserve assumptions and reject cross-domain source; absent mechanics discovery explicitly documented and tested.",
+      "status": "complete"
     },
     {
       "id": "chain.release",
