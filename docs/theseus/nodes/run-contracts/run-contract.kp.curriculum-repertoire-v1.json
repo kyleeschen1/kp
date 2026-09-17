@@ -47,7 +47,8 @@
     {
       "id": "curriculum.domains",
       "title": "Other-curricula",
-      "status": "planned"
+      "summary": "All required curriculum areas inventoried with examples, scoped evidence and explicit unknowns; shared reading retains its saved transfer gap",
+      "status": "complete"
     },
     {
       "id": "curriculum.traces",

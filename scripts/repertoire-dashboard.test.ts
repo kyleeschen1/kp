@@ -1,5 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { compileRepertoire, parseRepertoire, readRepertoire } from './repertoire-dashboard.ts';
 
 const example = '# Algebra\n## Cancellation\n### Semantic moves\n- [x] Cancel a nonzero factor. [Evidence](proof.md)\n### Visual motifs\n- [ ] Retain the original.\n';
@@ -32,4 +34,21 @@ test('granular claims require examples and honest audit states', () => {
   assert.throws(() => parseRepertoire(granular.replace('Audit: unaudited', 'Audit: implemented'), 'topic.md'), /checkbox contradicts/);
   assert.throws(() => parseRepertoire(granular.replace('Audit: unaudited', 'Audit: gap'), 'topic.md'), /audited claims require Evidence/);
   assert.throws(() => parseRepertoire(granular.replace('Audit: unaudited', 'Audit: probably'), 'topic.md'), /valid Audit/);
+});
+
+test('curriculum documentation and audit evidence contain no broken local file links', () => {
+  for (const directory of ['docs/project/repertoire', 'docs/project/repertoire-notes']) {
+    const files = readdirSync(directory, { recursive: true, withFileTypes: true })
+      .filter(entry => entry.isFile() && entry.name.endsWith('.md'))
+      .map(entry => resolve(entry.parentPath, entry.name));
+    for (const file of files) {
+      // Examples in fenced authoring instructions are not actual source links.
+      const markdown = readFileSync(file, 'utf8').replace(/```[\s\S]*?```/g, '');
+      for (const match of markdown.matchAll(/\[[^\]]+\]\(([^)]+)\)/g)) {
+        const link = match[1]!;
+        if (/^https?:\/\//.test(link) || link.startsWith('#')) continue;
+        assert.ok(existsSync(resolve(file, '..', link.split('#')[0]!)), `${file}: broken ${link}`);
+      }
+    }
+  }
 });

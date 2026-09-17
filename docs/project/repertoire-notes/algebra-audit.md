@@ -27,6 +27,7 @@ in the run evidence; reading the tests below is not the same as rerunning them.
 
 ## Partial evidence to investigate next
 
+- Exponential sum/product and difference/quotient are distinct rows. Their [dedicated pack](../../../src/animation/catalog-packs/exponential-homomorphism.ts) loads two distinct assets; the inspected pack alone does not establish every supported source shape or authoring direction.
 - General rational-expression composition: [governed split/merge variation](../../../src/authoring/governed-fraction-split-merge-variation.ts), [multiplicative cancellation plan](../../../tests/fraction-composition-multiplicative-cancellation-plan.test.ts), [distributed sum composition](../../../tests/fraction-distributed-sum-composition.test.ts). These are substantial machinery, not a reason to mark every fraction variant implemented.
 - Numerical evaluation/reduction: [fraction adapter](../../../src/animation/fraction-adapter.ts), [exact quantity pack](../../../src/animation/catalog-packs/exact-quantity.ts). Separate checked computation from a reusable explanation of each arithmetic operation.
 - Quadratic methods: [formula authority](../../../src/semantic/quadratic-formula-authority.ts), [formula KaTeX tests](../../../tests/quadratic-formula-katex.test.ts), [completing-square tests](../../../tests/quadratic-completing-square-authority.test.ts). Method authority/native forms do not alone prove the general reader experience.

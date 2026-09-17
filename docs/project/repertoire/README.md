@@ -8,13 +8,15 @@ separate lists for semantic moves and visual motifs.
 
 - [Shared reading](shared.md)
 - [Algebra](algebra/01-arithmetic.md) (topic files in `algebra/`)
-- [Calculus and multivariable calculus](calculus.md)
-- [Linear algebra](linear-algebra.md)
-- [Probability and statistics](probability-statistics.md)
-- [Differential equations and optimisation](differential-equations-optimisation.md)
-- [Classical mechanics](mechanics.md)
-- [Programming](programming.md)
-- [Economics](economics.md)
+- [Calculus and multivariable calculus](calculus/01-limits.md)
+- [Linear algebra](linear-algebra/01-matrices.md)
+- [Probability and statistics](probability-statistics/01-conditioning.md)
+- [Differential equations](differential-equations-optimisation/01-odes.md)
+- [Optimization](optimisation/01-objectives.md)
+- [Numerical methods](numerical-methods/01-error-solving.md)
+- [Classical mechanics](mechanics/01-kinematics.md)
+- [Programming](programming/01-evaluation.md)
+- [Economics](economics/01-choice-markets.md)
 
 **✓** Implemented at the scope stated on that row; follow the evidence link.
 **☐** Predicted need, not yet confirmed implemented at that scope. Some may

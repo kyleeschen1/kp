@@ -4,6 +4,15 @@
 
 ### Semantic moves
 
+- [ ] `alg.exp.sum-to-product` Rewrite an exponential of a sum as a product. [Evidence](../../repertoire-notes/algebra-audit.md)
+  Example: e^(a+b) → e^a e^b
+  Audit: partial — exponential-homomorphism asset exists; exact source/authoring scope needs its own audit
+- [ ] `alg.exp.difference-to-quotient` Rewrite an exponential of a difference as a quotient. [Evidence](../../repertoire-notes/algebra-audit.md)
+  Example: e^(a-b) → e^a/e^b
+  Audit: partial — separate quotient pressure asset exists; general source path not established
+- [ ] `alg.exp.product-to-sum` Combine equal-base exponential factors as an authored inverse move.
+  Example: e^a e^b → e^(a+b)
+  Audit: unaudited
 - [ ] `alg.log.definition` Convert between logarithmic and exponential statements.
   Example: log_b(a)=c ↔ b^c=a; b>0, b≠1, a>0
   Audit: unaudited

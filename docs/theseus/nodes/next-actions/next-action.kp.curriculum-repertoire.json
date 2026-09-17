@@ -18,6 +18,13 @@
       "scope": "curriculum.algebra",
       "checkedAt": "2026-09-17T05:42:31.970Z",
       "notes": "Four repertoire tests and 39 existing algebra tests pass. Initial repertoire test failed because it assumed one root file per discipline; repaired it to include grouped topic files and reran."
+    },
+    {
+      "command": "npm run test:repertoire; Node tests for fourteen inspected cross-domain evidence files",
+      "status": "passed",
+      "scope": "curriculum.domains",
+      "checkedAt": "2026-09-17T05:58:05.215Z",
+      "notes": "Five repertoire checks and 51 representative evidence tests passed; unaudited versus partial and explicit rejected-source gaps remain distinct. Fixed stale audit link after failing link check."
     }
   ]
 }
