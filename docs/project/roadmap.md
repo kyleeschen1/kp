@@ -31,6 +31,8 @@ nonterminal energy unfolding exemplar and resumed independent scalar transfer.
 Scalar transfer and a source-only notation/prose variation are verified; the
 [paired transfer review](reviews/2026-09-17-chain-first-transfer-review.md) is
 accepted. The user resumed the approved fraction-chain work.
+The [checked fraction passage](reviews/2026-09-17-chain-first-fraction-review.md)
+is ready for its mandatory visual checkpoint before numeric variation and inference.
 The [energy review packet](reviews/2026-09-17-chain-first-energy-review.md)
 provides the working URL, inspection actions and preservation evidence.
 

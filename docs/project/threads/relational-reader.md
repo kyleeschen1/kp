@@ -12,6 +12,10 @@ Accepted reference: [middle-step energy unfolding](../reviews/2026-09-17-chain-f
 User resumed the approved loop. Independent scalar transfer and its source-only
 variation are verified; the [paired transfer checkpoint](../reviews/2026-09-17-chain-first-transfer-review.md)
 is accepted. The user explicitly resumed the approved fraction-chain work.
+The [fraction passage review](../reviews/2026-09-17-chain-first-fraction-review.md)
+now supplies the canonical host, inspection actions, preservation evidence and
+remaining limits. Visual acceptance gates the approved variations and inference;
+this is not yet general source-only fraction authoring or curriculum promotion.
 
 Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).
 The user wants mathematical chains plus sparse context to become correct KP

@@ -131,7 +131,8 @@
     {
       "id": "chain.fraction-review",
       "title": "Fraction-review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: fraction review packet and shared URL ready. Await user judgment of denominator invariant, addition disclosure and distinct reduction before approving this slice and advancing to numeric variation.",
+      "status": "ready"
     },
     {
       "id": "chain.numeric-variation",

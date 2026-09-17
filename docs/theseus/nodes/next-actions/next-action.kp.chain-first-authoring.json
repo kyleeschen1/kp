@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-09-17-chain-first-energy-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-17-chain-first-fraction-review.md"
     }
   ],
   "dependsOn": {
@@ -733,11 +737,18 @@
       "scope": "chain.fraction-passage",
       "checkedAt": "2026-09-17T21:16:39.438Z",
       "notes": "Full app, node, tests, Svelte and domain typechecks passed; production build and existing publication checks passed. Existing large shared chunks remain warnings; no ceiling changed."
+    },
+    {
+      "command": "curl --fail --silent --output /dev/null --write-out %{http_code} http://localhost:8000/experiments/fraction-chain/",
+      "status": "passed",
+      "scope": "chain.fraction-review",
+      "checkedAt": "2026-09-17T21:18:55.173Z",
+      "notes": "Shared canonical review host returned HTTP 200. Desktop and enlarged-text captures from the stable fraction browser entrypoint were inspected. Human visual judgment remains required."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Energy accepted; scalar transfer and source-only variation verified. Paired transfer review ready, awaiting required visual acceptance before fraction work."
+    "summary": "HUMAN_CHECKPOINT at the mandatory fraction review. Canonical passage and checks are complete; awaiting visual acceptance before approved numeric variants and inference. Review packet owns URL and inspection actions; contract owns live progress."
   },
   "expectedLearning": [
     "Whether sparse mathematical chains can resolve checked operations and existing motifs with explicit repairs"
