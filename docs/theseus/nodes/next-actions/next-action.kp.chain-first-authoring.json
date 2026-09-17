@@ -586,6 +586,13 @@
       "scope": "chain.alignment",
       "checkedAt": "2026-09-17T20:14:19.480Z",
       "notes": "Six chain tests and ten existing alignment/authoring tests pass; 64 exact denominator pairs exercised. Full typecheck passes after correcting a redundant test narrowing."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.combination",
+      "checkedAt": "2026-09-17T20:16:42.781Z",
+      "notes": "Nine chain tests plus eight existing combination/authoring tests passed. Raw numerator, signs, zero, ordered subtraction, hidden reduction rejection and adjacency occurrence identity covered. Full typecheck passed."
     }
   ],
   "progress": {
