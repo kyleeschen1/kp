@@ -155,7 +155,8 @@
     {
       "id": "chain.move-resolution",
       "title": "Move-resolution",
-      "status": "planned"
+      "summary": "Unique checked moves infer without hints; wrong hints and unsupported paths return located repairs; 28 focused tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "chain.authoring-entrypoint",

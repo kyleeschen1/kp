@@ -917,6 +917,20 @@
       "scope": "chain.subtraction",
       "checkedAt": "2026-09-17T22:21:13.471Z",
       "notes": "Full application, node, tests, Svelte and domain types plus production bundle. Architecture and common-denominator semantic/authoring preservation checks also passed."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.move-resolution",
+      "checkedAt": "2026-09-17T22:24:21.773Z",
+      "notes": "28 checks, including four hint-free callers with identical issued authority and located abstentions for wrong hints and missing paths."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.move-resolution",
+      "checkedAt": "2026-09-17T22:24:22.862Z",
+      "notes": "All five typecheck cohorts passed."
     }
   ],
   "progress": {

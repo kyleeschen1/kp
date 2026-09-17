@@ -4,6 +4,7 @@ import { bindFractionChainAlignment } from "./fraction-chain-alignment.ts";
 import { verifyKpCommonDenominatorAlignment } from "../semantic/fraction-common-denominator.ts";
 import { bindFractionChainCombination } from "./fraction-chain-combination.ts";
 import { bindFractionChainReduction } from "./fraction-chain-reduction.ts";
+import { resolveFractionChainMove } from "./fraction-chain-move-resolution.ts";
 import { fractionChainStateId } from "./fraction-chain-binding.ts";
 import { createKpEquationSeriesCommonDenominatorSemanticSource, KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID } from "./equation-series-common-denominator-authoring.ts";
 import { createKpEquationSeriesLikeDenominatorSemanticSource, KP_LIKE_DENOMINATOR_AUTHORING_OPERATION_ID } from "./equation-series-like-denominator-authoring.ts";
@@ -34,8 +35,9 @@ export function compileFractionChain(value: unknown): { status: "compiled"; comp
   try {
     const steps = source.moves.map((move, index): CompiledFractionChainStep => {
       const pin = { sourceId: `source.${source.id}.${move.id}`, revisionId: revision, adjacencyId: `adjacency.${source.id}.${move.id}` };
-      if (move.hint === "align") {
-        const authority = bindFractionChainAlignment(source, index);
+      const resolved = resolveFractionChainMove(source, index);
+      if (resolved.kind === "align") {
+        const authority = resolved.authority;
         const multiplier = ({ entityId, semanticId, numerator, denominator }: typeof authority.equivalenceMultipliers[0]) => ({ entityId, semanticId, numerator, denominator });
         const internal = verifyKpCommonDenominatorAlignment({ schemaVersion: authority.schemaVersion, operator: authority.operator, id: `${authority.id}.products`,
           operationAuthority: authority.operationAuthority, lawAuthority: authority.lawAuthority, source: authority.source,
@@ -45,13 +47,12 @@ export function compileFractionChain(value: unknown): { status: "compiled"; comp
           createKpEquationSeriesCommonDenominatorSemanticSource({ ...pin, transformation: internal }), KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID,
           internal) });
       }
-      if (move.hint === "combine") {
-        const authority = bindFractionChainCombination(source, index);
+      if (resolved.kind === "combine") {
+        const authority = resolved.authority;
         return Object.freeze({ kind: "combine", authority, governed: compilePair(source, index,
           createKpEquationSeriesLikeDenominatorSemanticSource({ ...pin, transformation: authority }), KP_LIKE_DENOMINATOR_AUTHORING_OPERATION_ID) });
       }
-      if (move.hint === "reduce") return compileReduction(source, index, revision);
-      throw new FractionChainRepair("fraction-chain.operation", `$.moves[${index}].hint`, "Declare align, combine or reduce for this explicit compilation; inferred selection is not enabled yet.");
+      return compileReduction(source, index, revision, resolved.authority);
     });
     // All proofs are issued from one frozen source; no transported proof or
     // independently authored endpoint can be spliced into this sequence.
@@ -90,8 +91,9 @@ function compilePair(source: FractionChainSource, index: number, semantic: KpEqu
     result.repairs.map(repair => repair.message).join("; "));
   return result.active;
 }
-function compileReduction(source: FractionChainSource, index: number, revision: string): Extract<CompiledFractionChainStep, { kind: "reduce" }> {
-  const authority = bindFractionChainReduction(source, index), path = `$.moves[${index}]`;
+function compileReduction(source: FractionChainSource, index: number, revision: string,
+  authority: ReturnType<typeof bindFractionChainReduction>): Extract<CompiledFractionChainStep, { kind: "reduce" }> {
+  const path = `$.moves[${index}]`;
   if (authority.source.term.numerator.value <= 0n || authority.target.term.numerator.value <= 0n)
     throw new FractionChainRepair("fraction-chain.presentation", path, "The current reduction presentation requires positive numerators; exact signed/zero reduction is not yet a supported visual caller.");
   try {

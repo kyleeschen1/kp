@@ -39,7 +39,6 @@ test("wrong, skipped, reordered, forged and unsupported adjacencies return expli
     (source: ReturnType<typeof input>) => { source.moves.reverse(); },
     (source: ReturnType<typeof input>) => { source.moves[1].proof = "copied"; },
     (source: ReturnType<typeof input>) => { source.moves[0].hint = "combine"; },
-    (source: ReturnType<typeof input>) => { delete source.moves[0].hint; },
     (source: ReturnType<typeof input>) => { source.moves.splice(1, 1); }
   ]) { const source = input(); mutate(source); assert.equal(compileFractionChain(source).status, "repair-required"); }
 });
