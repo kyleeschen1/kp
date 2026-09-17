@@ -89,7 +89,8 @@
     {
       "id": "chain.alignment",
       "title": "Alignment",
-      "status": "planned"
+      "summary": "Verified one- and two-sided additive alignment with false-witness, no-op and adjacency negatives.",
+      "status": "complete"
     },
     {
       "id": "chain.combination",
