@@ -2,6 +2,41 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("disclosure settling releases ownership on keyboard input and page disposal", async ({ page }) => {
+  const root = await ready(page);
+  const summary = root.locator('[data-derivation-interleave="0"] details > summary').first();
+  await summary.click();
+  expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('none');
+  await summary.press('Escape');
+  expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('');
+  await summary.click();
+  await root.locator('[data-derivation-recall] > summary').click();
+  expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('none');
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide')));
+  expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('');
+});
+
+test("disclosure anchor survives delayed reflow and yields to reader scrolling", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  const root = await ready(page);
+  const summary = root.locator('[data-derivation-interleave="0"] details > summary').first();
+  await summary.evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 180));
+  const top = (await summary.boundingBox())!.y;
+  await summary.click();
+  expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('none');
+  await page.waitForTimeout(250);
+  // Model a late toolbar/font reflow after the initial toggle has settled.
+  await root.locator('.energy-derivation-local-access').first().evaluate(el => { el.style.paddingBottom = '90px'; });
+  await page.waitForTimeout(250);
+  expect(Math.abs((await summary.boundingBox())!.y - top)).toBeLessThan(2);
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.wheel(0, 140);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 80);
+  await page.waitForTimeout(250);
+  expect((await summary.boundingBox())!.y).toBeLessThan(top - 80);
+  expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('');
+});
+
 test("opening smaller steps preserves the detail entry in the viewport", async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 650 });
   const root = await ready(page);
@@ -16,11 +51,24 @@ test("opening smaller steps preserves the detail entry in the viewport", async (
   await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
   const collapse = root.locator('[data-refinement-collapse]').first();
   await expect(collapse).toBeFocused();
+  expect(await page.evaluate(() => document.documentElement.style.overflowAnchor)).toBe('none');
   expect(Math.abs((await collapse.boundingBox())!.y - top)).toBeLessThan(2);
+  const entryDrift = await collapse.evaluate(async el => {
+    const start = performance.now(), positions: number[] = [];
+    while (performance.now() - start < 1200) { await new Promise(requestAnimationFrame); positions.push(el.getBoundingClientRect().top); }
+    return Math.max(...positions) - Math.min(...positions);
+  });
+  expect(entryDrift).toBeLessThan(2);
   await collapse.click();
   await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
   await expect(expand).toBeFocused();
   expect(Math.abs((await expand.boundingBox())!.y - top)).toBeLessThan(2);
+  const returnDrift = await expand.evaluate(async el => {
+    const start = performance.now(), positions: number[] = [];
+    while (performance.now() - start < 1200) { await new Promise(requestAnimationFrame); positions.push(el.getBoundingClientRect().top); }
+    return Math.max(...positions) - Math.min(...positions);
+  });
+  expect(returnDrift).toBeLessThan(2);
   await expect(lens(root)).toHaveAttribute('aria-valuenow', progress!);
 });
 
@@ -1080,13 +1128,20 @@ test("unavailable refinement restores the checked compact inspection without a s
   const root = page.locator("[data-energy-derivation]:not([data-derivation-namespace=power])");
   await expect(root.locator("[data-derivation-stage]")).toHaveAttribute("data-derivation-renderer", "canonical-native-katex-scene-session");
   await root.locator('[data-derivation-entry="2"]').click();
+  // Firefox cannot synthesize mouseup outside the window. Leave room for
+  // this local drag so the following click actually enters failed detail.
+  await lens(root).evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 240));
   await dragTo(page, root, 2.55);
   const held = await root.getAttribute("data-progress");
   await root.locator("[data-refinement-view]").evaluate((el: HTMLTemplateElement) => {
     el.content.querySelector('[data-derivation-template="2"]')!.remove();
   });
   await root.locator("[data-refinement-expand]").click();
-  await expect(root.locator("[data-derivation-status]")).toContainText("needs repair");
+  await expect(root.locator("[data-refinement-status]")).toContainText("needs repair");
+  await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
+  await page.waitForTimeout(500);
+  await expect(root.locator("[data-refinement-status]")).toBeVisible();
+  await expect(root.locator("[data-refinement-status]")).toContainText("needs repair");
   await expect(root).toHaveAttribute("data-derivation-detail", "coarse");
   await expect(root).toHaveAttribute("data-move", "2");
   await expect(root).toHaveAttribute("data-progress", held!);

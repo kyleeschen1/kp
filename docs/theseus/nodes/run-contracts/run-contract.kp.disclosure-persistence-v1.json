@@ -33,6 +33,20 @@
       "scope": "disclosure-preservation",
       "checkedAt": "2026-09-17T01:47:11.935Z",
       "notes": "Full types and production build pass; existing global chunk warnings remain. No semantic mapping or animation change. Compact atomic interior poses have no issued child-pose equivalence; preserve exact saved return rather than invent one."
+    },
+    {
+      "command": "npm run typecheck; npm run build:bundle; npm run check:architecture",
+      "status": "passed",
+      "scope": "disclosure-preservation",
+      "checkedAt": "2026-09-17T02:02:20.671Z",
+      "notes": "Full types, production build and architecture gates pass. Existing global bundle-size warnings remain. Final reader removes an unsupported experimental status-owner change; semantic and paint ownership remain unchanged."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --grep \"disclosure settling releases|disclosure anchor survives delayed|opening smaller steps preserves|explanation disclosure preserves|unavailable refinement restores\"",
+      "status": "passed",
+      "scope": "delayed-disclosure-anchor",
+      "checkedAt": "2026-09-17T02:03:41.032Z",
+      "notes": "Four anchor cases pass in both browsers; failure recovery passes in both after centering synthetic drag. Pre-fix late reflow reproduced 90px drift. Final recovery fixture confirmed a subsequent status-writer race: optional detail now owns its notice, retained through font resizing. This supersedes the earlier note about removing the status-owner change. Full types/build/architecture passed with this implementation; final test types pass. Natural user timing remains unidentified."
     }
   ],
   "allowedWork": [
@@ -47,7 +61,7 @@
     {
       "id": "disclosure.anchor",
       "title": "Disclosure-anchor",
-      "summary": "COMPLETE: control and summary anchoring repaired with executable regressions. Saved compact state returns exactly; no guessed intermediate-pose mapping or new animation.",
+      "summary": "Delayed-layout anchor repair complete. Focused anchor and recovery cases pass in Chromium and Firefox; full types, build and architecture pass. No semantic or accepted visual treatment changes.",
       "status": "complete"
     }
   ]

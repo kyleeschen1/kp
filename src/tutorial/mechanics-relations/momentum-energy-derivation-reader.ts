@@ -1,5 +1,6 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
+import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
 import { createEnergyInspectionBookmarks, type EnergyInspectionPosition } from "./energy-derivation-bookmarks.ts";
@@ -68,6 +69,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
       const entry = event.currentTarget;
       if (!(entry instanceof HTMLElement)) return;
       busy = true;
+      const viewportAnchor = holdDisclosureViewportAnchor(entry);
       try {
         const collapsing = saved !== undefined;
         if (!collapsing) saved = { state: active.capture(), offset: entry.getBoundingClientRect().top };
@@ -83,8 +85,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         // The clicked control is the reader's anchor. The parent equation can
         // sit far above it once its explanation is open.
         const restoredEntry = root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")!;
-        window.scrollBy({ top: restoredEntry.getBoundingClientRect().top - offset, behavior: "instant" });
-        restoredEntry.focus({ preventScroll: true });
+        if (viewportAnchor.retarget(restoredEntry, offset)) restoredEntry.focus({ preventScroll: true });
       } catch (error) {
         // A failed optional view must not strand the reader or grant a visual
         // fallback authority. Restore the already checked compact inspection.
@@ -98,10 +99,17 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           await active.ready;
           bind();
           const restoredEntry = root.querySelector<HTMLElement>("[data-refinement-expand]")!;
-          window.scrollBy({ top: restoredEntry.getBoundingClientRect().top - previous.offset, behavior: "instant" });
-          restoredEntry.focus({ preventScroll: true });
+          if (viewportAnchor.retarget(restoredEntry, previous.offset)) restoredEntry.focus({ preventScroll: true });
         }
-        const status = root.querySelector<HTMLElement>("[data-derivation-status]")!;
+        // Recovery survives later compositor rebuilds, which own the separate
+        // transient preparation status.
+        let status = root.querySelector<HTMLElement>("[data-refinement-status]");
+        if (!status) {
+          status = document.createElement("p");
+          status.dataset["refinementStatus"] = "";
+          status.setAttribute("role", "status");
+          root.querySelector("[data-derivation-status]")!.after(status);
+        }
         status.hidden = false; status.textContent = "This detail needs repair; the written reasoning remains available.";
         console.error("Energy refinement repair", error);
       } finally { busy = false; }
@@ -600,14 +608,15 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     }, abort.signal);
   }
   if (initial?.disclosures.length) [...root.querySelectorAll<HTMLDetailsElement>("details")].forEach((el, i) => { el.open = initial.disclosures[i] ?? false; });
-  let disclosureAnchor: { summary: HTMLElement; top: number } | undefined;
+  let disclosureAnchor: { summary: HTMLElement; viewport: ReturnType<typeof holdDisclosureViewportAnchor> } | undefined;
   root.addEventListener('click', event => {
     const summary = event.target instanceof Element ? event.target.closest('summary') : null;
     if (!(summary instanceof HTMLElement) || !root.contains(summary) || summary.parentElement?.tagName !== 'DETAILS') return;
     // Capture before the native disclosure changes layout. Keyboard activation
     // dispatches the same click; pausing here holds the pose at activation.
     pause();
-    disclosureAnchor = { summary, top: summary.getBoundingClientRect().top };
+    const viewport = holdDisclosureViewportAnchor(summary, abort.signal);
+    disclosureAnchor = { summary, viewport };
   }, { ...opts, capture: true });
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. The handle or explicit step controls resume inspection.
@@ -616,7 +625,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     const anchor = disclosureAnchor;
     if (anchor?.summary.parentElement !== event.target) return;
     disclosureAnchor = undefined;
-    window.scrollBy({ top: anchor.summary.getBoundingClientRect().top - anchor.top, behavior: 'instant' });
+    anchor.viewport.refresh();
   }, { ...opts, capture: true }));
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, opts);
   reduced.addEventListener("change", pause, opts);

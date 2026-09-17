@@ -47,8 +47,44 @@ the drag/release in view and the rerun passes. Full types and production build
 pass with existing global chunk warnings. The impact selector lacked a focused
 mapping; this bounded repair uses the targeted regression tests above.
 
-No animation, observer or clock added. Native turnstiles retain their DOM and
+The initial repair added no animation, observer or clock. Native turnstiles retain their DOM and
 accessibility behavior. The new boundary pauses before the user toggle and
 restores its captured anchor after remeasurement; programmatic disclosures do
 not create user anchors. Expanded-view replacement uses the corresponding
 entry/return control for both success and repair paths.
+
+## Delayed-layout follow-up
+
+The user subsequently reported a delayed jump back. Observing ordinary entry
+and return for 1.2 seconds was stable in Chromium and Firefox, so the exact
+natural trigger remains unidentified. A deterministic late 90px toolbar reflow
+reproduced the missing invariant: the clicked anchor must survive layout settling,
+not just the first correction.
+
+`src/reader/runtime/disclosure-viewport-anchor.ts` now owns a temporary viewport
+anchor. A document permits only one owner; it suppresses competing browser scroll
+anchoring and observes the control's ancestor sizes. Correction is event-driven,
+with at most one pending animation frame, not continuous sampling. Replacement
+transfers the anchor to the corresponding control. Reader input, external scroll,
+navigation, window departure, page disposal or the native reader's abort releases
+observers/listeners and restores the previous browser-anchoring setting. Input
+during asynchronous replacement also cancels subsequent focus transfer.
+
+Regression pressure covers delayed reflow, wheel/keyboard cancellation, owner
+replacement, disposal, larger text, held-state return and 1.2-second entry/return
+stability. Testing caught capture-phase blur incorrectly cancelling ordinary
+control focus transfer; window blur now listens without capture. A Firefox
+failure-recovery check initially failed because its synthetic drag released below
+the viewport (773px in a 720px window), leaving pointer capture active and swallowing
+the next click. Centering the local drag fixes the fixture. The corrected fixture
+then entered recovery (confirmed by its console error) and exposed a second race:
+later compositor preparation erased the repair message. Optional-view recovery
+now owns a separate status node; a font-reflow regression protects that notice.
+These changes retain the accepted rail, inset paint and semantic models.
+
+Final evidence: four anchor/cancellation/return cases pass in both Chromium and
+Firefox; the corrected failed-detail recovery case also passes in both, including
+font resizing. Full types, production build and architecture gates pass; final
+test types pass. Existing global bundle-size warnings remain. This certifies the
+reproduced delayed-layout class, not an identified natural trigger for the user's
+particular timing. No new subjective visual treatment or promotion is introduced.
