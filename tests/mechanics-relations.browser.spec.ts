@@ -302,6 +302,15 @@ test("disclosure preserves the handle outline without stealing keyboard focus", 
     await expect(lens(root)).not.toBeFocused();
     expect(await observation.evaluate(state => state.finish())).not.toContain('none');
     await observation.dispose();
+    // Returning to the same rail is continued inspection, not leaving it.
+    for (const position of [1.55, 1.7, 1.55]) {
+      await dragTo(page, root, position);
+      await expect(lens(root)).toHaveCSS('outline-style', 'solid');
+    }
+    await lens(root).press('ArrowRight');
+    await lens(root).press('ArrowLeft');
+    await lens(root).click();
+    await expect(lens(root)).toHaveCSS('outline-style', 'solid');
   }
   // Moving to another control ends the retained cue; pointer-only disclosure
   // must not manufacture a focus outline that was absent before it.

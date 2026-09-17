@@ -537,6 +537,13 @@
       "scope": "chain.energy-review.focus",
       "checkedAt": "2026-09-17T19:20:15.381Z",
       "notes": "Exact six-test invocation; all pass. Full typecheck, architecture, production build, reader production closure and reader budgets also pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep \"disclosure preserves the handle outline|pending disclosure paint\"",
+      "status": "passed",
+      "scope": "chain.energy-review.focus",
+      "checkedAt": "2026-09-17T19:45:34.011Z",
+      "notes": "Post-disclosure drag reversal and keyboard-to-pointer regression reproduced before fix; six tests passed across Chromium Firefox WebKit after fix. Full npm run typecheck passed. Existing human checkpoint unchanged."
     }
   ],
   "progress": {

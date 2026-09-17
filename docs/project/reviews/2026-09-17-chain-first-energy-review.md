@@ -15,6 +15,13 @@ disclosure removed the cue despite preserving the rail position. The reader
 captures presence before pointer focus transfers and retains it on the existing
 handle through remount. Actual keyboard focus stays with the disclosure;
 Tab, Escape, another pointer target or focus elsewhere clears the retained cue.
+Follow-up: the original cleanup incorrectly treated returning to the handle as
+leaving the inspection. Handle, rail and disclosure targets now share the same
+continuation boundary for pointer, click, key and focus events. Repeated dragging
+in both directions and keyboard-to-pointer changes preserve the existing cue.
+The expanded regression failed on the first post-expansion drag before this fix,
+then passed in Chromium, Firefox and WebKit (six tests including lifecycle checks).
+
 An absent outline is not introduced by disclosure. Nonpersisted page disposal
 clears the cue and its listeners. This isolated reader helper and CSS selector
 are the rollback unit; semantic mappings and native compositor are unchanged.
