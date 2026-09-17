@@ -1,13 +1,29 @@
-#fraction-chain { max-width: 46rem; margin: 3rem auto; padding: 0 1.5rem; }
+#fraction-chain { max-width: 58rem; margin: 3rem auto; padding: 0 2.5rem; }
 #fraction-chain h1 { font-family: var(--kp-serif); }
 #fraction-chain p { max-width: 38rem; }
-#fraction-chain section { display: grid; gap: 1rem; }
-.fraction-stage { grid-area: 1 / 1; height: 15rem; min-width: 0; }
-.fraction-stage[hidden] { display: none !important; }
-#fraction-chain:not([data-fraction-ready="true"]) .fraction-stage { visibility: hidden; }
-#fraction-chain label { display: flex; align-items: center; gap: 1rem; }
-#fraction-chain input { flex: 1; }
-#fraction-chain output { min-height: 3em; }
-[data-distribution-stage] .kp-reader-equation-stage { min-height: 0; height: 100%; padding: 0; border: 0; box-shadow: none; background: transparent; }
-[data-distribution-stage] .kp-reader-equation-viewport { min-height: 0; height: 100%; }
-[data-distribution-stage] :is(.kp-reader-equation-stage-heading, .kp-reader-focus-stepper, .kp-reader-equation-hint, .kp-reader-equation-progress) { display: none; }
+.fraction-passage { --kp-equation-type-size: 1em; --derivation-inspection-accent: #236b8e; margin-block: 2rem; }
+.fraction-history { position: relative; margin-left: 1rem; padding-block: 3rem; }
+.fraction-history ol { list-style: none; margin: 0; padding: 0; }
+.fraction-history li { position: relative; }
+.fraction-history .energy-derivation-equation { width: 18rem; height: 6rem; padding: 0; }
+.fraction-history .energy-derivation-equation .katex-display,
+.fraction-history .energy-derivation-equation .katex-display > .katex { text-align: center; }
+.fraction-reason { margin-left: 19rem; padding: .5rem 0 2rem .8rem; border-left: 1px solid #c9c9c9; min-height: 6rem; }
+.fraction-reason p { margin-top: 0; }
+.fraction-inspection { position: absolute; left: 0; width: 18rem; height: 15rem; transform: translateY(-50%); pointer-events: none; opacity: 0; }
+.fraction-stage { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+.fraction-passage [data-distribution-stage] .kp-reader-equation-stage { min-height: 0; height: 100%; padding: 0; border: 0; box-shadow: none; background: transparent; }
+.fraction-passage [data-distribution-stage] .kp-reader-equation-viewport { min-height: 0; height: 100%; }
+.fraction-passage [data-distribution-stage] :is(.kp-reader-equation-stage-heading, .kp-reader-focus-stepper, .kp-reader-equation-hint, .kp-reader-equation-progress) { display: none; }
+.fraction-passage .kp-common-denominator-pressure-stage { min-block-size: 0; block-size: 100%; overflow: visible; }
+.fraction-passage :is(.kp-common-denominator-pressure-stage__endpoint, .kp-common-denominator-pressure-stage__material-layer) { font-size: var(--kp-equation-type-size); }
+.fraction-passage .energy-derivation-rail { left: -.75rem; }
+.fraction-passage :is(.kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface) { --kp-canonical-equation-type-size: 1em; }
+.fraction-passage .energy-derivation-scope { left: 0; }
+.fraction-passage [data-derivation-handle] { right: 0; }
+.fraction-passage[data-tracing="true"] .energy-derivation-equation { opacity: var(--derivation-record-presence, 1); color: color-mix(in srgb, #818990, #20252b calc(var(--derivation-record-emphasis, 0) * 100%)); text-shadow: 0 1px 0 #fff; }
+.fraction-passage [data-fraction-help] { color: #52616d; }
+.fraction-passage:not([data-fraction-ready="true"]) .fraction-inspection { opacity: 0 !important; }
+/* Inspection keeps its own lane even when enlarged prose becomes taller. */
+@media (max-width: 45rem) { #fraction-chain { padding-inline: 2rem 1rem; } .fraction-reason { margin-left: min(8rem, 45%); } .fraction-history .energy-derivation-equation, .fraction-inspection { width: min(7rem, 40%); } }
+@media print { .fraction-inspection, [data-fraction-rail], [data-fraction-scope], [data-fraction-navigation], [data-fraction-help], [data-fraction-disclosure] { display: none !important; } .fraction-reason { margin-left: 0; } .fraction-passage .energy-derivation-equation { opacity: 1 !important; color: inherit !important; } }

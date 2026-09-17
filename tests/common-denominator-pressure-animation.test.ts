@@ -113,15 +113,18 @@ test("the pressure caller resolves through its narrow native adapter", () => {
   assert.ok(capability.adapterIds.includes(projection.rendererAdapterId));
 });
 
-test("the pressure adapter composes existing paint authorities", async () => {
+test("the pressure adapter delegates to the shared native paint owner", async () => {
+  const adapter = await readFile("src/editor/common-denominator-pressure-surface-adapter.ts", "utf8");
+  assert.match(adapter, /mountCanonicalCommonDenominatorPressure/u);
+  assert.match(adapter, /session\.sample\(state\)/u);
   const source = await readFile(
-    "src/editor/common-denominator-pressure-surface-adapter.ts",
+    "src/rendering/common-denominator-pressure-session.ts",
     "utf8"
   );
 
   assert.match(source, /createKpFractionEquivalenceTransitSession/u);
   assert.match(source, /createKpCanonicalNativeKatexSceneSession/u);
-  assert.match(source, /KpEditorAnimationPlayerState/u);
+  assert.doesNotMatch(source, /from ["'][^"']*editor\//u);
   assert.match(source, /settleAndCreateKpNativeKatexRenderedEndpointHandle/u);
   assert.match(source, /validateAndMintKpNativeKatexEquivalentPoseSeam/u);
   assert.doesNotMatch(source,

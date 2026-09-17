@@ -61,6 +61,9 @@ const privateClockPaths = paths([
   // This page schedules scroll restoration and canonical-player hydration;
   // it does not sample animation time or own a second semantic clock.
   "src/experiments/kinetic-figure-log-product/kinetic-figure-log-product-entry.ts",
+  // RAF only coalesces resized native measurements; the shared reader clock
+  // owns position and the canonical sessions own every operation sample.
+  "src/tutorial/fraction-chain/reader.ts",
   "src/reader/app/distribution-area-runtime.ts",
   "src/reader/app/reader-canonical-equation-session.ts",
   "src/rendering/katex-transition-controller.ts",

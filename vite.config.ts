@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 import { kpViteAuthoringMarketPreview } from "./scripts/vite-authoring-market-preview.ts";
 import { kpViteAuthoringStructuralPreview } from "./scripts/vite-authoring-structural-preview.ts";
 import { kpViteMechanicsRelations } from "./scripts/vite-mechanics-relations.ts";
+import { kpViteFractionChain } from "./scripts/vite-fraction-chain.ts";
 import { kpViteCodeReasoning } from "./scripts/vite-code-reasoning.ts";
 import { kpViteRepertoireDashboard } from "./scripts/vite-repertoire-dashboard.ts";
 
@@ -158,6 +159,7 @@ export default defineConfig({
   plugins: [
     kpViteRepertoireDashboard(projectRoot),
     kpViteMechanicsRelations(projectRoot),
+    kpViteFractionChain(projectRoot),
     kpViteCodeReasoning(projectRoot),
     {
       name: "kp-canonical-tax-static-reading",

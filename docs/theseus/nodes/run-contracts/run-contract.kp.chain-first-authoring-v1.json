@@ -125,7 +125,8 @@
     {
       "id": "chain.fraction-passage",
       "title": "Fraction-passage",
-      "status": "planned"
+      "summary": "Static Article and persistent fraction rail compose canonical alignment, addition and reduction; exact detail return, resized-font edge drag and hidden/collapsed measurement regressions pass. Full types, architecture, production build and existing pressure preservation pass.",
+      "status": "complete"
     },
     {
       "id": "chain.fraction-review",

@@ -1,0 +1,46 @@
+import { createKpArticleSource } from "../../article/kp-article-source.ts";
+import { resolveKpArticleImports } from "../../article/kp-article-import-lock.ts";
+import { compileKpArticleDocument } from "../../article/kp-article-document.ts";
+import { compileKpArticleMarkdownFragmentHtml as html } from "../../article/kp-article-static-html.ts";
+import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
+import { compileFractionChain } from "../../authoring/fraction-chain-compilation.ts";
+
+export function compileFractionChainPublication(markdown: string, input: unknown) {
+  const result = compileFractionChain(input);
+  if (result.status !== "compiled") throw new Error(`${result.code}: ${result.expected}`);
+  const { source, revision } = result.compilation;
+  if (source.states.length !== 4 || result.compilation.steps.map(step => step.kind).join(",") !== "align,combine,reduce")
+    throw new Error("The canonical fraction passage requires alignment, addition, and reduction in order.");
+  const articleSource = createKpArticleSource("examples/algebra/fraction-chain.article.md", markdown);
+  const { lock } = resolveKpArticleImports(articleSource, []);
+  const article = compileKpArticleDocument({ source: articleSource, registry: [], lock });
+  const math = (latex: string) => renderLatexToHtml(latex, { displayMode: true });
+  const pair = source.states[1]!.expression;
+  if (pair.kind !== "pair") throw new Error("The canonical fraction passage requires its aligned pair.");
+  const intermediate = `\\frac{${pair.terms[0].numerator}+${pair.terms[1].numerator}}{${pair.terms[0].denominator}}`;
+  const row = (position: number, latex: string, prose: string, detail = false) => `<li data-fraction-row data-position="${position}"${detail ? ' data-fraction-detail hidden' : ''}>
+    <div class="energy-derivation-equation">${math(latex)}</div><div class="fraction-reason">${html(prose)}${position === 1
+      ? `<details data-fraction-static-detail><summary>Smaller addition steps</summary>${math(intermediate)}<p>Gather the numerators over one denominator, then evaluate their sum.</p></details><button type="button" data-fraction-disclosure aria-expanded="false" hidden>Inspect smaller steps</button>` : ""}</div></li>`;
+  const rows = source.states.map((state, index) => row(index, state.latex, source.moves[index]?.prose ?? "The same quantity is now written as one half.") +
+    (index === 1 ? row(1.5, intermediate, "Both counts now share one denominator. Add only the numerator terms.", true) : "")).join("");
+  const passage = `<div class="energy-derivation fraction-passage" data-fraction-passage data-source-revision="${revision}" data-rail-refinement="true" data-inset-fenceposts="true">
+    <p data-fraction-status role="status" hidden>Preparing inspection…</p>
+    <p data-fraction-help hidden>Click the rail to jump; drag the handle to inspect. Use arrow keys to move between equations.</p>
+    <div class="fraction-history"><ol>${rows}</ol>
+      <div class="energy-derivation-rail" data-fraction-rail hidden>${source.states.map((_, i) => `<span data-position="${i}"></span>`).join("")}<span data-position="1.5" data-fraction-detail hidden></span></div>
+      <div class="fraction-inspection" data-fraction-inspection aria-hidden="true">
+        ${["alignment", "merge", "evaluation", "reduction"].map(kind => `<div class="fraction-stage" data-fraction-stage="${kind}" data-distribution-stage></div>`).join("")}
+      </div>
+      <div class="energy-derivation-scope" data-fraction-scope hidden><button type="button" data-derivation-handle role="slider" aria-label="Fraction derivation" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><span aria-hidden="true"></span></button></div>
+    </div><div class="energy-derivation-actions" data-fraction-navigation hidden><button type="button" data-fraction-back>Previous</button><button type="button" data-fraction-next>Next</button></div>
+  </div>`;
+  let found = false;
+  const body = article.document.blocks.map(block => {
+    if (block.kind === "markdown") return html(block.markdown);
+    if (block.kind !== "passage" || block.id !== "counting-parts" || found) throw new Error("Fraction Article requires one counting-parts passage and prose only.");
+    found = true; return `<section id="counting-parts">${html(block.markdown)}${passage}</section>`;
+  }).join("\n");
+  if (!found) throw new Error("Missing fraction passage.");
+  return `<article data-kp-article="${escape(article.document.id)}">${body}</article>`;
+}

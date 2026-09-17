@@ -135,7 +135,8 @@ export function planKpCanonicalEquationTransitionCorrections(input: {
           Math.abs(from.height - to.height) > tolerancePx
         ) {
           throw new Error(
-            `Canonical equation seam ${cohort.id} -> ${next.id} changed paint shape at ${key}.`
+            `Canonical equation seam ${cohort.id} -> ${next.id} changed paint shape at ${key} ` +
+            `(${from.width} × ${from.height} -> ${to.width} × ${to.height}px).`
           );
         }
         return {

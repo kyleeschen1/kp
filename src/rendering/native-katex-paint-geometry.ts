@@ -233,12 +233,14 @@ function measureBorderPaintRects(
   const bounds = element.getBoundingClientRect();
   if (
     computed.display === "none" ||
-    computed.visibility === "hidden" ||
     bounds.width <= 0 ||
     bounds.height <= 0
   ) {
     return [];
   }
+  // Endpoint geometry is measured even when another compositor owner holds
+  // the paint. Match text measurement: visibility must not remove native
+  // rules from a hidden endpoint's geometry during resize or reverse seeking.
   const borders = [
     {
       style: computed.borderTopStyle,

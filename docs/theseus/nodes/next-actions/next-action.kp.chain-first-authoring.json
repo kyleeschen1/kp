@@ -691,6 +691,48 @@
       "scope": "chain.reduction-exemplar",
       "checkedAt": "2026-09-17T20:47:53.599Z",
       "notes": "Fraction addition and reduction route builds with production erasure preserved."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "chain.fraction-passage",
+      "checkedAt": "2026-09-17T21:15:20.992Z",
+      "notes": "21 checks passed: checked source and operations, ordered rail geometry at resized fonts, static Article publication, located unsupported-chain repair."
+    },
+    {
+      "command": "npm run visual:fraction-chain -- --repeat-each=2",
+      "status": "passed",
+      "scope": "chain.fraction-passage",
+      "checkedAt": "2026-09-17T21:15:22.221Z",
+      "notes": "Six Chromium checks passed across two runs: direct seek, all operations, native hidden-rule geometry, retained disclosure and exact return, static no-JS reading, resized fonts, reduced motion, edge drag both ends, collapsed-host restoration and narrow prose separation. Repairs addressed hidden transition measurement, visibility-independent native rule geometry and zero-width host invalidation."
+    },
+    {
+      "command": "npm run visual:common-denominator-pressure",
+      "status": "passed",
+      "scope": "chain.fraction-passage",
+      "checkedAt": "2026-09-17T21:15:23.280Z",
+      "notes": "Six existing Chromium checks passed after extracting the renderer-owned pressure session: canonical timeline, native seams, URL restore, interrupted playback, font and viewport replacement, narrow layout, device scale and static checkpoints."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.fraction-passage",
+      "checkedAt": "2026-09-17T21:15:47.255Z",
+      "notes": "Dependency directions, framework-neutral entrypoints, semantic and evaluation boundaries, equation compiler authority, governance v2 and cross-domain gateway passed. The exact host RAF inventory entry permits resize coalescing only; semantic time remains the existing shared timeline clock."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/common-denominator-pressure-presentation-plan.test.ts tests/common-denominator-pressure-animation.test.ts tests/equation-compiler-authority-ratchet.test.ts tests/composed-algebra-baseline-probe.test.ts",
+      "status": "passed",
+      "scope": "chain.fraction-passage",
+      "checkedAt": "2026-09-17T21:15:48.605Z",
+      "notes": "13 affected preservation checks passed. Updated source-boundary regression follows the extracted renderer owner and verifies editor delegation; no semantic or paint law was removed."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "chain.fraction-passage",
+      "checkedAt": "2026-09-17T21:16:39.438Z",
+      "notes": "Full app, node, tests, Svelte and domain typechecks passed; production build and existing publication checks passed. Existing large shared chunks remain warnings; no ceiling changed."
     }
   ],
   "progress": {

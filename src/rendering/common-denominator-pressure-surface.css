@@ -1,0 +1,39 @@
+.kp-common-denominator-pressure-stage {
+  position: relative;
+  display: grid;
+  min-block-size: clamp(18rem, 48vh, 30rem);
+  place-items: center;
+  inline-size: 100%;
+  overflow: hidden;
+  color: var(--kp-equation-foreground, currentColor);
+  background: transparent;
+  isolation: isolate;
+  text-transform: none;
+}
+
+.kp-common-denominator-pressure-stage__endpoint,
+.kp-common-denominator-pressure-stage__material-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  pointer-events: none;
+}
+
+.kp-common-denominator-pressure-stage__endpoint .katex-display {
+  margin: 0;
+}
+
+.kp-common-denominator-pressure-stage__material-layer {
+  z-index: 2;
+}
+
+.kp-common-denominator-pressure-stage__status {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
