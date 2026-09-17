@@ -5,6 +5,11 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+Inset fenceposts are accepted. The user approved anchoring as the first step for
+[disclosure persistence](2026-09-16-disclosure-persistence.md). Keep the clicked
+control at its viewport offset and preserve exact held-state return. Do not
+invent child-pose correspondence for the compact fluent cancellation.
+
 The rail exemplar is accepted. The user approved
 [inset equation fenceposts](2026-09-16-inset-equation-fenceposts.md), clarifying
 visual inset rather than downward motion. One energy exemplar owns discovery;

@@ -1,5 +1,8 @@
 # Inset equation fenceposts
 
+Visually accepted by the user: “looks great!” Next approved work is
+[disclosure persistence](2026-09-16-disclosure-persistence.md).
+
 User-approved experiment following acceptance of the equation rail. The user
 means visually inset equations, not physical downward motion.
 

@@ -25,6 +25,11 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Inset fenceposts are visually accepted. The next requested refinement is
+[disclosure persistence](threads/2026-09-16-disclosure-persistence.md): keep the
+clicked heading/control anchored and retain held inspection state on return.
+This is an anchoring repair before considering an expansion animation.
+
 The equation rail is visually accepted. Current approved experiment:
 [inset equation fenceposts](threads/2026-09-16-inset-equation-fenceposts.md),
 with subdued permanent equations and a clean single-copy docking handoff.

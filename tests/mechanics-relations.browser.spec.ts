@@ -2,6 +2,53 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("opening smaller steps preserves the detail entry in the viewport", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  const root = await ready(page);
+  // Enter the local move before dragging so release stays inside the viewport.
+  await root.locator('[data-derivation-entry="2"]').click();
+  await dragTo(page, root, 2.55);
+  const progress = await lens(root).getAttribute('aria-valuenow');
+  const expand = root.locator('[data-refinement-expand]');
+  await expand.evaluate(el => { scrollBy(0, el.getBoundingClientRect().top - 220); });
+  const top = (await expand.boundingBox())!.y;
+  await expand.click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
+  const collapse = root.locator('[data-refinement-collapse]').first();
+  await expect(collapse).toBeFocused();
+  expect(Math.abs((await collapse.boundingBox())!.y - top)).toBeLessThan(2);
+  await collapse.click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await expect(expand).toBeFocused();
+  expect(Math.abs((await expand.boundingBox())!.y - top)).toBeLessThan(2);
+  await expect(lens(root)).toHaveAttribute('aria-valuenow', progress!);
+});
+
+test("explanation disclosure preserves its reading anchor and held inspection", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  const root = await ready(page), handle = lens(root);
+  await dragTo(page, root, .5);
+  const summary = root.locator('[data-derivation-interleave="0"] details > summary').first();
+  await summary.evaluate(el => { scrollBy(0, el.getBoundingClientRect().top - 120); });
+  const progress = await handle.getAttribute('aria-valuenow');
+  for (const keyboard of [false, true]) {
+    const top = (await summary.boundingBox())!.y;
+    if (keyboard) { await summary.focus(); await summary.press('Enter'); } else await summary.click();
+    await page.waitForTimeout(100);
+    expect(Math.abs((await summary.boundingBox())!.y - top)).toBeLessThan(2);
+    await expect(handle).toHaveAttribute('aria-valuenow', progress!);
+    await expect(root).toHaveAttribute('data-playing', 'false');
+  }
+  await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; });
+  await expect.poll(async () => Number(await handle.getAttribute('aria-valuenow'))).toBeCloseTo(Number(progress), 5);
+  const recall = root.locator('[data-derivation-recall] > summary');
+  await recall.evaluate(el => { scrollBy(0, el.getBoundingClientRect().top - 160); });
+  const recallTop = (await recall.boundingBox())!.y;
+  await recall.click();
+  await expect.poll(async () => Math.abs((await recall.boundingBox())!.y - recallTop)).toBeLessThan(2);
+  await expect(handle).toHaveAttribute('aria-valuenow', progress!);
+});
+
 test("inset fenceposts hand overlapping paint to the moving equation and restore it at docks", async ({ page }, info) => {
   await page.setViewportSize({ width: 1280, height: 1100 });
   const root = await ready(page), records = root.locator('.energy-derivation-equation');

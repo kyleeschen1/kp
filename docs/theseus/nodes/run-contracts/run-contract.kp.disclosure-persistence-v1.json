@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.disclosure-persistence-v1",
+  "kind": "run-contract",
+  "title": "Preserve reading place across detail disclosures",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.relational-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/2026-09-16-disclosure-persistence.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --grep \"opening smaller steps preserves|explanation disclosure preserves\"",
+      "status": "passed",
+      "scope": "disclosure-anchor",
+      "checkedAt": "2026-09-17T01:47:09.937Z",
+      "notes": "Final four Chromium/Firefox checks pass: native summary anchor, keyboard/open/close, larger text, expanded entry/control continuity and exact compact return. Before repair entry jumped 132px. Initial Firefox setup released a pointer outside the viewport; local-step entry corrected that test setup. Separate five-case Chromium run passed refinement and failure-recovery preservation."
+    },
+    {
+      "command": "npm run typecheck; npm run build:bundle",
+      "status": "passed",
+      "scope": "disclosure-preservation",
+      "checkedAt": "2026-09-17T01:47:11.935Z",
+      "notes": "Full types and production build pass; existing global chunk warnings remain. No semantic mapping or animation change. Compact atomic interior poses have no issued child-pose equivalence; preserve exact saved return rather than invent one."
+    }
+  ],
+  "allowedWork": [
+    "Disclosure event anchoring and refinement control anchoring in the existing reader; bounded energy review and preservation checks; two-hour ceiling with final-quarter closeout reserve"
+  ],
+  "disallowedWork": [
+    "Invented correspondence between unlike intermediate poses, new animation or clock, graph/code rollout, merge, push"
+  ],
+  "goal": "Keep clicked disclosure controls in place and retain held inspection state during open/close and return",
+  "target": "next-action.kp.relational-reader",
+  "slices": [
+    {
+      "id": "disclosure.anchor",
+      "title": "Disclosure-anchor",
+      "summary": "COMPLETE: control and summary anchoring repaired with executable regressions. Saved compact state returns exactly; no guessed intermediate-pose mapping or new animation.",
+      "status": "complete"
+    }
+  ]
+}

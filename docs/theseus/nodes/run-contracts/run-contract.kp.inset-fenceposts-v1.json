@@ -2,8 +2,8 @@
   "id": "run-contract.kp.inset-fenceposts-v1",
   "kind": "run-contract",
   "title": "Try inset equation fenceposts",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: energy inset fenceposts and clean docking handoff ready. Review depth, readability and landing before wider adoption.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -47,8 +47,8 @@
     {
       "id": "fencepost.exemplar",
       "title": "Inset-fencepost-exemplar",
-      "summary": "HUMAN_CHECKPOINT: candidate verified; inspect inset context, near-landing clarity and reverse at energy-from-momentum.",
-      "status": "in-progress"
+      "summary": "User accepted inset fenceposts: looks great. Next selected refinement is disclosure state persistence.",
+      "status": "complete"
     }
   ]
 }

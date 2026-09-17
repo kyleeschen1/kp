@@ -63,24 +63,28 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
     if (!buttons.length || !enabled || !expanded) return;
     // Header and child affordances enter one transition, never independent
     // collapse states. The busy guard also covers overlapping activations.
-    const toggle = async () => {
+    const toggle = async (event: Event) => {
       if (busy) return;
+      const entry = event.currentTarget;
+      if (!(entry instanceof HTMLElement)) return;
       busy = true;
       try {
         const collapsing = saved !== undefined;
-        const anchor = root.querySelector<HTMLElement>("[data-refinement-anchor]")!;
-        if (!collapsing) saved = { state: active.capture(), offset: anchor.getBoundingClientRect().top };
+        if (!collapsing) saved = { state: active.capture(), offset: entry.getBoundingClientRect().top };
         const next = collapsing ? prototype.cloneNode(true) as HTMLElement : expanded.content.firstElementChild!.cloneNode(true) as HTMLElement;
         const destination = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
-        const offset = collapsing ? saved!.offset : anchor.getBoundingClientRect().top;
+        const offset = saved!.offset;
         active.dispose(); root.replaceWith(next); root = next;
         active = mountEnergyDerivation(root, binding, destination);
         await active.ready;
         if (root.dataset["repair"] === "true") throw new Error("Refinement scene requires repair");
         if (collapsing) saved = undefined;
         bind();
-        window.scrollBy({ top: root.querySelector<HTMLElement>("[data-refinement-anchor]")!.getBoundingClientRect().top - offset, behavior: "instant" });
-        root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")?.focus({ preventScroll: true });
+        // The clicked control is the reader's anchor. The parent equation can
+        // sit far above it once its explanation is open.
+        const restoredEntry = root.querySelector<HTMLElement>(collapsing ? "[data-refinement-expand]" : "[data-refinement-collapse]")!;
+        window.scrollBy({ top: restoredEntry.getBoundingClientRect().top - offset, behavior: "instant" });
+        restoredEntry.focus({ preventScroll: true });
       } catch (error) {
         // A failed optional view must not strand the reader or grant a visual
         // fallback authority. Restore the already checked compact inspection.
@@ -93,8 +97,9 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           saved = undefined;
           await active.ready;
           bind();
-          window.scrollBy({ top: root.querySelector<HTMLElement>("[data-refinement-anchor]")!.getBoundingClientRect().top - previous.offset, behavior: "instant" });
-          root.querySelector<HTMLElement>("[data-refinement-expand]")?.focus({ preventScroll: true });
+          const restoredEntry = root.querySelector<HTMLElement>("[data-refinement-expand]")!;
+          window.scrollBy({ top: restoredEntry.getBoundingClientRect().top - previous.offset, behavior: "instant" });
+          restoredEntry.focus({ preventScroll: true });
         }
         const status = root.querySelector<HTMLElement>("[data-derivation-status]")!;
         status.hidden = false; status.textContent = "This detail needs repair; the written reasoning remains available.";
@@ -595,9 +600,24 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     }, abort.signal);
   }
   if (initial?.disclosures.length) [...root.querySelectorAll<HTMLDetailsElement>("details")].forEach((el, i) => { el.open = initial.disclosures[i] ?? false; });
+  let disclosureAnchor: { summary: HTMLElement; top: number } | undefined;
+  root.addEventListener('click', event => {
+    const summary = event.target instanceof Element ? event.target.closest('summary') : null;
+    if (!(summary instanceof HTMLElement) || !root.contains(summary) || summary.parentElement?.tagName !== 'DETAILS') return;
+    // Capture before the native disclosure changes layout. Keyboard activation
+    // dispatches the same click; pausing here holds the pose at activation.
+    pause();
+    disclosureAnchor = { summary, top: summary.getBoundingClientRect().top };
+  }, { ...opts, capture: true });
   // Expanding the justification is a request to read, not a race against the
   // automatic act phase. The handle or explicit step controls resume inspection.
-  interleaves.forEach(passage => passage.addEventListener("toggle", () => { pause(); measureRows(); project(); }, { ...opts, capture: true }));
+  interleaves.forEach(passage => passage.addEventListener("toggle", event => {
+    pause(); measureRows(); project();
+    const anchor = disclosureAnchor;
+    if (anchor?.summary.parentElement !== event.target) return;
+    disclosureAnchor = undefined;
+    window.scrollBy({ top: anchor.summary.getBoundingClientRect().top - anchor.top, behavior: 'instant' });
+  }, { ...opts, capture: true }));
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, opts);
   reduced.addEventListener("change", pause, opts);
   const visibility = new IntersectionObserver(entries => {
