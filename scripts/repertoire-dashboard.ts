@@ -4,6 +4,7 @@ import { relative, resolve } from 'node:path';
 const escape = (text: string) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 export type Item = { checked: boolean; label: string; evidence?: string; id?: string; example?: string; audit?: string; uses?: string[] };
 type Topic = { title: string; moves: Item[]; motifs: Item[] };
+const topicSlug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export function parseRepertoire(text: string, source: string) {
   let title = '', topic: Topic | undefined, list: Item[] | undefined;
   const topics: Topic[] = [];
@@ -80,9 +81,10 @@ export function readRepertoire(projectRoot: string) {
     const group = groups.get(id) ?? { title: data.title, topics: [] };
     if (group.title !== data.title) throw new Error(`${path}: inconsistent discipline title`);
     for (const topic of data.topics) {
-      if (group.topics.some(t => t.title === topic.title)) throw new Error(`${path}: duplicate topic ${topic.title}`);
+      if (group.topics.some(t => topicSlug(t.title) === topicSlug(topic.title))) throw new Error(`${path}: duplicate topic route ${topic.title}`);
       group.topics.push({ ...topic, file });
-      for (const item of [...topic.moves, ...topic.motifs]) if (item.id) {
+      for (const item of [...topic.moves, ...topic.motifs]) {
+        if (!item.id) throw new Error(`${path}: curriculum rows require stable IDs, Example and Audit`);
         if (ids.has(item.id)) throw new Error(`${path}: duplicate item ${item.id}`);
         ids.add(item.id);
       }
@@ -112,7 +114,10 @@ export function compileRepertoire(projectRoot: string) {
       const evidence = item.evidence ? sourceLink(resolve(file, '..', item.evidence.split('#')[0]!)) : undefined;
       return `<li${item.id ? ` id="${item.id}"` : ''}><span class="status ${item.checked ? 'implemented' : ''}" role="img" aria-label="${item.checked ? 'Implemented at stated scope' : 'Predicted; implementation unconfirmed'}">${item.checked ? '✓' : '☐'}</span><div>${escape(item.label)}${evidence ? ` <a class="evidence" href="${escape(evidence)}" target="_blank" rel="noopener">Evidence<span class="sr-only"> for ${escape(item.label)}</span> ↗</a>` : ''}${item.example ? `<div class="example">${escape(item.example)}</div>` : ''}${item.audit && !item.checked ? `<div class="audit">${escape(item.audit)}</div>` : ''}${item.uses ? `<div class="audit">Uses: ${item.uses.map(id => `<a href="#${id}">${id}</a>`).join(', ')}</div>` : ''}</div></li>`;
     }).join('')}</ul>`;
-    return { id, title: data.title, html: `<section data-discipline="${id}" aria-labelledby="heading-${id}"><div class="discipline-heading"><h2 id="heading-${id}">${escape(data.title)}</h2></div>${data.topics.map(topic => `<article class="topic"><div class="discipline-heading"><h3>${escape(topic.title)}</h3><a class="source" href="${sourceLink(topic.file)}" target="_blank" rel="noopener">Markdown source ↗</a></div><div class="lists"><section><h4>Semantic moves</h4>${items(topic.moves, topic.file)}</section><section><h4>Visual motifs</h4>${items(topic.motifs, topic.file)}</section></div></article>`).join('')}</section>` };
+    return { id, title: data.title, html: `<section data-discipline="${id}" aria-labelledby="heading-${id}"><div class="discipline-heading"><h2 id="heading-${id}">${escape(data.title)}</h2></div>${data.topics.map(topic => `<article class="topic" id="topic-${id}-${topicSlug(topic.title)}" data-topic-title="${escape(topic.title)}"><div class="discipline-heading"><h3>${escape(topic.title)}</h3><a class="source" href="${sourceLink(topic.file)}" target="_blank" rel="noopener">Markdown source ↗</a></div><div class="lists"><section><h4>Semantic moves</h4>${items(topic.moves, topic.file)}</section><section><h4>Visual motifs</h4>${items(topic.motifs, topic.file)}</section></div></article>`).join('')}</section>` };
   });
-  return { assets, html: `<div class="selector"><label for="discipline">Discipline</label><select id="discipline" disabled>${disciplines.map(d => `<option value="${d.id}">${escape(d.title)}</option>`).join('')}</select><a href="#shared">Shared reading motifs</a></div><div id="disciplines">${disciplines.map(d => d.html).join('')}</div>` };
+  const guide = sourceLink(resolve(projectRoot, 'docs/project/repertoire-notes/scope-and-sources.md'));
+  const findings = sourceLink(resolve(projectRoot, 'docs/project/repertoire-notes/trace-findings.md'));
+  const editing = sourceLink(resolve(projectRoot, 'docs/project/repertoire/README.md'));
+  return { assets, html: `<p class="note"><a href="${guide}" target="_blank" rel="noopener">Scope and sources</a> · <a href="${findings}" target="_blank" rel="noopener">Worked-problem findings</a> · <a href="${editing}" target="_blank" rel="noopener">Editing guide</a></p><div class="selector"><div><label for="discipline">Discipline</label><select id="discipline" disabled>${disciplines.map(d => `<option value="${d.id}">${escape(d.title)}</option>`).join('')}</select></div><div id="topic-control" hidden><label for="topic">Topic</label><select id="topic" disabled></select></div><a href="#shared">Shared reading motifs</a></div><div id="disciplines">${disciplines.map(d => d.html).join('')}</div>` };
 }

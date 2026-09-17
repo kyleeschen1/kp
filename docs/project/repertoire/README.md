@@ -3,8 +3,13 @@
 Predicted needs by discipline, with checks for implemented examples.
 
 Open the [dashboard](http://localhost:8000/experiments/repertoire/) with the
-development server running. Choose a discipline, then read its topics with
+development server running. Choose a discipline and optionally one topic, then read
 separate lists for semantic moves and visual motifs.
+
+Link a particular move with `/experiments/repertoire/#alg.log.quotient-combine`
+(substitute its stable ID). The page restores the containing discipline/topic.
+Topic selection also survives reload and browser history. Without JavaScript all
+lists remain readable; the page does not need a database or runtime content fetch.
 
 - [Shared reading](shared.md)
 - [Algebra](algebra/01-arithmetic.md) (topic files in `algebra/`)
@@ -64,6 +69,10 @@ validated. Examples illustrate scope; they are not automatically certified tests
 
 Edit only the relevant discipline file. Keep each item one line: checkbox,
 plain-language name, brief scope if needed, and an evidence link when checked.
+Use the three-line format above for new rows; `partial` and `gap` also require
+evidence, while `unaudited` makes no implementation claim. The validator checks
+IDs, references, audit/checkbox agreement and files; a human/source audit still
+owns the truth of the claim. It cannot certify an implementation from a link.
 Narrow or split an overly broad item instead of adding status columns. Add likely
 needs as unchecked items; check only after inspecting implementation evidence.
 Shared treatments belong in shared.md; link them instead of duplicating status.

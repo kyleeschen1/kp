@@ -31,9 +31,12 @@
 - [ ] `alg.power.negative` Move a negative exponent across a fraction bar.
   Example: x^(-n) → 1/x^n; x≠0
   Audit: unaudited
-- [x] `alg.root.half-power` Rewrite a square root as a half power — governed exemplar. [Evidence](../../repertoire-notes/algebra-audit.md)
-  Example: √x ↔ x^(1/2); x≥0
+- [x] `alg.root.half-power` Rewrite a half power as a square root — governed exemplar. [Evidence](../../repertoire-notes/algebra-audit.md)
+  Example: x^(1/2) → √x; x≥0
   Audit: implemented
+- [ ] `alg.root.root-to-power` Rewrite a square root as a half power. [Evidence](../../repertoire-notes/algebra-audit.md)
+  Example: √x → x^(1/2); x≥0
+  Audit: partial — the checked operation runs power to root; reverse playback does not establish a separately authorized inverse move
 - [ ] `alg.root.rational-power` Relate general rational exponents to radicals.
   Example: x^(2/3) = (∛x)² for real x; choose real-root convention
   Audit: unaudited

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.curriculum-repertoire-v1",
   "kind": "run-contract",
   "title": "Practical curriculum repertoire away delivery",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,7 +60,8 @@
     {
       "id": "curriculum.integration",
       "title": "Dashboard-and-closeout",
-      "status": "planned"
+      "summary": "Dashboard and review packet delivered; all approved integration gates passed. Full-suite data-only scan-count failure and focused repair recorded separately. Source-only maintenance, 747 rows and audit limits documented.",
+      "status": "complete"
     }
   ]
 }

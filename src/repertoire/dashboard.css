@@ -11,6 +11,8 @@ h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.04em; margin: .5rem 0;
 .note { color: #647168; font-size: .8rem; line-height: 1.5; }
 .selector { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; padding: 1.4rem 0; margin-top: 1.5rem; border-block: 1px solid #dce2dc; }
 .selector label { font-size: .85rem; font-weight: 600; }
+.selector > div { display: grid; gap: .4rem; min-width: 0; flex: 1 1 19rem; }
+.selector > a { align-self: end; padding-bottom: .7rem; }
 select { font: inherit; background: white; color: inherit; padding: .6rem 2rem .6rem .7rem; border: 1px solid #acb9ae; border-radius: .25rem; max-width: 100%; min-height: 44px; }
 a { color: #38664f; text-underline-offset: .18em; }
 .selector a { margin-left: auto; font-size: .8rem; }
@@ -25,10 +27,16 @@ ul { list-style: none; margin: 0; padding: 0; }
 li { display: flex; gap: .65rem; align-items: baseline; font-size: .9rem; line-height: 1.6; margin: 0 0 .8rem; }
 .status { flex: 0 0 1rem; color: #79857c; }
 .status.implemented { color: #277557; font-weight: bold; }
+.example { margin-top: .25rem; overflow-wrap: anywhere; }
+.audit { color: #647168; font-size: .8rem; overflow-wrap: anywhere; }
+li > div { min-width: 0; }
+li:target { outline: 1px solid #acb9ae; outline-offset: .35rem; }
+.topic > .discipline-heading { margin-top: 0; margin-bottom: 1rem; }
+.topic h3 { margin-bottom: 0; }
 .evidence { white-space: nowrap; }
 footer { margin-top: 2rem; font-size: .8rem; line-height: 1.6; color: #647168; }
 :focus-visible { outline: 2px solid #277557; outline-offset: 3px; }
 [hidden] { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-@media (max-width: 640px) { main { padding: 1.5rem 1.1rem; } .lists { grid-template-columns: 1fr; gap: 1rem; } .selector { align-items: flex-start; flex-direction: column; } .selector a { margin-left: 0; } select { width: 100%; } }
-@media print { main { padding: 0; } .selector, footer { display: none; } [data-discipline][hidden] { display: block !important; } .topic { break-inside: avoid; } }
+@media (max-width: 640px) { main { padding: 1.5rem 1.1rem; } .lists { grid-template-columns: 1fr; gap: 1rem; } .selector { align-items: stretch; flex-direction: column; } .selector > div { flex-basis: auto; } .selector a { margin-left: 0; align-self: start; } select { width: 100%; } }
+@media print { main { padding: 0; } .selector, footer { display: none; } [data-discipline][hidden], .topic[hidden] { display: block !important; } .topic { break-inside: avoid; } }

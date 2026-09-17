@@ -13,6 +13,13 @@ against engine intervention. Next medium: existing centroid code/text coordinati
 This records direction; it does not reopen old run contracts or start a curriculum.
 Track repertoire hypotheses in the [simple dashboard](../repertoire/README.md).
 
+The approved [curriculum inventory plan](../2026-09-16-curriculum-repertoire-away-plan.md)
+has delivered a systematic first-pass map and bounded implementation audit.
+[Review packet](../reviews/2026-09-16-curriculum-repertoire-review.md) records its
+scope, checks and limits. This expands the planning inventory, not lesson
+production or renderer authority. Nonterminal/scalar transfer remains the saved
+next experiment; the inventory's gap ranking does not start new work.
+
 The user approved an [inline unfolding trial](2026-09-16-disclosure-persistence.md#inline-unfolding-exemplar)
 after observing that anchored view replacement still loses visual continuity.
 Preserve native energy endpoints, parent prose and grip; reveal checked children

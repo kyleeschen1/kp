@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, mkdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { compileRepertoire, parseRepertoire, readRepertoire } from './repertoire-dashboard.ts';
 
@@ -63,3 +63,40 @@ test('worked-problem traces refer only to existing stable curriculum rows', () =
     for (const ref of refs) assert.ok(ids.has(ref[1]), `${file}: unknown row ${ref[1]}`);
   }
 });
+
+function withFixture(run: (root: string, put: (path: string, content: string) => void) => void) {
+  mkdirSync('tmp/codex', { recursive: true });
+  const root = mkdtempSync(resolve('tmp/codex/repertoire-test-'));
+  const put = (path: string, content: string) => {
+    const file = resolve(root, path);
+    mkdirSync(resolve(file, '..'), { recursive: true });
+    writeFileSync(file, content);
+  };
+  try { run(root, put); } finally { rmSync(root, { recursive: true, force: true }); }
+}
+const completeGranular = granular.replace('- [ ] Preserve the denominator.', '- [ ] `motif.denominator` Preserve the denominator.\n  Example: Retain the same denominator\n  Audit: unaudited');
+test('topic-file edits cannot create duplicate IDs, conflicting disciplines or dangling reuse links', () => withFixture((root, put) => {
+  const path = 'docs/project/repertoire/algebra/';
+  put(path + 'first.md', completeGranular);
+  put(path + 'second.md', completeGranular.replace('## Fractions', '## Another topic'));
+  assert.throws(() => readRepertoire(root), /duplicate item alg.add/);
+  put(path + 'second.md', completeGranular.replace('# Algebra', '# Other name'));
+  assert.throws(() => readRepertoire(root), /inconsistent discipline title/);
+  rmSync(resolve(root, path, 'second.md'));
+  put(path + 'first.md', completeGranular.replace('Audit: unaudited', 'Audit: unaudited\n  Uses: alg.missing'));
+  assert.throws(() => readRepertoire(root), /unknown Uses reference alg.missing/);
+  put(path + 'first.md', completeGranular.replace('`alg.add` ', ''));
+  assert.throws(() => readRepertoire(root), /Details require an indented granular item/);
+}));
+
+test('source projection escapes authored text and cannot serve evidence outside approved directories', () => withFixture((root, put) => {
+  for (const path of ['docs/project/repertoire/README.md', 'docs/project/repertoire-notes/scope-and-sources.md', 'docs/project/repertoire-notes/trace-findings.md']) put(path, '# Notes');
+  const path = 'docs/project/repertoire/algebra/first.md';
+  put(path, completeGranular.replace('Add fractions.', '<img src=x onerror=alert(1)>'));
+  const compiled = compileRepertoire(root);
+  assert.ok(compiled.html.includes('&lt;img'));
+  assert.ok(!compiled.html.includes('<img'));
+  put('private.txt', 'Fixture-only private content');
+  put(path, completeGranular.replace('Add fractions.', 'Add fractions. [Evidence](../../../../private.txt)'));
+  assert.throws(() => compileRepertoire(root), /Evidence outside supported source directories/);
+}));

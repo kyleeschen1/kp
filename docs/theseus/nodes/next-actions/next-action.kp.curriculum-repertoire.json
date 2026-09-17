@@ -2,8 +2,31 @@
   "id": "next-action.kp.curriculum-repertoire",
   "kind": "next-action",
   "title": "Map practical curriculum moves and audit KP implementation coverage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "COMPLETE: all five approved inventory packages delivered and verified; review packet records 747 rows, bounded audits, unknowns, final checks and limitations. New machinery work awaits separate execution scope.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-16-curriculum-repertoire-away-plan.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-16-curriculum-repertoire-review.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.relational-reader"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:repertoire",
+    "npm run visual:repertoire"
+  ],
   "verificationRecords": [
     {
       "command": "Source review: open curriculum scope pages and repository repertoire parser",
@@ -32,6 +55,50 @@
       "scope": "curriculum.traces",
       "checkedAt": "2026-09-17T06:05:49.708Z",
       "notes": "Six tests pass including all trace row references and local audit links. Worked algebra/calculus/economics/mechanics/program examples manually checked; no learner outcomes claimed."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "curriculum.integration",
+      "checkedAt": "2026-09-17T06:25:26.398Z",
+      "notes": "Full suite exited nonzero on stale exact equation reachability snapshot. Focused reproduction established scannedFileCount 4704 versus 4749; all 68 roots and callers unchanged. Repaired with committed generator; full suite not rerun."
+    },
+    {
+      "command": "npm run test:equation-reachability; npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "curriculum.integration",
+      "checkedAt": "2026-09-17T06:25:27.873Z",
+      "notes": "After data-only count regeneration, 12 reachability tests and snapshot check pass. No roots, callers or assertions changed."
+    },
+    {
+      "command": "npm run test:repertoire; npm run visual:repertoire; npm run typecheck; npm run typecheck:tests; npm run check:architecture; npm run build:bundle",
+      "status": "passed",
+      "scope": "curriculum.integration",
+      "checkedAt": "2026-09-17T06:25:29.295Z",
+      "notes": "Eight repertoire and four Chromium tests pass, including static built route/evidence, no-script, deep links/history and narrow enlarged-font layout. Full and test types, architecture and production build pass. Review packet records costs, audit limits, prior failures and typed run metadata omission."
+    }
+  ],
+  "expectedLearning": [
+    "Which practical moves have bounded evidence and which remain partial, gaps or unaudited"
+  ],
+  "allowedWork": [
+    "Approved curriculum inventory and bounded evidence audit in the linked plan"
+  ],
+  "disallowedWork": [
+    "New lessons, animations, renderer promotion, paid calls, deployment, agents or old-loop resumption"
+  ],
+  "criteria": [
+    {
+      "id": "granular-source-backed-inventory",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-evidence-and-explicit-unknowns",
+      "weight": "high"
+    },
+    {
+      "id": "readable-validated-dashboard",
+      "weight": "high"
     }
   ]
 }
