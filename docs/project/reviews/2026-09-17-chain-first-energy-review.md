@@ -6,6 +6,29 @@ is pending. Theseus owns live counts and execution under
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
 requires this judgment before scalar transfer. No later slice has started.
 
+## Follow-up: prior return/handle repair did not resolve the report
+
+The user reports both original symptoms still persist. The prior warm-scene
+checks were insufficient: a fresh short-viewport test observed **222ms before
+the first frame**, and another run exposed a disabled first frame. Checking
+only enabled state after rendering can miss main-thread preparation latency.
+
+The energy reader now prepares its bounded published detail scenes during
+initial preparation, beginning one viewport before the section is visible.
+The first disclosure reuses these scenes; return does not repeat that preflight.
+Native plan, compositor, retained-paint and font/layout invalidation owners remain
+unchanged. This shifts work earlier; it does not eliminate first page-load or
+font-rebuild cost. The small-viewport regression checks first-frame latency,
+handle position/availability, then visits the final smaller step and returns to
+the saved step-3 position without an off-screen or delayed jump. All 15 scoped
+Chromium checks and full typecheck pass.
+
+**The reported whole-reader reset is still unconfirmed and unresolved.** The
+canonical URL and tested click sequence restore step 3 correctly. The user has
+been asked for the actual URL and sequence, including whether “reset” means
+collapsing detail, moving to the beginning or reloading the page. Do not present
+the latency repair as resolution of both symptoms or as visual acceptance.
+
 ## Revision: return destination and ready handle
 
 “Back to step 3” previously restored whichever transition was selected before

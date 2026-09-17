@@ -479,13 +479,15 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         }
       };
       alignBaselines(equationSlots);
-      for (let sceneIndex = 0; sceneIndex < total; sceneIndex++) {
-        const template = get<HTMLTemplateElement>(`[data-derivation-template="${sceneIndex}"]`);
-        const font = getComputedStyle(equationSlots[sceneIndex]!.querySelector('.katex')!);
-        const cacheKey = JSON.stringify([proofPlan.sourceRevision, ids[sceneIndex], template.innerHTML,
+      const keyFor = (plan: EnergyDerivationPlan, sceneIndex: number, template: HTMLTemplateElement) => {
+        const font = getComputedStyle(equationSlots[0]!.querySelector('.katex')!);
+        return JSON.stringify([plan.sourceRevision, plan.moves[sceneIndex]!.id, template.innerHTML,
           root.getBoundingClientRect().width, font.font, font.letterSpacing, font.lineHeight, fontRevision]);
+      };
+      const prepareScene = async (plan: EnergyDerivationPlan, sceneIndex: number, template: HTMLTemplateElement) => {
+        const cacheKey = keyFor(plan, sceneIndex, template);
         const cached = pool?.take(cacheKey);
-        if (cached) { stage.parentElement!.append(cached.element); pending.push(cached); continue; }
+        if (cached) { stage.parentElement!.append(cached.element); pending.push(cached); return; }
         candidate = stage.cloneNode(false) as HTMLElement;
         candidate.removeAttribute("data-derivation-stage");
         candidate.setAttribute("data-derivation-preparing", "");
@@ -505,18 +507,37 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
           for (const ink of candidate.querySelectorAll<HTMLElement>(".katex-html > .base"))
             inspectionRight = Math.max(inspectionRight, ink.getBoundingClientRect().right - origin);
         }
-        const move = proofPlan.moves[sceneIndex]!;
-        const focus = binding.inspection?.(proofPlan, sceneIndex) ?? {
-          source: [...move.exits, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.0.${role}`), target: [...move.entries, ...(move.notice ?? [])].map(role => `${proofPlan.namespace}.${move.id}.1.${role}`),
+        const move = plan.moves[sceneIndex]!;
+        const focus = binding.inspection?.(plan, sceneIndex) ?? {
+          source: [...move.exits, ...(move.notice ?? [])].map(role => `${plan.namespace}.${move.id}.0.${role}`), target: [...move.entries, ...(move.notice ?? [])].map(role => `${plan.namespace}.${move.id}.1.${role}`),
           recordSource: [], recordTarget: []
         };
         if (token !== generation) return;
-        created = await mountMomentumEnergyDerivationSession(candidate, proofPlan, sceneIndex,
+        created = await mountMomentumEnergyDerivationSession(candidate, plan, sceneIndex,
           accented ? { ...focus, extent: "equation", records: [] } : undefined, refinement);
         if (token !== generation) return;
         candidate.hidden = true; candidate.removeAttribute("data-derivation-preparing");
         pending.push({ element: candidate, session: created, cacheKey });
         candidate = undefined; created = undefined;
+      };
+      for (let sceneIndex = 0; sceneIndex < total; sceneIndex++) {
+        await prepareScene(proofPlan, sceneIndex, get<HTMLTemplateElement>(`[data-derivation-template="${sceneIndex}"]`));
+        if (token !== generation) return;
+      }
+      // Prepare the bounded published detail set before offering direct input.
+      // A first disclosure must not compile native scenes inside its click task.
+      if (pool && detail === 'coarse' && !initial) {
+        const activeKeys = new Set(pending.map(scene => scene.cacheKey));
+        for (const view of root.querySelectorAll<HTMLTemplateElement>('[data-refinement-view]')) {
+          const fine = await binding.loadPlan('mass-refinement', view.dataset['refinementView']);
+          const templates = [...view.content.querySelectorAll<HTMLTemplateElement>('[data-derivation-template]')];
+          for (const [i, template] of templates.entries()) {
+            if (activeKeys.has(keyFor(fine, i, template))) continue;
+            await prepareScene(fine, i, template);
+            if (token !== generation) return;
+            pool.put(pending.pop()!);
+          }
+        }
       }
       stage.remove();
       prepared = pending.splice(0);
@@ -753,7 +774,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   const visibility = new IntersectionObserver(entries => {
     if (!entries[0]?.isIntersecting) pause();
     else if (!session && !loading && !seeking && root.dataset["repair"] !== "true") void seekPosition(0);
-  }); visibility.observe(root);
+  }, { rootMargin: '100% 0px' }); visibility.observe(root);
   // Font-only zoom can change native ink and row spacing at unchanged width.
   // Observe stationary records, never moving compositor paint. Only native
   // metric changes rebuild scenes; prose reflow just remeasures the rail.

@@ -3,6 +3,45 @@ import { sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/
 
 const route = "/experiments/mechanics-relations/";
 
+test('first disclosure keeps a usable handle from the click onward', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 700 });
+  const root = await ready(page);
+  await root.locator('[data-derivation-entry="2"]').click();
+  await dragTo(page, root, 2.55);
+  const frames = await root.evaluate(async el => {
+    const handle = el.querySelector<HTMLButtonElement>('[data-derivation-handle]')!;
+    const top = handle.getBoundingClientRect().top, start = performance.now();
+    el.querySelector<HTMLButtonElement>('[data-refinement-expand="cancel-mass"]')!.click();
+    const frames = [];
+    for (let i = 0; i < 12; i++) {
+      await new Promise(requestAnimationFrame);
+      frames.push({ elapsed: Math.round(performance.now() - start), disabled: handle.disabled,
+        delta: Math.round(handle.getBoundingClientRect().top - top), move: el.dataset['move'] });
+    }
+    return frames;
+  });
+  expect(frames.filter(frame => frame.disabled || Math.abs(frame.delta) > 2)).toEqual([]);
+  await root.locator('[data-derivation-entry="4"]').click();
+  await dragTo(page, root, 4.55);
+  const back = root.locator('[data-refinement-local-return]').last();
+  await back.scrollIntoViewIfNeeded();
+  const returned = await root.evaluate(async el => {
+    const handle = el.querySelector<HTMLButtonElement>('[data-derivation-handle]')!;
+    const start = performance.now(), frames = [];
+    const buttons = el.querySelectorAll<HTMLButtonElement>('[data-refinement-local-return]');
+    buttons[buttons.length - 1]!.click();
+    for (let i = 0; i < 12; i++) {
+      await new Promise(requestAnimationFrame);
+      frames.push({ elapsed: Math.round(performance.now() - start), disabled: handle.disabled,
+        y: handle.getBoundingClientRect().top, move: el.dataset['move'], progress: el.dataset['progress'] });
+    }
+    return frames;
+  });
+  expect(returned.filter(frame => frame.disabled || frame.move !== '2' || Number(frame.progress) < .5 || frame.y < 0 || frame.y > 670)).toEqual([]);
+  expect(Math.max(...returned.map(frame => frame.y)) - Math.min(...returned.map(frame => frame.y))).toBeLessThan(2);
+  expect(frames[0]!.elapsed).toBeLessThan(50);
+});
+
 test("Back to step 3 returns to its parent without rebuilding or a disabled frame", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 1800 });
   const root = await ready(page);

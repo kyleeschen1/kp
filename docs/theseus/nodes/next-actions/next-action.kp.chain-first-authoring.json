@@ -4,7 +4,7 @@
   "title": "Chain-first checked authoring and reader transfer",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: energy return and handle repair ready at shared-server URL; wait for visual acceptance before scalar transfer.",
+  "summary": "User reports whole reset persists; canonical short-viewport sequence returns saved step 3. Need exact URL and click sequence to reproduce reset. Cold delay reproduced and repaired; no generalization.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -278,6 +278,48 @@
       "scope": "chain.energy-review.return-handoff",
       "checkedAt": "2026-09-17T16:38:18.081Z",
       "notes": "Production build and existing payload/closure gates pass without budget changes."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'first disclosure keeps'",
+      "status": "failed",
+      "scope": "chain.energy-review.cold-handoff",
+      "checkedAt": "2026-09-17T16:47:48.953Z",
+      "notes": "Fresh short-viewport regression reproduced 222ms first-frame delay; another run showed a disabled first frame. Earlier warmed enabled-state tests missed cold click-task work."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'first disclosure keeps|Back to step 3|disclosure preserves|pending disclosure|nonterminal unfolding|inline refinement|smaller steps preserves|every substep returns|expanded drag follows|equation geometry survives'",
+      "status": "passed",
+      "scope": "chain.energy-review.cold-handoff",
+      "checkedAt": "2026-09-17T16:47:50.157Z",
+      "notes": "15 pass after prewarming bounded energy detail scenes before direct input. Small-viewport first-frame limit, positions and return after last substep pass. User-reported whole reset is NOT confirmed resolved; URL/sequence requested."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.energy-review.cold-handoff",
+      "checkedAt": "2026-09-17T16:47:51.223Z",
+      "notes": "Full app/node/test/Svelte/domain typecheck passes."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.energy-review.cold-handoff",
+      "checkedAt": "2026-09-17T16:48:31.615Z",
+      "notes": "Production build and unchanged payload/closure gates pass."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.energy-review.cold-handoff",
+      "checkedAt": "2026-09-17T16:48:32.730Z",
+      "notes": "Production build and unchanged payload/closure gates pass."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "chain.energy-review.cold-handoff",
+      "checkedAt": "2026-09-17T16:48:33.748Z",
+      "notes": "Production build and unchanged payload/closure gates pass."
     }
   ],
   "progress": {
