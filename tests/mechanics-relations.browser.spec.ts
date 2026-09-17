@@ -2,12 +2,56 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("momentum move keeps its argument in place through forward, reverse, return and print", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1000, height: 1000 });
+  await page.goto(`${route}#momentum-move`);
+  const root = page.locator('[data-momentum-move]'), slider = root.locator('[data-move-seek]');
+  const prose = root.locator('.momentum-move-argument');
+  const text = await prose.textContent();
+  const first = await prose.boundingBox();
+  const seek = async (p: number) => slider.evaluate((el, value) => { (el as HTMLInputElement).value = String(value); el.dispatchEvent(new Event('input', { bubbles: true })); }, p);
+  const arrow = root.locator('[data-move-arrow]');
+  const initial = await arrow.getAttribute('d');
+  const track = (await slider.boundingBox())!;
+  await slider.click({ position: { x: track.width / 2, y: track.height * .9 } });
+  await expect(root).toHaveAttribute('data-move-part', 'energy');
+  await seek(0);
+  for (const p of [.35, .6, 1, .35, 0]) {
+    await seek(p);
+    expect(await prose.textContent()).toBe(text);
+    expect(await prose.boundingBox()).toEqual(first);
+    await expect(root.locator('.momentum-move-argument [data-move-entity]')).toHaveCount(3);
+  }
+  expect(await arrow.getAttribute('d')).toBe(initial);
+  await slider.focus(); await slider.press('End');
+  await expect(root).toHaveAttribute('data-move-part', 'energy');
+  await slider.press('Home'); await slider.press('ArrowDown');
+  await expect(slider).toHaveValue('0.025');
+  await seek(.6);
+  expect(await root.locator('svg circle[data-move-entity]').evaluate(el => getComputedStyle(el).strokeWidth)).toBe('3px');
+  await page.evaluate(() => window.dispatchEvent(new Event('beforeprint')));
+  await expect(root).toHaveAttribute('data-move-part', 'energy');
+  await page.evaluate(() => window.dispatchEvent(new Event('afterprint')));
+  await expect(root).toHaveAttribute('data-move-part', 'magnitude');
+  await root.screenshot({ path: info.outputPath('momentum-move-desktop.png') });
+  await page.setViewportSize({ width: 390, height: 1000 });
+  expect(await root.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+  await root.screenshot({ path: info.outputPath('momentum-move-phone.png') });
+  await root.getByRole('button', { name: 'Return to reading' }).click();
+  await expect(root.locator('details')).not.toHaveAttribute('open', '');
+  await expect(root.locator('summary')).toBeFocused();
+});
+
 test("momentum storyboard is readable without JavaScript with prose above each compact sketch", async ({ browser }, info) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   for (const width of [1000, 390]) {
     await page.setViewportSize({ width, height: 1100 });
     await page.goto(`http://localhost:8000${route}#momentum-space`);
+    const move = page.locator('[data-momentum-move]');
+    await move.locator('summary').click();
+    await expect(move.locator('.momentum-move-argument [data-move-entity]')).toHaveCount(3);
+    await expect(move.locator('[data-move-seek]')).toBeHidden();
     const root = page.locator('[data-momentum-space]');
     await expect(root.locator('svg')).toHaveCount(3);
     expect(await root.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);

@@ -1,0 +1,31 @@
+.momentum-move { margin-block: 1.5rem; }
+.momentum-move [hidden] { display: none !important; }
+.momentum-move summary { cursor: pointer; text-decoration: underline; text-underline-offset: .2em; }
+.momentum-move-layout { display: grid; grid-template-columns: minmax(0, 1fr) 14rem; gap: 1rem; align-items: start; }
+.momentum-move-argument { display: flex; align-items: stretch; }
+.momentum-move-argument input { writing-mode: vertical-lr; direction: ltr; flex: 0 0 2.75rem; width: 2.75rem; height: auto; min-height: 16rem; margin: 0; accent-color: #306b99; }
+.momentum-move-argument [data-move-entity] { padding-inline: .6rem; border-inline-start: 2px solid transparent; }
+.momentum-move-argument [data-move-salience="focus"] { border-color: currentColor; }
+.momentum-move-argument [data-move-salience="focus"] strong { text-decoration: underline; text-decoration-color: #306b99; text-underline-offset: .2em; }
+.physics-reader .momentum-move figure { margin: 0; }
+.momentum-move svg { width: 100%; max-width: 14rem; height: auto; }
+.momentum-move svg * { vector-effect: non-scaling-stroke; }
+.momentum-move svg path, .momentum-move svg circle[data-move-entity] { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.momentum-move svg .momentum-move-axes { stroke: #a0a6ae; stroke-width: 1; }
+.momentum-move svg .momentum-move-history { stroke-dasharray: 3 4; }
+.momentum-move svg path[data-move-salience="focus"], .momentum-move svg circle[data-move-salience="focus"] { stroke: #306b99; stroke-width: 3; }
+.momentum-move figure p { margin-block: .5rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.momentum-move figure p[data-move-salience="focus"] { text-decoration: underline; text-underline-offset: .2em; }
+.momentum-move button { font: inherit; background: transparent; color: inherit; border: 1px solid currentColor; padding: .4rem .6rem; min-height: 2.75rem; margin-top: .75rem; cursor: pointer; }
+.momentum-move :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media (max-width: 600px) {
+  .momentum-move-layout { grid-template-columns: minmax(0, 1fr); }
+  .momentum-move figure { justify-self: center; }
+}
+@media (forced-colors: active) {
+  .momentum-move svg path[data-move-salience="focus"], .momentum-move svg circle[data-move-salience="focus"] { stroke: Highlight; }
+  .momentum-move-argument [data-move-salience="focus"] strong { text-decoration-color: Highlight; }
+}
+@media print {
+  .momentum-move input, .momentum-move button, .momentum-move [data-move-instruction] { display: none !important; }
+}

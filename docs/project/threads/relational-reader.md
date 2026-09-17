@@ -5,6 +5,14 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+Latest approved graph experiment addresses **text coordination**: keep the
+written inference present and inspect its change, invariant and consequence
+through existing attention and physics owners. The accepted momentum-space
+storyboard is supporting material, not proof of KP's thinking-tool value.
+The user explicitly cautioned against a Brilliant-style exploration product.
+Code's accepted motion stays intact; its replaced narration is an identified
+coordination gap. [Current scope and review](2026-09-16-force-energy-graph.md).
+
 Current approved pivot: momentum-space still-frame storyboard, following the
 user's rejection of the correspondence interfaces as unhelpful. See the
 [graph proposal](2026-09-16-force-energy-graph.md) for scope and review URL.

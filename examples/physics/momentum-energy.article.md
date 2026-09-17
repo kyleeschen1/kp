@@ -174,6 +174,23 @@ force need not remain perpendicular later.
 [Back to the relationship map](#relationship-map).
 :::
 
+:::kp-passage{#momentum-move}
+Momentum can change direction while its magnitude—and therefore kinetic energy—stays constant.
+
+### direction
+**Momentum changes direction.** Follow the arrow as it turns. These are different
+momenta: a vector includes direction, not just length.
+
+### magnitude
+**Its magnitude stays the same.** The tip stays on one circle around zero.
+The distance from zero—the arrow’s length—does not change.
+
+### energy
+**Therefore kinetic energy stays the same.** For this fixed mass,
+$K=\lVert\mathbf p\rVert^2/(2m)$ depends on that unchanged length. The change in
+direction contributes no change in energy.
+:::
+
 :::kp-passage{#momentum-space}
 ## How can momentum change while energy stays the same?
 

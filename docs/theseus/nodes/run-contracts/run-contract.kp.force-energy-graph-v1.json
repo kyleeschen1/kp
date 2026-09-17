@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Inspect force-energy graph correspondence",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review localhost:8000/experiments/mechanics-relations/#momentum-space. Static equal-energy circles use checked physics; desktop/narrow no-JS checks, existing readouts, full types and build pass. No new interactive scope until pedagogical review.",
+  "summary": "HUMAN_CHECKPOINT: localhost:8000/experiments/mechanics-relations/#momentum-move. Review whether the graph inspection follows the written inference. Semantic, browser, types and build checks pass; phone coordination remains provisional. No code rollout or shared promotion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -143,6 +143,34 @@
       "scope": "Storyboard discovery and existing UI preservation",
       "checkedAt": "2026-09-16T23:51:31.421Z",
       "notes": "Four Chromium tests pass. Desktop and narrow no-JS storyboard, top-first prose, compact sketches, previous correspondence navigation and numeric layout stability. Final spacing-only rerun of momentum storyboard passes; screenshots inspected and discarded. Learning value remains subject to human review."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/momentum-move.test.ts tests/momentum-space.test.ts tests/physics-readout.test.ts",
+      "status": "passed",
+      "scope": "Text-coordinated move truth and preservation",
+      "checkedAt": "2026-09-17T00:03:18.656Z",
+      "notes": "Six pass. Attention phase controls physical turn; magnitude and energy invariant; reverse/direct projection deterministic; source bindings and static output checked."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"momentum move|momentum storyboard|physics readouts\"",
+      "status": "passed",
+      "scope": "Text coordination discovery",
+      "checkedAt": "2026-09-17T00:03:20.135Z",
+      "notes": "Three pass; final two-test rerun covers no-JS text and realized circle focus, then one-test native pointer rerun passes. Forward/reverse, keyboard, stable prose, print restoration and return checked. Desktop screenshots inspected; phone coordination provisional."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Text coordination repository types",
+      "checkedAt": "2026-09-17T00:03:21.259Z",
+      "notes": "Full application, node, test, Svelte and domains pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Text coordination final production build",
+      "checkedAt": "2026-09-17T00:03:22.414Z",
+      "notes": "Final build passes with existing chunk warnings. Closure measurement: initial 43135, activated 159671 JS/CSS gzip bytes; HTML 44839 gzip bytes. No new dependency or idle sampling loop."
     }
   ],
   "allowedWork": [
@@ -157,7 +185,7 @@
     {
       "id": "graph.correspondence",
       "title": "Graph and symbolic power correspondence",
-      "summary": "HUMAN_CHECKPOINT: momentum-space static storyboard implemented and verified. Review geometric explanation of outward versus tangential momentum change before any interaction or promotion.",
+      "summary": "HUMAN_CHECKPOINT: permanent text coordinates a local graph move from direction change to preserved magnitude to energy consequence. Desktop ready; phone provisional. Code narration diagnosed, accepted motion preserved.",
       "status": "in-progress"
     }
   ]

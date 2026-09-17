@@ -5,6 +5,57 @@ Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome
 
+Current approved experiment: **text coordination**, after acceptance of the
+momentum-space storyboard. The user clarified that KP is a text-, salience-,
+relationship- and move-oriented tool for thought, not principally a clearer
+physics book or a Brilliant-style manipulation exercise. The latest request
+authorizes trying an inference attached to prose. The graph is the first
+reversible exemplar; code is a diagnosed pressure caller, not a rollout.
+
+The local `#momentum-move` passage retains three argument clauses: direction
+changes; magnitude stays fixed; therefore energy stays fixed. A margin handle
+advances one deterministic attention projection: orientation, physical turn,
+inspection of the preserved magnitude, then its energy consequence. All text
+remains readable, with a compact graph nearby and return to the same reading
+location. Ordinary document scrolling does not advance the move. Native details
+retain the argument without JavaScript; print shows the full settled reading.
+
+Canonical source: `examples/physics/momentum-energy.article.md`; host:
+`/experiments/mechanics-relations/`; native SVG and KaTeX; physics authority:
+`domains/physics/momentum-energy.ts`. The existing attention projector,
+cross-view transmission and reader timeline clock own narrative progression.
+No replacement salience store or solver. Physical time advances only in act.
+
+Code diagnosis: `src/tutorial/code-reasoning/centroid-inspection.ts` updates a
+single narration element with `textContent` from the current beat. Its accepted
+token motion is beautiful to the user, but the narration reports rather than
+retains the argument. Preserve that motion and test text coordination here
+before proposing a code adaptation. The general thinking-tool ambition remains
+unproven by this single graph treatment.
+
+Checkpoint: does attention follow an intelligible inference through permanent
+text and evidence, or still feel like synchronized highlighting? Inspect phone
+proximity, forward/reverse, and return. Rollback unit: the local momentum-move
+source passage, four projection/reader/style modules and focused tests. Preserve
+accepted storyboard, physics, algebra, code and stable readouts. No promotion.
+Review: `http://localhost:8000/experiments/mechanics-relations/#momentum-move`.
+
+Discovery evidence: six focused semantic/static/readout tests pass; three
+Chromium discovery/preservation tests pass, followed by a final focused rerun
+covering native pointer input, keyboard, forward/reverse, stable prose geometry,
+print restoration and return. No-JS inspection retains all three clauses.
+Full typecheck and final production build pass (existing chunk warnings).
+Visual inspection found and repaired circle-focus CSS specificity; a realized
+stroke assertion protects the attention handoff. Phone stacks the graph below
+the argument: readable, but joint attention remains provisional.
+
+`npm run measure:mechanics-relations-closure` measures 43,135 initial and 159,671
+activated JS/CSS gzip bytes; HTML 44,839 gzip bytes. Those are current totals,
+not isolated marginal costs. Four new local modules; no new dependency or idle
+sampling loop. No learning-effect or cross-medium generalization claim.
+
+## Accepted static storyboard and earlier hypotheses
+
 Latest approved pivot (2026-09-16): the user found the correspondence interfaces
 unhelpful and approved the recommended momentum-space **still-frame storyboard**
 before further interaction. This supersedes the selection-interface hypothesis

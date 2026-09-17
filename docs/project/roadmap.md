@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current approved experiment is **text coordination** in one momentum-space move:
+permanent argument clauses, a local reversible graph inspection, and salience
+passing from change to invariant to consequence. The user accepted the static
+storyboard but clarified KP's target as text-, relationship- and move-oriented
+thinking tools. Code narration is an identified pressure caller; preserve its
+accepted motion. Scope and review: [graph proposal](threads/2026-09-16-force-energy-graph.md).
+Stop at this exemplar checkpoint before generalization.
+
 The user rejected the correspondence interfaces as unhelpful and approved a
 momentum-space still-frame storyboard before further interaction. Current scope
 and review URL are in the [graph proposal](threads/2026-09-16-force-energy-graph.md).

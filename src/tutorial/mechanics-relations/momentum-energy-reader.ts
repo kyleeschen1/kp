@@ -5,6 +5,7 @@ import { displayNumber } from "./momentum-energy-figure.ts";
 import { projectMomentumEnergyAttention } from "./momentum-energy-attention.ts";
 import { enhanceEnergyDerivation } from "./momentum-energy-derivation-reader.ts";
 import { enhancePowerCorrespondence } from "./power-correspondence-reader.ts";
+import { enhanceMomentumMove } from "./momentum-move-reader.ts";
 
 import type { DerivationReaderBinding } from "./momentum-energy-derivation-reader.ts";
 import type { CheckedForceEnergy } from "../../../domains/physics/force-energy-derivation.ts";
@@ -25,6 +26,7 @@ const powerBinding: DerivationReaderBinding = {
 };
 const bindings = new Map<string, DerivationReaderBinding | undefined>([["energy", undefined], ["power", powerBinding]]);
 document.querySelectorAll<HTMLDetailsElement>('[data-power-correspondence]').forEach(enhancePowerCorrespondence);
+document.querySelectorAll<HTMLElement>('[data-momentum-move]').forEach(enhanceMomentumMove);
 for (const root of document.querySelectorAll<HTMLElement>("[data-energy-derivation]")) {
   const namespace = root.dataset["derivationNamespace"]!;
   if (!bindings.has(namespace)) throw new Error(`Unsupported derivation authority: ${namespace}`);
