@@ -2,6 +2,53 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("inline refinement repair retains the original reading", async ({ page }) => {
+  const root = await ready(page);
+  const source = await root.locator('[data-refinement-anchor] .energy-derivation-equation').elementHandle();
+  await root.locator('[data-refinement-view]').evaluate((el: HTMLTemplateElement) => {
+    el.content.querySelector('[data-derivation-template="2"]')!.remove();
+  });
+  await root.locator('[data-refinement-expand]').click();
+  await expect(root.locator('[data-refinement-status]')).toContainText('needs repair');
+  await expect(root).toHaveAttribute('data-refinement-unfolding', 'false');
+  await expect(root.locator('[data-refinement-expand]')).toBeFocused();
+  expect(await source!.evaluate(el => el.isConnected)).toBe(true);
+  await expect(root.locator('[data-derivation-row]')).toHaveCount(4);
+});
+
+test("inline refinement retains native endpoints parent explanation and grip", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1100, height: 1100 });
+  const root = await ready(page);
+  const parent = root.locator('[data-refinement-anchor]');
+  await parent.evaluate(el => scrollBy(0, el.getBoundingClientRect().top - 100));
+  const retained = await root.evaluateHandle(el => ({
+    root: el,
+    source: el.querySelector('[data-refinement-anchor] .energy-derivation-equation'),
+    target: el.querySelector('[data-derivation-row]:last-child .energy-derivation-equation'),
+    prose: el.querySelector('[data-refinement-anchor] .energy-derivation-interleave-text'),
+    grip: el.querySelector('[data-derivation-handle]'),
+    button: el.querySelector('[data-refinement-expand]')
+  }));
+  await page.screenshot({ path: info.outputPath('inline-refinement-before.png') });
+  for (let cycle = 0; cycle < 2; cycle++) {
+    if (cycle === 1) await page.evaluate(() => { document.documentElement.style.fontSize = '24px'; });
+    await root.locator('[data-refinement-expand]').click();
+    await expect(root).toHaveAttribute('data-refinement-unfolding', 'true');
+    await expect(root.locator('[data-refinement-collapse]').first()).toBeFocused();
+    expect(await retained.evaluate(saved => Object.values(saved).every(node => node?.isConnected))).toBe(true);
+    await expect(root.locator('[data-refinement-parent]')).toContainText('Cancel');
+    await expect(root.locator('[data-derivation-row]')).toHaveCount(6);
+    if (cycle === 0) await page.screenshot({ path: info.outputPath('inline-refinement-open.png') });
+    await root.locator('[data-derivation-entry="3"]').click();
+    await expect(root).toHaveAttribute('data-move', '3');
+    await root.locator('[data-refinement-collapse]').first().click();
+    await expect(root).toHaveAttribute('data-refinement-unfolding', 'false');
+    await expect(root.locator('[data-refinement-expand]')).toBeFocused();
+    expect(await retained.evaluate(saved => Object.values(saved).every(node => node?.isConnected))).toBe(true);
+    await expect(root.locator('[data-derivation-row]')).toHaveCount(4);
+  }
+});
+
 test("smaller steps preserves its anchor from the first replacement frame", async ({ page }) => {
   const root = await ready(page);
   const expand = root.locator('[data-refinement-expand]');

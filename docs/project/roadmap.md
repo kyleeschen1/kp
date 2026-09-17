@@ -25,6 +25,10 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current visual trial: [unfold smaller steps in place](threads/2026-09-16-disclosure-persistence.md#inline-unfolding-exemplar).
+Keep the energy derivation's original equations, parent explanation and handle
+while revealing its checked children. Await one exemplar review before promotion.
+
 Inset fenceposts are visually accepted. The next requested refinement is
 [disclosure persistence](threads/2026-09-16-disclosure-persistence.md): keep the
 clicked heading/control anchored and retain held inspection state on return.

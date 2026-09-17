@@ -5,6 +5,11 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+The user approved an [inline unfolding trial](2026-09-16-disclosure-persistence.md#inline-unfolding-exemplar)
+after observing that anchored view replacement still loses visual continuity.
+Preserve native energy endpoints, parent prose and grip; reveal checked children
+inside the same section. One energy exemplar awaits visual review; no wider rollout.
+
 Inset fenceposts are accepted. The user approved anchoring as the first step for
 [disclosure persistence](2026-09-16-disclosure-persistence.md). Keep the clicked
 control at its viewport offset and preserve exact held-state return. Do not

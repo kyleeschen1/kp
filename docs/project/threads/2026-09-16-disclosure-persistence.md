@@ -111,3 +111,43 @@ reflow, exact saved return and failed-detail recovery. The final first-frame
 regression additionally covers collapse. Build and architecture checks pass;
 the initial test type failure required an HTML button runtime guard before
 calling click, rather than an unchecked cast.
+
+## Inline unfolding exemplar
+
+User assessment: anchoring is insufficient because the original disappears.
+Approved trial: unfold the checked smaller steps inside the existing energy move,
+retaining its source/result, parent explanation and inspection grip. Canonical
+artifact remains `examples/physics/momentum-energy.article.md`, native KaTeX host
+`http://localhost:8000/experiments/mechanics-relations/#energy-from-momentum`.
+Checked compact/fine plans remain the semantic source of truth.
+
+`energy-refinement-unfolding.ts` is the independently reversible exemplar adapter.
+It reuses the original root, common native equation nodes, parent explanation,
+toggle and grip during synchronous scaffold surgery. The fine plan inserts its
+intermediate records beneath the retained parent explanation; one reader clock
+and compositor set are active at a time. Retained control listeners are aborted
+before rebinding, so repeated cycles cannot accumulate toggle handlers. Shared
+endpoint authority still comes from checked publication; the adapter rejects
+non-energy/nonterminal use. Other families and the explicit
+`?derivation-detail=expandable` replacement comparison retain the prior path.
+
+Acceptance: source equation and parent explanation remain recognizable in place;
+children read as an unfolding of that same move; the same grip inspects children;
+collapse restores exact saved compact state. No new animation is added. The
+arbitrary compact interior pose still has no issued fine-child correspondence:
+detail begins at the shared parent source, while collapse restores the held pose.
+Native record continuity does not claim continuity of that intermediate material
+pose. Preserve accepted rail/inset paint, font behavior, models and authoring.
+
+The bounded browser regression retains references to root, original endpoint
+nodes, explanation, toggle and grip and proves they stay connected through two
+open/child-inspect/close cycles. Stable before/open screenshots use
+`npm run visual:mechanics-relations -- --grep 'inline refinement retains'`.
+Anchor/return and failed-view recovery checks remain in the focused smoke cohort.
+Review the default energy host before adding motion or promoting this pattern.
+
+Checkpoint evidence: four focused Chromium smoke cases pass; the final two inline
+cases also pass with larger text, repeated cycles and injected failed-detail
+recovery. Full types, final test types, production build and architecture checks
+pass (existing global chunk warnings remain). Before/open screenshots were
+inspected locally. Status: HUMAN_CHECKPOINT; no cross-family or animation rollout.

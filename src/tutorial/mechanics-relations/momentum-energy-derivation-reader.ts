@@ -1,6 +1,7 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
+import { createEnergyRefinementUnfolding } from "./energy-refinement-unfolding.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
 import { createEnergyInspectionBookmarks, type EnergyInspectionPosition } from "./energy-derivation-bookmarks.ts";
@@ -54,13 +55,21 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   }
   const prototype = initialRoot.cloneNode(true) as HTMLElement;
   const expanded = initialRoot.querySelector<HTMLTemplateElement>("[data-refinement-view]");
+  const unfold = initialRoot.dataset['derivationNamespace'] === 'energy' && detailMode === null
+    ? createEnergyRefinementUnfolding(initialRoot) : undefined;
   let root = initialRoot, active = mountEnergyDerivation(root, binding);
   let saved: { state: EnergyReaderState; offset: number } | undefined;
   let busy = false;
+  let controls = new AbortController();
+  const replace = (next: HTMLElement) => {
+    if (unfold) root = unfold(next);
+    else { root.replaceWith(next); root = next; }
+  };
   const bind = () => {
+    controls.abort(); controls = new AbortController();
     const staticDetail = root.querySelector<HTMLElement>("[data-refinement-static]");
     if (staticDetail) staticDetail.hidden = true;
-    const buttons = root.querySelectorAll<HTMLButtonElement>(saved ? "[data-refinement-collapse]" : "[data-refinement-expand]");
+    const buttons = root.querySelectorAll<HTMLButtonElement>(saved ? "[data-refinement-collapse], [data-refinement-parent-return]" : "[data-refinement-expand]");
     if (!buttons.length || !enabled || !expanded) return;
     // Header and child affordances enter one transition, never independent
     // collapse states. The busy guard also covers overlapping activations.
@@ -76,7 +85,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         const next = collapsing ? prototype.cloneNode(true) as HTMLElement : expanded.content.firstElementChild!.cloneNode(true) as HTMLElement;
         const destination = collapsing ? saved!.state : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
         const offset = saved!.offset;
-        active.dispose(); root.replaceWith(next); root = next;
+        active.dispose(); replace(next);
         active = mountEnergyDerivation(root, binding, destination);
         // Transfer before yielding: renderer preparation may span visible
         // frames, and a hidden control cannot supply an anchor rectangle.
@@ -97,7 +106,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           const previous = saved;
           active.dispose();
           const next = prototype.cloneNode(true) as HTMLElement;
-          root.replaceWith(next); root = next;
+          replace(next);
           active = mountEnergyDerivation(root, binding, previous.state);
           saved = undefined;
           const restoredEntry = root.querySelector<HTMLElement>("[data-refinement-expand]")!;
@@ -120,7 +129,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         console.error("Energy refinement repair", error);
       } finally { busy = false; }
     };
-    buttons.forEach(button => { button.hidden = false; button.addEventListener("click", toggle); });
+    buttons.forEach(button => { button.hidden = false; button.addEventListener("click", toggle, { signal: controls.signal }); });
   };
   bind();
 }
