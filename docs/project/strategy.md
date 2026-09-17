@@ -19,6 +19,13 @@ learner-facing product definition.
 
 ## Product Thesis
 
+Accepted authoring target: mathematical chains rendered with KaTeX, plus sparse
+context, should support high-precision LLM inference into typed semantic moves
+and appropriate motifs across disciplines. Domain-owned validation, explicit
+assumptions, stable correspondence and typed repair gaps remain authoritative.
+Measure inference precision separately from supported coverage; a model's plausible
+explanation is not proof. See [chain-first target](decisions/2026-09-16-chain-first-semantic-authoring-target.md).
+
 Accepted September 16 refinement: develop a small set of polished reference
 passages and deliberately test transfer before producing many lessons. Personal
 mechanics study supplies learning friction; internal-page polish earns product

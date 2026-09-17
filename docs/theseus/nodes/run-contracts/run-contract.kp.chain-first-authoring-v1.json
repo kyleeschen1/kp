@@ -1,0 +1,162 @@
+{
+  "id": "run-contract.kp.chain-first-authoring-v1",
+  "kind": "run-contract",
+  "title": "Chain-first authoring: transfer, fractions and checked inference",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.chain-first-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-17-chain-first-authoring-long-loop-proposal.md"
+    }
+  ],
+  "verification": [
+    "Per-slice focused tests and Theseus validation; standard adds typecheck; broad adds scoped browser, architecture and build checks; full final release gates"
+  ],
+  "allowedWork": [
+    "Exact approved proposal slices and responsible-boundary repairs"
+  ],
+  "disallowedWork": [
+    "No universal DSL, new domain engines, paid APIs, deployment, merge or subagents"
+  ],
+  "goal": "Preserve reader continuity and author bounded rational chains through checked semantic operations and existing motifs",
+  "target": "next-action.kp.chain-first-authoring",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "One verified slice with its evidence",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Human visual judgment after energy slice04 before scalar, transfer slice07 before fractions, and fraction slice16 before variations",
+    "Novel visual topology or aesthetic treatment requires local human judgment",
+    "Unresolvable safety, authority or scope blocker, user pause, or completed scope",
+    "24 active-hour ceiling with final three hours reserved for verification; human waiting excluded"
+  ],
+  "slices": [
+    {
+      "id": "chain.scope",
+      "title": "Scope",
+      "summary": "Scope reconciled; 34 baseline tests pass; historical broad target deferred without waiving gates; exact approved successor owns execution.",
+      "status": "complete"
+    },
+    {
+      "id": "chain.nonterminal-truth",
+      "title": "Nonterminal-truth",
+      "status": "planned"
+    },
+    {
+      "id": "chain.nonterminal-reader",
+      "title": "Nonterminal-reader",
+      "status": "planned"
+    },
+    {
+      "id": "chain.energy-review",
+      "title": "Energy-review",
+      "status": "planned"
+    },
+    {
+      "id": "chain.scalar-transfer",
+      "title": "Scalar-transfer",
+      "status": "planned"
+    },
+    {
+      "id": "chain.scalar-variation",
+      "title": "Scalar-variation",
+      "status": "planned"
+    },
+    {
+      "id": "chain.transfer-review",
+      "title": "Transfer-review",
+      "status": "planned"
+    },
+    {
+      "id": "chain.fraction-source",
+      "title": "Fraction-source",
+      "status": "planned"
+    },
+    {
+      "id": "chain.alignment",
+      "title": "Alignment",
+      "status": "planned"
+    },
+    {
+      "id": "chain.combination",
+      "title": "Combination",
+      "status": "planned"
+    },
+    {
+      "id": "chain.reduction",
+      "title": "Reduction",
+      "status": "planned"
+    },
+    {
+      "id": "chain.compilation",
+      "title": "Compilation",
+      "status": "planned"
+    },
+    {
+      "id": "chain.addition-exemplar",
+      "title": "Addition-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "chain.reduction-exemplar",
+      "title": "Reduction-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "chain.fraction-passage",
+      "title": "Fraction-passage",
+      "status": "planned"
+    },
+    {
+      "id": "chain.fraction-review",
+      "title": "Fraction-review",
+      "status": "planned"
+    },
+    {
+      "id": "chain.numeric-variation",
+      "title": "Numeric-variation",
+      "status": "planned"
+    },
+    {
+      "id": "chain.two-sided-variation",
+      "title": "Two-sided-variation",
+      "status": "planned"
+    },
+    {
+      "id": "chain.subtraction",
+      "title": "Subtraction",
+      "status": "planned"
+    },
+    {
+      "id": "chain.move-resolution",
+      "title": "Move-resolution",
+      "status": "planned"
+    },
+    {
+      "id": "chain.authoring-entrypoint",
+      "title": "Authoring-entrypoint",
+      "status": "planned"
+    },
+    {
+      "id": "chain.inference-trial",
+      "title": "Inference-trial",
+      "status": "planned"
+    },
+    {
+      "id": "chain.domain-boundaries",
+      "title": "Domain-boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "chain.release",
+      "title": "Release",
+      "status": "planned"
+    }
+  ]
+}

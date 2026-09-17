@@ -1,0 +1,53 @@
+{
+  "id": "next-action.kp.chain-first-authoring",
+  "kind": "next-action",
+  "title": "Chain-first checked authoring and reader transfer",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-17-chain-first-authoring-long-loop-proposal.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.algebra-coverage-audit"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --experimental-strip-types --test tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts",
+      "status": "passed",
+      "scope": "chain.scope",
+      "checkedAt": "2026-09-17T07:10:21.940Z",
+      "notes": "34 passed. Canonical energy Article and native KaTeX reader; checked local norm child exists, inline DOM seam requires terminal refinement. Scalar stays preserved until energy review. Historical broad task deferred into approved narrower successor without marking visual gates accepted."
+    }
+  ],
+  "expectedLearning": [
+    "Whether sparse mathematical chains can resolve checked operations and existing motifs with explicit repairs"
+  ],
+  "allowedWork": [
+    "Approved 24 slices in the September 17 chain-first proposal"
+  ],
+  "disallowedWork": [
+    "No universal DSL, new subject engines, paid model calls, deployment, merge or subagents"
+  ],
+  "criteria": [
+    {
+      "id": "checked-chain",
+      "weight": "high"
+    },
+    {
+      "id": "persistent-reader",
+      "weight": "high"
+    }
+  ]
+}

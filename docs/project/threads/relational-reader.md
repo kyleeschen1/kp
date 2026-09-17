@@ -1,9 +1,20 @@
 # Relational reader delivery
 
 Status: active; first five-package implementation proposal approved
-Last Updated: 2026-09-16
+Last Updated: 2026-09-17
 
 ## Canonical direction
+
+Approved execution: [chain-first authoring long loop](../2026-09-17-chain-first-authoring-long-loop-proposal.md).
+`run-contract.kp.chain-first-authoring-v1` owns ordered execution and live status;
+the historical broad reader task is deferred with its evidence and judgments intact.
+
+Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).
+The user wants mathematical chains plus sparse context to become correct KP
+reasoning passages through high-precision LLM inference. Models propose typed
+moves; domain authority checks meaning and assumptions before motif projection.
+Transfer and the proposed fraction family are concrete tests of this target,
+not isolated demonstrations. The approved run authorizes no universal framework.
 
 Current next action: [nonterminal unfolding and independent scalar transfer](../decisions/2026-09-16-machinery-transfer-and-simple-coverage.md).
 The user accepted the reference-passage/transfer trajectory and its detailed

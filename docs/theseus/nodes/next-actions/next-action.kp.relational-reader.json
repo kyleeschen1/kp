@@ -2,9 +2,9 @@
   "id": "next-action.kp.relational-reader",
   "kind": "next-action",
   "title": "Deliver the momentum-energy relational reader",
-  "status": "blocked",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT on approved reader.l6 graph correspondence under run-contract.kp.force-energy-graph-v1. Calculus remains accepted; no catalogue promotion or further loop authorized.",
+  "summary": "Historical broad reader task is parked, not completed. Approved nonterminal transfer now has narrow target next-action.kp.chain-first-authoring and exact run-contract.kp.chain-first-authoring-v1; earlier visual gates and evidence remain historical, not waived.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -1114,7 +1114,8 @@
   },
   "revisitWhen": [
     "User selects adoption/mobile scope or explicitly reconciles deferred v2 continuation.",
-    "User selects phone review or approves a concrete successor loop."
+    "User selects phone review or approves a concrete successor loop.",
+    "An explicitly approved reader scope outside the chain-first successor requires this historical task"
   ],
   "expectedLearning": [
     "Can a coherent reading-comparison-return experience clarify momentum versus kinetic energy and support source-only reuse?"
