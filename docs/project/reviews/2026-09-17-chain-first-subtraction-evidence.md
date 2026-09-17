@@ -29,3 +29,18 @@ Theseus. Cross-browser release remains slice 24.
 
 This required engine work, not merely a new source file. Fluent numeric
 reduction remains a separate gap; the existing reduction presentation is reused.
+
+## Human acceptance and host distinction
+
+On 2026-09-17 the user approved the exemplar, while questioning whether a
+separate subtraction page duplicates addition. Acceptance covers the presented
+behavior, not a decision to make each arithmetic variation a separate lesson.
+The separate host served as a bounded implementation and verification fixture:
+it pressures ordered operands, minus-sign preservation and right-only scaling.
+Those distinctions justify separate test coverage, not necessarily separate
+learner-facing pages. The recommended product direction is a subtraction
+variation within the same fraction passage. Consolidation has not been
+implemented or added to the completed loop's scope.
+
+The completed release and cross-browser results supersede the pending slice 24
+note above; see [the closeout](2026-09-17-chain-first-authoring-closeout.md).
