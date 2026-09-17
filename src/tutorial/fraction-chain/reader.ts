@@ -5,6 +5,7 @@ import { revealEquationInViewport } from "../../reader/runtime/equation-viewport
 import { sampleInsetDerivationRecord } from "../mechanics-relations/energy-derivation-presentation.ts";
 import { fractionIntervalAt, fractionPositionAtY, fractionSceneAt } from "./position.ts";
 import { preserveEnergyDisclosureFocus } from "../mechanics-relations/energy-disclosure-focus.ts";
+import { projectEquationRail } from "../../reader/runtime/equation-rail-presentation.ts";
 
 type Surface = { seek(progress: number): unknown; dispose(): void; invalidate?(): void };
 /** This local passage composes the existing clock, measured rail, docking,
@@ -44,6 +45,11 @@ export function mountFractionPassage(root: HTMLElement, surfaces: readonly Surfa
     if (!history.isConnected || history.offsetWidth <= 0) return;
     position = clock.getSnapshot().progress * 3;
     const interval = fractionIntervalAt(position, points), scene = fractionSceneAt(position);
+    projectEquationRail({ root, rail, centers: points.map(point => point.y),
+      stops: [...rail.querySelectorAll<HTMLElement>(":scope > span")].filter(stop => !stop.hidden)
+        .sort((a, b) => Number(a.dataset["position"]) - Number(b.dataset["position"])),
+      passages: rows.filter(row => !row.hidden).map(row => row.querySelector<HTMLElement>(".fraction-reason")!),
+      move: points.indexOf(interval.before), progress: interval.progress });
     // Opacity gates the complete inactive owner, including descendants with
     // explicit visibility, while retaining measurable native geometry.
     stages.forEach((stage, index) => { stage.style.opacity = index === scene.index ? "1" : "0"; stage.setAttribute("aria-hidden", String(index !== scene.index)); });
@@ -68,11 +74,11 @@ export function mountFractionPassage(root: HTMLElement, surfaces: readonly Surfa
     readableBounds: () => { const first = rows[0]!.getBoundingClientRect(), last = rows.at(-1)!.getBoundingClientRect(); return { top: first.top, bottom: last.bottom }; }, sample: pointer });
   const start = (event: PointerEvent) => {
     if (event.button !== 0) return;
-    event.preventDefault(); drag = event.pointerId; handle.setPointerCapture(drag); handle.focus({ preventScroll: true }); edge.update(event.clientY);
+    event.preventDefault(); drag = event.pointerId; root.dataset["derivationDragging"] = "true"; handle.setPointerCapture(drag); handle.focus({ preventScroll: true }); edge.update(event.clientY);
   };
   handle.addEventListener("pointerdown", start, options); rail.addEventListener("pointerdown", start, options);
   handle.addEventListener("pointermove", event => { if (drag === event.pointerId) edge.update(event.clientY); }, options);
-  const stop = () => { edge.stop(); drag = undefined; };
+  const stop = () => { edge.stop(); drag = undefined; delete root.dataset["derivationDragging"]; };
   for (const event of ["pointerup", "pointercancel", "lostpointercapture"]) handle.addEventListener(event, stop, options);
   window.addEventListener("blur", stop, options);
   const navigate = (direction: number) => {

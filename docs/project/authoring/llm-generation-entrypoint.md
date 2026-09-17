@@ -48,6 +48,11 @@ For the accepted equation/code parent–reason–return exemplars, use
 checker, exact supported edits and typed repair examples. It does not expand
 either domain's semantic or generation authority.
 
+For persistent equation passages, also read
+`../principles/reasoning-passage-presentation.md`. Reuse the shared document,
+rail, disclosure and native-surface owners; do not copy a demo page's theme or
+recreate the accepted rail state in caller-local CSS.
+
 For the independent scalar cancellation persistent-reader candidate, use
 `scalar-cancellation-reader-packet.md`. It documents the file-based checked
 source/Article workflow, shared physics-reader pipeline, supported notation

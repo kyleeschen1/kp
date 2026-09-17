@@ -1,14 +1,13 @@
 #fraction-chain { max-width: 58rem; margin: 3rem auto; padding: 0 2.5rem; }
-#fraction-chain h1 { font-family: var(--kp-serif); }
 #fraction-chain p { max-width: 38rem; }
-.fraction-passage { --kp-equation-type-size: 1em; --derivation-inspection-accent: #236b8e; margin-block: 2rem; }
+.fraction-passage { --kp-equation-type-size: 1em; margin-block: 2rem; }
 .fraction-history { position: relative; margin-left: 1rem; padding-block: 3rem; }
 .fraction-history ol { list-style: none; margin: 0; padding: 0; }
 .fraction-history li { position: relative; }
 .fraction-history .energy-derivation-equation { width: 18rem; height: 6rem; padding: 0; }
 .fraction-history .energy-derivation-equation .katex-display,
 .fraction-history .energy-derivation-equation .katex-display > .katex { text-align: center; }
-.fraction-reason { margin-left: 19rem; padding: .5rem 0 2rem .8rem; border-left: 1px solid #c9c9c9; min-height: 6rem; }
+.fraction-reason { margin-left: 19rem; padding-block: .5rem 2rem; min-height: 6rem; }
 .fraction-reason p { margin-top: 0; }
 .fraction-inspection { position: absolute; left: 0; width: 18rem; height: 15rem; transform: translateY(-50%); pointer-events: none; opacity: 0; }
 .fraction-stage { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
@@ -21,8 +20,6 @@
 .fraction-passage :is(.kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface) { --kp-canonical-equation-type-size: 1em; }
 .fraction-passage .energy-derivation-scope { left: 0; }
 .fraction-passage [data-derivation-handle] { right: 0; }
-.fraction-passage[data-tracing="true"] .energy-derivation-equation { opacity: var(--derivation-record-presence, 1); color: color-mix(in srgb, #818990, #20252b calc(var(--derivation-record-emphasis, 0) * 100%)); text-shadow: 0 1px 0 #fff; }
-.fraction-passage [data-fraction-help] { color: #52616d; }
 .fraction-passage:not([data-fraction-ready="true"]) .fraction-inspection { opacity: 0 !important; }
 /* Inspection keeps its own lane even when enlarged prose becomes taller. */
 @media (max-width: 45rem) { #fraction-chain { padding-inline: 2rem 1rem; } .fraction-reason { margin-left: min(8rem, 45%); } .fraction-history .energy-derivation-equation, .fraction-inspection { width: min(7rem, 40%); } }

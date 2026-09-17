@@ -1,0 +1,13 @@
+@import "../../document-base.css";
+@import "katex/dist/katex.min.css";
+/* One document role for accepted reasoning passages; native math keeps KaTeX. */
+:is(.physics-reader, .kp-reasoning-document) { max-width: 46rem; margin: auto; padding: 2rem 1.25rem 5rem; font-family: var(--kp-focus-card-passage-font, Georgia, "Times New Roman", serif); line-height: 1.65; }
+:is(.physics-reader, .kp-reasoning-document) nav { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; margin-bottom: 3rem; }
+:is(.physics-reader, .kp-reasoning-document) h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.2; }
+:is(.physics-reader, .kp-reasoning-document) h2 { margin-top: 2.5rem; font-size: 1.4rem; line-height: 1.3; }
+:is(.physics-reader, .kp-reasoning-document) p { margin-block: 1rem; }
+:is(.physics-reader, .kp-reasoning-document) .kp-article-math { overflow-x: auto; }
+:is(.physics-reader, .kp-reasoning-document) figure { margin: 1.25rem 0; }
+:is(.physics-reader, .kp-reasoning-document) figure img { display: block; width: min(100%, 30rem); margin-inline: auto; }
+:is(.physics-reader, .kp-reasoning-document) figcaption { font-size: .9rem; line-height: 1.45; margin-top: .75rem; }
+@media (max-width: 520px) { :is(.physics-reader, .kp-reasoning-document) { padding: 1rem .85rem 3rem; } :is(.physics-reader, .kp-reasoning-document) nav { margin-bottom: 2rem; } }

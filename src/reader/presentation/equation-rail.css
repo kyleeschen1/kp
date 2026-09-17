@@ -1,0 +1,101 @@
+/* Shared reasoning rail: marks are statements, the accented interval
+   is a move, and the grip is the reader's position. No completion meter. */
+.energy-derivation[data-rail-refinement] {
+  --rail-context: #a1aab1;
+  --rail-paper: var(--kp-page-background, #f8fafc);
+}
+.energy-derivation[data-rail-refinement] .energy-derivation-rail {
+  background: var(--rail-context);
+  pointer-events: auto;
+  touch-action: none;
+  cursor: pointer;
+}
+/* Pointer target stays in the navigation gutter; the existing slider supplies
+   keyboard access without adding a second focus stop. */
+.energy-derivation[data-rail-refinement] .energy-derivation-rail::after {
+  content: "";
+  position: absolute;
+  inset: -.5rem -1.375rem;
+}
+.energy-derivation[data-rail-refinement] .energy-derivation-rail::before {
+  content: "";
+  position: absolute;
+  left: -.5px;
+  top: var(--rail-move-top);
+  height: var(--rail-move-height);
+  width: 2px;
+  background: var(--derivation-inspection-accent);
+  visibility: hidden;
+}
+.energy-derivation[data-rail-position="between"] .energy-derivation-rail::before { visibility: visible; }
+.energy-derivation[data-rail-refinement] .energy-derivation-rail > span {
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: .4rem;
+  height: .4rem;
+  box-sizing: border-box;
+  border: 1px solid var(--rail-context);
+  border-radius: 50%;
+  background: var(--rail-paper);
+}
+.energy-derivation[data-rail-refinement] .energy-derivation-rail > [data-rail-stop="boundary"] {
+  border-color: var(--derivation-inspection-accent);
+}
+.energy-derivation[data-rail-refinement] .energy-derivation-rail > [data-rail-stop="current"] {
+  background: var(--derivation-inspection-accent);
+  border-color: var(--derivation-inspection-accent);
+}
+.energy-derivation[data-rail-refinement] .energy-derivation-scope::before { left: -.75rem; }
+.energy-derivation[data-rail-refinement] [data-derivation-handle] {
+  left: -.75rem;
+  right: auto;
+  transform: translate(-50%, -50%);
+  background: transparent;
+}
+.energy-derivation[data-rail-refinement] [data-derivation-handle] span {
+  width: .75rem;
+  height: 1.5rem;
+  border-radius: .3rem;
+  background: var(--rail-paper);
+}
+.energy-derivation[data-rail-refinement] [data-derivation-handle] span::before {
+  content: "";
+  width: .3rem;
+  height: .25rem;
+  border-block: 1px solid currentColor;
+}
+.energy-derivation[data-rail-refinement] [data-derivation-handle]:hover span,
+.energy-derivation[data-rail-refinement][data-derivation-dragging="true"] [data-derivation-handle] span {
+  background: #f2e8d6;
+}
+.energy-derivation[data-rail-refinement] [data-rail-active="true"] .energy-derivation-interleave-text {
+  border-left-color: var(--derivation-inspection-accent);
+  box-shadow: -1px 0 0 var(--derivation-inspection-accent);
+}
+.energy-derivation[data-rail-refinement] .energy-derivation-key { margin-bottom: 1rem; }
+@media (forced-colors: active) {
+  .energy-derivation[data-rail-refinement] {
+    --rail-context: CanvasText;
+    --rail-paper: Canvas;
+    --derivation-inspection-accent: Highlight;
+  }
+  .energy-derivation[data-rail-refinement] .energy-derivation-rail,
+  .energy-derivation[data-rail-refinement] .energy-derivation-rail::before,
+  .energy-derivation[data-rail-refinement] .energy-derivation-rail > span { forced-color-adjust: none; }
+  .energy-derivation[data-rail-refinement] [data-rail-active="true"] .energy-derivation-interleave-text { border-left-width: 2px; padding-left: calc(.75rem - 1px); }
+}
+
+/* The record is inset by light/ink alone. Its native coordinates, fraction
+   rules and font metrics remain the compositor's docking reference. */
+.energy-derivation[data-rail-refinement][data-inset-fenceposts="true"][data-tracing="true"] .energy-derivation-equation {
+  color: color-mix(in srgb, #7b858d, #1b1b1b calc(var(--derivation-record-emphasis, 0) * 100%));
+  text-shadow: 0 1px 0 #fff;
+  opacity: var(--derivation-record-presence, 1);
+}
+.energy-derivation[data-inset-fenceposts="true"][data-tracing="true"] [data-trace-role="live"] .energy-derivation-equation { text-shadow: none; }
+@media (forced-colors: active) {
+  .energy-derivation[data-rail-refinement][data-inset-fenceposts="true"][data-tracing="true"] .energy-derivation-equation { color: CanvasText; text-shadow: none; }
+}
+@media print {
+  .energy-derivation[data-inset-fenceposts="true"] .energy-derivation-equation { opacity: 1 !important; text-shadow: none !important; }
+}

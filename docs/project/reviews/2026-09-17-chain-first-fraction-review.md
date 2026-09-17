@@ -4,6 +4,18 @@ Review state: AWAITING VISUAL ACCEPTANCE. This is the mandatory fraction
 checkpoint in the approved chain-first proposal, before numeric variations or
 promotion. Theseus owns live progress in `run-contract.kp.chain-first-authoring-v1`.
 
+Review feedback: the user likes the passage, asks about fluent cancellation,
+and requires centralized typography, rail and disclosure styling. The styling
+correction now reuses the accepted energy/scalar treatment through the
+[shared presentation owners](../principles/reasoning-passage-presentation.md),
+with static computed-style parity and interaction preservation checks.
+Fluent cancellation exists for energy; the scalar compact view executes checked
+children. This numeric reduction still uses its checked expanded factor sequence.
+Recommended next treatment is a checked
+compact numeric reduction with that sequence on expansion, not faster playback
+or a profile-name switch. No numeric fluent treatment has been implemented or
+claimed as certified by this styling correction.
+
 ## Canonical reference and review
 
 Open <http://localhost:8000/experiments/fraction-chain/#counting-parts>.

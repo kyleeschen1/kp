@@ -744,6 +744,27 @@
       "scope": "chain.fraction-review",
       "checkedAt": "2026-09-17T21:18:55.173Z",
       "notes": "Shared canonical review host returned HTTP 200. Desktop and enlarged-text captures from the stable fraction browser entrypoint were inspected. Human visual judgment remains required."
+    },
+    {
+      "command": "npm run visual:fraction-chain",
+      "status": "passed",
+      "scope": "chain.fraction-review",
+      "checkedAt": "2026-09-17T21:31:04.884Z",
+      "notes": "Four checks passed after shared styling correction: native operations and exact return, static computed document/control style parity across fraction/scalar/energy, shared font-token repair propagation with KaTeX preserved, active rail and nested bracket, no-JS reading, enlarged font and edge/collapse safeguards."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"equation rail refinement|scalar reader reuses|disclosure preserves the handle outline|scalar static reading\"",
+      "status": "passed",
+      "scope": "chain.fraction-review",
+      "checkedAt": "2026-09-17T21:31:05.992Z",
+      "notes": "Four existing Chromium checks passed after extracting shared document/passage/rail styling and rail state projection. Accepted scalar and energy behavior preserved."
+    },
+    {
+      "command": "npm run test:fraction-chain; npm run typecheck; npm run check:architecture; npm run build:bundle; node --disable-warning=ExperimentalWarning --test tests/local-stylesheet-closure.test.ts",
+      "status": "passed",
+      "scope": "chain.fraction-review",
+      "checkedAt": "2026-09-17T21:31:07.022Z",
+      "notes": "22 fraction unit checks, complete typechecks, final app typecheck after moving rail projection into runtime, architecture, production build and seven transitive stylesheet closure checks passed. No budgets changed."
     }
   ],
   "progress": {

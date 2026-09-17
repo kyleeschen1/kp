@@ -33,3 +33,16 @@ test("fraction Article publishes source equations, prose and static detail befor
   assert.match(html, /A third is two sixths/);
   assert.throws(() => compileFractionChainPublication(markdown, { ...source, states: source.states.slice(0, 2), moves: source.moves.slice(0, 1) }), /requires alignment/);
 });
+
+test("fraction host cannot silently fork the accepted reader styling", () => {
+  const host = readFileSync("experiments/fraction-chain/index.html", "utf8");
+  const entry = readFileSync("src/tutorial/fraction-chain/entry.ts", "utf8");
+  for (const source of [host, entry]) {
+    assert.match(source, /reader\/presentation\/reasoning-document\.css/);
+    assert.match(source, /reader\/presentation\/equation-passage\.css/);
+    assert.doesNotMatch(source, /app\/exemplar\.css|mechanics-relations\/momentum-energy-reader\.css/);
+  }
+  assert.match(host, /class="kp-reasoning-document"/);
+  const local = readFileSync("src/tutorial/fraction-chain/style.css", "utf8");
+  assert.doesNotMatch(local, /font-family|--derivation-inspection-accent|text-shadow|#[\da-f]{3,8}\b/i);
+});

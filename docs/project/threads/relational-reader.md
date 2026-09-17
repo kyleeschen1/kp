@@ -16,6 +16,10 @@ The [fraction passage review](../reviews/2026-09-17-chain-first-fraction-review.
 now supplies the canonical host, inspection actions, preservation evidence and
 remaining limits. Visual acceptance gates the approved variations and inference;
 this is not yet general source-only fraction authoring or curriculum promotion.
+Latest review requests centralized text, rail and step-disclosure styling; the
+[shared presentation contract](../principles/reasoning-passage-presentation.md)
+records owners and parity checks. The separate fluent numeric reduction question
+remains explicit in the review packet; an existing profile label is not a binding.
 
 Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).
 The user wants mathematical chains plus sparse context to become correct KP

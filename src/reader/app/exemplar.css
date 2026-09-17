@@ -1,5 +1,6 @@
 @import "katex/dist/katex.min.css";
 @import "../../rendering/canonical-equation-stage.css";
+@import "./canonical-equation-surface.css";
 
 :root {
   color: #16231d;
@@ -107,83 +108,6 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 .kp-animation-static > [data-kp-static-state] { display: grid; place-items: center; min-height: clamp(340px, 62vh, 570px); border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); font-size: var(--kp-equation-type-size); }
 body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-state] { display: none; }
 
-.kp-reader-equation-stage { min-height: clamp(340px, 62vh, 570px); padding: 1.15rem; border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); box-shadow: 0 22px 60px rgb(22 35 29 / 7%); overflow: hidden; }
-.kp-reader-equation-stage-heading { display: grid; grid-template-areas: "kicker control" "status status"; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .25rem 1rem; min-height: 3rem; }
-.kp-reader-equation-stage-heading > span { grid-area: kicker; color: var(--kp-accent); font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-.kp-reader-equation-stage-heading output { grid-area: status; min-width: 0; overflow: hidden; color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; text-overflow: ellipsis; white-space: nowrap; }
-.kp-reader-focus-stepper { display: none; }
-.kp-reader-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.kp-reader-equation-accessible { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.kp-reader-equation-controls { grid-area: control; display: flex; align-items: center; gap: .7rem; margin-left: auto; }
-.kp-reader-motion-control, .kp-reader-profile-control, .kp-reader-fold-control { display: inline-flex; align-items: center; gap: .38rem; color: var(--kp-muted); font-size: .65rem; white-space: nowrap; }
-.kp-reader-motion-control select, .kp-reader-profile-control select, .kp-reader-fold-control select { padding: .2rem 1.35rem .2rem .42rem; border: 1px solid var(--kp-line); border-radius: .4rem; color: var(--kp-ink); background: var(--kp-surface); font: inherit; }
-.kp-reader-fold-drills { display: inline-flex; gap: .25rem; }
-.kp-reader-fold-drills button { padding: .24rem .42rem; border: 1px solid var(--kp-line); border-radius: .4rem; color: var(--kp-muted); background: var(--kp-surface); font: inherit; font-size: .62rem; }
-.kp-reader-fold-drills button[aria-pressed="true"] { border-color: var(--kp-accent); color: var(--kp-accent); background: color-mix(in srgb, var(--kp-accent) 7%, var(--kp-surface)); }
-.kp-reader-equation-stage-heading .kp-reader-fold-status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.kp-reader-equation-viewport { position: relative; min-height: clamp(245px, 48vh, 440px); overflow: hidden; }
-/* Native endpoint measurement survives a host's generic [hidden] rule. The
-   canonical stage owns visibility; hidden transitions remain measurable. */
-.kp-reader-equation-stage .kp-reader-equation-transition[data-kp-reader-transition] { display: block !important; }
-.kp-reader-equation-transition { position: absolute; inset: 0; visibility: hidden; }
-.kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
-.kp-reader-equation-fit-surface, .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { position: absolute; inset: 0; }
-.kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface {
-  /* Reader cards cap display type by their own width; the fit transform then
-     handles unusually long or tall notation without operation-specific CSS. */
-  --kp-canonical-equation-type-size: clamp(1.5rem, 7cqi, 2rem);
-}
-.kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: var(--kp-equation-type-size); }
-.kp-reader-equation-native { position: absolute; inset: 0; }
-/* Explicit intrinsic centering avoids Grid's start fallback for overwide math,
-   so the fit planner measures the same centered coordinate system on phones. */
-.kp-reader-equation-state { position: absolute; left: 50%; top: 50%; width: max-content; transform: translate(-50%, -50%); }
-.kp-reader-equation-state .katex-display { margin: 0; }
-.kp-reader-equation-state [data-kp-reader-equation-anchor-id] { position: relative; display: inline-block; will-change: opacity; transition: color 120ms ease; }
-.kp-reader-equation-material { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
-.kp-reader-equation-material-owner { will-change: transform, opacity; }
-.kp-reader-canonical-equation-session-material {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  pointer-events: none;
-}
-.kp-native-katex-structural-succession {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.kp-reader-canonical-equation-session-material
-  .editor-equation-stage__material-owner {
-  position: absolute;
-  display: grid;
-  place-items: center;
-  transform-origin: center;
-  will-change: opacity, transform;
-}
-.kp-reader-equation-material-fragment { display: block; }
-.kp-reader-equation-material-visual { display: inline-block; width: max-content; }
-.kp-reader-equation-annihilation-witness { position: absolute; z-index: 4; padding: .02em .16em; border-radius: 999px; background: color-mix(in srgb, var(--kp-surface) 88%, transparent); pointer-events: none; transform-origin: center; opacity: 0; }
-.kp-reader-equation-independent-zero-witness { position: absolute; z-index: 4; color: var(--kp-ink); pointer-events: none; transform-origin: center; opacity: 0; }
-.kp-reader-equation-material-owner--focused, .kp-reader-semantic-focus { color: var(--kp-accent) !important; }
-.kp-reader-equation-stage:is(
-  [data-kp-reader-focus-source="pointer"],
-  [data-kp-reader-focus-source="keyboard"],
-  [data-kp-reader-focus-source="url"]
-) :is(.kp-reader-equation-material-owner--focused, .kp-reader-semantic-focus) { color: var(--kp-relation) !important; }
-body[data-kp-reader-lesson-variant="fraction-composition"]
-  [data-kp-fraction-salience-bound] {
-  color: var(--kp-semantic-salience-color) !important;
-  opacity: var(--kp-semantic-salience-opacity);
-  transition: none;
-}
-.kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: drop-shadow(0 .08em .16em rgb(223 112 71 / 18%)); }
-body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: none; }
-.kp-reader-equation-progress { height: 2px; margin: .1rem .3rem 0; background: color-mix(in srgb, var(--kp-line) 72%, transparent); overflow: hidden; }
-.kp-reader-equation-progress span { display: block; width: 100%; height: 100%; background: var(--kp-accent); transform: scaleX(0); transform-origin: left; }
 .kp-reader-equation-hint { margin: .68rem 0 0; color: var(--kp-muted); font-size: .7rem; text-align: center; }
 
 /* Reader cards can be narrow inside a wide viewport, so their chrome responds

@@ -1,6 +1,7 @@
 import "katex/dist/katex.min.css";
-import "../../reader/app/exemplar.css";
-import "../mechanics-relations/momentum-energy-reader.css";
+import "../../reader/presentation/reasoning-document.css";
+import "../../reader/app/canonical-equation-surface.css";
+import "../../reader/presentation/equation-passage.css";
 import "../../rendering/common-denominator-pressure-surface.css";
 import "./style.css";
 import source from "../../../examples/algebra/fraction-chain.json";

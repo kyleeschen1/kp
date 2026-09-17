@@ -29,12 +29,16 @@ test("persistent fraction passage seeks through canonical operations and retains
       .some(owner => owner.checkVisibility({ opacityProperty: true, visibilityProperty: true }))))).toBe(false);
   }
   await seek(page, 1.25);
+  await expect(root).toHaveAttribute("data-rail-position", "between");
+  await expect(root.locator('[data-rail-stop="boundary"]')).toHaveCount(2);
+  await expect(root.locator('[data-rail-active="true"]')).toHaveCount(1);
   const handle = root.locator("[data-derivation-handle]"), toggle = root.locator("[data-fraction-disclosure]");
   await handle.focus(); await page.keyboard.press("ArrowDown"); await seek(page, 1.25);
   const held = Number(await root.getAttribute("data-fraction-position"));
   await root.locator('[data-fraction-row][data-position="1"] .energy-derivation-equation').evaluate(element => element.setAttribute("data-retained-probe", "true"));
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  expect(await root.locator('[data-fraction-row][data-fraction-detail]').evaluate(element => getComputedStyle(element, "::before").borderLeftWidth)).toBe("1px");
   await expect(root.locator('[data-retained-probe="true"]')).toHaveCount(1);
   expect(Number(await root.getAttribute("data-fraction-position"))).toBeCloseTo(held, 6);
   await seek(page, 1.75);
@@ -47,6 +51,38 @@ test("persistent fraction passage seeks through canonical operations and retains
   await seek(page, 2.5);
   await page.screenshot({ path: "tmp/codex/fraction-chain-review/reduction.png", fullPage: true });
   expect(errors).toEqual([]);
+});
+
+test("fraction, scalar and energy share document and disclosure styles before enhancement", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  let override = false;
+  // Vite can inline the shared sheet into a host's CSS response. Apply the
+  // simulated shared-token repair to every response carrying that owner.
+  await context.route(/\.css(?:\?|$)/, async route => {
+    const response = await route.fetch();
+    const body = await response.text();
+    await route.fulfill({ response, body: body + (override && body.includes(".kp-reasoning-document") ? '\n:root { --kp-focus-card-passage-font: monospace; }' : '') });
+  });
+  const page = await context.newPage();
+  const read = () => page.evaluate(() => {
+    const main = document.querySelector("main")!, action = main.querySelector(".energy-derivation-actions button")!;
+    const css = getComputedStyle(action), prose = getComputedStyle(main);
+    return { font: prose.fontFamily, lineHeight: prose.lineHeight, heading: getComputedStyle(main.querySelector("h1")!).fontFamily,
+      controlFont: css.fontFamily, controlBorder: css.borderStyle, controlBackground: css.backgroundColor, controlPadding: css.padding,
+      paper: getComputedStyle(document.body).backgroundColor, math: getComputedStyle(main.querySelector(".katex")!).fontFamily };
+  });
+  const routes = ["fraction-chain/", "scalar-cancellation/?derivation-detail=expandable", "mechanics-relations/?derivation-detail=expandable"];
+  const styles = [];
+  for (const route of routes) { await page.goto(`http://localhost:8000/experiments/${route}`); styles.push(await read()); }
+  expect(styles[0]).toEqual(styles[1]); expect(styles[0]).toEqual(styles[2]);
+  expect(styles[0]!.font).toContain("Georgia");
+  override = true;
+  for (const route of routes) {
+    await page.goto(`http://localhost:8000/experiments/${route}`);
+    const changed = await read(); expect(changed.font).toBe("monospace"); expect(changed.heading).toBe("monospace");
+    expect(changed.math).toBe(styles[0]!.math);
+  }
+  await context.close();
 });
 
 test("static Article keeps the complete fraction argument without JavaScript", async ({ browser }) => {

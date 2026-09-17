@@ -1,3 +1,4 @@
+import { projectEquationRail } from "../../reader/runtime/equation-rail-presentation.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
@@ -373,15 +374,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     handle.setAttribute("aria-valuenow", String(position));
     handle.setAttribute("aria-valuetext", `Step ${labels[move]}, ${progress === 0 ? "source" : progress === 1 ? "result" : `${Math.round(progress * 100)} percent`}`);
     if (refinedRail) {
-      const between = progress > 0 && progress < 1;
-      const dock = progress === 0 ? move : move + 1;
-      root.dataset["railPosition"] = between ? "between" : "docked";
-      rail.style.setProperty('--rail-move-top', `${centers[move]! - centers[0]!}px`);
-      rail.style.setProperty('--rail-move-height', `${centers[move + 1]! - centers[move]!}px`);
-      railStops.forEach((stop, i) => {
-        stop.dataset["railStop"] = between && (i === move || i === move + 1) ? "boundary" : !between && i === dock ? "current" : "rest";
-      });
-      interleaves.forEach((passage, i) => { passage.dataset["railActive"] = String(between && i === move); });
+      projectEquationRail({ root, rail, centers, stops: railStops, passages: interleaves, move, progress });
     }
   };
   const project = () => {
