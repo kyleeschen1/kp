@@ -167,7 +167,8 @@
     {
       "id": "chain.inference-trial",
       "title": "Inference-trial",
-      "status": "planned"
+      "summary": "Seven retained proposal records: four checked including one correction, three located repairs; explicit non-blinded limitations.",
+      "status": "complete"
     },
     {
       "id": "chain.domain-boundaries",

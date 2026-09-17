@@ -1,0 +1,303 @@
+{
+  "provenance": "Current Codex session; same model implemented the checker and authored these proposals with its contracts visible. Not blinded, independent, external-API or statistical evidence.",
+  "cases": [
+    {
+      "id": "tenths",
+      "prompt": "Show two fifths plus one tenth, then reduce. Write each mathematical move as an explicit stop; omit hints.",
+      "intent": [
+        "2/5+1/10",
+        "4/10+1/10",
+        "5/10",
+        "1/2"
+      ],
+      "expected": "checked",
+      "correctionCount": 0,
+      "proposal": {
+        "schema": "kp.algebra.fraction-chain.v1",
+        "id": "tenths",
+        "title": "Count tenths, then simplify.",
+        "states": [
+          {
+            "id": "s0",
+            "latex": "2/5+1/10"
+          },
+          {
+            "id": "s1",
+            "latex": "4/10+1/10"
+          },
+          {
+            "id": "s2",
+            "latex": "5/10"
+          },
+          {
+            "id": "s3",
+            "latex": "1/2"
+          }
+        ],
+        "moves": [
+          {
+            "id": "m0",
+            "from": "s0",
+            "to": "s1",
+            "prose": "Express both fractions in the same-sized parts."
+          },
+          {
+            "id": "m1",
+            "from": "s1",
+            "to": "s2",
+            "prose": "Combine the ordered counts while retaining their denominator."
+          },
+          {
+            "id": "m2",
+            "from": "s2",
+            "to": "s3",
+            "prose": "Divide both integers by a common divisor."
+          }
+        ]
+      }
+    },
+    {
+      "id": "twelfths",
+      "prompt": "Show one quarter plus one sixth with both fractions renamed before combination. Omit hints.",
+      "intent": [
+        "1/4+1/6",
+        "3/12+2/12",
+        "5/12"
+      ],
+      "expected": "checked",
+      "correctionCount": 0,
+      "proposal": {
+        "schema": "kp.algebra.fraction-chain.v1",
+        "id": "twelfths",
+        "title": "Count twelfths.",
+        "states": [
+          {
+            "id": "s0",
+            "latex": "1/4+1/6"
+          },
+          {
+            "id": "s1",
+            "latex": "3/12+2/12"
+          },
+          {
+            "id": "s2",
+            "latex": "5/12"
+          }
+        ],
+        "moves": [
+          {
+            "id": "m0",
+            "from": "s0",
+            "to": "s1",
+            "prose": "Express both fractions in the same-sized parts."
+          },
+          {
+            "id": "m1",
+            "from": "s1",
+            "to": "s2",
+            "prose": "Combine the ordered counts while retaining their denominator."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ordered-difference",
+      "prompt": "Show seven eighths minus one quarter. Keep operand order and the minus sign; no unnecessary reduction.",
+      "intent": [
+        "7/8-1/4",
+        "7/8-2/8",
+        "5/8"
+      ],
+      "expected": "checked",
+      "correctionCount": 0,
+      "proposal": {
+        "schema": "kp.algebra.fraction-chain.v1",
+        "id": "ordered-difference",
+        "title": "Subtract two eighths from seven.",
+        "states": [
+          {
+            "id": "s0",
+            "latex": "7/8-1/4"
+          },
+          {
+            "id": "s1",
+            "latex": "7/8-2/8"
+          },
+          {
+            "id": "s2",
+            "latex": "5/8"
+          }
+        ],
+        "moves": [
+          {
+            "id": "m0",
+            "from": "s0",
+            "to": "s1",
+            "prose": "Express both fractions in the same-sized parts."
+          },
+          {
+            "id": "m1",
+            "from": "s1",
+            "to": "s2",
+            "prose": "Combine the ordered counts while retaining their denominator."
+          }
+        ]
+      }
+    },
+    {
+      "id": "unspecified-path",
+      "prompt": "Boundary probe: retain only the endpoints one third plus one sixth and one half, with no stated route. Do not silently choose a derivation.",
+      "intent": [
+        "1/3+1/6",
+        "1/2"
+      ],
+      "expected": "repair-gap",
+      "correctionCount": 0,
+      "proposal": {
+        "schema": "kp.algebra.fraction-chain.v1",
+        "id": "unspecified-path",
+        "title": "Reach the same quantity.",
+        "states": [
+          {
+            "id": "s0",
+            "latex": "1/3+1/6"
+          },
+          {
+            "id": "s1",
+            "latex": "1/2"
+          }
+        ],
+        "moves": [
+          {
+            "id": "m0",
+            "from": "s0",
+            "to": "s1",
+            "prose": "Express both fractions in the same-sized parts."
+          }
+        ]
+      }
+    },
+    {
+      "id": "false-difference",
+      "prompt": "Adversarial probe: preserve the deliberately false proposed step five sixths minus two sixths equals seven sixths so the checker must reject it.",
+      "intent": [
+        "5/6-2/6",
+        "7/6"
+      ],
+      "expected": "repair-gap",
+      "correctionCount": 0,
+      "proposal": {
+        "schema": "kp.algebra.fraction-chain.v1",
+        "id": "false-difference",
+        "title": "Evaluate the proposed difference.",
+        "states": [
+          {
+            "id": "s0",
+            "latex": "5/6-2/6"
+          },
+          {
+            "id": "s1",
+            "latex": "7/6"
+          }
+        ],
+        "moves": [
+          {
+            "id": "m0",
+            "from": "s0",
+            "to": "s1",
+            "prose": "Express both fractions in the same-sized parts."
+          }
+        ]
+      }
+    },
+    {
+      "id": "symbolic-denominator",
+      "prompt": "Unsupported probe: preserve one over x plus one over x to two over x. The bounded fraction task has no declared symbolic domain.",
+      "intent": [
+        "1/x+1/x",
+        "2/x"
+      ],
+      "expected": "repair-gap",
+      "correctionCount": 0,
+      "proposal": {
+        "schema": "kp.algebra.fraction-chain.v1",
+        "id": "symbolic-denominator",
+        "title": "Combine symbolic fractions.",
+        "states": [
+          {
+            "id": "s0",
+            "latex": "1/x+1/x"
+          },
+          {
+            "id": "s1",
+            "latex": "2/x"
+          }
+        ],
+        "moves": [
+          {
+            "id": "m0",
+            "from": "s0",
+            "to": "s1",
+            "prose": "Express both fractions in the same-sized parts."
+          }
+        ]
+      }
+    },
+    {
+      "id": "specified-path-repair",
+      "prompt": "Repair unspecified-path after the checker requires explicit alignment, raw combination and reduction stops. Keep its original endpoints.",
+      "intent": [
+        "1/3+1/6",
+        "2/6+1/6",
+        "3/6",
+        "1/2"
+      ],
+      "expected": "checked",
+      "correctionCount": 1,
+      "repairs": "unspecified-path",
+      "proposal": {
+        "schema": "kp.algebra.fraction-chain.v1",
+        "id": "specified-path-repair",
+        "title": "Keep the amount while changing its expression.",
+        "states": [
+          {
+            "id": "a",
+            "latex": "1/3+1/6"
+          },
+          {
+            "id": "b",
+            "latex": "2/6+1/6"
+          },
+          {
+            "id": "c",
+            "latex": "3/6"
+          },
+          {
+            "id": "d",
+            "latex": "1/2"
+          }
+        ],
+        "moves": [
+          {
+            "id": "align",
+            "from": "a",
+            "to": "b",
+            "prose": "A third is two sixths."
+          },
+          {
+            "id": "combine",
+            "from": "b",
+            "to": "c",
+            "prose": "Combine the counts of sixths."
+          },
+          {
+            "id": "reduce",
+            "from": "c",
+            "to": "d",
+            "prose": "Divide numerator and denominator by three."
+          }
+        ]
+      }
+    }
+  ]
+}
