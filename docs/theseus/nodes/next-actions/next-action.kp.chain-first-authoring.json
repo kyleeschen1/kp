@@ -2,9 +2,9 @@
   "id": "next-action.kp.chain-first-authoring",
   "kind": "next-action",
   "title": "Chain-first checked authoring and reader transfer",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: energy exemplar with requested blue-outline continuity repair; awaiting final exemplar judgment before scalar transfer.",
+  "summary": "User accepted the energy reader and explicitly requested resuming the approved loop.",
   "sourceRefs": [
     {
       "kind": "file",

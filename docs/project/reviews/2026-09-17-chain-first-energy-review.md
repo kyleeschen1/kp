@@ -1,11 +1,11 @@
 # Middle-step unfolding: energy review
 
-Review state: HUMAN_CHECKPOINT. Disclosure latency and preservation checks pass;
-the separate larger-font cross-browser gap below remains open. Visual acceptance
-is pending. Theseus owns live counts and execution under
+Review state: ACCEPTED. The user accepted the refined reader and explicitly
+resumed the approved loop. Disclosure latency and preservation checks pass;
+the separate larger-font cross-browser gap below remains open. Theseus owns live counts and execution under
 `run-contract.kp.chain-first-authoring-v1`. The
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
-requires this judgment before scalar transfer. No later slice has started.
+requires this judgment before scalar transfer; that prerequisite is now satisfied.
 
 ## Disclosure follow-up: retain the handle's blue outline
 

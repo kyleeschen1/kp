@@ -8,7 +8,9 @@ Last Updated: 2026-09-17
 Approved execution: [chain-first authoring long loop](../2026-09-17-chain-first-authoring-long-loop-proposal.md).
 `run-contract.kp.chain-first-authoring-v1` owns ordered execution and live status;
 the historical broad reader task is deferred with its evidence and judgments intact.
-Canonical pending judgment: [middle-step energy unfolding](../reviews/2026-09-17-chain-first-energy-review.md).
+Accepted reference: [middle-step energy unfolding](../reviews/2026-09-17-chain-first-energy-review.md).
+User resumed the approved loop; next is independent scalar transfer and its
+source-only variation, followed by the paired transfer checkpoint.
 
 Accepted authoring target: [chain-first semantic authoring](../decisions/2026-09-16-chain-first-semantic-authoring-target.md).
 The user wants mathematical chains plus sparse context to become correct KP

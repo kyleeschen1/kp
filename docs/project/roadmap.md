@@ -26,8 +26,8 @@ nor its evidence. The ledger remains retrievable at
 ## Executive Direction
 
 Approved execution: [chain-first authoring long loop](2026-09-17-chain-first-authoring-long-loop-proposal.md),
-owned by `run-contract.kp.chain-first-authoring-v1`. The first checkpoint is the
-nonterminal energy unfolding exemplar, before independent scalar transfer.
+owned by `run-contract.kp.chain-first-authoring-v1`. The user accepted the
+nonterminal energy unfolding exemplar and resumed independent scalar transfer.
 The [energy review packet](reviews/2026-09-17-chain-first-energy-review.md)
 provides the working URL, inspection actions and preservation evidence.
 

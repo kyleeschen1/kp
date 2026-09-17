@@ -2,9 +2,9 @@
   "id": "run-contract.kp.chain-first-authoring-v1",
   "kind": "run-contract",
   "title": "Chain-first authoring: transfer, fractions and checked inference",
-  "status": "blocked",
+  "status": "ready",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: bounded energy disclosure refinement complete; no later slice started.",
+  "summary": "Energy visual checkpoint accepted; resume approved scalar transfer and source-only variation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,8 +59,8 @@
     {
       "id": "chain.energy-review",
       "title": "Energy-review",
-      "summary": "HUMAN_CHECKPOINT: requested handle outline continuity repaired and verified across three browsers; 3 of 24 complete, no scalar transfer.",
-      "status": "ready"
+      "summary": "User accepted the refined energy reader and resumed the loop; cross-browser disclosure continuity evidence recorded.",
+      "status": "complete"
     },
     {
       "id": "chain.scalar-transfer",
