@@ -4,7 +4,7 @@
   "title": "Chain-first checked authoring and reader transfer",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: energy review after immediate-disclosure repair. Separate baseline font gap recorded; no wider promotion.",
+  "summary": "HUMAN_CHECKPOINT: energy exemplar after approved startup repair. Three of 24 complete; no scalar transfer.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -460,6 +460,69 @@
       "scope": "chain.energy-review.immediate-disclosure",
       "checkedAt": "2026-09-17T18:44:38.991Z",
       "notes": "Production verification passes without budget amendments."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'startup preparation profile' --repeat-each=3 --trace off",
+      "status": "passed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:08:26.761Z",
+      "notes": "Baseline/final local medians rail-to-ready: Chromium 845/470ms, Firefox 1488/946ms, WebKit 2757/434ms. Nine final runs pass cold offscreen and later-entry readiness assertions."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'startup preparation profile' --trace off",
+      "status": "failed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:08:27.962Z",
+      "notes": "Negative control restoring original whole-viewport preload margin fails: six offscreen power stages prepared, expected zero. Final viewport scheduling repair restored."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'startup preparation profile|computed-style clone|material clone authority|material templates' --repeat-each=3 --trace off",
+      "status": "failed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:08:29.005Z",
+      "notes": "Discarded bulk CSS serialization: WebKit custom-property parity failed and timing did not improve consistently. CSS copying, tests and shared renderer changes fully reverted."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'startup preparation profile|relationship-map|cold disclosure gives|first disclosure keeps|Back to step 3|disclosure preserves|pending disclosure|nonterminal unfolding|inline refinement|smaller steps preserves|every substep returns|expanded drag follows|equation geometry survives|scalar reader reuses|optional detail'",
+      "status": "passed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:08:30.038Z",
+      "notes": "21 Chromium tests pass; all-edge drag preparation, disclosure, held paint, exact return, font resize, scalar and repair paths preserved."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:08:31.056Z",
+      "notes": "Full app, node, tests, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:08:32.074Z",
+      "notes": "All architecture/governance gates and eight conformance tests pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:09:51.128Z",
+      "notes": "Production build passes; no renderer or compiler changes retained."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:09:52.275Z",
+      "notes": "All 12 production manifest routes pass."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.energy-review.startup-cost",
+      "checkedAt": "2026-09-17T19:09:53.333Z",
+      "notes": "Reader budgets pass without amendments."
     }
   ],
   "progress": {

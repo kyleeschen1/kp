@@ -829,10 +829,12 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   }, { ...opts, capture: true }));
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, opts);
   reduced.addEventListener("change", pause, opts);
+  // A whole-viewport prewarm margin started the next derivation alongside the
+  // visible one. Native preparation for unseen sections delayed the active rail.
   const visibility = new IntersectionObserver(entries => {
     if (!entries[0]?.isIntersecting) pause();
     else if (!session && !loading && !seeking && root.dataset["repair"] !== "true") void seekPosition(0);
-  }, { rootMargin: '100% 0px' }); visibility.observe(root);
+  }); visibility.observe(root);
   // Font-only zoom can change native ink and row spacing at unchanged width.
   // Observe stationary records, never moving compositor paint. Only native
   // metric changes rebuild scenes; prose reflow just remeasures the rail.

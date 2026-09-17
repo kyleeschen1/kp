@@ -3,6 +3,55 @@ import { sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/
 
 const route = "/experiments/mechanics-relations/";
 
+test('startup preparation profile', async ({ page, browserName }, info) => {
+  await page.setViewportSize({ width: 1280, height: 1100 });
+  await page.addInitScript(() => {
+    const observation = { rail: 0, interactive: 0, longTasks: [] as number[] };
+    Object.defineProperty(window, '__derivationStartup', { value: observation });
+    if (PerformanceObserver.supportedEntryTypes.includes('longtask'))
+      new PerformanceObserver(list => observation.longTasks.push(...list.getEntries().map(entry => entry.duration)))
+        .observe({ type: 'longtask', buffered: true });
+    const observe = new MutationObserver(() => {
+      const root = document.querySelector('[data-derivation-namespace="energy"]');
+      const rail = root?.querySelector<HTMLElement>('[data-derivation-rail]');
+      const handle = root?.querySelector<HTMLButtonElement>('[data-derivation-handle]');
+      if (rail && !rail.hidden && !observation.rail) observation.rail = performance.now();
+      if (handle && rail && !rail.hidden && !handle.disabled && root?.querySelector('[data-derivation-renderer]')) {
+        observation.interactive = performance.now(); observe.disconnect();
+      }
+    });
+    observe.observe(document, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden', 'disabled', 'data-derivation-renderer'] });
+  });
+  const cdp = browserName === 'chromium' ? await page.context().newCDPSession(page) : undefined;
+  await cdp?.send('Profiler.enable');
+  await cdp?.send('Profiler.start');
+  const root = await ready(page);
+  const profile = (await cdp?.send('Profiler.stop'))?.profile;
+  const samples = new Map<number, number>();
+  profile?.samples?.forEach((id, i) => samples.set(id, (samples.get(id) ?? 0) + (profile.timeDeltas?.[i] ?? 0) / 1000));
+  const costs = profile?.nodes.map(node => ({ name: node.callFrame.functionName, url: node.callFrame.url,
+    line: node.callFrame.lineNumber + 1, ms: Math.round(samples.get(node.id) ?? 0) })).sort((a, b) => b.ms - a.ms).slice(0, 25) ?? [];
+  const timing = await page.evaluate(() => Reflect.get(window, '__derivationStartup'));
+  const sections = await page.locator('[data-energy-derivation]').evaluateAll(roots => roots.map(root => ({
+    namespace: root.getAttribute('data-derivation-namespace'), y: root.getBoundingClientRect().top,
+    prepared: root.querySelectorAll('[data-derivation-renderer]').length
+  })));
+  const report = { browserName, timing, sections, costs };
+  if (profile) await info.attach('startup-cpu-profile', { body: JSON.stringify(profile), contentType: 'application/json' });
+  await info.attach('startup-costs', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });
+  console.log('DERIVATION_STARTUP', JSON.stringify({ ...report, costs: costs.slice(0, 5) }));
+  await expect(lens(root)).toBeEnabled();
+  // This later section used to start inside a whole-viewport prewarm margin,
+  // occupying the main thread before the visible energy rail became usable.
+  const later = sections.find(section => section.namespace === 'power')!;
+  expect(later.y).toBeGreaterThan(1100);
+  expect(later.prepared).toBe(0);
+  const power = page.locator('[data-derivation-namespace="power"]');
+  await power.scrollIntoViewIfNeeded();
+  await expect(lens(power)).toBeEnabled();
+  await expect(power).not.toHaveAttribute('data-repair', 'true');
+});
+
 for (const parent of ['cancel-mass', 'scale-magnitude']) test(`relationship-map entry honors a detail click while preparing: ${parent}`, async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.addInitScript(() => {

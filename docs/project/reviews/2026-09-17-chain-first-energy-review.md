@@ -7,7 +7,55 @@ is pending. Theseus owns live counts and execution under
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
 requires this judgment before scalar transfer. No later slice has started.
 
-## Latest repair: publish detail before preparing native animation
+## Startup follow-up: prepare the visible derivation first
+
+The user accepted the improved disclosure response and authorized profiling the
+remaining initial rail lag. The canonical artifact, host, checked semantic
+source and native compositor below are unchanged. This is a scheduling repair,
+not a new visual treatment or authoring format.
+
+The viewport observer used a whole-viewport preload margin. At the energy
+entry, that also started the power derivation approximately 1,590px below the
+viewport top in a 1,100px window. Both native scene batches competed on the
+main thread. Automatic preparation now begins at actual viewport entry. All
+transitions of the visible view still prepare before enabling its handle, so
+continuous dragging retains its no-cross-edge-wait guarantee. Explicit
+disclosure and navigation keep their existing preparation paths.
+
+Three runs per browser, at the same 1280×1100 energy entry, measured the interval
+from the rail being unhidden to its handle being enabled in the shared
+development server (DOM readiness timestamps, not input-to-paint timings):
+
+| Browser | Previous median | Current median | Reduction |
+| --- | ---: | ---: | ---: |
+| Chromium | 845ms | 470ms | 44% |
+| Firefox | 1,488ms | 946ms | 36% |
+| WebKit | 2,757ms | 434ms | 84% |
+
+These are local samples, not universal device budgets or full navigation times.
+Network/module startup and native preparation still cost time. The Chromium
+profile showed substantial computed-style copying, but alternate CSS copying
+and read/write batching did not produce a consistent improvement. Bulk CSS
+serialization also failed WebKit custom-property parity. Those experiments
+were removed completely; the final production diff only changes viewport
+activation. No compiler, paint, font, theme or semantic guarantees were relaxed.
+The mathematical record and templates were already compiled at publication;
+introducing another serialized plan did not address the measured bottleneck.
+
+The durable startup test captures timings and a Chromium CPU profile, asserts
+zero prepared stages in the later offscreen section, then scrolls into that
+section and verifies its handle becomes usable. Restoring the old observer
+margin made this test fail with six offscreen prepared stages. All nine final
+startup runs pass across three engines; all 21 scoped Chromium preservation
+checks, full typecheck, architecture, production build, reader closure and
+reader budget checks pass. Repeat with
+`npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'startup preparation profile' --repeat-each=3 --trace off`.
+
+The previously documented large-font cross-browser renderer gap remains open;
+startup timing does not certify that motif. The rollback unit is the reader's
+viewport observer change. No scalar transfer or wider motif promotion started.
+
+## Earlier repair: publish detail before preparing native animation
 
 The previous repair below honored a cold click but still waited for native
 preparation before opening the text. That wait was the wrong boundary. The
