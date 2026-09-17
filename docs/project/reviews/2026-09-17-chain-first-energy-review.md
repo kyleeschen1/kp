@@ -1,12 +1,75 @@
 # Middle-step unfolding: energy review
 
-Review state: HUMAN_CHECKPOINT. Implementation is verified; visual acceptance
+Review state: HUMAN_CHECKPOINT. Disclosure latency and preservation checks pass;
+the separate larger-font cross-browser gap below remains open. Visual acceptance
 is pending. Theseus owns live counts and execution under
 `run-contract.kp.chain-first-authoring-v1`. The
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
 requires this judgment before scalar transfer. No later slice has started.
 
-## Supplied entry URL: blocked expansion and competing scroll
+## Latest repair: publish detail before preparing native animation
+
+The previous repair below honored a cold click but still waited for native
+preparation before opening the text. That wait was the wrong boundary. The
+canonical artifact remains `examples/physics/momentum-energy.article.md`, hosted
+at the supplied relationship-map URL, with the existing native KaTeX compositor
+and checked momentum-energy plans as semantic authority.
+
+Disclosure now captures validated semantic intent synchronously, unfolds the
+published explanation in the click task, and immediately binds close/reopen
+controls. Checked parent/child mappings are prepared with the issued plans,
+not imported during a click. A handoff generation prevents an obsolete success
+or repair completion from changing the latest view. Actual existing paint can
+remain leased until its successor is ready; a cold view needs no paint lease.
+
+Native preparation explicitly yields the first frame and then yields between
+uncached scenes. Current-view activation and its input queue no longer await
+hidden detail warming. Abort/generation checks and cleanup retain ownership
+across reversal and page retirement. Warm cached scenes still activate directly.
+
+Two unnecessary rebuild causes were repaired: Firefox DOMRect subtraction
+noise (for example 54.3999939 versus 54.4000092 pixels), and mount-local font
+event counters masquerading as cache identity. Numeric native extents now use
+a 0.01px comparison; font identity remains exact. The scene pool owns a shared
+invalidation revision, including late paint leases. Prepared geometry is
+compared with its post-font measurement baseline. Real resize recovery updates
+the rail from published text before native preparation finishes.
+
+Evidence: 15 focused cases pass across Chromium, Firefox and WebKit, including
+both early detail clicks, rapid close/reopen with fonts deliberately held,
+page disposal and frame-by-frame immediate parent return. Controlled cold
+disclosure first-frame samples were 8.4ms, 14ms and 19ms respectively. These
+measure click-handler-to-frame latency, not all device/input-queue latency.
+All 20 scoped Chromium preservation checks pass, including font resizing,
+held real paint, exact returns, every-pointer dragging, repair recovery and the
+existing scalar reader. Six metric/cache ownership unit checks, full typecheck
+and architecture checks pass. Production bundle, reader closure (12 manifest
+routes) and reader budget checks pass. No timeouts, budgets or visual laws were relaxed.
+
+Repeat the focused browser cohort with
+`npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'relationship-map|cold disclosure gives|Back to step 3'`.
+
+### Open, separately reproduced larger-font gap
+
+The broader `equation geometry survives` check fails in Firefox and WebKit;
+Chromium passes. Replacing only the reader with its exact `784f82673` version
+reproduced both failures, then the new reader was restored. The current WebKit
+trace reaches a protected-transit rejection between the retained exponent and
+introduced right parenthesis in `energy.extract-norm-scale` after font resizing.
+Native scene preparation also exceeds the existing timeout in this pressure
+case. This is not waived or certified by the latency checks. Repairing the
+motif's font-size geometry remains separate from publishing disclosure text;
+no arbitrary collision arc, tolerance change, fallback or choreography rewrite
+was introduced to conceal it.
+
+Try either **Inspect smaller steps** from
+`http://localhost:8000/experiments/mechanics-relations/#relationship-map`, including
+an early click after reload. Text and close/reopen controls should respond
+immediately. Native animation can still prepare on a cold entry; this does not
+claim zero renderer cost. The energy review remains the approved next judgment,
+before scalar transfer; it is not a claim of full cross-browser font conformance.
+
+## Earlier repair: supplied entry URL, blocked expansion and competing scroll
 
 The user supplied
 `http://localhost:8000/experiments/mechanics-relations/#relationship-map`.

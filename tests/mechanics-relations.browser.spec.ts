@@ -17,8 +17,15 @@ for (const parent of ['cancel-mass', 'scale-magnitude']) test(`relationship-map 
   const expand = root.locator(`[data-refinement-expand="${parent}"]`);
   await expand.scrollIntoViewIfNeeded();
   const top = (await expand.boundingBox())!.y;
-  await expand.click();
+  const immediate = await expand.evaluate((el: HTMLButtonElement) => {
+    el.click();
+    return el.closest('[data-energy-derivation]')!.getAttribute('data-derivation-detail');
+  });
+  expect(immediate).toBe('mass-refinement');
+  await root.locator('[data-refinement-local-return]').last().click();
   await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await root.locator(`[data-refinement-expand="${parent}"]`).click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
   await page.evaluate(() => window.dispatchEvent(new Event('test-fonts-ready')));
   await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
   await expect(lens(root)).toBeEnabled();
@@ -34,7 +41,53 @@ for (const parent of ['cancel-mass', 'scale-magnitude']) test(`relationship-map 
   await expect(root).toHaveAttribute('data-move', parent === 'cancel-mass' ? '2' : '1');
 });
 
-test('relationship-map pending disclosure cancels cleanly on page disposal', async ({ page }) => {
+test('cold disclosure gives the published detail a frame before native preparation', async ({ page }) => {
+  await page.addInitScript(() => {
+    const fonts = document.fonts;
+    Object.defineProperty(document, 'fonts', { configurable: true, value: fonts });
+    Object.defineProperty(fonts, 'ready', { configurable: true, value: new Promise<void>(resolve => {
+      window.addEventListener('test-fonts-ready', () => resolve(), { once: true });
+    }) });
+  });
+  await page.goto(route + '#relationship-map');
+  const root = page.locator('[data-energy-derivation][data-derivation-namespace="energy"]');
+  await root.locator('[data-refinement-expand="cancel-mass"]').scrollIntoViewIfNeeded();
+  // Keep the native module warm while its scene preparation is still blocked.
+  // Otherwise a network wait could accidentally provide the first paint.
+  await page.evaluate(async () => {
+    const modulePath = '/src/rendering/momentum-energy-derivation-session.ts';
+    await import(modulePath);
+  });
+  const firstFrame = await root.evaluate(async el => {
+    const start = performance.now();
+    let prepared = 0;
+    const observer = new MutationObserver(records => { prepared += records.filter(record => record.oldValue !== null).length; });
+    observer.observe(el, { subtree: true, attributes: true, attributeOldValue: true, attributeFilter: ['data-derivation-preparing'] });
+    el.querySelector<HTMLButtonElement>('[data-refinement-expand="cancel-mass"]')!.click();
+    window.dispatchEvent(new Event('test-fonts-ready'));
+    await new Promise(requestAnimationFrame);
+    observer.disconnect();
+    return { detail: el.dataset['derivationDetail'], prepared, elapsed: performance.now() - start,
+      controls: el.querySelectorAll('[data-refinement-local-return]').length };
+  });
+  expect(firstFrame.detail).toBe('mass-refinement');
+  expect(firstFrame.controls).toBeGreaterThan(0);
+  expect(firstFrame.prepared).toBe(0);
+  expect(firstFrame.elapsed).toBeLessThan(100);
+  test.info().annotations.push({ type: 'disclosure-first-frame-ms', description: firstFrame.elapsed.toFixed(2) });
+  await test.info().attach('disclosure-first-frame', { body: JSON.stringify(firstFrame), contentType: 'application/json' });
+  await expect.poll(() => root.evaluate(el => ({
+    enabled: !el.querySelector<HTMLButtonElement>('[data-derivation-handle]')!.disabled,
+    repair: el.getAttribute('data-repair'), fonts: document.fonts.status,
+    stages: [...el.querySelectorAll<HTMLElement>('.energy-derivation-stage')].map(stage => ({
+      preparing: stage.hasAttribute('data-derivation-preparing'), hidden: stage.hidden,
+      renderer: stage.dataset['derivationRenderer'],
+      entity: stage.querySelector('[data-kp-semantic-entity-id]')?.getAttribute('data-kp-semantic-entity-id')
+    }))
+  })).then(value => JSON.stringify(value))).toContain('"enabled":true');
+});
+
+test('relationship-map published detail survives disposal without late animation writes', async ({ page }) => {
   await page.addInitScript(() => {
     const fonts = document.fonts;
     Object.defineProperty(document, 'fonts', { configurable: true, value: fonts });
@@ -45,14 +98,14 @@ test('relationship-map pending disclosure cancels cleanly on page disposal', asy
   await page.goto(route + '#relationship-map');
   const root = page.locator('[data-energy-derivation][data-derivation-namespace="energy"]');
   await root.locator('[data-refinement-expand="cancel-mass"]').click();
-  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
   await page.evaluate(async () => {
     window.dispatchEvent(new PageTransitionEvent('pagehide'));
     window.dispatchEvent(new Event('test-fonts-ready'));
     for (let i = 0; i < 12; i++) await new Promise(requestAnimationFrame);
   });
-  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
-  await expect(root.locator('[data-refinement-status], [data-disclosure-paint]')).toHaveCount(0);
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
+  await expect(root.locator('[data-refinement-status], [data-disclosure-paint], [data-derivation-preparing]')).toHaveCount(0);
 });
 
 test('first disclosure keeps a usable handle from the click onward', async ({ page }) => {
@@ -586,11 +639,17 @@ test("equation geometry survives font resizing without a width change", async ({
   const width = (await root.boundingBox())!.width;
   for (const size of [24, 16, 28]) {
     await page.evaluate(value => { document.documentElement.style.fontSize = `${value}px`; }, size);
-    await expect.poll(async () => {
-      const slots = await root.locator('.energy-derivation-equation').evaluateAll(els => els.map(el => { const b = el.getBoundingClientRect(); return b.top + b.height / 2; }));
-      const b = (await handle.boundingBox())!;
-      return Math.abs(b.y + b.height / 2 - (slots[0]! + .4 * (slots[1]! - slots[0]!)));
-    }).toBeLessThan(1.5);
+    // Measure both sides in one layout sample: resize recovery can scroll
+    // between independent browser round trips.
+    await expect.poll(() => root.evaluate(el => {
+      const slots = [...el.querySelectorAll('.energy-derivation-equation')].map(node => { const b = node.getBoundingClientRect(); return b.top + b.height / 2; });
+      const b = el.querySelector('[data-derivation-handle]')!.getBoundingClientRect();
+      const offset = Math.abs(b.y + b.height / 2 - (slots[0]! + .4 * (slots[1]! - slots[0]!)));
+      return { aligned: offset < 1.5, offset, progress: el.dataset['progress'], move: el.dataset['move'],
+        disabled: el.querySelector<HTMLButtonElement>('[data-derivation-handle]')!.disabled,
+        preparing: el.querySelectorAll('[data-derivation-preparing]').length, fonts: document.fonts.status,
+        visibility: document.visibilityState, slots, handleCenter: b.y + b.height / 2 };
+    }).then(value => JSON.stringify(value))).toContain('"aligned":true');
     expect((await root.boundingBox())!.width).toBeCloseTo(width, 1);
     await expect(handle).toBeEnabled();
     await expect(handle).toHaveAttribute('aria-valuenow', progress!);

@@ -35,3 +35,19 @@ test('page retirement also disposes outstanding paint leases returned later', ()
   assert.equal(a.counts().disposed, 1); assert.equal(lease.counts().disposed, 1);
   assert.equal(pool.take('lease'), undefined);
 });
+
+test('font invalidation changes shared cache identity even for a late paint lease', () => {
+  const pool = createDerivationScenePool<ReturnType<typeof scene>>(2);
+  const key = () => `same-css-font:${pool.revision}`;
+  const original = pool.revision;
+  const lease = scene(key());
+  pool.put(lease);
+  assert.equal(pool.take(key()), lease);
+  assert.equal(pool.revision, original);
+  pool.clear();
+  assert.notEqual(pool.revision, original);
+  pool.put(lease);
+  assert.equal(pool.take(key()), undefined);
+  pool.close();
+  assert.equal(lease.counts().disposed, 1);
+});

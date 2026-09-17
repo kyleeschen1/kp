@@ -4,7 +4,7 @@
   "title": "Chain-first authoring: transfer, fractions and checked inference",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT at energy review; 3/24 complete. Supplied-URL regression repaired and checked; no scalar transfer before visual acceptance.",
+  "summary": "HUMAN_CHECKPOINT: energy exemplar review before scalar transfer. Three of 24 complete; latency regression checks pass.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,7 +59,7 @@
     {
       "id": "chain.energy-review",
       "title": "Energy-review",
-      "summary": "Supplied relationship-map entry failure reproduced and repaired; readiness/viewport/disposal regressions pass. HUMAN_CHECKPOINT: await energy visual acceptance before scalar transfer.",
+      "summary": "HUMAN_CHECKPOINT: immediate disclosure verified; review updated. Larger-font Firefox/WebKit gap also reproduces on baseline. No scalar transfer.",
       "status": "ready"
     },
     {

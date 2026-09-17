@@ -4,6 +4,8 @@ import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-vi
 import { createEnergyRefinementUnfolding } from "./energy-refinement-unfolding.ts";
 import { holdEnergyDisclosurePaint, visibleDerivationHandle } from "./energy-disclosure-paint.ts";
 import { createDerivationScenePool } from "./derivation-scene-pool.ts";
+import { yieldDerivationPreparation } from "./derivation-preparation-yield.ts";
+import { sameDerivationNativeMetrics } from "./derivation-native-metrics.ts";
 import { lensProgressForAlgebra } from "./energy-derivation-presentation.ts";
 import { equationViewportBounds, revealEquationInViewport } from "../../reader/runtime/equation-viewport.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
@@ -52,6 +54,7 @@ let rendererModule: Promise<typeof import('../../rendering/momentum-energy-deriv
 /** Coarse and fine are two projections, never two simultaneously active
  * timelines. Retire the old compositor/clock before mounting the next view. */
 export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: DerivationReaderBinding = energyBinding) {
+  const mappings = new Map<string, ReturnType<typeof import('../../animation/derivation-inspection-composition.ts').createDerivationRefinementMapping>>();
   // Issued plans are immutable within this published reader. Reuse their
   // authority on disclosure instead of checking and compiling them again.
   const sourceBinding = binding, plans = new Map<string, Promise<EnergyDerivationPlan>>();
@@ -59,7 +62,17 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
     const key = JSON.stringify([detail, parentId]);
     let plan = plans.get(key);
     if (!plan) {
-      plan = sourceBinding.loadPlan(detail, parentId);
+      plan = sourceBinding.loadPlan(detail, parentId).then(async issued => {
+        if (detail === 'coarse' && issued.inspections) {
+          const [{ unfoldDerivationInspection }, { createDerivationRefinementMapping }] = await Promise.all([
+            import('../../semantic/momentum-energy-derivation-plan.ts'), import('../../animation/derivation-inspection-composition.ts')
+          ]);
+          // Resolve checked correspondence with the plan, never on a click.
+          for (const parent of Object.keys(issued.inspections))
+            mappings.set(parent, createDerivationRefinementMapping(issued, unfoldDerivationInspection(issued, parent)));
+        }
+        return issued;
+      });
       plans.set(key, plan);
       void plan.catch(() => plans.delete(key));
     }
@@ -86,7 +99,11 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
   let root = initialRoot, active = mountEnergyDerivation(root, binding, undefined, pool);
   let saved: { state: EnergyReaderState; offset: number; parentId: string } | undefined;
   let busy = false;
+  let handoff = 0, releasePaint: (() => void) | undefined;
   let controls = new AbortController();
+  window.addEventListener('pagehide', event => {
+    if (!event.persisted) { handoff++; releasePaint?.(); controls.abort(); }
+  });
   const replace = (next: HTMLElement) => {
     if (unfold) root = unfold(next);
     else { root.replaceWith(next); root = next; }
@@ -104,7 +121,9 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
       const entry = event.currentTarget;
       if (!(entry instanceof HTMLElement)) return;
       busy = true;
-      const grip = unfold ? visibleDerivationHandle(root) : undefined;
+      const request = ++handoff;
+      releasePaint?.();
+      const grip = unfold && active.hasPaint ? visibleDerivationHandle(root) : undefined;
       const visualOffset = grip?.getBoundingClientRect().top;
       const entryOffset = entry.getBoundingClientRect().top;
       const viewportAnchor = holdDisclosureViewportAnchor(grip ?? entry);
@@ -112,7 +131,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
       try {
         const collapsing = saved !== undefined;
         if (!collapsing) {
-          const state = await active.capture();
+          const state = active.capture();
           if (!state) return;
           saved = { state, offset: entryOffset, parentId: entry.dataset['refinementExpand']! };
         }
@@ -132,13 +151,8 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           if (ids.includes(previous.transition)) {
             destination.transition = previous.transition; destination.progress = previous.progress;
           } else if (previous.transition === saved!.parentId) {
-            const coarse = await binding.loadPlan('coarse');
-            if (coarse.inspections?.[saved!.parentId]) {
-              const [{ unfoldDerivationInspection }, { createDerivationRefinementMapping }] = await Promise.all([
-                import('../../semantic/momentum-energy-derivation-plan.ts'),
-                import('../../animation/derivation-inspection-composition.ts')
-              ]);
-              const mapping = createDerivationRefinementMapping(coarse, unfoldDerivationInspection(coarse, saved!.parentId));
+            const mapping = mappings.get(saved!.parentId);
+            if (mapping) {
               const mapped = mapping.mapAlgebra(sampleEnergyDerivationLens(previous.progress).algebra);
               if (mapped) {
                 destination.transition = mapped.transition;
@@ -149,6 +163,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         }
         const offset = saved!.offset;
         if (grip) paintHold = holdEnergyDisclosurePaint(root, grip, active.detachPaint());
+        releasePaint = paintHold?.release;
         active.dispose(true); replace(next);
         paintHold?.attach();
         active = mountEnergyDerivation(root, binding, destination, pool);
@@ -157,15 +172,19 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         const restoredEntry = root.querySelector<HTMLElement>(collapsing ? `[data-refinement-expand="${saved!.parentId}"]` : "[data-refinement-collapse]")!;
         restoredEntry.hidden = false;
         viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? offset);
+        // The published explanation and its controls are ready independently
+        // of native paint. A newer disclosure owns all later completion work.
+        if (collapsing) saved = undefined;
+        bind(); busy = false;
         await active.ready;
+        if (request !== handoff) return;
         if (root.dataset["repair"] === "true") throw new Error("Refinement scene requires repair");
         paintHold?.release();
-        if (collapsing) saved = undefined;
-        bind();
         if (viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? offset)) restoredEntry.focus({ preventScroll: true });
         // Disclosure owns this reading anchor. Revealing an off-screen old
         // selection here would navigate away from the detail just opened.
       } catch (error) {
+        if (request !== handoff) return;
         // A failed optional view must not strand the reader or grant a visual
         // fallback authority. Restore the already checked compact inspection.
         if (saved && root.dataset["derivationDetail"] === "mass-refinement") {
@@ -180,6 +199,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
           restoredEntry.hidden = false;
           viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? previous.offset);
           await active.ready;
+          if (request !== handoff) return;
           paintHold?.release();
           bind();
           if (viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? previous.offset)) restoredEntry.focus({ preventScroll: true });
@@ -195,7 +215,7 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         }
         status.hidden = false; status.textContent = "This detail needs repair; the written reasoning remains available.";
         console.error("Energy refinement repair", error);
-      } finally { paintHold?.release(); busy = false; }
+      } finally { paintHold?.release(); if (request === handoff) busy = false; }
     };
     buttons.forEach(button => { button.hidden = false; button.addEventListener("click", toggle, { signal: controls.signal }); });
   };
@@ -293,6 +313,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   let pendingSeek: { move: number; progress: number } | undefined;
   let seeking = false;
   let seekCompletion: Promise<void> | undefined;
+  let requestedPosition = initialPosition ?? { move: 0, progress: 0 };
   let selectionRequest = 0;
   let revealRequested = false, revealFrame: number | undefined;
   const revealSelection = () => {
@@ -449,6 +470,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     scope.hidden = true;
   };
   async function mount(index: number, progress: number) {
+    requestedPosition = { move: index, progress };
     // Every scene in this bounded checked view is ready before direct input.
     // Crossing an edge must not await fonts, compilation, or native measurement.
     if (prepared.length === total) { activate(index, progress); return; }
@@ -459,6 +481,13 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     let candidate: HTMLElement | undefined;
     let created: Awaited<ReturnType<typeof mountMomentumEnergyDerivationSession>> | undefined;
     const pending: PreparedScene[] = [];
+    let firstPreparation = true;
+    let warming = false;
+    const releasePreparation = () => {
+      created?.dispose(); candidate?.remove();
+      for (const scene of pending) { scene.session.dispose(); scene.element.remove(); }
+      scheduleGeometry();
+    };
     let inspectionRight = 0;
     try {
       const [{ mountMomentumEnergyDerivationSession }, proofPlan] = await Promise.all([
@@ -473,6 +502,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       const refinement = proofPlan.compactInspection === "refinement" ? await binding.loadPlan("mass-refinement") : undefined;
       await document.fonts.ready;
       if (token !== generation) return;
+      const preparationMetrics = nativeMetrics(), preparationFontRevision = fontRevision;
       const alignBaselines = (equations: HTMLElement[]) => {
         // Align newly published records even when every compositor is reused.
         // The semantic prefix, not the changing strut envelope, owns the dock.
@@ -489,12 +519,15 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       const keyFor = (plan: EnergyDerivationPlan, sceneIndex: number, template: HTMLTemplateElement) => {
         const font = getComputedStyle(equationSlots[0]!.querySelector('.katex')!);
         return JSON.stringify([plan.sourceRevision, plan.moves[sceneIndex]!.id, template.innerHTML,
-          root.getBoundingClientRect().width, font.font, font.letterSpacing, font.lineHeight, fontRevision]);
+          root.getBoundingClientRect().width, font.font, font.letterSpacing, font.lineHeight, pool?.revision]);
       };
       const prepareScene = async (plan: EnergyDerivationPlan, sceneIndex: number, template: HTMLTemplateElement) => {
         const cacheKey = keyFor(plan, sceneIndex, template);
         const cached = pool?.take(cacheKey);
         if (cached) { stage.parentElement!.append(cached.element); pending.push(cached); return; }
+        await yieldDerivationPreparation(abort.signal, firstPreparation);
+        firstPreparation = false;
+        if (token !== generation) return;
         candidate = stage.cloneNode(false) as HTMLElement;
         candidate.removeAttribute("data-derivation-stage");
         candidate.setAttribute("data-derivation-preparing", "");
@@ -531,35 +564,48 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
         await prepareScene(proofPlan, sceneIndex, get<HTMLTemplateElement>(`[data-derivation-template="${sceneIndex}"]`));
         if (token !== generation) return;
       }
-      // Prepare the bounded published detail set before offering direct input.
-      // A first disclosure must not compile native scenes inside its click task.
-      if (pool && detail === 'coarse' && !initial) {
-        const activeKeys = new Set(pending.map(scene => scene.cacheKey));
-        for (const view of root.querySelectorAll<HTMLTemplateElement>('[data-refinement-view]')) {
-          const fine = await binding.loadPlan('mass-refinement', view.dataset['refinementView']);
-          const templates = [...view.content.querySelectorAll<HTMLTemplateElement>('[data-derivation-template]')];
-          for (const [i, template] of templates.entries()) {
-            if (activeKeys.has(keyFor(fine, i, template))) continue;
-            await prepareScene(fine, i, template);
-            if (token !== generation) return;
-            pool.put(pending.pop()!);
-          }
-        }
-      }
       stage.remove();
       prepared = pending.splice(0);
       preparedPlan = proofPlan;
+      // These scenes were measured after font readiness. Comparing them with
+      // the pre-font mount snapshot would immediately rebuild valid scenes.
+      metrics = preparationMetrics; measuredFontRevision = preparationFontRevision;
       if (inspectionRight > 0) root.style.setProperty("--derivation-inspection-lane", `${Math.ceil(inspectionRight)}px`);
       activate(index, progress);
+      // Hidden detail warming must not gate the current view's handle, including
+      // after a font resize. Generation checks cancel it when the reader changes.
+      if (pool && detail === 'coarse' && !initial) {
+        const activeKeys = new Set(prepared.map(scene => scene.cacheKey));
+        warming = true;
+        void (async () => {
+          try {
+            for (const view of root.querySelectorAll<HTMLTemplateElement>('[data-refinement-view]')) {
+              const fine = await binding.loadPlan('mass-refinement', view.dataset['refinementView']);
+              if (token !== generation) return;
+              const templates = [...view.content.querySelectorAll<HTMLTemplateElement>('[data-derivation-template]')];
+              for (const [i, template] of templates.entries()) {
+                if (activeKeys.has(keyFor(fine, i, template))) continue;
+                await prepareScene(fine, i, template);
+                if (token !== generation) return;
+                pool.put(pending.pop()!);
+              }
+            }
+          } catch (error) {
+            // Cache warming has no authority to retire a valid active scene.
+            // Opening the detail still runs its normal checked repair boundary.
+            if (token === generation) console.error('Derivation detail prewarm failed', error);
+          } finally {
+            releasePreparation();
+          }
+        })();
+      }
     } catch (error) {
       if (token !== generation) return;
       read(); root.dataset["repair"] = "true"; status.hidden = false;
       status.textContent = "This animation needs repair. The complete derivation is still available below.";
       console.error("Energy derivation repair", error);
     } finally {
-      created?.dispose(); candidate?.remove();
-      for (const scene of pending) { scene.session.dispose(); scene.element.remove(); }
-      scheduleGeometry();
+      if (!warming) releasePreparation();
     }
   }
   const play = (requested: Direction) => {
@@ -791,11 +837,11 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   // Observe stationary records, never moving compositor paint. Only native
   // metric changes rebuild scenes; prose reflow just remeasures the rail.
   const nativeInk = equationSlots.flatMap(slot => [...slot.querySelectorAll<HTMLElement>('.katex-html > .base')]);
-  const nativeMetrics = () => JSON.stringify([root.getBoundingClientRect().width,
+  const nativeMetrics = () => [root.getBoundingClientRect().width,
     ...equationSlots.flatMap(slot => {
       const box = slot.getBoundingClientRect(), font = getComputedStyle(slot.querySelector('.katex')!);
       return [box.width, box.height, font.font, font.letterSpacing];
-    }), ...nativeInk.flatMap(ink => { const box = ink.getBoundingClientRect(); return [box.width, box.height]; })]);
+    }), ...nativeInk.flatMap(ink => { const box = ink.getBoundingClientRect(); return [box.width, box.height]; })];
   let metrics = nativeMetrics(), fontRevision = 0, measuredFontRevision = 0;
   let geometryFrame: number | undefined;
   const scheduleGeometry = () => {
@@ -804,7 +850,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       geometryFrame = undefined;
       if (abort.signal.aborted || loading || seeking) return;
       const next = nativeMetrics();
-      if (next !== metrics || fontRevision !== measuredFontRevision) {
+      if (!sameDerivationNativeMetrics(metrics, next) || fontRevision !== measuredFontRevision) {
         metrics = next; measuredFontRevision = fontRevision;
         cancelDrag(); journey = undefined; clock.pause();
         if (tracing && session) {
@@ -814,6 +860,9 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
           // back to a selection they have already scrolled away from.
           if (current.bottom > 0 && current.top < innerHeight) revealRequested = true;
           const progress = clock.getSnapshot().progress;
+          // Rail geometry belongs to the published text, not native readiness.
+          // Preserve its held position throughout a font-triggered rebuild.
+          measureRows(); positionScope(selected, progress);
           retire(); void mount(selected, progress).then(() => { if (revealRequested) scheduleReveal(); }); return;
         }
       }
@@ -824,7 +873,9 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   };
   const resize = new ResizeObserver(scheduleGeometry);
   [root, ...equationSlots, ...nativeInk, ...interleaves].forEach(element => resize.observe(element));
-  document.fonts.addEventListener('loadingdone', () => { fontRevision++; scheduleGeometry(); }, opts);
+  // A view-local event count is not a cache identity across disclosure mounts.
+  // Font completion invalidates idle scenes directly, even at unchanged CSS.
+  document.fonts.addEventListener('loadingdone', () => { fontRevision++; pool?.clear(); scheduleGeometry(); }, opts);
   let disposed = false;
   const dispose = (recycle = false) => {
     if (disposed) return;
@@ -839,7 +890,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   measureRows(); rail.hidden = false;
   scope.hidden = false; transport.hidden = false; positionScope(0, 0); previous.disabled = true;
   const ready = initialPosition ? seekTransition(initialPosition) : Promise.resolve();
-  return { ready, dispose, detachPaint() {
+  return { ready, dispose, get hasPaint() { return prepared.some(scene => scene.element === stage); }, detachPaint() {
     pause();
     const retained = prepared.find(scene => scene.element === stage);
     if (!retained) throw new Error('Cannot retain an unprepared inspection');
@@ -854,16 +905,13 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       delete retained.element.dataset['disclosurePaint'];
       if (pool) pool.put(retained); else { retained.session.dispose(); retained.element.remove(); }
     } };
-  }, async capture(): Promise<EnergyReaderState | undefined> {
+  }, capture(): EnergyReaderState | undefined {
     pause();
-    if (seeking) await seekCompletion;
     if (abort.signal.aborted) return;
-    if (!session || loading) await seekTransition({ move: selected, progress: clock.getSnapshot().progress });
-    // Page disposal cancels the pending disclosure; it is not a repair gap.
-    if (abort.signal.aborted) return;
-    if (!session || root.dataset['repair'] === 'true') throw new Error('Cannot capture an unavailable derivation');
-    pause();
-    return { revision: root.dataset["derivationRevision"]!, transition: ids[selected]!, progress: clock.getSnapshot().progress,
+    // Capture semantic intent, including a restore still being prepared. Paint
+    // readiness cannot gate access to already-published reasoning.
+    const position = loading || seeking || !session ? pendingSeek ?? requestedPosition : { move: selected, progress: clock.getSnapshot().progress };
+    return { revision: root.dataset["derivationRevision"]!, transition: ids[position.move]!, progress: position.progress,
       bookmarks: bookmarks.snapshot(), disclosures: [...root.querySelectorAll<HTMLDetailsElement>("details")].map(el => el.open) };
   } };
 }

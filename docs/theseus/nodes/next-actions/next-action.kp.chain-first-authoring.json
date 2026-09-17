@@ -4,7 +4,7 @@
   "title": "Chain-first checked authoring and reader transfer",
   "status": "blocked",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: cold disclosure and competing scroll repaired using supplied relationship-map URL. Missing-URL blocker resolved; energy visual acceptance pending.",
+  "summary": "HUMAN_CHECKPOINT: energy review after immediate-disclosure repair. Separate baseline font gap recorded; no wider promotion.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -383,6 +383,83 @@
       "scope": "chain.energy-review.relationship-map-entry",
       "checkedAt": "2026-09-17T17:04:07.481Z",
       "notes": "Production build and existing reader closure/budget checks pass without policy changes."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'relationship-map entry'",
+      "status": "failed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:33.915Z",
+      "notes": "Before repair: both cold disclosures stayed coarse while capture awaited renderer readiness."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'relationship-map|cold disclosure gives'",
+      "status": "failed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:35.196Z",
+      "notes": "Discovery: WebKit completed five scenes before first frame. Yield repair exposed Firefox rounding-triggered rebuilds; repaired at preparation and native-metrics boundaries."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'equation geometry survives'",
+      "status": "failed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:36.368Z",
+      "notes": "Firefox/WebKit larger-font failures also reproduce with reader from 784f82673. Current WebKit reports exponent/parenthesis protected-transit rejection. Open separate gap; no threshold waived."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --project=webkit --grep 'relationship-map|cold disclosure gives|Back to step 3' --reporter=json",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:37.457Z",
+      "notes": "15 passed; cold text first-frame 8.4/14/19ms Chromium/Firefox/WebKit. Rapid reversal, disposal and frame-by-frame parent return pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'relationship-map|cold disclosure gives|first disclosure keeps|Back to step 3|disclosure preserves|pending disclosure|nonterminal unfolding|inline refinement|smaller steps preserves|every substep returns|expanded drag follows|equation geometry survives|scalar reader reuses|optional detail'",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:38.577Z",
+      "notes": "20 Chromium preservation cases passed on final source, including both repair paths, held paint, exact returns, font resizing and scalar preservation."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/derivation-native-metrics.test.ts tests/derivation-scene-pool.test.ts",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:39.672Z",
+      "notes": "Six passed: numeric noise versus real geometry/font invalidation; bounded ownership; late leases retain old invalidation identity."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:40.757Z",
+      "notes": "Full app, node, test, Svelte and domain typechecks pass. Earlier callback element typing failure repaired without casts."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:43:41.856Z",
+      "notes": "All boundary/governance checks and eight cross-domain conformance checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:44:36.804Z",
+      "notes": "Production verification passes without budget amendments."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:44:37.926Z",
+      "notes": "Production verification passes without budget amendments."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.energy-review.immediate-disclosure",
+      "checkedAt": "2026-09-17T18:44:38.991Z",
+      "notes": "Production verification passes without budget amendments."
     }
   ],
   "progress": {
