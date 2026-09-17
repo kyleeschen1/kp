@@ -1,0 +1,16 @@
+{
+  "id": "next-action.kp.curriculum-repertoire",
+  "kind": "next-action",
+  "title": "Map practical curriculum moves and audit KP implementation coverage",
+  "status": "ready",
+  "domain": "kp",
+  "verificationRecords": [
+    {
+      "command": "Source review: open curriculum scope pages and repository repertoire parser",
+      "status": "passed",
+      "scope": "curriculum.scope",
+      "checkedAt": "2026-09-17T05:33:15.139Z",
+      "notes": "Read curriculum scope pages; inclusion synthesis and audit semantics recorded in repertoire-notes/scope-and-sources.md"
+    }
+  ]
+}

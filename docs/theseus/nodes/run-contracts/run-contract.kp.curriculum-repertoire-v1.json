@@ -1,0 +1,62 @@
+{
+  "id": "run-contract.kp.curriculum-repertoire-v1",
+  "kind": "run-contract",
+  "title": "Practical curriculum repertoire away delivery",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.curriculum-repertoire.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-16-curriculum-repertoire-away-plan.md",
+      "summary": "User-approved scope, package dependencies, preservation, verification and stop rules"
+    }
+  ],
+  "verification": [
+    "npm run test:repertoire",
+    "npm run visual:repertoire",
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run build:bundle",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Approved plan packages; six-hour ceiling ending 2026-09-17T11:29:00Z; final hour reserved for closeout; independent domain work may continue past local review dependencies"
+  ],
+  "disallowedWork": [
+    "No lessons, new animations, renderer promotion, paid calls, deployment, agents, or old-loop resumption"
+  ],
+  "goal": "Deliver granular algebra and systematic applied mathematics economics mechanics and programming inventories with honest implementation evidence and a simple dashboard",
+  "target": "next-action.kp.curriculum-repertoire",
+  "slices": [
+    {
+      "id": "curriculum.scope",
+      "title": "Scope-and-conventions",
+      "summary": "Source-backed scope and row conventions recorded",
+      "status": "complete"
+    },
+    {
+      "id": "curriculum.algebra",
+      "title": "Granular-algebra",
+      "status": "planned"
+    },
+    {
+      "id": "curriculum.domains",
+      "title": "Other-curricula",
+      "status": "planned"
+    },
+    {
+      "id": "curriculum.traces",
+      "title": "Worked-problem-traces",
+      "status": "planned"
+    },
+    {
+      "id": "curriculum.integration",
+      "title": "Dashboard-and-closeout",
+      "status": "planned"
+    }
+  ]
+}
