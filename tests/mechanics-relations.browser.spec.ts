@@ -179,6 +179,11 @@ test("equation endpoint ink remains inside viewport margins at both drag extreme
     const b = (await handle.boundingBox())!;
     await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await page.mouse.down();
     await expect.poll(async () => { const box = (await equation.boundingBox())!; return end ? box.y + box.height : -box.y; }).toBeLessThanOrEqual(end ? 603 : -47);
+    const ink = await equation.locator('.katex-html > .base').evaluateAll(els => els.map(el => {
+      const b = el.getBoundingClientRect(); return { top: b.top, bottom: b.bottom };
+    }));
+    expect(Math.min(...ink.map(b => b.top))).toBeGreaterThanOrEqual(47);
+    expect(Math.max(...ink.map(b => b.bottom))).toBeLessThanOrEqual(603);
     if (!end) await expect.poll(async () => -(await root.boundingBox())!.y).toBeLessThanOrEqual(-95);
     await expect(handle).toHaveAttribute('aria-valuenow', end ? '3' : '0');
     await page.mouse.up();
