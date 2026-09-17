@@ -6,7 +6,42 @@ is pending. Theseus owns live counts and execution under
 [approved proposal](../2026-09-17-chain-first-authoring-long-loop-proposal.md)
 requires this judgment before scalar transfer. No later slice has started.
 
-## Follow-up: prior return/handle repair did not resolve the report
+## Supplied entry URL: blocked expansion and competing scroll
+
+The user supplied
+`http://localhost:8000/experiments/mechanics-relations/#relationship-map`.
+This is the same canonical document, with an earlier reading entry point.
+The old tests entered at the energy anchor and waited for a ready handle. A
+regression starting at the supplied URL instead exposed the dropped click:
+`capture()` threw while preparation was pending, so the detail never opened.
+Early scene preparation widened that unhandled lifecycle interval.
+
+Capture now joins the active seek/preparation completion before recording state.
+Concurrent seek consumers share that completion instead of returning early.
+Disposal returns a cancelled capture and cannot open detail or display a repair
+notice after the page retires. The disclosure retains the click's original
+viewport offset across the wait. A second regression exposed a 42px reading
+shift: the post-disclosure automatic reveal could compete with the clicked
+reading anchor by navigating to an old off-screen selection. Disclosure no
+longer invokes that separate navigation action. Explicit inspection/navigation
+still owns equation reveal and readable viewport margins.
+
+Both parent details now open from the supplied entry URL, remain at the clicked
+reading position, and return to their labeled parent. The new tests hold font
+readiness deliberately, click before preparation finishes, then release it;
+they never wait for the handle to become ready before attempting disclosure.
+Both parent paths and disposal pass in Chromium, Firefox and WebKit. WebKit's
+first disposal fixture failed to hold font readiness reliably; pinning the
+fixture's FontFaceSet and asserting the pre-release coarse
+state made the timing pressure explicit. The corrected cohort passes.
+All 18 scoped Chromium preservation checks and full typecheck pass as well.
+
+This supersedes the previous missing-URL blocker. The energy human checkpoint
+remains open; the user's report is not treated as acceptance or permission to
+generalize. Retry from the exact supplied URL, scroll to either **Inspect
+smaller steps**, open it directly, then use the labeled parent return.
+
+## Earlier follow-up: prior return/handle repair did not resolve the report
 
 The user reports both original symptoms still persist. The prior warm-scene
 checks were insufficient: a fresh short-viewport test observed **222ms before
@@ -23,7 +58,7 @@ handle position/availability, then visits the final smaller step and returns to
 the saved step-3 position without an off-screen or delayed jump. All 15 scoped
 Chromium checks and full typecheck pass.
 
-**The reported whole-reader reset is still unconfirmed and unresolved.** The
+**At that checkpoint the reported whole-reader reset was unconfirmed.** The
 canonical URL and tested click sequence restore step 3 correctly. The user has
 been asked for the actual URL and sequence, including whether “reset” means
 collapsing detail, moving to the beginning or reloading the page. Do not present

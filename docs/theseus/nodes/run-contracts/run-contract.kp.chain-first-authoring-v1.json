@@ -4,7 +4,7 @@
   "title": "Chain-first authoring: transfer, fractions and checked inference",
   "status": "blocked",
   "domain": "kp",
-  "summary": "BLOCKED at energy review: exact user reset reproduction pending. Cold first-disclosure preparation repaired and verified; 3/24 complete. No acceptance or scalar transfer.",
+  "summary": "HUMAN_CHECKPOINT at energy review; 3/24 complete. Supplied-URL regression repaired and checked; no scalar transfer before visual acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,7 +59,7 @@
     {
       "id": "chain.energy-review",
       "title": "Energy-review",
-      "summary": "Cold-click delay repaired. BLOCKED on exact user URL/sequence for persistent reset; prior visual checkpoint remains unaccepted. Do not claim both issues resolved.",
+      "summary": "Supplied relationship-map entry failure reproduced and repaired; readiness/viewport/disposal regressions pass. HUMAN_CHECKPOINT: await energy visual acceptance before scalar transfer.",
       "status": "ready"
     },
     {

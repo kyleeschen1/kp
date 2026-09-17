@@ -3,6 +3,58 @@ import { sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/
 
 const route = "/experiments/mechanics-relations/";
 
+for (const parent of ['cancel-mass', 'scale-magnitude']) test(`relationship-map entry honors a detail click while preparing: ${parent}`, async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.addInitScript(() => {
+    const fonts = document.fonts;
+    Object.defineProperty(document, 'fonts', { configurable: true, value: fonts });
+    Object.defineProperty(document.fonts, 'ready', { configurable: true, value: new Promise<void>(resolve => {
+      window.addEventListener('test-fonts-ready', () => resolve(), { once: true });
+    }) });
+  });
+  await page.goto(route + '#relationship-map');
+  const root = page.locator('[data-energy-derivation][data-derivation-namespace="energy"]');
+  const expand = root.locator(`[data-refinement-expand="${parent}"]`);
+  await expand.scrollIntoViewIfNeeded();
+  const top = (await expand.boundingBox())!.y;
+  await expand.click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await page.evaluate(() => window.dispatchEvent(new Event('test-fonts-ready')));
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
+  await expect(lens(root)).toBeEnabled();
+  await expect(root.locator('[data-refinement-status]')).toHaveCount(0);
+  const positions = await root.locator('[data-refinement-collapse]').first().evaluate(async el => {
+    const positions = [];
+    for (let i = 0; i < 12; i++) { await new Promise(requestAnimationFrame); positions.push(el.getBoundingClientRect().top); }
+    return positions;
+  });
+  expect(positions.every(y => Math.abs(y - top) < 2), JSON.stringify({ top, positions })).toBe(true);
+  await root.locator('[data-refinement-local-return]').last().click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await expect(root).toHaveAttribute('data-move', parent === 'cancel-mass' ? '2' : '1');
+});
+
+test('relationship-map pending disclosure cancels cleanly on page disposal', async ({ page }) => {
+  await page.addInitScript(() => {
+    const fonts = document.fonts;
+    Object.defineProperty(document, 'fonts', { configurable: true, value: fonts });
+    Object.defineProperty(document.fonts, 'ready', { configurable: true, value: new Promise<void>(resolve => {
+      window.addEventListener('test-fonts-ready', () => resolve(), { once: true });
+    }) });
+  });
+  await page.goto(route + '#relationship-map');
+  const root = page.locator('[data-energy-derivation][data-derivation-namespace="energy"]');
+  await root.locator('[data-refinement-expand="cancel-mass"]').click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await page.evaluate(async () => {
+    window.dispatchEvent(new PageTransitionEvent('pagehide'));
+    window.dispatchEvent(new Event('test-fonts-ready'));
+    for (let i = 0; i < 12; i++) await new Promise(requestAnimationFrame);
+  });
+  await expect(root).toHaveAttribute('data-derivation-detail', 'coarse');
+  await expect(root.locator('[data-refinement-status], [data-disclosure-paint]')).toHaveCount(0);
+});
+
 test('first disclosure keeps a usable handle from the click onward', async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 700 });
   const root = await ready(page);

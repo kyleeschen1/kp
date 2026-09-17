@@ -106,11 +106,16 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
       busy = true;
       const grip = unfold ? visibleDerivationHandle(root) : undefined;
       const visualOffset = grip?.getBoundingClientRect().top;
+      const entryOffset = entry.getBoundingClientRect().top;
       const viewportAnchor = holdDisclosureViewportAnchor(grip ?? entry);
       let paintHold: ReturnType<typeof holdEnergyDisclosurePaint> | undefined;
       try {
         const collapsing = saved !== undefined;
-        if (!collapsing) saved = { state: active.capture(), offset: entry.getBoundingClientRect().top, parentId: entry.dataset['refinementExpand']! };
+        if (!collapsing) {
+          const state = await active.capture();
+          if (!state) return;
+          saved = { state, offset: entryOffset, parentId: entry.dataset['refinementExpand']! };
+        }
         const expanded = expansions.find(template => template.dataset['refinementView'] === saved!.parentId)!;
         const next = collapsing ? prototype.cloneNode(true) as HTMLElement : expanded.content.firstElementChild!.cloneNode(true) as HTMLElement;
         const destination: EnergyReaderState = collapsing ? { ...saved!.state } : { revision: next.dataset["derivationRevision"]!, transition: next.dataset["refinementFirst"]!, progress: 0, bookmarks: [], disclosures: [] };
@@ -158,7 +163,8 @@ export function enhanceEnergyDerivation(initialRoot: HTMLElement, binding: Deriv
         if (collapsing) saved = undefined;
         bind();
         if (viewportAnchor.retarget(grip ?? restoredEntry, visualOffset ?? offset)) restoredEntry.focus({ preventScroll: true });
-        if (!grip) active.reveal();
+        // Disclosure owns this reading anchor. Revealing an off-screen old
+        // selection here would navigate away from the detail just opened.
       } catch (error) {
         // A failed optional view must not strand the reader or grant a visual
         // fallback authority. Restore the already checked compact inspection.
@@ -286,6 +292,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   let drag: { pointer: number; offset: number } | undefined;
   let pendingSeek: { move: number; progress: number } | undefined;
   let seeking = false;
+  let seekCompletion: Promise<void> | undefined;
   let selectionRequest = 0;
   let revealRequested = false, revealFrame: number | undefined;
   const revealSelection = () => {
@@ -585,21 +592,26 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   async function seekPosition(position: number) {
     return seekTransition(resolveEnergyDerivationPosition(position, total));
   }
-  async function seekTransition(position: { move: number; progress: number }) {
+  function seekTransition(position: { move: number; progress: number }): Promise<void> {
     pendingSeek = position;
     journey = undefined; selectionRequest++; clock.pause();
-    if (seeking) return;
+    // All consumers join the same drain. Returning early here used to tell a
+    // disclosure that an in-flight preparation had already finished.
+    if (seeking) return seekCompletion!;
     seeking = true;
-    try {
-      while (pendingSeek !== undefined && !abort.signal.aborted) {
-        const wanted = pendingSeek; pendingSeek = undefined;
-        direction = wanted.move + wanted.progress < selected + clock.getSnapshot().progress ? "rewind" : "forward";
-        if (session && !loading && selected === wanted.move) clock.seek(wanted.progress);
-        else await mount(wanted.move, wanted.progress);
-        if (root.dataset["repair"] === "true") break;
-        project();
-      }
-    } finally { seeking = false; if (revealRequested) scheduleReveal(); }
+    seekCompletion = (async () => {
+      try {
+        while (pendingSeek !== undefined && !abort.signal.aborted) {
+          const wanted = pendingSeek; pendingSeek = undefined;
+          direction = wanted.move + wanted.progress < selected + clock.getSnapshot().progress ? "rewind" : "forward";
+          if (session && !loading && selected === wanted.move) clock.seek(wanted.progress);
+          else await mount(wanted.move, wanted.progress);
+          if (root.dataset["repair"] === "true") break;
+          project();
+        }
+      } finally { seeking = false; if (revealRequested) scheduleReveal(); }
+    })();
+    return seekCompletion;
   }
   async function step(requested: Direction, target?: number) {
     revealRequested = true;
@@ -842,9 +854,15 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
       delete retained.element.dataset['disclosurePaint'];
       if (pool) pool.put(retained); else { retained.session.dispose(); retained.element.remove(); }
     } };
-  }, reveal() { revealRequested = true; scheduleReveal(); }, capture(): EnergyReaderState {
+  }, async capture(): Promise<EnergyReaderState | undefined> {
     pause();
-    if (loading || seeking || !session) throw new Error("Wait for the active derivation scene to finish preparing");
+    if (seeking) await seekCompletion;
+    if (abort.signal.aborted) return;
+    if (!session || loading) await seekTransition({ move: selected, progress: clock.getSnapshot().progress });
+    // Page disposal cancels the pending disclosure; it is not a repair gap.
+    if (abort.signal.aborted) return;
+    if (!session || root.dataset['repair'] === 'true') throw new Error('Cannot capture an unavailable derivation');
+    pause();
     return { revision: root.dataset["derivationRevision"]!, transition: ids[selected]!, progress: clock.getSnapshot().progress,
       bookmarks: bookmarks.snapshot(), disclosures: [...root.querySelectorAll<HTMLDetailsElement>("details")].map(el => el.open) };
   } };

@@ -4,7 +4,7 @@
   "title": "Chain-first checked authoring and reader transfer",
   "status": "blocked",
   "domain": "kp",
-  "summary": "User reports whole reset persists; canonical short-viewport sequence returns saved step 3. Need exact URL and click sequence to reproduce reset. Cold delay reproduced and repaired; no generalization.",
+  "summary": "HUMAN_CHECKPOINT: cold disclosure and competing scroll repaired using supplied relationship-map URL. Missing-URL blocker resolved; energy visual acceptance pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -320,6 +320,69 @@
       "scope": "chain.energy-review.cold-handoff",
       "checkedAt": "2026-09-17T16:48:33.748Z",
       "notes": "Production build and unchanged payload/closure gates pass."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'relationship-map entry'",
+      "status": "failed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:03:17.428Z",
+      "notes": "Supplied entry URL with delayed readiness reproduced dropped click: remained coarse. After async capture repair a stronger viewport assertion exposed 42px drift; click-time offset retention and removal of competing off-screen reveal repaired it."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=chromium --project=firefox --project=webkit --grep 'relationship-map'",
+      "status": "failed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:03:18.686Z",
+      "notes": "8/9 passed; WebKit disposal fixture did not hold readiness reliably. Pinned fixture FontFaceSet and asserted the pending coarse state before release; corrected cohort passes."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=webkit --grep 'relationship-map'",
+      "status": "passed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:03:19.772Z",
+      "notes": "6/6 Chromium/WebKit: both parent disclosures from relationship-map while preparation pending, clicked viewport anchor, labeled return, and pending-disclosure disposal."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --project=firefox --grep 'relationship-map'",
+      "status": "passed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:03:20.854Z",
+      "notes": "6/6 Chromium/Firefox with corrected readiness fixture and explicit pending-state assertion."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep 'relationship-map|first disclosure keeps|Back to step 3|disclosure preserves|pending disclosure|nonterminal unfolding|inline refinement|smaller steps preserves|every substep returns|expanded drag follows|equation geometry survives'",
+      "status": "passed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:03:21.958Z",
+      "notes": "18/18 scoped preservation checks. Earlier tests waited for ready handle and missed cold entry; new cases use supplied URL without readiness precondition."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:03:23.042Z",
+      "notes": "Full application, node, test, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:04:05.143Z",
+      "notes": "Production build and existing reader closure/budget checks pass without policy changes."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:04:06.331Z",
+      "notes": "Production build and existing reader closure/budget checks pass without policy changes."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "chain.energy-review.relationship-map-entry",
+      "checkedAt": "2026-09-17T17:04:07.481Z",
+      "notes": "Production build and existing reader closure/budget checks pass without policy changes."
     }
   ],
   "progress": {
