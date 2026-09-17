@@ -67,6 +67,36 @@ type DerivationMoveRoles = EnergyDerivationMove extends infer Move
   ? Move extends EnergyDerivationMove ? Omit<Move, "id"> : never : never;
 const issued = new WeakSet<object>();
 
+/** Insert only children already issued by this plan's domain owner. Keep the
+ * untouched moves themselves, so downstream identity survives changed indices. */
+export function unfoldDerivationInspection(plan: EnergyDerivationPlan, parentId: string): EnergyDerivationPlan {
+  assertEnergyDerivationPlan(plan);
+  if (plan.view.refinement) throw new Error("Only one refinement level is supported");
+  const index = plan.moves.findIndex(move => move.id === parentId);
+  const child = plan.inspections?.[parentId];
+  if (!child || index < 0) throw new Error("No issued inspection for this parent");
+  assertEnergyDerivationPlan(child);
+  const refinement = child.view.refinement;
+  if (child.model !== plan.model || child.namespace !== plan.namespace ||
+      refinement?.parentTransitionId !== `${plan.operationPrefix}.${parentId}` ||
+      child.view.states[0] !== plan.view.states[index] || child.view.states.at(-1) !== plan.view.states[index + 1] ||
+      child.moves.length !== child.view.steps.length || child.view.states.length !== child.moves.length + 1 ||
+      refinement.childOperationIds.length !== child.moves.length || child.moves.some((move, i) =>
+        refinement.childOperationIds[i] !== `${child.operationPrefix}.${move.id}`))
+    throw new Error("Inspection must preserve checked membership and exact outer endpoints");
+  const moves = [...plan.moves.slice(0, index), ...child.moves, ...plan.moves.slice(index + 1)];
+  if (new Set(moves.map(move => move.id)).size !== moves.length) throw new Error("Refinement move identities must be unique");
+  const view = Object.freeze({
+    states: Object.freeze([...plan.view.states.slice(0, index), ...child.view.states, ...plan.view.states.slice(index + 2)]),
+    steps: Object.freeze([...plan.view.steps.slice(0, index), ...child.view.steps, ...plan.view.steps.slice(index + 1)]),
+    proof: Object.freeze([...plan.view.proof, ...child.view.proof]), refinement
+  });
+  const expanded: EnergyDerivationPlan = Object.freeze({ ...plan, view, moves: Object.freeze(moves),
+    packId: child.packId, artifactId: child.artifactId });
+  issued.add(expanded);
+  return expanded;
+}
+
 /** Endpoint roles belong to the bounded semantic proof. Both build-time
  * governance and runtime paint binding derive from this small authority, so
  * the browser need not load authoring compilers or trust a serialized proof. */

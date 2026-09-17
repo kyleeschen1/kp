@@ -29,6 +29,19 @@
       "scope": "chain.scope",
       "checkedAt": "2026-09-17T07:10:21.940Z",
       "notes": "34 passed. Canonical energy Article and native KaTeX reader; checked local norm child exists, inline DOM seam requires terminal refinement. Scalar stays preserved until energy review. Historical broad task deferred into approved narrower successor without marking visual gates accepted."
+    },
+    {
+      "command": "node --experimental-strip-types --test tests/derivation-refinement-mapping.test.ts tests/momentum-energy.test.ts tests/scalar-cancellation-reader.test.ts",
+      "status": "passed",
+      "scope": "chain.nonterminal-truth",
+      "checkedAt": "2026-09-17T07:14:40.807Z",
+      "notes": "37 tests pass. Checked insertion preserves downstream move objects; exact row correspondence and shared-child algebra mapping; copied, mismatched and recursive plans rejected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "chain.nonterminal-truth",
+      "checkedAt": "2026-09-17T07:14:41.920Z"
     }
   ],
   "expectedLearning": [

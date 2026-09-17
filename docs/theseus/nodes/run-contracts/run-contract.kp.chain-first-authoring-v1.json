@@ -46,7 +46,8 @@
     {
       "id": "chain.nonterminal-truth",
       "title": "Nonterminal-truth",
-      "status": "planned"
+      "summary": "Checked insertion and correspondence prevent invented interior mapping and retain downstream identity. 37 tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "chain.nonterminal-reader",
