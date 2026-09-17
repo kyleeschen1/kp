@@ -14,8 +14,9 @@ variation are verified; the [paired transfer checkpoint](../reviews/2026-09-17-c
 is accepted. The user explicitly resumed the approved fraction-chain work.
 The [fraction passage review](../reviews/2026-09-17-chain-first-fraction-review.md)
 now supplies the canonical host, inspection actions, preservation evidence and
-remaining limits. Visual acceptance gates the approved variations and inference;
-this is not yet general source-only fraction authoring or curriculum promotion.
+remaining limits. The user accepted the passage and shared styling correction,
+then resumed the approved variations and inference. This does not yet establish
+general source-only fraction authoring or curriculum promotion.
 Latest review requests centralized text, rail and step-disclosure styling; the
 [shared presentation contract](../principles/reasoning-passage-presentation.md)
 records owners and parity checks. The separate fluent numeric reduction question

@@ -32,7 +32,8 @@ Scalar transfer and a source-only notation/prose variation are verified; the
 [paired transfer review](reviews/2026-09-17-chain-first-transfer-review.md) is
 accepted. The user resumed the approved fraction-chain work.
 The [checked fraction passage](reviews/2026-09-17-chain-first-fraction-review.md)
-is ready for its mandatory visual checkpoint before numeric variation and inference.
+and its centralized styling correction are accepted. The user resumed the
+approved numeric variations and checked inference work.
 The [energy review packet](reviews/2026-09-17-chain-first-energy-review.md)
 provides the working URL, inspection actions and preservation evidence.
 

@@ -1,8 +1,9 @@
 # Checked fraction passage
 
-Review state: AWAITING VISUAL ACCEPTANCE. This is the mandatory fraction
-checkpoint in the approved chain-first proposal, before numeric variations or
-promotion. Theseus owns live progress in `run-contract.kp.chain-first-authoring-v1`.
+Review state: ACCEPTED. The user said “great. resume.” after the shared styling
+correction. This satisfies the mandatory fraction checkpoint before the approved
+variations and inference work. Theseus owns live progress in
+`run-contract.kp.chain-first-authoring-v1`.
 
 Review feedback: the user likes the passage, asks about fluent cancellation,
 and requires centralized typography, rail and disclosure styling. The styling
