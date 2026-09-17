@@ -1,13 +1,29 @@
 .momentum-move { margin-block: 1.5rem; }
 .momentum-move [hidden] { display: none !important; }
 .momentum-move summary { cursor: pointer; text-decoration: underline; text-underline-offset: .2em; }
+.momentum-move [data-move-depth] { margin-block: .5rem 1rem; }
+.momentum-move [data-move-depth] summary p { display: inline; }
 .momentum-move-layout { display: grid; grid-template-columns: minmax(0, 1fr) 14rem; gap: 1rem; align-items: start; }
 .momentum-move-argument { display: flex; align-items: stretch; }
-.momentum-move-argument input { writing-mode: vertical-lr; direction: ltr; flex: 0 0 2.75rem; width: 2.75rem; height: auto; min-height: 16rem; margin: 0; accent-color: #306b99; }
+/* A moving native thumb must not become the browser's scroll anchor: that
+   would feed its motion back into document scroll and then into progress. */
+.momentum-move-gutter { position: relative; flex: 0 0 2.75rem; display: flex; overflow-anchor: none; }
+/* Pointer capture owns document-relative dragging; native range remains the
+   keyboard/accessibility control without a competing browser drag owner. */
+.momentum-move [data-move-pointer] { position: absolute; inset: 0; touch-action: none; cursor: ns-resize; }
+.momentum-move-argument input { writing-mode: vertical-lr; direction: ltr; flex: 0 0 2.75rem; width: 2.75rem; height: auto; min-height: 16rem; margin: 0; accent-color: #306b99; touch-action: none; }
+.momentum-move-argument input { appearance: none; background: transparent; }
+.momentum-move-argument input::-webkit-slider-runnable-track { width: 4px; background: #a0a6ae; border-radius: 2px; }
+.momentum-move-argument input::-moz-range-track { width: 4px; background: #a0a6ae; border-radius: 2px; }
+.momentum-move-argument input::-webkit-slider-thumb { appearance: none; height: 20px; width: 20px; margin-left: -8px; border-radius: 50%; background: #306b99; }
+.momentum-move-argument input::-moz-range-thumb { height: 20px; width: 20px; border: 0; border-radius: 50%; background: #306b99; }
 .momentum-move-argument [data-move-entity] { padding-inline: .6rem; border-inline-start: 2px solid transparent; }
 .momentum-move-argument [data-move-salience="focus"] { border-color: currentColor; }
 .momentum-move-argument [data-move-salience="focus"] strong { text-decoration: underline; text-decoration-color: #306b99; text-underline-offset: .2em; }
 .physics-reader .momentum-move figure { margin: 0; }
+@media (min-width: 601px) {
+  .physics-reader .momentum-move figure[data-sticky-fit="true"] { position: sticky; top: 1rem; }
+}
 .momentum-move svg { width: 100%; max-width: 14rem; height: auto; }
 .momentum-move svg * { vector-effect: non-scaling-stroke; }
 .momentum-move svg path, .momentum-move svg circle[data-move-entity] { fill: none; stroke: currentColor; stroke-width: 1.5; }
@@ -27,5 +43,6 @@
   .momentum-move-argument [data-move-salience="focus"] strong { text-decoration-color: Highlight; }
 }
 @media print {
-  .momentum-move input, .momentum-move button, .momentum-move [data-move-instruction] { display: none !important; }
+  .physics-reader .momentum-move figure { position: static !important; }
+  .momentum-move-gutter, .momentum-move button, .momentum-move [data-move-instruction] { display: none !important; }
 }

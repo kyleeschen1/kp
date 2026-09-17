@@ -1,4 +1,5 @@
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
+import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
 import type { mountMomentumEnergyDerivationSession } from "../../rendering/momentum-energy-derivation-session.ts";
 import { bindEnergyDerivationReturn } from "./energy-derivation-return.ts";
 import { createEnergyInspectionBookmarks, type EnergyInspectionPosition } from "./energy-derivation-bookmarks.ts";
@@ -290,6 +291,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     clock.seek(progress); project();
   };
   const read = () => {
+    edgeScroll.stop();
     selectionRequest++; drag = undefined; journey = undefined; pendingSeek = undefined;
     clock.pause(); retire(); tracing = false; loading = false;
     delete root.dataset["derivationDragging"];
@@ -445,6 +447,23 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     event.preventDefault();
     void step(requested, event.key === "Home" ? 0 : event.key === "End" ? total - 1 : undefined);
   }, opts);
+  const edgeScroll = createInspectionEdgeScroll({ signal: abort.signal,
+    bounds: () => {
+      const top = get(".energy-derivation-chain").getBoundingClientRect().top + (drag?.offset ?? 0);
+      return { top: top + centers[0]!, bottom: top + centers[total]! };
+    },
+    sample: clientY => {
+      if (!drag) return;
+      const y = clientY - drag.offset - get(".energy-derivation-chain").getBoundingClientRect().top;
+      void seekPosition(resolveEnergyDerivationMeasuredPosition(y, centers));
+    }
+  });
+  const cancelDrag = () => {
+    edgeScroll.stop();
+    const pointer = drag?.pointer; drag = undefined;
+    delete root.dataset["derivationDragging"];
+    if (pointer !== undefined && handle.hasPointerCapture(pointer)) handle.releasePointerCapture(pointer);
+  };
   handle.addEventListener("pointerdown", event => {
     if (!event.isPrimary || event.button !== 0) return;
     event.preventDefault();
@@ -460,17 +479,15 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     root.dataset["derivationDragging"] = "true";
     if (!session) void seekPosition(0);
     project();
+    edgeScroll.update(event.clientY);
   }, opts);
   handle.addEventListener("pointermove", event => {
     if (!drag || event.pointerId !== drag.pointer) return;
-    const y = event.clientY - drag.offset - get(".energy-derivation-chain").getBoundingClientRect().top;
-    void seekPosition(resolveEnergyDerivationMeasuredPosition(y, centers));
+    edgeScroll.update(event.clientY);
   }, opts);
   const endDrag = (event: PointerEvent) => {
     if (!drag || event.pointerId !== drag.pointer) return;
-    drag = undefined;
-    delete root.dataset["derivationDragging"];
-    if (handle.hasPointerCapture(event.pointerId)) handle.releasePointerCapture(event.pointerId);
+    cancelDrag();
     // No release animation: the sampled pose, including an interior pose, holds.
   };
   handle.addEventListener("pointerup", endDrag, opts);
@@ -479,9 +496,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   previous.addEventListener("click", () => { void step("rewind"); }, opts);
   next.addEventListener("click", () => { void step("forward"); }, opts);
   root.addEventListener("keydown", event => {
-    if (event.key === "Escape") { event.preventDefault(); journey = undefined; clock.pause(); project(); }
+    if (event.key === "Escape") { event.preventDefault(); cancelDrag(); journey = undefined; clock.pause(); project(); }
   }, opts);
-  const pause = () => { journey = undefined; selectionRequest++; clock.pause(); project(); };
+  const pause = () => { cancelDrag(); journey = undefined; selectionRequest++; clock.pause(); project(); };
+  window.addEventListener("blur", pause, opts);
   localControls.forEach((controls, index) => {
     const activate = (restart = false) => {
       pause();
@@ -562,6 +580,7 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
     if (nextWidth === undefined || Math.abs(nextWidth - width) < .5) return;
     width = nextWidth;
     if (tracing && session && !loading) {
+      cancelDrag();
       const progress = clock.getSnapshot().progress;
       retire(); void mount(selected, progress);
     }

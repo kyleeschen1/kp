@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Inspect force-energy graph correspondence",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: localhost:8000/experiments/mechanics-relations/#momentum-move. Review whether the graph inspection follows the written inference. Semantic, browser, types and build checks pass; phone coordination remains provisional. No code rollout or shared promotion.",
+  "summary": "HUMAN_CHECKPOINT: review momentum-move with all deeper explanations expanded, then energy-from-momentum equation lens. Hold near viewport edges and reverse. Long-text sticky and drag invariants verified; new gesture aesthetics await review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -171,6 +171,41 @@
       "scope": "Text coordination final production build",
       "checkedAt": "2026-09-17T00:03:22.414Z",
       "notes": "Final build passes with existing chunk warnings. Closure measurement: initial 43135, activated 159671 JS/CSS gzip bytes; HTML 44839 gzip bytes. No new dependency or idle sampling loop."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/inspection-edge-scroll.test.ts tests/momentum-move.test.ts tests/physics-readout.test.ts",
+      "status": "passed",
+      "scope": "Edge velocity and semantic preservation",
+      "checkedAt": "2026-09-17T00:23:19.719Z",
+      "notes": "Six pass. Symmetric bounded speed, inactive center, checked graph attention, source bindings and stable readout invariants."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"edge scrolling|momentum storyboard\"",
+      "status": "passed",
+      "scope": "Final sticky and edge-drag discovery",
+      "checkedAt": "2026-09-17T00:23:21.068Z",
+      "notes": "Three pass after RAF startup/rounding and scroll anchoring repairs. Graph held-pointer down/up, ordinary scroll independence, sticky bounds, release/cancel/endpoint; equation pixel coupling and release; no-JS preservation. Earlier six-test run passed five including numeric stability and expanded equation crossings; stale nested-summary selector repaired before final rerun."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Sticky and edge-scroll full types",
+      "checkedAt": "2026-09-17T00:23:22.164Z",
+      "notes": "Full application, node, tests, Svelte and domains pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Shared gesture owner boundary",
+      "checkedAt": "2026-09-17T00:23:23.239Z",
+      "notes": "Dependency direction, framework neutrality, reader/semantic governance and eight cross-domain conformance tests pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Final sticky and edge-scroll production build",
+      "checkedAt": "2026-09-17T00:23:24.320Z",
+      "notes": "Pass with existing chunk warnings. Closure: 44420 initial, 160956 activated JS/CSS gzip bytes; each +1285. HTML 45711 gzip, +872. No new dependency or idle sampling loop."
     }
   ],
   "allowedWork": [
@@ -185,7 +220,7 @@
     {
       "id": "graph.correspondence",
       "title": "Graph and symbolic power correspondence",
-      "summary": "HUMAN_CHECKPOINT: permanent text coordinates a local graph move from direction change to preserved magnitude to energy consequence. Desktop ready; phone provisional. Code narration diagnosed, accepted motion preserved.",
+      "summary": "HUMAN_CHECKPOINT: accepted graph now supports long-text sticky evidence and edge scrolling during graph/equation drags. Verification passes; review speed, pointer coupling and sticky bounds. Phone remains provisional.",
       "status": "in-progress"
     }
   ]

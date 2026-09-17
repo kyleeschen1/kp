@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The text-coordinated graph is accepted. The current approved extension is bounded
+sticky evidence for longer text plus active-drag edge scrolling for graphs and
+equations. Preserve ordinary-scroll independence, physics/algebra ownership and
+accepted code motion. [Scope and review](threads/2026-09-16-force-energy-graph.md).
+Stop for the new gesture/sticky checkpoint; phone remains provisional.
+
 Current approved experiment is **text coordination** in one momentum-space move:
 permanent argument clauses, a local reversible graph inspection, and salience
 passing from change to invariant to consequence. The user accepted the static

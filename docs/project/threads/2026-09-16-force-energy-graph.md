@@ -5,6 +5,53 @@ Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome
 
+Latest acceptance and approved extension: the user likes the text-coordinated
+graph. Extend it to long text with bounded sticky evidence, and add edge
+scrolling during active graph **and equation** drags. Ordinary scrolling must
+leave inspection progress unchanged. This explicitly extends the existing
+contract to the shared equation-reader gesture; code motion is preserved.
+
+The graph's three optional deeper explanations pressure cumulative height while
+preserving the accepted brief clauses. On desktop its figure sticks 1rem from
+the viewport top only when it fits; the containing move bounds its travel.
+Phone remains stacked/provisional. Expanding text ends a current drag rather
+than remapping it through a layout change.
+
+`src/reader/runtime/inspection-edge-scroll.ts` extends an owned gesture, never
+owns semantic progress. Both callers resample their existing document-relative
+mapping after scroll. A quadratic edge-speed ramp caps at 540 CSS px/s; these
+are provisional gesture aesthetics. Bounds stop scrolling at the first/last
+handle position. Release, cancel, capture loss, blur, hidden page, navigation,
+and disposal stop work; graph closure and equation reconstruction also cancel.
+There is no background sampling outside an active edge drag.
+
+Discovery repairs: an initial RAF timestamp can predate pointerdown; reschedule
+that zero-time sample and retain fractional pixels so gentle speeds do not
+stall. The browser chose the moving native thumb as a scroll anchor, producing
+scroll/progress feedback; exclude the moving gutter from anchoring. Captured
+pointer input has one document-relative owner, while the native range retains
+keyboard and accessibility behavior. Tests reproduce long-track stationary
+edge holds, reverse, release/cancel, endpoint stopping, and ordinary-scroll
+independence. Equation handles retain pixel coupling while the page moves.
+
+Verification: six focused unit tests, full typecheck, architecture gates and
+final build pass. Initial gesture tests exposed the above repairs; later six-test
+browser run passed five with one stale no-JS summary selector failure after
+adding nested details. Scoped selector repaired; final three-test edge/no-JS
+rerun passes. Existing graph reading, numeric stability and expanded equation
+cross-boundary tests passed in that broader run. Screenshot inspected; no claim
+of real-device touch or full cross-browser certification. Measured JS/CSS gzip:
+44,420 initial / 160,956 activated, each +1,285; HTML 45,711 gzip, +872.
+
+Review on desktop: open `#momentum-move`, expand the three deeper explanations,
+drag downward and hold near the viewport bottom, then reverse near the top.
+Check the graph stays nearby and leaves at the move boundary. Repeat with the
+equation lens at `#energy-from-momentum`. Rollback unit: shared edge-scroll
+controller, its two reader integrations, graph sticky/depth projection and tests.
+Stop for gesture/sticky review; no shared visual motif or code rollout.
+
+## Prior accepted text-coordination exemplar
+
 Current approved experiment: **text coordination**, after acceptance of the
 momentum-space storyboard. The user clarified that KP is a text-, salience-,
 relationship- and move-oriented tool for thought, not principally a clearer

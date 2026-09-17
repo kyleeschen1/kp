@@ -181,14 +181,52 @@ Momentum can change direction while its magnitude—and therefore kinetic energy
 **Momentum changes direction.** Follow the arrow as it turns. These are different
 momenta: a vector includes direction, not just length.
 
+#### Why direction counts
+
+Imagine comparing the momentum just before and just after the turn. The arrows
+have equal lengths, but they point in different directions. They are therefore
+different vectors. Subtracting the earlier vector from the later one gives a
+nonzero change in momentum, even though subtracting their lengths gives zero.
+
+The dashed arrow preserves the earlier direction while the live arrow turns.
+Both start at zero momentum. The circle is drawn in momentum space: the tip's
+location tells us the momentum components, not where the particle is in the
+room. This lets us examine the change in the vector without confusing it with
+the particle's path through physical space.
+
 ### magnitude
 **Its magnitude stays the same.** The tip stays on one circle around zero.
 The distance from zero—the arrow’s length—does not change.
+
+#### What the circle preserves
+
+Every point on this circle is the same distance from its center. Turning the
+arrow moves its tip between those points without taking it to a larger or
+smaller circle. We can therefore distinguish two statements that might otherwise
+sound contradictory: momentum changes, and momentum's magnitude stays fixed.
+
+The graph holds the end of the turn while we inspect that distinction. The
+circle provides a visible record of the invariant. Its radius is not being
+adjusted to hide a change in the arrow; the checked circular-motion example
+keeps speed and mass constant, which keeps momentum's magnitude constant.
 
 ### energy
 **Therefore kinetic energy stays the same.** For this fixed mass,
 $K=\lVert\mathbf p\rVert^2/(2m)$ depends on that unchanged length. The change in
 direction contributes no change in energy.
+
+#### Follow the dependence
+
+The energy expression uses the squared magnitude of momentum. It contains no
+separate direction argument. With mass held fixed, equal momentum magnitudes
+must therefore give equal kinetic energies. Here the unchanged magnitude is
+1.00 kg m/s and the mass is 1.00 kg, giving 0.50 J throughout the turn.
+
+This conclusion uses the invariant established in the previous clause. It does
+not claim that momentum is unchanged, or that force is absent. The force keeps
+turning momentum, while its instantaneous contribution to the energy rate is
+zero. Retrace the move upward to inspect which part changes and which part the
+energy calculation depends on.
 :::
 
 :::kp-passage{#momentum-space}

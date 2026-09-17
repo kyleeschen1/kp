@@ -2,6 +2,77 @@ import { test, expect, type Locator } from "@playwright/test";
 
 const route = "/experiments/mechanics-relations/";
 
+test("long graph argument keeps bounded sticky evidence and extends a held drag with edge scrolling", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  await page.goto(`${route}#momentum-move`);
+  const root = page.locator('[data-momentum-move]'), slider = root.locator('[data-move-seek]');
+  for (const detail of await root.locator('[data-move-depth]').all()) await detail.locator('summary').click();
+  await root.locator('.momentum-move-layout').evaluate(el => el.scrollIntoView({ block: 'start' }));
+  await expect(root.locator('figure')).toHaveAttribute('data-sticky-fit', 'true');
+  const p = () => slider.inputValue().then(Number);
+  const before = await p();
+  await page.evaluate(() => scrollBy(0, 180));
+  expect(await p()).toBe(before);
+  expect((await root.locator('figure').boundingBox())!.y).toBeCloseTo(16, 0);
+  await root.locator('.momentum-move-layout').evaluate(el => el.scrollIntoView({ block: 'start' }));
+  const box = (await slider.boundingBox())!, x = box.x + box.width / 2;
+  expect(box.height).toBeGreaterThan(900);
+  await page.mouse.move(x, box.y + 10); await page.mouse.down();
+  await page.mouse.move(x, 635);
+  const startScroll = await page.evaluate(() => scrollY), startProgress = await p();
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(startScroll + 100);
+  expect(await p()).toBeGreaterThan(startProgress);
+  const held = await p();
+  await page.mouse.move(x, 12);
+  const reverseScroll = await page.evaluate(() => scrollY);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(reverseScroll - 60);
+  expect(await p()).toBeLessThan(held);
+  await page.mouse.up();
+  const released = await p(), stopped = await page.evaluate(() => scrollY);
+  await page.waitForTimeout(160);
+  expect(await p()).toBe(released); expect(await page.evaluate(() => scrollY)).toBe(stopped);
+  await root.locator('.momentum-move-layout').evaluate(el => el.scrollIntoView({ block: 'start' }));
+  await slider.evaluate(el => { (el as HTMLInputElement).value = '0'; el.dispatchEvent(new Event('input')); });
+  const reset = (await slider.boundingBox())!;
+  await page.mouse.move(x, reset.y + 10); await page.mouse.down(); await page.mouse.move(x, 635);
+  await root.locator('[data-move-pointer]').dispatchEvent('pointercancel');
+  await page.mouse.up();
+  const cancelled = await page.evaluate(() => scrollY);
+  await page.waitForTimeout(160); expect(await page.evaluate(() => scrollY)).toBe(cancelled);
+  await slider.evaluate(el => { (el as HTMLInputElement).value = '1'; el.dispatchEvent(new Event('input')); const box = el.getBoundingClientRect(); scrollBy(0, box.bottom - 640); });
+  const end = (await slider.boundingBox())!;
+  await page.mouse.move(x, end.y + end.height - 10); await page.mouse.down();
+  const endpointScroll = await page.evaluate(() => scrollY);
+  await page.waitForTimeout(160);
+  expect(await page.evaluate(() => scrollY)).toBe(endpointScroll); expect(await p()).toBe(1);
+  await page.mouse.up();
+  await root.locator('.momentum-move-layout').evaluate(el => { const box = el.getBoundingClientRect(); scrollBy(0, box.bottom - 150); });
+  expect((await root.locator('figure').boundingBox())!.y).toBeLessThan(16);
+  await root.locator('.momentum-move-layout').evaluate(el => el.scrollIntoView({ block: 'start' }));
+  await page.evaluate(() => scrollBy(0, 220));
+  await page.screenshot({ path: info.outputPath('sticky-graph-long-text.png') });
+});
+
+test("equation edge scrolling resamples a stationary pointer and cancels on release", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 650 });
+  const root = await ready(page);
+  await lens(root).scrollIntoViewIfNeeded();
+  const box = (await lens(root).boundingBox())!, x = box.x + box.width / 2;
+  await page.mouse.move(x, box.y + box.height / 2); await page.mouse.down();
+  await page.mouse.move(x, 635);
+  const before = await page.evaluate(() => scrollY);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 60);
+  const handle = (await lens(root).boundingBox())!;
+  expect(Math.abs(handle.y + handle.height / 2 - 635)).toBeLessThan(3);
+  await page.mouse.move(x, 12);
+  const reversed = await page.evaluate(() => scrollY);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(reversed - 5);
+  await page.mouse.up();
+  const stopped = await page.evaluate(() => scrollY);
+  await page.waitForTimeout(160); expect(await page.evaluate(() => scrollY)).toBe(stopped);
+  await expect(root).not.toHaveAttribute('data-derivation-dragging', 'true');
+});
+
 test("momentum move keeps its argument in place through forward, reverse, return and print", async ({ page }, info) => {
   await page.setViewportSize({ width: 1000, height: 1000 });
   await page.goto(`${route}#momentum-move`);
@@ -13,7 +84,7 @@ test("momentum move keeps its argument in place through forward, reverse, return
   const arrow = root.locator('[data-move-arrow]');
   const initial = await arrow.getAttribute('d');
   const track = (await slider.boundingBox())!;
-  await slider.click({ position: { x: track.width / 2, y: track.height * .9 } });
+  await root.locator('[data-move-pointer]').click({ position: { x: track.width / 2, y: track.height * .9 } });
   await expect(root).toHaveAttribute('data-move-part', 'energy');
   await seek(0);
   for (const p of [.35, .6, 1, .35, 0]) {
@@ -38,8 +109,8 @@ test("momentum move keeps its argument in place through forward, reverse, return
   expect(await root.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
   await root.screenshot({ path: info.outputPath('momentum-move-phone.png') });
   await root.getByRole('button', { name: 'Return to reading' }).click();
-  await expect(root.locator('details')).not.toHaveAttribute('open', '');
-  await expect(root.locator('summary')).toBeFocused();
+  await expect(root.locator('details').first()).not.toHaveAttribute('open', '');
+  await expect(root.locator('summary').first()).toBeFocused();
 });
 
 test("momentum storyboard is readable without JavaScript with prose above each compact sketch", async ({ browser }, info) => {
@@ -49,7 +120,7 @@ test("momentum storyboard is readable without JavaScript with prose above each c
     await page.setViewportSize({ width, height: 1100 });
     await page.goto(`http://localhost:8000${route}#momentum-space`);
     const move = page.locator('[data-momentum-move]');
-    await move.locator('summary').click();
+    await move.locator('summary').first().click();
     await expect(move.locator('.momentum-move-argument [data-move-entity]')).toHaveCount(3);
     await expect(move.locator('[data-move-seek]')).toBeHidden();
     const root = page.locator('[data-momentum-space]');

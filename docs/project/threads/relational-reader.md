@@ -5,6 +5,12 @@ Last Updated: 2026-09-15
 
 ## Canonical direction
 
+User accepted the text-coordinated graph and approved the long-text extension:
+bounded sticky graph, and continuous edge scrolling during graph/equation drags.
+Ordinary scroll is independent of progress. The [graph proposal](2026-09-16-force-energy-graph.md)
+owns scope, regression evidence and review. Code motion stays accepted/preserved;
+this extension does not authorize a code text-coordination rollout.
+
 Latest approved graph experiment addresses **text coordination**: keep the
 written inference present and inspect its change, invariant and consequence
 through existing attention and physics owners. The accepted momentum-space
