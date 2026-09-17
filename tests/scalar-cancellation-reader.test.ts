@@ -56,7 +56,7 @@ test("scalar Article builds from files, and fresh source edits do not mutate an 
   assert.equal(original.document.id, "lesson.algebra.scalar-cancellation");
   const bytes = original.html;
   const edited = compileScalarCancellationPublication(text.replaceAll(/(?<![A-Za-z])x(?![A-Za-z])/g, "a").replace("Counting the factors", "Tracking the factors"),
-    { ...scalarCancellationSource, factor: "a" });
+    { ...original.source, factor: "a" });
   assert.notEqual(edited.revision, original.revision);
   assert.notEqual(edited.html, bytes);
   assert.equal(original.html, bytes);

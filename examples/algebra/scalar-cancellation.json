@@ -1,8 +1,8 @@
 {
   "schema": "kp.algebra.scalar-cancellation.v1",
-  "result": "Q",
+  "result": "R",
   "factor": "x",
-  "numerator": "y",
+  "numerator": "b",
   "factorDomain": "positive-real",
   "numeratorDomain": "real"
 }

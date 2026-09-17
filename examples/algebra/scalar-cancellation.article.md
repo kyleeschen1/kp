@@ -7,23 +7,23 @@ kp:
 
 # Why does one denominator factor remain?
 
-An expression can multiply by a quantity and divide by its square at the same
-time. Does the quantity cancel out completely? Counting the factors makes the
-answer visible—and makes the simplified expression easier to reason with.
+Multiplying by $x$ does not undo division by $x^2$: the denominator contains
+two copies of the factor. Follow the matching pair that disappears, then locate
+the copy that remains. That remaining copy determines how the result changes.
 
 :::kp-passage{#remaining-factor}
-Let $x>0$ and let $y$ be real. Define $Q$ by the first expression below.
-The numerator $y^2$ will stay unchanged throughout.
+Let $x>0$ and let $b$ be real. Define $R$ by the first expression below.
+The numerator $b^2$ will stay unchanged throughout.
 
 $$\begin{aligned}
-Q&=\frac{1}{2}x\frac{y^2}{x^2}\\
- &=\frac{y^2}{2x}
+R&=\frac{1}{2}x\frac{b^2}{x^2}\\
+ &=\frac{b^2}{2x}
 \end{aligned}$$
 
 There is **one** factor of $x$ outside the fraction but **two** in its
 denominator. Cancellation removes a matching pair, not every occurrence of the
-letter. The remaining denominator factor is why, with $y$ fixed, doubling $x$
-halves $Q$.
+letter. The remaining denominator factor is why, with $b$ fixed, doubling $x$
+halves $R$.
 
 The single written step contains several moves. Inspect it to expose the two
 denominator factors, cancel one pair, then follow the $2$ from $1/2$ into the

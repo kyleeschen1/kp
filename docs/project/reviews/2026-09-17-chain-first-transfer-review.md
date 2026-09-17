@@ -33,3 +33,17 @@ to select cancellation explicitly after energy gained a second disclosure.
 
 Promotion remains bounded to these two checked callers. There is no arbitrary
 algebra reader, automatic motif inference, or recursive unfolding claim.
+
+## Source-only variation
+
+Changed the retained scalar source from result `Q`, numerator `y` to result `R`,
+numerator `b`, and revised the Article's motivation and matching written chain.
+No reader, renderer, CSS, publication adapter, or semantic-engine edits were
+needed. One existing unit test now derives its secondary edit from the actual
+published source rather than assuming the historical default notation.
+
+Ten scalar/mapping unit tests and four Chromium browser checks passed on the
+changed source: canonical compact motion, in-place disclosure, direct seeking
+and reversal, exact saved return, source mismatch rejection and static reading.
+This establishes bounded notation/prose reuse, not a new mathematical family or
+an LLM inference benchmark. The authoring packet's canonical source is updated.

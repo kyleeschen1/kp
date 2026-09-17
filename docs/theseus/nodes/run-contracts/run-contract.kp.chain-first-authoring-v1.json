@@ -71,7 +71,8 @@
     {
       "id": "chain.scalar-variation",
       "title": "Scalar-variation",
-      "status": "planned"
+      "summary": "Supported notation and prose changed through source only; static, rejection, native motion, seeking and return checks pass.",
+      "status": "complete"
     },
     {
       "id": "chain.transfer-review",

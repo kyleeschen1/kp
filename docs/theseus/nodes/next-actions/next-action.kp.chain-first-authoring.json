@@ -558,6 +558,13 @@
       "scope": "chain.scalar-transfer",
       "checkedAt": "2026-09-17T19:56:52.035Z",
       "notes": "Seven Chromium checks passed. Full npm run typecheck passed. Retained slider maximum bug repaired; static cancellation selector updated for two energy disclosures."
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"scalar reader reuses|scalar compact inspection|scalar source mismatch|scalar static\"",
+      "status": "passed",
+      "scope": "chain.scalar-variation",
+      "checkedAt": "2026-09-17T19:59:49.514Z",
+      "notes": "Four Chromium tests and ten scalar/mapping unit tests passed on R,b notation and revised prose. Full typecheck passed. Zero engine renderer or CSS edits in this slice."
     }
   ],
   "progress": {

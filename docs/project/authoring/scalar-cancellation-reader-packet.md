@@ -17,15 +17,15 @@ The source declares exactly:
 ```json
 {
   "schema": "kp.algebra.scalar-cancellation.v1",
-  "result": "Q",
+  "result": "R",
   "factor": "x",
-  "numerator": "y",
+  "numerator": "b",
   "factorDomain": "positive-real",
   "numeratorDomain": "real"
 }
 ```
 
-It licenses only `(1/2) x (y²/x²) → y²/(2x)` and the three checked finer steps.
+It licenses only `(1/2) x (b²/x²) → b²/(2x)` and the three checked finer steps.
 `numerator` names the real scalar whose square is retained. Symbol fields accept
 distinct single Latin letters. For a supported variation, change these fields
 and the corresponding Article notation/prose together, then reload the preview.
