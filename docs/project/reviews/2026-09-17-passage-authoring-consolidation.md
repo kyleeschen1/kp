@@ -30,6 +30,12 @@ adapter bypassing the domains public API; the import was repaired, gate unchange
 The impact selector has no focused rule for the new host eligibility owner;
 the approved package uses affected checks, reserving full integration for release.
 
+The later complete author-entrypoint suite found one missing documentation row
+for mechanics discovery (47/48 passed). The canonical generation packet and
+entrypoint guide now include that bounded task; the test remains unchanged.
+The complete 48-test author-entrypoint rerun passes, as do the eight repertoire
+checks after the documentation reconciliation.
+
 ## Before preparation consolidation
 
 Fresh production build: fraction initial JS/CSS **451,078 gzip bytes**, complete

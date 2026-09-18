@@ -58,6 +58,10 @@ For bounded integer-fraction chains, select `equation.fraction-chain` and read
 raw addition/subtraction and reduction without hints. This is not an arbitrary
 LaTeX solver or a claim that every checked numeric caller has certified paint.
 
+For the existing momentum-energy derivation assumptions, select
+`mechanics.momentum-energy`. This exposes its mechanics-owned checker and
+reference-only host; it does not infer new physics, edit notation or apply drafts.
+
 For the independent scalar cancellation persistent-reader candidate, use
 `scalar-cancellation-reader-packet.md`. It documents the file-based checked
 source/Article workflow, shared physics-reader pipeline, supported notation

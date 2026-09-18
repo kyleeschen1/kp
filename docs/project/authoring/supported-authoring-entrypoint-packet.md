@@ -21,6 +21,7 @@ never serialized proof, geometry, renderer selection, timing or a new clock.
 
 | Task | Accepted scope | Preview / publication boundary |
 | --- | --- | --- |
+| `mechanics.momentum-energy` | Existing positive-real mass, Euclidean-vector velocity and mass-times-velocity momentum assumptions; no arbitrary physics inference | Reference-only `/experiments/mechanics-relations/#energy-from-momentum`; existing checked norm-scaling/cancellation detail, no draft Apply or selected-source edition |
 | `equation.fraction-chain` | Two to eight explicit fraction states; checked alignment, raw addition/subtraction and reduction, with optional hints | Local source/Article build at `/experiments/fraction-chain/`; check reports do not apply source or certify arbitrary paint. See `fraction-chain-authoring-packet.md`; no selected-source immutable edition command |
 | `equation.algebra-intuition` | Four/five-state collect, count, distribute and optional integer-product evaluation; versioned source, not arbitrary deductions | Explicit Apply at `/experiments/reusable-reasoning/?example=algebra-intuition`; whole/scoped readings and practice, exact return, immutable static edition via `author:composed-algebra-publication` |
 | `equation.composed-algebra` | Three-state compound factoring and exact coefficient evaluation; ordered left/right real-scalar sums/products, no arbitrary solver | Explicit Apply at `/experiments/reusable-reasoning/?example=composed-algebra`; shared readings, practice/exact return; immutable static reading/self-check edition via `author:composed-algebra-publication` |
@@ -35,6 +36,9 @@ never serialized proof, geometry, renderer selection, timing or a new clock.
 The executable capability inventory owns these distinctions. A report has
 `authority: report-only` and `handoff.execution: not-performed`. A successful
 check or route link never proves a revision was applied, reviewed or published.
+Fraction-chain results additionally report `hostEligibility`: a checked chain
+can still require a different host. Eligibility constructs existing native plans;
+it does not certify arbitrary browser paint. See `fraction-chain-authoring-packet.md`.
 Preserve `result` diagnostics verbatim: owner codes/paths and equation repairs
 remain domain-specific; transport failures have `author-invocation-gap`.
 Exit 2 means a repair is required. Repair the selected source and recheck; do
