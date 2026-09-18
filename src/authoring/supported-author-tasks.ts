@@ -1,10 +1,17 @@
 /** Discovery metadata only. Domain checkers still own acceptance and evidence;
  * a host reference cannot certify that a draft is applied or published. */
 export const supportedAuthorTasks = {
+  "mechanics.momentum-energy": {
+    owner: "src/authoring/mechanics-derivation-author-check.ts",
+    input: "Existing momentum-energy derivation assumptions: positive-real mass, Euclidean-vector velocity, momentum equals mass times velocity. No arbitrary equations, physical inference or editable notation.",
+    preview: { kind: "reference-only", url: "/experiments/mechanics-relations/#energy-from-momentum", reason: "Checks the existing mechanics authority; does not apply a selected draft." },
+    extraction: { kind: "domain-owned", owner: "src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts", scope: "Existing checked norm-scaling and mass-cancellation detail only." },
+    publication: { kind: "unsupported", reason: "No selected-source mechanics edition command." }
+  },
   "equation.fraction-chain": {
     owner: "src/authoring/fraction-chain-author-check.ts",
     input: "Two to eight explicit integer-fraction states; positive denominators. Checked ordered alignment, raw addition/subtraction and common-divisor reduction. Optional hints select verified moves; prose is editorial. No arbitrary solver or automatic visual certification.",
-    preview: { kind: "local-source-build", url: "/experiments/fraction-chain/", reason: "The route builds the retained source and adjacent Article; checking another file does not apply it to this host." },
+    preview: { kind: "local-source-build", url: "/experiments/fraction-chain/", reason: "Inspect result.hostEligibility separately from semantic acceptance. Edit the retained source and adjacent Article; checking another file does not apply it to this host." },
     extraction: { kind: "domain-owned", owner: "src/tutorial/fraction-chain/publication.ts", scope: "Raw numerator combination detail and exact held return in the retained passage; no general extraction." },
     publication: { kind: "unsupported", reason: "Local source/Article host exists; no selected-source immutable edition command." }
   },

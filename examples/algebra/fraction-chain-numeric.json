@@ -1,14 +1,14 @@
 {
   "schema": "kp.algebra.fraction-chain.v1",
   "id": "fraction-chain-numeric",
-  "title": "Count eighths",
+  "title": "Count tenths",
   "states": [
-    { "id": "unlike", "latex": "\\frac{1}{4}+\\frac{1}{8}" },
-    { "id": "aligned", "latex": "\\frac{2}{8}+\\frac{1}{8}" },
-    { "id": "combined", "latex": "\\frac{3}{8}" }
+    { "id": "unlike", "latex": "\\frac{1}{5}+\\frac{1}{10}" },
+    { "id": "aligned", "latex": "\\frac{2}{10}+\\frac{1}{10}" },
+    { "id": "combined", "latex": "\\frac{3}{10}" }
   ],
   "moves": [
-    { "id": "align", "from": "unlike", "to": "aligned", "hint": "align", "prose": "A quarter is two eighths. Change the first fraction's expression without changing its value." },
-    { "id": "combine", "from": "aligned", "to": "combined", "hint": "combine", "prose": "Both fractions now count eighths. Add their counts and retain the denominator." }
+    { "id": "align", "from": "unlike", "to": "aligned", "prose": "A fifth is two tenths. Change the first fraction's expression without changing its value." },
+    { "id": "combine", "from": "aligned", "to": "combined", "prose": "Both fractions now count tenths. Add their counts and retain the denominator." }
   ]
 }

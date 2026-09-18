@@ -6,6 +6,7 @@ import { compileFractionChain } from "../src/authoring/fraction-chain-compilatio
 test("all four retained callers infer the same checked moves without hints", () => {
   for (const suffix of ["", "-numeric", "-two-sided", "-subtraction"]) {
     const source = JSON.parse(readFileSync(`examples/algebra/fraction-chain${suffix}.json`, "utf8"));
+    const hadHints = source.moves.some((move: { hint?: string }) => move.hint !== undefined);
     const explicit = compileFractionChain(source);
     for (const move of source.moves) delete move.hint;
     const inferred = compileFractionChain(source);
@@ -14,7 +15,8 @@ test("all four retained callers infer the same checked moves without hints", () 
     assert.deepEqual(inferred.compilation.steps.map(s => s.kind), explicit.compilation.steps.map(s => s.kind));
     assert.deepEqual(inferred.compilation.steps.map(s => s.authority), explicit.compilation.steps.map(s => s.authority));
     assert.ok(inferred.compilation.source.moves.every(move => move.hint === undefined));
-    assert.notEqual(inferred.compilation.revision, explicit.compilation.revision);
+    if (hadHints) assert.notEqual(inferred.compilation.revision, explicit.compilation.revision);
+    else assert.equal(inferred.compilation.revision, explicit.compilation.revision);
   }
 });
 

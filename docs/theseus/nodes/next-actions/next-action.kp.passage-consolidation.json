@@ -30,6 +30,13 @@
       "scope": "reconciliation",
       "checkedAt": "2026-09-18T01:05:59.218Z",
       "notes": "Eight tests; evidence links and inventory shape, no blanket coverage certification."
+    },
+    {
+      "command": "npm run test:fraction-chain; npm run typecheck:tests; npm run check:architecture; npm run build:bundle; npm run visual:fraction-chain -- --grep \"numeric variant\"",
+      "status": "passed",
+      "scope": "supported-authoring",
+      "checkedAt": "2026-09-18T01:11:48.875Z",
+      "notes": "34 fraction tests; additional 11 author tests and app types pass. Initial hint fixture and domain import failures repaired; final suites pass."
     }
   ],
   "expectedLearning": [

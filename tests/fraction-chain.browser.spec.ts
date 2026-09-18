@@ -1,5 +1,32 @@
 import { test, expect, type Page } from "@playwright/test";
 
+test("fraction preparation timing records readiness and first and repeat disclosure", async ({ page }) => {
+  await page.addInitScript(() => {
+    const observer = new MutationObserver(() => {
+      if (document.querySelector('[data-fraction-ready="true"]')) {
+        performance.mark("fraction-test-ready"); observer.disconnect();
+      }
+    });
+    observer.observe(document, { subtree: true, attributes: true, childList: true });
+  });
+  const samples = [];
+  for (let iteration = 0; iteration < 3; iteration++) {
+    await page.goto("/experiments/fraction-chain/");
+    await expect(page.locator("[data-fraction-passage]")).toHaveAttribute("data-fraction-ready", "true", { timeout: 20000 });
+    samples.push(await page.evaluate(async () => {
+      const toggle = document.querySelector<HTMLButtonElement>("[data-fraction-disclosure]")!;
+      const click = async () => {
+        const start = performance.now(); toggle.click();
+        await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+        return performance.now() - start;
+      };
+      const first = await click(); await click(); const repeat = await click();
+      return { readyMs: performance.getEntriesByName("fraction-test-ready")[0]!.startTime, firstDisclosureMs: first, repeatDisclosureMs: repeat };
+    }));
+  }
+  console.log("fraction local browser timings (navigation to ready; click to two paints)", JSON.stringify(samples));
+});
+
 async function seek(page: Page, position: number) {
   const point = await page.evaluate(value => {
     const root = document.querySelector<HTMLElement>("[data-fraction-passage]")!;
@@ -85,7 +112,7 @@ test("two-sided alignment keeps two distinct factor joins inside one native owne
   expect(errors).toEqual([]);
 });
 
-test("numeric variant uses checked eighths throughout and ends without a reduction surface", async ({ page }) => {
+test("numeric variant uses source-only tenths throughout and ends without a reduction surface", async ({ page }) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto("/experiments/fraction-chain/numeric/");
   const root = page.locator("[data-fraction-passage]");
@@ -94,7 +121,7 @@ test("numeric variant uses checked eighths throughout and ends without a reducti
   await expect(root.locator("[data-fraction-stage]")).toHaveCount(3);
   await expect(root.locator("[data-derivation-handle]")).toHaveAttribute("aria-valuemax", "2");
   const latex = await root.locator('[data-fraction-stage="alignment"] .katex-mathml annotation').allTextContents();
-  expect(latex[0]).toContain("{4}"); expect(latex[3]).toContain("{8}");
+  expect(latex[0]).toContain("{5}"); expect(latex[3]).toContain("{10}");
   for (const position of [0, .08, .3, .85, 1, 1.25, 1.5, 1.75, 2, 1.75, 1.25, .85, .3, 0]) await seek(page, position);
   await seek(page, 1.25);
   const held = Number(await root.getAttribute("data-fraction-position"));

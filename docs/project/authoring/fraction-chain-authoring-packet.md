@@ -33,6 +33,13 @@ intermediate states; the checker does not invent a derivation. Preserve repair
 proofs, motif IDs, timing, geometry and transported authority are rejected.
 
 A successful report names the source revision and resolved moves. It carries
+`hostEligibility` separately: `eligible` means the current native passage can
+construct this operation sequence; `repair-required` names a host limitation
+without undoing successful semantic checking. Eligible shapes are alignment,
+raw combination, and optionally one reduction. This is not browser paint
+certification. Publication checks the same boundary before emitting a page.
+
+The report carries
 no live proof, Apply authority or publication authority. Editing endpoints,
 hints or prose produces a fresh revision; never attach an old report as proof.
 Semantic acceptance is not paint certification. Signed/zero results have
@@ -46,3 +53,11 @@ arbitrary file does not load it into that route. To revise a retained caller,
 edit its source and Article coherently and use the existing build; reuse shared
 reader typography, rails and disclosure controls. No standalone immutable
 edition builder or arbitrary chain-layout generator is supplied by this task.
+
+The retained `/numeric/` caller now demonstrates a source-only variation from
+eighths to tenths (`1/5+1/10 → 2/10+1/10 → 3/10`), without hints or route,
+renderer, CSS or clock changes. Its adjacent Article supplies the matching prose.
+
+Mechanics discovery is separate: `--task mechanics.momentum-energy --example`
+returns the existing positive-mass Euclidean-vector derivation assumptions.
+Its checker does not infer new mechanics or apply drafts to the reference host.

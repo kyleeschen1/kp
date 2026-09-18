@@ -5,14 +5,14 @@ kp:
   imports:
 ---
 
-# Count eighths
+# Count tenths
 
-A quarter and an eighth count different-sized parts. Express them in a shared
+A fifth and a tenth count different-sized parts. Express them in a shared
 unit before adding their counts.
 
 :::kp-passage{#counting-parts}
-First express the quarter as two eighths. Then count the eighths together.
+First express the fifth as two tenths. Then count the tenths together.
 :::
 
-The result is three eighths. There is no common factor to remove, so this
+The result is three tenths. There is no common factor to remove, so this
 chain ends after addition.

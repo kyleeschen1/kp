@@ -13,11 +13,26 @@ test("fraction discovery checks inferred moves but reports no live or applied au
   if (result.status !== "compiled") throw new Error("Missing compilation");
   assert.deepEqual(result.moves.map(move => move.kind), ["align", "combine", "reduce"]);
   assert.equal(result.presentationStatus, "not-certified-by-this-check");
+  assert.equal(result.hostEligibility.status, "eligible");
   assert.equal(checkFractionChainAuthorSource(JSON.stringify(result)).status, "repair-required");
   source.moves[0]!.prose += " Keep the quantity fixed.";
   const changed = checkFractionChainAuthorSource(JSON.stringify(source));
   assert.equal(changed.status, "compiled");
   if (changed.status === "compiled") assert.notEqual(changed.revisionId, result.revisionId);
+});
+
+test("checked shorter chains retain semantic acceptance but report a located host gap", () => {
+  const source = createFractionChainAuthorExample();
+  source.states = source.states.slice(0, 2);
+  source.moves = source.moves.slice(0, 1);
+  const result = checkFractionChainAuthorSource(JSON.stringify(source));
+  assert.equal(result.status, "compiled");
+  if (result.status !== "compiled") throw new Error("Expected checked alignment");
+  assert.equal(result.hostEligibility.status, "repair-required");
+  if (result.hostEligibility.status === "repair-required") {
+    assert.equal(result.hostEligibility.code, "fraction-chain.presentation");
+    assert.equal(result.hostEligibility.path, "$.moves");
+  }
 });
 
 test("injected controls and stale authority fail; a repaired endpoint rechecks cleanly", () => {

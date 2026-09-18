@@ -48,7 +48,8 @@
     {
       "id": "author",
       "title": "Supported source to preview and discovery",
-      "status": "planned"
+      "summary": "Source-only tenths preview demonstrated; host eligibility and mechanics discovery bounded and tested.",
+      "status": "complete"
     },
     {
       "id": "performance",

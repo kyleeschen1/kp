@@ -5,14 +5,14 @@ import { compileKpArticleMarkdownFragmentHtml as html } from "../../article/kp-a
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
 import { compileFractionChain } from "../../authoring/fraction-chain-compilation.ts";
+import { checkFractionChainHostEligibility } from "../../authoring/fraction-chain-host-eligibility.ts";
 
 export function compileFractionChainPublication(markdown: string, input: unknown) {
   const result = compileFractionChain(input);
   if (result.status !== "compiled") throw new Error(`${result.code}: ${result.expected}`);
   const { source, revision } = result.compilation;
-  const sequence = result.compilation.steps.map(step => step.kind).join(",");
-  if (!["align,combine", "align,combine,reduce"].includes(sequence))
-    throw new Error("The fraction passage requires alignment and addition, optionally followed by reduction.");
+  const eligibility = checkFractionChainHostEligibility(result.compilation);
+  if (eligibility.status !== "eligible") throw new Error(`${eligibility.code} ${eligibility.path}: ${eligibility.expected}`);
   const end = source.states.length - 1;
   const articleSource = createKpArticleSource("examples/algebra/fraction-chain.article.md", markdown);
   const { lock } = resolveKpArticleImports(articleSource, []);

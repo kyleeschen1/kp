@@ -31,9 +31,10 @@ test("algebra, Bayes and mechanics keep distinct source and assumption authority
   }
 });
 
-test("missing mechanics discovery is an explicit invocation gap, never an algebra fallback", async () => {
+test("mechanics discovery invokes its own checker, never an algebra fallback", async () => {
   const result = await runAuthorCheckCli(["--task", "mechanics.momentum-energy", "--request", "unused"],
-    () => { throw new Error("Unknown task must not read or reroute source"); });
+    () => JSON.stringify(momentumEnergyDerivationSource));
   assert.ok(result && typeof result === "object" && "kind" in result);
-  assert.equal(result.kind, "author-invocation-gap");
+  assert.equal(result.kind, "author-check-report");
+  assert.ok("status" in result && result.status === "checked");
 });
