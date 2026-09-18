@@ -1,0 +1,76 @@
+{
+  "id": "run-contract.kp.passage-consolidation-v1",
+  "kind": "run-contract",
+  "title": "Passage consolidation and code text",
+  "status": "superseded",
+  "summary": "Setup-only record replaced by v2 with complete run hygiene fields; no implementation occurred under v1. The CLI add help omitted those creation flags and update-contract cannot set them.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.passage-consolidation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-17-passage-consolidation-delivery.md",
+      "summary": "Approved four recommendations; eight bounded packages, six-hour ceiling with 45-minute reserve, mandatory code visual checkpoint"
+    }
+  ],
+  "verification": [
+    "npm run test:fraction-chain",
+    "npm run typecheck:tests",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Implement the eight packages and necessary measured repairs in the approved proposal"
+  ],
+  "disallowedWork": [
+    "No new algebra solver, renderer, frontend, paid calls, deployment or broad historical cleanup; stop at code exemplar for human visual review before promotion"
+  ],
+  "goal": "Supported source reaches a measured working preview; reconcile live truth, preserve composed motion, transfer persistent code text and add bounded explanation review",
+  "target": "next-action.kp.passage-consolidation",
+  "slices": [
+    {
+      "id": "reconcile",
+      "title": "Reconcile current truth and queue",
+      "summary": "User approved recommendations; begin bounded reconciliation before source-to-preview consolidation.",
+      "status": "in-progress"
+    },
+    {
+      "id": "author",
+      "title": "Supported source to preview and discovery",
+      "status": "planned"
+    },
+    {
+      "id": "performance",
+      "title": "Measure and consolidate loading and preparation",
+      "status": "planned"
+    },
+    {
+      "id": "composition",
+      "title": "Preserve composed equation motion",
+      "status": "planned"
+    },
+    {
+      "id": "code-exemplar",
+      "title": "Persistent code text visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "code-transfer",
+      "title": "Pressure and promote accepted code text",
+      "status": "planned"
+    },
+    {
+      "id": "explanation",
+      "title": "Bounded explanation review support",
+      "status": "planned"
+    },
+    {
+      "id": "release",
+      "title": "Integrated verification and closeout",
+      "status": "planned"
+    }
+  ]
+}

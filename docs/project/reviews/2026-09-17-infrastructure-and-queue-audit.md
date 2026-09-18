@@ -144,6 +144,44 @@ integration does not require recruiting readers or inventing new lessons.
 
 ## Verification
 
+### Follow-up: reconciliation, consolidation and motion priorities
+
+After the user accepted the fraction readiness and endpoint-spacing repairs,
+the recommendation remains the four outcomes above. The repairs strengthen the
+case for testing composition between existing mechanisms: a declared motif did
+not by itself establish its executed native path, product syntax entered before
+fission settled, and independently rendered endpoints added different spacing.
+These are separate integration failures, not evidence for a general algebra
+engine or replacement compositor.
+
+Reconciliation should distinguish inventory evidence, usable authoring/host
+support, and actual executed renderer coverage while keeping the visible
+dashboard simple. Reconcile only the live shortlist and conflicting records;
+do not exhaustively process every historical contract.
+
+Consolidation targets are concrete: fraction authoring imports and runtime
+validation boundaries; scene preparation, bounded reuse and invalidation;
+and supported source-to-host assembly. Mechanics already has a bounded scene
+pool and cooperative preparation scheduling. Reuse those responsible mechanisms
+where the fraction lifecycle fits, without assuming the whole hosts should
+merge. Measure startup and first-interaction latency before claiming speedups;
+the recorded payload figures alone establish no millisecond benefit.
+
+Within the source-to-preview outcome, verify complete composed transitions:
+native endpoint agreement, source/descendant ownership, dependent syntax entry,
+reverse seeks, interruption and font changes. Keep fluent numeric reduction an
+explicit unproved gap. This is bounded integration hardening, not a separate
+catalogue-wide animation redesign. Persistent centroid code/text remains the
+next modality experiment, preserving its accepted motion and testing long prose,
+local inspection and exact return before promotion. Explanation-review support
+remains fourth, after these direct integration needs.
+
+Finish criteria: one supported source/prose variation reaches the existing host
+without renderer, CSS, clock or route edits; unsupported sequences return a
+clear repair gap; measured costs and first-interaction behavior are recorded;
+accepted motion and navigation remain intact. Implementation scope is still
+unapproved. This follow-up updates the audit only; no queue status changes.
+
 - `npm run test:repertoire`: 8 passed; inventory structure and links, not truth of
   all 747 claims.
 - `npm run check:architecture`: all gates passed, including eight conformance

@@ -1,0 +1,62 @@
+{
+  "id": "next-action.kp.passage-consolidation",
+  "kind": "next-action",
+  "title": "Consolidate supported passages and transfer persistent code text",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-17-passage-consolidation-delivery.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "run-contract.kp.chain-first-authoring-v1"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run test:fraction-chain",
+    "npm run typecheck:tests",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:repertoire",
+      "status": "passed",
+      "scope": "reconciliation",
+      "checkedAt": "2026-09-18T01:05:59.218Z",
+      "notes": "Eight tests; evidence links and inventory shape, no blanket coverage certification."
+    }
+  ],
+  "expectedLearning": [
+    "Can supported source-to-preview reuse avoid engine edits while reducing measured costs and preserving accepted motion"
+  ],
+  "allowedWork": [
+    "Approved passage-consolidation packages only"
+  ],
+  "disallowedWork": [
+    "No new semantic engine, renderer, paid model calls or deployment"
+  ],
+  "criteria": [
+    {
+      "id": "source-only-preview",
+      "weight": "high"
+    },
+    {
+      "id": "measured-cost-and-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "accepted-code-text-transfer",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-explanation-review",
+      "weight": "medium"
+    }
+  ]
+}

@@ -1,6 +1,9 @@
 # Force–energy graph correspondence: bounded successor proposal
 
-Status: approved; executable control is `run-contract.kp.force-energy-graph-v1`.
+Status: completed; executable control is `run-contract.kp.force-energy-graph-v1`.
+Reconciled September 17: later user acceptance and clipping/font repairs satisfy
+the bounded desktop checkpoint. Prior checkpoint requests below are historical;
+phone behavior and general motif promotion remain provisional, not newly certified.
 Queue: reader.l6 in `../reviews/2026-09-15-next-step-review.md`.
 
 ## Reader outcome

@@ -7,9 +7,9 @@
 - [x] `reading.child` Expose checked child reasoning — energy and scalar cancellation. [Evidence](../reviews/2026-09-15-reader-authoring-reuse-boundary.md)
   Example: Open a parent operation's checked justification rather than inventing smaller steps
   Audit: implemented
-- [ ] `reading.middle` Unfold a middle step while preserving downstream context across independent callers. [Evidence](../decisions/2026-09-16-machinery-transfer-and-simple-coverage.md)
+- [x] `reading.middle` Unfold a middle step while preserving downstream context across independent callers. [Evidence](../reviews/2026-09-17-chain-first-transfer-review.md)
   Example: Inspect norm scaling without losing the later energy cancellation and result
-  Audit: partial — terminal energy unfolding exists; nonterminal/scalar transfer is the saved next experiment
+  Audit: implemented — accepted nonterminal energy and independent scalar transfer; bounded to their checked child operations
 
 ### Visual motifs
 

@@ -25,11 +25,21 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
+controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the
+audit's four recommendations. Live order: bounded reconciliation, supported
+source-to-preview and measured cost, composed-motion preservation, then one
+persistent code/text exemplar before human visual review and further promotion.
+Explanation-review support and integrated closeout follow. Resume with
+`theseus plan run` and the named contract's brief context; the general resume
+capsule still exceeds its 1,200-token budget. Historical entries below do not
+authorize competing work or repeat already accepted checkpoints.
+
 Latest planning direction: infrastructure work while no readers/teaching
 collaborators are available. The [infrastructure and queue audit](reviews/2026-09-17-infrastructure-and-queue-audit.md)
 recommends bounded state reconciliation followed by cheaper supported
 source-to-preview reuse, then code/text coordination and explanation-review
-support. No general algebra engine or new execution scope is approved. The
+support. The bounded successor above is now approved; no general algebra engine is authorized. The
 dashboard is mostly unaudited, and deferred contracts are not a ready queue.
 
 Completed execution: [chain-first authoring long loop](2026-09-17-chain-first-authoring-long-loop-proposal.md),

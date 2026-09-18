@@ -1,15 +1,20 @@
 # Relational reader delivery
 
-Status: active direction; chain-first delivery complete, next execution scope unapproved
+Status: active direction; chain-first delivery complete, passage consolidation approved
 Last Updated: 2026-09-17
 
 ## Canonical direction
+
+Active delivery: [approved passage consolidation](../2026-09-17-passage-consolidation-delivery.md).
+`run-contract.kp.passage-consolidation-v2` owns execution and evidence. The
+following prior planning and delivery entries remain provenance; persistent
+code/text now has approved exemplar scope with a required visual checkpoint.
 
 Latest planning request: audit infrastructure, repertoire and stored loops before
 selecting more infrastructure work. [Findings and proposed sequence](../reviews/2026-09-17-infrastructure-and-queue-audit.md)
 prioritize current-state reconciliation and supported source-to-preview reuse;
 code/text remains the next recommended medium transfer. Public tutorials or reader
-recruitment are not prerequisites. No new implementation contract is active.
+recruitment are not prerequisites. The approved successor above owns execution.
 
 Approved execution: [chain-first authoring long loop](../2026-09-17-chain-first-authoring-long-loop-proposal.md).
 `run-contract.kp.chain-first-authoring-v1` owns ordered execution and live status;
