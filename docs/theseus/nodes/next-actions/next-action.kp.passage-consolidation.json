@@ -44,6 +44,13 @@
       "scope": "runtime-consolidation",
       "checkedAt": "2026-09-18T01:19:32.508Z",
       "notes": "37 fraction tests and21 cross-browser cases pass. Fresh closure415099 initial457681 activated; unchanged validation and native owners."
+    },
+    {
+      "command": "npm run visual:fraction-chain:cohort -- --grep \"composed fraction native\"",
+      "status": "passed",
+      "scope": "composed-motion",
+      "checkedAt": "2026-09-18T01:22:29.032Z",
+      "notes": "Three browser cases each traverse four hosts; all native row endpoint dimensions, reversal and cancelled-grip restart pass. Eleven focused compositor/authority tests and test types pass."
     }
   ],
   "expectedLearning": [

@@ -60,7 +60,8 @@
     {
       "id": "composition",
       "title": "Preserve composed equation motion",
-      "status": "planned"
+      "summary": "Composed endpoints and gesture cancellation verified across four hosts and all three browsers; accepted motion preserved.",
+      "status": "complete"
     },
     {
       "id": "code-exemplar",

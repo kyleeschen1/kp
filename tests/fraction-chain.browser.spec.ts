@@ -45,6 +45,46 @@ async function seek(page: Page, position: number) {
   await expect.poll(async () => Number(await page.locator("[data-fraction-passage]").getAttribute("data-fraction-position"))).toBeCloseTo(position, 2);
 }
 
+test("composed fraction native endpoints retain typography across every owner", async ({ page }) => {
+  for (const route of ["", "numeric/", "two-sided/", "subtraction/"]) {
+    await page.goto(`/experiments/fraction-chain/${route}`);
+    const root = page.locator("[data-fraction-passage]");
+    await expect(root).toHaveAttribute("data-fraction-ready", "true", { timeout: 20000 });
+    await root.locator("[data-fraction-disclosure]").click();
+    await seek(page, 1.25);
+    const endpoints = await root.evaluate(element => {
+      const geometry = (equation: Element) => {
+        const rects = [...equation.querySelectorAll(":scope > .base")].map(node => node.getBoundingClientRect());
+        const x = Math.min(...rects.map(rect => rect.left)), y = Math.min(...rects.map(rect => rect.top));
+        return { text: equation.textContent, w: Math.max(...rects.map(rect => rect.right)) - x,
+          h: Math.max(...rects.map(rect => rect.bottom)) - y };
+      };
+      const native = [...element.querySelectorAll('[data-fraction-stage] [data-kp-reader-equation-state] .katex-html, [data-kp-common-denominator-pressure-endpoint] .katex-html')].map(geometry);
+      return [...element.querySelectorAll('[data-fraction-row] > .energy-derivation-equation .katex-html')].map(equation => {
+        const row = geometry(equation);
+        return { row, owners: native.filter(endpoint => endpoint.text === row.text) };
+      });
+    });
+    for (const { row, owners } of endpoints) {
+      expect(owners.length, `${route} native endpoint for ${row.text}`).toBeGreaterThan(0);
+      for (const endpoint of owners) {
+        expect(Math.abs(endpoint.w - row.w), `${route}: ${row.text} width`).toBeLessThan(.5);
+        expect(Math.abs(endpoint.h - row.h), `${route}: ${row.text} height`).toBeLessThan(.5);
+      }
+    }
+    for (const position of [1.49, 1.51, 1.99, 2, 1.51, 1.49, .99, 1.01]) await seek(page, position);
+    const handle = root.locator("[data-derivation-handle]");
+    const grip = await handle.boundingBox();
+    await page.mouse.move(grip!.x + grip!.width / 2, grip!.y + grip!.height / 2);
+    await page.mouse.down(); await handle.dispatchEvent("pointercancel");
+    const held = await root.getAttribute("data-fraction-position");
+    await page.mouse.move(grip!.x + grip!.width / 2, 2);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    await expect(root).toHaveAttribute("data-fraction-position", held!);
+    await page.mouse.up(); await seek(page, 1.25);
+  }
+});
+
 test("subtraction retains the minus sign through right-hand scaling and numerator combination", async ({ page }) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto("/experiments/fraction-chain/subtraction/");

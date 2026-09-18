@@ -80,3 +80,21 @@ production bundle pass. The complete existing fraction browser cohort passes
 21 cases across Chromium, Firefox and WebKit: four callers, native seeking,
 disclosure/exact return, static/no-JS, shared style parity, hidden ownership and
 font resizing. Further composition checks belong to the next package.
+
+## Composed native endpoints
+
+The permanent endpoint regression now compares every written equation against
+its corresponding native owners in addition, tenths, two-sided alignment and
+subtraction. Width/height must agree within half a CSS pixel, including the
+unfolded numerator expression. It crosses the merge/evaluation and coarse
+boundaries in both directions, cancels a captured gesture and seeks again.
+The new cohort passes in Chromium, Firefox and WebKit (three tests, each covering
+four hosts). Existing 21-case preservation remains passing from the preceding
+package; 11 focused compositor/runtime-authority tests and test types also pass.
+
+The first new assertion accidentally measured the hidden no-JS detail copy as
+a permanent equation; its zero-width geometry correctly failed. The selector
+now names direct permanent equation rows. No tolerance or product behavior was
+changed. Existing fission tests cover exclusive source/descendant paint and
+product syntax settlement in forward and reverse. This package adds integration
+evidence, not a new motif or fluent numeric cancellation claim.
