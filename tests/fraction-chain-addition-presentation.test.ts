@@ -8,10 +8,10 @@ import { createKpNumeratorSplitMergeSelectorAnnotatedLatex } from "../src/render
 test("checked positive addition reuses structural merging before certified numerator arithmetic", () => {
   const result = compileFractionChain(source);
   assert.equal(result.status, "compiled"); if (result.status !== "compiled") return;
-  const presentation = resolveFractionAdditionPresentation(result.compilation, 1);
+  const presentation = resolveFractionAdditionPresentation(result.compilation.checked, 1);
   assertFractionAdditionPresentation(presentation);
   assert.throws(() => assertFractionAdditionPresentation({ ...presentation }));
-  assert.throws(() => resolveFractionAdditionPresentation(result.compilation, 0));
+  assert.throws(() => resolveFractionAdditionPresentation(result.compilation.checked, 0));
   const merge = presentation.merge.transformations[0]!;
   assert.equal(merge.transformType, "mergeFractions");
   const merged = presentation.merge.bundle.objects.find(object => object.id === merge.targetObjectIds[0])!;

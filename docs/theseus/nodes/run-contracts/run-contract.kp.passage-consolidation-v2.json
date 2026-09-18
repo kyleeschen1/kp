@@ -54,7 +54,8 @@
     {
       "id": "performance",
       "title": "Measure and consolidate loading and preparation",
-      "status": "planned"
+      "summary": "Measured runtime boundary repair saves about36KB; shared source authority retained. No speculative cache; existing surfaces already persist across disclosure.",
+      "status": "complete"
     },
     {
       "id": "composition",

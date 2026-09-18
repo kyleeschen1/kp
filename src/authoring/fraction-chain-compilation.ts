@@ -1,10 +1,10 @@
-import { sha256 } from "../kernel/public-api.ts";
-import { readFractionChainSource, FractionChainRepair, fractionChainDiagnostic, type FractionChainSource, type FractionChainDiagnostic } from "./fraction-chain-source.ts";
+import { FractionChainRepair, fractionChainDiagnostic, type FractionChainSource, type FractionChainDiagnostic } from "./fraction-chain-source.ts";
+import { checkFractionChain, type CheckedFractionChain } from "./fraction-chain-checked.ts";
+import { createCheckedFractionReductionAnimation } from "./fraction-chain-reduction-animation.ts";
 import { bindFractionChainAlignment } from "./fraction-chain-alignment.ts";
 import { verifyKpCommonDenominatorAlignment } from "../semantic/fraction-common-denominator.ts";
 import { bindFractionChainCombination } from "./fraction-chain-combination.ts";
 import { bindFractionChainReduction } from "./fraction-chain-reduction.ts";
-import { resolveFractionChainMove } from "./fraction-chain-move-resolution.ts";
 import { fractionChainStateId } from "./fraction-chain-binding.ts";
 import { createKpEquationSeriesCommonDenominatorSemanticSource, KP_COMMON_DENOMINATOR_AUTHORING_OPERATION_ID } from "./equation-series-common-denominator-authoring.ts";
 import { createKpEquationSeriesLikeDenominatorSemanticSource, KP_LIKE_DENOMINATOR_AUTHORING_OPERATION_ID } from "./equation-series-like-denominator-authoring.ts";
@@ -24,18 +24,18 @@ export type CompiledFractionChainStep =
       animation: ReturnType<typeof createFractionSimplificationAnimationAsset>; governed: ReturnType<typeof compileKpGovernedCanonicalConstruction> }>;
 export interface CompiledFractionChain {
   readonly [brand]: true;
+  readonly checked: CheckedFractionChain;
   readonly source: FractionChainSource; readonly revision: string; readonly steps: readonly CompiledFractionChainStep[];
 }
 
 export function compileFractionChain(value: unknown): { status: "compiled"; compilation: CompiledFractionChain } | FractionChainDiagnostic {
-  const parsed = readFractionChainSource(value);
-  if (parsed.status !== "parsed") return parsed;
-  const source = parsed.source;
-  const revision = sha256(JSON.stringify({ ...source, states: source.states.map(({ id, latex }) => ({ id, latex })) }));
+  const result = checkFractionChain(value);
+  if (result.status !== "checked") return result;
+  const checked = result.chain, { source, revision } = checked;
   try {
     const steps = source.moves.map((move, index): CompiledFractionChainStep => {
       const pin = { sourceId: `source.${source.id}.${move.id}`, revisionId: revision, adjacencyId: `adjacency.${source.id}.${move.id}` };
-      const resolved = resolveFractionChainMove(source, index);
+      const resolved = checked.steps[index]!;
       if (resolved.kind === "align") {
         const authority = resolved.authority;
         const multiplier = ({ entityId, semanticId, numerator, denominator }: typeof authority.equivalenceMultipliers[0]) => ({ entityId, semanticId, numerator, denominator });
@@ -52,11 +52,11 @@ export function compileFractionChain(value: unknown): { status: "compiled"; comp
         return Object.freeze({ kind: "combine", authority, governed: compilePair(source, index,
           createKpEquationSeriesLikeDenominatorSemanticSource({ ...pin, transformation: authority }), KP_LIKE_DENOMINATOR_AUTHORING_OPERATION_ID) });
       }
-      return compileReduction(source, index, revision, resolved.authority);
+      return compileReduction(checked, index);
     });
     // All proofs are issued from one frozen source; no transported proof or
     // independently authored endpoint can be spliced into this sequence.
-    const compilation: CompiledFractionChain = Object.freeze({ [brand]: true as const, source, revision, steps: Object.freeze(steps) });
+    const compilation: CompiledFractionChain = Object.freeze({ [brand]: true as const, checked, source, revision, steps: Object.freeze(steps) });
     issued.add(compilation);
     return { status: "compiled", compilation };
   } catch (error) {
@@ -91,15 +91,13 @@ function compilePair(source: FractionChainSource, index: number, semantic: KpEqu
     result.repairs.map(repair => repair.message).join("; "));
   return result.active;
 }
-function compileReduction(source: FractionChainSource, index: number, revision: string,
-  authority: ReturnType<typeof bindFractionChainReduction>): Extract<CompiledFractionChainStep, { kind: "reduce" }> {
+function compileReduction(checked: CheckedFractionChain, index: number): Extract<CompiledFractionChainStep, { kind: "reduce" }> {
+  const { source, revision } = checked, step = checked.steps[index];
+  if (step?.kind !== "reduce") throw new TypeError("Select checked reduction");
+  const authority = step.authority;
   const path = `$.moves[${index}]`;
-  if (authority.source.term.numerator.value <= 0n || authority.target.term.numerator.value <= 0n)
-    throw new FractionChainRepair("fraction-chain.presentation", path, "The current reduction presentation requires positive numerators; exact signed/zero reduction is not yet a supported visual caller.");
   try {
-    const animation = createFractionSimplificationAnimationAsset({ familyId: "generated.fraction-expression", id: `generated.fraction-expression.${source.id}.${source.moves[index]!.id}`,
-      title: source.moves[index]!.prose, numerator: Number(authority.source.term.numerator.value), denominator: Number(authority.source.term.denominator.value),
-      simplifiedNumerator: Number(authority.target.term.numerator.value), simplifiedDenominator: Number(authority.target.term.denominator.value) });
+    const animation = createCheckedFractionReductionAnimation(checked, index);
     const operationPacks = [{ packId: "kp.algebra", version: "0.1.0" }] as const;
     const operationIds = animation.transformations.map(operation => operation.id), objectIds = animation.bundle.objects.map(object => object.id);
     const request = createKpGovernedCanonicalConstructionRequest({ schemaVersion: "kp.governed-semantic-authoring-request.v2", id: `request.${source.id}.${source.moves[index]!.id}`,

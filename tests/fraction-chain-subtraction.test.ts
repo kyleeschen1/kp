@@ -21,7 +21,7 @@ test("subtraction binds right-hand scaling, ordered numerator difference and exa
   assert.equal(endpoints[0].annotated.rawLatex, source.states[0]!.latex);
   assert.equal(endpoints[3].annotated.rawLatex, source.states[1]!.latex);
   assert.match(endpoints[1].annotated.rawLatex, /^\\frac\{5\}\{6\}-\\frac\{2\}\{2\}\\cdot/);
-  const presentation = resolveFractionAdditionPresentation(result.compilation, 1);
+  const presentation = resolveFractionAdditionPresentation(result.compilation.checked, 1);
   assert.equal(presentation.evaluation.transformations[0]!.transformType, "simplifyConstantDifference");
   assert.ok(presentation.evaluation.bundle.objects[0]!.selectors.some(s => s.label === "-"));
   const mergeValue = presentation.merge.bundle.objects[0]!.value;

@@ -1,11 +1,11 @@
-import { assertCompiledFractionChain, type CompiledFractionChain } from "../../authoring/fraction-chain-compilation.ts";
+import { assertCheckedFractionChain, type CheckedFractionChain } from "../../authoring/fraction-chain-checked.ts";
 import { FractionChainRepair } from "../../authoring/fraction-chain-source.ts";
 import { compileKpCommonDenominatorPressurePresentationPlan } from "../../animation/common-denominator-pressure-presentation-plan.ts";
 import { mountCanonicalCommonDenominatorPressure } from "../../rendering/common-denominator-pressure-session.ts";
 
 /** Bind the issued source, identities and native endpoints as one unit. */
-export async function mountFractionAlignmentSurface(target: HTMLElement, compilation: CompiledFractionChain, index: number) {
-  assertCompiledFractionChain(compilation);
+export async function mountFractionAlignmentSurface(target: HTMLElement, compilation: CheckedFractionChain, index: number) {
+  assertCheckedFractionChain(compilation);
   const step = compilation.steps[index];
   if (step?.kind !== "align") throw new TypeError("Select the checked alignment.");
   let plan;

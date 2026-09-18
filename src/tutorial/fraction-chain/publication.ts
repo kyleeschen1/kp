@@ -11,7 +11,7 @@ export function compileFractionChainPublication(markdown: string, input: unknown
   const result = compileFractionChain(input);
   if (result.status !== "compiled") throw new Error(`${result.code}: ${result.expected}`);
   const { source, revision } = result.compilation;
-  const eligibility = checkFractionChainHostEligibility(result.compilation);
+  const eligibility = checkFractionChainHostEligibility(result.compilation.checked);
   if (eligibility.status !== "eligible") throw new Error(`${eligibility.code} ${eligibility.path}: ${eligibility.expected}`);
   const end = source.states.length - 1;
   const articleSource = createKpArticleSource("examples/algebra/fraction-chain.article.md", markdown);

@@ -7,7 +7,8 @@ import { resolveKpReaderEquationPresentationProfile } from "../../reader/documen
 import { createKpNumeratorSplitMergeSelectorAnnotatedLatex } from "../../rendering/numerator-split-merge-selector-annotated-latex.ts";
 import { createKpSelectorAnnotatedLatex, type KpSelectorAnnotatedLatexSegment } from "../../rendering/selector-annotated-latex.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
-import { assertCompiledFractionChain, type CompiledFractionChain } from "../../authoring/fraction-chain-compilation.ts";
+import { assertCheckedFractionChain, type CheckedFractionChain } from "../../authoring/fraction-chain-checked.ts";
+import { createCheckedFractionReductionAnimation } from "../../authoring/fraction-chain-reduction-animation.ts";
 import { createKpFractionSelectorAnnotatedLatex } from "../../rendering/generated-fraction-selector-annotated-latex.ts";
 import type { KpAnimationAsset } from "../../animation/asset.ts";
 import type { KpVerifiedEquationEvaluationFamilyCertificateV2 } from "../../domain-ir/equation-evaluation-family-certificate-v2.ts";
@@ -20,11 +21,11 @@ export async function mountFractionAdditionSurface(target: HTMLElement, presenta
     kind === "evaluation" ? [presentation.evaluationCertificate] : []);
 }
 
-export async function mountFractionReductionSurface(target: HTMLElement, compilation: CompiledFractionChain, index: number) {
-  assertCompiledFractionChain(compilation);
+export async function mountFractionReductionSurface(target: HTMLElement, compilation: CheckedFractionChain, index: number) {
+  assertCheckedFractionChain(compilation);
   const step = compilation.steps[index];
   if (step?.kind !== "reduce") throw new TypeError("Select the checked reduction step.");
-  return mountCheckedFractionSurface(target, step.animation, state => createKpFractionSelectorAnnotatedLatex({ objectId: state.id, selectors: state.selectors }));
+  return mountCheckedFractionSurface(target, createCheckedFractionReductionAnimation(compilation, index), state => createKpFractionSelectorAnnotatedLatex({ objectId: state.id, selectors: state.selectors }));
 }
 
 async function mountCheckedFractionSurface(target: HTMLElement, animation: KpAnimationAsset,

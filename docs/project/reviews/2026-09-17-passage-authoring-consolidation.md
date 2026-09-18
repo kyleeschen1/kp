@@ -44,3 +44,39 @@ shared development server, three navigations: readiness 1097.3 / 610.7 / 553.5 m
 first disclosure 17.1 / 26.2 / 30.9 ms; repeated disclosure 33.3 / 33.3 / 33.2 ms.
 These are local diagnostic samples with server/browser warming, not a production
 device benchmark. No latency improvement is established by this baseline.
+
+## Runtime boundary consolidation
+
+Build and browser now share `checkFractionChain`, which parses, infers only the
+existing supported moves, reissues domain authority and pins the frozen source
+revision. Governed construction remains additional build/checker work. Runtime
+consumers require the nominal checked chain; copied objects, transported proof,
+changed arithmetic and unsupported host shapes are rejected. Reduction reuses
+one checked animation constructor in both paths. No validation was disabled.
+
+Final measured production closure for all four fraction hosts: **415,099 initial
+/ 457,681 activated gzip JS/CSS bytes**. Savings from the fresh baseline are
+35,979 / 35,970 bytes (about 8.0% / 7.3%). Physics remains 59,176 / 176,830 and
+scalar 50,671 / 169,211. The measurement command now accepts `--summary` to bound
+output while retaining the complete file-level default and unchanged traversal.
+No ceiling or consumer set changed.
+
+An intermediate timing probe ran during compiler/build work and measured a
+4485.9 ms cold navigation, then 865.3 / 617.6 ms. That is retained as noisy local
+evidence, not hidden as a passing speedup. An isolated final probe measured
+807.5 / 465.5 / 526.5 ms readiness; first disclosure 22.6 / 25.3 / 23.3 ms;
+repeat disclosure 33.3 / 33.3 / 33.3 ms. These samples suggest no added disclosure
+delay but do not establish a general latency percentage. Payload savings are the
+reliable measured improvement.
+
+Preparation decision: retain the existing bounded three/four prepared surfaces.
+They already survive disclosure and seeking, with native geometry invalidation
+on host resize. A second scene cache would duplicate ownership without improving
+the measured repeat interaction. No lazy first-click work or new idle loop was
+introduced. Remaining renderer cost is explicit, not a mandate for a rewrite.
+
+Verification: 37 fraction tests, complete repository typecheck, architecture and
+production bundle pass. The complete existing fraction browser cohort passes
+21 cases across Chromium, Firefox and WebKit: four callers, native seeking,
+disclosure/exact return, static/no-JS, shared style parity, hidden ownership and
+font resizing. Further composition checks belong to the next package.

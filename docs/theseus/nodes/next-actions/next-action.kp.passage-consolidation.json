@@ -37,6 +37,13 @@
       "scope": "supported-authoring",
       "checkedAt": "2026-09-18T01:11:48.875Z",
       "notes": "34 fraction tests; additional 11 author tests and app types pass. Initial hint fixture and domain import failures repaired; final suites pass."
+    },
+    {
+      "command": "npm run test:fraction-chain; npm run typecheck; npm run check:architecture; npm run build:bundle; npm run visual:fraction-chain:cohort -- --grep-invert \"preparation timing\"",
+      "status": "passed",
+      "scope": "runtime-consolidation",
+      "checkedAt": "2026-09-18T01:19:32.508Z",
+      "notes": "37 fraction tests and21 cross-browser cases pass. Fresh closure415099 initial457681 activated; unchanged validation and native owners."
     }
   ],
   "expectedLearning": [

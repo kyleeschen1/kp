@@ -18,6 +18,9 @@ const html = await readFile(`dist/${root}`);
 const initial = await measureKpBundleClosureAttribution("dist", collectKpHtmlBundleFiles(html.toString("utf8"), manifest));
 const activated = await measureKpBundleClosureAttribution("dist", collectKpHtmlBundleFiles(html.toString("utf8"), manifest, true));
 // Reachable JS/CSS transfer, not a device benchmark or an observed network trace.
-console.log(JSON.stringify({ entry, initial, activated, html: { bytes: html.byteLength, gzipBytes: gzipSync(html).byteLength },
+const summary = process.argv.includes("--summary");
+console.log(JSON.stringify({ entry, initial: summary ? { gzipBytes: initial.gzipBytes, fileCount: initial.files.length } : initial,
+  activated: summary ? { gzipBytes: activated.gzipBytes, fileCount: activated.files.length } : activated,
+  html: { bytes: html.byteLength, gzipBytes: gzipSync(html).byteLength },
   additionalActivationGzipBytes: activated.gzipBytes - initial.gzipBytes,
   excludes: ["fonts", "images", "HTTP overhead", "parse/execute/paint cost"] }, null, 2));

@@ -19,7 +19,7 @@ export function checkFractionChainAuthorSource(json: string) {
   if (result.status !== "compiled") return result;
   return Object.freeze({ status: "compiled" as const, domain: "algebra" as const,
     revisionId: result.compilation.revision, checkpointCount: result.compilation.source.states.length,
-    hostEligibility: checkFractionChainHostEligibility(result.compilation),
+    hostEligibility: checkFractionChainHostEligibility(result.compilation.checked),
     moves: result.compilation.steps.map((step, index) => ({ id: result.compilation.source.moves[index]!.id,
       kind: step.kind, from: result.compilation.source.states[index]!.id, to: result.compilation.source.states[index + 1]!.id })),
     editorialStatus: "editorial-not-proof" as const, presentationStatus: "not-certified-by-this-check" as const });

@@ -1,4 +1,4 @@
-import { assertCompiledFractionChain, type CompiledFractionChain } from "./fraction-chain-compilation.ts";
+import { assertCheckedFractionChain, type CheckedFractionChain } from "./fraction-chain-checked.ts";
 import { FractionChainRepair } from "./fraction-chain-source.ts";
 import { createVerifiedIntegerNumeratorMergeAnimation } from "../animation/numerator-split-merge-equation-adapter.ts";
 import { createVerifiedFractionNumeratorEvaluationAnimation } from "../animation/operation-evaluation-adapter.ts";
@@ -8,8 +8,8 @@ import { compileKpEquationAssetMigrationV2 } from "../domain-ir/equation-asset-m
 import { compileKpEquationEvaluationFamilyCertificateV2 } from "../domain-ir/equation-evaluation-family-certificate-v2.ts";
 
 const issued = new WeakSet<object>();
-export function resolveFractionAdditionPresentation(compilation: CompiledFractionChain, index: number) {
-  assertCompiledFractionChain(compilation);
+export function resolveFractionAdditionPresentation(compilation: CheckedFractionChain, index: number) {
+  assertCheckedFractionChain(compilation);
   const step = compilation.steps[index];
   if (step?.kind !== "combine") throw new FractionChainRepair("fraction-chain.presentation", `$.moves[${index}]`, "Select a checked raw fraction combination.");
   const merge = createVerifiedIntegerNumeratorMergeAnimation(step.authority);
