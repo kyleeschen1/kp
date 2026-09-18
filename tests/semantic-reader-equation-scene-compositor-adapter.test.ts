@@ -523,13 +523,19 @@ test("numeric factor decomposition never loses its source before descendants own
     const twoIndex = ids(targetSide).findIndex(id => label(id) === "2");
     const two = session.tracks.find(t => t.visualAtomId === `atom.${targetSide}.fraction.${twoIndex}`)!;
     assert.ok(six); assert.ok(two);
+    const dotIndex = ids(targetSide).findIndex(id => label(id) === "\\cdot");
+    const dot = session.tracks.find(t => t.visualAtomId === `atom.${targetSide}.fraction.${dotIndex}`)!;
+    assert.ok(dot);
     for (const progress of [.2, .5, .8, .5, .2]) {
       const frames = session.sample(direction === "forward" ? progress : 1 - progress);
       const source = frames.find(f => f.trackId === six.id)!;
       const descendant = frames.find(f => f.trackId === two.id)!;
       assert.equal(source.opacity + descendant.opacity, 1, "exclusive handoff has neither a blank nor a crossfade");
       assert.equal(source.opacity, progress < .36 ? 1 : 0);
+      assert.equal(frames.find(f => f.trackId === dot.id)!.opacity, 0,
+        "product syntax stays absent while factors still occupy the junction");
     }
+    assert.ok(session.sample(direction === "forward" ? .97 : .03).find(f => f.trackId === dot.id)!.opacity > 0);
   }
 });
 

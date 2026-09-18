@@ -16,7 +16,7 @@ import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotate
 export async function mountFractionAdditionSurface(target: HTMLElement, presentation: FractionAdditionPresentation, kind: "merge" | "evaluation") {
   assertFractionAdditionPresentation(presentation);
   return mountCheckedFractionSurface(target, presentation[kind], state => kind === "merge"
-    ? createKpNumeratorSplitMergeSelectorAnnotatedLatex(state)?.annotated : annotateNumeratorEvaluation(state),
+    ? createKpNumeratorSplitMergeSelectorAnnotatedLatex(state, "native")?.annotated : annotateNumeratorEvaluation(state),
     kind === "evaluation" ? [presentation.evaluationCertificate] : []);
 }
 
@@ -69,7 +69,6 @@ function annotateNumeratorEvaluation(state: KpSemanticAssetObject) {
   const denominator = semantic.find(selector => selector.metadata?.["equationStructureRole"] === "denominator")!;
   const token = (selector: typeof denominator): KpSelectorAnnotatedLatexSegment => ({ kind: "selector", selectorId: selector.id, latex: selector.label! });
   return createKpSelectorAnnotatedLatex({ id: `fraction-evaluation.${state.id}`, expectedSelectorIds: semantic.map(selector => selector.id),
-    segments: [{ kind: "latex", latex: "\\frac{" }, ...semantic.filter(selector => selector !== denominator).flatMap(selector => selector.kind === "operator"
-      ? [{ kind: "latex" as const, latex: "\\;" }, token(selector), { kind: "latex" as const, latex: "\\;" }] : [token(selector)]),
+    segments: [{ kind: "latex", latex: "\\frac{" }, ...semantic.filter(selector => selector !== denominator).map(token),
       { kind: "latex", latex: "}{" }, token(denominator), { kind: "latex", latex: "}" }] });
 }

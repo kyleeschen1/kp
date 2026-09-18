@@ -80,7 +80,9 @@ export function createKpNativeFractionFactorSplit(relations: readonly (Pick<Sele
       }
       return Object.freeze({ ...track,
         sampleProgress: (p: number) => sample(frame(p).reflowProgress),
-        sampleOpacityProgress: (p: number) => sample(frame(p).artifactProgress),
+        // Product syntax occupies the branch junction. It can enter only after
+        // fission clears that space, not on the older fraction fade schedule.
+        sampleOpacityProgress: (p: number) => sample(fission(branches[0]!.id, p).phases["settle-targets"]),
         opacityScheduleAuthority: "semantic-choreography" as const });
     });
   } });

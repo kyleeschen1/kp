@@ -11,7 +11,8 @@ export interface KpNumeratorSplitMergeAnnotatedLatex {
 }
 
 export function createKpNumeratorSplitMergeSelectorAnnotatedLatex(
-  state: KpSemanticAssetObject
+  state: KpSemanticAssetObject,
+  operatorSpacing: "expanded" | "native" = "expanded"
 ): KpNumeratorSplitMergeAnnotatedLatex | undefined {
   const structural = state.selectors.filter((selector) => selector.kind === "artifact");
   const semantic = state.selectors.filter((selector) => selector.kind !== "artifact");
@@ -39,7 +40,8 @@ export function createKpNumeratorSplitMergeSelectorAnnotatedLatex(
     kind: "latex",
     latex: value
   });
-  const gap = (): KpSelectorAnnotatedLatexSegment => latex("\\;");
+  // Passage endpoints must retain native spacing when handing paint to prose.
+  const gap = (): KpSelectorAnnotatedLatexSegment => latex(operatorSpacing === "expanded" ? "\\;" : "");
   let segments: readonly KpSelectorAnnotatedLatexSegment[];
   if (byRole.has("numerator-operator")) {
     segments = [

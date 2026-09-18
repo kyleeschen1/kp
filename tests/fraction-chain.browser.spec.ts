@@ -24,6 +24,28 @@ test("subtraction retains the minus sign through right-hand scaling and numerato
   const root = page.locator("[data-fraction-passage]");
   await expect(root).toHaveAttribute("data-fraction-ready", /true|repair/, { timeout: 20000 });
   expect(await root.getAttribute("data-fraction-ready"), await root.locator("[data-fraction-status]").textContent() ?? "").toBe("true");
+  await seek(page, .99);
+  const endpoints = await root.evaluate(element => {
+    const selectors = [
+      '[data-kp-common-denominator-pressure-endpoint="evaluated"] .katex-html',
+      '[data-fraction-row][data-position="1"] .katex-html',
+      '[data-fraction-stage="merge"] [data-kp-reader-equation-state] .katex-html'
+    ];
+    return selectors.map(selector => {
+      const equation = element.querySelector(selector)!;
+      const rects = [...equation.querySelectorAll(":scope > .base")].map(node => node.getBoundingClientRect());
+      const x = Math.min(...rects.map(rect => rect.left));
+      const y = Math.min(...rects.map(rect => rect.top));
+      return { x, w: Math.max(...rects.map(rect => rect.right)) - x,
+        h: Math.max(...rects.map(rect => rect.bottom)) - y };
+    });
+  });
+  // Switching native owners must preserve the endpoint's spacing and alignment.
+  for (const endpoint of endpoints.slice(1)) {
+    expect(Math.abs(endpoint.x - endpoints[0]!.x)).toBeLessThan(.5);
+    expect(Math.abs(endpoint.w - endpoints[0]!.w)).toBeLessThan(.5);
+    expect(Math.abs(endpoint.h - endpoints[0]!.h)).toBeLessThan(.5);
+  }
   for (const position of [0, .18, .45, .85, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 2, 1.75, 1.25, .45, 0]) await seek(page, position);
   for (const position of [2.06, 2.15, 2.27, 2.15, 2]) {
     await seek(page, position);

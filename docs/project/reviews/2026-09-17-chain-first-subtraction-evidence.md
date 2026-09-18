@@ -70,3 +70,25 @@ split-phase captures inspected. Application and test TypeScript checks and
 acceptance of the repaired transit; the linked subtraction host is the review
 surface. Initial attempts exposed changed-glyph blanking and fraction-bar arc
 crossings; neither workaround was retained.
+
+## Repair readiness and passage endpoint continuity
+
+Firefox and WebKit exposed product dots entering before fission descendants had
+cleared the branch junction. Product syntax now follows the existing fission
+`settle-targets` phase. Forward and rewind tests keep dots absent during transfer
+and require their appearance at settlement; unrelated transit guards remain.
+
+The subsequent step-boundary jump came from extra operator spacing in the
+merge/evaluation annotations. The pressure endpoint and prose row measured
+50.03 CSS pixels wide in Chromium; the merge source measured 60.78. The passage
+now selects native operator spacing in the shared annotation helper and retains
+it through evaluation. Standalone callers retain their existing expanded
+spacing. After repair the three owners measure 50.03 pixels. This is an endpoint
+presentation repair, with unchanged semantic assets and motion schedules.
+
+Durable verification uses `visual:fraction-chain:cohort` for subtraction,
+persistent addition and native geometry/font resizing (nine browser cases),
+plus focused compositor, reduction and numerator-split tests (14 tests).
+The subtraction browser test now asserts native endpoint width, height and
+horizontal alignment within half a CSS pixel. It does not certify every
+possible vertical handoff or every authored equation.
