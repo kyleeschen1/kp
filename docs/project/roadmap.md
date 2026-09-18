@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Latest planning direction: infrastructure work while no readers/teaching
+collaborators are available. The [infrastructure and queue audit](reviews/2026-09-17-infrastructure-and-queue-audit.md)
+recommends bounded state reconciliation followed by cheaper supported
+source-to-preview reuse, then code/text coordination and explanation-review
+support. No general algebra engine or new execution scope is approved. The
+dashboard is mostly unaudited, and deferred contracts are not a ready queue.
+
 Completed execution: [chain-first authoring long loop](2026-09-17-chain-first-authoring-long-loop-proposal.md),
 owned by `run-contract.kp.chain-first-authoring-v1`. The user accepted the
 nonterminal energy unfolding exemplar and resumed independent scalar transfer.

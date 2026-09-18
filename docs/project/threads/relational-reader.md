@@ -5,6 +5,12 @@ Last Updated: 2026-09-17
 
 ## Canonical direction
 
+Latest planning request: audit infrastructure, repertoire and stored loops before
+selecting more infrastructure work. [Findings and proposed sequence](../reviews/2026-09-17-infrastructure-and-queue-audit.md)
+prioritize current-state reconciliation and supported source-to-preview reuse;
+code/text remains the next recommended medium transfer. Public tutorials or reader
+recruitment are not prerequisites. No new implementation contract is active.
+
 Approved execution: [chain-first authoring long loop](../2026-09-17-chain-first-authoring-long-loop-proposal.md).
 `run-contract.kp.chain-first-authoring-v1` owns ordered execution and live status;
 the historical broad reader task is deferred with its evidence and judgments intact.
