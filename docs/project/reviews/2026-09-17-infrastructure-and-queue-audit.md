@@ -1,6 +1,9 @@
 # Infrastructure, repertoire and queue audit
 
-Date: 2026-09-17. Status: audit complete; proposed implementation unapproved.
+Date: 2026-09-17. Status: audit complete; recommendations subsequently approved
+in [passage consolidation](../2026-09-17-passage-consolidation-delivery.md).
+The findings below retain the audit-time snapshot; Theseus and the linked
+delivery evidence own subsequent implementation status.
 
 ## User direction and scope
 

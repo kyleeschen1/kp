@@ -8,6 +8,7 @@ import { tokenizeKpTypeScriptSource } from "../src/semantic/typescript-source-to
 import generated from "../src/semantic/centroid-extraction.generated.json" with { type: "json" };
 import { sha256 } from "../src/kernel/sha256.ts";
 import { resolveKpTypeScriptRefactorOpticalEndpoint, serializeKpTypeScriptRefactorOpticalEndpoint } from "../src/rendering/typescript-refactor-optical-theme.ts";
+import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading.ts";
 
 export const centroidPaths = {
   article: "examples/programming/centroid.article.md",
@@ -62,7 +63,12 @@ export function compileCentroidPublication(markdown: string, before: string, aft
   const code = (id: keyof typeof excerpts) => `<pre class="kp-typescript-refactor__revision" data-centroid-excerpt="${id}"><code>${highlight(excerpts[id])}</code></pre>`;
   const figure = (label: string, id: keyof typeof excerpts) => `<figure><figcaption>${label}</figcaption>${code(id)}</figure>`;
   const sourcePin = sha256(JSON.stringify([before, after]));
-  const inspection = `<figure data-centroid-local-inspection data-centroid-source-pin="${sourcePin}">
+  const narrative = `<ol class="centroid-narrative" aria-label="Reasons for extracting the helper">${centroidReading.map(reason =>
+    `<li id="centroid-${reason.id}" data-centroid-reason="${reason.id}"><h3>${reason.title}</h3>${markdownHtml(reason.cue)}
+      <details data-centroid-depth><summary>${reason.question}</summary>${markdownHtml(reason.detail)}</details>
+      <div class="code-controls"><button type="button" data-centroid-select="${reason.id}" hidden>Inspect this state</button></div></li>`).join("")}</ol>`;
+  const inspection = `<div class="centroid-extraction" data-centroid-local-inspection data-centroid-source-pin="${sourcePin}">
+    ${narrative}<figure data-centroid-evidence>
     <figcaption>The shared procedure <button type="button" data-centroid-open hidden>Trace the first loop</button></figcaption>
     <div data-centroid-static-helper>${code("helper")}</div>
     <div data-centroid-stage hidden class="kp-typescript-refactor centroid-stage" style="${serializeKpTypeScriptRefactorOpticalEndpoint(resolveKpTypeScriptRefactorOpticalEndpoint("light"))}">
@@ -71,21 +77,16 @@ export function compileCentroidPublication(markdown: string, before: string, aft
     </div>
     <div data-centroid-controls hidden>
       <p class="centroid-inspection-label">Local refactor inspection · not program execution</p>
-      <p data-centroid-narration></p>
       <div class="code-controls"><button type="button" data-centroid-previous>Previous</button><button type="button" data-centroid-next>Next</button><output data-centroid-position>1 / 3</output><button type="button" data-centroid-close>Return to reading</button>
       <input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect first-loop extraction" data-centroid-seek></div>
     </div><p data-centroid-error role="status" hidden></p>
-  </figure>`;
+  </figure></div>`;
   // Stale semantic evidence must never animate newly edited source. The
   // static draft may still publish so authors can inspect and repair it.
   const helperFigure = sourcePin === generated.sourcePin ? inspection : `${figure("The shared procedure", "helper")}<p>Inspection unavailable: source evidence needs regeneration.</p>`;
   const attachments: Record<string, string> = {
     pattern: `<div class="centroid-pair">${figure("Horizontal coordinates · xs → cx", "x")}${figure("Vertical coordinates · ys → cy", "y")}</div>`,
-    extract: `<div class="centroid-extraction">${helperFigure}<dl aria-label="How the original becomes the helper">
-      <dt>Input · xs or ys → vs</dt><dd>The parameter stands for whichever array this call receives.</dd>
-      <dt>Local work · sx or sy → s</dt><dd>The sum and loop stay inside the helper. Each call gets its own locals.</dd>
-      <dt>Output · assigned average → return</dt><dd>The same division supplies the value back to the caller.</dd>
-    </dl></div>`,
+    extract: helperFigure,
     reuse: `${figure("The centroid body after extraction", "calls")}<details><summary>See both complete source files</summary><h3>Before</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="before"><code>${highlight(before)}</code></pre><h3>After</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="after"><code>${highlight(after)}</code></pre></details>`,
     check: `<details><summary>Check your reasoning</summary><p><code>const cz = mean(zs);</code> reuses the same procedure. It gets a fresh local sum, just like the other calls.</p></details>`
   };

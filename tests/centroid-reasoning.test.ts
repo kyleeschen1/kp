@@ -6,6 +6,8 @@ import { centroid as afterCentroid, mean } from "../examples/programming/centroi
 import { centroidPaths, compileCentroidPublication } from "../scripts/centroid-publication.ts";
 import { renderCentroidNativeCode } from "../src/rendering/centroid-native-code-html.ts";
 import { tokenizeKpTypeScriptSource } from "../src/semantic/typescript-source-tokens.ts";
+import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading.ts";
+import { createCentroidMotion } from "../src/animation/centroid-extraction-motion.ts";
 
 const read = (path: string) => readFileSync(path, "utf8");
 const markdown = read(centroidPaths.article), before = read(centroidPaths.before), after = read(centroidPaths.after);
@@ -35,6 +37,8 @@ test("publication excerpts preserve source, while complete files remain availabl
   assert.equal([...html.matchAll(/data-centroid-excerpt=/g)].length, 4);
   assert.doesNotMatch(html, /<script/);
   assert.match(html, /data-centroid-open hidden/);
+  assert.deepEqual(centroidReading.map(reason => reason.id), createCentroidMotion().artifact.states.map(state => state.id));
+  for (const reason of centroidReading) assert.ok(html.includes(`data-centroid-reason="${reason.id}"`));
   const changed = compileCentroidPublication(markdown, before.replace("sx += x", "sx += 2 * x"), after);
   assert.match(changed.excerpts.x, /sx \+= 2 \* x/);
   // Source fidelity is intentionally not an equivalence certificate.

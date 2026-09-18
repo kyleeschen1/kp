@@ -3,9 +3,16 @@
 .centroid-reader pre { margin: 0; padding: 1rem; background: #f5f6f7; border-left: 2px solid #ccd1d8; overflow-x: auto; white-space: pre; }
 .centroid-reader pre code { font: inherit; }
 .centroid-pair, .centroid-extraction { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem; }
-.centroid-extraction dl { margin-top: 1.25rem; }
-.centroid-extraction dt { font-weight: 600; }
-.centroid-extraction dd { margin: 0.3rem 0 1rem; line-height: 1.6; }
+.centroid-extraction { align-items: start; }
+.centroid-narrative { list-style: none; padding: 0; margin: 0; }
+.centroid-narrative > li { border-inline-start: 2px solid transparent; padding-inline-start: 1rem; margin-block: 1.25rem; scroll-margin-top: 1.5rem; }
+.centroid-narrative h3 { margin-top: 0; }
+.centroid-narrative [data-centroid-current="true"] { border-color: currentColor; }
+.centroid-narrative [data-centroid-current="true"] h3 { text-decoration: underline; text-underline-offset: .2em; }
+.centroid-reader .centroid-narrative details { margin-block: .5rem; }
+@media (min-width: 651px) {
+  .centroid-reader [data-centroid-evidence][data-sticky-fit="true"] { position: sticky; top: 1rem; }
+}
 .centroid-reader details { margin: 1.5rem 0; }
 .centroid-reader summary { cursor: pointer; text-decoration: underline; text-underline-offset: 0.2em; }
 .centroid-reader section { scroll-margin-top: 1.5rem; }
@@ -15,7 +22,6 @@
 .centroid-reader .centroid-stage pre { min-height: calc(var(--centroid-lines, 9) * 1.75em + 2rem); }
 .centroid-reader .centroid-stage .kp-typescript-refactor__token-theater { position: absolute; top: 1rem; left: calc(1rem + 2px); min-width: 0; width: calc(100% - 2rem); }
 .centroid-reader [data-centroid-controls] { font: 0.85rem/1.5 system-ui, sans-serif; }
-.centroid-reader [data-centroid-narration] { min-height: 6em; }
 .centroid-reader .centroid-inspection-label { font-size: 0.75rem; }
 .centroid-reader [data-centroid-open] { margin-top: 0.4rem; display: block; font: inherit; cursor: pointer; }
 @media (max-width: 650px) {
@@ -25,6 +31,10 @@
   .centroid-reader .centroid-stage pre { min-height: calc(var(--centroid-lines, 9) * 1.75em + 1.5rem); }
 }
 @media print {
+  .centroid-reader [data-centroid-evidence] { position: static !important; }
+  .centroid-reader [data-centroid-select] { display: none !important; }
+  .centroid-narrative > li { border-color: transparent !important; }
+  .centroid-narrative h3 { text-decoration: none !important; }
   .centroid-reader [data-centroid-open], .centroid-reader [data-centroid-stage], .centroid-reader [data-centroid-controls], .centroid-reader [data-centroid-error] { display: none !important; }
   .centroid-reader [data-centroid-static-helper] { display: block !important; }
   .centroid-reader details::details-content { display: block; content-visibility: visible; }

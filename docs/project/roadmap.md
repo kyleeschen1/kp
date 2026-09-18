@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Current visual checkpoint: [persistent centroid text](reviews/2026-09-17-centroid-persistent-text-review.md).
+The approved consolidation run delivered reconciliation, source-only fraction
+preview/host eligibility, mechanics discovery and a measured ~36 KB compressed
+runtime reduction while preserving native composition. See
+[authoring and cost evidence](reviews/2026-09-17-passage-authoring-consolidation.md).
+The code exemplar now awaits visual judgment before its approved second-caller
+promotion and explanation-review support. Theseus owns live slice status.
+
 Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the
 audit's four recommendations. Live order: bounded reconciliation, supported

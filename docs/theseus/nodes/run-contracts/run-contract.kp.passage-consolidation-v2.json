@@ -2,7 +2,8 @@
   "id": "run-contract.kp.passage-consolidation-v2",
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT at code-exemplar: judge persistent text/code coordination, long prose sticky behavior and exact return at localhost:8000/experiments/centroid-reasoning/#extract. Four packages complete. After acceptance continue code-transfer, explanation support and release without new scope approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -66,7 +67,8 @@
     {
       "id": "code-exemplar",
       "title": "Persistent code text visual checkpoint",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: review persistent centroid reasons with all details open, reverse scrubbing and Return to reading. Exemplar verified; visual acceptance required before code-transfer. Review packet docs/project/reviews/2026-09-17-centroid-persistent-text-review.md.",
+      "status": "in-progress"
     },
     {
       "id": "code-transfer",

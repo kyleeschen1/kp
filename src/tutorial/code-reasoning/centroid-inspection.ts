@@ -2,6 +2,7 @@ import { createCentroidMotion, sampleCentroidMotion, centroidStops, centroidNarr
 import { renderKpTypeScriptTokenTheater } from "../../rendering/typescript-refactor-dom-session.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { renderCentroidNativeCode } from "../../rendering/centroid-native-code-html.ts";
+import { centroidReading } from "./centroid-reading.ts";
 
 export function mountCentroidInspection(root: HTMLElement) {
   const require = <T extends HTMLElement>(selector: string) => {
@@ -20,7 +21,13 @@ export function mountCentroidInspection(root: HTMLElement) {
   const previous = require<HTMLButtonElement>("[data-centroid-previous]");
   const next = require<HTMLButtonElement>("[data-centroid-next]");
   const output = require<HTMLOutputElement>("[data-centroid-position]");
-  const narration = require<HTMLElement>("[data-centroid-narration]");
+  const figure = require<HTMLElement>("[data-centroid-evidence]");
+  const reasons = centroidReading.map((reason, index) => ({
+    id: reason.id, position: centroidStops[index]!,
+    element: require<HTMLElement>(`[data-centroid-reason="${reason.id}"]`),
+    button: require<HTMLButtonElement>(`[data-centroid-select="${reason.id}"]`)
+  }));
+  if (reasons.some((reason, index) => reason.id !== plan.artifact.states[index]?.id)) throw new Error("Centroid reading and native checkpoints differ.");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const clock = createKpReaderTimelinePlaybackClock({ id: "centroid.first-loop", durationMs: 6000 });
   const render = () => {
@@ -37,7 +44,12 @@ export function mountCentroidInspection(root: HTMLElement) {
     seek.value = String(p);
     seek.setAttribute("aria-valuetext", `${Math.round(p * 100)} percent; ${centroidNarration[frame.beat]}`);
     output.value = `${frame.beat + 1} / 3`;
-    narration.textContent = centroidNarration[frame.beat]!;
+    for (const [index, reason] of reasons.entries()) {
+      const current = root.dataset["centroidInspecting"] === "true" && index === frame.beat;
+      reason.element.dataset["centroidCurrent"] = String(current);
+      if (current) reason.button.setAttribute("aria-current", "step");
+      else reason.button.removeAttribute("aria-current");
+    }
     previous.disabled = p === 0; next.disabled = p === 1;
   };
   const off = clock.subscribe(render);
@@ -48,14 +60,29 @@ export function mountCentroidInspection(root: HTMLElement) {
     if (reduced.matches) clock.seek(stopAt);
     else clock.play({ direction, stopAt });
   };
-  open.addEventListener("click", () => {
+  let entry: { element: HTMLElement; top: number } | undefined;
+  const begin = (origin: HTMLElement) => {
+    if (root.dataset["centroidInspecting"] !== "true") entry = { element: origin, top: origin.getBoundingClientRect().top };
     root.dataset["centroidInspecting"] = "true";
     controls.hidden = false; stage.hidden = false; open.hidden = true;
-    render(); next.focus();
-  }, options);
+    render();
+  };
+  open.addEventListener("click", () => { begin(figure.querySelector("figcaption")!); next.focus({ preventScroll: true }); }, options);
+  reasons.forEach(reason => {
+    reason.button.addEventListener("click", () => { begin(reason.element); clock.seek(reason.position); }, options);
+  });
+  const restore = () => {
+    const reason = reasons.find(reason => location.hash === `#centroid-${reason.id}`);
+    if (reason) { begin(reason.element); clock.seek(reason.position, "url"); }
+  };
+  window.addEventListener("hashchange", restore, options);
   close.addEventListener("click", () => {
     clock.pause(); delete root.dataset["centroidInspecting"];
-    controls.hidden = true; stage.hidden = true; open.hidden = false; open.focus();
+    controls.hidden = true; stage.hidden = true; open.hidden = false; render();
+    const destination = entry?.element.querySelector<HTMLButtonElement>("[data-centroid-select]") ?? open;
+    destination.focus({ preventScroll: true });
+    if (entry) window.scrollBy({ top: entry.element.getBoundingClientRect().top - entry.top, behavior: "instant" });
+    entry = undefined;
   }, options);
   previous.addEventListener("click", () => move("rewind"), options);
   next.addEventListener("click", () => move("forward"), options);
@@ -71,6 +98,12 @@ export function mountCentroidInspection(root: HTMLElement) {
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, options);
   const observer = new IntersectionObserver(entries => { if (!entries[0]?.isIntersecting) pause(); });
   observer.observe(root);
-  render(); open.hidden = false;
-  return () => { abort.abort(); observer.disconnect(); off(); clock.dispose(); };
+  // Sticky is a bounded layout affordance, never a source of semantic progress.
+  // Large fonts or short windows disable it instead of clipping controls.
+  const fit = () => { figure.dataset["stickyFit"] = String(figure.getBoundingClientRect().height + 32 < innerHeight); };
+  const size = new ResizeObserver(fit); size.observe(figure);
+  window.addEventListener("resize", fit, options);
+  reasons.forEach(reason => { reason.button.hidden = false; });
+  render(); open.hidden = false; restore();
+  return () => { abort.abort(); observer.disconnect(); size.disconnect(); off(); clock.dispose(); };
 }

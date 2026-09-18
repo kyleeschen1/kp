@@ -5,6 +5,13 @@ Last Updated: 2026-09-17
 
 ## Canonical direction
 
+Current checkpoint: [persistent centroid reasoning](../reviews/2026-09-17-centroid-persistent-text-review.md).
+Reconciliation and fraction authoring/runtime consolidation are delivered with
+[measured evidence](../reviews/2026-09-17-passage-authoring-consolidation.md).
+Code/text remains a local unpromoted exemplar awaiting human visual judgment.
+After acceptance, the existing approved contract continues second-caller pressure,
+explanation-review support and integrated closeout.
+
 Active delivery: [approved passage consolidation](../2026-09-17-passage-consolidation-delivery.md).
 `run-contract.kp.passage-consolidation-v2` owns execution and evidence. The
 following prior planning and delivery entries remain provenance; persistent

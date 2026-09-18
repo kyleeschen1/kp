@@ -51,6 +51,20 @@
       "scope": "composed-motion",
       "checkedAt": "2026-09-18T01:22:29.032Z",
       "notes": "Three browser cases each traverse four hosts; all native row endpoint dimensions, reversal and cancelled-grip restart pass. Eleven focused compositor/authority tests and test types pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts",
+      "status": "passed",
+      "scope": "author-discovery-integration",
+      "checkedAt": "2026-09-18T01:31:17.120Z",
+      "notes": "Initial47 of48 passed; missing mechanics row in generation packet repaired. Clean complete48-test rerun passes; repertoire8 pass."
+    },
+    {
+      "command": "npm run visual:code-reasoning -- --grep \"persistent centroid reasons|centroid is|local extraction|reduced motion reaches\"",
+      "status": "passed",
+      "scope": "code-exemplar-discovery",
+      "checkedAt": "2026-09-18T01:31:20.588Z",
+      "notes": "Four Chromium checks pass; six source/extraction tests, app/node/test types and architecture pass. Desktop capture inspected. New layout not human-approved; no second-caller or cross-browser promotion claimed."
     }
   ],
   "expectedLearning": [
