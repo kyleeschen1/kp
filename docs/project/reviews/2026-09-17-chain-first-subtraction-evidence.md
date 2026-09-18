@@ -44,3 +44,29 @@ implemented or added to the completed loop's scope.
 
 The completed release and cross-browser results supersede the pending slice 24
 note above; see [the closeout](2026-09-17-chain-first-authoring-closeout.md).
+
+## Numeric factor-split repair
+
+The user reported the wrong motif at `6 → 2·3`. The native reader dispatched
+`fraction-factor-split` as default motion; changed glyphs reconciled as unrelated
+retirement/introduction. Merely selecting identity-copy fan-out left a blank
+interval. The shared adapter now binds `splitFractionFactors` to the existing
+fission ownership/scale schedule and measured horizontal factor paths. The
+fraction choreography still owns context reflow and product-sign entry. Native
+paint identity/order, checked mathematics, rails and disclosure remain unchanged.
+Numerator normalization shares the motif label but does not enter this binding.
+
+The projection requires explicit one-to-many correspondence and complete native
+source/descendant paint. Contacts are grouped only within each declared split;
+unrelated paint keeps the compositor's transit checks. No glyph-specific offsets,
+new timing constants, solver work or fluent-reduction claim is introduced.
+Rollback unit: native factor-split projection and its shared dispatch binding.
+
+Verification: nine focused compositor/reduction tests pass, including exclusive
+source/descendant visibility during forward, rewind and repeated seeks. Two
+Chromium fraction checks pass for subtraction and original addition, with new
+split-phase captures inspected. Application and test TypeScript checks and
+`check:architecture` pass. This is not fresh cross-browser certification or human
+acceptance of the repaired transit; the linked subtraction host is the review
+surface. Initial attempts exposed changed-glyph blanking and fraction-bar arc
+crossings; neither workaround was retained.

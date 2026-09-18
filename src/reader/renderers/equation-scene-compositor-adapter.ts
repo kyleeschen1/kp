@@ -5,6 +5,7 @@ import type {
   KpNativeKatexRendererSession
 } from "../../rendering/native-katex-scene-compositor.ts";
 import { createKpFractionDistributionCoherentMotion } from "../../rendering/fraction-distribution-coherent-motion.ts";
+import { createKpNativeFractionFactorSplit } from "../../rendering/native-fraction-factor-split.ts";
 import type {
   KpNativeKatexSemanticPaintRelation
 } from "../../rendering/native-katex-base-scene-plan.ts";
@@ -449,6 +450,12 @@ function dispatchReaderEquationPresentation(input: {
     case "default-motion":
       return plainDispatch(plan.planKind, input.base);
     case "visual-motif":
+      if (plan.visualMotif.kind === "fraction-factor-split" &&
+          input.renderTransition.transformType === "splitFractionFactors") {
+        return { planKind: plan.planKind, canonicalInput: { ...input.base,
+          trackProjection: createKpNativeFractionFactorSplit(input.renderTransition.relations, input.direction)
+        }, motionProfile: "default", successorSynthesisCount: 0 };
+      }
       return routedDispatch(
         plan.planKind,
         input.base,

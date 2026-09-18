@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { createFractionSimplificationAnimationAsset } from "../src/animation/fraction-adapter.ts";
 
 import {
   createLinearSolveTeacherZeroAnimationAsset
@@ -328,7 +329,8 @@ function scene(
 
 function fractionScene(
   endpoint: "source" | "target",
-  semanticEntityIds: readonly string[]
+  semanticEntityIds: readonly string[],
+  labels: readonly string[] = []
 ) {
   const atoms = semanticEntityIds.map((semanticEntityId, index) => {
     const groupId = `group.${endpoint}.fraction.${index}`;
@@ -347,7 +349,7 @@ function fractionScene(
         semanticEntityId,
         presentationGroupId: groupId,
         paintKind: "glyph" as const,
-        visualKey: "glyph:2",
+        visualKey: `glyph:${labels[index] ?? "2"}`,
         sourceElement: endpoint === "source" ? sourceElement : targetElement,
         rect,
         styleFingerprint: "font:KaTeX_Math",
@@ -500,6 +502,35 @@ test("adapter rejects material plans that are detached from canonical lineage", 
     }),
     /does not belong/
   );
+});
+
+test("numeric factor decomposition never loses its source before descendants own paint", () => {
+  const animation = createFractionSimplificationAnimationAsset({ familyId: "generated.fraction-expression", id: "test.numeric-fission", title: "Reduce", numerator: 3, denominator: 6, simplifiedNumerator: 1, simplifiedDenominator: 2 });
+  for (const direction of ["forward", "rewind"] as const) {
+    const renderPlan = projectKpReaderEquationRenderPlan({ animation, runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, direction, progress: direction === "forward" ? .12 : .88 }) });
+    const transition = renderPlan.transitions[0]!;
+    const ids = (side: "source" | "target") => [...new Set(transition.relations.flatMap(r => side === "source" ? r.sourceSelectorIds : r.targetSelectorIds))];
+    const label = (id: string) => animation.bundle.objects.flatMap(o => o.selectors).find(s => s.id === id)!.label!;
+    const session = createKpReaderEquationSceneCompositorSession({ renderPlan,
+      materialPlan: compileKpReaderEquationMaterialPlan(renderPlan), transitionId: transition.id,
+      nativeKatex: kpNativeKatexFeaturePack, measurementIdentity,
+      source: fractionScene("source", ids("source"), ids("source").map(label)),
+      target: fractionScene("target", ids("target"), ids("target").map(label)) });
+    const sourceSide = direction === "forward" ? "source" : "target";
+    const targetSide = direction === "forward" ? "target" : "source";
+    const sixIndex = ids(sourceSide).findIndex(id => label(id) === "6");
+    const six = session.tracks.find(t => t.visualAtomId === `atom.${sourceSide}.fraction.${sixIndex}`)!;
+    const twoIndex = ids(targetSide).findIndex(id => label(id) === "2");
+    const two = session.tracks.find(t => t.visualAtomId === `atom.${targetSide}.fraction.${twoIndex}`)!;
+    assert.ok(six); assert.ok(two);
+    for (const progress of [.2, .5, .8, .5, .2]) {
+      const frames = session.sample(direction === "forward" ? progress : 1 - progress);
+      const source = frames.find(f => f.trackId === six.id)!;
+      const descendant = frames.find(f => f.trackId === two.id)!;
+      assert.equal(source.opacity + descendant.opacity, 1, "exclusive handoff has neither a blank nor a crossfade");
+      assert.equal(source.opacity, progress < .36 ? 1 : 0);
+    }
+  }
 });
 
 test("the same reader session adapter accepts both fraction fission and fusion plans", () => {

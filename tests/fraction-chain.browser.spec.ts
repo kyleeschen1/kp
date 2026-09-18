@@ -25,6 +25,10 @@ test("subtraction retains the minus sign through right-hand scaling and numerato
   await expect(root).toHaveAttribute("data-fraction-ready", /true|repair/, { timeout: 20000 });
   expect(await root.getAttribute("data-fraction-ready"), await root.locator("[data-fraction-status]").textContent() ?? "").toBe("true");
   for (const position of [0, .18, .45, .85, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 2, 1.75, 1.25, .45, 0]) await seek(page, position);
+  for (const position of [2.06, 2.15, 2.27, 2.15, 2]) {
+    await seek(page, position);
+    await page.screenshot({ path: `tmp/codex/fraction-chain-review/subtraction-factor-split-${position}.png`, fullPage: true });
+  }
   await seek(page, 1.25);
   await page.screenshot({ path: "tmp/codex/fraction-chain-review/subtraction-merge.png", fullPage: true });
   const toggle = root.locator("[data-fraction-disclosure]"), held = Number(await root.getAttribute("data-fraction-position"));
