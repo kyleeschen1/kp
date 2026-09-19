@@ -2,6 +2,52 @@ import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 const route = "/experiments/centroid-reasoning/";
 
+test("beat reading keeps the whole argument and fine-grained evidence through comparison and resizing", async ({ page }, info) => {
+  await page.goto(`${route}?reading=beats#extract`);
+  const root = page.locator("[data-centroid-local-inspection]");
+  const beats = root.locator("[data-centroid-beat]");
+  await expect(beats).toHaveCount(8);
+  await expect(root.locator(".centroid-narrative")).toBeHidden();
+  const text = await beats.allTextContents();
+  const whole = root.locator('[data-centroid-beat-select="beat.whole"]');
+  await whole.click();
+  await expect(root).toHaveAttribute("data-centroid-progress", "0");
+  await expect(whole).toHaveAttribute("aria-pressed", "true");
+  await root.locator("[data-centroid-because] summary").click();
+  await expect(root.locator("[data-centroid-because]")).toHaveAttribute("open", "");
+  await expect(whole).toHaveAttribute("aria-pressed", "true");
+  await root.locator('[data-centroid-beat-select="beat.return"]').click();
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
+  const seek = root.locator("[data-centroid-seek]");
+  await seek.fill("0.67"); await seek.dispatchEvent("input");
+  await root.locator('[data-centroid-beat-claim="division"]').click();
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.67");
+  for (const mode of ["paragraphs", "beats"]) {
+    await root.locator(`button[data-centroid-format="${mode}"]`).click();
+    await expect(root).toHaveAttribute("data-centroid-progress", "0.67");
+  }
+  expect(await beats.allTextContents()).toEqual(text);
+  await root.locator('[data-centroid-beat-select="beat.meaning"]').focus();
+  await page.keyboard.press("Enter");
+  await expect(root).toHaveAttribute("data-centroid-progress", "1");
+  await page.screenshot({ path: info.outputPath("centroid-beats.png"), fullPage: true });
+  await root.locator('[data-centroid-close]').click();
+  await expect(root.locator('button[data-centroid-format="beats"]')).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  expect(await beats.allTextContents()).toEqual(text);
+  await root.locator('[data-centroid-beat-select="beat.meaning"]').click();
+  await root.locator('[data-centroid-close]').click();
+  await expect(root.locator('[data-centroid-beat-select="beat.meaning"]')).toBeFocused();
+  await page.goto(`${route}#centroid-beat.divide`);
+  await expect(root).toHaveAttribute("data-centroid-format", "beats");
+  await expect(root.locator('[data-centroid-beat-select="beat.divide"]')).toHaveAttribute("aria-pressed", "true");
+  await root.locator('[data-centroid-beat-select="beat.divide"]').focus();
+  await page.keyboard.press("Escape");
+  await expect(root.locator('[data-centroid-beat-select="beat.divide"]')).toHaveAttribute("aria-pressed", "false");
+});
+
 test("phrase attention persists across native handoffs and rewind without moving the rail", async ({ page }, info) => {
   await page.goto(`${route}#centroid-extracted`);
   const root = page.locator("[data-centroid-local-inspection]");

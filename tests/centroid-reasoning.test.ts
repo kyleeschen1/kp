@@ -8,9 +8,24 @@ import { renderCentroidNativeCode } from "../src/rendering/centroid-native-code-
 import { tokenizeKpTypeScriptSource } from "../src/semantic/typescript-source-tokens.ts";
 import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading.ts";
 import { createCentroidMotion } from "../src/animation/centroid-extraction-motion.ts";
+import { centroidBeatReading } from "../src/tutorial/code-reasoning/centroid-beats.ts";
+import { centroidClaims } from "../src/tutorial/code-reasoning/centroid-attention.ts";
 
 const read = (path: string) => readFileSync(path, "utf8");
 const markdown = read(centroidPaths.article), before = read(centroidPaths.before), after = read(centroidPaths.after);
+
+test("reading beats retain unique addresses and existing semantic authority", () => {
+  const { html } = compileCentroidPublication(markdown, before, after);
+  assert.equal(new Set(centroidBeatReading.map(beat => beat.id)).size, centroidBeatReading.length);
+  for (const beat of centroidBeatReading) {
+    assert.ok(centroidReading.some(reason => reason.id === beat.checkpoint));
+    assert.ok(beat.claims.length > 0);
+    for (const id of beat.claims) assert.ok(centroidClaims.some(claim => claim.id === id));
+    assert.ok(html.includes(`id="centroid-${beat.id}"`));
+  }
+  assert.equal(centroidBeatReading.filter(beat => beat.because).length, 1);
+  assert.match(html, /Extracting only the division would leave the repeated accumulation/);
+});
 
 test("centroid extraction preserves declared cases and independent accumulators", () => {
   for (const [xs, ys] of [

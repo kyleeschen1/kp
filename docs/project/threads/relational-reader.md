@@ -5,12 +5,12 @@ Last Updated: 2026-09-17
 
 ## Canonical direction
 
-Current checkpoint: [persistent centroid reasoning](../reviews/2026-09-17-centroid-persistent-text-review.md).
+Current checkpoint: [centroid beat-reading comparison](../reviews/2026-09-18-centroid-beat-reading.md).
 Reconciliation and fraction authoring/runtime consolidation are delivered with
 [measured evidence](../reviews/2026-09-17-passage-authoring-consolidation.md).
-Code/text remains a local unpromoted exemplar awaiting human visual judgment.
-After acceptance, the existing approved contract continues second-caller pressure,
-explanation-review support and integrated closeout.
+Persistent layout and phrase salience are accepted. The user paused second-caller
+pressure to try a reversible beat-reading comparison; its rhythm now needs visual
+judgment. The approved contract retains transfer, explanation support and closeout.
 
 Active delivery: [approved passage consolidation](../2026-09-17-passage-consolidation-delivery.md).
 `run-contract.kp.passage-consolidation-v2` owns execution and evidence. The

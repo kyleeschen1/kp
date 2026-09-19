@@ -25,6 +25,12 @@ engine. Shared typography, rails and disclosure remain responsible owners.
 
 ## Work packages and dependencies
 
+September 18 approved steering: after accepting centroid phrase salience, the
+user paused larger-source transfer to try addressable, greentext-inspired beats
+on the same exemplar. This is a reversible comparison within code/text discovery,
+with its own human visual checkpoint before resuming transfer. It does not approve
+a universal text schema. See [trial packet](reviews/2026-09-18-centroid-beat-reading.md).
+
 1. Reconcile current truth: correct evidenced dashboard staleness; compare the old
    graph checkpoint to later acceptance and exact remaining obligations; provide
    a cheap live shortlist. Diagnose oversized resume output without editing the

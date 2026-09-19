@@ -10,6 +10,8 @@ import { sha256 } from "../src/kernel/sha256.ts";
 import { resolveKpTypeScriptRefactorOpticalEndpoint, serializeKpTypeScriptRefactorOpticalEndpoint } from "../src/rendering/typescript-refactor-optical-theme.ts";
 import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading.ts";
 import { centroidClaims } from "../src/tutorial/code-reasoning/centroid-attention.ts";
+import { centroidBeatReading } from "../src/tutorial/code-reasoning/centroid-beats.ts";
+import { encodeKpHtmlAttribute } from "../src/rendering/html-output-encoding.ts";
 
 export const centroidPaths = {
   article: "examples/programming/centroid.article.md",
@@ -77,8 +79,18 @@ export function compileCentroidPublication(markdown: string, before: string, aft
     `<li id="centroid-${reason.id}" data-centroid-reason="${reason.id}"><h3>${reason.title}</h3>${cueHtml(reason)}
       <details data-centroid-depth><summary>${reason.question}</summary>${markdownHtml(reason.detail)}</details>
       <div class="code-controls"><button type="button" data-centroid-select="${reason.id}" hidden>Inspect this state</button></div></li>`).join("")}</ol>`;
+  const beats = `<ol class="centroid-beats" data-centroid-beats hidden aria-label="Extracting the average, one thought at a time">${centroidBeatReading.map(beat => {
+    let text = markdownHtml(beat.text);
+    if (beat.phrase) {
+      const claim = centroidClaims.find(claim => claim.id === beat.phrase)!;
+      const phrase = markdownHtml(claim.phrase).trim().replace(/^<p>|<\/p>$/g, "");
+      if (text.split(phrase).length !== 2) throw new Error(`Missing beat phrase ${beat.id}`);
+      text = text.replace(phrase, `<button type="button" class="centroid-claim" data-centroid-beat-claim="${claim.id}" aria-pressed="false" disabled>${phrase}</button>`);
+    }
+    return `<li id="centroid-${beat.id}" data-centroid-beat="${beat.id}"><button type="button" class="centroid-beat-marker" data-centroid-beat-select="${beat.id}" aria-label="${encodeKpHtmlAttribute(`Inspect: ${beat.text.replaceAll("`", "")}`)}" aria-pressed="false" disabled><span aria-hidden="true">›</span></button><div>${text}${beat.because ? `<details data-centroid-because><summary>${beat.because.question}</summary>${markdownHtml(beat.because.text)}</details>` : ""}</div></li>`;
+  }).join("")}</ol>`;
   const inspection = `<div class="centroid-extraction" data-centroid-local-inspection data-centroid-source-pin="${sourcePin}">
-    ${narrative}<figure data-centroid-evidence>
+    <div class="centroid-reading-column"><div class="code-controls centroid-reading-switch" data-centroid-reading-switch hidden role="group" aria-label="Explanation format"><button type="button" data-centroid-format="paragraphs" aria-pressed="true">Paragraphs</button><button type="button" data-centroid-format="beats" aria-pressed="false">Beats</button></div>${narrative}${beats}</div><figure data-centroid-evidence>
     <figcaption>The shared procedure <button type="button" data-centroid-open hidden>Trace the first loop</button></figcaption>
     <div data-centroid-static-helper>${code("helper")}</div>
     <div data-centroid-stage hidden class="kp-typescript-refactor centroid-stage" style="${serializeKpTypeScriptRefactorOpticalEndpoint(resolveKpTypeScriptRefactorOpticalEndpoint("light"))}">

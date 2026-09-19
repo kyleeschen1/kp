@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: persistent layout accepted; approved phrase salience trial implemented and verified. Review three underlined phrases at localhost:8000/experiments/centroid-reasoning/#centroid-extracted. Four of eight packages complete; code-exemplar awaits treatment judgment before larger-code pressure and transfer.",
+  "summary": "HUMAN_CHECKPOINT: accepted paragraph salience preserved; user-approved eight-beat comparison ready at localhost:8000/experiments/centroid-reasoning/?reading=beats#extract. Five of eight packages complete. Larger-source transfer paused for judgment of beat rhythm; explanation support and release remain downstream.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -28,6 +28,12 @@
       "status": "passed",
       "scope": "code-exemplar",
       "checkedAt": "2026-09-19T00:59:45.670Z"
+    },
+    {
+      "command": "npm run visual:code-reasoning -- tests/centroid-reasoning.browser.spec.ts",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-19T01:20:46.361Z"
     }
   ],
   "allowedWork": [
@@ -75,13 +81,14 @@
     {
       "id": "code-exemplar",
       "title": "Persistent code text visual checkpoint",
-      "summary": "User accepted persistent layout and approved phrase-to-code salience exemplar refinement before promotion.",
-      "status": "in-progress"
+      "summary": "Persistent layout and fine-grained phrase salience visually accepted by user. Verified reversible exemplar committed as 3dcbfb33a.",
+      "status": "complete"
     },
     {
       "id": "code-transfer",
       "title": "Pressure and promote accepted code text",
-      "status": "planned"
+      "summary": "User steering: before larger-source transfer, compare accepted paragraph reading with a reversible addressable-beat centroid trial. Existing source/motion and accepted phrases preserved; visual gate before further transfer.",
+      "status": "in-progress"
     },
     {
       "id": "explanation",

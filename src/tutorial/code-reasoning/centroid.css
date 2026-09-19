@@ -7,6 +7,17 @@
 .centroid-narrative { list-style: none; padding: 0; margin: 0; }
 .centroid-narrative > li { border-inline-start: 2px solid transparent; padding-inline-start: 1rem; margin-block: 1.25rem; scroll-margin-top: 1.5rem; }
 .centroid-narrative h3 { margin-top: 0; }
+.centroid-reading-column { min-width: 0; }
+.centroid-reading-switch { padding-top: 0; }
+.centroid-reading-switch [aria-pressed="true"] { border-color: currentColor; text-decoration: underline; text-underline-offset: .2em; }
+.centroid-beats { list-style: none; padding: 0; margin: 0; }
+.centroid-beats > li { display: grid; grid-template-columns: 1.5em minmax(0, 1fr); gap: .35em; margin-block: .9em; scroll-margin-top: 1.5rem; cursor: pointer; }
+.centroid-beats p { margin-block: 0; }
+.centroid-beat-marker { appearance: none; align-self: start; font: inherit; color: inherit; border: 0; padding: 0; background: transparent; cursor: pointer; }
+.centroid-beat-marker[aria-pressed="true"] { background: color-mix(in srgb, currentColor 12%, transparent); box-shadow: inset 2px 0 currentColor; }
+.centroid-beats [data-centroid-beat-current="true"] > div > p { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: .2em; }
+.centroid-reader .centroid-beats details { margin-block: .5em; cursor: auto; }
+.centroid-beats details p { margin-block: .5em; }
 .centroid-claim { appearance: none; display: inline; font: inherit; color: inherit; line-height: inherit; margin: 0; padding: 0; border: 0; background: transparent; text-align: inherit; }
 .centroid-claim:enabled { cursor: pointer; text-decoration: underline dotted; text-underline-offset: .2em; }
 .centroid-claim[aria-pressed="true"] { background: color-mix(in srgb, currentColor 12%, transparent); text-decoration-style: solid; }
@@ -42,6 +53,7 @@
   .centroid-reader .centroid-stage pre { min-height: calc(var(--centroid-lines, 9) * 1.75em + 1.5rem); }
 }
 @media print {
+  .centroid-reading-switch { display: none !important; }
   .centroid-reader [data-centroid-evidence] { position: static !important; }
   .centroid-reader [data-centroid-select] { display: none !important; }
   .centroid-narrative > li { border-color: transparent !important; }
