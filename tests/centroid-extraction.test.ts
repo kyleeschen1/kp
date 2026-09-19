@@ -4,9 +4,25 @@ import { readFileSync } from "node:fs";
 import { compileCentroidExtraction } from "../scripts/centroid-extraction-frontend.ts";
 import { createCentroidMotion, sampleCentroidMotion } from "../src/animation/centroid-extraction-motion.ts";
 import generated from "../src/semantic/centroid-extraction.generated.json" with { type: "json" };
+import { centroidClaims, centroidClaimEntities, projectCentroidAttention, validateCentroidClaims } from "../src/tutorial/code-reasoning/centroid-attention.ts";
 
 const before = readFileSync("examples/programming/centroid-before.ts", "utf8");
 const after = readFileSync("examples/programming/centroid-after.ts", "utf8");
+test("prose targets retain checked identity across native and moving owners", () => {
+  const plan = createCentroidMotion();
+  validateCentroidClaims(plan.artifact);
+  for (const p of [0, .2, .5, .67, 1, .67, .2, 0]) {
+    const frame = sampleCentroidMotion(plan, p);
+    const tokens = frame.theater.active ? frame.theater.tokens : frame.native.tokens;
+    for (const claim of centroidClaims) {
+      for (const id of centroidClaimEntities(claim)) assert.ok(tokens.some(token => token.entityId === id));
+      for (const token of tokens) assert.equal(projectCentroidAttention(token.entityId, claim.id), centroidClaimEntities(claim).includes(token.entityId) ? "focus" : "context");
+    }
+  }
+  assert.throws(() => projectCentroidAttention("centroid.local.sum", "unknown"), /Unknown/);
+  const [first, second, third] = plan.artifact.states;
+  assert.throws(() => validateCentroidClaims({ ...plan.artifact, states: [{ ...first, tokens: [] }, second, third] }), /needs repair/);
+});
 test("checked artifact derives exact source and local role correspondence", () => {
   const result = compileCentroidExtraction(before, after);
   assert.equal(result.status, "accepted");

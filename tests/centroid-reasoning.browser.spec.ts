@@ -2,6 +2,40 @@ import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 const route = "/experiments/centroid-reasoning/";
 
+test("phrase attention persists across native handoffs and rewind without moving the rail", async ({ page }, info) => {
+  await page.goto(`${route}#centroid-extracted`);
+  const root = page.locator("[data-centroid-local-inspection]");
+  const claim = root.locator('[data-centroid-claim="answer"]');
+  const stage = root.locator('[data-centroid-stage]');
+  const seek = root.locator('[data-centroid-seek]');
+  const geometry = await stage.boundingBox();
+  await claim.click();
+  await expect(claim).toHaveAttribute("aria-pressed", "true");
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
+  expect((await stage.boundingBox())!.height).toBe(geometry!.height);
+  for (const progress of [.67, 1, .2, 0, .5]) {
+    await seek.evaluate((node, p) => { (node as HTMLInputElement).value = String(p); node.dispatchEvent(new Event("input", { bubbles: true })); }, progress);
+    const owner = progress === .67 || progress === .2 ? root.locator('[data-kp-typescript-token-theater]') : root.locator('[data-centroid-native]');
+    for (const entity of ["centroid.result.expression", "centroid.caller.result"]) {
+      const tokens = owner.locator(`[data-kp-typescript-token-entity-id="${entity}"]`);
+      expect(await tokens.count()).toBeGreaterThan(0);
+      for (const token of await tokens.all()) await expect(token).toHaveAttribute("data-centroid-salience", "focus");
+    }
+    await expect(owner.locator('[data-kp-typescript-token-entity-id="centroid.local.sum"]').first()).toHaveAttribute("data-centroid-salience", "context");
+  }
+  await page.screenshot({ path: info.outputPath("centroid-phrase-attention.png"), fullPage: true });
+  await claim.focus();
+  await page.keyboard.press("Escape");
+  await expect(claim).toHaveAttribute("aria-pressed", "false");
+  await page.keyboard.press("Enter");
+  await expect(claim).toHaveAttribute("aria-pressed", "true");
+  await root.locator('[data-centroid-close]').click();
+  await expect(claim).toHaveAttribute("aria-pressed", "false");
+  await root.locator('[data-centroid-open]').click();
+  await expect(claim).toHaveAttribute("aria-pressed", "true");
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
+});
+
 test("persistent centroid reasons coordinate long prose without replacing text or losing return", async ({ page }, info) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.goto(`${route}#extract`);

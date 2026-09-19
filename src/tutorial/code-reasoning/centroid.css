@@ -7,6 +7,17 @@
 .centroid-narrative { list-style: none; padding: 0; margin: 0; }
 .centroid-narrative > li { border-inline-start: 2px solid transparent; padding-inline-start: 1rem; margin-block: 1.25rem; scroll-margin-top: 1.5rem; }
 .centroid-narrative h3 { margin-top: 0; }
+.centroid-claim { appearance: none; display: inline; font: inherit; color: inherit; line-height: inherit; margin: 0; padding: 0; border: 0; background: transparent; text-align: inherit; }
+.centroid-claim:enabled { cursor: pointer; text-decoration: underline dotted; text-underline-offset: .2em; }
+.centroid-claim[aria-pressed="true"] { background: color-mix(in srgb, currentColor 12%, transparent); text-decoration-style: solid; }
+.centroid-claim:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.centroid-stage [data-centroid-salience="focus"] { background: color-mix(in srgb, currentColor 12%, transparent); text-decoration: underline; text-underline-offset: .18em; }
+/* Keep context fully readable and leave compositor opacity under its owner. */
+.centroid-stage [data-centroid-salience="context"] { filter: saturate(.3); }
+.centroid-attention-description { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (forced-colors: active) {
+  .centroid-stage [data-centroid-salience="focus"], .centroid-claim[aria-pressed="true"] { text-decoration: underline double; }
+}
 .centroid-narrative [data-centroid-current="true"] { border-color: currentColor; }
 .centroid-narrative [data-centroid-current="true"] h3 { text-decoration: underline; text-underline-offset: .2em; }
 .centroid-reader .centroid-narrative details { margin-block: .5rem; }

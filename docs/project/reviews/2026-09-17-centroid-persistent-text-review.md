@@ -1,9 +1,53 @@
 # Persistent centroid reasoning: visual checkpoint
 
-Status: HUMAN_CHECKPOINT; not yet visually accepted or promoted.
+Status: HUMAN_CHECKPOINT for phrase salience; persistent layout accepted, not promoted.
 Execution: `run-contract.kp.passage-consolidation-v2`, slice `code-exemplar`.
 
 ## Canonical artifact and preservation
+
+### September 18 refinement: claims connected to code
+
+The user accepted persistence, identified the missing fine-grained text/code
+connection, and approved a bounded trial before larger-source pressure.
+Three phrases in the middle explanation now select source-owned semantic roles:
+**sum and loop**, **division's result**, and **cx** (result-to-caller relationship).
+Selections use the existing reader semantic focus service and salience intent
+vocabulary. Native code exposes the same entity bindings already carried by
+moving tokens. No generated source evidence, motion timing or trajectories changed.
+
+Open <http://localhost:8000/experiments/centroid-reasoning/#centroid-extracted>.
+Select each underlined phrase; move the rail forward and backward while selected.
+Click the selected phrase again or press Escape to clear. Keyboard Enter/Space
+work through native buttons. A first phrase selection opens its checkpoint;
+subsequent selections preserve the current inspection position and pause playback.
+Closing/reopening retains the selection and code position. The relationship's
+plain-language summary is exposed through a live status region.
+
+Judge whether the restrained background/underline makes the relevant code
+immediately locatable while leaving context readable. This is a provisional
+local treatment, with no hover preview, new connector motion or universal schema.
+Input-to-parameter targeting needs finer checked roles and is not claimed here.
+Larger source/longer relationship pressure remains behind this visual checkpoint.
+Rollback unit: the phrase bindings, native identity exposure, local projection,
+and associated tests in this refinement commit.
+
+Evidence: seven source/publication/extraction tests and all five centroid Chromium
+tests pass. The new check covers target identity across transit/native owners,
+reverse, fixed rail position and height, keyboard selection/clearing and retained
+selection on reopening. App/node/test TypeScript and architecture gates pass.
+Commands: `node --experimental-strip-types --test tests/centroid-extraction.test.ts tests/centroid-reasoning.test.ts`;
+`npm run visual:code-reasoning -- tests/centroid-reasoning.browser.spec.ts`;
+`node node_modules/typescript/bin/tsc --project tsconfig.app.json --noEmit`;
+the equivalent `tsconfig.node.json` command; `npm run typecheck:tests`;
+`npm run check:architecture`. The initially attempted `typecheck:app` and
+`typecheck:node` npm scripts do not exist; the direct compiler commands above
+completed successfully. Impact selection still falls back to broad checks for
+this local module; exemplar discovery uses focused preservation as permitted.
+
+The code footprint adds one small local attention module and no dependency,
+clock, observer, or extra animation loop. Per-frame projection visits existing
+token nodes; runtime cost is not separately benchmarked. Larger-code capacity
+and full responsive/theme/browser promotion remain unestablished.
 
 Review [the centroid passage](http://localhost:8000/experiments/centroid-reasoning/#extract).
 The existing before/after TypeScript files, generated language evidence, native

@@ -9,6 +9,7 @@ import generated from "../src/semantic/centroid-extraction.generated.json" with 
 import { sha256 } from "../src/kernel/sha256.ts";
 import { resolveKpTypeScriptRefactorOpticalEndpoint, serializeKpTypeScriptRefactorOpticalEndpoint } from "../src/rendering/typescript-refactor-optical-theme.ts";
 import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading.ts";
+import { centroidClaims } from "../src/tutorial/code-reasoning/centroid-attention.ts";
 
 export const centroidPaths = {
   article: "examples/programming/centroid.article.md",
@@ -63,8 +64,17 @@ export function compileCentroidPublication(markdown: string, before: string, aft
   const code = (id: keyof typeof excerpts) => `<pre class="kp-typescript-refactor__revision" data-centroid-excerpt="${id}"><code>${highlight(excerpts[id])}</code></pre>`;
   const figure = (label: string, id: keyof typeof excerpts) => `<figure><figcaption>${label}</figcaption>${code(id)}</figure>`;
   const sourcePin = sha256(JSON.stringify([before, after]));
+  const cueHtml = (reason: typeof centroidReading[number]) => {
+    let html = markdownHtml(reason.cue);
+    if (reason.id === "extracted") for (const claim of centroidClaims) {
+      const phrase = markdownHtml(claim.phrase).trim().replace(/^<p>|<\/p>$/g, "");
+      if (html.split(phrase).length !== 2) throw new Error(`Centroid claim phrase must occur exactly once: ${claim.id}`);
+      html = html.replace(phrase, `<button type="button" class="centroid-claim" data-centroid-claim="${claim.id}" aria-pressed="false" disabled>${phrase}</button>`);
+    }
+    return html;
+  };
   const narrative = `<ol class="centroid-narrative" aria-label="Reasons for extracting the helper">${centroidReading.map(reason =>
-    `<li id="centroid-${reason.id}" data-centroid-reason="${reason.id}"><h3>${reason.title}</h3>${markdownHtml(reason.cue)}
+    `<li id="centroid-${reason.id}" data-centroid-reason="${reason.id}"><h3>${reason.title}</h3>${cueHtml(reason)}
       <details data-centroid-depth><summary>${reason.question}</summary>${markdownHtml(reason.detail)}</details>
       <div class="code-controls"><button type="button" data-centroid-select="${reason.id}" hidden>Inspect this state</button></div></li>`).join("")}</ol>`;
   const inspection = `<div class="centroid-extraction" data-centroid-local-inspection data-centroid-source-pin="${sourcePin}">
@@ -79,7 +89,7 @@ export function compileCentroidPublication(markdown: string, before: string, aft
       <p class="centroid-inspection-label">Local refactor inspection · not program execution</p>
       <div class="code-controls"><button type="button" data-centroid-previous>Previous</button><button type="button" data-centroid-next>Next</button><output data-centroid-position>1 / 3</output><button type="button" data-centroid-close>Return to reading</button>
       <input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect first-loop extraction" data-centroid-seek></div>
-    </div><p data-centroid-error role="status" hidden></p>
+    </div><p data-centroid-attention-description role="status" class="centroid-attention-description" hidden></p><p data-centroid-error role="status" hidden></p>
   </figure></div>`;
   // Stale semantic evidence must never animate newly edited source. The
   // static draft may still publish so authors can inspect and repair it.

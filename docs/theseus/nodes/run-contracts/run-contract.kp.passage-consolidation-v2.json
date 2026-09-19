@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT at code-exemplar: judge persistent text/code coordination, long prose sticky behavior and exact return at localhost:8000/experiments/centroid-reasoning/#extract. Four packages complete. After acceptance continue code-transfer, explanation support and release without new scope approval.",
+  "summary": "HUMAN_CHECKPOINT: persistent layout accepted; approved phrase salience trial implemented and verified. Review three underlined phrases at localhost:8000/experiments/centroid-reasoning/#centroid-extracted. Four of eight packages complete; code-exemplar awaits treatment judgment before larger-code pressure and transfer.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,14 @@
     "npm run typecheck:tests",
     "npm run check:architecture",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:code-reasoning -- tests/centroid-reasoning.browser.spec.ts",
+      "status": "passed",
+      "scope": "code-exemplar",
+      "checkedAt": "2026-09-19T00:59:45.670Z"
+    }
   ],
   "allowedWork": [
     "Eight packages and measured repairs in approved proposal"
@@ -67,7 +75,7 @@
     {
       "id": "code-exemplar",
       "title": "Persistent code text visual checkpoint",
-      "summary": "HUMAN_CHECKPOINT: review persistent centroid reasons with all details open, reverse scrubbing and Return to reading. Exemplar verified; visual acceptance required before code-transfer. Review packet docs/project/reviews/2026-09-17-centroid-persistent-text-review.md.",
+      "summary": "User accepted persistent layout and approved phrase-to-code salience exemplar refinement before promotion.",
       "status": "in-progress"
     },
     {
