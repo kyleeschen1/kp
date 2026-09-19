@@ -10,9 +10,21 @@ import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading
 import { createCentroidMotion } from "../src/animation/centroid-extraction-motion.ts";
 import { centroidBeatReading } from "../src/tutorial/code-reasoning/centroid-beats.ts";
 import { centroidClaims } from "../src/tutorial/code-reasoning/centroid-attention.ts";
+import { projectCentroidTextPosition } from "../src/tutorial/code-reasoning/centroid-text-rail.ts";
 
 const read = (path: string) => readFileSync(path, "utf8");
 const markdown = read(centroidPaths.article), before = read(centroidPaths.before), after = read(centroidPaths.after);
+
+test("text rail holds native states between thoughts and samples only declared transformations", () => {
+  for (const p of [0, .5, 1, 1.5, 2, 2.5, 3]) assert.equal(projectCentroidTextPosition(p).codeProgress, 0);
+  for (const p of [4, 4.5, 5]) assert.equal(projectCentroidTextPosition(p).codeProgress, .5);
+  for (const p of [6, 6.5, 7]) assert.equal(projectCentroidTextPosition(p).codeProgress, 1);
+  assert.equal(projectCentroidTextPosition(3.5).codeProgress, .25);
+  assert.equal(projectCentroidTextPosition(5.5).codeProgress, .75);
+  assert.deepEqual(projectCentroidTextPosition(-1), projectCentroidTextPosition(0));
+  assert.deepEqual(projectCentroidTextPosition(10), projectCentroidTextPosition(7));
+  assert.throws(() => projectCentroidTextPosition(NaN), /finite/);
+});
 
 test("reading beats retain unique addresses and existing semantic authority", () => {
   const { html } = compileCentroidPublication(markdown, before, after);

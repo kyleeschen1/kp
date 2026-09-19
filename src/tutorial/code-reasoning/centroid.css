@@ -1,3 +1,5 @@
+@import "../../reader/presentation/equation-passage.css";
+@import "../../reader/presentation/equation-rail.css";
 .centroid-reader figure { margin: 1.25rem 0; min-width: 0; }
 .centroid-reader figcaption { font: 0.8rem/1.5 system-ui, sans-serif; margin-bottom: 0.5rem; }
 .centroid-reader pre { margin: 0; padding: 1rem; background: #f5f6f7; border-left: 2px solid #ccd1d8; overflow-x: auto; white-space: pre; }
@@ -10,11 +12,12 @@
 .centroid-reading-column { min-width: 0; }
 .centroid-reading-switch { padding-top: 0; }
 .centroid-reading-switch [aria-pressed="true"] { border-color: currentColor; text-decoration: underline; text-underline-offset: .2em; }
-.centroid-beats { list-style: none; padding: 0; margin: 0; }
-.centroid-beats > li { display: grid; grid-template-columns: 1.5em minmax(0, 1fr); gap: .35em; margin-block: .9em; scroll-margin-top: 1.5rem; cursor: pointer; }
+.centroid-beats { list-style: none; padding: 0 0 0 .9rem; margin: 0; }
+.centroid-beat-passage { position: relative; margin-left: 1.5rem; padding-block: 1.5rem; }
+.centroid-beat-passage .energy-derivation-rail { left: -.75rem; }
+.centroid-beats > li { margin-block: .9em; scroll-margin-top: 1.5rem; cursor: pointer; }
 .centroid-beats p { margin-block: 0; }
-.centroid-beat-marker { appearance: none; align-self: start; font: inherit; color: inherit; border: 0; padding: 0; background: transparent; cursor: pointer; }
-.centroid-beat-marker[aria-pressed="true"] { background: color-mix(in srgb, currentColor 12%, transparent); box-shadow: inset 2px 0 currentColor; }
+[data-centroid-format="beats"] :is([data-centroid-previous], [data-centroid-next], [data-centroid-position], [data-centroid-seek]) { display: none; }
 .centroid-beats [data-centroid-beat-current="true"] > div > p { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: .2em; }
 .centroid-reader .centroid-beats details { margin-block: .5em; cursor: auto; }
 .centroid-beats details p { margin-block: .5em; }
@@ -53,6 +56,7 @@
   .centroid-reader .centroid-stage pre { min-height: calc(var(--centroid-lines, 9) * 1.75em + 1.5rem); }
 }
 @media print {
+  .centroid-beat-passage [data-derivation-handle] { display: none !important; }
   .centroid-reading-switch { display: none !important; }
   .centroid-reader [data-centroid-evidence] { position: static !important; }
   .centroid-reader [data-centroid-select] { display: none !important; }

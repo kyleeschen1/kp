@@ -6,6 +6,7 @@ import { centroidReading } from "./centroid-reading.ts";
 import { centroidClaims, projectCentroidAttention, validateCentroidClaims } from "./centroid-attention.ts";
 import { createKpReaderSemanticFocusService } from "../../reader/runtime/semantic-focus.ts";
 import { centroidBeatReading } from "./centroid-beats.ts";
+import { mountCentroidTextRail, projectCentroidTextPosition } from "./centroid-text-rail.ts";
 
 export function mountCentroidInspection(root: HTMLElement) {
   const require = <T extends HTMLElement>(selector: string) => {
@@ -29,7 +30,7 @@ export function mountCentroidInspection(root: HTMLElement) {
   const figure = require<HTMLElement>("[data-centroid-evidence]");
   const description = require<HTMLElement>("[data-centroid-attention-description]");
   const claims = centroidClaims.flatMap(claim => [...root.querySelectorAll<HTMLButtonElement>(`[data-centroid-claim="${claim.id}"], [data-centroid-beat-claim="${claim.id}"]`)].map(button => ({ ...claim, button })));
-  const beats = centroidBeatReading.map(beat => ({ ...beat, element: require<HTMLElement>(`[data-centroid-beat="${beat.id}"]`), button: require<HTMLButtonElement>(`[data-centroid-beat-select="${beat.id}"]`) }));
+  const beats = centroidBeatReading.map(beat => ({ ...beat, element: require<HTMLElement>(`[data-centroid-beat="${beat.id}"]`) }));
   const beatList = require<HTMLElement>("[data-centroid-beats]");
   const narrative = require<HTMLElement>("ol.centroid-narrative");
   const readingColumn = require<HTMLElement>("div.centroid-reading-column");
@@ -41,6 +42,7 @@ export function mountCentroidInspection(root: HTMLElement) {
   if (reasons.some((reason, index) => reason.id !== plan.artifact.states[index]?.id)) throw new Error("Centroid reading and native checkpoints differ.");
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const clock = createKpReaderTimelinePlaybackClock({ id: "centroid.first-loop", durationMs: 6000 });
+  let textRail: ReturnType<typeof mountCentroidTextRail> | undefined;
   const render = () => {
     const p = clock.getSnapshot().progress;
     const frame = sampleCentroidMotion(plan, p);
@@ -61,9 +63,8 @@ export function mountCentroidInspection(root: HTMLElement) {
     });
     claims.forEach(claim => claim.button.setAttribute("aria-pressed", String(claim.id === claimId)));
     beats.forEach(beat => {
-      const current = beat.id === claimId;
+      const current = beat.id === (root.dataset["centroidFormat"] === "beats" && textRail ? projectCentroidTextPosition(textRail.getPosition()).beat.id : claimId);
       beat.element.dataset["centroidBeatCurrent"] = String(current);
-      beat.button.setAttribute("aria-pressed", String(current));
     });
     const summary = selectedBeat?.text.replaceAll("`", "") ?? claims.find(claim => claim.id === claimId)?.summary ?? "";
     if (description.textContent !== summary) description.textContent = summary;
@@ -102,6 +103,8 @@ export function mountCentroidInspection(root: HTMLElement) {
     if (entry) entry = { element: readingColumn, top: readingColumn.getBoundingClientRect().top };
     narrative.hidden = mode === "beats"; beatList.hidden = mode !== "beats";
     root.dataset["centroidFormat"] = mode;
+    textRail?.stop();
+    if (mode === "beats") textRail?.sync(clock.getSnapshot().progress);
     formatButtons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset["centroidFormat"] === mode)));
   };
   formatButtons.forEach(button => button.addEventListener("click", () => {
@@ -109,21 +112,18 @@ export function mountCentroidInspection(root: HTMLElement) {
     const url = new URL(location.href); url.searchParams.set("reading", root.dataset["centroidFormat"]!);
     history.replaceState(history.state, "", url);
   }, options));
-  beats.forEach(beat => {
-    const select = () => {
-      begin(beat.element); clock.pause();
-      clock.seek(reasons.find(reason => reason.id === beat.checkpoint)!.position);
-      attention.clear("keyboard"); attention.clear("pointer");
-      attention.clear("url");
-      attention.set("keyboard", [beat.id]);
-    };
-    beat.button.addEventListener("click", select, options);
-    beat.element.addEventListener("click", event => {
-      if (event.target instanceof Element && !event.target.closest("button, details, a")) select();
-    }, options);
-    beat.button.disabled = false;
+  textRail = mountCentroidTextRail(beatList, pose => {
+    begin(beatList); clock.pause();
+    attention.clear("keyboard"); attention.clear("pointer"); attention.clear("url");
+    attention.set("story", [pose.beat.id]);
+    clock.seek(reduced.matches ? reasons.find(reason => reason.id === pose.beat.checkpoint)!.position : pose.codeProgress);
   });
-  open.addEventListener("click", () => { begin(figure.querySelector("figcaption")!); next.focus({ preventScroll: true }); }, options);
+  beats.forEach((beat, index) => {
+    beat.element.addEventListener("click", event => {
+      if (event.target instanceof Element && !event.target.closest("button, details, a")) textRail!.seek(index);
+    }, options);
+  });
+  open.addEventListener("click", () => { begin(figure.querySelector("figcaption")!); (root.dataset["centroidFormat"] === "beats" ? textRail!.handle : next).focus({ preventScroll: true }); }, options);
   reasons.forEach(reason => {
     reason.button.addEventListener("click", () => { begin(reason.element); clock.seek(reason.position); }, options);
   });
@@ -148,15 +148,16 @@ export function mountCentroidInspection(root: HTMLElement) {
   const restore = () => {
     attention.clear("keyboard"); attention.clear("pointer"); attention.clear("url");
     const beat = beats.find(beat => location.hash === `#centroid-${beat.id}`);
-    if (beat) { format("beats"); begin(beat.element); clock.seek(reasons.find(reason => reason.id === beat.checkpoint)!.position, "url"); attention.set("url", [beat.id]); return; }
+    if (beat) { format("beats"); textRail!.seek(beats.indexOf(beat)); return; }
     const reason = reasons.find(reason => location.hash === `#centroid-${reason.id}`);
     if (reason) { begin(reason.element); clock.seek(reason.position, "url"); }
   };
   window.addEventListener("hashchange", restore, options);
   close.addEventListener("click", () => {
     clock.pause(); delete root.dataset["centroidInspecting"];
+    textRail?.stop();
     controls.hidden = true; stage.hidden = true; open.hidden = false; render();
-    const destination = entry?.element.querySelector<HTMLButtonElement>('[data-centroid-format][aria-pressed="true"], [data-centroid-beat-select], [data-centroid-select]') ?? open;
+    const destination = entry?.element.querySelector<HTMLButtonElement>('[data-centroid-format][aria-pressed="true"], [data-derivation-handle], [data-centroid-select]') ?? (root.dataset["centroidFormat"] === "beats" ? textRail!.handle : open);
     destination.focus({ preventScroll: true });
     if (entry) window.scrollBy({ top: entry.element.getBoundingClientRect().top - entry.top, behavior: "instant" });
     entry = undefined;
@@ -185,5 +186,5 @@ export function mountCentroidInspection(root: HTMLElement) {
   require<HTMLElement>("[data-centroid-reading-switch]").hidden = false;
   format(new URL(location.href).searchParams.get("reading") === "beats" ? "beats" : "paragraphs");
   render(); open.hidden = false; restore();
-  return () => { abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };
+  return () => { textRail?.dispose(); abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };
 }

@@ -2,6 +2,44 @@ import { expect, test } from "@playwright/test";
 import { readFileSync } from "node:fs";
 const route = "/experiments/centroid-reasoning/";
 
+test("text rail drag scrolls at both viewport edges and cancels without residual motion", async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 420 });
+  await page.goto(`${route}?reading=beats#centroid-beat.want-average`);
+  await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
+  const passage = page.locator("[data-centroid-beats]");
+  const handle = passage.getByRole("slider", { name: "Explore the argument" });
+  await page.locator("[data-centroid-because] summary").click();
+  await handle.focus(); await handle.press("Home");
+  await handle.scrollIntoViewIfNeeded();
+  const box = (await handle.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  const before = await page.evaluate(() => scrollY);
+  await page.mouse.move(box.x + box.width / 2, 417);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 30);
+  await page.mouse.up();
+  await handle.press("End");
+  const bottom = await page.evaluate(() => scrollY);
+  const end = (await handle.boundingBox())!;
+  await page.mouse.move(end.x + end.width / 2, end.y + end.height / 2);
+  await page.mouse.down(); await page.mouse.move(end.x + end.width / 2, 2);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeLessThan(bottom - 30);
+  await handle.dispatchEvent("pointercancel");
+  await page.mouse.up();
+  await expect(passage).not.toHaveAttribute("data-derivation-dragging", "true");
+  const held = await handle.getAttribute("aria-valuenow");
+  await page.mouse.wheel(0, 100);
+  await expect(handle).toHaveAttribute("aria-valuenow", held!);
+  await handle.press("End");
+  await page.evaluate(() => { document.documentElement.style.fontSize = "28px"; });
+  await expect(handle).toHaveAttribute("aria-valuenow", "7.000");
+  await expect.poll(async () => {
+    const grip = (await handle.boundingBox())!;
+    const text = (await page.locator('[data-centroid-beat="beat.meaning"] p').boundingBox())!;
+    return Math.abs(grip.y + grip.height / 2 - text.y - text.height / 2);
+  }).toBeLessThan(1);
+});
+
 test("beat reading keeps the whole argument and fine-grained evidence through comparison and resizing", async ({ page }, info) => {
   await page.goto(`${route}?reading=beats#extract`);
   const root = page.locator("[data-centroid-local-inspection]");
@@ -9,26 +47,32 @@ test("beat reading keeps the whole argument and fine-grained evidence through co
   await expect(beats).toHaveCount(8);
   await expect(root.locator(".centroid-narrative")).toBeHidden();
   const text = await beats.allTextContents();
-  const whole = root.locator('[data-centroid-beat-select="beat.whole"]');
-  await whole.click();
+  const handle = root.getByRole("slider", { name: "Explore the argument" });
+  const whole = root.locator('[data-centroid-beat="beat.whole"]');
+  await whole.locator("p").first().click();
   await expect(root).toHaveAttribute("data-centroid-progress", "0");
-  await expect(whole).toHaveAttribute("aria-pressed", "true");
+  await expect(whole).toHaveAttribute("data-centroid-beat-current", "true");
   await root.locator("[data-centroid-because] summary").click();
   await expect(root.locator("[data-centroid-because]")).toHaveAttribute("open", "");
-  await expect(whole).toHaveAttribute("aria-pressed", "true");
-  await root.locator('[data-centroid-beat-select="beat.return"]').click();
+  await expect(whole).toHaveAttribute("data-centroid-beat-current", "true");
+  await root.locator('[data-centroid-beat="beat.return"] p').click({ position: { x: 3, y: 3 } });
   await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
-  const seek = root.locator("[data-centroid-seek]");
-  await seek.fill("0.67"); await seek.dispatchEvent("input");
+  const rail = root.locator("[data-centroid-text-rail]");
+  const y = async (index: number) => beats.nth(index).locator("p").first().evaluate(node => { const rect = node.getBoundingClientRect(); return rect.top + rect.height / 2; });
+  await rail.scrollIntoViewIfNeeded();
+  const box = (await rail.boundingBox())!;
+  await page.mouse.click(box.x, (await y(5)) + ((await y(6)) - (await y(5))) * .34);
+  await expect.poll(async () => Number(await root.getAttribute("data-centroid-progress"))).toBeCloseTo(.67, 2);
+  const held = await root.getAttribute("data-centroid-progress");
   await root.locator('[data-centroid-beat-claim="division"]').click();
-  await expect(root).toHaveAttribute("data-centroid-progress", "0.67");
+  await expect(root).toHaveAttribute("data-centroid-progress", held!);
   for (const mode of ["paragraphs", "beats"]) {
     await root.locator(`button[data-centroid-format="${mode}"]`).click();
-    await expect(root).toHaveAttribute("data-centroid-progress", "0.67");
+    await expect(root).toHaveAttribute("data-centroid-progress", held!);
   }
   expect(await beats.allTextContents()).toEqual(text);
-  await root.locator('[data-centroid-beat-select="beat.meaning"]').focus();
-  await page.keyboard.press("Enter");
+  await handle.focus();
+  await page.keyboard.press("End");
   await expect(root).toHaveAttribute("data-centroid-progress", "1");
   await page.screenshot({ path: info.outputPath("centroid-beats.png"), fullPage: true });
   await root.locator('[data-centroid-close]').click();
@@ -37,15 +81,15 @@ test("beat reading keeps the whole argument and fine-grained evidence through co
   await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(await beats.allTextContents()).toEqual(text);
-  await root.locator('[data-centroid-beat-select="beat.meaning"]').click();
+  await handle.focus(); await page.keyboard.press("End");
   await root.locator('[data-centroid-close]').click();
-  await expect(root.locator('[data-centroid-beat-select="beat.meaning"]')).toBeFocused();
+  await expect(handle).toBeFocused();
   await page.goto(`${route}#centroid-beat.divide`);
   await expect(root).toHaveAttribute("data-centroid-format", "beats");
-  await expect(root.locator('[data-centroid-beat-select="beat.divide"]')).toHaveAttribute("aria-pressed", "true");
-  await root.locator('[data-centroid-beat-select="beat.divide"]').focus();
+  await expect(handle).toHaveAttribute("aria-valuenow", "2.000");
+  await handle.focus();
   await page.keyboard.press("Escape");
-  await expect(root.locator('[data-centroid-beat-select="beat.divide"]')).toHaveAttribute("aria-pressed", "false");
+  await expect(handle).toHaveAttribute("aria-valuenow", "2.000");
 });
 
 test("phrase attention persists across native handoffs and rewind without moving the rail", async ({ page }, info) => {

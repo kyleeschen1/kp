@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: accepted paragraph salience preserved; user-approved eight-beat comparison ready at localhost:8000/experiments/centroid-reasoning/?reading=beats#extract. Five of eight packages complete. Larger-source transfer paused for judgment of beat rhythm; explanation support and release remain downstream.",
+  "summary": "HUMAN_CHECKPOINT: text-led rail ready on centroid reading=beats. Shared grip, stops, edge scroll and disclosure anchoring; text selects attention and existing code transformations. Five of eight packages complete; larger transfer remains paused for visual judgment.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -34,6 +34,12 @@
       "status": "passed",
       "scope": "code-transfer",
       "checkedAt": "2026-09-19T01:20:46.361Z"
+    },
+    {
+      "command": "npm run visual:code-reasoning -- tests/centroid-reasoning.browser.spec.ts",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-19T01:32:13.442Z"
     }
   ],
   "allowedWork": [
@@ -87,7 +93,7 @@
     {
       "id": "code-transfer",
       "title": "Pressure and promote accepted code text",
-      "summary": "User steering: before larger-source transfer, compare accepted paragraph reading with a reversible addressable-beat centroid trial. Existing source/motion and accepted phrases preserved; visual gate before further transfer.",
+      "summary": "User approved replacing beat buttons and code slider with a text-led shared rail in the centroid trial; preserve paragraph comparison and checked code motion. Visual checkpoint before larger transfer.",
       "status": "in-progress"
     },
     {

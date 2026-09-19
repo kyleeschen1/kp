@@ -3,6 +3,45 @@
 Status: HUMAN_CHECKPOINT. The user accepted paragraph/phrase salience, then
 paused larger-source transfer and approved this reversible comparison.
 
+## Current trial: text-led rail
+
+The user subsequently approved replacing beat buttons and the separate code
+slider with the established rail interface beside text. The same URL below now
+shows that trial. The shared equation rail CSS, interval projection, disclosure
+viewport anchor and edge-scroll owner are reused; the local adapter measures text
+and maps its eight positions into the existing code clock. No new compositor,
+animation timeline or source inference is introduced.
+
+Drag the grip, click a rail point, or use Up/Down and Home/End. The first four
+thoughts keep the original code stationary; extraction occurs between thoughts
+four and five, and renaming between six and seven. Other intervals hold native
+code while changing attention. Phrase selection refines evidence without seeking.
+Paragraph mode retains its prior controls. The text rail remains the location
+owner when a phrase overrides salience. Print hides the rail and grip.
+
+Readable endpoint bounds support automatic scrolling at both viewport edges.
+ResizeObserver remeasures rows without changing text position; disclosure uses the
+existing viewport anchor. Drag cancellation, capture loss, blur, hidden documents,
+format switching and disposal stop edge scrolling. Rail hit areas stay inside a
+reserved gutter so they cannot intercept the beginning of a line.
+
+Current evidence: nine unit tests and seven Chromium browser tests pass, alongside
+app/node/test types and architecture. Added tests cover piecewise stationary/code
+interval mapping, direct rail seeking, bidirectional edge scrolling, cancellation
+and font-resized handle alignment. The browser test initially clicked an inline
+phrase while intending to select the whole line; moving it to the line start
+then exposed the real gutter overlap, which was repaired in layout. The full
+browser suite was rerun successfully. The screenshot was inspected.
+
+This remains an eight-beat local discovery trial. Expanded prose occupies more
+rail space; a separate nested reason rail and general long-passage timing policy
+are not implemented or promoted. The shared edge loop runs only during a drag;
+the adapter adds one resize observer and a small pure position mapping. Runtime
+cost has not been separately benchmarked. Rollback unit is the text-rail adapter
+and its host integration; the accepted paragraph path and source remain intact.
+
+## Earlier beat-button comparison (superseded controls)
+
 Canonical artifact: existing centroid before/after TypeScript and checked
 extraction evidence. Host: `/experiments/centroid-reasoning/`. Renderer:
 existing native code and token theater. No new motion or source authority.
