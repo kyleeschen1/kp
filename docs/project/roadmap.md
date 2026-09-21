@@ -25,7 +25,7 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Current visual checkpoint: [motion-coordinated prose](reviews/2026-09-20-centroid-motion-reading.md).
+Current visual checkpoint: [persistent-stage centroid focus card](reviews/2026-09-21-centroid-focus-card.md).
 The approved consolidation run delivered reconciliation, source-only fraction
 preview/host eligibility, mechanics discovery and a measured ~36 KB compressed
 runtime reduction while preserving native composition. See
@@ -33,9 +33,11 @@ runtime reduction while preserving native composition. See
 The user accepted persistent code text and phrase salience, then found the rail
 less fitting for code than equations. The stationary relationship trial was
 rejected for insufficient explanatory value. The user reaffirmed the exceptional
-existing animation and approved three persistent explanations coordinated with
-its playhead. Text-rail refinement is paused. Explanation-review support remains
-downstream. Theseus owns live status.
+existing animation. The subsequent three-explanation layout failed co-visibility
+and affordance expectations. The approved successor reuses the focus-card
+scaffold: one compact cue, persistent code stage, named animated navigation and
+explicit viewport adaptation. Text-rail refinement is paused. Explanation-review
+support remains downstream. Theseus owns live status.
 
 Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the

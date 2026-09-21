@@ -2,6 +2,61 @@ import { expect, test, type Locator } from "@playwright/test";
 import { readFileSync } from "node:fs";
 const route = "/experiments/centroid-reasoning/";
 
+test("focus card retains one stage through animated navigation and adapts to viewport and font size", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1100, height: 850 });
+  await page.goto(`${route}?reading=focus#extract`);
+  const root = page.locator("[data-centroid-local-inspection]");
+  const card = root.locator(".centroid-focus-card");
+  const stage = card.locator("[data-centroid-stage]");
+  const slider = card.getByRole("slider", { name: "Scrub the code transformation" });
+  await expect(stage).toBeVisible();
+  await expect(root.locator("[data-centroid-stage]")).toHaveCount(1);
+  await stage.evaluate(node => { node.dataset["continuityProbe"] = "same-stage"; });
+  const box = () => stage.evaluate(node => { const r = node.getBoundingClientRect(); return { top: r.top + scrollY, height: r.height }; });
+  const initial = await box();
+  await card.getByRole("button", { name: "Keep the answer", exact: true }).click();
+  // Playback must traverse an interior rather than replacing the endpoint.
+  await expect.poll(async () => Number(await root.getAttribute("data-centroid-progress"))).toBeGreaterThan(0);
+  expect(Number(await root.getAttribute("data-centroid-progress"))).toBeLessThan(.5);
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
+  await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "answer");
+  expect(await box()).toEqual(initial);
+  await card.getByRole("button", { name: "Move the calculation", exact: true }).click();
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.1");
+  await expect(stage).toHaveAttribute("data-continuity-probe", "same-stage");
+  expect(await box()).toEqual(initial);
+  await slider.evaluate(node => { if (!(node instanceof HTMLInputElement)) throw new Error("Missing slider"); node.value = ".31"; node.dispatchEvent(new Event("input", { bubbles: true })); });
+  await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "boundary");
+  await expect(card.locator('[data-kp-focus-deck-beat="calculation"]')).toHaveAttribute("aria-hidden", "true");
+  await expect(card.locator('[data-kp-focus-deck-beat][aria-current="page"]')).toHaveAttribute("data-kp-focus-deck-beat", "boundary");
+  await card.screenshot({ path: info.outputPath("centroid-focus-desktop.png") });
+  for (const viewport of [{ width: 1000, height: 600 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
+    await expect(card).toHaveAttribute("data-centroid-fit", "bounded");
+    await expect.poll(() => card.evaluate(node => node.getBoundingClientRect().height)).toBeLessThan(viewport.height - 20);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await stage.evaluate(node => { node.scrollTop = node.scrollHeight; });
+    await expect.poll(() => stage.evaluate(node => Math.abs(node.scrollHeight - node.clientHeight - node.scrollTop))).toBeLessThan(2);
+    await expect(stage).toHaveAttribute("data-continuity-probe", "same-stage");
+  }
+  await card.screenshot({ path: info.outputPath("centroid-focus-enlarged.png") });
+  const activePanel = card.locator('[data-kp-focus-deck-beat="boundary"]');
+  expect(await activePanel.evaluate(node => node.scrollHeight <= node.clientHeight + 1)).toBe(true);
+  await page.setViewportSize({ width: 1000, height: 280 });
+  await expect(card).toHaveAttribute("data-centroid-fit", "reading");
+  await expect(root.locator("[data-centroid-card-fit-note]")).toContainText("Reading layout");
+  await expect(stage).toHaveCSS("max-height", "none");
+  await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "active" });
+  await slider.focus(); await slider.press("End");
+  await expect(root).toHaveAttribute("data-centroid-progress", "1");
+  await card.getByRole("button", { name: "Inspect the boundary", exact: true }).click();
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.3");
+  const beforeDetail = await box();
+  await root.getByText("More about this extraction", { exact: true }).click();
+  expect(await box()).toEqual(beforeDetail);
+});
+
 test("motion reading follows the existing playhead forward, backward and by sentence without reflow", async ({ page }, info) => {
   await page.goto(`${route}?reading=motion#extract`);
   const root = page.locator("[data-centroid-local-inspection]");

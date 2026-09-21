@@ -105,3 +105,14 @@ the corresponding moments. Preserve checked source, motion and renderer ownershi
 Review [this one exemplar](reviews/2026-09-20-centroid-motion-reading.md) before
 transfer. This supersedes the stationary trial's pending checkpoint, not the
 accepted animation or existing paragraph/phrase-salience evidence.
+
+## September 21 focus-card continuity amendment
+
+The user found the three-explanation layout unable to guarantee co-visibility
+with code, with unclear navigation affordances. Approved successor: reuse the
+existing focus-card format with one short reserved explanation, named navigation
+through the accepted animation, continuous scrubbing, and a persistent code stage.
+Keep deeper explanation outside the working surface. Measure viewport fit and
+adapt explicitly for large text/short windows without scaling code or clipping
+required content. The [centroid focus-card review](reviews/2026-09-21-centroid-focus-card.md)
+is the next exemplar gate; no shared-card migration or second caller is approved.

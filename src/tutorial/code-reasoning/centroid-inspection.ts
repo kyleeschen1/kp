@@ -8,6 +8,7 @@ import { createKpReaderSemanticFocusService } from "../../reader/runtime/semanti
 import { centroidBeatReading } from "./centroid-beats.ts";
 import { mountCentroidTextRail, projectCentroidTextPosition } from "./centroid-text-rail.ts";
 import { centroidMotionReading, centroidMotionThought } from "./centroid-motion-reading.ts";
+import { mountCentroidFocus } from "./centroid-focus.ts";
 
 export function mountCentroidInspection(root: HTMLElement) {
   const require = <T extends HTMLElement>(selector: string) => {
@@ -48,8 +49,10 @@ export function mountCentroidInspection(root: HTMLElement) {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const clock = createKpReaderTimelinePlaybackClock({ id: "centroid.first-loop", durationMs: 6000 });
   let textRail: ReturnType<typeof mountCentroidTextRail> | undefined;
+  let focusCard: ReturnType<typeof mountCentroidFocus> | undefined;
   const render = () => {
     const p = clock.getSnapshot().progress;
+    focusCard?.render(p);
     const frame = sampleCentroidMotion(plan, p);
     const thought = centroidMotionThought(p);
     for (const item of thoughts) {
@@ -213,5 +216,21 @@ export function mountCentroidInspection(root: HTMLElement) {
     close.hidden = true;
     begin(figure);
   }
-  return () => { textRail?.dispose(); abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };
+  if (new URL(location.href).searchParams.get("reading") === "focus") {
+    begin(figure);
+    root.dataset["centroidMotionReading"] = "true";
+    readingColumn.hidden = true;
+    focusCard = mountCentroidFocus(require("[data-centroid-focus]"), stage, {
+      progress: () => clock.getSnapshot().progress,
+      seek: p => { clock.pause(); clock.seek(p); },
+      travel: p => {
+        const current = clock.getSnapshot().progress;
+        clock.pause();
+        if (reduced.matches || p === current) clock.seek(p);
+        else clock.play({ direction: p > current ? "forward" : "rewind", stopAt: p });
+      }
+    });
+    figure.hidden = true;
+  }
+  return () => { focusCard?.dispose(); textRail?.dispose(); abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };
 }

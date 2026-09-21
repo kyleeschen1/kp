@@ -13,6 +13,7 @@ import { centroidClaims } from "../src/tutorial/code-reasoning/centroid-attentio
 import { centroidBeatReading } from "../src/tutorial/code-reasoning/centroid-beats.ts";
 import { renderCentroidRelationPublication } from "./centroid-relation-publication.ts";
 import { centroidMotionReading } from "../src/tutorial/code-reasoning/centroid-motion-reading.ts";
+import { renderCentroidFocusPublication } from "./centroid-focus-publication.ts";
 
 export const centroidPaths = {
   article: "examples/programming/centroid.article.md",
@@ -104,7 +105,7 @@ export function compileCentroidPublication(markdown: string, before: string, aft
       <div class="code-controls"><button type="button" data-centroid-previous>Previous</button><button type="button" data-centroid-next>Next</button><output data-centroid-position>1 / 3</output><button type="button" data-centroid-close>Return to reading</button>
       <input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect first-loop extraction" data-centroid-seek></div>
     </div><p data-centroid-attention-description role="status" class="centroid-attention-description" hidden></p><p data-centroid-error role="status" hidden></p>
-  </figure></div>`;
+  </figure>${renderCentroidFocusPublication()}</div>`;
   // Stale semantic evidence must never animate newly edited source. The
   // static draft may still publish so authors can inspect and repair it.
   const helperFigure = sourcePin === generated.sourcePin ? inspection + renderCentroidRelationPublication() : `${figure("The shared procedure", "helper")}<p>Inspection unavailable: source evidence needs regeneration.</p>`;

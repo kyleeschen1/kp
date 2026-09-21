@@ -1,6 +1,7 @@
 # Explanations coordinated with centroid motion
 
-Status: HUMAN_CHECKPOINT; one unpromoted exemplar.
+Status: superseded after user found co-visibility and navigation affordances inadequate.
+Successor: [persistent-stage focus card](2026-09-21-centroid-focus-card.md).
 Execution: `run-contract.kp.passage-consolidation-v2`, `code-transfer`.
 
 The user rejected the stationary relationship trial and reaffirmed that the
