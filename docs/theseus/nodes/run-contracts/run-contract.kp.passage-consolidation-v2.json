@@ -2,8 +2,8 @@
   "id": "run-contract.kp.passage-consolidation-v2",
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: persistent-stage focus card ready at localhost:8000/experiments/centroid-reasoning/?reading=focus#extract. Five of eight packages complete; visual review before code transfer.",
+  "status": "active",
+  "summary": "Focus-card visual checkpoint accepted. Bounded requested refinement COMPLETE: named buttons removed and checked-source copy available throughout motion. Five of eight packages complete; resume code-transfer with a structurally different caller.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -58,6 +58,12 @@
       "status": "passed",
       "scope": "code-transfer",
       "checkedAt": "2026-09-21T16:26:20.583Z"
+    },
+    {
+      "command": "npm run visual:code-reasoning -- tests/centroid-reasoning.browser.spec.ts",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-21T16:34:15.955Z"
     }
   ],
   "allowedWork": [
@@ -111,7 +117,7 @@
     {
       "id": "code-transfer",
       "title": "Pressure and promote accepted code text",
-      "summary": "Shared-scaffold centroid focus card implemented: persistent stage, compact cue, named animated navigation, measured viewport adaptation. Awaiting visual judgment before transfer.",
+      "summary": "Focus card accepted. Requested button removal and checked-source copying delivered with 12 Chromium checks. Structurally different caller and promotion remain.",
       "status": "in-progress"
     },
     {

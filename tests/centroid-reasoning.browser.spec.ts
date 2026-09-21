@@ -14,14 +14,21 @@ test("focus card retains one stage through animated navigation and adapts to vie
   await stage.evaluate(node => { node.dataset["continuityProbe"] = "same-stage"; });
   const box = () => stage.evaluate(node => { const r = node.getBoundingClientRect(); return { top: r.top + scrollY, height: r.height }; });
   const initial = await box();
-  await card.getByRole("button", { name: "Keep the answer", exact: true }).click();
+  await expect(card.locator("[data-centroid-card-target]")).toHaveCount(0);
+  await card.getByRole("button", { name: "Next step", exact: true }).click();
   // Playback must traverse an interior rather than replacing the endpoint.
   await expect.poll(async () => Number(await root.getAttribute("data-centroid-progress"))).toBeGreaterThan(0);
   expect(Number(await root.getAttribute("data-centroid-progress"))).toBeLessThan(.5);
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.1");
+  await slider.focus(); await slider.press("ArrowRight");
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.3");
+  await slider.press("ArrowRight");
   await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
   await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "answer");
   expect(await box()).toEqual(initial);
-  await card.getByRole("button", { name: "Move the calculation", exact: true }).click();
+  await slider.press("ArrowLeft");
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.3");
+  await slider.press("ArrowLeft");
   await expect(root).toHaveAttribute("data-centroid-progress", "0.1");
   await expect(stage).toHaveAttribute("data-continuity-probe", "same-stage");
   expect(await box()).toEqual(initial);
@@ -50,11 +57,59 @@ test("focus card retains one stage through animated navigation and adapts to vie
   await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "active" });
   await slider.focus(); await slider.press("End");
   await expect(root).toHaveAttribute("data-centroid-progress", "1");
-  await card.getByRole("button", { name: "Inspect the boundary", exact: true }).click();
+  await slider.press("ArrowLeft");
+  await slider.press("ArrowLeft");
   await expect(root).toHaveAttribute("data-centroid-progress", "0.3");
   const beforeDetail = await box();
   await root.getByText("More about this extraction", { exact: true }).click();
   expect(await box()).toEqual(beforeDetail);
+});
+
+test("copy uses complete checked source at every phase, preserves selection and recovers clipboard denial", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto(`${route}?reading=focus#extract`);
+  const root = page.locator("[data-centroid-local-inspection]");
+  const card = root.locator(".centroid-focus-card");
+  const copy = card.getByRole("button", { name: "Copy code", exact: true });
+  const slider = card.getByRole("slider", { name: "Scrub the code transformation" });
+  const stage = card.locator("[data-centroid-stage]");
+  const evidence = JSON.parse(readFileSync("src/semantic/centroid-extraction.generated.json", "utf8"));
+  const seek = async (p: number) => {
+    await slider.evaluate((node, value) => { if (!(node instanceof HTMLInputElement)) throw new Error("Missing slider"); node.value = String(value); node.dispatchEvent(new Event("input", { bubbles: true })); }, p);
+    await expect(root).toHaveAttribute("data-centroid-progress", String(p));
+  };
+  for (const [p, state] of [[0, 0], [.12, 0], [.249, 0], [.25, 1], [.31, 1], [.5, 1], [.65, 1], [.749, 1], [.75, 2], [.9, 2], [1, 2], [.31, 1], [.1, 0]] as const) {
+    await seek(p); await copy.click();
+    await expect(root.locator("[data-centroid-copy-status]")).toContainText("Copied");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(evidence.states[state].source);
+    await expect(root).toHaveAttribute("data-centroid-progress", String(p));
+  }
+  await seek(.65); await stage.focus();
+  await page.keyboard.press("ControlOrMeta+c");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(evidence.states[1].source);
+  await seek(1);
+  await stage.locator("[data-centroid-native]").evaluate(node => {
+    const range = document.createRange(); range.selectNodeContents(node);
+    const selection = window.getSelection()!; selection.removeAllRanges(); selection.addRange(range);
+  });
+  await page.keyboard.press("ControlOrMeta+c");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(evidence.states[2].source);
+  await page.evaluate(() => {
+    window.getSelection()?.removeAllRanges();
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: {
+      writeText: () => new Promise((_, reject) => document.addEventListener("reject-copy", () => reject(new Error("Denied")), { once: true }))
+    } });
+  });
+  await seek(.31); await copy.click();
+  await expect(copy).toBeDisabled();
+  await seek(.9);
+  await page.evaluate(() => document.dispatchEvent(new Event("reject-copy")));
+  const fallback = root.locator("[data-centroid-copy-source]");
+  await expect(fallback).toBeVisible();
+  await expect(fallback).toHaveValue(evidence.states[1].source);
+  await expect(fallback).toBeFocused();
+  await expect(copy).toBeEnabled();
+  expect(await fallback.evaluate(node => node instanceof HTMLTextAreaElement && node.selectionStart === 0 && node.selectionEnd === node.value.length)).toBe(true);
 });
 
 test("motion reading follows the existing playhead forward, backward and by sentence without reflow", async ({ page }, info) => {

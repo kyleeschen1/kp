@@ -19,8 +19,7 @@ export function mountCentroidFocus(root: HTMLElement, stage: HTMLElement, host: 
   const next = element<HTMLButtonElement>("[data-kp-focus-deck-next]");
   const status = element<HTMLOutputElement>("[data-kp-focus-deck-position]");
   const panels = centroidMotionReading.map(thought => ({ ...thought,
-    panel: element<HTMLElement>(`[data-kp-focus-deck-beat="${thought.id}"]`),
-    button: element<HTMLButtonElement>(`[data-centroid-card-target="${thought.id}"]`)
+    panel: element<HTMLElement>(`[data-kp-focus-deck-beat="${thought.id}"]`)
   }));
   const originalParent = stage.parentNode!, originalNext = stage.nextSibling;
   panels.forEach(item => { item.panel.tabIndex = 0; });
@@ -35,7 +34,6 @@ export function mountCentroidFocus(root: HTMLElement, stage: HTMLElement, host: 
   const move = (forward: boolean) => host.travel(forward
     ? stops.find(p => p > host.progress() + .00001) ?? 1
     : stops.filter(p => p < host.progress() - .00001).at(-1) ?? 0);
-  panels.forEach(item => item.button.addEventListener("click", () => host.travel(item.position), options));
   previous.addEventListener("click", () => move(false), options);
   next.addEventListener("click", () => move(true), options);
   scrubber.addEventListener("input", () => host.seek(Number(scrubber.value)), options);
@@ -56,7 +54,6 @@ export function mountCentroidFocus(root: HTMLElement, stage: HTMLElement, host: 
       if (active) item.panel.setAttribute("aria-current", "page");
       else item.panel.removeAttribute("aria-current");
       item.panel.inert = !active;
-      item.button.setAttribute("aria-pressed", String(active));
     }
     scrubber.value = String(p);
     scrubber.setAttribute("aria-valuetext", thought.title);

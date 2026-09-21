@@ -9,6 +9,7 @@ import { centroidBeatReading } from "./centroid-beats.ts";
 import { mountCentroidTextRail, projectCentroidTextPosition } from "./centroid-text-rail.ts";
 import { centroidMotionReading, centroidMotionThought } from "./centroid-motion-reading.ts";
 import { mountCentroidFocus } from "./centroid-focus.ts";
+import { mountCentroidCopy } from "./centroid-copy.ts";
 
 export function mountCentroidInspection(root: HTMLElement) {
   const require = <T extends HTMLElement>(selector: string) => {
@@ -50,6 +51,7 @@ export function mountCentroidInspection(root: HTMLElement) {
   const clock = createKpReaderTimelinePlaybackClock({ id: "centroid.first-loop", durationMs: 6000 });
   let textRail: ReturnType<typeof mountCentroidTextRail> | undefined;
   let focusCard: ReturnType<typeof mountCentroidFocus> | undefined;
+  let disposeCopy: (() => void) | undefined;
   const render = () => {
     const p = clock.getSnapshot().progress;
     focusCard?.render(p);
@@ -67,6 +69,7 @@ export function mountCentroidInspection(root: HTMLElement) {
     renderKpTypeScriptTokenTheater(stage, frame.theater);
     if (stage.dataset["centroidNativeState"] !== frame.native.id) native.innerHTML = renderCentroidNativeCode(frame.native);
     native.style.opacity = frame.theater.active ? "0" : "1";
+    native.style.userSelect = frame.theater.active ? "none" : "text";
     stage.dataset["centroidNativeState"] = frame.native.id;
     const claimId = root.dataset["centroidInspecting"] === "true" ? attention.getSnapshot().objectRefs[0] : undefined;
     const selectedBeat = beats.find(beat => beat.id === claimId);
@@ -231,6 +234,12 @@ export function mountCentroidInspection(root: HTMLElement) {
       }
     });
     figure.hidden = true;
+    disposeCopy = mountCentroidCopy(require("[data-centroid-focus]"), stage, () => {
+      const p = clock.getSnapshot().progress;
+      // A midpoint tie chooses the later complete version, independent of
+      // travel direction. No partially introduced syntax becomes source.
+      return plan.artifact.states[p < .25 ? 0 : p < .75 ? 1 : 2];
+    });
   }
-  return () => { focusCard?.dispose(); textRail?.dispose(); abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };
+  return () => { disposeCopy?.(); focusCard?.dispose(); textRail?.dispose(); abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };
 }

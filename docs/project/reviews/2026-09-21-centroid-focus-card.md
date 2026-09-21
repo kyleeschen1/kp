@@ -1,12 +1,36 @@
 # A persistent code stage inside the focus card
 
-Status: HUMAN_CHECKPOINT; one unpromoted exemplar.
+Status: visually accepted by user; named buttons removed and checked-source copying delivered. Not promoted across callers.
 Execution: `run-contract.kp.passage-consolidation-v2`, `code-transfer`.
 
 Review: <http://localhost:8000/experiments/centroid-reasoning/?reading=focus#extract>.
-Select **Keep the answer**, then **Move the calculation**, and scrub through the
-same transformation. The explanation changes while the code stage remains in
-place. Open **More about this extraction** to recover the fuller reasoning.
+Scrub forward and backward through the transformation; use **Copy code** at any
+point. The explanation changes while the code stage remains in place. Open
+**More about this extraction** to recover the fuller reasoning.
+
+## Accepted refinement: simplify navigation and copy source
+
+The user accepted the card and requested removal of the named navigation buttons
+and copying at any point. The three buttons are removed; arrows and scrubber
+remain. A small Copy code action copies a complete checked snapshot with exact
+source whitespace. At intermediate positions, nearest native checkpoint wins;
+midpoint ties choose the later version, independent of travel direction. This
+does not pretend transient spatial tokens constitute valid intermediate source.
+
+The source is captured before awaiting clipboard access. Copying does not seek
+or reset the animation. Denial/unavailable clipboard exposes and selects that
+captured source for manual copy. Focusing the code region with no selection also
+supports Cmd/Ctrl+C. Native endpoints preserve ordinary partial text selection;
+hidden native ink and moving spans cannot supply misleading selection text.
+
+Twelve Chromium checks passed, including actual clipboard contents at thirteen
+positions/rewinds and midpoint boundaries, native selection, focused keyboard
+copy, and a delayed clipboard failure while the playhead changes. App/node/test
+typechecks and architecture gates passed. Initial browser startup lost resources
+during a dev-server restart; the unchanged full rerun passed. Desktop capture
+inspected. The acceptance above covers the card; second-caller evidence remains
+required before promotion. The implementation history below records the earlier
+named-button trial.
 
 ## Approved direction and boundaries
 
