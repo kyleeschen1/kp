@@ -1,6 +1,18 @@
 @import "../../reader/presentation/equation-passage.css";
 @import "../../reader/presentation/equation-rail.css";
 .centroid-reader figure { margin: 1.25rem 0; min-width: 0; }
+.centroid-relation-note { display: grid; }
+.centroid-relation-note > p { grid-area: 1 / 1; margin-block: .5rem 1rem; }
+.centroid-relation-note [aria-hidden="true"] { visibility: hidden; }
+.centroid-relation-source { display: grid; min-width: 0; }
+.centroid-relation-source > pre { grid-area: 1 / 1; min-width: 0; align-self: stretch; }
+.centroid-relation-source > [aria-hidden="true"] { visibility: hidden; }
+.centroid-relation [data-centroid-relation-call] { appearance: none; display: inline; font: inherit; line-height: inherit; color: inherit; border: 0; padding: 0; margin: 0; background: transparent; text-decoration: underline dotted; text-underline-offset: .2em; cursor: pointer; }
+.centroid-relation[data-relation-selected="true"] :is([data-centroid-relation-helper], [data-centroid-relation-call]) { background: color-mix(in srgb, currentColor 12%, transparent); box-decoration-break: clone; }
+.centroid-relation[data-relation-selected="true"] [data-centroid-relation-call] { text-decoration-style: solid; }
+@media (forced-colors: active) {
+  .centroid-relation[data-relation-selected="true"] :is([data-centroid-relation-helper], [data-centroid-relation-call]) { outline: 1px solid Highlight; }
+}
 .centroid-reader figcaption { font: 0.8rem/1.5 system-ui, sans-serif; margin-bottom: 0.5rem; }
 .centroid-reader pre { margin: 0; padding: 1rem; background: #f5f6f7; border-left: 2px solid #ccd1d8; overflow-x: auto; white-space: pre; }
 .centroid-reader pre code { font: inherit; }

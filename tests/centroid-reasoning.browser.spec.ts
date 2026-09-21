@@ -1,6 +1,64 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 import { readFileSync } from "node:fs";
 const route = "/experiments/centroid-reasoning/";
+
+test("stationary caller relationship preserves code geometry, selection and before-state return", async ({ page }, info) => {
+  await page.goto(`${route}?reading=relationships#extract`);
+  const root = page.locator("[data-centroid-relation]");
+  const call = root.locator("[data-centroid-relation-call]");
+  const helper = root.locator("[data-centroid-relation-helper]");
+  await expect(root).toBeVisible();
+  await expect(page.locator("[data-centroid-local-inspection]")).toBeHidden();
+  const code = root.locator('[data-relation-source="after"]');
+  const box = (node: Locator) => node.evaluate(element => { const r = element.getBoundingClientRect(); return { x: r.x + scrollX, y: r.y + scrollY, width: r.width, height: r.height }; });
+  const source = await code.textContent();
+  const evidence = JSON.parse(readFileSync("src/semantic/centroid-extraction.generated.json", "utf8"));
+  expect(source).toBe(evidence.states[2].source);
+  const sourceBox = await box(code);
+  const callBox = await box(call);
+  await call.click();
+  await expect(call).toHaveAttribute("aria-pressed", "true");
+  await expect(root.locator('[data-relation-note="selected"]')).toBeVisible();
+  expect(await helper.evaluate(node => getComputedStyle(node).backgroundColor)).not.toBe("rgba(0, 0, 0, 0)");
+  expect(await box(code)).toEqual(sourceBox);
+  expect(await box(call)).toEqual(callBox);
+  expect(await code.textContent()).toEqual(source);
+  await root.screenshot({ path: info.outputPath("centroid-caller-helper.png") });
+  const before = root.getByRole("button", { name: "Show before extraction" });
+  await before.click();
+  await expect(code).toBeHidden();
+  await expect(root.locator('[data-relation-source="before"]')).toBeVisible();
+  await expect(root.locator('[data-relation-note="before"]')).toBeVisible();
+  expect(await root.locator('[data-relation-source="before"]').textContent()).toBe(evidence.states[0].source);
+  expect(await box(root.locator('[data-relation-source="before"]'))).toEqual(sourceBox);
+  await root.getByRole("button", { name: "Return to helper" }).click();
+  await expect(call).toHaveAttribute("aria-pressed", "true");
+  expect(await box(call)).toEqual(callBox);
+  await call.focus(); await page.keyboard.press("Escape");
+  await expect(call).toHaveAttribute("aria-pressed", "false");
+  await page.keyboard.press("Enter");
+  await expect(call).toHaveAttribute("aria-pressed", "true");
+  await root.getByRole("button", { name: "Clear selection" }).click();
+  await expect(call).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
+  await call.click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await expect(call).toHaveAttribute("aria-pressed", "true");
+  await page.emulateMedia({ forcedColors: "active", reducedMotion: "reduce" });
+  await expect(helper).toHaveCSS("outline-style", "solid");
+});
+
+test("unknown relationship roles fail closed to the readable source", async ({ page }) => {
+  await page.route("**/experiments/centroid-reasoning/?reading=relationships", async route => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: (await response.text()).replace('data-relation-role="role.centroid.x.call"', 'data-relation-role="unknown.call"') });
+  });
+  await page.goto(`${route}?reading=relationships`);
+  await expect(page.locator("[data-centroid-relation]")).toBeHidden();
+  await expect(page.locator("[data-centroid-error]")).toContainText("unknown call/helper binding");
+  await expect(page.locator("[data-centroid-static-helper]")).toBeVisible();
+});
 
 test("text rail drag scrolls at both viewport edges and cancels without residual motion", async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 420 });

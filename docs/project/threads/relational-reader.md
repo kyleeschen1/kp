@@ -5,12 +5,13 @@ Last Updated: 2026-09-17
 
 ## Canonical direction
 
-Current checkpoint: [centroid beat-reading comparison](../reviews/2026-09-18-centroid-beat-reading.md).
+Current checkpoint: [stationary caller–helper inspection](../reviews/2026-09-20-centroid-direct-relationship.md).
 Reconciliation and fraction authoring/runtime consolidation are delivered with
 [measured evidence](../reviews/2026-09-17-passage-authoring-consolidation.md).
-Persistent layout and phrase salience are accepted. The user paused second-caller
-pressure to try a reversible beat-reading comparison; its rhythm now needs visual
-judgment. The approved contract retains transfer, explanation support and closeout.
+Persistent layout and phrase salience are accepted. The user found the equation
+rail stronger than its code/text transfer and approved direct relationship
+inspection in stationary code. Text-rail refinement is paused; the new local
+trial needs visual judgment. Transfer, explanation support and closeout remain.
 
 Active delivery: [approved passage consolidation](../2026-09-17-passage-consolidation-delivery.md).
 `run-contract.kp.passage-consolidation-v2` owns execution and evidence. The

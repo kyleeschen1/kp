@@ -25,14 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Current visual checkpoint: [centroid beat-reading comparison](reviews/2026-09-18-centroid-beat-reading.md).
+Current visual checkpoint: [stationary caller–helper inspection](reviews/2026-09-20-centroid-direct-relationship.md).
 The approved consolidation run delivered reconciliation, source-only fraction
 preview/host eligibility, mechanics discovery and a measured ~36 KB compressed
 runtime reduction while preserving native composition. See
 [authoring and cost evidence](reviews/2026-09-17-passage-authoring-consolidation.md).
-The user accepted persistent code text and phrase salience, then approved a
-reversible beat-reading trial before second-caller pressure. Explanation-review
-support remains downstream. Theseus owns live slice status.
+The user accepted persistent code text and phrase salience, then found the rail
+less fitting for code than equations. Text-rail refinement is paused; the approved
+local trial makes the caller–helper relationship directly inspectable in stationary
+source. Explanation-review support remains downstream. Theseus owns live status.
 
 Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the

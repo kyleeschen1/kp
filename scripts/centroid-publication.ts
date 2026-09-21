@@ -11,6 +11,7 @@ import { resolveKpTypeScriptRefactorOpticalEndpoint, serializeKpTypeScriptRefact
 import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading.ts";
 import { centroidClaims } from "../src/tutorial/code-reasoning/centroid-attention.ts";
 import { centroidBeatReading } from "../src/tutorial/code-reasoning/centroid-beats.ts";
+import { renderCentroidRelationPublication } from "./centroid-relation-publication.ts";
 
 export const centroidPaths = {
   article: "examples/programming/centroid.article.md",
@@ -104,7 +105,7 @@ export function compileCentroidPublication(markdown: string, before: string, aft
   </figure></div>`;
   // Stale semantic evidence must never animate newly edited source. The
   // static draft may still publish so authors can inspect and repair it.
-  const helperFigure = sourcePin === generated.sourcePin ? inspection : `${figure("The shared procedure", "helper")}<p>Inspection unavailable: source evidence needs regeneration.</p>`;
+  const helperFigure = sourcePin === generated.sourcePin ? inspection + renderCentroidRelationPublication() : `${figure("The shared procedure", "helper")}<p>Inspection unavailable: source evidence needs regeneration.</p>`;
   const attachments: Record<string, string> = {
     pattern: `<div class="centroid-pair">${figure("Horizontal coordinates · xs → cx", "x")}${figure("Vertical coordinates · ys → cy", "y")}</div>`,
     extract: helperFigure,

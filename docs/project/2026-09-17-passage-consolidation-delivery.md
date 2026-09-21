@@ -25,6 +25,13 @@ engine. Shared typography, rails and disclosure remain responsible owners.
 
 ## Work packages and dependencies
 
+September 20 approved steering: the user preferred equation rails and approved
+pausing code/text-rail refinement in favor of one stationary caller–helper
+inspection with local explanation and recoverable before-state. See the
+[review packet](reviews/2026-09-20-centroid-direct-relationship.md). This replaces
+the current visual question within transfer discovery; it does not authorize a
+general relationship browser or promote code rails universally.
+
 September 18 approved steering: after accepting centroid phrase salience, the
 user paused larger-source transfer to try addressable, greentext-inspired beats
 on the same exemplar. This is a reversible comparison within code/text discovery,
