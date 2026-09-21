@@ -19,6 +19,11 @@ point. These refinements are delivered through the scrubber/arrows and checked
 source snapshots. Text-rail refinement is paused. Second-caller transfer,
 explanation support and closeout remain.
 
+Approved bounded extension: [source selection](../reviews/2026-09-21-source-selection.md).
+Code settles before a new selection begins; energy equations copy their complete
+checked LaTeX. Keep arbitrary math-fragment mapping and catalogue rollout out of
+this slice. Source ownership and both animation renderers remain unchanged.
+
 Active delivery: [approved passage consolidation](../2026-09-17-passage-consolidation-delivery.md).
 `run-contract.kp.passage-consolidation-v2` owns execution and evidence. The
 following prior planning and delivery entries remain provenance; persistent

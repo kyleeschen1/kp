@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
   "status": "active",
-  "summary": "Focus-card visual checkpoint accepted. Bounded requested refinement COMPLETE: named buttons removed and checked-source copy available throughout motion. Five of eight packages complete; resume code-transfer with a structurally different caller.",
+  "summary": "Bounded source-selection extension COMPLETE on centroid and energy exemplars. Five of eight packages complete; resume code-transfer pressure caller. Arbitrary math fragment mapping is excluded.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -64,6 +64,12 @@
       "status": "passed",
       "scope": "code-transfer",
       "checkedAt": "2026-09-21T16:34:15.955Z"
+    },
+    {
+      "command": "npm run visual:code-reasoning -- tests/centroid-reasoning.browser.spec.ts",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-21T16:48:05.766Z"
     }
   ],
   "allowedWork": [
@@ -117,7 +123,7 @@
     {
       "id": "code-transfer",
       "title": "Pressure and promote accepted code text",
-      "summary": "Focus card accepted. Requested button removal and checked-source copying delivered with 12 Chromium checks. Structurally different caller and promotion remain.",
+      "summary": "Accepted centroid focus card now supports settle-then-select; energy exemplar supports whole-expression checked LaTeX selection/current-copy. Bounded extension verified. Structurally different code caller and promotion remain.",
       "status": "in-progress"
     },
     {

@@ -3,6 +3,36 @@ import { sampleEnergyDerivationLens } from "../src/tutorial/mechanics-relations/
 
 const route = "/experiments/mechanics-relations/";
 
+test("whole equation selection copies checked LaTeX and leaves rail motion intact", async ({ page, context }, info) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  const root = await ready(page);
+  const equation = root.locator('.energy-derivation-history > li > [data-derivation-latex]').first();
+  const source = await equation.getAttribute('data-derivation-latex');
+  expect(source).toBeTruthy(); expect(source).not.toContain('htmlData');
+  await equation.click();
+  await expect(equation).toHaveAttribute('data-equation-copy-selected', 'true');
+  await page.keyboard.press('ControlOrMeta+c');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(source);
+  await dragTo(page, root, .7);
+  await expect(equation).not.toHaveAttribute('data-equation-copy-selected', 'true');
+  const held = await root.getAttribute('data-derivation-progress');
+  const targetSource = await root.locator('.energy-derivation-history > li > [data-derivation-latex]').nth(1).getAttribute('data-derivation-latex');
+  await root.getByRole('button', { name: 'Copy current LaTeX', exact: true }).click();
+  await expect(root.locator('[data-equation-copy-status]')).toHaveText('Copied current equation as LaTeX.');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(targetSource);
+  await expect(root).toHaveAttribute('data-derivation-progress', held!);
+  await root.locator('[data-refinement-expand="cancel-mass"]').click();
+  await expect(root).toHaveAttribute('data-derivation-detail', 'mass-refinement');
+  await expect(root.locator('[data-equation-copy-tools]')).toHaveCount(1);
+  const inner = root.locator('.energy-derivation-history > li > [data-derivation-latex]').nth(3);
+  await inner.focus(); await inner.press('Enter');
+  await page.keyboard.press('ControlOrMeta+c');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(await inner.getAttribute('data-derivation-latex'));
+  await root.screenshot({ path: info.outputPath('equation-copy-selection.png') });
+  await lens(root).focus(); await lens(root).press('Home');
+  await expect(inner).not.toHaveAttribute('data-equation-copy-selected', 'true');
+});
+
 test('startup preparation profile', async ({ page, browserName }, info) => {
   await page.setViewportSize({ width: 1280, height: 1100 });
   await page.addInitScript(() => {
@@ -2149,7 +2179,9 @@ test("persistent lens follows the expression, holds interiors and rewinds exactl
   expect(Number(await root.getAttribute("data-derivation-progress"))).toBeLessThan(Number(held));
   expect(await documentBoxes(cue)).toEqual(cueBox);
   await dragTo(page, root, .55);
-  await expect(root).toHaveAttribute("data-derivation-progress", held!);
+  // Browser pointer coordinates round independently after viewport scrolling.
+  // Preserve sub-pixel equivalence, not the decimal serialization of a float.
+  await expect.poll(async () => Number(await root.getAttribute("data-derivation-progress"))).toBeCloseTo(Number(held), 6);
   expect(await root.locator("[data-derivation-row]").evaluateAll(rows => rows.map(row => (row as HTMLElement).offsetTop))).toEqual(slots);
 });
 

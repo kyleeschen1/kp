@@ -1,4 +1,5 @@
 import katex from "katex";
+import { encodeKpHtmlText } from "../../rendering/html-output-encoding.ts";
 import { checkMomentumEnergyDerivation, momentumEnergyDerivationSource, type EnergyDerivationDetail } from "../../../domains/public-api.ts";
 import { compileCheckedDerivation } from "../../authoring/momentum-energy-derivation-authoring.ts";
 import { compileKpArticleMarkdownFragmentHtml as html } from "../../article/kp-article-static-html.ts";
@@ -99,7 +100,7 @@ export function renderCheckedDerivationPassage(markdown: string, publicationRevi
     <div class="energy-derivation-workspace">
     <div class="energy-derivation-chain">
       <ol class="energy-derivation-history">${view.states.map((_, i) => `<li data-derivation-row="${i}"${detail === "coarse" ? ` data-coarse-row="${i}"` : selected.mapping.rows.some(row => row.fine === i) ? ` data-coarse-row="${selected.mapping.rows.find(row => row.fine === i)!.coarse}"` : ""}${i === parentIndex ? " data-refinement-anchor" : ""}${outline[i]?.depth === 1 ? ` data-nested-step data-nested-first="${outline[i].first}" data-nested-last="${outline[i].last}"` : ""}>
-        <div class="energy-derivation-equation">${math(i === 1 && plan.moves[0]!.operationKind === "substitute" ? compiled.moves[0]!.annotated[1]! : compiled.moves[i]?.annotated[0] ?? compiled.moves.at(-1)!.annotated[1]!)}</div>
+        <div class="energy-derivation-equation" data-derivation-latex="${encodeKpHtmlText(view.states[i]!)}">${math(i === 1 && plan.moves[0]!.operationKind === "substitute" ? compiled.moves[0]!.annotated[1]! : compiled.moves[i]?.annotated[0] ?? compiled.moves.at(-1)!.annotated[1]!)}</div>
         ${reason(i)}
       </li>`).join("")}</ol>
       <div class="energy-derivation-rail" data-derivation-rail aria-hidden="true" hidden>${view.states.map(() => `<span></span>`).join("")}</div>

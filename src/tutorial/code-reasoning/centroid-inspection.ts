@@ -239,6 +239,13 @@ export function mountCentroidInspection(root: HTMLElement) {
       // A midpoint tie chooses the later complete version, independent of
       // travel direction. No partially introduced syntax becomes source.
       return plan.artifact.states[p < .25 ? 0 : p < .75 ? 1 : 2];
+    }, () => {
+      const p = clock.getSnapshot().progress;
+      const stop = p < .25 ? 0 : p < .75 ? .5 : 1;
+      clock.pause();
+      if (p === stop) return false;
+      clock.seek(stop);
+      return true;
     });
   }
   return () => { disposeCopy?.(); focusCard?.dispose(); textRail?.dispose(); abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };

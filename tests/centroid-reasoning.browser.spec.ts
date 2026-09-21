@@ -2,6 +2,28 @@ import { expect, test, type Locator } from "@playwright/test";
 import { readFileSync } from "node:fs";
 const route = "/experiments/centroid-reasoning/";
 
+test("code selection settles before anchoring and preserves native partial copying", async ({ page, context }) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto(`${route}?reading=focus#extract`);
+  const root = page.locator("[data-centroid-local-inspection]");
+  const stage = root.locator("[data-centroid-focus] [data-centroid-stage]");
+  const slider = root.getByRole("slider", { name: "Scrub the code transformation" });
+  await expect(stage).toBeVisible();
+  await slider.evaluate(node => { if (!(node instanceof HTMLInputElement)) throw new Error("Missing range"); node.value = ".31"; node.dispatchEvent(new Event("input", { bubbles: true })); });
+  await stage.dispatchEvent('pointerdown', { pointerType: 'touch', button: 0 });
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.31");
+  await stage.click({ position: { x: 25, y: 25 } });
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
+  await expect(stage.locator("[data-centroid-native]")).toHaveCSS("user-select", "text");
+  const keyword = stage.locator('[data-centroid-native] [data-kp-typescript-syntax-kind="keyword"]').first();
+  await keyword.dblclick();
+  expect(await page.evaluate(() => getSelection()?.toString())).toBe("function");
+  await page.keyboard.press("ControlOrMeta+c");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("function");
+  await slider.focus(); await slider.press("End");
+  await expect(root).toHaveAttribute("data-centroid-progress", "1");
+});
+
 test("focus card retains one stage through animated navigation and adapts to viewport and font size", async ({ page }, info) => {
   await page.setViewportSize({ width: 1100, height: 850 });
   await page.goto(`${route}?reading=focus#extract`);

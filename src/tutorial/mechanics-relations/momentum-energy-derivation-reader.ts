@@ -1,4 +1,5 @@
 import { projectEquationRail } from "../../reader/runtime/equation-rail-presentation.ts";
+import { mountEquationSourceCopy } from "./equation-source-copy.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { createInspectionEdgeScroll } from "../../reader/runtime/inspection-edge-scroll.ts";
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
@@ -876,6 +877,10 @@ function mountEnergyDerivation(root: HTMLElement, binding: DerivationReaderBindi
   // Font completion invalidates idle scenes directly, even at unchanged CSS.
   document.fonts.addEventListener('loadingdone', () => { fontRevision++; pool?.clear(); scheduleGeometry(); }, opts);
   let disposed = false;
+  if (root.dataset["derivationNamespace"] === "energy") mountEquationSourceCopy(root, () => {
+    const position = pendingSeek ?? { move: selected, progress: clock.getSnapshot().progress };
+    return position.move + (position.progress < .5 ? 0 : 1);
+  }, pause, abort.signal);
   const dispose = (recycle = false) => {
     if (disposed) return;
     disposed = true;

@@ -39,7 +39,10 @@ scaffold: one compact cue, persistent code stage and explicit viewport adaptatio
 The user accepted it and requested removal of the named buttons plus copying at
 any point. Those refinements are implemented: the scrubber/arrows remain, and
 copying uses the nearest complete checked source. Second-caller transfer remains;
-text-rail refinement is paused. Theseus owns live status.
+text-rail refinement is paused. The approved [selection and LaTeX copy extension](reviews/2026-09-21-source-selection.md)
+adds settle-then-select in the code card and whole-expression source copying in
+the energy rail. Arbitrary mathematical fragment copying remains excluded.
+Theseus owns live status.
 
 Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the

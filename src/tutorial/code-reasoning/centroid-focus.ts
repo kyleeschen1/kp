@@ -69,7 +69,7 @@ export function mountCentroidFocus(root: HTMLElement, stage: HTMLElement, host: 
     stage.style.maxHeight = available < 96 ? "none" : `${Math.floor(available)}px`;
     element<HTMLElement>("[data-centroid-card-fit-note]").textContent = available < 96
       ? "Reading layout: scroll the page to explore the code at this text size."
-      : "Drag to inspect. Scroll within the code when needed.";
+      : "Drag to inspect. Click code to settle, then drag to select. Scroll within the code when needed.";
   };
   root.hidden = false;
   render(host.progress());

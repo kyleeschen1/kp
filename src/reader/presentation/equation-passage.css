@@ -49,6 +49,10 @@
 /* KaTeX superscript metric boxes extend beyond visible ink. All math in this
  * read-only proof must yield hit-testing to controls; disclosures stay active. */
 .energy-derivation .katex-html { pointer-events: none; }
+.energy-derivation [data-equation-copy-selected="true"] .katex { outline: 1px solid currentColor; outline-offset: .2rem; }
+.energy-derivation [data-derivation-latex][role="button"] { cursor: text; }
+.energy-derivation [data-equation-copy-fallback] { width: 100%; }
+.energy-derivation [data-equation-copy-fallback] textarea { display: block; width: 100%; box-sizing: border-box; }
 .energy-derivation-stage { position: absolute; left: 0; width: 100%; height: 3.4rem; pointer-events: none; }
 /* Preparation keeps the previous real paint visible until atomic handoff. */
 .energy-derivation[data-disclosure-handoff] [data-derivation-stage] { opacity: 0 !important; }

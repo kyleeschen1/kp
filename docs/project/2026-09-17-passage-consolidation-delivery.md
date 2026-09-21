@@ -116,3 +116,11 @@ Keep deeper explanation outside the working surface. Measure viewport fit and
 adapt explicitly for large text/short windows without scaling code or clipping
 required content. The [centroid focus-card review](reviews/2026-09-21-centroid-focus-card.md)
 is the next exemplar gate; no shared-card migration or second caller is approved.
+
+## September 21 approved source-selection extension
+
+After accepting the focus card and requesting copy access throughout motion, the
+user approved settle-then-select for code and whole-expression LaTeX copying for
+equations. Implement on the centroid card and energy rail. Share only clipboard
+transport/lifecycle; domain adapters retain source authority. Defer arbitrary
+mathematical fragment selection. See [scope and evidence](reviews/2026-09-21-source-selection.md).
