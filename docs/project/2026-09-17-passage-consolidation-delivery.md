@@ -124,3 +124,12 @@ user approved settle-then-select for code and whole-expression LaTeX copying for
 equations. Implement on the centroid card and energy rail. Share only clipboard
 transport/lifecycle; domain adapters retain source authority. Defer arbitrary
 mathematical fragment selection. See [scope and evidence](reviews/2026-09-21-source-selection.md).
+
+## September 21 approved second-caller implementation
+
+The user approved applying the accepted card to a structurally different code
+example. The existing free-shipping refactor supplies the pressure caller, using
+its own checked source, score and renderer. Share the demonstrated card mechanics
+and clipboard behavior with centroid; preserve the default article. Review the
+opt-in [shipping trial](reviews/2026-09-21-shipping-focus-transfer.md) before wider
+promotion. This does not authorize new code semantics or a universal code UI.

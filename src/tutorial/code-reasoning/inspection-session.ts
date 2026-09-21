@@ -4,6 +4,7 @@ import { createKpTypeScriptRefactorTokenProgram, sampleKpTypeScriptRefactorToken
 import { renderKpTypeScriptRefactorDomFrame } from "../../rendering/typescript-refactor-dom-session.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { sha256 } from "../../kernel/sha256.ts";
+import { mountShippingFocus } from "./shipping-focus.ts";
 
 export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void; dispose(): void } {
   const asset = createKpTypeScriptFreeShippingRuntimeProjection();
@@ -29,13 +30,19 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   const stage = required<HTMLElement>("[data-code-stage-host] [data-kp-typescript-refactor-stage]");
   const clock = createKpReaderTimelinePlaybackClock({ id: "code-reasoning.inspection", durationMs: asset.score.durationMs });
   const stops = asset.score.stages.map(beat => beat.checkpointMs / asset.score.durationMs);
+  let focus: ReturnType<typeof mountShippingFocus> | undefined;
+  let selectionSettled = false;
   const render = () => {
     const progress = clock.getSnapshot().progress;
-    const motion = sampleKpTypeScriptRefactorMotionFrame({ score: asset.score, progress, reducedMotion: reduced.matches });
+    const native = reduced.matches || selectionSettled;
+    const motion = sampleKpTypeScriptRefactorMotionFrame({ score: asset.score, progress, reducedMotion: native });
+    const theater = sampleKpTypeScriptRefactorTokenTheater({ program, plan: asset.motionPlan, score: asset.score, progress, reducedMotion: native });
     renderKpTypeScriptRefactorDomFrame(stage, {
       motion,
-      theater: sampleKpTypeScriptRefactorTokenTheater({ program, plan: asset.motionPlan, score: asset.score, progress, reducedMotion: reduced.matches })
+      theater
     }, asset.accessibility.title);
+    stage.style.userSelect = theater.active ? "none" : "text";
+    focus?.render(progress);
     // Counter and narration share the score's boundary convention, including
     // exact midpoints; independently choosing a nearest stop can disagree.
     const index = asset.score.stages.findIndex(beat => beat.id === motion.stage.stageId);
@@ -62,6 +69,7 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   const abort = new AbortController();
   const options = { signal: abort.signal };
   const resumeInspection = () => {
+    selectionSettled = false;
     root.dataset["codeView"] = "inspection";
     required<HTMLElement>("[data-code-source-label]").textContent = "Inspection · original available below";
     original.setAttribute("aria-pressed", "false");
@@ -89,21 +97,41 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   }, options);
   root.querySelector("[data-code-inspection]")!.addEventListener("keydown", event => {
     const key = event as KeyboardEvent;
+    if (key.defaultPrevented || (key.target instanceof HTMLElement && key.target.closest("textarea"))) return;
     if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(key.key)) return;
     key.preventDefault();
     if (key.key === "Home" || key.key === "End") { resumeInspection(); clock.seek(key.key === "Home" ? 0 : 1); }
     else move(key.key === "ArrowRight" ? "forward" : "rewind");
   }, options);
+  if (new URL(location.href).searchParams.get("reading") === "focus") {
+    focus = mountShippingFocus(root, stage, asset, {
+      progress: () => clock.getSnapshot().progress,
+      seek(p) { resumeInspection(); clock.pause(); clock.seek(p); render(); },
+      travel(p) {
+        resumeInspection();
+        if (reduced.matches) clock.seek(p);
+        else clock.play({ direction: p < clock.getSnapshot().progress ? "rewind" : "forward", stopAt: p });
+        render();
+      },
+      settle(p) {
+        const changed = stage.style.userSelect === "none" || clock.getSnapshot().progress !== p;
+        clock.pause(); selectionSettled = true;
+        // A checkpoint may also start the next token track. Explicit selection
+        // uses that checkpoint's native projection, then holds the same clock.
+        clock.seek(p); render(); return changed;
+      }
+    });
+  }
   reduced.addEventListener("change", pause, options);
   // Closing, backgrounding or leaving the local inspection never runs hidden
   // motion; reopening samples the same held clock, not a fresh session.
   document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, options);
   const observer = new IntersectionObserver(entries => { if (!entries[0]?.isIntersecting) pause(); });
-  observer.observe(host);
+  observer.observe(stage);
   render();
   seek.disabled = false;
   play.disabled = false;
   original.disabled = false;
   root.dataset["codeReady"] = "true";
-  return { pause, dispose() { abort.abort(); observer.disconnect(); off(); clock.dispose(); host.replaceChildren(); delete root.dataset["codeReady"]; } };
+  return { pause, dispose() { abort.abort(); observer.disconnect(); off(); focus?.dispose(); clock.dispose(); host.replaceChildren(); delete root.dataset["codeReady"]; } };
 }

@@ -6,7 +6,7 @@ import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading
 export function renderCentroidFocusPublication() {
   return `<div data-centroid-focus hidden>${renderKpFocusDeckScaffold({
     id: "centroid.extraction.focus", ariaLabel: "Inspect the extraction of a helper",
-    activeBeatSlug: "calculation", classAliases: { root: "centroid-focus-card" },
+    activeBeatSlug: "calculation", classAliases: { root: "centroid-focus-card kp-code-focus-card" },
     headerTrailingHtml: '<button type="button" data-centroid-copy title="Copy the nearest complete version during a transition">Copy code</button>',
     stageHtml: '<div data-centroid-card-surface><div data-centroid-card-slot></div></div>',
     beats: centroidMotionReading.map(thought => ({ slug: thought.id, title: thought.title,

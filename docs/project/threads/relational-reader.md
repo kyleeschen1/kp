@@ -16,8 +16,9 @@ affordances inadequate. The approved successor uses the shared focus-card scaffo
 one compact cue, a persistent code stage and explicit viewport adaptation.
 The user accepted it, requested removal of named buttons and copying at any
 point. These refinements are delivered through the scrubber/arrows and checked
-source snapshots. Text-rail refinement is paused. Second-caller transfer,
-explanation support and closeout remain.
+source snapshots. Text-rail refinement is paused. The [shipping second-caller trial](../reviews/2026-09-21-shipping-focus-transfer.md)
+is implemented and awaits visual judgment. Promotion, explanation support and
+closeout remain.
 
 Approved bounded extension: [source selection](../reviews/2026-09-21-source-selection.md).
 Code settles before a new selection begins; energy equations copy their complete

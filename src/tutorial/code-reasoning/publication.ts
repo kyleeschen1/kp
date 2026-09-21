@@ -6,6 +6,7 @@ import { createKpTypeScriptFreeShippingAnimationAsset } from "../../semantic/typ
 import { renderKpTypeScriptRefactorCodeHtml } from "../../rendering/typescript-refactor-code-html.ts";
 import { encodeKpHtmlText as text, encodeKpHtmlAttribute as attribute } from "../../rendering/html-output-encoding.ts";
 import { sha256 } from "../../kernel/sha256.ts";
+import { renderShippingFocus } from "./shipping-focus-publication.ts";
 
 export const codeReasoningArticlePath = "examples/programming/shared-rule.article.md";
 
@@ -35,7 +36,7 @@ export function compileCodeReasoningPublication(markdown: string) {
       <output data-code-position>1 / ${asset.score.stages.length}</output>
       <input type="range" min="0" max="1" step="0.001" value="0" aria-label="Inspect the refactor" data-code-seek disabled>
     </div>
-    <p data-code-error role="status" hidden></p>
+    ${renderShippingFocus(asset.score)}<p data-code-error role="status" hidden></p>
   </details>`;
   const endpoint = (revision: "before" | "after") => `<pre class="code-record kp-typescript-refactor__revision" data-code-record="${revision}"><code>${text(asset.staticEndpoints[revision])}</code></pre>`;
   const cases = asset.behavior.cases.map(item => `<tr><td>${item.total}</td><td>${text(String(item.before.shippingCost))}</td><td>${text(item.before.shippingMessage)}</td><td>${item.equivalent ? "Same" : "Different"}</td></tr>`).join("");

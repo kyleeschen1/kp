@@ -36,6 +36,7 @@ if (root) {
   };
   inspection.hidden = false;
   inspection.addEventListener("toggle", open);
+  if (new URL(location.href).searchParams.get("reading") === "focus") inspection.open = true;
   window.addEventListener("pagehide", event => {
     session?.pause();
     if (event.persisted) return;

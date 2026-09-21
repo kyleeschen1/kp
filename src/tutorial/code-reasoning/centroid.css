@@ -1,22 +1,6 @@
 @import "../../reader/presentation/equation-passage.css";
 @import "../../reader/presentation/equation-rail.css";
-@import "../focus-deck-scaffold.css";
-.centroid-focus-card {
-  --kp-st-paper: var(--kp-semantic-surface, #fffdf8);
-  --kp-st-strong: var(--kp-semantic-ink-strong, #17212b);
-  --kp-st-header: var(--kp-semantic-ink-strong, #17212b);
-  --kp-st-header-ink: var(--kp-semantic-surface, #fffdf8);
-  --kp-st-rule: var(--kp-semantic-rule, #ccd1d8);
-  --kp-st-muted: var(--kp-semantic-ink-muted, #52616d);
-  --kp-st-focus: var(--kp-semantic-focus, #205b74);
-  overflow: visible;
-}
-.centroid-focus-card .kp-focus-deck__card { height: auto; grid-template-rows: auto auto; }
-.centroid-focus-card .kp-focus-deck__narrative { order: -1; display: grid; overflow: visible; }
-.centroid-focus-card .kp-focus-deck__narrative > section { grid-area: 1 / 1; height: auto; align-self: end; max-height: 30svh; overflow-y: auto; }
-.centroid-focus-card [data-kp-focus-deck-beat-active="false"] { visibility: hidden; }
-.centroid-focus-card .kp-focus-deck__passage-page { padding: .8rem 1rem; min-height: 0; }
-.centroid-focus-card [data-centroid-copy] { font: inherit; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: .2rem; padding: .35rem .6rem; cursor: pointer; }
+@import "./code-focus.css";
 .centroid-stage [data-kp-typescript-token-theater] { user-select: none; }
 .centroid-reader [data-centroid-copy-source] { display: block; width: 100%; box-sizing: border-box; white-space: pre; }
 .centroid-focus-card [data-centroid-card-surface], .centroid-focus-card [data-centroid-card-slot] { min-width: 0; }

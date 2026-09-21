@@ -1,0 +1,12 @@
+@import "./code-focus.css";
+[data-code-focus="true"] [data-code-inspection] > :is(summary, .code-inspection-label, .code-controls) { display: none; }
+.shipping-focus-card [data-shipping-focus-slot] { min-width: 0; }
+.shipping-focus-card .kp-typescript-refactor { width: 100%; min-height: 0; display: block; border: 0; box-shadow: none; }
+.shipping-focus-card :is(.kp-typescript-refactor__file, .kp-typescript-refactor__narration) { display: none; }
+.shipping-focus-card [data-kp-typescript-accessible-state] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.shipping-focus-card .kp-typescript-refactor__source { padding: 1rem; overflow: visible; }
+.shipping-focus-card .kp-typescript-refactor__revision { align-self: start; white-space: pre; }
+[data-shipping-copy-source] { width: 100%; box-sizing: border-box; }
+@media print {
+  [data-code-focus="true"] [data-code-source-slot] { display: grid !important; }
+}

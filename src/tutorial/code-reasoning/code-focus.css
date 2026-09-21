@@ -1,0 +1,20 @@
+@import "../focus-deck-scaffold.css";
+.kp-code-focus-card {
+  --kp-st-paper: var(--kp-semantic-surface, #fffdf8);
+  --kp-st-strong: var(--kp-semantic-ink-strong, #17212b);
+  --kp-st-header: var(--kp-semantic-ink-strong, #17212b);
+  --kp-st-header-ink: var(--kp-semantic-surface, #fffdf8);
+  --kp-st-rule: var(--kp-semantic-rule, #ccd1d8);
+  --kp-st-muted: var(--kp-semantic-ink-muted, #52616d);
+  --kp-st-focus: var(--kp-semantic-focus, #205b74);
+  overflow: visible;
+}
+.kp-code-focus-card .kp-focus-deck__card { height: auto; grid-template-rows: auto auto; }
+.kp-code-focus-card .kp-focus-deck__narrative { order: -1; display: grid; overflow: visible; }
+.kp-code-focus-card .kp-focus-deck__narrative > section { grid-area: 1 / 1; height: auto; align-self: end; max-height: 30svh; overflow-y: auto; }
+.kp-code-focus-card [data-kp-focus-deck-beat-active="false"] { visibility: hidden; }
+.kp-code-focus-card .kp-focus-deck__passage-page { padding: .8rem 1rem; min-height: 0; }
+.kp-code-focus-card .kp-focus-deck__header button { font: inherit; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: .2rem; padding: .35rem .6rem; cursor: pointer; }
+.kp-code-focus-card [data-code-focus-stage] { overflow: auto; overscroll-behavior: contain; }
+.kp-code-focus-card [data-kp-typescript-token-theater] { user-select: none; }
+.kp-code-focus-card .kp-focus-deck__ticks { display: none; }

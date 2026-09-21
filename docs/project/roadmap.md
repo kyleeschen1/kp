@@ -38,7 +38,8 @@ and affordance expectations. The approved successor reuses the focus-card
 scaffold: one compact cue, persistent code stage and explicit viewport adaptation.
 The user accepted it and requested removal of the named buttons plus copying at
 any point. Those refinements are implemented: the scrubber/arrows remain, and
-copying uses the nearest complete checked source. Second-caller transfer remains;
+copying uses the nearest complete checked source. The [shipping second-caller trial](reviews/2026-09-21-shipping-focus-transfer.md)
+is implemented and awaits visual judgment before promotion;
 text-rail refinement is paused. The approved [selection and LaTeX copy extension](reviews/2026-09-21-source-selection.md)
 adds settle-then-select in the code card and whole-expression source copying in
 the energy rail. Arbitrary mathematical fragment copying remains excluded.
