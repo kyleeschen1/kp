@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: stationary caller-helper inspection ready at localhost:8000/experiments/centroid-reasoning/?reading=relationships#extract. Five of eight packages complete; code rail refinement paused, direct relationship trial awaits judgment before transfer.",
+  "summary": "HUMAN_CHECKPOINT: motion-coordinated prose ready at localhost:8000/experiments/centroid-reasoning/?reading=motion#extract. Existing animation preserved. Five of eight packages complete; code-transfer awaits exemplar judgment.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,6 +46,12 @@
       "status": "passed",
       "scope": "code-transfer",
       "checkedAt": "2026-09-21T03:02:33.480Z"
+    },
+    {
+      "command": "npm run visual:code-reasoning -- tests/centroid-reasoning.browser.spec.ts",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-21T04:06:19.678Z"
     }
   ],
   "allowedWork": [
@@ -99,7 +105,7 @@
     {
       "id": "code-transfer",
       "title": "Pressure and promote accepted code text",
-      "summary": "User-approved pivot: stop refining code/text rail; stationary centroid caller-helper trial implemented and verified, awaiting human judgment before larger transfer.",
+      "summary": "Stationary trial rejected. User-approved motion-first prose exemplar implemented; existing animation preserved; awaiting visual judgment before transfer.",
       "status": "in-progress"
     },
     {

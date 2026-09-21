@@ -5,12 +5,14 @@ Last Updated: 2026-09-17
 
 ## Canonical direction
 
-Current checkpoint: [stationary caller–helper inspection](../reviews/2026-09-20-centroid-direct-relationship.md).
+Current checkpoint: [motion-coordinated prose](../reviews/2026-09-20-centroid-motion-reading.md).
 Reconciliation and fraction authoring/runtime consolidation are delivered with
 [measured evidence](../reviews/2026-09-17-passage-authoring-consolidation.md).
 Persistent layout and phrase salience are accepted. The user found the equation
-rail stronger than its code/text transfer and approved direct relationship
-inspection in stationary code. Text-rail refinement is paused; the new local
+rail stronger than its code/text transfer, then rejected the stationary
+relationship trial. The accepted code animation remains the center: the user
+approved three persistent explanations above it, coordinated with the existing
+playhead and directly selectable. Text-rail refinement is paused; this local
 trial needs visual judgment. Transfer, explanation support and closeout remain.
 
 Active delivery: [approved passage consolidation](../2026-09-17-passage-consolidation-delivery.md).

@@ -7,6 +7,7 @@ import { centroidClaims, projectCentroidAttention, validateCentroidClaims } from
 import { createKpReaderSemanticFocusService } from "../../reader/runtime/semantic-focus.ts";
 import { centroidBeatReading } from "./centroid-beats.ts";
 import { mountCentroidTextRail, projectCentroidTextPosition } from "./centroid-text-rail.ts";
+import { centroidMotionReading, centroidMotionThought } from "./centroid-motion-reading.ts";
 
 export function mountCentroidInspection(root: HTMLElement) {
   const require = <T extends HTMLElement>(selector: string) => {
@@ -34,6 +35,10 @@ export function mountCentroidInspection(root: HTMLElement) {
   const beatList = require<HTMLElement>("[data-centroid-beats]");
   const narrative = require<HTMLElement>("ol.centroid-narrative");
   const readingColumn = require<HTMLElement>("div.centroid-reading-column");
+  const motionReading = new URL(location.href).searchParams.get("reading") === "motion";
+  const thoughts = centroidMotionReading.map(thought => ({ ...thought,
+    button: require<HTMLButtonElement>(`[data-centroid-thought="${thought.id}"]`)
+  }));
   const reasons = centroidReading.map((reason, index) => ({
     id: reason.id, position: centroidStops[index]!,
     element: require<HTMLElement>(`[data-centroid-reason="${reason.id}"]`),
@@ -46,6 +51,13 @@ export function mountCentroidInspection(root: HTMLElement) {
   const render = () => {
     const p = clock.getSnapshot().progress;
     const frame = sampleCentroidMotion(plan, p);
+    const thought = centroidMotionThought(p);
+    for (const item of thoughts) {
+      const current = item.id === thought.id;
+      item.button.closest("li")!.dataset["current"] = String(current);
+      if (current) item.button.setAttribute("aria-current", "step");
+      else item.button.removeAttribute("aria-current");
+    }
     // Reserve the complete inspection once: native endpoint handoffs must not
     // move the slider or shift the prose below it.
     stage.style.setProperty("--centroid-lines", String(frame.theater.maxLineCount));
@@ -70,7 +82,7 @@ export function mountCentroidInspection(root: HTMLElement) {
     if (description.textContent !== summary) description.textContent = summary;
     root.dataset["centroidProgress"] = String(p);
     seek.value = String(p);
-    seek.setAttribute("aria-valuetext", `${Math.round(p * 100)} percent; ${centroidNarration[frame.beat]}`);
+    seek.setAttribute("aria-valuetext", `${Math.round(p * 100)} percent; ${motionReading ? thought.title : centroidNarration[frame.beat]}`);
     output.value = `${frame.beat + 1} / 3`;
     for (const [index, reason] of reasons.entries()) {
       const current = root.dataset["centroidInspecting"] === "true" && index === frame.beat;
@@ -126,6 +138,14 @@ export function mountCentroidInspection(root: HTMLElement) {
   open.addEventListener("click", () => { begin(figure.querySelector("figcaption")!); (root.dataset["centroidFormat"] === "beats" ? textRail!.handle : next).focus({ preventScroll: true }); }, options);
   reasons.forEach(reason => {
     reason.button.addEventListener("click", () => { begin(reason.element); clock.seek(reason.position); }, options);
+  });
+  thoughts.forEach(thought => {
+    thought.button.disabled = false;
+    thought.button.addEventListener("click", () => {
+      begin(figure);
+      clock.pause();
+      clock.seek(thought.position);
+    }, options);
   });
   claims.forEach(claim => {
     claim.button.addEventListener("click", event => {
@@ -186,5 +206,12 @@ export function mountCentroidInspection(root: HTMLElement) {
   require<HTMLElement>("[data-centroid-reading-switch]").hidden = false;
   format(new URL(location.href).searchParams.get("reading") === "beats" ? "beats" : "paragraphs");
   render(); open.hidden = false; restore();
+  if (motionReading) {
+    root.dataset["centroidMotionReading"] = "true";
+    readingColumn.hidden = true;
+    require<HTMLElement>("[data-centroid-motion-reading]").hidden = false;
+    close.hidden = true;
+    begin(figure);
+  }
   return () => { textRail?.dispose(); abort.abort(); observer.disconnect(); size.disconnect(); offAttention(); attention.dispose(); off(); clock.dispose(); };
 }

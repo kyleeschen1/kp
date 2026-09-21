@@ -95,3 +95,13 @@ an uncertain ceiling, not a utilization target or a token budget. Stop earlier
 for completion, the required visual checkpoint, user pause, or a genuine
 scope/safety/external blocker. Record incomplete work explicitly rather than
 waiving checks. Commit verified reversible packages with their evidence.
+
+## September 20 motion-first amendment
+
+The user rejected the stationary relationship trial and reaffirmed the quality
+of the existing centroid animation. Approved: three persistent explanations above
+that animation, coordinated with its playhead, with sentence selection seeking
+the corresponding moments. Preserve checked source, motion and renderer ownership.
+Review [this one exemplar](reviews/2026-09-20-centroid-motion-reading.md) before
+transfer. This supersedes the stationary trial's pending checkpoint, not the
+accepted animation or existing paragraph/phrase-salience evidence.

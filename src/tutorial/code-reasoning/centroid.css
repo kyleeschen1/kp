@@ -18,6 +18,14 @@
 .centroid-reader pre code { font: inherit; }
 .centroid-pair, .centroid-extraction { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5rem; }
 .centroid-extraction { align-items: start; }
+.centroid-extraction[data-centroid-motion-reading="true"] { grid-template-columns: minmax(0, 1fr); }
+.centroid-motion-reading ol { list-style: none; margin: 0; padding: 0; }
+.centroid-motion-reading li { border-inline-start: 2px solid transparent; padding-inline-start: .8rem; margin-block: .8rem; }
+.centroid-motion-reading li[data-current="true"] { border-color: currentColor; }
+.centroid-motion-reading button { font: inherit; color: inherit; background: transparent; border: 0; padding: 0; text-align: start; text-decoration: underline dotted; text-underline-offset: .2em; cursor: pointer; }
+.centroid-motion-reading button[aria-current="step"] { text-decoration-style: solid; }
+.centroid-motion-reading li p { margin-block: .2rem 0; }
+.centroid-extraction[data-centroid-motion-reading="true"] [data-centroid-evidence] { position: static; }
 .centroid-narrative { list-style: none; padding: 0; margin: 0; }
 .centroid-narrative > li { border-inline-start: 2px solid transparent; padding-inline-start: 1rem; margin-block: 1.25rem; scroll-margin-top: 1.5rem; }
 .centroid-narrative h3 { margin-top: 0; }

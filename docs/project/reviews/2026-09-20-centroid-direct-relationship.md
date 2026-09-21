@@ -1,6 +1,7 @@
 # Stationary caller–helper inspection
 
-Status: HUMAN_CHECKPOINT; local unpromoted trial.
+Status: rejected by user for insufficient KP explanatory value; retained as a local comparison.
+Successor: [motion-coordinated prose](2026-09-20-centroid-motion-reading.md).
 Execution: `run-contract.kp.passage-consolidation-v2`, `code-transfer`.
 
 The user judged the equation rail the strongest KP interface and questioned its

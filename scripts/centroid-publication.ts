@@ -12,6 +12,7 @@ import { centroidReading } from "../src/tutorial/code-reasoning/centroid-reading
 import { centroidClaims } from "../src/tutorial/code-reasoning/centroid-attention.ts";
 import { centroidBeatReading } from "../src/tutorial/code-reasoning/centroid-beats.ts";
 import { renderCentroidRelationPublication } from "./centroid-relation-publication.ts";
+import { centroidMotionReading } from "../src/tutorial/code-reasoning/centroid-motion-reading.ts";
 
 export const centroidPaths = {
   article: "examples/programming/centroid.article.md",
@@ -91,6 +92,7 @@ export function compileCentroidPublication(markdown: string, before: string, aft
   }).join("")}</ol></div>`;
   const inspection = `<div class="centroid-extraction" data-centroid-local-inspection data-centroid-source-pin="${sourcePin}">
     <div class="centroid-reading-column"><div class="code-controls centroid-reading-switch" data-centroid-reading-switch hidden role="group" aria-label="Explanation format"><button type="button" data-centroid-format="paragraphs" aria-pressed="true">Paragraphs</button><button type="button" data-centroid-format="beats" aria-pressed="false">Beats</button></div>${narrative}${beats}</div><figure data-centroid-evidence>
+    <div class="centroid-motion-reading" data-centroid-motion-reading hidden><p>Drag to follow the extraction, or select a sentence to inspect its moment.</p><ol aria-label="What to notice during extraction">${centroidMotionReading.map(thought => `<li><button type="button" data-centroid-thought="${thought.id}" disabled>${thought.title}</button><p>${markdownHtml(thought.text).trim().replace(/^<p>|<\/p>$/g, "")}</p></li>`).join("")}</ol></div>
     <figcaption>The shared procedure <button type="button" data-centroid-open hidden>Trace the first loop</button></figcaption>
     <div data-centroid-static-helper>${code("helper")}</div>
     <div data-centroid-stage hidden class="kp-typescript-refactor centroid-stage" style="${serializeKpTypeScriptRefactorOpticalEndpoint(resolveKpTypeScriptRefactorOpticalEndpoint("light"))}">

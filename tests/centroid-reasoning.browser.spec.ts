@@ -2,6 +2,42 @@ import { expect, test, type Locator } from "@playwright/test";
 import { readFileSync } from "node:fs";
 const route = "/experiments/centroid-reasoning/";
 
+test("motion reading follows the existing playhead forward, backward and by sentence without reflow", async ({ page }, info) => {
+  await page.goto(`${route}?reading=motion#extract`);
+  const root = page.locator("[data-centroid-local-inspection]");
+  const stage = root.locator("[data-centroid-stage]");
+  const thoughts = root.locator("[data-centroid-thought]");
+  const seek = root.locator("[data-centroid-seek]");
+  await expect(stage).toBeVisible();
+  await expect(thoughts).toHaveCount(3);
+  const geometry = () => stage.evaluate(node => { const r = node.getBoundingClientRect(); return { top: r.top + scrollY, height: r.height }; });
+  const initial = await geometry();
+  for (const [id, progress] of [["boundary", "0.3"], ["answer", "0.5"], ["calculation", "0.1"]]) {
+    const sentence = root.locator(`[data-centroid-thought="${id}"]`);
+    await sentence.click();
+    await expect(root).toHaveAttribute("data-centroid-progress", progress!);
+    await expect(sentence).toHaveAttribute("aria-current", "step");
+    expect(await geometry()).toEqual(initial);
+  }
+  for (const [p, id] of [[1, "answer"], [.31, "boundary"], [.12, "calculation"], [.49, "answer"], [0, "calculation"]] as const) {
+    await seek.evaluate((node, value) => { if (!(node instanceof HTMLInputElement)) throw new Error("Expected range input"); node.value = String(value); node.dispatchEvent(new Event("input", { bubbles: true })); }, p);
+    await expect(root.locator(`[data-centroid-thought="${id}"]`)).toHaveAttribute("aria-current", "step");
+    expect(await geometry()).toEqual(initial);
+  }
+  const evidence = JSON.parse(readFileSync("src/semantic/centroid-extraction.generated.json", "utf8"));
+  expect(await root.locator("[data-centroid-native]").textContent()).toBe(evidence.states[0].source);
+  await thoughts.nth(1).focus(); await page.keyboard.press("Enter");
+  await expect(root).toHaveAttribute("data-centroid-progress", "0.3");
+  await root.screenshot({ path: info.outputPath("centroid-motion-reading.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => { document.documentElement.style.fontSize = "24px"; });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await expect(thoughts.nth(1)).toHaveAttribute("aria-current", "step");
+  await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "active" });
+  await thoughts.nth(2).click();
+  await expect(root.locator("[data-centroid-native]")).toHaveCSS("opacity", "1");
+});
+
 test("stationary caller relationship preserves code geometry, selection and before-state return", async ({ page }, info) => {
   await page.goto(`${route}?reading=relationships#extract`);
   const root = page.locator("[data-centroid-relation]");
