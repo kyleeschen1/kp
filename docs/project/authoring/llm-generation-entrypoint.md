@@ -105,6 +105,9 @@ better; a synchronized animation alone is not a teaching outcome.
 
 For a new conceptual explanation or a repair of an unclear “why”, use
 `explanation-first-worksheet.md` before selecting card stops or choreography.
+Its bounded review examples separate located structural repairs from editorial
+findings; `npm run test:explanation-review` retains damaged cases and harmless
+paraphrases without treating structural success as evidence of comprehension.
 Establish the reader's question, prerequisite meanings and inferential bridges;
 then give each visual a specific teaching job. Prose, sketches and conversation
 may all discover the explanation. Reuse accepted explanatory baselines for

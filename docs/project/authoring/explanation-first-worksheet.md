@@ -95,6 +95,48 @@ Types and tests protect facts, references, source coherence and deterministic
 behavior. Presence of a “why” field does not prove that it explains anything.
 Keep mathematical verification and pedagogical judgment separately reported.
 
+### Bounded review and worked critique
+
+Be strict about truth, references and preservation; explicit about explanatory
+judgments; empirical about comprehension. Report each editorial finding as
+**location → missing bridge → likely reader consequence → smallest repair**.
+Do not assign a clarity score or treat a supplied prerequisite declaration as
+proof that its meaning was taught. Harmless paraphrases and independent steps
+may vary without changing the argument.
+
+Gradient example, `general-projection`:
+
+- Damaged: “The gradient wins because the dot product says so.” The formula is
+  invoked as authority without explaining the comparison.
+- Bridge: for fixed-length moves, the dot product is gradient length times the
+  move's signed projection onto the gradient. Alignment maximizes that
+  projection; perpendicular motion gives zero and opposite motion gives a
+  negative contribution. This connects the earlier picture to unequal slopes.
+- Consequence of omission: the reader may memorize northeast as the answer,
+  or believe a longer diagonal move establishes a steeper direction.
+- Smallest repair: restore the projection comparison at this location, keeping
+  the equal-distance condition and local-rate qualification explicit. No new
+  diagram or beat is necessary.
+
+Distinct code example, shipping helper explanation:
+
+- Damaged: “This proves every possible behavior is identical.”
+- Missing bridge: the retained language evidence covers declared threshold
+  cases and pinned programs; editorial stages are not separate verified programs.
+- Consequence: readers may infer a universal equivalence proof from a few cases.
+- Smallest repair: say which threshold cases were checked and preserve the
+  source pins; do not claim coverage of arbitrary changed programs.
+
+Run `npm run test:explanation-review` for the retained good, damaged and
+paraphrased examples. Its gradient helper checks this story's declared path,
+evidence bindings, required beats and native-math presence. It does not parse
+the truth of prose or validate arbitrary HTML. Existing gradient sequence tests
+own stationary evidence and mathematical behavior; existing browser/stage-fit
+checks own readable layout. The code caller uses its existing language owner.
+Both circular reasoning and the code overclaim intentionally pass structural
+checking: the examples above record the editorial finding separately. No new
+runtime contract or mandatory review step is introduced.
+
 ## Starting prompts for humans and LLMs
 
 **Explanation pass:** “Given this learner's question, known background and

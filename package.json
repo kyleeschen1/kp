@@ -44,6 +44,7 @@
     "check:authored-bayes-workflows": "node --disable-warning=ExperimentalWarning scripts/check-authored-bayes-workflows.ts",
     "visual:authoring-entrypoints": "playwright test --config playwright.authoring-entrypoints.config.ts --project=chromium --workers=1",
     "visual:authoring-entrypoints:cohort": "playwright test --config playwright.authoring-entrypoints.config.ts --project=chromium --project=firefox --project=webkit --workers=1",
+    "test:explanation-review": "node --disable-warning=ExperimentalWarning --test tests/explanation-review.test.ts tests/gradient-contour-sequence.test.ts",
     "test:authoring-entrypoints": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts",
     "test:bayesian-reasoning": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-*.test.ts",
     "visual:bayesian-reasoning:shared": "playwright test --config playwright.bayesian-reasoning-review.config.ts --project=chromium --workers=1",
