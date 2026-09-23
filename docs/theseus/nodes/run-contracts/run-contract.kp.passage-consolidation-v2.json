@@ -2,8 +2,8 @@
   "id": "run-contract.kp.passage-consolidation-v2",
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
-  "status": "active",
-  "summary": "User accepted the shipping focus-card second caller with limited code space noted. Visual gate cleared; code-transfer promotion, bounded explanation review and release remain. Current turn requests strategic review, not new implementation scope; see docs/project/reviews/2026-09-21-next-step-review.md.",
+  "status": "resolved",
+  "summary": "All eight packages complete and mandatory verification passed; approved successor may now be created.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -110,8 +110,32 @@
       "status": "passed",
       "scope": "explanation",
       "checkedAt": "2026-09-23T01:42:47.888Z"
+    },
+    {
+      "command": "npm run visual:mechanics-relations -- --grep \"whole equation selection|persistent lens follows|rail jumps directly\"",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-09-23T01:49:45.934Z"
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "release",
+      "checkedAt": "2026-09-23T01:59:51.696Z",
+      "notes": "Initial sandboxed release run exposed stale sampler/reachability inventories and HTTP listen EPERM. Inventories repaired and focused checks pass; full rerun uses approved loopback access."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "release",
+      "checkedAt": "2026-09-23T02:01:12.300Z",
+      "notes": "7195 passed, zero failures, cancellations or skips; 732 seconds with local loopback access. Includes repaired sampler inventory and generated reachability."
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "Eight approved packages complete; closeout evidence in docs/project/reviews/2026-09-22-consolidation-closeout.md. Approved successor is the fixed ten-case authoring trial."
+  },
   "allowedWork": [
     "Eight packages and measured repairs in approved proposal"
   ],
@@ -175,7 +199,8 @@
     {
       "id": "release",
       "title": "Integrated verification and closeout",
-      "status": "planned"
+      "summary": "All required gates pass: 7195 unit tests, full types/build, architecture, code cohort, equation copy/rail checks, repertoire and workspace validation. Closeout retains measured payloads, authoring limits and external snapshot gap.",
+      "status": "complete"
     }
   ]
 }

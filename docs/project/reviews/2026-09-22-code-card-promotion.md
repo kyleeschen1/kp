@@ -53,8 +53,8 @@ recorded in the owning Theseus contract at slice completion.
 
 The complete cohort passed 57/57. Full app/node/test/Svelte/domain types,
 architecture, inference, production bundle and 17 focused publication/budget
-tests passed. The repository-wide unit run continues as integrated release work;
-it is not yet claimed complete by this package.
+tests passed. Integrated release subsequently passed all 7,195 repository tests;
+see [closeout and repaired inventory evidence](2026-09-22-consolidation-closeout.md).
 
 Production measurements through `measure:mechanics-relations-closure` with
 `code --summary` and `centroid --summary`: shipping initial/activated compressed

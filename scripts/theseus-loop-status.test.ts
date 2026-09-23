@@ -3,8 +3,26 @@ import test from "node:test";
 
 import {
   formatTheseusLoopStatus,
+  formatStoredContractStatus,
   requiresUnscopedRunLookup
 } from "./theseus-loop-status.ts";
+
+test("explicit stored progress survives an absent global snapshot without inventing blockers or completion", () => {
+  const contract = { id: "run-contract.kp.test", kind: "run-contract", title: "Selected run", status: "active", slices: [
+    { id: "one", title: "Finished", status: "complete" },
+    { id: "two", title: "Remaining", status: "in-progress" },
+    { id: "three", title: "Deferred", status: "deferred" }
+  ] };
+  const status = formatStoredContractStatus(contract, contract.id);
+  assert.equal(status.headline, "KP · Selected run · 1/3 complete");
+  assert.match(status.detail, /next: Remaining · global blockers not queried/);
+  assert.equal(status.active, true);
+  assert.equal(formatStoredContractStatus({ ...contract, status: "resolved" }, contract.id).active, false);
+  for (const value of [null, {}, { ...contract, id: "different" }, { ...contract, slices: [contract.slices[0], contract.slices[0]] },
+    { ...contract, slices: [{ id: "missing-status", title: "Incomplete" }] }]) {
+    assert.throws(() => formatStoredContractStatus(value, contract.id), /Invalid/);
+  }
+});
 
 test("prints exact logical slice progress from the active Theseus contract", () => {
   assert.deepEqual(formatTheseusLoopStatus({

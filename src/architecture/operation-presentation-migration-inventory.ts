@@ -240,6 +240,15 @@ export const kpExecutableMotifMigrationLedger = Object.freeze([
     "Exact fraction directly samples local fission/fusion plans and must adopt the shared program route."
   ),
   executableMotifMigration(
+    "consumer.fraction-factor-split-fission-fusion",
+    "renderer-consumer",
+    "src/rendering/native-fraction-factor-split.ts",
+    "sampleKpFissionFusion({",
+    "protected-existing-consumer",
+    "preserve",
+    "Accepted native fraction decomposition uses checked fan-out lineage and the existing exclusive-ownership sampler; preserve its forward and rewind choreography."
+  ),
+  executableMotifMigration(
     "consumer.factoring-fission-fusion",
     "renderer-consumer",
     "src/rendering/native-katex-factoring-choreography.ts",

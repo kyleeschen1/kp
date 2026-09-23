@@ -207,6 +207,7 @@ test("executable motif ledger covers every authority seam and owns every repair"
       .sort(),
     [
       "executable-motif.consumer.factoring-fission-fusion",
+      "executable-motif.consumer.fraction-factor-split-fission-fusion",
       "executable-motif.consumer.quadratic-fission-fusion",
       "executable-motif.consumer.quadratic-runtime-fission-fusion"
     ]
@@ -239,6 +240,7 @@ test("runtime sampler discovery cannot grow a silent motif route", async () => {
         "src/animation/quadratic-branch-choreography.ts",
         "src/reader/app/quadratic-branching-runtime.ts",
         "src/rendering/exact-fraction-quantity-runtime.ts",
+        "src/rendering/native-fraction-factor-split.ts",
         "src/rendering/native-katex-factoring-choreography.ts"
       ]
     },

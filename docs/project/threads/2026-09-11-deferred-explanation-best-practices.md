@@ -1,12 +1,15 @@
 # Deferred: encode and check explanation-authoring best practices
 
-Status: accepted recommendation; implementation deferred until the current
-brainstorm is finished. Recorded 2026-09-11.
+Status: bounded implementation completed September 22 in the approved passage
+consolidation run. The original September 11 commitment is retained below.
+See `../authoring/explanation-first-worksheet.md` for doctrine and worked critique,
+and `npm run test:explanation-review` for retained gradient/code fixtures.
+Structural review deliberately leaves reasoning quality and learning unproved;
+no universal runtime schema or mandatory review ceremony was added.
 
-The user agreed to the proposed layered approach and explicitly asked to make a
-note to implement it after brainstorming. Do not begin that implementation merely
-because this note exists. Do not change the active Theseus contract or silently
-replace the gradient run's remaining gates.
+The user originally asked to defer implementation until after brainstorming.
+The later approved consolidation contract supplied implementation authority;
+this historical note does not independently authorize further scope.
 
 ## Accepted implementation direction
 

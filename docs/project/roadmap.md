@@ -54,6 +54,9 @@ September 22: the user approved the [24-slice sequence](2026-09-22-authoring-rep
 closes the existing run before a ten-case trial and at most one recurring-boundary
 repair. Execute the remaining consolidation packages before creating the successor.
 The same document retains the remaining recommendations and revisit triggers.
+When the global snapshot omits the active contract, derive exact stored progress
+with `npm run --silent loop:status -- --contract run-contract.kp.passage-consolidation-v2`.
+This explicit selection does not authorize new scope or query global blockers.
 
 Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the

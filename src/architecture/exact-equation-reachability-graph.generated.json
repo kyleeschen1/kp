@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4794,
+  "scannedFileCount": 4823,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -1082,6 +1082,7 @@
         "src/rendering/equation-motion-plan.ts",
         "src/rendering/log-exponent-transit-session.ts",
         "src/rendering/log-quotient-transit-session.ts",
+        "src/rendering/native-fraction-factor-split.ts",
         "src/rendering/native-katex-semantic-motion-track-projection.ts",
         "src/rendering/visual-artifact-lifecycle.ts",
         "src/semantic/antiderivative-power-rule-semantics.ts",

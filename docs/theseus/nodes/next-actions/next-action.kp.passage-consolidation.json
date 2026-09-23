@@ -2,8 +2,9 @@
   "id": "next-action.kp.passage-consolidation",
   "kind": "next-action",
   "title": "Consolidate supported passages and transfer persistent code text",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Consolidation contract completed with integrated evidence; continue the already approved fixed-case trial.",
   "sourceRefs": [
     {
       "kind": "file",
