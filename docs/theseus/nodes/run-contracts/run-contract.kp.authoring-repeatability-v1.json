@@ -2,8 +2,8 @@
   "id": "run-contract.kp.authoring-repeatability-v1",
   "kind": "run-contract",
   "title": "Fixed-case authoring repeatability",
-  "status": "active",
-  "summary": "User approved the full September 22 proposal; predecessor closed with all mandatory checks passing. Execute its remaining 21 ordered slices.",
+  "status": "resolved",
+  "summary": "COMPLETE 21/21. Ten frozen inputs and exact rerun reports retained; two fraction fixture previews pass after one shared MathML repair. Full release 7203 tests and all mandatory gates pass. Future connected argument and algebra retry are recommendations only.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -203,6 +203,13 @@
       "scope": "coverage-reconcile",
       "checkedAt": "2026-09-23T03:06:57.822Z",
       "notes": "All eight repertoire checks pass after preserving checklist format; no checkbox changes or broader semantic claims. Full types passed in preceding slice."
+    },
+    {
+      "command": "npm test; npm run typecheck; npm run build:bundle; npm run test:repertoire; npm run check:equation-reachability; scoped browser and closure commands in linked closeout",
+      "status": "passed",
+      "scope": "trial-closeout",
+      "checkedAt": "2026-09-23T03:13:49.700Z",
+      "notes": "7203 full tests, zero failures cancellations or skips, 705 seconds. 12 frozen-source browser checks, 26 canonical cohort passes plus nine repeated geometry checks after test-driver repair. All four closure consumers measured, MathML gain costs 190 gzip bytes on main HTML. Server HTTP 200. Seven record invariants, 48 author entrypoint and 38 fraction checks pass; no waived gates."
     }
   ],
   "allowedWork": [
@@ -346,7 +353,8 @@
     {
       "id": "trial-closeout",
       "title": "Verify and close the approved trial",
-      "status": "planned"
+      "summary": "COMPLETE: integrated verification passed, 21 successor slices delivered after three predecessor closeout packages. Ten unchanged inputs retain honest outcomes; one shared native-MathML repair; no new curriculum checkmarks. Durable report and remainder linked from roadmap.",
+      "status": "complete"
     }
   ]
 }

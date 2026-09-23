@@ -1,7 +1,7 @@
 # Relational reader delivery
 
-Status: active direction; chain-first delivery complete, passage consolidation approved
-Last Updated: 2026-09-17
+Status: active direction; consolidation and fixed-case authoring trial complete
+Last Updated: 2026-09-22
 
 ## Canonical direction
 
@@ -17,18 +17,25 @@ one compact cue, a persistent code stage and explicit viewport adaptation.
 The user accepted it, requested removal of named buttons and copying at any
 point. These refinements are delivered through the scrubber/arrows and checked
 source snapshots. Text-rail refinement is paused. The [shipping second-caller trial](../reviews/2026-09-21-shipping-focus-transfer.md)
-is visually accepted, with limited code space noted. Promotion, explanation support and
-closeout remain.
+is visually accepted, with limited code space noted. Promotion, explanation support
+and consolidation closeout are complete.
 
 Approved bounded extension: [source selection](../reviews/2026-09-21-source-selection.md).
 Code settles before a new selection begins; energy equations copy their complete
 checked LaTeX. Keep arbitrary math-fragment mapping and catalogue rollout out of
 this slice. Source ownership and both animation renderers remain unchanged.
 
-Active delivery: [approved passage consolidation](../2026-09-17-passage-consolidation-delivery.md).
-`run-contract.kp.passage-consolidation-v2` owns execution and evidence. The
-following prior planning and delivery entries remain provenance; persistent
-code/text now has approved exemplar scope with a required visual checkpoint.
+Completed delivery: [passage consolidation](../reviews/2026-09-22-consolidation-closeout.md)
+and the [fixed-case authoring trial](../reviews/2026-09-22-authoring-repeatability-closeout.md).
+Their Theseus contracts own execution evidence; no approved slices remain.
+The trial preserves ten raw inputs, identical before/after owner reports and two
+passing fraction fixture previews after one shared accessible-math repair.
+It does not establish general algebra authoring or mechanics/code application.
+Next recommendation is one connected short fraction argument using demonstrated
+machinery, with measured source/Article work; it needs new scope selection.
+The [durable remainder](../2026-09-22-authoring-repeatability-long-loop.md#durable-remainder-and-revisit-triggers)
+retains the broader trajectory. Following entries are historical provenance,
+not parallel live queues or authority to restart parked work.
 
 Latest planning request: audit infrastructure, repertoire and stored loops before
 selecting more infrastructure work. [Findings and proposed sequence](../reviews/2026-09-17-infrastructure-and-queue-audit.md)

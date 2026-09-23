@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-17
+Last Updated: 2026-09-22
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -39,28 +39,35 @@ scaffold: one compact cue, persistent code stage and explicit viewport adaptatio
 The user accepted it and requested removal of the named buttons plus copying at
 any point. Those refinements are implemented: the scrubber/arrows remain, and
 copying uses the nearest complete checked source. The [shipping second-caller trial](reviews/2026-09-21-shipping-focus-transfer.md)
-is visually accepted; promotion and release checks remain;
+is visually accepted; promotion and release checks are complete;
 text-rail refinement is paused. The approved [selection and LaTeX copy extension](reviews/2026-09-21-source-selection.md)
 adds settle-then-select in the code card and whole-expression source copying in
 the energy rail. Arbitrary mathematical fragment copying remains excluded.
 Theseus owns live status.
 
-Latest [strategic review](reviews/2026-09-21-next-step-review.md): finish the
-bounded consolidation run, then consider a small authoring-repeatability trial
-before breadth or further interface work. This is a recommendation, not approval
-of a new run; the current plan retains its scope.
+The [strategic review](reviews/2026-09-21-next-step-review.md) recommended finishing
+consolidation and testing authoring repeatability before breadth or further UI
+work. Both are now delivered under the approved sequence below.
 
 September 22: the user approved the [24-slice sequence](2026-09-22-authoring-repeatability-long-loop.md), which
-closes the existing run before a ten-case trial and at most one recurring-boundary
-repair. Execute the remaining consolidation packages before creating the successor.
+closed the existing run before a ten-case trial and one recurring-boundary repair.
 The same document retains the remaining recommendations and revisit triggers.
 Consolidation is now [closed with integrated evidence](reviews/2026-09-22-consolidation-closeout.md).
-The active approved successor is `run-contract.kp.authoring-repeatability-v1`:
-freeze ten inputs, measure existing-owner outcomes and actual preview application,
-repair at most one observed recurring seam, then rerun unchanged inputs.
-Derive exact stored progress with
+The successor `run-contract.kp.authoring-repeatability-v1` is
+[closed with integrated evidence](reviews/2026-09-22-authoring-repeatability-closeout.md).
+Two unchanged fraction proposals now pass applied fixture-preview checks after a
+shared native-MathML repair; all ten owner reports remain unchanged. Both algebra
+intentions were blocked by source-ID mistakes; mechanics/code checks remain
+reference-only. No new curriculum checks or universal authoring claims follow.
+Retrieve exact stored progress with
 `npm run --silent loop:status -- --contract run-contract.kp.authoring-repeatability-v1`.
 This explicit selection does not authorize new scope or query global blockers.
+
+Next recommendation, awaiting selection: one connected short argument using the
+demonstrated fraction path, measuring source/Article work and exact return.
+The [coverage reconciliation](reviews/authoring-repeatability/coverage-reconciliation.md)
+retains a separately identified algebra retry and the broader revisit triggers.
+No current approved slice remains; historical deferred loops stay parked.
 
 Completed predecessor: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by resolved `run-contract.kp.passage-consolidation-v2`. Its eight

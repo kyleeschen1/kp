@@ -2,6 +2,7 @@
   "id": "next-action.kp.authoring-repeatability",
   "kind": "next-action",
   "title": "Measure fixed-case authoring repeatability",
-  "status": "ready",
-  "domain": "kp"
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Delivered approved fixed-case trial and one repair, with unchanged failures and actual application evidence separated. See docs/project/reviews/2026-09-22-authoring-repeatability-closeout.md; no automatic successor scope."
 }
