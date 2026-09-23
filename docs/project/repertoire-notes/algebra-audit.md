@@ -9,6 +9,12 @@ with a different scalar spelling describe the move, not a newly executed fixture
 The broader unaudited rows remain unchecked. Final executed commands are recorded
 in the run evidence; reading the tests below is not the same as rerunning them.
 
+The [fixed-input authoring trial](../reviews/authoring-repeatability/coverage-reconciliation.md)
+adds two source variations and accessible static math to the existing bounded
+fraction passage evidence. It adds no checkmarks or general authorability claim.
+That note maps all affected stable rows and preserves the factoring, mechanics
+and code limitations found by the trial.
+
 ## Audited support and limits
 
 | Row family | Inspected evidence | Conclusion |

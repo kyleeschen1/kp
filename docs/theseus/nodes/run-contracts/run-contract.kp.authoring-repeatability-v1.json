@@ -189,6 +189,20 @@
       "scope": "author-guidance",
       "checkedAt": "2026-09-23T03:04:52.713Z",
       "notes": "48 entrypoint tests and full app/node/test/Svelte/domain types pass; verified exact generated state IDs and retained original trial failures."
+    },
+    {
+      "command": "npm run test:repertoire",
+      "status": "failed",
+      "scope": "coverage-reconcile",
+      "checkedAt": "2026-09-23T03:06:53.355Z",
+      "notes": "Initial explanatory paragraph violated checklist-only syntax. Removed it from topic file and placed evidence in the existing linked audit; no parser change."
+    },
+    {
+      "command": "npm run test:repertoire; local Markdown link review; git diff --check",
+      "status": "passed",
+      "scope": "coverage-reconcile",
+      "checkedAt": "2026-09-23T03:06:57.822Z",
+      "notes": "All eight repertoire checks pass after preserving checklist format; no checkbox changes or broader semantic claims. Full types passed in preceding slice."
     }
   ],
   "allowedWork": [
@@ -326,7 +340,8 @@
     {
       "id": "coverage-reconcile",
       "title": "Reconcile only evidenced dashboard claims",
-      "status": "planned"
+      "summary": "Existing fraction evidence reconciled; no new curriculum checks. Algebra source errors and mechanics/code reference-only limits retained; future connected argument and separate algebra retry documented without new scope.",
+      "status": "complete"
     },
     {
       "id": "trial-closeout",
