@@ -99,6 +99,12 @@
       "status": "passed",
       "scope": "mechanics-negative",
       "checkedAt": "2026-09-23T02:32:53.652Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-code.test.ts",
+      "status": "passed",
+      "scope": "code-editorial",
+      "checkedAt": "2026-09-23T02:33:57.513Z"
     }
   ],
   "allowedWork": [
@@ -176,7 +182,8 @@
     {
       "id": "code-editorial",
       "title": "Retain two pinned code editorial variants",
-      "status": "planned"
+      "summary": "Two unchanged pinned-prose inputs checked; exact source identities, seven stage pins and reference-only limits retained. Editorial purpose versus boundary emphasis reviewed separately; no comprehension or application claim. Existing node/test type evidence remains applicable to record-only changes.",
+      "status": "complete"
     },
     {
       "id": "code-negative",

@@ -1,0 +1,93 @@
+{
+  "schema": "kp.authoring-repeatability-result.v1",
+  "caseId": "code-boundaries",
+  "task": "reasoning.code",
+  "inputSha256": "6329b8209723d03a7927536ed3296c6d1adc35a260229c448fd721a973a93c08",
+  "expected": "checked",
+  "actual": "checked",
+  "expectationMatched": true,
+  "report": {
+    "kind": "author-check-report",
+    "task": "reasoning.code",
+    "authority": "report-only",
+    "handoff": {
+      "execution": "not-performed",
+      "capabilities": {
+        "owner": "src/experiments/reusable-reasoning/code-evidence.ts",
+        "input": "Editorial prose with exact TypeScript free-shipping source revisions and pedagogical stage pins.",
+        "preview": {
+          "kind": "reference-only",
+          "url": "/experiments/reusable-reasoning-code/",
+          "reason": "No selected-source JSON editor; the route shows the reference caller."
+        },
+        "extraction": {
+          "kind": "domain-owned",
+          "owner": "src/experiments/reusable-reasoning/code-evidence.ts",
+          "scope": "Bounded language context and exact return; not equation procedure or flashcard parity."
+        },
+        "publication": {
+          "kind": "unsupported",
+          "reason": "No selected-source code reasoning edition builder."
+        }
+      }
+    },
+    "status": "checked",
+    "result": {
+      "status": "compiled",
+      "domain": "code",
+      "source": {
+        "title": "Check the threshold boundary",
+        "statement": "A shared decision must preserve the declared callers' outcomes.",
+        "explanation": "Compare the declared below, at and above threshold cases after extraction. These cases accompany the pinned transformation; they are not a proof about arbitrary programs.",
+        "sourceRevisionId": "free-shipping.before.v1",
+        "targetRevisionId": "free-shipping.after.v1",
+        "stageIds": [
+          "stage.orient",
+          "stage.compare-duplicates",
+          "stage.introduce-helper",
+          "stage.move-shared-rule",
+          "stage.replace-cost-call",
+          "stage.replace-message-call",
+          "stage.verify-parity"
+        ]
+      },
+      "revisionId": "sha256:da194528634545ffe4157e03b2ba455932c5e2606d567fb441b5665615a97a0a",
+      "checkpointCount": 7,
+      "checkpointKind": "pedagogical-stage",
+      "assumptions": [
+        "Only the exact canonical TypeScript sources are supported.",
+        "Behavioral evidence covers the three declared threshold cases, not arbitrary programs or inputs."
+      ],
+      "editorialStatus": "editorial"
+    }
+  },
+  "preview": {
+    "status": "reference-only",
+    "url": "/experiments/reusable-reasoning-code/",
+    "visited": false
+  },
+  "checkElapsedMs": 13.812375000000031,
+  "work": {
+    "sourceEditsAfterFreeze": 0,
+    "adapterEdits": 0,
+    "engineEdits": 0,
+    "editorialCorrections": [],
+    "engineeringMinutes": null,
+    "notes": "No per-case source, adapter or engine correction. Trial infrastructure is separate; checker elapsed time excludes preview and is not engineering time."
+  },
+  "editorialJudgment": "not-certified",
+  "provenance": "current-agent-with-implementation-knowledge",
+  "phase": "baseline",
+  "implementationCommit": "468a67df2b982390c56a4889e6493625898bfe08",
+  "recordedAt": "2026-09-23T02:33:27.038Z",
+  "command": "npm run trial:authoring -- --phase baseline --case code-boundaries --record",
+  "invocation": [
+    "--phase",
+    "baseline",
+    "--case",
+    "code-purpose",
+    "--case",
+    "code-boundaries",
+    "--record"
+  ]
+}

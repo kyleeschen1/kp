@@ -19,3 +19,13 @@ namespaced IDs such as `state.trial.expanded` and `state.trial.factored`. Changi
 these frozen cases now or relaxing the responsible source validator would conceal
 the observed failure. Final findings must report status matching separately from
 intent coverage and actual host application.
+
+The two code variants preserve `free-shipping.before.v1`,
+`free-shipping.after.v1`, and all seven ordered stage IDs. Both check through the
+existing language owner; neither has selected-source application. In current-agent
+editorial review, `code-purpose` describes the helper extraction sequence, while
+`code-boundaries` emphasizes the declared threshold cases and explicitly avoids a
+universal-program proof claim. Both are consistent with the bounded source pins.
+No editorial correction was made. This is qualified review of wording, not a
+measured difference in comprehension or fine-grained salience. Their different
+editorial revisions do not create new verified intermediate programs.
