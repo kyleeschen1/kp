@@ -29,6 +29,12 @@
       "status": "passed",
       "scope": "freeze-cases",
       "checkedAt": "2026-09-23T02:05:54.911Z"
+    },
+    {
+      "command": "npm run test:authoring-repeatability",
+      "status": "passed",
+      "scope": "outcome-records",
+      "checkedAt": "2026-09-23T02:08:52.418Z"
     }
   ],
   "allowedWork": [
@@ -58,7 +64,8 @@
     {
       "id": "outcome-records",
       "title": "Separate checked and applied outcomes",
-      "status": "planned"
+      "summary": "Three focused record/integrity checks and node/test types pass. Applied claims require exact source and owner revision plus host evidence; reference-only and rejected inputs cannot claim application. Engineering time remains explicitly unknown unless measured.",
+      "status": "complete"
     },
     {
       "id": "trial-runner",
