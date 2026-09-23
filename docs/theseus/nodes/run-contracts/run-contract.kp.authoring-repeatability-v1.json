@@ -105,6 +105,12 @@
       "status": "passed",
       "scope": "code-editorial",
       "checkedAt": "2026-09-23T02:33:57.513Z"
+    },
+    {
+      "command": "npm run trial:authoring -- --phase baseline --case code-changed-source --record",
+      "status": "passed",
+      "scope": "code-negative",
+      "checkedAt": "2026-09-23T02:35:04.286Z"
     }
   ],
   "allowedWork": [
@@ -188,7 +194,8 @@
     {
       "id": "code-negative",
       "title": "Retain changed-source rejection",
-      "status": "planned"
+      "summary": "Changed-source negative rejected at its exact source pin; no reference evidence borrowing. All ten baseline owner outcomes are retained, including both algebra source-format failures.",
+      "status": "complete"
     },
     {
       "id": "preview-baseline",
