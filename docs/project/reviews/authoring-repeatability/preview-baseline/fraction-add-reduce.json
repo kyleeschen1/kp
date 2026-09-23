@@ -1,0 +1,109 @@
+{
+  "schema": "kp.authoring-repeatability-result.v1",
+  "caseId": "fraction-add-reduce",
+  "task": "equation.fraction-chain",
+  "inputSha256": "c296088f78c6fdc10a4cbea4ac7935aa635280db7668d5f7af5a6abbde0f1bb4",
+  "expected": "checked",
+  "actual": "checked",
+  "expectationMatched": true,
+  "report": {
+    "kind": "author-check-report",
+    "task": "equation.fraction-chain",
+    "authority": "report-only",
+    "handoff": {
+      "execution": "not-performed",
+      "capabilities": {
+        "owner": "src/authoring/fraction-chain-author-check.ts",
+        "input": "Two to eight explicit integer-fraction states; positive denominators. Checked ordered alignment, raw addition/subtraction and common-divisor reduction. Optional hints select verified moves; prose is editorial. No arbitrary solver or automatic visual certification.",
+        "preview": {
+          "kind": "local-source-build",
+          "url": "/experiments/fraction-chain/",
+          "reason": "Inspect result.hostEligibility separately from semantic acceptance. Edit the retained source and adjacent Article; checking another file does not apply it to this host."
+        },
+        "extraction": {
+          "kind": "domain-owned",
+          "owner": "src/tutorial/fraction-chain/publication.ts",
+          "scope": "Raw numerator combination detail and exact held return in the retained passage; no general extraction."
+        },
+        "publication": {
+          "kind": "unsupported",
+          "reason": "Local source/Article host exists; no selected-source immutable edition command."
+        }
+      }
+    },
+    "status": "checked",
+    "result": {
+      "status": "compiled",
+      "domain": "algebra",
+      "revisionId": "16fa2c669aac1b59f733928e4295a9775c85e5a1d3f9e4c60d3a8464af05f2dd",
+      "checkpointCount": 4,
+      "hostEligibility": {
+        "status": "eligible",
+        "host": "fraction-passage",
+        "revision": "16fa2c669aac1b59f733928e4295a9775c85e5a1d3f9e4c60d3a8464af05f2dd",
+        "paintCertification": "not-performed"
+      },
+      "moves": [
+        {
+          "id": "align",
+          "kind": "align",
+          "from": "unlike",
+          "to": "aligned"
+        },
+        {
+          "id": "combine",
+          "kind": "combine",
+          "from": "aligned",
+          "to": "combined"
+        },
+        {
+          "id": "reduce",
+          "kind": "reduce",
+          "from": "combined",
+          "to": "reduced"
+        }
+      ],
+      "editorialStatus": "editorial-not-proof",
+      "presentationStatus": "not-certified-by-this-check"
+    }
+  },
+  "preview": {
+    "status": "failed",
+    "sourceApplied": true,
+    "sourceSha256": "c296088f78c6fdc10a4cbea4ac7935aa635280db7668d5f7af5a6abbde0f1bb4",
+    "revision": "16fa2c669aac1b59f733928e4295a9775c85e5a1d3f9e4c60d3a8464af05f2dd",
+    "host": "/experiments/fraction-chain/?authoring-trial=fraction-add-reduce",
+    "mode": "existing-host-fixture",
+    "command": "npm run visual:authoring-repeatability",
+    "checks": [
+      "exact frozen source",
+      "owner revision",
+      "native visual endpoints",
+      "reverse seek",
+      "exact disclosure return",
+      "font resize"
+    ],
+    "failures": [
+      "Static equations have aria-hidden visual HTML without native MathML or an alternative equation label."
+    ]
+  },
+  "checkElapsedMs": 547.7347500000001,
+  "work": {
+    "sourceEditsAfterFreeze": 0,
+    "adapterEdits": 0,
+    "engineEdits": 0,
+    "editorialCorrections": [],
+    "engineeringMinutes": null,
+    "notes": "No per-case source, adapter or engine correction. Trial infrastructure is separate; checker elapsed time excludes preview and is not engineering time."
+  },
+  "editorialJudgment": "not-certified",
+  "provenance": "current-agent-with-implementation-knowledge",
+  "browsers": [
+    "chromium",
+    "firefox",
+    "webkit"
+  ],
+  "phase": "preview-baseline",
+  "sourceCheckRecord": "baseline/fraction-add-reduce.json",
+  "qualification": "Source was applied in an isolated browser document response using the existing compiler and host. Accessibility preservation failed; this is not a ready preview or a new upload feature."
+}

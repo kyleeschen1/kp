@@ -8,7 +8,10 @@ export type TrialPreview =
   | { readonly status: "unsupported"; readonly reason: string }
   | { readonly status: "applied"; readonly sourceSha256: string; readonly revision: string;
       readonly host: string; readonly mode: "existing-host-fixture" | "existing-host-editor";
-      readonly command: string; readonly checks: readonly string[] };
+      readonly command: string; readonly checks: readonly string[] }
+  | { readonly status: "failed"; readonly sourceApplied: true; readonly sourceSha256: string; readonly revision: string;
+      readonly host: string; readonly mode: "existing-host-fixture" | "existing-host-editor";
+      readonly command: string; readonly checks: readonly string[]; readonly failures: readonly string[] };
 
 export interface TrialWork {
   readonly sourceEditsAfterFreeze: number;
@@ -39,7 +42,7 @@ export function createTrialRecord(item: RepeatabilityCase, report: AuthorCheckRe
   // A capability declaration is not evidence that these bytes reached a host.
   if (report.status === "repair-gap" && application.status !== "unsupported" && application.status !== "not-performed")
     throw new Error("Rejected input cannot claim reference or application evidence.");
-  if (application.status === "applied") {
+  if (application.status === "applied" || application.status === "failed") {
     if (report.status !== "checked" || (capability.kind !== "explicit-apply" && capability.kind !== "local-source-build"))
       throw new Error("Rejected or reference-only input cannot be an applied success.");
     if (application.sourceSha256 !== item.sha256 || !application.revision.trim()
@@ -50,6 +53,8 @@ export function createTrialRecord(item: RepeatabilityCase, report: AuthorCheckRe
       throw new Error("Applied revision must match the current owner report.");
     if ((capability.kind === "explicit-apply") !== (application.mode === "existing-host-editor"))
       throw new Error("Application evidence must use the declared host mechanism.");
+    if (application.status === "failed" && (!application.failures.length || application.failures.some(failure => !failure.trim())))
+      throw new Error("Failed preview must retain its preservation gap.");
     if (item.task === "equation.fraction-chain") {
       const result = report.result;
       if (!("hostEligibility" in result) || !isRecord(result.hostEligibility) || result.hostEligibility["status"] !== "eligible")

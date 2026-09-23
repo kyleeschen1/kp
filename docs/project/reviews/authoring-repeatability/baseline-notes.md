@@ -29,3 +29,31 @@ universal-program proof claim. Both are consistent with the bounded source pins.
 No editorial correction was made. This is qualified review of wording, not a
 measured difference in comprehension or fine-grained salience. Their different
 editorial revisions do not create new verified intermediate programs.
+
+The two fraction inputs reach the existing native host in isolated document
+fixtures: exact source, owner revision, visual endpoints, reverse seeking,
+disclosure return and font resizing pass across Chromium, Firefox and WebKit.
+Neither baseline preview is ready: both no-JS accessible-math checks fail in all
+three browsers. `publication.ts` calls the native KaTeX adapter with HTML-only
+output; that output marks visual glyphs `aria-hidden="true"` and emits no MathML
+or alternative equation label. The missing accessible equation is a shared
+publication defect, independent of the raw input and motion renderer.
+
+`npm run visual:authoring-repeatability` initially passed five of twelve cases:
+six failures reproduce missing MathML, and the seventh was a WebKit test pointer
+aimed before font-resize geometry settled. Waiting for measured enlarged geometry
+and two observer frames repaired that harness condition; the focused WebKit
+`--project webkit --grep 'frozen source'` rerun passes both interactive cases with
+unchanged product code and tolerance. The initial probe also incorrectly looked
+for static MathML to compare visual endpoints; those are now independently
+compared to native visual markup, while the accessibility gate remains failing.
+
+`preview-baseline/` records source application with **failed preservation**, not
+success. The browser fixture compiles an adjacent source-specific Article and
+uses the real host entry/CSS. It does not add a public source selector, mutate the
+shared accepted examples, or claim a published edition. This remaining release
+gate must be repaired and rerun before closeout. No baseline failure is waived.
+Each fraction preview required one new adjacent Article file; those are content
+authoring costs in addition to the frozen JSON. The new browser harness and result
+format are shared trial infrastructure, not zero-cost content reuse. Per-case
+adapter/engine edits remain zero; unmeasured engineering time stays unknown.

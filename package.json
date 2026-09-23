@@ -47,6 +47,7 @@
     "test:explanation-review": "node --disable-warning=ExperimentalWarning --test tests/explanation-review.test.ts tests/gradient-contour-sequence.test.ts",
     "test:authoring-repeatability": "node --disable-warning=ExperimentalWarning --test tests/authoring-repeatability.test.ts",
     "trial:authoring": "node --disable-warning=ExperimentalWarning scripts/authoring-repeatability.ts",
+    "visual:authoring-repeatability": "playwright test --config playwright.authoring-repeatability.config.ts --workers=1",
     "test:authoring-entrypoints": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-*.test.ts",
     "test:bayesian-reasoning": "node --disable-warning=ExperimentalWarning --test tests/bayesian-reasoning-*.test.ts",
     "visual:bayesian-reasoning:shared": "playwright test --config playwright.bayesian-reasoning-review.config.ts --project=chromium --workers=1",

@@ -111,6 +111,19 @@
       "status": "passed",
       "scope": "code-negative",
       "checkedAt": "2026-09-23T02:35:04.286Z"
+    },
+    {
+      "command": "npm run visual:authoring-repeatability",
+      "status": "failed",
+      "scope": "preview-baseline",
+      "checkedAt": "2026-09-23T02:43:43.235Z",
+      "notes": "Six no-JS cases reproduce missing MathML. One initial WebKit resize-pointer harness race was repaired; focused interactive rerun passes both unchanged product cases."
+    },
+    {
+      "command": "npm run visual:authoring-repeatability -- --project webkit --grep \"frozen source\"",
+      "status": "passed",
+      "scope": "preview-baseline",
+      "checkedAt": "2026-09-23T02:43:44.598Z"
     }
   ],
   "allowedWork": [
@@ -200,7 +213,8 @@
     {
       "id": "preview-baseline",
       "title": "Exercise eligible source application",
-      "status": "planned"
+      "summary": "Baseline executed and retained: two source applications with failed accessibility preservation, three reference-only checked inputs, five rejected inputs. Interactive fraction checks pass across supported browsers; missing static native MathML remains an open release gate for the upcoming bounded repair.",
+      "status": "complete"
     },
     {
       "id": "baseline-findings",

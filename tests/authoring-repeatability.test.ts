@@ -83,6 +83,9 @@ test("applied records require matching source, owner revision, eligible host and
     host: "/experiments/reusable-reasoning/?example=common-factor", mode: "existing-host-editor" as const,
     command: "synthetic-test", checks: ["source pin", "native endpoints"] };
   assert.equal(createTrialRecord(algebra, report, 1, work, evidence).preview.status, "applied");
+  const failedPreview = { ...evidence, status: "failed" as const, sourceApplied: true as const, failures: ["native accessible math missing"] };
+  assert.equal(createTrialRecord(algebra, report, 1, work, failedPreview).preview.status, "failed");
+  assert.throws(() => createTrialRecord(algebra, report, 1, work, { ...failedPreview, failures: [] }), /preservation gap/);
   for (const broken of [{ ...evidence, sourceSha256: "stale" }, { ...evidence, revision: "stale" },
     { ...evidence, checks: [] }, { ...evidence, command: "" }, { ...evidence, host: "" }])
     assert.throws(() => createTrialRecord(algebra, report, 1, work, broken), /Applied/);
