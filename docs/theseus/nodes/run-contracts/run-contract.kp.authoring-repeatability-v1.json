@@ -67,6 +67,19 @@
       "status": "passed",
       "scope": "fraction-boundary",
       "checkedAt": "2026-09-23T02:26:59.784Z"
+    },
+    {
+      "command": "npm run trial:authoring -- --phase baseline --case algebra-single-digit --record",
+      "status": "failed",
+      "scope": "algebra-variation",
+      "checkedAt": "2026-09-23T02:29:23.002Z",
+      "notes": "Expected checked but got located source-ID repair; failure retained as approved trial data, not waived or substituted."
+    },
+    {
+      "command": "npm run test:common-factor-authoring",
+      "status": "passed",
+      "scope": "algebra-variation",
+      "checkedAt": "2026-09-23T02:29:24.207Z"
     }
   ],
   "allowedWork": [
@@ -120,7 +133,8 @@
     {
       "id": "algebra-variation",
       "title": "Retain supported algebra baseline",
-      "status": "planned"
+      "summary": "Executed and retained unexpected source-ID rejection; no algebra or host reuse claim. Input remains frozen. All 32 existing owner checks pass; later adjudication must distinguish author error from implementation capability.",
+      "status": "complete"
     },
     {
       "id": "algebra-boundary",
