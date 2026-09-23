@@ -11,6 +11,29 @@ import { readFileSync, readdirSync } from "node:fs";
 const work: TrialWork = { sourceEditsAfterFreeze: 0, adapterEdits: 0, engineEdits: 0,
   editorialCorrections: [], engineeringMinutes: null, notes: "Synthetic record test; no trial case executed." };
 
+test("unchanged-input rerun preserves every owner outcome and only repairs fraction preview preservation", () => {
+  const directory = new URL("../docs/project/reviews/authoring-repeatability/", import.meta.url);
+  assert.deepEqual(readdirSync(new URL("rerun/", directory)).sort(), repeatabilityCases.map(item => `${item.id}.json`).sort());
+  for (const item of repeatabilityCases) {
+    const baseline = JSON.parse(readFileSync(new URL(`baseline/${item.id}.json`, directory), "utf8"));
+    const rerun = JSON.parse(readFileSync(new URL(`rerun/${item.id}.json`, directory), "utf8"));
+    assert.equal(rerun.inputSha256, item.sha256);
+    assert.deepEqual(rerun.report, baseline.report);
+    assert.deepEqual(rerun.preview, baseline.preview);
+    assert.equal(rerun.actual, baseline.actual);
+    assert.equal(rerun.work.sourceEditsAfterFreeze, 0);
+    if (item.id !== "fraction-add-reduce" && item.id !== "fraction-subtract") continue;
+    const before = JSON.parse(readFileSync(new URL(`preview-baseline/${item.id}.json`, directory), "utf8"));
+    const after = JSON.parse(readFileSync(new URL(`preview-rerun/${item.id}.json`, directory), "utf8"));
+    assert.equal(before.preview.status, "failed"); assert.equal(after.preview.status, "applied");
+    assert.equal(after.preview.sourceSha256, before.preview.sourceSha256);
+    assert.equal(after.preview.revision, before.preview.revision);
+    assert.equal(after.preview.mode, "existing-host-fixture");
+    assert.deepEqual(after.browsers, ["chromium", "firefox", "webkit"]);
+    assert.deepEqual(createTrialRecord(item, after.report, after.checkElapsedMs, after.work, after.preview).preview, after.preview);
+  }
+});
+
 test("all first outcomes remain pinned and algebra status matching cannot conceal the missed boundary", () => {
   const directory = new URL("../docs/project/reviews/authoring-repeatability/baseline/", import.meta.url);
   assert.deepEqual(readdirSync(directory).sort(), repeatabilityCases.map(item => `${item.id}.json`).sort());

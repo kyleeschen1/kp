@@ -1,0 +1,67 @@
+{
+  "schema": "kp.authoring-repeatability-result.v1",
+  "caseId": "fraction-false-count",
+  "task": "equation.fraction-chain",
+  "inputSha256": "9cc8e6186874f7a2b6948a849b20b2719a21f7176186db82d7bbca34e66dc287",
+  "expected": "repair-gap",
+  "actual": "repair-gap",
+  "expectationMatched": true,
+  "report": {
+    "kind": "author-check-report",
+    "task": "equation.fraction-chain",
+    "authority": "report-only",
+    "handoff": {
+      "execution": "not-performed",
+      "capabilities": {
+        "owner": "src/authoring/fraction-chain-author-check.ts",
+        "input": "Two to eight explicit integer-fraction states; positive denominators. Checked ordered alignment, raw addition/subtraction and common-divisor reduction. Optional hints select verified moves; prose is editorial. No arbitrary solver or automatic visual certification.",
+        "preview": {
+          "kind": "local-source-build",
+          "url": "/experiments/fraction-chain/",
+          "reason": "Inspect result.hostEligibility separately from semantic acceptance. Edit the retained source and adjacent Article; checking another file does not apply it to this host."
+        },
+        "extraction": {
+          "kind": "domain-owned",
+          "owner": "src/tutorial/fraction-chain/publication.ts",
+          "scope": "Raw numerator combination detail and exact held return in the retained passage; no general extraction."
+        },
+        "publication": {
+          "kind": "unsupported",
+          "reason": "Local source/Article host exists; no selected-source immutable edition command."
+        }
+      }
+    },
+    "status": "repair-gap",
+    "result": {
+      "status": "repair-required",
+      "code": "fraction-chain.operation",
+      "path": "$.moves[1]",
+      "expected": "No supported exact adjacent move matches. Supply explicit alignment, raw combination and reduction stops; equivalent endpoints alone do not specify a supported path."
+    }
+  },
+  "preview": {
+    "status": "unsupported",
+    "reason": "Existing owner returned a repair; retain its exact diagnostic below."
+  },
+  "checkElapsedMs": 5.515916999999945,
+  "work": {
+    "sourceEditsAfterFreeze": 0,
+    "adapterEdits": 0,
+    "engineEdits": 0,
+    "editorialCorrections": [],
+    "engineeringMinutes": null,
+    "notes": "No per-case source, adapter or engine correction. Trial infrastructure is separate; checker elapsed time excludes preview and is not engineering time."
+  },
+  "editorialJudgment": "not-certified",
+  "provenance": "current-agent-with-implementation-knowledge",
+  "phase": "rerun",
+  "implementationCommit": "833a04c659101465d5b4928850b62b2e966dc508",
+  "recordedAt": "2026-09-23T02:59:18.382Z",
+  "command": "npm run trial:authoring -- --phase rerun --case fraction-false-count --record",
+  "invocation": [
+    "--phase",
+    "rerun",
+    "--all",
+    "--record"
+  ]
+}

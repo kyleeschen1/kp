@@ -168,6 +168,13 @@
       "scope": "repair-pressure",
       "checkedAt": "2026-09-23T02:58:48.909Z",
       "notes": "All canonical cases covered by passing checks; original WebKit driver failure retained and corrected. Frozen trial browser cohort 12 passed at preceding repair slice."
+    },
+    {
+      "command": "npm run test:authoring-repeatability; npm run typecheck:tests",
+      "status": "passed",
+      "scope": "frozen-rerun",
+      "checkedAt": "2026-09-23T03:00:29.652Z",
+      "notes": "Seven regression tests pass. Trial command exits one deliberately for the retained unexpected algebra rejection; all ten records produced, no runner execution failures, exact reports unchanged. Source outcome mismatch is data, not waived verification."
     }
   ],
   "allowedWork": [
@@ -287,7 +294,8 @@
     {
       "id": "frozen-rerun",
       "title": "Rerun all ten unchanged inputs",
-      "status": "planned"
+      "summary": "Ten immutable rerun records, two source-pinned passing preview records, original failures retained. Seven invariant tests and test types pass; checker outcomes unchanged.",
+      "status": "complete"
     },
     {
       "id": "cost-comparison",

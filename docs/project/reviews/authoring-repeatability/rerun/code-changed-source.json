@@ -1,0 +1,69 @@
+{
+  "schema": "kp.authoring-repeatability-result.v1",
+  "caseId": "code-changed-source",
+  "task": "reasoning.code",
+  "inputSha256": "4f3aa3f03f34b967e9830ed432423a49d1c4030e2c33ddbd8eade34d4da6e30b",
+  "expected": "repair-gap",
+  "actual": "repair-gap",
+  "expectationMatched": true,
+  "report": {
+    "kind": "author-check-report",
+    "task": "reasoning.code",
+    "authority": "report-only",
+    "handoff": {
+      "execution": "not-performed",
+      "capabilities": {
+        "owner": "src/experiments/reusable-reasoning/code-evidence.ts",
+        "input": "Editorial prose with exact TypeScript free-shipping source revisions and pedagogical stage pins.",
+        "preview": {
+          "kind": "reference-only",
+          "url": "/experiments/reusable-reasoning-code/",
+          "reason": "No selected-source JSON editor; the route shows the reference caller."
+        },
+        "extraction": {
+          "kind": "domain-owned",
+          "owner": "src/experiments/reusable-reasoning/code-evidence.ts",
+          "scope": "Bounded language context and exact return; not equation procedure or flashcard parity."
+        },
+        "publication": {
+          "kind": "unsupported",
+          "reason": "No selected-source code reasoning edition builder."
+        }
+      }
+    },
+    "status": "repair-gap",
+    "result": {
+      "status": "repair-gap",
+      "diagnostic": {
+        "code": "kp.reasoning.code-binding",
+        "path": "$.sourceRevisionId",
+        "expected": "Retain exact canonical source revisions and ordered pedagogical stages; new code transformations need language-owned evidence."
+      }
+    }
+  },
+  "preview": {
+    "status": "unsupported",
+    "reason": "Existing owner returned a repair; retain its exact diagnostic below."
+  },
+  "checkElapsedMs": 0.3489999999999327,
+  "work": {
+    "sourceEditsAfterFreeze": 0,
+    "adapterEdits": 0,
+    "engineEdits": 0,
+    "editorialCorrections": [],
+    "engineeringMinutes": null,
+    "notes": "No per-case source, adapter or engine correction. Trial infrastructure is separate; checker elapsed time excludes preview and is not engineering time."
+  },
+  "editorialJudgment": "not-certified",
+  "provenance": "current-agent-with-implementation-knowledge",
+  "phase": "rerun",
+  "implementationCommit": "833a04c659101465d5b4928850b62b2e966dc508",
+  "recordedAt": "2026-09-23T02:59:18.463Z",
+  "command": "npm run trial:authoring -- --phase rerun --case code-changed-source --record",
+  "invocation": [
+    "--phase",
+    "rerun",
+    "--all",
+    "--record"
+  ]
+}

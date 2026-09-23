@@ -1,0 +1,67 @@
+{
+  "schema": "kp.authoring-repeatability-result.v1",
+  "caseId": "mechanics-zero-mass",
+  "task": "mechanics.momentum-energy",
+  "inputSha256": "2792cc9602dc5892c57d7334494fabfd58587f845daf95d426813bb64217f142",
+  "expected": "repair-gap",
+  "actual": "repair-gap",
+  "expectationMatched": true,
+  "report": {
+    "kind": "author-check-report",
+    "task": "mechanics.momentum-energy",
+    "authority": "report-only",
+    "handoff": {
+      "execution": "not-performed",
+      "capabilities": {
+        "owner": "src/authoring/mechanics-derivation-author-check.ts",
+        "input": "Existing momentum-energy derivation assumptions: positive-real mass, Euclidean-vector velocity, momentum equals mass times velocity. No arbitrary equations, physical inference or editable notation.",
+        "preview": {
+          "kind": "reference-only",
+          "url": "/experiments/mechanics-relations/#energy-from-momentum",
+          "reason": "Checks the existing mechanics authority; does not apply a selected draft."
+        },
+        "extraction": {
+          "kind": "domain-owned",
+          "owner": "src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts",
+          "scope": "Existing checked norm-scaling and mass-cancellation detail only."
+        },
+        "publication": {
+          "kind": "unsupported",
+          "reason": "No selected-source mechanics edition command."
+        }
+      }
+    },
+    "status": "repair-gap",
+    "result": {
+      "status": "repair-required",
+      "code": "physics.derivation.unsupported-source",
+      "path": "$.mass",
+      "expected": "Use the existing positive-real mass, Euclidean-vector velocity and mass-times-velocity momentum assumptions. Arbitrary mechanics inference is unsupported."
+    }
+  },
+  "preview": {
+    "status": "unsupported",
+    "reason": "Existing owner returned a repair; retain its exact diagnostic below."
+  },
+  "checkElapsedMs": 0.15345800000000054,
+  "work": {
+    "sourceEditsAfterFreeze": 0,
+    "adapterEdits": 0,
+    "engineEdits": 0,
+    "editorialCorrections": [],
+    "engineeringMinutes": null,
+    "notes": "No per-case source, adapter or engine correction. Trial infrastructure is separate; checker elapsed time excludes preview and is not engineering time."
+  },
+  "editorialJudgment": "not-certified",
+  "provenance": "current-agent-with-implementation-knowledge",
+  "phase": "rerun",
+  "implementationCommit": "833a04c659101465d5b4928850b62b2e966dc508",
+  "recordedAt": "2026-09-23T02:59:18.415Z",
+  "command": "npm run trial:authoring -- --phase rerun --case mechanics-zero-mass --record",
+  "invocation": [
+    "--phase",
+    "rerun",
+    "--all",
+    "--record"
+  ]
+}
