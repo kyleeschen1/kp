@@ -41,3 +41,20 @@ The repair is expected to improve two usable previews, not checker acceptance.
 It adds serialized MathML and therefore may increase HTML bytes; measure that
 cost rather than claiming a speedup. Per-case engineering savings and learner
 benefits remain unmeasured.
+
+## Executed preservation pressure
+
+The repaired publication passes all 12 frozen-source browser checks (two cases,
+interactive and no-JS, Chromium/Firefox/WebKit), plus all 38 fraction unit checks.
+The established-host cohort passed 26/27 initially. Its WebKit collapsed-width
+restoration driver clicked before ResizeObserver layout completed. Waiting across
+that observer/paint boundary in the test, without changing product code or target
+tolerance, passes nine repeated cases: three runs in each supported engine.
+Commands: `npm run visual:authoring-repeatability`,
+`npm run visual:fraction-chain:cohort`, and
+`npm run visual:fraction-chain:cohort -- --grep 'native rule geometry' --repeat-each=3`.
+The combined evidence covers all established-host cases, including reversal,
+pointer cancellation, exact disclosure return, hidden native paint and font resize.
+No lifecycle owner changed and no new disposal mechanism is claimed. The shared
+publication regression checks all four production callers and exact native visual
+markup; no source spelling, animation timing or semantic inference was repaired.

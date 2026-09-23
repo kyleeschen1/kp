@@ -292,6 +292,9 @@ test("native rule geometry survives hidden ownership and the rail survives font 
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await root.evaluate(element => { element.style.width = ""; });
   await expect.poll(() => root.locator(".fraction-history").evaluate(element => element.getBoundingClientRect().width)).toBeGreaterThan(0);
+  // Width restoration is visible before ResizeObserver updates rail geometry.
+  // Aim only after that observer and its scheduled layout have painted.
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
   await seek(page, 2.5);
   await page.screenshot({ path: "tmp/codex/fraction-chain-review/large-font.png", fullPage: true });
   expect(await root.evaluate(element => {
