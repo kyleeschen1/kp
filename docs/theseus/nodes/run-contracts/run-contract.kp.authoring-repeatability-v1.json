@@ -175,6 +175,13 @@
       "scope": "frozen-rerun",
       "checkedAt": "2026-09-23T03:00:29.652Z",
       "notes": "Seven regression tests pass. Trial command exits one deliberately for the retained unexpected algebra rejection; all ten records produced, no runner execution failures, exact reports unchanged. Source outcome mismatch is data, not waived verification."
+    },
+    {
+      "command": "npm run measure:mechanics-relations-closure with fraction, fraction-numeric, fraction-two-sided and fraction-subtraction entries",
+      "status": "passed",
+      "scope": "cost-comparison",
+      "checkedAt": "2026-09-23T03:01:53.332Z",
+      "notes": "All complete consumers measured after passing production build; identical 415444 initial and 458026 activated JS/CSS gzip. Only main host has retained before HTML baseline; no fabricated deltas or speedup."
     }
   ],
   "allowedWork": [
@@ -300,7 +307,8 @@
     {
       "id": "cost-comparison",
       "title": "Compare measured effort and affected costs",
-      "status": "planned"
+      "summary": "Recorded complete closure measurements and authoring costs with unknown engineering time and incompatible timing samples explicit. Main HTML adds 190 gzip bytes; no runtime size change.",
+      "status": "complete"
     },
     {
       "id": "author-guidance",
