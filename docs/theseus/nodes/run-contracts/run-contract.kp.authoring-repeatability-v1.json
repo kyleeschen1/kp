@@ -136,6 +136,24 @@
       "status": "passed",
       "scope": "select-one-seam",
       "checkedAt": "2026-09-23T02:47:46.815Z"
+    },
+    {
+      "command": "npm run visual:authoring-repeatability",
+      "status": "passed",
+      "scope": "repair-one-seam",
+      "checkedAt": "2026-09-23T02:52:21.469Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repair-one-seam",
+      "checkedAt": "2026-09-23T02:52:22.753Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "repair-one-seam",
+      "checkedAt": "2026-09-23T02:52:23.808Z"
     }
   ],
   "allowedWork": [
@@ -243,7 +261,8 @@
     {
       "id": "repair-one-seam",
       "title": "Repair the selected boundary or record no-op",
-      "status": "planned"
+      "summary": "Shared fraction publication emits native MathML without changing visual glyph markup. 38 fraction tests, 12 cross-browser trial cases, full types, architecture and production build pass. No raw input, semantic model, renderer default or runtime import changed.",
+      "status": "complete"
     },
     {
       "id": "repair-pressure",

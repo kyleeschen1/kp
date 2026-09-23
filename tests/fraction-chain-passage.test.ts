@@ -3,6 +3,7 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { fractionIntervalAt, fractionPositionAtY, fractionSceneAt } from "../src/tutorial/fraction-chain/position.ts";
 import { compileFractionChainPublication } from "../src/tutorial/fraction-chain/publication.ts";
+import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 
 test("measured fraction rail round trips coarse and expanded positions at different font geometries", () => {
   for (const scale of [.75, 1, 2]) for (const stops of [[0, 1, 2], [0, 1, 1.5, 2], [0, 1, 2, 3], [0, 1, 1.5, 2, 3]]) {
@@ -45,4 +46,22 @@ test("fraction host cannot silently fork the accepted reader styling", () => {
   assert.match(host, /class="kp-reasoning-document"/);
   const local = readFileSync("src/tutorial/fraction-chain/style.css", "utf8");
   assert.doesNotMatch(local, /font-family|--derivation-inspection-accent|text-shadow|#[\da-f]{3,8}\b/i);
+});
+
+test("every fraction publication exposes native MathML without changing its visual glyph markup", () => {
+  for (const name of ["fraction-chain", "fraction-chain-numeric", "fraction-chain-two-sided", "fraction-chain-subtraction"]) {
+    const source = JSON.parse(readFileSync(`examples/algebra/${name}.json`, "utf8"));
+    const html = compileFractionChainPublication(readFileSync(`examples/algebra/${name}.article.md`, "utf8"), source);
+    const annotations = [...html.matchAll(/<annotation encoding="application\/x-tex">([\s\S]*?)<\/annotation>/g)].map(match => match[1]);
+    // Two additional expressions are the static detail and its expandable row.
+    assert.equal(annotations.length, source.states.length + 2, name);
+    for (const state of source.states) {
+      assert.ok(annotations.includes(state.latex), `${name}: ${state.latex}`);
+      const visual = renderLatexToHtml(state.latex);
+      const accessible = renderLatexToHtml(state.latex, { output: "htmlAndMathml" });
+      const suffix = (value: string) => value.slice(value.indexOf('<span class="katex-html"'));
+      assert.equal(suffix(accessible), suffix(visual));
+      assert.ok(html.includes(accessible), "Publication must use the complete native projection");
+    }
+  }
 });

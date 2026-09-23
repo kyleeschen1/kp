@@ -72,10 +72,12 @@ for (const item of cases) {
       const page = await context.newPage(); await mount(page);
       await expect(page.locator("h1")).toHaveText(source.title);
       expect(await page.locator("[data-fraction-row]:not([data-fraction-detail]) > .energy-derivation-equation .katex-mathml annotation").allTextContents()).toEqual(source.states.map(state => state.latex));
+      expect(await page.locator("[data-fraction-row]:not([data-fraction-detail]) > .energy-derivation-equation math").evaluateAll(nodes => nodes.every(node => !node.closest('[aria-hidden="true"]')))).toBe(true);
       await expect(page.locator("[data-fraction-disclosure]")).toBeHidden();
       const detail = page.locator("[data-fraction-static-detail]");
       await detail.locator("summary").click();
       await expect(detail.locator(".katex-html")).toBeVisible();
+      await expect(detail.locator(".katex-mathml annotation")).toHaveCount(1);
       for (const move of source.moves) await expect(page.locator("article")).toContainText(move.prose);
     } finally { await context.close(); }
   });

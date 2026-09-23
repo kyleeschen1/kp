@@ -17,7 +17,9 @@ export function compileFractionChainPublication(markdown: string, input: unknown
   const articleSource = createKpArticleSource("examples/algebra/fraction-chain.article.md", markdown);
   const { lock } = resolveKpArticleImports(articleSource, []);
   const article = compileKpArticleDocument({ source: articleSource, registry: [], lock });
-  const math = (latex: string) => renderLatexToHtml(latex, { displayMode: true });
+  // Static equations need their native semantic projection: visual KaTeX HTML
+  // is aria-hidden, so HTML-only output leaves no accessible mathematics.
+  const math = (latex: string) => renderLatexToHtml(latex, { displayMode: true, output: "htmlAndMathml" });
   const pair = source.states[1]!.expression;
   if (pair.kind !== "pair") throw new Error("The canonical fraction passage requires its aligned pair.");
   const intermediate = `\\frac{${pair.terms[0].numerator}${pair.operator}${pair.terms[1].numerator}}{${pair.terms[0].denominator}}`;
