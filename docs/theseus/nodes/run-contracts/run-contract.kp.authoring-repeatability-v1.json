@@ -124,6 +124,12 @@
       "status": "passed",
       "scope": "preview-baseline",
       "checkedAt": "2026-09-23T02:43:44.598Z"
+    },
+    {
+      "command": "npm run test:authoring-repeatability",
+      "status": "passed",
+      "scope": "baseline-findings",
+      "checkedAt": "2026-09-23T02:45:56.215Z"
     }
   ],
   "allowedWork": [
@@ -219,7 +225,8 @@
     {
       "id": "baseline-findings",
       "title": "Adjudicate all ten baseline records",
-      "status": "planned"
+      "summary": "All cases and costs accounted for without a combined success percentage. Baseline ledger is immutable; coarse status match is separated from intent coverage and ready previews. Shared missing MathML is the evidenced repair candidate.",
+      "status": "complete"
     },
     {
       "id": "select-one-seam",

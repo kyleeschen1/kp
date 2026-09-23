@@ -6,9 +6,37 @@ import { reportAuthorCheck } from "../src/authoring/author-check-report.ts";
 import { createTrialRecord, createFailedTrialRecord, type TrialWork } from "../scripts/authoring-repeatability-records.ts";
 import { runRepeatabilityCase, parseTrialArguments } from "../scripts/authoring-repeatability.ts";
 import { spawnSync } from "node:child_process";
+import { readFileSync, readdirSync } from "node:fs";
 
 const work: TrialWork = { sourceEditsAfterFreeze: 0, adapterEdits: 0, engineEdits: 0,
   editorialCorrections: [], engineeringMinutes: null, notes: "Synthetic record test; no trial case executed." };
+
+test("all first outcomes remain pinned and algebra status matching cannot conceal the missed boundary", () => {
+  const directory = new URL("../docs/project/reviews/authoring-repeatability/baseline/", import.meta.url);
+  assert.deepEqual(readdirSync(directory).sort(), repeatabilityCases.map(item => `${item.id}.json`).sort());
+  let checked = 0, matched = 0, references = 0;
+  for (const item of repeatabilityCases) {
+    const record = JSON.parse(readFileSync(new URL(`${item.id}.json`, directory), "utf8"));
+    assert.equal(record.caseId, item.id); assert.equal(record.task, item.task); assert.equal(record.inputSha256, item.sha256);
+    assert.equal(record.report.authority, "report-only"); assert.equal(record.report.handoff.execution, "not-performed");
+    assert.equal(record.expectationMatched, record.actual === item.expected);
+    assert.equal(record.work.sourceEditsAfterFreeze, 0);
+    if (record.actual === "checked") checked++;
+    if (record.expectationMatched) matched++;
+    if (record.preview.status === "reference-only") references++;
+    if (item.task === "equation.common-factor") {
+      assert.equal(record.report.result.diagnostic.code, "source");
+      assert.equal(record.report.result.diagnostic.path, "$.states[0].id");
+    }
+  }
+  assert.deepEqual({ checked, matched, references }, { checked: 5, matched: 9, references: 3 });
+  for (const item of repeatabilityCases.filter(item => item.id === "fraction-add-reduce" || item.id === "fraction-subtract")) {
+    const record = JSON.parse(readFileSync(new URL(`../docs/project/reviews/authoring-repeatability/preview-baseline/${item.id}.json`, import.meta.url), "utf8"));
+    assert.equal(record.inputSha256, item.sha256);
+    assert.equal(record.preview.status, "failed"); assert.equal(record.preview.sourceApplied, true);
+    assert.ok(record.preview.failures.some((failure: string) => failure.includes("MathML")));
+  }
+});
 
 test("the ten frozen inputs retain exact bytes, unique identity and approved task proportions", () => {
   assert.equal(repeatabilityCases.length, 10);
