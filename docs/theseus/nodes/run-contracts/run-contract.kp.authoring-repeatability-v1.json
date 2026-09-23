@@ -61,6 +61,12 @@
       "status": "passed",
       "scope": "fraction-variations",
       "checkedAt": "2026-09-23T02:13:40.724Z"
+    },
+    {
+      "command": "npm run trial:authoring -- --phase baseline --case fraction-false-count --record",
+      "status": "passed",
+      "scope": "fraction-boundary",
+      "checkedAt": "2026-09-23T02:26:59.784Z"
     }
   ],
   "allowedWork": [
@@ -108,7 +114,8 @@
     {
       "id": "fraction-boundary",
       "title": "Retain the fraction negative",
-      "status": "planned"
+      "summary": "Frozen false count rejected at the second move by the existing exact operation owner; unsupported preview retained. No source or engine correction.",
+      "status": "complete"
     },
     {
       "id": "algebra-variation",
