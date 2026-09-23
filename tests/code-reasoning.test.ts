@@ -6,8 +6,17 @@ import { codeReasoningArticlePath, compileCodeReasoningPublication } from "../sr
 import { kpTypeScriptFreeShippingRefactorContract as contract } from "../src/semantic/typescript-free-shipping-refactor-contract.ts";
 import { createKpTypeScriptFreeShippingRuntimeProjection } from "../src/public-web/typescript-free-shipping-runtime.ts";
 import { sha256 } from "../src/kernel/sha256.ts";
+import { renderCodePrintableDisclosure } from "../src/tutorial/code-reasoning/printable-disclosure.ts";
 
 const markdown = readFileSync(codeReasoningArticlePath, "utf8");
+test("print projection preserves identical static evidence without duplicating document identity", () => {
+  const body = "<pre>const id = 1;</pre><p>Checked evidence</p>";
+  const html = renderCodePrintableDisclosure("Source <record>", body);
+  assert.equal(html.split(body).length, 3);
+  assert.match(html, /Source &lt;record&gt;/);
+  for (const invalid of ['<p id="duplicate">x</p>', '<button>run</button>', '<details>hidden</details>'])
+    assert.throws(() => renderCodePrintableDisclosure("Source", invalid), /static content/);
+});
 test("code record publishes exact language-owned states once, with inert canonical inspection", () => {
   const publication = compileCodeReasoningPublication(markdown);
   const html = publication.html;
@@ -17,7 +26,7 @@ test("code record publishes exact language-owned states once, with inert canonic
   }
   assert.match(html, /<template data-code-stage-template><section[^>]+data-kp-typescript-refactor-stage=/);
   assert.match(html, /not.*proof for all inputs/s);
-  assert.equal([...html.matchAll(/<tr><td>/g)].length, 3);
+  assert.equal([...html.matchAll(/<tr><td>/g)].length, 6); // Identical screen and no-JS print projections.
   assert.equal(publication.pin, sha256(JSON.stringify(createKpTypeScriptFreeShippingRuntimeProjection().semantics)));
 });
 test("code publication rejects missing or reordered states instead of improvising a motion", () => {

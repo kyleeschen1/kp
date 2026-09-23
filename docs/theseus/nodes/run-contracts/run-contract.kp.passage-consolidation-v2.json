@@ -2,8 +2,8 @@
   "id": "run-contract.kp.passage-consolidation-v2",
   "kind": "run-contract",
   "title": "Passage consolidation and code text",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: shipping focus-card second caller ready for visual review. Five of eight packages complete; code-transfer remains in progress until review and promotion. Explanation and release remain approved downstream scope.",
+  "status": "active",
+  "summary": "User accepted the shipping focus-card second caller with limited code space noted. Visual gate cleared; code-transfer promotion, bounded explanation review and release remain. Current turn requests strategic review, not new implementation scope; see docs/project/reviews/2026-09-21-next-step-review.md.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,6 +14,10 @@
       "kind": "file",
       "path": "docs/project/2026-09-17-passage-consolidation-delivery.md",
       "summary": "Approved recommendations, scope, acceptance, visual gate and resource ceiling"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-22-authoring-repeatability-long-loop.md"
     }
   ],
   "verification": [
@@ -82,6 +86,24 @@
       "status": "passed",
       "scope": "code-transfer",
       "checkedAt": "2026-09-21T18:55:03.236Z"
+    },
+    {
+      "command": "npm run visual:code-reasoning:cohort",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-23T01:35:56.001Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-23T01:35:57.486Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "code-transfer",
+      "checkedAt": "2026-09-23T01:35:58.967Z"
     }
   ],
   "allowedWork": [
@@ -135,8 +157,8 @@
     {
       "id": "code-transfer",
       "title": "Pressure and promote accepted code text",
-      "summary": "Shipping second caller implemented with shared code card and selection mechanics. Nineteen code browser checks pass. Visual review of cue coordination and narrow scrolling required before promotion; see docs/project/reviews/2026-09-21-shipping-focus-transfer.md.",
-      "status": "in-progress"
+      "summary": "Both accepted code callers pass 57 supported-browser checks plus full types architecture inference and production build. Scoped shared card boundary promoted; larger programs and OS clipboard transport outside Chromium remain qualified.",
+      "status": "complete"
     },
     {
       "id": "explanation",

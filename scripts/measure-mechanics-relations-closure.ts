@@ -4,6 +4,8 @@ import { collectKpHtmlBundleFiles, measureKpBundleClosureAttribution, type KpBun
 
 const manifest = JSON.parse(await readFile("dist/.vite/manifest.json", "utf8")) as KpBundleManifest;
 const entries = new Map([
+  ["code", "experiments/code-reasoning/index.html"],
+  ["centroid", "experiments/centroid-reasoning/index.html"],
   ["physics", "experiments/mechanics-relations/index.html"],
   ["scalar", "experiments/scalar-cancellation/index.html"],
   ["fraction", "experiments/fraction-chain/index.html"],

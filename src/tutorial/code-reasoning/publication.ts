@@ -7,6 +7,7 @@ import { renderKpTypeScriptRefactorCodeHtml } from "../../rendering/typescript-r
 import { encodeKpHtmlText as text, encodeKpHtmlAttribute as attribute } from "../../rendering/html-output-encoding.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 import { renderShippingFocus } from "./shipping-focus-publication.ts";
+import { renderCodePrintableDisclosure } from "./printable-disclosure.ts";
 
 export const codeReasoningArticlePath = "examples/programming/shared-rule.article.md";
 
@@ -44,8 +45,8 @@ export function compileCodeReasoningPublication(markdown: string) {
     if (block.kind === "markdown") return markdownHtml(block.markdown);
     if (block.kind !== "passage") throw new Error("Code record supports prose and the pinned TypeScript inspection only");
     const body = markdownHtml(block.markdown);
-    if (block.id === "why") return `<details class="code-justification" id="why"><summary>Why is this allowed? What has been checked?</summary>${body}
-      <table><caption>Declared-case evidence · before and after</caption><thead><tr><th>Total</th><th>Cost</th><th>Message</th><th>After</th></tr></thead><tbody>${cases}</tbody></table></details>`;
+    if (block.id === "why") return `<div class="code-justification" id="why">${renderCodePrintableDisclosure("Why is this allowed? What has been checked?", `${body}
+      <table><caption>Declared-case evidence · before and after</caption><thead><tr><th>Total</th><th>Cost</th><th>Message</th><th>After</th></tr></thead><tbody>${cases}</tbody></table>`)}</div>`;
     return `<section id="${attribute(block.id)}">${body}${block.id === "before"
       ? `<div class="code-source-slot" data-code-source-slot><span class="code-source-label" data-code-source-label hidden>Inspection · original available below</span>${endpoint("before")}<div data-code-stage-host></div></div>${inspection}`
       : block.id === "after" ? endpoint("after") : ""}</section>`;

@@ -23,8 +23,8 @@ test("both approved cohorts retain exact fixture membership and active checking"
   assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts", "tests/type-fixtures/composed-algebra-consumers.ts"]);
   assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 117700, instantiations: 198900 });
   const budget = combinedInferenceBudget;
-  assert.deepEqual(budget.measuredProject, { types: 178493, instantiations: 300444 });
-  assert.deepEqual(budget.ceilings, { types: 182100, instantiations: 301600 });
+  assert.deepEqual(budget.measuredProject, { types: 179268, instantiations: 303017 });
+  assert.deepEqual(budget.ceilings, { types: 182100, instantiations: 309100 });
   assert.ok(budget.ceilings.types > budget.measuredProject.types);
   assert.ok(budget.ceilings.types <= Math.ceil(budget.measuredProject.types * 1.02 / 100) * 100);
   // Keep passing caps tighter; only the exceeded cap receives fixed headroom.

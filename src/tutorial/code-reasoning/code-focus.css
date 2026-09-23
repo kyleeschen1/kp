@@ -16,5 +16,5 @@
 .kp-code-focus-card .kp-focus-deck__passage-page { padding: .8rem 1rem; min-height: 0; }
 .kp-code-focus-card .kp-focus-deck__header button { font: inherit; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: .2rem; padding: .35rem .6rem; cursor: pointer; }
 .kp-code-focus-card [data-code-focus-stage] { overflow: auto; overscroll-behavior: contain; }
-.kp-code-focus-card [data-kp-typescript-token-theater] { user-select: none; }
+.kp-code-focus-card [data-kp-typescript-token-theater] { -webkit-user-select: none; user-select: none; }
 .kp-code-focus-card .kp-focus-deck__ticks { display: none; }

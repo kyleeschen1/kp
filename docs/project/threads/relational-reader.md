@@ -17,7 +17,7 @@ one compact cue, a persistent code stage and explicit viewport adaptation.
 The user accepted it, requested removal of named buttons and copying at any
 point. These refinements are delivered through the scrubber/arrows and checked
 source snapshots. Text-rail refinement is paused. The [shipping second-caller trial](../reviews/2026-09-21-shipping-focus-transfer.md)
-is implemented and awaits visual judgment. Promotion, explanation support and
+is visually accepted, with limited code space noted. Promotion, explanation support and
 closeout remain.
 
 Approved bounded extension: [source selection](../reviews/2026-09-21-source-selection.md).

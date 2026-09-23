@@ -70,6 +70,7 @@ export function mountCentroidInspection(root: HTMLElement) {
     if (stage.dataset["centroidNativeState"] !== frame.native.id) native.innerHTML = renderCentroidNativeCode(frame.native);
     native.style.opacity = frame.theater.active ? "0" : "1";
     native.style.userSelect = frame.theater.active ? "none" : "text";
+    native.style.setProperty("-webkit-user-select", frame.theater.active ? "none" : "text");
     stage.dataset["centroidNativeState"] = frame.native.id;
     const claimId = root.dataset["centroidInspecting"] === "true" ? attention.getSnapshot().objectRefs[0] : undefined;
     const selectedBeat = beats.find(beat => beat.id === claimId);

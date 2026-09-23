@@ -1,7 +1,7 @@
 @import "../../reader/presentation/equation-passage.css";
 @import "../../reader/presentation/equation-rail.css";
 @import "./code-focus.css";
-.centroid-stage [data-kp-typescript-token-theater] { user-select: none; }
+.centroid-stage [data-kp-typescript-token-theater] { -webkit-user-select: none; user-select: none; }
 .centroid-reader [data-centroid-copy-source] { display: block; width: 100%; box-sizing: border-box; white-space: pre; }
 .centroid-focus-card [data-centroid-card-surface], .centroid-focus-card [data-centroid-card-slot] { min-width: 0; }
 .centroid-focus-card [data-centroid-stage] { overflow: auto; overscroll-behavior: contain; }

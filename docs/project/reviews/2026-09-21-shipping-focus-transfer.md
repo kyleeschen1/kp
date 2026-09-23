@@ -1,7 +1,12 @@
 # Shipping refactor: second code focus-card caller
 
-Status: implemented; awaiting visual judgment before wider promotion.
+Status: visually accepted by the user; promotion/release checks remain.
 Execution: `run-contract.kp.passage-consolidation-v2`, `code-transfer`.
+
+The user accepted the trial, noting limited space for code. Preserve this as an
+explicit layout limit: scrolling provides access but does not guarantee that
+related distant regions remain visible together. No larger-code modality is
+authorized by this acceptance.
 
 The user approved trying the accepted centroid card on a structurally different
 code example. This trial uses the existing free-shipping refactor: two callers,

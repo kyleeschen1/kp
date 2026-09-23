@@ -58,11 +58,12 @@ export const frontendInferenceFixtures = [
   "tests/type-fixtures/composed-algebra-consumers.ts"
 ] as const;
 export const combinedInferenceBudget = Object.freeze({
-  measuredProject: { types: 178_493, instantiations: 300_444 },
-  // Readiness release: checked deep-immutable data adoption adds measured
-  // structural types. Restore 2% only for the exceeded type cap; keep the
-  // passing instantiation cap and all 49 core + 2 frontend consumers.
-  ceilings: { types: 182_100, instantiations: 301_600 }
+  measuredProject: { types: 179_268, instantiations: 303_017 },
+  // September 22 promotion: the accepted native fraction-factor split adds
+  // 2,255 instantiations through reader dispatch. Retain all 51 consumers and
+  // the passing type cap; restore 2% only to the exceeded instantiation cap.
+  // Attribution and alternatives: 2026-09-22-code-promotion-inference-cost.md.
+  ceilings: { types: 182_100, instantiations: 309_100 }
 } as const);
 export const inferenceCohorts = [
   { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },

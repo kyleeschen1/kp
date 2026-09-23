@@ -1,4 +1,5 @@
 import ts from "typescript";
+import { renderCodePrintableDisclosure } from "../src/tutorial/code-reasoning/printable-disclosure.ts";
 import { createKpArticleSource } from "../src/article/kp-article-source.ts";
 import { resolveKpArticleImports } from "../src/article/kp-article-import-lock.ts";
 import { compileKpArticleDocument } from "../src/article/kp-article-document.ts";
@@ -112,7 +113,7 @@ export function compileCentroidPublication(markdown: string, before: string, aft
   const attachments: Record<string, string> = {
     pattern: `<div class="centroid-pair">${figure("Horizontal coordinates · xs → cx", "x")}${figure("Vertical coordinates · ys → cy", "y")}</div>`,
     extract: helperFigure,
-    reuse: `${figure("The centroid body after extraction", "calls")}<details><summary>See both complete source files</summary><h3>Before</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="before"><code>${highlight(before)}</code></pre><h3>After</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="after"><code>${highlight(after)}</code></pre></details>`,
+    reuse: `${figure("The centroid body after extraction", "calls")}${renderCodePrintableDisclosure("See both complete source files", `<h3>Before</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="before"><code>${highlight(before)}</code></pre><h3>After</h3><pre class="kp-typescript-refactor__revision" data-centroid-source="after"><code>${highlight(after)}</code></pre>`)}`,
     check: `<details><summary>Check your reasoning</summary><p><code>const cz = mean(zs);</code> reuses the same procedure. It gets a fresh local sum, just like the other calls.</p></details>`
   };
   const html = article.document.blocks.map(block => {

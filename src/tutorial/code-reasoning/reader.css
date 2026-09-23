@@ -37,7 +37,10 @@
 .code-justification { margin-top: 1.5rem; }
 .code-justification table { width: 100%; border-collapse: collapse; text-align: left; font-size: .9rem; }
 .code-justification th, .code-justification td { padding: .5rem; border-bottom: 1px solid #ccd4db; }
+.code-print-disclosure { display: none; }
 @media print {
+  .code-screen-disclosure { display: none !important; }
+  .code-print-disclosure { display: block; }
   .code-reasoning-reader { max-width: none; padding: 0; }
   .code-reasoning-reader nav, .code-inspection { display: none !important; }
   .code-source-slot > [data-code-stage-host], .code-source-label { display: none !important; }

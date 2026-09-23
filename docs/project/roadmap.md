@@ -39,11 +39,21 @@ scaffold: one compact cue, persistent code stage and explicit viewport adaptatio
 The user accepted it and requested removal of the named buttons plus copying at
 any point. Those refinements are implemented: the scrubber/arrows remain, and
 copying uses the nearest complete checked source. The [shipping second-caller trial](reviews/2026-09-21-shipping-focus-transfer.md)
-is implemented and awaits visual judgment before promotion;
+is visually accepted; promotion and release checks remain;
 text-rail refinement is paused. The approved [selection and LaTeX copy extension](reviews/2026-09-21-source-selection.md)
 adds settle-then-select in the code card and whole-expression source copying in
 the energy rail. Arbitrary mathematical fragment copying remains excluded.
 Theseus owns live status.
+
+Latest [strategic review](reviews/2026-09-21-next-step-review.md): finish the
+bounded consolidation run, then consider a small authoring-repeatability trial
+before breadth or further interface work. This is a recommendation, not approval
+of a new run; the current plan retains its scope.
+
+September 22: the user approved the [24-slice sequence](2026-09-22-authoring-repeatability-long-loop.md), which
+closes the existing run before a ten-case trial and at most one recurring-boundary
+repair. Execute the remaining consolidation packages before creating the successor.
+The same document retains the remaining recommendations and revisit triggers.
 
 Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the

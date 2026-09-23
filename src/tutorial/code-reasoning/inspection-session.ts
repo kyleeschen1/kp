@@ -42,6 +42,7 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
       theater
     }, asset.accessibility.title);
     stage.style.userSelect = theater.active ? "none" : "text";
+    stage.style.setProperty("-webkit-user-select", theater.active ? "none" : "text");
     focus?.render(progress);
     // Counter and narration share the score's boundary convention, including
     // exact midpoints; independently choosing a nearest stop can disagree.

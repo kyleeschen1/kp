@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "visual:code-reasoning:cohort": "playwright test --config playwright.code-reasoning-review.config.ts --workers=1",
+    "measure:inference-history": "node --disable-warning=ExperimentalWarning scripts/measure-inference-history.ts",
     "test:fraction-chain": "node --disable-warning=ExperimentalWarning --test tests/fraction-chain-*.test.ts",
     "generate:equation-catalog-evidence": "npm run generate:animation-governance-inventory && npm run generate:animation-library-metadata && npm run generate:equation-surface-inventory && npm run generate:equation-surface-preservation-matrix && npm run generate:equation-surface-disposition-ledger && npm run generate:equation-asset-manifest && npm run generate:animation-library-display-catalog && npm run generate:equation-reachability",
     "visual:mechanics-motion": "playwright test --config playwright.mechanics-motion-review.config.ts --project=chromium --workers=1",

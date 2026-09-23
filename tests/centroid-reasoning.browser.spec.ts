@@ -1,9 +1,10 @@
 import { expect, test, type Locator } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { prepareCodeClipboard, copyCodeSelection, expectCodeGeometry } from "./code-clipboard-browser-helper.ts";
 const route = "/experiments/centroid-reasoning/";
 
-test("code selection settles before anchoring and preserves native partial copying", async ({ page, context }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+test("code selection settles before anchoring and preserves native partial copying", async ({ page, context, browserName }) => {
+  await prepareCodeClipboard(context, browserName);
   await page.goto(`${route}?reading=focus#extract`);
   const root = page.locator("[data-centroid-local-inspection]");
   const stage = root.locator("[data-centroid-focus] [data-centroid-stage]");
@@ -14,12 +15,13 @@ test("code selection settles before anchoring and preserves native partial copyi
   await expect(root).toHaveAttribute("data-centroid-progress", "0.31");
   await stage.click({ position: { x: 25, y: 25 } });
   await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
-  await expect(stage.locator("[data-centroid-native]")).toHaveCSS("user-select", "text");
+  expect(await stage.locator("[data-centroid-native]").evaluate(node => {
+    const style = getComputedStyle(node); return style.userSelect || style.getPropertyValue("-webkit-user-select");
+  })).toBe("text");
   const keyword = stage.locator('[data-centroid-native] [data-kp-typescript-syntax-kind="keyword"]').first();
   await keyword.dblclick();
   expect(await page.evaluate(() => getSelection()?.toString())).toBe("function");
-  await page.keyboard.press("ControlOrMeta+c");
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("function");
+  expect(await copyCodeSelection(page, stage, browserName)).toBe("function");
   await slider.focus(); await slider.press("End");
   await expect(root).toHaveAttribute("data-centroid-progress", "1");
 });
@@ -47,13 +49,13 @@ test("focus card retains one stage through animated navigation and adapts to vie
   await slider.press("ArrowRight");
   await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
   await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "answer");
-  expect(await box()).toEqual(initial);
+  expectCodeGeometry(await box(), initial);
   await slider.press("ArrowLeft");
   await expect(root).toHaveAttribute("data-centroid-progress", "0.3");
   await slider.press("ArrowLeft");
   await expect(root).toHaveAttribute("data-centroid-progress", "0.1");
   await expect(stage).toHaveAttribute("data-continuity-probe", "same-stage");
-  expect(await box()).toEqual(initial);
+  expectCodeGeometry(await box(), initial);
   await slider.evaluate(node => { if (!(node instanceof HTMLInputElement)) throw new Error("Missing slider"); node.value = ".31"; node.dispatchEvent(new Event("input", { bubbles: true })); });
   await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "boundary");
   await expect(card.locator('[data-kp-focus-deck-beat="calculation"]')).toHaveAttribute("aria-hidden", "true");
@@ -84,11 +86,11 @@ test("focus card retains one stage through animated navigation and adapts to vie
   await expect(root).toHaveAttribute("data-centroid-progress", "0.3");
   const beforeDetail = await box();
   await root.getByText("More about this extraction", { exact: true }).click();
-  expect(await box()).toEqual(beforeDetail);
+  expectCodeGeometry(await box(), beforeDetail);
 });
 
-test("copy uses complete checked source at every phase, preserves selection and recovers clipboard denial", async ({ page, context }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+test("copy uses complete checked source at every phase, preserves selection and recovers clipboard denial", async ({ page, context, browserName }) => {
+  await prepareCodeClipboard(context, browserName);
   await page.goto(`${route}?reading=focus#extract`);
   const root = page.locator("[data-centroid-local-inspection]");
   const card = root.locator(".centroid-focus-card");
@@ -107,15 +109,13 @@ test("copy uses complete checked source at every phase, preserves selection and 
     await expect(root).toHaveAttribute("data-centroid-progress", String(p));
   }
   await seek(.65); await stage.focus();
-  await page.keyboard.press("ControlOrMeta+c");
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(evidence.states[1].source);
+  expect(await copyCodeSelection(page, stage, browserName)).toBe(evidence.states[1].source);
   await seek(1);
   await stage.locator("[data-centroid-native]").evaluate(node => {
     const range = document.createRange(); range.selectNodeContents(node);
     const selection = window.getSelection()!; selection.removeAllRanges(); selection.addRange(range);
   });
-  await page.keyboard.press("ControlOrMeta+c");
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(evidence.states[2].source);
+  expect(await copyCodeSelection(page, stage, browserName)).toBe(evidence.states[2].source);
   await page.evaluate(() => {
     window.getSelection()?.removeAllRanges();
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: {
@@ -188,8 +188,8 @@ test("stationary caller relationship preserves code geometry, selection and befo
   await expect(call).toHaveAttribute("aria-pressed", "true");
   await expect(root.locator('[data-relation-note="selected"]')).toBeVisible();
   expect(await helper.evaluate(node => getComputedStyle(node).backgroundColor)).not.toBe("rgba(0, 0, 0, 0)");
-  expect(await box(code)).toEqual(sourceBox);
-  expect(await box(call)).toEqual(callBox);
+  expectCodeGeometry(await box(code), sourceBox);
+  expectCodeGeometry(await box(call), callBox);
   expect(await code.textContent()).toEqual(source);
   await root.screenshot({ path: info.outputPath("centroid-caller-helper.png") });
   const before = root.getByRole("button", { name: "Show before extraction" });
@@ -198,10 +198,10 @@ test("stationary caller relationship preserves code geometry, selection and befo
   await expect(root.locator('[data-relation-source="before"]')).toBeVisible();
   await expect(root.locator('[data-relation-note="before"]')).toBeVisible();
   expect(await root.locator('[data-relation-source="before"]').textContent()).toBe(evidence.states[0].source);
-  expect(await box(root.locator('[data-relation-source="before"]'))).toEqual(sourceBox);
+  expectCodeGeometry(await box(root.locator('[data-relation-source="before"]')), sourceBox);
   await root.getByRole("button", { name: "Return to helper" }).click();
   await expect(call).toHaveAttribute("aria-pressed", "true");
-  expect(await box(call)).toEqual(callBox);
+  expectCodeGeometry(await box(call), callBox);
   await call.focus(); await page.keyboard.press("Escape");
   await expect(call).toHaveAttribute("aria-pressed", "false");
   await page.keyboard.press("Enter");
@@ -285,9 +285,9 @@ test("beat reading keeps the whole argument and fine-grained evidence through co
   await expect(root).toHaveAttribute("data-centroid-progress", "0.5");
   const rail = root.locator("[data-centroid-text-rail]");
   const y = async (index: number) => beats.nth(index).locator("p").first().evaluate(node => { const rect = node.getBoundingClientRect(); return rect.top + rect.height / 2; });
-  await rail.scrollIntoViewIfNeeded();
+  await beats.nth(5).scrollIntoViewIfNeeded();
   const box = (await rail.boundingBox())!;
-  await page.mouse.click(box.x, (await y(5)) + ((await y(6)) - (await y(5))) * .34);
+  await page.mouse.click(Math.round(box.x), Math.round((await y(5)) + ((await y(6)) - (await y(5))) * .34));
   await expect.poll(async () => Number(await root.getAttribute("data-centroid-progress"))).toBeCloseTo(.67, 2);
   const held = await root.getAttribute("data-centroid-progress");
   await root.locator('[data-centroid-beat-claim="division"]').click();
@@ -407,16 +407,17 @@ test("centroid is a source-backed readable record without JavaScript", async ({ 
   const keywordColor = await keyword.evaluate(node => getComputedStyle(node).color);
   expect(keywordColor).not.toBe(await identifier.evaluate(node => getComputedStyle(node).color));
   await page.screenshot({ path: info.outputPath("centroid-desktop.png"), fullPage: true });
-  const disclosure = page.getByText("See both complete source files", { exact: true });
+  const disclosure = page.locator("summary").filter({ hasText: "See both complete source files" });
   await disclosure.focus(); await page.keyboard.press("Enter");
   for (const revision of ["before", "after"]) {
-    const code = page.locator(`[data-centroid-source="${revision}"] code`);
+    const code = page.locator(`.code-screen-disclosure [data-centroid-source="${revision}"] code`);
     await expect(code).toBeVisible();
     expect(await code.textContent()).toBe(readFileSync(`examples/programming/centroid-${revision}.ts`, "utf8"));
   }
   await disclosure.click();
   await page.emulateMedia({ media: "print" });
-  await expect(page.locator('[data-centroid-source="before"]')).toBeVisible();
+  await expect(page.locator('.code-print-disclosure [data-centroid-source="before"]')).toBeVisible();
+  expect(await page.locator('.code-print-disclosure [data-centroid-source="before"] code').textContent()).toBe(readFileSync("examples/programming/centroid-before.ts", "utf8"));
   await expect(keyword).toHaveCSS("color", keywordColor);
   await page.emulateMedia({ media: "screen" });
   await page.setViewportSize({ width: 390, height: 844 });

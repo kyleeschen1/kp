@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { kpTypeScriptFreeShippingRefactorContract as contract } from "../src/semantic/typescript-free-shipping-refactor-contract.ts";
+import { prepareCodeClipboard, copyCodeSelection } from "./code-clipboard-browser-helper.ts";
 const route = "/experiments/code-reasoning/";
 
 test("shipping focus transfers one continuous stage with coordinated cues and enlarged-code scrolling", async ({ page }, info) => {
@@ -51,8 +52,8 @@ test("shipping focus transfers one continuous stage with coordinated cues and en
   await expect(root.locator('[data-code-record="before"]')).toBeVisible();
 });
 
-test("shipping copy uses complete projections and native selection survives checkpoint handoffs", async ({ page, context }) => {
-  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+test("shipping copy uses complete projections and native selection survives checkpoint handoffs", async ({ page, context, browserName }) => {
+  await prepareCodeClipboard(context, browserName);
   await page.goto(`${route}?reading=focus#before`);
   const root = page.locator("[data-code-reasoning]");
   await expect(root).toHaveAttribute("data-code-ready", "true");
@@ -76,8 +77,7 @@ test("shipping copy uses complete projections and native selection survives chec
   const keyword = stage.locator('[data-kp-typescript-projection-id="projection.typescript.helper-introduced"] [data-kp-typescript-syntax-kind="keyword"]').first();
   await keyword.dblclick();
   expect(await page.evaluate(() => getSelection()?.toString())).toBe("function");
-  await page.keyboard.press("ControlOrMeta+c");
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe("function");
+  expect(await copyCodeSelection(page, stage, browserName)).toBe("function");
   await slider.fill("0.73");
   await expect(stage.locator("[data-kp-typescript-token-theater]")).toHaveAttribute("data-kp-typescript-token-theater-active", "true");
   await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async () => { throw new Error("Denied"); } } }));
@@ -125,7 +125,7 @@ test("persistent code survives continuous inspection, reverse, disclosure and pr
   await page.getByRole("button", { name: "Return to inspection", exact: true }).click();
   await expect(root).toHaveAttribute("data-code-view", "inspection");
   expect(await tokenPose()).toEqual(pose);
-  await page.getByText("Why is this allowed? What has been checked?", { exact: true }).click();
+  await page.locator("summary").filter({ hasText: "Why is this allowed? What has been checked?" }).click();
   await expect(root).toHaveAttribute("data-code-progress", "0.42");
   await page.getByText("Inspect where the rule goes", { exact: true }).click();
   await expect(root.locator("[data-code-stage-host]")).toBeHidden();
@@ -144,11 +144,11 @@ test("persistent code survives continuous inspection, reverse, disclosure and pr
   for (const revision of ["before", "after"] as const) {
     expect(await root.locator(`[data-code-record="${revision}"] code`).textContent()).toBe(contract[revision].source);
   }
-  await page.getByText("Why is this allowed? What has been checked?", { exact: true }).click();
+  await page.locator("summary").filter({ hasText: "Why is this allowed? What has been checked?" }).click();
   await page.emulateMedia({ media: "print" });
   await expect(root.locator("[data-code-inspection]")).toBeHidden();
   await expect(records.first()).toBeVisible(); await expect(records.last()).toBeVisible();
-  await expect(root.locator("tbody tr").first()).toBeVisible();
+  await expect(root.locator(".code-print-disclosure tbody tr").first()).toBeVisible();
 });
 
 test("no-JS keeps the whole argument and reduced motion keeps endpoints", async ({ browser, page }) => {
@@ -157,8 +157,8 @@ test("no-JS keeps the whole argument and reduced motion keeps endpoints", async 
   await staticPage.goto("http://localhost:8000" + route);
   await expect(staticPage.locator("[data-code-record]")).toHaveCount(2);
   await expect(staticPage.locator("[data-code-inspection]")).toBeHidden();
-  await staticPage.getByText("Why is this allowed? What has been checked?", { exact: true }).click();
-  await expect(staticPage.locator("tbody tr")).toHaveCount(3);
+  await staticPage.locator("summary").filter({ hasText: "Why is this allowed? What has been checked?" }).click();
+  await expect(staticPage.locator(".code-screen-disclosure tbody tr")).toHaveCount(3);
   await context.close();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(route);
