@@ -93,6 +93,12 @@
       "status": "passed",
       "scope": "mechanics-declared",
       "checkedAt": "2026-09-23T02:32:04.496Z"
+    },
+    {
+      "command": "npm run trial:authoring -- --phase baseline --case mechanics-zero-mass --record",
+      "status": "passed",
+      "scope": "mechanics-negative",
+      "checkedAt": "2026-09-23T02:32:53.652Z"
     }
   ],
   "allowedWork": [
@@ -164,7 +170,8 @@
     {
       "id": "mechanics-negative",
       "title": "Retain changed-assumption rejection",
-      "status": "planned"
+      "summary": "Zero mass rejected by physics.derivation.unsupported-source at $.mass; exact input and domain diagnostic retained. Reference evidence is not borrowed and no new physics inference is introduced.",
+      "status": "complete"
     },
     {
       "id": "code-editorial",
