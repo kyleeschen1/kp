@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-22
+Last Updated: 2026-09-23
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -63,11 +63,19 @@ Retrieve exact stored progress with
 `npm run --silent loop:status -- --contract run-contract.kp.authoring-repeatability-v1`.
 This explicit selection does not authorize new scope or query global blockers.
 
-Next recommendation, awaiting selection: one connected short argument using the
-demonstrated fraction path, measuring source/Article work and exact return.
+September 23: the user replaced the fraction recommendation with
+[one connected mechanics argument](2026-09-23-mechanics-connected-argument.md):
+how a sideways force changes momentum without changing kinetic energy. Use the
+existing checked energy/power rails and one focused Article; stop for the first
+explanation review before expanding it. `run-contract.kp.mechanics-connected-argument-v1`
+owns this bounded execution. Fractions remain regression fixtures, not the next
+product-development destination.
+The [first mechanics exemplar](reviews/2026-09-23-mechanics-connected-argument.md)
+is implemented and awaits its explanation review; the review packet owns the
+working URL, inspection questions and measured limits.
 The [coverage reconciliation](reviews/authoring-repeatability/coverage-reconciliation.md)
 retains a separately identified algebra retry and the broader revisit triggers.
-No current approved slice remains; historical deferred loops stay parked.
+The completed trial has no remaining slices; historical deferred loops stay parked.
 
 Completed predecessor: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
 controlled by resolved `run-contract.kp.passage-consolidation-v2`. Its eight

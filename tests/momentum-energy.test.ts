@@ -536,6 +536,24 @@ test("the canonical Article resolves governed vignettes and complete no-script s
   assert.equal(renderMomentumEnergyReader(compileMomentumEnergyPublication(revised)).document.title, "A revised source title");
 });
 
+test("the focused mechanics Article reuses checked rails with its own provenance and closed links", () => {
+  const path = "examples/physics/force-without-work.article.md";
+  const text = readFileSync(path, "utf8");
+  const publication = compileMomentumEnergyPublication(text, undefined, undefined, path);
+  assert.equal(publication.article.document.id, "lesson.physics.force-without-work");
+  assert.equal(publication.article.document.importLock.entries.length, 0);
+  assert.ok(JSON.stringify(publication.article.document).includes(path));
+  const reader = renderMomentumEnergyReader(publication);
+  assert.equal(reader.document.title, "Can a force change motion without changing energy?");
+  assert.match(reader.html, /data-derivation-namespace="energy"/);
+  assert.match(reader.html, /data-derivation-namespace="power"/);
+  assert.doesNotMatch(reader.html, /data-physics-motion|data-momentum-move|data-power-correspondence/);
+  const ids = new Set([...reader.html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
+  for (const link of reader.html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.has(link[1]), `Unresolved focused link ${link[1]}`);
+  assert.throws(() => renderMomentumEnergyReader(compileMomentumEnergyPublication(
+    text.replace("K&=\\frac12m", "K&=\\frac13m"), undefined, undefined, path)), /repair the bounded semantic binding/);
+});
+
 test("the displayed momentum-energy deductions agree with both checked physical fixtures", () => {
   for (const index of [0, 1]) for (const mass of [1, 2, 4]) {
     const checked = model(index, mass);

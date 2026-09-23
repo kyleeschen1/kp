@@ -1,7 +1,7 @@
 # Relational reader delivery
 
-Status: active direction; consolidation and fixed-case authoring trial complete
-Last Updated: 2026-09-22
+Status: active direction; focused mechanics argument approved through first review
+Last Updated: 2026-09-23
 
 ## Canonical direction
 
@@ -27,12 +27,18 @@ this slice. Source ownership and both animation renderers remain unchanged.
 
 Completed delivery: [passage consolidation](../reviews/2026-09-22-consolidation-closeout.md)
 and the [fixed-case authoring trial](../reviews/2026-09-22-authoring-repeatability-closeout.md).
-Their Theseus contracts own execution evidence; no approved slices remain.
+Their Theseus contracts own completed execution evidence.
 The trial preserves ten raw inputs, identical before/after owner reports and two
 passing fraction fixture previews after one shared accessible-math repair.
 It does not establish general algebra authoring or mechanics/code application.
-Next recommendation is one connected short fraction argument using demonstrated
-machinery, with measured source/Article work; it needs new scope selection.
+The user rejected more fraction development and approved
+[one short mechanics argument](../2026-09-23-mechanics-connected-argument.md).
+The new Article asks how a force can change momentum without changing kinetic
+energy, using the existing energy/power rails. Its own focused host retains the
+full reference page and domain authority. `run-contract.kp.mechanics-connected-argument-v1`
+owns execution through the first human explanation checkpoint. Keep this bounded
+experiment on the existing relational-reader feature branch with its accepted
+dependencies; no new renderer, motif or general authoring framework is approved.
 The [durable remainder](../2026-09-22-authoring-repeatability-long-loop.md#durable-remainder-and-revisit-triggers)
 retains the broader trajectory. Following entries are historical provenance,
 not parallel live queues or authority to restart parked work.

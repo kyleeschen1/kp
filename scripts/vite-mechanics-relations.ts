@@ -14,6 +14,14 @@ export function kpViteMechanicsRelations(projectRoot: string): Plugin {
   const directory = "experiments/mechanics-relations/";
   return { name: "kp-mechanics-relations-publication",
     transformIndexHtml: { order: "pre", handler(html, context) {
+      if (context.filename === resolve(projectRoot, directory, "force-without-work/index.html")) {
+        const sourcePath = "examples/physics/force-without-work.article.md";
+        // A separate Article keeps its own provenance while reusing the exact
+        // checked derivations, reader projection and native runtime.
+        const publication = compileMomentumEnergyPublication(readFileSync(resolve(projectRoot, sourcePath), "utf8"), undefined,
+          JSON.parse(readFileSync(resolve(projectRoot, "examples/physics/momentum-energy.concepts.lock.json"), "utf8")), sourcePath);
+        return html.replace("<!-- kp:momentum-energy -->", renderMomentumEnergyReader(publication).html);
+      }
       if (context.filename === resolve(projectRoot, "experiments/scalar-cancellation/index.html")) {
         const publication = compileScalarCancellationPublication(readFileSync(resolve(projectRoot, scalarCancellationArticlePath), "utf8"),
           JSON.parse(readFileSync(resolve(projectRoot, scalarCancellationSourcePath), "utf8")));

@@ -7,6 +7,7 @@ const entries = new Map([
   ["code", "experiments/code-reasoning/index.html"],
   ["centroid", "experiments/centroid-reasoning/index.html"],
   ["physics", "experiments/mechanics-relations/index.html"],
+  ["physics-argument", "experiments/mechanics-relations/force-without-work/index.html"],
   ["scalar", "experiments/scalar-cancellation/index.html"],
   ["fraction", "experiments/fraction-chain/index.html"],
   ["fraction-numeric", "experiments/fraction-chain/numeric/index.html"],

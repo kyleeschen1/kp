@@ -12,7 +12,8 @@ export const momentumEnergySourcePath = "examples/physics/momentum-energy.articl
 
 /** Build-only: imports bind to governed assets before any publication is emitted.
  * The browser receives physics inputs and compiled prose, not this compiler. */
-export function compileMomentumEnergyPublication(text: string, lock?: KpArticleImportLock, dependencyLock?: string) {
+export function compileMomentumEnergyPublication(text: string, lock?: KpArticleImportLock, dependencyLock?: string,
+  sourcePath = momentumEnergySourcePath) {
   if (dependencyLock !== undefined && dependencyLock !== momentumDependencyIntegrity)
     throw new Error("physics.dependency.integrity-mismatch: restore the pinned source or explicitly upgrade the edition");
   const dependencies = compileMomentumDependencies(text);
@@ -45,7 +46,7 @@ export function compileMomentumEnergyPublication(text: string, lock?: KpArticleI
     const release = createKpVignetteRelease({ ...draft, integrity: `sha256:${sha256(serializeKpVignetteReleasePayload(draft))}` });
     return Object.freeze({ compiled, release });
   });
-  const source = createKpArticleSource(momentumEnergySourcePath, dependencies.markdown), registry = capabilities.map(c => c.release);
+  const source = createKpArticleSource(sourcePath, dependencies.markdown), registry = capabilities.map(c => c.release);
   const resolved = resolveKpArticleImports(source, registry, lock);
   const article = compileKpArticleDocument({ source, registry, lock: resolved.lock });
   const staticHtml = compileKpArticleStaticHtml(article.document);

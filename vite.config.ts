@@ -341,6 +341,7 @@ export default defineConfig({
     // legacy polyfill would add a startup request to every route.
     entries: {
       mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
+      forceWithoutWork: resolve(projectRoot, "experiments/mechanics-relations/force-without-work/index.html"),
       repertoire: resolve(projectRoot, "experiments/repertoire/index.html"),
       scalarCancellation: resolve(projectRoot, "experiments/scalar-cancellation/index.html"),
       fractionChain: resolve(projectRoot, "experiments/fraction-chain/index.html"),

@@ -1,0 +1,60 @@
+{
+  "id": "run-contract.kp.mechanics-connected-argument-v1",
+  "kind": "run-contract",
+  "title": "One connected mechanics argument",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: exemplar implemented and verified, 1/2 packages. Await whether two existing rails form a useful connected explanation. Review URL and questions: docs/project/reviews/2026-09-23-mechanics-connected-argument.md. No new visual or semantic expansion before review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-23-mechanics-connected-argument.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:mechanics-relations",
+    "npm run typecheck",
+    "npm run build:bundle"
+  ],
+  "verificationRecords": [
+    {
+      "command": "Initial focused Article compilation and browser smoke",
+      "status": "failed",
+      "scope": "exemplar",
+      "checkedAt": "2026-09-23T15:58:20.883Z",
+      "notes": "Article rejects raw HTML answer disclosure; replaced with Markdown. Initial browser assumptions treated ordinary End as instant and matched multiple collapse controls; corrected driver to existing reduced-motion policy and parent control. No runtime patch or relaxed tolerance."
+    },
+    {
+      "command": "Focused momentum-energy unit tests; scoped visual:mechanics-relations connected argument; full typecheck; check:architecture; build:bundle; check:equation-reachability; physics and physics-argument closure measurements",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-09-23T15:58:24.221Z",
+      "notes": "30 unit tests and two Chromium smoke checks pass; both rails unfold/restore exact parent endpoints, static math and shared typography preserved. Full and final affected types pass. Review packet documents source-only versus host integration, payloads and pre-review verification limits."
+    }
+  ],
+  "allowedWork": [
+    "One Article and explicit host through existing mechanics publication; focused preservation checks; durable review"
+  ],
+  "disallowedWork": [
+    "New semantics, motifs, renderer, global UI, generic Apply layer, curriculum promotion or restart of parked loops"
+  ],
+  "goal": "Author and review why a sideways force changes momentum without changing kinetic energy using existing equation rails",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Build the focused mechanics argument",
+      "summary": "Focused mechanics Article and existing-runtime host ready at /experiments/mechanics-relations/force-without-work/. Verified exact derivations, both rail returns, no-JS reading, typography, types and build. Human explanation judgment remains.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Record human explanation review and close out",
+      "status": "planned"
+    }
+  ]
+}
