@@ -55,6 +55,12 @@
       "scope": "trial-runner",
       "checkedAt": "2026-09-23T02:12:24.912Z",
       "notes": "Redundant narrowed-union comparison removed; unchanged five focused checks pass, node types already passed."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "fraction-variations",
+      "checkedAt": "2026-09-23T02:13:40.724Z"
     }
   ],
   "allowedWork": [
@@ -96,7 +102,8 @@
     {
       "id": "fraction-variations",
       "title": "Retain two fraction baseline outcomes",
-      "status": "planned"
+      "summary": "Addition with reduction and two-sided subtraction both checked unchanged, host-eligible but not yet applied. Exact owner moves, revisions, input hashes and local timing retained; 37 fraction checks pass.",
+      "status": "complete"
     },
     {
       "id": "fraction-boundary",
