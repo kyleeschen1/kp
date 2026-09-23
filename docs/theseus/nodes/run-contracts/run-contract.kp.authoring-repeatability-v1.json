@@ -80,6 +80,13 @@
       "status": "passed",
       "scope": "algebra-variation",
       "checkedAt": "2026-09-23T02:29:24.207Z"
+    },
+    {
+      "command": "npm run trial:authoring -- --phase baseline --case algebra-composite-factor --record",
+      "status": "passed",
+      "scope": "algebra-boundary",
+      "checkedAt": "2026-09-23T02:31:12.969Z",
+      "notes": "Command matches coarse repair status only. Adjudication records that the intended paint boundary was not reached; no false coverage credit."
     }
   ],
   "allowedWork": [
@@ -139,7 +146,8 @@
     {
       "id": "algebra-boundary",
       "title": "Retain algebra presentation boundary",
-      "status": "planned"
+      "summary": "Executed frozen negative and retained source-ID diagnostic. Intended multi-digit presentation boundary was NOT exercised; durable baseline notes distinguish status matching from intent coverage. No source substitution or relaxed validation.",
+      "status": "complete"
     },
     {
       "id": "mechanics-declared",

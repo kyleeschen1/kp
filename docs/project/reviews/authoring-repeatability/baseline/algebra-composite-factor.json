@@ -1,0 +1,71 @@
+{
+  "schema": "kp.authoring-repeatability-result.v1",
+  "caseId": "algebra-composite-factor",
+  "task": "equation.common-factor",
+  "inputSha256": "9b2b99ac32f14498d3a9ed6d1b59051762f9826802732824b7c744b4f06db7ba",
+  "expected": "repair-gap",
+  "actual": "repair-gap",
+  "expectationMatched": true,
+  "report": {
+    "kind": "author-check-report",
+    "task": "equation.common-factor",
+    "authority": "report-only",
+    "handoff": {
+      "execution": "not-performed",
+      "capabilities": {
+        "owner": "src/authoring/common-factor-author-check.ts",
+        "input": "One ordered two-product rewrite over declared single-letter real scalars; single-letter or single-digit nonnegative common factor and symbolic addends. Multi-digit factors return unsupported-presentation. Editorial prose is not proof.",
+        "preview": {
+          "kind": "explicit-apply",
+          "url": "/experiments/reusable-reasoning/?example=common-factor"
+        },
+        "extraction": {
+          "kind": "domain-owned",
+          "owner": "src/experiments/common-factor/practice.ts",
+          "scope": "Two bounded self-checks and revision-pinned exact return; no automatic grading."
+        },
+        "publication": {
+          "kind": "local-edition",
+          "command": "author:common-factor-publication",
+          "output": "immutable-content-addressed",
+          "input": "selected common-factor source JSON; static reading and self-checks, not interactive animation"
+        }
+      }
+    },
+    "status": "repair-gap",
+    "result": {
+      "status": "repair-gap",
+      "diagnostic": {
+        "code": "source",
+        "path": "$.states[0].id",
+        "expected": "Use a namespaced stable ID."
+      }
+    }
+  },
+  "preview": {
+    "status": "unsupported",
+    "reason": "Existing owner returned a repair; retain its exact diagnostic below."
+  },
+  "checkElapsedMs": 346.98999999999995,
+  "work": {
+    "sourceEditsAfterFreeze": 0,
+    "adapterEdits": 0,
+    "engineEdits": 0,
+    "editorialCorrections": [],
+    "engineeringMinutes": null,
+    "notes": "No per-case source, adapter or engine correction. Trial infrastructure is separate; checker elapsed time excludes preview and is not engineering time."
+  },
+  "editorialJudgment": "not-certified",
+  "provenance": "current-agent-with-implementation-knowledge",
+  "phase": "baseline",
+  "implementationCommit": "7367ca7ee9aecfc0b0dd2541b021747dec8fadfb",
+  "recordedAt": "2026-09-23T02:29:51.450Z",
+  "command": "npm run trial:authoring -- --phase baseline --case algebra-composite-factor --record",
+  "invocation": [
+    "--phase",
+    "baseline",
+    "--case",
+    "algebra-composite-factor",
+    "--record"
+  ]
+}
