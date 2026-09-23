@@ -35,6 +35,26 @@
       "status": "passed",
       "scope": "outcome-records",
       "checkedAt": "2026-09-23T02:08:52.418Z"
+    },
+    {
+      "command": "npm run test:authoring-repeatability",
+      "status": "passed",
+      "scope": "trial-runner",
+      "checkedAt": "2026-09-23T02:11:33.986Z"
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "failed",
+      "scope": "trial-runner",
+      "checkedAt": "2026-09-23T02:11:58.954Z",
+      "notes": "TS2367 in runner fixture: assert.equal already narrowed actual to checked before a redundant comparison to failed. Remove redundant comparison and rerun before commit."
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "trial-runner",
+      "checkedAt": "2026-09-23T02:12:24.912Z",
+      "notes": "Redundant narrowed-union comparison removed; unchanged five focused checks pass, node types already passed."
     }
   ],
   "allowedWork": [
@@ -70,7 +90,8 @@
     {
       "id": "trial-runner",
       "title": "Delegate trials through current authoring owners",
-      "status": "planned"
+      "summary": "Stable scoped runner delegates current owners and retains immutable outcomes. Five focused checks and node/test types pass after repairing a redundant assertion narrowing; no frozen case has yet been executed by a domain owner.",
+      "status": "complete"
     },
     {
       "id": "fraction-variations",
