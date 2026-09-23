@@ -1,0 +1,16 @@
+{
+  "title": "Name the shared shipping decision",
+  "statement": "Both callers use the same threshold decision.",
+  "explanation": "Introduce a named helper, move the shared rule, then replace each caller. Inspect the declared below, at and above threshold cases.",
+  "sourceRevisionId": "free-shipping.unreviewed.v2",
+  "targetRevisionId": "free-shipping.after.v1",
+  "stageIds": [
+    "stage.orient",
+    "stage.compare-duplicates",
+    "stage.introduce-helper",
+    "stage.move-shared-rule",
+    "stage.replace-cost-call",
+    "stage.replace-message-call",
+    "stage.verify-parity"
+  ]
+}

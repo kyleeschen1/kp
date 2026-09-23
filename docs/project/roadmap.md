@@ -54,19 +54,20 @@ September 22: the user approved the [24-slice sequence](2026-09-22-authoring-rep
 closes the existing run before a ten-case trial and at most one recurring-boundary
 repair. Execute the remaining consolidation packages before creating the successor.
 The same document retains the remaining recommendations and revisit triggers.
-When the global snapshot omits the active contract, derive exact stored progress
-with `npm run --silent loop:status -- --contract run-contract.kp.passage-consolidation-v2`.
+Consolidation is now [closed with integrated evidence](reviews/2026-09-22-consolidation-closeout.md).
+The active approved successor is `run-contract.kp.authoring-repeatability-v1`:
+freeze ten inputs, measure existing-owner outcomes and actual preview application,
+repair at most one observed recurring seam, then rerun unchanged inputs.
+Derive exact stored progress with
+`npm run --silent loop:status -- --contract run-contract.kp.authoring-repeatability-v1`.
 This explicit selection does not authorize new scope or query global blockers.
 
-Approved active delivery: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
-controlled by `run-contract.kp.passage-consolidation-v2`. The user approved the
-audit's four recommendations. Live order: bounded reconciliation, supported
-source-to-preview and measured cost, composed-motion preservation, then one
-persistent code/text exemplar before human visual review and further promotion.
-Explanation-review support and integrated closeout follow. Resume with
-`theseus plan run` and the named contract's brief context; the general resume
-capsule still exceeds its 1,200-token budget. Historical entries below do not
-authorize competing work or repeat already accepted checkpoints.
+Completed predecessor: [passage consolidation and code/text transfer](2026-09-17-passage-consolidation-delivery.md),
+controlled by resolved `run-contract.kp.passage-consolidation-v2`. Its eight
+packages include code promotion, explanation review and integrated closeout.
+Resume the successor with its named brief context; the global Theseus snapshot
+may omit the active contract. Historical entries below do not authorize competing
+work or repeat already accepted checkpoints.
 
 Latest planning direction: infrastructure work while no readers/teaching
 collaborators are available. The [infrastructure and queue audit](reviews/2026-09-17-infrastructure-and-queue-audit.md)

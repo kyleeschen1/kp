@@ -1,0 +1,33 @@
+{
+  "schema": "kp.algebra.fraction-chain.v1",
+  "id": "trial-false-count",
+  "title": "A deliberately incorrect count",
+  "states": [
+    {
+      "id": "unlike",
+      "latex": "\\frac{2}{5}+\\frac{1}{10}"
+    },
+    {
+      "id": "aligned",
+      "latex": "\\frac{4}{10}+\\frac{1}{10}"
+    },
+    {
+      "id": "combined",
+      "latex": "\\frac{6}{10}"
+    }
+  ],
+  "moves": [
+    {
+      "id": "align",
+      "from": "unlike",
+      "to": "aligned",
+      "prose": "Express both fractions in tenths."
+    },
+    {
+      "id": "combine",
+      "from": "aligned",
+      "to": "combined",
+      "prose": "This deliberately damaged proposal says four plus one is six."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Check the threshold boundary",
+  "statement": "A shared decision must preserve the declared callers' outcomes.",
+  "explanation": "Compare the declared below, at and above threshold cases after extraction. These cases accompany the pinned transformation; they are not a proof about arbitrary programs.",
+  "sourceRevisionId": "free-shipping.before.v1",
+  "targetRevisionId": "free-shipping.after.v1",
+  "stageIds": [
+    "stage.orient",
+    "stage.compare-duplicates",
+    "stage.introduce-helper",
+    "stage.move-shared-rule",
+    "stage.replace-cost-call",
+    "stage.replace-message-call",
+    "stage.verify-parity"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "schema": "kp.physics.momentum-energy-derivation.v1",
+  "mass": "zero",
+  "velocity": "euclidean-vector",
+  "momentum": "mass-times-velocity"
+}

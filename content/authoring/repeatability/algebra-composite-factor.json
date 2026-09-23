@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "kp.common-factor-source.v1",
+  "id": "lesson.trial.factor-12",
+  "domain": "real-scalars",
+  "symbols": [
+    "x",
+    "y"
+  ],
+  "states": [
+    {
+      "id": "expanded",
+      "latex": "12x+12y",
+      "narration": "Both products contain 12. Preserve the order of x and y."
+    },
+    {
+      "id": "factored",
+      "latex": "12(x+y)",
+      "narration": "Distributing the outer factor recovers both original products."
+    }
+  ],
+  "editorial": {
+    "title": "One factor, two contributions",
+    "setup": "Identify what both products share before gathering their remaining terms.",
+    "summary": "Factoring changes the grouping without changing the value."
+  }
+}

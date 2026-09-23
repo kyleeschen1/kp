@@ -1,0 +1,159 @@
+{
+  "id": "run-contract.kp.authoring-repeatability-v1",
+  "kind": "run-contract",
+  "title": "Fixed-case authoring repeatability",
+  "status": "active",
+  "summary": "User approved the full September 22 proposal; predecessor closed with all mandatory checks passing. Execute its remaining 21 ordered slices.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.authoring-repeatability.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-22-authoring-repeatability-long-loop.md"
+    }
+  ],
+  "verification": [
+    "npm run test:authoring-entrypoints",
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle",
+    "npm run test:repertoire",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:authoring-repeatability",
+      "status": "passed",
+      "scope": "freeze-cases",
+      "checkedAt": "2026-09-23T02:05:54.911Z"
+    }
+  ],
+  "allowedWork": [
+    "Approved proposal rows 4 through 24 only; bounded engineering-budget repairs remain authorized"
+  ],
+  "disallowedWork": [
+    "No new semantic task, solver, frontend, motif, universal UI, paid calls, deployment or external repository changes"
+  ],
+  "goal": "Run ten frozen authoring inputs through existing owners and hosts, repair at most one observed recurring seam, rerun unchanged inputs and retain honest costs and gaps.",
+  "target": "next-action.kp.authoring-repeatability",
+  "runMode": "run",
+  "maxSlices": 21,
+  "commitCadence": "One verified reversible approved slice with its evidence",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "New visual treatment requires canonical human judgment before promotion",
+    "Review at eight active hours and stop at ten from September 22 execution, reserving final hour for verification; human waiting excluded",
+    "Completed scope, user pause or genuine safety, external authority or scope blocker"
+  ],
+  "slices": [
+    {
+      "id": "freeze-cases",
+      "title": "Freeze ten exact authoring inputs",
+      "summary": "Ten fixed raw inputs and SHA-256 revisions retained, with six intended checked outcomes and four intended repairs. No owner outcome claimed before execution; provenance explicitly excludes blind-model and learning claims.",
+      "status": "complete"
+    },
+    {
+      "id": "outcome-records",
+      "title": "Separate checked and applied outcomes",
+      "status": "planned"
+    },
+    {
+      "id": "trial-runner",
+      "title": "Delegate trials through current authoring owners",
+      "status": "planned"
+    },
+    {
+      "id": "fraction-variations",
+      "title": "Retain two fraction baseline outcomes",
+      "status": "planned"
+    },
+    {
+      "id": "fraction-boundary",
+      "title": "Retain the fraction negative",
+      "status": "planned"
+    },
+    {
+      "id": "algebra-variation",
+      "title": "Retain supported algebra baseline",
+      "status": "planned"
+    },
+    {
+      "id": "algebra-boundary",
+      "title": "Retain algebra presentation boundary",
+      "status": "planned"
+    },
+    {
+      "id": "mechanics-declared",
+      "title": "Retain declared mechanics reference outcome",
+      "status": "planned"
+    },
+    {
+      "id": "mechanics-negative",
+      "title": "Retain changed-assumption rejection",
+      "status": "planned"
+    },
+    {
+      "id": "code-editorial",
+      "title": "Retain two pinned code editorial variants",
+      "status": "planned"
+    },
+    {
+      "id": "code-negative",
+      "title": "Retain changed-source rejection",
+      "status": "planned"
+    },
+    {
+      "id": "preview-baseline",
+      "title": "Exercise eligible source application",
+      "status": "planned"
+    },
+    {
+      "id": "baseline-findings",
+      "title": "Adjudicate all ten baseline records",
+      "status": "planned"
+    },
+    {
+      "id": "select-one-seam",
+      "title": "Select at most one observed recurring boundary",
+      "status": "planned"
+    },
+    {
+      "id": "repair-one-seam",
+      "title": "Repair the selected boundary or record no-op",
+      "status": "planned"
+    },
+    {
+      "id": "repair-pressure",
+      "title": "Pressure the same repair across frozen cases",
+      "status": "planned"
+    },
+    {
+      "id": "frozen-rerun",
+      "title": "Rerun all ten unchanged inputs",
+      "status": "planned"
+    },
+    {
+      "id": "cost-comparison",
+      "title": "Compare measured effort and affected costs",
+      "status": "planned"
+    },
+    {
+      "id": "author-guidance",
+      "title": "Update demonstrated authoring guidance",
+      "status": "planned"
+    },
+    {
+      "id": "coverage-reconcile",
+      "title": "Reconcile only evidenced dashboard claims",
+      "status": "planned"
+    },
+    {
+      "id": "trial-closeout",
+      "title": "Verify and close the approved trial",
+      "status": "planned"
+    }
+  ]
+}

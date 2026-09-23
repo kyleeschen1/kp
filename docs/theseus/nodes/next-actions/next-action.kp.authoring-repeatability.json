@@ -1,0 +1,7 @@
+{
+  "id": "next-action.kp.authoring-repeatability",
+  "kind": "next-action",
+  "title": "Measure fixed-case authoring repeatability",
+  "status": "ready",
+  "domain": "kp"
+}

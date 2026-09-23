@@ -1,0 +1,43 @@
+{
+  "schema": "kp.algebra.fraction-chain.v1",
+  "id": "trial-add-reduce",
+  "title": "From tenths to halves",
+  "states": [
+    {
+      "id": "unlike",
+      "latex": "\\frac{2}{5}+\\frac{1}{10}"
+    },
+    {
+      "id": "aligned",
+      "latex": "\\frac{4}{10}+\\frac{1}{10}"
+    },
+    {
+      "id": "combined",
+      "latex": "\\frac{5}{10}"
+    },
+    {
+      "id": "reduced",
+      "latex": "\\frac{1}{2}"
+    }
+  ],
+  "moves": [
+    {
+      "id": "align",
+      "from": "unlike",
+      "to": "aligned",
+      "prose": "Two fifths equals four tenths; multiply its numerator and denominator by two."
+    },
+    {
+      "id": "combine",
+      "from": "aligned",
+      "to": "combined",
+      "prose": "Add the counts of tenths, retaining their denominator."
+    },
+    {
+      "id": "reduce",
+      "from": "combined",
+      "to": "reduced",
+      "prose": "Divide five and ten by five to express the same quantity as one half."
+    }
+  ]
+}
