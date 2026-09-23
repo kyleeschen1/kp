@@ -3,6 +3,14 @@
 Use task `equation.common-factor` from the supported authoring entrypoint.
 This is one ordered two-product factoring step, not general polynomial factoring.
 
+Begin with its generated `--example`, including namespaced state IDs such as
+`state.common-factor.expanded` and `state.common-factor.factored`. Plain IDs like
+`expanded` fail at `$.states[0].id` before algebra or presentation is checked.
+Preserve the reported `code`, `path` and `expected`; repair the source format and
+recheck before interpreting a rejection as a missing mathematical motif. Both
+algebra inputs in the frozen repeatability trial made this authoring error;
+their original failures remain recorded and provide no new factoring coverage.
+
 ## Start from a source
 
 The accepted primary is `src/authoring/examples/common-factor-primary.json`:

@@ -58,6 +58,18 @@ The retained `/numeric/` caller now demonstrates a source-only variation from
 eighths to tenths (`1/5+1/10 → 2/10+1/10 → 3/10`), without hints or route,
 renderer, CSS or clock changes. Its adjacent Article supplies the matching prose.
 
+The frozen repeatability trial also applies `2/5+1/10 → 4/10+1/10 → 5/10 → 1/2`
+and `3/4−1/6 → 9/12−2/12 → 7/12` through this compiler and existing host,
+without hints or case-specific engine changes. See
+[`cost-comparison.md`](../reviews/authoring-repeatability/cost-comparison.md).
+Its two adjacent Articles are real authoring work. Application used isolated
+browser document fixtures, not a new upload/Apply route or immutable edition.
+All three supported browsers preserve endpoints, reversal, disclosure return,
+font resizing and no-JS native MathML. The publication owner now emits accessible
+native math for permanent equations and static detail; retain that output when
+editing prose. Checking another chain still does not certify its choreography
+or teaching quality. A false numerator total remains a located arithmetic repair.
+
 Mechanics discovery is separate: `--task mechanics.momentum-energy --example`
 returns the existing positive-mass Euclidean-vector derivation assumptions.
 Its checker does not infer new mechanics or apply drafts to the reference host.

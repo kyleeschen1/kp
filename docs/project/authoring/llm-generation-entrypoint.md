@@ -34,6 +34,17 @@ their distinct schemas, diagnostics and host/publication capabilities. It does
 not replace their semantic authorities or provide arbitrary generation. Use
 the domain packet only after selecting the exact task.
 
+Start each draft from that task's `--example`; preserve its required identity
+syntax and pins before changing content. Run `author:check` on the actual file
+and retain located diagnostics. Keep three separate claims: the source checked,
+those exact bytes/revision reached a host, and that output passed its preservation
+checks. A reference URL or successful check proves neither application nor
+explanation quality. The [fixed-input trial](../reviews/authoring-repeatability/baseline-findings.md)
+and [unchanged-input cost comparison](../reviews/authoring-repeatability/cost-comparison.md)
+show why: two algebra proposals failed source IDs before testing their intended
+operations; two valid fraction proposals needed a shared accessible-math repair.
+These are current-agent observations, not general LLM accuracy or curriculum coverage.
+
 The authoring-first integration direction is accepted in
 `../decisions/2026-09-05-authoring-integration-priority-and-sequence.md`.
 Its bounded market source/Article/preview integration is implemented; use

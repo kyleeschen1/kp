@@ -182,6 +182,13 @@
       "scope": "cost-comparison",
       "checkedAt": "2026-09-23T03:01:53.332Z",
       "notes": "All complete consumers measured after passing production build; identical 415444 initial and 458026 activated JS/CSS gzip. Only main host has retained before HTML baseline; no fabricated deltas or speedup."
+    },
+    {
+      "command": "npm run test:authoring-entrypoints; npm run typecheck; common-factor generated example; git diff --check",
+      "status": "passed",
+      "scope": "author-guidance",
+      "checkedAt": "2026-09-23T03:04:52.713Z",
+      "notes": "48 entrypoint tests and full app/node/test/Svelte/domain types pass; verified exact generated state IDs and retained original trial failures."
     }
   ],
   "allowedWork": [
@@ -313,7 +320,8 @@
     {
       "id": "author-guidance",
       "title": "Update demonstrated authoring guidance",
-      "status": "planned"
+      "summary": "Updated canonical routing and fraction/common-factor packets with demonstrated scope, namespaced-ID repair and application distinctions. 48 entrypoint tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "coverage-reconcile",
