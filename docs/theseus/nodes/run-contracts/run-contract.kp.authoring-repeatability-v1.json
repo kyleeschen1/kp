@@ -87,6 +87,12 @@
       "scope": "algebra-boundary",
       "checkedAt": "2026-09-23T02:31:12.969Z",
       "notes": "Command matches coarse repair status only. Adjudication records that the intended paint boundary was not reached; no false coverage credit."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-mechanics.test.ts",
+      "status": "passed",
+      "scope": "mechanics-declared",
+      "checkedAt": "2026-09-23T02:32:04.496Z"
     }
   ],
   "allowedWork": [
@@ -152,7 +158,8 @@
     {
       "id": "mechanics-declared",
       "title": "Retain declared mechanics reference outcome",
-      "status": "planned"
+      "summary": "Canonical positive-mass and Euclidean-vector declaration checked unchanged; semantic-plan-only and reference-only limitations retained. No selected-source mechanics preview claim.",
+      "status": "complete"
     },
     {
       "id": "mechanics-negative",

@@ -1,0 +1,75 @@
+{
+  "schema": "kp.authoring-repeatability-result.v1",
+  "caseId": "mechanics-declared",
+  "task": "mechanics.momentum-energy",
+  "inputSha256": "c7ca69fe0812b4d07fdd06ba89f4450cc0fd423b84366e61eb797cb20fa64e22",
+  "expected": "checked",
+  "actual": "checked",
+  "expectationMatched": true,
+  "report": {
+    "kind": "author-check-report",
+    "task": "mechanics.momentum-energy",
+    "authority": "report-only",
+    "handoff": {
+      "execution": "not-performed",
+      "capabilities": {
+        "owner": "src/authoring/mechanics-derivation-author-check.ts",
+        "input": "Existing momentum-energy derivation assumptions: positive-real mass, Euclidean-vector velocity, momentum equals mass times velocity. No arbitrary equations, physical inference or editable notation.",
+        "preview": {
+          "kind": "reference-only",
+          "url": "/experiments/mechanics-relations/#energy-from-momentum",
+          "reason": "Checks the existing mechanics authority; does not apply a selected draft."
+        },
+        "extraction": {
+          "kind": "domain-owned",
+          "owner": "src/tutorial/mechanics-relations/momentum-energy-derivation-publication.ts",
+          "scope": "Existing checked norm-scaling and mass-cancellation detail only."
+        },
+        "publication": {
+          "kind": "unsupported",
+          "reason": "No selected-source mechanics edition command."
+        }
+      }
+    },
+    "status": "checked",
+    "result": {
+      "status": "semantic-plan-only",
+      "domain": "mechanics",
+      "checkpointCount": 4,
+      "source": {
+        "schema": "kp.physics.momentum-energy-derivation.v1",
+        "mass": "positive-real",
+        "velocity": "euclidean-vector",
+        "momentum": "mass-times-velocity"
+      },
+      "presentationStatus": "reference-only"
+    }
+  },
+  "preview": {
+    "status": "reference-only",
+    "url": "/experiments/mechanics-relations/#energy-from-momentum",
+    "visited": false
+  },
+  "checkElapsedMs": 35.926874999999995,
+  "work": {
+    "sourceEditsAfterFreeze": 0,
+    "adapterEdits": 0,
+    "engineEdits": 0,
+    "editorialCorrections": [],
+    "engineeringMinutes": null,
+    "notes": "No per-case source, adapter or engine correction. Trial infrastructure is separate; checker elapsed time excludes preview and is not engineering time."
+  },
+  "editorialJudgment": "not-certified",
+  "provenance": "current-agent-with-implementation-knowledge",
+  "phase": "baseline",
+  "implementationCommit": "c0e86c1dea2a3cbd6affac98568f270db355361e",
+  "recordedAt": "2026-09-23T02:31:43.346Z",
+  "command": "npm run trial:authoring -- --phase baseline --case mechanics-declared --record",
+  "invocation": [
+    "--phase",
+    "baseline",
+    "--case",
+    "mechanics-declared",
+    "--record"
+  ]
+}
