@@ -31,6 +31,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-29T20:47:38.775Z",
       "notes": "s03: Separate executed reference checks from declared symbolic laws"
+    },
+    {
+      "command": "npm run test:symbolic-inspection; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-29T20:49:45.431Z",
+      "notes": "s04: Project immutable transformation evidence with endpoint ownership checks"
     }
   ]
 }

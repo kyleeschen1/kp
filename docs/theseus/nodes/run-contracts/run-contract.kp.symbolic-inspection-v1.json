@@ -50,7 +50,8 @@
     {
       "id": "s04",
       "title": "Project transformation evidence",
-      "status": "planned"
+      "summary": "Project immutable transformation evidence with endpoint ownership checks",
+      "status": "complete"
     },
     {
       "id": "s05",

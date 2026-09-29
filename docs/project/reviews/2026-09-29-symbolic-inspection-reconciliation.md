@@ -43,3 +43,9 @@ certification of their consumers.
 
 The impact selector has no focused documentation rule; the approved docs-only
 cadence uses `git diff --check` and Theseus validation rather than a full suite.
+
+The inspection projection also checks endpoint ownership: existence anywhere in
+the bundle is insufficient for a source/target selector on the selected edge.
+The projection copies and freezes its evidence and does not pass mutable input
+arrays to a view. Its checked scope is reference/lifecycle integrity. Mathematical
+law references and assumptions remain separately identified declarations.
