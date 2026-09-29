@@ -5,3 +5,10 @@
 [data-distribution-stage] .kp-reader-focus-stepper,
 [data-distribution-stage] .kp-reader-equation-hint,
 [data-distribution-stage] .kp-reader-equation-progress { display: none; }
+/* Empty overlay boxes and transparent endpoint copies cannot own inspection
+   hits. Only the compositor-reported settled endpoint exposes native ink. */
+[data-kp-symbolic-inspection] [data-kp-reader-material-fit-surface],
+[data-kp-symbolic-inspection] [data-kp-reader-fit-surface],
+[data-kp-symbolic-inspection] [data-kp-reader-equation-measurement],
+[data-kp-symbolic-inspection] [data-kp-reader-native] { pointer-events: none; }
+[data-kp-inspection-hit-endpoint] [data-kp-reader-selector-id] { pointer-events: auto; cursor: pointer; }

@@ -18,3 +18,19 @@ test("inspection is opt-in and preserves canonical seek and reverse", async ({ p
     await expect(card.locator("[data-kp-reader-canonical-paint-owner]")).toHaveAttribute("data-kp-reader-canonical-paint-owner", "true");
   }
 });
+
+test("native occurrence click focuses through the existing compositor without seeking", async ({ page }) => {
+  await page.goto(route + "?inspection=true");
+  const card = page.locator('[data-kp-authoring-distribution-card="ready"]');
+  await expect(card).toBeVisible();
+  const selector = "fraction-fan-out.source.addend.x";
+  await card.locator(`[data-kp-inspection-hit-endpoint] [data-kp-reader-selector-id="${selector}"]`).click();
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-inspection-selector", selector);
+  await expect(card).toHaveAttribute("data-kp-distribution-progress", "0");
+  await expect(card.locator("[data-kp-reader-focus-source]")).toHaveAttribute("data-kp-reader-focus-source", "pointer");
+  await card.locator("[data-kp-focus-deck-scrubber]").fill("1");
+  const target = "fraction-fan-out.target.addend.x";
+  await card.locator(`[data-kp-inspection-hit-endpoint] [data-kp-reader-selector-id="${target}"]`).click();
+  await expect(page.locator("#authored-focus-card")).toHaveAttribute("data-kp-inspection-selector", target);
+  await expect(card).toHaveAttribute("data-kp-distribution-progress", "1");
+});

@@ -1,4 +1,5 @@
 import "./style.css";
+import type { KpInspectionSelection } from "./inspection-selection.ts";
 import { bindKpFocusDeckRangeController } from "../focus-deck-range-controller.ts";
 import { renderKpAuthoredFocusCard, kpAuthoredDistributionBeats as beats } from "../authored-focus-card-content.ts";
 import { restoreKpReaderAuthoringDistributionPreview } from "../../reader/app/authoring-distribution-preview.ts";
@@ -79,13 +80,22 @@ async function mount() {
   await document.fonts.ready;
   prepare();
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let inspectionSelection: KpInspectionSelection | undefined;
   const render = () => {
     try {
       const sample = clock.getSnapshot();
-      const result = session.sample({ clock: sample, motionMode: reduced.matches ? "essential" : "continuous" });
+      const result = session.sample({ clock: sample, motionMode: reduced.matches ? "essential" : "continuous",
+        ...(inspectionSelection ? { focus: inspectionSelection.paintFocus() } : {}) });
       sampledRevision = `${result.layoutRevision}:${result.fontRevision}`;
       card.dataset["kpDistributionProgress"] = String(sample.progress / end);
       card.dataset["kpDistributionState"] = result.accessibleEquationState;
+      if (inspectionSelection) for (const transition of shell.transitions) {
+        for (const native of transition.querySelectorAll<HTMLElement>("[data-kp-reader-native]")) {
+          native.toggleAttribute("data-kp-inspection-hit-endpoint",
+            transition.dataset["kpReaderTransition"] === result.transitionId &&
+            native.dataset["kpReaderNative"] === result.nativeEndpoint);
+        }
+      }
       card.dataset["kpDistributionTransition"] = clock.getStatus() === "playing" ? "active" : "settled";
     } catch (error) {
       clock.pause();
@@ -93,6 +103,19 @@ async function mount() {
       reportGap(error);
     }
   };
+  let disposeSelection = () => {};
+  if (inspection) {
+    const module = await import("./inspection-selection.ts");
+    const selection = inspectionSelection = module.createKpInspectionSelection(inspection);
+    const unsubscribe = selection.subscribe(() => {
+      const selected = selection.read();
+      if (selected) root.dataset["kpInspectionSelector"] = selected.occurrence.selectorId;
+      else delete root.dataset["kpInspectionSelector"];
+      render();
+    });
+    const unbind = module.bindKpInspectionStageSelection({ stage: shell.stage, selection, pause: () => clock.pause() });
+    disposeSelection = () => { unbind(); unsubscribe(); selection.dispose(); };
+  }
   const controller = bindKpFocusDeckRangeController({
     card, beats, hashPrefix: "beat.authoring-distribution", end, clock, reduced, render,
     prepareNavigation: () => {
@@ -101,7 +124,7 @@ async function mount() {
       if (sampledRevision !== preparedRevision) { prepare(); render(); }
     },
     prepareResize: () => { session.invalidate(); prepare(); },
-    disposeSurface: () => { inspection?.dispose(); session.dispose(); }
+    disposeSurface: () => { disposeSelection(); inspection?.dispose(); session.dispose(); }
   });
   import.meta.hot?.dispose(controller.dispose);
   if (!root.dataset["kpDistributionRepairGap"]) {

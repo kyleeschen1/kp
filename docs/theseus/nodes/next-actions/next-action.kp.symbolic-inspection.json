@@ -73,6 +73,13 @@
       "scope": "broad",
       "checkedAt": "2026-09-29T20:57:43.480Z",
       "notes": "s09: Load revision-pinned inspection evidence only on the opt-in host"
+    },
+    {
+      "command": "npm run test:symbolic-inspection; npm run typecheck; npm run visual:symbolic-inspection; npm run check:architecture; npm run build:symbolic-inspection",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-29T21:03:07.975Z",
+      "notes": "s10: Bind inspection selection to reader focus and actual native paint ownership"
     }
   ]
 }

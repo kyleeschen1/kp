@@ -50,3 +50,13 @@ measures 141,308 initial / 237,187 activated gzip bytes: +706 / +2,312 over
 baseline. This includes chunk-layout changes, not just new source bytes. A
 Chromium request check confirms the ordinary route does not fetch the inspection
 bridge. Its opt-in route passes forward/direct/reverse canonical paint checks.
+
+Native pointer inspection initially failed because empty material/measurement
+boxes intercepted events. A first endpoint rule also assumed the first edge
+owned its target dock; the compositor can correctly hand that dock to the next
+edge's source. The opt-in host now marks only the compositor-reported active
+native endpoint as hit-enabled and makes transparent overlay boxes inert to
+pointer input. Browser regression clicks both actual source and target ink,
+without forced clicks, and confirms focus changes without seeking. In transit,
+selection uses the explicit occurrence chooser; no glyph-based hit inference or
+new material owner was introduced.

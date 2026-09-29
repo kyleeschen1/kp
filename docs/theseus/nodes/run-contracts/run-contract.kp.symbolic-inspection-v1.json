@@ -86,7 +86,8 @@
     {
       "id": "s10",
       "title": "Integrate selection",
-      "status": "planned"
+      "summary": "Bind inspection selection to reader focus and actual native paint ownership",
+      "status": "complete"
     },
     {
       "id": "s11",
