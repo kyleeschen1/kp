@@ -45,6 +45,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-29T20:51:19.924Z",
       "notes": "s05: Keep unresolved assumptions distinct from invalid construction"
+    },
+    {
+      "command": "npm run test:symbolic-inspection; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-29T20:52:39.568Z",
+      "notes": "s06: Derive distinct selector occurrences and source provenance"
     }
   ]
 }

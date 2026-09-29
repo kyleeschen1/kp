@@ -62,7 +62,8 @@
     {
       "id": "s06",
       "title": "Derive occurrence projection",
-      "status": "planned"
+      "summary": "Derive distinct selector occurrences and source provenance",
+      "status": "complete"
     },
     {
       "id": "s07",
