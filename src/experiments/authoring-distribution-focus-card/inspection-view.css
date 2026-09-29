@@ -1,0 +1,15 @@
+#authored-focus-card.kp-inspection-host { max-width: 1180px; }
+.kp-inspection-layout { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(16rem, 1fr); gap: 1.5rem; align-items: start; }
+.kp-inspection-panel { min-width: 0; padding: 0 0 1rem; }
+.kp-inspection-panel h2 { margin: 0 0 .6rem; }
+.kp-inspection-panel p { margin: .65rem 0; }
+.kp-inspection-panel select { display: block; width: 100%; margin-top: .3rem; padding: .4rem; }
+.kp-inspection-panel button { margin: .3rem .3rem .3rem 0; padding: .4rem .6rem; border: 1px solid var(--kp-st-rule); border-radius: .25rem; color: var(--kp-st-ink); background: var(--kp-st-paper); cursor: pointer; }
+.kp-inspection-panel button:disabled { cursor: default; opacity: .6; }
+.kp-inspection-panel details { margin-top: 1rem; border-top: 1px solid var(--kp-st-rule); padding-top: .75rem; overflow-wrap: anywhere; }
+.kp-inspection-panel summary { cursor: pointer; }
+.kp-inspection-panel dt { margin-top: .65rem; font-weight: bold; }
+@media (max-width: 62rem) {
+  #authored-focus-card.kp-inspection-host { max-width: 780px; }
+  .kp-inspection-layout { grid-template-columns: minmax(0, 1fr); }
+}

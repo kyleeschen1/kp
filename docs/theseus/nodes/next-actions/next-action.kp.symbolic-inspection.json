@@ -80,6 +80,13 @@
       "scope": "broad",
       "checkedAt": "2026-09-29T21:03:07.975Z",
       "notes": "s10: Bind inspection selection to reader focus and actual native paint ownership"
+    },
+    {
+      "command": "npm run test:symbolic-inspection; npm run visual:symbolic-inspection (3 passed); npm run typecheck; npm run typecheck:tests; npm run check:architecture; npm run build:symbolic-inspection; inspected held-position screenshot",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-29T21:09:46.435Z",
+      "notes": "s11: Add an opt-in inspector with counterpart navigation and honest audit limits"
     }
   ]
 }

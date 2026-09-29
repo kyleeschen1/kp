@@ -19,6 +19,32 @@ test("inspection is opt-in and preserves canonical seek and reverse", async ({ p
   }
 });
 
+test("keyboard inspection follows descendants and clears at the held position", async ({ page }, info) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(route + "?inspection=true");
+  const card = page.locator('[data-kp-authoring-distribution-card="ready"]');
+  await expect(card).toBeVisible();
+  await card.locator("[data-kp-focus-deck-scrubber]").fill("0.5");
+  const before = await card.boundingBox();
+  const chooser = page.getByRole("combobox", { name: "Occurrence to inspect" });
+  // Native popup keystrokes are platform-dependent in headless Chromium;
+  // select through its native API, then exercise keyboard follow and Escape.
+  await chooser.selectOption("0");
+  await expect(page.locator("[data-inspection-result]")).not.toContainText("Select an occurrence");
+  await expect(card).toHaveAttribute("data-kp-distribution-progress", "0.5");
+  await expect(page.getByRole("button", { name: /^Follow target/ })).toHaveCount(2);
+  await page.getByRole("button", { name: /^Follow target/ }).first().focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("button", { name: /^Follow source/ })).toHaveCount(1);
+  await page.getByText("Audit evidence", { exact: true }).click();
+  await expect(page.locator("[data-inspection-audit]")).toContainText("do not prove mathematical equivalence");
+  await page.screenshot({ path: info.outputPath("inspection-held.png"), fullPage: true });
+  await chooser.press("Escape");
+  await expect(page.locator("[data-inspection-result]")).toContainText("Select an occurrence");
+  await expect(card).toHaveAttribute("data-kp-distribution-progress", "0.5");
+  expect(await card.boundingBox()).toEqual(before);
+});
+
 test("native occurrence click focuses through the existing compositor without seeking", async ({ page }) => {
   await page.goto(route + "?inspection=true");
   const card = page.locator('[data-kp-authoring-distribution-card="ready"]');

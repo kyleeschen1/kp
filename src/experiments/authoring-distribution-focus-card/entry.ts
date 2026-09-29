@@ -114,7 +114,9 @@ async function mount() {
       render();
     });
     const unbind = module.bindKpInspectionStageSelection({ stage: shell.stage, selection, pause: () => clock.pause() });
-    disposeSelection = () => { unbind(); unsubscribe(); selection.dispose(); };
+    const disposeView = (await import("./inspection-view.ts")).mountKpDistributionInspectionView({ root, card, selection, pause: () => clock.pause() });
+    session.invalidate(); prepare();
+    disposeSelection = () => { disposeView(); unbind(); unsubscribe(); selection.dispose(); };
   }
   const controller = bindKpFocusDeckRangeController({
     card, beats, hashPrefix: "beat.authoring-distribution", end, clock, reduced, render,

@@ -92,7 +92,8 @@
     {
       "id": "s11",
       "title": "Build local inspector",
-      "status": "planned"
+      "summary": "Add an opt-in inspector with counterpart navigation and honest audit limits",
+      "status": "complete"
     },
     {
       "id": "s12",
