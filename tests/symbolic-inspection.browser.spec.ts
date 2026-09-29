@@ -1,6 +1,46 @@
 import { expect, test } from "@playwright/test";
+import { buildKpVisualContactSheetHtml, type KpVisualContactSheetItem } from "../scripts/capture-visual-contact-sheet.ts";
 
 const route = "/experiments/authoring-distribution-focus-card/";
+
+test("review packet compares static endpoints with the inspection flow", async ({ page }, info) => {
+  const captures: KpVisualContactSheetItem[] = [];
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  for (const checkpoint of [
+    { id: "static-source", progress: 0, inspect: false, width: 1280 },
+    { id: "static-target", progress: 1, inspect: false, width: 1280 },
+    { id: "inspect-source", progress: 0, inspect: true, width: 1280 },
+    { id: "inspect-transit", progress: .5, inspect: true, width: 1280 },
+    { id: "inspect-target", progress: 1, inspect: true, width: 1280 },
+    { id: "inspect-phone", progress: 1, inspect: true, width: 390 },
+  ]) {
+    await page.setViewportSize({ width: checkpoint.width, height: 900 });
+    await page.goto(route + (checkpoint.inspect ? "?inspection=true" : ""));
+    const card = page.locator('[data-kp-authoring-distribution-card="ready"]');
+    await expect(card).toBeVisible();
+    await card.locator("[data-kp-focus-deck-scrubber]").fill(String(checkpoint.progress));
+    if (checkpoint.inspect) {
+      await page.getByRole("combobox", { name: "Occurrence to inspect" }).selectOption("0");
+      await expect(page.getByRole("button", { name: /^Follow target/ })).toHaveCount(2);
+    }
+    await page.evaluate(() => document.fonts.ready);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const file = info.outputPath(`${checkpoint.id}.png`);
+    const capture = await page.screenshot({ path: file, fullPage: true });
+    captures.push({ id: checkpoint.id, label: checkpoint.id, progress: checkpoint.progress,
+      viewport: { width: checkpoint.width, height: 900 }, file,
+      dataUrl: `data:image/png;base64,${capture.toString("base64")}` });
+  }
+  expect(errors).toEqual([]);
+  const sheet = await page.context().newPage();
+  await sheet.setViewportSize({ width: 1500, height: 1000 });
+  await sheet.setContent(buildKpVisualContactSheetHtml(captures, {
+    title: "Symbolic inspection · endpoints and correspondence", columns: 2, imageFit: "contain", imageHeightPx: 480
+  }));
+  await sheet.screenshot({ path: info.outputPath("inspection-contact-sheet.png"), fullPage: true });
+  await sheet.close();
+});
 test("inspection is opt-in and preserves canonical seek and reverse", async ({ page }) => {
   const requests: string[] = [];
   page.on("request", request => requests.push(request.url()));

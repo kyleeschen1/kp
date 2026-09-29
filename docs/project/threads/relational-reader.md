@@ -11,6 +11,9 @@ feature tip and its accepted dependencies; the repo has no branch helper.
 Commit audited planning changes before branching from this tip. Do not restart
 from older dev or merge as part of this run. Stop at the mandatory exemplar
 checkpoint before factoring pressure or shared promotion.
+The [inspection exemplar packet](../reviews/2026-09-29-symbolic-inspection-exemplar.md)
+now exposes the canonical distribution's occurrence lineage and audit limits;
+its treatment has not been visually accepted. Use its live URL for the checkpoint.
 
 The [September 23 toolmaking discussion](../reviews/2026-09-23-medium-and-toolmaking-direction.md)
 records the user's nonprofit mission and leading symbolic-medium hypothesis.

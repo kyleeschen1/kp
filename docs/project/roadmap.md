@@ -31,6 +31,9 @@ distribution identity, correspondence and validation evidence, stop at one
 inspection exemplar, then conditionally pressure factoring and bounded reuse.
 This adopts only the proposal's scope, not the imported runtime handoff wholesale.
 The mechanics review remains preserved and unaccepted, not a prerequisite.
+The [first inspection review packet](reviews/2026-09-29-symbolic-inspection-exemplar.md)
+provides the live opt-in host, reproducible flow and measured costs. Human
+judgment of its usefulness and treatment is required before conditional reuse.
 
 September 23 mission clarification: KP is a nonprofit whose primary ambition
 is media and tools for thought. The user is questioning further page production

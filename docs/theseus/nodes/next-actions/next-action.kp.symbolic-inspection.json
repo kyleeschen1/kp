@@ -87,6 +87,13 @@
       "scope": "broad",
       "checkedAt": "2026-09-29T21:09:46.435Z",
       "notes": "s11: Add an opt-in inspector with counterpart navigation and honest audit limits"
+    },
+    {
+      "command": "npm run visual:symbolic-inspection (4 passed); npm run test:symbolic-inspection (13 passed); npm run typecheck; native-motion canary Chromium and Firefox passed on idle rerun after Firefox frame-count miss; npm run visual:contact-sheet; npm run measure:symbolic-inspection; git diff --check; shared URL HTTP 200",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-29T21:13:16.828Z",
+      "notes": "s12: Prepare the symbolic inspection review packet with flow captures and measured closure"
     }
   ]
 }

@@ -98,7 +98,8 @@
     {
       "id": "s12",
       "title": "Prepare review packet",
-      "status": "planned"
+      "summary": "Prepare the symbolic inspection review packet with flow captures and measured closure",
+      "status": "complete"
     },
     {
       "id": "s13",
