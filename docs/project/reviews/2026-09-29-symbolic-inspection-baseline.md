@@ -44,3 +44,9 @@ Baseline outcome: full types, architecture, main build, isolated build and 14
 focused owner tests pass; all 30 existing Chromium/Firefox browser cases pass.
 The inspection treatment will be additive and opt-in; none was present during
 these baseline captures.
+
+After the lazy evidence bridge (before selection/UI), the same isolated build
+measures 141,308 initial / 237,187 activated gzip bytes: +706 / +2,312 over
+baseline. This includes chunk-layout changes, not just new source bytes. A
+Chromium request check confirms the ordinary route does not fetch the inspection
+bridge. Its opt-in route passes forward/direct/reverse canonical paint checks.

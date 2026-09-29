@@ -7,6 +7,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "visual:symbolic-inspection": "playwright test --config playwright.symbolic-inspection.config.ts --project=chromium --workers=1",
     "test:symbolic-inspection": "node --disable-warning=ExperimentalWarning --test tests/symbolic-inspection-*.test.ts",
     "build:symbolic-inspection": "vite build --config vite.symbolic-inspection.config.ts",
     "measure:symbolic-inspection": "node --disable-warning=ExperimentalWarning scripts/measure-symbolic-inspection-closure.ts",

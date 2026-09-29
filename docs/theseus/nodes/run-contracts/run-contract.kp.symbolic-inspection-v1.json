@@ -80,7 +80,8 @@
     {
       "id": "s09",
       "title": "Bridge host evidence",
-      "status": "planned"
+      "summary": "Load revision-pinned inspection evidence only on the opt-in host",
+      "status": "complete"
     },
     {
       "id": "s10",

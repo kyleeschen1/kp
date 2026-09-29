@@ -26,7 +26,8 @@ async function mount() {
   const response = await fetch("/api/dev/authoring-structural/distribution-focus-card", { cache: "no-store" });
   if (!response.ok) throw new Error("kp.authoring.distribution-card.preparation-gap");
   const data: unknown = await response.json();
-  const { animation, beforeVersionId, afterVersionId } = restoreKpReaderAuthoringDistributionPreview(data);
+  const preview = restoreKpReaderAuthoringDistributionPreview(data);
+  const { animation, beforeVersionId, afterVersionId } = preview;
   if (typeof (data as { stageTemplate?: unknown }).stageTemplate !== "string") throw new Error("kp.authoring.distribution-card.template-gap");
   const templateContainer = document.createElement("div");
   templateContainer.innerHTML = (data as { stageTemplate: string }).stageTemplate;
@@ -61,6 +62,10 @@ async function mount() {
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: card,
     createStageLayoutIntent: planKpFractionCompositionLayout, renderSalience: frame => salience.render(frame) });
   const clock = createKpReaderTimelinePlaybackClock({ id: "reader.focus-card.authored-distribution", durationMs, ownerWindow: window });
+  const inspection = new URL(location.href).searchParams.get("inspection") === "true"
+    ? (await import("./inspection-bridge.ts")).createKpDistributionInspection(preview)
+    : undefined;
+  if (inspection) root.dataset["kpSymbolicInspection"] = "ready";
   // Compile the bounded card's native endpoint and attention revisions before
   // opening interaction. Compilation must not consume the playback clock.
   let preparedRevision = "";
@@ -96,7 +101,7 @@ async function mount() {
       if (sampledRevision !== preparedRevision) { prepare(); render(); }
     },
     prepareResize: () => { session.invalidate(); prepare(); },
-    disposeSurface: () => session.dispose()
+    disposeSurface: () => { inspection?.dispose(); session.dispose(); }
   });
   import.meta.hot?.dispose(controller.dispose);
   if (!root.dataset["kpDistributionRepairGap"]) {

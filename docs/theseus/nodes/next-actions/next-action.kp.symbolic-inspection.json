@@ -66,6 +66,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-29T20:55:35.289Z",
       "notes": "s08: Reject stale inspection requests across replacement and disposal"
+    },
+    {
+      "command": "npm run test:symbolic-inspection; npm run typecheck; npm run visual:symbolic-inspection; npm run check:architecture; npm run build:symbolic-inspection; npm run measure:symbolic-inspection",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-29T20:57:43.480Z",
+      "notes": "s09: Load revision-pinned inspection evidence only on the opt-in host"
     }
   ]
 }
