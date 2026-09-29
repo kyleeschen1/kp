@@ -74,7 +74,8 @@
     {
       "id": "s08",
       "title": "Pin inspection snapshots",
-      "status": "planned"
+      "summary": "Reject stale inspection requests across replacement and disposal",
+      "status": "complete"
     },
     {
       "id": "s09",
