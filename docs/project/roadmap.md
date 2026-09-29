@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-23
+Last Updated: 2026-09-29
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -24,6 +24,21 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+September 29: the user approved the [24-slice symbolic inspection run](2026-09-29-symbolic-inspection-long-loop-proposal.md).
+`run-contract.kp.symbolic-inspection-v1` owns execution: expose existing
+distribution identity, correspondence and validation evidence, stop at one
+inspection exemplar, then conditionally pressure factoring and bounded reuse.
+This adopts only the proposal's scope, not the imported runtime handoff wholesale.
+The mechanics review remains preserved and unaccepted, not a prerequisite.
+
+September 23 mission clarification: KP is a nonprofit whose primary ambition
+is media and tools for thought. The user is questioning further page production
+and sees inspectable, auditable semantic symbolic transformations as the leading
+value hypothesis, with graphs/code secondary. The [toolmaking discussion](reviews/2026-09-23-medium-and-toolmaking-direction.md)
+records this distinction and a proposed reuse experiment. Content-library growth
+is not a default success measure; product form and audience remain open. This
+does not alter the stored mechanics checkpoint or authorize new implementation.
 
 Accepted exemplar: [persistent-stage centroid focus card](reviews/2026-09-21-centroid-focus-card.md).
 The approved consolidation run delivered reconciliation, source-only fraction

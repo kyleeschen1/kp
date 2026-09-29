@@ -1,0 +1,153 @@
+{
+  "id": "run-contract.kp.symbolic-inspection-v1",
+  "kind": "run-contract",
+  "title": "Inspectable symbolic transformations",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.symbolic-inspection.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-29-symbolic-inspection-long-loop-proposal.md",
+      "summary": "Approved exact slice scope, verification, stop conditions, visual gate, preservation and rollback"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Only the 24 ordered slices, checks, per-slice commits and conditional continuation in the approved proposal; mandatory human gate at s13"
+  ],
+  "disallowedWork": [
+    "No replacement runtime, universal solver, Jacobian, induction, catalogue rollout, paid calls, deployment or merging"
+  ],
+  "goal": "Deliver domain-backed inspection on distribution, review it, then prove factoring and authoring reuse",
+  "target": "next-action.kp.symbolic-inspection",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile source handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Pin canonical distribution baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Specify inspection evidence boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Project transformation evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Guard validity diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Derive occurrence projection",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Query correspondence",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Pin inspection snapshots",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Bridge host evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Integrate selection",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Build local inspector",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Prepare review packet",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Record human exemplar judgment",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Harden accepted behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Vary supported authoring source",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Measure authoring cost",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Map factoring caller",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Implement factoring inspection",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Extract proven shared seam",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Expose headless evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Pressure lifecycle resources",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Verify promotion cohort",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Run integrated release",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Close out",
+      "status": "planned"
+    }
+  ]
+}

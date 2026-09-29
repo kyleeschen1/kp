@@ -1,9 +1,23 @@
 # Relational reader delivery
 
 Status: active direction; focused mechanics argument approved through first review
-Last Updated: 2026-09-23
+Last Updated: 2026-09-29
 
 ## Canonical direction
+
+Approved current execution: [symbolic inspection](../2026-09-29-symbolic-inspection-long-loop-proposal.md),
+controlled by `run-contract.kp.symbolic-inspection-v1`. Preserve the current
+feature tip and its accepted dependencies; the repo has no branch helper.
+Commit audited planning changes before branching from this tip. Do not restart
+from older dev or merge as part of this run. Stop at the mandatory exemplar
+checkpoint before factoring pressure or shared promotion.
+
+The [September 23 toolmaking discussion](../reviews/2026-09-23-medium-and-toolmaking-direction.md)
+records the user's nonprofit mission and leading symbolic-medium hypothesis.
+Further pages should answer a named capability, reuse or usefulness question;
+content-library growth is not the default destination. Product form is still
+under discussion. The mechanics checkpoint below remains unreviewed, and this
+clarification does not start a successor implementation.
 
 Accepted exemplar: [persistent-stage centroid focus card](../reviews/2026-09-21-centroid-focus-card.md).
 Reconciliation and fraction authoring/runtime consolidation are delivered with

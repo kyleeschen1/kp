@@ -1,0 +1,13 @@
+{
+  "id": "next-action.kp.symbolic-inspection",
+  "kind": "next-action",
+  "title": "Expose auditable symbolic transformation evidence",
+  "status": "ready",
+  "domain": "semantic-runtime",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-29-symbolic-inspection-long-loop-proposal.md"
+    }
+  ]
+}

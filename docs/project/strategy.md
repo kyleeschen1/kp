@@ -6,6 +6,14 @@ Last Updated: 2026-09-16
 
 > **Kinetic Press turns explanations into reusable mental machinery.**
 
+Mission clarification (2026-09-23): KP is a nonprofit focused on creating media
+and tools for thought. A competitive content library is not the assumed product
+destination. The user's leading hypothesis is inspectable, auditable symbolic
+transformations backed by semantics, with graphs and code secondary. Preserve
+the distinction between this hypothesis and demonstrated novelty or adoption;
+product form and audience remain open. Reference content earns its place by
+testing or communicating the medium. See the [toolmaking discussion](reviews/2026-09-23-medium-and-toolmaking-direction.md).
+
 KP's current product emphasis is **domain-specific literacy**: accelerating a
 learner's ability to perceive, inspect, and manipulate the authentic formal
 representations of a field. This sharpens the north star rather than replacing
