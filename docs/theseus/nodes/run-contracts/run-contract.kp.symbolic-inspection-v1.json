@@ -38,7 +38,8 @@
     {
       "id": "s02",
       "title": "Pin canonical distribution baseline",
-      "status": "planned"
+      "summary": "Pin canonical distribution host and measured client baseline",
+      "status": "complete"
     },
     {
       "id": "s03",

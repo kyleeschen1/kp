@@ -17,6 +17,13 @@
       "scope": "focused",
       "checkedAt": "2026-09-29T20:41:46.982Z",
       "notes": "s01 owner reconciliation; no implementation or semantic certification claim"
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run build:bundle; npm run visual:authoring-distribution-card -- --project=chromium; npm run measure:symbolic-inspection; owner tests",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-29T20:46:00.033Z",
+      "notes": "s02: Pin canonical distribution host and measured client baseline"
     }
   ]
 }
