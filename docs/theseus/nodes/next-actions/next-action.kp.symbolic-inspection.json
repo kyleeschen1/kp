@@ -38,6 +38,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-29T20:49:45.431Z",
       "notes": "s04: Project immutable transformation evidence with endpoint ownership checks"
+    },
+    {
+      "command": "npm run test:symbolic-inspection; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-29T20:51:19.924Z",
+      "notes": "s05: Keep unresolved assumptions distinct from invalid construction"
     }
   ]
 }

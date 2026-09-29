@@ -56,7 +56,8 @@
     {
       "id": "s05",
       "title": "Guard validity diagnostics",
-      "status": "planned"
+      "summary": "Keep unresolved assumptions distinct from invalid construction",
+      "status": "complete"
     },
     {
       "id": "s06",

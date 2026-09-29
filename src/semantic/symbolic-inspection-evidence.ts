@@ -22,6 +22,13 @@ export function projectKpSymbolicInspectionEvidence(input: KpSymbolicInspectionI
   }
   if (input.sourceRevision === input.targetRevision) throw new KpSymbolicInspectionGap("targetRevision", "A transformation requires distinct source and target revisions.");
   const transformation = input.transformation;
+  for (const key of ["id", "title", "transformType"] as const) {
+    if (!transformation[key].trim()) throw new KpSymbolicInspectionGap(key, "Transformation metadata must be explicit.");
+  }
+  for (const side of ["source", "target"] as const) {
+    const ids = transformation[`${side}ObjectIds`];
+    if (!ids.length || new Set(ids).size !== ids.length) throw new KpSymbolicInspectionGap(side, "Endpoint objects must be nonempty and unique.");
+  }
   const issues = [...validateKpAssetBundle(input.bundle), ...validateKpSemanticTransformation(transformation, input.bundle)];
   if (issues[0]) throw new KpSymbolicInspectionGap(issues[0].path, issues[0].message);
   const map = normalizeKpSemanticTransformationCorrespondence(transformation);
