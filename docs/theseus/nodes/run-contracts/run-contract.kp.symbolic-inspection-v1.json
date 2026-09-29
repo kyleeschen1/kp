@@ -68,7 +68,8 @@
     {
       "id": "s07",
       "title": "Query correspondence",
-      "status": "planned"
+      "summary": "Index symbolic correspondence without inventing inverse semantics",
+      "status": "complete"
     },
     {
       "id": "s08",

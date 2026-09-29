@@ -52,6 +52,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-29T20:52:39.568Z",
       "notes": "s06: Derive distinct selector occurrences and source provenance"
+    },
+    {
+      "command": "npm run test:symbolic-inspection; npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-29T20:54:07.031Z",
+      "notes": "s07: Index symbolic correspondence without inventing inverse semantics"
     }
   ]
 }
