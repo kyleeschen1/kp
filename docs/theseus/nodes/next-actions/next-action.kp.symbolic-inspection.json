@@ -9,5 +9,14 @@
       "kind": "file",
       "path": "docs/project/2026-09-29-symbolic-inspection-long-loop-proposal.md"
     }
+  ],
+  "verificationRecords": [
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-29T20:41:46.982Z",
+      "notes": "s01 owner reconciliation; no implementation or semantic certification claim"
+    }
   ]
 }

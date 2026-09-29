@@ -32,7 +32,8 @@
     {
       "id": "s01",
       "title": "Reconcile source handoff",
-      "status": "planned"
+      "summary": "Owner map and guarantee boundaries recorded in the reconciliation review.",
+      "status": "complete"
     },
     {
       "id": "s02",
