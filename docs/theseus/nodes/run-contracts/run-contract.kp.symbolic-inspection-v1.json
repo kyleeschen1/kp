@@ -44,7 +44,8 @@
     {
       "id": "s03",
       "title": "Specify inspection evidence boundary",
-      "status": "planned"
+      "summary": "Separate executed reference checks from declared symbolic laws",
+      "status": "complete"
     },
     {
       "id": "s04",

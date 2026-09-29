@@ -24,6 +24,13 @@
       "scope": "broad",
       "checkedAt": "2026-09-29T20:46:00.033Z",
       "notes": "s02: Pin canonical distribution host and measured client baseline"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-29T20:47:38.775Z",
+      "notes": "s03: Separate executed reference checks from declared symbolic laws"
     }
   ]
 }
