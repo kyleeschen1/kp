@@ -2,7 +2,8 @@
   "id": "run-contract.kp.symbolic-inspection-v1",
   "kind": "run-contract",
   "title": "Inspectable symbolic transformations",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT at s13: the first visual inspection treatment needs user judgment; s14-s24 remain conditionally approved after acceptance.",
   "sourceRefs": [
     {
       "kind": "file",

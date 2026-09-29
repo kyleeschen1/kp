@@ -2,12 +2,17 @@
   "id": "next-action.kp.symbolic-inspection",
   "kind": "next-action",
   "title": "Expose auditable symbolic transformation evidence",
-  "status": "ready",
+  "status": "blocked",
   "domain": "semantic-runtime",
+  "summary": "HUMAN_CHECKPOINT: first distribution inspection exemplar awaits user visual judgment; see docs/project/reviews/2026-09-29-symbolic-inspection-exemplar.md. Resume the conditional queue after acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-09-29-symbolic-inspection-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-29-symbolic-inspection-exemplar.md"
     }
   ],
   "verificationRecords": [
