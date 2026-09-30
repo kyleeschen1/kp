@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+September 30, interpretation experiment: the user approved testing the object
+boundary through column combinations, identity and orthonormality. The
+[approved scope](2026-09-30-matrix-interpretations.md) and
+[visual review packet](reviews/2026-09-30-matrix-interpretations.md) preserve the
+accepted dot-product animation. Column combinations reuse its scalar contribution
+objects; identity and scoped Gram evidence are tested semantically. The first
+column-combination visual exemplar needs review before visual transfer under
+`run-contract.kp.matrix-interpretations-v1`. This is current execution; standalone
+dot-product choreography remains a proposal, and inspector work remains parked.
+
 September 30, subsequent matrix discussion: the user accepted the matrix
 animation and identified semantic subobjects and contextual operation objects
 as the reusable core. The [current next-step recommendation](reviews/2026-09-30-semantic-operation-next-step-review.md)

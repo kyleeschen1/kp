@@ -5,6 +5,14 @@ Last Updated: 2026-09-29
 
 ## Canonical direction
 
+Current September 30 work: [matrix interpretation experiment](../2026-09-30-matrix-interpretations.md),
+approved after the object-boundary discussion. The semantic adapter shares exact
+contributions between dot products and column combinations; identity/Gram cases
+are tested without making an unqualified orthonormality claim. The
+[new native-KaTeX exemplar](../reviews/2026-09-30-matrix-interpretations.md)
+is at its first visual checkpoint. `run-contract.kp.matrix-interpretations-v1`
+owns the conditional continuation to identity and orthonormality presentations.
+
 September 30: the user separately authorized making the column-first 2×2 matrix
 animation developed during the API discussion. The [candidate and review packet](../reviews/2026-09-30-matrix-column-animation.md)
 are implemented under `run-contract.kp.matrix-column-animation-v1`. The local

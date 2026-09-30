@@ -2,7 +2,8 @@
   "id": "run-contract.kp.matrix-interpretations-v1",
   "kind": "run-contract",
   "title": "Matrix interpretations with retained semantic identity",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review the column-combination layout and choreography before the approved transfer slice. Semantic and exemplar-delivery packages complete; treatment not yet accepted.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -37,7 +38,8 @@
     {
       "id": "exemplar",
       "title": "Column-combination visual checkpoint",
-      "status": "planned"
+      "summary": "Candidate implemented and verified; review packet ready. Completion records delivery to the checkpoint, not visual acceptance.",
+      "status": "complete"
     },
     {
       "id": "transfer",

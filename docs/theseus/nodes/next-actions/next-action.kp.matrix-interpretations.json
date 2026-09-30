@@ -2,12 +2,17 @@
   "id": "next-action.kp.matrix-interpretations",
   "kind": "next-action",
   "title": "Explain one matrix product through column combinations, identity and orthonormality",
-  "status": "ready",
+  "status": "blocked",
   "domain": "linear-algebra",
+  "summary": "HUMAN_CHECKPOINT at the first column-combination exemplar. On acceptance continue identity and orthonormality transfer; no redundant resume approval.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-09-30-matrix-interpretations.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-30-matrix-interpretations.md"
     }
   ],
   "verificationRecords": [
@@ -17,6 +22,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-30T19:44:08.568Z",
       "notes": "17 semantic and preservation tests pass, including shared contribution identity, rectangular products, identity weights, transpose and numerical Gram evidence. Full types and architecture pass. Initial scope index-access type error corrected."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations; npm run test:matrix-column; npm run typecheck; npm run check:architecture; npm run build:matrix-interpretations; node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-30T19:46:32.656Z",
+      "notes": "Two Chromium discovery tests, 20 accepted-path tests, types, architecture and standalone build passed. Captures inspected. Reachability count regenerated and three exact checks passed. JS 97.38 KB gzip, CSS 14.26 KB; no promotion or broad browser certification."
     }
   ]
 }
