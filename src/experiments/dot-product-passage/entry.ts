@@ -18,7 +18,7 @@ async function mount() {
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div></section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
     <details><summary>Read the calculation</summary><div class="dot-static">${renderLatexToHtml(calculationLatex(passage), { output: "htmlAndMathml" })}</div>
-    <p>Pairing copies the original entries. Multiplication produces three new values; addition produces the final result. The source vectors remain unchanged.</p></details>`;
+    <p>Pairing copies the original entries. Multiplication produces three new values; addition produces the final result. The covector and vector remain unchanged. In real Euclidean coordinates, this pairing also represents the dot product uᵀv.</p></details>`;
   await document.fonts.ready;
   const view = mountPresentation(root, passage);
   const clock = createKpReaderTimelinePlaybackClock({ id: "dot-product-passage", durationMs });

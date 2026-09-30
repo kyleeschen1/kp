@@ -4,7 +4,7 @@
   "title": "Prove rectangular animation authoring through a reusable dot passage",
   "status": "blocked",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: standalone pair-to-products-to-sum motion ready; await visual acceptance before rectangular integration.",
+  "summary": "HUMAN_CHECKPOINT: review revised Three-term dot product in shared menu; rectangular integration follows acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -22,6 +22,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-30T20:46:01.653Z",
       "notes": "Three semantic tests, two dot browser tests and eight preservation browser tests pass. Full typecheck including Svelte passes; architecture, build and three inventory checks pass. Sequential operand arrivals repair crossing routes; sampled overlap and reversal checks pass. New entry 3.81 KB gzip; shared chunks repartitioned. Visual acceptance pending before rectangular integration."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Covector-column presentation and contextual negative formatting",
+      "checkedAt": "2026-09-30T20:57:57.170Z",
+      "notes": "Four unit tests and two Chromium tests pass; full types and build pass. Initial browser failure measured owner line leading; scalar inline-box measurement repairs the false positive. See passage review."
     }
   ]
 }

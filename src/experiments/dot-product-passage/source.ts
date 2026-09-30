@@ -5,7 +5,7 @@ import { dotPassage } from "./model.ts";
 
 const scalar = (id: string, value: number) => createKpScalarExpression({ id, expression: constant(value) });
 // A row times a column supplies the existing semantic dot relationship. This
-// standalone host displays its operands as vectors, not as a matrix lesson.
+// standalone host displays the row as a covector and the column as a vector.
 const left = createKpTypedMatrixFromRows({ id: "dot-example.u", rows: [
   [2, -1, 3].map((value, i) => scalar(`dot-example.u.${i}`, value)),
 ] });

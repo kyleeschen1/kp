@@ -12,7 +12,7 @@ export const valueOf = (entry: KpScalarValue) => {
 };
 
 export const beats = Object.freeze([
-  { id: "vectors", cue: "A dot product pairs entries in the same position." },
+  { id: "vectors", cue: "Pair each entry of the row covector with the matching entry of the column vector." },
   { id: "pairs", cue: "Bring each pair together. Keep all three pairs in order." },
   { id: "products", cue: "Evaluate each multiplication. Each new number is the product of its two operands." },
   { id: "sum", cue: "Add the three products, keeping their signs. This is the dot product." },

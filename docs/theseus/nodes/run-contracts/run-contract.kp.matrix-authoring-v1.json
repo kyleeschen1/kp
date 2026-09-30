@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT 1/3: review Three-term dot product in Matrix explorations before the approved rectangular integration and source-only variation.",
+  "summary": "HUMAN_CHECKPOINT: revised passage ready; covector-column layout and contextual negative notation await visual acceptance before rectangular integration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,7 +32,7 @@
     {
       "id": "passage",
       "title": "Three-term dot passage and visual review",
-      "summary": "Standalone passage delivered and verified for the required visual review; completion records checkpoint delivery, not acceptance or rectangular reuse.",
+      "summary": "Revised standalone candidate verified; visual acceptance remains required before rectangular integration.",
       "status": "complete"
     },
     {

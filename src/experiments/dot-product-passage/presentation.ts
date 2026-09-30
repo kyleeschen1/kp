@@ -3,24 +3,30 @@ import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMateri
 import { valueOf, sample, DotPassageGap, type DotPassage } from "./model.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 
-const number = (entry: KpScalarValue) => { const n = valueOf(entry); return n < 0 ? `(${n})` : String(n); };
+const number = (entry: KpScalarValue) => String(valueOf(entry));
+const factorNumber = (entry: KpScalarValue) => valueOf(entry) < 0 ? `(${number(entry)})` : number(entry);
+const signedSum = (entries: readonly KpScalarValue[]) => entries.map((entry, i) =>
+  `${i > 0 && valueOf(entry) >= 0 ? "+" : ""}${number(entry)}`).join("");
 const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-dot-key=${key}}{${number(entry)}}`;
+// Parentheses are factor syntax, not part of the scalar occurrence that moves.
+const factor = (key: string, entry: KpScalarValue) => valueOf(entry) < 0
+  ? `\\htmlData{kp-dot-key=syntax-${key}-open}{(}${tag(key, entry)}\\htmlData{kp-dot-key=syntax-${key}-close}{)}` : tag(key, entry);
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const plus = `<span class="dot-plus">${math("+")}</span>`;
 
 export function calculationLatex(passage: DotPassage) {
-  return passage.dot.pairs.map(pair => `${number(pair.left)}\\times ${number(pair.right)}`).join("+") + "=" +
-    passage.dot.pairs.map(pair => number(pair.product)).join("+") + "=" + valueOf(passage.dot.result);
+  return passage.dot.pairs.map(pair => `${factorNumber(pair.left)}\\times ${factorNumber(pair.right)}`).join("+") + "=" +
+    signedSum(passage.dot.pairs.map(pair => pair.product)) + "=" + valueOf(passage.dot.result);
 }
 
 export function stageHtml(passage: DotPassage) {
   const { dot } = passage;
-  const vector = (side: "left" | "right") => math(`\\begin{bmatrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(" & ")}\\end{bmatrix}`);
+  const vector = (side: "left" | "right") => math(`\\begin{bmatrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{bmatrix}`);
   return `<div class="dot-stage" aria-hidden="true">
-    <div class="dot-inputs">${vector("left")}<span>${math("\\cdot")}</span>${vector("right")}</div>
+    <div class="dot-inputs">${vector("left")}${vector("right")}</div>
     <div class="dot-work">
-      <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`${tag(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=times-${i}}{\\times}${tag(`pair-right-${i}`, pair.right)}`)}</span>`).join(plus)}</div>
-      <div class="dot-products">${dot.pairs.map((pair, i) => `<span class="dot-term" data-product="${i}">${math(tag(`product-${i}`, pair.product))}</span>`).join(plus)}</div>
+      <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`${factor(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=syntax-times-${i}}{\\times}${factor(`pair-right-${i}`, pair.right)}`)}</span>`).join(plus)}</div>
+      <div class="dot-products">${dot.pairs.map((pair, i) => `${i > 0 ? `<span class="dot-plus">${math(valueOf(pair.product) < 0 ? "\\phantom{+}" : "+")}</span>` : ""}<span class="dot-term" data-product="${i}">${math(tag(`product-${i}`, pair.product))}</span>`).join("")}</div>
       <div class="dot-sum">${math(tag("sum", dot.result))}</div>
     </div><div class="dot-material"></div>
   </div>`;
@@ -96,8 +102,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       for (const pair of passage.dot.pairs) {
         requireNative(`pair-left-${pair.index}`).style.opacity = "0";
         requireNative(`pair-right-${pair.index}`).style.opacity = "0";
-        requireNative(`times-${pair.index}`).style.transform = `scale(${ease((frame.local - .8) / .2)})`;
+
       }
+      for (const [key, node] of native) if (key.startsWith("syntax-")) node.style.transform = `scale(${ease((frame.local - .8) / .2)})`;
       for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${ease((frame.local - .8) / .2)})`;
     }
     // Evaluation replaces operand expressions with derived values. Their distinct
@@ -105,7 +112,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     if (frame.index === 2) {
       for (const node of pairs.querySelectorAll<HTMLElement>(".dot-term")) node.style.transform = `scale(${shrink})`;
       for (const node of products.querySelectorAll<HTMLElement>(".dot-term")) node.style.transform = `scale(${grow})`;
-      for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.local === 1 ? "1" : "0";
+      for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${shrink})`;
+      for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${grow})`;
     }
     if (frame.index === 3) {
       products.style.transform = `scale(${shrink})`;

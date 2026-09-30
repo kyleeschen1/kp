@@ -5,13 +5,22 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
   const root = page.locator("#dot-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  const inputBounds = async (side: string) => page.locator(`[data-kp-dot-key^="${side}-"]`).evaluateAll(nodes => nodes.map(node => {
+    const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+  }));
+  const row = await inputBounds("left"), column = await inputBounds("right");
+  expect(Math.max(...row.map(r => r.y)) - Math.min(...row.map(r => r.y))).toBeLessThan(1);
+  expect(Math.max(...column.map(r => r.x)) - Math.min(...column.map(r => r.x))).toBeLessThan(1);
+  expect(column[0]!.y).toBeLessThan(column[1]!.y); expect(column[1]!.y).toBeLessThan(column[2]!.y);
+  await expect(page.locator('[data-kp-dot-key="left-1"]')).toHaveText("−1");
+  await expect(page.locator('[data-kp-dot-key="right-2"]')).toHaveText("−2");
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const slider = page.getByRole("slider", { name: "Animation position" });
   for (const i of [0, 1, 2, 3]) {
     await chooser.selectOption(String(i));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`step-${i}.png`) });
   }
-  await expect(page.locator('[data-kp-dot-key="sum"]')).toHaveText("(−3)");
+  await expect(page.locator('[data-kp-dot-key="sum"]')).toHaveText("−3");
   await expect(page.locator(".dot-sum")).toHaveCSS("opacity", "1");
   for (const pair of passage.dot.pairs) {
     await expect(page.locator(`[data-kp-dot-key="product-${pair.index}"]`)).toHaveAttribute("data-source-id", pair.product.id);
@@ -24,11 +33,12 @@ test("signed dot passage preserves references through pairing, products and sum"
     await slider.fill(String(p));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`transit-${p}.png`) });
     const moving = await page.locator(".dot-paint").evaluateAll(nodes => nodes.filter(n => getComputedStyle(n).opacity === "1").map(n => {
-      const r = n.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
+      // The owner includes line leading; measure the copied scalar's inline box.
+      const r = n.firstElementChild!.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
     }));
     for (let i = 0; i < moving.length; i++) for (let j = i + 1; j < moving.length; j++) {
       const a = moving[i]!, b = moving[j]!;
-      expect(a.right <= b.left + .5 || b.right <= a.left + .5 || a.bottom <= b.top + .5 || b.bottom <= a.top + .5).toBe(true);
+      expect(a.right <= b.left + .5 || b.right <= a.left + .5 || a.bottom <= b.top + .5 || b.bottom <= a.top + .5, JSON.stringify({ p, i, j, a, b })).toBe(true);
     }
     const poses = () => page.locator(".dot-stage [style]").evaluateAll(nodes => nodes.map(n => n.getAttribute("style")));
     const held = await poses(); await slider.fill("0"); await slider.fill("1"); await slider.fill(String(p));
