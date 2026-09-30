@@ -4,7 +4,7 @@
   "title": "Prove rectangular animation authoring through a reusable dot passage",
   "status": "blocked",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: five-checkpoint dot passage with muted notation ready in shared menu.",
+  "summary": "HUMAN_CHECKPOINT: grouped dot products ready in shared menu.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -64,6 +64,13 @@
       "scope": "Notation and separate operation beats",
       "checkedAt": "2026-09-30T21:42:54.136Z",
       "notes": "Four unit tests and two Chromium tests pass; full types and build pass. Five native checkpoints, operator introduction timing, gradual bracket withdrawal, fusion handoffs, pivot geometry and reverse seeking verified. Four notation frames inspected. Local contributor-fusion adapter limits unchanged. Entry 5.85 KB gzip."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Centered dots and whole-product grouping",
+      "checkedAt": "2026-09-30T21:48:09.522Z",
+      "notes": "Four unit and two browser tests pass; full types and build pass. Browser checks include dot glyph and three opening/closing parentheses, group introduction timing, fusion and preserved pivot. Multiplication frame inspected. Entry 5.88 KB gzip; local optical adapter certification limits unchanged."
     }
   ]
 }

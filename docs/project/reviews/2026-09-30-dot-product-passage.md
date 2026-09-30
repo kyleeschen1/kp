@@ -25,9 +25,11 @@ settles downward later in the turn to clear the opening row. This is a layout
 transformation, not a mathematical rotation of the vector. The source
 representations are consumed by this rearrangement; immutable references remain.
 The Pairs endpoint contains operands only. In the next beat multiplication
-syntax grows in, holds briefly, then evaluation begins. Negative factors have no added
-parentheses, as requested. Each pair now uses the canonical contributor-fusion
-optical sampler: its two operands and multiplication sign gather into nonzero
+syntax grows in, holds briefly, then evaluation begins. Centered dots replace
+crosses; muted parentheses enclose each entire product, not individual negative
+factors: `(2·4)`, `(−1·5)`, `(3·−2)`. Dot and enclosure enter together after
+matching and are consumed with the operands. Each pair uses the canonical contributor-fusion
+optical sampler: its two operands and product syntax gather into nonzero
 ink, then the derived value emerges in the same slot. In the separate Addition
 beat plus signs appear to form `8 + −5 + −6`; only the later Sum beat consumes
 them. This intentionally supersedes the earlier always-present addition signs.
@@ -38,7 +40,8 @@ clarity of pairing, the product replacement, and the final sum's timing.
 
 Notation trial: KaTeX `left`/`right` delimiters enclose a native matrix with
 explicit internal padding, rather than manually drawn bracket characters.
-Operators use 0.85em sizing and the shared theme-aware muted ink token; brackets
+Operators use 0.85em sizing and the shared theme-aware muted ink token; parentheses
+retain full math sizing and muted ink. Matrix brackets
 use the same muted ink. Signed scalar values retain normal number styling.
 The bracket-only source shells fade continuously while material entries move.
 
@@ -109,7 +112,7 @@ The generic impact selector has no experiment rule and proposes whole-product
 gates; this discovery uses the approved contract's bounded verification instead.
 No broad release or native-compositor certification is claimed.
 
-Build: 59 modules; revised dot entry 5.85 KB gzip (previously 5.76 KB), shared config 0.38 KB,
+Build: 59 modules; revised dot entry 5.88 KB gzip (previously 5.85 KB), shared config 0.38 KB,
 shared scaffold chunk 85.16 KB, dot CSS 14.40 KB, excluding fonts/transport.
 Shared chunks were repartitioned, so the new entry size alone is not a total
 page-cost delta. No budget amendments. A local model, source, presentation,

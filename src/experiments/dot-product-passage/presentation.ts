@@ -11,7 +11,7 @@ const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const plus = `<span class="dot-plus">${math("+")}</span>`;
 
 export function calculationLatex(passage: DotPassage) {
-  return passage.dot.pairs.map(pair => `${number(pair.left)}\\times ${number(pair.right)}`).join("+") + "=" +
+  return passage.dot.pairs.map(pair => `(${number(pair.left)}\\cdot ${number(pair.right)})`).join("+") + "=" +
     signedSum(passage.dot.pairs.map(pair => pair.product)) + "=" + valueOf(passage.dot.result);
 }
 
@@ -21,7 +21,7 @@ export function stageHtml(passage: DotPassage) {
   return `<div class="dot-stage" aria-hidden="true">
     <div class="dot-inputs"><span data-dot-vector="left">${vector("left")}</span><span data-dot-vector="right">${vector("right")}</span></div>
     <div class="dot-work">
-      <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`${tag(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=syntax-times-${i}}{\\times}${tag(`pair-right-${i}`, pair.right)}`)}</span>`).join(plus)}</div>
+      <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`\\htmlData{kp-dot-key=syntax-open-${i}}{(}${tag(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=syntax-multiply-${i}}{\\cdot}${tag(`pair-right-${i}`, pair.right)}\\htmlData{kp-dot-key=syntax-close-${i}}{)}`)}</span>`).join(plus)}</div>
       <div class="dot-products">${dot.pairs.map((pair, i) => `${i > 0 ? plus : ""}<span class="dot-term" data-product="${i}">${math(tag(`product-${i}`, pair.product))}</span>`).join("")}</div>
       <div class="dot-sum">${math(tag("sum", dot.result))}</div>
     </div><div class="dot-material"></div>
@@ -75,7 +75,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     }
     multiply = passage.dot.pairs.map(pair => prepareFusion(stage,
       [requireNative(`pair-left-${pair.index}`), requireNative(`pair-right-${pair.index}`)],
-      [requireNative(`syntax-times-${pair.index}`)], requireNative(`product-${pair.index}`)));
+      [requireNative(`syntax-open-${pair.index}`), requireNative(`syntax-multiply-${pair.index}`), requireNative(`syntax-close-${pair.index}`)], requireNative(`product-${pair.index}`)));
     add = prepareFusion(stage, passage.dot.pairs.map(pair => requireNative(`product-${pair.index}`)),
       [...products.querySelectorAll<HTMLElement>(".dot-plus")], requireNative("sum"));
     const row = vectors.left.querySelector(".katex-html > .base")!.getBoundingClientRect();

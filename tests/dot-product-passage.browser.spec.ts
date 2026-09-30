@@ -65,9 +65,12 @@ test("signed dot passage preserves references through pairing, products and sum"
     expect(visiblePluses.every(text => text?.includes("+"))).toBe(true);
   }
   await chooser.selectOption("1");
-  for (const operator of await page.locator('[data-kp-dot-key^="syntax-times-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
+  for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
   await slider.fill("0.31");
-  for (const operator of await page.locator('[data-kp-dot-key^="syntax-times-"]').all()) await expect(operator).toHaveCSS("opacity", "1");
+  for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "1");
+  await expect(page.locator('[data-kp-dot-key="syntax-multiply-0"]')).toHaveText("⋅");
+  await expect(page.locator('[data-kp-dot-key^="syntax-open-"]')).toHaveCount(3);
+  await expect(page.locator('[data-kp-dot-key^="syntax-close-"]')).toHaveCount(3);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("multiply-hold.png") });
   const gap = await page.locator(".dot-pairs").evaluate(node => parseFloat(getComputedStyle(node).gap));
   expect(gap).toBeLessThan(8);
@@ -79,7 +82,7 @@ test("signed dot passage preserves references through pairing, products and sum"
       const phaseLocal = phase === 1 ? .35 + .65 * local : local;
       await slider.fill(String(Number(((phase + phaseLocal) / 4).toFixed(4))));
       const cohorts = phase === 1 ? passage.dot.pairs.map(pair =>
-        [`pair-left-${pair.index}`, `pair-right-${pair.index}`, `syntax-times-${pair.index}`, `product-${pair.index}`])
+        [`pair-left-${pair.index}`, `pair-right-${pair.index}`, `syntax-multiply-${pair.index}`, `product-${pair.index}`])
         : [[...passage.dot.pairs.map(pair => `product-${pair.index}`), "sum"]];
       for (const keys of cohorts) {
         const visible = await page.locator(keys.map(key => `[data-kp-dot-key="${key}"]`).join(",")).evaluateAll(nodes => nodes.filter(node => {

@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review revised dot notation and operation staging before rectangular integration.",
+  "summary": "HUMAN_CHECKPOINT: review centered dots and whole-product grouping before integration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,7 +32,7 @@
     {
       "id": "passage",
       "title": "Three-term dot passage and visual review",
-      "summary": "Quieter padded notation and separated match, multiplication, addition-assembly and sum beats verified for visual review.",
+      "summary": "Centered dots and whole-product parentheses verified; revised standalone candidate ready for review.",
       "status": "complete"
     },
     {
