@@ -14,6 +14,9 @@ existing derived entries. Integrate this into the current column-combination
 host, preserving its source matrices and upper layout. Review this new motion
 before carrying it into identity/orthonormality. The rollback unit is this
 local passage refinement; mathematical values and contribution IDs do not change.
+The subsequent user revision requests an in-place replacement: outside scalars
+shrink, copies grow beside each entry, and brackets widen on the same line.
+This supersedes the initial downward fan-out, without expanding scope.
 
 1. Add a column-combination interpretation of the existing product, retaining
    the identical scalar contribution objects and destinations. Exercise identity

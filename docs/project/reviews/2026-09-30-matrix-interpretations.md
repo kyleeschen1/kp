@@ -6,7 +6,33 @@ the original review and evidence below remain provenance.
 Authority: [approved experiment](../2026-09-30-matrix-interpretations.md).
 Contract: `run-contract.kp.matrix-interpretations-v1`.
 
-## Scalar-vector refinement
+## In-place scalar revision (current review)
+
+The user requested shrinking the outside coefficients and growing their copies
+beside every entry, in place. Open [Weights](http://localhost:8000/experiments/matrix-column-combinations/#weights)
+and press Next. Each scalar shrinks first; its occurrences then grow at their
+native product slots. The vector brackets widen on the same line, the entry rows
+stay fixed, and the product presentation replaces the weighted presentation.
+The separate product row and downward fan-out described below are superseded.
+
+Native KaTeX still owns endpoints; the local deterministic presentation owns
+this provisional choreography. Coefficient copies retain the original scalar
+IDs; mathematical objects and contribution pairs are unchanged. The rollback
+unit is this local presentation, style and scoped browser-check revision.
+There is no shared compositor certification or general API promotion claim.
+
+Verification: 17 semantic tests, both Chromium checks, full typecheck and the
+standalone build pass. Checks cover shrink-before-growth, destination-centered
+copies, preserved entry rows, endpoint handoff, deterministic reversal, reduced
+motion, controls and source identity. Shrink, growth and endpoint captures were
+inspected. Build: JS 97.96 KB gzip (+0.35 KB), CSS 14.30 KB gzip (+0.03 KB),
+excluding fonts/transport. Stage height returns from 470 to 370 px; no budget
+changes. Timing remains provisional pending human review.
+
+HUMAN_CHECKPOINT: revised scalar treatment ready for review; identity and
+orthonormality visual transfer remain behind its acceptance.
+
+## Scalar-vector refinement (superseded motion, historical evidence)
 
 The user accepted the original column layout and requested an animation of a
 scalar applied to a vector. The existing host now adds **Distribute** between

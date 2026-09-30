@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Matrix interpretations with retained semantic identity",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review newly requested scalar-vector distribution. Prior column layout accepted; identity and orthonormality transfer remains approved after this motion checkpoint.",
+  "summary": "HUMAN_CHECKPOINT: review revised in-place scalar treatment at column-combinations weights then Next. Transfer remains gated on acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -44,7 +44,7 @@
     {
       "id": "scalar-vector",
       "title": "Show the scalar reaching every vector entry",
-      "summary": "Scalar-vector passage delivered and verified for review; earlier layout acceptance preserved. New motion treatment awaits judgment.",
+      "summary": "Delivered in-place scalar shrink and per-entry growth with verified native endpoints; visual acceptance pending.",
       "status": "complete"
     },
     {

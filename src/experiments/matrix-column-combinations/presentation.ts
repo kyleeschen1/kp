@@ -28,11 +28,11 @@ export function stageHtml() {
     </div>
     <div class="comb-weighted">${combination.terms.map(term => `<div class="comb-term">
       <span data-reveal="2">${math(tag(`weight-${term.index}`, term.coefficient))}</span>
-      <span data-reveal="1">${vector(term.vector.entries, `column-${term.index}`)}</span>
+      <span data-column-shell="${term.index}" data-reveal="1">${vector(term.vector.entries, `column-${term.index}`)}</span>
       </div>`).join(`<span data-reveal="2">${math("+")}</span>`)}</div>
-    <div class="comb-expanded"><span data-reveal="3">${math("=")}</span>
-      ${combination.terms.map(term => `<span data-reveal="3">${math(`\\begin{bmatrix}${term.pairs.map((pair, i) =>
-        `${tag(`factor-${term.index}-${i}`, pair.right)}\\times ${tag(`entry-${term.index}-${i}`, pair.left)}`
+    <div class="comb-expanded">
+      ${combination.terms.map(term => `<span class="comb-term" data-expanded-shell="${term.index}" data-reveal="3">${math(`\\begin{bmatrix}${term.pairs.map((pair, i) =>
+        `${tag(`factor-${term.index}-${i}`, pair.right)}\\htmlData{kp-comb-key=times-${term.index}-${i}}{\\times} ${tag(`entry-${term.index}-${i}`, pair.left)}`
       ).join("\\\\")}\\end{bmatrix}`)}</span>`).join(`<span data-reveal="3">${math("+")}</span>`)}
     </div>
     <div class="comb-evaluated"><span data-reveal="4">${math("=")}</span>
@@ -46,19 +46,28 @@ export function mountPresentation(root: HTMLElement) {
   const stage = root.querySelector<HTMLElement>(".comb-stage")!;
   const layer = root.querySelector<HTMLElement>(".comb-material")!;
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-comb-key]")].map(node => [node.dataset["kpCombKey"]!, node]));
+  // Native delimiter endpoints belong to this local KaTeX presentation only.
+  for (const term of combination.terms) for (const [side, selector] of [["open", ".mopen"], ["close", ".mclose"]] as const) {
+    for (const [kind, shell] of [["source", "column"], ["target", "expanded"]] as const) {
+      const node = stage.querySelector<HTMLElement>(`[data-${shell}-shell="${term.index}"] .katex-html ${selector}`);
+      if (!node) throw new Error(`Missing ${kind} vector delimiter.`);
+      native.set(`${kind}-${side}-${term.index}`, node);
+    }
+  }
+  const weighted = stage.querySelector<HTMLElement>(".comb-weighted")!;
   const points = new Map<string, Position>();
-  const owners: { owner: HTMLElement; from: string; to: string; phase: number; delay: number }[] = [];
+  const owners: { owner: HTMLElement; from: string; to: string; phase: number; grow: boolean }[] = [];
   let disposed = false;
   const prepare = () => {
     if (disposed) return;
     for (const node of stage.querySelectorAll<HTMLElement>("[data-reveal]")) node.style.opacity = "1";
-    for (const node of native.values()) { node.style.opacity = "1"; node.classList.remove("comb-focus"); }
+    for (const node of native.values()) { node.style.opacity = "1"; node.style.transform = ""; node.classList.remove("comb-focus"); }
     layer.replaceChildren(); owners.length = 0;
     const bounds = stage.getBoundingClientRect();
     for (const [key, node] of native) {
       const box = node.getBoundingClientRect(); points.set(key, { x: box.x - bounds.x + box.width / 2, y: box.y - bounds.y + box.height / 2 });
     }
-    const copy = (from: string, to: string, source: KpScalarValue, phase: number, delay = 0) => {
+    const copy = (from: string, to: string, source: KpScalarValue, phase: number, grow = false) => {
       const original = native.get(from);
       if (!original || !native.has(to)) throw new Error(`Missing native endpoint ${from} or ${to}.`);
       const owner = document.createElement("span"); owner.className = "comb-paint";
@@ -68,7 +77,7 @@ export function mountPresentation(root: HTMLElement) {
       }
       owner.append(clone); makeKpMaterialOwnerInert(owner);
       owner.dataset["sourceId"] = source.id; owner.dataset["occurrence"] = to;
-      layer.append(owner); owners.push({ owner, from, to, phase, delay });
+      layer.append(owner); owners.push({ owner, from, to, phase, grow });
     };
     for (const term of combination.terms) {
       term.vector.entries.forEach((entry, i) => copy(`a-${i}-${term.index}`, `column-${term.index}-${i}`, entry, 1));
@@ -76,15 +85,12 @@ export function mountPresentation(root: HTMLElement) {
       // Both interpretations share these exact operands and derived products.
       // Fan-out makes new occurrences of the coefficient, not new scalar values.
       term.pairs.forEach((pair, i) => {
-        // Lower copies depart first: an upper copy must not be overtaken on the
-        // same downward route. Delay belongs to this local discovery treatment.
-        const delay = .18 * (term.pairs.length - 1 - i) / Math.max(1, term.pairs.length - 1);
-        copy(`weight-${term.index}`, `factor-${term.index}-${i}`, pair.right, 3, delay);
-        copy(`column-${term.index}-${i}`, `entry-${term.index}-${i}`, pair.left, 3);
+        copy(`weight-${term.index}`, `factor-${term.index}-${i}`, pair.right, 3, true);
       });
     }
     combination.result.entries.forEach((entry, i) => copy(`sum-${i}`, `c-${i}-0`, entry, 6));
   };
+  const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const render = (progress: number) => {
     const frame = sample(progress);
     if (disposed) return frame;
@@ -94,16 +100,40 @@ export function mountPresentation(root: HTMLElement) {
     // it does not pretend that a new value is the same scalar as its inputs.
     for (const node of stage.querySelectorAll<HTMLElement>("[data-reveal]")) node.style.opacity = Number(node.dataset["reveal"]) <= settled ? "1" : "0";
     for (const [key, node] of native) {
+      node.style.transform = "";
       node.style.opacity = key.startsWith("c-") ? (settled === 6 && key.endsWith("-0") ? "1" : "0") : "1";
       node.classList.toggle("comb-focus", (frame.index === 1 && key.startsWith("a-")) ||
         (frame.index === 2 && /^b-\d-0$/.test(key)) || (frame.index === 3 && (key.startsWith("weight-") || key.startsWith("factor-"))));
     }
-    for (const { owner, from, to, phase, delay } of owners) {
-      const local = Math.max(0, Math.min(1, (frame.local - delay) / (phase === 3 && to.startsWith("factor-") ? .82 : 1)));
-      const t = local * local * (3 - 2 * local);
+    weighted.style.opacity = settled >= 3 ? "0" : "1";
+    const distributing = frame.index === 3 && frame.local < 1;
+    const growth = ease((frame.local - .4) / .6);
+    if (distributing) {
+      for (const node of stage.querySelectorAll<HTMLElement>("[data-expanded-shell]")) node.style.opacity = "1";
+      for (const term of combination.terms) {
+        const weight = native.get(`weight-${term.index}`)!;
+        weight.style.transform = `scale(${1 - ease(frame.local / .4)})`;
+        // Preserve the entry rows while the left bracket makes room for products.
+        const reflow = (from: string, to: string) => {
+          const a = points.get(from)!, b = points.get(to)!;
+          native.get(from)!.style.transform = `translate(${(b.x - a.x) * ease(frame.local)}px, ${(b.y - a.y) * ease(frame.local)}px)`;
+          native.get(to)!.style.opacity = "0";
+        };
+        for (const side of ["open", "close"]) reflow(`source-${side}-${term.index}`, `target-${side}-${term.index}`);
+        term.pairs.forEach((_, i) => {
+          reflow(`column-${term.index}-${i}`, `entry-${term.index}-${i}`);
+          native.get(`factor-${term.index}-${i}`)!.style.opacity = "0";
+          native.get(`times-${term.index}-${i}`)!.style.transform = `scale(${growth})`;
+        });
+      }
+    }
+    for (const { owner, from, to, phase, grow } of owners) {
+      const t = ease(frame.local);
       const a = points.get(from)!, b = points.get(to)!;
-      owner.style.transform = `translate(${a.x + (b.x - a.x) * t}px, ${a.y + (b.y - a.y) * t}px) translate(-50%, -50%)`;
-      owner.style.opacity = frame.index === phase && local > 0 && frame.local < 1 ? "1" : "0";
+      const x = grow ? b.x : a.x + (b.x - a.x) * t;
+      const y = grow ? b.y : a.y + (b.y - a.y) * t;
+      owner.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${grow ? growth : 1})`;
+      owner.style.opacity = frame.index === phase && frame.local > 0 && frame.local < 1 && (!grow || growth > 0) ? "1" : "0";
     }
     return frame;
   };

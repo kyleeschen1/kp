@@ -11,7 +11,7 @@ contributions between dot products and column combinations; identity/Gram cases
 are tested without making an unqualified orthonormality claim. The
 [new native-KaTeX exemplar](../reviews/2026-09-30-matrix-interpretations.md)
 was accepted by the user, who requested explicit scalar-vector animation. The
-new Distribute passage is at its visual checkpoint.
+new in-place Distribute passage (scalar shrink, per-entry growth) is at its visual checkpoint.
 `run-contract.kp.matrix-interpretations-v1` owns this inserted refinement and
 the conditional continuation to identity and orthonormality presentations.
 

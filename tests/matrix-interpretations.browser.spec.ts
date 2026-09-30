@@ -37,7 +37,10 @@ test("columns and coefficients retain source identity through readable weighted-
     const scalarCopy = page.locator(`[data-occurrence="factor-${term.index}-${i}"]`);
     await expect(scalarCopy).toHaveAttribute("data-source-id", pair.right.id);
     await expect(scalarCopy).toHaveCSS("opacity", "1");
-    await expect(page.locator(`[data-occurrence="entry-${term.index}-${i}"]`)).toHaveAttribute("data-source-id", pair.left.id);
+    const target = await page.locator(`[data-kp-comb-key="factor-${term.index}-${i}"]`).boundingBox();
+    const copy = await scalarCopy.boundingBox();
+    expect(Math.abs(copy!.x + copy!.width / 2 - target!.x - target!.width / 2)).toBeLessThan(1);
+    expect(Math.abs(copy!.y + copy!.height / 2 - target!.y - target!.height / 2)).toBeLessThan(1);
   }
   for (const term of combination.terms) {
     const copies = await page.locator(`[data-occurrence^="factor-${term.index}-"]`).evaluateAll(nodes => nodes.map(node => {
@@ -45,8 +48,19 @@ test("columns and coefficients retain source identity through readable weighted-
     }));
     expect(copies[0]!.bottom).toBeLessThan(copies[1]!.top);
   }
-  await page.locator(".matrix-card").screenshot({ path: info.outputPath("scalar-fanout.png") });
+  await slider.fill((2.75 / (beats.length - 1)).toFixed(4));
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("scalar-grow-in-place.png") });
+  await slider.fill((2.2 / (beats.length - 1)).toFixed(4));
+  await expect(page.locator('[data-occurrence="factor-0-0"]')).toHaveCSS("opacity", "0");
+  const shrink = await page.locator('[data-kp-comb-key="weight-0"]').evaluate(node => new DOMMatrix(getComputedStyle(node).transform).a);
+  expect(shrink).toBeGreaterThan(.4); expect(shrink).toBeLessThan(.6);
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("scalar-shrink.png") });
+  await chooser.selectOption("2");
+  const original = await page.locator('[data-kp-comb-key="column-0-0"]').boundingBox();
   await chooser.selectOption("3");
+  const expanded = await page.locator('[data-kp-comb-key="entry-0-0"]').boundingBox();
+  expect(Math.abs(original!.y - expanded!.y)).toBeLessThan(1);
+  await expect(page.locator(".comb-weighted")).toHaveCSS("opacity", "0");
   await expect(page.locator(".comb-expanded [data-reveal]").first()).toHaveCSS("opacity", "1");
   for (const term of combination.terms) for (const [i, pair] of term.pairs.entries()) {
     await expect(page.locator(`[data-occurrence="factor-${term.index}-${i}"]`)).toHaveCSS("opacity", "0");
@@ -55,7 +69,7 @@ test("columns and coefficients retain source identity through readable weighted-
   for (const p of [0.1, 0.3, 0.9]) {
     await slider.fill(String(p)); await page.locator(".matrix-card").screenshot({ path: info.outputPath(`transit-${p}.png`) });
   }
-  const poses = () => page.locator(".comb-paint").evaluateAll(nodes => nodes.map(node => node.getAttribute("style")));
+  const poses = () => page.locator(".comb-paint, .comb-weighted [data-kp-comb-key], .comb-expanded [data-kp-comb-key]").evaluateAll(nodes => nodes.map(node => node.getAttribute("style")));
   const distributionMidpoint = (2.5 / (beats.length - 1)).toFixed(4);
   await slider.fill(distributionMidpoint); const held = await poses();
   await slider.fill("1"); await slider.fill("0"); await slider.fill(distributionMidpoint); expect(await poses()).toEqual(held);

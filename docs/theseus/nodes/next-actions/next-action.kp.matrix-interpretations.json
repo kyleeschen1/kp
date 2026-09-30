@@ -4,7 +4,7 @@
   "title": "Explain one matrix product through column combinations, identity and orthonormality",
   "status": "blocked",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: scalar-vector refinement ready at the existing host, Weights then Next; prior layout accepted.",
+  "summary": "HUMAN_CHECKPOINT: in-place scalar revision delivered for visual judgment before identity and orthonormality transfer.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -36,6 +36,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-30T19:55:03.260Z",
       "notes": "Scalar-vector passage: 17 semantic tests and two Chromium tests pass; types and build pass. Scalar fan-out copies retain coefficient IDs, native handoff and midpoint separation are checked, reversal pressures the new passage. First captured overlap repaired by departure ordering. JS 97.61 KB gzip, CSS 14.27 KB."
+    },
+    {
+      "command": "npm run test:matrix-interpretations; npm run visual:matrix-interpretations; npm run typecheck; npm run build:matrix-interpretations; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-30T20:03:49.898Z",
+      "notes": "In-place scalar revision: 17 semantic tests and 2 browser checks pass; rows preserved, scalar shrinks before destination growth, deterministic replay and native handoff. Full types and build pass. JS 97.96 KB gzip; CSS 14.30 KB gzip. Visual treatment pending human review."
     }
   ]
 }
