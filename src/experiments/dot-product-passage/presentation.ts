@@ -59,7 +59,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   requireNative("sum").dataset["sourceId"] = passage.dot.result.id;
   const reset = () => {
     for (const node of [pairs, products, sum, ...Object.values(vectors), ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus, .dot-inputs .mopen, .dot-inputs .mclose")]) {
-      node.style.opacity = "1"; node.style.transform = ""; node.style.clipPath = "";
+      node.style.opacity = "1"; node.style.transform = ""; node.style.clipPath = ""; node.style.color = "";
     }
   };
   const prepare = () => {
@@ -92,6 +92,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const from = `${side}-${pair.index}`, to = `pair-${side}-${pair.index}`;
       const clone = cloneElementWithComputedStyles(requireNative(from));
       stripKpMaterialCloneAuthority(clone);
+      // Repreparing after a layout change must not copy the source trace role.
+      clone.removeAttribute("data-trace-role");
       const node = document.createElement("span"); node.className = "dot-paint";
       for (const part of [clone, ...clone.querySelectorAll<HTMLElement>("*")]) {
         part.style.textShadow = "inherit"; part.style.color = "inherit"; part.style.setProperty("-webkit-text-fill-color", "currentColor");
@@ -124,35 +126,29 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     sum.style.opacity = frame.index === 4 ? "1" : "0";
     for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = "0";
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
-    const tilt = smooth((frame.local - .15) / .85);
-    const opening = smooth(frame.local / .7);
+    const matching = frame.index === 0 ? 0 : frame.index === 1 ? smooth(frame.local) : 1;
+    workingPlane.style.setProperty("--dot-warmth", `${100 * matching}%`);
     for (const side of ["left", "right"] as const) {
       vectors[side].style.opacity = "1";
       if (frame.index > 0) {
-        for (const pair of passage.dot.pairs) requireNative(`${side}-${pair.index}`).style.opacity = "0";
+        for (const pair of passage.dot.pairs) {
+          const original = requireNative(`${side}-${pair.index}`);
+          original.style.opacity = ".6"; original.style.color = "var(--dot-syntax-ink)";
+          original.dataset["traceRole"] = "source-trace";
+        }
       }
-      if (frame.index === 0) vectors[side].style.transform = "";
+      if (frame.index === 0) for (const pair of passage.dot.pairs) delete requireNative(`${side}-${pair.index}`).dataset["traceRole"];
     }
     for (const { node, from, to } of owners) {
       const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
-      const a = source;
-      let x = a.x + (b.x - a.x) * opening, y = a.y + (b.y - a.y) * opening;
-      if (side === "right") {
-        // All column entries share one pivot and angle. Spacing opens along
-        // that axis to fit the native factor slots, while glyphs stay upright.
-        // Quintic easing gives the turn zero velocity and acceleration at rest.
-        const last = passage.dot.pairs.length - 1;
-        const base = points.get(`right-${last}`)!, end = points.get(`pair-right-${last}`)!;
-        const pivot = base;
-        const radius = (base.y - source.y) * (1 - tilt) + (end.x - b.x) * tilt;
-        const angle = -Math.PI / 2 - Math.PI / 2 * tilt;
-        x = pivot.x + (end.x - pivot.x) * tilt + radius * Math.cos(angle);
-        // One continuous lift-and-turn starts at the original entries, with no
-        // docked intermediate state. The lift follows the measured column span.
-        const lift = (base.y - points.get("right-0")!.y) * Math.sin(Math.PI * smooth(frame.local));
-        y = pivot.y + (end.y - pivot.y) * tilt - lift + radius * Math.sin(angle);
-      }
+      // Both operands approach their shared reading line from opposite sides.
+      // A shallow separation replaces the former full-column sweeping pivot.
+      const separation = 24 * Math.sin(Math.PI * matching);
+      // Open the native pair slots before closing the column's vertical spacing.
+      const spread = smooth(frame.local / .7);
+      const x = source.x + (b.x - source.x) * spread;
+      const y = source.y + (b.y - source.y) * matching + (side === "left" ? separation : -separation);
       // All entries move out of the shared plane; the destination expression
       // lives at the same depth, avoiding a jump on the native handoff.
       const z = 70 * ease(frame.local / .2);

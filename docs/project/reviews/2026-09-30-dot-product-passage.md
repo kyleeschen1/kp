@@ -254,6 +254,25 @@ reversal and configuration checks pass. Initial, transit and multiplication
 captures were inspected: the text stays upright and the stack reads as layered
 sheets. Scoped build passes with a 6.15 KB gzip entry (previously 6.11).
 
+September 30, converging pairs and source traces: the user accepted the face-on
+direction and requested less sweeping motion. Row and column entries now meet
+on the central reading line from below and above, using a shallow 24px separation
+instead of the full-column pivot. Native pair slots open before vertical spacing
+closes; this repaired an observed early neighbor overlap without enlarging the
+path. The initial rigid-column collinearity assertion was replaced with checks
+for opposite-side approach, bounded vertical travel and native arrival.
+
+The front surface transitions from cool to the same warm neutral paper tone as
+the source surface by the matched-pairs endpoint. Original native entries remain
+as grey source traces, retaining their scalar references; these are visual
+historical occurrences rather than new mathematical values. Their trace role
+is explicitly removed from material clones during layout remeasurement. Browser
+checks cover six retained traces, role separation after configuration changes,
+exact color endpoint, geometry, evaluation and deterministic reverse seeking.
+Four unit tests, full types and the scoped build pass; the entry is approximately
+6.1 KB gzip. Matching and multiplication frames were inspected. This remains the
+standalone review candidate; rectangular integration has not begun.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

@@ -61,18 +61,19 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "1");
   await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "1");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
-  // The column turns as a straight unit; the row finishes opening before it lands.
+  // Matching pairs approach the central line from opposite sides, without
+  // the former rigid-column sweep. Each entry keeps its original source ID.
   for (const p of [.12, .15, .18, .21]) {
     await slider.fill(String(p));
-    const centers = await page.locator('[data-occurrence^="pair-right-"]').evaluateAll(nodes => nodes.map(node => {
-      const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
-    }));
-    const [a, b, c] = centers;
-    const length = Math.hypot(c!.x - a!.x, c!.y - a!.y);
-    const offAxis = Math.abs((b!.x - a!.x) * (c!.y - a!.y) - (b!.y - a!.y) * (c!.x - a!.x)) / length;
-    expect(offAxis).toBeLessThan(.1);
+    for (const pair of passage.dot.pairs) {
+      const left = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();
+      const right = await page.locator(`[data-occurrence="pair-right-${pair.index}"]`).boundingBox();
+      const target = await page.locator(`[data-kp-dot-key="pair-right-${pair.index}"]`).boundingBox();
+      expect(left!.y + left!.height / 2).toBeGreaterThan(right!.y + right!.height / 2);
+      expect(Math.abs(right!.y - target!.y)).toBeLessThan(70);
+    }
   }
-  await slider.fill("0.18");
+  await slider.fill("0.2499");
   for (const pair of passage.dot.pairs) {
     const copy = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();
     const target = await page.locator(`[data-kp-dot-key="pair-left-${pair.index}"]`).boundingBox();
@@ -81,7 +82,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   }
   const columnTop = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
   const columnBottom = await page.locator('[data-occurrence="pair-right-2"]').boundingBox();
-  expect(columnBottom!.y - columnTop!.y).toBeGreaterThan(1);
+  expect(Math.abs(columnBottom!.y - columnTop!.y)).toBeLessThan(1);
   for (const i of [0, 1, 2, 3, 4]) {
     await chooser.selectOption(String(i));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`step-${i}.png`) });
@@ -97,6 +98,10 @@ test("signed dot passage preserves references through pairing, products and sum"
     expect(visiblePluses.every(text => text?.includes("+"))).toBe(true);
   }
   await chooser.selectOption("1");
+  await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
+  for (const trace of await page.locator('[data-trace-role="source-trace"]').all()) await expect(trace).toHaveCSS("opacity", "0.6");
+  const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", backColor);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
@@ -224,6 +229,8 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await child.getByRole("slider").fill("0.57");
   await page.getByRole("button", { name: "Side by side", exact: true }).click();
   await expect(child.getByRole("slider")).toHaveValue("0.57");
+  await expect(child.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
+  await expect(child.locator('.dot-material [data-trace-role]')).toHaveCount(0);
   await page.screenshot({ path: info.outputPath("side-layout.png"), fullPage: true });
   await child.getByRole("slider").fill("0.2");
   const stageBounds = await child.locator(".dot-stage").boundingBox();

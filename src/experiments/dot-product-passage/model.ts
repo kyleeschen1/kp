@@ -13,7 +13,7 @@ export const valueOf = (entry: KpScalarValue) => {
 
 export const beats = Object.freeze([
   { id: "vectors", cue: "Pair each entry of the row covector with the matching entry of the column vector." },
-  { id: "pairs", cue: "Tilt the column into matching pairs as the row spreads to make room." },
+  { id: "pairs", cue: "Bring matching row and column entries together on the working plane." },
   { id: "products", cue: "Multiply each matched pair to form its product." },
   { id: "addition", cue: "Join the three products with addition signs." },
   { id: "sum", cue: "Add the three products, keeping their signs. This is the dot product." },

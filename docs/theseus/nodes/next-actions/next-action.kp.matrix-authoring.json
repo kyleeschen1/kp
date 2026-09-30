@@ -141,6 +141,13 @@
       "scope": "Face-on shadowed panel comparison",
       "checkedAt": "2026-09-30T22:53:52.714Z",
       "notes": "Four unit and two browser tests pass; full types and build pass. Zero camera tilt, panel shadow, rear offset, no text shadows and real Z motion checked. Three captures inspected. CSS panel-shadow approximation, not physical light projection. Entry 6.15 KB gzip."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Converging pairs, warm surfaces and retained source traces",
+      "checkedAt": "2026-09-30T23:03:28.746Z",
+      "notes": "Four unit and two browser tests pass; full types and build pass. Short opposite-side convergence replaces rigid pivot; slot opening precedes vertical closure. Six source traces and role separation after reprepare checked. Exact warm surface endpoint and reverse seeking preserved. Frames inspected, entry 6.12 KB gzip."
     }
   ]
 }
