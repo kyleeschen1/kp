@@ -211,6 +211,18 @@ departure, pivot and multiplication captures. Four unit and two Chromium tests
 pass; the signed camera rotation and text-shadow lifecycle are checked along
 with the existing handoff and reverse-seek checks. Build passes at 6.00 KB gzip.
 
+September 30, two bordered surfaces: the source plane now has a thin neutral
+border and faint fill; a second, faint teal working plane appears and translates
+forward with the entries. Each surface sits 1px behind its mathematical paint
+to avoid coplanar ambiguity. The working plane stays forward throughout
+evaluation; there are only two surfaces, not one per beat. Both share the camera
+and adapt their width to the side layout. They are decorative, pointer-inert and
+inside the existing aria-hidden visual stage. No mathematical identity changes.
+Four unit and two Chromium tests pass, including plane count, initial working
+plane absence, material/surface depth agreement and reverse seek. Initial,
+pivot and multiplication captures were inspected. The scoped build passes at
+6.06 KB gzip for the dot entry. Border and fill values remain provisional.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

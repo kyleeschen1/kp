@@ -120,6 +120,13 @@
       "scope": "Reverse 25-degree camera and text shadows",
       "checkedAt": "2026-09-30T22:24:28.730Z",
       "notes": "Four unit and two browser tests pass; full types and build pass. Signed camera rotation, depth-linked text shadows and clean landing checked; original brackets, Z translation and reverse seek preserved. Three captures inspected. Text-attached shadow only; not a projected light simulation."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Two bordered translucent planes",
+      "checkedAt": "2026-09-30T22:33:26.540Z",
+      "notes": "Four unit and two Chromium tests pass; full types and build pass. Two surfaces, initial absence, shared material and plane depth, reverse seeking and config verified. Three frames inspected. Source plane stays behind brackets; working plane persists forward. Entry 6.06 KB gzip; local visual checkpoint."
     }
   ]
 }

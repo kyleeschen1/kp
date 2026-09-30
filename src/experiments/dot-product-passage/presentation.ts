@@ -19,6 +19,8 @@ export function stageHtml(passage: DotPassage) {
   const { dot } = passage;
   const vector = (side: "left" | "right") => math(`\\left[\\;\\begin{matrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{matrix}\\;\\right]`);
   return `<div class="dot-stage" aria-hidden="true">
+    <div class="dot-plane dot-plane-source"></div>
+    <div class="dot-plane dot-plane-working"></div>
     <div class="dot-inputs"><span data-dot-vector="left">${vector("left")}</span><span data-dot-vector="right">${vector("right")}</span></div>
     <div class="dot-work">
       <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`\\htmlData{kp-dot-key=syntax-open-${i}}{(}${tag(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=syntax-multiply-${i}}{\\cdot}${tag(`pair-right-${i}`, pair.right)}\\htmlData{kp-dot-key=syntax-close-${i}}{)}`)}</span>`).join(plus)}</div>
@@ -32,6 +34,7 @@ interface Point { x: number; y: number }
 export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const stage = root.querySelector<HTMLElement>(".dot-stage")!;
   const layer = stage.querySelector<HTMLElement>(".dot-material")!;
+  const workingPlane = stage.querySelector<HTMLElement>(".dot-plane-working")!;
   const pairs = stage.querySelector<HTMLElement>(".dot-pairs")!;
   const products = stage.querySelector<HTMLElement>(".dot-products")!;
   const sum = stage.querySelector<HTMLElement>(".dot-sum")!;
@@ -103,6 +106,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     if (disposed) return frame;
     reset();
     stage.dataset["progress"] = String(frame.progress);
+    // The surface shares the entries' depth, without owning their semantic paint.
+    const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
+    workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
+    workingPlane.style.opacity = String(planeLift);
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 4 ? "1" : "0";

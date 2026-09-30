@@ -16,6 +16,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-kp-dot-key="right-2"]')).toHaveText("−2");
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const slider = page.getByRole("slider", { name: "Animation position" });
+  await expect(page.locator(".dot-plane")).toHaveCount(2);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
   await slider.fill("0.06");
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
@@ -29,6 +31,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   const forward = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
   expect(forward).toBe(70);
+  const planeDepth = await page.locator(".dot-plane-working").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
+  expect(planeDepth).toBe(forward - 1);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "1");
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.a, y: m.d };
