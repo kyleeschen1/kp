@@ -174,6 +174,14 @@ flattening, shadow-free endpoint/reduced-motion and existing reversal checks.
 Departure, transit and landed captures were inspected. The scoped build passes;
 dot entry 6.03 KB gzip, previously 5.87 KB. No shared motif promotion is claimed.
 
+September 30, glyph-axis tilt trial: column glyphs now rotate up to 22 degrees
+about their own vertical axes with local perspective, following the same depth
+envelope as the shadow. The row remains face-on; landing and reduced motion have
+zero tilt. The mathematical objects, column trajectory and evaluation stay
+unchanged. Four unit and two Chromium tests pass, including measured 3D tilt
+and zero-tilt landing. The departure capture was inspected; the effect is subtle
+at native text size. Build passes at 6.06 KB gzip for the dot entry (6.03 before).
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

@@ -23,6 +23,10 @@ test("signed dot passage preserves references through pairing, products and sum"
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
   await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("filter", "none");
   await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("filter", "none");
+  const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
+    new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
+  expect(Math.abs(await tiltY('[data-occurrence="pair-right-0"]'))).toBeGreaterThan(.1);
+  expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.a, y: m.d };
   });
@@ -72,6 +76,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   }
   await chooser.selectOption("1");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("filter", "none");
+  expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
   await slider.fill("0.31");
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "1");

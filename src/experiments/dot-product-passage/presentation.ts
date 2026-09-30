@@ -139,9 +139,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
         y = pivot.y + (end.y - pivot.y) * tilt - lift + radius * Math.sin(angle);
       }
       // Depth is presentation-only: retain one paint owner and the same semantic
-      // trajectory. The column settles to native size and loses its shadow.
+      // trajectory. Each glyph turns about its own vertical axis, then settles
+      // face-on at native size and loses its shadow before the native handoff.
       const elevation = side === "right" ? depth : 0;
-      node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${1 + .035 * elevation})`;
+      node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) perspective(500px) rotateY(${-22 * elevation}deg) scale(${1 + .035 * elevation})`;
       node.style.filter = elevation > 0 ? `drop-shadow(0 ${5 * elevation}px ${3 * elevation}px rgba(20, 25, 30, ${.28 * elevation}))` : "none";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
