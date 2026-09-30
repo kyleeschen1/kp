@@ -22,22 +22,25 @@ test("signed dot passage preserves references through pairing, products and sum"
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
   await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("filter", "none");
-  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("filter", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("filter", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
-  expect(Math.abs(await tiltY('[data-occurrence="pair-right-0"]'))).toBeGreaterThan(.1);
+  expect(Math.abs(await tiltY(".dot-stage"))).toBeCloseTo(Math.SQRT1_2, 5);
+  expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
+  const forward = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
+  expect(forward).toBe(70);
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.a, y: m.d };
   });
   expect(bracketScale.x).toBeGreaterThan(0);
-  expect(bracketScale.x).toBeLessThan(bracketScale.y);
+  expect(bracketScale.x).toBe(1); expect(bracketScale.y).toBe(1);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("lift-and-turn.png") });
   const fading = Number(await page.locator('[data-dot-vector="right"]').evaluate(node => getComputedStyle(node).opacity));
-  expect(fading).toBeGreaterThan(0); expect(fading).toBeLessThan(1);
+  expect(fading).toBe(1);
   await slider.fill("0.2");
-  await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "0");
-  await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "0");
+  await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "1");
+  await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "1");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
   // The column turns as a straight unit; the row finishes opening before it lands.
   for (const p of [.12, .15, .18, .21]) {
@@ -86,22 +89,22 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("multiply-hold.png") });
   const notation = await page.locator(".dot-stage").evaluate(stage => {
     const read = (selector: string) => getComputedStyle(stage.querySelector(selector)!);
-    const bounds = stage.getBoundingClientRect();
-    const expression = stage.querySelector(".dot-pairs")!.getBoundingClientRect();
+    const work = stage.querySelector<HTMLElement>(".dot-work")!;
     return { entry: read('[data-kp-dot-key="left-0"]').fontSize,
       paired: read('[data-kp-dot-key="pair-left-0"]').fontSize,
       ink: read('[data-kp-dot-key="pair-left-0"]').color,
       syntax: ['[data-kp-dot-key="syntax-open-0"]', '[data-kp-dot-key="syntax-close-0"]',
         '[data-kp-dot-key="syntax-multiply-0"]', '.dot-plus', '.dot-inputs .mopen', '.dot-inputs .mclose'].map(s => read(s).color),
-      offsetX: expression.x + expression.width / 2 - bounds.x - bounds.width / 2,
-      offsetY: expression.y + expression.height / 2 - bounds.y - bounds.height / 2 };
+      offsetX: work.offsetLeft + work.offsetWidth / 2 - stage.clientWidth / 2,
+      depth: new DOMMatrixReadOnly(getComputedStyle(work).transform).m43 };
   });
   expect(notation.entry).toBe(notation.paired);
   expect(new Set(notation.syntax).size).toBe(1);
   expect(notation.syntax[0]).not.toBe(notation.ink);
   expect(notation.syntax[0]).toBe("rgb(70, 70, 70)");
+  // Check centering in scene coordinates, before the shared camera projection.
   expect(Math.abs(notation.offsetX)).toBeLessThan(1);
-  expect(Math.abs(notation.offsetY)).toBeLessThan(25);
+  expect(notation.depth).toBe(70);
   // Parentheses shrink after the contents; seeking backward restores that ordering.
   const delayedPose = async () => page.locator('[data-kp-dot-key="syntax-open-0"], [data-kp-dot-key="pair-left-0"]').evaluateAll(nodes => nodes.map(node => {
     const style = getComputedStyle(node);

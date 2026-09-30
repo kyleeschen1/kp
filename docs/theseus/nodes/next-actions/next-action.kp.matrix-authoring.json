@@ -106,6 +106,13 @@
       "scope": "Column glyph vertical-axis tilt",
       "checkedAt": "2026-09-30T22:16:47.337Z",
       "notes": "Four unit and two Chromium tests pass; full types and build pass. Column tilt and face-on landing verified; row flat, reverse seek and column trajectory preserved. Departure image inspected. Local visual candidate; entry 6.06 KB gzip."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run typecheck:tests; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Shared 45-degree plane and real forward translation",
+      "checkedAt": "2026-09-30T22:21:32.028Z",
+      "notes": "Four unit and two browser tests pass. Full types and build pass. Scene-local measurement, shared camera, material and target Z, persistent brackets, native handoff and reverse seek checked. Captures inspected; working line separated from retained brackets. Local trial, 6.00 KB gzip entry."
     }
   ]
 }

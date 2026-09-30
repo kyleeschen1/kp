@@ -182,6 +182,24 @@ unchanged. Four unit and two Chromium tests pass, including measured 3D tilt
 and zero-tilt landing. The departure capture was inspected; the effect is subtle
 at native text size. Build passes at 6.06 KB gzip for the dot entry (6.03 before).
 
+September 30, shared-plane correction: the user clarified that the entire
+mathematical x-y plane should tilt, rather than individual glyphs. The stage now
+uses shared perspective and a 45-degree Y rotation with preserved 3D children.
+Both row and column material entries translate forward to Z=70px; the working
+expression remains at that depth for a continuous native handoff. Source
+brackets remain full-size and opaque at Z=0 throughout. The working line sits
+60px lower in plane coordinates to avoid the retained brackets overlapping the
+new expression. This supersedes the bracket retreat and individual-glyph tilt.
+
+Preparation temporarily removes the camera and working-plane transforms so
+native measurement and fusion remain in scene coordinates. The projection is
+restored before paint; semantics and evaluation timing are unchanged. Four unit
+and two Chromium tests pass, including shared rotation, positive material and
+destination Z, untransformed opaque brackets, collinearity, native handoff and
+reverse seeking. Full types and build pass; dot entry is 6.00 KB gzip. Initial,
+departure, pairing and multiplication frames were inspected. This remains a
+local perspective trial, with no general 3D renderer or compositor claim.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

@@ -61,6 +61,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   };
   const prepare = () => {
     if (disposed) return;
+    // Measure in plane-local coordinates; perspective belongs only to display.
+    stage.style.transform = "none";
+    const work = stage.querySelector<HTMLElement>(".dot-work")!;
+    work.style.transform = "none";
     reset(); layer.replaceChildren(); owners.length = 0;
     // Keep addition in place while only the multiplication terms evaluate.
     for (const pair of passage.dot.pairs) {
@@ -90,6 +94,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       node.dataset["sourceId"] = pair[side].id; node.dataset["occurrence"] = to;
       layer.append(node); owners.push({ node, from, to });
     }
+    stage.style.transform = ""; work.style.transform = "";
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -105,15 +110,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
     const tilt = smooth((frame.local - .15) / .85);
     const opening = smooth(frame.local / .7);
-    const retreat = ease((frame.local - .12) / .48);
     const depth = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
       ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
     for (const side of ["left", "right"] as const) {
-      vectors[side].style.opacity = frame.index === 0 ? "1" : frame.index === 1 ? String(1 - retreat) : "0";
-      if (frame.index === 1) for (const bracket of vectors[side].querySelectorAll<HTMLElement>(".mopen, .mclose")) {
-        bracket.style.transform = `scale(${1 - retreat}, ${1 - .12 * retreat})`;
-      }
-      if (frame.index === 1 && frame.local > 0) {
+      vectors[side].style.opacity = "1";
+      if (frame.index > 0) {
         for (const pair of passage.dot.pairs) requireNative(`${side}-${pair.index}`).style.opacity = "0";
       }
       if (frame.index === 0) vectors[side].style.transform = "";
@@ -138,11 +139,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
         const lift = (base.y - points.get("right-0")!.y) * Math.sin(Math.PI * smooth(frame.local));
         y = pivot.y + (end.y - pivot.y) * tilt - lift + radius * Math.sin(angle);
       }
-      // Depth is presentation-only: retain one paint owner and the same semantic
-      // trajectory. Each glyph turns about its own vertical axis, then settles
-      // face-on at native size and loses its shadow before the native handoff.
-      const elevation = side === "right" ? depth : 0;
-      node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) perspective(500px) rotateY(${-22 * elevation}deg) scale(${1 + .035 * elevation})`;
+      // All entries move out of the shared plane; the destination expression
+      // lives at the same depth, avoiding a jump on the native handoff.
+      const elevation = depth;
+      const z = 70 * ease(frame.local / .2);
+      node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
       node.style.filter = elevation > 0 ? `drop-shadow(0 ${5 * elevation}px ${3 * elevation}px rgba(20, 25, 30, ${.28 * elevation}))` : "none";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }

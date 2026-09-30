@@ -2,8 +2,11 @@
 .dot-stage, .dot-static { --dot-syntax-ink: #464646; }
 @media (prefers-color-scheme: dark) { .dot-stage, .dot-static { --dot-syntax-ink: #a6aaa8; } }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
+.dot-stage { transform: perspective(900px) rotateY(45deg); transform-style: preserve-3d; }
+.dot-work { transform: translateZ(70px); }
+.dot-material { transform-style: preserve-3d; }
 .dot-inputs { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
-.dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
+.dot-work { position: absolute; top: calc(50% + 20px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
 .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
