@@ -8,6 +8,7 @@ import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 
 async function mount() {
   const query = new URLSearchParams(location.search);
+  document.documentElement.toggleAttribute("data-embedded", query.has("embedded"));
   const scene = example(query.get("example") ?? "columns", Number(query.get("column") ?? "0"));
   const { beats } = scene;
   document.querySelector("h1")!.textContent = scene.title;

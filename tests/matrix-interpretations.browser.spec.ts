@@ -128,3 +128,33 @@ for (const kind of ["identity", "orthonormality"] as const) for (const column of
     await expect(page.locator("#comb-player")).toHaveAttribute("data-milestone", "distribute");
   });
 }
+
+test("one host switches every example and result column without changing its URL", async ({ page }, info) => {
+  await page.goto("/experiments/matrix-examples/");
+  const url = page.url();
+  const menu = page.getByRole("combobox", { name: "Example", exact: true });
+  const child = page.frameLocator("#example-frame");
+  await expect(child.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+  for (const kind of ["identity", "orthonormality", "dot", "columns"]) {
+    // Switching while playing must retire the previous document and clock.
+    await child.getByRole("button", { name: "Play", exact: true }).click();
+    const loaded = page.waitForEvent("framenavigated", f => f.parentFrame() !== null && (kind === "dot" ? f.url().includes("matrix-column-product") : f.url().includes(`example=${kind}`)));
+    await menu.selectOption(kind);
+    await loaded;
+    await expect(child.locator(kind === "dot" ? "#matrix-player" : "#comb-player")).toHaveAttribute("data-ready", "true");
+    expect(page.url()).toBe(url);
+    await expect(page.locator("iframe")).toHaveCount(1);
+  }
+  const changedColumn = page.waitForEvent("framenavigated", f => f.parentFrame() !== null && f.url().includes("column=1"));
+  await page.getByRole("combobox", { name: "Result column" }).selectOption({ value: "1" });
+  await changedColumn;
+  await expect(child.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+  await child.getByRole("combobox", { name: "Milestone" }).selectOption("6");
+  await expect(child.locator('[data-kp-comb-key="c-1-1"]')).toHaveCSS("opacity", "1");
+  await expect(child.locator('[data-kp-comb-key="c-1-1"]')).toHaveText("8");
+  expect(page.url()).toBe(url);
+  await page.screenshot({ path: info.outputPath("menu-desktop.png"), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath("menu-phone.png"), fullPage: true });
+});

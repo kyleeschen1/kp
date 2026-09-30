@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Matrix explorations</title></head>
+<body><main id="matrix-story">
+  <h1>Matrix explorations</h1>
+  <nav class="matrix-controls" aria-label="Choose an animation">
+    <label>Example <select id="example-menu">
+      <option value="columns">Column combinations</option>
+      <option value="dot">Row–column dot products</option>
+      <option value="identity">Identity</option>
+      <option value="orthonormality">Orthonormality</option>
+    </select></label>
+    <label id="column-label">Result column <select id="column-menu"><option value="0">1</option><option value="1">2</option></select></label>
+  </nav>
+  <iframe id="example-frame" title="Column combinations animation" src="../matrix-column-combinations/?embedded=1" style="display:block;width:100%;height:1000px;border:0"></iframe>
+  <noscript><p>Enable JavaScript to switch examples using the menu.</p></noscript>
+</main><script type="module" src="/src/experiments/matrix-examples/entry.ts"></script></body>
+</html>

@@ -14,5 +14,7 @@
 .comb-focus { color: var(--kp-st-focus); }
 .comb-static { overflow-x: auto; }
 .comb-static > div { margin: 1rem 0; }
+html[data-embedded] #comb-player > nav,
+html[data-embedded] #comb-player > p:has(a) { display: none; }
 
 .comb-weighted [data-kp-comb-key], .comb-expanded [data-kp-comb-key], .comb-weighted .mopen, .comb-weighted .mclose { display: inline-block; transform-origin: center; }

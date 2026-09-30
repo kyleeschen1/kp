@@ -6,6 +6,23 @@ with the same choreography; earlier checkpoints below are historical evidence.
 Authority: [approved experiment](../2026-09-30-matrix-interpretations.md).
 Contract: `run-contract.kp.matrix-interpretations-v1`.
 
+## Shared menu host
+
+The user requested one URL for all examples. Open
+[Matrix explorations](http://localhost:8000/experiments/matrix-examples/).
+The menu switches column combinations, row–column dot products, identity and
+orthonormality; a second selector chooses the result column where applicable.
+One embedded document is active at a time. Switching replaces the prior player,
+while the outer URL remains fixed. Existing standalone URLs and animation
+implementations remain available. The standalone build includes all three hosts.
+The new host adds 0.37 KB gzip of JavaScript, excluding shared styles and players.
+
+The scoped browser suite checks switching during playback, all four menu items,
+second-column placement, a stable outer URL and narrow-screen overflow. The
+initial test selected label “1” instead of value “1” (column 2); the corrected
+check uses an explicit option value and waits for the new document.
+Full typecheck, standalone build and three reachability checks pass.
+
 ## Accepted-treatment transfer
 
 - [Identity](http://localhost:8000/experiments/matrix-column-combinations/?example=identity&column=0#weights): one and zero select each original column. Both weights and all zero contributions remain inspectable.
