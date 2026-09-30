@@ -86,6 +86,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(notation.entry).toBe(notation.paired);
   expect(new Set(notation.syntax).size).toBe(1);
   expect(notation.syntax[0]).not.toBe(notation.ink);
+  expect(notation.syntax[0]).toBe("rgb(70, 70, 70)");
   expect(Math.abs(notation.offsetX)).toBeLessThan(1);
   expect(Math.abs(notation.offsetY)).toBeLessThan(25);
   // Parentheses shrink after the contents; seeking backward restores that ordering.
@@ -96,10 +97,25 @@ test("signed dot passage preserves references through pairing, products and sum"
   await slider.fill("0.4106");
   const delayed = await delayedPose();
   expect(delayed[0]!.scale).toBeGreaterThan(delayed[1]!.scale);
+  expect(delayed[0]!.scale).toBe(1);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("enclosure-delay.png") });
   await slider.fill("0.4269");
   await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("opacity", "0");
   await expect(page.locator('[data-kp-dot-key="syntax-open-0"]')).toHaveCSS("opacity", "1");
+  const popPose = await page.locator('[data-kp-dot-key="syntax-open-0"]').evaluate(node => {
+    const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.a, y: m.d };
+  });
+  expect(popPose.y).toBeLessThan(popPose.x);
+  expect(popPose.x).toBeLessThan(1);
+  const resultWidth = () => page.locator('[data-kp-dot-key="product-0"]').evaluate(node => node.getBoundingClientRect().width);
+  const kernelWidth = await resultWidth();
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("parenthesis-pop.png") });
+  await slider.fill("0.4383");
+  expect(await resultWidth()).toBeCloseTo(kernelWidth, 2);
+  await slider.fill("0.4594");
+  await expect(page.locator('[data-kp-dot-key="syntax-open-0"]')).toHaveCSS("opacity", "0");
+  expect(await resultWidth()).toBeGreaterThan(kernelWidth);
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("result-after-pop.png") });
   await slider.fill("1"); await slider.fill("0.4106");
   expect(await delayedPose()).toEqual(delayed);
   const gap = await page.locator(".dot-pairs").evaluate(node => parseFloat(getComputedStyle(node).gap));

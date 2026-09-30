@@ -1,12 +1,14 @@
 @import "../matrix-column-product/style.css";
+.dot-stage, .dot-static { --dot-syntax-ink: #464646; }
+@media (prefers-color-scheme: dark) { .dot-stage, .dot-static { --dot-syntax-ink: #a6aaa8; } }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
 .dot-inputs { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 .dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
 .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
-.dot-plus, [data-kp-dot-key^="syntax-"], .dot-inputs .mopen, .dot-inputs .mclose { color: var(--kp-st-muted, #6b7280); }
-.dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct) { color: var(--kp-st-muted, #6b7280); }
+.dot-plus, [data-kp-dot-key^="syntax-"], .dot-inputs .mopen, .dot-inputs .mclose { color: var(--dot-syntax-ink); }
+.dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct) { color: var(--dot-syntax-ink); }
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
 .dot-paint { position: absolute; left: 0; top: 0; color: var(--kp-st-focus); }

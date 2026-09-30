@@ -85,6 +85,13 @@
       "scope": "Continuous lift and pivot without docking",
       "checkedAt": "2026-09-30T22:00:21.483Z",
       "notes": "Four unit and two Chromium tests pass; full typecheck and build pass. Column upward departure, stationary fading brackets, straight-axis pivot, early row arrival, reverse seek and evaluation preserved. Four transit frames inspected. Dot entry 5.83 KB gzip. Standalone visual checkpoint remains."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Late vertical enclosure pop and darker syntax",
+      "checkedAt": "2026-09-30T22:07:59.831Z",
+      "notes": "Four unit and two browser tests pass; full typecheck and build pass. Parentheses hold until content kernel, collapse vertically faster, and disappear before result growth. Darker syntax checked; reverse seek and unchanged addition fusion preserved. Three frames inspected. Local visual trial only."
     }
   ]
 }

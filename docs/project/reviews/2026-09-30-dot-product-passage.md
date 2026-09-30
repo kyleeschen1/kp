@@ -150,6 +150,18 @@ row arrival, reverse seeking, references, fusion and side-layout containment.
 Four lift/turn frames were inspected. This supersedes the docking choreography
 described earlier in this review; it does not advance rectangular integration.
 
+September 30, enclosure pop refinement: parentheses now hold at native size
+until the contents reach the contributor-fusion kernel. A short local collapse
+shrinks their vertical scale faster than their horizontal scale; the result
+holds at kernel size until the enclosure is gone, then expands using the shared
+fusion optics. Ungrouped addition retains its existing fusion timing. This
+supersedes the earlier delayed uniform enclosure fusion trial. Syntax is darker
+neutral grey in light mode, with a separately legible darker-grey dark-mode value.
+Four unit and two Chromium tests pass, including native enclosure hold,
+anisotropic collapse, result-growth ordering and reverse seek. Multiplication,
+pop and result frames were inspected. The build passes at 5.87 KB gzip for the
+dot entry. These are local provisional aesthetics, not a promoted global motif.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
