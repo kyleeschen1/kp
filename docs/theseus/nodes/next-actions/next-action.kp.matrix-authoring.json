@@ -78,6 +78,13 @@
       "scope": "Smaller centered notation and delayed parenthesis fusion",
       "checkedAt": "2026-09-30T21:56:10.818Z",
       "notes": "Four unit and two Chromium tests pass, full types pass. Original semantic references and deterministic reverse seek preserved. Initial and multiplication frames inspected. Local adapter only; global compositor certification unchanged. Review packet updated."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Continuous lift and pivot without docking",
+      "checkedAt": "2026-09-30T22:00:21.483Z",
+      "notes": "Four unit and two Chromium tests pass; full typecheck and build pass. Column upward departure, stationary fading brackets, straight-axis pivot, early row arrival, reverse seek and evaluation preserved. Four transit frames inspected. Dot entry 5.83 KB gzip. Standalone visual checkpoint remains."
     }
   ]
 }

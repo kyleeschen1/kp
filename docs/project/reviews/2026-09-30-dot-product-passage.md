@@ -136,6 +136,20 @@ the existing semantic-reference, pivot, endpoint and configuration checks.
 Initial, multiplication hold and delayed-enclosure captures were inspected.
 The dot entry is now 5.96 KB gzip (previously 5.88); no budget change.
 
+September 30, continuous lift-and-pivot refinement: removed the intermediate
+bracket-corner docking state. Material entries depart directly from their native
+positions; the column lifts and turns on one continuous sampled motion, retaining
+its straight axis and upright glyphs while the row opens early. Brackets fade at
+their original positions. The lift uses the measured column span, not a new
+global trajectory or mathematical transformation. Addition still uses the same
+contributor-fusion sampler with all products and plus signs as contributors.
+Four unit and two Chromium tests pass; the scoped build reports 5.83 KB gzip
+for the dot entry. Browser checks replace obsolete docking assertions with
+direct upward departure and stationary bracket checks, preserving collinearity,
+row arrival, reverse seeking, references, fusion and side-layout containment.
+Four lift/turn frames were inspected. This supersedes the docking choreography
+described earlier in this review; it does not advance rectangular integration.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

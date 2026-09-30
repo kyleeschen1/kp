@@ -16,13 +16,12 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-kp-dot-key="right-2"]')).toHaveText("−2");
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const slider = page.getByRole("slider", { name: "Animation position" });
-  await slider.fill("0.0825");
-  const rowCorner = await page.locator('[data-dot-vector="left"] .katex-html > .base').boundingBox();
-  const columnCorner = await page.locator('[data-dot-vector="right"] .katex-html > .base').boundingBox();
-  expect(columnCorner!.x).toBeCloseTo(rowCorner!.x + rowCorner!.width, 1);
-  expect(columnCorner!.y + columnCorner!.height).toBeCloseTo(rowCorner!.y, 1);
-  await page.locator(".matrix-card").screenshot({ path: info.outputPath("docked.png") });
-  await slider.fill("0.15");
+  await slider.fill("0.06");
+  const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
+  expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
+  // Brackets stay at their source while entries depart; no corner docking.
+  for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("lift-and-turn.png") });
   const fading = Number(await page.locator('[data-dot-vector="right"]').evaluate(node => getComputedStyle(node).opacity));
   expect(fading).toBeGreaterThan(0); expect(fading).toBeLessThan(1);
   await slider.fill("0.2");

@@ -36,7 +36,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const products = stage.querySelector<HTMLElement>(".dot-products")!;
   const sum = stage.querySelector<HTMLElement>(".dot-sum")!;
   const vectors = { left: stage.querySelector<HTMLElement>('[data-dot-vector="left"]')!, right: stage.querySelector<HTMLElement>('[data-dot-vector="right"]')! };
-  let dock = { left: { x: 0, y: 0 }, right: { x: 0, y: 0 } };
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => [node.dataset["kpDotKey"]!, node]));
   const points = new Map<string, Point>();
   const owners: { node: HTMLElement; from: string; to: string }[] = [];
@@ -79,12 +78,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       [requireNative(`syntax-open-${pair.index}`), requireNative(`syntax-close-${pair.index}`)]));
     add = prepareFusion(stage, passage.dot.pairs.map(pair => requireNative(`product-${pair.index}`)),
       [...products.querySelectorAll<HTMLElement>(".dot-plus")], requireNative("sum"));
-    const row = vectors.left.querySelector(".katex-html > .base")!.getBoundingClientRect();
-    const column = vectors.right.querySelector(".katex-html > .base")!.getBoundingClientRect();
-    const first = points.get("left-0")!, target = points.get("pair-left-0")!;
-    const left = { x: target.x - first.x, y: target.y - first.y };
-    // Dock the actual bracket corners, independent of font metrics and layout.
-    dock = { left, right: { x: row.right + left.x - column.left, y: row.top + left.y - column.bottom } };
     for (const pair of passage.dot.pairs) for (const side of ["left", "right"] as const) {
       const from = `${side}-${pair.index}`, to = `pair-${side}-${pair.index}`;
       const clone = cloneElementWithComputedStyles(requireNative(from));
@@ -110,12 +103,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     sum.style.opacity = frame.index === 4 ? "1" : "0";
     for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = "0";
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
-    const docking = ease(frame.local / .3), tilt = smooth((frame.local - .4) / .45);
-    const opening = smooth((frame.local - .4) / .26);
+    const tilt = smooth((frame.local - .15) / .85);
+    const opening = smooth(frame.local / .7);
     for (const side of ["left", "right"] as const) {
-      vectors[side].style.transform = `translate(${dock[side].x * docking}px, ${dock[side].y * docking}px)`;
-      vectors[side].style.opacity = frame.index === 0 ? "1" : frame.index === 1 ? String(1 - ease((frame.local - .4) / .4)) : "0";
-      if (frame.index === 1 && frame.local >= .4) {
+      vectors[side].style.opacity = frame.index === 0 ? "1" : frame.index === 1 ? String(1 - ease(frame.local / .6)) : "0";
+      if (frame.index === 1 && frame.local > 0) {
         for (const pair of passage.dot.pairs) requireNative(`${side}-${pair.index}`).style.opacity = "0";
       }
       if (frame.index === 0) vectors[side].style.transform = "";
@@ -123,7 +115,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     for (const { node, from, to } of owners) {
       const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
-      const a = { x: source.x + dock[side].x, y: source.y + dock[side].y };
+      const a = source;
       let x = a.x + (b.x - a.x) * opening, y = a.y + (b.y - a.y) * opening;
       if (side === "right") {
         // All column entries share one pivot and angle. Spacing opens along
@@ -131,15 +123,17 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
         // Quintic easing gives the turn zero velocity and acceleration at rest.
         const last = passage.dot.pairs.length - 1;
         const base = points.get(`right-${last}`)!, end = points.get(`pair-right-${last}`)!;
-        const pivot = { x: base.x + dock.right.x, y: base.y + dock.right.y };
+        const pivot = base;
         const radius = (base.y - source.y) * (1 - tilt) + (end.x - b.x) * tilt;
         const angle = -Math.PI / 2 - Math.PI / 2 * tilt;
         x = pivot.x + (end.x - pivot.x) * tilt + radius * Math.cos(angle);
-        // Hold the unit above the opening row until its horizontal travel clears it.
-        y = pivot.y + (end.y - pivot.y) * tilt * tilt + radius * Math.sin(angle);
+        // One continuous lift-and-turn starts at the original entries, with no
+        // docked intermediate state. The lift follows the measured column span.
+        const lift = (base.y - points.get("right-0")!.y) * Math.sin(Math.PI * smooth(frame.local));
+        y = pivot.y + (end.y - pivot.y) * tilt - lift + radius * Math.sin(angle);
       }
       node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-      node.style.opacity = frame.index === 1 && frame.local >= .4 && frame.local < 1 ? "1" : "0";
+      node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {
       for (const pair of passage.dot.pairs) {
