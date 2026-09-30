@@ -2,8 +2,8 @@
   "id": "run-contract.kp.matrix-column-animation-v1",
   "kind": "run-contract",
   "title": "Matrix column animation exemplar",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: implemented exemplar awaits choreography and usefulness review at /experiments/matrix-column-product/. No API or catalogue promotion authorized.",
+  "status": "resolved",
+  "summary": "User accepted the visual exemplar with this looks great; no shared promotion implied. Follow-up semantic migration is separately authorized.",
   "sourceRefs": [
     {
       "kind": "file",

@@ -1,0 +1,40 @@
+{
+  "id": "run-contract.kp.semantic-matrix-product-v1",
+  "kind": "run-contract",
+  "title": "Semantic matrix product and exemplar migration",
+  "status": "resolved",
+  "summary": "COMPLETE 1/1: navigable semantic product drives accepted animation, with recorded verification and limits; no new visual gate needed.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-matrix-product.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-30-semantic-operation-next-step-review.md",
+      "summary": "User go approves first package: proposed steps 1 and 2"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-column",
+    "npm run visual:matrix-column",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Implement typed product selections and contribution references; migrate accepted 2x2 score; focused verification and evidence"
+  ],
+  "disallowedWork": [
+    "New choreography, general parser, generic scene DSL, geometric interpretations, catalogue promotion, inspector continuation"
+  ],
+  "goal": "Retain matrix operands and navigable cell contributions while preserving the accepted animation",
+  "target": "next-action.kp.semantic-matrix-product",
+  "slices": [
+    {
+      "id": "semantic-product",
+      "title": "Operation object and preserved exemplar",
+      "summary": "Semantic operation and accepted-exemplar migration complete; existing visuals preserved, focused and integration checks recorded, generated inventory repaired.",
+      "status": "complete"
+    }
+  ]
+}

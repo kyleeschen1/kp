@@ -2,9 +2,9 @@
   "id": "next-action.kp.matrix-column-animation",
   "kind": "next-action",
   "title": "Make the column-first matrix animation",
-  "status": "blocked",
+  "status": "resolved",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: review column lifting, pivot, copying, evaluated dot products and native result settlement; see the matrix-column-animation review packet.",
+  "summary": "Matrix visual exemplar accepted by the user; implementation and prior verification complete.",
   "sourceRefs": [
     {
       "kind": "file",

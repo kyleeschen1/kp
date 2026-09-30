@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4829,
+  "scannedFileCount": 4856,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -854,6 +854,8 @@
         "src/semantic/radical-fragment-semantics.ts",
         "src/semantic/scheme-factorial-animation-asset.ts",
         "src/semantic/semantic-operation-projection.ts",
+        "src/semantic/symbolic-inspection-evidence.ts",
+        "src/semantic/symbolic-inspection-types.ts",
         "src/semantic/transformation-definition-binding.ts",
         "src/semantic/typescript-refactor-operations.ts"
       ],
@@ -1119,6 +1121,7 @@
         "src/semantic/radical-fragment-semantics.ts",
         "src/semantic/semantic-scene-protocol.ts",
         "src/semantic/semantic-state-authority-adapter.ts",
+        "src/semantic/symbolic-inspection-types.ts",
         "src/semantic/transformation-definition-binding.ts",
         "src/semantic/typescript-refactor-operations.ts",
         "src/tutorial/typed-linear-supply-demand/economics-supply-tax-governed-source.ts"
@@ -1812,6 +1815,8 @@
         "src/semantic/radical-fragment-semantics.ts",
         "src/semantic/scheme-factorial-animation-asset.ts",
         "src/semantic/semantic-operation-projection.ts",
+        "src/semantic/symbolic-inspection-evidence.ts",
+        "src/semantic/symbolic-inspection-types.ts",
         "src/semantic/transformation-definition-binding.ts",
         "src/semantic/typescript-refactor-operations.ts"
       ],

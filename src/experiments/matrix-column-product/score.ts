@@ -1,30 +1,5 @@
-import { createGeneratedLinearAlgebraProblemFixture } from "../../semantic/generated-linear-algebra-problem-fixture.ts";
-import { createGeneratedProblemAnimationAsset } from "../../animation/generated-problem-import.ts";
-import { createKpMatrixMatrixCompositionChoreography } from "../../animation/matrix-matrix-composition-choreography.ts";
-
-export class MatrixColumnGap extends Error {
-  readonly code = "kp.matrix-column.unsupported";
-}
-
-export function matrixEnvironment() {
-  const fixture = createGeneratedLinearAlgebraProblemFixture("generated.linear-algebra.matrix-matrix.two-by-two");
-  const asset = createGeneratedProblemAnimationAsset(fixture);
-  // The domain owner checks every result against authored row-column evidence.
-  const { cells } = createKpMatrixMatrixCompositionChoreography(asset);
-  if (cells.length !== 4 || cells.some(c => c.leftValues.length !== 2 || c.rightValues.length !== 2 ||
-    ![...c.leftValues, ...c.rightValues, c.result].every(Number.isFinite))) {
-    throw new MatrixColumnGap("This presentation requires a finite 2 by 2 product.");
-  }
-  const copy = cells.map(c => Object.freeze({
-    row: c.rowIndex, col: c.columnIndex, result: c.result,
-    left: Object.freeze([...c.leftValues]), right: Object.freeze([...c.rightValues]),
-    leftIds: Object.freeze([...c.leftSelectorIds]), rightIds: Object.freeze([...c.rightSelectorIds]),
-    resultId: c.resultSelectorId, intermediateId: c.intermediateObjectId,
-  }));
-  return Object.freeze({ assetId: asset.id, cells: Object.freeze(copy) });
-}
-export type MatrixEnvironment = ReturnType<typeof matrixEnvironment>;
-export type MatrixCell = MatrixEnvironment["cells"][number];
+import { MatrixColumnGap, matrixEnvironment, type MatrixEnvironment } from "./environment.ts";
+export { MatrixColumnGap, matrixEnvironment, type MatrixEnvironment, type MatrixCell } from "./environment.ts";
 export type Column = 0 | 1;
 export const actions = ["initial", "lift", "pivot", "copy", "dot", "evaluate", "place"] as const;
 export type Action = typeof actions[number];

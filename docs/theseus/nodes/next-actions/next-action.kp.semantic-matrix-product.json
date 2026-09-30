@@ -1,0 +1,41 @@
+{
+  "id": "next-action.kp.semantic-matrix-product",
+  "kind": "next-action",
+  "title": "Semantic matrix product driving the accepted exemplar",
+  "status": "resolved",
+  "domain": "math",
+  "summary": "COMPLETE: approved steps 1 and 2 delivered; standalone dot-product choreography and general scene API remain proposals.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-30-semantic-operation-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-30-semantic-matrix-product.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-column; npm run visual:matrix-column; npm run typecheck; npm run typecheck:tests; npm run build:matrix-column; npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-30T19:14:15.421Z",
+      "notes": "20 focused tests, 2 Chromium preservation tests, full types and both builds. Initial generic identity comparison type error repaired without casts. Final standalone JS 100.18 KB gzip, +1.45 KB. Full npm test still running."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-09-30T19:16:32.046Z",
+      "notes": "7224 of 7225 tests passed. Sole failure: stale generated equation reachability graph. No runtime or semantic failures; generated evidence repaired and separately verified."
+    },
+    {
+      "command": "npm run generate:equation-reachability; node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-09-30T19:16:33.029Z",
+      "notes": "Generated-data-only repair: scanned count 4829 to 4856 and five previously missing inspector caller entries; 68 roots unchanged. All three exact inventory and root tests passed. Full suite not repeated; no assertion or ceiling changes."
+    }
+  ]
+}

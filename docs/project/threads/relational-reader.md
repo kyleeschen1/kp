@@ -9,10 +9,19 @@ September 30: the user separately authorized making the column-first 2×2 matrix
 animation developed during the API discussion. The [candidate and review packet](../reviews/2026-09-30-matrix-column-animation.md)
 are implemented under `run-contract.kp.matrix-column-animation-v1`. The local
 chained score distinguishes immutable env and scene snapshots, but is not the
-full proposed general-purpose binding/layout API. Its visual judgment is pending;
-the symbolic inspector below remains unaccepted and is not resumed by this work.
+full proposed general-purpose binding/layout API. The user subsequently accepted
+the visual exemplar and identified contextual semantic operation objects as the
+next design priority. The [next-step review](../reviews/2026-09-30-semantic-operation-next-step-review.md)
+records the sequence. The subsequent “go” approves its first package, semantic
+product plus accepted-exemplar migration, under
+`run-contract.kp.semantic-matrix-product-v1`. The prior matrix exemplar contract
+is resolved following acceptance. The symbolic inspector below remains unaccepted
+and is not resumed by this work.
+The [semantic-product evidence](../reviews/2026-09-30-semantic-matrix-product.md)
+records the implemented operation, preserved exemplar and scoped limits. New
+dot-product choreography remains a proposed follow-up, not current execution.
 
-Approved current execution: [symbolic inspection](../2026-09-29-symbolic-inspection-long-loop-proposal.md),
+Earlier approved execution, held at its unaccepted checkpoint: [symbolic inspection](../2026-09-29-symbolic-inspection-long-loop-proposal.md),
 controlled by `run-contract.kp.symbolic-inspection-v1`. Preserve the current
 feature tip and its accepted dependencies; the repo has no branch helper.
 Commit audited planning changes before branching from this tip. Do not restart

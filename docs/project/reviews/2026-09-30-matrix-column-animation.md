@@ -1,6 +1,10 @@
 # Column-first matrix multiplication
 
-Status: implemented candidate; awaiting human visual judgment.
+Status: visual exemplar accepted by the user; shared promotion not established.
+Acceptance: “this looks great,” followed by the request to prioritize semantic
+subobjects and reusable dot-product/matrix operations. This records the visual
+judgment; its contract was subsequently resolved when starting the separately
+approved semantic-product migration.
 Authority: [bounded work package](../2026-09-30-matrix-column-animation.md).
 Contract: `run-contract.kp.matrix-column-animation-v1`.
 

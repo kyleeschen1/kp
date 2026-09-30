@@ -1,11 +1,32 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { empty, matrixEnvironment, matrixColumnStory, MatrixColumnGap, sampleStory, timeline } from "../src/experiments/matrix-column-product/score.ts";
+import { createGeneratedLinearAlgebraProblemFixture } from "../src/semantic/generated-linear-algebra-problem-fixture.ts";
+import { createGeneratedProblemAnimationAsset } from "../src/animation/generated-problem-import.ts";
+import { createKpMatrixMatrixCompositionChoreography } from "../src/animation/matrix-matrix-composition-choreography.ts";
+
+test("semantic product projection preserves the accepted renderer's full input", () => {
+  const fixture = createGeneratedLinearAlgebraProblemFixture("generated.linear-algebra.matrix-matrix.two-by-two");
+  const asset = createGeneratedProblemAnimationAsset(fixture);
+  const expected = createKpMatrixMatrixCompositionChoreography(asset).cells.map(c => ({
+    row: c.rowIndex, col: c.columnIndex, result: c.result,
+    left: c.leftValues, right: c.rightValues, leftIds: c.leftSelectorIds, rightIds: c.rightSelectorIds,
+    resultId: c.resultSelectorId, intermediateId: c.intermediateObjectId,
+  }));
+  assert.deepEqual(matrixEnvironment().cells.map(({ semantic: _semantic, ...projection }) => projection), expected);
+});
 
 test("column-first presentation retains immutable checked cell identities and values", () => {
   const env = matrixEnvironment();
   const story = matrixColumnStory(env);
   assert.equal(story.state.env, env);
+  assert.equal(env.product.left, env.A);
+  assert.equal(env.product.right, env.B);
+  for (const cell of env.cells) {
+    assert.equal(cell.semantic, env.product.cell(cell.row, cell.col));
+    assert.deepEqual(cell.leftIds, cell.semantic.dot.pairs.map(pair => pair.left.id));
+    assert.deepEqual(cell.rightIds, cell.semantic.dot.pairs.map(pair => pair.right.id));
+  }
   assert.ok(Object.isFrozen(env.cells[0]!.left));
   assert.deepEqual(env.cells.map(c => c.result), [4, 4, 10, 8]);
   assert.equal(new Set(env.cells.map(c => c.resultId)).size, 4);

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "visual:matrix-column": "playwright test --config playwright.matrix-column.config.ts --project=chromium --workers=1",
-    "test:matrix-column": "node --disable-warning=ExperimentalWarning --test tests/matrix-column-story.test.ts tests/kp-matrix-matrix-composition-choreography.test.ts tests/kp-editor-matrix-matrix-visible-animation.test.ts",
+    "test:matrix-column": "node --disable-warning=ExperimentalWarning --test tests/matrix-product.test.ts tests/typed-semantic-math.test.ts tests/matrix-column-story.test.ts tests/kp-matrix-matrix-composition-choreography.test.ts tests/kp-editor-matrix-matrix-visible-animation.test.ts",
     "build:matrix-column": "vite build --config vite.matrix-column.config.ts",
     "visual:symbolic-inspection": "playwright test --config playwright.symbolic-inspection.config.ts --project=chromium --workers=1",
     "test:symbolic-inspection": "node --disable-warning=ExperimentalWarning --test tests/symbolic-inspection-*.test.ts",

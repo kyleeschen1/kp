@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-29
+Last Updated: 2026-09-30
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -24,6 +24,26 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+September 30, subsequent matrix discussion: the user accepted the matrix
+animation and identified semantic subobjects and contextual operation objects
+as the reusable core. The [current next-step recommendation](reviews/2026-09-30-semantic-operation-next-step-review.md)
+is to build a semantic matrix product behind that exemplar, prove standalone
+dot-product reuse, then demonstrate another interpretation. This supersedes
+the immediate recommendation below, not an executable contract. The proposed
+first implementation package is now authorized by “go” and tracked by
+`run-contract.kp.semantic-matrix-product-v1`; later packages remain proposals.
+Its [implementation evidence](reviews/2026-09-30-semantic-matrix-product.md)
+records navigable product cells, retained operands and the preserved visual
+projection. Standalone staged dot-product motion is the next proposed package.
+The inspector remains unaccepted.
+
+September 30, prior recommendation (superseded above): the user found the
+inspection exemplar's purpose unclear. The
+[next-step review](reviews/2026-09-30-next-step-review.md) recommended demonstrating
+one complete source-to-animation authoring task and its audit boundary before
+further panel polish or generalization. This is a recommendation, not an accepted
+pivot or permission to reorder the run; its human checkpoint remains unaccepted.
 
 September 29: the user approved the [24-slice symbolic inspection run](2026-09-29-symbolic-inspection-long-loop-proposal.md).
 `run-contract.kp.symbolic-inspection-v1` owns execution: expose existing
