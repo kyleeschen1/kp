@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { buildKpVisualContactSheetHtml, type KpVisualContactSheetItem } from "../scripts/capture-visual-contact-sheet.ts";
-import { env, combination } from "../src/experiments/matrix-column-combinations/model.ts";
+import { env, combination, beats, numberOf } from "../src/experiments/matrix-column-combinations/model.ts";
 
 const route = "/experiments/matrix-column-combinations/";
 test("columns and coefficients retain source identity through readable weighted-sum milestones", async ({ page }, info) => {
@@ -11,11 +11,11 @@ test("columns and coefficients retain source identity through readable weighted-
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const slider = page.getByRole("slider", { name: "Animation position" });
   const captures: KpVisualContactSheetItem[] = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < beats.length; i++) {
     await chooser.selectOption(String(i));
     const file = info.outputPath(`step-${i}.png`);
     const buffer = await page.locator(".matrix-card").screenshot({ path: file });
-    captures.push({ id: String(i), label: await root.getAttribute("data-milestone") ?? "", progress: i / 5,
+    captures.push({ id: String(i), label: await root.getAttribute("data-milestone") ?? "", progress: i / (beats.length - 1),
       viewport: { width: 1200, height: 950 }, file, dataUrl: `data:image/png;base64,${buffer.toString("base64")}` });
   }
   for (const [i, expected] of [[0, "4"], [1, "10"]] as const) {
@@ -30,17 +30,40 @@ test("columns and coefficients retain source identity through readable weighted-
     await expect(page.locator(`[data-occurrence="weight-${term.index}"]`)).toHaveAttribute("data-source-id", env.B.rows[term.index]![0]!.id);
   }
   await expect(page.locator(".comb-material [data-kp-comb-key]")).toHaveCount(0);
+  // The scalar is copied once per entry; each occurrence retains its original
+  // identity and hands paint back to a native product operand at the endpoint.
+  await slider.fill((2.5 / (beats.length - 1)).toFixed(4));
+  for (const term of combination.terms) for (const [i, pair] of term.pairs.entries()) {
+    const scalarCopy = page.locator(`[data-occurrence="factor-${term.index}-${i}"]`);
+    await expect(scalarCopy).toHaveAttribute("data-source-id", pair.right.id);
+    await expect(scalarCopy).toHaveCSS("opacity", "1");
+    await expect(page.locator(`[data-occurrence="entry-${term.index}-${i}"]`)).toHaveAttribute("data-source-id", pair.left.id);
+  }
+  for (const term of combination.terms) {
+    const copies = await page.locator(`[data-occurrence^="factor-${term.index}-"]`).evaluateAll(nodes => nodes.map(node => {
+      const r = node.getBoundingClientRect(); return { top: r.top, bottom: r.bottom };
+    }));
+    expect(copies[0]!.bottom).toBeLessThan(copies[1]!.top);
+  }
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("scalar-fanout.png") });
+  await chooser.selectOption("3");
+  await expect(page.locator(".comb-expanded [data-reveal]").first()).toHaveCSS("opacity", "1");
+  for (const term of combination.terms) for (const [i, pair] of term.pairs.entries()) {
+    await expect(page.locator(`[data-occurrence="factor-${term.index}-${i}"]`)).toHaveCSS("opacity", "0");
+    await expect(page.locator(`[data-kp-comb-key="factor-${term.index}-${i}"]`)).toHaveText(String(numberOf(pair.right)));
+  }
   for (const p of [0.1, 0.3, 0.9]) {
     await slider.fill(String(p)); await page.locator(".matrix-card").screenshot({ path: info.outputPath(`transit-${p}.png`) });
   }
   const poses = () => page.locator(".comb-paint").evaluateAll(nodes => nodes.map(node => node.getAttribute("style")));
-  await slider.fill("0.3"); const held = await poses();
-  await slider.fill("1"); await slider.fill("0"); await slider.fill("0.3"); expect(await poses()).toEqual(held);
+  const distributionMidpoint = (2.5 / (beats.length - 1)).toFixed(4);
+  await slider.fill(distributionMidpoint); const held = await poses();
+  await slider.fill("1"); await slider.fill("0"); await slider.fill(distributionMidpoint); expect(await poses()).toEqual(held);
   await slider.press("Home"); await expect(root).toHaveAttribute("data-milestone", "initial");
   await page.getByRole("button", { name: "Next milestone" }).click();
-  await expect(page.locator(".comb-stage")).toHaveAttribute("data-progress", "0.2", { timeout: 5000 });
+  await expect(page.locator(".comb-stage")).toHaveAttribute("data-progress", String(1 / (beats.length - 1)), { timeout: 5000 });
   await slider.press("End"); await expect(root).toHaveAttribute("data-milestone", "placed");
-  await page.setViewportSize({ width: 390, height: 844 }); await chooser.selectOption("4");
+  await page.setViewportSize({ width: 390, height: 844 }); await chooser.selectOption("5");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath("phone.png"), fullPage: true });
   await page.emulateMedia({ colorScheme: "dark" }); await page.screenshot({ path: info.outputPath("dark.png"), fullPage: true });
@@ -54,7 +77,7 @@ test("reduced-motion controls and deep links reach exact states", async ({ page 
   await page.emulateMedia({ reducedMotion: "reduce" }); await page.goto(route + "#weights");
   const root = page.locator("#comb-player"); await expect(root).toHaveAttribute("data-ready", "true");
   await expect(root).toHaveAttribute("data-milestone", "weights");
-  await page.getByRole("button", { name: "Next step", exact: true }).click(); await expect(root).toHaveAttribute("data-milestone", "scaled");
+  await page.getByRole("button", { name: "Next step", exact: true }).click(); await expect(root).toHaveAttribute("data-milestone", "distribute");
   await page.getByRole("button", { name: "Previous milestone" }).click(); await expect(root).toHaveAttribute("data-milestone", "weights");
   await page.getByRole("slider").press("End"); await page.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(root).toHaveAttribute("data-milestone", "initial");

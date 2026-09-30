@@ -4,7 +4,7 @@
   "title": "Explain one matrix product through column combinations, identity and orthonormality",
   "status": "blocked",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT at the first column-combination exemplar. On acceptance continue identity and orthonormality transfer; no redundant resume approval.",
+  "summary": "HUMAN_CHECKPOINT: scalar-vector refinement ready at the existing host, Weights then Next; prior layout accepted.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -29,6 +29,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-30T19:46:32.656Z",
       "notes": "Two Chromium discovery tests, 20 accepted-path tests, types, architecture and standalone build passed. Captures inspected. Reachability count regenerated and three exact checks passed. JS 97.38 KB gzip, CSS 14.26 KB; no promotion or broad browser certification."
+    },
+    {
+      "command": "npm run test:matrix-interpretations; npm run visual:matrix-interpretations; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-30T19:55:03.260Z",
+      "notes": "Scalar-vector passage: 17 semantic tests and two Chromium tests pass; types and build pass. Scalar fan-out copies retain coefficient IDs, native handoff and midpoint separation are checked, reversal pressures the new passage. First captured overlap repaired by departure ordering. JS 97.61 KB gzip, CSS 14.27 KB."
     }
   ]
 }

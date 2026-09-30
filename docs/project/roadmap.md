@@ -30,8 +30,9 @@ boundary through column combinations, identity and orthonormality. The
 [approved scope](2026-09-30-matrix-interpretations.md) and
 [visual review packet](reviews/2026-09-30-matrix-interpretations.md) preserve the
 accepted dot-product animation. Column combinations reuse its scalar contribution
-objects; identity and scoped Gram evidence are tested semantically. The first
-column-combination visual exemplar needs review before visual transfer under
+objects; identity and scoped Gram evidence are tested semantically. The user
+accepted the column-combination layout and requested explicit scalar-vector
+animation. The new Distribute passage is at its visual checkpoint before transfer under
 `run-contract.kp.matrix-interpretations-v1`. This is current execution; standalone
 dot-product choreography remains a proposal, and inspector work remains parked.
 

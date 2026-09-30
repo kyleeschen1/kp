@@ -14,7 +14,7 @@ async function mount() {
     <div class="matrix-controls"><button data-back aria-label="Previous milestone">Previous</button><button data-play>Play</button><button data-next aria-label="Next milestone">Next</button>
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div></section>
-    <p class="matrix-help">Follow the columns, then their weights. Use the scrubber to revisit any moment. On narrow screens, scroll the stage horizontally.</p>
+    <p class="matrix-help">Follow the columns, then watch each scalar reach every entry. Use the scrubber to revisit any moment. On narrow screens, scroll the stage horizontally.</p>
     <details><summary>Read the calculation</summary><div class="comb-static">${renderLatexToHtml(calculationLatex(), { output: "htmlAndMathml" })}</div>
     <p>The copied columns and weights refer to the original entries of A and B. Multiplication produces derived entries; addition produces the result column. The columns of A do not need to form a basis.</p></details>
     <p><a href="/experiments/matrix-column-product/">Compare the row–column dot-product view</a></p>`;

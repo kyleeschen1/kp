@@ -1,8 +1,46 @@
 # One product, another explanation
 
-Status: HUMAN_CHECKPOINT; column-combination candidate ready for review.
+Status: column-combination layout accepted by the user ("this looks good").
+The requested scalar-vector distribution refinement is the next visual checkpoint;
+the original review and evidence below remain provenance.
 Authority: [approved experiment](../2026-09-30-matrix-interpretations.md).
 Contract: `run-contract.kp.matrix-interpretations-v1`.
+
+## Scalar-vector refinement
+
+The user accepted the original column layout and requested an animation of a
+scalar applied to a vector. The existing host now adds **Distribute** between
+Weights and Scaled. Open [Weights](http://localhost:8000/experiments/matrix-column-combinations/#weights)
+and press Next to watch each coefficient copy travel beside every vector entry.
+The explicit column of products precedes the evaluated column; the source
+matrices and original weighted vectors stay visible. Existing milestone names
+still restore their intended states. Total duration is now 12.6 seconds.
+
+This is a local scalar-vector passage inside the existing presentation, not a
+new standalone public animation API. It directly consumes the term's original
+dot-product pairs: copied coefficients use `pair.right`, vector entries use
+`pair.left`, and evaluated entries remain `pair.product`. No new arithmetic,
+mathematical identities, or interpretation layer was introduced.
+
+The first transit capture exposed overlapping copies of the coefficient. The
+local copy owner now dispatches lower copies first so an upper copy is not
+overtaken on the shared downward route. A browser regression checks separation
+at the captured midpoint, shared source identity, one native owner per settled
+occurrence, and deterministic reversal through this new passage. This is sampled
+preservation evidence, not continuous collision certification.
+
+Verification: 17 focused tests, both Chromium tests, full typecheck, and standalone
+build pass. Seven milestones and the scalar fan-out transit were captured and
+inspected. Final JS is 97.61 KB gzip (+0.23 KB from the accepted candidate), CSS
+14.27 KB gzip (+0.01 KB), excluding fonts/transport. The extra intermediate row
+adds 100 px to the local stage; narrow layouts retain horizontal scrolling.
+No budget or semantic contract changed. Arithmetic evaluation still introduces
+the derived numerical values at native checkpoints; a generic evaluation morph
+has not been claimed or implemented.
+
+HUMAN_CHECKPOINT: review the new scalar distribution before transfer to identity
+and orthonormality. The earlier layout acceptance is retained; it is not being
+requested again. The independently reversible unit is this passage refinement.
 
 Open [the column-combination example](http://localhost:8000/experiments/matrix-column-combinations/).
 Play or choose Columns, Weights, Scaled, Sum and Placed. The first result column

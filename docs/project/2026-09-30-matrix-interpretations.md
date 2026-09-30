@@ -6,6 +6,15 @@ of one relationship without reconstructing semantic identities.
 
 ## Outcome and scope
 
+September 30 amendment: the user accepted the column-combination layout and
+requested an animation of a scalar applied to a vector. Insert one bounded
+scalar-distribution passage before visual transfer: copies of the same scalar
+meet every original vector entry, form explicit products, and evaluate to the
+existing derived entries. Integrate this into the current column-combination
+host, preserving its source matrices and upper layout. Review this new motion
+before carrying it into identity/orthonormality. The rollback unit is this
+local passage refinement; mathematical values and contribution IDs do not change.
+
 1. Add a column-combination interpretation of the existing product, retaining
    the identical scalar contribution objects and destinations. Exercise identity
    and Gram matrices in semantic tests. Claims about orthonormality must state

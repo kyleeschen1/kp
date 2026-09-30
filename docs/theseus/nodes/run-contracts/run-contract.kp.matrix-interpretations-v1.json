@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Matrix interpretations with retained semantic identity",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review the column-combination layout and choreography before the approved transfer slice. Semantic and exemplar-delivery packages complete; treatment not yet accepted.",
+  "summary": "HUMAN_CHECKPOINT: review newly requested scalar-vector distribution. Prior column layout accepted; identity and orthonormality transfer remains approved after this motion checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,6 +39,12 @@
       "id": "exemplar",
       "title": "Column-combination visual checkpoint",
       "summary": "Candidate implemented and verified; review packet ready. Completion records delivery to the checkpoint, not visual acceptance.",
+      "status": "complete"
+    },
+    {
+      "id": "scalar-vector",
+      "title": "Show the scalar reaching every vector entry",
+      "summary": "Scalar-vector passage delivered and verified for review; earlier layout acceptance preserved. New motion treatment awaits judgment.",
       "status": "complete"
     },
     {
