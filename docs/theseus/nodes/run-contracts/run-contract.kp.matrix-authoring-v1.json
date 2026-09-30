@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review corner docking, bracket withdrawal and column tilt in the standalone passage before rectangular integration.",
+  "summary": "HUMAN_CHECKPOINT: review compact pairing, persistent addition and gentle concave-up landing paths before integration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,7 +32,7 @@
     {
       "id": "passage",
       "title": "Three-term dot passage and visual review",
-      "summary": "Corner-docking and column-tilt candidate verified; visual acceptance pending before integration.",
+      "summary": "Revised candidate preserves addition, tightens spacing and uses shallow concave-up approaches; ready for visual review.",
       "status": "complete"
     },
     {

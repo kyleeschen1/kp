@@ -30,6 +30,21 @@ test("signed dot passage preserves references through pairing, products and sum"
     await chooser.selectOption(String(i));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`step-${i}.png`) });
   }
+  // Multiplication may replace terms, but must not erase the pending addition.
+  for (const progress of [0.4, 0.5, 0.6, 2 / 3]) {
+    if (progress === 2 / 3) await chooser.selectOption("2");
+    else await slider.fill(String(progress));
+    const visiblePluses = await page.locator(".dot-plus").evaluateAll(nodes => nodes.filter(node => {
+      const parent = node.parentElement!;
+      return getComputedStyle(parent).opacity === "1" && getComputedStyle(node).opacity === "1" && node.getBoundingClientRect().width > 0;
+    }).map(node => node.textContent));
+    expect(visiblePluses).toHaveLength(2);
+    expect(visiblePluses.every(text => text?.includes("+"))).toBe(true);
+  }
+  await chooser.selectOption("1");
+  const gap = await page.locator(".dot-pairs").evaluate(node => parseFloat(getComputedStyle(node).gap));
+  expect(gap).toBeLessThan(8);
+  await chooser.selectOption("3");
   await expect(page.locator('[data-kp-dot-key="sum"]')).toHaveText("−3");
   await expect(page.locator(".dot-sum")).toHaveCSS("opacity", "1");
   for (const pair of passage.dot.pairs) {

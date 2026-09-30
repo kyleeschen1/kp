@@ -4,7 +4,7 @@
   "title": "Prove rectangular animation authoring through a reusable dot passage",
   "status": "blocked",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: corner-docking and column-tilt trial ready in shared menu.",
+  "summary": "HUMAN_CHECKPOINT: revised dot passage ready in the shared menu.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -36,6 +36,13 @@
       "scope": "Local corner docking and column tilt",
       "checkedAt": "2026-09-30T21:09:11.615Z",
       "notes": "Four semantic/notation tests, two Chromium tests and full types pass. Browser checks cover native docking, source withdrawal, sampled material overlap, reversal and side-layout containment. Native-base measurement and reserved tilt height repair issues found during image inspection. Visual review pending."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Addition persistence, compact spacing and concave-up motion",
+      "checkedAt": "2026-09-30T21:14:54.607Z",
+      "notes": "Four unit tests, two Chromium tests, full typecheck and build pass. Addition remains visible throughout multiplication; sampled paths, native endpoints and reverse seeking pass. Initial new test failure was an invalid range-input step, corrected to milestone selection. Entry 4.23 KB gzip. Visual candidate only."
     }
   ]
 }

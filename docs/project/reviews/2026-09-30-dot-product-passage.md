@@ -15,13 +15,17 @@ The source is the row covector `[2, −1, 3]` applied to the column vector
 move both objects so the column's lower-left meets the row's upper-right,
 withdraw the brackets, then tilt the column into the paired expression while
 spreading the row entries. The local presentation measures native KaTeX boxes
-for docking and pair slots for arrival. Column positions turn around the last
-entry while their spacing expands; glyphs remain upright. This is a layout
+for docking and pair slots for arrival. The latest user-requested trial replaces
+the pivot with shallow concave-up approaches that land directly in the measured
+factor slots; glyphs remain upright. This is a layout
 transformation, not a mathematical rotation of the vector. The source
 representations are consumed by this rearrangement; immutable references remain.
 Multiplication syntax enters after arrival. Negative factors have no added
 parentheses, as requested. Each pair shrinks,
-then its derived value grows in the same slot: `8 − 5 − 6`. The products
+then its derived value grows in the same slot: `8 + −5 + −6`. Addition signs
+remain visible and stationary throughout multiplication. Only the later sum
+step consumes them. Pair terms now use their native widths with a 0.25em gap;
+product slots retain those widths for a stationary addition-sign handoff. The products
 then shrink and the sum `−3` grows. Review the
 clarity of pairing, the product replacement, and the final sum's timing.
 
@@ -40,7 +44,7 @@ untransformed native slots before restoring the current semantic playhead.
 Shared layout, spacing and motion settings apply through the existing host.
 The accessible calculation and no-script text preserve the explanation.
 
-Checks after the requested corner-docking/tilt revision: four focused
+Checks after the requested addition-preservation/spacing/arc revision: four focused
 semantic/preservation tests; two scoped Chromium tests
 with four endpoints, ten transit captures, source IDs, native handoff, actual
 playback, reverse seek, layout reflow, instant steps, reduced motion and phone
@@ -51,7 +55,11 @@ scalar-box overlap checks, without claiming continuous collision certification.
 Visual inspection caught a wrapper-box docking gap and a clipped top entry in
 the side layout. Measuring KaTeX's native base fixes the docking boundary;
 reserving the same vertical tilt room in both layouts fixes the clipping.
-Tests assert corner alignment and side-layout material containment.
+Tests assert corner alignment and side-layout material containment. The latest
+regressions also check two visible addition signs throughout multiplication
+and compact inter-term gaps. The first new test run used an invalid range-input
+step for the exact endpoint; it now selects that endpoint through the milestone
+control, while still sampling intermediate multiplication poses through the slider.
 Full types (including zero Svelte errors/warnings) and the standalone build pass
 again for this correction. Before this correction, architecture, the standalone
 multi-entry build and three changed-inventory checks pass, as do the eight
@@ -61,7 +69,7 @@ The generic impact selector has no experiment rule and proposes whole-product
 gates; this discovery uses the approved contract's bounded verification instead.
 No broad release or native-compositor certification is claimed.
 
-Build: 56 modules; tilt-trial dot entry 4.33 KB gzip (previously 4.01 KB), shared config 0.38 KB,
+Build: 56 modules; revised dot entry 4.23 KB gzip (previously 4.33 KB), shared config 0.38 KB,
 shared scaffold chunk 85.16 KB, dot CSS 14.40 KB, excluding fonts/transport.
 Shared chunks were repartitioned, so the new entry size alone is not a total
 page-cost delta. No budget amendments. A local model, source, presentation,

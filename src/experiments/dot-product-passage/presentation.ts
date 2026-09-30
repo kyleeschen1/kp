@@ -4,8 +4,7 @@ import { valueOf, sample, DotPassageGap, type DotPassage } from "./model.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
-const signedSum = (entries: readonly KpScalarValue[]) => entries.map((entry, i) =>
-  `${i > 0 && valueOf(entry) >= 0 ? "+" : ""}${number(entry)}`).join("");
+const signedSum = (entries: readonly KpScalarValue[]) => entries.map(number).join("+");
 const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-dot-key=${key}}{${number(entry)}}`;
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const plus = `<span class="dot-plus">${math("+")}</span>`;
@@ -22,7 +21,7 @@ export function stageHtml(passage: DotPassage) {
     <div class="dot-inputs"><span data-dot-vector="left">${vector("left")}</span><span data-dot-vector="right">${vector("right")}</span></div>
     <div class="dot-work">
       <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`${tag(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=syntax-times-${i}}{\\times}${tag(`pair-right-${i}`, pair.right)}`)}</span>`).join(plus)}</div>
-      <div class="dot-products">${dot.pairs.map((pair, i) => `${i > 0 ? `<span class="dot-plus">${math(valueOf(pair.product) < 0 ? "\\phantom{+}" : "+")}</span>` : ""}<span class="dot-term" data-product="${i}">${math(tag(`product-${i}`, pair.product))}</span>`).join("")}</div>
+      <div class="dot-products">${dot.pairs.map((pair, i) => `${i > 0 ? plus : ""}<span class="dot-term" data-product="${i}">${math(tag(`product-${i}`, pair.product))}</span>`).join("")}</div>
       <div class="dot-sum">${math(tag("sum", dot.result))}</div>
     </div><div class="dot-material"></div>
   </div>`;
@@ -61,6 +60,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const prepare = () => {
     if (disposed) return;
     reset(); layer.replaceChildren(); owners.length = 0;
+    // Keep addition in place while only the multiplication terms evaluate.
+    for (const pair of passage.dot.pairs) {
+      const term = pairs.querySelector<HTMLElement>(`[data-pair="${pair.index}"]`)!;
+      products.querySelector<HTMLElement>(`[data-product="${pair.index}"]`)!.style.width = `${term.getBoundingClientRect().width}px`;
+    }
     const bounds = stage.getBoundingClientRect();
     for (const [key, node] of native) {
       const r = node.getBoundingClientRect();
@@ -107,15 +111,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const a = { x: source.x + dock[side].x, y: source.y + dock[side].y };
       let x = a.x + (b.x - a.x) * tilt, y = a.y + (b.y - a.y) * tilt;
       if (side === "right") {
-        // Rotate the ordered column around its last entry while stretching to
-        // the measured pair spacing. Glyphs stay upright throughout the tilt.
-        const last = passage.dot.pairs.length - 1;
-        const base = points.get(`right-${last}`)!, end = points.get(`pair-right-${last}`)!;
-        const pivot = { x: base.x + dock.right.x, y: base.y + dock.right.y };
-        const radius = (base.y - source.y) * (1 - tilt) + (end.x - b.x) * tilt;
-        const angle = -Math.PI / 2 - Math.PI / 2 * tilt;
-        x = pivot.x + (end.x - pivot.x) * tilt + radius * Math.cos(angle) + (source.x - base.x) * (1 - tilt);
-        y = pivot.y + (end.y - pivot.y) * tilt + radius * Math.sin(angle);
+        // A shallow concave-up approach settles horizontally into the exact
+        // factor slot; there is no intermediate pivot or final repositioning.
+        y = a.y + (b.y - a.y) * (2 * tilt - tilt * tilt);
       }
       node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
       node.style.opacity = frame.index === 1 && frame.local >= .4 && frame.local < 1 ? "1" : "0";
@@ -134,8 +132,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     if (frame.index === 2) {
       for (const node of pairs.querySelectorAll<HTMLElement>(".dot-term")) node.style.transform = `scale(${shrink})`;
       for (const node of products.querySelectorAll<HTMLElement>(".dot-term")) node.style.transform = `scale(${grow})`;
-      for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${shrink})`;
-      for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${grow})`;
+      // Addition is a separate operation: retain its signs while factors shrink
+      // and products grow, then hand them to the identical product slots.
+      for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.local === 1 ? "1" : "0";
     }
     if (frame.index === 3) {
       products.style.transform = `scale(${shrink})`;
