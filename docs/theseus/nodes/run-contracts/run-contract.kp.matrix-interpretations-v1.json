@@ -1,0 +1,48 @@
+{
+  "id": "run-contract.kp.matrix-interpretations-v1",
+  "kind": "run-contract",
+  "title": "Matrix interpretations with retained semantic identity",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.matrix-interpretations.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-30-matrix-interpretations.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-interpretations",
+    "npm run visual:matrix-interpretations",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Semantic interpretation adapters and tests; one native-KaTeX exemplar; transfer after visual acceptance"
+  ],
+  "disallowedWork": [
+    "No new visual transfer before exemplar acceptance; no generic ontology, renderer migration, inspector continuation, merge or deployment"
+  ],
+  "goal": "Prove shared mathematical objects across column combinations, identity and orthonormality",
+  "target": "next-action.kp.matrix-interpretations",
+  "slices": [
+    {
+      "id": "semantics",
+      "title": "Shared contributions and scoped claims",
+      "summary": "Interpretation and scoped-claim semantics implemented and verified; no arithmetic engine duplicated.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Column-combination visual checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "transfer",
+      "title": "Post-approval identity and orthonormality transfer",
+      "status": "planned"
+    }
+  ]
+}

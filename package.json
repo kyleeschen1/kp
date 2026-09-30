@@ -7,6 +7,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "test:matrix-interpretations": "node --disable-warning=ExperimentalWarning --test tests/matrix-interpretations.test.ts tests/matrix-product.test.ts tests/typed-semantic-math.test.ts tests/matrix-column-story.test.ts",
     "visual:matrix-column": "playwright test --config playwright.matrix-column.config.ts --project=chromium --workers=1",
     "test:matrix-column": "node --disable-warning=ExperimentalWarning --test tests/matrix-product.test.ts tests/typed-semantic-math.test.ts tests/matrix-column-story.test.ts tests/kp-matrix-matrix-composition-choreography.test.ts tests/kp-editor-matrix-matrix-visible-animation.test.ts",
     "build:matrix-column": "vite build --config vite.matrix-column.config.ts",

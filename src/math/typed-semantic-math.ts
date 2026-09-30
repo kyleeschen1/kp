@@ -450,6 +450,22 @@ export function rebuildKpTypedMatrix<Rows extends number, Columns extends number
   );
 }
 
+/** Transposition changes positions, not scalar identity. Basis/map authority
+ * cannot be inherited without a separate dual-space interpretation. */
+export function transposeKpTypedMatrix<Rows extends number, Columns extends number>(input: {
+  readonly id: string;
+  readonly matrix: KpTypedMatrix<Rows, Columns>;
+}): KpTypedMatrix<Columns, Rows> {
+  requireText(input.id, "Transposed matrix id");
+  if (input.id === input.matrix.id) throw new Error("A transpose needs its own matrix identity.");
+  return createMatrixValue(input.id, input.matrix.columnCount, input.matrix.rowCount,
+    Array.from({ length: input.matrix.columnCount }, (_, column) => input.matrix.rows.map(row => {
+      const entry = row[column];
+      if (!entry) throw new Error("A transpose requires rectangular matrix entries.");
+      return entry;
+    })), derived([input.matrix.id], "kp.math.matrix-transpose.v1"));
+}
+
 export function composeKpFunctionSignatures<
   const Inner extends KpFunctionType,
   const Output extends KpMathValueType

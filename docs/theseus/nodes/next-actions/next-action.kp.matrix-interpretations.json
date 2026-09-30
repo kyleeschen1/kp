@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.matrix-interpretations",
+  "kind": "next-action",
+  "title": "Explain one matrix product through column combinations, identity and orthonormality",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-30-matrix-interpretations.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-interpretations; npm run typecheck; npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-30T19:44:08.568Z",
+      "notes": "17 semantic and preservation tests pass, including shared contribution identity, rectangular products, identity weights, transpose and numerical Gram evidence. Full types and architecture pass. Initial scope index-access type error corrected."
+    }
+  ]
+}
