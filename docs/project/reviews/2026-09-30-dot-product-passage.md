@@ -200,6 +200,17 @@ reverse seeking. Full types and build pass; dot entry is 6.00 KB gzip. Initial,
 departure, pairing and multiplication frames were inspected. This remains a
 local perspective trial, with no general 3D renderer or compositor claim.
 
+September 30, reverse camera and text-shadow trial: the shared Y rotation is
+now -25 degrees, replacing +45. Moving glyphs inherit an explicit text shadow
+whose offset, softness and opacity track the depth envelope, replacing the
+filter shadow. The source brackets and real Z translation are preserved.
+Shadows settle away at the reading endpoint and are suppressed in reduced
+motion. They are text-attached shading, not a light projection onto the backing
+plane. The smaller angle makes the text less compressed in the inspected
+departure, pivot and multiplication captures. Four unit and two Chromium tests
+pass; the signed camera rotation and text-shadow lifecycle are checked along
+with the existing handoff and reverse-seek checks. Build passes at 6.00 KB gzip.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

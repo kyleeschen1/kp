@@ -113,6 +113,13 @@
       "scope": "Shared 45-degree plane and real forward translation",
       "checkedAt": "2026-09-30T22:21:32.028Z",
       "notes": "Four unit and two browser tests pass. Full types and build pass. Scene-local measurement, shared camera, material and target Z, persistent brackets, native handoff and reverse seek checked. Captures inspected; working line separated from retained brackets. Local trial, 6.00 KB gzip entry."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Reverse 25-degree camera and text shadows",
+      "checkedAt": "2026-09-30T22:24:28.730Z",
+      "notes": "Four unit and two browser tests pass; full types and build pass. Signed camera rotation, depth-linked text shadows and clean landing checked; original brackets, Z translation and reverse seek preserved. Three captures inspected. Text-attached shadow only; not a projected light simulation."
     }
   ]
 }

@@ -88,7 +88,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       stripKpMaterialCloneAuthority(clone);
       const node = document.createElement("span"); node.className = "dot-paint";
       for (const part of [clone, ...clone.querySelectorAll<HTMLElement>("*")]) {
-        part.style.color = "inherit"; part.style.setProperty("-webkit-text-fill-color", "currentColor");
+        part.style.textShadow = "inherit"; part.style.color = "inherit"; part.style.setProperty("-webkit-text-fill-color", "currentColor");
       }
       node.append(clone); makeKpMaterialOwnerInert(node);
       node.dataset["sourceId"] = pair[side].id; node.dataset["occurrence"] = to;
@@ -144,7 +144,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const elevation = depth;
       const z = 70 * ease(frame.local / .2);
       node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
-      node.style.filter = elevation > 0 ? `drop-shadow(0 ${5 * elevation}px ${3 * elevation}px rgba(20, 25, 30, ${.28 * elevation}))` : "none";
+      node.style.textShadow = elevation > 0 ? `${2 * elevation}px ${7 * elevation}px ${4 * elevation}px rgba(20, 25, 30, ${.32 * elevation})` : "none";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {
