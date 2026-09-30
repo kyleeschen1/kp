@@ -3,12 +3,12 @@
 body { background: var(--kp-st-paper); color: var(--kp-st-ink); }
 .dot-stage, .dot-static { --dot-syntax-ink: #464646; --dot-warm-paper: color-mix(in srgb, var(--kp-st-paper) 94%, #806548); }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
-.dot-stage { transform: perspective(900px); transform-style: preserve-3d; }
+.dot-stage { transform-style: preserve-3d; }
 .dot-work { transform: translateZ(70px); }
 .dot-material { transform-style: preserve-3d; }
-.dot-plane { position: absolute; inset: 65px 18% 35px; border: 1px solid color-mix(in srgb, var(--kp-st-ink) 28%, transparent); background: color-mix(in srgb, var(--dot-warm-paper) 85%, transparent); pointer-events: none; }
+.dot-plane { position: absolute; inset: 65px 18% 35px; border: 0; background: color-mix(in srgb, var(--dot-warm-paper) 85%, transparent); pointer-events: none; }
 .dot-plane-source { transform: translate3d(var(--dot-back-x, 0px), var(--dot-back-y, 0px), calc(var(--dot-source-depth, 0px) - 1px)); }
-.dot-plane-working { background: color-mix(in srgb, color-mix(in srgb, var(--dot-warm-paper) var(--dot-warmth, 0%), color-mix(in srgb, var(--kp-st-paper) 96%, var(--kp-st-focus))) 30%, transparent); border-color: color-mix(in srgb, color-mix(in srgb, var(--kp-st-ink) var(--dot-warmth, 0%), var(--kp-st-focus)) 28%, transparent); }
+.dot-plane-working { background: color-mix(in srgb, color-mix(in srgb, var(--dot-warm-paper) var(--dot-warmth, 0%), color-mix(in srgb, var(--kp-st-paper) 96%, var(--kp-st-focus))) 30%, transparent); }
 .dot-inputs { position: absolute; top: 50%; transform: translateY(-50%) translate3d(var(--dot-back-x, 0px), var(--dot-back-y, 0px), var(--dot-source-depth, 0px)); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 .dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
@@ -19,7 +19,8 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); }
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }
 .dot-inputs :is(.mopen, .mclose) { display: inline-block; transform-origin: center; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
-.dot-paint { position: absolute; left: 0; top: 0; color: var(--kp-st-ink); }
+.dot-paint, .dot-shadow { position: absolute; left: 0; top: 0; color: var(--kp-st-ink); }
+.dot-shadow { color: #20252b; pointer-events: none; }
 .dot-static { overflow-x: auto; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
 :root[data-matrix-layout="side"] .dot-plane { left: 4%; right: 4%; }

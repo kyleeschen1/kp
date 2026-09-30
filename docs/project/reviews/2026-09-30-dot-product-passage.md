@@ -307,6 +307,25 @@ next comparison is constant-size, face-on objects with surface-relative shadows
 and a small number of stable levels. Preserve the logged bracket issue and do
 not treat this discussion as approval to redesign or promote the motif.
 
+September 30, approved borderless-level exemplar: removed the remaining camera
+perspective and both surface borders. Glyph sizes now remain constant with Z;
+panel tone, offset and soft panel shadow identify the two levels. Entries rise
+up to 20px above the receiving surface, with separate inert glyph-shadow paint
+projected onto that surface using a fixed directional offset proportional to
+height. Shadow blur grows with height; shadows tighten and disappear at landing.
+Attached text shadows are disabled. This is a local directional projection,
+not a general lighting engine or a promoted compositor mechanism.
+
+Preparation and disposal own both glyph and shadow nodes. Decorative shadows
+carry no native occurrence or source IDs; a browser regression caught inherited
+source metadata and the clone boundary now removes it. An accidental selector
+edit was also caught by the existing syntax-color check and repaired. Four unit
+and two Chromium tests pass, as do full types, updated test types and build
+(6.28 KB gzip entry). Browser checks include zero borders, constant glyph bounds,
+receiver-plane shadow depth, semantic metadata exclusion, clean landing and
+existing reverse/configuration checks. Transit and multiplication captures were
+inspected. The previously logged bracket-size discrepancy remains deferred.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

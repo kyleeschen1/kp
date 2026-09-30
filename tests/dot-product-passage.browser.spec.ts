@@ -29,16 +29,28 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
-  await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("text-shadow", "none");
-  await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("text-shadow", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
   expect(await tiltY(".dot-stage")).toBe(0);
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   const forward = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
-  expect(forward).toBe(70);
+  expect(forward).toBe(90);
   const planeDepth = await page.locator(".dot-plane-working").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
-  expect(planeDepth).toBe(forward - 1);
+  expect(planeDepth).toBe(69);
+  const projected = await page.locator('[data-shadow-for="pair-right-0"]').evaluate(node => {
+    const m = new DOMMatrixReadOnly(getComputedStyle(node).transform);
+    return { z: m.m43, opacity: Number(getComputedStyle(node).opacity) };
+  });
+  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeGreaterThan(0);
+  const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
+  const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
+  expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 2);
+  expect(liftedSize!.height).toBeCloseTo(originalSize!.height, 2);
+  await expect(page.locator(".dot-plane").first()).toHaveCSS("border-top-width", "0px");
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("border-top-width", "0px");
+  await expect(page.locator(".dot-shadow [data-source-id], .dot-shadow [data-kp-dot-key]")).toHaveCount(0);
   const retreat = await page.locator(".dot-inputs").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
   const backSurface = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
   expect(retreat).toBe(-100); expect(backSurface).toBe(retreat - 1);
@@ -100,6 +112,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     expect(visiblePluses.every(text => text?.includes("+"))).toBe(true);
   }
   await chooser.selectOption("1");
+  for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("opacity", "0");
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
   for (const trace of await page.locator('[data-trace-role="source-trace"]').all()) await expect(trace).toHaveCSS("opacity", "0.6");
   const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);

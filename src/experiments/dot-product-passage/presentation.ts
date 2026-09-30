@@ -41,7 +41,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const vectors = { left: stage.querySelector<HTMLElement>('[data-dot-vector="left"]')!, right: stage.querySelector<HTMLElement>('[data-dot-vector="right"]')! };
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => [node.dataset["kpDotKey"]!, node]));
   const points = new Map<string, Point>();
-  const owners: { node: HTMLElement; from: string; to: string }[] = [];
+  const owners: { node: HTMLElement; shadow: HTMLElement; from: string; to: string }[] = [];
   let multiply: readonly ((progress: number) => void)[] = [];
   let add: (progress: number) => void = () => {};
   let disposed = false;
@@ -100,7 +100,13 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       }
       node.append(clone); makeKpMaterialOwnerInert(node);
       node.dataset["sourceId"] = pair[side].id; node.dataset["occurrence"] = to;
-      layer.append(node); owners.push({ node, from, to });
+      // A decorative projection lives on the receiving surface, separately from
+      // the crisp glyph above it; it never receives mathematical authority.
+      const shadow = document.createElement("span"); shadow.className = "dot-shadow";
+      shadow.append(clone.cloneNode(true)); makeKpMaterialOwnerInert(shadow);
+      for (const part of shadow.querySelectorAll("[data-source-id]")) part.removeAttribute("data-source-id");
+      shadow.dataset["shadowFor"] = to;
+      layer.append(shadow, node); owners.push({ node, shadow, from, to });
     }
     stage.style.transform = ""; work.style.transform = "";
     for (const [key, value] of sourceStyles) stage.style.setProperty(key, value);
@@ -141,7 +147,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       }
       if (frame.index === 0) for (const pair of passage.dot.pairs) delete requireNative(`${side}-${pair.index}`).dataset["traceRole"];
     }
-    for (const { node, from, to } of owners) {
+    for (const { node, shadow, from, to } of owners) {
       const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
       // Both operands approach their shared reading line from opposite sides.
@@ -153,10 +159,14 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const y = source.y + (b.y - source.y) * matching + (side === "left" ? separation : -separation);
       // All entries move out of the shared plane; the destination expression
       // lives at the same depth, avoiding a jump on the native handoff.
-      const z = 70 * ease(frame.local / .2);
+      const surfaceZ = 70 * ease(frame.local / .2);
+      const height = 20 * shadowLift;
+      const z = surfaceZ + height;
       node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
-      node.style.textShadow = shadowLift > 0
-        ? `${shadowLift}px ${4 * shadowLift}px ${2.5 * shadowLift}px rgba(20, 25, 30, ${.3 * shadowLift})` : "none";
+      node.style.textShadow = "none";
+      shadow.style.transform = `translate3d(${x + .25 * height}px, ${y + .45 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%)`;
+      shadow.style.filter = `blur(${.5 + 2 * shadowLift}px)`;
+      shadow.style.opacity = String(.22 * shadowLift);
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {

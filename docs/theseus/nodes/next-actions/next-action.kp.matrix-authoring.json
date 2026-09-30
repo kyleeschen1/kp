@@ -169,6 +169,13 @@
       "scope": "Light-mode text-shadow comparison",
       "checkedAt": "2026-09-30T23:15:14.275Z",
       "notes": "Four unit and two browser tests pass; full types and build pass. Host light override under dark preference, transient text shadow and neutral ink verified. Reduced-motion and endpoint shadow absence retained. Transit capture inspected; 6.17 KB gzip entry."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run typecheck:tests; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Borderless levels and receiver-plane shadows",
+      "checkedAt": "2026-09-30T23:39:56.979Z",
+      "notes": "Four unit and two browser tests pass; full types and build pass. Constant glyph bounds, no borders, separate shadow depth, excluded semantic metadata, landing and replay verified. Native syntax-color regression caught and repaired. Two frames inspected. Local directional projection only; deferred brackets untouched. Entry 6.28 KB gzip."
     }
   ]
 }
