@@ -41,7 +41,12 @@ test("signed dot passage preserves references through pairing, products and sum"
   const slider = page.getByRole("slider", { name: "Animation position" });
   await expect(page.locator(".dot-plane")).toHaveCount(2);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
+  const initialBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
+  const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
   await slider.fill("0.06");
+  const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
+  expect(earlyBackColor).not.toBe(initialBackColor);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
@@ -141,7 +146,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
   for (const trace of await page.locator('[data-trace-role="source-trace"]').all()) await expect(trace).toHaveCSS("opacity", "0.6");
   const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", backColor.replace(/\/\s*[\d.]+\)/, "/ 0.3)"));
+  expect(backColor).toBe(initialFrontColor.replace(/\/\s*[\d.]+\)/, "/ 0.85)"));
+  expect(earlyBackColor).not.toBe(backColor);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialBackColor.replace(/\/\s*[\d.]+\)/, "/ 0.3)"));
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");

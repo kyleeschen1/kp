@@ -137,7 +137,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
     const pop = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
       ? ease(frame.local / .15) * (1 - ease((frame.local - .18) / .42)) : 0;
-    workingPlane.style.setProperty("--dot-warmth", `${100 * matching}%`);
+    // Hand the warm surface from source to working plane over the pairing beat.
+    const surfaceProgress = frame.index === 0 ? 0 : frame.index === 1 ? frame.local : 1;
+    stage.style.setProperty("--dot-back-whiteness", `${100 * smooth(surfaceProgress / .6)}%`);
+    workingPlane.style.setProperty("--dot-warmth", `${100 * smooth((surfaceProgress - .35) / .65)}%`);
     for (const side of ["left", "right"] as const) {
       vectors[side].style.opacity = "1";
       if (frame.index > 0) {

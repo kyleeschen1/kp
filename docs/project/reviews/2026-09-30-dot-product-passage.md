@@ -354,6 +354,16 @@ browser test covers zero/full/intermediate values and tuning during playback;
 existing slider queries now explicitly distinguish the timeline from tuning.
 All three browser tests, four unit tests and build pass; entry 6.48 KB gzip.
 
+September 30, gradual surface color exchange: the source retains its initial
+beige, then eases toward white over the first 60% of pairing. The working plane
+starts white and warms to the original beige from 35% through the end of pairing.
+The overlapping smooth ramps follow the existing playhead, with no independent
+CSS transition. Rear opacity tuning, stationary placement, source traces, shadows
+and mathematical references are preserved. Scoped browser checks confirm initial,
+intermediate and exchanged endpoint colors; all three browser tests, four unit
+tests and build pass (dot entry 6.51 KB gzip). Color strength remains provisional
+at the existing 30% front surface alpha; no broader treatment is promoted.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

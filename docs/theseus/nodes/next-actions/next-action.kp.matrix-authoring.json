@@ -190,6 +190,13 @@
       "scope": "Live back-panel opacity slider",
       "checkedAt": "2026-09-30T23:49:48.343Z",
       "notes": "Four unit and three browser tests pass; full types and build pass. Zero/full/intermediate opacity updates both source panel and content without seeking or pausing playback. Slider queries distinguish controls; cleanup and geometry/config behavior preserved. Entry 6.48 KB gzip."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Local dot passage surface color exchange",
+      "checkedAt": "2026-09-30T23:57:17.284Z",
+      "notes": "Three Chromium tests, four unit tests, full typecheck and build pass. Gradual initial/intermediate/exchanged colors checked; existing semantics and opacity controls preserved. Human checkpoint remains."
     }
   ]
 }

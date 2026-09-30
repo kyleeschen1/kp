@@ -7,8 +7,8 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); }
 .dot-work { transform: translateZ(70px); }
 .dot-material { transform-style: preserve-3d; }
 .dot-plane { position: absolute; inset: 65px 18% 35px; border: 0; background: color-mix(in srgb, var(--dot-warm-paper) 85%, transparent); pointer-events: none; }
-.dot-plane-source { transform: translateZ(-1px) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); }
-.dot-plane-working { background: color-mix(in srgb, color-mix(in srgb, var(--dot-warm-paper) var(--dot-warmth, 0%), color-mix(in srgb, var(--kp-st-paper) 96%, var(--kp-st-focus))) 30%, transparent); }
+.dot-plane-source { background: color-mix(in srgb, color-mix(in srgb, white var(--dot-back-whiteness, 0%), var(--dot-warm-paper)) 85%, transparent); transform: translateZ(-1px) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); }
+.dot-plane-working { background: color-mix(in srgb, color-mix(in srgb, var(--dot-warm-paper) var(--dot-warmth, 0%), white) 30%, transparent); }
 .dot-inputs { position: absolute; top: 50%; transform: translateY(-50%) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 .dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
