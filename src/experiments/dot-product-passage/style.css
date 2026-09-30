@@ -10,6 +10,7 @@
 .dot-plus, [data-kp-dot-key^="syntax-"], .dot-inputs .mopen, .dot-inputs .mclose { color: var(--dot-syntax-ink); }
 .dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct) { color: var(--dot-syntax-ink); }
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }
+.dot-inputs :is(.mopen, .mclose) { display: inline-block; transform-origin: center; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
 .dot-paint { position: absolute; left: 0; top: 0; color: var(--kp-st-focus); }
 .dot-static { overflow-x: auto; }

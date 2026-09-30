@@ -162,6 +162,18 @@ anisotropic collapse, result-growth ordering and reverse seek. Multiplication,
 pop and result frames were inspected. The build passes at 5.87 KB gzip for the
 dot entry. These are local provisional aesthetics, not a promoted global motif.
 
+September 30, column depth trial: the user approved testing a subtle dimensional
+departure. Column material entries gain a soft glyph shadow and at most 3.5%
+scale while following the existing lift/pivot. The row remains flat. Native
+brackets wait briefly, then flatten horizontally with a slight vertical retreat
+and fade. Entry shadows and scale settle completely before the native pairing
+endpoint; reduced-motion mode suppresses this depth cue. This is a local 2D
+depth illusion, not new 3D geometry or semantic ownership. Evaluation is unchanged.
+Four unit and two Chromium tests pass, including column-only shadow, bracket
+flattening, shadow-free endpoint/reduced-motion and existing reversal checks.
+Departure, transit and landed captures were inspected. The scoped build passes;
+dot entry 6.03 KB gzip, previously 5.87 KB. No shared motif promotion is claimed.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

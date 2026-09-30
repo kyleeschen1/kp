@@ -55,7 +55,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   }
   requireNative("sum").dataset["sourceId"] = passage.dot.result.id;
   const reset = () => {
-    for (const node of [pairs, products, sum, ...Object.values(vectors), ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus")]) {
+    for (const node of [pairs, products, sum, ...Object.values(vectors), ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus, .dot-inputs .mopen, .dot-inputs .mclose")]) {
       node.style.opacity = "1"; node.style.transform = ""; node.style.clipPath = "";
     }
   };
@@ -105,8 +105,14 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
     const tilt = smooth((frame.local - .15) / .85);
     const opening = smooth(frame.local / .7);
+    const retreat = ease((frame.local - .12) / .48);
+    const depth = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
     for (const side of ["left", "right"] as const) {
-      vectors[side].style.opacity = frame.index === 0 ? "1" : frame.index === 1 ? String(1 - ease(frame.local / .6)) : "0";
+      vectors[side].style.opacity = frame.index === 0 ? "1" : frame.index === 1 ? String(1 - retreat) : "0";
+      if (frame.index === 1) for (const bracket of vectors[side].querySelectorAll<HTMLElement>(".mopen, .mclose")) {
+        bracket.style.transform = `scale(${1 - retreat}, ${1 - .12 * retreat})`;
+      }
       if (frame.index === 1 && frame.local > 0) {
         for (const pair of passage.dot.pairs) requireNative(`${side}-${pair.index}`).style.opacity = "0";
       }
@@ -132,7 +138,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
         const lift = (base.y - points.get("right-0")!.y) * Math.sin(Math.PI * smooth(frame.local));
         y = pivot.y + (end.y - pivot.y) * tilt - lift + radius * Math.sin(angle);
       }
-      node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      // Depth is presentation-only: retain one paint owner and the same semantic
+      // trajectory. The column settles to native size and loses its shadow.
+      const elevation = side === "right" ? depth : 0;
+      node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${1 + .035 * elevation})`;
+      node.style.filter = elevation > 0 ? `drop-shadow(0 ${5 * elevation}px ${3 * elevation}px rgba(20, 25, 30, ${.28 * elevation}))` : "none";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {

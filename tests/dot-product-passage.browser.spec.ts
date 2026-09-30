@@ -21,6 +21,13 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
+  await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("filter", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("filter", "none");
+  const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
+    const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.a, y: m.d };
+  });
+  expect(bracketScale.x).toBeGreaterThan(0);
+  expect(bracketScale.x).toBeLessThan(bracketScale.y);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("lift-and-turn.png") });
   const fading = Number(await page.locator('[data-dot-vector="right"]').evaluate(node => getComputedStyle(node).opacity));
   expect(fading).toBeGreaterThan(0); expect(fading).toBeLessThan(1);
@@ -64,6 +71,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     expect(visiblePluses.every(text => text?.includes("+"))).toBe(true);
   }
   await chooser.selectOption("1");
+  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("filter", "none");
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
   await slider.fill("0.31");
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "1");
@@ -201,4 +209,6 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
   await page.screenshot({ path: info.outputPath("dark.png"), fullPage: true });
+  await child.getByRole("slider").fill("0.06");
+  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("filter", "none");
 });

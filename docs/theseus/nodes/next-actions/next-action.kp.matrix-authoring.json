@@ -92,6 +92,13 @@
       "scope": "Late vertical enclosure pop and darker syntax",
       "checkedAt": "2026-09-30T22:07:59.831Z",
       "notes": "Four unit and two browser tests pass; full typecheck and build pass. Parentheses hold until content kernel, collapse vertically faster, and disappear before result growth. Darker syntax checked; reverse seek and unchanged addition fusion preserved. Three frames inspected. Local visual trial only."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Column depth and bracket retreat trial",
+      "checkedAt": "2026-09-30T22:12:37.326Z",
+      "notes": "Four unit and two browser tests pass; full typecheck and build pass. Column-only depth, horizontal bracket collapse, clean native landing and reduced-motion suppression checked. Three frames inspected. Existing evaluation and mathematical references preserved. Entry 6.03 KB gzip. Local candidate awaiting review."
     }
   ]
 }
