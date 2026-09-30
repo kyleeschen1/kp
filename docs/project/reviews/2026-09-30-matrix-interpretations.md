@@ -6,6 +6,35 @@ with the same choreography; earlier checkpoints below are historical evidence.
 Authority: [approved experiment](../2026-09-30-matrix-interpretations.md).
 Contract: `run-contract.kp.matrix-interpretations-v1`.
 
+## Shared presentation controls
+
+The user requested cross-cutting configuration and toggles. The shared host now
+provides Side by side, Roomy spacing, Step instantly and Reset settings. One
+`MatrixExampleConfig` owns layout/spacing/motion choices for these previews.
+Settings follow example and result-column switches within the page; reloading
+returns to defaults. The system reduced-motion preference always wins.
+
+Both player hosts subscribe to the same configuration event and pause, measure
+native endpoints, then project the unchanged semantic playhead. Layout changes
+are immediate, not animated. The two adapters map the same layout preference to
+their own native slots; semantic values, source IDs, scalar choreography and
+milestone order remain unchanged. The accepted stacked layout remains default.
+The host and its existing iframe URL remain stable during toggles. Side-by-side
+uses horizontal scrolling on narrow screens rather than shrinking mathematics.
+
+Validation: full typecheck and standalone build; scoped browser checks for held
+progress, return to identical material poses, preference propagation across all
+four examples, instant steps, reset, reduced-motion precedence and phone overflow;
+three generated reachability checks. Captures of the column, identity, Gram and
+dot-product side layouts were inspected. A pre-existing dot-player replay edge
+case now returns to the start in instant-step mode, with an executable browser
+regression. Default presentation checks remain in the same scoped suite.
+
+The reversible unit is the config module, host controls, two player subscriptions
+and adapter CSS rules. This is a requested preview-wide trial, not catalogue
+promotion or native-compositor certification. New layout aesthetics await user
+judgment before wider reuse. No new clock, math owner or persistence store.
+
 ## Shared menu host
 
 The user requested one URL for all examples. Open

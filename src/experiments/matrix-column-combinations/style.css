@@ -1,7 +1,7 @@
 @import "../matrix-column-product/style.css";
 
 .comb-stage { position: relative; height: 370px; min-width: 500px; font-size: var(--kp-equation-type-size); color: var(--kp-st-ink); }
-.comb-equation, .comb-weighted, .comb-expanded, .comb-evaluated { position: absolute; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: 1.5rem; }
+.comb-equation, .comb-weighted, .comb-expanded, .comb-evaluated { position: absolute; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: var(--matrix-layout-gap, 1.5rem); }
 .comb-equation { top: 25px; }
 .comb-equation > div { text-align: center; }
 .comb-equation .kp-focus-deck__annotation { margin-top: .4rem; }
@@ -18,3 +18,9 @@ html[data-embedded] #comb-player > nav,
 html[data-embedded] #comb-player > p:has(a) { display: none; }
 
 .comb-weighted [data-kp-comb-key], .comb-expanded [data-kp-comb-key], .comb-weighted .mopen, .comb-weighted .mclose { display: inline-block; transform-origin: center; }
+
+:root[data-matrix-layout="side"] .comb-stage { min-width: 1050px; }
+:root[data-matrix-layout="side"] .comb-equation { top: 140px; right: auto; width: 45%; }
+:root[data-matrix-layout="side"] .comb-weighted,
+:root[data-matrix-layout="side"] .comb-expanded { top: 65px; left: 45%; }
+:root[data-matrix-layout="side"] .comb-evaluated { top: 215px; left: 45%; }

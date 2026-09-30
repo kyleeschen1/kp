@@ -1,3 +1,4 @@
+import { readMatrixConfig, observeMatrixConfig } from "../matrix-examples/config.ts";
 import "./style.css";
 import source from "./score.ts?raw";
 import { matrixColumnStory, timeline, sampleStory } from "./score.ts";
@@ -24,6 +25,8 @@ async function mount() {
   await document.fonts.ready;
   const view = mountMatrixColumnPresentation(root, story);
   const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-column-product", durationMs: duration });
+  let config = readMatrixConfig(document);
+  const stepsOnly = () => reduced.matches || config.motion === "steps";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slider = root.querySelector<HTMLInputElement>("[data-scrub]")!;
   const chooser = root.querySelector<HTMLSelectElement>("[data-step]")!;
@@ -38,7 +41,7 @@ async function mount() {
     slider.value = String(p); slider.setAttribute("aria-valuetext", frame.step.cue);
     chooser.value = String(frame.index);
     previous.disabled = p === 0; next.disabled = p === 1;
-    play.textContent = clock.getStatus() === "playing" ? "Pause" : p === 1 ? "Replay" : reduced.matches ? "Next step" : "Play";
+    play.textContent = clock.getStatus() === "playing" ? "Pause" : p === 1 ? "Replay" : stepsOnly() ? "Next step" : "Play";
     if (lastCue !== frame.step.name) {
       root.querySelector("[data-cue]")!.innerHTML = renderKpFocusDeckAnnotation({ entityId: frame.step.name, text: frame.step.cue });
       lastCue = frame.step.name;
@@ -49,7 +52,7 @@ async function mount() {
     clock.pause();
     const target = stops[Math.max(0, Math.min(stops.length - 1, index))]!;
     history.replaceState(null, "", `#${story.steps[Math.max(0, Math.min(stops.length - 1, index))]!.name}`);
-    if (animate && !reduced.matches) clock.play({ direction: target < clock.getSnapshot().progress ? "rewind" : "forward", stopAt: target });
+    if (animate && !stepsOnly()) clock.play({ direction: target < clock.getSnapshot().progress ? "rewind" : "forward", stopAt: target });
     else clock.seek(target);
     render();
   };
@@ -69,13 +72,14 @@ async function mount() {
   previous.onclick = () => navigate(-1); next.onclick = () => navigate(1);
   play.onclick = () => {
     if (clock.getStatus() === "playing") clock.pause();
-    else if (reduced.matches) navigate(1);
+    else if (stepsOnly()) { if (clock.getSnapshot().progress === 1) go(0, false); else navigate(1); }
     else { if (clock.getSnapshot().progress === 1) clock.seek(0); clock.play({ direction: "forward", stopAt: 1 }); }
     render();
   };
   const unsubscribe = clock.subscribe(render);
   const restore = () => { const i = story.steps.findIndex(s => s.name === location.hash.slice(1)); go(i < 0 ? 0 : i, false); };
   const resize = () => { clock.pause(); view.prepare(); render(); };
+  const stopConfig = observeMatrixConfig(document, next => { config = next; resize(); });
   const visibility = () => { if (document.hidden) { clock.pause(); render(); } };
   const motion = () => { clock.pause(); render(); };
   const pagehide = (event: PageTransitionEvent) => { if (event.persisted) clock.pause(); else dispose(); };
@@ -86,7 +90,7 @@ async function mount() {
   reduced.addEventListener("change", motion);
   const dispose = () => {
     if (disposed) return; disposed = true;
-    observer.disconnect(); unsubscribe(); clock.dispose(); view.dispose();
+    stopConfig(); observer.disconnect(); unsubscribe(); clock.dispose(); view.dispose();
     window.removeEventListener("hashchange", restore); document.removeEventListener("visibilitychange", visibility);
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow);
     reduced.removeEventListener("change", motion);

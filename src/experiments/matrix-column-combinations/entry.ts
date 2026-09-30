@@ -1,3 +1,4 @@
+import { readMatrixConfig, observeMatrixConfig } from "../matrix-examples/config.ts";
 import "./style.css";
 import { example, numberOf, durationMs, sample } from "./model.ts";
 import { stageHtml, mountPresentation, calculationLatex } from "./presentation.ts";
@@ -36,6 +37,8 @@ async function mount() {
   await document.fonts.ready;
   const view = mountPresentation(root, scene);
   const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-column-combinations", durationMs });
+  let config = readMatrixConfig(document);
+  const stepsOnly = () => reduced.matches || config.motion === "steps";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slider = root.querySelector<HTMLInputElement>("[data-scrub]")!;
   const chooser = root.querySelector<HTMLSelectElement>("select")!;
@@ -48,7 +51,7 @@ async function mount() {
     const frame = view.render(clock.getSnapshot().progress);
     slider.value = String(frame.progress); slider.setAttribute("aria-valuetext", frame.beat.cue);
     chooser.value = String(frame.index); back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
-    play.textContent = clock.getStatus() === "playing" ? "Pause" : reduced.matches ? "Next step" : frame.progress === 1 ? "Replay" : "Play";
+    play.textContent = clock.getStatus() === "playing" ? "Pause" : stepsOnly() ? "Next step" : frame.progress === 1 ? "Replay" : "Play";
     if (lastBeat !== frame.beat.id) {
       root.querySelector("[data-cue]")!.innerHTML = renderKpFocusDeckAnnotation({ entityId: frame.beat.id, text: frame.beat.cue });
       lastBeat = frame.beat.id;
@@ -58,7 +61,7 @@ async function mount() {
   const go = (index: number, animate = true) => {
     const i = Math.max(0, Math.min(beats.length - 1, index)), target = i / (beats.length - 1);
     clock.pause(); history.replaceState(null, "", `#${beats[i]!.id}`);
-    if (animate && !reduced.matches) clock.play({ direction: target < clock.getSnapshot().progress ? "rewind" : "forward", stopAt: target });
+    if (animate && !stepsOnly()) clock.play({ direction: target < clock.getSnapshot().progress ? "rewind" : "forward", stopAt: target });
     else clock.seek(target);
     render();
   };
@@ -75,15 +78,16 @@ async function mount() {
   back.onclick = () => navigate(-1); next.onclick = () => navigate(1);
   play.onclick = () => {
     if (clock.getStatus() === "playing") clock.pause();
-    else if (reduced.matches) { if (clock.getSnapshot().progress === 1) go(0, false); else navigate(1); }
+    else if (stepsOnly()) { if (clock.getSnapshot().progress === 1) go(0, false); else navigate(1); }
     else { if (clock.getSnapshot().progress === 1) clock.seek(0); clock.play({ direction: "forward", stopAt: 1 }); }
     render();
   };
   const unsubscribe = clock.subscribe(render);
   const restore = () => { const i = beats.findIndex(beat => beat.id === location.hash.slice(1)); go(i < 0 ? 0 : i, false); };
   const resize = () => { clock.pause(); view.prepare(); render(); };
+  const stopConfig = observeMatrixConfig(document, next => { config = next; resize(); });
   const visibility = () => { if (document.hidden) { clock.pause(); render(); } };
-  const motion = () => { clock.pause(); if (reduced.matches) go(sample(clock.getSnapshot().progress, beats).index, false); render(); };
+  const motion = () => { clock.pause(); if (stepsOnly()) go(sample(clock.getSnapshot().progress, beats).index, false); render(); };
   const pagehide = (event: PageTransitionEvent) => { if (event.persisted) clock.pause(); else dispose(); };
   const pageshow = (event: PageTransitionEvent) => { if (event.persisted) resize(); };
   const observer = new ResizeObserver(resize); observer.observe(root);
@@ -91,7 +95,7 @@ async function mount() {
   window.addEventListener("pagehide", pagehide); window.addEventListener("pageshow", pageshow); reduced.addEventListener("change", motion);
   const dispose = () => {
     if (disposed) return; disposed = true;
-    observer.disconnect(); unsubscribe(); clock.dispose(); view.dispose();
+    stopConfig(); observer.disconnect(); unsubscribe(); clock.dispose(); view.dispose();
     window.removeEventListener("hashchange", restore); document.removeEventListener("visibilitychange", visibility);
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;

@@ -158,3 +158,52 @@ test("one host switches every example and result column without changing its URL
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath("menu-phone.png"), fullPage: true });
 });
+
+test("shared configuration reflows the held pose and follows every example", async ({ page }, info) => {
+  test.setTimeout(60000);
+  await page.setViewportSize({ width: 1500, height: 1050 });
+  await page.goto("/experiments/matrix-examples/");
+  const child = page.frameLocator("#example-frame");
+  await expect(child.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+  const slider = child.getByRole("slider", { name: "Animation position" });
+  await slider.fill("0.46");
+  const held = await slider.inputValue();
+  await page.getByRole("button", { name: "Side by side", exact: true }).click();
+  await page.getByRole("button", { name: "Roomy spacing", exact: true }).click();
+  await expect(child.locator("html")).toHaveAttribute("data-matrix-layout", "side");
+  await expect(slider).toHaveValue(held);
+  const source = await child.locator(".comb-equation").boundingBox();
+  const work = await child.locator(".comb-expanded").boundingBox();
+  expect(source!.x + source!.width).toBeLessThanOrEqual(work!.x + 1);
+  const poses = () => child.locator(".comb-paint").evaluateAll(nodes => nodes.map(n => n.getAttribute("style")));
+  const sidePose = await poses();
+  await page.getByRole("button", { name: "Side by side", exact: true }).click();
+  await page.getByRole("button", { name: "Side by side", exact: true }).click();
+  expect(await poses()).toEqual(sidePose);
+  await page.getByRole("button", { name: "Step instantly", exact: true }).click();
+  await child.getByRole("button", { name: "Next step", exact: true }).click();
+  await expect(child.locator("#comb-player")).toHaveAttribute("data-milestone", "distribute");
+  await page.screenshot({ path: info.outputPath("config-columns.png"), fullPage: true });
+  for (const kind of ["identity", "orthonormality", "dot"]) {
+    const loaded = page.waitForEvent("framenavigated", f => f.parentFrame() !== null && (kind === "dot" ? f.url().includes("matrix-column-product") : f.url().includes(`example=${kind}`)));
+    await page.getByRole("combobox", { name: "Example", exact: true }).selectOption(kind);
+    await loaded;
+    await expect(child.locator(kind === "dot" ? "#matrix-player" : "#comb-player")).toHaveAttribute("data-ready", "true");
+    await expect(child.locator("html")).toHaveAttribute("data-matrix-layout", "side");
+    await expect(child.locator("html")).toHaveAttribute("data-matrix-spacing", "roomy");
+    await child.getByRole("button", { name: "Next step", exact: true }).click();
+    await child.getByRole("button", { name: "Next step", exact: true }).click();
+    await page.screenshot({ path: info.outputPath(`config-${kind}.png`), fullPage: true });
+  }
+  await child.getByRole("slider").press("End");
+  await child.getByRole("button", { name: "Replay", exact: true }).click();
+  await expect(child.getByRole("slider")).toHaveValue("0");
+  await page.getByRole("button", { name: "Reset settings", exact: true }).click();
+  await expect(child.locator("html")).toHaveAttribute("data-matrix-layout", "stacked");
+  await expect(child.getByRole("button", { name: "Play", exact: true })).toBeVisible();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(child.getByRole("button", { name: "Next step", exact: true })).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Side by side", exact: true }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
