@@ -4,7 +4,7 @@
   "title": "Prove rectangular animation authoring through a reusable dot passage",
   "status": "blocked",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: revised dot passage ready in the shared menu.",
+  "summary": "HUMAN_CHECKPOINT: coordinated column pivot ready in shared menu.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -43,6 +43,13 @@
       "scope": "Addition persistence, compact spacing and concave-up motion",
       "checkedAt": "2026-09-30T21:14:54.607Z",
       "notes": "Four unit tests, two Chromium tests, full typecheck and build pass. Addition remains visible throughout multiplication; sampled paths, native endpoints and reverse seeking pass. Initial new test failure was an invalid range-input step, corrected to milestone selection. Entry 4.23 KB gzip. Visual candidate only."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Common-axis pivot and earlier row opening",
+      "checkedAt": "2026-09-30T21:18:28.685Z",
+      "notes": "Four unit tests, two browser tests, full types and build pass. Browser checks assert column collinearity and row completion before horizontal landing. Initial bottom-entry overlap repaired by delaying shared pivot descent; sampled overlap and reversal checks pass. Entry 4.35 KB gzip. Visual acceptance pending."
     }
   ]
 }

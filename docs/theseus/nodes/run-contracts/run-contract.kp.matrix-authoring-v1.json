@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review compact pairing, persistent addition and gentle concave-up landing paths before integration.",
+  "summary": "HUMAN_CHECKPOINT: review the common-axis pivot and earlier row opening before integration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,7 +32,7 @@
     {
       "id": "passage",
       "title": "Three-term dot passage and visual review",
-      "summary": "Revised candidate preserves addition, tightens spacing and uses shallow concave-up approaches; ready for visual review.",
+      "summary": "Coordinated column pivot and earlier row opening verified; candidate ready for review.",
       "status": "complete"
     },
     {

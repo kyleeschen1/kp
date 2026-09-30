@@ -16,8 +16,12 @@ move both objects so the column's lower-left meets the row's upper-right,
 withdraw the brackets, then tilt the column into the paired expression while
 spreading the row entries. The local presentation measures native KaTeX boxes
 for docking and pair slots for arrival. The latest user-requested trial replaces
-the pivot with shallow concave-up approaches that land directly in the measured
-factor slots; glyphs remain upright. This is a layout
+independent concave-up paths with a coordinated pivot: all column entries stay
+on one straight axis with a shared angle and pivot. Spacing expands along that
+axis to fit the factor slots; glyphs remain upright. Quintic easing starts and
+ends the turn with zero velocity and acceleration. The row opens earlier and
+is already in its final slots before the column reaches horizontal. The unit
+settles downward later in the turn to clear the opening row. This is a layout
 transformation, not a mathematical rotation of the vector. The source
 representations are consumed by this rearrangement; immutable references remain.
 Multiplication syntax enters after arrival. Negative factors have no added
@@ -44,7 +48,7 @@ untransformed native slots before restoring the current semantic playhead.
 Shared layout, spacing and motion settings apply through the existing host.
 The accessible calculation and no-script text preserve the explanation.
 
-Checks after the requested addition-preservation/spacing/arc revision: four focused
+Checks after the requested coordinated-pivot revision: four focused
 semantic/preservation tests; two scoped Chromium tests
 with four endpoints, ten transit captures, source IDs, native handoff, actual
 playback, reverse seek, layout reflow, instant steps, reduced motion and phone
@@ -56,6 +60,11 @@ Visual inspection caught a wrapper-box docking gap and a clipped top entry in
 the side layout. Measuring KaTeX's native base fixes the docking boundary;
 reserving the same vertical tilt room in both layouts fixes the clipping.
 Tests assert corner alignment and side-layout material containment. The latest
+checks also assert column collinearity during the turn and that row entries
+reach their final slots while the column is still tilted. The initial pivot
+trial caught bottom-entry overlap with the opening row; delaying the shared
+pivot's descent repaired it without changing the straight-axis constraint.
+The previous
 regressions also check two visible addition signs throughout multiplication
 and compact inter-term gaps. The first new test run used an invalid range-input
 step for the exact endpoint; it now selects that endpoint through the milestone
@@ -69,7 +78,7 @@ The generic impact selector has no experiment rule and proposes whole-product
 gates; this discovery uses the approved contract's bounded verification instead.
 No broad release or native-compositor certification is claimed.
 
-Build: 56 modules; revised dot entry 4.23 KB gzip (previously 4.33 KB), shared config 0.38 KB,
+Build: 56 modules; revised dot entry 4.35 KB gzip (previously 4.23 KB), shared config 0.38 KB,
 shared scaffold chunk 85.16 KB, dot CSS 14.40 KB, excluding fonts/transport.
 Shared chunks were repartitioned, so the new entry size alone is not a total
 page-cost delta. No budget amendments. A local model, source, presentation,

@@ -26,6 +26,27 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "0");
   await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "0");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
+  // The column turns as a straight unit; the row finishes opening before it lands.
+  for (const p of [.16, .2, .24, .28]) {
+    await slider.fill(String(p));
+    const centers = await page.locator('[data-occurrence^="pair-right-"]').evaluateAll(nodes => nodes.map(node => {
+      const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+    }));
+    const [a, b, c] = centers;
+    const length = Math.hypot(c!.x - a!.x, c!.y - a!.y);
+    const offAxis = Math.abs((b!.x - a!.x) * (c!.y - a!.y) - (b!.y - a!.y) * (c!.x - a!.x)) / length;
+    expect(offAxis).toBeLessThan(.1);
+  }
+  await slider.fill("0.24");
+  for (const pair of passage.dot.pairs) {
+    const copy = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();
+    const target = await page.locator(`[data-kp-dot-key="pair-left-${pair.index}"]`).boundingBox();
+    expect(copy!.x + copy!.width / 2).toBeCloseTo(target!.x + target!.width / 2, 1);
+    expect(copy!.y + copy!.height / 2).toBeCloseTo(target!.y + target!.height / 2, 1);
+  }
+  const columnTop = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
+  const columnBottom = await page.locator('[data-occurrence="pair-right-2"]').boundingBox();
+  expect(columnBottom!.y - columnTop!.y).toBeGreaterThan(1);
   for (const i of [0, 1, 2, 3]) {
     await chooser.selectOption(String(i));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`step-${i}.png`) });

@@ -90,6 +90,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     }
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
+  const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
   const render = (progress: number) => {
     const frame = sample(progress);
     if (disposed) return frame;
@@ -99,7 +100,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     products.style.opacity = frame.index >= 2 && !(frame.index === 3 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 3 ? "1" : "0";
     const shrink = 1 - ease(frame.local / .45), grow = ease((frame.local - .45) / .55);
-    const docking = ease(frame.local / .3), tilt = ease((frame.local - .4) / .45);
+    const docking = ease(frame.local / .3), tilt = smooth((frame.local - .4) / .45);
+    const opening = smooth((frame.local - .4) / .26);
     for (const side of ["left", "right"] as const) {
       vectors[side].style.transform = `translate(${dock[side].x * docking}px, ${dock[side].y * docking}px)`;
       vectors[side].style.opacity = frame.index === 0 || (frame.index === 1 && frame.local < .4) ? "1" : "0";
@@ -109,11 +111,19 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
       const a = { x: source.x + dock[side].x, y: source.y + dock[side].y };
-      let x = a.x + (b.x - a.x) * tilt, y = a.y + (b.y - a.y) * tilt;
+      let x = a.x + (b.x - a.x) * opening, y = a.y + (b.y - a.y) * opening;
       if (side === "right") {
-        // A shallow concave-up approach settles horizontally into the exact
-        // factor slot; there is no intermediate pivot or final repositioning.
-        y = a.y + (b.y - a.y) * (2 * tilt - tilt * tilt);
+        // All column entries share one pivot and angle. Spacing opens along
+        // that axis to fit the native factor slots, while glyphs stay upright.
+        // Quintic easing gives the turn zero velocity and acceleration at rest.
+        const last = passage.dot.pairs.length - 1;
+        const base = points.get(`right-${last}`)!, end = points.get(`pair-right-${last}`)!;
+        const pivot = { x: base.x + dock.right.x, y: base.y + dock.right.y };
+        const radius = (base.y - source.y) * (1 - tilt) + (end.x - b.x) * tilt;
+        const angle = -Math.PI / 2 - Math.PI / 2 * tilt;
+        x = pivot.x + (end.x - pivot.x) * tilt + radius * Math.cos(angle);
+        // Hold the unit above the opening row until its horizontal travel clears it.
+        y = pivot.y + (end.y - pivot.y) * tilt * tilt + radius * Math.sin(angle);
       }
       node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
       node.style.opacity = frame.index === 1 && frame.local >= .4 && frame.local < 1 ? "1" : "0";
