@@ -66,8 +66,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     if (disposed) return;
     // Measure in plane-local coordinates; perspective belongs only to display.
     stage.style.transform = "none";
-    const sourceDepth = stage.style.getPropertyValue("--dot-source-depth");
-    stage.style.setProperty("--dot-source-depth", "0px");
+    const sourceProperties = ["--dot-source-depth", "--dot-back-x", "--dot-back-y"];
+    const sourceStyles = sourceProperties.map(key => [key, stage.style.getPropertyValue(key)] as const);
+    for (const key of sourceProperties) stage.style.setProperty(key, "0px");
     const work = stage.querySelector<HTMLElement>(".dot-work")!;
     work.style.transform = "none";
     reset(); layer.replaceChildren(); owners.length = 0;
@@ -100,7 +101,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       layer.append(node); owners.push({ node, from, to });
     }
     stage.style.transform = ""; work.style.transform = "";
-    stage.style.setProperty("--dot-source-depth", sourceDepth);
+    for (const [key, value] of sourceStyles) stage.style.setProperty(key, value);
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -114,6 +115,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     stage.style.setProperty("--dot-source-depth", `${-100 * planeLift}px`);
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
     workingPlane.style.opacity = String(planeLift);
+    stage.style.setProperty("--dot-back-x", `${60 * planeLift}px`);
+    stage.style.setProperty("--dot-back-y", `${32 * planeLift}px`);
+    workingPlane.style.boxShadow = planeLift > 0
+      ? `${10 * planeLift}px ${14 * planeLift}px ${22 * planeLift}px rgba(20, 25, 30, ${.18 * planeLift})` : "none";
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 4 ? "1" : "0";
@@ -121,8 +126,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
     const tilt = smooth((frame.local - .15) / .85);
     const opening = smooth(frame.local / .7);
-    const depth = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
     for (const side of ["left", "right"] as const) {
       vectors[side].style.opacity = "1";
       if (frame.index > 0) {
@@ -152,10 +155,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       }
       // All entries move out of the shared plane; the destination expression
       // lives at the same depth, avoiding a jump on the native handoff.
-      const elevation = depth;
       const z = 70 * ease(frame.local / .2);
       node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
-      node.style.textShadow = elevation > 0 ? `${2 * elevation}px ${7 * elevation}px ${4 * elevation}px rgba(20, 25, 30, ${.32 * elevation})` : "none";
+      node.style.textShadow = "none";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {

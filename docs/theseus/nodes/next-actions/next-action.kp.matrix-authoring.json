@@ -134,6 +134,13 @@
       "scope": "Shared horizontal tilt and separating planes",
       "checkedAt": "2026-09-30T22:41:00.418Z",
       "notes": "Four unit and two browser tests pass; types and build pass. X 10 and Y minus25 camera, rear bracket/surface Z minus100 and forward Z70 checked. Front fill 85 percent. Panel clipping repaired; scene spacing checked before projection, projected frames inspected with no universal collision claim. Entry 6.11 KB gzip."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Face-on shadowed panel comparison",
+      "checkedAt": "2026-09-30T22:53:52.714Z",
+      "notes": "Four unit and two browser tests pass; full types and build pass. Zero camera tilt, panel shadow, rear offset, no text shadows and real Z motion checked. Three captures inspected. CSS panel-shadow approximation, not physical light projection. Entry 6.15 KB gzip."
     }
   ]
 }

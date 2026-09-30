@@ -239,6 +239,21 @@ asserted in scene coordinates; projected transit remains captured and visually
 inspected rather than certified collision-free. Revised pivot and multiplication
 captures show unclipped main-layout planes and distinguishable front content.
 
+September 30, face-on comparison: removed both camera rotations while retaining
+perspective and the real forward/rearward Z translations. The rear surface and
+brackets gain a coordinated 60px horizontal / 32px vertical offset to expose the
+stack. The front panel casts a soft CSS box shadow that spreads and softens as
+the planes separate; glyph text shadows are removed. This is a panel-attached
+shadow approximation, not a physically projected light simulation. The existing
+85%-opaque fill is retained. Source offset/depth are reset during local geometry
+measurement so configuration changes cannot accumulate displacement.
+
+Four unit and two Chromium tests pass. Camera rotation is zero, panel shadow and
+rear offset are checked, glyphs remain shadow-free, and native endpoints,
+reversal and configuration checks pass. Initial, transit and multiplication
+captures were inspected: the text stays upright and the stack reads as layered
+sheets. Scoped build passes with a 6.15 KB gzip entry (previously 6.11).
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

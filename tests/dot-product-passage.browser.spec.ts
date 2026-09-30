@@ -27,11 +27,11 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
-  await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("text-shadow", "none");
-  await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("text-shadow", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
-  expect(await tiltY(".dot-stage")).toBeCloseTo(Math.sin(25 * Math.PI / 180) * Math.cos(10 * Math.PI / 180), 5);
+  expect(await tiltY(".dot-stage")).toBe(0);
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   const forward = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
   expect(forward).toBe(70);
@@ -41,7 +41,12 @@ test("signed dot passage preserves references through pairing, products and sum"
   const backSurface = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
   expect(retreat).toBe(-100); expect(backSurface).toBe(retreat - 1);
   const tiltX = await page.locator(".dot-stage").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m23);
-  expect(tiltX).toBeCloseTo(Math.sin(10 * Math.PI / 180), 5);
+  expect(tiltX).toBe(0);
+  await expect(page.locator(".dot-plane-working")).not.toHaveCSS("box-shadow", "none");
+  const backingOffset = await page.locator(".dot-plane-source").evaluate(node => {
+    const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.m41, y: m.m42 };
+  });
+  expect(backingOffset).toEqual({ x: 60, y: 32 });
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "1");
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
