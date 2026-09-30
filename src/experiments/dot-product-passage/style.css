@@ -1,0 +1,13 @@
+@import "../matrix-column-product/style.css";
+.dot-stage { position: relative; height: 330px; min-width: 650px; font-size: var(--kp-equation-type-size); color: var(--kp-st-ink); }
+.dot-inputs { position: absolute; top: 40px; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
+.dot-work { position: absolute; top: 180px; left: 0; right: 0; height: 80px; }
+.dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 1rem); }
+.dot-term { display: inline-flex; width: 7rem; justify-content: center; transform-origin: center; }
+.dot-pairs [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
+.dot-material { position: absolute; inset: 0; pointer-events: none; }
+.dot-paint { position: absolute; left: 0; top: 0; color: var(--kp-st-focus); }
+.dot-static { overflow-x: auto; }
+:root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
+:root[data-matrix-layout="side"] .dot-inputs { top: 130px; right: 55%; gap: 1rem; }
+:root[data-matrix-layout="side"] .dot-work { top: 100px; left: 45%; }

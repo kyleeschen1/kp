@@ -1,0 +1,27 @@
+{
+  "id": "next-action.kp.matrix-authoring",
+  "kind": "next-action",
+  "title": "Prove rectangular animation authoring through a reusable dot passage",
+  "status": "blocked",
+  "domain": "linear-algebra",
+  "summary": "HUMAN_CHECKPOINT: standalone pair-to-products-to-sum motion ready; await visual acceptance before rectangular integration.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-30-matrix-authoring-next-step.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-30-dot-product-passage.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run visual:matrix-interpretations; npm run typecheck; npm run check:architecture; npm run build:matrix-interpretations; node --disable-warning=ExperimentalWarning --test tests/exact-equation-reachability-graph.test.ts; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-30T20:46:01.653Z",
+      "notes": "Three semantic tests, two dot browser tests and eight preservation browser tests pass. Full typecheck including Svelte passes; architecture, build and three inventory checks pass. Sequential operand arrivals repair crossing routes; sampled overlap and reversal checks pass. New entry 3.81 KB gzip; shared chunks repartitioned. Visual acceptance pending before rectangular integration."
+    }
+  ]
+}

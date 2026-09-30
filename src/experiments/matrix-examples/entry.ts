@@ -29,9 +29,10 @@ reset.onclick = () => configure({ layout: "stacked", spacing: "compact", motion:
 const select = () => {
   observer?.disconnect();
   const dot = menu.value === "dot";
-  columnLabel.hidden = dot;
+  const passage = menu.value === "dot-passage";
+  columnLabel.hidden = dot || passage;
   frame.title = `${menu.selectedOptions[0]!.textContent} animation`;
-  frame.src = dot ? "../matrix-column-product/" :
+  frame.src = passage ? "../dot-product-passage/" : dot ? "../matrix-column-product/" :
     `../matrix-column-combinations/?embedded=1&example=${menu.value}&column=${column.value}`;
 };
 frame.onload = () => {

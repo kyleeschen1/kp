@@ -5,6 +5,14 @@ Last Updated: 2026-09-29
 
 ## Canonical direction
 
+Current continuation: the user approved the
+[rectangular authoring proof](../reviews/2026-09-30-matrix-authoring-next-step.md).
+`run-contract.kp.matrix-authoring-v1` owns a standalone dot-passage checkpoint,
+then rectangular integration and a source-only variation after acceptance.
+The [three-term passage](../reviews/2026-09-30-dot-product-passage.md) is the first
+reviewable candidate. Older interpretation work remains complete; inspector
+work stays parked.
+
 Current September 30 work: [matrix interpretation experiment](../2026-09-30-matrix-interpretations.md),
 approved after the object-boundary discussion. The semantic adapter shares exact
 contributions between dot products and column combinations; identity/Gram cases

@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "test:dot-passage": "node --disable-warning=ExperimentalWarning --test tests/dot-product-passage.test.ts",
+    "visual:dot-passage": "playwright test --config playwright.dot-passage.config.ts --project=chromium --workers=1",
     "visual:matrix-interpretations": "playwright test --config playwright.matrix-interpretations.config.ts --project=chromium --workers=1",
     "build:matrix-interpretations": "vite build --config vite.matrix-interpretations.config.ts",
     "test:matrix-interpretations": "node --disable-warning=ExperimentalWarning --test tests/matrix-interpretations.test.ts tests/matrix-product.test.ts tests/typed-semantic-math.test.ts tests/matrix-column-story.test.ts",

@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+September 30, after shared presentation controls: the
+[next recommendation](reviews/2026-09-30-matrix-authoring-next-step.md) is a
+rectangular authoring proof using a reusable three-term dot-product passage.
+The user approved this with “great! go”; `run-contract.kp.matrix-authoring-v1`
+owns the standalone visual checkpoint, conditional rectangular integration and
+source-only variation. The [dot-passage review](reviews/2026-09-30-dot-product-passage.md)
+is the current checkpoint. It builds on the delivered interpretation experiment;
+the new side-by-side layout remains visually provisional.
+
 September 30, interpretation experiment: the user approved testing the object
 boundary through column combinations, identity and orthonormality. The
 [approved scope](2026-09-30-matrix-interpretations.md) and
