@@ -22,6 +22,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); }
 .dot-paint, .dot-shadow { position: absolute; left: 0; top: 0; color: var(--kp-st-ink); }
 .dot-shadow { color: #20252b; pointer-events: none; }
 .dot-static { overflow-x: auto; }
+.dot-tuning output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
 :root[data-matrix-layout="side"] .dot-plane { left: 4%; right: 4%; }
 :root[data-matrix-layout="side"] .dot-inputs { right: 55%; gap: 1rem; }

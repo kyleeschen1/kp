@@ -113,7 +113,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
-  const render = (progress: number) => {
+  const render = (progress: number, backOpacity = .22) => {
+    if (!Number.isFinite(backOpacity) || backOpacity < 0 || backOpacity > 1) throw new DotPassageGap("Back-panel opacity must be between zero and one.");
     const frame = sample(progress);
     if (disposed) return frame;
     reset();
@@ -121,7 +122,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     // The surface shares the entries' depth, without owning their semantic paint.
     const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
     stage.style.setProperty("--dot-back-scale", String(1 - .06 * planeLift));
-    stage.style.setProperty("--dot-back-opacity", String(1 - .78 * planeLift));
+    stage.style.setProperty("--dot-back-opacity", String(1 - (1 - backOpacity) * planeLift));
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
     workingPlane.style.opacity = String(planeLift);
     workingPlane.style.boxShadow = planeLift > 0

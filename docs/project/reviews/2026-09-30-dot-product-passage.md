@@ -343,6 +343,17 @@ than assert zero rectangle overlap. Finite geometry, native endpoints, identity,
 reverse seek and configuration checks remain executable. This is not a claim
 of raster-level collision certification. The bracket-size issue stays deferred.
 
+September 30, live opacity tuning: added a labeled Back panel opacity slider
+below playback controls, 0–100% with a 22% default and percentage readout. It
+sets the source panel/contents' opacity after foreground lift, preserving the
+initial readable source and the existing fade envelope. Changes render at the
+current clock position without pausing playback, seeking or rebuilding geometry.
+The setting remains during same-page layout changes; reload resets the default.
+The local render boundary rejects nonfinite/out-of-range opacity. A third scoped
+browser test covers zero/full/intermediate values and tuning during playback;
+existing slider queries now explicitly distinguish the timeline from tuning.
+All three browser tests, four unit tests and build pass; entry 6.48 KB gzip.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

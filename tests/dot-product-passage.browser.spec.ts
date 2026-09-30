@@ -1,6 +1,25 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test("back opacity can be tuned without seeking or pausing playback", async ({ page }) => {
+  await page.goto("/experiments/dot-product-passage/");
+  await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
+  await page.getByRole("combobox", { name: "Milestone" }).selectOption("1");
+  const tuning = page.getByRole("slider", { name: "Back panel opacity" });
+  await expect(tuning).toHaveValue("22");
+  for (const value of [0, 100, 40]) {
+    await tuning.fill(String(value));
+    await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", String(value / 100));
+    await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", String(value / 100));
+    await expect(page.locator("[data-opacity-value]")).toHaveText(`${value}%`);
+    await expect(page.getByRole("slider", { name: "Animation position" })).toHaveValue("0.25");
+  }
+  await page.getByRole("button", { name: "Play", exact: true }).click();
+  await tuning.fill("65");
+  await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
+  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "0.65");
+});
+
 test("signed dot passage preserves references through pairing, products and sum", async ({ page }, info) => {
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
@@ -257,22 +276,22 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await page.getByRole("button", { name: "Step instantly", exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
-  await child.getByRole("slider").fill("0.57");
+  await child.getByRole("slider", { name: "Animation position" }).fill("0.57");
   await page.getByRole("button", { name: "Side by side", exact: true }).click();
-  await expect(child.getByRole("slider")).toHaveValue("0.57");
+  await expect(child.getByRole("slider", { name: "Animation position" })).toHaveValue("0.57");
   await expect(child.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
   await expect(child.locator('.dot-material [data-trace-role]')).toHaveCount(0);
   await page.screenshot({ path: info.outputPath("side-layout.png"), fullPage: true });
-  await child.getByRole("slider").fill("0.2");
+  await child.getByRole("slider", { name: "Animation position" }).fill("0.2");
   const stageBounds = await child.locator(".dot-stage").boundingBox();
   for (const copy of await child.locator(".dot-paint").all()) {
     const bounds = await copy.boundingBox();
     expect(bounds!.y).toBeGreaterThanOrEqual(stageBounds!.y);
   }
   await page.screenshot({ path: info.outputPath("side-tilt.png"), fullPage: true });
-  await child.getByRole("slider").press("End");
+  await child.getByRole("slider", { name: "Animation position" }).press("End");
   await child.getByRole("button", { name: "Next step", exact: true }).click();
-  await expect(child.getByRole("slider")).toHaveValue("0");
+  await expect(child.getByRole("slider", { name: "Animation position" })).toHaveValue("0");
   await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "dark" });
   await page.getByRole("button", { name: "Reset settings", exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
@@ -280,7 +299,7 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await expect(child.locator("body")).toHaveCSS("background-color", "rgb(255, 253, 248)");
   await expect(child.locator("html")).toHaveCSS("color-scheme", "light");
   await page.screenshot({ path: info.outputPath("light-override.png"), fullPage: true });
-  await child.getByRole("slider").fill("0.06");
+  await child.getByRole("slider", { name: "Animation position" }).fill("0.06");
   const darkInk = await child.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", darkInk);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");

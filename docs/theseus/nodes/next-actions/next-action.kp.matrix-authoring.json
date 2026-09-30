@@ -183,6 +183,13 @@
       "scope": "Stationary faded source and stronger foreground pop",
       "checkedAt": "2026-09-30T23:45:26.568Z",
       "notes": "Four unit and two browser checks pass; types and build pass. Source no translation, scale94 percent and opacity22 percent; foreground pop12 percent and native-size landing; shadow alpha65 percent checked. Early pop font-box contacts retained as JSON diagnostics per motif policy, with captured glyphs inspected. Three latest frames inspected. Bracket issue deferred."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Live back-panel opacity slider",
+      "checkedAt": "2026-09-30T23:49:48.343Z",
+      "notes": "Four unit and three browser tests pass; full types and build pass. Zero/full/intermediate opacity updates both source panel and content without seeking or pausing playback. Slider queries distinguish controls; cleanup and geometry/config behavior preserved. Entry 6.48 KB gzip."
     }
   ]
 }
