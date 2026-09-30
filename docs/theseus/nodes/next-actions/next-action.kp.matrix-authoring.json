@@ -127,6 +127,13 @@
       "scope": "Two bordered translucent planes",
       "checkedAt": "2026-09-30T22:33:26.540Z",
       "notes": "Four unit and two Chromium tests pass; full types and build pass. Two surfaces, initial absence, shared material and plane depth, reverse seeking and config verified. Three frames inspected. Source plane stays behind brackets; working plane persists forward. Entry 6.06 KB gzip; local visual checkpoint."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run typecheck:tests; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Shared horizontal tilt and separating planes",
+      "checkedAt": "2026-09-30T22:41:00.418Z",
+      "notes": "Four unit and two browser tests pass; types and build pass. X 10 and Y minus25 camera, rear bracket/surface Z minus100 and forward Z70 checked. Front fill 85 percent. Panel clipping repaired; scene spacing checked before projection, projected frames inspected with no universal collision claim. Entry 6.11 KB gzip."
     }
   ]
 }

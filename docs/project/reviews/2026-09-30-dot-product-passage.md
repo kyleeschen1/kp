@@ -223,6 +223,22 @@ plane absence, material/surface depth agreement and reverse seek. Initial,
 pivot and multiplication captures were inspected. The scoped build passes at
 6.06 KB gzip for the dot entry. Border and fill values remain provisional.
 
+September 30, stronger plane separation: shared camera now combines X=10deg
+with Y=-25deg. The working surface has an 85%-opaque paper-toned fill with a
+slight teal tint. Source surface and brackets recede together to Z=-100px while
+the working surface and entries advance to Z=70px. Their opacity and native
+scale stay intact; the front surface naturally obscures the rear content.
+Preparation resets source depth while measuring and restores it before paint.
+Plane top bounds were tightened after a capture exposed clipping under X tilt.
+
+Four unit and two Chromium tests pass, as do full types, updated test types and
+build (dot entry 6.11 KB gzip). Browser checks cover both camera axes and shared
+source/bracket depth. A former screen-rectangle no-contact assertion caught
+0.65px of projected whitespace overlap between column entries. Spacing is now
+asserted in scene coordinates; projected transit remains captured and visually
+inspected rather than certified collision-free. Revised pivot and multiplication
+captures show unclipped main-layout planes and distinguishable front content.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

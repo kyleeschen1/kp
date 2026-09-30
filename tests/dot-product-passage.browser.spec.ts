@@ -8,9 +8,13 @@ test("signed dot passage preserves references through pairing, products and sum"
   const inputBounds = async (side: string) => page.locator(`[data-kp-dot-key^="${side}-"]`).evaluateAll(nodes => nodes.map(node => {
     const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
   }));
-  const row = await inputBounds("left"), column = await inputBounds("right");
+  // Orientation is a plane-local invariant, independent of the camera angle.
+  await page.locator(".dot-stage").evaluate(node => { (node as HTMLElement).style.transform = "none"; });
+  const row = await inputBounds("left"), localColumn = await inputBounds("right");
   expect(Math.max(...row.map(r => r.y)) - Math.min(...row.map(r => r.y))).toBeLessThan(1);
-  expect(Math.max(...column.map(r => r.x)) - Math.min(...column.map(r => r.x))).toBeLessThan(1);
+  expect(Math.max(...localColumn.map(r => r.x)) - Math.min(...localColumn.map(r => r.x))).toBeLessThan(1);
+  await page.locator(".dot-stage").evaluate(node => { (node as HTMLElement).style.transform = ""; });
+  const column = await inputBounds("right");
   expect(column[0]!.y).toBeLessThan(column[1]!.y); expect(column[1]!.y).toBeLessThan(column[2]!.y);
   await expect(page.locator('[data-kp-dot-key="left-1"]')).toHaveText("−1");
   await expect(page.locator('[data-kp-dot-key="right-2"]')).toHaveText("−2");
@@ -27,12 +31,17 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("text-shadow", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
-  expect(await tiltY(".dot-stage")).toBeCloseTo(Math.sin(25 * Math.PI / 180), 5);
+  expect(await tiltY(".dot-stage")).toBeCloseTo(Math.sin(25 * Math.PI / 180) * Math.cos(10 * Math.PI / 180), 5);
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   const forward = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
   expect(forward).toBe(70);
   const planeDepth = await page.locator(".dot-plane-working").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
   expect(planeDepth).toBe(forward - 1);
+  const retreat = await page.locator(".dot-inputs").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
+  const backSurface = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
+  expect(retreat).toBe(-100); expect(backSurface).toBe(retreat - 1);
+  const tiltX = await page.locator(".dot-stage").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m23);
+  expect(tiltX).toBeCloseTo(Math.sin(10 * Math.PI / 180), 5);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "1");
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
@@ -174,10 +183,14 @@ test("signed dot passage preserves references through pairing, products and sum"
   for (const p of [.03, .08, .14, .18, .25, .29, .43, .57, .78, .94]) {
     await slider.fill(String(p));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`transit-${p}.png`) });
+    // Preserve spacing in scene coordinates. Rotated screen-space rectangles
+    // include empty corner wedges; their contact is not a glyph collision.
+    await page.locator(".dot-stage").evaluate(node => { (node as HTMLElement).style.transform = "none"; });
     const moving = await page.locator(".dot-paint").evaluateAll(nodes => nodes.filter(n => getComputedStyle(n).opacity === "1").map(n => {
       // The owner includes line leading; measure the copied scalar's inline box.
       const r = n.firstElementChild!.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom };
     }));
+    await page.locator(".dot-stage").evaluate(node => { (node as HTMLElement).style.transform = ""; });
     for (let i = 0; i < moving.length; i++) for (let j = i + 1; j < moving.length; j++) {
       const a = moving[i]!, b = moving[j]!;
       expect(a.right <= b.left + .5 || b.right <= a.left + .5 || a.bottom <= b.top + .5 || b.bottom <= a.top + .5, JSON.stringify({ p, i, j, a, b })).toBe(true);

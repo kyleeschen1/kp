@@ -66,6 +66,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     if (disposed) return;
     // Measure in plane-local coordinates; perspective belongs only to display.
     stage.style.transform = "none";
+    const sourceDepth = stage.style.getPropertyValue("--dot-source-depth");
+    stage.style.setProperty("--dot-source-depth", "0px");
     const work = stage.querySelector<HTMLElement>(".dot-work")!;
     work.style.transform = "none";
     reset(); layer.replaceChildren(); owners.length = 0;
@@ -98,6 +100,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       layer.append(node); owners.push({ node, from, to });
     }
     stage.style.transform = ""; work.style.transform = "";
+    stage.style.setProperty("--dot-source-depth", sourceDepth);
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -108,6 +111,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     stage.dataset["progress"] = String(frame.progress);
     // The surface shares the entries' depth, without owning their semantic paint.
     const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
+    stage.style.setProperty("--dot-source-depth", `${-100 * planeLift}px`);
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
     workingPlane.style.opacity = String(planeLift);
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";

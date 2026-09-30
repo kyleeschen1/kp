@@ -2,13 +2,13 @@
 .dot-stage, .dot-static { --dot-syntax-ink: #464646; }
 @media (prefers-color-scheme: dark) { .dot-stage, .dot-static { --dot-syntax-ink: #a6aaa8; } }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
-.dot-stage { transform: perspective(900px) rotateY(-25deg); transform-style: preserve-3d; }
+.dot-stage { transform: perspective(900px) rotateX(10deg) rotateY(-25deg); transform-style: preserve-3d; }
 .dot-work { transform: translateZ(70px); }
 .dot-material { transform-style: preserve-3d; }
-.dot-plane { position: absolute; inset: 35px 18%; border: 1px solid color-mix(in srgb, var(--kp-st-ink) 28%, transparent); background: color-mix(in srgb, var(--kp-st-ink) 3%, transparent); pointer-events: none; }
-.dot-plane-source { transform: translateZ(-1px); }
-.dot-plane-working { background: color-mix(in srgb, var(--kp-st-focus) 5%, transparent); border-color: color-mix(in srgb, var(--kp-st-focus) 35%, transparent); }
-.dot-inputs { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
+.dot-plane { position: absolute; inset: 65px 18% 35px; border: 1px solid color-mix(in srgb, var(--kp-st-ink) 28%, transparent); background: color-mix(in srgb, var(--kp-st-ink) 3%, transparent); pointer-events: none; }
+.dot-plane-source { transform: translateZ(calc(var(--dot-source-depth, 0px) - 1px)); }
+.dot-plane-working { background: color-mix(in srgb, color-mix(in srgb, var(--kp-st-paper) 96%, var(--kp-st-focus)) 85%, transparent); border-color: color-mix(in srgb, var(--kp-st-focus) 35%, transparent); }
+.dot-inputs { position: absolute; top: 50%; transform: translateY(-50%) translateZ(var(--dot-source-depth, 0px)); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 .dot-work { position: absolute; top: calc(50% + 20px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
