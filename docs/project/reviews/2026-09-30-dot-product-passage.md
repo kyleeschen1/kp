@@ -284,6 +284,16 @@ The border, panel shadow, text and rear surface retain their existing paint.
 The browser color-endpoint check now preserves matching warm RGB with the
 intentionally lower front alpha.
 
+September 30, light-mode text-shadow comparison: this standalone host now
+explicitly uses the light palette even with a dark OS preference. Moving entries
+regain a subtle dark text shadow, strongest during departure/convergence and
+absent at native reading endpoints or under reduced motion. Their ink stays
+neutral. Panel alpha remains 30%, and the original grey traces remain visible.
+The two Chromium checks pass, including explicit light color-scheme/background
+under dark media emulation, moving shadow presence and shadow-free endpoints.
+Four unit tests and the build pass (6.17 KB gzip entry); a transit frame was
+inspected. This is a local palette trial, not a global theme preference change.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

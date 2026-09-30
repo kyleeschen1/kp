@@ -162,6 +162,13 @@
       "scope": "Lighter front-panel fill",
       "checkedAt": "2026-09-30T23:07:50.680Z",
       "notes": "Two Chromium tests pass. Front alpha reduced from 85 to 30 percent; warm color endpoint and other existing checks preserved."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Light-mode text-shadow comparison",
+      "checkedAt": "2026-09-30T23:15:14.275Z",
+      "notes": "Four unit and two browser tests pass; full types and build pass. Host light override under dark preference, transient text shadow and neutral ink verified. Reduced-motion and endpoint shadow absence retained. Transit capture inspected; 6.17 KB gzip entry."
     }
   ]
 }

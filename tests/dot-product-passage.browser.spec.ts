@@ -29,8 +29,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
-  await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
-  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("text-shadow", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
   expect(await tiltY(".dot-stage")).toBe(0);
@@ -248,7 +248,9 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await page.getByRole("button", { name: "Reset settings", exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
-  await page.screenshot({ path: info.outputPath("dark.png"), fullPage: true });
+  await expect(child.locator("body")).toHaveCSS("background-color", "rgb(255, 253, 248)");
+  await expect(child.locator("html")).toHaveCSS("color-scheme", "light");
+  await page.screenshot({ path: info.outputPath("light-override.png"), fullPage: true });
   await child.getByRole("slider").fill("0.06");
   const darkInk = await child.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", darkInk);

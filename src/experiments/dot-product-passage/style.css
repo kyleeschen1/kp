@@ -1,6 +1,7 @@
 @import "../matrix-column-product/style.css";
+:root { color-scheme: light; --kp-st-paper: #fffdf8; --kp-st-rule: #d4d5cf; --kp-st-ink: #20252b; --kp-st-muted: #59645e; --kp-st-focus: #167a80; }
+body { background: var(--kp-st-paper); color: var(--kp-st-ink); }
 .dot-stage, .dot-static { --dot-syntax-ink: #464646; --dot-warm-paper: color-mix(in srgb, var(--kp-st-paper) 94%, #806548); }
-@media (prefers-color-scheme: dark) { .dot-stage, .dot-static { --dot-syntax-ink: #a6aaa8; } }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
 .dot-stage { transform: perspective(900px); transform-style: preserve-3d; }
 .dot-work { transform: translateZ(70px); }

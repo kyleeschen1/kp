@@ -127,6 +127,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = "0";
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
     const matching = frame.index === 0 ? 0 : frame.index === 1 ? smooth(frame.local) : 1;
+    const shadowLift = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
     workingPlane.style.setProperty("--dot-warmth", `${100 * matching}%`);
     for (const side of ["left", "right"] as const) {
       vectors[side].style.opacity = "1";
@@ -153,7 +155,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       // lives at the same depth, avoiding a jump on the native handoff.
       const z = 70 * ease(frame.local / .2);
       node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
-      node.style.textShadow = "none";
+      node.style.textShadow = shadowLift > 0
+        ? `${shadowLift}px ${4 * shadowLift}px ${2.5 * shadowLift}px rgba(20, 25, 30, ${.3 * shadowLift})` : "none";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {
