@@ -1,7 +1,9 @@
 import { matrixEnvironment, MatrixColumnGap } from "../matrix-column-product/environment.ts";
-import { columnCombinations } from "../../math/matrix-interpretations.ts";
-import { compileExpression } from "../../math/expression.ts";
-import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
+import { columnCombinations, inspectOrthonormality } from "../../math/matrix-interpretations.ts";
+import { constant, compileExpression } from "../../math/expression.ts";
+import { createKpScalarExpression, createKpTypedMatrixFromRows, type KpScalarValue } from "../../math/typed-semantic-math.ts";
+
+import { matrixProduct } from "../../math/matrix-product.ts";
 
 export const env = matrixEnvironment();
 export const combination = columnCombinations(env.product).column(0);
@@ -22,9 +24,41 @@ export const beats = Object.freeze([
 
 // Local discovery cadence, borrowing the accepted copy/evaluate/place envelope.
 export const durationMs = 12600;
-export function sample(progress: number) {
+export function sample(progress: number, sequence = beats) {
   if (!Number.isFinite(progress)) throw new MatrixColumnGap("Progress must be finite.");
   const p = Math.min(1, Math.max(0, progress));
-  const phase = p * (beats.length - 1), index = Math.ceil(phase);
-  return { progress: p, index, local: index === 0 ? 1 : phase - index + 1, beat: beats[index]! };
+  const phase = p * (sequence.length - 1), index = Math.ceil(phase);
+  return { progress: p, index, local: index === 0 ? 1 : phase - index + 1, beat: sequence[index]! };
 }
+
+// Only the demonstrated finite 2×2 cases enter this local presentation.
+// Mathematical relationships stay with matrixProduct and its interpretations.
+export function example(kind = "columns", column = 0) {
+  if (!["columns", "identity", "orthonormality"].includes(kind) || ![0, 1].includes(column)) {
+    throw new MatrixColumnGap("Choose columns, identity or orthonormality, and result column 0 or 1.");
+  }
+  const matrix = (id: string, values: readonly (readonly number[])[]) => createKpTypedMatrixFromRows({ id,
+    rows: values.map((row, i) => row.map((value, j) => createKpScalarExpression({ id: `${id}.${i}.${j}`, expression: constant(value) }))),
+  });
+  const evidence = kind === "orthonormality" ? inspectOrthonormality({ id: "example.gram",
+    matrix: matrix("example.Q", [[.6, -.8], [.8, .6]]), scope: {}, tolerance: 1e-12 }) : undefined;
+  const product = evidence?.gram ?? (kind === "identity" ? matrixProduct({ id: "example.AI", left: env.A,
+    right: matrix("example.I", [[1, 0], [0, 1]]) }) : env.product);
+  const combination = columnCombinations(product).column(column);
+  const labels = kind === "identity" ? ["A", "I", "AI"] : evidence ? ["Qᵀ", "Q", "QᵀQ"] : ["A", "B", "AB"];
+  const ordinal = column === 0 ? "first" : "second";
+  const cues = kind === "columns" && column === 0 ? beats : beats.map(beat => ({ ...beat, cue: ({
+    initial: evidence ? "QᵀQ compares the columns of Q with one another." : `The ${ordinal} column of ${labels[1]} supplies the weights for one result column.`,
+    columns: `Separate the columns of ${labels[0]}. The entries retain their original references.`,
+    weights: kind === "identity" ? `Column ${column + 1} of I selects column ${column + 1} of A: its weight is 1; the other weight is 0.` : `Use the ${ordinal} column of ${labels[1]} as the weights.`,
+    distribute: "Apply each scalar to every entry. The copies refer to the same coefficient.",
+    scaled: "Evaluate every product, including negative and zero contributions.",
+    sum: `Add entry by entry: ${combination.result.entries.map(numberOf).join(" above ")}.`,
+    placed: evidence ? `Column ${column + 1} of QᵀQ: a column dotted with itself gives 1; with the other column, 0.` : kind === "identity" ? `The result is column ${column + 1} of A. Zero contributes nothing; one preserves every value.` : `The sum is the ${ordinal} column of AB.`,
+  } as Record<string, string>)[beat.id]! }));
+  return Object.freeze({ kind, column, env: { A: product.left, B: product.right, product }, combination, labels,
+    beats: Object.freeze(cues), evidence,
+    title: evidence ? "Orthonormal columns produce the identity" : kind === "identity" ? "Identity selects each column" : "Columns, weighted and added",
+  });
+}
+export type ColumnExample = ReturnType<typeof example>;

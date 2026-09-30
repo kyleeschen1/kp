@@ -2,8 +2,8 @@
   "id": "run-contract.kp.matrix-interpretations-v1",
   "kind": "run-contract",
   "title": "Matrix interpretations with retained semantic identity",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review revised in-place scalar treatment at column-combinations weights then Next. Transfer remains gated on acceptance.",
+  "status": "resolved",
+  "summary": "COMPLETE 4/4: accepted scalar presentation reused for identity and orthonormality with retained references, scoped claims and verified browser behavior.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -44,13 +44,14 @@
     {
       "id": "scalar-vector",
       "title": "Show the scalar reaching every vector entry",
-      "summary": "Delivered in-place scalar shrink and per-entry growth with verified native endpoints; visual acceptance pending.",
+      "summary": "User accepted the in-place scalar shrink and growth treatment: beautiful, on to the next thing.",
       "status": "complete"
     },
     {
       "id": "transfer",
       "title": "Post-approval identity and orthonormality transfer",
-      "status": "planned"
+      "summary": "Delivered identity and numerical Gram examples for both result columns through the accepted presentation; 18 semantic and 18 cross-browser checks pass.",
+      "status": "complete"
     }
   ]
 }

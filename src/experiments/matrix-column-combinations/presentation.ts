@@ -2,7 +2,7 @@ import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMaterialCloneAuthority } from "../../rendering/computed-style-clone.ts";
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
-import { env, combination, numberOf, sample } from "./model.ts";
+import { example, type ColumnExample, numberOf, sample } from "./model.ts";
 
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-comb-key=${key}}{${numberOf(entry)}}`;
@@ -10,21 +10,23 @@ const vector = (entries: readonly KpScalarValue[], key: string) => math(`\\begin
 const matrix = (rows: readonly (readonly KpScalarValue[])[], key: string) => math(`\\begin{bmatrix}${rows.map((row, i) => row.map((entry, j) => tag(`${key}-${i}-${j}`, entry)).join(" & ")).join("\\\\")}\\end{bmatrix}`);
 const label = (id: string, text: string) => renderKpFocusDeckAnnotation({ entityId: id, text, role: "support" });
 
-export function calculationLatex() {
+export function calculationLatex(scene: ColumnExample = example()) {
+  const { combination } = scene;
   const column = (entries: readonly KpScalarValue[]) => `\\begin{bmatrix}${entries.map(numberOf).join("\\\\")}\\end{bmatrix}`;
   return combination.terms.map(term => `${numberOf(term.coefficient)}${column(term.vector.entries)}`).join("+") +
     "=" + combination.terms.map(term => `\\begin{bmatrix}${term.pairs.map(pair => `${numberOf(pair.right)}\\times ${numberOf(pair.left)}`).join("\\\\")}\\end{bmatrix}`).join("+") +
     "=" + combination.terms.map(term => column(term.entries)).join("+") + "=" + column(combination.result.entries);
 }
 
-export function stageHtml() {
+export function stageHtml(scene: ColumnExample = example()) {
+  const { env, combination, labels } = scene;
   return `<div class="comb-stage" aria-hidden="true">
     <div class="comb-equation">
-      <div>${matrix(env.A.rows, "a")}<div>${label(env.A.id, "A")}</div></div>
+      <div>${matrix(env.A.rows, "a")}<div>${label(env.A.id, labels[0]!)}</div></div>
       <span>${math("\\times")}</span>
-      <div>${matrix(env.B.rows, "b")}<div>${label(env.B.id, "B")}</div></div>
+      <div>${matrix(env.B.rows, "b")}<div>${label(env.B.id, labels[1]!)}</div></div>
       <span>${math("=")}</span>
-      <div>${matrix(env.product.result.rows, "c")}<div>${label(env.product.result.id, "AB")}</div></div>
+      <div>${matrix(env.product.result.rows, "c")}<div>${label(env.product.result.id, labels[2]!)}</div></div>
     </div>
     <div class="comb-weighted">${combination.terms.map(term => `<div class="comb-term">
       <span data-reveal="2">${math(tag(`weight-${term.index}`, term.coefficient))}</span>
@@ -42,7 +44,8 @@ export function stageHtml() {
 }
 
 interface Position { x: number; y: number }
-export function mountPresentation(root: HTMLElement) {
+export function mountPresentation(root: HTMLElement, scene: ColumnExample = example()) {
+  const { combination } = scene;
   const stage = root.querySelector<HTMLElement>(".comb-stage")!;
   const layer = root.querySelector<HTMLElement>(".comb-material")!;
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-comb-key]")].map(node => [node.dataset["kpCombKey"]!, node]));
@@ -81,18 +84,18 @@ export function mountPresentation(root: HTMLElement) {
     };
     for (const term of combination.terms) {
       term.vector.entries.forEach((entry, i) => copy(`a-${i}-${term.index}`, `column-${term.index}-${i}`, entry, 1));
-      copy(`b-${term.index}-0`, `weight-${term.index}`, term.coefficient, 2);
+      copy(`b-${term.index}-${scene.column}`, `weight-${term.index}`, term.coefficient, 2);
       // Both interpretations share these exact operands and derived products.
       // Fan-out makes new occurrences of the coefficient, not new scalar values.
       term.pairs.forEach((pair, i) => {
         copy(`weight-${term.index}`, `factor-${term.index}-${i}`, pair.right, 3, true);
       });
     }
-    combination.result.entries.forEach((entry, i) => copy(`sum-${i}`, `c-${i}-0`, entry, 6));
+    combination.result.entries.forEach((entry, i) => copy(`sum-${i}`, `c-${i}-${scene.column}`, entry, 6));
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const render = (progress: number) => {
-    const frame = sample(progress);
+    const frame = sample(progress, scene.beats);
     if (disposed) return frame;
     const settled = frame.local === 1 ? frame.index : frame.index - 1;
     stage.dataset["progress"] = String(frame.progress);
@@ -101,9 +104,9 @@ export function mountPresentation(root: HTMLElement) {
     for (const node of stage.querySelectorAll<HTMLElement>("[data-reveal]")) node.style.opacity = Number(node.dataset["reveal"]) <= settled ? "1" : "0";
     for (const [key, node] of native) {
       node.style.transform = "";
-      node.style.opacity = key.startsWith("c-") ? (settled === 6 && key.endsWith("-0") ? "1" : "0") : "1";
+      node.style.opacity = key.startsWith("c-") ? (settled === 6 && key.endsWith(`-${scene.column}`) ? "1" : "0") : "1";
       node.classList.toggle("comb-focus", (frame.index === 1 && key.startsWith("a-")) ||
-        (frame.index === 2 && /^b-\d-0$/.test(key)) || (frame.index === 3 && (key.startsWith("weight-") || key.startsWith("factor-"))));
+        (frame.index === 2 && key.startsWith("b-") && key.endsWith(`-${scene.column}`)) || (frame.index === 3 && (key.startsWith("weight-") || key.startsWith("factor-"))));
     }
     weighted.style.opacity = settled >= 3 ? "0" : "1";
     const distributing = frame.index === 3 && frame.local < 1;

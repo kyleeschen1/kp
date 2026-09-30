@@ -11,9 +11,11 @@ contributions between dot products and column combinations; identity/Gram cases
 are tested without making an unqualified orthonormality claim. The
 [new native-KaTeX exemplar](../reviews/2026-09-30-matrix-interpretations.md)
 was accepted by the user, who requested explicit scalar-vector animation. The
-new in-place Distribute passage (scalar shrink, per-entry growth) is at its visual checkpoint.
-`run-contract.kp.matrix-interpretations-v1` owns this inserted refinement and
-the conditional continuation to identity and orthonormality presentations.
+in-place Distribute passage was accepted (“beautiful! on to the next thing”).
+Identity and QᵀQ now reuse its choreography for both result columns; source
+references and scoped numerical evidence remain authoritative.
+`run-contract.kp.matrix-interpretations-v1` records the completed approved scope.
+Further mathematical domains or public API promotion need a new proposal.
 
 September 30: the user separately authorized making the column-first 2×2 matrix
 animation developed during the API discussion. The [candidate and review packet](../reviews/2026-09-30-matrix-column-animation.md)

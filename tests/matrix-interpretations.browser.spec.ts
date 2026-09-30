@@ -96,3 +96,35 @@ test("reduced-motion controls and deep links reach exact states", async ({ page 
   await page.getByRole("slider").press("End"); await page.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(root).toHaveAttribute("data-milestone", "initial");
 });
+
+for (const kind of ["identity", "orthonormality"] as const) for (const column of [0, 1]) {
+  test(`${kind} column ${column + 1} reuses scalar distribution and places its own result`, async ({ page }, info) => {
+    await page.goto(`${route}?example=${kind}&column=${column}#weights`);
+    await expect(page.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+    const chooser = page.getByRole("combobox", { name: "Milestone" });
+    const slider = page.getByRole("slider", { name: "Animation position" });
+    for (const beat of [2, 3, 4, 6]) {
+      await chooser.selectOption(String(beat));
+      await page.locator(".matrix-card").screenshot({ path: info.outputPath(`transfer-${beat}.png`) });
+    }
+    const values = kind === "identity" ? (column === 0 ? [1, 3] : [2, 4]) : (column === 0 ? [1, 0] : [0, 1]);
+    for (const [row, value] of values.entries()) {
+      await expect(page.locator(`[data-kp-comb-key="c-${row}-${column}"]`)).toHaveText(String(value));
+      await expect(page.locator(`[data-kp-comb-key="c-${row}-${column}"]`)).toHaveCSS("opacity", "1");
+      await expect(page.locator(`[data-kp-comb-key="c-${row}-${1 - column}"]`)).toHaveCSS("opacity", "0");
+    }
+    if (kind === "orthonormality") await expect(page.getByRole("region", { name: "Column dot products" })).toContainText("within-tolerance");
+    await slider.fill("0.46");
+    const poses = () => page.locator(".comb-paint").evaluateAll(nodes => nodes.map(node => node.getAttribute("style")));
+    const held = await poses(); await slider.fill("0"); await slider.fill("0.46"); expect(await poses()).toEqual(held);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await chooser.selectOption("3");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: info.outputPath("transfer-phone.png"), fullPage: true });
+    await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce", forcedColors: "active" });
+    await page.getByRole("button", { name: "Previous milestone" }).click();
+    await expect(page.locator("#comb-player")).toHaveAttribute("data-milestone", "weights");
+    await page.getByRole("button", { name: "Next step", exact: true }).click();
+    await expect(page.locator("#comb-player")).toHaveAttribute("data-milestone", "distribute");
+  });
+}

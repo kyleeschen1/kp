@@ -1,12 +1,44 @@
 # One product, another explanation
 
-Status: column-combination layout accepted by the user ("this looks good").
-The requested scalar-vector distribution refinement is the next visual checkpoint;
-the original review and evidence below remain provenance.
+Status: column-combination layout and in-place scalar treatment accepted by the
+user (“beautiful! on to the next thing”). Identity/Gram transfer implemented
+with the same choreography; earlier checkpoints below are historical evidence.
 Authority: [approved experiment](../2026-09-30-matrix-interpretations.md).
 Contract: `run-contract.kp.matrix-interpretations-v1`.
 
-## In-place scalar revision (current review)
+## Accepted-treatment transfer
+
+- [Identity](http://localhost:8000/experiments/matrix-column-combinations/?example=identity&column=0#weights): one and zero select each original column. Both weights and all zero contributions remain inspectable.
+- [Orthonormality](http://localhost:8000/experiments/matrix-column-combinations/?example=orthonormality&column=0#weights): Q has columns (0.6, 0.8) and (−0.8, 0.6). Animate either column of QᵀQ using the same scalar distribution; the four retained column dot products explain the diagonal ones and off-diagonal zeros below the animation.
+- The page links to both result columns and the unchanged default example.
+
+The local presentation now receives an example containing the existing product,
+selected combination, labels and cues. No choreography, timing, CSS, shared
+renderer or mathematical owner changed. Inputs, negative/zero contributions and
+result destinations come from the original product references. Qᵀ retains Q's
+scalar objects; the numerical orthonormality check and visual product use the
+identical Gram object. The check is scoped to this numerical example with
+1e-12 tolerance, not a symbolic theorem for arbitrary Q.
+
+Authoring cost: two additional cases fit in the existing model plus parameterized
+presentation and host. No new source files, clock or renderer abstraction.
+Standalone build: 41 modules; JS 99.62 KB gzip (+1.66 KB), CSS 14.30 KB gzip
+(unchanged), excluding fonts/transport. No budget amendments. This is bounded
+finite 2×2 preview reuse, not catalogue promotion or arbitrary-matrix support.
+The rollback unit is this transfer commit; accepted default motion is preserved.
+
+Validation includes 18 semantic/preservation tests, full types, architecture,
+standalone build and 18 browser checks across Chromium, Firefox and WebKit.
+Both columns of each case exercise placement, replay, narrow layout, reduced
+motion and forced colors; the existing default checks also cover dark mode.
+The first expanded browser run could not launch Chromium inside the sandbox;
+the direct approved scoped command passed. Desktop/phone captures were inspected.
+The impact selector has no experiment-specific rule and proposed the generic
+whole-product suite; the approved experiment contract instead supplies focused
+checks, full types, architecture and its standalone build. No whole-repository
+release or compositor certification claim follows from these checks.
+
+## In-place scalar revision (accepted)
 
 The user requested shrinking the outside coefficients and growing their copies
 beside every entry, in place. Open [Weights](http://localhost:8000/experiments/matrix-column-combinations/#weights)
@@ -29,8 +61,7 @@ inspected. Build: JS 97.96 KB gzip (+0.35 KB), CSS 14.30 KB gzip (+0.03 KB),
 excluding fonts/transport. Stage height returns from 470 to 370 px; no budget
 changes. Timing remains provisional pending human review.
 
-HUMAN_CHECKPOINT: revised scalar treatment ready for review; identity and
-orthonormality visual transfer remain behind its acceptance.
+The user accepted this treatment and authorized the existing transfer continuation.
 
 ## Scalar-vector refinement (superseded motion, historical evidence)
 

@@ -32,8 +32,10 @@ boundary through column combinations, identity and orthonormality. The
 accepted dot-product animation. Column combinations reuse its scalar contribution
 objects; identity and scoped Gram evidence are tested semantically. The user
 accepted the column-combination layout and requested explicit scalar-vector
-animation. The new in-place Distribute passage (scalar shrink, per-entry growth) is at its visual checkpoint before transfer under
-`run-contract.kp.matrix-interpretations-v1`. This is current execution; standalone
+animation, then accepted the in-place scalar treatment. Identity and QᵀQ now
+reuse that presentation for either result column, with source-reference and
+numerical-claim checks under `run-contract.kp.matrix-interpretations-v1`.
+The approved experiment is delivered; standalone
 dot-product choreography remains a proposal, and inspector work remains parked.
 
 September 30, subsequent matrix discussion: the user accepted the matrix

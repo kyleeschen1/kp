@@ -2,9 +2,9 @@
   "id": "next-action.kp.matrix-interpretations",
   "kind": "next-action",
   "title": "Explain one matrix product through column combinations, identity and orthonormality",
-  "status": "blocked",
+  "status": "resolved",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: in-place scalar revision delivered for visual judgment before identity and orthonormality transfer.",
+  "summary": "COMPLETE: approved object-boundary experiment delivered, including accepted motion and bounded identity/Gram reuse. Further domains and public API promotion remain proposals.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -43,6 +43,13 @@
       "scope": "standard",
       "checkedAt": "2026-09-30T20:03:49.898Z",
       "notes": "In-place scalar revision: 17 semantic tests and 2 browser checks pass; rows preserved, scalar shrinks before destination growth, deterministic replay and native handoff. Full types and build pass. JS 97.96 KB gzip; CSS 14.30 KB gzip. Visual treatment pending human review."
+    },
+    {
+      "command": "npm run test:matrix-interpretations; npm run visual:matrix-interpretations -- --project=firefox --project=webkit; npm run typecheck; npm run typecheck:tests; npm run check:architecture; npm run build:matrix-interpretations; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-09-30T20:16:54.308Z",
+      "notes": "18 semantic tests and 18 Chromium/Firefox/WebKit checks pass. Full types plus final test types, architecture and build pass. Direct approved browser command repaired sandbox launch failure. Original motion unchanged; both result columns and signed decimal/zero contributions verified. JS 99.62 KB gzip, CSS 14.30 KB. Local preview reuse, no catalogue promotion."
     }
   ]
 }

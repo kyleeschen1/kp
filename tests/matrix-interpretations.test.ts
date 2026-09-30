@@ -88,3 +88,26 @@ test("orthonormality is numerical evidence with retained scope and explicit tole
   assert.equal(evidence.status, "within-tolerance");
   assert.throws(() => inspectOrthonormality({ id: "check", matrix: Q, scope: {}, tolerance: 0 }));
 });
+
+test("presentation cases retain semantic authority for both selected columns and reject unsupported inputs", async () => {
+  const { example } = await import("../src/experiments/matrix-column-combinations/model.ts");
+  for (const kind of ["columns", "identity", "orthonormality"]) for (const j of [0, 1]) {
+    const scene = example(kind, j);
+    assert.equal(scene.combination.index, j);
+    assert.equal(scene.env.A, scene.env.product.left);
+    assert.equal(scene.env.B, scene.env.product.right);
+    for (const term of scene.combination.terms) for (const [i, pair] of term.pairs.entries()) {
+      assert.equal(pair, scene.env.product.cell(i, j).dot.pairs[term.index]);
+      assert.equal(pair.right, scene.env.B.rows[term.index]![j]);
+    }
+    if (scene.evidence) {
+      assert.equal(scene.env.product, scene.evidence.gram);
+      assert.equal(scene.evidence.status, "within-tolerance");
+      for (const cell of scene.env.product.cells) for (const pair of cell.dot.pairs) {
+        assert.equal(pair.left, scene.evidence.matrix.rows[pair.index]![cell.rowIndex]);
+      }
+    }
+  }
+  for (const column of [-1, 2, .5, NaN]) assert.throws(() => example("identity", column));
+  assert.throws(() => example("unsupported"));
+});
