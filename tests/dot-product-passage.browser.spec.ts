@@ -103,7 +103,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
   for (const trace of await page.locator('[data-trace-role="source-trace"]').all()) await expect(trace).toHaveCSS("opacity", "0.6");
   const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", backColor);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", backColor.replace(/\/\s*[\d.]+\)/, "/ 0.3)"));
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");

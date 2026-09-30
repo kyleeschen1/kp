@@ -278,6 +278,12 @@ entries. Moving numbers now use the same theme-native ink as their destination
 occurrences (light text in dark mode, dark text in light mode). Source traces
 remain grey. The scoped browser check asserts matching ink in both themes.
 
+September 30, lighter working surface: front-panel fill opacity reduced from
+85% to 30% at the user's request, exposing more of the grey originals behind it.
+The border, panel shadow, text and rear surface retain their existing paint.
+The browser color-endpoint check now preserves matching warm RGB with the
+intentionally lower front alpha.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
