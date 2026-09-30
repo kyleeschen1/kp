@@ -75,7 +75,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     }
     multiply = passage.dot.pairs.map(pair => prepareFusion(stage,
       [requireNative(`pair-left-${pair.index}`), requireNative(`pair-right-${pair.index}`)],
-      [requireNative(`syntax-open-${pair.index}`), requireNative(`syntax-multiply-${pair.index}`), requireNative(`syntax-close-${pair.index}`)], requireNative(`product-${pair.index}`)));
+      [requireNative(`syntax-multiply-${pair.index}`)], requireNative(`product-${pair.index}`),
+      [requireNative(`syntax-open-${pair.index}`), requireNative(`syntax-close-${pair.index}`)]));
     add = prepareFusion(stage, passage.dot.pairs.map(pair => requireNative(`product-${pair.index}`)),
       [...products.querySelectorAll<HTMLElement>(".dot-plus")], requireNative("sum"));
     const row = vectors.left.querySelector(".katex-html > .base")!.getBoundingClientRect();

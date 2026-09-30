@@ -1,15 +1,16 @@
 @import "../matrix-column-product/style.css";
-.dot-stage { position: relative; height: 330px; min-width: 650px; font-size: var(--kp-equation-type-size); color: var(--kp-st-ink); }
-.dot-inputs { position: absolute; top: 40px; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
-.dot-work { position: absolute; top: 180px; left: 0; right: 0; height: 80px; }
+.dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
+.dot-inputs { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
+.dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
 .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
 .dot-plus, [data-kp-dot-key^="syntax-"], .dot-inputs .mopen, .dot-inputs .mclose { color: var(--kp-st-muted, #6b7280); }
+.dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct) { color: var(--kp-st-muted, #6b7280); }
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
 .dot-paint { position: absolute; left: 0; top: 0; color: var(--kp-st-focus); }
 .dot-static { overflow-x: auto; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
-:root[data-matrix-layout="side"] .dot-inputs { top: 130px; right: 55%; gap: 1rem; }
-:root[data-matrix-layout="side"] .dot-work { top: 180px; left: 45%; }
+:root[data-matrix-layout="side"] .dot-inputs { right: 55%; gap: 1rem; }
+:root[data-matrix-layout="side"] .dot-work { left: 45%; }

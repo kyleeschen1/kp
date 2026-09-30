@@ -71,6 +71,13 @@
       "scope": "Centered dots and whole-product grouping",
       "checkedAt": "2026-09-30T21:48:09.522Z",
       "notes": "Four unit and two browser tests pass; full types and build pass. Browser checks include dot glyph and three opening/closing parentheses, group introduction timing, fusion and preserved pivot. Multiplication frame inspected. Entry 5.88 KB gzip; local optical adapter certification limits unchanged."
+    },
+    {
+      "command": "npm run test:dot-passage; npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Smaller centered notation and delayed parenthesis fusion",
+      "checkedAt": "2026-09-30T21:56:10.818Z",
+      "notes": "Four unit and two Chromium tests pass, full types pass. Original semantic references and deterministic reverse seek preserved. Initial and multiplication frames inspected. Local adapter only; global compositor certification unchanged. Review packet updated."
     }
   ]
 }

@@ -118,6 +118,24 @@ Shared chunks were repartitioned, so the new entry size alone is not a total
 page-cost delta. No budget amendments. A local model, source, presentation,
 host entry and stylesheet are added; the general matrix/math owners are unchanged.
 
+September 30, compact centered presentation refinement: the mathematical stage
+is 10% smaller, including both source entries and their destination occurrences
+to avoid a size jump at handoff. Starting vectors and the evaluation line are
+centered vertically; the existing layout controls retain horizontal grouping.
+KaTeX operator, relation, enclosure and punctuation classes use the muted theme
+color in the stage and static calculation. Product parentheses are explicit
+enclosure participants in the local fusion adapter: their sampled phase trails
+the contents, while the result retains its existing handoff. This is a local
+visual trial, not promotion of a new global fusion profile.
+
+Validation: four unit tests, two scoped Chromium tests, full typecheck (zero
+Svelte errors/warnings), and the matrix experiment build pass. Browser checks
+cover matching entry sizes, consistent syntax color, centered working layout,
+delayed enclosure compression/withdrawal and reverse seek restoration, alongside
+the existing semantic-reference, pivot, endpoint and configuration checks.
+Initial, multiplication hold and delayed-enclosure captures were inspected.
+The dot entry is now 5.96 KB gzip (previously 5.88); no budget change.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

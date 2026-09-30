@@ -72,6 +72,37 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-kp-dot-key^="syntax-open-"]')).toHaveCount(3);
   await expect(page.locator('[data-kp-dot-key^="syntax-close-"]')).toHaveCount(3);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("multiply-hold.png") });
+  const notation = await page.locator(".dot-stage").evaluate(stage => {
+    const read = (selector: string) => getComputedStyle(stage.querySelector(selector)!);
+    const bounds = stage.getBoundingClientRect();
+    const expression = stage.querySelector(".dot-pairs")!.getBoundingClientRect();
+    return { entry: read('[data-kp-dot-key="left-0"]').fontSize,
+      paired: read('[data-kp-dot-key="pair-left-0"]').fontSize,
+      ink: read('[data-kp-dot-key="pair-left-0"]').color,
+      syntax: ['[data-kp-dot-key="syntax-open-0"]', '[data-kp-dot-key="syntax-close-0"]',
+        '[data-kp-dot-key="syntax-multiply-0"]', '.dot-plus', '.dot-inputs .mopen', '.dot-inputs .mclose'].map(s => read(s).color),
+      offsetX: expression.x + expression.width / 2 - bounds.x - bounds.width / 2,
+      offsetY: expression.y + expression.height / 2 - bounds.y - bounds.height / 2 };
+  });
+  expect(notation.entry).toBe(notation.paired);
+  expect(new Set(notation.syntax).size).toBe(1);
+  expect(notation.syntax[0]).not.toBe(notation.ink);
+  expect(Math.abs(notation.offsetX)).toBeLessThan(1);
+  expect(Math.abs(notation.offsetY)).toBeLessThan(25);
+  // Parentheses shrink after the contents; seeking backward restores that ordering.
+  const delayedPose = async () => page.locator('[data-kp-dot-key="syntax-open-0"], [data-kp-dot-key="pair-left-0"]').evaluateAll(nodes => nodes.map(node => {
+    const style = getComputedStyle(node);
+    return { scale: new DOMMatrixReadOnly(style.transform).a, opacity: style.opacity };
+  }));
+  await slider.fill("0.4106");
+  const delayed = await delayedPose();
+  expect(delayed[0]!.scale).toBeGreaterThan(delayed[1]!.scale);
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("enclosure-delay.png") });
+  await slider.fill("0.4269");
+  await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("opacity", "0");
+  await expect(page.locator('[data-kp-dot-key="syntax-open-0"]')).toHaveCSS("opacity", "1");
+  await slider.fill("1"); await slider.fill("0.4106");
+  expect(await delayedPose()).toEqual(delayed);
   const gap = await page.locator(".dot-pairs").evaluate(node => parseFloat(getComputedStyle(node).gap));
   expect(gap).toBeLessThan(8);
   await chooser.selectOption("3");
