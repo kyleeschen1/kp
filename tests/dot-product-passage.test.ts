@@ -44,10 +44,10 @@ test("sampling has exact native checkpoints and no dependence on playback histor
 
 test("negative notation follows its expression context without changing scalar values", async () => {
   const { calculationLatex, stageHtml } = await import("../src/experiments/dot-product-passage/presentation.ts");
-  assert.equal(calculationLatex(passage), "2\\times 4+(-1)\\times 5+3\\times (-2)=8-5-6=-3");
+  assert.equal(calculationLatex(passage), "2\\times 4+-1\\times 5+3\\times -2=8-5-6=-3");
   const html = stageHtml(passage);
-  assert.ok(html.includes("syntax-pair-left-1-open"));
-  assert.ok(html.includes("syntax-pair-right-2-open"));
+  assert.ok(!html.includes("syntax-pair-left-1-open"));
+  assert.ok(!html.includes("syntax-pair-right-2-open"));
   assert.equal(valueOf(passage.dot.pairs[1]!.product), -5);
   assert.equal(valueOf(passage.dot.pairs[2]!.product), -6);
 });

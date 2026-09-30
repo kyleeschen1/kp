@@ -4,18 +4,14 @@ import { valueOf, sample, DotPassageGap, type DotPassage } from "./model.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
-const factorNumber = (entry: KpScalarValue) => valueOf(entry) < 0 ? `(${number(entry)})` : number(entry);
 const signedSum = (entries: readonly KpScalarValue[]) => entries.map((entry, i) =>
   `${i > 0 && valueOf(entry) >= 0 ? "+" : ""}${number(entry)}`).join("");
 const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-dot-key=${key}}{${number(entry)}}`;
-// Parentheses are factor syntax, not part of the scalar occurrence that moves.
-const factor = (key: string, entry: KpScalarValue) => valueOf(entry) < 0
-  ? `\\htmlData{kp-dot-key=syntax-${key}-open}{(}${tag(key, entry)}\\htmlData{kp-dot-key=syntax-${key}-close}{)}` : tag(key, entry);
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const plus = `<span class="dot-plus">${math("+")}</span>`;
 
 export function calculationLatex(passage: DotPassage) {
-  return passage.dot.pairs.map(pair => `${factorNumber(pair.left)}\\times ${factorNumber(pair.right)}`).join("+") + "=" +
+  return passage.dot.pairs.map(pair => `${number(pair.left)}\\times ${number(pair.right)}`).join("+") + "=" +
     signedSum(passage.dot.pairs.map(pair => pair.product)) + "=" + valueOf(passage.dot.result);
 }
 
@@ -23,9 +19,9 @@ export function stageHtml(passage: DotPassage) {
   const { dot } = passage;
   const vector = (side: "left" | "right") => math(`\\begin{bmatrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{bmatrix}`);
   return `<div class="dot-stage" aria-hidden="true">
-    <div class="dot-inputs">${vector("left")}${vector("right")}</div>
+    <div class="dot-inputs"><span data-dot-vector="left">${vector("left")}</span><span data-dot-vector="right">${vector("right")}</span></div>
     <div class="dot-work">
-      <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`${factor(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=syntax-times-${i}}{\\times}${factor(`pair-right-${i}`, pair.right)}`)}</span>`).join(plus)}</div>
+      <div class="dot-pairs">${dot.pairs.map((pair, i) => `<span class="dot-term" data-pair="${i}">${math(`${tag(`pair-left-${i}`, pair.left)}\\htmlData{kp-dot-key=syntax-times-${i}}{\\times}${tag(`pair-right-${i}`, pair.right)}`)}</span>`).join(plus)}</div>
       <div class="dot-products">${dot.pairs.map((pair, i) => `${i > 0 ? `<span class="dot-plus">${math(valueOf(pair.product) < 0 ? "\\phantom{+}" : "+")}</span>` : ""}<span class="dot-term" data-product="${i}">${math(tag(`product-${i}`, pair.product))}</span>`).join("")}</div>
       <div class="dot-sum">${math(tag("sum", dot.result))}</div>
     </div><div class="dot-material"></div>
@@ -39,6 +35,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const pairs = stage.querySelector<HTMLElement>(".dot-pairs")!;
   const products = stage.querySelector<HTMLElement>(".dot-products")!;
   const sum = stage.querySelector<HTMLElement>(".dot-sum")!;
+  const vectors = { left: stage.querySelector<HTMLElement>('[data-dot-vector="left"]')!, right: stage.querySelector<HTMLElement>('[data-dot-vector="right"]')! };
+  let dock = { left: { x: 0, y: 0 }, right: { x: 0, y: 0 } };
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => [node.dataset["kpDotKey"]!, node]));
   const points = new Map<string, Point>();
   const owners: { node: HTMLElement; from: string; to: string }[] = [];
@@ -56,7 +54,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   }
   requireNative("sum").dataset["sourceId"] = passage.dot.result.id;
   const reset = () => {
-    for (const node of [pairs, products, sum, ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus")]) {
+    for (const node of [pairs, products, sum, ...Object.values(vectors), ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus")]) {
       node.style.opacity = "1"; node.style.transform = "";
     }
   };
@@ -68,6 +66,12 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const r = node.getBoundingClientRect();
       points.set(key, { x: r.x - bounds.x + r.width / 2, y: r.y - bounds.y + r.height / 2 });
     }
+    const row = vectors.left.querySelector(".katex-html > .base")!.getBoundingClientRect();
+    const column = vectors.right.querySelector(".katex-html > .base")!.getBoundingClientRect();
+    const first = points.get("left-0")!, target = points.get("pair-left-0")!;
+    const left = { x: target.x - first.x, y: target.y - first.y };
+    // Dock the actual bracket corners, independent of font metrics and layout.
+    dock = { left, right: { x: row.right + left.x - column.left, y: row.top + left.y - column.bottom } };
     for (const pair of passage.dot.pairs) for (const side of ["left", "right"] as const) {
       const from = `${side}-${pair.index}`, to = `pair-${side}-${pair.index}`;
       const clone = cloneElementWithComputedStyles(requireNative(from));
@@ -91,12 +95,30 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     products.style.opacity = frame.index >= 2 && !(frame.index === 3 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 3 ? "1" : "0";
     const shrink = 1 - ease(frame.local / .45), grow = ease((frame.local - .45) / .55);
+    const docking = ease(frame.local / .3), tilt = ease((frame.local - .4) / .45);
+    for (const side of ["left", "right"] as const) {
+      vectors[side].style.transform = `translate(${dock[side].x * docking}px, ${dock[side].y * docking}px)`;
+      vectors[side].style.opacity = frame.index === 0 || (frame.index === 1 && frame.local < .4) ? "1" : "0";
+      if (frame.index === 0) vectors[side].style.transform = "";
+    }
     for (const { node, from, to } of owners) {
-      // Separate arrivals avoid crossing unrelated operands from the two vectors.
-      const arrival = (frame.local - (from.startsWith("left-") ? 0 : .4)) / .4;
-      const a = points.get(from)!, b = points.get(to)!, t = ease(arrival);
-      node.style.transform = `translate(${a.x + (b.x - a.x) * t}px, ${a.y + (b.y - a.y) * t}px) translate(-50%, -50%)`;
-      node.style.opacity = frame.index === 1 && arrival > 0 && frame.local < 1 ? "1" : "0";
+      const side = from.startsWith("left-") ? "left" : "right";
+      const source = points.get(from)!, b = points.get(to)!;
+      const a = { x: source.x + dock[side].x, y: source.y + dock[side].y };
+      let x = a.x + (b.x - a.x) * tilt, y = a.y + (b.y - a.y) * tilt;
+      if (side === "right") {
+        // Rotate the ordered column around its last entry while stretching to
+        // the measured pair spacing. Glyphs stay upright throughout the tilt.
+        const last = passage.dot.pairs.length - 1;
+        const base = points.get(`right-${last}`)!, end = points.get(`pair-right-${last}`)!;
+        const pivot = { x: base.x + dock.right.x, y: base.y + dock.right.y };
+        const radius = (base.y - source.y) * (1 - tilt) + (end.x - b.x) * tilt;
+        const angle = -Math.PI / 2 - Math.PI / 2 * tilt;
+        x = pivot.x + (end.x - pivot.x) * tilt + radius * Math.cos(angle) + (source.x - base.x) * (1 - tilt);
+        y = pivot.y + (end.y - pivot.y) * tilt + radius * Math.sin(angle);
+      }
+      node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      node.style.opacity = frame.index === 1 && frame.local >= .4 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {
       for (const pair of passage.dot.pairs) {
@@ -104,8 +126,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
         requireNative(`pair-right-${pair.index}`).style.opacity = "0";
 
       }
-      for (const [key, node] of native) if (key.startsWith("syntax-")) node.style.transform = `scale(${ease((frame.local - .8) / .2)})`;
-      for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${ease((frame.local - .8) / .2)})`;
+      for (const [key, node] of native) if (key.startsWith("syntax-")) node.style.transform = `scale(${ease((frame.local - .85) / .15)})`;
+      for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${ease((frame.local - .85) / .15)})`;
     }
     // Evaluation replaces operand expressions with derived values. Their distinct
     // semantic IDs remain intact even though they occupy the same presentation slot.

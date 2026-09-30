@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: revised passage ready; covector-column layout and contextual negative notation await visual acceptance before rectangular integration.",
+  "summary": "HUMAN_CHECKPOINT: review corner docking, bracket withdrawal and column tilt in the standalone passage before rectangular integration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,7 +32,7 @@
     {
       "id": "passage",
       "title": "Three-term dot passage and visual review",
-      "summary": "Revised standalone candidate verified; visual acceptance remains required before rectangular integration.",
+      "summary": "Corner-docking and column-tilt candidate verified; visual acceptance pending before integration.",
       "status": "complete"
     },
     {

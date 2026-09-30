@@ -16,6 +16,16 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-kp-dot-key="right-2"]')).toHaveText("−2");
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const slider = page.getByRole("slider", { name: "Animation position" });
+  await slider.fill("0.11");
+  const rowCorner = await page.locator('[data-dot-vector="left"] .katex-html > .base').boundingBox();
+  const columnCorner = await page.locator('[data-dot-vector="right"] .katex-html > .base').boundingBox();
+  expect(columnCorner!.x).toBeCloseTo(rowCorner!.x + rowCorner!.width, 1);
+  expect(columnCorner!.y + columnCorner!.height).toBeCloseTo(rowCorner!.y, 1);
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("docked.png") });
+  await slider.fill("0.2");
+  await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "0");
+  await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "0");
+  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
   for (const i of [0, 1, 2, 3]) {
     await chooser.selectOption(String(i));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`step-${i}.png`) });
@@ -65,6 +75,13 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await page.getByRole("button", { name: "Side by side", exact: true }).click();
   await expect(child.getByRole("slider")).toHaveValue("0.57");
   await page.screenshot({ path: info.outputPath("side-layout.png"), fullPage: true });
+  await child.getByRole("slider").fill("0.2");
+  const stageBounds = await child.locator(".dot-stage").boundingBox();
+  for (const copy of await child.locator(".dot-paint").all()) {
+    const bounds = await copy.boundingBox();
+    expect(bounds!.y).toBeGreaterThanOrEqual(stageBounds!.y);
+  }
+  await page.screenshot({ path: info.outputPath("side-tilt.png"), fullPage: true });
   await child.getByRole("slider").press("End");
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.getByRole("slider")).toHaveValue("0");

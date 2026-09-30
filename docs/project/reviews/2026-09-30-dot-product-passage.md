@@ -11,12 +11,18 @@ Products and Sum. The [standalone host](http://localhost:8000/experiments/dot-pr
 supports the same milestones and hash restoration.
 
 The source is the row covector `[2, −1, 3]` applied to the column vector
-`[4; 5; −2]`. Copies arrange into three ordered operand pairs, with the
-covector entries settling before the vector entries join them; multiplication
-syntax enters after arrival. Negative factors acquire separate parentheses;
-the scalar copies retain their original signed values. Each pair shrinks,
+`[4; 5; −2]`. The user requested a replacement for sequential copy arrivals:
+move both objects so the column's lower-left meets the row's upper-right,
+withdraw the brackets, then tilt the column into the paired expression while
+spreading the row entries. The local presentation measures native KaTeX boxes
+for docking and pair slots for arrival. Column positions turn around the last
+entry while their spacing expands; glyphs remain upright. This is a layout
+transformation, not a mathematical rotation of the vector. The source
+representations are consumed by this rearrangement; immutable references remain.
+Multiplication syntax enters after arrival. Negative factors have no added
+parentheses, as requested. Each pair shrinks,
 then its derived value grows in the same slot: `8 − 5 − 6`. The products
-then shrink and the sum `−3` grows. Source entries stay readable. Review the
+then shrink and the sum `−3` grows. Review the
 clarity of pairing, the product replacement, and the final sum's timing.
 
 The local model accepts the original `MatrixProductCell`. A 1×3 row times a
@@ -34,17 +40,18 @@ untransformed native slots before restoring the current semantic playhead.
 Shared layout, spacing and motion settings apply through the existing host.
 The accessible calculation and no-script text preserve the explanation.
 
-Checks after the requested covector/vector correction: four focused
+Checks after the requested corner-docking/tilt revision: four focused
 semantic/preservation tests; two scoped Chromium tests
 with four endpoints, ten transit captures, source IDs, native handoff, actual
 playback, reverse seek, layout reflow, instant steps, reduced motion and phone
-overflow. Endpoint and transit images were inspected. Inspection identified crossing
-routes when both vectors moved simultaneously. Sequential vector arrivals keep
-direct paths; sampled pairwise material-overlap checks guard this local repair
-without claiming continuous collision certification. The column revision exposed
-a measurement false positive: adjacent copies' owner line-leading boxes overlap
-while their scalar inline boxes remain separate. The check now measures those
-scalar boxes and reports progress and bounds on failure; paths are unchanged.
+overflow. Corner docking and exclusive source/material presence now have
+explicit checks. Endpoint, docked, transit and side-layout images were inspected.
+The prior simultaneous-copy crossing regression remains guarded by sampled
+scalar-box overlap checks, without claiming continuous collision certification.
+Visual inspection caught a wrapper-box docking gap and a clipped top entry in
+the side layout. Measuring KaTeX's native base fixes the docking boundary;
+reserving the same vertical tilt room in both layouts fixes the clipping.
+Tests assert corner alignment and side-layout material containment.
 Full types (including zero Svelte errors/warnings) and the standalone build pass
 again for this correction. Before this correction, architecture, the standalone
 multi-entry build and three changed-inventory checks pass, as do the eight
@@ -54,7 +61,7 @@ The generic impact selector has no experiment rule and proposes whole-product
 gates; this discovery uses the approved contract's bounded verification instead.
 No broad release or native-compositor certification is claimed.
 
-Build: 56 modules; revised dot entry 4.01 KB gzip (previously 3.81 KB), shared config 0.38 KB,
+Build: 56 modules; tilt-trial dot entry 4.33 KB gzip (previously 4.01 KB), shared config 0.38 KB,
 shared scaffold chunk 85.16 KB, dot CSS 14.40 KB, excluding fonts/transport.
 Shared chunks were repartitioned, so the new entry size alone is not a total
 page-cost delta. No budget amendments. A local model, source, presentation,

@@ -10,4 +10,4 @@
 .dot-static { overflow-x: auto; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
 :root[data-matrix-layout="side"] .dot-inputs { top: 130px; right: 55%; gap: 1rem; }
-:root[data-matrix-layout="side"] .dot-work { top: 100px; left: 45%; }
+:root[data-matrix-layout="side"] .dot-work { top: 180px; left: 45%; }
