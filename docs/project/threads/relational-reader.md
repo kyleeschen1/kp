@@ -5,6 +5,13 @@ Last Updated: 2026-09-29
 
 ## Canonical direction
 
+September 30: the user separately authorized making the column-first 2×2 matrix
+animation developed during the API discussion. The [candidate and review packet](../reviews/2026-09-30-matrix-column-animation.md)
+are implemented under `run-contract.kp.matrix-column-animation-v1`. The local
+chained score distinguishes immutable env and scene snapshots, but is not the
+full proposed general-purpose binding/layout API. Its visual judgment is pending;
+the symbolic inspector below remains unaccepted and is not resumed by this work.
+
 Approved current execution: [symbolic inspection](../2026-09-29-symbolic-inspection-long-loop-proposal.md),
 controlled by `run-contract.kp.symbolic-inspection-v1`. Preserve the current
 feature tip and its accepted dependencies; the repo has no branch helper.

@@ -1,0 +1,27 @@
+{
+  "id": "next-action.kp.matrix-column-animation",
+  "kind": "next-action",
+  "title": "Make the column-first matrix animation",
+  "status": "blocked",
+  "domain": "linear-algebra",
+  "summary": "HUMAN_CHECKPOINT: review column lifting, pivot, copying, evaluated dot products and native result settlement; see the matrix-column-animation review packet.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-30-matrix-column-animation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-09-30-matrix-column-animation.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-column; npm run visual:matrix-column; npm run typecheck; npm run typecheck:tests; npm run check:architecture; npm run build:matrix-column; git diff --check",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-09-30T18:36:38.036Z",
+      "notes": "10 semantic/unit tests, 2 Chromium tests; repaired clone markers, pivot crossing and evaluation crowding. See review for initial test failures and scoped limits."
+    }
+  ]
+}

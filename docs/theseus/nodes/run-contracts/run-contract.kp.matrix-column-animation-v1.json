@@ -1,0 +1,39 @@
+{
+  "id": "run-contract.kp.matrix-column-animation-v1",
+  "kind": "run-contract",
+  "title": "Matrix column animation exemplar",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: implemented exemplar awaits choreography and usefulness review at /experiments/matrix-column-product/. No API or catalogue promotion authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.matrix-column-animation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-09-30-matrix-column-animation.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-column",
+    "npm run visual:matrix-column",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "One bounded column-first matrix score, native presentation, host and checks"
+  ],
+  "disallowedWork": [
+    "No generic DSL, catalogue promotion, paused inspector continuation or migration"
+  ],
+  "goal": "Deliver the requested column-first animation for human review",
+  "target": "next-action.kp.matrix-column-animation",
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Build and verify the column-first exemplar",
+      "summary": "Column-first exemplar implemented and verified; live host and executable score ready for human judgment.",
+      "status": "complete"
+    }
+  ]
+}
