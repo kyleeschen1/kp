@@ -326,6 +326,23 @@ receiver-plane shadow depth, semantic metadata exclusion, clean landing and
 existing reverse/configuration checks. Transit and multiplication captures were
 inspected. The previously logged bracket-size discrepancy remains deferred.
 
+September 30, stationary context and stronger pop: source plane and source
+contents no longer translate in x, y or z. They shrink to 94% around their own
+centers and dim together to 22% opacity. Original scalar traces remain attached
+to their original references. Foreground entries briefly scale up by at most
+12%, returning to native size before landing. Receiver-plane glyph shadows are
+much stronger (peak alpha .65, larger offset and blur); attached text shadow
+remains disabled so glyphs stay crisp. Reduced motion suppresses pop/shadow.
+
+Browser checks cover stationary rear transforms, coordinated translucency and
+scale, foreground growth followed by native-size landing, and stronger shadow
+presence. The pop produces approximately 2.6px overlap of adjacent column font
+rectangles at an early sampled frame; visual inspection shows distinct glyphs.
+Per motif-composition policy, transit contacts now attach diagnostic JSON rather
+than assert zero rectangle overlap. Finite geometry, native endpoints, identity,
+reverse seek and configuration checks remain executable. This is not a claim
+of raster-level collision certification. The bracket-size issue stays deferred.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
