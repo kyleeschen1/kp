@@ -66,6 +66,25 @@ test("signed dot passage preserves references through pairing, products and sum"
   const gap = await page.locator(".dot-pairs").evaluate(node => parseFloat(getComputedStyle(node).gap));
   expect(gap).toBeLessThan(8);
   await chooser.selectOption("3");
+  // Fusion retains nonzero ink through the handoff, rather than a blank
+  // shrink-to-zero interval. Each multiplication remains its own cohort.
+  for (const local of [.48, .51, .53, .58]) {
+    for (const phase of [1, 2]) {
+      await slider.fill(String(Number(((phase + local) / 3).toFixed(4))));
+      const cohorts = phase === 1 ? passage.dot.pairs.map(pair =>
+        [`pair-left-${pair.index}`, `pair-right-${pair.index}`, `syntax-times-${pair.index}`, `product-${pair.index}`])
+        : [[...passage.dot.pairs.map(pair => `product-${pair.index}`), "sum"]];
+      for (const keys of cohorts) {
+        const visible = await page.locator(keys.map(key => `[data-kp-dot-key="${key}"]`).join(",")).evaluateAll(nodes => nodes.filter(node => {
+          const bounds = node.getBoundingClientRect();
+          return getComputedStyle(node).opacity === "1" && bounds.width > 1 && bounds.height > 1;
+        }).length);
+        expect(visible).toBeGreaterThan(0);
+      }
+      await page.locator(".matrix-card").screenshot({ path: info.outputPath(`fusion-${phase}-${local}.png`) });
+    }
+  }
+  await chooser.selectOption("3");
   await expect(page.locator('[data-kp-dot-key="sum"]')).toHaveText("−3");
   await expect(page.locator(".dot-sum")).toHaveCSS("opacity", "1");
   for (const pair of passage.dot.pairs) {

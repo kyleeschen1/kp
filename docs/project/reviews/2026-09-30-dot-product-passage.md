@@ -25,12 +25,13 @@ settles downward later in the turn to clear the opening row. This is a layout
 transformation, not a mathematical rotation of the vector. The source
 representations are consumed by this rearrangement; immutable references remain.
 Multiplication syntax enters after arrival. Negative factors have no added
-parentheses, as requested. Each pair shrinks,
-then its derived value grows in the same slot: `8 + −5 + −6`. Addition signs
+parentheses, as requested. Each pair now uses the canonical contributor-fusion
+optical sampler: its two operands and multiplication sign gather into nonzero
+ink, then the derived value emerges in the same slot: `8 + −5 + −6`. Addition signs
 remain visible and stationary throughout multiplication. Only the later sum
 step consumes them. Pair terms now use their native widths with a 0.25em gap;
 product slots retain those widths for a stationary addition-sign handoff. The products
-then shrink and the sum `−3` grows. Review the
+then gather with those signs through a second contributor fusion into `−3`. Review the
 clarity of pairing, the product replacement, and the final sum's timing.
 
 The local model accepts the original `MatrixProductCell`. A 1×3 row times a
@@ -48,7 +49,17 @@ untransformed native slots before restoring the current semantic playhead.
 Shared layout, spacing and motion settings apply through the existing host.
 The accessible calculation and no-script text preserve the explanation.
 
-Checks after the requested coordinated-pivot revision: four focused
+The new local `fusion.ts` adapter projects the existing
+`sampleKpNativeKatexContributorFusionPaint` onto measured native DOM fragments.
+There are no copied optical thresholds or new arithmetic values. The three
+multiplication cohorts and the later addition use the original dot references;
+operators participate as catalysts. Native endpoints, reset/remeasure and the
+existing clock remain local owners. This reuses the canonical optical treatment,
+but does not mint evaluation certificates or traverse the full certified scene
+compositor. Do not describe this experiment as compositor-certified. That
+integration remains distinct from this user-requested visual trial.
+
+Checks after the requested contributor-fusion revision: four focused
 semantic/preservation tests; two scoped Chromium tests
 with four endpoints, ten transit captures, source IDs, native handoff, actual
 playback, reverse seek, layout reflow, instant steps, reduced motion and phone
@@ -60,6 +71,14 @@ Visual inspection caught a wrapper-box docking gap and a clipped top entry in
 the side layout. Measuring KaTeX's native base fixes the docking boundary;
 reserving the same vertical tilt room in both layouts fixes the clipping.
 Tests assert corner alignment and side-layout material containment. The latest
+checks sample both evaluations before and after the fusion handoff, require a
+nonzero visible fragment in each cohort, and retain addition-sign preservation.
+Eight additional handoff images were captured; four representative frames were
+inspected directly. These DOM geometry/presence
+checks are not raster-level continuity certification. A test initially supplied
+trailing-zero strings rejected by Playwright's range-input fill; normalizing the
+numeric strings fixed the harness and both scoped browser tests pass again.
+Previous
 checks also assert column collinearity during the turn and that row entries
 reach their final slots while the column is still tilted. The initial pivot
 trial caught bottom-entry overlap with the opening row; delaying the shared
@@ -78,7 +97,7 @@ The generic impact selector has no experiment rule and proposes whole-product
 gates; this discovery uses the approved contract's bounded verification instead.
 No broad release or native-compositor certification is claimed.
 
-Build: 56 modules; revised dot entry 4.35 KB gzip (previously 4.23 KB), shared config 0.38 KB,
+Build: 59 modules; revised dot entry 5.76 KB gzip (previously 4.35 KB), shared config 0.38 KB,
 shared scaffold chunk 85.16 KB, dot CSS 14.40 KB, excluding fonts/transport.
 Shared chunks were repartitioned, so the new entry size alone is not a total
 page-cost delta. No budget amendments. A local model, source, presentation,

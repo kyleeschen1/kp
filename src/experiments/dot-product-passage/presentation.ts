@@ -2,6 +2,7 @@ import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMaterialCloneAuthority } from "../../rendering/computed-style-clone.ts";
 import { valueOf, sample, DotPassageGap, type DotPassage } from "./model.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
+import { prepareFusion } from "./fusion.ts";
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
 const signedSum = (entries: readonly KpScalarValue[]) => entries.map(number).join("+");
@@ -39,6 +40,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => [node.dataset["kpDotKey"]!, node]));
   const points = new Map<string, Point>();
   const owners: { node: HTMLElement; from: string; to: string }[] = [];
+  let multiply: readonly ((progress: number) => void)[] = [];
+  let add: (progress: number) => void = () => {};
   let disposed = false;
   const requireNative = (key: string) => {
     const node = native.get(key);
@@ -54,7 +57,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   requireNative("sum").dataset["sourceId"] = passage.dot.result.id;
   const reset = () => {
     for (const node of [pairs, products, sum, ...Object.values(vectors), ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus")]) {
-      node.style.opacity = "1"; node.style.transform = "";
+      node.style.opacity = "1"; node.style.transform = ""; node.style.clipPath = "";
     }
   };
   const prepare = () => {
@@ -70,6 +73,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const r = node.getBoundingClientRect();
       points.set(key, { x: r.x - bounds.x + r.width / 2, y: r.y - bounds.y + r.height / 2 });
     }
+    multiply = passage.dot.pairs.map(pair => prepareFusion(stage,
+      [requireNative(`pair-left-${pair.index}`), requireNative(`pair-right-${pair.index}`)],
+      [requireNative(`syntax-times-${pair.index}`)], requireNative(`product-${pair.index}`)));
+    add = prepareFusion(stage, passage.dot.pairs.map(pair => requireNative(`product-${pair.index}`)),
+      [...products.querySelectorAll<HTMLElement>(".dot-plus")], requireNative("sum"));
     const row = vectors.left.querySelector(".katex-html > .base")!.getBoundingClientRect();
     const column = vectors.right.querySelector(".katex-html > .base")!.getBoundingClientRect();
     const first = points.get("left-0")!, target = points.get("pair-left-0")!;
@@ -99,7 +107,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 3 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 3 ? "1" : "0";
-    const shrink = 1 - ease(frame.local / .45), grow = ease((frame.local - .45) / .55);
     const docking = ease(frame.local / .3), tilt = smooth((frame.local - .4) / .45);
     const opening = smooth((frame.local - .4) / .26);
     for (const side of ["left", "right"] as const) {
@@ -140,15 +147,13 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     // Evaluation replaces operand expressions with derived values. Their distinct
     // semantic IDs remain intact even though they occupy the same presentation slot.
     if (frame.index === 2) {
-      for (const node of pairs.querySelectorAll<HTMLElement>(".dot-term")) node.style.transform = `scale(${shrink})`;
-      for (const node of products.querySelectorAll<HTMLElement>(".dot-term")) node.style.transform = `scale(${grow})`;
+      multiply.forEach(apply => apply(frame.local));
       // Addition is a separate operation: retain its signs while factors shrink
       // and products grow, then hand them to the identical product slots.
       for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.local === 1 ? "1" : "0";
     }
     if (frame.index === 3) {
-      products.style.transform = `scale(${shrink})`;
-      sum.style.transform = `scale(${grow})`;
+      add(frame.local);
     }
     return frame;
   };

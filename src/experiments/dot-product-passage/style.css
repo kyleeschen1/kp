@@ -4,7 +4,7 @@
 .dot-work { position: absolute; top: 180px; left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
-.dot-pairs [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
+.dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
 .dot-paint { position: absolute; left: 0; top: 0; color: var(--kp-st-focus); }
 .dot-static { overflow-x: auto; }
