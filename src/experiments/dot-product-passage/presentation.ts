@@ -17,7 +17,7 @@ export function calculationLatex(passage: DotPassage) {
 
 export function stageHtml(passage: DotPassage) {
   const { dot } = passage;
-  const vector = (side: "left" | "right") => math(`\\begin{bmatrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{bmatrix}`);
+  const vector = (side: "left" | "right") => math(`\\left[\\;\\begin{matrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{matrix}\\;\\right]`);
   return `<div class="dot-stage" aria-hidden="true">
     <div class="dot-inputs"><span data-dot-vector="left">${vector("left")}</span><span data-dot-vector="right">${vector("right")}</span></div>
     <div class="dot-work">
@@ -105,13 +105,18 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     reset();
     stage.dataset["progress"] = String(frame.progress);
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
-    products.style.opacity = frame.index >= 2 && !(frame.index === 3 && frame.local === 1) ? "1" : "0";
-    sum.style.opacity = frame.index === 3 ? "1" : "0";
+    products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
+    sum.style.opacity = frame.index === 4 ? "1" : "0";
+    for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = "0";
+    for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
     const docking = ease(frame.local / .3), tilt = smooth((frame.local - .4) / .45);
     const opening = smooth((frame.local - .4) / .26);
     for (const side of ["left", "right"] as const) {
       vectors[side].style.transform = `translate(${dock[side].x * docking}px, ${dock[side].y * docking}px)`;
-      vectors[side].style.opacity = frame.index === 0 || (frame.index === 1 && frame.local < .4) ? "1" : "0";
+      vectors[side].style.opacity = frame.index === 0 ? "1" : frame.index === 1 ? String(1 - ease((frame.local - .4) / .4)) : "0";
+      if (frame.index === 1 && frame.local >= .4) {
+        for (const pair of passage.dot.pairs) requireNative(`${side}-${pair.index}`).style.opacity = "0";
+      }
       if (frame.index === 0) vectors[side].style.transform = "";
     }
     for (const { node, from, to } of owners) {
@@ -141,20 +146,20 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
         requireNative(`pair-right-${pair.index}`).style.opacity = "0";
 
       }
-      for (const [key, node] of native) if (key.startsWith("syntax-")) node.style.transform = `scale(${ease((frame.local - .85) / .15)})`;
-      for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${ease((frame.local - .85) / .15)})`;
     }
+    if (frame.index <= 1) for (const [key, node] of native) if (key.startsWith("syntax-")) node.style.opacity = "0";
     // Evaluation replaces operand expressions with derived values. Their distinct
     // semantic IDs remain intact even though they occupy the same presentation slot.
     if (frame.index === 2) {
-      multiply.forEach(apply => apply(frame.local));
-      // Addition is a separate operation: retain its signs while factors shrink
-      // and products grow, then hand them to the identical product slots.
-      for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.local === 1 ? "1" : "0";
+      // Introduce the operator, hold the readable products, then evaluate.
+      const evaluation = Math.max(0, (frame.local - .35) / .65);
+      multiply.forEach(apply => apply(evaluation));
+      if (frame.local < .35) for (const [key, node] of native) if (key.startsWith("syntax-")) node.style.transform = `scale(${ease(frame.local / .18)})`;
     }
     if (frame.index === 3) {
-      add(frame.local);
+      for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${ease(frame.local / .4)})`;
     }
+    if (frame.index === 4) add(frame.local);
     return frame;
   };
   prepare();

@@ -32,8 +32,8 @@ test("presentation rejects unsupported lengths, broken references and nonfinite 
 });
 
 test("sampling has exact native checkpoints and no dependence on playback history", () => {
-  for (const [i, id] of ["vectors", "pairs", "products", "sum"].entries()) {
-    const frame = sample(i / 3); assert.equal(frame.beat.id, id); assert.equal(frame.local, 1);
+  for (const [i, id] of ["vectors", "pairs", "products", "addition", "sum"].entries()) {
+    const frame = sample(i / 4); assert.equal(frame.beat.id, id); assert.equal(frame.local, 1);
   }
   for (const p of [.1, .28, .45, .61, .78, .95]) {
     const held = sample(p); sample(1); sample(0); assert.deepEqual(sample(p), held);

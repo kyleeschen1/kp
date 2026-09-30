@@ -14,10 +14,11 @@ export const valueOf = (entry: KpScalarValue) => {
 export const beats = Object.freeze([
   { id: "vectors", cue: "Pair each entry of the row covector with the matching entry of the column vector." },
   { id: "pairs", cue: "Tilt the column into matching pairs as the row spreads to make room." },
-  { id: "products", cue: "Evaluate each multiplication. Each new number is the product of its two operands." },
+  { id: "products", cue: "Multiply each matched pair to form its product." },
+  { id: "addition", cue: "Join the three products with addition signs." },
   { id: "sum", cue: "Add the three products, keeping their signs. This is the dot product." },
 ].map(beat => Object.freeze(beat)));
-export const durationMs = 6300;
+export const durationMs = 8400;
 
 /** A local projection of an existing relationship. No replacement operands,
  * contributions or arithmetic are created to drive the animation. */

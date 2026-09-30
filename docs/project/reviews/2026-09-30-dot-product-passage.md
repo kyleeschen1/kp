@@ -7,13 +7,13 @@ Execution: `run-contract.kp.matrix-authoring-v1`, first of three packages.
 
 Open [Matrix explorations](http://localhost:8000/experiments/matrix-examples/)
 and choose **Three-term dot product**. Use Next to inspect Vectors, Pairs,
-Products and Sum. The [standalone host](http://localhost:8000/experiments/dot-product-passage/)
+Products, Addition and Sum. The [standalone host](http://localhost:8000/experiments/dot-product-passage/)
 supports the same milestones and hash restoration.
 
 The source is the row covector `[2, −1, 3]` applied to the column vector
 `[4; 5; −2]`. The user requested a replacement for sequential copy arrivals:
 move both objects so the column's lower-left meets the row's upper-right,
-withdraw the brackets, then tilt the column into the paired expression while
+fade the brackets during departure, then tilt the column into the paired expression while
 spreading the row entries. The local presentation measures native KaTeX boxes
 for docking and pair slots for arrival. The latest user-requested trial replaces
 independent concave-up paths with a coordinated pivot: all column entries stay
@@ -24,15 +24,23 @@ is already in its final slots before the column reaches horizontal. The unit
 settles downward later in the turn to clear the opening row. This is a layout
 transformation, not a mathematical rotation of the vector. The source
 representations are consumed by this rearrangement; immutable references remain.
-Multiplication syntax enters after arrival. Negative factors have no added
+The Pairs endpoint contains operands only. In the next beat multiplication
+syntax grows in, holds briefly, then evaluation begins. Negative factors have no added
 parentheses, as requested. Each pair now uses the canonical contributor-fusion
 optical sampler: its two operands and multiplication sign gather into nonzero
-ink, then the derived value emerges in the same slot: `8 + −5 + −6`. Addition signs
-remain visible and stationary throughout multiplication. Only the later sum
-step consumes them. Pair terms now use their native widths with a 0.25em gap;
-product slots retain those widths for a stationary addition-sign handoff. The products
+ink, then the derived value emerges in the same slot. In the separate Addition
+beat plus signs appear to form `8 + −5 + −6`; only the later Sum beat consumes
+them. This intentionally supersedes the earlier always-present addition signs.
+Pair terms use their native widths with a 0.25em gap;
+product slots retain those widths. The products
 then gather with those signs through a second contributor fusion into `−3`. Review the
 clarity of pairing, the product replacement, and the final sum's timing.
+
+Notation trial: KaTeX `left`/`right` delimiters enclose a native matrix with
+explicit internal padding, rather than manually drawn bracket characters.
+Operators use 0.85em sizing and the shared theme-aware muted ink token; brackets
+use the same muted ink. Signed scalar values retain normal number styling.
+The bracket-only source shells fade continuously while material entries move.
 
 The local model accepts the original `MatrixProductCell`. A 1×3 row times a
 3×1 column supplies the standalone dot relationship through `matrixProduct`.
@@ -59,9 +67,9 @@ but does not mint evaluation certificates or traverse the full certified scene
 compositor. Do not describe this experiment as compositor-certified. That
 integration remains distinct from this user-requested visual trial.
 
-Checks after the requested contributor-fusion revision: four focused
+Checks after the requested notation and beat-separation revision: four focused
 semantic/preservation tests; two scoped Chromium tests
-with four endpoints, ten transit captures, source IDs, native handoff, actual
+with five endpoints, ten transit captures, source IDs, native handoff, actual
 playback, reverse seek, layout reflow, instant steps, reduced motion and phone
 overflow. Corner docking and exclusive source/material presence now have
 explicit checks. Endpoint, docked, transit and side-layout images were inspected.
@@ -72,7 +80,11 @@ the side layout. Measuring KaTeX's native base fixes the docking boundary;
 reserving the same vertical tilt room in both layouts fixes the clipping.
 Tests assert corner alignment and side-layout material containment. The latest
 checks sample both evaluations before and after the fusion handoff, require a
-nonzero visible fragment in each cohort, and retain addition-sign preservation.
+nonzero visible fragment in each cohort, and verify that addition signs wait
+until multiplication has completed. Separate checks cover fractional bracket
+opacity during departure and multiplication syntax absent at Pairs but visible
+before fusion. Initial, Pairs, multiplication-hold and Addition images were
+inspected for the notation changes.
 Eight additional handoff images were captured; four representative frames were
 inspected directly. These DOM geometry/presence
 checks are not raster-level continuity certification. A test initially supplied
@@ -84,7 +96,7 @@ reach their final slots while the column is still tilted. The initial pivot
 trial caught bottom-entry overlap with the opening row; delaying the shared
 pivot's descent repaired it without changing the straight-axis constraint.
 The previous
-regressions also check two visible addition signs throughout multiplication
+regressions now check addition-sign introduction after multiplication
 and compact inter-term gaps. The first new test run used an invalid range-input
 step for the exact endpoint; it now selects that endpoint through the milestone
 control, while still sampling intermediate multiplication poses through the slider.
@@ -97,7 +109,7 @@ The generic impact selector has no experiment rule and proposes whole-product
 gates; this discovery uses the approved contract's bounded verification instead.
 No broad release or native-compositor certification is claimed.
 
-Build: 59 modules; revised dot entry 5.76 KB gzip (previously 4.35 KB), shared config 0.38 KB,
+Build: 59 modules; revised dot entry 5.85 KB gzip (previously 5.76 KB), shared config 0.38 KB,
 shared scaffold chunk 85.16 KB, dot CSS 14.40 KB, excluding fonts/transport.
 Shared chunks were repartitioned, so the new entry size alone is not a total
 page-cost delta. No budget amendments. A local model, source, presentation,

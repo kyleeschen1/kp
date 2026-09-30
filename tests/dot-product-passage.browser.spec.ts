@@ -16,18 +16,21 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-kp-dot-key="right-2"]')).toHaveText("−2");
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const slider = page.getByRole("slider", { name: "Animation position" });
-  await slider.fill("0.11");
+  await slider.fill("0.0825");
   const rowCorner = await page.locator('[data-dot-vector="left"] .katex-html > .base').boundingBox();
   const columnCorner = await page.locator('[data-dot-vector="right"] .katex-html > .base').boundingBox();
   expect(columnCorner!.x).toBeCloseTo(rowCorner!.x + rowCorner!.width, 1);
   expect(columnCorner!.y + columnCorner!.height).toBeCloseTo(rowCorner!.y, 1);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("docked.png") });
+  await slider.fill("0.15");
+  const fading = Number(await page.locator('[data-dot-vector="right"]').evaluate(node => getComputedStyle(node).opacity));
+  expect(fading).toBeGreaterThan(0); expect(fading).toBeLessThan(1);
   await slider.fill("0.2");
   await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "0");
   await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "0");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
   // The column turns as a straight unit; the row finishes opening before it lands.
-  for (const p of [.16, .2, .24, .28]) {
+  for (const p of [.12, .15, .18, .21]) {
     await slider.fill(String(p));
     const centers = await page.locator('[data-occurrence^="pair-right-"]').evaluateAll(nodes => nodes.map(node => {
       const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
@@ -37,7 +40,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     const offAxis = Math.abs((b!.x - a!.x) * (c!.y - a!.y) - (b!.y - a!.y) * (c!.x - a!.x)) / length;
     expect(offAxis).toBeLessThan(.1);
   }
-  await slider.fill("0.24");
+  await slider.fill("0.18");
   for (const pair of passage.dot.pairs) {
     const copy = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();
     const target = await page.locator(`[data-kp-dot-key="pair-left-${pair.index}"]`).boundingBox();
@@ -47,30 +50,34 @@ test("signed dot passage preserves references through pairing, products and sum"
   const columnTop = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
   const columnBottom = await page.locator('[data-occurrence="pair-right-2"]').boundingBox();
   expect(columnBottom!.y - columnTop!.y).toBeGreaterThan(1);
-  for (const i of [0, 1, 2, 3]) {
+  for (const i of [0, 1, 2, 3, 4]) {
     await chooser.selectOption(String(i));
     await page.locator(".matrix-card").screenshot({ path: info.outputPath(`step-${i}.png`) });
   }
-  // Multiplication may replace terms, but must not erase the pending addition.
-  for (const progress of [0.4, 0.5, 0.6, 2 / 3]) {
-    if (progress === 2 / 3) await chooser.selectOption("2");
-    else await slider.fill(String(progress));
+  // Addition is introduced only after multiplication, then remains for summation.
+  for (const progress of [.25, .3, .4, .5, .65, .75]) {
+    await slider.fill(String(progress));
     const visiblePluses = await page.locator(".dot-plus").evaluateAll(nodes => nodes.filter(node => {
       const parent = node.parentElement!;
       return getComputedStyle(parent).opacity === "1" && getComputedStyle(node).opacity === "1" && node.getBoundingClientRect().width > 0;
     }).map(node => node.textContent));
-    expect(visiblePluses).toHaveLength(2);
+    expect(visiblePluses).toHaveLength(progress <= .5 ? 0 : 2);
     expect(visiblePluses.every(text => text?.includes("+"))).toBe(true);
   }
   await chooser.selectOption("1");
+  for (const operator of await page.locator('[data-kp-dot-key^="syntax-times-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
+  await slider.fill("0.31");
+  for (const operator of await page.locator('[data-kp-dot-key^="syntax-times-"]').all()) await expect(operator).toHaveCSS("opacity", "1");
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("multiply-hold.png") });
   const gap = await page.locator(".dot-pairs").evaluate(node => parseFloat(getComputedStyle(node).gap));
   expect(gap).toBeLessThan(8);
   await chooser.selectOption("3");
   // Fusion retains nonzero ink through the handoff, rather than a blank
   // shrink-to-zero interval. Each multiplication remains its own cohort.
   for (const local of [.48, .51, .53, .58]) {
-    for (const phase of [1, 2]) {
-      await slider.fill(String(Number(((phase + local) / 3).toFixed(4))));
+    for (const phase of [1, 3]) {
+      const phaseLocal = phase === 1 ? .35 + .65 * local : local;
+      await slider.fill(String(Number(((phase + phaseLocal) / 4).toFixed(4))));
       const cohorts = phase === 1 ? passage.dot.pairs.map(pair =>
         [`pair-left-${pair.index}`, `pair-right-${pair.index}`, `syntax-times-${pair.index}`, `product-${pair.index}`])
         : [[...passage.dot.pairs.map(pair => `product-${pair.index}`), "sum"]];
@@ -84,7 +91,7 @@ test("signed dot passage preserves references through pairing, products and sum"
       await page.locator(".matrix-card").screenshot({ path: info.outputPath(`fusion-${phase}-${local}.png`) });
     }
   }
-  await chooser.selectOption("3");
+  await chooser.selectOption("4");
   await expect(page.locator('[data-kp-dot-key="sum"]')).toHaveText("−3");
   await expect(page.locator(".dot-sum")).toHaveCSS("opacity", "1");
   for (const pair of passage.dot.pairs) {
@@ -111,7 +118,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   }
   await chooser.selectOption("0");
   await page.getByRole("button", { name: "Next milestone" }).click();
-  await expect(page.locator(".dot-stage")).toHaveAttribute("data-progress", String(1 / 3));
+  await expect(page.locator(".dot-stage")).toHaveAttribute("data-progress", "0.25");
   await expect(page.locator('.dot-paint').first()).toHaveCSS("opacity", "0");
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

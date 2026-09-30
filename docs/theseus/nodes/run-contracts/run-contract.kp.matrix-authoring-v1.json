@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review contributor fusion in standalone dot passage before rectangular integration.",
+  "summary": "HUMAN_CHECKPOINT: review revised dot notation and operation staging before rectangular integration.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,7 +32,7 @@
     {
       "id": "passage",
       "title": "Three-term dot passage and visual review",
-      "summary": "Contributor-fusion optical trial verified for three products and final sum; ready for visual review.",
+      "summary": "Quieter padded notation and separated match, multiplication, addition-assembly and sum beats verified for visual review.",
       "status": "complete"
     },
     {
