@@ -294,6 +294,19 @@ under dark media emulation, moving shadow presence and shadow-free endpoints.
 Four unit tests and the build pass (6.17 KB gzip entry); a transit frame was
 inspected. This is a local palette trial, not a global theme preference change.
 
+Deferred visual feedback, September 30: user reports a large size difference
+between the two pairs of brackets. Log only; do not repair yet. Diagnosis should
+distinguish intended row/column enclosure height from inconsistent glyph scale,
+stroke weight, padding or perspective scaling. No cause has been established.
+
+Exploratory direction, not implementation approval: user finds tilt distracting
+and wants to brainstorm borderless panel levels, with entities rising from and
+settling onto surfaces and shadows communicating depth. The current code has no
+X/Y rotation, but retains perspective and Z-dependent apparent size. A possible
+next comparison is constant-size, face-on objects with surface-relative shadows
+and a small number of stable levels. Preserve the logged bracket issue and do
+not treat this discussion as approval to redesign or promote the motif.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
