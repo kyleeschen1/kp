@@ -148,6 +148,13 @@
       "scope": "Converging pairs, warm surfaces and retained source traces",
       "checkedAt": "2026-09-30T23:03:28.746Z",
       "notes": "Four unit and two browser tests pass; full types and build pass. Short opposite-side convergence replaces rigid pivot; slot opening precedes vertical closure. Six source traces and role separation after reprepare checked. Exact warm surface endpoint and reverse seeking preserved. Frames inspected, entry 6.12 KB gzip."
+    },
+    {
+      "command": "npm run visual:dot-passage",
+      "status": "passed",
+      "scope": "Neutral moving number color in both themes",
+      "checkedAt": "2026-09-30T23:04:49.494Z",
+      "notes": "Two Chromium checks pass, including moving/native ink equality in light and dark themes. Grey source traces and all existing choreography checks preserved. CSS-only visual change."
     }
   ]
 }

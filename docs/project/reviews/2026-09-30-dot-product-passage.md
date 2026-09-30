@@ -273,6 +273,11 @@ Four unit tests, full types and the scoped build pass; the entry is approximatel
 6.1 KB gzip. Matching and multiplication frames were inspected. This remains the
 standalone review candidate; rectangular integration has not begun.
 
+September 30, neutral moving ink: removed the blue/teal focus color from material
+entries. Moving numbers now use the same theme-native ink as their destination
+occurrences (light text in dark mode, dark text in light mode). Source traces
+remain grey. The scoped browser check asserts matching ink in both themes.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

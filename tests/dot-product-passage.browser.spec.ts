@@ -23,6 +23,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator(".dot-plane")).toHaveCount(2);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
   await slider.fill("0.06");
+  const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
+  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
@@ -248,5 +250,7 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
   await page.screenshot({ path: info.outputPath("dark.png"), fullPage: true });
   await child.getByRole("slider").fill("0.06");
+  const darkInk = await child.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
+  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", darkInk);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
 });
