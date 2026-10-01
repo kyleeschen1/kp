@@ -1,6 +1,48 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test('light typography keeps moving paint consistent and tightens both vector axes', async ({ page }, info) => {
+  await page.goto('/experiments/dot-product-passage/');
+  await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
+  const size = page.getByRole('slider', { name: 'Math size' });
+  const theme = page.getByRole('button', { name: 'Light mode', exact: true });
+  const timeline = page.getByRole('slider', { name: 'Animation position' });
+  await size.fill('20');
+  const metrics = () => page.locator('.dot-stage').evaluate(stage => {
+    const centers = (side: string, axis: 'x' | 'y', length: 'width' | 'height') =>
+      [...stage.querySelectorAll(`[data-dot-vector="${side}"] [data-kp-dot-key]`)].map(node => {
+        const r = node.getBoundingClientRect(); return r[axis] + r[length] / 2;
+      });
+    const gaps = (values: number[]) => values.slice(1).map((v, i) => v - values[i]!);
+    const stroke = (selector: string) => parseFloat(getComputedStyle(stage.querySelector(selector)!).webkitTextStrokeWidth);
+    return { row: gaps(centers('left', 'x', 'width')), column: gaps(centers('right', 'y', 'height')),
+      token: stroke('[data-kp-dot-key="left-0"] .mord'), moving: stroke('[data-occurrence="pair-left-0"] .mord'),
+      multiply: stroke('[data-kp-dot-key="syntax-multiply-0"] .mbin'), plus: stroke('.dot-plus .mord'),
+      delimiter: stroke('[data-kp-dot-key="syntax-open-0"] .mopen'),
+      bracket: parseFloat(getComputedStyle(stage.querySelector('[data-dot-vector]')!, '::before').borderLeftWidth) };
+  });
+  const light = await metrics();
+  expect(light.token).toBeGreaterThan(0);
+  expect(light.moving).toBe(light.token);
+  expect(light.multiply).toBeGreaterThan(0); expect(light.plus).toBeGreaterThan(0);
+  expect(light.delimiter).toBeGreaterThan(light.token);
+  await timeline.fill('0.125');
+  expect((await metrics()).moving).toBe(light.token);
+  await page.locator('.matrix-card').screenshot({ path: info.outputPath('light-heavier-tokens.png') });
+  await theme.click(); await timeline.fill('0');
+  const dark = await metrics();
+  expect(dark.token).toBe(0); expect(dark.moving).toBe(0);
+  expect(dark.multiply).toBe(0); expect(dark.plus).toBe(0);
+  expect(light.bracket).toBeGreaterThan(dark.bracket);
+  light.row.forEach((gap, i) => {
+    expect(gap).toBeLessThan(dark.row[i]!);
+    expect(gap).toBeGreaterThan(dark.row[i]! * .8);
+    expect(light.column[i]).toBeCloseTo(gap, 2);
+  });
+  await theme.click();
+  expect(await metrics()).toEqual(light);
+});
+
 test('beige light mode preserves focus ink and the held geometry', async ({ page }, info) => {
   await page.goto('/experiments/dot-product-passage/');
   await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
@@ -158,7 +200,7 @@ test('depth controls change whole groups while preserving endpoint and reverse p
     const style = getComputedStyle(node, '::before');
     return { width: parseFloat(style.borderLeftWidth), font: parseFloat(getComputedStyle(node).fontSize) };
   });
-  expect(bracket.width / bracket.font).toBeLessThan(.09);
+  expect(bracket.width / bracket.font).toBeLessThan(.15);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await timeline.fill('0.125');
   await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '1');

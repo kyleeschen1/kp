@@ -10,6 +10,11 @@
 .dot-stage .katex, .dot-static .katex { -webkit-font-smoothing: auto; -moz-osx-font-smoothing: auto; }
 :root[data-matrix-theme="dark"] :is(.dot-stage, .dot-static) .katex { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; -webkit-text-stroke: .035em currentColor; }
+/* Paint weight leaves KaTeX metrics intact and is copied into moving material. */
+:root[data-matrix-theme="light"] :is(.dot-stage, .dot-static) .katex { -webkit-text-stroke: .018em currentColor; }
+:root[data-matrix-theme="light"] .dot-stage [data-kp-dot-key^="syntax-"] { -webkit-text-stroke: .018em currentColor; }
+:root[data-matrix-theme="light"] :is(.dot-stage, .dot-static) .katex :is(.mopen, .mclose) { -webkit-text-stroke-width: .03em; }
+:root[data-matrix-theme="light"] :is(.dot-stage, .dot-static) .dot-negative-sign { -webkit-text-stroke-width: .05em; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
 /* The slider names the actual KaTeX size, accounting for its 1.21em default.
    Reserve proportional vertical room so larger column pivots remain visible. */
@@ -21,6 +26,10 @@
 /* KaTeX retains enclosure layout and MathML. One structural paint treatment
    replaces its short font brackets and tall SVG brackets without double paint. */
 .dot-inputs [data-dot-vector] { position: relative; display: inline-block; --dot-bracket-stroke: .075em; }
+/* A 2px floor keeps border rounding from erasing the increase at small sizes. */
+:root[data-matrix-theme="light"] .dot-inputs [data-dot-vector] { --dot-bracket-stroke: max(2px, .13em); }
+/* KaTeX sets these gaps inline. Column centers follow the measured row gaps. */
+:root[data-matrix-theme="light"] .dot-inputs .arraycolsep { width: .4em !important; }
 .dot-inputs .katex-display { margin: 0; }
 .dot-inputs :is(.mopen, .mclose) { visibility: hidden; }
 .dot-inputs [data-dot-vector]::before, .dot-inputs [data-dot-vector]::after {

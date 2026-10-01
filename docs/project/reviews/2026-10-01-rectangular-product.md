@@ -35,6 +35,16 @@ KaTeX smoothing (the thinner treatment remains dark-only); both player and
 menu expose the toggle. Theme changes preserve the playhead, remeasure geometry
 for that theme's size, and restore its previous size selection when returning.
 
+Subsequent light-only typography tuning uses a small current-color glyph stroke
+for tokens and operators, stronger parentheses, and vector borders with a 2px
+minimum. Vector column gaps shrink from .5em to .4em; the existing measured
+column projection keeps vertical center spacing equal to horizontal spacing.
+The Three-term dot product remains the visual reference. These local CSS rules
+are the rollback unit; dark paint, semantic identity and choreography are
+preserved. Browser checks compare native/moving stroke, theme restoration,
+matched axis spacing and unchanged dark paint. This remains exemplar tuning,
+not a catalogue-wide KaTeX policy.
+
 The rollback unit is the rectangular host/context integration; the accepted
 standalone arithmetic and presentation controls are preserved. The local context
 renderer is loaded only for the rectangular caller. No universal scene API,
