@@ -37,7 +37,17 @@ test("signed dot passage preserves references through pairing, products and sum"
     expect(parseFloat(bracket.vertical)).toBeGreaterThan(0);
   }
   for (const delimiter of await page.locator(".dot-inputs :is(.mopen, .mclose)").all()) await expect(delimiter).toHaveCSS("visibility", "hidden");
-  await expect(page.locator('[data-kp-dot-key="left-0"] .mord')).toHaveCSS("font-weight", "700");
+  await expect(page.locator('[data-kp-dot-key="left-0"] .mord')).toHaveCSS("font-weight", "400");
+  const elementSize = await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
+  const expressionSize = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
+  expect(elementSize / expressionSize).toBeCloseTo(.9, 2);
+  const negative = page.locator('[data-kp-dot-key="pair-left-1"] .dot-negative-sign');
+  await expect(negative).toHaveCSS("font-weight", "700");
+  const tokenInk = await page.locator('[data-kp-dot-key="pair-left-1"]').evaluate(node => getComputedStyle(node).color);
+  await expect(negative).toHaveCSS("color", tokenInk);
+  expect(await negative.evaluate(node => parseFloat(getComputedStyle(node).fontSize)) / expressionSize).toBeCloseTo(.85, 2);
+  await expect(page.locator('[data-kp-dot-key="syntax-multiply-0"]')).toHaveCSS("font-weight", "700");
+  await expect(page.locator(".dot-products .dot-plus .katex").first()).toHaveCSS("font-weight", "700");
   const inputBounds = async (side: string) => page.locator(`[data-kp-dot-key^="${side}-"]`).evaluateAll(nodes => nodes.map(node => {
     const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
   }));
@@ -63,7 +73,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
-  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "700");
+  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "400");
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
@@ -158,8 +168,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   const settledScale = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
   expect(settledScale).toBe(1);
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("opacity", "0");
-  await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
-  for (const trace of await page.locator('[data-trace-role="source-trace"]').all()) await expect(trace).toHaveCSS("opacity", "0.6");
+  await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(0);
+  for (const source of await page.locator(".dot-inputs [data-kp-dot-key]").all()) await expect(source).toHaveCSS("opacity", "0");
   const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   expect(backColor).toBe(initialFrontColor.replace(/\/\s*[\d.]+\)/, "/ 0.85)"));
   expect(earlyBackColor).not.toBe(backColor);
@@ -184,7 +194,7 @@ test("signed dot passage preserves references through pairing, products and sum"
       offsetX: work.offsetLeft + work.offsetWidth / 2 - stage.clientWidth / 2,
       depth: new DOMMatrixReadOnly(getComputedStyle(work).transform).m43 };
   });
-  expect(notation.entry).toBe(notation.paired);
+  expect(parseFloat(notation.entry) / parseFloat(notation.paired)).toBeCloseTo(.9, 2);
   expect(new Set(notation.syntax).size).toBe(1);
   expect(notation.syntax[0]).not.toBe(notation.ink);
   expect(notation.syntax[0]).toBe("rgb(70, 70, 70)");
@@ -301,7 +311,8 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await child.getByRole("slider", { name: "Animation position" }).fill("0.57");
   await page.getByRole("button", { name: "Side by side", exact: true }).click();
   await expect(child.getByRole("slider", { name: "Animation position" })).toHaveValue("0.57");
-  await expect(child.locator('[data-trace-role="source-trace"]')).toHaveCount(6);
+  await expect(child.locator('[data-trace-role="source-trace"]')).toHaveCount(0);
+  for (const source of await child.locator(".dot-inputs [data-kp-dot-key]").all()) await expect(source).toHaveCSS("opacity", "0");
   await expect(child.locator('.dot-material [data-trace-role]')).toHaveCount(0);
   await page.screenshot({ path: info.outputPath("side-layout.png"), fullPage: true });
   await child.getByRole("slider", { name: "Animation position" }).fill("0.2");

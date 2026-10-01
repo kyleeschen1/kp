@@ -4,7 +4,15 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 /* This light-mode exemplar uses actual bold font faces before geometry is measured. */
 #matrix-story :is(button, input, select, pre, code, [data-kp-focus-deck-type]) { font-weight: 600; }
 #matrix-story [data-kp-focus-deck-type="label"] { font-weight: 700; }
-.dot-stage .katex, .dot-static .katex { font-weight: 700; }
+/* KaTeX has regular and bold faces; a light paint stroke fills the gap without
+   requesting a nonexistent intermediate face or changing token metrics. */
+.dot-stage .katex, .dot-static .katex { font-weight: 400; -webkit-text-stroke: .2px currentColor; }
+.dot-inputs [data-kp-dot-key] { font-size: .9em; }
+.dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct),
+.dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct),
+.dot-plus .katex, [data-kp-dot-key^="syntax-"], .dot-negative-sign { font-weight: 700; -webkit-text-stroke: 0; }
+.dot-negative-sign { font-size: .85em; color: inherit; }
+.dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
 .dot-stage, .dot-static { --dot-syntax-ink: #464646; --dot-warm-paper: color-mix(in srgb, var(--kp-st-paper) 94%, #806548); }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
 .dot-stage { transform-style: preserve-3d; }

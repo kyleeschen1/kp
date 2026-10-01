@@ -204,6 +204,13 @@
       "scope": "Light-mode text weight and consistent row and column bracket paint",
       "checkedAt": "2026-10-01T00:03:47.275Z",
       "notes": "Three browser tests pass including bracket stroke equality, exclusive replacement paint and bold native/material glyph parity. Full typecheck and build pass. Initial and multiplication screenshots inspected. Global adoption remains unpromoted."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Dot passage token roles, operator weight and empty source vectors",
+      "checkedAt": "2026-10-01T00:12:25.724Z",
+      "notes": "Three browser tests, four unit tests, typecheck and build pass. Explicit unary sign role, 90 percent element sizing, measured growth, and no source traces verified. Screenshots reviewed locally; human checkpoint and broader scope remain unchanged."
     }
   ]
 }

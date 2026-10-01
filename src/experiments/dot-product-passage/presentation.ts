@@ -5,14 +5,16 @@ import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 import { prepareFusion } from "./fusion.ts";
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
-const signedSum = (entries: readonly KpScalarValue[]) => entries.map(number).join("+");
-const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-dot-key=${key}}{${number(entry)}}`;
+const signedToken = (entry: KpScalarValue) => valueOf(entry) < 0
+  ? `\\htmlClass{dot-negative-sign}{\\mathord{-}}${Math.abs(valueOf(entry))}` : number(entry);
+const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-dot-key=${key}}{${signedToken(entry)}}`;
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const plus = `<span class="dot-plus">${math("+")}</span>`;
 
-export function calculationLatex(passage: DotPassage) {
-  return passage.dot.pairs.map(pair => `(${number(pair.left)}\\cdot ${number(pair.right)})`).join("+") + "=" +
-    signedSum(passage.dot.pairs.map(pair => pair.product)) + "=" + valueOf(passage.dot.result);
+export function calculationLatex(passage: DotPassage, styled = false) {
+  const token = styled ? signedToken : number;
+  return passage.dot.pairs.map(pair => `(${token(pair.left)}\\cdot ${token(pair.right)})`).join("+") + "=" +
+    passage.dot.pairs.map(pair => token(pair.product)).join("+") + "=" + token(passage.dot.result);
 }
 
 export function stageHtml(passage: DotPassage) {
@@ -41,7 +43,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const vectors = { left: stage.querySelector<HTMLElement>('[data-dot-vector="left"]')!, right: stage.querySelector<HTMLElement>('[data-dot-vector="right"]')! };
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => [node.dataset["kpDotKey"]!, node]));
   const points = new Map<string, Point>();
-  const owners: { node: HTMLElement; shadow: HTMLElement; from: string; to: string }[] = [];
+  const owners: { node: HTMLElement; shadow: HTMLElement; from: string; to: string; sourceScale: number }[] = [];
   let multiply: readonly ((progress: number) => void)[] = [];
   let add: (progress: number) => void = () => {};
   let disposed = false;
@@ -90,10 +92,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       [...products.querySelectorAll<HTMLElement>(".dot-plus")], requireNative("sum"));
     for (const pair of passage.dot.pairs) for (const side of ["left", "right"] as const) {
       const from = `${side}-${pair.index}`, to = `pair-${side}-${pair.index}`;
-      const clone = cloneElementWithComputedStyles(requireNative(from));
+      // Destination typography is the full-size expression role. Departure scale
+      // comes from the measured element role, rather than repeated nesting rules.
+      const sourceScale = requireNative(from).getBoundingClientRect().width / requireNative(to).getBoundingClientRect().width;
+      const clone = cloneElementWithComputedStyles(requireNative(to));
       stripKpMaterialCloneAuthority(clone);
-      // Repreparing after a layout change must not copy the source trace role.
-      clone.removeAttribute("data-trace-role");
       const node = document.createElement("span"); node.className = "dot-paint";
       for (const part of [clone, ...clone.querySelectorAll<HTMLElement>("*")]) {
         part.style.textShadow = "inherit"; part.style.color = "inherit"; part.style.setProperty("-webkit-text-fill-color", "currentColor");
@@ -106,7 +109,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       shadow.append(clone.cloneNode(true)); makeKpMaterialOwnerInert(shadow);
       for (const part of shadow.querySelectorAll("[data-source-id]")) part.removeAttribute("data-source-id");
       shadow.dataset["shadowFor"] = to;
-      layer.append(shadow, node); owners.push({ node, shadow, from, to });
+      layer.append(shadow, node); owners.push({ node, shadow, from, to, sourceScale });
     }
     stage.style.transform = ""; work.style.transform = "";
     for (const [key, value] of sourceStyles) stage.style.setProperty(key, value);
@@ -146,13 +149,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       if (frame.index > 0) {
         for (const pair of passage.dot.pairs) {
           const original = requireNative(`${side}-${pair.index}`);
-          original.style.opacity = ".6"; original.style.color = "var(--dot-syntax-ink)";
-          original.dataset["traceRole"] = "source-trace";
+          original.style.opacity = "0";
         }
       }
-      if (frame.index === 0) for (const pair of passage.dot.pairs) delete requireNative(`${side}-${pair.index}`).dataset["traceRole"];
     }
-    for (const { node, shadow, from, to } of owners) {
+    for (const { node, shadow, from, to, sourceScale } of owners) {
       const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
       // Both operands approach their shared reading line from opposite sides.
@@ -167,9 +168,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const surfaceZ = 70 * ease(frame.local / .2);
       const height = 20 * shadowLift;
       const z = surfaceZ + height;
-      node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%) scale(${1 + .12 * pop})`;
+      const tokenScale = sourceScale + (1 - sourceScale) * matching + .12 * pop;
+      node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%) scale(${tokenScale})`;
       node.style.textShadow = "none";
-      shadow.style.transform = `translate3d(${x + .45 * height}px, ${y + .75 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%)`;
+      shadow.style.transform = `translate3d(${x + .45 * height}px, ${y + .75 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%) scale(${tokenScale})`;
       shadow.style.filter = `blur(${1 + 4 * shadowLift}px)`;
       shadow.style.opacity = String(.65 * shadowLift);
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";

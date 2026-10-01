@@ -384,6 +384,23 @@ material glyphs; all three scoped tests, full typecheck and build pass.
 Initial and multiplication-hold screenshots were inspected. The reversible
 unit is the local stylesheet and its scoped checks; math and clocks are unchanged.
 
+September 30, token/operator hierarchy refinement: lighter tokens use the regular
+KaTeX face with a .2px paint stroke; delimiters and operators retain bold weight
+and grey syntax ink. Unary negative signs are explicitly tagged from scalar
+values, use bold operator sizing (85%), and retain token ink. This also applies
+to the expandable static calculation. Source vector entries use a single 90%
+element role. Moving owners clone full-size destination typography and interpolate
+from the measured source-size ratio, retaining the existing pop and native landing.
+This is role-based sizing, not recursive nesting shrinkage.
+
+Source values now become invisible on departure, leaving empty structural
+brackets rather than historical token copies. Native identities remain available
+for measuring and reverse restoration. Browser checks cover relative element size,
+negative sign weight/size/ink, bold operators, absent source paint after departure
+and after reprepare, native handoffs and reverse seeks. Initial and multiplication
+frames were inspected; three browser tests, four unit tests and build pass
+(entry 6.53 KB gzip). The full light-mode treatment remains exemplar-local.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
