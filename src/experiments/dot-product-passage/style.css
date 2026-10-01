@@ -7,11 +7,10 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 /* KaTeX has regular and bold faces; a light paint stroke fills the gap without
    requesting a nonexistent intermediate face or changing token metrics. */
 .dot-stage .katex, .dot-static .katex { font-weight: 400; -webkit-text-stroke: .2px currentColor; }
-.dot-inputs [data-kp-dot-key] { font-size: .9em; }
 .dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct),
 .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct),
 .dot-plus .katex, [data-kp-dot-key^="syntax-"], .dot-negative-sign { font-weight: 700; -webkit-text-stroke: 0; }
-.dot-negative-sign { font-size: .85em; color: inherit; }
+.dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
 .dot-stage, .dot-static { --dot-syntax-ink: #464646; --dot-warm-paper: color-mix(in srgb, var(--kp-st-paper) 94%, #806548); }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
@@ -28,11 +27,11 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-inputs .katex-display { margin: 0; }
 .dot-inputs :is(.mopen, .mclose) { visibility: hidden; }
 .dot-inputs [data-dot-vector]::before, .dot-inputs [data-dot-vector]::after {
-  content: ""; position: absolute; top: -.15em; bottom: -.15em; width: .25em;
+  content: ""; position: absolute; top: var(--dot-bracket-top, -.15em); bottom: var(--dot-bracket-bottom, -.15em); width: .25em;
   border: var(--dot-bracket-stroke) solid var(--dot-syntax-ink); pointer-events: none;
 }
-.dot-inputs [data-dot-vector]::before { left: .12em; border-right: 0; }
-.dot-inputs [data-dot-vector]::after { right: .12em; border-left: 0; }
+.dot-inputs [data-dot-vector]::before { left: var(--dot-bracket-left, .12em); border-right: 0; }
+.dot-inputs [data-dot-vector]::after { right: var(--dot-bracket-right, .12em); border-left: 0; }
 .dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }

@@ -45,7 +45,25 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(negative).toHaveCSS("font-weight", "700");
   const tokenInk = await page.locator('[data-kp-dot-key="pair-left-1"]').evaluate(node => getComputedStyle(node).color);
   await expect(negative).toHaveCSS("color", tokenInk);
-  expect(await negative.evaluate(node => parseFloat(getComputedStyle(node).fontSize)) / expressionSize).toBeCloseTo(.85, 2);
+  const signRatio = await negative.evaluate(node => {
+    const digit = node.nextElementSibling!;
+    return node.getBoundingClientRect().width / digit.getBoundingClientRect().width;
+  });
+  expect(signRatio).toBeLessThan(1);
+  expect(signRatio).toBeGreaterThan(.6);
+  for (const vector of await page.locator(".dot-inputs [data-dot-vector]").all()) {
+    const offset = await vector.evaluate(node => {
+      const outer = node.getBoundingClientRect();
+      const entries = [...node.querySelectorAll("[data-kp-dot-key]")].map(entry => entry.getBoundingClientRect());
+      const left = getComputedStyle(node, "::before"), right = getComputedStyle(node, "::after");
+      return {
+        x: (outer.left + parseFloat(left.left) + outer.right - parseFloat(right.right)) / 2 - (Math.min(...entries.map(r => r.left)) + Math.max(...entries.map(r => r.right))) / 2,
+        y: (outer.top + parseFloat(left.top) + outer.bottom - parseFloat(left.bottom)) / 2 - (Math.min(...entries.map(r => r.top)) + Math.max(...entries.map(r => r.bottom))) / 2,
+      };
+    });
+    expect(Math.abs(offset.x)).toBeLessThan(.5);
+    expect(Math.abs(offset.y)).toBeLessThan(.5);
+  }
   await expect(page.locator('[data-kp-dot-key="syntax-multiply-0"]')).toHaveCSS("font-weight", "700");
   await expect(page.locator(".dot-products .dot-plus .katex").first()).toHaveCSS("font-weight", "700");
   const inputBounds = async (side: string) => page.locator(`[data-kp-dot-key^="${side}-"]`).evaluateAll(nodes => nodes.map(node => {

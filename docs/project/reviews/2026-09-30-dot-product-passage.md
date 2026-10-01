@@ -401,6 +401,21 @@ and after reprepare, native handoffs and reverse seeks. Initial and multiplicati
 frames were inspected; three browser tests, four unit tests and build pass
 (entry 6.53 KB gzip). The full light-mode treatment remains exemplar-local.
 
+September 30, correction to unary size and matrix centering: the previous
+font-size-only check missed that a bold minus at 85% was wider than a digit.
+Unary signs now use 50% sizing with baseline adjustment; the browser checks
+their measured width against the adjacent digit, rather than accepting a CSS
+percentage as evidence of proportion. Matrix element sizing now uses KaTeX's
+native small size before layout instead of a post-layout CSS font override.
+Structural brackets use symmetric padding around measured entry bounds, avoiding
+the outer formula line box's asymmetric font whitespace. These measurements are
+recomputed during preparation with source scale neutralized, preserving resize
+and direct-seek behavior. Regression checks enforce horizontal/vertical enclosure
+centering within half a CSS pixel and retain row/column alignment tests. These
+are DOM geometry checks, not a claim of raster-ink optical centering. Initial
+and multiplication frames were inspected; three browser tests, four unit tests,
+typecheck and build pass (entry 6.69 KB gzip).
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

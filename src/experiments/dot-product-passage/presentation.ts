@@ -19,7 +19,7 @@ export function calculationLatex(passage: DotPassage, styled = false) {
 
 export function stageHtml(passage: DotPassage) {
   const { dot } = passage;
-  const vector = (side: "left" | "right") => math(`\\left[\\;\\begin{matrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{matrix}\\;\\right]`);
+  const vector = (side: "left" | "right") => math(`\\left[\\;{\\small\\begin{matrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{matrix}}\\;\\right]`);
   return `<div class="dot-stage" aria-hidden="true">
     <div class="dot-plane dot-plane-source"></div>
     <div class="dot-plane dot-plane-working"></div>
@@ -74,6 +74,17 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     const work = stage.querySelector<HTMLElement>(".dot-work")!;
     work.style.transform = "none";
     reset(); layer.replaceChildren(); owners.length = 0;
+    // Bracket paint encloses measured entries, not the font's outer line box.
+    // One symmetric padding rule handles both row and column presentations.
+    for (const vector of Object.values(vectors)) {
+      const outer = vector.getBoundingClientRect();
+      const entries = [...vector.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => node.getBoundingClientRect());
+      const padding = parseFloat(getComputedStyle(vector).fontSize) * .4;
+      vector.style.setProperty("--dot-bracket-top", `${Math.min(...entries.map(r => r.top)) - outer.top - padding}px`);
+      vector.style.setProperty("--dot-bracket-bottom", `${outer.bottom - Math.max(...entries.map(r => r.bottom)) - padding}px`);
+      vector.style.setProperty("--dot-bracket-left", `${Math.min(...entries.map(r => r.left)) - outer.left - padding}px`);
+      vector.style.setProperty("--dot-bracket-right", `${outer.right - Math.max(...entries.map(r => r.right)) - padding}px`);
+    }
     // Keep addition in place while only the multiplication terms evaluate.
     for (const pair of passage.dot.pairs) {
       const term = pairs.querySelector<HTMLElement>(`[data-pair="${pair.index}"]`)!;
