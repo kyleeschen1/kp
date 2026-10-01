@@ -5,6 +5,14 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 current candidate: [basis-aware composition and bracket
+withdrawal](../reviews/2026-10-01-basis-composition.md), approved by the user after
+the cost experiment. Brackets now withdraw gradually over the pivot. The new
+composition caller keeps maps and bases alongside the existing product, rejects
+a mismatched coordinate join, and reuses column motion. Review both in one packet
+before promotion; `run-contract.kp.basis-composition-v1` owns progress. The old
+rectangular checkpoint remains separate.
+
 October 1 measured result: the approved [semantic reuse and delivery-cost
 experiment](../reviews/2026-10-01-semantic-cost-results.md) supports retaining the
 existing product and contribution identities. Both matrix readings now accept

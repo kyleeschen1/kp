@@ -29,7 +29,7 @@ async function record(name: string, data: unknown) {
 
 test('canonical production pages: cold/warm transfers, fonts and readiness', async ({ browser }) => {
   const reports = [];
-  for (const [route, root] of [['dot-product-passage', '#dot-player'], ['matrix-column-product', '#matrix-player'], ['matrix-column-combinations', '#comb-player'], ['matrix-examples', '#comb-player']]) {
+  for (const [route, root] of [['dot-product-passage', '#dot-player'], ['matrix-column-product', '#matrix-player'], ['matrix-column-combinations', '#comb-player'], ['matrix-examples', '#comb-player'], ['matrix-column-combinations/?example=composition', '#comb-player']]) {
     const context = await browser.newContext({ baseURL: 'http://127.0.0.1:4196', viewport: { width: 1200, height: 950 } });
     const page = await context.newPage();
     const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
@@ -37,7 +37,7 @@ test('canonical production pages: cold/warm transfers, fonts and readiness', asy
     const loads = [];
     for (const cache of ['cold', 'warm']) {
       const start = performance.now();
-      await page.goto(`/experiments/${route}/`);
+      await page.goto(`/experiments/${route}${route!.includes('?') ? '' : '/'}`);
       await expect(route === 'matrix-examples' ? page.frameLocator('#example-frame').locator(root!) : page.locator(root!)).toHaveAttribute('data-ready', 'true');
       await page.evaluate(() => document.fonts.ready);
       const navigation = await page.evaluate(() => {
@@ -52,7 +52,7 @@ test('canonical production pages: cold/warm transfers, fonts and readiness', asy
     expect(warm.filter(r => /\.(js|css|woff2)$/.test(r.path)).reduce((sum, r) => sum + r.transfer, 0)).toBeLessThan(1000);
     expect(errors).toEqual([]);
     if (route === 'matrix-examples') {
-      for (const value of ['dot-passage', 'dot', 'identity', 'orthonormality', 'columns']) {
+      for (const value of ['dot-passage', 'dot', 'identity', 'orthonormality', 'composition', 'columns']) {
         await page.locator('#example-menu').selectOption(value);
         const selector = value === 'dot-passage' ? '#dot-player' : value === 'dot' ? '#matrix-player' : '#comb-player';
         await expect(page.frameLocator('#example-frame').locator(selector)).toHaveAttribute('data-ready', 'true');

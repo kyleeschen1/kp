@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 1,
+  "node": "v26.9.0",
+  "closures": [
+    {
+      "page": "dot-product-passage",
+      "js": {
+        "raw": 303153,
+        "gzip": 91188
+      },
+      "css": {
+        "raw": 58109,
+        "gzip": 14461
+      },
+      "html": {
+        "raw": 904,
+        "gzip": 534
+      },
+      "files": [
+        {
+          "file": "experiments/dot-product-passage/index.html",
+          "raw": 904,
+          "gzip": 534
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/dotPassage-BbpmI2C9.js",
+          "raw": 17859,
+          "gzip": 6571
+        },
+        {
+          "file": "assets/dotPassage-DeBbtcTN.css",
+          "raw": 58109,
+          "gzip": 14461
+        },
+        {
+          "file": "assets/focus-deck-scaffold-DGGPY--d.js",
+          "raw": 284625,
+          "gzip": 84241
+        }
+      ]
+    },
+    {
+      "page": "matrix-column-product",
+      "js": {
+        "raw": 339208,
+        "gzip": 100886
+      },
+      "css": {
+        "raw": 56468,
+        "gzip": 14082
+      },
+      "html": {
+        "raw": 1083,
+        "gzip": 601
+      },
+      "files": [
+        {
+          "file": "experiments/matrix-column-product/index.html",
+          "raw": 1083,
+          "gzip": 601
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/environment-Dqqa_26Y.js",
+          "raw": 35913,
+          "gzip": 9873
+        },
+        {
+          "file": "assets/focus-deck-scaffold-DGGPY--d.js",
+          "raw": 284625,
+          "gzip": 84241
+        },
+        {
+          "file": "assets/matrixDotProduct-EGkncULc.js",
+          "raw": 18001,
+          "gzip": 6396
+        },
+        {
+          "file": "assets/style-sJxacFiR.css",
+          "raw": 56468,
+          "gzip": 14082
+        }
+      ]
+    },
+    {
+      "page": "matrix-column-combinations",
+      "js": {
+        "raw": 340125,
+        "gzip": 101674
+      },
+      "css": {
+        "raw": 57840,
+        "gzip": 14357
+      },
+      "html": {
+        "raw": 1030,
+        "gzip": 561
+      },
+      "files": [
+        {
+          "file": "experiments/matrix-column-combinations/index.html",
+          "raw": 1030,
+          "gzip": 561
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/environment-Dqqa_26Y.js",
+          "raw": 35913,
+          "gzip": 9873
+        },
+        {
+          "file": "assets/focus-deck-scaffold-DGGPY--d.js",
+          "raw": 284625,
+          "gzip": 84241
+        },
+        {
+          "file": "assets/matrixInterpretations-1Gmlldq8.css",
+          "raw": 57840,
+          "gzip": 14357
+        },
+        {
+          "file": "assets/matrixInterpretations-C1Q785Cq.js",
+          "raw": 18918,
+          "gzip": 7184
+        }
+      ]
+    },
+    {
+      "page": "matrix-examples",
+      "js": {
+        "raw": 2151,
+        "gzip": 1027
+      },
+      "css": {
+        "raw": 56468,
+        "gzip": 14082
+      },
+      "html": {
+        "raw": 1821,
+        "gzip": 795
+      },
+      "files": [
+        {
+          "file": "experiments/matrix-examples/index.html",
+          "raw": 1821,
+          "gzip": 795
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/matrixExamples-DKcqLTJI.js",
+          "raw": 1482,
+          "gzip": 651
+        },
+        {
+          "file": "assets/style-sJxacFiR.css",
+          "raw": 56468,
+          "gzip": 14082
+        }
+      ]
+    },
+    {
+      "page": "matrix-composition",
+      "js": {
+        "raw": 352145,
+        "gzip": 105864
+      },
+      "css": {
+        "raw": 57840,
+        "gzip": 14357
+      },
+      "html": {
+        "raw": 1030,
+        "gzip": 561
+      },
+      "files": [
+        {
+          "file": "experiments/matrix-column-combinations/index.html",
+          "raw": 1030,
+          "gzip": 561
+        },
+        {
+          "file": "assets/basis-composition-D4-tr6mx.js",
+          "raw": 9444,
+          "gzip": 2970
+        },
+        {
+          "file": "assets/basis-composition-view-DDzDBb7B.js",
+          "raw": 2576,
+          "gzip": 1220
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/environment-Dqqa_26Y.js",
+          "raw": 35913,
+          "gzip": 9873
+        },
+        {
+          "file": "assets/focus-deck-scaffold-DGGPY--d.js",
+          "raw": 284625,
+          "gzip": 84241
+        },
+        {
+          "file": "assets/matrixInterpretations-1Gmlldq8.css",
+          "raw": 57840,
+          "gzip": 14357
+        },
+        {
+          "file": "assets/matrixInterpretations-C1Q785Cq.js",
+          "raw": 18918,
+          "gzip": 7184
+        }
+      ]
+    }
+  ],
+  "menuWithDefaultChild": {
+    "jsGzip": 102325,
+    "cssGzip": 28439
+  },
+  "modules": [
+    "\u0000vite/preload-helper.js",
+    "experiments/dot-product-passage/index.html",
+    "experiments/matrix-column-combinations/index.html",
+    "experiments/matrix-column-product/index.html",
+    "experiments/matrix-examples/index.html",
+    "node_modules/katex/dist/katex.mjs",
+    "src/animation/asset.ts",
+    "src/animation/equation-presentation-profile.ts",
+    "src/animation/focus-profile.ts",
+    "src/animation/generated-problem-import.ts",
+    "src/animation/matrix-matrix-composition-choreography.ts",
+    "src/animation/matrix-matrix-duration-contract.ts",
+    "src/animation/matrix-vector-duration-contract.ts",
+    "src/animation/organic-motion-primitives.ts",
+    "src/animation/presentation-constraints.ts",
+    "src/animation/propagation-compiler.ts",
+    "src/animation/semantic-traversal.ts",
+    "src/experiments/dot-product-passage/entry.ts",
+    "src/experiments/dot-product-passage/fusion.ts",
+    "src/experiments/dot-product-passage/model.ts",
+    "src/experiments/dot-product-passage/page.css",
+    "src/experiments/dot-product-passage/player.ts",
+    "src/experiments/dot-product-passage/presentation.ts",
+    "src/experiments/dot-product-passage/source.ts",
+    "src/experiments/matrix-column-combinations/basis-composition-view.ts",
+    "src/experiments/matrix-column-combinations/basis-composition.ts",
+    "src/experiments/matrix-column-combinations/entry.ts",
+    "src/experiments/matrix-column-combinations/model.ts",
+    "src/experiments/matrix-column-combinations/presentation.ts",
+    "src/experiments/matrix-column-combinations/style.css",
+    "src/experiments/matrix-column-product/entry.ts",
+    "src/experiments/matrix-column-product/environment.ts",
+    "src/experiments/matrix-column-product/presentation.ts",
+    "src/experiments/matrix-column-product/score.ts",
+    "src/experiments/matrix-column-product/score.ts?raw",
+    "src/experiments/matrix-examples/config.ts",
+    "src/experiments/matrix-examples/entry.ts",
+    "src/math/algebra/algebraic-structures.ts",
+    "src/math/algebra/finite-basis.ts",
+    "src/math/algebra/law-evidence.ts",
+    "src/math/algebra/linear-map.ts",
+    "src/math/algebra/matrix-representation.ts",
+    "src/math/algebra/semantic-space.ts",
+    "src/math/algebra/standard-spaces.ts",
+    "src/math/algebra/typed-matrix-adapter.ts",
+    "src/math/expression.ts",
+    "src/math/matrix-interpretations.ts",
+    "src/math/matrix-product.ts",
+    "src/math/typed-semantic-math.ts",
+    "src/reader/runtime/playback-clock.ts",
+    "src/reader/runtime/timeline-playback-clock.ts",
+    "src/rendering/computed-style-clone.ts",
+    "src/rendering/katex-adapter.ts",
+    "src/rendering/native-katex-contributor-fusion-sampling.ts",
+    "src/rendering/native-katex-ink-knot-geometry.ts",
+    "src/semantic/animation.ts",
+    "src/semantic/asset-diagram.ts",
+    "src/semantic/asset-flashcard.ts",
+    "src/semantic/asset-transformation.ts",
+    "src/semantic/asset.ts",
+    "src/semantic/correspondence.ts",
+    "src/semantic/generated-algebra-transformation-authority.ts",
+    "src/semantic/generated-linear-algebra-problem-fixture.ts",
+    "src/semantic/transformation-composition.ts",
+    "src/tutorial/focus-deck-annotation.ts",
+    "src/tutorial/focus-deck-scaffold.ts"
+  ],
+  "construction": [
+    {
+      "size": 2,
+      "contributions": 8,
+      "medianMs": 0.06520800000001259,
+      "maxMs": 0.09929100000000801
+    },
+    {
+      "size": 10,
+      "contributions": 1000,
+      "medianMs": 2.21795800000001,
+      "maxMs": 3.0615829999999846
+    },
+    {
+      "size": 20,
+      "contributions": 8000,
+      "medianMs": 16.371499999999997,
+      "maxMs": 25.290041000000002
+    }
+  ],
+  "serializationIllustration": {
+    "actualTransport": "These pages construct objects locally; neither JSON below is sent.",
+    "naiveObjectRawBytes": 102179,
+    "naiveObjectGzipBytes": 1997,
+    "numericInputRawBytes": 68,
+    "numericInputGzipBytes": 82
+  },
+  "exclusions": [
+    "Fonts are measured from actual browser requests separately.",
+    "Closure sizes are compressed estimates, not network transfers.",
+    "Node construction timings are local samples, not browser timings or a universal scaling claim."
+  ]
+}

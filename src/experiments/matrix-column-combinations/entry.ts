@@ -10,16 +10,28 @@ import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 async function mount() {
   const query = new URLSearchParams(location.search);
   document.documentElement.toggleAttribute("data-embedded", query.has("embedded"));
-  const scene = example(query.get("example") ?? "columns", Number(query.get("column") ?? "0"));
+  const column = Number(query.get("column") ?? "0");
+  const basisMode = query.get('basis') ?? 'adapted';
+  if (query.get('example') === 'composition' && basisMode !== 'adapted' && basisMode !== 'standard') {
+    const { BasisCompositionGap } = await import('./basis-composition.ts');
+    throw new BasisCompositionGap('Choose the adapted or standard intermediate basis.');
+  }
+  const composition = query.get("example") === "composition"
+    ? (await import('./basis-composition.ts')).basisComposition(query.get('basis') === 'standard' ? 'standard' : 'adapted', column)
+    : undefined;
+  const scene = composition?.scene ?? example(query.get("example") ?? "columns", column);
   const { beats } = scene;
   document.querySelector("h1")!.textContent = scene.title;
   document.title = scene.title;
   const intro = document.querySelector("#matrix-story > p")!;
-  intro.textContent = scene.evidence ? "Each entry of QᵀQ is a dot product between two columns of Q. Diagonal entries measure squared length; off-diagonal entries measure orthogonality." : "Each column of the right matrix tells us how to combine the columns of the left matrix.";
+  intro.textContent = composition ? "The same two maps have different matrices in different bases. Their composition is unchanged when the coordinates at the join agree." : scene.evidence ? "Each entry of QᵀQ is a dot product between two columns of Q. Diagonal entries measure squared length; off-diagonal entries measure orthogonality." : "Each column of the right matrix tells us how to combine the columns of the left matrix.";
   const links = ["columns", "identity", "orthonormality"].map((kind, i) => `<a href="?example=${kind}&column=0#weights">${["Column combinations", "Identity", "Orthonormality"][i]}</a>`).join(" · ");
   const root = document.querySelector<HTMLElement>("#comb-player")!;
+  const contextHtml = composition ? (await import('./basis-composition-view.ts')).basisCompositionHtml(composition) : '';
+  const basisQuery = composition ? `&basis=${composition.mode}` : '';
   root.innerHTML = `<nav aria-label="Matrix examples">${links}</nav>
-    <p>Result column: <a href="?example=${scene.kind}&column=0#weights">1</a> · <a href="?example=${scene.kind}&column=1#weights">2</a></p>
+    ${contextHtml}
+    <p>Result column: <a href="?example=${scene.kind}${basisQuery}&column=0#weights">1</a> · <a href="?example=${scene.kind}${basisQuery}&column=1#weights">2</a></p>
     <section class="matrix-card kp-focus-deck" aria-label="Column combination animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Column combination; scroll horizontally on narrow screens">${stageHtml(scene)}</div>

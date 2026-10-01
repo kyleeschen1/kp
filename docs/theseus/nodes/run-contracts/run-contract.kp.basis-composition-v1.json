@@ -1,0 +1,51 @@
+{
+  "id": "run-contract.kp.basis-composition-v1",
+  "kind": "run-contract",
+  "title": "Basis-aware composition exemplar",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review gradual bracket withdrawal and basis-aware composition; no broader rollout authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.basis-composition.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-basis-composition.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:dot-passage",
+    "npm run test:basis-composition",
+    "npm run visual:basis-composition"
+  ],
+  "allowedWork": [
+    "Local fade, one basis-aware numerical example, typed compatibility checks and existing renderer reuse"
+  ],
+  "disallowedWork": [
+    "New motion motifs, universal framework, old rectangular rollout, merge or deployment"
+  ],
+  "goal": "Gradually withdraw dot brackets, then demonstrate basis-aware composition with existing matrix animation",
+  "target": "next-action.kp.basis-composition",
+  "slices": [
+    {
+      "id": "fade",
+      "title": "Bracket-fade",
+      "summary": "Playhead-driven bracket withdrawal follows pivot; all six dot browser checks pass. Timing remains provisional for joint human review.",
+      "status": "complete"
+    },
+    {
+      "id": "composition",
+      "title": "Basis-aware-example",
+      "summary": "Both intermediate-basis choices and both columns pass browser checks using unchanged motion. Typed join rejection and numerical map/coordinate identity tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Review-packet",
+      "summary": "HUMAN_CHECKPOINT: review packet and verified URLs ready; awaiting visual judgment of bracket cadence and coordinate explanation.",
+      "status": "in-progress"
+    }
+  ]
+}

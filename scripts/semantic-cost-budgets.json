@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
-  "rationale": "Initial ceilings from the complete October 1 four-entry build and measured one/ten-instance cohorts. Approximately 9–15% compressed-entry headroom; DOM allowances cover the tested signed/two-digit variants. Timings and heap are observations, not portable hard limits.",
+  "rationale": "Initial ceilings from the October 1 four-entry build and one/ten-instance cohorts (9–15% initial headroom). Composition activation inherits the column ceiling: 105864 measured JS gzip bytes versus 111000 allowed, about 4.9% headroom; existing ceilings unchanged. DOM allowances cover tested signed/two-digit variants. Timings and heap remain observations, not portable limits. See docs/project/reviews/2026-10-01-basis-composition.md.",
   "entries": {
     "dot-product-passage": { "jsGzip": 100000, "cssGzip": 16000 },
     "matrix-column-product": { "jsGzip": 111000, "cssGzip": 16000 },
     "matrix-column-combinations": { "jsGzip": 111000, "cssGzip": 16000 },
-    "matrix-examples": { "jsGzip": 1200, "cssGzip": 16000 }
+    "matrix-examples": { "jsGzip": 1200, "cssGzip": 16000 },
+    "matrix-composition": { "jsGzip": 111000, "cssGzip": 16000 }
   },
   "menuWithDefaultChild": { "jsGzip": 113000, "cssGzip": 32000 },
   "forbiddenModuleFragments": ["research/", "src/experiments/la-knowledge-graph/", "node_modules/three/", "src/editor/", "src/experiments/semantic-cost/"],

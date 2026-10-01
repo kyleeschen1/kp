@@ -1,0 +1,72 @@
+{
+  "id": "next-action.kp.basis-composition",
+  "kind": "next-action",
+  "title": "Basis-aware composition and gradual bracket withdrawal",
+  "status": "blocked",
+  "domain": "mathematical-authoring",
+  "summary": "Candidate implemented and verified; joint visual review is the remaining checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-basis-composition.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:basis-composition",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:13.666Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    },
+    {
+      "command": "npm run visual:dot-passage",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:14.471Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    },
+    {
+      "command": "npm run visual:basis-composition",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:15.200Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:15.910Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    },
+    {
+      "command": "npm run build:semantic-cost",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:16.613Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:17.328Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    },
+    {
+      "command": "npm run visual:semantic-cost -- --grep canonical",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:18.053Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "basis-composition",
+      "checkedAt": "2026-10-01T11:30:18.767Z",
+      "notes": "Bounded exemplar; evidence and limits in docs/project/reviews/2026-10-01-basis-composition.md."
+    }
+  ]
+}

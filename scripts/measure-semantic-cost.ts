@@ -10,11 +10,13 @@ import budgets from './semantic-cost-budgets.json' with { type: 'json' };
 
 const root = 'dist/matrix-interpretations';
 const manifest: KpBundleManifest = JSON.parse(await readFile(`${root}/.vite/manifest.json`, 'utf8'));
-const pages = ['dot-product-passage', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples'];
+const pages = ['dot-product-passage', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
 const closures = [];
 for (const page of pages) {
-  const html = `experiments/${page}/index.html`;
-  const files = [html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest)];
+  const html = `experiments/${page === 'matrix-composition' ? 'matrix-column-combinations' : page}/index.html`;
+  // Composition activates both lazy modules; include their full dependencies,
+  // not only the ordinary page's cold static closure.
+  const files = [html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-composition')];
   const measured = await Promise.all(files.map(async file => {
     const data = await readFile(`${root}/${file}`);
     return { file, raw: data.byteLength, gzip: gzipSync(data).byteLength };

@@ -70,9 +70,11 @@ function projectExample(product: ReturnType<typeof matrixProduct>, column: numbe
     sum: `Add entry by entry: ${combination.result.entries.map(numberOf).join(" above ")}.`,
     placed: evidence ? `Column ${column + 1} of QᵀQ: a column dotted with itself gives 1; with the other column, 0.` : kind === "identity" ? `The result is column ${column + 1} of A. Zero contributes nothing; one preserves every value.` : `The sum is the ${ordinal} column of AB.`,
   } as Record<string, string>)[beat.id]! }));
+  // Titles are authored presentation text, not a closed set of mathematical kinds.
+  const title: string = evidence ? "Orthonormal columns produce the identity" : kind === "identity" ? "Identity selects each column" : "Columns, weighted and added";
   return Object.freeze({ kind, column, env: { A: product.left, B: product.right, product }, combination, labels,
     beats: Object.freeze(cues), evidence,
-    title: evidence ? "Orthonormal columns produce the identity" : kind === "identity" ? "Identity selects each column" : "Columns, weighted and added",
+    title,
   });
 }
 export type ColumnExample = ReturnType<typeof example>;

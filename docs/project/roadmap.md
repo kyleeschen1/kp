@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1 current candidate: [basis-aware composition and gradual bracket
+withdrawal](reviews/2026-10-01-basis-composition.md). The user approved the next
+composition example and requested the dot brackets fade gradually first. Both
+are implemented for joint visual review; the existing matrix menu includes the
+new example. No new choreography or universal semantic model was introduced.
+`run-contract.kp.basis-composition-v1` owns the review checkpoint.
+
 October 1: the approved [semantic cost experiment](reviews/2026-10-01-semantic-cost-results.md)
 measures one and ten instances and adds bounded source-only product adapters for
 both existing matrix readings. Ten different inputs took under 1 ms to prepare
