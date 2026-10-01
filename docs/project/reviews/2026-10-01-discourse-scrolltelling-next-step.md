@@ -197,3 +197,11 @@ HUMAN_CHECKPOINT: scroll from matched pairs through multiplication, pause on
 stationary commentary, divider marker and held stage direct attention clearly.
 Exact focus paint and pacing remain provisional; no family-wide rollout follows
 without visual acceptance.
+
+Layout correction: the user's intended reading order is text on the left and
+the stationary mathematical stage on the right. The divider and scrubber sit on
+the reading column's right edge; “left border” refers to the left border of that
+right-hand stage. The local stylesheet now enforces this placement, and the
+browser regression checks their relative geometry and scrubber alignment.
+Narrow screens retain the stacked presentation. Timing and semantic state are
+unchanged.

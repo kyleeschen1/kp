@@ -19,8 +19,14 @@ test('unified commentary retains text and holds math through a focus-only beat',
   expect(styles.background).toBe(styles.stage); expect(styles.border).toBe('0px');
   await expect(stage).toHaveAttribute('data-progress', '0.25');
   const stageBox = await stage.boundingBox();
+  // Reading precedes the stage spatially; their divider owns the scrubber.
+  const trackBox = await page.locator('.attention-track').boundingBox();
+  expect(trackBox!.x + trackBox!.width).toBeLessThanOrEqual(stageBox!.x + 1);
+  expect(stageBox!.x).toBeGreaterThan(page.viewportSize()!.width * .45);
   await select('First, they multiply.', 'multiply');
   const multiply = page.getByRole('slider', { name: 'Multiplication progress' });
+  const sliderBox = await multiply.boundingBox();
+  expect(Math.abs(sliderBox!.x + sliderBox!.width / 2 - (trackBox!.x + trackBox!.width))).toBeLessThan(3);
   await multiply.fill('0.5');
   await expect.poll(() => stage.getAttribute('data-progress').then(Number)).toBeCloseTo(.375, 2);
   await expect(page.getByRole('button', { name: 'First, they multiply.', exact: true })).toBeVisible();
