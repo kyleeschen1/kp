@@ -2,6 +2,33 @@ import { test, expect } from '@playwright/test';
 import { explanation } from '../src/experiments/discourse-scrolltelling/source.ts';
 
 const path = '/experiments/discourse-scrolltelling/';
+test('split scroll owns intermediate frames and rebases manual inspection without a jump', async ({ page }, info) => {
+  await page.goto(path);
+  const player = page.locator('#discourse-player');
+  await expect(player).toHaveAttribute('data-scroll-ready', 'true');
+  const timeline = page.getByRole('slider', { name: 'Animation position' });
+  const middle = await page.evaluate(() => {
+    const y = (id: string) => document.querySelector(`#${id} h2`)!.getBoundingClientRect().top + scrollY;
+    return (y('select') + y('pair')) / 2 - innerHeight * .36;
+  });
+  await page.evaluate(y => scrollTo(0, y), middle);
+  await expect.poll(async () => Number(await timeline.inputValue())).toBeCloseTo(.125, 2);
+  await expect(player).toHaveAttribute('data-scroll-phase', 'transition');
+  const held = await timeline.inputValue();
+  await page.waitForTimeout(250);
+  await expect(timeline).toHaveValue(held);
+  await page.evaluate(y => scrollTo(0, y + 100), middle);
+  await expect.poll(async () => Number(await timeline.inputValue())).toBeGreaterThan(Number(held));
+  await page.evaluate(y => scrollTo(0, y), middle);
+  await expect(timeline).toHaveValue(held);
+  await page.screenshot({ path: info.outputPath('split-mid-transition.png') });
+  await timeline.fill('0.4');
+  await page.evaluate(() => scrollBy(0, 1));
+  await expect.poll(async () => Number(await timeline.inputValue())).toBeCloseTo(.4, 2);
+  await page.evaluate(() => scrollBy(0, 80));
+  await expect.poll(async () => Number(await timeline.inputValue())).toBeGreaterThan(.4);
+});
+
 test('scroll selects existing milestones, reverses and skips without a queue', async ({ page }, info) => {
   await page.goto(path);
   const player = page.locator('#discourse-player');

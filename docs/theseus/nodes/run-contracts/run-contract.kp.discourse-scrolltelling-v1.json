@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Discourse-guided dot passage",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: judge prose-stage connection, pacing and detour return at the separate scrolltelling route",
+  "summary": "HUMAN_CHECKPOINT: review continuous scrub edges and reading hold length on the dot discourse route",
   "sourceRefs": [
     {
       "kind": "file",
@@ -34,6 +34,12 @@
       "id": "exemplar",
       "title": "Dot passage scrolltelling comparison",
       "summary": "Implementation and focused checks complete; human visual review remains",
+      "status": "complete"
+    },
+    {
+      "id": "split-reuse",
+      "title": "Reuse continuous split-view scrolling",
+      "summary": "Shared split-view scroll adaptation and preservation checks complete; ready for pacing review",
       "status": "complete"
     }
   ]

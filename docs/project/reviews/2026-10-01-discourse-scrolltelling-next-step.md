@@ -25,11 +25,11 @@ column, pairing, multiplication, addition and the result. Keep local goal and
 necessary ancestry visible. Bind each section to existing semantic references
 and milestones, without adding mathematical operations or replacing the clock.
 
-Default to scroll-selected milestones with bounded transitions, not continuous
-pixel-to-animation scrubbing. A reader should be able to stop scrolling and
-inspect a settled expression. Preserve explicit stepping and local scrubbing.
-Fast jumps must resolve the latest target without queued animations; reverse,
-reduced motion and direct links must reach the same semantic endpoints.
+Original proposal used scroll-selected milestones with bounded playback. The
+user subsequently requested reuse of the existing split-view work and approved
+the recommendation below: continuous scrubbing between settled reading holds
+supersedes that initial interaction choice. Preserve explicit stepping and
+local scrubbing, deterministic reverse, reduced motion and direct links.
 
 Add one optional “Why pair these entries?” detour. Its opening should not advance
 the main explanation merely because disclosure changes document height. Closing
@@ -94,3 +94,36 @@ chunks; its new scroll entry is about 1.36 KB gzip beyond shared dependencies.
 Existing measured dot/rectangular closures are 93,835/94,882 B JavaScript gzip
 and remain within their budgets. The new page has not received ten-instance
 runtime certification. No budget ceilings changed.
+
+## Split-view reuse revision
+
+Approved by “implement rec” after the read-only prior-work report. The earlier
+prototype remains historical evidence; its local scroll listener and triggered
+autoplay have now been replaced. The same review URL uses
+`KpTutorialPageScrollCoordinator`, `projectKpTutorialCorridorTravel` and
+`projectKpTutorialRebasedCorridor`, already used by the economics/Lisp and
+log-product projections. The mathematical model, glyph renderer and animation
+timing/motifs are preserved. No second clock or general discourse schema is added.
+
+Five measured heading landings define four reversible edges. Each edge holds its
+source for 20% of document travel, scrubs the existing interval for 60%, and holds
+its target for 20%. These local reading holds are provisional, not new animation
+timing. Desktop uses the Glance reading-line ratio (36%); the narrow projection
+keeps the reading line below the compact stage. Prose retains stable ink; the
+heading underline withdraws while an edge is in motion. Manual controls rebase
+into the scroll corridor using the existing handoff projection. Geometry is
+invalidated after resize/disclosure; a detour freezes projection until exact return.
+
+Verification: `npm run test:discourse-scrolltelling` passes 15 tests including
+shared coordinator/rebase laws. `npm run visual:discourse-scrolltelling` passes
+five tests, now proving intermediate-frame holds, reverse equality and manual
+handoff as well as detour, direct-link, reduced-motion and static reading.
+The standalone dot preservation suite passes eleven tests; application/test
+TypeScript checks and the isolated build pass. The build now estimates 94.44 KB
+JS gzip and 15.09 KB CSS (fonts separate), about 4 KB JS above the initial local
+handler. No existing renderer or shared coordinator implementation was changed.
+
+Status: HUMAN_CHECKPOINT. Inspect continuous forward/reverse scroll between the
+first two headings, stop midway, then manually scrub and resume scrolling.
+Judge the hold length and reading connection. Rollback is the discourse route's
+adapter, pure edge projection and local style; existing split callers stay intact.

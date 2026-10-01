@@ -24,6 +24,7 @@
     "test:dot-passage": "node --disable-warning=ExperimentalWarning --test tests/dot-product-passage.test.ts",
     "visual:dot-passage": "playwright test --config playwright.dot-passage.config.ts --project=chromium --workers=1",
     "visual:discourse-scrolltelling": "playwright test --config playwright.discourse-scrolltelling.config.ts --project=chromium --workers=1",
+    "test:discourse-scrolltelling": "node --disable-warning=ExperimentalWarning --test tests/discourse-scrolltelling.test.ts tests/kp-tutorial-motion.test.ts tests/kp-tutorial-page-scroll-coordinator.test.ts",
     "build:discourse-scrolltelling": "vite build --config vite.discourse-scrolltelling.config.ts",
     "visual:matrix-interpretations": "playwright test --config playwright.matrix-interpretations.config.ts --project=chromium --workers=1",
     "build:matrix-interpretations": "vite build --config vite.matrix-interpretations.config.ts",

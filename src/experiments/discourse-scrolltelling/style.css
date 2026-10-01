@@ -10,6 +10,7 @@
 .discourse-prose p { line-height: 1.65; }
 .discourse-context { color: var(--kp-st-muted); font-size: .9em; }
 .discourse-prose [aria-current="step"] h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
+.discourse-layout:has([data-scroll-phase="transition"]) .discourse-prose h2 { text-decoration: none; }
 .discourse-goal { margin: 0 0 1rem; }
 #why-pair { padding: 1rem; border: 1px solid var(--kp-st-rule); border-radius: .5rem; }
 #why-pair summary { cursor: pointer; }

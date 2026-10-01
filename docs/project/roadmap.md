@@ -27,7 +27,8 @@ nor its evidence. The ledger remains retrievable at
 
 October 1 scrolltelling comparison: the user approved the bounded
 [discourse-guided dot passage](reviews/2026-10-01-discourse-scrolltelling-next-step.md).
-The separate route reuses the dot player, with five reading sections and exact
+The separate route reuses the dot player and existing split-view scroll
+coordinator, with continuously scrubbed edges between reading holds and exact
 detour return. `run-contract.kp.discourse-scrolltelling-v1` owns its visual
 checkpoint; no universal format adoption or rectangular-review acceptance is implied.
 
