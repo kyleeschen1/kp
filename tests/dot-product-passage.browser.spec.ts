@@ -249,6 +249,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.locator(".dot-inputs").evaluate(node => { (node as HTMLElement).style.color = ""; });
   for (const delimiter of await page.locator(".dot-inputs :is(.mopen, .mclose)").all()) await expect(delimiter).toHaveCSS("visibility", "hidden");
   await expect(page.locator('[data-kp-dot-key="left-0"] .mord')).toHaveCSS("font-weight", "400");
+  for (const selector of ['[data-kp-dot-key="left-0"] .mord', '[data-kp-dot-key="pair-left-0"] .mord', '[data-occurrence="pair-left-0"] .mord']) {
+    await expect(page.locator(selector)).toHaveCSS('-webkit-font-smoothing', 'antialiased');
+  }
   const elementSize = await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
   const expressionSize = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
   expect(elementSize).toBe(expressionSize);

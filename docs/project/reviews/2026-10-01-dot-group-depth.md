@@ -1,5 +1,17 @@
 # Dot passage: group depth and lighter delimiters
 
+Typography review before rectangular integration: the user requested thinner
+KaTeX numerals/tokens. The exemplar already uses regular KaTeX at weight 400,
+with no added stroke except the deliberately strengthened negative sign.
+Grayscale font smoothing is now requested on native math and retained in
+computed-style material clones. This changes rasterization on supporting macOS
+browsers, not the font outlines or metrics; other platforms may look unchanged.
+Negative-sign thickness, bracket strokes and all motion remain unchanged.
+Eight scoped browser checks pass, including native/material smoothing parity.
+Visual usefulness still needs user judgment before extending the treatment.
+Rectangular integration remains approved; this requested typography adjustment
+is the current visual checkpoint before its new caller is built.
+
 Current revision: shadows and their control are removed at the user's request.
 Lift height now ranges from 0–24px, defaulting to 6px, and controls only the
 initial rise. The hold, pivot, separate scale control and full-size background
