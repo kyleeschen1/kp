@@ -583,6 +583,12 @@ The moving shadow returns to the same 4% contact strength at landing. Existing
 offsets, blur, panel shadows, dimming control and zero-default glow are unchanged.
 Scoped browser expectations now cover the lighter lift and contact endpoints.
 
+September 30, frontal glyph lighting: user requests light, straight-on shadows.
+Resting glyph shadows now have zero x/y offset, and moving shadows project
+directly behind their token centers on the receiving plane. Faint 4–8% strength
+and existing blur remain; panel shadows are unchanged. The scoped browser test
+checks coincident token/shadow centers during lift.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

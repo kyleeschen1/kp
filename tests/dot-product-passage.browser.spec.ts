@@ -184,6 +184,14 @@ test("signed dot passage preserves references through pairing, products and sum"
     return { z: m.m43, opacity: Number(getComputedStyle(node).opacity) };
   });
   expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.08, 2);
+  const shadowOffset = await page.locator(".dot-stage").evaluate(stage => {
+    const token = stage.querySelector('[data-occurrence="pair-right-0"]')!.getBoundingClientRect();
+    const shadow = stage.querySelector('[data-shadow-for="pair-right-0"]')!.getBoundingClientRect();
+    return { x: shadow.x + shadow.width / 2 - token.x - token.width / 2,
+      y: shadow.y + shadow.height / 2 - token.y - token.height / 2 };
+  });
+  expect(shadowOffset.x).toBeCloseTo(0, 2);
+  expect(shadowOffset.y).toBeCloseTo(0, 2);
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
   expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 1);
   expect(liftedSize!.height).toBeCloseTo(originalSize!.height, 1);
