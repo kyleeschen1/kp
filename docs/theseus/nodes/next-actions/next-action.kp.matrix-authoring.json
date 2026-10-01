@@ -218,6 +218,13 @@
       "scope": "Unary sign proportion and centered matrix enclosures",
       "checkedAt": "2026-10-01T00:19:39.311Z",
       "notes": "Three Chromium tests, four unit tests, typecheck and build pass. Sign width below adjacent digit and symmetric enclosure geometry checked. Initial and multiplication screenshots inspected. Exemplar remains at human checkpoint."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Opaque paper and contact-shadow depth exemplar",
+      "checkedAt": "2026-10-01T00:27:21.680Z",
+      "notes": "Three browser tests, four unit tests, full typecheck and build pass. Constant opaque fill, stationary native-scale back, lift and landing shadows checked. Screenshots show occlusion; full playback awaits human judgment."
     }
   ]
 }

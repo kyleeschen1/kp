@@ -6,7 +6,7 @@ test("back opacity can be tuned without seeking or pausing playback", async ({ p
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
   await page.getByRole("combobox", { name: "Milestone" }).selectOption("1");
   const tuning = page.getByRole("slider", { name: "Back panel opacity" });
-  await expect(tuning).toHaveValue("22");
+  await expect(tuning).toHaveValue("100");
   for (const value of [0, 100, 40]) {
     await tuning.fill(String(value));
     await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", String(value / 100));
@@ -85,9 +85,11 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
   const initialBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
+  expect(initialFrontColor).not.toContain("/");
   await slider.fill("0.06");
   const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(earlyBackColor).not.toBe(initialBackColor);
+  expect(earlyBackColor).toBe(initialBackColor);
+  expect(initialFrontColor).toBe(initialBackColor);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
@@ -110,7 +112,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform);
     return { z: m.m43, opacity: Number(getComputedStyle(node).opacity) };
   });
-  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.65, 2);
+  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.2, 2);
   const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
   expect(liftedSize!.width).toBeGreaterThan(originalSize!.width);
@@ -128,10 +130,10 @@ test("signed dot passage preserves references through pairing, products and sum"
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.m41, y: m.m42 };
   });
   expect(backingOffset).toEqual({ x: 0, y: 0 });
-  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "0.22");
-  await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "0.22");
+  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "1");
   const backScale = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
-  expect(backScale).toBeCloseTo(.94, 4);
+  expect(backScale).toBeCloseTo(1, 4);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "1");
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
@@ -159,6 +161,13 @@ test("signed dot passage preserves references through pairing, products and sum"
     }
   }
   await slider.fill("0.2499");
+  const contact = await page.locator('[data-shadow-for="pair-right-0"]').evaluate(node => {
+    const style = getComputedStyle(node);
+    return { blur: Number(style.filter.match(/blur\(([\d.]+)px\)/)?.[1]), opacity: Number(style.opacity) };
+  });
+  expect(contact.blur).toBeLessThan(.51);
+  expect(contact.opacity).toBeCloseTo(.35, 2);
+  await expect(page.locator(".dot-work")).not.toHaveCSS("text-shadow", "none");
   for (const pair of passage.dot.pairs) {
     const copy = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();
     const target = await page.locator(`[data-kp-dot-key="pair-left-${pair.index}"]`).boundingBox();
@@ -189,9 +198,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(0);
   for (const source of await page.locator(".dot-inputs [data-kp-dot-key]").all()) await expect(source).toHaveCSS("opacity", "0");
   const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(backColor).toBe(initialFrontColor.replace(/\/\s*[\d.]+\)/, "/ 0.85)"));
-  expect(earlyBackColor).not.toBe(backColor);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialBackColor.replace(/\/\s*[\d.]+\)/, "/ 0.3)"));
+  expect(backColor).toBe(initialFrontColor);
+  expect(earlyBackColor).toBe(backColor);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialBackColor);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");

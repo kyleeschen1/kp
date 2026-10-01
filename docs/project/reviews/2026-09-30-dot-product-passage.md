@@ -425,6 +425,23 @@ discussion only: the color exchange primarily suggests attention transfer;
 contact shadows and opaque occlusion are candidates for a future face-on depth
 pass, not newly implemented or approved treatments.
 
+September 30, opaque paper depth experiment (approved “go”): both surfaces now
+keep the same opaque warm-paper fill. The back stays stationary at native scale;
+its opacity slider remains available but defaults to 100%. The raised paper
+occludes the underlying source brackets. Its tight contact shadow is accompanied
+by a broader offset cast shadow as elevation increases. Token shadows separate
+and soften during lift, then tighten to match the native expression's resting
+contact shadow. Background color exchange and automatic rear shrinking are
+removed. Typography, padding, semantic references and pairing/evaluation beats
+remain intact. This is one reversible local depth treatment, not a promotion.
+
+The scoped browser gate checks constant opaque fills, unchanged rear scale,
+default full opacity, diffuse lift and tight landing shadows, reverse seeks,
+native handoffs, reduced motion and existing identity/geometry safeguards.
+Three browser tests, four unit tests, full typecheck and build pass (entry 6.69 KB
+gzip). Lift and multiplication screenshots were inspected: source brackets are
+covered by the raised sheet. Full-playback depth readability awaits human review.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

@@ -130,7 +130,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
-  const render = (progress: number, backOpacity = .22) => {
+  const render = (progress: number, backOpacity = 1) => {
     if (!Number.isFinite(backOpacity) || backOpacity < 0 || backOpacity > 1) throw new DotPassageGap("Back-panel opacity must be between zero and one.");
     const frame = sample(progress);
     if (disposed) return frame;
@@ -138,12 +138,14 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     stage.dataset["progress"] = String(frame.progress);
     // The surface shares the entries' depth, without owning their semantic paint.
     const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
-    stage.style.setProperty("--dot-back-scale", String(1 - .06 * planeLift));
+    stage.style.setProperty("--dot-back-scale", "1");
     stage.style.setProperty("--dot-back-opacity", String(1 - (1 - backOpacity) * planeLift));
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
-    workingPlane.style.opacity = String(planeLift);
+    // The front is solid paper once present; elevation changes its cast shadow,
+    // not its transparency. At rest it coincides with the source surface.
+    workingPlane.style.opacity = planeLift > 0 ? "1" : "0";
     workingPlane.style.boxShadow = planeLift > 0
-      ? `${10 * planeLift}px ${14 * planeLift}px ${22 * planeLift}px rgba(20, 25, 30, ${.18 * planeLift})` : "none";
+      ? `0 1px 2px rgba(20, 25, 30, .16), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(20, 25, 30, .22)` : "none";
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 4 ? "1" : "0";
@@ -154,10 +156,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
     const pop = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
       ? ease(frame.local / .15) * (1 - ease((frame.local - .18) / .42)) : 0;
-    // Hand the warm surface from source to working plane over the pairing beat.
-    const surfaceProgress = frame.index === 0 ? 0 : frame.index === 1 ? frame.local : 1;
-    stage.style.setProperty("--dot-back-whiteness", `${100 * smooth(surfaceProgress / .6)}%`);
-    workingPlane.style.setProperty("--dot-warmth", `${100 * smooth((surfaceProgress - .35) / .65)}%`);
     for (const side of ["left", "right"] as const) {
       vectors[side].style.opacity = "1";
       if (frame.index > 0) {
@@ -185,9 +183,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const tokenScale = sourceScale + (1 - sourceScale) * matching + .12 * pop;
       node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%) scale(${tokenScale})`;
       node.style.textShadow = "none";
-      shadow.style.transform = `translate3d(${x + .45 * height}px, ${y + .75 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%) scale(${tokenScale})`;
-      shadow.style.filter = `blur(${1 + 4 * shadowLift}px)`;
-      shadow.style.opacity = String(.65 * shadowLift);
+      shadow.style.transform = `translate3d(${x + .45 * height}px, ${y + .8 + .75 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%) scale(${tokenScale})`;
+      shadow.style.filter = `blur(${.5 + 4.5 * shadowLift}px)`;
+      // At landing this matches the native expression's tight contact shadow.
+      shadow.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? String(.35 - .15 * shadowLift) : "0";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {

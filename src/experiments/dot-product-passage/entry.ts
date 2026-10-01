@@ -17,8 +17,8 @@ async function mount() {
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div>
     <div class="matrix-controls dot-tuning"><label for="dot-back-opacity">Back panel opacity</label>
-    <input id="dot-back-opacity" data-back-opacity type="range" min="0" max="100" step="1" value="22">
-    <output for="dot-back-opacity" data-opacity-value>22%</output></div></section>
+    <input id="dot-back-opacity" data-back-opacity type="range" min="0" max="100" step="1" value="100">
+    <output for="dot-back-opacity" data-opacity-value>100%</output></div></section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
     <details><summary>Read the calculation</summary><div class="dot-static">${renderLatexToHtml(calculationLatex(passage, true), { output: "htmlAndMathml", trust: true })}</div>
     <p>The row and column change arrangement while their entries retain the same mathematical identities. Multiplication produces three new values; addition produces the final result. In real Euclidean coordinates, this pairing also represents the dot product uᵀv.</p></details>`;
