@@ -1,5 +1,17 @@
 # Dot passage: group depth and lighter delimiters
 
+Latest focus inspection revision: operators inherit their expression's ink;
+negative signs retain their compact size with a .035em paint stroke shared by
+native and moving occurrences. Both contributor groups rise 24px and hold for
+840ms before pairing. The shared departure sampler holds geometry, foreground
+scale and background opacity together; background scale remains exactly 1.
+The first transition retains its 2100ms duration, so the hold leaves a shorter
+pairing interval. This cadence is provisional for review on the same exemplar.
+Semantic product identities and later evaluation phases are unchanged. The
+rollback unit is this local CSS/departure revision. Five unit and seven browser
+checks pass, including held-pose equality, reverse, sign-stroke parity and
+operator color inheritance (`npm run test:dot-passage`, `npm run visual:dot-passage`).
+
 Latest correction: the user requested **no background scaling**. The sampler
 now fixes background scale at 1 for every playhead and setting, and the background
 scale selector is removed. A separate foreground-lift control preserves the

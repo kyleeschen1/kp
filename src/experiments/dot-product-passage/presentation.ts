@@ -3,7 +3,7 @@ import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMateri
 import { valueOf, sample, DotPassageGap, type DotPassage } from "./model.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 import { prepareFusion } from "./fusion.ts";
-import { defaultDotDepth, sampleDotDepth, type DotDepthSettings } from './depth.ts';
+import { defaultDotDepth, sampleDotDepth, sampleDotDeparture, type DotDepthSettings } from './depth.ts';
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
 const signedToken = (entry: KpScalarValue) => valueOf(entry) < 0
@@ -145,8 +145,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage, depthS
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
     // Restore the original lift-and-pivot phrase: the column rises before
     // turning as one axis, while the row opens into the native factor slots.
-    const tilt = smooth((frame.local - .15) / .85);
-    const opening = smooth(frame.local / .7);
+    const departure = sampleDotDeparture(frame.local);
+    const tilt = smooth(departure.travel);
+    const opening = smooth(departure.travel / .7);
+    const elevation = 24 * departure.rise * (1 - tilt);
     for (const side of ["left", "right"] as const) {
       // Retain the recessed source through pairing so depth can be read before
       // withdrawal. Fade during operator introduction, before multiplication.
@@ -170,11 +172,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage, depthS
         const base = points.get(`right-${last}`)!, end = points.get(`pair-right-${last}`)!;
         const radius = (base.y - source.y) * (1 - tilt) + (end.x - b.x) * tilt;
         const angle = -Math.PI / 2 - Math.PI / 2 * tilt;
-        const lift = (base.y - points.get("right-0")!.y) * Math.sin(Math.PI * smooth(frame.local));
+        const lift = (base.y - points.get("right-0")!.y) * Math.sin(Math.PI * smooth(departure.travel));
         x = base.x + (end.x - base.x) * tilt + radius * Math.cos(angle);
         y = base.y + (end.y - base.y) * tilt - lift + radius * Math.sin(angle);
       }
-      node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+      node.style.transform = `translate(${x}px, ${y - elevation}px) translate(-50%, -50%)`;
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {

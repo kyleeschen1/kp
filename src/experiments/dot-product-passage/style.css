@@ -1,9 +1,8 @@
 @import "../matrix-player.css";
 /* Moving material snapshots the same regular math face as native endpoints. */
 .dot-stage .katex, .dot-static .katex, [data-kp-dot-key^="syntax-"] { font-weight: 400; -webkit-text-stroke-width: 0; }
-.dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; }
+.dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; -webkit-text-stroke: .035em currentColor; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
-.dot-stage, .dot-static { --dot-syntax-ink: #aeb1b1; }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
 .dot-inputs { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 /* KaTeX retains enclosure layout and MathML. One structural paint treatment
@@ -22,10 +21,10 @@
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
 .dot-inputs [data-kp-dot-key], .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
 .dot-work { color: var(--kp-st-focus); }
-.dot-plus, [data-kp-dot-key^="syntax-multiply-"] { color: var(--dot-syntax-ink); }
-.dot-work .katex :is(.mbin, .mrel, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mpunct) { color: var(--dot-syntax-ink); }
-/* Enclosures inherit their expression's ink rather than an independent syntax color. */
-.dot-work .katex :is(.mopen, .mclose), .dot-static .katex :is(.mopen, .mclose) { color: inherit; }
+/* Syntax follows the same expression ink as its operands. */
+.dot-plus, [data-kp-dot-key^="syntax-multiply-"],
+.dot-stage .katex :is(.mbin, .mrel, .mpunct, .mopen, .mclose),
+.dot-static .katex :is(.mbin, .mrel, .mpunct, .mopen, .mclose) { color: inherit; }
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }
 .dot-inputs :is(.mopen, .mclose) { display: inline-block; transform-origin: center; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }

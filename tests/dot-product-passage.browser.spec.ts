@@ -17,6 +17,8 @@ test('depth controls change whole groups while preserving endpoint and reverse p
   for (const group of ['.dot-work', '.dot-material']) await expect(page.locator(group)).toHaveCSS('scale', '1.03');
   const poses = () => page.locator('.dot-stage [style]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
   const held = await poses();
+  await timeline.fill('0.075');
+  expect(await poses()).toEqual(held);
   await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
   expect(await poses()).toEqual(held);
   await page.locator('.matrix-card').screenshot({ path: info.outputPath('depth-40-fixed-background.png') });
@@ -214,6 +216,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(negative).toHaveCSS("font-weight", "400");
   const tokenInk = await page.locator('[data-kp-dot-key="pair-left-1"]').evaluate(node => getComputedStyle(node).color);
   await expect(negative).toHaveCSS("color", tokenInk);
+  const signStroke = await negative.evaluate(node => getComputedStyle(node).webkitTextStrokeWidth);
+  expect(parseFloat(signStroke)).toBeGreaterThan(0);
+  await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS('-webkit-text-stroke-width', signStroke);
   const signRatio = await negative.evaluate(node => {
     const digit = node.nextElementSibling!;
     return node.getBoundingClientRect().width / digit.getBoundingClientRect().width;
@@ -329,7 +334,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     await slider.fill(String(progress));
     const key = progress === .25 ? "pair-left-0" : progress === 1 ? "sum" : "product-0";
     await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(255, 250, 240)");
-    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-multiply-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(174, 177, 177)");
+    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-multiply-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(255, 250, 240)");
     for (const delimiter of await page.locator('[data-kp-dot-key^="syntax-open-"], [data-kp-dot-key^="syntax-close-"]').all()) await expect(delimiter).toHaveCSS("color", "rgb(255, 250, 240)");
   }
   await slider.fill("0");
@@ -363,7 +368,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   });
   expect(notation.entry).toBe(notation.paired);
   expect(notation.syntax.slice(0, 2)).toEqual([notation.ink, notation.ink]);
-  expect(notation.syntax.slice(2)).toEqual(['rgb(174, 177, 177)', 'rgb(174, 177, 177)']);
+  expect(notation.syntax.slice(2)).toEqual([notation.ink, notation.ink]);
   // Check centering in scene coordinates, before the shared camera projection.
   expect(Math.abs(notation.offsetX)).toBeLessThan(1);
   expect(notation.depth).toBe(0);

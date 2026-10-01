@@ -10,6 +10,7 @@ import { sampleDotDepth, defaultDotDepth } from '../src/experiments/dot-product-
 test('group depth preserves native endpoints, bounded scaling and reduced motion', () => {
   assert.deepEqual(sampleDotDepth(0), { backgroundOpacity: 1, backgroundScale: 1, foregroundScale: 1 });
   assert.equal(sampleDotDepth(.125).foregroundScale, 1.03);
+  assert.deepEqual(sampleDotDepth(.075), sampleDotDepth(.125));
   for (const p of [.25, .5, .75, 1]) assert.equal(sampleDotDepth(p).foregroundScale, 1);
   for (let i = 0; i <= 100; i++) {
     const pose = sampleDotDepth(i / 100);
