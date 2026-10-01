@@ -1,0 +1,61 @@
+{
+  "id": "next-action.kp.discourse-scrolltelling",
+  "kind": "next-action",
+  "title": "Compare discourse-guided scrolling with the dot player",
+  "status": "blocked",
+  "domain": "kinetic-press",
+  "summary": "HUMAN_CHECKPOINT: bounded candidate ready, no universal authoring-format adoption",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-discourse-scrolltelling-next-step.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T17:20:51.853Z",
+      "notes": "Four tests: milestones, reverse and jumps, exact detour return, repeated links, narrow reduced motion and static reading. Initial caption resize pause repaired at stage measurement boundary."
+    },
+    {
+      "command": "npm run visual:dot-passage",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-01T17:21:15.548Z",
+      "notes": "Eleven browser tests passed"
+    },
+    {
+      "command": "npm run visual:rectangular-product",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-01T17:21:16.190Z",
+      "notes": "Two browser tests passed"
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-10-01T17:21:16.718Z"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-10-01T17:21:17.241Z"
+    },
+    {
+      "command": "npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "build",
+      "checkedAt": "2026-10-01T17:21:17.771Z"
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "delivery",
+      "checkedAt": "2026-10-01T17:21:18.299Z"
+    }
+  ]
+}

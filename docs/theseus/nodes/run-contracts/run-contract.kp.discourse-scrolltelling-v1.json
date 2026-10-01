@@ -1,0 +1,40 @@
+{
+  "id": "run-contract.kp.discourse-scrolltelling-v1",
+  "kind": "run-contract",
+  "title": "Discourse-guided dot passage",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: judge prose-stage connection, pacing and detour return at the separate scrolltelling route",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.discourse-scrolltelling.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-discourse-scrolltelling-next-step.md",
+      "summary": "User approved implementation after reviewing the scrolltelling proposal; stop for visual review"
+    }
+  ],
+  "verification": [
+    "npm run visual:discourse-scrolltelling",
+    "npm run visual:dot-passage",
+    "npm run typecheck:tests"
+  ],
+  "allowedWork": [
+    "One separate scroll host, typed fixture, bounded dot-player control API, focused checks and review evidence"
+  ],
+  "disallowedWork": [
+    "Universal schema, new mathematical operations, choreography replacement, catalogue rollout, deployment"
+  ],
+  "goal": "Deliver one scrolltelling comparison with exact detour return for visual review",
+  "target": "next-action.kp.discourse-scrolltelling",
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Dot passage scrolltelling comparison",
+      "summary": "Implementation and focused checks complete; human visual review remains",
+      "status": "complete"
+    }
+  ]
+}

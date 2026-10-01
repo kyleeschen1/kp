@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1 scrolltelling comparison: the user approved the bounded
+[discourse-guided dot passage](reviews/2026-10-01-discourse-scrolltelling-next-step.md).
+The separate route reuses the dot player, with five reading sections and exact
+detour return. `run-contract.kp.discourse-scrolltelling-v1` owns its visual
+checkpoint; no universal format adoption or rectangular-review acceptance is implied.
+
 October 1 rectangular candidate: [first-cell integration](reviews/2026-10-01-rectangular-product.md)
 reuses the accepted dot passage in matrix context and adds result placement.
 The existing authoring contract owns its layout review, then all-cell selection

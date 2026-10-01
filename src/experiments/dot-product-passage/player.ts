@@ -127,7 +127,16 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   const motion = () => { clock.pause(); if (stepsOnly()) go(readFrame(clock.getSnapshot().progress).index, false); render(); };
   const pagehide = (event: PageTransitionEvent) => { if (event.persisted) clock.pause(); else dispose(); };
   const pageshow = (event: PageTransitionEvent) => { if (event.persisted) resize(); };
-  const observer = new ResizeObserver(resize); observer.observe(root);
+  // Cue text can change the card height during playback without changing the
+  // math stage. Only stage geometry invalidates its measured endpoints.
+  const stage = root.querySelector<HTMLElement>('.dot-stage')!;
+  let measuredWidth = stage.clientWidth, measuredHeight = stage.clientHeight;
+  const observer = new ResizeObserver(() => {
+    if (stage.clientWidth === measuredWidth && stage.clientHeight === measuredHeight) return;
+    measuredWidth = stage.clientWidth; measuredHeight = stage.clientHeight;
+    resize();
+  });
+  observer.observe(stage);
   if (syncHash) window.addEventListener("hashchange", restore);
   document.addEventListener("visibilitychange", visibility);
   window.addEventListener("pagehide", pagehide); window.addEventListener("pageshow", pageshow); reduced.addEventListener("change", motion);
@@ -146,5 +155,12 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   };
   if (syncHash) restore(); else go(0, false);
   root.setAttribute("aria-busy", "false"); root.dataset["ready"] = "true";
-  return dispose;
+  // Hosts can select semantic milestones without dispatching synthetic UI events
+  // or creating a second clock. The callable cleanup preserves existing mounts.
+  return Object.assign(dispose, {
+    go,
+    pause: () => { clock.pause(); render(); },
+    seek: (progress: number) => { clock.pause(); clock.seek(progress); },
+    progress: () => clock.getSnapshot().progress,
+  });
 }

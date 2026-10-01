@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 approved comparison: [discourse-guided scrolltelling](../reviews/2026-10-01-discourse-scrolltelling-next-step.md)
+adds a separate dot-product reading projection and one exact-return detour.
+Review the reader experience before a recursive authoring schema; the existing
+rectangular checkpoint remains pending. The new Theseus contract owns execution.
+
 October 1 resumed integration: [rectangular first-cell candidate](../reviews/2026-10-01-rectangular-product.md)
 is ready for layout review under the existing matrix-authoring contract. The
 approved continuation remains all-cell selection and source-only variation.

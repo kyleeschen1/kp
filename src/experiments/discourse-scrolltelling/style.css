@@ -1,0 +1,33 @@
+@import '../dot-product-passage/page.css';
+#discourse-story { max-width: 1440px; margin: 2rem auto; padding: 0 1.5rem; }
+#discourse-story header { max-width: 46rem; margin-bottom: 3rem; }
+.discourse-layout { display: grid; grid-template-columns: minmax(18rem, .85fr) minmax(0, 1.6fr); gap: 3rem; align-items: start; }
+.discourse-stage { grid-column: 2; grid-row: 1; position: sticky; top: 1rem; min-width: 0; }
+.discourse-prose { grid-column: 1; grid-row: 1; }
+.discourse-prose section { min-height: 75vh; padding: 2rem 0 4rem; scroll-margin-top: 20vh; border-top: 1px solid var(--kp-st-rule); }
+.discourse-prose section:last-child { min-height: 100vh; }
+.discourse-prose h2 { margin-top: .5rem; }
+.discourse-prose p { line-height: 1.65; }
+.discourse-context { color: var(--kp-st-muted); font-size: .9em; }
+.discourse-prose [aria-current="step"] h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: .2em; }
+.discourse-goal { margin: 0 0 1rem; }
+#why-pair { padding: 1rem; border: 1px solid var(--kp-st-rule); border-radius: .5rem; }
+#why-pair summary { cursor: pointer; }
+#why-pair button { padding: .6rem; color: var(--kp-st-ink); background: var(--kp-st-paper); border: 1px solid var(--kp-st-rule); }
+/* This reading projection keeps tuning controls on the comparison page. */
+#discourse-player .matrix-controls[aria-label="Depth comparison"],
+#discourse-player > details, #discourse-player > .matrix-help { display: none; }
+#discourse-player .dot-stage { min-width: 500px; }
+#discourse-player .matrix-cue { min-height: 4rem; }
+@media (max-width: 850px) {
+  #discourse-story { padding: 0 .75rem; }
+  .discourse-layout { display: block; }
+  .discourse-stage { top: 0; z-index: 2; background: var(--kp-matrix-page); padding: .4rem 0; }
+  .discourse-goal { font-size: .85rem; margin-bottom: .4rem; }
+  #discourse-player .dot-stage { height: 185px; }
+  #discourse-player .matrix-cue { display: none; }
+  #discourse-player .matrix-controls { padding: .4rem; gap: .35rem; }
+  #discourse-player .matrix-controls select { display: none; }
+  #discourse-player .matrix-controls input { min-width: 7rem; }
+  .discourse-prose section { scroll-margin-top: 340px; min-height: 85vh; padding-top: 1.5rem; }
+}

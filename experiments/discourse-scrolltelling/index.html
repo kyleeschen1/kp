@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" class="matrix-example-page" data-matrix-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One entry, three contributions</title></head>
+<body><main id="discourse-story">
+  <header><a href="../matrix-examples/">← Animation examples</a>
+    <h1>One entry, three contributions</h1>
+    <p>Read at your own pace. As you scroll, the calculation moves to the corresponding step. You can also pause, step, or scrub it yourself.</p>
+    <p><a href="../dot-product-passage/">Compare with the original player</a></p>
+  </header>
+  <div class="discourse-layout">
+    <aside class="discourse-stage" aria-label="Calculation and current goal">
+      <p class="discourse-goal">Our goal: understand how one row and one column produce one entry.</p>
+      <div id="discourse-player" aria-busy="true"><p>[2, −1, 3] · [4; 5; −2] = 8 − 5 − 6 = −3.</p></div>
+    </aside>
+    <article class="discourse-prose" aria-label="Explanation">
+      <section id="select" data-reading-step><p class="discourse-context">One entry / its inputs</p>
+        <h2>Take a row and a column.</h2><p>The row is [2, −1, 3]. The column is [4; 5; −2]. Each has three entries.</p>
+        <p>In matrix multiplication, this row and this column supply one entry of the answer.</p>
+        <a href="#select">Inspect the inputs</a>
+      </section>
+      <section id="pair" data-reading-step><p class="discourse-context">One entry / corresponding positions</p>
+        <h2>Match corresponding entries.</h2><p>First with first, second with second, third with third: 2 with 4, −1 with 5, and 3 with −2.</p>
+        <p>The column turns into position. These are the same entries, arranged so we can read each contribution.</p>
+        <details id="why-pair"><summary>Why pair these entries?</summary>
+          <p>A row covector assigns a weight to each coordinate. The column supplies a value for each coordinate in the matching basis. Corresponding positions refer to the same coordinate.</p>
+          <p>Here the rule is 2v₁ − v₂ + 3v₃. Applying it to v = [4; 5; −2] gives 2·4 + (−1)·5 + 3·(−2).</p>
+          <p>This is the row-by-column rule for a matrix-product entry. In standard real Euclidean coordinates, it is also the familiar dot product.</p>
+          <button type="button" data-return>Return to the calculation</button>
+        </details>
+      </section>
+      <section id="multiply" data-reading-step><p class="discourse-context">One entry / three contributions</p>
+        <h2>Multiply within each pair.</h2><p>2·4 = 8. (−1)·5 = −5. And 3·(−2) = −6.</p>
+        <p>Each pair produces a contribution. Keep the signs: the second and third contributions are negative.</p>
+        <a href="#multiply">Inspect the products</a>
+      </section>
+      <section id="add" data-reading-step><p class="discourse-context">One entry / combine contributions</p>
+        <h2>Now add the products.</h2><p>The three contributions join into one expression: 8 + (−5) + (−6).</p>
+        <p>Multiplication happens within each pair; addition combines the contributions across all three positions.</p>
+        <a href="#add">Inspect the sum before evaluation</a>
+      </section>
+      <section id="result" data-reading-step><p class="discourse-context">One entry / the result</p>
+        <h2>Three contributions become −3.</h2><p>8 − 5 − 6 = −3.</p>
+        <p>In a matrix product, −3 belongs at the intersection of the selected row and column. Other entries repeat the same rule with different rows or columns.</p>
+        <a href="#select">Read it again</a>
+      </section>
+    </article>
+  </div>
+  <noscript><p>The complete explanation above is available without animation.</p></noscript>
+</main><script type="module" src="/src/experiments/discourse-scrolltelling/entry.ts"></script></body></html>
