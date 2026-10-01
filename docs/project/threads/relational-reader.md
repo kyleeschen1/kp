@@ -5,6 +5,15 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 measured result: the approved [semantic reuse and delivery-cost
+experiment](../reviews/2026-10-01-semantic-cost-results.md) supports retaining the
+existing product and contribution identities. Both matrix readings now accept
+source-only numerical 2×2 products; rendering dominates measured small-example
+costs. The report owns evidence, bounded budgets and limitations;
+`run-contract.kp.semantic-cost-v1` owns execution status. A basis-aware composition
+example is the next recommendation, not authorized implementation. No old
+execution contract or visual checkpoint is resumed or waived.
+
 October 1 current review: the user approved the [linear algebra graph
 experiment](../reviews/2026-10-01-linear-algebra-knowledge-graph.md) to use real
 definitions, proofs, representations and distinctions to generate API insights.

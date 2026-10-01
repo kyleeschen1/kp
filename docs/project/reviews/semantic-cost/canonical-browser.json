@@ -1,0 +1,522 @@
+{
+  "browser": "149.0.7827.55",
+  "reports": [
+    {
+      "route": "dot-product-passage",
+      "loads": [
+        {
+          "cache": "cold",
+          "readyMs": 194.9670840000001,
+          "navigation": {
+            "transfer": 831,
+            "encoded": 531,
+            "decoded": 904
+          },
+          "resources": [
+            {
+              "path": "/assets/dotPassage-Bwj7wpai.js",
+              "transfer": 6861,
+              "encoded": 6561,
+              "decoded": 17866
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 676,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 84394,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/dotPassage-DeBbtcTN.css",
+              "transfer": 14761,
+              "encoded": 14461,
+              "decoded": 58109
+            },
+            {
+              "path": "/assets/KaTeX_Size1-Regular-mCD8mA8B.woff2",
+              "transfer": 5768,
+              "encoded": 5468,
+              "decoded": 5468
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 26572,
+              "encoded": 26272,
+              "decoded": 26272
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 3079248,
+            "Nodes": 1339,
+            "Documents": 1,
+            "JSEventListeners": 28
+          }
+        },
+        {
+          "cache": "warm",
+          "readyMs": 79.63529199999994,
+          "navigation": {
+            "transfer": 831,
+            "encoded": 531,
+            "decoded": 904
+          },
+          "resources": [
+            {
+              "path": "/assets/dotPassage-Bwj7wpai.js",
+              "transfer": 0,
+              "encoded": 6561,
+              "decoded": 17866
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 0,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 0,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/dotPassage-DeBbtcTN.css",
+              "transfer": 0,
+              "encoded": 14461,
+              "decoded": 58109
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 0,
+              "encoded": 26272,
+              "decoded": 26272
+            },
+            {
+              "path": "/assets/KaTeX_Size1-Regular-mCD8mA8B.woff2",
+              "transfer": 0,
+              "encoded": 5468,
+              "decoded": 5468
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 3077152,
+            "Nodes": 1339,
+            "Documents": 1,
+            "JSEventListeners": 28
+          }
+        }
+      ]
+    },
+    {
+      "route": "matrix-column-product",
+      "loads": [
+        {
+          "cache": "cold",
+          "readyMs": 164.69845900000018,
+          "navigation": {
+            "transfer": 901,
+            "encoded": 601,
+            "decoded": 1083
+          },
+          "resources": [
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 676,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/matrixDotProduct-CsFA1IK-.js",
+              "transfer": 6696,
+              "encoded": 6396,
+              "decoded": 18001
+            },
+            {
+              "path": "/assets/environment-C3OPXNX7.js",
+              "transfer": 10042,
+              "encoded": 9742,
+              "decoded": 35060
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 84394,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/style-sJxacFiR.css",
+              "transfer": 14382,
+              "encoded": 14082,
+              "decoded": 56468
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 26572,
+              "encoded": 26272,
+              "decoded": 26272
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 3196132,
+            "Nodes": 1911,
+            "Documents": 1,
+            "JSEventListeners": 28
+          }
+        },
+        {
+          "cache": "warm",
+          "readyMs": 134.5357079999999,
+          "navigation": {
+            "transfer": 901,
+            "encoded": 601,
+            "decoded": 1083
+          },
+          "resources": [
+            {
+              "path": "/assets/matrixDotProduct-CsFA1IK-.js",
+              "transfer": 0,
+              "encoded": 6396,
+              "decoded": 18001
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 0,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 0,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/environment-C3OPXNX7.js",
+              "transfer": 0,
+              "encoded": 9742,
+              "decoded": 35060
+            },
+            {
+              "path": "/assets/style-sJxacFiR.css",
+              "transfer": 0,
+              "encoded": 14082,
+              "decoded": 56468
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 0,
+              "encoded": 26272,
+              "decoded": 26272
+            },
+            {
+              "path": "data:embedded-resource",
+              "transfer": 0,
+              "encoded": 0,
+              "decoded": 0
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 3193872,
+            "Nodes": 1911,
+            "Documents": 1,
+            "JSEventListeners": 28
+          }
+        }
+      ]
+    },
+    {
+      "route": "matrix-column-combinations",
+      "loads": [
+        {
+          "cache": "cold",
+          "readyMs": 147.83074999999963,
+          "navigation": {
+            "transfer": 861,
+            "encoded": 561,
+            "decoded": 1030
+          },
+          "resources": [
+            {
+              "path": "/assets/matrixInterpretations-DNyicWPC.js",
+              "transfer": 6424,
+              "encoded": 6124,
+              "decoded": 16207
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 676,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 84394,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/environment-C3OPXNX7.js",
+              "transfer": 10042,
+              "encoded": 9742,
+              "decoded": 35060
+            },
+            {
+              "path": "/assets/matrixInterpretations-1Gmlldq8.css",
+              "transfer": 14657,
+              "encoded": 14357,
+              "decoded": 57840
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 26572,
+              "encoded": 26272,
+              "decoded": 26272
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 3295884,
+            "Nodes": 2402,
+            "Documents": 1,
+            "JSEventListeners": 28
+          }
+        },
+        {
+          "cache": "warm",
+          "readyMs": 107.86041700000033,
+          "navigation": {
+            "transfer": 861,
+            "encoded": 561,
+            "decoded": 1030
+          },
+          "resources": [
+            {
+              "path": "/assets/matrixInterpretations-DNyicWPC.js",
+              "transfer": 0,
+              "encoded": 6124,
+              "decoded": 16207
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 0,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 0,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/environment-C3OPXNX7.js",
+              "transfer": 0,
+              "encoded": 9742,
+              "decoded": 35060
+            },
+            {
+              "path": "/assets/matrixInterpretations-1Gmlldq8.css",
+              "transfer": 0,
+              "encoded": 14357,
+              "decoded": 57840
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 0,
+              "encoded": 26272,
+              "decoded": 26272
+            },
+            {
+              "path": "data:embedded-resource",
+              "transfer": 0,
+              "encoded": 0,
+              "decoded": 0
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 3291412,
+            "Nodes": 2402,
+            "Documents": 1,
+            "JSEventListeners": 28
+          }
+        }
+      ]
+    },
+    {
+      "route": "matrix-examples",
+      "loads": [
+        {
+          "cache": "cold",
+          "readyMs": 143.21000000000004,
+          "navigation": {
+            "transfer": 1077,
+            "encoded": 777,
+            "decoded": 1756
+          },
+          "resources": [
+            {
+              "path": "/assets/matrixExamples-DKcqLTJI.js",
+              "transfer": 951,
+              "encoded": 651,
+              "decoded": 1482
+            },
+            {
+              "path": "/assets/style-sJxacFiR.css",
+              "transfer": 14382,
+              "encoded": 14082,
+              "decoded": 56468
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 676,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/experiments/matrix-column-combinations/",
+              "transfer": 861,
+              "encoded": 561,
+              "decoded": 1030
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 0,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/matrixInterpretations-DNyicWPC.js",
+              "transfer": 6424,
+              "encoded": 6124,
+              "decoded": 16207
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 84394,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/environment-C3OPXNX7.js",
+              "transfer": 10042,
+              "encoded": 9742,
+              "decoded": 35060
+            },
+            {
+              "path": "/assets/matrixInterpretations-1Gmlldq8.css",
+              "transfer": 14657,
+              "encoded": 14357,
+              "decoded": 57840
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 26572,
+              "encoded": 26272,
+              "decoded": 26272
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 4288020,
+            "Nodes": 2567,
+            "Documents": 2,
+            "JSEventListeners": 64
+          }
+        },
+        {
+          "cache": "warm",
+          "readyMs": 163.050209,
+          "navigation": {
+            "transfer": 1077,
+            "encoded": 777,
+            "decoded": 1756
+          },
+          "resources": [
+            {
+              "path": "/assets/matrixExamples-DKcqLTJI.js",
+              "transfer": 0,
+              "encoded": 651,
+              "decoded": 1482
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 0,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/style-sJxacFiR.css",
+              "transfer": 0,
+              "encoded": 14082,
+              "decoded": 56468
+            },
+            {
+              "path": "/experiments/matrix-column-combinations/",
+              "transfer": 861,
+              "encoded": 561,
+              "decoded": 1030
+            },
+            {
+              "path": "data:embedded-resource",
+              "transfer": 0,
+              "encoded": 0,
+              "decoded": 0
+            },
+            {
+              "path": "/assets/matrixInterpretations-DNyicWPC.js",
+              "transfer": 0,
+              "encoded": 6124,
+              "decoded": 16207
+            },
+            {
+              "path": "/assets/config-xnnaXcXn.js",
+              "transfer": 0,
+              "encoded": 376,
+              "decoded": 669
+            },
+            {
+              "path": "/assets/focus-deck-scaffold-D7CoE88h.js",
+              "transfer": 0,
+              "encoded": 84094,
+              "decoded": 284100
+            },
+            {
+              "path": "/assets/environment-C3OPXNX7.js",
+              "transfer": 0,
+              "encoded": 9742,
+              "decoded": 35060
+            },
+            {
+              "path": "/assets/matrixInterpretations-1Gmlldq8.css",
+              "transfer": 0,
+              "encoded": 14357,
+              "decoded": 57840
+            },
+            {
+              "path": "/assets/KaTeX_Main-Regular-B22Nviop.woff2",
+              "transfer": 0,
+              "encoded": 26272,
+              "decoded": 26272
+            },
+            {
+              "path": "data:embedded-resource",
+              "transfer": 0,
+              "encoded": 0,
+              "decoded": 0
+            }
+          ],
+          "metrics": {
+            "JSHeapUsedSize": 4285256,
+            "Nodes": 2567,
+            "Documents": 2,
+            "JSEventListeners": 64
+          }
+        }
+      ]
+    }
+  ],
+  "note": "Loopback gzip/cache fixture; readiness includes automation. Resource transferSize includes per-resource overhead and excludes navigation HTML."
+}

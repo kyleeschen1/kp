@@ -47,3 +47,27 @@ export function matrixEnvironment() {
 }
 export type MatrixEnvironment = ReturnType<typeof matrixEnvironment>;
 export type MatrixCell = MatrixEnvironment["cells"][number];
+
+/** Bounded input adapter for the existing 2×2 presentation. Numeric projection
+ * never reconstructs the product: both interpretations retain its exact cells. */
+export function matrixEnvironmentFromProduct(product: ReturnType<typeof matrixProduct>): MatrixEnvironment {
+  if (product.left.rowCount !== 2 || product.left.columnCount !== 2 ||
+      product.right.rowCount !== 2 || product.right.columnCount !== 2) {
+    throw new MatrixColumnGap("This presentation requires a finite 2 by 2 product.");
+  }
+  const valueOf = (entry: typeof product.left.rows[number][number]) => {
+    let value: number;
+    try { value = compileExpression(entry.expression)({}); }
+    catch { throw new MatrixColumnGap("This presentation requires finite numerical entries with no unresolved parameters."); }
+    if (!Number.isFinite(value)) throw new MatrixColumnGap("This presentation requires finite numerical entries.");
+    return value;
+  };
+  const cells = product.cells.map(semantic => Object.freeze({
+    semantic, row: semantic.rowIndex, col: semantic.columnIndex, result: valueOf(semantic.result),
+    left: Object.freeze(semantic.row.entries.map(valueOf)), right: Object.freeze(semantic.column.entries.map(valueOf)),
+    leftIds: Object.freeze(semantic.row.entries.map(entry => entry.id)),
+    rightIds: Object.freeze(semantic.column.entries.map(entry => entry.id)),
+    resultId: semantic.result.id, intermediateId: semantic.dot.id,
+  }));
+  return Object.freeze({ assetId: product.id, A: product.left, B: product.right, product, cells: Object.freeze(cells) });
+}

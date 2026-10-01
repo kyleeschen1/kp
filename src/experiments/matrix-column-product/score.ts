@@ -62,19 +62,20 @@ export function empty(env: MatrixEnvironment) { return new MatrixStory(new Matri
 
 // This is the actual executable authoring score, not a displayed pseudocode copy.
 export function matrixColumnStory(env = matrixEnvironment()) {
+  const sums = (column: number) => env.cells.filter(cell => cell.col === column).map(cell => cell.result).join(" and ");
   return empty(env)
     .transform("initial", "Each column of B meets both rows of A.", s => s.show())
     .transform("lift-first", "Lift a copy of the first column. B stays unchanged.", s => s.lift(0))
     .transform("pivot-first", "Turn the column into a row; keep its entry order.", s => s.pivot())
     .transform("copy-first", "The same column will meet the second row too.", s => s.copy())
     .transform("dot-first", "Pair corresponding entries from each row and the column.", s => s.dot())
-    .transform("evaluate-first", "Multiply each pair, then add: 4 and 10.", s => s.evaluate())
+    .transform("evaluate-first", `Multiply each pair, then add: ${sums(0)}.`, s => s.evaluate())
     .transform("place-first", "Those two sums form the first column of the product.", s => s.place())
     .transform("lift-second", "Now lift a copy of the second column of B.", s => s.lift(1))
     .transform("pivot-second", "Turn the second column to meet the first row.", s => s.pivot())
     .transform("copy-second", "Copy it again for the second row.", s => s.copy())
     .transform("dot-second", "Use the same row–column pairing for both remaining entries.", s => s.dot())
-    .transform("evaluate-second", "These sums are 4 and 8.", s => s.evaluate())
+    .transform("evaluate-second", `These sums are ${sums(1)}.`, s => s.evaluate())
     .transform("complete", "Each result entry is one row–column dot product.", s => s.place());
 }
 

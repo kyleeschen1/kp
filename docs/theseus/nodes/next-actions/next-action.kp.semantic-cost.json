@@ -1,0 +1,69 @@
+{
+  "id": "next-action.kp.semantic-cost",
+  "kind": "next-action",
+  "title": "Measure matrix authoring reuse and browser delivery costs",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Delivered bounded source-only reuse, measured production and instance costs, regression guards and final findings.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-semantic-cost-next-step.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-semantic-cost-results.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run build:semantic-cost",
+      "status": "passed",
+      "scope": "semantic-cost",
+      "checkedAt": "2026-10-01T11:17:07.277Z",
+      "notes": "See docs/project/reviews/2026-10-01-semantic-cost-results.md for measured evidence and limits."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "semantic-cost",
+      "checkedAt": "2026-10-01T11:17:08.206Z",
+      "notes": "See docs/project/reviews/2026-10-01-semantic-cost-results.md for measured evidence and limits."
+    },
+    {
+      "command": "npm run test:semantic-cost",
+      "status": "passed",
+      "scope": "semantic-cost",
+      "checkedAt": "2026-10-01T11:17:08.954Z",
+      "notes": "See docs/project/reviews/2026-10-01-semantic-cost-results.md for measured evidence and limits."
+    },
+    {
+      "command": "npm run visual:semantic-cost",
+      "status": "passed",
+      "scope": "semantic-cost",
+      "checkedAt": "2026-10-01T11:17:09.697Z",
+      "notes": "See docs/project/reviews/2026-10-01-semantic-cost-results.md for measured evidence and limits."
+    },
+    {
+      "command": "npm run visual:matrix-column",
+      "status": "passed",
+      "scope": "semantic-cost",
+      "checkedAt": "2026-10-01T11:17:10.449Z",
+      "notes": "See docs/project/reviews/2026-10-01-semantic-cost-results.md for measured evidence and limits."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "semantic-cost",
+      "checkedAt": "2026-10-01T11:17:11.193Z",
+      "notes": "See docs/project/reviews/2026-10-01-semantic-cost-results.md for measured evidence and limits."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "semantic-cost",
+      "checkedAt": "2026-10-01T11:17:11.927Z",
+      "notes": "See docs/project/reviews/2026-10-01-semantic-cost-results.md for measured evidence and limits."
+    }
+  ]
+}

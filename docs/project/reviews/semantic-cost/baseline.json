@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "node": "v26.9.0",
+  "closures": [
+    {
+      "page": "dot-product-passage",
+      "js": {
+        "raw": 302635,
+        "gzip": 91031
+      },
+      "css": {
+        "raw": 58109,
+        "gzip": 14461
+      },
+      "html": {
+        "raw": 904,
+        "gzip": 531
+      },
+      "files": [
+        {
+          "file": "experiments/dot-product-passage/index.html",
+          "raw": 904,
+          "gzip": 531
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/dotPassage-Bwj7wpai.js",
+          "raw": 17866,
+          "gzip": 6561
+        },
+        {
+          "file": "assets/dotPassage-DeBbtcTN.css",
+          "raw": 58109,
+          "gzip": 14461
+        },
+        {
+          "file": "assets/focus-deck-scaffold-D7CoE88h.js",
+          "raw": 284100,
+          "gzip": 84094
+        }
+      ]
+    },
+    {
+      "page": "matrix-column-product",
+      "js": {
+        "raw": 337609,
+        "gzip": 100520
+      },
+      "css": {
+        "raw": 56468,
+        "gzip": 14082
+      },
+      "html": {
+        "raw": 1083,
+        "gzip": 601
+      },
+      "files": [
+        {
+          "file": "experiments/matrix-column-product/index.html",
+          "raw": 1083,
+          "gzip": 601
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/environment-C3OPXNX7.js",
+          "raw": 35060,
+          "gzip": 9742
+        },
+        {
+          "file": "assets/focus-deck-scaffold-D7CoE88h.js",
+          "raw": 284100,
+          "gzip": 84094
+        },
+        {
+          "file": "assets/matrixDotProduct-CBa018q5.js",
+          "raw": 17780,
+          "gzip": 6308
+        },
+        {
+          "file": "assets/style-sJxacFiR.css",
+          "raw": 56468,
+          "gzip": 14082
+        }
+      ]
+    },
+    {
+      "page": "matrix-column-combinations",
+      "js": {
+        "raw": 335994,
+        "gzip": 100319
+      },
+      "css": {
+        "raw": 57840,
+        "gzip": 14357
+      },
+      "html": {
+        "raw": 1030,
+        "gzip": 563
+      },
+      "files": [
+        {
+          "file": "experiments/matrix-column-combinations/index.html",
+          "raw": 1030,
+          "gzip": 563
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/environment-C3OPXNX7.js",
+          "raw": 35060,
+          "gzip": 9742
+        },
+        {
+          "file": "assets/focus-deck-scaffold-D7CoE88h.js",
+          "raw": 284100,
+          "gzip": 84094
+        },
+        {
+          "file": "assets/matrixInterpretations-1Gmlldq8.css",
+          "raw": 57840,
+          "gzip": 14357
+        },
+        {
+          "file": "assets/matrixInterpretations-BhdywGSV.js",
+          "raw": 16165,
+          "gzip": 6107
+        }
+      ]
+    },
+    {
+      "page": "matrix-examples",
+      "js": {
+        "raw": 2151,
+        "gzip": 1027
+      },
+      "css": {
+        "raw": 56468,
+        "gzip": 14082
+      },
+      "html": {
+        "raw": 1756,
+        "gzip": 777
+      },
+      "files": [
+        {
+          "file": "experiments/matrix-examples/index.html",
+          "raw": 1756,
+          "gzip": 777
+        },
+        {
+          "file": "assets/config-xnnaXcXn.js",
+          "raw": 669,
+          "gzip": 376
+        },
+        {
+          "file": "assets/matrixExamples-DKcqLTJI.js",
+          "raw": 1482,
+          "gzip": 651
+        },
+        {
+          "file": "assets/style-sJxacFiR.css",
+          "raw": 56468,
+          "gzip": 14082
+        }
+      ]
+    }
+  ],
+  "construction": [
+    {
+      "size": 2,
+      "contributions": 8,
+      "medianMs": 0.07491699999999923,
+      "maxMs": 0.10275000000000034
+    },
+    {
+      "size": 10,
+      "contributions": 1000,
+      "medianMs": 1.9000419999999991,
+      "maxMs": 2.67025000000001
+    },
+    {
+      "size": 20,
+      "contributions": 8000,
+      "medianMs": 12.471084000000019,
+      "maxMs": 16.746125000000006
+    }
+  ],
+  "serializationIllustration": {
+    "actualTransport": "These pages construct objects locally; neither JSON below is sent.",
+    "naiveObjectRawBytes": 102179,
+    "naiveObjectGzipBytes": 1997,
+    "numericInputRawBytes": 68,
+    "numericInputGzipBytes": 82
+  },
+  "exclusions": [
+    "Fonts are measured from actual browser requests separately.",
+    "Closure sizes are compressed estimates, not network transfers.",
+    "Node construction timings are local samples, not browser timings or a universal scaling claim."
+  ]
+}

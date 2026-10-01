@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1: the approved [semantic cost experiment](reviews/2026-10-01-semantic-cost-results.md)
+measures one and ten instances and adds bounded source-only product adapters for
+both existing matrix readings. Ten different inputs took under 1 ms to prepare
+locally; rendering dominated, with no additional assets after warm-up. Dependency,
+payload, DOM and lifecycle guards preserve that boundary. Next recommendation is
+one basis-aware composition example, proposed separately; the existing
+dot-product visual checkpoint remains unchanged.
+
 October 1: the approved [linear algebra knowledge graph
 experiment](reviews/2026-10-01-linear-algebra-knowledge-graph.md): source-backed
 definitions, proofs and dense relationships from four open textbooks, inspected

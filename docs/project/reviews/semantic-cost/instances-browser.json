@@ -1,0 +1,381 @@
+{
+  "browser": "149.0.7827.55",
+  "reports": [
+    {
+      "reading": "dot",
+      "baseline": {
+        "JSHeapUsedSize": 3249172,
+        "Nodes": 53,
+        "Documents": 1,
+        "JSEventListeners": 31
+      },
+      "cases": [
+        {
+          "count": 1,
+          "different": false,
+          "prepare": {
+            "prepareMs": 0.09999996423721313,
+            "models": 1,
+            "uniqueProducts": 1
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3283748,
+            "Nodes": 53,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 29.69999998807907,
+            "nodes": 438
+          },
+          "mounted": {
+            "JSHeapUsedSize": 3631140,
+            "Nodes": 1345,
+            "Documents": 1,
+            "JSEventListeners": 42
+          },
+          "frame": {
+            "p50Ms": 16.69999999999999,
+            "p95Ms": 17.699999999999932
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3621032,
+            "Nodes": 53,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        },
+        {
+          "count": 10,
+          "different": false,
+          "prepare": {
+            "prepareMs": 0.19999998807907104,
+            "models": 10,
+            "uniqueProducts": 1
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3662432,
+            "Nodes": 53,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 282.7999999523163,
+            "nodes": 4380
+          },
+          "mounted": {
+            "JSHeapUsedSize": 5152896,
+            "Nodes": 12973,
+            "Documents": 1,
+            "JSEventListeners": 141
+          },
+          "frame": {
+            "p50Ms": 16.699999999999818,
+            "p95Ms": 17.699999999999818
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3883380,
+            "Nodes": 53,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        },
+        {
+          "count": 10,
+          "different": true,
+          "prepare": {
+            "prepareMs": 0.5,
+            "models": 10,
+            "uniqueProducts": 10
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3960732,
+            "Nodes": 53,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 291.89999997615814,
+            "nodes": 4334
+          },
+          "mounted": {
+            "JSHeapUsedSize": 5295688,
+            "Nodes": 12881,
+            "Documents": 1,
+            "JSEventListeners": 141
+          },
+          "frame": {
+            "p50Ms": 16.699999999999818,
+            "p95Ms": 17.5
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3909580,
+            "Nodes": 53,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        }
+      ],
+      "afterCycles": {
+        "JSHeapUsedSize": 3943120,
+        "Nodes": 53,
+        "Documents": 1,
+        "JSEventListeners": 31
+      }
+    },
+    {
+      "reading": "rows",
+      "baseline": {
+        "JSHeapUsedSize": 3336124,
+        "Nodes": 481,
+        "Documents": 1,
+        "JSEventListeners": 31
+      },
+      "cases": [
+        {
+          "count": 1,
+          "different": false,
+          "prepare": {
+            "prepareMs": 0.19999998807907104,
+            "models": 1,
+            "uniqueProducts": 1
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3372628,
+            "Nodes": 481,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 35.299999952316284,
+            "nodes": 414
+          },
+          "mounted": {
+            "JSHeapUsedSize": 3596480,
+            "Nodes": 1764,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "frame": {
+            "p50Ms": 16.699999999999932,
+            "p95Ms": 17.59999999999991
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3533152,
+            "Nodes": 481,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        },
+        {
+          "count": 10,
+          "different": false,
+          "prepare": {
+            "prepareMs": 0.10000002384185791,
+            "models": 10,
+            "uniqueProducts": 1
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3560428,
+            "Nodes": 481,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 341.60000002384186,
+            "nodes": 4140
+          },
+          "mounted": {
+            "JSHeapUsedSize": 4864368,
+            "Nodes": 13311,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "frame": {
+            "p50Ms": 16.699999999999818,
+            "p95Ms": 17.600000000000364
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3775768,
+            "Nodes": 481,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        },
+        {
+          "count": 10,
+          "different": true,
+          "prepare": {
+            "prepareMs": 0.5,
+            "models": 10,
+            "uniqueProducts": 10
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3867416,
+            "Nodes": 481,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 373.69999998807907,
+            "nodes": 4162
+          },
+          "mounted": {
+            "JSHeapUsedSize": 5036392,
+            "Nodes": 13386,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "frame": {
+            "p50Ms": 16.699999999999818,
+            "p95Ms": 17.399999999999636
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3824708,
+            "Nodes": 481,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        }
+      ],
+      "afterCycles": {
+        "JSHeapUsedSize": 3751296,
+        "Nodes": 481,
+        "Documents": 1,
+        "JSEventListeners": 31
+      }
+    },
+    {
+      "reading": "columns",
+      "baseline": {
+        "JSHeapUsedSize": 3389488,
+        "Nodes": 651,
+        "Documents": 1,
+        "JSEventListeners": 31
+      },
+      "cases": [
+        {
+          "count": 1,
+          "different": false,
+          "prepare": {
+            "prepareMs": 0.19999998807907104,
+            "models": 1,
+            "uniqueProducts": 1
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3426264,
+            "Nodes": 651,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 30.900000035762787,
+            "nodes": 528
+          },
+          "mounted": {
+            "JSHeapUsedSize": 3630136,
+            "Nodes": 2128,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "frame": {
+            "p50Ms": 16.699999999999818,
+            "p95Ms": 17.5
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3537604,
+            "Nodes": 651,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        },
+        {
+          "count": 10,
+          "different": false,
+          "prepare": {
+            "prepareMs": 0.30000001192092896,
+            "models": 10,
+            "uniqueProducts": 1
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3564288,
+            "Nodes": 651,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 241.60000002384186,
+            "nodes": 5250
+          },
+          "mounted": {
+            "JSHeapUsedSize": 5128368,
+            "Nodes": 15316,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "frame": {
+            "p50Ms": 16.59999999999991,
+            "p95Ms": 17.700000000000273
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3795144,
+            "Nodes": 651,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        },
+        {
+          "count": 10,
+          "different": true,
+          "prepare": {
+            "prepareMs": 0.7000000476837158,
+            "models": 10,
+            "uniqueProducts": 10
+          },
+          "inactive": {
+            "JSHeapUsedSize": 3860124,
+            "Nodes": 651,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "mount": {
+            "mountMs": 290.30000001192093,
+            "nodes": 5269
+          },
+          "mounted": {
+            "JSHeapUsedSize": 5267952,
+            "Nodes": 15378,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "frame": {
+            "p50Ms": 16.699999999999818,
+            "p95Ms": 17.700000000000728
+          },
+          "disposed": {
+            "JSHeapUsedSize": 3816224,
+            "Nodes": 651,
+            "Documents": 1,
+            "JSEventListeners": 31
+          },
+          "newResourcesAfterWarmup": 0
+        }
+      ],
+      "afterCycles": {
+        "JSHeapUsedSize": 3748072,
+        "Nodes": 651,
+        "Documents": 1,
+        "JSEventListeners": 31
+      }
+    }
+  ],
+  "note": "Dot uses the full existing player. Rows/columns use the real adapters and clock in a stage-only measurement host. All instances run concurrently, including offscreen ones. CDP heap samples follow forced GC; they are not total process memory. Frame samples are local observations, not fixed performance guarantees."
+}

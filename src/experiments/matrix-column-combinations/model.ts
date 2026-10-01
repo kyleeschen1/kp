@@ -1,4 +1,4 @@
-import { matrixEnvironment, MatrixColumnGap } from "../matrix-column-product/environment.ts";
+import { matrixEnvironment, matrixEnvironmentFromProduct, MatrixColumnGap } from "../matrix-column-product/environment.ts";
 import { columnCombinations, inspectOrthonormality } from "../../math/matrix-interpretations.ts";
 import { constant, compileExpression } from "../../math/expression.ts";
 import { createKpScalarExpression, createKpTypedMatrixFromRows, type KpScalarValue } from "../../math/typed-semantic-math.ts";
@@ -44,10 +44,24 @@ export function example(kind = "columns", column = 0) {
     matrix: matrix("example.Q", [[.6, -.8], [.8, .6]]), scope: {}, tolerance: 1e-12 }) : undefined;
   const product = evidence?.gram ?? (kind === "identity" ? matrixProduct({ id: "example.AI", left: env.A,
     right: matrix("example.I", [[1, 0], [0, 1]]) }) : env.product);
+  return projectExample(product, column, kind, evidence, kind === "columns" && column === 0);
+}
+
+/** Additional examples supply mathematics and selection, not presentation code.
+ * Keep the demonstrated size/number boundary explicit rather than silently
+ * routing unsupported inputs to unrelated choreography. */
+export function columnExampleFromProduct(product: ReturnType<typeof matrixProduct>, column = 0) {
+  matrixEnvironmentFromProduct(product);
+  if (![0, 1].includes(column)) throw new MatrixColumnGap("Choose result column 0 or 1.");
+  return projectExample(product, column, "columns", undefined, false);
+}
+
+function projectExample(product: ReturnType<typeof matrixProduct>, column: number, kind: string,
+  evidence: ReturnType<typeof inspectOrthonormality> | undefined, legacyCues: boolean) {
   const combination = columnCombinations(product).column(column);
   const labels = kind === "identity" ? ["A", "I", "AI"] : evidence ? ["Qᵀ", "Q", "QᵀQ"] : ["A", "B", "AB"];
   const ordinal = column === 0 ? "first" : "second";
-  const cues = kind === "columns" && column === 0 ? beats : beats.map(beat => ({ ...beat, cue: ({
+  const cues = legacyCues ? beats : beats.map(beat => ({ ...beat, cue: ({
     initial: evidence ? "QᵀQ compares the columns of Q with one another." : `The ${ordinal} column of ${labels[1]} supplies the weights for one result column.`,
     columns: `Separate the columns of ${labels[0]}. The entries retain their original references.`,
     weights: kind === "identity" ? `Column ${column + 1} of I selects column ${column + 1} of A: its weight is 1; the other weight is 0.` : `Use the ${ordinal} column of ${labels[1]} as the weights.`,

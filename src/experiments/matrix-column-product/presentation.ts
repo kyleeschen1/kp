@@ -103,7 +103,9 @@ export function mountMatrixColumnPresentation(root: HTMLElement, story: ReturnTy
     stage.dataset["column"] = String(column);
     stage.dataset["progress"] = String(progress);
     for (const c of story.state.env.cells) stage.dataset[`cell${c.row}${c.col}`] = "pending";
-    for (const { owner } of paints.values()) owner.style.opacity = "0";
+    // Hidden occurrences also have a deterministic pose. Otherwise visiting the
+    // other column leaves stale transforms behind on seek/reversal.
+    for (const { owner } of paints.values()) { owner.style.opacity = "0"; owner.style.transform = ""; }
     // Target native entries take ownership only after their material settles.
     for (const c of story.state.env.cells) {
       const settled = c.col < column || (c.col === column && action === "place" && frame.local === 1);

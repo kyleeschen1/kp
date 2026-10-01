@@ -1,0 +1,51 @@
+{
+  "id": "run-contract.kp.semantic-cost-v1",
+  "kind": "run-contract",
+  "title": "Bounded semantic cost and reuse experiment",
+  "status": "resolved",
+  "summary": "COMPLETE: all three approved slices delivered; no new domain or old checkpoint resumed.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-cost.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-semantic-cost-next-step.md"
+    }
+  ],
+  "verification": [
+    "npm run test:semantic-cost",
+    "npm run measure:semantic-cost",
+    "npm run visual:semantic-cost"
+  ],
+  "allowedWork": [
+    "Production closure and browser measurements; existing two readings; measured cost repairs; source-only variations; scoped regression gates"
+  ],
+  "disallowedWork": [
+    "New mathematical domains, new choreography, universal framework, old contract resumption, merging or deployment"
+  ],
+  "goal": "Measure one and ten existing matrix animations, preserve identity across readings, and repair demonstrated delivery or lifecycle costs",
+  "target": "next-action.kp.semantic-cost",
+  "slices": [
+    {
+      "id": "baseline",
+      "title": "Measure",
+      "summary": "Recorded four-entry production closures, construction and serialization illustration; browser cold/warm cache and ten full dot players measured. Rendering dominates the semantic input cost.",
+      "status": "complete"
+    },
+    {
+      "id": "reuse-repair",
+      "title": "Repair-and-prove-reuse",
+      "summary": "Both presentations accept one product; typed unsupported inputs, value-derived cues and deterministic hidden paint poses verified.",
+      "status": "complete"
+    },
+    {
+      "id": "verify",
+      "title": "Verify-and-record",
+      "summary": "Build and measured budgets passed; 19 semantic tests, 12 browser tests, full typecheck and workspace validation passed. Durable before/after evidence and limitations recorded.",
+      "status": "complete"
+    }
+  ]
+}
