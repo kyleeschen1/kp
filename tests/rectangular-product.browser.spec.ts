@@ -31,7 +31,7 @@ test('rectangular cell reuses the passage and hands off one result through seek 
   await expect(root.locator('[data-context-arrived]')).toHaveCount(1);
   await root.getByRole('button', { name: 'Light mode', exact: true }).click();
   await expect(target).toHaveCSS('color', 'rgb(17, 17, 15)');
-  await expect(root.locator('.matrix-card')).toHaveCSS('background-color', 'rgb(247, 243, 232)');
+  await expect(root.locator('.matrix-card')).toHaveCSS('background-color', 'color(srgb 0.970118 0.956392 0.931137)');
   await expect(target).toHaveCSS('-webkit-font-smoothing', 'auto');
   await root.locator('.matrix-card').screenshot({ path: info.outputPath('rectangular-light-mode.png') });
   await timeline.fill('0.9999');
@@ -62,7 +62,7 @@ test('shared menu loads the rectangular review and shared configuration', async 
   await expect(child.locator('#rectangular-player')).toHaveAttribute('data-ready', 'true');
   await expect(page.getByRole('combobox', { name: 'Result column' })).toBeHidden();
   await page.getByRole('button', { name: 'Step instantly', exact: true }).click();
-  await page.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Light mode', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(child.locator('html')).toHaveCSS('color-scheme', 'light');
   await child.getByRole('combobox', { name: 'Milestone' }).selectOption('5');
   await expect(child.locator('[data-context-arrived]')).toHaveCount(1);

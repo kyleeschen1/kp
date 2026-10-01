@@ -29,7 +29,7 @@ async function record(name: string, data: unknown) {
 
 test('canonical production pages: cold/warm transfers, fonts and readiness', async ({ browser }) => {
   const reports = [];
-  for (const [route, root] of [['dot-product-passage', '#dot-player'], ['matrix-column-product', '#matrix-player'], ['matrix-column-combinations', '#comb-player'], ['matrix-examples', '#comb-player'], ['matrix-column-combinations/?example=composition', '#comb-player']]) {
+  for (const [route, root] of [['dot-product-passage', '#dot-player'], ['matrix-column-product', '#matrix-player'], ['matrix-column-combinations', '#comb-player'], ['matrix-examples', '#dot-player'], ['matrix-column-combinations/?example=composition', '#comb-player']]) {
     const context = await browser.newContext({ baseURL: 'http://127.0.0.1:4196', viewport: { width: 1200, height: 950 } });
     const page = await context.newPage();
     const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));

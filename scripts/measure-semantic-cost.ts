@@ -36,7 +36,7 @@ for (const closure of closures) {
 }
 // An iframe is a separate document, but its assets still belong to this reader.
 // Account for the union rather than reporting only the tiny menu script.
-const menuFiles = [...new Map(closures.filter(c => ['matrix-examples', 'matrix-column-combinations'].includes(c.page))
+const menuFiles = [...new Map(closures.filter(c => ['matrix-examples', 'dot-product-passage'].includes(c.page))
   .flatMap(c => c.files.map(file => [file.file, file] as const))).values()];
 const menuWithDefaultChild = { jsGzip: menuFiles.filter(f => f.file.endsWith('.js')).reduce((n, f) => n + f.gzip, 0),
   cssGzip: menuFiles.filter(f => f.file.endsWith('.css')).reduce((n, f) => n + f.gzip, 0) };

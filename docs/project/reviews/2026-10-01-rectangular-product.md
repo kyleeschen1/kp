@@ -26,7 +26,8 @@ acceptance, as approved; do not claim them delivered from the underlying model.
 
 The requested presentation controls remain: 20px math by default (20–32px),
 matched row/column center spacing, 6px lift (0–24px), full-size background at 40%
-opacity, and no shadows. Light mode uses explicit warm beige #f7f3e8
+opacity, and no shadows. Light mode uses the historical cream page (#fffdf8)
+and beige panel (94% cream, 6% #806548)
 through the existing shared configuration, with dark focus ink and normal
 KaTeX smoothing (the thinner treatment remains dark-only); both player and
 menu expose the toggle. Theme changes preserve the held geometry/playhead.
@@ -58,3 +59,9 @@ JS gzip and 14,896 B CSS gzip; the standalone dot page is 93,505 B and 14,536 B.
 Fonts are separate. Eight unit tests, ten standalone browser tests, two
 rectangular browser tests, full typecheck, the scoped production build and
 delivery-budget checks pass.
+
+Subsequent startup correction: the menu opens the Three-term dot product in
+light mode; reset returns to light and child theme toggles synchronize the outer
+menu. Default-reader accounting now measures menu plus dot, not menu plus column
+combinations: 94,262 B JS and 28,553 B CSS gzip estimates. CSS includes both
+documents' emitted stylesheets; this changes the entry cohort, not a cost ceiling.

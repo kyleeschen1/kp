@@ -11,18 +11,19 @@ test("all matrix pages and the menu use the three-term page theme", async ({ pag
     for (const [index, route] of routes.entries()) {
       await page.goto(`/experiments/${route}`);
       const menu = route === 'matrix-examples/';
+      const light = menu || route === 'dot-product-passage/';
       if (!menu) await expect(page.locator('[data-ready="true"]')).toHaveCount(1);
-      await expect(page.locator('html')).toHaveCSS('color-scheme', 'dark');
-      await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
-      await expect(page.locator('body')).toHaveCSS('color', 'rgb(208, 208, 203)');
+      await expect(page.locator('html')).toHaveCSS('color-scheme', light ? 'light' : 'dark');
+      await expect(page.locator('body')).toHaveCSS('background-color', light ? 'rgb(255, 253, 248)' : 'rgb(32, 34, 34)');
+      await expect(page.locator('body')).toHaveCSS('color', light ? 'rgb(36, 35, 31)' : 'rgb(208, 208, 203)');
       await expect(page.locator('.matrix-controls button').first()).toHaveCSS('font-weight', '600');
       if (!menu) {
-        await expect(page.locator('.matrix-card')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
-        await expect(page.locator('.matrix-card')).toHaveCSS('border-top-color', 'rgb(76, 80, 80)');
+        await expect(page.locator('.matrix-card')).toHaveCSS('background-color', light ? 'color(srgb 0.970118 0.956392 0.931137)' : 'rgb(32, 34, 34)');
+        await expect(page.locator('.matrix-card')).toHaveCSS('border-top-color', light ? 'rgb(183, 177, 165)' : 'rgb(76, 80, 80)');
         await expect(page.locator('.matrix-card .katex').first()).toHaveCSS('font-weight', '400');
       } else {
-        await expect(page.frameLocator('#example-frame').locator('#comb-player')).toHaveAttribute('data-ready', 'true');
-        await expect(page.frameLocator('#example-frame').locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
+        await expect(page.frameLocator('#example-frame').locator('#dot-player')).toHaveAttribute('data-ready', 'true');
+        await expect(page.frameLocator('#example-frame').locator('body')).toHaveCSS('background-color', 'rgb(255, 253, 248)');
       }
       if (colorScheme === 'light') await page.screenshot({ path: info.outputPath(`shared-page-${index}.png`), fullPage: true });
     }
@@ -161,7 +162,7 @@ test("one host switches every example and result column without changing its URL
   const url = page.url();
   const menu = page.getByRole("combobox", { name: "Example", exact: true });
   const child = page.frameLocator("#example-frame");
-  await expect(child.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+  await expect(child.locator("#dot-player")).toHaveAttribute("data-ready", "true");
   for (const kind of ["identity", "orthonormality", "dot", "columns"]) {
     // Switching while playing must retire the previous document and clock.
     await child.getByRole("button", { name: "Play", exact: true }).click();
@@ -190,6 +191,7 @@ test("shared configuration reflows the held pose and follows every example", asy
   test.setTimeout(60000);
   await page.setViewportSize({ width: 1500, height: 1050 });
   await page.goto("/experiments/matrix-examples/");
+  await page.getByRole('combobox', { name: 'Example', exact: true }).selectOption('columns');
   const child = page.frameLocator("#example-frame");
   await expect(child.locator("#comb-player")).toHaveAttribute("data-ready", "true");
   const slider = child.getByRole("slider", { name: "Animation position" });

@@ -1,11 +1,12 @@
 import "../matrix-example-page.css";
-import { applyMatrixConfig, readMatrixConfig, type MatrixExampleConfig } from "./config.ts";
+import { applyMatrixConfig, readMatrixConfig, observeMatrixConfig, type MatrixExampleConfig } from "./config.ts";
 
 const menu = document.querySelector<HTMLSelectElement>("#example-menu")!;
 const column = document.querySelector<HTMLSelectElement>("#column-menu")!;
 const columnLabel = document.querySelector<HTMLElement>("#column-label")!;
 const frame = document.querySelector<HTMLIFrameElement>("#example-frame")!;
 let observer: ResizeObserver | undefined;
+let stopChildConfig: (() => void) | undefined;
 let config = readMatrixConfig(document);
 const layout = document.querySelector<HTMLButtonElement>("#layout-toggle")!;
 const spacing = document.querySelector<HTMLButtonElement>("#spacing-toggle")!;
@@ -25,12 +26,13 @@ layout.onclick = () => configure({ ...config, layout: config.layout === "side" ?
 spacing.onclick = () => configure({ ...config, spacing: config.spacing === "roomy" ? "compact" : "roomy" });
 motion.onclick = () => configure({ ...config, motion: config.motion === "steps" ? "animate" : "steps" });
 theme.onclick = () => configure({ ...config, theme: config.theme === 'dark' ? 'light' : 'dark' });
-reset.onclick = () => configure({ layout: "stacked", spacing: "compact", motion: "animate", theme: 'dark' });
+reset.onclick = () => configure({ layout: "stacked", spacing: "compact", motion: "animate", theme: 'light' });
 
 // Keep one live child document: replacing it disposes the previous player's
 // clock and listeners, and its history changes cannot change the host URL.
 const select = () => {
   observer?.disconnect();
+  stopChildConfig?.();
   const dot = menu.value === "dot";
   const passage = menu.value === "dot-passage";
   const rectangular = menu.value === 'rectangular';
@@ -41,9 +43,14 @@ const select = () => {
 };
 frame.onload = () => {
   observer?.disconnect();
+  stopChildConfig?.();
   const body = frame.contentDocument?.body;
   if (!body) return;
   applyMatrixConfig(body.ownerDocument, config);
+  // A player-side theme toggle must not leave the menu and outer page stale.
+  stopChildConfig = observeMatrixConfig(body.ownerDocument, next => {
+    if (next.theme !== config.theme) configure(next);
+  });
   const resize = () => { frame.style.height = `${Math.ceil(body.getBoundingClientRect().height + 100)}px`; };
   observer = new ResizeObserver(resize);
   observer.observe(body);
@@ -53,6 +60,7 @@ menu.onchange = select;
 column.onchange = select;
 import.meta.hot?.dispose(() => {
   observer?.disconnect();
+  stopChildConfig?.();
   menu.onchange = null; column.onchange = null; frame.onload = null;
   layout.onclick = null; spacing.onclick = null; motion.onclick = null; reset.onclick = null; theme.onclick = null;
 });

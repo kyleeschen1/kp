@@ -11,14 +11,14 @@ test('beige light mode preserves focus ink and the held geometry', async ({ page
     return { x: r.x - stage.x, y: r.y - stage.y, width: r.width, height: r.height };
   }));
   const before = await positions();
-  await page.getByRole('button', { name: 'Light mode', exact: true }).click();
   await expect(page.locator('html')).toHaveCSS('color-scheme', 'light');
+  await expect(page.getByRole('button', { name: 'Light mode', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(timeline).toHaveValue('0.125');
   expect(await positions()).toEqual(before);
   const paper = await page.locator('.matrix-card').evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(paper).toBe('rgb(247, 243, 232)');
-  await expect(page.locator('body')).toHaveCSS('background-color', paper);
-  await expect(page.locator('html')).toHaveCSS('background-color', paper);
+  expect(paper).toBe('color(srgb 0.970118 0.956392 0.931137)');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(255, 253, 248)');
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(255, 253, 248)');
   for (const selector of ['[data-kp-dot-key="left-0"] .mord', '[data-kp-dot-key="pair-left-0"] .mord', '[data-occurrence="pair-left-0"] .mord', '.dot-static .katex']) {
     await expect(page.locator(selector).first()).toHaveCSS('-webkit-font-smoothing', 'auto');
   }
@@ -30,6 +30,8 @@ test('beige light mode preserves focus ink and the held geometry', async ({ page
   await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS('-webkit-font-smoothing', 'antialiased');
   expect(await positions()).toEqual(before);
+  await page.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS('-webkit-font-smoothing', 'auto');
 });
 
 test('math size remeasures native and moving tokens at the held playhead', async ({ page }, info) => {
@@ -196,6 +198,7 @@ test("two players share a renderer while retaining independent state and identit
   await page.goto("/experiments/dot-product-passage/?compare=1");
   const first = page.locator("#dot-player"), second = page.locator("#dot-player-second");
   for (const root of [first, second]) await expect(root).toHaveAttribute("data-ready", "true");
+  await first.getByRole('button', { name: 'Light mode', exact: true }).click();
   await expect(page.locator("iframe, .dot-shadow, .dot-plane, [data-glow]")).toHaveCount(0);
   const ids = await page.locator("[id]").evaluateAll(nodes => nodes.map(n => n.id));
   expect(new Set(ids).size).toBe(ids.length);
@@ -289,6 +292,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
   const root = page.locator("#dot-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  await root.getByRole('button', { name: 'Light mode', exact: true }).click();
   await page.getByRole('combobox', { name: 'Foreground lift' }).selectOption('off');
   await page.getByRole('slider', { name: 'Background opacity' }).fill('100');
   await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
@@ -580,9 +584,17 @@ test("signed dot passage preserves references through pairing, products and sum"
 
 test("menu configuration, native endpoints and reduced motion work for the passage", async ({ page }, info) => {
   await page.goto("/experiments/matrix-examples/");
-  await page.getByRole("combobox", { name: "Example", exact: true }).selectOption("dot-passage");
+  await expect(page.getByRole("combobox", { name: "Example", exact: true })).toHaveValue("dot-passage");
   const child = page.frameLocator("#example-frame");
   await expect(child.locator("#dot-player")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator('html')).toHaveCSS('color-scheme', 'light');
+  await expect(child.locator('html')).toHaveCSS('color-scheme', 'light');
+  await expect(child.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS('-webkit-font-smoothing', 'auto');
+  await child.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Light mode', exact: true })).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('html')).toHaveCSS('color-scheme', 'dark');
+  await child.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await expect(page.locator('html')).toHaveCSS('color-scheme', 'light');
   await page.getByRole("button", { name: "Step instantly", exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
@@ -605,6 +617,7 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await expect(child.getByRole("slider", { name: "Animation position" })).toHaveValue("0");
   await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "dark" });
   await page.getByRole("button", { name: "Reset settings", exact: true }).click();
+  await page.getByRole('button', { name: 'Light mode', exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
   await expect(child.locator("body")).toHaveCSS("background-color", "rgb(32, 34, 34)");

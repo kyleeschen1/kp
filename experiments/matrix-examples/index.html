@@ -1,28 +1,28 @@
 <!doctype html>
-<html lang="en" class="matrix-example-page">
+<html lang="en" class="matrix-example-page" data-matrix-theme="light">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Matrix explorations</title></head>
 <body><main id="matrix-story" class="matrix-player">
   <h1>Matrix explorations</h1>
   <nav class="matrix-controls" aria-label="Choose an animation">
     <label>Example <select id="example-menu">
       <option value="columns">Column combinations</option>
-      <option value="dot-passage">Three-term dot product</option>
+      <option value="dot-passage" selected>Three-term dot product</option>
       <option value="rectangular">Rectangular product · first cell</option>
       <option value="dot">Row–column dot products</option>
       <option value="identity">Identity</option>
       <option value="orthonormality">Orthonormality</option>
       <option value="composition">Composition and bases</option>
     </select></label>
-    <label id="column-label">Result column <select id="column-menu"><option value="0">1</option><option value="1">2</option></select></label>
+    <label id="column-label" hidden>Result column <select id="column-menu"><option value="0">1</option><option value="1">2</option></select></label>
   </nav>
   <fieldset class="matrix-controls"><legend>Shared presentation</legend>
     <button id="layout-toggle" type="button" aria-pressed="false">Side by side</button>
     <button id="spacing-toggle" type="button" aria-pressed="false">Roomy spacing</button>
     <button id="motion-toggle" type="button" aria-pressed="false">Step instantly</button>
-    <button id="theme-toggle" type="button" aria-pressed="false">Light mode</button>
+    <button id="theme-toggle" type="button" aria-pressed="true">Light mode</button>
     <button id="config-reset" type="button">Reset settings</button>
   </fieldset>
-  <iframe id="example-frame" title="Column combinations animation" src="../matrix-column-combinations/?embedded=1" style="display:block;width:100%;height:1000px;border:0"></iframe>
+  <iframe id="example-frame" title="Three-term dot product animation" src="../dot-product-passage/" style="display:block;width:100%;height:1000px;border:0"></iframe>
   <noscript><p>Enable JavaScript to switch examples using the menu.</p></noscript>
 </main><script type="module" src="/src/experiments/matrix-examples/entry.ts"></script></body>
 </html>

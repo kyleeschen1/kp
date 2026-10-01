@@ -1,12 +1,18 @@
 # Dot passage: group depth and lighter delimiters
 
-Light mode correction: the cream/brown mix read as almost off-white. The user
-requested beige background and removal of light-mode thinning. Page and player
-now use explicit #f7f3e8; native and moving KaTeX use normal (`auto`) smoothing
-in light mode, while dark mode retains the finer treatment. Browser assertions
-check exact page/card color, native/material smoothing and return to dark mode.
+Light-mode provenance correction: checking the actual styles at `dd2e85b8a`
+and `a896eff2a` confirms the earlier treatment was a cream page (#fffdf8) around
+a distinct beige panel (94% cream, 6% #806548). The subsequent #f7f3e8 change
+was not that exact color and flattened the page/panel distinction; it is now
+superseded. Restore the historical two surfaces. Normal (`auto`) smoothing is
+the baseline for native and moving KaTeX; only explicitly selected dark mode
+applies the finer treatment. Browser assertions check exact page/card color,
+native/material smoothing and theme reversibility.
 Theme uses the existing presentation configuration and preserves
-the held playhead/geometry. Dark remains the initial default. The full dot
+the held playhead/geometry. The menu now opens the Three-term dot product in
+light mode, as does the direct dot page, with the theme in initial HTML to avoid
+a dark first paint. Reset returns to light mode. Player-side theme changes also
+synchronize the enclosing menu/page. The full dot
 browser suite checks both native and moving ink, reversible theme switching,
 size/spacing and the existing motion invariants.
 

@@ -2,7 +2,7 @@
 @import "./matrix-player.css";
 
 /* Page framing stays separate from embeddable players. */
-html.matrix-example-page, .matrix-example-page body { background: var(--kp-st-paper); color: var(--kp-st-ink); }
+html.matrix-example-page, .matrix-example-page body { background: var(--kp-matrix-page); color: var(--kp-st-ink); }
 .matrix-example-page body { font-weight: 600; }
 .matrix-example-page a { color: var(--kp-st-ink); text-underline-offset: .2em; }
 .matrix-example-page a:hover, .matrix-example-page a:focus-visible { color: var(--kp-st-focus); }
