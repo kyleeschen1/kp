@@ -25,9 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1 next-step recommendation: [compose the dot passage inside a rectangular
+product](reviews/2026-10-01-next-step-review.md), returning to the preserved
+authoring-reuse proof. This review starts no implementation and does not waive
+the existing visual checkpoint.
+
 October 1 attention candidate: [group depth and lighter delimiters](reviews/2026-10-01-dot-group-depth.md)
-on the three-term dot page. Restored background-opacity slider defaults to 80%;
-background recession and foreground scale lift are inspectable options. Other
+on the three-term dot page. Background opacity defaults to 40%, background size
+stays fixed, and initial lift height defaults to 6px with a 0–24px slider.
+Shadows were removed; foreground scale remains an independent option. Other
 matrix renderers retain their existing motion until this exemplar is reviewed.
 
 October 1 page direction: the user selected the three-term dot page as the

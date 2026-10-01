@@ -5,9 +5,14 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 next-step review: [rectangular composition of the dot passage](../reviews/2026-10-01-next-step-review.md).
+Recommend returning to the preserved authoring-reuse proof after focus tuning;
+no implementation or checkpoint acceptance is implied by this review.
+
 October 1 attention candidate: [dot group depth](../reviews/2026-10-01-dot-group-depth.md).
-The user approved comparing group scaling and requested the 80% opacity slider,
-inherited delimiter color and thinner brackets. One local dot exemplar owns the
+Latest settings are 40% background opacity, fixed background size, 6px default
+lift with a 0–24px control, inherited syntax color and no shadows. Earlier 80%
+opacity/background recession descriptions are superseded. One local dot exemplar owns the
 candidate; mathematical objects and evaluation choreography are preserved.
 
 October 1 presentation direction: use the three-term dot page as the reference
