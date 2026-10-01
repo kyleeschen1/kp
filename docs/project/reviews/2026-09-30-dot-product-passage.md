@@ -589,6 +589,14 @@ directly behind their token centers on the receiving plane. Faint 4–8% strengt
 and existing blur remain; panel shadows are unchanged. The scoped browser test
 checks coincident token/shadow centers during lift.
 
+September 30, deep-red focus ink trial: user requests focused tokens in a
+contrasting red. Existing beat-derived focus now paints #b91c1c on operands,
+their unary signs, products and final result. Native and moving fill/stroke share
+the same ink; unfocused source and operation syntax keep their neutral treatment.
+No halo is enabled by this change. Dimming and faint frontal shadows remain.
+The focused-color browser assertions cover intermediate/result states and reverse
+restoration to neutral initial matrices.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
