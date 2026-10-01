@@ -1,0 +1,1397 @@
+[
+  {
+    "book": "beezer",
+    "path": "src/archetypes.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/archetypes.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/archetypes.xml",
+    "sha256": "1a9d55387444c7c5596ae20e3997ae8cade04f88766b60cf542aff1e633061cb",
+    "bytes": 93966
+  },
+  {
+    "book": "beezer",
+    "path": "src/bookinfo.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/bookinfo.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/bookinfo.xml",
+    "sha256": "b9425c1711363ac4aed3cb94358329c0b706721cf04408cb350499a741ff9679",
+    "bytes": 77493
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-D.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-D.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-D.xml",
+    "sha256": "a0a248d8ad3306baa246bcacaf703d1ece845b287d5dafd800a06fe69d92f01e",
+    "bytes": 3032
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-E.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-E.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-E.xml",
+    "sha256": "bed839646be3686dd50c1791914857ee9d838558dfd8db1689d8b6103ef8dd66",
+    "bytes": 4461
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-LT.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-LT.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-LT.xml",
+    "sha256": "58fbcb6f063205dc05c9dabfa65cdf5911387ccff6ee449ab0921aa82cd3b5c5",
+    "bytes": 5670
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-M.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-M.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-M.xml",
+    "sha256": "783cf84d08ec6fbb4609ef4b0af8ffb5067b62e6b3de5842ff7426aea780ebbb",
+    "bytes": 4349
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-P.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-P.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-P.xml",
+    "sha256": "67d2e519da87faa4ee3f5d9448e97ddd92d0f523aa3c0dc8a5bb1c6e9eabde48",
+    "bytes": 555
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-R.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-R.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-R.xml",
+    "sha256": "c0bde3bec475698c8693efa1b9489f30d7f03883a8ec48221f3e232a3a25676f",
+    "bytes": 5315
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-SLE.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-SLE.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-SLE.xml",
+    "sha256": "10524f45faa14cdb505c23ef772c043d6914596311d1ca145fa71f53fa20d1d7",
+    "bytes": 3886
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-V.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-V.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-V.xml",
+    "sha256": "f99d4f2310e1e661a87e381a7b6b62d1da0a57f4ad7104b7a95e813869910027",
+    "bytes": 3403
+  },
+  {
+    "book": "beezer",
+    "path": "src/chapter-VS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-VS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/chapter-VS.xml",
+    "sha256": "d747cd1fac4a4c37a08307d24e62dfdb778b3ffa3ce96be92de648dbced25d8e",
+    "bytes": 3861
+  },
+  {
+    "book": "beezer",
+    "path": "src/fcla.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/fcla.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/fcla.xml",
+    "sha256": "1255f96213152b65467cb870bb4d29c8bde1c9622f8d7442978fa4f59b2e34cf",
+    "bytes": 636
+  },
+  {
+    "book": "beezer",
+    "path": "src/macros.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/macros.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/macros.xml",
+    "sha256": "5af5067791e544ecb4d22329e4b6e48675113a9690397825cc13392ab42f71e4",
+    "bytes": 22888
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-B.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-B.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-B.xml",
+    "sha256": "4c12bb1e3eb96e4385e5b792e06640562b8110880c657e92b5364396f8a68abd",
+    "bytes": 62104
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-CB.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-CB.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-CB.xml",
+    "sha256": "d8d933fc248a80cb25fae186137effd5e9eec63a98cb6b20f9eaf6a5dad0b2bc",
+    "bytes": 91640
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-CNO.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-CNO.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-CNO.xml",
+    "sha256": "6a0c4d6af51131027334af8a1c8b3e5224bd16f8091472c207fcf5849578847d",
+    "bytes": 13265
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-CRS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-CRS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-CRS.xml",
+    "sha256": "4d3cd554fbc2cb55120d994c7812277ba55c4b21d0f4aa04862251583338584b",
+    "bytes": 78077
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-D.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-D.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-D.xml",
+    "sha256": "f3fafed9d214e4896a34acb18c1deaf9b57815c8ef7480b9f6362f17a4142e5b",
+    "bytes": 46982
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-DM.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-DM.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-DM.xml",
+    "sha256": "d0760959d818aabf1cc61948c9bad54a5fe29edae48537bceaeff6b015e4d4f1",
+    "bytes": 53449
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-EE.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-EE.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-EE.xml",
+    "sha256": "222f44c25ded8ce919e802d9f5a305b12a8a47e9f9aff46e80ee786126779de0",
+    "bytes": 86152
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-FS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-FS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-FS.xml",
+    "sha256": "629346e26133c2bf33912a3fcfd9df0e0b6eaeae643a34ba876d051c532d2f3e",
+    "bytes": 76842
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-HSE.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-HSE.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-HSE.xml",
+    "sha256": "4c8becb800dd1fc4ee2016653160c606765234c9665d19828fafa6dbc29815dd",
+    "bytes": 38047
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-ILT.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-ILT.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-ILT.xml",
+    "sha256": "5b1a67311f1fec40950f5b1e5b01fe71a305b13cc432a702966a26b8966679c1",
+    "bytes": 62787
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-IVLT.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-IVLT.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-IVLT.xml",
+    "sha256": "bcc63ee42123d98045db4a0d446e508441e9c943f99cc1a33b2a3ad6467c918a",
+    "bytes": 85106
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-LC.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LC.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LC.xml",
+    "sha256": "cddc53d10c3f74f7f930fac49da12301af5065a12fbfffbda7e4669a7fdc300e",
+    "bytes": 75707
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-LDS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LDS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LDS.xml",
+    "sha256": "44a7e9d2a0044a33e2ff63d1226443d923a9bb6a1ca08f3a526ed2557c40a00c",
+    "bytes": 48860
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-LI.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LI.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LI.xml",
+    "sha256": "825577704b67560629ff93458281c2a8b94980a9def4972849e723902e455090",
+    "bytes": 70177
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-LISS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LISS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LISS.xml",
+    "sha256": "fe6b767b5e77a8922bff021c92ee8b0a663a30a3f14c00a45555fb6810da98b5",
+    "bytes": 62520
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-LT.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LT.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-LT.xml",
+    "sha256": "f29e23564a45639644df42d5af662840d19a39e81e5f505798344c3fef322d45",
+    "bytes": 93998
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-MINM.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MINM.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MINM.xml",
+    "sha256": "03f072cea0437ea8fd5d7e484b549f7717a5ef6475c531297bdc12573fb31fc8",
+    "bytes": 39765
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-MISLE.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MISLE.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MISLE.xml",
+    "sha256": "f39b225f3bbba970fc5a2dbfbfdf2add6008b263347397f613b013353178cf44",
+    "bytes": 48930
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-MM.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MM.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MM.xml",
+    "sha256": "0cc7a8984528ab60b517e84f780509d4e7fb8ccfd63e590a46f59e5a82e8e91b",
+    "bytes": 72583
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-MO.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MO.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MO.xml",
+    "sha256": "de5910de95d470e3c1e34e7b44f9ee28762539310fe2d26a6f00608e8445003b",
+    "bytes": 54902
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-MR.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MR.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-MR.xml",
+    "sha256": "66ce433c78978f9a00fd9d0a69322c50bdcf248decf5847a159a89dcece6b375",
+    "bytes": 117762
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-NM.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-NM.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-NM.xml",
+    "sha256": "d12197fbf7bd6706c8524368f81d7a853326310efe859e61014b771405fe0874",
+    "bytes": 41113
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-O.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-O.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-O.xml",
+    "sha256": "4c114a96867fa2f301ad26640958ee289028146fe68ef502e14a0082e7c7db40",
+    "bytes": 55371
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-OD.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-OD.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-OD.xml",
+    "sha256": "6e6cc0e07bcd7b27416707f257317366c4f9267de91e8d3ac782f26582a205b6",
+    "bytes": 41625
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-PD.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-PD.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-PD.xml",
+    "sha256": "79c26b75e22ff65ccc3ba942073ca55147ceb54925215ceb17697885f7a51173",
+    "bytes": 29571
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-PDM.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-PDM.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-PDM.xml",
+    "sha256": "6fb878ae1d7173f93320609ed13c2560b3fd76bbf84d9be03c8ddfe092a83210",
+    "bytes": 39834
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-PEE.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-PEE.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-PEE.xml",
+    "sha256": "20de8f10224639aa8280c46c070992e03094f734caf60522ffcc3223472f3368",
+    "bytes": 44007
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-RREF.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-RREF.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-RREF.xml",
+    "sha256": "249a0a8529d7656092e74aee9022773b669cee010975bf3e818d3107a0bbf63b",
+    "bytes": 93570
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-S.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-S.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-S.xml",
+    "sha256": "1b3675dd97f9664dd35cb6ee784ddec13f5be27d707e6025fd3541cdc3a182db",
+    "bytes": 59499
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-SD.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SD.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SD.xml",
+    "sha256": "fd130eeefd16aeefb7ffaa571c77da4494e0d63d048093751180b95aec73ddf9",
+    "bytes": 66240
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-SET.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SET.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SET.xml",
+    "sha256": "b282a46fa7a5f2f42be7f0e21fa2489cbaf8204e5845b2142b28c1674f9203d8",
+    "bytes": 11993
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-SLT.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SLT.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SLT.xml",
+    "sha256": "e08a908f54cb0498792a0969a6d44fccd3a04552b8ce9bf0c19c89756196e25d",
+    "bytes": 61667
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-SS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SS.xml",
+    "sha256": "8ee6479f3d3732d90b96d2829a62612a7670c8adbc1a6d68a383e455f3c72f14",
+    "bytes": 72323
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-SSLE.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SSLE.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-SSLE.xml",
+    "sha256": "b3ec019bb8c2a24fc83ff6fe3a70e66358a02f1a4a04c442e69226da8738a5f7",
+    "bytes": 55142
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-TSS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-TSS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-TSS.xml",
+    "sha256": "439c4b83a2cc1ecc8d410cbc4d5d119aec7f068928ab1644a3adf450490bd9e1",
+    "bytes": 60410
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-VO.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-VO.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-VO.xml",
+    "sha256": "6c8c8c7da6c9894ec3c6c47a9e563d877dfa46529e1a13b3eae3d89a37a4d7b8",
+    "bytes": 38273
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-VR.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-VR.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-VR.xml",
+    "sha256": "95ab17d422a52e092512d807729723e06417556300ed1a96946df1719dea7556",
+    "bytes": 42770
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-VS.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-VS.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-VS.xml",
+    "sha256": "b061fcaca43d8418808567fc945939605149b61cfa5ee5464c2c2507d5591278",
+    "bytes": 50929
+  },
+  {
+    "book": "beezer",
+    "path": "src/section-WILA.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-WILA.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/section-WILA.xml",
+    "sha256": "eee667bfc724cba2f7fdb41e19b90e4ae28af388f9f2f474596a413ca1c2fc42",
+    "bytes": 20874
+  },
+  {
+    "book": "beezer",
+    "path": "src/techniques.xml",
+    "revision": "347f27fe909b54b26970bcc0fcbf69c7e853c766",
+    "url": "https://raw.githubusercontent.com/rbeezer/fcla/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/techniques.xml",
+    "sourceUrl": "https://github.com/rbeezer/fcla/blob/347f27fe909b54b26970bcc0fcbf69c7e853c766/src/techniques.xml",
+    "sha256": "3731ef7665fd0c43cf9f49457374b07f4a08d9e04bed1c2c08dc806b1d9ead2a",
+    "bytes": 38147
+  },
+  {
+    "book": "ila",
+    "path": "src/b-coordinates.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/b-coordinates.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/b-coordinates.xml",
+    "sha256": "2e4ba4278830b235d64237f0ba23f8835b682e7fc3828b799df6404c7a1803e7",
+    "bytes": 17423
+  },
+  {
+    "book": "ila",
+    "path": "src/backmatter.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/backmatter.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/backmatter.xml",
+    "sha256": "1d2813781f98bb01580d5b8ce4ddd9a9ba8d3081d91c9d9fe6a27e008577dcce",
+    "bytes": 1369
+  },
+  {
+    "book": "ila",
+    "path": "src/bookinfo.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/bookinfo.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/bookinfo.xml",
+    "sha256": "59dfbf3f9e546c186dfdcbd5463c257767ddf9a8b3c14f538b08385d05d2431d",
+    "bytes": 2294
+  },
+  {
+    "book": "ila",
+    "path": "src/charpoly.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/charpoly.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/charpoly.xml",
+    "sha256": "9ad07d1320a4e03e6546b1cf831be5920878dcb5fbc90d3e9e24a6b37c4eb428",
+    "bytes": 22872
+  },
+  {
+    "book": "ila",
+    "path": "src/cplx-eigenvals.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/cplx-eigenvals.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/cplx-eigenvals.xml",
+    "sha256": "302ce2f43d32ba6cf9ed4ecf65fd274c1798814a45becfb339ea0a3a83bb0f4c",
+    "bytes": 65202
+  },
+  {
+    "book": "ila",
+    "path": "src/cplx-nums.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/cplx-nums.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/cplx-nums.xml",
+    "sha256": "4108b555c5643e522f511721baa5a608292fd28680e88fd0b1aef0ffdae2dfab",
+    "bytes": 9664
+  },
+  {
+    "book": "ila",
+    "path": "src/determinant-cofactors.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/determinant-cofactors.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/determinant-cofactors.xml",
+    "sha256": "34fe5e60c5c7f98163b491d5df20b5cbbcf178ea22989cd088e2cbafd5efe22a",
+    "bytes": 52684
+  },
+  {
+    "book": "ila",
+    "path": "src/determinant-definitions-properties.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/determinant-definitions-properties.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/determinant-definitions-properties.xml",
+    "sha256": "2232b63a6e684bbcacb57e4bd10447c3b963a8ce88f372fa91172ce5b0234eaa",
+    "bytes": 57492
+  },
+  {
+    "book": "ila",
+    "path": "src/determinant-volume.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/determinant-volume.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/determinant-volume.xml",
+    "sha256": "1638734048e9c4b92e49867893dabd8eed1bb5980fe8653bd8d9b1a61f6de46f",
+    "bytes": 48603
+  },
+  {
+    "book": "ila",
+    "path": "src/diagonalization.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/diagonalization.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/diagonalization.xml",
+    "sha256": "91d7f3793c41f8cc4e1b83497c8247e5e48716688a91022c211166f9070852ea",
+    "bytes": 77824
+  },
+  {
+    "book": "ila",
+    "path": "src/dimension.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/dimension.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/dimension.xml",
+    "sha256": "dec57361669a0547565ca4247e0f1609d302b39445eed960c7dc0c346a0f9c9e",
+    "bytes": 25115
+  },
+  {
+    "book": "ila",
+    "path": "src/eigenvectors.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/eigenvectors.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/eigenvectors.xml",
+    "sha256": "579ece8d66b516aa94642da9b9629d185c72c44db3ed18ec8916706327dab370",
+    "bytes": 43837
+  },
+  {
+    "book": "ila",
+    "path": "src/frontmatter.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/frontmatter.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/frontmatter.xml",
+    "sha256": "101efda8f6f6ee0aa77a50f705005b59ba6b837f231f14622d982381279e8236",
+    "bytes": 5852
+  },
+  {
+    "book": "ila",
+    "path": "src/gfdl.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/gfdl.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/gfdl.xml",
+    "sha256": "6cad6870b8b674eae6cce33736c9d56d06768f9dd80ee8838e36b1df99ab369c",
+    "bytes": 26683
+  },
+  {
+    "book": "ila",
+    "path": "src/ila.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/ila.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/ila.xml",
+    "sha256": "7a957e1fbdd9bcd24af7b218a2ee113621dfe96d8374f7e06088133d650a54a0",
+    "bytes": 21998
+  },
+  {
+    "book": "ila",
+    "path": "src/innerprod.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/innerprod.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/innerprod.xml",
+    "sha256": "bdc866820856d2231d852185a0eb12e6b8cdb0d7a97b4b94b0543b6222e52d0d",
+    "bytes": 16148
+  },
+  {
+    "book": "ila",
+    "path": "src/invertible-matrix-thm.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/invertible-matrix-thm.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/invertible-matrix-thm.xml",
+    "sha256": "da23666f8345d32273e23191796ca646e740ca90a5cdce070e574a65811796c0",
+    "bytes": 9082
+  },
+  {
+    "book": "ila",
+    "path": "src/leastsquares.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/leastsquares.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/leastsquares.xml",
+    "sha256": "a6c73d9903e19d092bfeac69a097d415002d8a081838318f3f00f6aa52f3e6e0",
+    "bytes": 54262
+  },
+  {
+    "book": "ila",
+    "path": "src/linear-trans.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/linear-trans.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/linear-trans.xml",
+    "sha256": "becd4d2674a6e4019242959a67779c205f978a30a6c86eebea54426f4dd58238",
+    "bytes": 35477
+  },
+  {
+    "book": "ila",
+    "path": "src/linindep.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/linindep.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/linindep.xml",
+    "sha256": "cdbfef0084c0748b2ce63c790126a6e4046876866f7ad51124d4cdfcbb16b97e",
+    "bytes": 53268
+  },
+  {
+    "book": "ila",
+    "path": "src/matrix-inv.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrix-inv.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrix-inv.xml",
+    "sha256": "de20f7f9d78ff6e34e9ddf1bf12d0a91a020b74592bcb2e0a0535c0f4c49efba",
+    "bytes": 42094
+  },
+  {
+    "book": "ila",
+    "path": "src/matrix-mult.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrix-mult.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrix-mult.xml",
+    "sha256": "39cb7485271a475ad2cab3abc5af4c98de274d18c039cdd518a19885e9ffd650",
+    "bytes": 49577
+  },
+  {
+    "book": "ila",
+    "path": "src/matrix-trans.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrix-trans.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrix-trans.xml",
+    "sha256": "b4ee4ee1e6f6720e94d6440d04ce0c3bff3369cd12c4f571e923e4bbc8cbf14b",
+    "bytes": 45931
+  },
+  {
+    "book": "ila",
+    "path": "src/matrixeq.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrixeq.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/matrixeq.xml",
+    "sha256": "0ce438b56728858864b05aaa46bc90d3bc889c4914099df430bc096581969e76",
+    "bytes": 23084
+  },
+  {
+    "book": "ila",
+    "path": "src/one-one-onto.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/one-one-onto.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/one-one-onto.xml",
+    "sha256": "36be4c5176e7e030b8dbb58d1d12380be6835ef7b83851475879c33626d259e8",
+    "bytes": 40388
+  },
+  {
+    "book": "ila",
+    "path": "src/orthocomp.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/orthocomp.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/orthocomp.xml",
+    "sha256": "f082046abab75f1e70cde87327c0c6ff22540d10ee6182d1028bfb07dd4c2e6b",
+    "bytes": 25355
+  },
+  {
+    "book": "ila",
+    "path": "src/orthosets.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/orthosets.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/orthosets.xml",
+    "sha256": "e40c5a3397e732778aa958949717cd80d2eb7c11ef75a350c70e5cb7ae26dd46",
+    "bytes": 35779
+  },
+  {
+    "book": "ila",
+    "path": "src/overview.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/overview.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/overview.xml",
+    "sha256": "1df47b1c8faf298ac6109b98c759a86484dca42a148676bc8526648a3cb990bc",
+    "bytes": 16443
+  },
+  {
+    "book": "ila",
+    "path": "src/parametric-form.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/parametric-form.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/parametric-form.xml",
+    "sha256": "9b0dd47f7e08b02533f80ddbd704d4359b10d8be06c8e41a59330da2a69e04d7",
+    "bytes": 10945
+  },
+  {
+    "book": "ila",
+    "path": "src/projections.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/projections.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/projections.xml",
+    "sha256": "f22d5921cee8e530d3e3173a0fd4a5ab5a8b80dcc1097749520edb467d140cd7",
+    "bytes": 49043
+  },
+  {
+    "book": "ila",
+    "path": "src/rank-thm.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/rank-thm.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/rank-thm.xml",
+    "sha256": "656e93c8313501604cbf44bef7936260392c98be19fe27fe7fb0bc6e63a0dc75",
+    "bytes": 13902
+  },
+  {
+    "book": "ila",
+    "path": "src/row-reduction.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/row-reduction.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/row-reduction.xml",
+    "sha256": "d66f91126ecce8da74dfd09c6d3dda21b83c5e869709ef3038639e7836ead860",
+    "bytes": 40429
+  },
+  {
+    "book": "ila",
+    "path": "src/schemas.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/schemas.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/schemas.xml",
+    "sha256": "203809fc659569b714f95794636a71e5c0036531bd224af5f5400f8808265827",
+    "bytes": 3825
+  },
+  {
+    "book": "ila",
+    "path": "src/similarity.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/similarity.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/similarity.xml",
+    "sha256": "a7cb35c4d3464dfcf4eb983dee32c2e5a2e28efeef4de86a44a86ec87da12145",
+    "bytes": 52688
+  },
+  {
+    "book": "ila",
+    "path": "src/solnsets.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/solnsets.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/solnsets.xml",
+    "sha256": "6bd73abc2b3aa63e508777a70f794d05746ca86ff011055fc1c97de865e0cce3",
+    "bytes": 32902
+  },
+  {
+    "book": "ila",
+    "path": "src/spans.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/spans.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/spans.xml",
+    "sha256": "da6b49bac189cfd5b9a2141d5a4886179541742680814330342625b6bd6b55cf",
+    "bytes": 18637
+  },
+  {
+    "book": "ila",
+    "path": "src/stochastic.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/stochastic.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/stochastic.xml",
+    "sha256": "9b8ad665388aceb447d957fd469d03ec924953e4e996e54429d46523de8df2fe",
+    "bytes": 42342
+  },
+  {
+    "book": "ila",
+    "path": "src/subspaces.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/subspaces.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/subspaces.xml",
+    "sha256": "6f93d1af1e243f23d2acfb82918cded727f9874aef8f52c0470785a362a0969e",
+    "bytes": 30503
+  },
+  {
+    "book": "ila",
+    "path": "src/systems-eqns.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/systems-eqns.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/systems-eqns.xml",
+    "sha256": "2a23aa7bffe0a6ab0d7264402708d5ecf4d205e481e6d71e6b9a4fc2821387e1",
+    "bytes": 26508
+  },
+  {
+    "book": "ila",
+    "path": "src/vectors.xml",
+    "revision": "a8593c2590351185c40ce93338c4ba730ac2d6ba",
+    "url": "https://raw.githubusercontent.com/QBobWatson/ila/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/vectors.xml",
+    "sourceUrl": "https://github.com/QBobWatson/ila/blob/a8593c2590351185c40ce93338c4ba730ac2d6ba/src/vectors.xml",
+    "sha256": "e49a7d4118dd790d063ca5da465d3dd49904c68014ae40484d0504d01d374c6c",
+    "bytes": 17117
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/cas.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fcas.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/cas.tex",
+    "sha256": "43dd76442b5d85ab41cb8a5554dc6a5834317c49bea75e58964a7123275ffaa1",
+    "bytes": 13907
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/gr1.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fgr1.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/gr1.tex",
+    "sha256": "430112b25cf249c95ba2257aff292a94632044dde06728d7fb143444c4b60016",
+    "bytes": 210356
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/gr2.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fgr2.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/gr2.tex",
+    "sha256": "71b483a145fb2fb8084b1cece56cca6d2709233f3b187d308e198c86b1a6a896",
+    "bytes": 80666
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/gr3.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fgr3.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/gr3.tex",
+    "sha256": "684d2c0a4cccb64208c06c7ef1b2bdf2bcabda887e5913ebbac92f2bec0c0e60",
+    "bytes": 93611
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/gr4.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fgr4.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/gr4.tex",
+    "sha256": "18b893ef0d6c859a298b7d292f6834f7f8b0b322a4bdf1312ed364a72b95cb41",
+    "bytes": 4318
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/leontief.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fleontief.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/leontief.tex",
+    "sha256": "7b2eff3cf33ea04a6b39dd54835f9df1525d58d274b9b500e9514ad7da1394e1",
+    "bytes": 27998
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/network.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fnetwork.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/network.tex",
+    "sha256": "1b8a3068bbb5ea3d66e689b58d2cdd007025b48338eb12b9ac1dcd081073541d",
+    "bytes": 28036
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/ppivot.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fppivot.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/ppivot.tex",
+    "sha256": "2f0e1fec88c720336f13fdc55a773bfefba20b4a60c632fd12969281dce714a1",
+    "bytes": 18161
+  },
+  {
+    "book": "hefferon",
+    "path": "src/gr/speed.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fgr%2Fspeed.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/gr/speed.tex",
+    "sha256": "c1a164a9bac867645464b1e3bdfee756c169f29b1267036d113a1ce601590028",
+    "bytes": 7811
+  },
+  {
+    "book": "hefferon",
+    "path": "src/vs/crystal.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fvs%2Fcrystal.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/vs/crystal.tex",
+    "sha256": "8d39c5165c1b8c250aabd416632122c60e415bbf84c5d29585abf86781bb8824",
+    "bytes": 10003
+  },
+  {
+    "book": "hefferon",
+    "path": "src/vs/dimen.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fvs%2Fdimen.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/vs/dimen.tex",
+    "sha256": "b7562e7e00d3a15f64c501d5b506e274ce6bfde44486bba7c1448f2c542d369d",
+    "bytes": 32514
+  },
+  {
+    "book": "hefferon",
+    "path": "src/vs/fields.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fvs%2Ffields.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/vs/fields.tex",
+    "sha256": "da974313db5567e772ed9b6a76f5d9c0e26c8d46c28127250951771b453a0860",
+    "bytes": 6601
+  },
+  {
+    "book": "hefferon",
+    "path": "src/vs/voting.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fvs%2Fvoting.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/vs/voting.tex",
+    "sha256": "09f71fd902fe011e94fa23188f6f141738c7ce3c541003ee0df83493ad776622",
+    "bytes": 37288
+  },
+  {
+    "book": "hefferon",
+    "path": "src/vs/vs1.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fvs%2Fvs1.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/vs/vs1.tex",
+    "sha256": "d7b83def8532ee79706496b1a601f2ccf2f6c4d25231677aecd36b14cfae395d",
+    "bytes": 152684
+  },
+  {
+    "book": "hefferon",
+    "path": "src/vs/vs2.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fvs%2Fvs2.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/vs/vs2.tex",
+    "sha256": "93aefd3ba5b31e702497e48ccc7103808e3cfaf06ca4ff3aa05ad7888d44f974",
+    "bytes": 83623
+  },
+  {
+    "book": "hefferon",
+    "path": "src/vs/vs3.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fvs%2Fvs3.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/vs/vs3.tex",
+    "sha256": "b84dc51560d95683972d4c895d8f33b086a4bc241735cd318e1b4533737ea01f",
+    "bytes": 243735
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/erlang.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Ferlang.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/erlang.tex",
+    "sha256": "a7b90e18aaed256e8ce71092dc8a4b95019dd48dd6a24502da61e037081f874a",
+    "bytes": 20767
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/homogeom.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fhomogeom.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/homogeom.tex",
+    "sha256": "7b3d246cbdc0c64e8a28b6ab39a1e575893171650ef005d56f34cd3507c10389",
+    "bytes": 27123
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/lstsqs.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Flstsqs.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/lstsqs.tex",
+    "sha256": "1316c767082a6eb9a5dad8acbad1a1fe674c2c3c3bc4965f55f5bd6116d46441",
+    "bytes": 45327
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/magicsqs.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmagicsqs.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/magicsqs.tex",
+    "sha256": "0e88b736bc05356d54523db9771bdc3ec68d3cdf339571531fd54df9b2043f5c",
+    "bytes": 25392
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/map1.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmap1.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/map1.tex",
+    "sha256": "a9219c908155cc1150d0bbb70e5f7ceb1f6a7c1baf5e97e028923d5980f30be3",
+    "bytes": 108577
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/map2.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmap2.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/map2.tex",
+    "sha256": "1c04c322f0f66b9f27774d27d749dd38b2d694838103247c1daedf2292b9a4bc",
+    "bytes": 117448
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/map3.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmap3.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/map3.tex",
+    "sha256": "ff48452823dd8a60988ab3067fa96c2a6955d010f0ce1a7c38d30e392c83ff85",
+    "bytes": 128297
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/map4.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmap4.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/map4.tex",
+    "sha256": "d32bd8bc020429cfb96dc0c8abde884aab66828ac6e1a3b577d1dac4bf0ef113",
+    "bytes": 191903
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/map5.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmap5.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/map5.tex",
+    "sha256": "f071a8b21f21dee410fdfa487c9e083e54a52b840bf601549c05f6412ae92ce3",
+    "bytes": 91837
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/map6.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmap6.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/map6.tex",
+    "sha256": "d2d2253842333cb65436767a6f53f2f83652c42524a7cf9b9f719d49306cc944",
+    "bytes": 150445
+  },
+  {
+    "book": "hefferon",
+    "path": "src/map/markov.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fmap%2Fmarkov.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/map/markov.tex",
+    "sha256": "1b767d3f33d3557f6caeccc06390332de55bff314e20eb7e350d66a8b9d66445",
+    "bytes": 67093
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/chio.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fchio.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/chio.tex",
+    "sha256": "91b1850da5ca7acc92daf62eebf4730aabeb7f2735485a611c0ecc3f103ec6da",
+    "bytes": 14162
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/compgraphics.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fcompgraphics.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/compgraphics.tex",
+    "sha256": "d2675394b35556226b1c6da0b6adabbcb001cf90258c047ad0737a785f452c76",
+    "bytes": 14777
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/cramer.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fcramer.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/cramer.tex",
+    "sha256": "62f23f41131db4ede9cf976936651e02eea9a27b4443b1ace7be6b447582f87d",
+    "bytes": 10589
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/det1.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fdet1.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/det1.tex",
+    "sha256": "31b022b953c83e65f2939c546219ec18872a42bc783bc1742e57548d129ac80e",
+    "bytes": 153968
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/det2.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fdet2.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/det2.tex",
+    "sha256": "eff431fabd29cbb67dfa94139cf5d5378427bca2867103845704c97cd79ce23e",
+    "bytes": 43814
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/det3.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fdet3.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/det3.tex",
+    "sha256": "a22779d16c5550ced8214b202bc96ab753973c1665c67b585421819a5baefc9a",
+    "bytes": 43086
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/detspeed.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fdetspeed.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/detspeed.tex",
+    "sha256": "1e5bf9f4586a242db4fd0f52a6e4c85c2994e1df692bf549bbd6798b2b7ac2a2",
+    "bytes": 16236
+  },
+  {
+    "book": "hefferon",
+    "path": "src/det/projplane.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fdet%2Fprojplane.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/det/projplane.tex",
+    "sha256": "3dd2b1e6c595e281dabc9d817c641c7e07a2ad9aa595f9c5c442b3e1672d5f87",
+    "bytes": 37228
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/eigengeom.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Feigengeom.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/eigengeom.tex",
+    "sha256": "1ec0eb742094242e12d12f44ba697361504f4c96a17dba7cabdfb634c1de04f3",
+    "bytes": 8558
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/innerproduct.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Finnerproduct.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/innerproduct.tex",
+    "sha256": "32e75012c8d2c8def55089dfa2a6e5f0231296c99bd0ac1e5231108dcca4f188",
+    "bytes": 23694
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/jc1.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fjc1.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/jc1.tex",
+    "sha256": "ec0b9cafbc150050099f6ac55f1b47cfeb4d6f686ff00088778916a5d92a4403",
+    "bytes": 12725
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/jc2.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fjc2.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/jc2.tex",
+    "sha256": "76cd47b10aac67b7a15288dce1abf53906179f5b8306d881d2de0ee2137adc62",
+    "bytes": 158439
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/jc3.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fjc3.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/jc3.tex",
+    "sha256": "4918b21480132fa51319c1f7b9e2e462a7ee7799524b5021354e308a13f70a4c",
+    "bytes": 77050
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/jc4.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fjc4.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/jc4.tex",
+    "sha256": "3d2cd301edb10485157956eadec673ae378f15a13f44b745577fdcc94c099620",
+    "bytes": 168329
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/pops.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fpops.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/pops.tex",
+    "sha256": "0a5608665879151fbd7bc384af28e612be4dc1b605f43dcc3cda65f6a77f3d1f",
+    "bytes": 9170
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/powers.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fpowers.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/powers.tex",
+    "sha256": "d373bd21cfb04c0573d7b7faa06a00aedd1b17767b85258799bbaa38bad276be",
+    "bytes": 13778
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/recur.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Frecur.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/recur.tex",
+    "sha256": "13f2512b6bad4a9f89193b1e26cffa6c945dea89c9ece239ca982b5ba80f6ef3",
+    "bytes": 29477
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/search.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fsearch.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/search.tex",
+    "sha256": "a9aaf2dbf2e45e9a15c7daff82aae22b5826bab8dfbf99e0f07e0a468a16266f",
+    "bytes": 12975
+  },
+  {
+    "book": "hefferon",
+    "path": "src/jc/wilber.tex",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fjc%2Fwilber.tex/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/jc/wilber.tex",
+    "sha256": "20c5e315efcb352ba114eebf10890bf9752428a567f3a62169b222de5b6e1e62",
+    "bytes": 15308
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/answerjh.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fanswerjh.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/answerjh.sty",
+    "sha256": "92a54635eec9aa2b0afd0671430525010403ebf9a68b712403f5a2a9811a764e",
+    "bytes": 10497
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/bookans.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fbookans.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/bookans.sty",
+    "sha256": "2abda551437d5f379b6e72183f1fa0ed8caf0acbd9a8503a33c5126f9c3843db",
+    "bytes": 13962
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/bookjh.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fbookjh.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/bookjh.sty",
+    "sha256": "335f81978d276de39f267b053f464b389ec80f3d438fde6b6e271a3f2e145414",
+    "bytes": 324
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/bookjhconcrete.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fbookjhconcrete.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/bookjhconcrete.sty",
+    "sha256": "a00acb1fafd75f887127f8c147da23f95cb362d8102c2365775f11c347b437ee",
+    "bytes": 38604
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/conc.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fconc.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/conc.sty",
+    "sha256": "91759fceeeb19af8278bff036551fd475d96411b8beac749e5e14133429c7f99",
+    "bytes": 743
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/covergraphic.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fcovergraphic.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/covergraphic.sty",
+    "sha256": "c5321d1fc20073bf5aff7fd1b93e7da916e241f33d0a0c313a75df96f4191f8c",
+    "bytes": 2764
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/dash.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fdash.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/dash.sty",
+    "sha256": "3e47846b4d0faf80810aa5d9e55778996e1f3466d477b1accee302a4c3050966",
+    "bytes": 520
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/directories.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fdirectories.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/directories.sty",
+    "sha256": "1ffc04c00690c7e7e29f06424d53ea237874a05b8645ceddd08639aaf083fdd3",
+    "bytes": 535
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/engnum.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fengnum.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/engnum.sty",
+    "sha256": "838404a4575c19266b3496a4e3087f4d3b06f39a5cbc3aee750a5dae0e680ae3",
+    "bytes": 2758
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/hrefout.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fhrefout.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/hrefout.sty",
+    "sha256": "4fd0bdc0c0736df72a015f577a67e1abecde8958c0fb4a64059139c68bfd3af7",
+    "bytes": 2918
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/linalgjh.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Flinalgjh.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/linalgjh.sty",
+    "sha256": "be3eab2af606485004d75817b24cf872cfde1f080e77decd53aa409cad0fb5df",
+    "bytes": 14860
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/pbsifont.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fpbsifont.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/pbsifont.sty",
+    "sha256": "39d2e20d7ee5d13a546d66f9db33e853f3407f311695d9954e70475d15fe26f2",
+    "bytes": 2878
+  },
+  {
+    "book": "hefferon",
+    "path": "src/sty/present.sty",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/src%2Fsty%2Fpresent.sty/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://gitlab.com/jim.hefferon/linear-algebra/-/blob/886efa18e59ab686d4abc2305a2a5331126a4dc1/src/sty/present.sty",
+    "sha256": "3c74e1a544325df46880af0dcb73b22bd9c8cfd19930cec9ee5c8f0d238b60d0",
+    "bytes": 9620
+  },
+  {
+    "book": "axler",
+    "path": "LADR4e.pdf",
+    "revision": "retrieved-2026-10-01",
+    "url": "https://linear.axler.net/LADR4e.pdf",
+    "sourceUrl": "https://linear.axler.net/LADR4e.pdf",
+    "sha256": "1207d90a1310e79dea2ec3068f853e20b8306928eda122ae13fdfab50f41ea08",
+    "bytes": 2795156
+  },
+  {
+    "book": "hefferon",
+    "path": "LICENSE",
+    "revision": "886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "url": "https://gitlab.com/api/v4/projects/jim.hefferon%2Flinear-algebra/repository/files/LICENSE/raw?ref=886efa18e59ab686d4abc2305a2a5331126a4dc1",
+    "sourceUrl": "https://hefferon.net/source.html",
+    "sha256": "45e69a5115ce82fb4566271045b1777d4c506929f866fa12c2ca0ef9b23bb140",
+    "bytes": 311
+  },
+  {
+    "book": "licenses",
+    "path": "gfdl-1.3.txt",
+    "revision": "1.3",
+    "url": "https://www.gnu.org/licenses/fdl-1.3.txt",
+    "sourceUrl": "https://www.gnu.org/licenses/fdl-1.3.html",
+    "sha256": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4",
+    "bytes": 22955
+  }
+]

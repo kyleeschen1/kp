@@ -1,0 +1,93 @@
+{
+  "id": "conversation.kp.la-graph-research",
+  "kind": "conversation",
+  "title": "Explore a dense textbook-backed linear algebra graph to inform authoring APIs",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "User approved an exploratory dense linear algebra graph from openly available textbooks, including genuine definitions and proofs, to discover requirements for small composable semantic transformations and alternative representations. The isolated local research host preserves source provenance and separates interpreted links from extracted citations.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/reviews/2026-10-01-la-graph-authorization.md",
+      "turnRange": "Selected latest research-intent, source-availability and authorization turns; excerpt captured at record time",
+      "digest": "sha256:1680a1a85b6dd36f8a4308262b64772c208d445a840000f627da8d1ae037d94a",
+      "summary": "User approved an exploratory dense linear algebra graph from openly available textbooks, including genuine definitions and proofs, to discover requirements for small composable semantic transformations and alternative representations. The isolated local research host preserves source provenance and separates interpreted links from extracted citations."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-linear-algebra-knowledge-graph.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:la-graph",
+      "status": "passed",
+      "scope": "Five extraction and five graph, mathematical rendering, counterexample and payload tests",
+      "checkedAt": "2026-10-01T10:09:41.970Z",
+      "notes": "Standalone build, app typecheck and three scoped Chromium checks also passed; detailed evidence in the linked review. No formal proof certification."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-10-01T10:07:32.000Z",
+    "participants": [
+      {
+        "id": "user",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "assistant",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/reviews/2026-10-01-la-graph-authorization.md",
+        "turnRange": "Selected latest research-intent, source-availability and authorization turns; excerpt captured at record time",
+        "digest": "sha256:1680a1a85b6dd36f8a4308262b64772c208d445a840000f627da8d1ae037d94a"
+      }
+    ],
+    "summary": "User approved an exploratory dense linear algebra graph from openly available textbooks, including genuine definitions and proofs, to discover requirements for small composable semantic transformations and alternative representations. The isolated local research host preserves source provenance and separates interpreted links from extracted citations.",
+    "proposals": [
+      {
+        "id": "la-research-graph",
+        "statement": "Import pinned Beezer, Hefferon, ILA and Axler source records; add an explicitly authored semantic overlay and a local inspection host; report API findings without promoting graph claims to runtime capabilities.",
+        "proposedBy": "assistant",
+        "status": "accepted",
+        "linkedEntityIds": []
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "approve-research",
+        "statement": "Proceed with the source-backed graph research experiment under the latest user go instruction.",
+        "proposalId": "la-research-graph",
+        "decidedAt": "2026-10-01T10:07:32.000Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "user",
+          "basis": "Explicit go in the current conversation; timestamp is capture time, not a reconstructed original turn timestamp."
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "Assistant-recorded excerpt of the current conversation; no full provider transcript export is attached."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Retain with the research artifact and source provenance."
+    },
+    "linkedEntityIds": []
+  }
+}

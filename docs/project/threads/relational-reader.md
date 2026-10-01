@@ -1,11 +1,21 @@
 # Relational reader delivery
 
 Status: active direction; focused mechanics argument approved through first review
-Last Updated: 2026-09-29
+Last Updated: 2026-10-01
 
 ## Canonical direction
 
-Current continuation: the user approved the
+October 1 current review: the user approved the [linear algebra graph
+experiment](../reviews/2026-10-01-linear-algebra-knowledge-graph.md) to use real
+definitions, proofs, representations and distinctions to generate API insights.
+The isolated host at `/experiments/la-knowledge-graph/` is implemented with
+2,722 source records, a separate 61-node interpretation and passing scoped checks.
+The review records source limits and concrete API findings; inspect it before
+promoting any new runtime or authoring contracts. Keep source extraction and
+authored interpretation distinguishable. The prior
+dot-product checkpoint remains available and does not block this research task.
+
+Preserved September 30 continuation: the user approved the
 [rectangular authoring proof](../reviews/2026-09-30-matrix-authoring-next-step.md).
 `run-contract.kp.matrix-authoring-v1` owns a standalone dot-passage checkpoint,
 then rectangular integration and a source-only variation after acceptance.

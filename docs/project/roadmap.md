@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-09-30
+Last Updated: 2026-10-01
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -24,6 +24,15 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+October 1: the approved [linear algebra knowledge graph
+experiment](reviews/2026-10-01-linear-algebra-knowledge-graph.md): source-backed
+definitions, proofs and dense relationships from four open textbooks, inspected
+locally to inform composable authoring APIs, is implemented and ready for review
+at `/experiments/la-knowledge-graph/`. Its 2,722 source records and separate
+61-node interpretation preserve evidence boundaries. This is exploratory knowledge, not
+runtime certification. The dot-product visual checkpoint remains preserved;
+its conditional rectangular integration is not resumed by this experiment.
 
 September 30, after shared presentation controls: the
 [next recommendation](reviews/2026-09-30-matrix-authoring-next-step.md) is a

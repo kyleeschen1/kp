@@ -1,0 +1,2460 @@
+{
+  "schemaVersion": 1,
+  "nodes": [
+    {
+      "id": "concept:space",
+      "title": "Vector space",
+      "body": "A set $V$ with vector addition and scalar multiplication over a field $F$, satisfying the vector-space axioms. Its elements need not be arrows or lists.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "A specified scalar field F and specified operations."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:vector",
+      "title": "Vector",
+      "body": "An element $v\\in V$. A polynomial, function, matrix or coordinate tuple can be a vector when its ambient vector space is specified.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:scalar",
+      "title": "Scalar multiplication",
+      "body": "The action $(a,v)\\mapsto av$ of $F$ on $V$. Scaling a coordinate list is one representation of this operation.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:combination",
+      "title": "Linear combination",
+      "body": "A finite sum $a_1v_1+\\cdots+a_nv_n$. The coefficients and the selected vectors have different semantic roles even when both are displayed as numbers.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:span",
+      "title": "Span",
+      "body": "$\\operatorname{span}(v_1,\\ldots,v_k)$ is the set of all linear combinations of the listed vectors.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:subspace",
+      "title": "Subspace",
+      "body": "A subset $U\\subseteq V$ containing zero and closed under addition and scalar multiplication, with the inherited operations.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:independence",
+      "title": "Linear independence",
+      "body": "A list is linearly independent when $\\sum_i a_iv_i=0$ forces every $a_i=0$. Dependence concerns the entire list, not a property of an isolated nonzero vector.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:basis",
+      "title": "Ordered basis",
+      "body": "An ordered list $\\mathcal B=(b_1,\\ldots,b_n)$ that spans $V$ and is linearly independent. The order matters for coordinates.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Finite-dimensional V for this finite-list presentation."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:dimension",
+      "title": "Dimension",
+      "body": "The number of vectors in any basis of a finite-dimensional space. Equality of basis sizes is a theorem, not an arbitrary display convention.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Finite-dimensional vector space."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:coordinates",
+      "title": "Coordinates in a basis",
+      "body": "$[v]_{\\mathcal B}=(a_1,\\ldots,a_n)^T$ means $v=\\sum_i a_ib_i$. Changing the basis changes this list without changing $v$.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:polynomial",
+      "title": "Polynomial as a vector",
+      "body": "For $p=a_0+a_1x+a_2x^2+a_3x^3$, the coefficient column is $[p]_{(1,x,x^2,x^3)}=(a_0,a_1,a_2,a_3)^T$. The symbols being removed in a view still identify basis vectors in the semantic model.",
+      "book": "interpretation",
+      "kind": "representation",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Formal polynomials of degree at most 3 over F, including the zero polynomial."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:map",
+      "title": "Linear map",
+      "body": "$T:V\\to W$ satisfies $T(u+v)=T(u)+T(v)$ and $T(av)=aT(v)$. Domain, codomain and scalar field are part of its context.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "V and W are vector spaces over the same field."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:matrix",
+      "title": "Matrix",
+      "body": "An $m\\times n$ array over $F$. It can encode a linear map in chosen bases, a system of equations, or a collection of vectors; those roles are additional context.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:matrix-representation",
+      "title": "Matrix of a linear map",
+      "body": "$[T]_{\\mathcal C\\leftarrow\\mathcal B}$ has column $j$ equal to $[T(b_j)]_{\\mathcal C}$. It satisfies $[T(v)]_{\\mathcal C}=[T]_{\\mathcal C\\leftarrow\\mathcal B}[v]_{\\mathcal B}$.",
+      "book": "interpretation",
+      "kind": "representation",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Finite-dimensional domain and codomain; ordered bases B and C."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:row",
+      "title": "Matrix row",
+      "body": "Row $i$ of $A$ records the coefficients of the $i$th output coordinate functional. As a list it is indexed by input coordinates.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:column",
+      "title": "Matrix column",
+      "body": "Column $j$ of a matrix representing $T$ is the coordinate vector of $T(b_j)$. It is indexed by output coordinates.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:covector",
+      "title": "Covector / linear functional",
+      "body": "A linear map $\\varphi:V\\to F$. A row of coefficients represents it after choosing a basis. The pairing $\\varphi(v)$ needs no inner product.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:dual",
+      "title": "Dual space",
+      "body": "$V^*=\\operatorname{Hom}(V,F)$, the vector space of linear functionals on $V$. An identification of $V$ with $V^*$ requires extra choices or structure.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:pairing",
+      "title": "Covector–vector evaluation",
+      "body": "$\\varphi(v)=\\sum_i\\varphi(b_i)[v]_{\\mathcal B,i}$. This is bilinear over $F$. It differs from a complex inner product, which conjugates one argument.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Matching basis and dual-coordinate convention."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:matvec",
+      "title": "Matrix–vector product",
+      "body": "$Ax=\\sum_jx_jA_{:,j}$. Its $i$th entry is the evaluation of row $i$ on $x$. These are two presentations of one product.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "A is m×n; x has n coordinates."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:product",
+      "title": "Matrix multiplication",
+      "body": "For $A\\in F^{m\\times n}$ and $B\\in F^{n\\times p}$, $(AB)_{ij}=\\sum_k A_{ik}B_{kj}$. Rows, columns, entries and both factor maps must remain addressable within this one object.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Matching inner dimension n; compatible intermediate coordinates."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:composition",
+      "title": "Composition of linear maps",
+      "body": "For $S:U\\to V$ and $T:V\\to W$, $(T\\circ S)(u)=T(S(u))$. The rightmost map acts first.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "The output of S is in the domain of T."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:outer",
+      "title": "Outer-product expansion",
+      "body": "$AB=\\sum_k A_{:,k}B_{k,:}$. Each summand is a column times a row, producing an $m\\times p$ matrix of rank at most one.",
+      "book": "interpretation",
+      "kind": "representation",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "A is m×n; B is n×p; expansion follows entrywise."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:system",
+      "title": "Linear system",
+      "body": "$Ax=b$ asks for all input coordinates that produce the chosen output. It can be read as simultaneous equations, a column combination, or a preimage under a map.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:elimination",
+      "title": "Gaussian elimination",
+      "body": "Invertible elementary row operations transform an augmented system while preserving its solution set. The numerical coefficient matrix changes.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:elementary",
+      "title": "Elementary matrix",
+      "body": "Applying a single elementary row operation to the identity produces $E$. Left multiplication by $E$ applies that row operation.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:rref",
+      "title": "Reduced row-echelon form",
+      "body": "A row-echelon matrix whose pivots are 1 and are the only nonzero entries in their columns. RREF is unique within a row-equivalence class.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:kernel",
+      "title": "Kernel / null space",
+      "body": "$\\ker T=\\{v:T(v)=0\\}$. It is a subspace of the domain. Matrix null-space coordinates depend on the input basis.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:image",
+      "title": "Image / range",
+      "body": "$\\operatorname{im}T=\\{T(v):v\\in V\\}$. For $x\\mapsto Ax$ in standard coordinates this is the span of the columns of $A$. The codomain may be larger.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:preimage",
+      "title": "Preimage / solution fiber",
+      "body": "$T^{-1}(b)=\\{v:T(v)=b\\}$. If nonempty and $T$ is linear, it equals $v_0+\\ker T$ for any one solution $v_0$. It need not be a subspace.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:rank",
+      "title": "Rank",
+      "body": "$\\operatorname{rank}T=\\dim(\\operatorname{im}T)$. For a matrix this equals column rank and row rank.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:injective",
+      "title": "Injectivity",
+      "body": "$T(u)=T(v)$ implies $u=v$. A linear map is injective exactly when its kernel is zero.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:surjective",
+      "title": "Surjectivity",
+      "body": "Every element of the specified codomain is attained. Surjectivity is equality of image and codomain, so the codomain cannot be omitted from the object.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:identity",
+      "title": "Identity",
+      "body": "$I_V(v)=v$. In matching input and output bases its matrix is the identity matrix. Its columns show the original basis vectors unchanged.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:inverse",
+      "title": "Inverse",
+      "body": "For a bijective linear map $T$, the inverse $T^{-1}$ satisfies $T^{-1}T=I$ and $TT^{-1}=I$. A left inverse alone is insufficient for arbitrary rectangular maps.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:change-basis",
+      "title": "Change of basis",
+      "body": "If $P$ has columns $[c_j]_{\\mathcal B}$, then $[v]_{\\mathcal B}=P[v]_{\\mathcal C}$. This changes coordinates, not the underlying vector.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:similarity",
+      "title": "Similarity",
+      "body": "$B=P^{-1}AP$ with $P$ invertible. These matrices can represent the same endomorphism in two bases.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:eigen",
+      "title": "Eigenvector and eigenvalue",
+      "body": "$Tv=\\lambda v$ with $v\\ne0$. The invariant direction is essential; the zero vector is excluded even though it satisfies the equation for every scalar.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "T is an endomorphism V→V; λ belongs to the chosen scalar field."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:eigenspace",
+      "title": "Eigenspace",
+      "body": "$E_\\lambda=\\ker(T-\\lambda I)$. It includes zero; its nonzero vectors are the eigenvectors for $\\lambda$.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:diagonalization",
+      "title": "Diagonalization",
+      "body": "$A=PDP^{-1}$ where $D$ is diagonal. The columns of $P$ are a basis of eigenvectors, and the corresponding eigenvalues are the diagonal entries of $D$.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "A square matrix over F; an eigenbasis over F exists."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:inner",
+      "title": "Inner product",
+      "body": "An inner product supplies lengths and angles. On $\\mathbb R^n$ the standard product is $x^Ty$; on $\\mathbb C^n$ a Hermitian product conjugates one argument. The argument convention must be recorded.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Positive-definite inner product over R or C; explicitly chosen conjugate-linear slot."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:orthogonal",
+      "title": "Orthogonality",
+      "body": "$u\\perp v$ means $\\langle u,v\\rangle=0$. Without an inner product this relation is not available.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:orthonormal",
+      "title": "Orthonormal basis",
+      "body": "A basis with $\\langle q_i,q_j\\rangle=\\delta_{ij}$. Pairwise orthogonality alone does not imply unit length.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:projection",
+      "title": "Orthogonal projection",
+      "body": "$v=P_Uv+(v-P_Uv)$ with $P_Uv\\in U$ and residual in $U^\\perp$. This is a decomposition of one vector into complementary components.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Finite-dimensional subspace U of a real or complex inner-product space."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:least-squares",
+      "title": "Least squares",
+      "body": "Minimize $\\|Ax-b\\|^2$. Over the reals, minimizers solve $A^T(Ax-b)=0$. The fitted vector is unique; the coefficient vector need not be.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Real finite-dimensional Euclidean spaces; use A* over C."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:gram-schmidt",
+      "title": "Gram–Schmidt",
+      "body": "Subtract projections onto previously constructed orthonormal directions, then normalize. Independence ensures each residual to be normalized is nonzero.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:transpose",
+      "title": "Transpose and dual map",
+      "body": "$A^T$ swaps row and column indices. It represents the dual map in dual bases. A transpose is not generally the inverse.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:adjoint",
+      "title": "Adjoint",
+      "body": "In orthonormal bases the adjoint has matrix $A^*=\\overline A^T$. With the convention linear in the first slot, $\\langle Tv,w\\rangle=\\langle v,T^*w\\rangle$.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:determinant",
+      "title": "Determinant",
+      "body": "For square $A$, $\\det A$ measures signed volume scaling over $\\mathbb R$ and detects invertibility. It is not defined for arbitrary rectangular matrices in this sense.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Square matrix; Euclidean oriented volume interpretation uses real coordinates."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:svd",
+      "title": "Singular value decomposition",
+      "body": "$A=U\\Sigma V^*$ with orthonormal input and output bases and nonnegative singular values. Input and output bases may differ, unlike a similarity diagonalization.",
+      "book": "interpretation",
+      "kind": "concept",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "Finite-dimensional real or complex inner-product spaces."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:product-entry-proof",
+      "title": "Why row–column and column-combination views agree",
+      "body": "The entry rule and the column-combination rule describe the same indexed contributions, not copied numbers that merely happen to match.",
+      "book": "interpretation",
+      "kind": "claim",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "A is m×n and B is n×p over the same field."
+      ],
+      "steps": [
+        "Write the jth column of B as $b_j=\\sum_k B_{kj}e_k$.",
+        "By linearity, $Ab_j=\\sum_k B_{kj}Ae_k=\\sum_k B_{kj}A_{:,k}$.",
+        "Taking output coordinate i gives $(Ab_j)_i=\\sum_k A_{ik}B_{kj}$.",
+        "The columns $Ab_j$ form AB, so this is also $(AB)_{ij}$."
+      ]
+    },
+    {
+      "id": "concept:rank-nullity",
+      "title": "Rank–nullity",
+      "body": "$\\dim V=\\dim\\ker T+\\dim\\operatorname{im}T$.",
+      "book": "interpretation",
+      "kind": "claim",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "T:V→W is linear and V is finite-dimensional."
+      ],
+      "steps": [
+        "Choose a basis $(u_1,\\ldots,u_k)$ for $\\ker T$ and extend it to a basis $(u_1,\\ldots,u_k,v_1,\\ldots,v_r)$ of V.",
+        "The vectors $T(v_i)$ span the image: expand any input in this basis and apply T.",
+        "If $\\sum_i a_iT(v_i)=0$, then $\\sum_i a_iv_i\\in\\ker T$. Independence of the extended basis forces every $a_i=0$.",
+        "Thus the image has basis $(T(v_1),\\ldots,T(v_r))$, and $\\dim V=k+r$."
+      ]
+    },
+    {
+      "id": "concept:kernel-test",
+      "title": "Injectivity is a trivial kernel",
+      "body": "$T$ is injective if and only if $\\ker T=\\{0\\}$.",
+      "book": "interpretation",
+      "kind": "claim",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "T is a linear map."
+      ],
+      "steps": [
+        "If T is injective and $T(v)=0=T(0)$, then $v=0$.",
+        "Conversely, $T(u)=T(v)$ implies $T(u-v)=0$. A trivial kernel forces $u-v=0$."
+      ]
+    },
+    {
+      "id": "concept:normal-equations",
+      "title": "Why least squares gives normal equations",
+      "body": "The residual must be orthogonal to every column of A.",
+      "book": "interpretation",
+      "kind": "claim",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "A and b are real; squared Euclidean norm."
+      ],
+      "steps": [
+        "The nearest vector to b in $\\operatorname{Col}(A)$ is its orthogonal projection.",
+        "Therefore $Ax-b$ is orthogonal to each column of A, exactly $A^T(Ax-b)=0$.",
+        "For such a residual and any h, $\\|A(x+h)-b\\|^2=\\|Ax-b\\|^2+\\|Ah\\|^2$, proving minimality.",
+        "All minimizers differ by $\\ker A$; uniqueness requires full column rank."
+      ]
+    },
+    {
+      "id": "concept:row-equivalence-proof",
+      "title": "Why elimination preserves solutions",
+      "body": "For invertible elementary E, $Ax=b$ if and only if $EAx=Eb$.",
+      "book": "interpretation",
+      "kind": "claim",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "The same row operation is applied to both coefficient matrix and right side."
+      ],
+      "steps": [
+        "Apply E to both sides of $Ax=b$ to get $EAx=Eb$.",
+        "Apply $E^{-1}$ to the transformed equation to recover $Ax=b$.",
+        "Iterate this equivalence for the sequence of elementary operations."
+      ]
+    },
+    {
+      "id": "concept:field-eigen",
+      "title": "A real rotation can have no real eigenvectors",
+      "body": "$R=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$ has characteristic polynomial $\\lambda^2+1$. It has no eigenvalues over $\\mathbb R$, and eigenvalues $i,-i$ over $\\mathbb C$.",
+      "book": "interpretation",
+      "kind": "counterexample",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [
+        "The field changes the permitted eigenvalues and eigenvectors."
+      ],
+      "steps": []
+    },
+    {
+      "id": "concept:vector-coordinates",
+      "title": "Vector ≠ its coordinate list",
+      "body": "The polynomial $p=1+x$ has coordinates $(1,1)$ in $(1,x)$ and $(1,0)$ in $(1+x,x)$. The object p has not changed.",
+      "book": "interpretation",
+      "kind": "counterexample",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:row-vs-similarity",
+      "title": "Row equivalence ≠ similarity",
+      "body": "$I_2$ and $\\operatorname{diag}(2,1)$ are row equivalent over $\\mathbb R$, but are not similar: their eigenvalues differ. Elimination preserves system solutions when the right side changes too; similarity preserves the represented operator under a basis change.",
+      "book": "interpretation",
+      "kind": "counterexample",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:pairing-vs-inner",
+      "title": "Bilinear pairing ≠ Hermitian inner product",
+      "body": "For $z=(1,i)^T$, $z^Tz=0$ but $z^*z=2$. Rotating a displayed column into a row cannot silently decide whether to conjugate it.",
+      "book": "interpretation",
+      "kind": "counterexample",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:inverse-vs-transpose",
+      "title": "Transpose ≠ inverse",
+      "body": "For $A=\\operatorname{diag}(2,1)$ over $\\mathbb R$, $A^T=A$ while $A^{-1}=\\operatorname{diag}(1/2,1)$. For real orthogonal matrices these operations do agree.",
+      "book": "interpretation",
+      "kind": "counterexample",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    },
+    {
+      "id": "concept:nonunique-fit",
+      "title": "Unique fit ≠ unique coefficients",
+      "body": "With $A=\\begin{pmatrix}1&1\\end{pmatrix}$ and $b=1$, every $x=(t,1-t)^T$ has zero residual. The fitted output is uniquely 1, but the coefficient vector is not unique.",
+      "book": "interpretation",
+      "kind": "counterexample",
+      "evidence": "authored-interpretation",
+      "format": "math-text",
+      "context": "KP research synthesis; source scopes can differ",
+      "assumptions": [],
+      "steps": []
+    }
+  ],
+  "edges": [
+    {
+      "source": "concept:space",
+      "target": "beezer:section-VS:definition-VS",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:space",
+      "target": "hefferon:def:VecSpace",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector",
+      "target": "beezer:section-VO:definition-VSCV",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector",
+      "target": "ila:vectors:vectors-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector",
+      "target": "concept:space",
+      "relation": "inhabits",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:scalar",
+      "target": "beezer:section-VO:definition-CVSM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:scalar",
+      "target": "hefferon:df:VectorScalarMultiplication",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:scalar",
+      "target": "concept:vector",
+      "relation": "acts-on",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:scalar",
+      "target": "concept:space",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:combination",
+      "target": "beezer:section-S:definition-LC",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:combination",
+      "target": "hefferon:def:linearcombination",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:combination",
+      "target": "concept:scalar",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:combination",
+      "target": "concept:vector",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:span",
+      "target": "beezer:section-S:definition-SS",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:span",
+      "target": "hefferon:df:Span",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:span",
+      "target": "concept:combination",
+      "relation": "constructed-from",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:span",
+      "target": "concept:subspace",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:subspace",
+      "target": "beezer:section-S:definition-S",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:subspace",
+      "target": "ila:subspaces:subspaces-defn-of",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:subspace",
+      "target": "concept:space",
+      "relation": "inherits-from",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:independence",
+      "target": "beezer:section-LISS:definition-LI",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:independence",
+      "target": "hefferon:def:LinInd",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:independence",
+      "target": "concept:combination",
+      "relation": "constrains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:basis",
+      "target": "beezer:section-B:definition-B",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:basis",
+      "target": "hefferon:def:basis",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:basis",
+      "target": "concept:span",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:basis",
+      "target": "concept:independence",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:basis",
+      "target": "concept:space",
+      "relation": "belongs-to",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:dimension",
+      "target": "beezer:section-D:definition-D",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:dimension",
+      "target": "hefferon:df:Dimension",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:dimension",
+      "target": "concept:space",
+      "relation": "measures",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:dimension",
+      "target": "concept:basis",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:coordinates",
+      "target": "beezer:section-VR:definition-VR",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:coordinates",
+      "target": "ila:b-coordinates:dimension-defn-Bcoords",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:coordinates",
+      "target": "concept:vector",
+      "relation": "represents",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:coordinates",
+      "target": "concept:basis",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:coordinates",
+      "target": "concept:combination",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:polynomial",
+      "target": "beezer:section-D:theorem-DP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:polynomial",
+      "target": "hefferon:def:VecSpace",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:polynomial",
+      "target": "concept:vector",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:polynomial",
+      "target": "concept:coordinates",
+      "relation": "represented-by",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:polynomial",
+      "target": "concept:basis",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:map",
+      "target": "beezer:section-LT:definition-LT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:map",
+      "target": "ila:linear-trans:linear-trans-defn",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:map",
+      "target": "hefferon:def:Homo",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:map",
+      "target": "concept:space",
+      "relation": "between",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:map",
+      "target": "concept:combination",
+      "relation": "preserves",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix",
+      "target": "beezer:section-RREF:definition-M",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix",
+      "target": "hefferon:df:matrix",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix",
+      "target": "concept:map",
+      "relation": "can-represent",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix",
+      "target": "concept:system",
+      "relation": "can-represent",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix-representation",
+      "target": "beezer:section-MR:definition-MR",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix-representation",
+      "target": "hefferon:def:MatRepMap",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix-representation",
+      "target": "concept:map",
+      "relation": "represents",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix-representation",
+      "target": "concept:coordinates",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix-representation",
+      "target": "concept:basis",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matrix-representation",
+      "target": "concept:matrix",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row",
+      "target": "ila:matrixeq:matrixeq-row-column-prod",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row",
+      "target": "beezer:section-MM:theorem-EMP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row",
+      "target": "concept:matrix",
+      "relation": "part-of",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row",
+      "target": "concept:covector",
+      "relation": "can-represent",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:column",
+      "target": "beezer:section-MM:definition-MVP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:column",
+      "target": "ila:linear-trans:matrix-of-transformation",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:column",
+      "target": "concept:matrix",
+      "relation": "part-of",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:column",
+      "target": "concept:vector",
+      "relation": "can-represent",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:column",
+      "target": "concept:matrix-representation",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:covector",
+      "target": "axler:page-119",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:covector",
+      "target": "concept:map",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:covector",
+      "target": "concept:dual",
+      "relation": "inhabits",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:covector",
+      "target": "concept:vector",
+      "relation": "acts-on",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:dual",
+      "target": "axler:page-119",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:dual",
+      "target": "concept:space",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:dual",
+      "target": "concept:covector",
+      "relation": "contains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing",
+      "target": "axler:page-119",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing",
+      "target": "ila:matrixeq:matrixeq-row-column-prod",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing",
+      "target": "concept:covector",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing",
+      "target": "concept:vector",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing",
+      "target": "concept:coordinates",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matvec",
+      "target": "beezer:section-MM:definition-MVP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matvec",
+      "target": "ila:matrixeq:matrixeq-defn-Ax1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matvec",
+      "target": "concept:matrix",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matvec",
+      "target": "concept:column",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matvec",
+      "target": "concept:pairing",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matvec",
+      "target": "concept:map",
+      "relation": "represents",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:matvec",
+      "target": "concept:combination",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "beezer:section-MM:definition-MM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "ila:matrix-mult:matrix-mult-defn-of",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "hefferon:def:MatMult",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "concept:row",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "concept:column",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "concept:pairing",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "concept:matvec",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product",
+      "target": "concept:composition",
+      "relation": "represents",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:composition",
+      "target": "beezer:section-LT:definition-LTC",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:composition",
+      "target": "ila:matrix-mult:matrix-mult-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:composition",
+      "target": "concept:map",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:outer",
+      "target": "beezer:section-MM:theorem-EMP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:outer",
+      "target": "concept:product",
+      "relation": "represents",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:outer",
+      "target": "concept:column",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:outer",
+      "target": "concept:row",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:outer",
+      "target": "concept:rank",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:system",
+      "target": "beezer:section-MM:theorem-SLEMM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:system",
+      "target": "ila:systems-eqns:systems-eqns-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:system",
+      "target": "concept:matvec",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:system",
+      "target": "concept:preimage",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elimination",
+      "target": "beezer:section-RREF:definition-RO",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elimination",
+      "target": "hefferon:df:GaussMethod",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elimination",
+      "target": "concept:system",
+      "relation": "acts-on",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elimination",
+      "target": "concept:elementary",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elimination",
+      "target": "concept:rref",
+      "relation": "produces",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elementary",
+      "target": "beezer:section-DM:definition-ELEM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elementary",
+      "target": "concept:matrix",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elementary",
+      "target": "concept:identity",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:elementary",
+      "target": "concept:inverse",
+      "relation": "has-property",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rref",
+      "target": "beezer:section-RREF:definition-RREF",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rref",
+      "target": "ila:row-reduction:row-reduction-definition-4",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rref",
+      "target": "concept:matrix",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rref",
+      "target": "concept:rank",
+      "relation": "reveals",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rref",
+      "target": "concept:kernel",
+      "relation": "reveals",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel",
+      "target": "beezer:section-ILT:definition-KLT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel",
+      "target": "hefferon:df:NullSpace",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel",
+      "target": "concept:subspace",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel",
+      "target": "concept:map",
+      "relation": "belongs-to",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:image",
+      "target": "beezer:section-SLT:definition-RLT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:image",
+      "target": "hefferon:df:RangeSpace",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:image",
+      "target": "concept:subspace",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:image",
+      "target": "concept:map",
+      "relation": "belongs-to",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:image",
+      "target": "concept:span",
+      "relation": "represented-by",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:preimage",
+      "target": "beezer:section-LT:definition-PI",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:preimage",
+      "target": "beezer:section-ILT:theorem-KPI",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:preimage",
+      "target": "concept:map",
+      "relation": "belongs-to",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:preimage",
+      "target": "concept:kernel",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank",
+      "target": "beezer:section-IVLT:definition-ROLT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank",
+      "target": "ila:rank-thm:rank-thm-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank",
+      "target": "concept:image",
+      "relation": "measures",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank",
+      "target": "concept:dimension",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:injective",
+      "target": "beezer:section-ILT:definition-ILT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:injective",
+      "target": "ila:one-one-onto:one-one-onto-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:injective",
+      "target": "concept:map",
+      "relation": "property-of",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:injective",
+      "target": "concept:kernel",
+      "relation": "constrains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:surjective",
+      "target": "beezer:section-SLT:definition-SLT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:surjective",
+      "target": "ila:one-one-onto:one-one-onto-definition-2",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:surjective",
+      "target": "concept:map",
+      "relation": "property-of",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:surjective",
+      "target": "concept:image",
+      "relation": "constrains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:identity",
+      "target": "beezer:section-IVLT:definition-IDLT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:identity",
+      "target": "ila:linear-trans:linear-trans-identity-mat",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:identity",
+      "target": "concept:map",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:identity",
+      "target": "concept:composition",
+      "relation": "unit-for",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse",
+      "target": "beezer:section-IVLT:definition-IVLT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse",
+      "target": "ila:matrix-inv:matrix-inv-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse",
+      "target": "concept:injective",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse",
+      "target": "concept:surjective",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse",
+      "target": "concept:composition",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse",
+      "target": "concept:identity",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:change-basis",
+      "target": "beezer:section-CB:definition-CBM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:change-basis",
+      "target": "hefferon:df:ChangeOfBasisMatrix",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:change-basis",
+      "target": "concept:coordinates",
+      "relation": "acts-on",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:change-basis",
+      "target": "concept:basis",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:change-basis",
+      "target": "concept:inverse",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:similarity",
+      "target": "beezer:section-SD:definition-SIM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:similarity",
+      "target": "ila:similarity:similarity-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:similarity",
+      "target": "concept:change-basis",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:similarity",
+      "target": "concept:matrix-representation",
+      "relation": "relates",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigen",
+      "target": "beezer:section-CB:definition-EELT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigen",
+      "target": "hefferon:def:Eigen",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigen",
+      "target": "concept:map",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigen",
+      "target": "concept:scalar",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigen",
+      "target": "concept:vector",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigenspace",
+      "target": "beezer:section-EE:definition-EM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigenspace",
+      "target": "concept:kernel",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigenspace",
+      "target": "concept:eigen",
+      "relation": "contains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:eigenspace",
+      "target": "concept:identity",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:diagonalization",
+      "target": "beezer:section-SD:definition-DZM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:diagonalization",
+      "target": "ila:diagonalization:diagonalization-thm",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:diagonalization",
+      "target": "concept:similarity",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:diagonalization",
+      "target": "concept:basis",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:diagonalization",
+      "target": "concept:eigen",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inner",
+      "target": "beezer:section-O:definition-IP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inner",
+      "target": "ila:innerprod:innerprod-definition-1",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inner",
+      "target": "concept:space",
+      "relation": "structure-on",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inner",
+      "target": "concept:pairing",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:orthogonal",
+      "target": "beezer:section-O:definition-OV",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:orthogonal",
+      "target": "ila:innerprod:innerprod-definition-4",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:orthogonal",
+      "target": "concept:inner",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:orthonormal",
+      "target": "beezer:section-O:definition-ONS",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:orthonormal",
+      "target": "concept:basis",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:orthonormal",
+      "target": "concept:orthogonal",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:orthonormal",
+      "target": "concept:inner",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:projection",
+      "target": "ila:projections:projections-decomp-exists",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:projection",
+      "target": "hefferon:def:OrthComp",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:projection",
+      "target": "concept:subspace",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:projection",
+      "target": "concept:inner",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:projection",
+      "target": "concept:orthogonal",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:projection",
+      "target": "concept:map",
+      "relation": "is-a",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:least-squares",
+      "target": "ila:leastsquares:leastsquares-ATA-method",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:least-squares",
+      "target": "concept:projection",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:least-squares",
+      "target": "concept:system",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:least-squares",
+      "target": "concept:kernel",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:gram-schmidt",
+      "target": "beezer:section-O:theorem-GSP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:gram-schmidt",
+      "target": "ila:orthosets:orthosets-theorem-2",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:gram-schmidt",
+      "target": "concept:projection",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:gram-schmidt",
+      "target": "concept:independence",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:gram-schmidt",
+      "target": "concept:orthonormal",
+      "relation": "produces",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:transpose",
+      "target": "beezer:section-MO:definition-TM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:transpose",
+      "target": "hefferon:df:Transpose",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:transpose",
+      "target": "axler:page-123",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:transpose",
+      "target": "concept:matrix",
+      "relation": "acts-on",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:transpose",
+      "target": "concept:dual",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:adjoint",
+      "target": "beezer:section-MO:definition-A",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:adjoint",
+      "target": "concept:inner",
+      "relation": "requires",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:adjoint",
+      "target": "concept:transpose",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:determinant",
+      "target": "beezer:section-DM:definition-DM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:determinant",
+      "target": "ila:determinant-volume:det-is-volume",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:determinant",
+      "target": "hefferon:def:Det",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:determinant",
+      "target": "concept:matrix",
+      "relation": "property-of",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:determinant",
+      "target": "concept:inverse",
+      "relation": "detects",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:svd",
+      "target": "axler:page-287",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:svd",
+      "target": "axler:page-288",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:svd",
+      "target": "concept:orthonormal",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:svd",
+      "target": "concept:matrix-representation",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:svd",
+      "target": "concept:rank",
+      "relation": "reveals",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:svd",
+      "target": "concept:adjoint",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product-entry-proof",
+      "target": "beezer:section-MM:theorem-EMP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product-entry-proof",
+      "target": "ila:matrix-mult:matrix-mult-comp-is-prod",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product-entry-proof",
+      "target": "concept:product",
+      "relation": "explains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product-entry-proof",
+      "target": "concept:matvec",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product-entry-proof",
+      "target": "concept:pairing",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:product-entry-proof",
+      "target": "concept:composition",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank-nullity",
+      "target": "beezer:section-IVLT:theorem-RPNDD",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank-nullity",
+      "target": "ila:rank-thm:rank-theorem",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank-nullity",
+      "target": "concept:rank",
+      "relation": "relates",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank-nullity",
+      "target": "concept:kernel",
+      "relation": "relates",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank-nullity",
+      "target": "concept:dimension",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:rank-nullity",
+      "target": "concept:basis",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel-test",
+      "target": "beezer:section-ILT:theorem-KILT",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel-test",
+      "target": "concept:injective",
+      "relation": "explains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel-test",
+      "target": "concept:kernel",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:kernel-test",
+      "target": "concept:map",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:normal-equations",
+      "target": "ila:leastsquares:leastsquares-ATA-method",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:normal-equations",
+      "target": "concept:least-squares",
+      "relation": "explains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:normal-equations",
+      "target": "concept:projection",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:normal-equations",
+      "target": "concept:orthogonal",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:normal-equations",
+      "target": "concept:transpose",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-equivalence-proof",
+      "target": "beezer:section-RREF:theorem-REMES",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-equivalence-proof",
+      "target": "beezer:section-DM:theorem-EMN",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-equivalence-proof",
+      "target": "concept:elimination",
+      "relation": "explains",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-equivalence-proof",
+      "target": "concept:inverse",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-equivalence-proof",
+      "target": "concept:elementary",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:field-eigen",
+      "target": "ila:cplx-eigenvals:cplx-diagonalization-thm",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:field-eigen",
+      "target": "concept:eigen",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:field-eigen",
+      "target": "concept:determinant",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector-coordinates",
+      "target": "beezer:section-VR:definition-VR",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector-coordinates",
+      "target": "concept:vector",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector-coordinates",
+      "target": "concept:coordinates",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector-coordinates",
+      "target": "concept:polynomial",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:vector-coordinates",
+      "target": "concept:change-basis",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-vs-similarity",
+      "target": "beezer:section-SD:theorem-SMEE",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-vs-similarity",
+      "target": "beezer:section-RREF:definition-REM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-vs-similarity",
+      "target": "concept:elimination",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-vs-similarity",
+      "target": "concept:similarity",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:row-vs-similarity",
+      "target": "concept:eigen",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing-vs-inner",
+      "target": "axler:page-119",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing-vs-inner",
+      "target": "beezer:section-O:definition-IP",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing-vs-inner",
+      "target": "concept:pairing",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing-vs-inner",
+      "target": "concept:inner",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:pairing-vs-inner",
+      "target": "concept:adjoint",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse-vs-transpose",
+      "target": "beezer:section-MINM:definition-UM",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse-vs-transpose",
+      "target": "beezer:section-MISLE:definition-MI",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse-vs-transpose",
+      "target": "concept:transpose",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse-vs-transpose",
+      "target": "concept:inverse",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:inverse-vs-transpose",
+      "target": "concept:orthonormal",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:nonunique-fit",
+      "target": "ila:leastsquares:leastsquares-theorem-2",
+      "relation": "reading-witness",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:nonunique-fit",
+      "target": "concept:least-squares",
+      "relation": "contrasts",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:nonunique-fit",
+      "target": "concept:kernel",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    },
+    {
+      "source": "concept:nonunique-fit",
+      "target": "concept:rank",
+      "relation": "uses",
+      "evidence": "authored-interpretation"
+    }
+  ],
+  "note": "KP-authored paraphrases, examples and informal proof outlines. Reading witnesses do not assert identical hypotheses across books. No formal verification or animation support implied."
+}
