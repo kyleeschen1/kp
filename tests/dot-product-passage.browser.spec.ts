@@ -183,7 +183,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform);
     return { z: m.m43, opacity: Number(getComputedStyle(node).opacity) };
   });
-  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.55, 2);
+  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.08, 2);
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
   expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 1);
   expect(liftedSize!.height).toBeCloseTo(originalSize!.height, 1);
@@ -238,7 +238,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     return { blur: Number(style.filter.match(/blur\(([\d.]+)px\)/)?.[1]), opacity: Number(style.opacity) };
   });
   expect(contact.blur).toBeLessThan(.51);
-  expect(contact.opacity).toBeCloseTo(.35, 2);
+  expect(contact.opacity).toBeCloseTo(.04, 2);
   await expect(page.locator(".dot-work")).not.toHaveCSS("text-shadow", "none");
   for (const pair of passage.dot.pairs) {
     const copy = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();

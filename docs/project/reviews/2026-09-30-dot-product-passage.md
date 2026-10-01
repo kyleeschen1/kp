@@ -577,6 +577,12 @@ to the initial presentation. This remains scoped to the animation's source and
 working layers, not page prose or controls. Browser checks cover live tuning,
 unchanged scale/foreground paint, zero overlay, and deterministic direct seeks.
 
+September 30, extremely light glyph shadows: reduce resting contact-shadow
+opacity from 35% to 4%, and maximum moving glyph-shadow opacity from 55% to 8%.
+The moving shadow returns to the same 4% contact strength at landing. Existing
+offsets, blur, panel shadows, dimming control and zero-default glow are unchanged.
+Scoped browser expectations now cover the lighter lift and contact endpoints.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

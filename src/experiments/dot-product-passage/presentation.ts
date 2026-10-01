@@ -142,7 +142,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     const haloInk = `rgba(220, 38, 38, ${glowStrength})`;
     const halo = glowStrength === 0 ? "" : ["-1px 0 1px", "1px 0 1px", "0 -1px 1px", "0 1px 1px", "0 0 4px", "0 0 4px"].map(offset => `${offset} ${haloInk}`).join(", ");
     stage.style.setProperty("--dot-moving-glow", halo || "none");
-    stage.style.setProperty("--dot-focused-shadow", `${halo ? `${halo}, ` : ""}0 .8px .5px rgba(0, 0, 0, .35)`);
+    stage.style.setProperty("--dot-focused-shadow", `${halo ? `${halo}, ` : ""}0 .8px .5px rgba(0, 0, 0, .04)`);
     // Focus follows the beat's mathematical contributors and result, so native
     // and moving occurrences agree through seeks, reprepare and ownership handoff.
     const focusedIds = new Set<string>();
@@ -205,7 +205,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       shadow.style.filter = `blur(${.5 + 3.5 * shadowLift}px)`;
       // At landing this matches the native expression's tight contact shadow.
       shadow.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? String(.35 + .2 * shadowLift) : "0";
+        ? String(.04 + .04 * shadowLift) : "0";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {
