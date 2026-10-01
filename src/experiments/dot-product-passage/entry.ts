@@ -16,9 +16,9 @@ async function mount() {
     <div class="matrix-controls"><button data-back aria-label="Previous milestone">Previous</button><button data-play>Play</button><button data-next aria-label="Next milestone">Next</button>
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div>
-    <div class="matrix-controls dot-tuning"><label for="dot-back-opacity">Back panel opacity</label>
-    <input id="dot-back-opacity" data-back-opacity type="range" min="0" max="100" step="1" value="22">
-    <output for="dot-back-opacity" data-opacity-value>22%</output></div>
+    <div class="matrix-controls dot-tuning"><label for="dot-dim-unfocused">Dim unfocused</label>
+    <input id="dot-dim-unfocused" data-dim-unfocused type="range" min="0" max="100" step="1" value="60">
+    <output for="dot-dim-unfocused" data-dim-value>60%</output></div>
     <div class="matrix-controls dot-tuning"><label for="dot-glow">Glow strength</label>
     <input id="dot-glow" data-glow type="range" min="0" max="100" step="1" value="0">
     <output for="dot-glow" data-glow-value>0%</output></div></section>
@@ -32,8 +32,8 @@ async function mount() {
   const stepsOnly = () => reduced.matches || config.motion === "steps";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slider = root.querySelector<HTMLInputElement>("[data-scrub]")!;
-  const opacitySlider = root.querySelector<HTMLInputElement>("[data-back-opacity]")!;
-  const opacityValue = root.querySelector<HTMLOutputElement>("[data-opacity-value]")!;
+  const dimSlider = root.querySelector<HTMLInputElement>("[data-dim-unfocused]")!;
+  const dimValue = root.querySelector<HTMLOutputElement>("[data-dim-value]")!;
   const glowSlider = root.querySelector<HTMLInputElement>("[data-glow]")!;
   const glowValue = root.querySelector<HTMLOutputElement>("[data-glow-value]")!;
   const chooser = root.querySelector<HTMLSelectElement>("select")!;
@@ -43,7 +43,7 @@ async function mount() {
   let disposed = false, lastBeat = "";
   const render = () => {
     if (disposed) return;
-    const frame = view.render(clock.getSnapshot().progress, Number(opacitySlider.value) / 100, Number(glowSlider.value) / 100);
+    const frame = view.render(clock.getSnapshot().progress, Number(dimSlider.value) / 100, Number(glowSlider.value) / 100);
     slider.value = String(frame.progress); slider.setAttribute("aria-valuetext", frame.beat.cue);
     chooser.value = String(frame.index); back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
     play.textContent = clock.getStatus() === "playing" ? "Pause" : stepsOnly() ? "Next step" : frame.progress === 1 ? "Replay" : "Play";
@@ -65,9 +65,9 @@ async function mount() {
     go(offset > 0 ? Math.floor(phase + 1e-8) + 1 : Math.ceil(phase - 1e-8) - 1);
   };
   slider.oninput = () => { clock.pause(); clock.seek(Number(slider.value)); };
-  opacitySlider.oninput = () => {
-    opacityValue.value = `${opacitySlider.value}%`;
-    opacitySlider.setAttribute("aria-valuetext", opacityValue.value);
+  dimSlider.oninput = () => {
+    dimValue.value = `${dimSlider.value}%`;
+    dimSlider.setAttribute("aria-valuetext", dimValue.value);
     render();
   };
   glowSlider.oninput = () => {
@@ -104,7 +104,7 @@ async function mount() {
     window.removeEventListener("hashchange", restore); document.removeEventListener("visibilitychange", visibility);
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
-    opacitySlider.oninput = null;
+    dimSlider.oninput = null;
     glowSlider.oninput = null;
   };
   import.meta.hot?.dispose(dispose);

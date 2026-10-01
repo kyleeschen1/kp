@@ -267,6 +267,13 @@
       "scope": "Restored coordinated source card retreat",
       "checkedAt": "2026-10-01T01:23:57.521Z",
       "notes": "Four browser tests, four unit tests, typecheck and build pass. Source scale/opacity coordination, live back tuning, fixed active token size and reverse behavior checked. Multiplication capture inspected; entry 6.96 KB gzip."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Plain dim-unfocused slider without retreat or veil",
+      "checkedAt": "2026-10-01T01:28:11.912Z",
+      "notes": "Four browser tests, four unit tests, typecheck and build pass. Live dimming at zero/intermediate/full strengths, no front wash, constant source/active scale and reverse behavior checked. Multiplication screenshot inspected."
     }
   ]
 }

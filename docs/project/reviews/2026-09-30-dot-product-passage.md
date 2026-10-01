@@ -566,6 +566,17 @@ Four browser tests, four unit tests and build pass (entry 6.96 KB gzip); the
 multiplication capture was inspected. This restores the specific retreat
 relationship without reverting the intervening typography and geometry fixes.
 
+September 30, plain unfocused dimming: user cancels the source-retreat treatment
+and requests a dimming slider. Dim unfocused now runs 0–100%, default 60%; higher
+values reduce source-context opacity. Both source layout and surface retain
+100% scale. The front surface adds no fill/veil, so dimming is not compounded
+with a second context wash. Active expression tokens and required punctuation
+remain readable above the context, with existing shadows; glow stays off by
+default. Dimming enters smoothly during the focus transfer and clears on reverse
+to the initial presentation. This remains scoped to the animation's source and
+working layers, not page prose or controls. Browser checks cover live tuning,
+unchanged scale/foreground paint, zero overlay, and deterministic direct seeks.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

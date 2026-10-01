@@ -130,8 +130,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
-  const render = (progress: number, backOpacity = .22, glowStrength = 0) => {
-    if (!Number.isFinite(backOpacity) || backOpacity < 0 || backOpacity > 1) throw new DotPassageGap("Back-panel opacity must be between zero and one.");
+  const render = (progress: number, dimUnfocused = .6, glowStrength = 0) => {
+    if (!Number.isFinite(dimUnfocused) || dimUnfocused < 0 || dimUnfocused > 1) throw new DotPassageGap("Unfocused dimming must be between zero and one.");
     if (!Number.isFinite(glowStrength) || glowStrength < 0 || glowStrength > 1) throw new DotPassageGap("Glow strength must be between zero and one.");
     const frame = sample(progress);
     if (disposed) return frame;
@@ -158,15 +158,14 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     }
     // The surface shares the entries' depth, without owning their semantic paint.
     const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
-    stage.style.setProperty("--dot-back-scale", String(1 - .06 * planeLift));
-    stage.style.setProperty("--dot-back-opacity", String(1 - (1 - backOpacity) * planeLift));
+    stage.style.setProperty("--dot-back-scale", "1");
+    stage.style.setProperty("--dot-back-opacity", String(1 - dimUnfocused * planeLift));
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
     // Surface translucency preserves the source context; elevation changes the
     // cast shadow independently, without fading the foreground mathematical ink.
     workingPlane.style.opacity = planeLift > 0 ? "1" : "0";
-    // The source recedes as one layer. Keep the receiving surface lightly
-    // translucent instead of using it as a separate adjustable context veil.
-    workingPlane.style.setProperty("--dot-front-fill", `${30 * planeLift}%`);
+    // Dimming is the only context wash; the receiving plane adds no overlay.
+    workingPlane.style.setProperty("--dot-front-fill", "0%");
     workingPlane.style.boxShadow = planeLift > 0
       ? `0 1px 2px rgba(0, 0, 0, ${.16 * planeLift}), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(0, 0, 0, ${.22 * planeLift})` : "none";
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
