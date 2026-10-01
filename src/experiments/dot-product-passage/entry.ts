@@ -18,7 +18,10 @@ async function mount() {
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div>
     <div class="matrix-controls dot-tuning"><label for="dot-background-veil">Background veil</label>
     <input id="dot-background-veil" data-background-veil type="range" min="0" max="40" step="1" value="0">
-    <output for="dot-background-veil" data-veil-value>0%</output></div></section>
+    <output for="dot-background-veil" data-veil-value>0%</output></div>
+    <div class="matrix-controls dot-tuning"><label for="dot-glow">Glow strength</label>
+    <input id="dot-glow" data-glow type="range" min="0" max="100" step="1" value="60">
+    <output for="dot-glow" data-glow-value>60%</output></div></section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
     <details><summary>Read the calculation</summary><div class="dot-static">${renderLatexToHtml(calculationLatex(passage, true), { output: "htmlAndMathml", trust: true })}</div>
     <p>The row and column change arrangement while their entries retain the same mathematical identities. Multiplication produces three new values; addition produces the final result. In real Euclidean coordinates, this pairing also represents the dot product uᵀv.</p></details>`;
@@ -31,6 +34,8 @@ async function mount() {
   const slider = root.querySelector<HTMLInputElement>("[data-scrub]")!;
   const veilSlider = root.querySelector<HTMLInputElement>("[data-background-veil]")!;
   const veilValue = root.querySelector<HTMLOutputElement>("[data-veil-value]")!;
+  const glowSlider = root.querySelector<HTMLInputElement>("[data-glow]")!;
+  const glowValue = root.querySelector<HTMLOutputElement>("[data-glow-value]")!;
   const chooser = root.querySelector<HTMLSelectElement>("select")!;
   const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
   const back = root.querySelector<HTMLButtonElement>("[data-back]")!;
@@ -38,7 +43,7 @@ async function mount() {
   let disposed = false, lastBeat = "";
   const render = () => {
     if (disposed) return;
-    const frame = view.render(clock.getSnapshot().progress, Number(veilSlider.value) / 100);
+    const frame = view.render(clock.getSnapshot().progress, Number(veilSlider.value) / 100, Number(glowSlider.value) / 100);
     slider.value = String(frame.progress); slider.setAttribute("aria-valuetext", frame.beat.cue);
     chooser.value = String(frame.index); back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
     play.textContent = clock.getStatus() === "playing" ? "Pause" : stepsOnly() ? "Next step" : frame.progress === 1 ? "Replay" : "Play";
@@ -63,6 +68,11 @@ async function mount() {
   veilSlider.oninput = () => {
     veilValue.value = `${veilSlider.value}%`;
     veilSlider.setAttribute("aria-valuetext", veilValue.value);
+    render();
+  };
+  glowSlider.oninput = () => {
+    glowValue.value = `${glowSlider.value}%`;
+    glowSlider.setAttribute("aria-valuetext", glowValue.value);
     render();
   };
   slider.onkeydown = event => {
@@ -95,6 +105,7 @@ async function mount() {
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
     veilSlider.oninput = null;
+    glowSlider.oninput = null;
   };
   import.meta.hot?.dispose(dispose);
   restore(); root.setAttribute("aria-busy", "false"); root.dataset["ready"] = "true";

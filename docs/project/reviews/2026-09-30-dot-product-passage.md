@@ -512,6 +512,19 @@ fill arrival. Three browser tests, four unit tests and build pass (entry 6.73 KB
 gzip). The multiplication capture at 40% was inspected. Tuning starts at zero
 after reload and remains local to the mounted example.
 
+September 30, focused glyph halo: add Glow strength (0–100%, default 60%) beside
+the independent Background veil control. Focused tokens use a paper-white
+(#fffdf8) glyph-shaped halo: four 1px edge shadows and a soft 4px spread. Native
+tokens retain their dark contact shadow; moving tokens use the halo while their
+separate receiving-plane shadow stays black and halo-free. Unary signs inherit
+the halo through the signed token. Unfocused source text and syntax keep their
+existing appearance. The existing beat-derived focus IDs own eligibility; there
+is no additional focus state or geometry animation. The render boundary validates
+strength, live tuning preserves playback, and disposal removes the input handler.
+Browser checks cover zero/full/intermediate strength, stage-relative geometry,
+native negative-sign inheritance, neutral decorative shadows and reverse focus
+removal. This is a local visual candidate; no shared motif is promoted.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

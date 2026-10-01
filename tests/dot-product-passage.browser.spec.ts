@@ -1,6 +1,39 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test("focus glow tunes glyph paint without changing geometry or playback", async ({ page }) => {
+  await page.goto("/experiments/dot-product-passage/");
+  await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
+  const timeline = page.getByRole("slider", { name: "Animation position" });
+  const tuning = page.getByRole("slider", { name: "Glow strength" });
+  await expect(tuning).toHaveValue("60");
+  await timeline.fill("0.1");
+  const moving = page.locator('[data-occurrence="pair-left-1"]');
+  const measure = () => moving.evaluate(node => {
+    const token = node.getBoundingClientRect(), stage = node.closest(".dot-stage")!.getBoundingClientRect();
+    return { x: token.x - stage.x, y: token.y - stage.y, width: token.width, height: token.height };
+  });
+  const bounds = await measure();
+  for (const strength of [0, 100, 60]) {
+    await tuning.fill(String(strength));
+    const glow = await moving.evaluate(node => getComputedStyle(node).textShadow);
+    if (strength === 0) expect(glow).toBe("none");
+    else expect(glow).toContain("255, 253, 248");
+    expect(await measure()).toEqual(bounds);
+    await expect(timeline).toHaveValue("0.1");
+    await expect(page.locator("[data-glow-value]")).toHaveText(`${strength}%`);
+  }
+  for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("text-shadow", "none");
+  await timeline.fill("0.25");
+  await expect(page.locator('[data-kp-dot-key="pair-left-1"] .dot-negative-sign')).toHaveCSS("text-shadow", /255, 253, 248/);
+  await timeline.fill("0");
+  await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
+  expect(await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => getComputedStyle(node).textShadow)).not.toContain("255, 253, 248");
+  await page.getByRole("button", { name: "Play", exact: true }).click();
+  await tuning.fill("80");
+  await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
+});
+
 test("background veil can be tuned without seeking or pausing playback", async ({ page }) => {
   await page.goto("/experiments/dot-product-passage/");
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
@@ -129,8 +162,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
-  await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
-  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("text-shadow", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
   expect(await tiltY(".dot-stage")).toBe(0);
@@ -242,7 +275,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(backColor).toBe(initialBackColor);
   expect(earlyBackColor).toBe(backColor);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
-  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
+  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).not.toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
   await slider.fill("0.31");
@@ -403,5 +436,5 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await child.getByRole("slider", { name: "Animation position" }).fill("0.06");
   const darkInk = await child.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", darkInk);
-  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
+  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).not.toHaveCSS("text-shadow", "none");
 });

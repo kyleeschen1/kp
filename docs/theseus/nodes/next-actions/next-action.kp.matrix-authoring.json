@@ -253,6 +253,13 @@
       "scope": "Live background veil and neutral foreground",
       "checkedAt": "2026-10-01T01:09:42.270Z",
       "notes": "Three browser tests, four unit tests, full typecheck and build pass. Veil bounds, live tuning, neutral foreground and reversible surface projection checked. Multiplication screenshot at maximum veil inspected."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Focused glyph halo with live strength control",
+      "checkedAt": "2026-10-01T01:12:54.894Z",
+      "notes": "Four browser tests, four unit tests, typecheck and build pass. Strength zero/full/intermediate, unchanged stage-relative geometry, native sign inheritance, shadow isolation and live playback tuning checked. Multiplication screenshot inspected; entry 6.96 KB gzip."
     }
   ]
 }

@@ -130,12 +130,19 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
-  const render = (progress: number, backgroundVeil = 0) => {
+  const render = (progress: number, backgroundVeil = 0, glowStrength = .6) => {
     if (!Number.isFinite(backgroundVeil) || backgroundVeil < 0 || backgroundVeil > .4) throw new DotPassageGap("Background veil must be between zero and 0.4.");
+    if (!Number.isFinite(glowStrength) || glowStrength < 0 || glowStrength > 1) throw new DotPassageGap("Glow strength must be between zero and one.");
     const frame = sample(progress);
     if (disposed) return frame;
     reset();
     stage.dataset["progress"] = String(frame.progress);
+    // A glyph-shaped light halo is separate from the dark receiving-plane shadow.
+    // It inherits through signed tokens without changing their metrics or ink.
+    const haloInk = `rgba(255, 253, 248, ${glowStrength})`;
+    const halo = glowStrength === 0 ? "" : ["-1px 0 1px", "1px 0 1px", "0 -1px 1px", "0 1px 1px", "0 0 4px", "0 0 4px"].map(offset => `${offset} ${haloInk}`).join(", ");
+    stage.style.setProperty("--dot-moving-glow", halo || "none");
+    stage.style.setProperty("--dot-focused-shadow", `${halo ? `${halo}, ` : ""}0 .8px .5px rgba(0, 0, 0, .35)`);
     // Focus follows the beat's mathematical contributors and result, so native
     // and moving occurrences agree through seeks, reprepare and ownership handoff.
     const focusedIds = new Set<string>();
@@ -194,7 +201,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const height = 20 * shadowLift;
       const z = surfaceZ + height;
       node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
-      node.style.textShadow = "none";
       shadow.style.transform = `translate3d(${x + .65 * height}px, ${y + .8 + height}px, ${surfaceZ - .5}px) translate(-50%, -50%)`;
       shadow.style.filter = `blur(${.5 + 3.5 * shadowLift}px)`;
       // At landing this matches the native expression's tight contact shadow.
