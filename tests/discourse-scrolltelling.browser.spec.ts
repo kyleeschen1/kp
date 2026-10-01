@@ -2,6 +2,50 @@ import { test, expect } from '@playwright/test';
 import { explanation } from '../src/experiments/discourse-scrolltelling/source.ts';
 
 const path = '/experiments/discourse-scrolltelling/';
+test('one full-screen card hands an instruction to a synchronized pairing scrubber', async ({ page }, info) => {
+  await page.goto(`${path}?view=attention-card`);
+  const player = page.locator('#discourse-player');
+  await expect(player).toHaveAttribute('data-attention-ready', 'true');
+  const travel = async (value: number) => page.locator('.discourse-layout').evaluate((node, value) => {
+    scrollTo(0, node.getBoundingClientRect().top + scrollY + value * innerHeight * 3);
+  }, value);
+  const paint = () => page.locator('[data-kp-dot-key="left-0"]').evaluate(node => {
+    const r = node.getBoundingClientRect(); return { x: r.x, y: r.y };
+  });
+  await expect(player).toHaveAttribute('data-attention-phase', 'read');
+  const before = await paint();
+  const frame = await page.locator('.matrix-card').boundingBox();
+  expect(frame!.width).toBe(page.viewportSize()!.width);
+  expect(frame!.height).toBe(page.viewportSize()!.height);
+  expect(before.x).toBeGreaterThan(0); expect(before.x).toBeLessThan(page.viewportSize()!.width * .15);
+  await page.screenshot({ path: info.outputPath('attention-read.png') });
+  await travel(.25);
+  await expect(player).toHaveAttribute('data-attention-phase', 'watch');
+  await expect(page.getByText('Watch the column turn.', { exact: true })).toBeVisible();
+  expect(await paint()).toEqual(before);
+  await page.screenshot({ path: info.outputPath('attention-watch.png') });
+  await travel(.55);
+  const scrubber = page.getByRole('slider', { name: 'Pairing progress', exact: true });
+  await expect(scrubber).toBeVisible();
+  await expect(page.getByText('Watch the column turn.', { exact: true })).toBeHidden();
+  await expect.poll(async () => Number(await scrubber.inputValue())).toBeCloseTo(.5, 2);
+  await expect.poll(() => page.locator('.dot-stage').getAttribute('data-progress').then(Number)).toBeCloseTo(.125, 3);
+  await page.screenshot({ path: info.outputPath('attention-scrub.png') });
+  await scrubber.fill('0.7');
+  await expect.poll(() => page.evaluate(() => scrollY / (innerHeight * 3))).toBeCloseTo(.65, 2);
+  await travel(.55); await expect.poll(async () => Number(await scrubber.inputValue())).toBeCloseTo(.5, 2);
+  await travel(.9); await expect(player).toHaveAttribute('data-attention-phase', 'inspect');
+  await expect(page.getByText('Same entries. Three pairs.', { exact: true })).toBeVisible();
+  await page.screenshot({ path: info.outputPath('attention-inspect.png') });
+  await travel(.25); expect(await paint()).toEqual(before);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await travel(.55); await expect(page.locator('.dot-stage')).toHaveAttribute('data-progress', '0');
+  await travel(.9); await expect(page.locator('.dot-stage')).toHaveAttribute('data-progress', '0.25');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
+  await page.screenshot({ path: info.outputPath('attention-phone.png') });
+});
+
 test('split scroll owns intermediate frames and rebases manual inspection without a jump', async ({ page }, info) => {
   await page.goto(path);
   const player = page.locator('#discourse-player');

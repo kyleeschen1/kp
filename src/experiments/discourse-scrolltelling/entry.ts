@@ -18,7 +18,11 @@ const detour = document.querySelector<HTMLDetailsElement>('#why-pair')!;
 const returnButton = document.querySelector<HTMLButtonElement>('[data-return]')!;
 let disposed = false;
 let cleanup = () => {};
-void mountDotPlayer(root, passage).then(player => {
+if (new URLSearchParams(location.search).get('view') === 'attention-card') {
+  void import('./attention-card.ts').then(module => module.mountPairingAttentionCard(root)).then(dispose => {
+    if (disposed) dispose(); else cleanup = dispose;
+  }).catch(error => { root.textContent = `Attention card unavailable: ${String(error)}`; });
+} else void mountDotPlayer(root, passage).then(player => {
   if (disposed) { player(); return; }
   let active = 0;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');

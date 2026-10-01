@@ -1,0 +1,22 @@
+:root[data-discourse-view="attention-card"] #discourse-story { max-width: none; padding: 0; margin: 0; }
+:root[data-discourse-view="attention-card"] .discourse-layout { display: block; height: 400vh; }
+:root[data-discourse-view="attention-card"] .discourse-stage { position: sticky; top: 0; height: 100vh; padding: 0; }
+:root[data-discourse-view="attention-card"] .discourse-goal { display: none; }
+:root[data-discourse-view="attention-card"] #discourse-player .matrix-card { position: relative; height: 100vh; box-sizing: border-box; border-radius: 0; }
+:root[data-discourse-view="attention-card"] #discourse-player :is(.matrix-cue, .matrix-controls) { display: none; }
+:root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { position: absolute; left: 0; top: 50%; width: clamp(320px, 42vw, 560px); transform: translateY(-50%); }
+:root[data-discourse-view="attention-card"] #discourse-player .dot-stage { min-width: 0; width: 100%; height: 340px; }
+:root[data-discourse-view="attention-card"] .dot-inputs { justify-content: flex-start; padding-left: 32px; }
+.attention-annotation { position: absolute; top: 50%; left: 54%; right: 6%; transform: translateY(-50%); }
+.attention-annotation p { line-height: 1.6; }
+.attention-eyebrow, .attention-hint { color: var(--kp-st-muted); }
+.attention-annotation label { display: block; margin-bottom: 1rem; }
+.attention-annotation input { width: 100%; accent-color: var(--kp-st-focus); }
+.attention-back { position: absolute; left: 2rem; top: 1.5rem; }
+.attention-reading { max-width: 50rem; margin: 3rem auto; padding: 1rem; }
+.attention-reading .discourse-prose section { min-height: 0; padding: 2rem 0; }
+@media (max-width: 850px) {
+  :root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { top: 30%; width: 100%; max-width: 500px; }
+  .attention-annotation { top: 66%; left: 7%; right: 7%; }
+  .attention-back { left: 1rem; top: 1rem; font-size: .9rem; }
+}

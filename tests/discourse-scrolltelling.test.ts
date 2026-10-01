@@ -1,6 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { discourseCorridor, discourseProgress } from '../src/experiments/discourse-scrolltelling/scroll.ts';
+import { pairingAttentionFrame } from '../src/experiments/discourse-scrolltelling/attention-card-model.ts';
+
+test('pairing attention separates instruction, scroll motion and inspection', () => {
+  assert.deepEqual(pairingAttentionFrame(.1), { phase: 'read', progress: 0 });
+  assert.deepEqual(pairingAttentionFrame(.25), { phase: 'watch', progress: 0 });
+  assert.equal(pairingAttentionFrame(.55).phase, 'move');
+  assert.ok(Math.abs(pairingAttentionFrame(.55).progress - .5) < 1e-10);
+  assert.deepEqual(pairingAttentionFrame(.9), { phase: 'inspect', progress: 1 });
+  assert.equal(pairingAttentionFrame(.55, true).progress, 0);
+  assert.equal(pairingAttentionFrame(.9, true).progress, 1);
+  const samples = Array.from({ length: 101 }, (_, i) => i / 100);
+  assert.deepEqual(samples.map(t => pairingAttentionFrame(t)), [...samples].reverse().map(t => pairingAttentionFrame(t)).reverse());
+  assert.throws(() => pairingAttentionFrame(NaN));
+});
 
 test('measured discourse edges hold reading endpoints and scrub reversibly', () => {
   const landings = [100, 800, 1600, 2150, 3100];

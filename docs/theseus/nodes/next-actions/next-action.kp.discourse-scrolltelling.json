@@ -4,7 +4,7 @@
   "title": "Compare discourse-guided scrolling with the dot player",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: split-view reuse revision ready for visual review",
+  "summary": "HUMAN_CHECKPOINT: one pairing attention card ready; no generalization to further steps",
   "sourceRefs": [
     {
       "kind": "file",
@@ -96,6 +96,46 @@
       "scope": "delivery",
       "checkedAt": "2026-10-01T17:47:40.449Z",
       "notes": "94.44 KB JS gzip and 15.09 KB CSS excluding fonts; shared scroll machinery adds about 4 KB JS over initial local-handler build"
+    },
+    {
+      "command": "npm run test:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T18:03:24.882Z",
+      "notes": "16 tests including read/watch/move/inspect phases and reduced-motion endpoints"
+    },
+    {
+      "command": "npm run visual:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T18:03:26.048Z",
+      "notes": "Six tests including full-screen card, equation position, synchronized interactive scrubber, reverse, phone and preserved split/detour behavior"
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-10-01T18:03:26.752Z"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-10-01T18:03:27.389Z"
+    },
+    {
+      "command": "npm run build:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "delivery",
+      "checkedAt": "2026-10-01T18:03:28.026Z",
+      "notes": "Lazy attention adapter 1.88 KB JS gzip plus 0.59 KB CSS; no shared renderer changes"
+    },
+    {
+      "command": "npm run visual:dot-passage",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-01T18:03:43.968Z",
+      "notes": "All eleven standalone dot checks pass"
     }
   ]
 }
