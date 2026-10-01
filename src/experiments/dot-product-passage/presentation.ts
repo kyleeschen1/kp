@@ -75,15 +75,18 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     work.style.transform = "none";
     reset(); layer.replaceChildren(); owners.length = 0;
     // Bracket paint encloses measured entries, not the font's outer line box.
-    // One symmetric padding rule handles both row and column presentations.
+    // Retain the native enclosure's roomy horizontal padding while centering
+    // its paint on the entries rather than inheriting asymmetric font bearings.
     for (const vector of Object.values(vectors)) {
       const outer = vector.getBoundingClientRect();
       const entries = [...vector.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => node.getBoundingClientRect());
       const padding = parseFloat(getComputedStyle(vector).fontSize) * .4;
+      const left = Math.min(...entries.map(r => r.left)), right = Math.max(...entries.map(r => r.right));
+      const horizontalPadding = (outer.width - (right - left)) / 2 - parseFloat(getComputedStyle(vector).fontSize) * .12;
       vector.style.setProperty("--dot-bracket-top", `${Math.min(...entries.map(r => r.top)) - outer.top - padding}px`);
       vector.style.setProperty("--dot-bracket-bottom", `${outer.bottom - Math.max(...entries.map(r => r.bottom)) - padding}px`);
-      vector.style.setProperty("--dot-bracket-left", `${Math.min(...entries.map(r => r.left)) - outer.left - padding}px`);
-      vector.style.setProperty("--dot-bracket-right", `${outer.right - Math.max(...entries.map(r => r.right)) - padding}px`);
+      vector.style.setProperty("--dot-bracket-left", `${left - outer.left - horizontalPadding}px`);
+      vector.style.setProperty("--dot-bracket-right", `${outer.right - right - horizontalPadding}px`);
     }
     // Keep addition in place while only the multiplication terms evaluate.
     for (const pair of passage.dot.pairs) {

@@ -416,6 +416,15 @@ are DOM geometry checks, not a claim of raster-ink optical centering. Initial
 and multiplication frames were inspected; three browser tests, four unit tests,
 typecheck and build pass (entry 6.69 KB gzip).
 
+September 30, padding restoration: retain the native enclosure's former horizontal
+extent while centering it on the entry bounds. The prior centering repair had
+also tightened the horizontal padding to the vertical .4em inset; that aesthetic
+change was unwanted. Horizontal padding now derives from native enclosure width
+and the previous .12em edge inset, applied symmetrically. Depth alternatives are
+discussion only: the color exchange primarily suggests attention transfer;
+contact shadows and opaque occlusion are candidates for a future face-on depth
+pass, not newly implemented or approved treatments.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
