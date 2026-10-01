@@ -654,6 +654,12 @@ landing and during the hold (within .1px). Five browser tests, four unit tests
 and the scoped build pass. This is bounded geometry evidence, not a claim of
 renderer-wide pixel-identical paint.
 
+September 30, constant dark background: source and page surfaces now share the
+same charcoal background throughout playback. Context opacity belongs only to
+the source notation, not its panel. The dimming slider preserves the background
+and focused-token brightness across its full range; all five scoped browser
+tests pass. Existing layout, timing and token handoff checks remain intact.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

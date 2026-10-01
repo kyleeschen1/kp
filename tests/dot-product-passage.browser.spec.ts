@@ -42,7 +42,8 @@ test("unfocused dimming can be tuned without seeking or pausing playback", async
   await expect(tuning).toHaveValue("60");
   for (const value of [0, 40, 70, 100]) {
     await tuning.fill(String(value));
-    expect(await page.locator(".dot-plane-source").evaluate(node => Number(getComputedStyle(node).opacity))).toBeCloseTo(1 - value / 100, 4);
+    await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
+    await expect(page.locator(".dot-plane-source")).toHaveCSS("background-color", "rgb(32, 34, 34)");
     const fill = await page.locator(".dot-plane-working").evaluate(node => (node as HTMLElement).style.getPropertyValue("--dot-front-fill"));
     expect(fill).toBe("0%");
     expect(await page.locator(".dot-inputs").evaluate(node => Number(getComputedStyle(node).opacity))).toBeCloseTo(1 - value / 100, 4);
@@ -53,7 +54,7 @@ test("unfocused dimming can be tuned without seeking or pausing playback", async
   await page.getByRole("button", { name: "Play", exact: true }).click();
   await tuning.fill("30");
   await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
-  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "0.7");
+  await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "0.7");
   await expect(page.locator("[data-dim-value]")).toHaveText("30%");
 });
 
@@ -254,7 +255,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.m41, y: m.m42 };
   });
   expect(backingOffset).toEqual({ x: 0, y: 0 });
-  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "0.4");
+  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
   await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "0.4");
   const backScale = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
   expect(backScale).toBeCloseTo(1, 4);

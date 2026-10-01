@@ -70,7 +70,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     if (disposed) return;
     // Measure in plane-local coordinates; perspective belongs only to display.
     stage.style.transform = "none";
-    const sourceProperties = ["--dot-back-scale", "--dot-back-opacity"];
+    const sourceProperties = ["--dot-back-scale", "--dot-context-opacity"];
     const sourceStyles = sourceProperties.map(key => [key, stage.style.getPropertyValue(key)] as const);
     for (const key of sourceProperties) stage.style.setProperty(key, "1");
     const work = stage.querySelector<HTMLElement>(".dot-work")!;
@@ -160,7 +160,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     // The surface shares the entries' depth, without owning their semantic paint.
     const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
     stage.style.setProperty("--dot-back-scale", "1");
-    stage.style.setProperty("--dot-back-opacity", String(1 - dimUnfocused * planeLift));
+    stage.style.setProperty("--dot-context-opacity", String(1 - dimUnfocused * planeLift));
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
     // Source context and the working expression are separated by layout.
     workingPlane.style.opacity = planeLift > 0 ? "1" : "0";

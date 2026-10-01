@@ -8,16 +8,16 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-stage .katex, .dot-static .katex, [data-kp-dot-key^="syntax-"] { font-weight: 400; -webkit-text-stroke-width: 0; }
 .dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
-.dot-stage, .dot-static { --dot-syntax-ink: #aeb1b1; --dot-surface-paper: #292b2b; }
+.dot-stage, .dot-static { --dot-syntax-ink: #aeb1b1; --dot-surface-paper: var(--kp-st-paper); }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
 .dot-stage { transform-style: preserve-3d; }
 .dot-work { transform: translateZ(70px); }
 .dot-material { transform-style: preserve-3d; }
 .dot-plane { position: absolute; inset: 20px 18%; border: 0; background: var(--dot-surface-paper); pointer-events: none; }
-.dot-plane-source { transform: translateZ(-1px) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); }
+.dot-plane-source { transform: translateZ(-1px) scale(var(--dot-back-scale, 1)); }
 .dot-plane-working { background: color-mix(in srgb, var(--dot-surface-paper) var(--dot-front-fill, 0%), transparent); }
 .dot-inputs [data-kp-dot-key], .dot-work { text-shadow: 0 0 .5px rgb(0 0 0 / .04); }
-.dot-inputs { position: absolute; top: 30%; transform: translateY(-50%) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
+.dot-inputs { position: absolute; top: 30%; transform: translateY(-50%) scale(var(--dot-back-scale, 1)); opacity: var(--dot-context-opacity, 1); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 /* KaTeX retains enclosure layout and MathML. One structural paint treatment
    replaces its short font brackets and tall SVG brackets without double paint. */
 .dot-inputs [data-dot-vector] { position: relative; display: inline-block; --dot-bracket-stroke: .12em; }
