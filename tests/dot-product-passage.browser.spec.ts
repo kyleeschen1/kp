@@ -82,12 +82,12 @@ test("signed dot passage preserves references through pairing, products and sum"
   }
   await page.locator(".dot-inputs").evaluate(node => { (node as HTMLElement).style.color = ""; });
   for (const delimiter of await page.locator(".dot-inputs :is(.mopen, .mclose)").all()) await expect(delimiter).toHaveCSS("visibility", "hidden");
-  await expect(page.locator('[data-kp-dot-key="left-0"] .mord')).toHaveCSS("font-weight", "700");
+  await expect(page.locator('[data-kp-dot-key="left-0"] .mord')).toHaveCSS("font-weight", "400");
   const elementSize = await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
   const expressionSize = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
   expect(elementSize).toBe(expressionSize);
   const negative = page.locator('[data-kp-dot-key="pair-left-1"] .dot-negative-sign');
-  await expect(negative).toHaveCSS("font-weight", "700");
+  await expect(negative).toHaveCSS("font-weight", "400");
   const tokenInk = await page.locator('[data-kp-dot-key="pair-left-1"]').evaluate(node => getComputedStyle(node).color);
   await expect(negative).toHaveCSS("color", tokenInk);
   const signRatio = await negative.evaluate(node => {
@@ -109,8 +109,8 @@ test("signed dot passage preserves references through pairing, products and sum"
     expect(Math.abs(offset.x)).toBeLessThan(.5);
     expect(Math.abs(offset.y)).toBeLessThan(.5);
   }
-  await expect(page.locator('[data-kp-dot-key="syntax-multiply-0"]')).toHaveCSS("font-weight", "700");
-  await expect(page.locator(".dot-products .dot-plus .katex").first()).toHaveCSS("font-weight", "700");
+  await expect(page.locator('[data-kp-dot-key="syntax-multiply-0"]')).toHaveCSS("font-weight", "400");
+  await expect(page.locator(".dot-products .dot-plus .katex").first()).toHaveCSS("font-weight", "400");
   const inputBounds = async (side: string) => page.locator(`[data-kp-dot-key^="${side}-"]`).evaluateAll(nodes => nodes.map(node => {
     const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
   }));
@@ -164,17 +164,17 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS("color", nativeInk);
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
-  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "700");
+  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "400");
   const fontsSession = await page.context().newCDPSession(page);
   await fontsSession.send("DOM.enable");
   await fontsSession.send("CSS.enable");
   const fontDocument = await fontsSession.send("DOM.getDocument");
   for (const selector of ['[data-kp-dot-key="left-0"] .mord', '[data-occurrence="pair-left-0"] .mord', '[data-kp-dot-key="syntax-multiply-0"] .mbin', '.dot-products .dot-plus .mord']) {
-    await expect(page.locator(selector).first()).toHaveCSS("-webkit-text-stroke-width", "0.3px");
+    await expect(page.locator(selector).first()).toHaveCSS("-webkit-text-stroke-width", "0px");
     const { nodeId } = await fontsSession.send("DOM.querySelector", { nodeId: fontDocument.root.nodeId, selector });
     const { fonts } = await fontsSession.send("CSS.getPlatformFontsForNode", { nodeId });
     expect(fonts.length, selector).toBeGreaterThan(0);
-    for (const font of fonts) expect(font.postScriptName, `${selector}: ${JSON.stringify(fonts)}`).toContain("Bold");
+    for (const font of fonts) expect(font.postScriptName, `${selector}: ${JSON.stringify(fonts)}`).not.toContain("Bold");
   }
   await fontsSession.detach();
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();

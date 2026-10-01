@@ -624,6 +624,12 @@ width for those four owners, alongside constant-size handoffs and controls.
 Four browser tests and build pass; the lift capture was inspected. This is an
 optical-weight adjustment, not a claim that platform antialiasing is identical.
 
+September 30, regular-weight math: at the user's request, remove the bold math
+override and added optical stroke. Source, moving and result tokens plus operators
+use regular weight; SteelBlue focus, beige surfaces, dimming and structural
+bracket strokes remain. All four scoped browser tests pass, including regular
+platform-font selection and zero text stroke for native and moving owners.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
