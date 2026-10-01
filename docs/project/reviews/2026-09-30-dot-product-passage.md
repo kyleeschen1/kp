@@ -555,6 +555,17 @@ fixed grey was already beneath the veil, not bypassing it. Inheriting the curren
 dark context ink actually darkens source brackets slightly. This isolates the
 ownership experiment and does not claim to resolve their visual dominance.
 
+September 30, restore coordinated source retreat: user identifies the earlier
+shrinking/translucent card as the strongest treatment. Source surface and vector
+layout again ease together to 94% scale and 22% opacity while foreground tokens
+lift at constant size. Back panel opacity replaces the veil slider with a 22%
+default; the receiving paper uses a light 30% fill introduced smoothly during
+lift, not a separately tunable wash. Glow stays off by default. Current typography,
+centered/padded enclosures, inherited source ink and semantic identities remain.
+Four browser tests, four unit tests and build pass (entry 6.96 KB gzip); the
+multiplication capture was inspected. This restores the specific retreat
+relationship without reverting the intervening typography and geometry fixes.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

@@ -260,6 +260,13 @@
       "scope": "Focused glyph halo with live strength control",
       "checkedAt": "2026-10-01T01:12:54.894Z",
       "notes": "Four browser tests, four unit tests, typecheck and build pass. Strength zero/full/intermediate, unchanged stage-relative geometry, native sign inheritance, shadow isolation and live playback tuning checked. Multiplication screenshot inspected; entry 6.96 KB gzip."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Restored coordinated source card retreat",
+      "checkedAt": "2026-10-01T01:23:57.521Z",
+      "notes": "Four browser tests, four unit tests, typecheck and build pass. Source scale/opacity coordination, live back tuning, fixed active token size and reverse behavior checked. Multiplication capture inspected; entry 6.96 KB gzip."
     }
   ]
 }
