@@ -46,7 +46,7 @@ test("unfocused dimming can be tuned without seeking or pausing playback", async
     const fill = await page.locator(".dot-plane-working").evaluate(node => (node as HTMLElement).style.getPropertyValue("--dot-front-fill"));
     expect(fill).toBe("0%");
     expect(await page.locator(".dot-inputs").evaluate(node => Number(getComputedStyle(node).opacity))).toBeCloseTo(1 - value / 100, 4);
-    await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("color", "rgb(32, 32, 32)");
+    await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("color", "rgb(70, 130, 180)");
     await expect(page.locator("[data-dim-value]")).toHaveText(`${value}%`);
     await expect(page.getByRole("slider", { name: "Animation position" })).toHaveValue("0.25");
   }
@@ -159,7 +159,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(await frontAlpha()).toBe(0);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
-  expect(nativeInk).toBe("rgb(32, 32, 32)");
+  expect(nativeInk).toBe("rgb(70, 130, 180)");
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("-webkit-text-stroke-color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS("color", nativeInk);
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
@@ -275,7 +275,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   for (const progress of [.25, .5, .75, 1]) {
     await slider.fill(String(progress));
     const key = progress === .25 ? "pair-left-0" : progress === 1 ? "sum" : "product-0";
-    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(32, 32, 32)");
+    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(70, 130, 180)");
     for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(70, 70, 70)");
   }
   await slider.fill("0");

@@ -606,6 +606,12 @@ with the same bold face, keeping constant-size handoffs. Grey active syntax,
 faint frontal shadows and zero-default glow remain. This does not roll out a
 global renderer policy beyond the reviewed dot-passage experiment.
 
+September 30, bold SteelBlue focus trial: focused tokens now use #4682B4 with
+the current bold face. Beige surfaces, neutral syntax, inherited source bracket
+ink, dimming control and faint frontal shadows are retained. Negative signs and
+derived results share the same beat-driven focus color; reverse restores neutral
+initial matrices. This revisits SteelBlue with the newer heavier typography.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

@@ -44,7 +44,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-paint, .dot-shadow { position: absolute; left: 0; top: 0; color: var(--kp-st-ink); }
 .dot-paint, .dot-shadow { text-shadow: none; }
 .dot-shadow { color: #000; pointer-events: none; }
-.dot-stage [data-dot-focused] { text-shadow: var(--dot-focused-shadow); }
+.dot-stage [data-dot-focused] { color: #4682b4; text-shadow: var(--dot-focused-shadow); }
 .dot-stage .dot-paint[data-dot-focused] { text-shadow: var(--dot-moving-glow); }
 .dot-static { overflow-x: auto; }
 .dot-tuning output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
