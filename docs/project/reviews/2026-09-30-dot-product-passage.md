@@ -597,6 +597,15 @@ No halo is enabled by this change. Dimming and faint frontal shadows remain.
 The focused-color browser assertions cover intermediate/result states and reverse
 restoration to neutral initial matrices.
 
+September 30, bold neutral tokens: user requests thicker tokens and a return to
+dimming as the consistent emphasis treatment. All native stage/static math uses
+the actual bold KaTeX face, with the former .2px synthetic stroke removed. Focused
+tokens return to neutral ink; the Dim unfocused control remains the shared
+context treatment within this exemplar. Source/material geometry is measured
+with the same bold face, keeping constant-size handoffs. Grey active syntax,
+faint frontal shadows and zero-default glow remain. This does not roll out a
+global renderer policy beyond the reviewed dot-passage experiment.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
