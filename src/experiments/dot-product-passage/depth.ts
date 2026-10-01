@@ -5,7 +5,7 @@ export interface DotDepthSettings {
   readonly backgroundScale: 1 | .98 | .95;
   readonly reducedMotion: boolean;
 }
-export const defaultDotDepth: DotDepthSettings = Object.freeze({ backgroundOpacity: .8, backgroundScale: .98, reducedMotion: false });
+export const defaultDotDepth: DotDepthSettings = Object.freeze({ backgroundOpacity: .4, backgroundScale: .98, reducedMotion: false });
 const smooth = (p: number) => { const t = Math.max(0, Math.min(1, p)); return t * t * t * (t * (t * 6 - 15) + 10); };
 
 /** Presentation-group depth is separate from each bracket's presence and each

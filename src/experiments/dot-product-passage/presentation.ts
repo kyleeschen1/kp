@@ -148,9 +148,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage, depthS
     const tilt = smooth((frame.local - .15) / .85);
     const opening = smooth(frame.local / .7);
     for (const side of ["left", "right"] as const) {
-      // Brackets withdraw with the pivot, independently of the material tokens.
-      // Sampling the same phase keeps partial fades identical on reverse/seek.
-      vectors[side].style.opacity = String(frame.index === 0 ? 1 : frame.index === 1 ? 1 - tilt : 0);
+      // Retain the recessed source through pairing so depth can be read before
+      // withdrawal. Fade during operator introduction, before multiplication.
+      vectors[side].style.opacity = String(frame.index <= 1 ? 1 : frame.index === 2 ? 1 - smooth(frame.local / .35) : 0);
       if (frame.index > 0) {
         for (const pair of passage.dot.pairs) {
           const original = requireNative(`${side}-${pair.index}`);

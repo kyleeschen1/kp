@@ -22,7 +22,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div>
     <div class="matrix-controls" aria-label="Depth comparison">
-      <label>Background opacity <input data-background-opacity aria-label="Background opacity" type="range" min="0" max="100" step="1" value="80"><output data-opacity-value>80%</output></label>
+      <label>Background opacity <input data-background-opacity aria-label="Background opacity" type="range" min="0" max="100" step="1" value="${defaultDotDepth.backgroundOpacity * 100}"><output data-opacity-value>${defaultDotDepth.backgroundOpacity * 100}%</output></label>
       <label>Background scale <select data-background-scale aria-label="Background scale"><option value="1">100% · no lift</option><option value="0.98" selected>98% · subtle</option><option value="0.95">95% · stronger</option></select></label>
     </div>
     </section>

@@ -1,5 +1,21 @@
 # Dot passage: group depth and lighter delimiters
 
+## Current revision: stronger separation
+
+The user found the 80% treatment too weak and approved trying 35–45% opacity
+with the brackets retained longer. The default is now **40% opaque**; foreground
+material remains fully opaque. Brackets retain their presence through lift,
+pivot and the paired endpoint, then fade during operator introduction before
+multiplication. Background recession (98%) and foreground lift (up to 103%) are
+unchanged so this comparison isolates contrast and withdrawal timing. Slider
+markup now derives its default from the same settings object as the renderer.
+
+`npm run test:dot-passage` and `npm run visual:dot-passage` check retained bracket
+presence with 40% group opacity, opaque moving tokens, delayed continuous
+withdrawal, reverse/seek restoration and preserved geometry/evaluation.
+
+## Initial candidate
+
 The user approved a comparison of background recession and foreground lift,
 requested the 80% background-opacity setting, removal of separate delimiter
 color, and thinner brackets. They clarified that the opacity control was a

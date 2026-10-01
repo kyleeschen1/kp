@@ -7,19 +7,21 @@ test('depth controls change whole groups while preserving endpoint and reverse p
   const timeline = page.getByRole('slider', { name: 'Animation position' });
   const opacity = page.getByRole('slider', { name: 'Background opacity' });
   const scale = page.getByRole('combobox', { name: 'Background scale' });
-  await expect(opacity).toHaveValue('80'); await expect(scale).toHaveValue('0.98');
+  await expect(opacity).toHaveValue('40'); await expect(scale).toHaveValue('0.98');
   await timeline.fill('0.125');
-  await expect(page.locator('.dot-inputs')).toHaveCSS('opacity', '0.8');
+  await expect(page.locator('.dot-inputs')).toHaveCSS('opacity', '0.4');
+  for (const bracket of await page.locator('[data-dot-vector]').all()) await expect(bracket).toHaveCSS('opacity', '1');
+  for (const token of await page.locator('.dot-paint').all()) await expect(token).toHaveCSS('opacity', '1');
   await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '0.98');
   for (const group of ['.dot-work', '.dot-material']) await expect(page.locator(group)).toHaveCSS('scale', '1.03');
   const poses = () => page.locator('.dot-stage [style]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
   const held = await poses();
   await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
   expect(await poses()).toEqual(held);
-  await page.locator('.matrix-card').screenshot({ path: info.outputPath('depth-80-98.png') });
+  await page.locator('.matrix-card').screenshot({ path: info.outputPath('depth-40-98.png') });
   await opacity.fill('20'); await expect(page.locator('.dot-inputs')).toHaveCSS('opacity', '0.2');
   await scale.selectOption('0.95'); await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '0.95');
-  await opacity.fill('80'); await scale.selectOption('0.98');
+  await opacity.fill('40'); await scale.selectOption('0.98');
   await page.setViewportSize({ width: 1100, height: 900 });
   await expect(page.locator('.dot-material')).toHaveCSS('scale', '1.03');
   await timeline.fill('0.25'); await expect(page.locator('.dot-material')).toHaveCSS('scale', '1');
@@ -34,7 +36,7 @@ test('depth controls change whole groups while preserving endpoint and reverse p
   await expect(page.locator('.dot-material')).toHaveCSS('scale', '1');
 });
 
-test("column rises before pivoting as one axis and brackets fade through the turn", async ({ page }, info) => {
+test("column pivots as one axis and brackets withdraw only after pairing", async ({ page }, info) => {
   await page.goto("/experiments/dot-product-passage/");
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
   // Isolate the accepted path from the independently tested depth projection.
@@ -54,14 +56,14 @@ test("column rises before pivoting as one axis and brackets fade through the tur
     expect(source[i]!.y - lifted[i]!.y).toBeCloseTo(source[0]!.y - lifted[0]!.y, 1);
   }
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("column-lift.png") });
-  for (const [progress, opacity] of [[.0374, "1"], [.25, "0"], [.0374, "1"], [0, "1"]] as const) {
+  for (const [progress, opacity] of [[.0374, "1"], [.25, "1"], [.34, "0"], [.25, "1"], [0, "1"]] as const) {
     await timeline.fill(String(progress));
     await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "1");
     for (const bracket of await page.locator("[data-dot-vector]").all()) await expect(bracket).toHaveCSS("opacity", opacity);
   }
   const opacity = () => page.locator('[data-dot-vector]').evaluateAll(nodes => nodes.map(node => Number(getComputedStyle(node).opacity)));
   let previous = 1;
-  for (const progress of [.05, .09, .14, .19, .23]) {
+  for (const progress of [.26, .275, .29, .31, .33]) {
     await timeline.fill(String(progress));
     const held = await opacity();
     expect(held[0]).toBeGreaterThan(0); expect(held[0]).toBeLessThan(previous);
@@ -289,11 +291,11 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(bracketScale.x).toBe(1); expect(bracketScale.y).toBe(1);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("lift-and-turn.png") });
   const fading = Number(await page.locator('[data-dot-vector="right"]').evaluate(node => getComputedStyle(node).opacity));
-  expect(fading).toBeGreaterThan(0); expect(fading).toBeLessThan(1);
+  expect(fading).toBe(1);
   await slider.fill("0.2");
   for (const bracket of await page.locator('[data-dot-vector]').all()) {
     const later = Number(await bracket.evaluate(node => getComputedStyle(node).opacity));
-    expect(later).toBeGreaterThan(0); expect(later).toBeLessThan(fading);
+    expect(later).toBe(1);
   }
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
   await slider.fill("0.2499");
