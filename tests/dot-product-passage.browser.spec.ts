@@ -1,6 +1,41 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test("column rises before pivoting as one axis and brackets vanish at the turn", async ({ page }, info) => {
+  await page.goto("/experiments/dot-product-passage/");
+  await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
+  await expect(page.getByRole("slider", { name: "Dim unfocused" })).toHaveCount(0);
+  const timeline = page.getByRole("slider", { name: "Animation position" });
+  const centers = (selector: string) => page.locator(selector).evaluateAll(nodes => nodes.map(node => {
+    const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+  }));
+  const source = await centers('[data-kp-dot-key^="right-"]');
+  await timeline.fill("0.03");
+  const lifted = await centers('[data-occurrence^="pair-right-"]');
+  for (let i = 0; i < source.length; i++) {
+    expect(lifted[i]!.x).toBeCloseTo(source[i]!.x, 1);
+    expect(lifted[i]!.y).toBeLessThan(source[i]!.y);
+    expect(source[i]!.y - lifted[i]!.y).toBeCloseTo(source[0]!.y - lifted[0]!.y, 1);
+  }
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("column-lift.png") });
+  for (const [progress, opacity] of [[.0374, "1"], [.0376, "0"], [.25, "0"], [.0374, "1"], [0, "1"]] as const) {
+    await timeline.fill(String(progress));
+    await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "1");
+    for (const bracket of await page.locator("[data-dot-vector]").all()) await expect(bracket).toHaveCSS("opacity", opacity);
+  }
+  for (const progress of [.07, .12, .18, .22]) {
+    await timeline.fill(String(progress));
+    const [a, b, c] = await centers('[data-occurrence^="pair-right-"]');
+    const dx = c!.x - a!.x, dy = c!.y - a!.y;
+    expect(Math.abs(dx * (b!.y - a!.y) - dy * (b!.x - a!.x)) / Math.hypot(dx, dy)).toBeLessThan(.1);
+    for (const token of await page.locator('[data-occurrence^="pair-right-"]').all()) {
+      const rotation = await token.evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).b);
+      expect(rotation).toBe(0);
+    }
+    await page.locator(".matrix-card").screenshot({ path: info.outputPath(`column-pivot-${progress}.png`) });
+  }
+});
+
 test("two players share a renderer while retaining independent state and identity", async ({ page }, info) => {
   await page.goto("/experiments/dot-product-passage/?compare=1");
   const first = page.locator("#dot-player"), second = page.locator("#dot-player-second");
@@ -14,9 +49,6 @@ test("two players share a renderer while retaining independent state and identit
   expect(await second.locator(".dot-stage").innerHTML()).toBe(secondInitial);
   await second.getByRole("combobox", { name: "Milestone" }).selectOption("4");
   await expect(second.locator('[data-kp-dot-key="sum"]')).toHaveText("−36");
-  await second.getByRole("slider", { name: "Dim unfocused" }).fill("90");
-  await expect(second.locator(".dot-inputs")).toHaveCSS("opacity", "0.1");
-  await expect(first.locator(".dot-inputs")).toHaveCSS("opacity", "0.4");
   const firstIds = await first.locator("[data-source-id]").evaluateAll(nodes => nodes.map(n => n.getAttribute("data-source-id")));
   const secondIds = await second.locator("[data-source-id]").evaluateAll(nodes => nodes.map(n => n.getAttribute("data-source-id")));
   expect(firstIds.some(id => secondIds.includes(id))).toBe(false);
@@ -36,27 +68,6 @@ test("two players share a renderer while retaining independent state and identit
   await first.getByRole("combobox", { name: "Milestone" }).selectOption("1");
   await expect(page.locator("html")).toHaveCSS("background-color", "rgb(32, 34, 34)");
   await page.screenshot({ path: info.outputPath("two-players.png"), fullPage: true });
-});
-
-test("unfocused dimming can be tuned without seeking or pausing playback", async ({ page }) => {
-  await page.goto("/experiments/dot-product-passage/");
-  await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
-  await page.getByRole("combobox", { name: "Milestone" }).selectOption("1");
-  const tuning = page.getByRole("slider", { name: "Dim unfocused" });
-  await expect(tuning).toHaveValue("60");
-  for (const value of [0, 40, 70, 100]) {
-    await tuning.fill(String(value));
-    await expect(page.locator(".dot-player")).toHaveCSS("background-color", "rgb(32, 34, 34)");
-    expect(await page.locator(".dot-inputs").evaluate(node => Number(getComputedStyle(node).opacity))).toBeCloseTo(1 - value / 100, 4);
-    await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("color", "rgb(255, 250, 240)");
-    await expect(page.locator("[data-dim-value]")).toHaveText(`${value}%`);
-    await expect(page.getByRole("slider", { name: "Animation position" })).toHaveValue("0.25");
-  }
-  await page.getByRole("button", { name: "Play", exact: true }).click();
-  await tuning.fill("30");
-  await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
-  await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "0.7");
-  await expect(page.locator("[data-dim-value]")).toHaveText("30%");
 });
 
 test("a player can be disposed and remounted without retaining a clock or handlers", async ({ page }) => {
@@ -103,8 +114,8 @@ test("departure preserves every source token's glyph geometry", async ({ page })
     }
   }
   // The same token box must also settle exactly onto its destination, including
-  // signed entries, and remain stationary during the recognition hold.
-  for (const progress of ["0.21", "0.2499"]) {
+  // signed entries, immediately before native ownership resumes.
+  for (const progress of ["0.2499"]) {
     await timeline.fill(progress);
     for (const side of ["left", "right"]) for (let i = 0; i < 3; i++) {
       const target = await page.locator(`[data-kp-dot-key="pair-${side}-${i}"]`).boundingBox();
@@ -115,9 +126,6 @@ test("departure preserves every source token's glyph geometry", async ({ page })
     }
     for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("opacity", "0");
   }
-  const inputs = await page.locator(".dot-inputs").boundingBox();
-  const work = await page.locator(".dot-work").boundingBox();
-  expect(work!.y - (inputs!.y + inputs!.height)).toBeGreaterThan(20);
   await expect(page.locator(".dot-plane, .dot-shadow, [data-glow]")).toHaveCount(0);
 });
 
@@ -191,22 +199,6 @@ test("signed dot passage preserves references through pairing, products and sum"
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
   const slider = page.getByRole("slider", { name: "Animation position" });
-  let lastDim = 0;
-  for (const progress of [.001, .01, .025, .05]) {
-    await slider.fill(String(progress));
-    const dim = await page.locator(".dot-inputs").evaluate(node => 1 - Number(getComputedStyle(node).opacity));
-    expect(dim).toBeGreaterThan(lastDim);
-    if (progress === .001) expect(dim).toBeLessThan(.001);
-    lastDim = dim;
-    for (const copy of await page.locator(".dot-paint").all()) {
-      const size = await copy.evaluate(node => {
-        const matrix = new DOMMatrixReadOnly(getComputedStyle(node).transform);
-        return { x: matrix.m11, y: matrix.m22 };
-      });
-      expect(size).toEqual({ x: 1, y: 1 });
-    }
-  }
-  expect(lastDim).toBeCloseTo(.6, 4);
   await slider.fill("0");
   await slider.fill("0.06");
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
@@ -228,7 +220,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   }
   await fontsSession.detach();
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
-  expect(lifted!.y + lifted!.height / 2).toBeGreaterThan(column[0]!.y);
+  expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
   await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
@@ -240,7 +232,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
   expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 1);
   expect(liftedSize!.height).toBeCloseTo(originalSize!.height, 1);
-  await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "0.4");
+  await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "1");
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.a, y: m.d };
@@ -249,24 +241,11 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(bracketScale.x).toBe(1); expect(bracketScale.y).toBe(1);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("lift-and-turn.png") });
   const fading = Number(await page.locator('[data-dot-vector="right"]').evaluate(node => getComputedStyle(node).opacity));
-  expect(fading).toBe(1);
+  expect(fading).toBe(0);
   await slider.fill("0.2");
-  await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "1");
-  await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "1");
+  await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "0");
+  await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "0");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
-  // Every entry travels monotonically downward to its matching pair slot.
-  for (const p of [.12, .15, .18, .21]) {
-    await slider.fill(String(p));
-    for (const pair of passage.dot.pairs) {
-      for (const side of ["left", "right"]) {
-        const source = await page.locator(`[data-kp-dot-key="${side}-${pair.index}"]`).boundingBox();
-        const copy = await page.locator(`[data-occurrence="pair-${side}-${pair.index}"]`).boundingBox();
-        const target = await page.locator(`[data-kp-dot-key="pair-${side}-${pair.index}"]`).boundingBox();
-        expect(copy!.y).toBeGreaterThan(source!.y);
-        expect(copy!.y).toBeLessThanOrEqual(target!.y + .1);
-      }
-    }
-  }
   await slider.fill("0.2499");
   for (const pair of passage.dot.pairs) {
     const copy = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();

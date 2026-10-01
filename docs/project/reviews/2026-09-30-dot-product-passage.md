@@ -700,6 +700,23 @@ inspected. Three numerical terms remain the supported scope; no rectangular
 integration, viewport suspension, global renderer promotion or scale claim is
 made by this proof.
 
+October 1, restore rise-and-pivot at the user's request: recover the measured
+shared-pivot column trajectory from `235358b90` and its centered source/work
+layout. The column initially rises without rotation, then tilts as one axis
+while the row opens; individual glyphs remain upright. Brackets retain full
+opacity during the initial lift and disappear once rotation starts (15% of the
+pairing beat), with deterministic restoration on rewind. Remove bracket dimming
+and its now-unused slider. This supersedes the downward convergence and pairing
+dwell trial, not the dark theme, regular typography, native handoff repair,
+semantic source objects or reusable player extraction.
+
+Six scoped browser tests pass, including lift-before-turn, collinearity through
+the turn, bracket presence on either side of the turn boundary and rewind,
+two independent instances, disposal/remount and exact source/target handoffs.
+Four semantic unit tests and the production build pass; lift and pivot captures
+were inspected. The dot entry is 6.58 KB gzip and route CSS 14.45 KB gzip. No
+3D planes, shadows or ghost source numbers are reintroduced.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

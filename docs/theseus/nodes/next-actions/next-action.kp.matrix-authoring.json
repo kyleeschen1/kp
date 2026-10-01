@@ -288,6 +288,13 @@
       "scope": "Local player reuse cleanup",
       "checkedAt": "2026-10-01T04:12:22.635Z",
       "notes": "Six browser tests pass including independent instances, geometry continuity, disposal and remount. Four unit tests, typecheck, build, eight matrix interpretation and two matrix column browser tests also pass."
+    },
+    {
+      "command": "npm run visual:dot-passage",
+      "status": "passed",
+      "scope": "Restored rise-and-pivot exemplar",
+      "checkedAt": "2026-10-01T09:05:10.599Z",
+      "notes": "Six browser tests, four semantic unit tests, full typecheck and production build pass. New checks verify initial vertical lift, shared column axis, upright glyphs and bracket presence at pivot onset and reverse. Screenshots inspected."
     }
   ]
 }

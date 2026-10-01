@@ -65,9 +65,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   };
   const prepare = () => {
     if (disposed) return;
-    const sourceProperties = ["--dot-context-opacity"];
-    const sourceStyles = sourceProperties.map(key => [key, stage.style.getPropertyValue(key)] as const);
-    for (const key of sourceProperties) stage.style.setProperty(key, "1");
     reset(); layer.replaceChildren(); owners.length = 0;
     // Bracket paint encloses measured entries, not the font's outer line box.
     // Retain the native enclosure's roomy horizontal padding while centering
@@ -113,12 +110,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       node.dataset["sourceId"] = pair[side].id; node.dataset["occurrence"] = to;
       layer.append(node); owners.push({ node, from, to });
     }
-    for (const [key, value] of sourceStyles) stage.style.setProperty(key, value);
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
-  const render = (progress: number, dimUnfocused = .6) => {
-    if (!Number.isFinite(dimUnfocused) || dimUnfocused < 0 || dimUnfocused > 1) throw new DotPassageGap("Unfocused dimming must be between zero and one.");
+  const render = (progress: number) => {
     const frame = sample(progress);
     if (disposed) return frame;
     reset();
@@ -136,18 +131,18 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     for (const node of [...native.values(), ...owners.map(owner => owner.node)]) {
       node.toggleAttribute("data-dot-focused", focusedIds.has(node.dataset["sourceId"] ?? ""));
     }
-    // Context notation dims; the background is owned by the static player skin.
-    const context = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
-    stage.style.setProperty("--dot-context-opacity", String(1 - dimUnfocused * context));
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 4 ? "1" : "0";
     for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = "0";
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
-    // Finish travel before the pairs milestone, leaving a short recognition hold.
-    const matching = frame.index === 0 ? 0 : frame.index === 1 ? smooth(frame.local / .82) : 1;
+    // Restore the original lift-and-pivot phrase: the column rises before
+    // turning as one axis, while the row opens into the native factor slots.
+    const tilt = smooth((frame.local - .15) / .85);
+    const opening = smooth(frame.local / .7);
     for (const side of ["left", "right"] as const) {
-      vectors[side].style.opacity = "1";
+      // Brackets are present during the lift and absent once rotation begins.
+      vectors[side].style.opacity = frame.index === 0 || (frame.index === 1 && frame.local <= .15) ? "1" : "0";
       if (frame.index > 0) {
         for (const pair of passage.dot.pairs) {
           const original = requireNative(`${side}-${pair.index}`);
@@ -156,10 +151,21 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       }
     }
     for (const { node, from, to } of owners) {
+      const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
-      // Move directly from the source row/column to the lower reading line.
-      const x = source.x + (b.x - source.x) * matching;
-      const y = source.y + (b.y - source.y) * matching;
+      let x = source.x + (b.x - source.x) * opening;
+      let y = source.y + (b.y - source.y) * opening;
+      if (side === "right") {
+        // All column entries share one pivot and angle; glyphs remain upright.
+        // Measured radii interpolate to the native slots, including wider tokens.
+        const last = passage.dot.pairs.length - 1;
+        const base = points.get(`right-${last}`)!, end = points.get(`pair-right-${last}`)!;
+        const radius = (base.y - source.y) * (1 - tilt) + (end.x - b.x) * tilt;
+        const angle = -Math.PI / 2 - Math.PI / 2 * tilt;
+        const lift = (base.y - points.get("right-0")!.y) * Math.sin(Math.PI * smooth(frame.local));
+        x = base.x + (end.x - base.x) * tilt + radius * Math.cos(angle);
+        y = base.y + (end.y - base.y) * tilt - lift + radius * Math.sin(angle);
+      }
       node.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }

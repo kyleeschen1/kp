@@ -10,7 +10,7 @@
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
 .dot-stage, .dot-static { --dot-syntax-ink: #aeb1b1; }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
-.dot-inputs { position: absolute; top: 30%; transform: translateY(-50%); opacity: var(--dot-context-opacity, 1); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
+.dot-inputs { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 /* KaTeX retains enclosure layout and MathML. One structural paint treatment
    replaces its short font brackets and tall SVG brackets without double paint. */
 .dot-inputs [data-dot-vector] { position: relative; display: inline-block; --dot-bracket-stroke: .12em; }
@@ -22,7 +22,7 @@
 }
 .dot-inputs [data-dot-vector]::before { left: var(--dot-bracket-left, .12em); border-right: 0; }
 .dot-inputs [data-dot-vector]::after { right: var(--dot-bracket-right, .12em); border-left: 0; }
-.dot-work { position: absolute; top: calc(75% - 40px); left: 0; right: 0; height: 80px; }
+.dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
 .dot-inputs [data-kp-dot-key], .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
@@ -35,7 +35,6 @@
 .dot-paint { position: absolute; display: flex; left: 0; top: 0; color: var(--kp-st-ink); }
 .dot-stage [data-dot-focused] { color: var(--kp-st-focus); }
 .dot-static { overflow-x: auto; }
-.dot-tuning output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
 :root[data-matrix-layout="side"] .dot-inputs { right: 55%; gap: 1rem; }
 :root[data-matrix-layout="side"] .dot-work { left: 45%; }

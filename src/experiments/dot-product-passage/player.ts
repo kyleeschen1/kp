@@ -20,9 +20,6 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     <div class="matrix-controls"><button data-back aria-label="Previous milestone">Previous</button><button data-play>Play</button><button data-next aria-label="Next milestone">Next</button>
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div>
-    <div class="matrix-controls dot-tuning"><label for="${root.id}-dim">Dim unfocused</label>
-    <input id="${root.id}-dim" data-dim-unfocused type="range" min="0" max="100" step="1" value="60">
-    <output for="${root.id}-dim" data-dim-value>60%</output></div>
     </section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
     <details><summary>Read the calculation</summary><div class="dot-static">${renderLatexToHtml(calculationLatex(passage, true), { output: "htmlAndMathml", trust: true })}</div>
@@ -34,8 +31,6 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   const stepsOnly = () => reduced.matches || config.motion === "steps";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slider = root.querySelector<HTMLInputElement>("[data-scrub]")!;
-  const dimSlider = root.querySelector<HTMLInputElement>("[data-dim-unfocused]")!;
-  const dimValue = root.querySelector<HTMLOutputElement>("[data-dim-value]")!;
   const chooser = root.querySelector<HTMLSelectElement>("select")!;
   const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
   const back = root.querySelector<HTMLButtonElement>("[data-back]")!;
@@ -43,7 +38,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   let disposed = false, lastBeat = "";
   const render = () => {
     if (disposed) return;
-    const frame = view.render(clock.getSnapshot().progress, Number(dimSlider.value) / 100);
+    const frame = view.render(clock.getSnapshot().progress);
     slider.value = String(frame.progress); slider.setAttribute("aria-valuetext", frame.beat.cue);
     chooser.value = String(frame.index); back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
     play.textContent = clock.getStatus() === "playing" ? "Pause" : stepsOnly() ? "Next step" : frame.progress === 1 ? "Replay" : "Play";
@@ -65,11 +60,6 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     go(offset > 0 ? Math.floor(phase + 1e-8) + 1 : Math.ceil(phase - 1e-8) - 1);
   };
   slider.oninput = () => { clock.pause(); clock.seek(Number(slider.value)); };
-  dimSlider.oninput = () => {
-    dimValue.value = `${dimSlider.value}%`;
-    dimSlider.setAttribute("aria-valuetext", dimValue.value);
-    render();
-  };
   slider.onkeydown = event => {
     const target = readKpFocusDeckScrubberKeyTarget(event, clock.getSnapshot().progress * (beats.length - 1), beats.length);
     if (target !== undefined) { event.preventDefault(); go(target, false); }
@@ -100,7 +90,6 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     window.removeEventListener("hashchange", restore); document.removeEventListener("visibilitychange", visibility);
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
-    dimSlider.oninput = null;
     root.dataset["dotMounted"] = "false";
     delete root.dataset["ready"];
   };
