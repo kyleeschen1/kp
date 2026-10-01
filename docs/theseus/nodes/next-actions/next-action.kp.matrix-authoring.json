@@ -274,6 +274,13 @@
       "scope": "Plain dim-unfocused slider without retreat or veil",
       "checkedAt": "2026-10-01T01:28:11.912Z",
       "notes": "Four browser tests, four unit tests, typecheck and build pass. Live dimming at zero/intermediate/full strengths, no front wash, constant source/active scale and reverse behavior checked. Multiplication screenshot inspected."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Apparent weight of native and moving math and operators",
+      "checkedAt": "2026-10-01T01:43:36.109Z",
+      "notes": "Four browser tests, full typecheck and build pass. Chromium platform font inspection confirms Bold faces and shared 0.3px stroke for source/moving digits and multiply/plus operators. Lift screenshot inspected. No claim of identical antialiasing across platforms."
     }
   ]
 }

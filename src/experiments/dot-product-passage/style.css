@@ -4,11 +4,12 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 /* This light-mode exemplar uses actual bold font faces before geometry is measured. */
 #matrix-story :is(button, input, select, pre, code, [data-kp-focus-deck-type]) { font-weight: 600; }
 #matrix-story [data-kp-focus-deck-type="label"] { font-weight: 700; }
-/* Use the native bold face consistently before measuring source and work slots. */
-.dot-stage .katex, .dot-static .katex { font-weight: 700; -webkit-text-stroke: 0; }
+/* Native bold plus shared optical weight keeps operators and moving material
+   substantial without changing layout metrics or switching faces during motion. */
+.dot-stage .katex, .dot-static .katex { font-weight: 700; -webkit-text-stroke: .3px currentColor; }
 .dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct),
 .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct),
-.dot-plus .katex, [data-kp-dot-key^="syntax-"], .dot-negative-sign { font-weight: 700; -webkit-text-stroke: 0; }
+.dot-plus .katex, [data-kp-dot-key^="syntax-"], .dot-negative-sign { font-weight: 700; -webkit-text-stroke: .3px currentColor; }
 .dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
 .dot-stage, .dot-static { --dot-syntax-ink: #464646; --dot-surface-paper: color-mix(in srgb, var(--kp-st-paper) 94%, #806548); }

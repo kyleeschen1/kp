@@ -165,6 +165,18 @@ test("signed dot passage preserves references through pairing, products and sum"
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "700");
+  const fontsSession = await page.context().newCDPSession(page);
+  await fontsSession.send("DOM.enable");
+  await fontsSession.send("CSS.enable");
+  const fontDocument = await fontsSession.send("DOM.getDocument");
+  for (const selector of ['[data-kp-dot-key="left-0"] .mord', '[data-occurrence="pair-left-0"] .mord', '[data-kp-dot-key="syntax-multiply-0"] .mbin', '.dot-products .dot-plus .mord']) {
+    await expect(page.locator(selector).first()).toHaveCSS("-webkit-text-stroke-width", "0.3px");
+    const { nodeId } = await fontsSession.send("DOM.querySelector", { nodeId: fontDocument.root.nodeId, selector });
+    const { fonts } = await fontsSession.send("CSS.getPlatformFontsForNode", { nodeId });
+    expect(fonts.length, selector).toBeGreaterThan(0);
+    for (const font of fonts) expect(font.postScriptName, `${selector}: ${JSON.stringify(fonts)}`).toContain("Bold");
+  }
+  await fontsSession.detach();
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.

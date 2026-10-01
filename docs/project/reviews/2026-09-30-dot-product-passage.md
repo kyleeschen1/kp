@@ -612,6 +612,18 @@ ink, dimming control and faint frontal shadows are retained. Negative signs and
 derived results share the same beat-driven focus color; reverse restores neutral
 initial matrices. This revisits SteelBlue with the newer heavier typography.
 
+September 30, operator and moving-token weight: user reports insufficient boldness
+in operators and moving glyphs. Chromium platform-font inspection confirms the
+actual bold font face is already selected for source digits, moving digits,
+multiplication and addition operators; missing font-weight inheritance is not
+demonstrated. Add a shared .3px currentColor optical stroke to native bold math
+and syntax, copied into material glyphs, to strengthen apparent weight without
+changing layout metrics. Existing signed-token sizing and SteelBlue focus remain.
+The scoped browser gate now checks actual rendered font-face names and stroke
+width for those four owners, alongside constant-size handoffs and controls.
+Four browser tests and build pass; the lift capture was inspected. This is an
+optical-weight adjustment, not a claim that platform antialiasing is identical.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
