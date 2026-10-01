@@ -197,6 +197,13 @@
       "scope": "Local dot passage surface color exchange",
       "checkedAt": "2026-09-30T23:57:17.284Z",
       "notes": "Three Chromium tests, four unit tests, full typecheck and build pass. Gradual initial/intermediate/exchanged colors checked; existing semantics and opacity controls preserved. Human checkpoint remains."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Light-mode text weight and consistent row and column bracket paint",
+      "checkedAt": "2026-10-01T00:03:47.275Z",
+      "notes": "Three browser tests pass including bracket stroke equality, exclusive replacement paint and bold native/material glyph parity. Full typecheck and build pass. Initial and multiplication screenshots inspected. Global adoption remains unpromoted."
     }
   ]
 }

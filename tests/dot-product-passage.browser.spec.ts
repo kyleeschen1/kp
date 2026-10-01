@@ -24,6 +24,20 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
   const root = page.locator("#dot-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  // Short font delimiters and tall SVG delimiters must not own competing paint.
+  const brackets = await page.locator(".dot-inputs [data-dot-vector]").evaluateAll(nodes => nodes.flatMap(node =>
+    ["::before", "::after"].map(pseudo => {
+      const style = getComputedStyle(node, pseudo);
+      return { horizontal: style.borderTopWidth, vertical: pseudo === "::before" ? style.borderLeftWidth : style.borderRightWidth, color: style.borderTopColor };
+    })));
+  expect(brackets).toHaveLength(4);
+  for (const bracket of brackets) {
+    expect(bracket).toEqual(brackets[0]);
+    expect(bracket.horizontal).toBe(bracket.vertical);
+    expect(parseFloat(bracket.vertical)).toBeGreaterThan(0);
+  }
+  for (const delimiter of await page.locator(".dot-inputs :is(.mopen, .mclose)").all()) await expect(delimiter).toHaveCSS("visibility", "hidden");
+  await expect(page.locator('[data-kp-dot-key="left-0"] .mord')).toHaveCSS("font-weight", "700");
   const inputBounds = async (side: string) => page.locator(`[data-kp-dot-key^="${side}-"]`).evaluateAll(nodes => nodes.map(node => {
     const r = node.getBoundingClientRect(); return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
   }));
@@ -49,6 +63,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
+  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "700");
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.

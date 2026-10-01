@@ -364,6 +364,26 @@ intermediate and exchanged endpoint colors; all three browser tests, four unit
 tests and build pass (dot entry 6.51 KB gzip). Color strength remains provisional
 at the existing 30% front surface alpha; no broader treatment is promoted.
 
+September 30, heavier light-mode typography and uniform brackets: user requests
+heavier text generally in light mode. This passage is the first reviewable
+candidate: prose and controls use weight 600, cues and native math use 700.
+The native and moving numeric owners retain the same weight; fonts load before
+geometry measurement. Catalogue-wide light-mode adoption remains a follow-up
+after reviewing this treatment and a second caller.
+
+The previously deferred bracket mismatch now has a concrete mechanism: KaTeX
+selects a size-font glyph for the row and a constructed SVG for the column.
+This local adapter preserves KaTeX enclosure layout and MathML but hides the
+two native delimiter paints and draws structural square brackets with one
+shared .12em stroke. Display-math outer margins are excluded from the bracket
+height. Thus row and column height can differ while all horizontal and vertical
+strokes agree. This is a local replacement-paint boundary, not certification of
+the shared native KaTeX compositor. Browser regression checks enforce equal
+nonzero bracket strokes, hidden native delimiters and matching bold source and
+material glyphs; all three scoped tests, full typecheck and build pass.
+Initial and multiplication-hold screenshots were inspected. The reversible
+unit is the local stylesheet and its scoped checks; math and clocks are unchanged.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
