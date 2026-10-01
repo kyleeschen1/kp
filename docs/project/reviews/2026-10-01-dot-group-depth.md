@@ -1,5 +1,14 @@
 # Dot passage: group depth and lighter delimiters
 
+Current size control: Math size spans 20–32px and defaults to 26px. Values name
+the resulting KaTeX font size, accounting for its 1.21em multiplier. Each player
+owns its setting; changing it pauses playback, remeasures native endpoints and
+rebuilds material at the same playhead. Stage height reserves proportional room
+for the column pivot. Nine browser checks pass, including all three sizes,
+reverse, independent players and 32px/max-lift overflow and clipping checks.
+The user accepted the finer smoothing below and approved this size experiment;
+rectangular integration remains the active continuation.
+
 Typography review before rectangular integration: the user requested thinner
 KaTeX numerals/tokens. The exemplar already uses regular KaTeX at weight 400,
 with no added stroke except the deliberately strengthened negative sign.

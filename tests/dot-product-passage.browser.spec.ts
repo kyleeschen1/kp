@@ -1,11 +1,36 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test('math size remeasures native and moving tokens at the held playhead', async ({ page }, info) => {
+  await page.goto('/experiments/dot-product-passage/?compare=1');
+  const root = page.locator('#dot-player');
+  await expect(root).toHaveAttribute('data-ready', 'true');
+  const size = root.getByRole('slider', { name: 'Math size' });
+  const timeline = root.getByRole('slider', { name: 'Animation position' });
+  await expect(size).toHaveValue('26');
+  await timeline.fill('0.125');
+  for (const value of ['20', '32', '26']) {
+    await size.fill(value);
+    await expect(timeline).toHaveValue('0.125');
+    for (const selector of ['[data-kp-dot-key="left-0"] .mord', '[data-kp-dot-key="pair-left-0"] .mord', '[data-occurrence="pair-left-0"] .mord']) {
+      const actual = await root.locator(selector).evaluate(node => parseFloat(getComputedStyle(node).fontSize));
+      expect(actual).toBeCloseTo(Number(value), 2);
+    }
+    const pose = () => root.locator('.dot-paint').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
+    const held = await pose();
+    await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
+    expect(await pose()).toEqual(held);
+  }
+  await expect(page.locator('#dot-player-second').getByRole('slider', { name: 'Math size' })).toHaveValue('26');
+  await root.locator('.matrix-card').screenshot({ path: info.outputPath('math-size-26.png') });
+});
+
 test('focus lift cannot change scroll extents while narrow stages remain scrollable', async ({ page }) => {
   await page.goto('/experiments/dot-product-passage/');
   await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
   const timeline = page.getByRole('slider', { name: 'Animation position' });
   await page.getByRole('slider', { name: 'Lift height' }).fill('24');
+  await page.getByRole('slider', { name: 'Math size' }).fill('32');
   const dimensions = () => page.locator('.matrix-scroll').evaluate(node => ({
     width: node.clientWidth, height: node.clientHeight, scrollWidth: node.scrollWidth, scrollHeight: node.scrollHeight,
   }));

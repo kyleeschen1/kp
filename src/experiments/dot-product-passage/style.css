@@ -6,7 +6,9 @@
 .dot-stage .katex, .dot-static .katex { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; -webkit-text-stroke: .035em currentColor; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
-.dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
+/* The slider names the actual KaTeX size, accounting for its 1.21em default.
+   Reserve proportional vertical room so larger column pivots remain visible. */
+.dot-stage { position: relative; height: calc(var(--dot-math-size, 26px) * 16); min-width: 650px; font-size: calc(var(--dot-math-size, 26px) / 1.21); color: var(--kp-st-ink); }
 /* Transformed full-stage layers must not enlarge the outer scroll viewport.
    The stage retains its minimum width for intentional narrow-screen scrolling. */
 .dot-stage { overflow: clip; }
@@ -37,7 +39,7 @@
 /* Flex isolates the cloned token from an extra inherited prose line box. */
 .dot-paint { position: absolute; display: flex; left: 0; top: 0; color: var(--kp-st-ink); }
 .dot-stage [data-dot-focused] { color: var(--kp-st-focus); }
-.dot-static { overflow-x: auto; }
+.dot-static { overflow-x: auto; font-size: calc(var(--dot-math-size, 26px) / 1.21); }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
 :root[data-matrix-layout="side"] .dot-inputs { right: 55%; gap: 1rem; }
 :root[data-matrix-layout="side"] .dot-work { left: 45%; }

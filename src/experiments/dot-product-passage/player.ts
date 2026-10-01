@@ -15,6 +15,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   }
   root.dataset["dotMounted"] = "true";
   root.classList.add("dot-player", "matrix-player");
+  root.style.setProperty('--dot-math-size', '26px');
   root.innerHTML = `<section class="matrix-card kp-focus-deck" aria-label="Three-term dot product animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Dot product; scroll horizontally on narrow screens">${stageHtml(passage)}</div>
@@ -25,6 +26,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
       <label>Background opacity <input data-background-opacity aria-label="Background opacity" type="range" min="0" max="100" step="1" value="${defaultDotDepth.backgroundOpacity * 100}"><output data-opacity-value>${defaultDotDepth.backgroundOpacity * 100}%</output></label>
       <label>Foreground lift <select data-foreground-lift aria-label="Foreground lift"><option value="on" selected>On</option><option value="off">Off</option></select></label>
       <label>Lift height <input data-lift-height aria-label="Lift height" type="range" min="0" max="24" step="1" value="${defaultDotDepth.liftHeight}"><output data-lift-value>${defaultDotDepth.liftHeight} px</output></label>
+      <label>Math size <input data-math-size aria-label="Math size" type="range" min="20" max="32" step="1" value="26"><output data-size-value>26 px</output></label>
     </div>
     </section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
@@ -36,6 +38,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   const opacityControl = root.querySelector<HTMLInputElement>('[data-background-opacity]')!;
   const liftControl = root.querySelector<HTMLSelectElement>('[data-foreground-lift]')!;
   const heightControl = root.querySelector<HTMLInputElement>('[data-lift-height]')!;
+  const sizeControl = root.querySelector<HTMLInputElement>('[data-math-size]')!;
   const view = mountPresentation(root, passage, () => ({ ...depth, reducedMotion: reduced.matches }));
   const clock = createKpReaderTimelinePlaybackClock({ id: root.id, durationMs });
   let config = readMatrixConfig(document);
@@ -92,6 +95,12 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   const unsubscribe = clock.subscribe(render);
   const restore = () => { const i = beats.findIndex(beat => beat.id === location.hash.slice(1)); go(i < 0 ? 0 : i, false); };
   const resize = () => { clock.pause(); view.prepare(); render(); };
+  sizeControl.oninput = () => {
+    root.style.setProperty('--dot-math-size', `${sizeControl.value}px`);
+    root.querySelector('[data-size-value]')!.textContent = `${sizeControl.value} px`;
+    // Re-measure native endpoints and rebuild material at the held playhead.
+    resize();
+  };
   const stopConfig = observeMatrixConfig(document, next => { config = next; resize(); });
   const visibility = () => { if (document.hidden) { clock.pause(); render(); } };
   const motion = () => { clock.pause(); if (stepsOnly()) go(sample(clock.getSnapshot().progress).index, false); render(); };
@@ -108,6 +117,8 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
     opacityControl.oninput = heightControl.oninput = liftControl.onchange = null;
+    sizeControl.oninput = null;
+    root.style.removeProperty('--dot-math-size');
     root.dataset["dotMounted"] = "false";
     delete root.dataset["ready"];
   };
