@@ -16,9 +16,9 @@ async function mount() {
     <div class="matrix-controls"><button data-back aria-label="Previous milestone">Previous</button><button data-play>Play</button><button data-next aria-label="Next milestone">Next</button>
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div>
-    <div class="matrix-controls dot-tuning"><label for="dot-back-opacity">Back panel opacity</label>
-    <input id="dot-back-opacity" data-back-opacity type="range" min="0" max="100" step="1" value="100">
-    <output for="dot-back-opacity" data-opacity-value>100%</output></div></section>
+    <div class="matrix-controls dot-tuning"><label for="dot-background-veil">Background veil</label>
+    <input id="dot-background-veil" data-background-veil type="range" min="0" max="40" step="1" value="0">
+    <output for="dot-background-veil" data-veil-value>0%</output></div></section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
     <details><summary>Read the calculation</summary><div class="dot-static">${renderLatexToHtml(calculationLatex(passage, true), { output: "htmlAndMathml", trust: true })}</div>
     <p>The row and column change arrangement while their entries retain the same mathematical identities. Multiplication produces three new values; addition produces the final result. In real Euclidean coordinates, this pairing also represents the dot product uᵀv.</p></details>`;
@@ -29,8 +29,8 @@ async function mount() {
   const stepsOnly = () => reduced.matches || config.motion === "steps";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const slider = root.querySelector<HTMLInputElement>("[data-scrub]")!;
-  const opacitySlider = root.querySelector<HTMLInputElement>("[data-back-opacity]")!;
-  const opacityValue = root.querySelector<HTMLOutputElement>("[data-opacity-value]")!;
+  const veilSlider = root.querySelector<HTMLInputElement>("[data-background-veil]")!;
+  const veilValue = root.querySelector<HTMLOutputElement>("[data-veil-value]")!;
   const chooser = root.querySelector<HTMLSelectElement>("select")!;
   const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
   const back = root.querySelector<HTMLButtonElement>("[data-back]")!;
@@ -38,7 +38,7 @@ async function mount() {
   let disposed = false, lastBeat = "";
   const render = () => {
     if (disposed) return;
-    const frame = view.render(clock.getSnapshot().progress, Number(opacitySlider.value) / 100);
+    const frame = view.render(clock.getSnapshot().progress, Number(veilSlider.value) / 100);
     slider.value = String(frame.progress); slider.setAttribute("aria-valuetext", frame.beat.cue);
     chooser.value = String(frame.index); back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
     play.textContent = clock.getStatus() === "playing" ? "Pause" : stepsOnly() ? "Next step" : frame.progress === 1 ? "Replay" : "Play";
@@ -60,9 +60,9 @@ async function mount() {
     go(offset > 0 ? Math.floor(phase + 1e-8) + 1 : Math.ceil(phase - 1e-8) - 1);
   };
   slider.oninput = () => { clock.pause(); clock.seek(Number(slider.value)); };
-  opacitySlider.oninput = () => {
-    opacityValue.value = `${opacitySlider.value}%`;
-    opacitySlider.setAttribute("aria-valuetext", opacityValue.value);
+  veilSlider.oninput = () => {
+    veilValue.value = `${veilSlider.value}%`;
+    veilSlider.setAttribute("aria-valuetext", veilValue.value);
     render();
   };
   slider.onkeydown = event => {
@@ -94,7 +94,7 @@ async function mount() {
     window.removeEventListener("hashchange", restore); document.removeEventListener("visibilitychange", visibility);
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
-    opacitySlider.oninput = null;
+    veilSlider.oninput = null;
   };
   import.meta.hot?.dispose(dispose);
   restore(); root.setAttribute("aria-busy", "false"); root.dataset["ready"] = "true";

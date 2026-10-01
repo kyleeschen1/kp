@@ -496,6 +496,22 @@ The same beat-derived focus mapping, neutral syntax/shadows, constant token size
 and smoothly introduced translucent front are preserved. No highlight background
 or new color-exchange animation is introduced.
 
+September 30, adjustable background veil: user declines the blue focus treatment
+and approves neutral focused tokens with a beige context wash. Background veil
+replaces the back-opacity slider, ranging 0–40% and starting at zero. It controls
+the existing front surface's fill, with the same smooth lift envelope, instead
+of stacking another layer over the previous 70% wash. Rear paint remains at full
+opacity; active native/material tokens, required operation syntax and shadows
+sit above the veil. Beat-derived focus IDs remain available but no longer color
+the tokens. This projection is scoped to this exemplar's source/working layers.
+
+The render boundary rejects nonfinite or out-of-range veil settings. Browser
+checks cover zero/intermediate/maximum values, live tuning without seeking or
+pausing, neutral foreground ink, unchanged rear opacity and reversible smooth
+fill arrival. Three browser tests, four unit tests and build pass (entry 6.73 KB
+gzip). The multiplication capture at 40% was inspected. Tuning starts at zero
+after reload and remains local to the mounted example.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

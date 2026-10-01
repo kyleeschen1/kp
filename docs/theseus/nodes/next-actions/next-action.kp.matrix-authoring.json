@@ -246,6 +246,13 @@
       "scope": "Semantic token focus ink in the dot passage",
       "checkedAt": "2026-10-01T01:02:42.746Z",
       "notes": "Three browser tests, four unit tests, typecheck and build pass. Blue operands/products/result, signed-token inheritance, cloned fill/stroke, neutral syntax/shadows and reverse neutral restoration checked. Entry 6.74 KB gzip."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Live background veil and neutral foreground",
+      "checkedAt": "2026-10-01T01:09:42.270Z",
+      "notes": "Three browser tests, four unit tests, full typecheck and build pass. Veil bounds, live tuning, neutral foreground and reversible surface projection checked. Multiplication screenshot at maximum veil inspected."
     }
   ]
 }

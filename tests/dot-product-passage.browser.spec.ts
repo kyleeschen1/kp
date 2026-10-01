@@ -1,23 +1,27 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
-test("back opacity can be tuned without seeking or pausing playback", async ({ page }) => {
+test("background veil can be tuned without seeking or pausing playback", async ({ page }) => {
   await page.goto("/experiments/dot-product-passage/");
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
   await page.getByRole("combobox", { name: "Milestone" }).selectOption("1");
-  const tuning = page.getByRole("slider", { name: "Back panel opacity" });
-  await expect(tuning).toHaveValue("100");
-  for (const value of [0, 100, 40]) {
+  const tuning = page.getByRole("slider", { name: "Background veil" });
+  await expect(tuning).toHaveValue("0");
+  for (const value of [0, 40, 20]) {
     await tuning.fill(String(value));
-    await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", String(value / 100));
-    await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", String(value / 100));
-    await expect(page.locator("[data-opacity-value]")).toHaveText(`${value}%`);
+    await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
+    const fill = await page.locator(".dot-plane-working").evaluate(node => (node as HTMLElement).style.getPropertyValue("--dot-front-fill"));
+    expect(fill).toBe(`${value}%`);
+    await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "1");
+    await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("color", "rgb(32, 32, 32)");
+    await expect(page.locator("[data-veil-value]")).toHaveText(`${value}%`);
     await expect(page.getByRole("slider", { name: "Animation position" })).toHaveValue("0.25");
   }
   await page.getByRole("button", { name: "Play", exact: true }).click();
-  await tuning.fill("65");
+  await tuning.fill("30");
   await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
-  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "0.65");
+  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
+  await expect(page.locator("[data-veil-value]")).toHaveText("30%");
 });
 
 test("signed dot passage preserves references through pairing, products and sum", async ({ page }, info) => {
@@ -88,6 +92,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   const frontAlpha = () => page.locator(".dot-plane-working").evaluate(node =>
     Number(getComputedStyle(node).backgroundColor.match(/\/\s*([\d.e+-]+)\)/)?.[1] ?? 1));
   expect(await frontAlpha()).toBe(0);
+  await page.getByRole("slider", { name: "Background veil" }).fill("40");
   let lastAlpha = 0;
   for (const progress of [.001, .01, .025, .05]) {
     await slider.fill(String(progress));
@@ -103,18 +108,18 @@ test("signed dot passage preserves references through pairing, products and sum"
       expect(size).toEqual({ x: 1, y: 1 });
     }
   }
-  expect(lastAlpha).toBeCloseTo(.7, 4);
+  expect(lastAlpha).toBeCloseTo(.4, 4);
   await slider.fill("0");
   expect(await frontAlpha()).toBe(0);
   await slider.fill("0.06");
   const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
   const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   expect(earlyBackColor).toBe(initialBackColor);
-  expect(initialFrontColor).toMatch(/\/\s*0\.7\)/);
-  expect(initialFrontColor.replace(/\s*\/\s*0\.7\)/, ")")).toBe(initialBackColor);
+  expect(initialFrontColor).toMatch(/\/\s*0\.4\)/);
+  expect(initialFrontColor.replace(/\s*\/\s*0\.4\)/, ")")).toBe(initialBackColor);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
-  expect(nativeInk).toBe("rgb(70, 130, 180)");
+  expect(nativeInk).toBe("rgb(32, 32, 32)");
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("-webkit-text-stroke-color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS("color", nativeInk);
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
@@ -221,7 +226,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   for (const progress of [.25, .5, .75, 1]) {
     await slider.fill(String(progress));
     const key = progress === .25 ? "pair-left-0" : progress === 1 ? "sum" : "product-0";
-    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(70, 130, 180)");
+    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(32, 32, 32)");
     for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(70, 70, 70)");
   }
   await slider.fill("0");
