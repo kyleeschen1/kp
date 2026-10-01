@@ -144,7 +144,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     workingPlane.style.opacity = planeLift > 0 ? "1" : "0";
     workingPlane.style.setProperty("--dot-front-fill", `${70 * planeLift}%`);
     workingPlane.style.boxShadow = planeLift > 0
-      ? `0 1px 2px rgba(20, 25, 30, ${.16 * planeLift}), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(20, 25, 30, ${.22 * planeLift})` : "none";
+      ? `0 1px 2px rgba(0, 0, 0, ${.16 * planeLift}), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(0, 0, 0, ${.22 * planeLift})` : "none";
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 4 ? "1" : "0";
@@ -179,11 +179,11 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const z = surfaceZ + height;
       node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
       node.style.textShadow = "none";
-      shadow.style.transform = `translate3d(${x + .45 * height}px, ${y + .8 + .75 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%)`;
-      shadow.style.filter = `blur(${.5 + 4.5 * shadowLift}px)`;
+      shadow.style.transform = `translate3d(${x + .65 * height}px, ${y + .8 + height}px, ${surfaceZ - .5}px) translate(-50%, -50%)`;
+      shadow.style.filter = `blur(${.5 + 3.5 * shadowLift}px)`;
       // At landing this matches the native expression's tight contact shadow.
       shadow.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? String(.35 - .15 * shadowLift) : "0";
+        ? String(.35 + .2 * shadowLift) : "0";
       node.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 ? "1" : "0";
     }
     if (frame.index === 1 && frame.local < 1) {

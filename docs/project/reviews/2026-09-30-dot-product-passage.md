@@ -463,6 +463,19 @@ sample, and reverse restoration to zero alpha. Three browser tests, four unit
 tests, typecheck and build pass (entry 6.64 KB gzip). Transit capture inspected;
 full-playback visual acceptance remains pending.
 
+September 30, neutral palette and stronger lift shadows: user approves trying
+white surfaces with stable neutral ink, reserving color for purposeful focus.
+The passage now uses neutral paper, text, syntax, controls and shadow colors;
+no semantic focus color cue is added yet. Default back opacity remains 100%,
+with the existing manual tuning control retained. Front surface translucency
+and its smooth arrival remain, so this does not restore full occlusion.
+Moving glyph shadows now peak at .55 opacity instead of .20, offset 13px/20.8px
+instead of 9px/15.8px, and blur 4px instead of 5px. Resting contact-shadow geometry
+and strength remain unchanged, with neutral black replacing the tinted shadow.
+Constant glyph size, source references and evaluation choreography are preserved.
+Three browser tests, four unit tests and build pass (entry 6.63 KB gzip); the lift
+capture was inspected. These palette/shadow values remain local visual candidates.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

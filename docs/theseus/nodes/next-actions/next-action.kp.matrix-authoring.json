@@ -232,6 +232,13 @@
       "scope": "Constant token sizing and continuous front panel arrival",
       "checkedAt": "2026-10-01T00:38:03.886Z",
       "notes": "Three browser tests, four unit tests, typecheck and build pass. Constant transit scales, equal source/material bounds, smooth fill onset and reverse reset checked. Evaluation scaling preserved."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Neutral palette and stronger moving shadows",
+      "checkedAt": "2026-10-01T00:55:12.690Z",
+      "notes": "Three browser tests, four unit tests, full typecheck and build pass. Neutral white surfaces, stronger projected shadow and unchanged contact landing checked. Lift screenshot inspected. Local visual checkpoint retained."
     }
   ]
 }

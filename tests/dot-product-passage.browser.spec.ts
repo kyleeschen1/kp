@@ -109,7 +109,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
   const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   expect(earlyBackColor).toBe(initialBackColor);
-  expect(initialFrontColor.replace(/\s*\/\s*0\.7\)/, ")")).toBe(initialBackColor);
+  expect(initialBackColor).toBe("rgb(255, 255, 255)");
+  expect(initialFrontColor).toBe("color(srgb 1 1 1 / 0.7)");
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
@@ -132,7 +133,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform);
     return { z: m.m43, opacity: Number(getComputedStyle(node).opacity) };
   });
-  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.2, 2);
+  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.55, 2);
   const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
   expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 1);
@@ -376,7 +377,7 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await page.getByRole("button", { name: "Reset settings", exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
-  await expect(child.locator("body")).toHaveCSS("background-color", "rgb(255, 253, 248)");
+  await expect(child.locator("body")).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(child.locator("html")).toHaveCSS("color-scheme", "light");
   await page.screenshot({ path: info.outputPath("light-override.png"), fullPage: true });
   await child.getByRole("slider", { name: "Animation position" }).fill("0.06");
