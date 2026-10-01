@@ -5,6 +5,22 @@ import { dotPassage, DotPassageGap, valueOf, sample } from "../src/experiments/d
 import { constant } from "../src/math/expression.ts";
 import { createKpScalarExpression, createKpTypedMatrixFromRows } from "../src/math/typed-semantic-math.ts";
 import { matrixProduct } from "../src/math/matrix-product.ts";
+import { sampleDotDepth, defaultDotDepth } from '../src/experiments/dot-product-passage/depth.ts';
+
+test('group depth preserves native endpoints, bounded scaling and reduced motion', () => {
+  assert.deepEqual(sampleDotDepth(0), { backgroundOpacity: 1, backgroundScale: 1, foregroundScale: 1 });
+  assert.equal(sampleDotDepth(.125).foregroundScale, 1.03);
+  for (const p of [.25, .5, .75, 1]) assert.equal(sampleDotDepth(p).foregroundScale, 1);
+  for (let i = 0; i <= 100; i++) {
+    const pose = sampleDotDepth(i / 100);
+    assert.ok(pose.backgroundOpacity >= .8 && pose.backgroundOpacity <= 1);
+    assert.ok(pose.backgroundScale >= .98 && pose.backgroundScale <= 1);
+    assert.ok(pose.foregroundScale >= 1 && pose.foregroundScale <= 1.03);
+    const reduced = sampleDotDepth(i / 100, { ...defaultDotDepth, reducedMotion: true });
+    assert.equal(reduced.backgroundScale, 1); assert.equal(reduced.foregroundScale, 1);
+  }
+  for (const backgroundOpacity of [-1, 2, NaN, Infinity]) assert.throws(() => sampleDotDepth(.1, { ...defaultDotDepth, backgroundOpacity }), DotPassageGap);
+});
 
 test("passage retains the original dot, pair products and result with signed values", () => {
   assert.equal(passage.cell, product.cell(0, 0));

@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 attention candidate: [dot group depth](../reviews/2026-10-01-dot-group-depth.md).
+The user approved comparing group scaling and requested the 80% opacity slider,
+inherited delimiter color and thinner brackets. One local dot exemplar owns the
+candidate; mathematical objects and evaluation choreography are preserved.
+
 October 1 presentation direction: use the three-term dot page as the reference
 for all current matrix examples and their menu. The user explicitly approved
 this scoped rollout; [page unification](../reviews/2026-10-01-matrix-page-unification.md)

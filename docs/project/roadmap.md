@@ -25,6 +25,11 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1 attention candidate: [group depth and lighter delimiters](reviews/2026-10-01-dot-group-depth.md)
+on the three-term dot page. Restored background-opacity slider defaults to 80%;
+background recession and foreground scale lift are inspectable options. Other
+matrix renderers retain their existing motion until this exemplar is reviewed.
+
 October 1 page direction: the user selected the three-term dot page as the
 reference and authorized porting all matrix examples plus the menu to its shared
 styling. [Page unification](reviews/2026-10-01-matrix-page-unification.md) keeps

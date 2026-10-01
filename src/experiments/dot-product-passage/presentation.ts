@@ -3,6 +3,7 @@ import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMateri
 import { valueOf, sample, DotPassageGap, type DotPassage } from "./model.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 import { prepareFusion } from "./fusion.ts";
+import { defaultDotDepth, sampleDotDepth, type DotDepthSettings } from './depth.ts';
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
 const signedToken = (entry: KpScalarValue) => valueOf(entry) < 0
@@ -32,9 +33,11 @@ export function stageHtml(passage: DotPassage) {
 }
 
 interface Point { x: number; y: number }
-export function mountPresentation(root: HTMLElement, passage: DotPassage) {
+export function mountPresentation(root: HTMLElement, passage: DotPassage, depthSettings: () => DotDepthSettings = () => defaultDotDepth) {
   const stage = root.querySelector<HTMLElement>(".dot-stage")!;
   const layer = stage.querySelector<HTMLElement>(".dot-material")!;
+  const inputs = stage.querySelector<HTMLElement>('.dot-inputs')!;
+  const work = stage.querySelector<HTMLElement>('.dot-work')!;
   const pairs = stage.querySelector<HTMLElement>(".dot-pairs")!;
   const products = stage.querySelector<HTMLElement>(".dot-products")!;
   const sum = stage.querySelector<HTMLElement>(".dot-sum")!;
@@ -58,6 +61,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   }
   requireNative("sum").dataset["sourceId"] = passage.dot.result.id;
   const reset = () => {
+    // Measurement uses the normal plane; group scaling is applied only after
+    // projecting the frame, avoiding double-scaled endpoints during resize.
+    for (const group of [inputs, work, layer]) group.style.scale = '1';
+    inputs.style.opacity = '1';
     for (const node of [pairs, products, sum, ...Object.values(vectors), ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus, .dot-inputs .mopen, .dot-inputs .mclose")]) {
       node.style.opacity = "1"; node.style.transform = ""; node.style.clipPath = ""; node.style.color = "";
       node.removeAttribute("data-dot-focused");
@@ -190,6 +197,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${ease(frame.local / .4)})`;
     }
     if (frame.index === 4) add(frame.local);
+    const depth = sampleDotDepth(frame.progress, depthSettings());
+    inputs.style.opacity = String(depth.backgroundOpacity);
+    inputs.style.scale = String(depth.backgroundScale);
+    work.style.scale = layer.style.scale = String(depth.foregroundScale);
     return frame;
   };
   prepare();

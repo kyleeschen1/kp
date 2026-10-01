@@ -1,9 +1,45 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test('depth controls change whole groups while preserving endpoint and reverse poses', async ({ page }, info) => {
+  await page.goto('/experiments/dot-product-passage/');
+  await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
+  const timeline = page.getByRole('slider', { name: 'Animation position' });
+  const opacity = page.getByRole('slider', { name: 'Background opacity' });
+  const scale = page.getByRole('combobox', { name: 'Background scale' });
+  await expect(opacity).toHaveValue('80'); await expect(scale).toHaveValue('0.98');
+  await timeline.fill('0.125');
+  await expect(page.locator('.dot-inputs')).toHaveCSS('opacity', '0.8');
+  await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '0.98');
+  for (const group of ['.dot-work', '.dot-material']) await expect(page.locator(group)).toHaveCSS('scale', '1.03');
+  const poses = () => page.locator('.dot-stage [style]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
+  const held = await poses();
+  await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
+  expect(await poses()).toEqual(held);
+  await page.locator('.matrix-card').screenshot({ path: info.outputPath('depth-80-98.png') });
+  await opacity.fill('20'); await expect(page.locator('.dot-inputs')).toHaveCSS('opacity', '0.2');
+  await scale.selectOption('0.95'); await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '0.95');
+  await opacity.fill('80'); await scale.selectOption('0.98');
+  await page.setViewportSize({ width: 1100, height: 900 });
+  await expect(page.locator('.dot-material')).toHaveCSS('scale', '1.03');
+  await timeline.fill('0.25'); await expect(page.locator('.dot-material')).toHaveCSS('scale', '1');
+  const bracket = await page.locator('[data-dot-vector="right"]').evaluate(node => {
+    const style = getComputedStyle(node, '::before');
+    return { width: parseFloat(style.borderLeftWidth), font: parseFloat(getComputedStyle(node).fontSize) };
+  });
+  expect(bracket.width / bracket.font).toBeLessThan(.09);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await timeline.fill('0.125');
+  await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '1');
+  await expect(page.locator('.dot-material')).toHaveCSS('scale', '1');
+});
+
 test("column rises before pivoting as one axis and brackets fade through the turn", async ({ page }, info) => {
   await page.goto("/experiments/dot-product-passage/");
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
+  // Isolate the accepted path from the independently tested depth projection.
+  await page.getByRole('combobox', { name: 'Background scale' }).selectOption('1');
+  await page.getByRole('slider', { name: 'Background opacity' }).fill('100');
   await expect(page.getByRole("slider", { name: "Dim unfocused" })).toHaveCount(0);
   const timeline = page.getByRole("slider", { name: "Animation position" });
   const centers = (selector: string) => page.locator(selector).evaluateAll(nodes => nodes.map(node => {
@@ -143,6 +179,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
   const root = page.locator("#dot-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  await page.getByRole('combobox', { name: 'Background scale' }).selectOption('1');
+  await page.getByRole('slider', { name: 'Background opacity' }).fill('100');
   await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
   // Short font delimiters and tall SVG delimiters must not own competing paint.
   const brackets = await page.locator(".dot-inputs [data-dot-vector]").evaluateAll(nodes => nodes.flatMap(node =>
@@ -287,7 +325,8 @@ test("signed dot passage preserves references through pairing, products and sum"
     await slider.fill(String(progress));
     const key = progress === .25 ? "pair-left-0" : progress === 1 ? "sum" : "product-0";
     await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(255, 250, 240)");
-    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(174, 177, 177)");
+    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-multiply-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(174, 177, 177)");
+    for (const delimiter of await page.locator('[data-kp-dot-key^="syntax-open-"], [data-kp-dot-key^="syntax-close-"]').all()) await expect(delimiter).toHaveCSS("color", "rgb(255, 250, 240)");
   }
   await slider.fill("0");
   await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
@@ -319,9 +358,8 @@ test("signed dot passage preserves references through pairing, products and sum"
       depth: new DOMMatrixReadOnly(getComputedStyle(work).transform).m43 };
   });
   expect(notation.entry).toBe(notation.paired);
-  expect(new Set(notation.syntax).size).toBe(1);
-  expect(notation.syntax[0]).not.toBe(notation.ink);
-  expect(notation.syntax[0]).toBe("rgb(174, 177, 177)");
+  expect(notation.syntax.slice(0, 2)).toEqual([notation.ink, notation.ink]);
+  expect(notation.syntax.slice(2)).toEqual(['rgb(174, 177, 177)', 'rgb(174, 177, 177)']);
   // Check centering in scene coordinates, before the shared camera projection.
   expect(Math.abs(notation.offsetX)).toBeLessThan(1);
   expect(notation.depth).toBe(0);
