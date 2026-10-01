@@ -110,11 +110,11 @@ test("signed dot passage preserves references through pairing, products and sum"
   const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
   const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   expect(earlyBackColor).toBe(initialBackColor);
-  expect(initialBackColor).toBe("rgb(255, 255, 255)");
-  expect(initialFrontColor).toBe("color(srgb 1 1 1 / 0.7)");
+  expect(initialFrontColor).toMatch(/\/\s*0\.7\)/);
+  expect(initialFrontColor.replace(/\s*\/\s*0\.7\)/, ")")).toBe(initialBackColor);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
-  expect(nativeInk).toBe("rgb(37, 99, 235)");
+  expect(nativeInk).toBe("rgb(70, 130, 180)");
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("-webkit-text-stroke-color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS("color", nativeInk);
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
@@ -221,7 +221,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   for (const progress of [.25, .5, .75, 1]) {
     await slider.fill(String(progress));
     const key = progress === .25 ? "pair-left-0" : progress === 1 ? "sum" : "product-0";
-    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(37, 99, 235)");
+    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(70, 130, 180)");
     for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(70, 70, 70)");
   }
   await slider.fill("0");
@@ -392,7 +392,7 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await page.getByRole("button", { name: "Reset settings", exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
-  await expect(child.locator("body")).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(child.locator("body")).toHaveCSS("background-color", "rgb(255, 253, 248)");
   await expect(child.locator("html")).toHaveCSS("color-scheme", "light");
   await page.screenshot({ path: info.outputPath("light-override.png"), fullPage: true });
   await child.getByRole("slider", { name: "Animation position" }).fill("0.06");

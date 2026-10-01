@@ -489,6 +489,13 @@ Scoped browser checks cover operand, product and final-result blue, negative
 sign inheritance, neutral syntax/shadows and neutral restoration at the start.
 This is the local exemplar's focus mapping, not a catalogue-wide rollout.
 
+September 30, palette adjustment: restore the cream page (#fffdf8) and the
+earlier warm beige surface mix (94% paper, 6% #806548). Focused token ink is now
+CSS SteelBlue (#4682B4), replacing #2563EB for every active operand and result.
+The same beat-derived focus mapping, neutral syntax/shadows, constant token size
+and smoothly introduced translucent front are preserved. No highlight background
+or new color-exchange animation is introduced.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
