@@ -30,7 +30,8 @@
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
 /* Flex isolates the cloned token from an extra inherited prose line box. */
 .dot-paint { position: absolute; display: flex; left: 0; top: 0; color: var(--kp-st-ink); }
-.dot-stage [data-dot-focused] { color: var(--kp-st-focus); }
+.dot-stage [data-dot-focused] { color: var(--kp-st-focus); text-shadow: var(--dot-focus-shadow, none); }
+@media (forced-colors: active) { .dot-stage [data-dot-focused] { text-shadow: none; } }
 .dot-static { overflow-x: auto; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
 :root[data-matrix-layout="side"] .dot-inputs { right: 55%; gap: 1rem; }

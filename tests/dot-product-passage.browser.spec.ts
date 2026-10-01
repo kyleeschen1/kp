@@ -17,6 +17,18 @@ test('depth controls change whole groups while preserving endpoint and reverse p
   for (const group of ['.dot-work', '.dot-material']) await expect(page.locator(group)).toHaveCSS('scale', '1.03');
   const poses = () => page.locator('.dot-stage [style]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
   const held = await poses();
+  const shadowControl = page.getByRole('slider', { name: 'Shadow strength' });
+  await expect(shadowControl).toHaveValue('70');
+  const shadow = await page.locator('[data-occurrence="pair-left-1"]').evaluate(node => getComputedStyle(node).textShadow);
+  expect(shadow).not.toBe('none');
+  for (const selector of ['[data-occurrence="pair-left-1"] .dot-negative-sign', '[data-kp-dot-key="pair-left-1"] .dot-negative-sign']) {
+    await expect(page.locator(selector)).toHaveCSS('text-shadow', shadow);
+  }
+  await shadowControl.fill('0');
+  await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS('text-shadow', 'none');
+  await shadowControl.fill('100');
+  await page.locator('.matrix-card').screenshot({ path: info.outputPath('focus-shadow-100.png') });
+  await shadowControl.fill('70');
   await timeline.fill('0.075');
   expect(await poses()).toEqual(held);
   await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
@@ -280,8 +292,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
-  await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
-  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("text-shadow", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
   expect(await tiltY(".dot-stage")).toBe(0);
@@ -346,7 +358,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(settledScale).toBe(1);
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(0);
   for (const source of await page.locator(".dot-inputs [data-kp-dot-key]").all()) await expect(source).toHaveCSS("opacity", "0");
-  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
+  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).not.toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
   await slider.fill("0.31");
@@ -506,5 +518,5 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await child.getByRole("slider", { name: "Animation position" }).fill("0.06");
   const darkInk = await child.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", darkInk);
-  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
+  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).not.toHaveCSS("text-shadow", "none");
 });

@@ -3,7 +3,7 @@ import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMateri
 import { valueOf, sample, DotPassageGap, type DotPassage } from "./model.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 import { prepareFusion } from "./fusion.ts";
-import { defaultDotDepth, sampleDotDepth, sampleDotDeparture, type DotDepthSettings } from './depth.ts';
+import { defaultDotDepth, sampleDotDepth, sampleDotDeparture, sampleDotShadow, type DotDepthSettings } from './depth.ts';
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
 const signedToken = (entry: KpScalarValue) => valueOf(entry) < 0
@@ -199,7 +199,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage, depthS
       for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.transform = `scale(${ease(frame.local / .4)})`;
     }
     if (frame.index === 4) add(frame.local);
-    const depth = sampleDotDepth(frame.progress, depthSettings());
+    const settings = depthSettings();
+    const depth = sampleDotDepth(frame.progress, settings);
+    stage.style.setProperty('--dot-focus-shadow', sampleDotShadow(frame.progress, settings));
     inputs.style.opacity = String(depth.backgroundOpacity);
     inputs.style.scale = String(depth.backgroundScale);
     work.style.scale = layer.style.scale = String(depth.foregroundScale);

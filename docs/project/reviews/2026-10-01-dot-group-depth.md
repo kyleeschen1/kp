@@ -1,5 +1,19 @@
 # Dot passage: group depth and lighter delimiters
 
+Current shadow candidate: focused tokens receive two downward black text
+shadows, one tight and one soft, sampled from the existing departure timeline.
+The 0–100% Shadow strength slider defaults to 70%; zero removes shadows.
+The lifted hold uses offsets of 3px and 10px, settling to 1px and 2px at the
+native endpoint. Native and moving glyphs inherit the same paint; reduced
+motion uses the settled shadow and forced colors removes it. Background color,
+background scale, semantic identities and motion timing are preserved.
+This local depth/CSS/player revision is independently reversible; it is not a
+shared renderer policy. Review the held focus at 12.5% progress on the canonical
+three-term dot page, comparing 0% and 100% shadow strength. The captured maximum
+shows a dark shadow below the crisp glyphs, though contrast remains limited by
+the dark stage. Six unit and seven browser checks cover projection, disabling,
+native/material inheritance, held poses, seeking and existing preservation laws.
+
 Latest focus inspection revision: operators inherit their expression's ink;
 negative signs retain their compact size with a .035em paint stroke shared by
 native and moving occurrences. Both contributor groups rise 24px and hold for

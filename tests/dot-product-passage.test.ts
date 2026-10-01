@@ -5,7 +5,17 @@ import { dotPassage, DotPassageGap, valueOf, sample } from "../src/experiments/d
 import { constant } from "../src/math/expression.ts";
 import { createKpScalarExpression, createKpTypedMatrixFromRows } from "../src/math/typed-semantic-math.ts";
 import { matrixProduct } from "../src/math/matrix-product.ts";
-import { sampleDotDepth, defaultDotDepth } from '../src/experiments/dot-product-passage/depth.ts';
+import { sampleDotDepth, sampleDotShadow, defaultDotDepth } from '../src/experiments/dot-product-passage/depth.ts';
+
+test('focus shadows hold, settle, disable and reject invalid strengths', () => {
+  assert.equal(sampleDotShadow(0), 'none');
+  assert.equal(sampleDotShadow(.075), sampleDotShadow(.125));
+  assert.equal(sampleDotShadow(.25), sampleDotShadow(.5));
+  assert.equal(sampleDotShadow(.125, { ...defaultDotDepth, shadowStrength: 0 }), 'none');
+  for (const shadowStrength of [-1, 2, NaN, Infinity]) assert.throws(() => sampleDotShadow(.125, { ...defaultDotDepth, shadowStrength }), DotPassageGap);
+  const reduced = { ...defaultDotDepth, reducedMotion: true };
+  assert.equal(sampleDotShadow(.075, reduced), sampleDotShadow(.25, reduced));
+});
 
 test('group depth preserves native endpoints, bounded scaling and reduced motion', () => {
   assert.deepEqual(sampleDotDepth(0), { backgroundOpacity: 1, backgroundScale: 1, foregroundScale: 1 });
