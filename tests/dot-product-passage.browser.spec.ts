@@ -118,6 +118,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-kp-dot-key="left-1"]')).toHaveText("−1");
   await expect(page.locator('[data-kp-dot-key="right-2"]')).toHaveText("−2");
   const chooser = page.getByRole("combobox", { name: "Milestone" });
+  const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
   const slider = page.getByRole("slider", { name: "Animation position" });
   await expect(page.locator(".dot-plane")).toHaveCount(2);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
@@ -177,7 +178,6 @@ test("signed dot passage preserves references through pairing, products and sum"
     return { z: m.m43, opacity: Number(getComputedStyle(node).opacity) };
   });
   expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.55, 2);
-  const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
   expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 1);
   expect(liftedSize!.height).toBeCloseTo(originalSize!.height, 1);
@@ -197,7 +197,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
   await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "1");
   const backScale = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
-  expect(backScale).toBeCloseTo(1, 4);
+  expect(backScale).toBeCloseTo(.96, 4);
+  const contextScale = await page.locator(".dot-inputs").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
+  expect(contextScale).toBeCloseTo(.96, 4);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "1");
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
@@ -265,6 +267,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await slider.fill("0");
   await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
   await expect(page.locator('[data-kp-dot-key="left-0"]')).toHaveCSS("color", "rgb(32, 32, 32)");
+  expect(await page.locator(".dot-inputs").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11)).toBe(1);
   await chooser.selectOption("1");
   const settledScale = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
   expect(settledScale).toBe(1);

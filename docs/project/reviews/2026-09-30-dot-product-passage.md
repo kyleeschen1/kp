@@ -537,6 +537,14 @@ lift, while focused expression paint and glow remain above it. Smooth arrival
 and manual adjustment are preserved. The live-control browser check now exercises
 0%, 40%, 70% and 100%.
 
+September 30, subtle context recession: user requests slightly smaller unfocused
+content. Source surface and source vector layout now ease together from 100% to
+96% scale during foreground lift, centered in place. Active tokens and expression
+stay at their original size; this does not restore extraction growth or the pop.
+Existing prepare-time scale neutralization preserves native geometry measurement.
+Browser checks verify matching 96% context scales, unchanged active token size
+against the initial source, and reverse restoration to 100%.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

@@ -158,7 +158,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     }
     // The surface shares the entries' depth, without owning their semantic paint.
     const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
-    stage.style.setProperty("--dot-back-scale", "1");
+    stage.style.setProperty("--dot-back-scale", String(1 - .04 * planeLift));
     stage.style.setProperty("--dot-back-opacity", "1");
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
     // Surface translucency preserves the source context; elevation changes the
