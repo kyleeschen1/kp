@@ -85,11 +85,11 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
   const initialBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(initialFrontColor).not.toContain("/");
+  expect(initialFrontColor).toMatch(/\/\s*0\.7\)/);
   await slider.fill("0.06");
   const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   expect(earlyBackColor).toBe(initialBackColor);
-  expect(initialFrontColor).toBe(initialBackColor);
+  expect(initialFrontColor.replace(/\s*\/\s*0\.7\)/, ")")).toBe(initialBackColor);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
@@ -198,9 +198,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(0);
   for (const source of await page.locator(".dot-inputs [data-kp-dot-key]").all()) await expect(source).toHaveCSS("opacity", "0");
   const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(backColor).toBe(initialFrontColor);
+  expect(backColor).toBe(initialBackColor);
   expect(earlyBackColor).toBe(backColor);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialBackColor);
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");

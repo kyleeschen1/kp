@@ -141,8 +141,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     stage.style.setProperty("--dot-back-scale", "1");
     stage.style.setProperty("--dot-back-opacity", String(1 - (1 - backOpacity) * planeLift));
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
-    // The front is solid paper once present; elevation changes its cast shadow,
-    // not its transparency. At rest it coincides with the source surface.
+    // Surface translucency preserves the source context; elevation changes the
+    // cast shadow independently, without fading the foreground mathematical ink.
     workingPlane.style.opacity = planeLift > 0 ? "1" : "0";
     workingPlane.style.boxShadow = planeLift > 0
       ? `0 1px 2px rgba(20, 25, 30, .16), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(20, 25, 30, .22)` : "none";

@@ -442,6 +442,14 @@ Three browser tests, four unit tests, full typecheck and build pass (entry 6.69 
 gzip). Lift and multiplication screenshots were inspected: source brackets are
 covered by the raised sheet. Full-playback depth readability awaits human review.
 
+September 30, source-context correction: user found fully opaque layers
+incoherent because they concealed the source. The working surface now uses 70%
+paper alpha, allowing the empty source brackets to remain visible through it.
+Foreground mathematical ink stays fully opaque; constant color, stationary
+back, contact/cast shadows and the rear opacity control are preserved. This
+supersedes full occlusion as the desired treatment for this exemplar. The scoped
+browser check now enforces stable surface translucency rather than opaque fill.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
