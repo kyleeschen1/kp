@@ -26,8 +26,9 @@ acceptance, as approved; do not claim them delivered from the underlying model.
 
 The requested presentation controls remain: 20px math by default (20–32px),
 matched row/column center spacing, 6px lift (0–24px), full-size background at 40%
-opacity, and no shadows. Light mode restores the earlier cream/brown beige mix
-through the existing shared configuration, with dark focus ink; both player and
+opacity, and no shadows. Light mode uses explicit warm beige #f7f3e8
+through the existing shared configuration, with dark focus ink and normal
+KaTeX smoothing (the thinner treatment remains dark-only); both player and
 menu expose the toggle. Theme changes preserve the held geometry/playhead.
 
 The rollback unit is the rectangular host/context integration; the accepted

@@ -16,14 +16,19 @@ test('beige light mode preserves focus ink and the held geometry', async ({ page
   await expect(timeline).toHaveValue('0.125');
   expect(await positions()).toEqual(before);
   const paper = await page.locator('.matrix-card').evaluate(node => getComputedStyle(node).backgroundColor);
+  expect(paper).toBe('rgb(247, 243, 232)');
   await expect(page.locator('body')).toHaveCSS('background-color', paper);
-  expect(paper).not.toBe('rgb(32, 34, 34)');
+  await expect(page.locator('html')).toHaveCSS('background-color', paper);
+  for (const selector of ['[data-kp-dot-key="left-0"] .mord', '[data-kp-dot-key="pair-left-0"] .mord', '[data-occurrence="pair-left-0"] .mord', '.dot-static .katex']) {
+    await expect(page.locator(selector).first()).toHaveCSS('-webkit-font-smoothing', 'auto');
+  }
   for (const selector of ['[data-kp-dot-key="pair-left-1"] .dot-negative-sign', '[data-occurrence="pair-left-1"] .dot-negative-sign']) {
     await expect(page.locator(selector)).toHaveCSS('color', 'rgb(17, 17, 15)');
   }
   await page.locator('.matrix-card').screenshot({ path: info.outputPath('beige-light-mode.png') });
   await page.getByRole('button', { name: 'Light mode', exact: true }).click();
   await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
+  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS('-webkit-font-smoothing', 'antialiased');
   expect(await positions()).toEqual(before);
 });
 

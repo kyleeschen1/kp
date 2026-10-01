@@ -1,8 +1,11 @@
 # Dot passage: group depth and lighter delimiters
 
-Light mode comparison: an explicit toggle in the player and shared menu restores
-the earlier 94% cream (#fffdf8), 6% brown (#806548) background mix, with dark
-focused math. Theme uses the existing presentation configuration and preserves
+Light mode correction: the cream/brown mix read as almost off-white. The user
+requested beige background and removal of light-mode thinning. Page and player
+now use explicit #f7f3e8; native and moving KaTeX use normal (`auto`) smoothing
+in light mode, while dark mode retains the finer treatment. Browser assertions
+check exact page/card color, native/material smoothing and return to dark mode.
+Theme uses the existing presentation configuration and preserves
 the held playhead/geometry. Dark remains the initial default. The full dot
 browser suite checks both native and moving ink, reversible theme switching,
 size/spacing and the existing motion invariants.

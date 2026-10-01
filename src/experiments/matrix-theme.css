@@ -16,10 +16,10 @@
 .matrix-player [data-kp-focus-deck-type="label"] { font-weight: 700; }
 /* Native and moving mathematical ink use the same regular KaTeX face. */
 .matrix-player .katex { font-weight: 400; -webkit-text-stroke-width: 0; }
-/* Restore the earlier cream/brown paper mix through the existing page theme. */
+/* Use an explicit warm beige consistently on the page and player surfaces. */
 .matrix-example-page[data-matrix-theme="light"], [data-matrix-theme="light"] .matrix-player {
   color-scheme: light;
-  --kp-st-paper: color-mix(in srgb, #fffdf8 94%, #806548);
+  --kp-st-paper: #f7f3e8;
   --kp-st-header: var(--kp-st-paper);
   --kp-st-header-ink: #24231f;
   --kp-st-rule: #b7b1a5;

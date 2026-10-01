@@ -31,6 +31,8 @@ test('rectangular cell reuses the passage and hands off one result through seek 
   await expect(root.locator('[data-context-arrived]')).toHaveCount(1);
   await root.getByRole('button', { name: 'Light mode', exact: true }).click();
   await expect(target).toHaveCSS('color', 'rgb(17, 17, 15)');
+  await expect(root.locator('.matrix-card')).toHaveCSS('background-color', 'rgb(247, 243, 232)');
+  await expect(target).toHaveCSS('-webkit-font-smoothing', 'auto');
   await root.locator('.matrix-card').screenshot({ path: info.outputPath('rectangular-light-mode.png') });
   await timeline.fill('0.9999');
   const center = async (selector: string) => root.locator(selector).evaluate(node => {
