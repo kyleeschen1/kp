@@ -130,8 +130,8 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const smooth = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * t * (t * (t * 6 - 15) + 10); };
-  const render = (progress: number, backgroundVeil = 0, glowStrength = .6) => {
-    if (!Number.isFinite(backgroundVeil) || backgroundVeil < 0 || backgroundVeil > .4) throw new DotPassageGap("Background veil must be between zero and 0.4.");
+  const render = (progress: number, backgroundVeil = .7, glowStrength = .6) => {
+    if (!Number.isFinite(backgroundVeil) || backgroundVeil < 0 || backgroundVeil > 1) throw new DotPassageGap("Background veil must be between zero and one.");
     if (!Number.isFinite(glowStrength) || glowStrength < 0 || glowStrength > 1) throw new DotPassageGap("Glow strength must be between zero and one.");
     const frame = sample(progress);
     if (disposed) return frame;

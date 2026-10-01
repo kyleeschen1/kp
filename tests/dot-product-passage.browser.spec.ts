@@ -39,8 +39,8 @@ test("background veil can be tuned without seeking or pausing playback", async (
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
   await page.getByRole("combobox", { name: "Milestone" }).selectOption("1");
   const tuning = page.getByRole("slider", { name: "Background veil" });
-  await expect(tuning).toHaveValue("0");
-  for (const value of [0, 40, 20]) {
+  await expect(tuning).toHaveValue("70");
+  for (const value of [0, 40, 70, 100]) {
     await tuning.fill(String(value));
     await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
     const fill = await page.locator(".dot-plane-working").evaluate(node => (node as HTMLElement).style.getPropertyValue("--dot-front-fill"));

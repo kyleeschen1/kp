@@ -17,8 +17,8 @@ async function mount() {
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div>
     <div class="matrix-controls dot-tuning"><label for="dot-background-veil">Background veil</label>
-    <input id="dot-background-veil" data-background-veil type="range" min="0" max="40" step="1" value="0">
-    <output for="dot-background-veil" data-veil-value>0%</output></div>
+    <input id="dot-background-veil" data-background-veil type="range" min="0" max="100" step="1" value="70">
+    <output for="dot-background-veil" data-veil-value>70%</output></div>
     <div class="matrix-controls dot-tuning"><label for="dot-glow">Glow strength</label>
     <input id="dot-glow" data-glow type="range" min="0" max="100" step="1" value="60">
     <output for="dot-glow" data-glow-value>60%</output></div></section>

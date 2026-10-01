@@ -530,6 +530,13 @@ Change its color to red (#dc2626), preserving the 60% default, strength slider,
 glyph-shaped spread, dark token ink and separate black shadows. This makes the
 existing effect easier to inspect; red is a local trial, not a focus-color policy.
 
+September 30, stronger veil range: user requests a heavier wash. Background veil
+now spans 0–100%, starting at 70%; the render boundary uses the same range and
+default. At 100% the source beneath the working surface is fully covered after
+lift, while focused expression paint and glow remain above it. Smooth arrival
+and manual adjustment are preserved. The live-control browser check now exercises
+0%, 40%, 70% and 100%.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
