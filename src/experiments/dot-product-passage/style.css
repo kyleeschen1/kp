@@ -1,4 +1,8 @@
 @import "../matrix-player.css";
+.dot-player { --dot-math-size: var(--dot-dark-math-size, 20px); }
+/* Restore the pre-slider .9em stage sizing, including KaTeX's 1.21 multiplier.
+   Theme-specific overrides prevent light-mode tuning from changing dark mode. */
+:root[data-matrix-theme="light"] .dot-player { --dot-math-size: var(--dot-light-math-size, calc(var(--kp-equation-type-size) * 1.089)); }
 /* Moving material snapshots the same regular math face as native endpoints. */
 .dot-stage .katex, .dot-static .katex, [data-kp-dot-key^="syntax-"] { font-weight: 400; -webkit-text-stroke-width: 0; }
 /* KaTeX has no light face. On macOS, grayscale rasterization reduces apparent

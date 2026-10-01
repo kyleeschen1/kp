@@ -19,7 +19,6 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   }
   root.dataset["dotMounted"] = "true";
   root.classList.add("dot-player", "matrix-player");
-  root.style.setProperty('--dot-math-size', '20px');
   root.innerHTML = `<section class="matrix-card kp-focus-deck" aria-label="Three-term dot product animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Dot product; scroll horizontally on narrow screens">${stageHtml(passage)}</div>
@@ -30,7 +29,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
       <label>Background opacity <input data-background-opacity aria-label="Background opacity" type="range" min="0" max="100" step="1" value="${defaultDotDepth.backgroundOpacity * 100}"><output data-opacity-value>${defaultDotDepth.backgroundOpacity * 100}%</output></label>
       <label>Foreground lift <select data-foreground-lift aria-label="Foreground lift"><option value="on" selected>On</option><option value="off">Off</option></select></label>
       <label>Lift height <input data-lift-height aria-label="Lift height" type="range" min="0" max="24" step="1" value="${defaultDotDepth.liftHeight}"><output data-lift-value>${defaultDotDepth.liftHeight} px</output></label>
-      <label>Math size <input data-math-size aria-label="Math size" type="range" min="20" max="32" step="1" value="20"><output data-size-value>20 px</output></label>
+      <label>Math size <input data-math-size aria-label="Math size" type="range" min="20" max="32" step="0.1" value="20"><output data-size-value>20 px</output></label>
       <button data-light-mode type="button" aria-pressed="false">Light mode</button>
     </div>
     </section>
@@ -107,13 +106,22 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   };
   const unsubscribe = clock.subscribe(render);
   const restore = () => { const i = storyBeats.findIndex(beat => beat.id === location.hash.slice(1)); go(i < 0 ? 0 : i, false); };
-  const resize = () => { clock.pause(); view.prepare(); context?.prepare(); render(); };
+  const updateSizeControl = () => {
+    const actual = parseFloat(getComputedStyle(root.querySelector('.dot-stage .katex')!).fontSize);
+    const original = config.theme === 'light' && !root.style.getPropertyValue('--dot-light-math-size');
+    sizeControl.min = config.theme === 'light' ? '16' : '20';
+    sizeControl.value = actual.toFixed(1);
+    const label = original ? `Original (${actual.toFixed(1)} px)` : `${Number(actual.toFixed(1))} px`;
+    root.querySelector('[data-size-value]')!.textContent = label;
+    sizeControl.setAttribute('aria-valuetext', label);
+  };
+  const resize = () => { clock.pause(); view.prepare(); context?.prepare(); updateSizeControl(); render(); };
   sizeControl.oninput = () => {
-    root.style.setProperty('--dot-math-size', `${sizeControl.value}px`);
-    root.querySelector('[data-size-value]')!.textContent = `${sizeControl.value} px`;
+    root.style.setProperty(`--dot-${config.theme}-math-size`, `${sizeControl.value}px`);
     // Re-measure native endpoints and rebuild material at the held playhead.
     resize();
   };
+  updateSizeControl();
   const stopConfig = observeMatrixConfig(document, next => { config = next; resize(); });
   const visibility = () => { if (document.hidden) { clock.pause(); render(); } };
   const motion = () => { clock.pause(); if (stepsOnly()) go(readFrame(clock.getSnapshot().progress).index, false); render(); };
@@ -132,7 +140,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     opacityControl.oninput = heightControl.oninput = liftControl.onchange = null;
     sizeControl.oninput = null;
     theme.onclick = null;
-    root.style.removeProperty('--dot-math-size');
+    root.style.removeProperty('--dot-light-math-size'); root.style.removeProperty('--dot-dark-math-size');
     root.dataset["dotMounted"] = "false";
     delete root.dataset["ready"];
   };

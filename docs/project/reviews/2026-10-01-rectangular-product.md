@@ -24,13 +24,16 @@ yet an animated extraction from the full matrices. Only the first cell is wired
 into this review host. All-cell selection and source-only variation follow
 acceptance, as approved; do not claim them delivered from the underlying model.
 
-The requested presentation controls remain: 20px math by default (20–32px),
+The requested presentation controls remain: 20px math by default in dark mode
+(20–32px); light mode restores the original responsive math size (roughly
+19–21px), with an independent 16–32px override. Other controls retain
 matched row/column center spacing, 6px lift (0–24px), full-size background at 40%
 opacity, and no shadows. Light mode uses the historical cream page (#fffdf8)
 and beige panel (94% cream, 6% #806548)
 through the existing shared configuration, with dark focus ink and normal
 KaTeX smoothing (the thinner treatment remains dark-only); both player and
-menu expose the toggle. Theme changes preserve the held geometry/playhead.
+menu expose the toggle. Theme changes preserve the playhead, remeasure geometry
+for that theme's size, and restore its previous size selection when returning.
 
 The rollback unit is the rectangular host/context integration; the accepted
 standalone arithmetic and presentation controls are preserved. The local context

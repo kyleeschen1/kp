@@ -6,6 +6,14 @@ test('beige light mode preserves focus ink and the held geometry', async ({ page
   await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
   const timeline = page.getByRole('slider', { name: 'Animation position' });
   await timeline.fill('0.125');
+  const originalSize = await page.locator('#dot-player').evaluate(root => {
+    const probe = document.createElement('span');
+    probe.style.fontSize = 'calc(var(--kp-equation-type-size) * .9 * 1.21)';
+    root.append(probe);
+    const size = parseFloat(getComputedStyle(probe).fontSize); probe.remove(); return size;
+  });
+  const actualSize = () => page.locator('[data-occurrence="pair-left-0"] .mord').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
+  expect(await actualSize()).toBeCloseTo(originalSize, 2);
   const positions = () => page.locator('.dot-paint').evaluateAll(nodes => nodes.map(node => {
     const r = node.getBoundingClientRect(), stage = node.closest('.dot-stage')!.getBoundingClientRect();
     return { x: r.x - stage.x, y: r.y - stage.y, width: r.width, height: r.height };
@@ -29,9 +37,20 @@ test('beige light mode preserves focus ink and the held geometry', async ({ page
   await page.getByRole('button', { name: 'Light mode', exact: true }).click();
   await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS('-webkit-font-smoothing', 'antialiased');
-  expect(await positions()).toEqual(before);
+  await expect(page.getByRole('slider', { name: 'Math size' })).toHaveValue('20');
+  await page.getByRole('slider', { name: 'Math size' }).fill('26');
+  await expect(timeline).toHaveValue('0.125');
   await page.getByRole('button', { name: 'Light mode', exact: true }).click();
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS('-webkit-font-smoothing', 'auto');
+  const restored = await positions();
+  expect(restored).toHaveLength(before.length);
+  restored.forEach((pose, i) => {
+    // Re-measuring after a size change can round browser geometry below a pixel.
+    for (const key of ['x', 'y', 'width', 'height'] as const) expect(pose[key]).toBeCloseTo(before[i]![key], 2);
+  });
+  expect(await actualSize()).toBeCloseTo(originalSize, 2);
+  await page.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await expect(page.getByRole('slider', { name: 'Math size' })).toHaveValue('26');
 });
 
 test('math size remeasures native and moving tokens at the held playhead', async ({ page }, info) => {
@@ -40,7 +59,7 @@ test('math size remeasures native and moving tokens at the held playhead', async
   await expect(root).toHaveAttribute('data-ready', 'true');
   const size = root.getByRole('slider', { name: 'Math size' });
   const timeline = root.getByRole('slider', { name: 'Animation position' });
-  await expect(size).toHaveValue('20');
+  await expect(root.locator('[data-size-value]')).toContainText('Original');
   await timeline.fill('0.125');
   for (const value of ['20', '32', '26']) {
     await size.fill(value);
@@ -62,7 +81,7 @@ test('math size remeasures native and moving tokens at the held playhead', async
     await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
     expect(await pose()).toEqual(held);
   }
-  await expect(page.locator('#dot-player-second').getByRole('slider', { name: 'Math size' })).toHaveValue('20');
+  await expect(page.locator('#dot-player-second [data-size-value]')).toContainText('Original');
   await root.locator('.matrix-card').screenshot({ path: info.outputPath('math-size-26.png') });
 });
 
