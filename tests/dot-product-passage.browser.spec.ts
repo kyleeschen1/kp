@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
-test("column rises before pivoting as one axis and brackets vanish at the turn", async ({ page }, info) => {
+test("column rises before pivoting as one axis and brackets fade through the turn", async ({ page }, info) => {
   await page.goto("/experiments/dot-product-passage/");
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
   await expect(page.getByRole("slider", { name: "Dim unfocused" })).toHaveCount(0);
@@ -18,10 +18,20 @@ test("column rises before pivoting as one axis and brackets vanish at the turn",
     expect(source[i]!.y - lifted[i]!.y).toBeCloseTo(source[0]!.y - lifted[0]!.y, 1);
   }
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("column-lift.png") });
-  for (const [progress, opacity] of [[.0374, "1"], [.0376, "0"], [.25, "0"], [.0374, "1"], [0, "1"]] as const) {
+  for (const [progress, opacity] of [[.0374, "1"], [.25, "0"], [.0374, "1"], [0, "1"]] as const) {
     await timeline.fill(String(progress));
     await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "1");
     for (const bracket of await page.locator("[data-dot-vector]").all()) await expect(bracket).toHaveCSS("opacity", opacity);
+  }
+  const opacity = () => page.locator('[data-dot-vector]').evaluateAll(nodes => nodes.map(node => Number(getComputedStyle(node).opacity)));
+  let previous = 1;
+  for (const progress of [.05, .09, .14, .19, .23]) {
+    await timeline.fill(String(progress));
+    const held = await opacity();
+    expect(held[0]).toBeGreaterThan(0); expect(held[0]).toBeLessThan(previous);
+    expect(held[1]).toBe(held[0]); previous = held[0]!;
+    await timeline.fill('1'); await timeline.fill('0'); await timeline.fill(String(progress));
+    expect(await opacity()).toEqual(held);
   }
   for (const progress of [.07, .12, .18, .22]) {
     await timeline.fill(String(progress));
@@ -241,10 +251,12 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(bracketScale.x).toBe(1); expect(bracketScale.y).toBe(1);
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("lift-and-turn.png") });
   const fading = Number(await page.locator('[data-dot-vector="right"]').evaluate(node => getComputedStyle(node).opacity));
-  expect(fading).toBe(0);
+  expect(fading).toBeGreaterThan(0); expect(fading).toBeLessThan(1);
   await slider.fill("0.2");
-  await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "0");
-  await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "0");
+  for (const bracket of await page.locator('[data-dot-vector]').all()) {
+    const later = Number(await bracket.evaluate(node => getComputedStyle(node).opacity));
+    expect(later).toBeGreaterThan(0); expect(later).toBeLessThan(fading);
+  }
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
   await slider.fill("0.2499");
   for (const pair of passage.dot.pairs) {

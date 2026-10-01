@@ -141,8 +141,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     const tilt = smooth((frame.local - .15) / .85);
     const opening = smooth(frame.local / .7);
     for (const side of ["left", "right"] as const) {
-      // Brackets are present during the lift and absent once rotation begins.
-      vectors[side].style.opacity = frame.index === 0 || (frame.index === 1 && frame.local <= .15) ? "1" : "0";
+      // Brackets withdraw with the pivot, independently of the material tokens.
+      // Sampling the same phase keeps partial fades identical on reverse/seek.
+      vectors[side].style.opacity = String(frame.index === 0 ? 1 : frame.index === 1 ? 1 - tilt : 0);
       if (frame.index > 0) {
         for (const pair of passage.dot.pairs) {
           const original = requireNative(`${side}-${pair.index}`);
