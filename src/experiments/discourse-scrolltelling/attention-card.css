@@ -1,18 +1,22 @@
 :root[data-discourse-view="attention-card"] #discourse-story { max-width: none; padding: 0; margin: 0; }
-:root[data-discourse-view="attention-card"] .discourse-layout { display: block; height: 400vh; }
+:root[data-discourse-view="attention-card"] .discourse-layout { display: grid; grid-template-columns: 48% 52%; gap: 0; align-items: start; }
 :root[data-discourse-view="attention-card"] .discourse-stage { position: sticky; top: 0; height: 100vh; padding: 0; background: var(--kp-matrix-page); }
 :root[data-discourse-view="attention-card"] .discourse-goal { display: none; }
 :root[data-discourse-view="attention-card"] #discourse-player .matrix-card { position: relative; height: 100vh; box-sizing: border-box; border: 0; border-radius: 0; box-shadow: none; background: var(--kp-matrix-page); }
 :root[data-discourse-view="attention-card"] #discourse-player :is(.matrix-cue, .matrix-controls) { display: none; }
-:root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { position: absolute; left: 48%; top: 50%; width: 45%; transform: translateY(-50%); }
+:root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { position: absolute; left: 0; top: 50%; width: 100%; transform: translateY(-50%); }
 :root[data-discourse-view="attention-card"] #discourse-player .dot-stage { min-width: 0; width: 100%; height: 340px; }
-.attention-track { position: absolute; left: 5%; right: 52%; top: 50%; transform: translateY(-50%); border-right: 1px solid var(--kp-st-muted); padding: 1rem 2rem 1rem 0; }
-.attention-comment { position: relative; min-height: 4rem; margin: .75rem 0; display: flex; align-items: center; }
+.attention-track { grid-column: 1; grid-row: 1; min-width: 0; border: 0; border-right: 1px solid var(--kp-st-muted); background: transparent; box-shadow: none; overflow: visible; padding: 30vh 2rem 0 max(1.5rem, 5vw); }
+.attention-track .kp-focus-deck__annotation { position: static; }
+.attention-comment { position: relative; min-height: 34vh; padding-bottom: 12vh; box-sizing: border-box; }
+.attention-comment[data-form="prose"] { min-height: 65vh; }
+.attention-comment p { line-height: 1.65; margin: 1rem 0; }
+.attention-end { height: 70vh; }
 .attention-comment button { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; padding: .5rem 0; }
 .attention-comment button:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
-.attention-comment[data-active]::before { content: ''; position: absolute; right: calc(-2rem - 2px); top: 0; bottom: 0; width: 3px; background: currentColor; }
+.attention-comment[data-active]::before { content: ''; position: absolute; right: calc(-2rem - 2px); top: 0; height: min(100%, 25vh); width: 3px; background: currentColor; }
 .attention-comment:has(input:not([hidden]))::before { display: none; }
-.attention-comment input { position: absolute; right: calc(-2rem - 9px); top: 0; width: 18px; height: 100%; margin: 0; writing-mode: vertical-lr; appearance: none; background: transparent; cursor: ns-resize; }
+.attention-comment input { position: absolute; right: calc(-2rem - 9px); top: 0; width: 18px; height: 25vh; margin: 0; writing-mode: vertical-lr; appearance: none; background: transparent; cursor: ns-resize; }
 .attention-comment input::-webkit-slider-runnable-track { width: 3px; background: currentColor; }
 .attention-comment input::-webkit-slider-thumb { appearance: none; width: 11px; height: 7px; margin-left: -4px; background: currentColor; border-radius: 2px; }
 .attention-comment input::-moz-range-track { width: 3px; background: currentColor; }
@@ -23,12 +27,14 @@
 .attention-reading { max-width: 50rem; margin: 3rem auto; padding: 1rem; }
 .attention-reading .discourse-prose section { min-height: 0; padding: 2rem 0; }
 @media (max-width: 850px) {
-  :root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { left: 0; top: 23%; width: 100%; }
+  :root[data-discourse-view="attention-card"] .discourse-layout { display: block; }
+  :root[data-discourse-view="attention-card"] .discourse-stage,
+  :root[data-discourse-view="attention-card"] #discourse-player .matrix-card { height: 30vh; }
+  :root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { left: 0; top: 60%; width: 100%; }
   :root[data-discourse-view="attention-card"] #discourse-player .dot-stage { height: 200px; }
-  .attention-track { top: 42%; left: 1.5rem; right: 1rem; transform: none; border-right: 0; border-left: 1px solid var(--kp-st-muted); padding: 1rem 0 1rem 2rem; }
+  .attention-track { margin: 0 1rem; border-right: 0; border-left: 1px solid var(--kp-st-muted); padding: 6vh 0 0 2rem; }
   .attention-comment[data-active]::before { right: auto; left: calc(-2rem - 2px); }
   .attention-comment input { right: auto; left: calc(-2rem - 9px); }
-  .attention-comment { min-height: 3rem; margin: .2rem 0; }
   .attention-back { left: 1rem; top: 1rem; }
   .attention-hint { display: none; }
 }

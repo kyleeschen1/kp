@@ -6,7 +6,11 @@ test('unified commentary retains text and holds math through a focus-only beat',
   await page.goto(`${path}?view=attention-card`);
   const player = page.locator('#discourse-player'), stage = page.locator('.dot-stage');
   await expect(player).toHaveAttribute('data-attention-ready', 'true');
-  await expect(page.locator('.attention-comment button')).toHaveCount(5);
+  await expect(page.locator('.attention-comment button')).toHaveCount(7);
+  await expect(page.locator('.attention-comment[data-form="prose"]')).toHaveCount(4);
+  await expect(page.locator('.attention-comment[data-form="brief"]')).toHaveCount(3);
+  await expect(page.locator('.attention-track')).toContainText('In matrix multiplication, this row and this column supply one entry');
+  await page.screenshot({ path: info.outputPath('unified-prose.png') });
   const select = async (text: string, id: string) => {
     await page.getByRole('button', { name: text, exact: true }).click();
     await expect(player).toHaveAttribute('data-attention-comment', id);
@@ -17,7 +21,7 @@ test('unified commentary retains text and holds math through a focus-only beat',
     border: getComputedStyle(node).borderTopWidth,
   }));
   expect(styles.background).toBe(styles.stage); expect(styles.border).toBe('0px');
-  await expect(stage).toHaveAttribute('data-progress', '0.25');
+  await expect(stage).toHaveAttribute('data-progress', '0');
   const stageBox = await stage.boundingBox();
   // Reading precedes the stage spatially; their divider owns the scrubber.
   const trackBox = await page.locator('.attention-track').boundingBox();
@@ -64,8 +68,9 @@ test('unified commentary retains text and holds math through a focus-only beat',
   await select('Keep the negative signs.', 'signs');
   await expect(stage).toHaveAttribute('data-progress', '0.5');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
-  const comments = await page.locator('.attention-track').boundingBox();
-  expect(comments!.y + comments!.height).toBeLessThanOrEqual(844);
+  const comment = await page.locator('.attention-comment[data-active]').boundingBox();
+  const mobileStage = await page.locator('.discourse-stage').boundingBox();
+  expect(comment!.y).toBeGreaterThanOrEqual(mobileStage!.y + mobileStage!.height);
   await page.screenshot({ path: info.outputPath('unified-phone.png') });
 });
 

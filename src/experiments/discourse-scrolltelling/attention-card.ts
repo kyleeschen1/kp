@@ -2,7 +2,7 @@ import './attention-card.css';
 import { mountDotPlayer } from '../dot-product-passage/player.ts';
 import { passage } from '../dot-product-passage/source.ts';
 import { KpTutorialPageScrollCoordinator } from '../../tutorial/kp-tutorial-page-scroll-coordinator.ts';
-import { attentionComments, attentionCorridor, attentionFrame, attentionTravel } from './attention-card-model.ts';
+import { attentionComments, attentionCorridor, attentionFrame, attentionAtPosition, attentionPosition } from './attention-card-model.ts';
 import { renderKpFocusDeckAnnotation } from '../../tutorial/focus-deck-annotation.ts';
 
 /** Local presentation experiment: the retained dot renderer owns all math. */
@@ -22,21 +22,32 @@ export async function mountUnifiedAttention(root: HTMLElement) {
   document.documentElement.dataset['discourseView'] = 'attention-card'; header.hidden = true;
   const player = await mountDotPlayer(root, passage);
   const card = root.querySelector<HTMLElement>('.matrix-card')!;
-  const track = document.createElement('nav');
-  track.className = 'attention-track'; track.setAttribute('aria-label', 'Calculation commentary');
+  const track = document.createElement('article');
+  track.className = 'attention-track kp-focus-deck'; track.setAttribute('aria-label', 'Calculation commentary');
   track.innerHTML = attentionComments.map((comment, index) => `<div class="attention-comment" data-comment="${comment.id}">
     <button type="button" data-select="${index}">${renderKpFocusDeckAnnotation({ entityId: comment.id, text: comment.text })}</button>
-    ${comment.kind === 'transform' ? `<input data-motion="${index}" aria-label="${comment.id === 'multiply' ? 'Multiplication' : 'Addition'} progress" type="range" min="0" max="1" step="0.001" value="0" hidden>` : ''}</div>`).join('');
-  card.append(track);
+    ${comment.kind === 'transform' ? `<input data-motion="${index}" aria-label="${comment.id === 'pair' ? 'Pairing' : comment.id === 'multiply' ? 'Multiplication' : 'Addition'} progress" type="range" min="0" max="1" step="0.001" value="0" hidden>` : ''}</div>`).join('');
+  layout.append(track);
+  const end = document.createElement('div'); end.className = 'attention-end'; track.append(end);
   const back = document.createElement('a');
   back.className = 'attention-back'; back.href = './'; back.textContent = '← Full explanation'; card.append(back);
   const hint = document.createElement('p'); hint.className = 'attention-hint';
   hint.textContent = 'Scroll to read and inspect. The divider marks the active comment.'; card.append(hint);
   const rows = [...track.querySelectorAll<HTMLElement>('.attention-comment')];
-  rows.forEach((row, index) => { row.dataset['sourceIds'] = attentionComments[index]!.refs.map(ref => ref.id).join(' '); });
+  rows.forEach((row, index) => {
+    const comment = attentionComments[index]!;
+    row.dataset['sourceIds'] = comment.refs.map(ref => ref.id).join(' ');
+    row.dataset['form'] = comment.paragraphs ? 'prose' : 'brief';
+    for (const text of comment.paragraphs ?? []) { const p = document.createElement('p'); p.dataset['kpFocusDeckType'] = 'support'; p.textContent = text; row.append(p); }
+  });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let disposed = false;
-  const seekTravel = (travel: number) => window.scrollTo({ top: layout.getBoundingClientRect().top + scrollY + travel * innerHeight * 3, behavior: 'instant' });
+  const readingLine = () => matchMedia('(max-width: 850px)').matches ? innerHeight * .36 : innerHeight * .3;
+  const landings = () => [...rows, end].map(row => row.getBoundingClientRect().top + scrollY - readingLine());
+  const seek = (index: number, motion?: number) => {
+    const positions = landings(), y = attentionPosition(positions, index, motion);
+    render(attentionAtPosition(positions, y)); window.scrollTo({ top: y, behavior: 'instant' });
+  };
   const clearFocus = () => root.querySelectorAll('[data-attention-sign]').forEach(node => node.removeAttribute('data-attention-sign'));
   const render = (travel: number) => {
     const frame = attentionFrame(travel, reduced.matches);
@@ -57,24 +68,32 @@ export async function mountUnifiedAttention(root: HTMLElement) {
       if (slider) { slider.hidden = !active; slider.value = String(frame.motion); slider.setAttribute('aria-valuetext', `${Math.round(frame.motion * 100)}% complete`); }
     });
   };
-  const coordinator = new KpTutorialPageScrollCoordinator(window, () => [{
-    id: 'unified-attention', passageId: 'dot', blockId: 'dot.commentary', anchor: layout, corridor: attentionCorridor,
-  }], projection => { if (!disposed && projection.blocks[0]) render(projection.blocks[0].travel); });
+  const coordinator = new KpTutorialPageScrollCoordinator(window, () => [...rows, end].map((anchor, index) => ({
+    id: String(index), passageId: 'dot', blockId: `dot.commentary.${index}`, anchor, corridor: attentionCorridor,
+  })), projection => {
+    if (disposed) return;
+    const positions = [...rows, end].map((_, index) => {
+      const block = projection.blocks.find(block => block.id === String(index));
+      if (!block) throw new Error('Missing commentary scroll boundary.');
+      return block.anchorTop + projection.scrollY - readingLine();
+    });
+    render(attentionAtPosition(positions, projection.scrollY));
+  }, { projectionNeighborhoodRadius: attentionComments.length + 1 });
   rows.forEach((row, index) => {
     row.querySelector('button')!.onclick = () => {
       history.replaceState(null, '', `#attention-${attentionComments[index]!.id}`);
-      const travel = attentionTravel(index); render(travel); seekTravel(travel);
+      seek(index);
     };
     const slider = row.querySelector('input');
     if (slider) slider.oninput = () => {
       // Drag and scroll share the same physical corridor authority.
-      const travel = attentionTravel(index, Number(slider.value)); render(travel); seekTravel(travel);
+      seek(index, Number(slider.value));
     };
   });
-  const restore = () => { const index = attentionComments.findIndex(comment => location.hash === `#attention-${comment.id}`); if (index >= 0) seekTravel(attentionTravel(index)); };
+  const restore = () => { const index = attentionComments.findIndex(comment => location.hash === `#attention-${comment.id}`); if (index >= 0) seek(index); };
   const motion = () => coordinator.scheduleProjection();
   window.addEventListener('hashchange', restore); reduced.addEventListener('change', motion);
-  const resize = new ResizeObserver(() => coordinator.invalidateGeometry()); resize.observe(layout);
+  const resize = new ResizeObserver(() => coordinator.invalidateGeometry()); resize.observe(track); rows.forEach(row => resize.observe(row));
   render(0); coordinator.connect(); restore(); root.dataset['attentionReady'] = 'true';
   return () => {
     if (disposed) return; disposed = true;

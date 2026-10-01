@@ -4,7 +4,7 @@
   "title": "Compare discourse-guided scrolling with the dot player",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: unified commentary exemplar ready at existing attention-card URL; implementation and checks complete",
+  "summary": "HUMAN_CHECKPOINT: mixed explanatory prose and brief comments now flow on the left of the fixed math stage; prior stationary five-comment interpretation superseded",
   "sourceRefs": [
     {
       "kind": "file",
@@ -178,6 +178,13 @@
       "scope": "delivery",
       "checkedAt": "2026-10-01T18:34:17.127Z",
       "notes": "Lazy unified adapter 2.35 KB JS gzip and 0.92 KB CSS; common JS unchanged at 94.61 KB"
+    },
+    {
+      "command": "npm run visual:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "mixed-prose",
+      "checkedAt": "2026-10-01T18:45:34.357Z",
+      "notes": "Six browser checks pass for flowing prose plus brief cues, stationary right stage, shared divider, direct links, reversal and mobile; 17 unit tests, app/test types and build also pass"
     }
   ]
 }

@@ -205,3 +205,30 @@ right-hand stage. The local stylesheet now enforces this placement, and the
 browser regression checks their relative geometry and scrubber alignment.
 Narrow screens retain the stacked presentation. Timing and semantic state are
 unchanged.
+
+## Mixed prose and short comments
+
+The user clarified that the first version's explanatory prose is the foundation:
+short comments must be interspersed in that reading flow, not replace it with a
+list of instructions. The query view now has a normal scrolling article on the
+left and the same stationary stage on the right. Four explanatory passages cover
+the inputs, matching positions, the covector relationship, and the result. Three
+brief cues cover multiplication, signs, and addition. Both forms use the same
+semantic playhead and divider marker. The native input and pairing interval have
+been restored at the beginning.
+
+The shared page coordinator measures passage boundaries; paragraph height owns
+the scroll interval rather than a fixed screen-sized annotation list. Slider
+input maps back into those same document positions. Shared annotation typography
+now applies to the article, with normal-flow labels and support prose; moving
+the labels outside the stage must not leave absolute-positioned, zero-height
+buttons. Narrow screens retain the pinned stage above the flowing text.
+
+Verification: 17 focused unit tests, six discourse browser tests, application and
+test TypeScript checks, and the isolated build pass. Tests cover mixed passage
+forms, measured-boundary inversion, fixed stage geometry through reading/focus,
+scrubber reversal, links, narrow screens, and the preserved original split view.
+Latest lazy adapter is 3.18 KB JS gzip plus 1.07 KB CSS; common entry remains
+94.61 KB JS gzip, excluding fonts. The local model, adapter and stylesheet remain
+the rollback unit. Review this mixed reading flow at the existing query URL;
+the previous five-comment stationary presentation is superseded.

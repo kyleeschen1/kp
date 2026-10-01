@@ -1,15 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { discourseCorridor, discourseProgress } from '../src/experiments/discourse-scrolltelling/scroll.ts';
-import { attentionComments, attentionFrame, attentionTravel } from '../src/experiments/discourse-scrolltelling/attention-card-model.ts';
+import { attentionComments, attentionFrame, attentionTravel, attentionAtPosition, attentionPosition } from '../src/experiments/discourse-scrolltelling/attention-card-model.ts';
 import { passage } from '../src/experiments/dot-product-passage/source.ts';
 
 test('comments and focus hold existing math while transformations scrub reversibly', () => {
-  assert.equal(attentionFrame(attentionTravel(0)).progress, .25);
-  assert.equal(attentionFrame(attentionTravel(2)).progress, .5);
-  assert.equal(attentionFrame(attentionTravel(4)).progress, 1);
-  assert.deepEqual(attentionComments[2]!.refs, passage.dot.pairs.slice(1).map(pair => pair.product));
-  for (const index of [1, 3]) {
+  assert.equal(attentionFrame(attentionTravel(0)).progress, 0);
+  assert.equal(attentionFrame(attentionTravel(2)).progress, .25);
+  assert.equal(attentionFrame(attentionTravel(4)).progress, .5);
+  assert.equal(attentionFrame(attentionTravel(6)).progress, 1);
+  assert.deepEqual(attentionComments[4]!.refs, passage.dot.pairs.slice(1).map(pair => pair.product));
+  for (const index of [1, 3, 5]) {
     const comment = attentionComments[index]!;
     assert.equal(comment.kind, 'transform');
     if (comment.kind !== 'transform') throw new Error('Expected transformation');
@@ -28,6 +29,20 @@ test('comments and focus hold existing math while transformations scrub reversib
   assert.throws(() => attentionTravel(99));
   assert.throws(() => attentionTravel(2, .5));
   assert.throws(() => attentionTravel(1, Infinity));
+});
+
+test('mixed prose and brief cues use measured boundaries in both directions', () => {
+  const landings = [0, 450, 1000, 1800, 2050, 2300, 2700, 3200];
+  for (let index = 0; index < attentionComments.length; index++) {
+    const y = attentionPosition(landings, index);
+    assert.equal(attentionFrame(attentionAtPosition(landings, y)).index, index);
+  }
+  for (const index of [1, 3, 5]) for (const motion of [0, .25, .5, 1]) {
+    const frame = attentionFrame(attentionAtPosition(landings, attentionPosition(landings, index, motion)));
+    assert.ok(Math.abs(frame.motion - motion) < 1e-10);
+  }
+  assert.throws(() => attentionAtPosition([0, 0], 0));
+  assert.throws(() => attentionAtPosition(landings, NaN));
 });
 
 test('measured discourse edges hold reading endpoints and scrub reversibly', () => {
