@@ -4,6 +4,9 @@
 .dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; -webkit-text-stroke: .035em currentColor; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
+/* Transformed full-stage layers must not enlarge the outer scroll viewport.
+   The stage retains its minimum width for intentional narrow-screen scrolling. */
+.dot-stage { overflow: clip; }
 .dot-inputs { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 /* KaTeX retains enclosure layout and MathML. One structural paint treatment
    replaces its short font brackets and tall SVG brackets without double paint. */
@@ -30,8 +33,7 @@
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
 /* Flex isolates the cloned token from an extra inherited prose line box. */
 .dot-paint { position: absolute; display: flex; left: 0; top: 0; color: var(--kp-st-ink); }
-.dot-stage [data-dot-focused] { color: var(--kp-st-focus); text-shadow: var(--dot-focus-shadow, none); }
-@media (forced-colors: active) { .dot-stage [data-dot-focused] { text-shadow: none; } }
+.dot-stage [data-dot-focused] { color: var(--kp-st-focus); }
 .dot-static { overflow-x: auto; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }
 :root[data-matrix-layout="side"] .dot-inputs { right: 55%; gap: 1rem; }

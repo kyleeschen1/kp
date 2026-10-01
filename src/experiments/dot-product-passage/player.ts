@@ -24,7 +24,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     <div class="matrix-controls" aria-label="Depth comparison">
       <label>Background opacity <input data-background-opacity aria-label="Background opacity" type="range" min="0" max="100" step="1" value="${defaultDotDepth.backgroundOpacity * 100}"><output data-opacity-value>${defaultDotDepth.backgroundOpacity * 100}%</output></label>
       <label>Foreground lift <select data-foreground-lift aria-label="Foreground lift"><option value="on" selected>On</option><option value="off">Off</option></select></label>
-      <label>Shadow strength <input data-shadow-strength aria-label="Shadow strength" type="range" min="0" max="100" step="1" value="${defaultDotDepth.shadowStrength * 100}"><output data-shadow-value>${defaultDotDepth.shadowStrength * 100}%</output></label>
+      <label>Lift height <input data-lift-height aria-label="Lift height" type="range" min="0" max="24" step="1" value="${defaultDotDepth.liftHeight}"><output data-lift-value>${defaultDotDepth.liftHeight} px</output></label>
     </div>
     </section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
@@ -35,7 +35,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   let depth: DotDepthSettings = defaultDotDepth;
   const opacityControl = root.querySelector<HTMLInputElement>('[data-background-opacity]')!;
   const liftControl = root.querySelector<HTMLSelectElement>('[data-foreground-lift]')!;
-  const shadowControl = root.querySelector<HTMLInputElement>('[data-shadow-strength]')!;
+  const heightControl = root.querySelector<HTMLInputElement>('[data-lift-height]')!;
   const view = mountPresentation(root, passage, () => ({ ...depth, reducedMotion: reduced.matches }));
   const clock = createKpReaderTimelinePlaybackClock({ id: root.id, durationMs });
   let config = readMatrixConfig(document);
@@ -76,12 +76,12 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   };
   chooser.onchange = () => go(Number(chooser.value), false);
   const updateDepth = () => {
-    depth = { ...depth, backgroundOpacity: Number(opacityControl.value) / 100, foregroundLift: liftControl.value === 'on', shadowStrength: Number(shadowControl.value) / 100 };
+    depth = { ...depth, backgroundOpacity: Number(opacityControl.value) / 100, foregroundLift: liftControl.value === 'on', liftHeight: Number(heightControl.value) };
     root.querySelector('[data-opacity-value]')!.textContent = `${opacityControl.value}%`;
-    root.querySelector('[data-shadow-value]')!.textContent = `${shadowControl.value}%`;
+    root.querySelector('[data-lift-value]')!.textContent = `${heightControl.value} px`;
     render();
   };
-  opacityControl.oninput = shadowControl.oninput = liftControl.onchange = updateDepth;
+  opacityControl.oninput = heightControl.oninput = liftControl.onchange = updateDepth;
   back.onclick = () => navigate(-1); next.onclick = () => navigate(1);
   play.onclick = () => {
     if (clock.getStatus() === "playing") clock.pause();
@@ -107,7 +107,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     window.removeEventListener("hashchange", restore); document.removeEventListener("visibilitychange", visibility);
     window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
-    opacityControl.oninput = shadowControl.oninput = liftControl.onchange = null;
+    opacityControl.oninput = heightControl.oninput = liftControl.onchange = null;
     root.dataset["dotMounted"] = "false";
     delete root.dataset["ready"];
   };

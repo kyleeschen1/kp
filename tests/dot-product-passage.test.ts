@@ -5,16 +5,17 @@ import { dotPassage, DotPassageGap, valueOf, sample } from "../src/experiments/d
 import { constant } from "../src/math/expression.ts";
 import { createKpScalarExpression, createKpTypedMatrixFromRows } from "../src/math/typed-semantic-math.ts";
 import { matrixProduct } from "../src/math/matrix-product.ts";
-import { sampleDotDepth, sampleDotShadow, defaultDotDepth } from '../src/experiments/dot-product-passage/depth.ts';
+import { sampleDotDepth, sampleDotElevation, defaultDotDepth } from '../src/experiments/dot-product-passage/depth.ts';
 
-test('focus shadows hold, settle, disable and reject invalid strengths', () => {
-  assert.equal(sampleDotShadow(0), 'none');
-  assert.equal(sampleDotShadow(.075), sampleDotShadow(.125));
-  assert.equal(sampleDotShadow(.25), sampleDotShadow(.5));
-  assert.equal(sampleDotShadow(.125, { ...defaultDotDepth, shadowStrength: 0 }), 'none');
-  for (const shadowStrength of [-1, 2, NaN, Infinity]) assert.throws(() => sampleDotShadow(.125, { ...defaultDotDepth, shadowStrength }), DotPassageGap);
-  const reduced = { ...defaultDotDepth, reducedMotion: true };
-  assert.equal(sampleDotShadow(.075, reduced), sampleDotShadow(.25, reduced));
+test('lift height holds, settles and rejects invalid settings', () => {
+  for (const liftHeight of [0, 6, 24]) {
+    const settings = { ...defaultDotDepth, liftHeight };
+    assert.equal(sampleDotElevation(.075, settings), liftHeight);
+    assert.equal(sampleDotElevation(.125, settings), liftHeight);
+    for (const p of [0, .25, .5, 1]) assert.equal(sampleDotElevation(p, settings), 0);
+    assert.equal(sampleDotElevation(.125, { ...settings, reducedMotion: true }), 0);
+  }
+  for (const liftHeight of [-1, 25, NaN, Infinity]) assert.throws(() => sampleDotElevation(.125, { ...defaultDotDepth, liftHeight }), DotPassageGap);
 });
 
 test('group depth preserves native endpoints, bounded scaling and reduced motion', () => {

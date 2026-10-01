@@ -1,6 +1,36 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test('focus lift cannot change scroll extents while narrow stages remain scrollable', async ({ page }) => {
+  await page.goto('/experiments/dot-product-passage/');
+  await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
+  const timeline = page.getByRole('slider', { name: 'Animation position' });
+  await page.getByRole('slider', { name: 'Lift height' }).fill('24');
+  const dimensions = () => page.locator('.matrix-scroll').evaluate(node => ({
+    width: node.clientWidth, height: node.clientHeight, scrollWidth: node.scrollWidth, scrollHeight: node.scrollHeight,
+  }));
+  for (const width of [1200, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await timeline.fill('0');
+    const initial = await dimensions();
+    expect(initial.scrollHeight).toBe(initial.height);
+    if (width === 390) expect(initial.scrollWidth).toBeGreaterThan(initial.width);
+    else expect(initial.scrollWidth).toBe(initial.width);
+    for (const p of [.01, .03, .075, .125, .18, .22, .25, 0]) {
+      await timeline.fill(String(p));
+      expect(await dimensions()).toEqual(initial);
+      const insideStage = await page.locator('.dot-stage').evaluate(stage => {
+        const bounds = stage.getBoundingClientRect();
+        return [...stage.querySelectorAll('.dot-paint')].filter(node => Number(getComputedStyle(node).opacity) > 0).every(node => {
+          const rect = node.getBoundingClientRect();
+          return rect.top >= bounds.top && rect.bottom <= bounds.bottom && rect.left >= bounds.left && rect.right <= bounds.right;
+        });
+      });
+      expect(insideStage).toBe(true);
+    }
+  }
+});
+
 test('depth controls change whole groups while preserving endpoint and reverse poses', async ({ page }, info) => {
   await page.goto('/experiments/dot-product-passage/');
   await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
@@ -17,18 +47,16 @@ test('depth controls change whole groups while preserving endpoint and reverse p
   for (const group of ['.dot-work', '.dot-material']) await expect(page.locator(group)).toHaveCSS('scale', '1.03');
   const poses = () => page.locator('.dot-stage [style]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
   const held = await poses();
-  const shadowControl = page.getByRole('slider', { name: 'Shadow strength' });
-  await expect(shadowControl).toHaveValue('70');
-  const shadow = await page.locator('[data-occurrence="pair-left-1"]').evaluate(node => getComputedStyle(node).textShadow);
-  expect(shadow).not.toBe('none');
+  await expect(page.getByRole('slider', { name: 'Shadow strength' })).toHaveCount(0);
+  const heightControl = page.getByRole('slider', { name: 'Lift height' });
+  await expect(heightControl).toHaveValue('6');
   for (const selector of ['[data-occurrence="pair-left-1"] .dot-negative-sign', '[data-kp-dot-key="pair-left-1"] .dot-negative-sign']) {
-    await expect(page.locator(selector)).toHaveCSS('text-shadow', shadow);
+    await expect(page.locator(selector)).toHaveCSS('text-shadow', 'none');
   }
-  await shadowControl.fill('0');
-  await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS('text-shadow', 'none');
-  await shadowControl.fill('100');
-  await page.locator('.matrix-card').screenshot({ path: info.outputPath('focus-shadow-100.png') });
-  await shadowControl.fill('70');
+  const y = () => page.locator('[data-occurrence="pair-left-1"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m42);
+  await heightControl.fill('0'); const baseline = await y();
+  await heightControl.fill('24'); expect(baseline - await y()).toBeCloseTo(24, 4);
+  await heightControl.fill('6'); expect(baseline - await y()).toBeCloseTo(6, 4);
   await timeline.fill('0.075');
   expect(await poses()).toEqual(held);
   await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
@@ -292,8 +320,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
-  await expect(page.locator('[data-occurrence="pair-right-0"]')).not.toHaveCSS("text-shadow", "none");
-  await expect(page.locator('[data-occurrence="pair-left-0"]')).not.toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
+  await expect(page.locator('[data-occurrence="pair-left-0"]')).toHaveCSS("text-shadow", "none");
   const tiltY = (selector: string) => page.locator(selector).evaluate(node =>
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
   expect(await tiltY(".dot-stage")).toBe(0);
@@ -358,7 +386,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(settledScale).toBe(1);
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(0);
   for (const source of await page.locator(".dot-inputs [data-kp-dot-key]").all()) await expect(source).toHaveCSS("opacity", "0");
-  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).not.toHaveCSS("text-shadow", "none");
+  for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
   await slider.fill("0.31");
@@ -518,5 +546,5 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await child.getByRole("slider", { name: "Animation position" }).fill("0.06");
   const darkInk = await child.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", darkInk);
-  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).not.toHaveCSS("text-shadow", "none");
+  for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
 });

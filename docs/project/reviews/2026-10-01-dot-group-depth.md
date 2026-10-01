@@ -1,6 +1,19 @@
 # Dot passage: group depth and lighter delimiters
 
-Current shadow candidate: focused tokens receive two downward black text
+Current revision: shadows and their control are removed at the user's request.
+Lift height now ranges from 0–24px, defaulting to 6px, and controls only the
+initial rise. The hold, pivot, separate scale control and full-size background
+are preserved. Invalid/nonfinite lift heights fail at the projection boundary.
+
+The startup scrollbar flash came from scaling the full-stage material layer
+inside an auto-overflow viewport. The dot stage now clips transformed overflow;
+its layout minimum width still supplies intentional horizontal scrolling on
+narrow screens. The browser regression checks stable scroll extents on desktop
+and phone widths throughout departure and reversal, plus visible token bounds
+at maximum lift. This fixes overflow ownership rather than hiding scrollbars.
+Verification: `npm run test:dot-passage`, `npm run visual:dot-passage`.
+
+Previous shadow candidate (removed): focused tokens received two downward black text
 shadows, one tight and one soft, sampled from the existing departure timeline.
 The 0–100% Shadow strength slider defaults to 70%; zero removes shadows.
 The lifted hold uses offsets of 3px and 10px, settling to 1px and 2px at the
