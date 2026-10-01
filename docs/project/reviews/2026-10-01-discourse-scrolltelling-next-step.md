@@ -272,3 +272,9 @@ The local stylesheet and removal of sticky-position bookkeeping are the rollback
 unit. Browser checks now enforce continued card travel after clearance as well as
 the unchanged stationary stage and pre-clearance hold. Material values remain
 provisional for this exemplar.
+
+After comparing both layouts, the user's latest request restores split mode.
+The local host, model, stylesheet and tests match the mixed-prose split exemplar
+at `41eae7b98`: prose and short comments left, fixed math right, divider scrubber.
+The underlying semantic objects and dot renderer remain unchanged. The same
+query URL serves this restored presentation.

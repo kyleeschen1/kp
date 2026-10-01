@@ -4,7 +4,7 @@
   "title": "Compare discourse-guided scrolling with the dot player",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: single-column text-over-stage reveal implemented; effects start only after text clearance, superseding side-by-side layout",
+  "summary": "Latest user direction restores mixed-prose split mode: scrolling text left, fixed math right, divider scrubber; single-column alternatives superseded.",
   "sourceRefs": [
     {
       "kind": "file",

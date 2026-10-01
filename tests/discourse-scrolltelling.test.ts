@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { discourseCorridor, discourseProgress } from '../src/experiments/discourse-scrolltelling/scroll.ts';
-import { attentionComments, attentionFrame, attentionTravel, attentionAtPosition, attentionPosition, revealFrame } from '../src/experiments/discourse-scrolltelling/attention-card-model.ts';
+import { attentionComments, attentionFrame, attentionTravel, attentionAtPosition, attentionPosition } from '../src/experiments/discourse-scrolltelling/attention-card-model.ts';
 import { passage } from '../src/experiments/dot-product-passage/source.ts';
 
 test('comments and focus hold existing math while transformations scrub reversibly', () => {
@@ -43,21 +43,6 @@ test('mixed prose and brief cues use measured boundaries in both directions', ()
   }
   assert.throws(() => attentionAtPosition([0, 0], 0));
   assert.throws(() => attentionAtPosition(landings, NaN));
-});
-
-test('reveal gates effects on text clearance and rejects overlapping intervals', () => {
-  const boundaries = attentionComments.map((_, i) => ({ start: i * 1000, clear: i * 1000 + 400, end: i * 1000 + 700 }));
-  for (const i of [1, 3, 5]) {
-    const comment = attentionComments[i]!;
-    if (comment.kind !== 'transform') throw new Error('Expected transformation');
-    assert.equal(revealFrame(boundaries, boundaries[i]!.clear - 1).progress, comment.from);
-    assert.equal(revealFrame(boundaries, boundaries[i]!.clear).progress, comment.from);
-    assert.ok(Math.abs(revealFrame(boundaries, boundaries[i]!.clear + 150).progress - (comment.from + comment.to) / 2) < 1e-10);
-    assert.equal(revealFrame(boundaries, boundaries[i]!.clear - 1).cleared, false);
-  }
-  assert.throws(() => revealFrame(boundaries, NaN));
-  assert.throws(() => revealFrame(boundaries.map(b => ({ ...b, clear: b.start })), 0));
-  assert.throws(() => revealFrame(boundaries.map(b => ({ ...b, end: b.end + 1000 })), 0));
 });
 
 test('measured discourse edges hold reading endpoints and scrub reversibly', () => {

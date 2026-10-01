@@ -31,10 +31,10 @@ The separate route reuses the dot player and existing split-view scroll
 coordinator, with continuously scrubbed edges between reading holds and exact
 detour return. `run-contract.kp.discourse-scrolltelling-v1` owns its visual
 checkpoint; no universal format adoption or rectangular-review acceptance is implied.
-Its latest comparison is `?view=attention-card`: one shared column with a centered,
-pinned stage behind scrolling prose and brief cues. Text clears the stage before
-effects begin, then keeps floating upward on a mostly opaque backing. It awaits visual
-review before generalization; this supersedes the side-by-side comparison.
+Its current comparison is `?view=attention-card`: scrolling explanatory prose and
+short cues on the left, with the fixed mathematical stage on the right and a
+divider scrubber. The user's latest direction restores split mode; single-column
+reveal and floating-card experiments remain historical alternatives.
 
 October 1 rectangular candidate: [first-cell integration](reviews/2026-10-01-rectangular-product.md)
 reuses the accepted dot passage in matrix context and adds result placement.
