@@ -1,6 +1,11 @@
 # Dot passage: group depth and lighter delimiters
 
-Current size control: Math size spans 20–32px and defaults to 26px. Values name
+Current size control: Math size spans 20–32px and now defaults to the user's
+selected 20px. Column element centers match the measured horizontal spacing of
+the corresponding row elements, without scaling glyphs. This is recomputed
+with native endpoint measurement on resize/size changes and used by the pivot.
+Nine browser checks pass, including spacing equality at 20, 26 and 32px.
+Values name
 the resulting KaTeX font size, accounting for its 1.21em multiplier. Each player
 owns its setting; changing it pauses playback, remeasures native endpoints and
 rebuilds material at the same playhead. Stage height reserves proportional room

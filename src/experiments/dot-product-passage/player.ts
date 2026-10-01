@@ -15,7 +15,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
   }
   root.dataset["dotMounted"] = "true";
   root.classList.add("dot-player", "matrix-player");
-  root.style.setProperty('--dot-math-size', '26px');
+  root.style.setProperty('--dot-math-size', '20px');
   root.innerHTML = `<section class="matrix-card kp-focus-deck" aria-label="Three-term dot product animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Dot product; scroll horizontally on narrow screens">${stageHtml(passage)}</div>
@@ -26,7 +26,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
       <label>Background opacity <input data-background-opacity aria-label="Background opacity" type="range" min="0" max="100" step="1" value="${defaultDotDepth.backgroundOpacity * 100}"><output data-opacity-value>${defaultDotDepth.backgroundOpacity * 100}%</output></label>
       <label>Foreground lift <select data-foreground-lift aria-label="Foreground lift"><option value="on" selected>On</option><option value="off">Off</option></select></label>
       <label>Lift height <input data-lift-height aria-label="Lift height" type="range" min="0" max="24" step="1" value="${defaultDotDepth.liftHeight}"><output data-lift-value>${defaultDotDepth.liftHeight} px</output></label>
-      <label>Math size <input data-math-size aria-label="Math size" type="range" min="20" max="32" step="1" value="26"><output data-size-value>26 px</output></label>
+      <label>Math size <input data-math-size aria-label="Math size" type="range" min="20" max="32" step="1" value="20"><output data-size-value>20 px</output></label>
     </div>
     </section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>

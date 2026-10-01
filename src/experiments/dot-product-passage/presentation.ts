@@ -73,6 +73,20 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage, depthS
   const prepare = () => {
     if (disposed) return;
     reset(); layer.replaceChildren(); owners.length = 0;
+    // Native arrays use different horizontal and vertical spacing. Project the
+    // column onto the row's measured center spacing, without scaling glyphs.
+    // Keep this layout translation separate from frame-owned motion transforms.
+    const rowEntries = passage.dot.pairs.map(pair => requireNative(`left-${pair.index}`).getBoundingClientRect());
+    const columnEntries = passage.dot.pairs.map(pair => requireNative(`right-${pair.index}`));
+    columnEntries.forEach(node => { node.style.translate = ''; });
+    const columnBounds = columnEntries.map(node => node.getBoundingClientRect());
+    const rowCenters = rowEntries.map(r => r.x + r.width / 2);
+    const columnCenters = columnBounds.map(r => r.y + r.height / 2);
+    const rowMiddle = (rowCenters[0]! + rowCenters.at(-1)!) / 2;
+    const columnMiddle = (columnCenters[0]! + columnCenters.at(-1)!) / 2;
+    columnEntries.forEach((node, i) => {
+      node.style.translate = `0px ${columnMiddle + rowCenters[i]! - rowMiddle - columnCenters[i]!}px`;
+    });
     // Bracket paint encloses measured entries, not the font's outer line box.
     // Retain the native enclosure's roomy horizontal padding while centering
     // its paint on the entries rather than inheriting asymmetric font bearings.

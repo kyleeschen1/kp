@@ -7,7 +7,7 @@ test('math size remeasures native and moving tokens at the held playhead', async
   await expect(root).toHaveAttribute('data-ready', 'true');
   const size = root.getByRole('slider', { name: 'Math size' });
   const timeline = root.getByRole('slider', { name: 'Animation position' });
-  await expect(size).toHaveValue('26');
+  await expect(size).toHaveValue('20');
   await timeline.fill('0.125');
   for (const value of ['20', '32', '26']) {
     await size.fill(value);
@@ -16,12 +16,20 @@ test('math size remeasures native and moving tokens at the held playhead', async
       const actual = await root.locator(selector).evaluate(node => parseFloat(getComputedStyle(node).fontSize));
       expect(actual).toBeCloseTo(Number(value), 2);
     }
+    const spacings = await root.locator('.dot-inputs').evaluate(inputs => {
+      const centers = (side: string) => [...inputs.querySelectorAll(`[data-kp-dot-key^="${side}-"]`)].map(node => {
+        const r = node.getBoundingClientRect(); return side === 'left' ? r.x + r.width / 2 : r.y + r.height / 2;
+      });
+      const gaps = (values: number[]) => values.slice(1).map((v, i) => v - values[i]!);
+      return { row: gaps(centers('left')), column: gaps(centers('right')) };
+    });
+    for (let i = 0; i < spacings.row.length; i++) expect(spacings.column[i]).toBeCloseTo(spacings.row[i]!, 2);
     const pose = () => root.locator('.dot-paint').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
     const held = await pose();
     await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
     expect(await pose()).toEqual(held);
   }
-  await expect(page.locator('#dot-player-second').getByRole('slider', { name: 'Math size' })).toHaveValue('26');
+  await expect(page.locator('#dot-player-second').getByRole('slider', { name: 'Math size' })).toHaveValue('20');
   await root.locator('.matrix-card').screenshot({ path: info.outputPath('math-size-26.png') });
 });
 
