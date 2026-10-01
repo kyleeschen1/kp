@@ -630,6 +630,11 @@ use regular weight; SteelBlue focus, beige surfaces, dimming and structural
 bracket strokes remain. All four scoped browser tests pass, including regular
 platform-font selection and zero text stroke for native and moving owners.
 
+September 30, return to dark mode: use charcoal page and panel surfaces,
+warm-white focused tokens and neutral grey context/syntax. Regular math weight,
+the dimming slider and default-off glow remain. Four scoped browser tests pass;
+the palette remains a local exemplar choice pending visual review.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

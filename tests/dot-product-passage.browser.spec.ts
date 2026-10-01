@@ -46,7 +46,7 @@ test("unfocused dimming can be tuned without seeking or pausing playback", async
     const fill = await page.locator(".dot-plane-working").evaluate(node => (node as HTMLElement).style.getPropertyValue("--dot-front-fill"));
     expect(fill).toBe("0%");
     expect(await page.locator(".dot-inputs").evaluate(node => Number(getComputedStyle(node).opacity))).toBeCloseTo(1 - value / 100, 4);
-    await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("color", "rgb(70, 130, 180)");
+    await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("color", "rgb(255, 250, 240)");
     await expect(page.locator("[data-dim-value]")).toHaveText(`${value}%`);
     await expect(page.getByRole("slider", { name: "Animation position" })).toHaveValue("0.25");
   }
@@ -159,7 +159,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(await frontAlpha()).toBe(0);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
-  expect(nativeInk).toBe("rgb(70, 130, 180)");
+  expect(nativeInk).toBe("rgb(255, 250, 240)");
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("-webkit-text-stroke-color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS("color", nativeInk);
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
@@ -287,12 +287,12 @@ test("signed dot passage preserves references through pairing, products and sum"
   for (const progress of [.25, .5, .75, 1]) {
     await slider.fill(String(progress));
     const key = progress === .25 ? "pair-left-0" : progress === 1 ? "sum" : "product-0";
-    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(70, 130, 180)");
-    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(70, 70, 70)");
+    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(255, 250, 240)");
+    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(174, 177, 177)");
   }
   await slider.fill("0");
   await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
-  await expect(page.locator('[data-kp-dot-key="left-0"]')).toHaveCSS("color", "rgb(32, 32, 32)");
+  await expect(page.locator('[data-kp-dot-key="left-0"]')).toHaveCSS("color", "rgb(208, 208, 203)");
   expect(await page.locator(".dot-inputs").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11)).toBe(1);
   await chooser.selectOption("1");
   const settledScale = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
@@ -327,7 +327,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(notation.entry).toBe(notation.paired);
   expect(new Set(notation.syntax).size).toBe(1);
   expect(notation.syntax[0]).not.toBe(notation.ink);
-  expect(notation.syntax[0]).toBe("rgb(70, 70, 70)");
+  expect(notation.syntax[0]).toBe("rgb(174, 177, 177)");
   // Check centering in scene coordinates, before the shared camera projection.
   expect(Math.abs(notation.offsetX)).toBeLessThan(1);
   expect(notation.depth).toBe(70);
@@ -459,9 +459,9 @@ test("menu configuration, native endpoints and reduced motion work for the passa
   await page.getByRole("button", { name: "Reset settings", exact: true }).click();
   await child.getByRole("button", { name: "Next step", exact: true }).click();
   await expect(child.locator("#dot-player")).toHaveAttribute("data-milestone", "pairs");
-  await expect(child.locator("body")).toHaveCSS("background-color", "rgb(255, 253, 248)");
-  await expect(child.locator("html")).toHaveCSS("color-scheme", "light");
-  await page.screenshot({ path: info.outputPath("light-override.png"), fullPage: true });
+  await expect(child.locator("body")).toHaveCSS("background-color", "rgb(32, 34, 34)");
+  await expect(child.locator("html")).toHaveCSS("color-scheme", "dark");
+  await page.screenshot({ path: info.outputPath("dark-theme.png"), fullPage: true });
   await child.getByRole("slider", { name: "Animation position" }).fill("0.06");
   const darkInk = await child.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   for (const copy of await child.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", darkInk);
