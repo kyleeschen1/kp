@@ -163,3 +163,37 @@ excluding fonts. No broad renderer certification or catalogue rollout is claimed
 HUMAN_CHECKPOINT: judge the equation's distance from the border, the annotation
 placement, and whether the watch instruction gives enough notice before the
 scrubber takes its place. This remains one pairing-step exemplar.
+
+## Unified commentary revision
+
+The user approved replacing the attention-card presentation with one shared
+surface, a fixed stage, and short retained comments. This supersedes the preceding
+card/handoff treatment at the same query URL. The source of truth remains the
+three-term dot passage and its actual scalar references; the existing dot player
+and KaTeX renderer still own all mathematical transitions. The local adapter,
+model and stylesheet remain the independently reversible rollback unit.
+
+Five comments distinguish held observation, multiplication, negative-sign focus,
+addition, and the final entry. All remain visible; a heavier divider segment marks
+the selected comment. Transformation segments expose a vertical range control
+on that divider, synchronized to ordinary scrolling. Each transformation has
+reading and inspection holds. Clicking a comment updates its shareable hash.
+The negative-sign comment holds exactly the existing products, underlining their
+native sign roles through the original product IDs, without new math or motion.
+This is a local presentation experiment, not a promoted annotation API.
+
+Acceptance checks protect unchanged product geometry during focus, reversal,
+scroll/scrubber correspondence, hash restoration, shared backgrounds, and narrow
+reduced-motion behavior. Six discourse browser tests and sixteen focused unit
+tests pass; eleven standalone dot preservation checks, application/test TypeScript
+and the isolated build pass. The stable
+capture command remains `npm run visual:discourse-scrolltelling`. Existing split
+view and full static explanation remain available. The lazy adapter is 2.35 KB
+JS gzip, versus 1.88 KB previously; its CSS is 0.92 KB gzip versus
+0.59 KB. Common entry remains 94.61 KB JS gzip; fonts are separate.
+
+HUMAN_CHECKPOINT: scroll from matched pairs through multiplication, pause on
+“Keep the negative signs,” then continue through addition. Judge whether the
+stationary commentary, divider marker and held stage direct attention clearly.
+Exact focus paint and pacing remain provisional; no family-wide rollout follows
+without visual acceptance.

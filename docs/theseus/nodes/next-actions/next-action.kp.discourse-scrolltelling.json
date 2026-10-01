@@ -4,7 +4,7 @@
   "title": "Compare discourse-guided scrolling with the dot player",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: one pairing attention card ready; no generalization to further steps",
+  "summary": "HUMAN_CHECKPOINT: unified commentary exemplar ready at existing attention-card URL; implementation and checks complete",
   "sourceRefs": [
     {
       "kind": "file",
@@ -136,6 +136,48 @@
       "scope": "preservation",
       "checkedAt": "2026-10-01T18:03:43.968Z",
       "notes": "All eleven standalone dot checks pass"
+    },
+    {
+      "command": "npm run test:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "unified-attention",
+      "checkedAt": "2026-10-01T18:33:43.261Z",
+      "notes": "16 unit checks including typed source references, held focus state, reversible projection, endpoint holds and invalid travel rejection"
+    },
+    {
+      "command": "npm run visual:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "unified-attention",
+      "checkedAt": "2026-10-01T18:34:14.777Z",
+      "notes": "Six checks pass: retained commentary, focus geometry, reverse, hash restoration, phone reduced motion and original split behavior"
+    },
+    {
+      "command": "npm run visual:dot-passage",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-01T18:34:15.478Z",
+      "notes": "Eleven standalone renderer checks pass"
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-10-01T18:34:16.034Z",
+      "notes": "Test TypeScript passes"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-10-01T18:34:16.568Z",
+      "notes": "Application TypeScript passes"
+    },
+    {
+      "command": "npm run build:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "delivery",
+      "checkedAt": "2026-10-01T18:34:17.127Z",
+      "notes": "Lazy unified adapter 2.35 KB JS gzip and 0.92 KB CSS; common JS unchanged at 94.61 KB"
     }
   ]
 }

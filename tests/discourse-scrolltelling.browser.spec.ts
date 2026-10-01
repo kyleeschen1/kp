@@ -2,48 +2,65 @@ import { test, expect } from '@playwright/test';
 import { explanation } from '../src/experiments/discourse-scrolltelling/source.ts';
 
 const path = '/experiments/discourse-scrolltelling/';
-test('one full-screen card hands an instruction to a synchronized pairing scrubber', async ({ page }, info) => {
+test('unified commentary retains text and holds math through a focus-only beat', async ({ page }, info) => {
   await page.goto(`${path}?view=attention-card`);
-  const player = page.locator('#discourse-player');
+  const player = page.locator('#discourse-player'), stage = page.locator('.dot-stage');
   await expect(player).toHaveAttribute('data-attention-ready', 'true');
-  const travel = async (value: number) => page.locator('.discourse-layout').evaluate((node, value) => {
-    scrollTo(0, node.getBoundingClientRect().top + scrollY + value * innerHeight * 3);
-  }, value);
-  const paint = () => page.locator('[data-kp-dot-key="left-0"]').evaluate(node => {
-    const r = node.getBoundingClientRect(); return { x: r.x, y: r.y };
-  });
-  await expect(player).toHaveAttribute('data-attention-phase', 'read');
-  const before = await paint();
-  const frame = await page.locator('.matrix-card').boundingBox();
-  expect(frame!.width).toBe(page.viewportSize()!.width);
-  expect(frame!.height).toBe(page.viewportSize()!.height);
-  expect(before.x).toBeGreaterThan(0); expect(before.x).toBeLessThan(page.viewportSize()!.width * .15);
-  await page.screenshot({ path: info.outputPath('attention-read.png') });
-  await travel(.25);
-  await expect(player).toHaveAttribute('data-attention-phase', 'watch');
-  await expect(page.getByText('Watch the column turn.', { exact: true })).toBeVisible();
-  expect(await paint()).toEqual(before);
-  await page.screenshot({ path: info.outputPath('attention-watch.png') });
-  await travel(.55);
-  const scrubber = page.getByRole('slider', { name: 'Pairing progress', exact: true });
-  await expect(scrubber).toBeVisible();
-  await expect(page.getByText('Watch the column turn.', { exact: true })).toBeHidden();
-  await expect.poll(async () => Number(await scrubber.inputValue())).toBeCloseTo(.5, 2);
-  await expect.poll(() => page.locator('.dot-stage').getAttribute('data-progress').then(Number)).toBeCloseTo(.125, 3);
-  await page.screenshot({ path: info.outputPath('attention-scrub.png') });
-  await scrubber.fill('0.7');
-  await expect.poll(() => page.evaluate(() => scrollY / (innerHeight * 3))).toBeCloseTo(.65, 2);
-  await travel(.55); await expect.poll(async () => Number(await scrubber.inputValue())).toBeCloseTo(.5, 2);
-  await travel(.9); await expect(player).toHaveAttribute('data-attention-phase', 'inspect');
-  await expect(page.getByText('Same entries. Three pairs.', { exact: true })).toBeVisible();
-  await page.screenshot({ path: info.outputPath('attention-inspect.png') });
-  await travel(.25); expect(await paint()).toEqual(before);
+  await expect(page.locator('.attention-comment button')).toHaveCount(5);
+  const select = async (text: string, id: string) => {
+    await page.getByRole('button', { name: text, exact: true }).click();
+    await expect(player).toHaveAttribute('data-attention-comment', id);
+  };
+  const styles = await page.locator('.matrix-card').evaluate(node => ({
+    background: getComputedStyle(node).backgroundColor,
+    stage: getComputedStyle(document.querySelector('.discourse-stage')!).backgroundColor,
+    border: getComputedStyle(node).borderTopWidth,
+  }));
+  expect(styles.background).toBe(styles.stage); expect(styles.border).toBe('0px');
+  await expect(stage).toHaveAttribute('data-progress', '0.25');
+  const stageBox = await stage.boundingBox();
+  await select('First, they multiply.', 'multiply');
+  const multiply = page.getByRole('slider', { name: 'Multiplication progress' });
+  await multiply.fill('0.5');
+  await expect.poll(() => stage.getAttribute('data-progress').then(Number)).toBeCloseTo(.375, 2);
+  await expect(page.getByRole('button', { name: 'First, they multiply.', exact: true })).toBeVisible();
+  await page.screenshot({ path: info.outputPath('unified-multiply.png') });
+  await multiply.fill('1');
+  await expect.poll(() => stage.getAttribute('data-progress').then(Number)).toBeCloseTo(.5, 2);
+  const products = () => page.locator('[data-kp-dot-key^="product-"]').evaluateAll(nodes => nodes.map(node => {
+    const r = node.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height };
+  }));
+  const before = await products();
+  await select('Keep the negative signs.', 'signs');
+  await expect(stage).toHaveAttribute('data-progress', '0.5');
+  await expect(page.locator('[data-attention-sign]')).toHaveCount(2);
+  expect(await products()).toEqual(before);
+  expect(await stage.boundingBox()).toEqual(stageBox);
+  await page.screenshot({ path: info.outputPath('unified-signs.png') });
+  await select('Then the products are added.', 'add');
+  await expect(page.locator('[data-attention-sign]')).toHaveCount(0);
+  const addition = page.getByRole('slider', { name: 'Addition progress' });
+  await addition.fill('0.5');
+  await expect.poll(() => stage.getAttribute('data-progress').then(Number)).toBeCloseTo(.75, 2);
+  const scroll = await page.evaluate(() => scrollY);
+  await addition.fill('1');
+  await page.evaluate(y => scrollTo(0, y), scroll);
+  await expect.poll(async () => Number(await addition.inputValue())).toBeCloseTo(.5, 2);
+  await select('Keep the negative signs.', 'signs');
+  expect(await products()).toEqual(before);
+  await page.reload();
+  await expect(player).toHaveAttribute('data-attention-comment', 'signs');
+  await expect(page.locator('[data-attention-sign]')).toHaveCount(2);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await travel(.55); await expect(page.locator('.dot-stage')).toHaveAttribute('data-progress', '0');
-  await travel(.9); await expect(page.locator('.dot-stage')).toHaveAttribute('data-progress', '0.25');
+  await select('First, they multiply.', 'multiply');
+  await multiply.fill('0.5'); await expect(stage).toHaveAttribute('data-progress', '0.25');
+  await select('Keep the negative signs.', 'signs');
+  await expect(stage).toHaveAttribute('data-progress', '0.5');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(390);
-  await page.screenshot({ path: info.outputPath('attention-phone.png') });
+  const comments = await page.locator('.attention-track').boundingBox();
+  expect(comments!.y + comments!.height).toBeLessThanOrEqual(844);
+  await page.screenshot({ path: info.outputPath('unified-phone.png') });
 });
 
 test('split scroll owns intermediate frames and rebases manual inspection without a jump', async ({ page }, info) => {

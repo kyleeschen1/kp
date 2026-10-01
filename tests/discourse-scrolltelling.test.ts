@@ -1,19 +1,33 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { discourseCorridor, discourseProgress } from '../src/experiments/discourse-scrolltelling/scroll.ts';
-import { pairingAttentionFrame } from '../src/experiments/discourse-scrolltelling/attention-card-model.ts';
+import { attentionComments, attentionFrame, attentionTravel } from '../src/experiments/discourse-scrolltelling/attention-card-model.ts';
+import { passage } from '../src/experiments/dot-product-passage/source.ts';
 
-test('pairing attention separates instruction, scroll motion and inspection', () => {
-  assert.deepEqual(pairingAttentionFrame(.1), { phase: 'read', progress: 0 });
-  assert.deepEqual(pairingAttentionFrame(.25), { phase: 'watch', progress: 0 });
-  assert.equal(pairingAttentionFrame(.55).phase, 'move');
-  assert.ok(Math.abs(pairingAttentionFrame(.55).progress - .5) < 1e-10);
-  assert.deepEqual(pairingAttentionFrame(.9), { phase: 'inspect', progress: 1 });
-  assert.equal(pairingAttentionFrame(.55, true).progress, 0);
-  assert.equal(pairingAttentionFrame(.9, true).progress, 1);
-  const samples = Array.from({ length: 101 }, (_, i) => i / 100);
-  assert.deepEqual(samples.map(t => pairingAttentionFrame(t)), [...samples].reverse().map(t => pairingAttentionFrame(t)).reverse());
-  assert.throws(() => pairingAttentionFrame(NaN));
+test('comments and focus hold existing math while transformations scrub reversibly', () => {
+  assert.equal(attentionFrame(attentionTravel(0)).progress, .25);
+  assert.equal(attentionFrame(attentionTravel(2)).progress, .5);
+  assert.equal(attentionFrame(attentionTravel(4)).progress, 1);
+  assert.deepEqual(attentionComments[2]!.refs, passage.dot.pairs.slice(1).map(pair => pair.product));
+  for (const index of [1, 3]) {
+    const comment = attentionComments[index]!;
+    assert.equal(comment.kind, 'transform');
+    if (comment.kind !== 'transform') throw new Error('Expected transformation');
+    for (const motion of [0, .2, .5, .8, 1]) {
+      const frame = attentionFrame(attentionTravel(index, motion));
+      assert.ok(Math.abs(frame.progress - (comment.from + (comment.to - comment.from) * motion)) < 1e-10);
+    }
+    assert.equal(attentionFrame(attentionTravel(index, .5), true).progress, comment.from);
+    assert.equal(attentionFrame(attentionTravel(index, 1) + .001, true).progress, comment.to);
+  }
+  const samples = Array.from({ length: 501 }, (_, i) => i / 500);
+  const frames = samples.map(t => attentionFrame(t));
+  assert.deepEqual([...samples].reverse().map(t => attentionFrame(t)).reverse(), frames);
+  frames.forEach((frame, i) => { if (i) assert.ok(frame.progress >= frames[i - 1]!.progress); });
+  assert.throws(() => attentionFrame(NaN));
+  assert.throws(() => attentionTravel(99));
+  assert.throws(() => attentionTravel(2, .5));
+  assert.throws(() => attentionTravel(1, Infinity));
 });
 
 test('measured discourse edges hold reading endpoints and scrub reversibly', () => {

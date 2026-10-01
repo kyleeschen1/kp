@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Discourse-guided dot passage",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review equation border placement and instruction-to-scrubber timing in attention-card query view",
+  "summary": "HUMAN_CHECKPOINT: review unified background, retained commentary, divider scrubber and stationary negative-sign focus before generalization",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,6 +46,12 @@
       "id": "attention-card",
       "title": "Full-screen pairing attention card",
       "summary": "Bounded attention card ready for visual review with unit/browser/type/build evidence",
+      "status": "complete"
+    },
+    {
+      "id": "unified-attention",
+      "title": "Unified commentary and held mathematical stage",
+      "summary": "Unified commentary exemplar complete; all focused checks pass; visual review of pacing and focus treatment remains",
       "status": "complete"
     }
   ]

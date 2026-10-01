@@ -19,7 +19,7 @@ const returnButton = document.querySelector<HTMLButtonElement>('[data-return]')!
 let disposed = false;
 let cleanup = () => {};
 if (new URLSearchParams(location.search).get('view') === 'attention-card') {
-  void import('./attention-card.ts').then(module => module.mountPairingAttentionCard(root)).then(dispose => {
+  void import('./attention-card.ts').then(module => module.mountUnifiedAttention(root)).then(dispose => {
     if (disposed) dispose(); else cleanup = dispose;
   }).catch(error => { root.textContent = `Attention card unavailable: ${String(error)}`; });
 } else void mountDotPlayer(root, passage).then(player => {
