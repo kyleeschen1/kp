@@ -2,6 +2,33 @@ import { expect, test } from "@playwright/test";
 import { buildKpVisualContactSheetHtml, type KpVisualContactSheetItem } from "../scripts/capture-visual-contact-sheet.ts";
 import { env, combination, beats, numberOf } from "../src/experiments/matrix-column-combinations/model.ts";
 
+test("all matrix pages and the menu use the three-term page theme", async ({ page }, info) => {
+  const routes = ['dot-product-passage/', 'matrix-column-product/', 'matrix-column-combinations/',
+    'matrix-column-combinations/?example=identity', 'matrix-column-combinations/?example=orthonormality',
+    'matrix-column-combinations/?example=composition', 'matrix-examples/'];
+  for (const colorScheme of ['light', 'dark'] as const) {
+    await page.emulateMedia({ colorScheme });
+    for (const [index, route] of routes.entries()) {
+      await page.goto(`/experiments/${route}`);
+      const menu = route === 'matrix-examples/';
+      if (!menu) await expect(page.locator('[data-ready="true"]')).toHaveCount(1);
+      await expect(page.locator('html')).toHaveCSS('color-scheme', 'dark');
+      await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
+      await expect(page.locator('body')).toHaveCSS('color', 'rgb(208, 208, 203)');
+      await expect(page.locator('.matrix-controls button').first()).toHaveCSS('font-weight', '600');
+      if (!menu) {
+        await expect(page.locator('.matrix-card')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
+        await expect(page.locator('.matrix-card')).toHaveCSS('border-top-color', 'rgb(76, 80, 80)');
+        await expect(page.locator('.matrix-card .katex').first()).toHaveCSS('font-weight', '400');
+      } else {
+        await expect(page.frameLocator('#example-frame').locator('#comb-player')).toHaveAttribute('data-ready', 'true');
+        await expect(page.frameLocator('#example-frame').locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
+      }
+      if (colorScheme === 'light') await page.screenshot({ path: info.outputPath(`shared-page-${index}.png`), fullPage: true });
+    }
+  }
+});
+
 const route = "/experiments/matrix-column-combinations/";
 test("columns and coefficients retain source identity through readable weighted-sum milestones", async ({ page }, info) => {
   test.setTimeout(60000);

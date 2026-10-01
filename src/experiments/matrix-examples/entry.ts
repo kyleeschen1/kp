@@ -1,4 +1,4 @@
-import "../matrix-column-product/style.css";
+import "../matrix-example-page.css";
 import { applyMatrixConfig, readMatrixConfig, type MatrixExampleConfig } from "./config.ts";
 
 const menu = document.querySelector<HTMLSelectElement>("#example-menu")!;

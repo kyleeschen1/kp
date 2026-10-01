@@ -1,5 +1,6 @@
 import { readMatrixConfig, observeMatrixConfig } from "../matrix-examples/config.ts";
 import "./style.css";
+import "../matrix-example-page.css";
 import source from "./score.ts?raw";
 import { matrixColumnStory, timeline, sampleStory } from "./score.ts";
 import { matrixStageHtml, mountMatrixColumnPresentation } from "./presentation.ts";

@@ -1,4 +1,3 @@
-@import "../matrix-column-product/style.css";
 
 .comb-stage { position: relative; height: 370px; min-width: 500px; font-size: var(--kp-equation-type-size); color: var(--kp-st-ink); }
 .comb-equation, .comb-weighted, .comb-expanded, .comb-evaluated { position: absolute; left: 0; right: 0; display: flex; justify-content: center; align-items: center; gap: var(--matrix-layout-gap, 1.5rem); }

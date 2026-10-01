@@ -25,6 +25,11 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1 page direction: the user selected the three-term dot page as the
+reference and authorized porting all matrix examples plus the menu to its shared
+styling. [Page unification](reviews/2026-10-01-matrix-page-unification.md) keeps
+one palette, page frame and player chrome while preserving each motion adapter.
+
 October 1 current candidate: [basis-aware composition and gradual bracket
 withdrawal](reviews/2026-10-01-basis-composition.md). The user approved the next
 composition example and requested the dot brackets fade gradually first. Both

@@ -1,5 +1,6 @@
 @import "katex/dist/katex.min.css";
 @import "../tutorial/focus-deck-scaffold.css";
+@import "./matrix-theme.css";
 
 /* Shared player chrome; mathematical stage layout belongs to each adapter. */
 .matrix-card { background: var(--kp-st-paper); border: 1px solid var(--kp-st-rule); border-radius: .5rem; overflow: hidden; }

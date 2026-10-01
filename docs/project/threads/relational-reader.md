@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 presentation direction: use the three-term dot page as the reference
+for all current matrix examples and their menu. The user explicitly approved
+this scoped rollout; [page unification](../reviews/2026-10-01-matrix-page-unification.md)
+records shared CSS ownership, preserved animation boundaries and parity checks.
+
 October 1 current candidate: [basis-aware composition and bracket
 withdrawal](../reviews/2026-10-01-basis-composition.md), approved by the user after
 the cost experiment. Brackets now withdraw gradually over the pivot. The new

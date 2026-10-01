@@ -13,7 +13,7 @@ export async function mountDotPlayer(root: HTMLElement, passage: DotPassage, syn
     throw new Error("Dot players require a unique, attached, unmounted root with a simple HTML id.");
   }
   root.dataset["dotMounted"] = "true";
-  root.classList.add("dot-player");
+  root.classList.add("dot-player", "matrix-player");
   root.innerHTML = `<section class="matrix-card kp-focus-deck" aria-label="Three-term dot product animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Dot product; scroll horizontally on narrow screens">${stageHtml(passage)}</div>

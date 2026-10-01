@@ -1,5 +1,6 @@
 import { readMatrixConfig, observeMatrixConfig } from "../matrix-examples/config.ts";
 import "./style.css";
+import "../matrix-example-page.css";
 import { example, numberOf, durationMs, sample } from "./model.ts";
 import { stageHtml, mountPresentation, calculationLatex } from "./presentation.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
