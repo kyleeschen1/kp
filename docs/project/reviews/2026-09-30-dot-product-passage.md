@@ -450,6 +450,19 @@ back, contact/cast shadows and the rear opacity control are preserved. This
 supersedes full occlusion as the desired treatment for this exemplar. The scoped
 browser check now enforces stable surface translucency rather than opaque fill.
 
+September 30, constant token size and continuous panel arrival: remove the
+matrix-only small size, extraction growth and lift pop. Sources, moving owners
+and paired values now share the same typography and inline-block box behavior;
+the latter fixes a measured 0.297px source/material line-box discrepancy.
+Evaluation fusion scaling is preserved. Front fill now follows the lift smoothly
+from 0% to 70%, with shadow strength ramping alongside it. This replaces the
+instant translucent overlay that caused the bracket contrast jump; the bracket
+ink itself stays constant. Browser checks sample unchanged x/y token scale,
+matching native/material bounds, monotonic fill alpha with a near-zero initial
+sample, and reverse restoration to zero alpha. Three browser tests, four unit
+tests, typecheck and build pass (entry 6.64 KB gzip). Transit capture inspected;
+full-playback visual acceptance remains pending.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

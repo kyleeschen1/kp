@@ -19,7 +19,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-material { transform-style: preserve-3d; }
 .dot-plane { position: absolute; inset: 65px 18% 35px; border: 0; background: var(--dot-warm-paper); pointer-events: none; }
 .dot-plane-source { transform: translateZ(-1px) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); box-shadow: 0 1px 2px rgb(20 25 30 / .16); }
-.dot-plane-working { background: color-mix(in srgb, var(--dot-warm-paper) 70%, transparent); }
+.dot-plane-working { background: color-mix(in srgb, var(--dot-warm-paper) var(--dot-front-fill, 0%), transparent); }
 .dot-inputs [data-kp-dot-key], .dot-work { text-shadow: 0 .8px .5px rgb(20 25 30 / .35); }
 .dot-inputs { position: absolute; top: 50%; transform: translateY(-50%) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 /* KaTeX retains enclosure layout and MathML. One structural paint treatment
@@ -36,7 +36,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
-.dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
+.dot-inputs [data-kp-dot-key], .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
 .dot-plus, [data-kp-dot-key^="syntax-"], .dot-inputs .mopen, .dot-inputs .mclose { color: var(--dot-syntax-ink); }
 .dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct) { color: var(--dot-syntax-ink); }
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }

@@ -40,7 +40,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-kp-dot-key="left-0"] .mord')).toHaveCSS("font-weight", "400");
   const elementSize = await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
   const expressionSize = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => parseFloat(getComputedStyle(node).fontSize));
-  expect(elementSize / expressionSize).toBeCloseTo(.9, 2);
+  expect(elementSize).toBe(expressionSize);
   const negative = page.locator('[data-kp-dot-key="pair-left-1"] .dot-negative-sign');
   await expect(negative).toHaveCSS("font-weight", "700");
   const tokenInk = await page.locator('[data-kp-dot-key="pair-left-1"]').evaluate(node => getComputedStyle(node).color);
@@ -84,9 +84,29 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator(".dot-plane")).toHaveCount(2);
   await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
   const initialBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(initialFrontColor).toMatch(/\/\s*0\.7\)/);
+  const frontAlpha = () => page.locator(".dot-plane-working").evaluate(node =>
+    Number(getComputedStyle(node).backgroundColor.match(/\/\s*([\d.e+-]+)\)/)?.[1] ?? 1));
+  expect(await frontAlpha()).toBe(0);
+  let lastAlpha = 0;
+  for (const progress of [.001, .01, .025, .05]) {
+    await slider.fill(String(progress));
+    const alpha = await frontAlpha();
+    expect(alpha).toBeGreaterThan(lastAlpha);
+    if (progress === .001) expect(alpha).toBeLessThan(.001);
+    lastAlpha = alpha;
+    for (const copy of await page.locator(".dot-paint").all()) {
+      const size = await copy.evaluate(node => {
+        const matrix = new DOMMatrixReadOnly(getComputedStyle(node).transform);
+        return { x: matrix.m11, y: matrix.m22 };
+      });
+      expect(size).toEqual({ x: 1, y: 1 });
+    }
+  }
+  expect(lastAlpha).toBeCloseTo(.7, 4);
+  await slider.fill("0");
+  expect(await frontAlpha()).toBe(0);
   await slider.fill("0.06");
+  const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
   const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
   expect(earlyBackColor).toBe(initialBackColor);
   expect(initialFrontColor.replace(/\s*\/\s*0\.7\)/, ")")).toBe(initialBackColor);
@@ -115,8 +135,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.2, 2);
   const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
-  expect(liftedSize!.width).toBeGreaterThan(originalSize!.width);
-  expect(liftedSize!.height).toBeGreaterThan(originalSize!.height);
+  expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 1);
+  expect(liftedSize!.height).toBeCloseTo(originalSize!.height, 1);
   await expect(page.locator(".dot-plane").first()).toHaveCSS("border-top-width", "0px");
   await expect(page.locator(".dot-plane-working")).toHaveCSS("border-top-width", "0px");
   await expect(page.locator(".dot-shadow [data-source-id], .dot-shadow [data-kp-dot-key]")).toHaveCount(0);
@@ -221,7 +241,7 @@ test("signed dot passage preserves references through pairing, products and sum"
       offsetX: work.offsetLeft + work.offsetWidth / 2 - stage.clientWidth / 2,
       depth: new DOMMatrixReadOnly(getComputedStyle(work).transform).m43 };
   });
-  expect(parseFloat(notation.entry) / parseFloat(notation.paired)).toBeCloseTo(.9, 2);
+  expect(notation.entry).toBe(notation.paired);
   expect(new Set(notation.syntax).size).toBe(1);
   expect(notation.syntax[0]).not.toBe(notation.ink);
   expect(notation.syntax[0]).toBe("rgb(70, 70, 70)");
@@ -297,7 +317,7 @@ test("signed dot passage preserves references through pairing, products and sum"
     await page.locator(".dot-stage").evaluate(node => { (node as HTMLElement).style.transform = "none"; });
     const moving = await page.locator(".dot-paint").evaluateAll(nodes => nodes.filter(n => getComputedStyle(n).opacity === "1").map(n => {
       // Native glyph rectangles still include font whitespace; contacts are
-      // diagnostics during this pop trial, not a raster-level collision proof.
+      // diagnostics during transit, not a raster-level collision proof.
       const glyphs = [...n.querySelectorAll(".mord")].map(g => g.getBoundingClientRect());
       if (glyphs.length === 0) throw new Error("Missing native scalar glyph boxes");
       return { left: Math.min(...glyphs.map(r => r.left)), right: Math.max(...glyphs.map(r => r.right)),

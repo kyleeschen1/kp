@@ -225,6 +225,13 @@
       "scope": "Opaque paper and contact-shadow depth exemplar",
       "checkedAt": "2026-10-01T00:27:21.680Z",
       "notes": "Three browser tests, four unit tests, full typecheck and build pass. Constant opaque fill, stationary native-scale back, lift and landing shadows checked. Screenshots show occlusion; full playback awaits human judgment."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Constant token sizing and continuous front panel arrival",
+      "checkedAt": "2026-10-01T00:38:03.886Z",
+      "notes": "Three browser tests, four unit tests, typecheck and build pass. Constant transit scales, equal source/material bounds, smooth fill onset and reverse reset checked. Evaluation scaling preserved."
     }
   ]
 }

@@ -19,7 +19,7 @@ export function calculationLatex(passage: DotPassage, styled = false) {
 
 export function stageHtml(passage: DotPassage) {
   const { dot } = passage;
-  const vector = (side: "left" | "right") => math(`\\left[\\;{\\small\\begin{matrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{matrix}}\\;\\right]`);
+  const vector = (side: "left" | "right") => math(`\\left[\\;\\begin{matrix}${dot.pairs.map((pair, i) => tag(`${side}-${i}`, pair[side])).join(side === "left" ? " & " : "\\\\")}\\end{matrix}\\;\\right]`);
   return `<div class="dot-stage" aria-hidden="true">
     <div class="dot-plane dot-plane-source"></div>
     <div class="dot-plane dot-plane-working"></div>
@@ -43,7 +43,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const vectors = { left: stage.querySelector<HTMLElement>('[data-dot-vector="left"]')!, right: stage.querySelector<HTMLElement>('[data-dot-vector="right"]')! };
   const native = new Map([...stage.querySelectorAll<HTMLElement>("[data-kp-dot-key]")].map(node => [node.dataset["kpDotKey"]!, node]));
   const points = new Map<string, Point>();
-  const owners: { node: HTMLElement; shadow: HTMLElement; from: string; to: string; sourceScale: number }[] = [];
+  const owners: { node: HTMLElement; shadow: HTMLElement; from: string; to: string }[] = [];
   let multiply: readonly ((progress: number) => void)[] = [];
   let add: (progress: number) => void = () => {};
   let disposed = false;
@@ -106,9 +106,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       [...products.querySelectorAll<HTMLElement>(".dot-plus")], requireNative("sum"));
     for (const pair of passage.dot.pairs) for (const side of ["left", "right"] as const) {
       const from = `${side}-${pair.index}`, to = `pair-${side}-${pair.index}`;
-      // Destination typography is the full-size expression role. Departure scale
-      // comes from the measured element role, rather than repeated nesting rules.
-      const sourceScale = requireNative(from).getBoundingClientRect().width / requireNative(to).getBoundingClientRect().width;
+      // Source, moving material and destination use identical token typography.
       const clone = cloneElementWithComputedStyles(requireNative(to));
       stripKpMaterialCloneAuthority(clone);
       const node = document.createElement("span"); node.className = "dot-paint";
@@ -123,7 +121,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       shadow.append(clone.cloneNode(true)); makeKpMaterialOwnerInert(shadow);
       for (const part of shadow.querySelectorAll("[data-source-id]")) part.removeAttribute("data-source-id");
       shadow.dataset["shadowFor"] = to;
-      layer.append(shadow, node); owners.push({ node, shadow, from, to, sourceScale });
+      layer.append(shadow, node); owners.push({ node, shadow, from, to });
     }
     stage.style.transform = ""; work.style.transform = "";
     for (const [key, value] of sourceStyles) stage.style.setProperty(key, value);
@@ -144,8 +142,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     // Surface translucency preserves the source context; elevation changes the
     // cast shadow independently, without fading the foreground mathematical ink.
     workingPlane.style.opacity = planeLift > 0 ? "1" : "0";
+    workingPlane.style.setProperty("--dot-front-fill", `${70 * planeLift}%`);
     workingPlane.style.boxShadow = planeLift > 0
-      ? `0 1px 2px rgba(20, 25, 30, .16), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(20, 25, 30, .22)` : "none";
+      ? `0 1px 2px rgba(20, 25, 30, ${.16 * planeLift}), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(20, 25, 30, ${.22 * planeLift})` : "none";
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 4 ? "1" : "0";
@@ -154,8 +153,6 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     const matching = frame.index === 0 ? 0 : frame.index === 1 ? smooth(frame.local) : 1;
     const shadowLift = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
       ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
-    const pop = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? ease(frame.local / .15) * (1 - ease((frame.local - .18) / .42)) : 0;
     for (const side of ["left", "right"] as const) {
       vectors[side].style.opacity = "1";
       if (frame.index > 0) {
@@ -165,7 +162,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
         }
       }
     }
-    for (const { node, shadow, from, to, sourceScale } of owners) {
+    for (const { node, shadow, from, to } of owners) {
       const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
       // Both operands approach their shared reading line from opposite sides.
@@ -180,10 +177,9 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const surfaceZ = 70 * ease(frame.local / .2);
       const height = 20 * shadowLift;
       const z = surfaceZ + height;
-      const tokenScale = sourceScale + (1 - sourceScale) * matching + .12 * pop;
-      node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%) scale(${tokenScale})`;
+      node.style.transform = `translate3d(${x}px, ${y}px, ${z}px) translate(-50%, -50%)`;
       node.style.textShadow = "none";
-      shadow.style.transform = `translate3d(${x + .45 * height}px, ${y + .8 + .75 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%) scale(${tokenScale})`;
+      shadow.style.transform = `translate3d(${x + .45 * height}px, ${y + .8 + .75 * height}px, ${surfaceZ - .5}px) translate(-50%, -50%)`;
       shadow.style.filter = `blur(${.5 + 4.5 * shadowLift}px)`;
       // At landing this matches the native expression's tight contact shadow.
       shadow.style.opacity = frame.index === 1 && frame.local > 0 && frame.local < 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
