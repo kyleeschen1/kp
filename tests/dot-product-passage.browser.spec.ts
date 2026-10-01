@@ -6,22 +6,24 @@ test('depth controls change whole groups while preserving endpoint and reverse p
   await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
   const timeline = page.getByRole('slider', { name: 'Animation position' });
   const opacity = page.getByRole('slider', { name: 'Background opacity' });
-  const scale = page.getByRole('combobox', { name: 'Background scale' });
-  await expect(opacity).toHaveValue('40'); await expect(scale).toHaveValue('0.98');
+  const lift = page.getByRole('combobox', { name: 'Foreground lift' });
+  await expect(opacity).toHaveValue('40'); await expect(lift).toHaveValue('on');
+  await expect(page.getByRole('combobox', { name: 'Background scale' })).toHaveCount(0);
   await timeline.fill('0.125');
   await expect(page.locator('.dot-inputs')).toHaveCSS('opacity', '0.4');
   for (const bracket of await page.locator('[data-dot-vector]').all()) await expect(bracket).toHaveCSS('opacity', '1');
   for (const token of await page.locator('.dot-paint').all()) await expect(token).toHaveCSS('opacity', '1');
-  await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '0.98');
+  await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '1');
   for (const group of ['.dot-work', '.dot-material']) await expect(page.locator(group)).toHaveCSS('scale', '1.03');
   const poses = () => page.locator('.dot-stage [style]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
   const held = await poses();
   await timeline.fill('1'); await timeline.fill('0'); await timeline.fill('0.125');
   expect(await poses()).toEqual(held);
-  await page.locator('.matrix-card').screenshot({ path: info.outputPath('depth-40-98.png') });
+  await page.locator('.matrix-card').screenshot({ path: info.outputPath('depth-40-fixed-background.png') });
   await opacity.fill('20'); await expect(page.locator('.dot-inputs')).toHaveCSS('opacity', '0.2');
-  await scale.selectOption('0.95'); await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '0.95');
-  await opacity.fill('40'); await scale.selectOption('0.98');
+  await lift.selectOption('off'); await expect(page.locator('.dot-material')).toHaveCSS('scale', '1');
+  await expect(page.locator('.dot-inputs')).toHaveCSS('scale', '1');
+  await opacity.fill('40'); await lift.selectOption('on');
   await page.setViewportSize({ width: 1100, height: 900 });
   await expect(page.locator('.dot-material')).toHaveCSS('scale', '1.03');
   await timeline.fill('0.25'); await expect(page.locator('.dot-material')).toHaveCSS('scale', '1');
@@ -40,7 +42,7 @@ test("column pivots as one axis and brackets withdraw only after pairing", async
   await page.goto("/experiments/dot-product-passage/");
   await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
   // Isolate the accepted path from the independently tested depth projection.
-  await page.getByRole('combobox', { name: 'Background scale' }).selectOption('1');
+  await page.getByRole('combobox', { name: 'Foreground lift' }).selectOption('off');
   await page.getByRole('slider', { name: 'Background opacity' }).fill('100');
   await expect(page.getByRole("slider", { name: "Dim unfocused" })).toHaveCount(0);
   const timeline = page.getByRole("slider", { name: "Animation position" });
@@ -181,7 +183,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
   const root = page.locator("#dot-player"); await expect(root).toHaveAttribute("data-ready", "true");
-  await page.getByRole('combobox', { name: 'Background scale' }).selectOption('1');
+  await page.getByRole('combobox', { name: 'Foreground lift' }).selectOption('off');
   await page.getByRole('slider', { name: 'Background opacity' }).fill('100');
   await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
   // Short font delimiters and tall SVG delimiters must not own competing paint.

@@ -1,5 +1,11 @@
 # Dot passage: group depth and lighter delimiters
 
+Latest correction: the user requested **no background scaling**. The sampler
+now fixes background scale at 1 for every playhead and setting, and the background
+scale selector is removed. A separate foreground-lift control preserves the
+existing lift comparison. Background opacity remains 40%, with the same bracket
+hold/withdrawal timing. Unit and browser checks enforce the fixed background.
+
 ## Current revision: stronger separation
 
 The user found the 80% treatment too weak and approved trying 35–45% opacity

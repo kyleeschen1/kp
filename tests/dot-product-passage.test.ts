@@ -14,7 +14,7 @@ test('group depth preserves native endpoints, bounded scaling and reduced motion
   for (let i = 0; i <= 100; i++) {
     const pose = sampleDotDepth(i / 100);
     assert.ok(pose.backgroundOpacity >= .4 && pose.backgroundOpacity <= 1);
-    assert.ok(pose.backgroundScale >= .98 && pose.backgroundScale <= 1);
+    assert.equal(pose.backgroundScale, 1);
     assert.ok(pose.foregroundScale >= 1 && pose.foregroundScale <= 1.03);
     const reduced = sampleDotDepth(i / 100, { ...defaultDotDepth, reducedMotion: true });
     assert.equal(reduced.backgroundScale, 1); assert.equal(reduced.foregroundScale, 1);
