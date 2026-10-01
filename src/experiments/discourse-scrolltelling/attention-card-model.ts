@@ -55,3 +55,18 @@ export function attentionPosition(landings: readonly number[], index: number, mo
   attentionAtPosition(landings, 0); attentionTravel(index, motion);
   return landings[index]! + (landings[index + 1]! - landings[index]!) * (motion === undefined ? .1 : .2 + .6 * motion);
 }
+
+export type RevealBoundary = { start: number; clear: number; end: number };
+export function revealFrame(boundaries: readonly RevealBoundary[], y: number, reduced = false) {
+  if (boundaries.length !== attentionComments.length || !Number.isFinite(y) || boundaries.some((b, i) =>
+    ![b.start, b.clear, b.end].every(Number.isFinite) || b.clear <= b.start || b.end <= b.clear ||
+    (i > 0 && b.start <= boundaries[i - 1]!.end))) throw new Error('Reveal boundaries must be finite, ordered and leave room for inspection.');
+  let index = 0;
+  boundaries.forEach((b, i) => { if (y >= b.start) index = i; });
+  const boundary = boundaries[index]!, comment = attentionComments[index]!;
+  const cleared = y >= boundary.clear;
+  const rawMotion = Math.max(0, Math.min(1, (y - boundary.clear) / (boundary.end - boundary.clear)));
+  const motion = reduced ? (rawMotion >= 1 ? 1 : 0) : rawMotion;
+  const progress = comment.kind === 'transform' ? comment.from + (comment.to - comment.from) * motion : comment.at;
+  return { index, comment, progress, motion, cleared, phase: !cleared ? 'read' : rawMotion < 1 ? 'watch' : 'inspect' };
+}

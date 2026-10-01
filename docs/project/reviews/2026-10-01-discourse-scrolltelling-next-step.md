@@ -232,3 +232,31 @@ Latest lazy adapter is 3.18 KB JS gzip plus 1.07 KB CSS; common entry remains
 94.61 KB JS gzip, excluding fonts. The local model, adapter and stylesheet remain
 the rollback unit. Review this mixed reading flow at the existing query URL;
 the previous five-comment stationary presentation is superseded.
+
+## Single-column reveal exemplar
+
+The user approved a new presentation: the stage and text share a centered column.
+The existing stage pins at 50vh behind the flowing article. A passage takes over
+when its top reaches 50vh, crosses the stage on an opaque page-colored backing,
+and holds above it once its bottom clears the stage box by 24px. Only then can
+scroll drive its transformation or focus effect. The transparent interval after
+the text exposes the math; the next passage repeats the handoff. Short cues remain
+above the stage during effects. Long paragraphs can extend above the viewport
+after being read normally; their lower edge still determines clearance.
+
+The same dot passage, native renderer, scalar references and reversible playhead
+remain authoritative. This changes only the local host projection and layout.
+Measured text height and the existing stage envelope determine clearance, rather
+than guessed paragraph lengths or a timer. Reduced motion holds the source until
+the effect endpoint. A horizontal scrubber stays with each transformation passage.
+Its space remains reserved when hidden, preventing visibility changes from moving
+the clearance threshold. Browser-rounded direct links land inside the addressed
+passage. Explicit flow spacers allow the text's sticky hold to work throughout the
+effect; bottom padding alone did not provide that sticky travel.
+
+Validation: 18 unit checks, six discourse browser checks, application/test types,
+and the isolated build pass. Long and short passages are checked before clearance,
+during the effect, in reverse, and on narrow/reduced-motion views. The stage stays
+centered and the cue's lower edge stays above it. This remains one reversible
+exemplar, pending human judgment of clearance, scroll distance and text handoff;
+no shared renderer or catalogue changes are implied.

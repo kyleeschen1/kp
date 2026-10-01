@@ -1,40 +1,33 @@
 :root[data-discourse-view="attention-card"] #discourse-story { max-width: none; padding: 0; margin: 0; }
-:root[data-discourse-view="attention-card"] .discourse-layout { display: grid; grid-template-columns: 48% 52%; gap: 0; align-items: start; }
-:root[data-discourse-view="attention-card"] .discourse-stage { position: sticky; top: 0; height: 100vh; padding: 0; background: var(--kp-matrix-page); }
+:root[data-discourse-view="attention-card"] .discourse-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; align-items: start; max-width: 46rem; margin: auto; }
+:root[data-discourse-view="attention-card"] .discourse-stage { grid-column: 1; grid-row: 1; position: sticky; top: 0; height: 100vh; padding: 0; z-index: 0; background: var(--kp-matrix-page); }
 :root[data-discourse-view="attention-card"] .discourse-goal { display: none; }
 :root[data-discourse-view="attention-card"] #discourse-player .matrix-card { position: relative; height: 100vh; box-sizing: border-box; border: 0; border-radius: 0; box-shadow: none; background: var(--kp-matrix-page); }
 :root[data-discourse-view="attention-card"] #discourse-player :is(.matrix-cue, .matrix-controls) { display: none; }
 :root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { position: absolute; left: 0; top: 50%; width: 100%; transform: translateY(-50%); }
-:root[data-discourse-view="attention-card"] #discourse-player .dot-stage { min-width: 0; width: 100%; height: 340px; }
-.attention-track { grid-column: 1; grid-row: 1; min-width: 0; border: 0; border-right: 1px solid var(--kp-st-muted); background: transparent; box-shadow: none; overflow: visible; padding: 30vh 2rem 0 max(1.5rem, 5vw); }
+:root[data-discourse-view="attention-card"] #discourse-player .dot-stage { min-width: 0; width: 100%; height: min(340px, 40vh); }
+.attention-track { grid-column: 1; grid-row: 1; position: relative; z-index: 1; min-width: 0; border: 0; background: transparent; box-shadow: none; overflow: visible; padding: 50vh 0 0; pointer-events: none; }
 .attention-track .kp-focus-deck__annotation { position: static; }
-.attention-comment { position: relative; min-height: 34vh; padding-bottom: 12vh; box-sizing: border-box; }
-.attention-comment[data-form="prose"] { min-height: 65vh; }
-.attention-comment p { line-height: 1.65; margin: 1rem 0; }
-.attention-end { height: 70vh; }
-.attention-comment button { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; padding: .5rem 0; }
-.attention-comment button:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
-.attention-comment[data-active]::before { content: ''; position: absolute; right: calc(-2rem - 2px); top: 0; height: min(100%, 25vh); width: 3px; background: currentColor; }
-.attention-comment:has(input:not([hidden]))::before { display: none; }
-.attention-comment input { position: absolute; right: calc(-2rem - 9px); top: 0; width: 18px; height: 25vh; margin: 0; writing-mode: vertical-lr; appearance: none; background: transparent; cursor: ns-resize; }
-.attention-comment input::-webkit-slider-runnable-track { width: 3px; background: currentColor; }
-.attention-comment input::-webkit-slider-thumb { appearance: none; width: 11px; height: 7px; margin-left: -4px; background: currentColor; border-radius: 2px; }
-.attention-comment input::-moz-range-track { width: 3px; background: currentColor; }
-.attention-comment input::-moz-range-thumb { width: 11px; height: 7px; border: 0; background: currentColor; border-radius: 2px; }
+/* Each transparent interval leaves the pinned stage exposed. Only the actual
+   text paints an opaque backing; its measured bottom gates the effect. */
+.attention-comment { position: relative; }
+.attention-comment::after { content: ''; display: block; height: 100vh; }
+.attention-copy { position: sticky; top: var(--attention-copy-top, 0); padding: 1rem 2rem; background: var(--kp-matrix-page); pointer-events: auto; }
+.attention-copy p { line-height: 1.65; margin: 1rem 0; }
+.attention-end { height: 60vh; }
+.attention-copy button { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; padding: .5rem 0; }
+.attention-copy button:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.attention-copy input { display: block; width: 100%; height: 1rem; margin: .5rem 0 0; accent-color: var(--kp-st-ink); }
+/* Reserve scrubber geometry even when inactive, so focus cannot change the
+   text-clearance threshold or create a scroll/projection feedback loop. */
+.attention-copy input[hidden] { display: block; visibility: hidden; }
 [data-attention-sign] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .attention-back { position: absolute; left: 2rem; top: 1.5rem; }
-.attention-hint { position: absolute; bottom: 1rem; left: 2rem; color: var(--kp-st-muted); }
-.attention-reading { max-width: 50rem; margin: 3rem auto; padding: 1rem; }
+.attention-hint { position: absolute; bottom: 1rem; left: 2rem; right: 2rem; color: var(--kp-st-muted); }
+.attention-reading { max-width: 46rem; margin: 3rem auto; padding: 1rem; }
 .attention-reading .discourse-prose section { min-height: 0; padding: 2rem 0; }
 @media (max-width: 850px) {
-  :root[data-discourse-view="attention-card"] .discourse-layout { display: block; }
-  :root[data-discourse-view="attention-card"] .discourse-stage,
-  :root[data-discourse-view="attention-card"] #discourse-player .matrix-card { height: 30vh; }
-  :root[data-discourse-view="attention-card"] #discourse-player .matrix-scroll { left: 0; top: 60%; width: 100%; }
-  :root[data-discourse-view="attention-card"] #discourse-player .dot-stage { height: 200px; }
-  .attention-track { margin: 0 1rem; border-right: 0; border-left: 1px solid var(--kp-st-muted); padding: 6vh 0 0 2rem; }
-  .attention-comment[data-active]::before { right: auto; left: calc(-2rem - 2px); }
-  .attention-comment input { right: auto; left: calc(-2rem - 9px); }
+  .attention-copy { padding: 1rem; }
   .attention-back { left: 1rem; top: 1rem; }
   .attention-hint { display: none; }
 }

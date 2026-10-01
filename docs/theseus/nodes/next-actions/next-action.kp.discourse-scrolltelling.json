@@ -4,7 +4,7 @@
   "title": "Compare discourse-guided scrolling with the dot player",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: mixed explanatory prose and brief comments now flow on the left of the fixed math stage; prior stationary five-comment interpretation superseded",
+  "summary": "HUMAN_CHECKPOINT: single-column text-over-stage reveal implemented; effects start only after text clearance, superseding side-by-side layout",
   "sourceRefs": [
     {
       "kind": "file",
@@ -185,6 +185,13 @@
       "scope": "mixed-prose",
       "checkedAt": "2026-10-01T18:45:34.357Z",
       "notes": "Six browser checks pass for flowing prose plus brief cues, stationary right stage, shared divider, direct links, reversal and mobile; 17 unit tests, app/test types and build also pass"
+    },
+    {
+      "command": "npm run visual:discourse-scrolltelling",
+      "status": "passed",
+      "scope": "single-column-reveal",
+      "checkedAt": "2026-10-01T19:43:29.235Z",
+      "notes": "Six browser checks pass: centered shared column, clearance gates for long and brief text, sticky cue hold, reverse, scrub, direct links and reduced motion. Eighteen unit checks and app/test types pass."
     }
   ]
 }
