@@ -8,11 +8,11 @@
 :root[data-discourse-view="attention-card"] #discourse-player .dot-stage { min-width: 0; width: 100%; height: min(340px, 40vh); }
 .attention-track { grid-column: 1; grid-row: 1; position: relative; z-index: 1; min-width: 0; border: 0; background: transparent; box-shadow: none; overflow: visible; padding: 50vh 0 0; pointer-events: none; }
 .attention-track .kp-focus-deck__annotation { position: static; }
-/* Each transparent interval leaves the pinned stage exposed. Only the actual
-   text paints an opaque backing; its measured bottom gates the effect. */
+/* Content determines card height; the following transparent interval reserves
+   room for the effect independently of how much explanation precedes it. */
 .attention-comment { position: relative; }
 .attention-comment::after { content: ''; display: block; height: 100vh; }
-.attention-copy { position: sticky; top: var(--attention-copy-top, 0); padding: 1rem 2rem; background: var(--kp-matrix-page); pointer-events: auto; }
+.attention-copy { position: relative; padding: 1rem 2rem; border-radius: .6rem; background: color-mix(in srgb, var(--kp-matrix-page) 92%, transparent); box-shadow: 0 4px 18px rgb(0 0 0 / 8%); pointer-events: auto; }
 .attention-copy p { line-height: 1.65; margin: 1rem 0; }
 .attention-end { height: 60vh; }
 .attention-copy button { background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; padding: .5rem 0; }

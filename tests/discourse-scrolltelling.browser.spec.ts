@@ -19,6 +19,9 @@ test('text reveals a centered stage before effects start, forwards and backwards
     scrollTo(0, clear + offset * innerHeight);
   }, offset);
   for (const [id, source, middle] of [['pair', 0, .125], ['multiply', .25, .375]] as const) {
+    await position(id, -.3);
+    await expect(stage).toHaveAttribute('data-progress', String(source));
+    await page.screenshot({ path: info.outputPath(`floating-${id}-over-stage.png`) });
     await position(id, -.05);
     await expect(player).toHaveAttribute('data-attention-comment', id);
     await expect(stage).toHaveAttribute('data-progress', String(source));
@@ -28,13 +31,23 @@ test('text reveals a centered stage before effects start, forwards and backwards
     await position(id, .175);
     await expect.poll(() => stage.getAttribute('data-progress').then(Number)).toBeCloseTo(middle, 2);
     expect((await copy.boundingBox())!.y + (await copy.boundingBox())!.height).toBeLessThan(stageBox.y);
-    expect(Math.abs((await copy.boundingBox())!.y + (await copy.boundingBox())!.height - (stageBox.y - 24))).toBeLessThan(1);
+    // Cards continue with document scroll after clearance; they never pin.
+    const actingBox = (await copy.boundingBox())!;
+    await position(id, .225);
+    await expect.poll(async () => (await copy.boundingBox())!.y).toBeCloseTo(actingBox.y - page.viewportSize()!.height * .05, 0);
+    await position(id, .175);
     expect(await stage.boundingBox()).toEqual(stageBox);
     await page.screenshot({ path: info.outputPath(`reveal-${id}-acting.png`) });
     await position(id, -.05);
     await expect(stage).toHaveAttribute('data-progress', String(source));
   }
   await position('multiply', .175);
+  const material = await page.locator('[data-comment="multiply"] .attention-copy').evaluate(node => ({
+    opacity: getComputedStyle(node).opacity, background: getComputedStyle(node).backgroundColor, shadow: getComputedStyle(node).boxShadow,
+  }));
+  expect(material.opacity).toBe('1'); // Only the backing is translucent; words retain contrast.
+  expect(material.background).toMatch(/0\.92/);
+  expect(material.shadow).not.toBe('none');
   const slider = page.getByRole('slider', { name: 'Multiplication progress' });
   await slider.fill('0.8');
   await expect.poll(() => stage.getAttribute('data-progress').then(Number)).toBeCloseTo(.45, 2);

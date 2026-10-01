@@ -33,7 +33,7 @@ detour return. `run-contract.kp.discourse-scrolltelling-v1` owns its visual
 checkpoint; no universal format adoption or rectangular-review acceptance is implied.
 Its latest comparison is `?view=attention-card`: one shared column with a centered,
 pinned stage behind scrolling prose and brief cues. Text clears the stage before
-effects begin, then holds above it during the transformation. It awaits visual
+effects begin, then keeps floating upward on a mostly opaque backing. It awaits visual
 review before generalization; this supersedes the side-by-side comparison.
 
 October 1 rectangular candidate: [first-cell integration](reviews/2026-10-01-rectangular-product.md)

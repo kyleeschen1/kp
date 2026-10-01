@@ -50,9 +50,7 @@ export async function mountUnifiedAttention(root: HTMLElement) {
     return rows.map((row, index) => {
       const copy = row.querySelector<HTMLElement>('.attention-copy')!;
       const height = copy.getBoundingClientRect().height;
-      const top = stageTop - height - 24;
-      copy.style.setProperty('--attention-copy-top', `${top}px`);
-      const clear = tops[index]! - top;
+      const clear = tops[index]! + height - stageTop + 24;
       return { start: tops[index]! - innerHeight / 2, clear, end: clear + innerHeight * .35 };
     });
   };

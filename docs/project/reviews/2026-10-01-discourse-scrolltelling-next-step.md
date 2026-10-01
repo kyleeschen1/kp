@@ -260,3 +260,15 @@ during the effect, in reverse, and on narrow/reduced-motion views. The stage sta
 centered and the cue's lower edge stays above it. This remains one reversible
 exemplar, pending human judgment of clearance, scroll distance and text handoff;
 no shared renderer or catalogue changes are implied.
+
+### Floating-card revision
+
+User approved replacing the above-stage sticky hold with freely scrolling cards.
+Each content-sized card now has a 92% page-colored backing and a light shadow;
+the text itself remains fully opaque. The card continues upward after clearance,
+while the following transparent interval provides effect and inspection space.
+The same measured bottom-clearance gate and scroll-driven math are preserved.
+The local stylesheet and removal of sticky-position bookkeeping are the rollback
+unit. Browser checks now enforce continued card travel after clearance as well as
+the unchanged stationary stage and pre-clearance hold. Material values remain
+provisional for this exemplar.
