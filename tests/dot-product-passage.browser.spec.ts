@@ -1,37 +1,41 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
-test("focus glow tunes glyph paint without changing geometry or playback", async ({ page }) => {
-  await page.goto("/experiments/dot-product-passage/");
-  await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
-  const timeline = page.getByRole("slider", { name: "Animation position" });
-  const tuning = page.getByRole("slider", { name: "Glow strength" });
-  await expect(tuning).toHaveValue("0");
-  await timeline.fill("0.1");
-  const moving = page.locator('[data-occurrence="pair-left-1"]');
-  const measure = () => moving.evaluate(node => {
-    const token = node.getBoundingClientRect(), stage = node.closest(".dot-stage")!.getBoundingClientRect();
-    return { x: token.x - stage.x, y: token.y - stage.y, width: token.width, height: token.height };
-  });
-  const bounds = await measure();
-  for (const strength of [0, 100, 60]) {
-    await tuning.fill(String(strength));
-    const glow = await moving.evaluate(node => getComputedStyle(node).textShadow);
-    if (strength === 0) expect(glow).toBe("none");
-    else expect(glow).toContain("220, 38, 38");
-    expect(await measure()).toEqual(bounds);
-    await expect(timeline).toHaveValue("0.1");
-    await expect(page.locator("[data-glow-value]")).toHaveText(`${strength}%`);
+test("two players share a renderer while retaining independent state and identity", async ({ page }, info) => {
+  await page.goto("/experiments/dot-product-passage/?compare=1");
+  const first = page.locator("#dot-player"), second = page.locator("#dot-player-second");
+  for (const root of [first, second]) await expect(root).toHaveAttribute("data-ready", "true");
+  await expect(page.locator("iframe, .dot-shadow, .dot-plane, [data-glow]")).toHaveCount(0);
+  const ids = await page.locator("[id]").evaluateAll(nodes => nodes.map(n => n.id));
+  expect(new Set(ids).size).toBe(ids.length);
+  const secondInitial = await second.locator(".dot-stage").innerHTML();
+  await first.getByRole("combobox", { name: "Milestone" }).selectOption("4");
+  await expect(first.locator('[data-kp-dot-key="sum"]')).toHaveText("−3");
+  expect(await second.locator(".dot-stage").innerHTML()).toBe(secondInitial);
+  await second.getByRole("combobox", { name: "Milestone" }).selectOption("4");
+  await expect(second.locator('[data-kp-dot-key="sum"]')).toHaveText("−36");
+  await second.getByRole("slider", { name: "Dim unfocused" }).fill("90");
+  await expect(second.locator(".dot-inputs")).toHaveCSS("opacity", "0.1");
+  await expect(first.locator(".dot-inputs")).toHaveCSS("opacity", "0.4");
+  const firstIds = await first.locator("[data-source-id]").evaluateAll(nodes => nodes.map(n => n.getAttribute("data-source-id")));
+  const secondIds = await second.locator("[data-source-id]").evaluateAll(nodes => nodes.map(n => n.getAttribute("data-source-id")));
+  expect(firstIds.some(id => secondIds.includes(id))).toBe(false);
+  await first.getByRole("slider", { name: "Animation position" }).fill("0");
+  await second.getByRole("slider", { name: "Animation position" }).fill("0.0001");
+  for (const side of ["left", "right"]) for (let i = 0; i < 3; i++) {
+    const source = await second.locator(`[data-kp-dot-key="${side}-${i}"]`).boundingBox();
+    const copy = await second.locator(`[data-occurrence="pair-${side}-${i}"] > span`).boundingBox();
+    for (const key of ["x", "y", "width", "height"] as const) expect(Math.abs(copy![key] - source![key])).toBeLessThan(.1);
   }
-  for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("text-shadow", "none");
-  await timeline.fill("0.25");
-  await expect(page.locator('[data-kp-dot-key="pair-left-1"] .dot-negative-sign')).toHaveCSS("text-shadow", /220, 38, 38/);
-  await timeline.fill("0");
-  await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
-  expect(await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => getComputedStyle(node).textShadow)).not.toContain("220, 38, 38");
-  await page.getByRole("button", { name: "Play", exact: true }).click();
-  await tuning.fill("80");
-  await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
+  await second.getByRole("combobox", { name: "Milestone" }).selectOption("1");
+  await first.getByRole("button", { name: "Play", exact: true }).click();
+  await expect(first.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
+  await expect(second.getByRole("slider", { name: "Animation position" })).toHaveValue("0.25");
+  await first.getByRole("button", { name: "Pause", exact: true }).click();
+  expect(new URL(page.url()).hash).toBe("");
+  await first.getByRole("combobox", { name: "Milestone" }).selectOption("1");
+  await expect(page.locator("html")).toHaveCSS("background-color", "rgb(32, 34, 34)");
+  await page.screenshot({ path: info.outputPath("two-players.png"), fullPage: true });
 });
 
 test("unfocused dimming can be tuned without seeking or pausing playback", async ({ page }) => {
@@ -42,10 +46,7 @@ test("unfocused dimming can be tuned without seeking or pausing playback", async
   await expect(tuning).toHaveValue("60");
   for (const value of [0, 40, 70, 100]) {
     await tuning.fill(String(value));
-    await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
-    await expect(page.locator(".dot-plane-source")).toHaveCSS("background-color", "rgb(32, 34, 34)");
-    const fill = await page.locator(".dot-plane-working").evaluate(node => (node as HTMLElement).style.getPropertyValue("--dot-front-fill"));
-    expect(fill).toBe("0%");
+    await expect(page.locator(".dot-player")).toHaveCSS("background-color", "rgb(32, 34, 34)");
     expect(await page.locator(".dot-inputs").evaluate(node => Number(getComputedStyle(node).opacity))).toBeCloseTo(1 - value / 100, 4);
     await expect(page.locator('[data-kp-dot-key="pair-left-0"]')).toHaveCSS("color", "rgb(255, 250, 240)");
     await expect(page.locator("[data-dim-value]")).toHaveText(`${value}%`);
@@ -56,6 +57,34 @@ test("unfocused dimming can be tuned without seeking or pausing playback", async
   await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
   await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "0.7");
   await expect(page.locator("[data-dim-value]")).toHaveText("30%");
+});
+
+test("a player can be disposed and remounted without retaining a clock or handlers", async ({ page }) => {
+  await page.goto("/experiments/dot-product-passage/");
+  await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
+  const result = await page.evaluate(async () => {
+    const playerModule = "/src/experiments/dot-product-passage/player.ts";
+    const sourceModule = "/src/experiments/dot-product-passage/source.ts";
+    const { mountDotPlayer } = await import(/* @vite-ignore */ playerModule);
+    const { comparisonPassage } = await import(/* @vite-ignore */ sourceModule);
+    const root = document.createElement("div"); root.id = "lifecycle-player"; document.body.append(root);
+    const dispose = await mountDotPlayer(root, comparisonPassage);
+    let duplicateRejected = false;
+    try { await mountDotPlayer(root, comparisonPassage); } catch { duplicateRejected = true; }
+    root.querySelector<HTMLButtonElement>("[data-play]")!.click();
+    dispose(); dispose();
+    const held = root.innerHTML;
+    root.querySelector<HTMLButtonElement>("[data-next]")!.click();
+    document.dispatchEvent(new Event("kp-matrix-example-config"));
+    await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const unchanged = root.innerHTML === held;
+    const nextDispose = await mountDotPlayer(root, comparisonPassage);
+    const ready = root.dataset["ready"];
+    const progress = root.querySelector<HTMLInputElement>("[data-scrub]")!.value;
+    nextDispose(); root.remove();
+    return { duplicateRejected, unchanged, ready, progress };
+  });
+  expect(result).toEqual({ duplicateRejected: true, unchanged: true, ready: "true", progress: "0" });
 });
 
 test("departure preserves every source token's glyph geometry", async ({ page }) => {
@@ -89,7 +118,7 @@ test("departure preserves every source token's glyph geometry", async ({ page })
   const inputs = await page.locator(".dot-inputs").boundingBox();
   const work = await page.locator(".dot-work").boundingBox();
   expect(work!.y - (inputs!.y + inputs!.height)).toBeGreaterThan(20);
-  for (const plane of await page.locator(".dot-plane").all()) await expect(plane).toHaveCSS("box-shadow", "none");
+  await expect(page.locator(".dot-plane, .dot-shadow, [data-glow]")).toHaveCount(0);
 });
 
 test("signed dot passage preserves references through pairing, products and sum", async ({ page }, info) => {
@@ -162,16 +191,9 @@ test("signed dot passage preserves references through pairing, products and sum"
   const chooser = page.getByRole("combobox", { name: "Milestone" });
   const originalSize = await page.locator('[data-kp-dot-key="right-0"]').boundingBox();
   const slider = page.getByRole("slider", { name: "Animation position" });
-  await expect(page.locator(".dot-plane")).toHaveCount(2);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "0");
-  const initialBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  const frontAlpha = () => page.locator(".dot-plane-working").evaluate(node =>
-    Number(getComputedStyle(node).backgroundColor.match(/\/\s*([\d.e+-]+)\)/)?.[1] ?? 1));
-  expect(await frontAlpha()).toBe(0);
   let lastDim = 0;
   for (const progress of [.001, .01, .025, .05]) {
     await slider.fill(String(progress));
-    expect(await frontAlpha()).toBe(0);
     const dim = await page.locator(".dot-inputs").evaluate(node => 1 - Number(getComputedStyle(node).opacity));
     expect(dim).toBeGreaterThan(lastDim);
     if (progress === .001) expect(dim).toBeLessThan(.001);
@@ -186,18 +208,11 @@ test("signed dot passage preserves references through pairing, products and sum"
   }
   expect(lastDim).toBeCloseTo(.6, 4);
   await slider.fill("0");
-  expect(await frontAlpha()).toBe(0);
   await slider.fill("0.06");
-  const initialFrontColor = await page.locator(".dot-plane-working").evaluate(node => getComputedStyle(node).backgroundColor);
-  const earlyBackColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(earlyBackColor).toBe(initialBackColor);
-  expect(await frontAlpha()).toBe(0);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
   expect(nativeInk).toBe("rgb(255, 250, 240)");
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("-webkit-text-stroke-color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS("color", nativeInk);
-  for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "400");
   const fontsSession = await page.context().newCDPSession(page);
@@ -222,46 +237,10 @@ test("signed dot passage preserves references through pairing, products and sum"
     new DOMMatrixReadOnly(getComputedStyle(node).transform).m13);
   expect(await tiltY(".dot-stage")).toBe(0);
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
-  const forward = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
-  expect(forward).toBe(90);
-  const planeDepth = await page.locator(".dot-plane-working").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
-  expect(planeDepth).toBe(69);
-  const projected = await page.locator('[data-shadow-for="pair-right-0"]').evaluate(node => {
-    const m = new DOMMatrixReadOnly(getComputedStyle(node).transform);
-    return { z: m.m43, opacity: Number(getComputedStyle(node).opacity) };
-  });
-  expect(projected.z).toBe(69.5); expect(projected.opacity).toBeCloseTo(.08, 2);
-  const shadowOffset = await page.locator(".dot-stage").evaluate(stage => {
-    const token = stage.querySelector('[data-occurrence="pair-right-0"]')!.getBoundingClientRect();
-    const shadow = stage.querySelector('[data-shadow-for="pair-right-0"]')!.getBoundingClientRect();
-    return { x: shadow.x + shadow.width / 2 - token.x - token.width / 2,
-      y: shadow.y + shadow.height / 2 - token.y - token.height / 2 };
-  });
-  expect(shadowOffset.x).toBeCloseTo(0, 2);
-  expect(shadowOffset.y).toBeCloseTo(0, 2);
   const liftedSize = await page.locator('[data-occurrence="pair-right-0"] > span').boundingBox();
   expect(liftedSize!.width).toBeCloseTo(originalSize!.width, 1);
   expect(liftedSize!.height).toBeCloseTo(originalSize!.height, 1);
-  await expect(page.locator(".dot-plane").first()).toHaveCSS("border-top-width", "0px");
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("border-top-width", "0px");
-  await expect(page.locator(".dot-shadow [data-source-id], .dot-shadow [data-kp-dot-key]")).toHaveCount(0);
-  const retreat = await page.locator(".dot-inputs").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
-  const backSurface = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m43);
-  expect(retreat).toBe(0); expect(backSurface).toBe(retreat - 1);
-  const tiltX = await page.locator(".dot-stage").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m23);
-  expect(tiltX).toBe(0);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("box-shadow", "none");
-  const backingOffset = await page.locator(".dot-plane-source").evaluate(node => {
-    const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.m41, y: m.m42 };
-  });
-  expect(backingOffset).toEqual({ x: 0, y: 0 });
-  await expect(page.locator(".dot-plane-source")).toHaveCSS("opacity", "1");
   await expect(page.locator(".dot-inputs")).toHaveCSS("opacity", "0.4");
-  const backScale = await page.locator(".dot-plane-source").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
-  expect(backScale).toBeCloseTo(1, 4);
-  const contextScale = await page.locator(".dot-inputs").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
-  expect(contextScale).toBeCloseTo(1, 4);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("opacity", "1");
   expect(await tiltY('[data-occurrence="pair-left-0"]')).toBe(0);
   const bracketScale = await page.locator('[data-dot-vector="right"] .mopen').evaluate(node => {
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.a, y: m.d };
@@ -289,13 +268,6 @@ test("signed dot passage preserves references through pairing, products and sum"
     }
   }
   await slider.fill("0.2499");
-  const contact = await page.locator('[data-shadow-for="pair-right-0"]').evaluate(node => {
-    const style = getComputedStyle(node);
-    return { blur: Number(style.filter.match(/blur\(([\d.]+)px\)/)?.[1]), opacity: Number(style.opacity) };
-  });
-  expect(contact.blur).toBeLessThan(.51);
-  expect(contact.opacity).toBeCloseTo(.04, 2);
-  await expect(page.locator(".dot-work")).not.toHaveCSS("text-shadow", "none");
   for (const pair of passage.dot.pairs) {
     const copy = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();
     const target = await page.locator(`[data-kp-dot-key="pair-left-${pair.index}"]`).boundingBox();
@@ -333,13 +305,8 @@ test("signed dot passage preserves references through pairing, products and sum"
   await chooser.selectOption("1");
   const settledScale = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
   expect(settledScale).toBe(1);
-  for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("opacity", "0");
   await expect(page.locator('[data-trace-role="source-trace"]')).toHaveCount(0);
   for (const source of await page.locator(".dot-inputs [data-kp-dot-key]").all()) await expect(source).toHaveCSS("opacity", "0");
-  const backColor = await page.locator(".dot-plane-source").evaluate(node => getComputedStyle(node).backgroundColor);
-  expect(backColor).toBe(initialBackColor);
-  expect(earlyBackColor).toBe(backColor);
-  await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("text-shadow", "none");
   expect(await tiltY('[data-occurrence="pair-right-0"]')).toBe(0);
   for (const operator of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(operator).toHaveCSS("opacity", "0");
@@ -366,7 +333,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(notation.syntax[0]).toBe("rgb(174, 177, 177)");
   // Check centering in scene coordinates, before the shared camera projection.
   expect(Math.abs(notation.offsetX)).toBeLessThan(1);
-  expect(notation.depth).toBe(70);
+  expect(notation.depth).toBe(0);
   // Parentheses shrink after the contents; seeking backward restores that ordering.
   const delayedPose = async () => page.locator('[data-kp-dot-key="syntax-open-0"], [data-kp-dot-key="pair-left-0"]').evaluateAll(nodes => nodes.map(node => {
     const style = getComputedStyle(node);

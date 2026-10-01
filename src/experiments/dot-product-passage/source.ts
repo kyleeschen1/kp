@@ -14,3 +14,14 @@ const right = createKpTypedMatrixFromRows({ id: "dot-example.v", rows:
 });
 export const product = matrixProduct({ id: "dot-example.product", left, right });
 export const passage = dotPassage(product.cell(0, 0));
+
+// A second caller changes only semantic operands, never presentation code.
+const comparisonLeft = createKpTypedMatrixFromRows({ id: "dot-comparison.u", rows: [
+  [0, 12, -3].map((value, i) => scalar(`dot-comparison.u.${i}`, value)),
+] });
+const comparisonRight = createKpTypedMatrixFromRows({ id: "dot-comparison.v", rows:
+  [7, -2, 4].map((value, i) => [scalar(`dot-comparison.v.${i}`, value)]),
+});
+export const comparisonPassage = dotPassage(matrixProduct({
+  id: "dot-comparison.product", left: comparisonLeft, right: comparisonRight,
+}).cell(0, 0));

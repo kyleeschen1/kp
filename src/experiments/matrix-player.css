@@ -1,0 +1,19 @@
+@import "katex/dist/katex.min.css";
+@import "../tutorial/focus-deck-scaffold.css";
+
+/* Shared player chrome; mathematical stage layout belongs to each adapter. */
+.matrix-card { background: var(--kp-st-paper); border: 1px solid var(--kp-st-rule); border-radius: .5rem; overflow: hidden; }
+.matrix-cue { padding: 1.25rem 1.5rem .5rem; min-height: 5rem; display: flex; align-items: end; }
+.matrix-scroll { overflow-x: auto; }
+.matrix-card .kp-focus-deck__annotation { position: static; }
+.matrix-controls { display: flex; flex-wrap: wrap; gap: .75rem; padding: 1rem; align-items: center; border-top: 1px solid var(--kp-st-rule); }
+.matrix-controls input { flex: 1; min-width: 10rem; accent-color: var(--kp-st-focus); }
+.matrix-controls button, .matrix-controls select { padding: .45rem .65rem; background: var(--kp-st-paper); color: var(--kp-st-ink); border: 1px solid var(--kp-st-rule); border-radius: .25rem; }
+.matrix-controls button:focus-visible, .matrix-controls select:focus-visible { outline: 2px solid var(--kp-st-focus); outline-offset: 2px; }
+.matrix-controls select { max-width: 100%; }
+.matrix-help { color: var(--kp-st-muted); }
+.matrix-controls button[aria-pressed="true"] { background: var(--kp-st-focus); color: var(--kp-st-paper); }
+@media (max-width: 650px) {
+  .matrix-cue { min-height: 6rem; padding: 1rem; }
+  .matrix-controls select { width: 100%; }
+}

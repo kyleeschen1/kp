@@ -660,6 +660,46 @@ the source notation, not its panel. The dimming slider preserves the background
 and focused-token brightness across its full range; all five scoped browser
 tests pass. Existing layout, timing and token handoff checks remain intact.
 
+October 1, bounded reuse cleanup (explicitly approved after the CSS audit):
+`matrix-player.css` now owns shared controls/scaffold styling, while
+`matrix-example-page.css` owns page framing. The dot renderer no longer imports
+another animation's stylesheet. Its dark theme is scoped to `.dot-player`;
+`page.css` composes the host and renderer styles once. This also avoids duplicate
+KaTeX font-face declarations observed when separate CSS entrypoints each pulled
+in the same renderer stylesheet.
+
+Remove obsolete planes, shadow clones, glow controls and 3D motion. Preserve
+the source-above-work layout, dimming, pairing dwell, evaluation sequence and
+native/material token box continuity. `mountDotPlayer(root, passage)` owns one
+instance and returns its disposal function; hash navigation is opt-in for the
+standalone host. Roots and control IDs are instance-specific. Duplicate mounts
+are rejected, and disposal cancels the clock and removes observers/listeners.
+
+The [two-instance proof](http://localhost:8000/experiments/dot-product-passage/?compare=1)
+renders the original -3 example and `[0,12,-3] · [7,-2,4] = -36` in one document
+without iframes. Both use the same renderer, stylesheet and player. The second
+caller varies only the semantic source and mount root; it adds no presentation
+branches. Import `style.css` once for these players, then mount each existing
+`DotPassage` into its own identified root. The standalone host keeps existing
+URL restoration; the comparison uses local state so players cannot overwrite
+each other's history.
+
+Measurements: dot component CSS 4,532 → 3,606 bytes; presentation adapter 15,477 →
+12,429 bytes. Vite production dot entry 6.83 → 6.72 KB gzip, now including both
+data examples, and route CSS 15.04 → 14.50 KB gzip. Shared JS remains 85.16 KB
+gzip. These are build sizes, not measured network or runtime performance.
+Separate page bundles still repeat shared CSS; this cleanup proves same-document
+reuse, not complete cross-route amortization or many-instance performance.
+
+Verification: six `visual:dot-passage` browser tests cover independent state and
+identity, regular paint, geometry, dimming, reverse, disposal/remount, menu and
+reduced motion. `visual:matrix-interpretations` (eight) and `visual:matrix-column`
+(two) pass after shared-style extraction; four `test:dot-passage` unit tests,
+typecheck and `build:matrix-interpretations` pass. Two-instance screenshots were
+inspected. Three numerical terms remain the supported scope; no rectangular
+integration, viewport suspension, global renderer promotion or scale claim is
+made by this proof.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular
