@@ -525,6 +525,11 @@ Browser checks cover zero/full/intermediate strength, stage-relative geometry,
 native negative-sign inheritance, neutral decorative shadows and reverse focus
 removal. This is a local visual candidate; no shared motif is promoted.
 
+September 30, halo visibility probe: user could not see the paper-white halo.
+Change its color to red (#dc2626), preserving the 60% default, strength slider,
+glyph-shaped spread, dark token ink and separate black shadows. This makes the
+existing effect easier to inspect; red is a local trial, not a focus-color policy.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

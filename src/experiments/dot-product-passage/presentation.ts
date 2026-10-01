@@ -139,7 +139,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     stage.dataset["progress"] = String(frame.progress);
     // A glyph-shaped light halo is separate from the dark receiving-plane shadow.
     // It inherits through signed tokens without changing their metrics or ink.
-    const haloInk = `rgba(255, 253, 248, ${glowStrength})`;
+    const haloInk = `rgba(220, 38, 38, ${glowStrength})`;
     const halo = glowStrength === 0 ? "" : ["-1px 0 1px", "1px 0 1px", "0 -1px 1px", "0 1px 1px", "0 0 4px", "0 0 4px"].map(offset => `${offset} ${haloInk}`).join(", ");
     stage.style.setProperty("--dot-moving-glow", halo || "none");
     stage.style.setProperty("--dot-focused-shadow", `${halo ? `${halo}, ` : ""}0 .8px .5px rgba(0, 0, 0, .35)`);

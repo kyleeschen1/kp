@@ -18,17 +18,17 @@ test("focus glow tunes glyph paint without changing geometry or playback", async
     await tuning.fill(String(strength));
     const glow = await moving.evaluate(node => getComputedStyle(node).textShadow);
     if (strength === 0) expect(glow).toBe("none");
-    else expect(glow).toContain("255, 253, 248");
+    else expect(glow).toContain("220, 38, 38");
     expect(await measure()).toEqual(bounds);
     await expect(timeline).toHaveValue("0.1");
     await expect(page.locator("[data-glow-value]")).toHaveText(`${strength}%`);
   }
   for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("text-shadow", "none");
   await timeline.fill("0.25");
-  await expect(page.locator('[data-kp-dot-key="pair-left-1"] .dot-negative-sign')).toHaveCSS("text-shadow", /255, 253, 248/);
+  await expect(page.locator('[data-kp-dot-key="pair-left-1"] .dot-negative-sign')).toHaveCSS("text-shadow", /220, 38, 38/);
   await timeline.fill("0");
   await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
-  expect(await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => getComputedStyle(node).textShadow)).not.toContain("255, 253, 248");
+  expect(await page.locator('[data-kp-dot-key="left-0"]').evaluate(node => getComputedStyle(node).textShadow)).not.toContain("220, 38, 38");
   await page.getByRole("button", { name: "Play", exact: true }).click();
   await tuning.fill("80");
   await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
