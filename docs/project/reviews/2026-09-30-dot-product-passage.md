@@ -635,6 +635,25 @@ warm-white focused tokens and neutral grey context/syntax. Regular math weight,
 the dimming slider and default-off glow remain. Four scoped browser tests pass;
 the palette remains a local exemplar choice pending visual review.
 
+September 30, separate source and calculation: source matrices now sit above
+the working line. Entries travel directly downward to their paired slots,
+finishing at 82% of the pairing beat for a roughly 378ms recognition hold before
+multiplication. Panel shadows are removed; warm-white focus and context dimming
+remain. Initial and paired screenshots were inspected; visual acceptance is
+still pending.
+
+The reported departure jerk reproduced as a 2.32px horizontal offset. KaTeX
+had placed a trailing operator mspace inside the destination token's htmlData
+wrapper, so copying that wrapper changed its width relative to the source.
+An outer mathord now keeps inter-operator spacing outside the semantic token
+box. Flex material wrappers also remove the extra inherited prose line box.
+This repairs token ownership/measurement in this adapter without glyph-specific
+offsets or changes to semantic operands. A new regression compares all six
+source/material boxes at departure and rewind, and material/target boxes at
+landing and during the hold (within .1px). Five browser tests, four unit tests
+and the scoped build pass. This is bounded geometry evidence, not a claim of
+renderer-wide pixel-identical paint.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

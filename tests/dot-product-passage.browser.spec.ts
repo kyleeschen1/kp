@@ -57,6 +57,40 @@ test("unfocused dimming can be tuned without seeking or pausing playback", async
   await expect(page.locator("[data-dim-value]")).toHaveText("30%");
 });
 
+test("departure preserves every source token's glyph geometry", async ({ page }) => {
+  await page.goto("/experiments/dot-product-passage/");
+  await expect(page.locator("#dot-player")).toHaveAttribute("data-ready", "true");
+  const timeline = page.getByRole("slider", { name: "Animation position" });
+  for (const progress of ["0.0001", "0.2", "0.0001"]) {
+    await timeline.fill(progress);
+    if (progress === "0.2") continue;
+    for (const side of ["left", "right"]) for (let i = 0; i < 3; i++) {
+      const source = await page.locator(`[data-kp-dot-key="${side}-${i}"]`).boundingBox();
+      const copy = await page.locator(`[data-occurrence="pair-${side}-${i}"] > span`).boundingBox();
+      for (const key of ["x", "y", "width", "height"] as const) {
+        expect(Math.abs(copy![key] - source![key]), `${side}-${i} ${key}`).toBeLessThan(.1);
+      }
+    }
+  }
+  // The same token box must also settle exactly onto its destination, including
+  // signed entries, and remain stationary during the recognition hold.
+  for (const progress of ["0.21", "0.2499"]) {
+    await timeline.fill(progress);
+    for (const side of ["left", "right"]) for (let i = 0; i < 3; i++) {
+      const target = await page.locator(`[data-kp-dot-key="pair-${side}-${i}"]`).boundingBox();
+      const copy = await page.locator(`[data-occurrence="pair-${side}-${i}"] > span`).boundingBox();
+      for (const key of ["x", "y", "width", "height"] as const) {
+        expect(Math.abs(copy![key] - target![key]), `${side}-${i} landed ${key}`).toBeLessThan(.1);
+      }
+    }
+    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("opacity", "0");
+  }
+  const inputs = await page.locator(".dot-inputs").boundingBox();
+  const work = await page.locator(".dot-work").boundingBox();
+  expect(work!.y - (inputs!.y + inputs!.height)).toBeGreaterThan(20);
+  for (const plane of await page.locator(".dot-plane").all()) await expect(plane).toHaveCSS("box-shadow", "none");
+});
+
 test("signed dot passage preserves references through pairing, products and sum", async ({ page }, info) => {
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
@@ -178,7 +212,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   }
   await fontsSession.detach();
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
-  expect(lifted!.y + lifted!.height / 2).toBeLessThan(column[0]!.y);
+  expect(lifted!.y + lifted!.height / 2).toBeGreaterThan(column[0]!.y);
   // Brackets stay at their source while entries depart; no corner docking.
   for (const side of ["left", "right"]) await expect(page.locator(`[data-dot-vector="${side}"]`)).toHaveCSS("transform", "none");
   await expect(page.locator('[data-occurrence="pair-right-0"]')).toHaveCSS("text-shadow", "none");
@@ -215,7 +249,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(retreat).toBe(0); expect(backSurface).toBe(retreat - 1);
   const tiltX = await page.locator(".dot-stage").evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m23);
   expect(tiltX).toBe(0);
-  await expect(page.locator(".dot-plane-working")).not.toHaveCSS("box-shadow", "none");
+  await expect(page.locator(".dot-plane-working")).toHaveCSS("box-shadow", "none");
   const backingOffset = await page.locator(".dot-plane-source").evaluate(node => {
     const m = new DOMMatrixReadOnly(getComputedStyle(node).transform); return { x: m.m41, y: m.m42 };
   });
@@ -240,16 +274,17 @@ test("signed dot passage preserves references through pairing, products and sum"
   await expect(page.locator('[data-dot-vector="left"]')).toHaveCSS("opacity", "1");
   await expect(page.locator('[data-dot-vector="right"]')).toHaveCSS("opacity", "1");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("opacity", "1");
-  // Matching pairs approach the central line from opposite sides, without
-  // the former rigid-column sweep. Each entry keeps its original source ID.
+  // Every entry travels monotonically downward to its matching pair slot.
   for (const p of [.12, .15, .18, .21]) {
     await slider.fill(String(p));
     for (const pair of passage.dot.pairs) {
-      const left = await page.locator(`[data-occurrence="pair-left-${pair.index}"]`).boundingBox();
-      const right = await page.locator(`[data-occurrence="pair-right-${pair.index}"]`).boundingBox();
-      const target = await page.locator(`[data-kp-dot-key="pair-right-${pair.index}"]`).boundingBox();
-      expect(left!.y + left!.height / 2).toBeGreaterThan(right!.y + right!.height / 2);
-      expect(Math.abs(right!.y - target!.y)).toBeLessThan(70);
+      for (const side of ["left", "right"]) {
+        const source = await page.locator(`[data-kp-dot-key="${side}-${pair.index}"]`).boundingBox();
+        const copy = await page.locator(`[data-occurrence="pair-${side}-${pair.index}"]`).boundingBox();
+        const target = await page.locator(`[data-kp-dot-key="pair-${side}-${pair.index}"]`).boundingBox();
+        expect(copy!.y).toBeGreaterThan(source!.y);
+        expect(copy!.y).toBeLessThanOrEqual(target!.y + .1);
+      }
     }
   }
   await slider.fill("0.2499");

@@ -7,7 +7,8 @@ import { prepareFusion } from "./fusion.ts";
 const number = (entry: KpScalarValue) => String(valueOf(entry));
 const signedToken = (entry: KpScalarValue) => valueOf(entry) < 0
   ? `\\htmlClass{dot-negative-sign}{\\mathord{-}}${Math.abs(valueOf(entry))}` : number(entry);
-const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-dot-key=${key}}{${signedToken(entry)}}`;
+// Keep inter-operator spacing outside the semantic token's measured paint owner.
+const tag = (key: string, entry: KpScalarValue) => `\\mathord{\\htmlData{kp-dot-key=${key}}{${signedToken(entry)}}}`;
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const plus = `<span class="dot-plus">${math("+")}</span>`;
 
@@ -161,19 +162,17 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     stage.style.setProperty("--dot-back-scale", "1");
     stage.style.setProperty("--dot-back-opacity", String(1 - dimUnfocused * planeLift));
     workingPlane.style.transform = `translate3d(0, 0, ${70 * planeLift - 1}px)`;
-    // Surface translucency preserves the source context; elevation changes the
-    // cast shadow independently, without fading the foreground mathematical ink.
+    // Source context and the working expression are separated by layout.
     workingPlane.style.opacity = planeLift > 0 ? "1" : "0";
     // Dimming is the only context wash; the receiving plane adds no overlay.
     workingPlane.style.setProperty("--dot-front-fill", "0%");
-    workingPlane.style.boxShadow = planeLift > 0
-      ? `0 1px 2px rgba(0, 0, 0, ${.16 * planeLift}), ${10 * planeLift}px ${1 + 13 * planeLift}px ${2 + 20 * planeLift}px rgba(0, 0, 0, ${.22 * planeLift})` : "none";
     pairs.style.opacity = frame.index === 1 || (frame.index === 2 && frame.local < 1) ? "1" : "0";
     products.style.opacity = frame.index >= 2 && !(frame.index === 4 && frame.local === 1) ? "1" : "0";
     sum.style.opacity = frame.index === 4 ? "1" : "0";
     for (const plus of pairs.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = "0";
     for (const plus of products.querySelectorAll<HTMLElement>(".dot-plus")) plus.style.opacity = frame.index >= 3 ? "1" : "0";
-    const matching = frame.index === 0 ? 0 : frame.index === 1 ? smooth(frame.local) : 1;
+    // Finish travel before the pairs milestone, leaving a short recognition hold.
+    const matching = frame.index === 0 ? 0 : frame.index === 1 ? smooth(frame.local / .82) : 1;
     const shadowLift = frame.index === 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches
       ? ease(frame.local / .2) * (1 - ease((frame.local - .55) / .45)) : 0;
     for (const side of ["left", "right"] as const) {
@@ -186,15 +185,10 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       }
     }
     for (const { node, shadow, from, to } of owners) {
-      const side = from.startsWith("left-") ? "left" : "right";
       const source = points.get(from)!, b = points.get(to)!;
-      // Both operands approach their shared reading line from opposite sides.
-      // A shallow separation replaces the former full-column sweeping pivot.
-      const separation = 24 * Math.sin(Math.PI * matching);
-      // Open the native pair slots before closing the column's vertical spacing.
-      const spread = smooth(frame.local / .7);
-      const x = source.x + (b.x - source.x) * spread;
-      const y = source.y + (b.y - source.y) * matching + (side === "left" ? separation : -separation);
+      // Move directly from the source row/column to the lower reading line.
+      const x = source.x + (b.x - source.x) * matching;
+      const y = source.y + (b.y - source.y) * matching;
       // All entries move out of the shared plane; the destination expression
       // lives at the same depth, avoiding a jump on the native handoff.
       const surfaceZ = 70 * ease(frame.local / .2);

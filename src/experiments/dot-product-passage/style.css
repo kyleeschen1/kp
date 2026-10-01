@@ -13,11 +13,11 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-stage { transform-style: preserve-3d; }
 .dot-work { transform: translateZ(70px); }
 .dot-material { transform-style: preserve-3d; }
-.dot-plane { position: absolute; inset: 65px 18% 35px; border: 0; background: var(--dot-surface-paper); pointer-events: none; }
-.dot-plane-source { transform: translateZ(-1px) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); box-shadow: 0 1px 2px rgb(0 0 0 / .16); }
+.dot-plane { position: absolute; inset: 20px 18%; border: 0; background: var(--dot-surface-paper); pointer-events: none; }
+.dot-plane-source { transform: translateZ(-1px) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); }
 .dot-plane-working { background: color-mix(in srgb, var(--dot-surface-paper) var(--dot-front-fill, 0%), transparent); }
 .dot-inputs [data-kp-dot-key], .dot-work { text-shadow: 0 0 .5px rgb(0 0 0 / .04); }
-.dot-inputs { position: absolute; top: 50%; transform: translateY(-50%) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
+.dot-inputs { position: absolute; top: 30%; transform: translateY(-50%) scale(var(--dot-back-scale, 1)); opacity: var(--dot-back-opacity, 1); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: var(--matrix-layout-gap, 2rem); }
 /* KaTeX retains enclosure layout and MathML. One structural paint treatment
    replaces its short font brackets and tall SVG brackets without double paint. */
 .dot-inputs [data-dot-vector] { position: relative; display: inline-block; --dot-bracket-stroke: .12em; }
@@ -29,7 +29,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 }
 .dot-inputs [data-dot-vector]::before { left: var(--dot-bracket-left, .12em); border-right: 0; }
 .dot-inputs [data-dot-vector]::after { right: var(--dot-bracket-right, .12em); border-left: 0; }
-.dot-work { position: absolute; top: calc(50% - 40px); left: 0; right: 0; height: 80px; }
+.dot-work { position: absolute; top: calc(75% - 40px); left: 0; right: 0; height: 80px; }
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
 .dot-inputs [data-kp-dot-key], .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
@@ -38,7 +38,8 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }
 .dot-inputs :is(.mopen, .mclose) { display: inline-block; transform-origin: center; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
-.dot-paint, .dot-shadow { position: absolute; left: 0; top: 0; color: var(--kp-st-ink); }
+/* Flex isolates the cloned token from an extra inherited prose line box. */
+.dot-paint, .dot-shadow { position: absolute; display: flex; left: 0; top: 0; color: var(--kp-st-ink); }
 .dot-paint, .dot-shadow { text-shadow: none; }
 .dot-shadow { color: #000; pointer-events: none; }
 .dot-stage [data-dot-focused] { color: var(--kp-st-focus); text-shadow: var(--dot-focused-shadow); }
