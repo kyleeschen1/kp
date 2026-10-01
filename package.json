@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "test:rectangular-product": "node --disable-warning=ExperimentalWarning --test tests/rectangular-product.test.ts tests/dot-product-passage.test.ts",
+    "visual:rectangular-product": "playwright test --config playwright.rectangular-product.config.ts --project=chromium --workers=1",
     "test:basis-composition": "node --disable-warning=ExperimentalWarning --test tests/basis-composition.test.ts tests/matrix-product.test.ts tests/matrix-interpretations.test.ts",
     "visual:basis-composition": "playwright test --config playwright.basis-composition.config.ts --project=chromium --workers=1",
     "measure:semantic-cost": "node --disable-warning=ExperimentalWarning scripts/measure-semantic-cost.ts",

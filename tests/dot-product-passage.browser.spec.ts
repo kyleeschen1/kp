@@ -1,6 +1,32 @@
 import { expect, test } from "@playwright/test";
 import { passage } from "../src/experiments/dot-product-passage/source.ts";
 
+test('beige light mode preserves focus ink and the held geometry', async ({ page }, info) => {
+  await page.goto('/experiments/dot-product-passage/');
+  await expect(page.locator('#dot-player')).toHaveAttribute('data-ready', 'true');
+  const timeline = page.getByRole('slider', { name: 'Animation position' });
+  await timeline.fill('0.125');
+  const positions = () => page.locator('.dot-paint').evaluateAll(nodes => nodes.map(node => {
+    const r = node.getBoundingClientRect(), stage = node.closest('.dot-stage')!.getBoundingClientRect();
+    return { x: r.x - stage.x, y: r.y - stage.y, width: r.width, height: r.height };
+  }));
+  const before = await positions();
+  await page.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await expect(page.locator('html')).toHaveCSS('color-scheme', 'light');
+  await expect(timeline).toHaveValue('0.125');
+  expect(await positions()).toEqual(before);
+  const paper = await page.locator('.matrix-card').evaluate(node => getComputedStyle(node).backgroundColor);
+  await expect(page.locator('body')).toHaveCSS('background-color', paper);
+  expect(paper).not.toBe('rgb(32, 34, 34)');
+  for (const selector of ['[data-kp-dot-key="pair-left-1"] .dot-negative-sign', '[data-occurrence="pair-left-1"] .dot-negative-sign']) {
+    await expect(page.locator(selector)).toHaveCSS('color', 'rgb(17, 17, 15)');
+  }
+  await page.locator('.matrix-card').screenshot({ path: info.outputPath('beige-light-mode.png') });
+  await page.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(32, 34, 34)');
+  expect(await positions()).toEqual(before);
+});
+
 test('math size remeasures native and moving tokens at the held playhead', async ({ page }, info) => {
   await page.goto('/experiments/dot-product-passage/?compare=1');
   const root = page.locator('#dot-player');

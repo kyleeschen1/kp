@@ -1,5 +1,12 @@
 # Dot passage: group depth and lighter delimiters
 
+Light mode comparison: an explicit toggle in the player and shared menu restores
+the earlier 94% cream (#fffdf8), 6% brown (#806548) background mix, with dark
+focused math. Theme uses the existing presentation configuration and preserves
+the held playhead/geometry. Dark remains the initial default. The full dot
+browser suite checks both native and moving ink, reversible theme switching,
+size/spacing and the existing motion invariants.
+
 Current size control: Math size spans 20–32px and now defaults to the user's
 selected 20px. Column element centers match the measured horizontal spacing of
 the corresponding row elements, without scaling glyphs. This is recomputed

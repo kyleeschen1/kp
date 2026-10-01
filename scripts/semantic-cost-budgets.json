@@ -3,6 +3,7 @@
   "rationale": "Initial ceilings from the October 1 four-entry build and one/ten-instance cohorts (9–15% initial headroom). Composition activation inherits the column ceiling: 105864 measured JS gzip bytes versus 111000 allowed, about 4.9% headroom; existing ceilings unchanged. DOM allowances cover tested signed/two-digit variants. Timings and heap remain observations, not portable limits. See docs/project/reviews/2026-10-01-basis-composition.md.",
   "entries": {
     "dot-product-passage": { "jsGzip": 100000, "cssGzip": 16000 },
+    "rectangular-product": { "jsGzip": 100000, "cssGzip": 16000 },
     "matrix-column-product": { "jsGzip": 111000, "cssGzip": 16000 },
     "matrix-column-combinations": { "jsGzip": 111000, "cssGzip": 16000 },
     "matrix-examples": { "jsGzip": 1200, "cssGzip": 16000 },

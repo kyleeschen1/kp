@@ -1,0 +1,10 @@
+.dot-stage--context { height: calc(var(--dot-math-size, 20px) * 16 + 200px); }
+.dot-stage--context .dot-inputs { top: calc(50% + 100px); }
+.dot-stage--context .dot-work { top: calc(50% + 60px); }
+.rect-context { position: absolute; top: 24px; left: 0; right: 0; height: 152px; display: flex; align-items: center; justify-content: center; gap: 1.25em; }
+.rect-matrix [data-context-key] { display: inline-block; position: relative; opacity: .4; }
+.rect-matrix [data-context-selected], .rect-matrix [data-context-destination] { opacity: 1; color: var(--kp-st-focus); }
+.rect-result-ink { visibility: hidden; }
+.rect-result [data-context-key]::after { content: '·'; position: absolute; inset: 0; text-align: center; }
+.rect-result [data-context-arrived]::after { display: none; }
+.rect-result [data-context-arrived] .rect-result-ink { visibility: visible; }

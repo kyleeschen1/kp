@@ -6,7 +6,7 @@ import { prepareFusion } from "./fusion.ts";
 import { defaultDotDepth, sampleDotDepth, sampleDotDeparture, sampleDotElevation, type DotDepthSettings } from './depth.ts';
 
 const number = (entry: KpScalarValue) => String(valueOf(entry));
-const signedToken = (entry: KpScalarValue) => valueOf(entry) < 0
+export const signedToken = (entry: KpScalarValue) => valueOf(entry) < 0
   ? `\\htmlClass{dot-negative-sign}{\\mathord{-}}${Math.abs(valueOf(entry))}` : number(entry);
 // Keep inter-operator spacing outside the semantic token's measured paint owner.
 const tag = (key: string, entry: KpScalarValue) => `\\mathord{\\htmlData{kp-dot-key=${key}}{${signedToken(entry)}}}`;

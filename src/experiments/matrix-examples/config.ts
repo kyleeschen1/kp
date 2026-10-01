@@ -3,20 +3,23 @@ export interface MatrixExampleConfig {
   readonly layout: "stacked" | "side";
   readonly spacing: "compact" | "roomy";
   readonly motion: "animate" | "steps";
+  readonly theme: "dark" | "light";
 }
 const changed = "kp-matrix-example-config";
 
 export function readMatrixConfig(doc: Document): MatrixExampleConfig {
-  const { matrixLayout = "stacked", matrixSpacing = "compact", matrixMotion = "animate" } = doc.documentElement.dataset;
+  const { matrixLayout = "stacked", matrixSpacing = "compact", matrixMotion = "animate", matrixTheme = 'dark' } = doc.documentElement.dataset;
   if ((matrixLayout !== "stacked" && matrixLayout !== "side") ||
       (matrixSpacing !== "compact" && matrixSpacing !== "roomy") ||
-      (matrixMotion !== "animate" && matrixMotion !== "steps")) throw new Error("Unsupported matrix presentation configuration.");
-  return Object.freeze({ layout: matrixLayout, spacing: matrixSpacing, motion: matrixMotion });
+      (matrixMotion !== "animate" && matrixMotion !== "steps") ||
+      (matrixTheme !== 'dark' && matrixTheme !== 'light')) throw new Error("Unsupported matrix presentation configuration.");
+  return Object.freeze({ layout: matrixLayout, spacing: matrixSpacing, motion: matrixMotion, theme: matrixTheme });
 }
 
 export function applyMatrixConfig(doc: Document, config: MatrixExampleConfig) {
   const data = doc.documentElement.dataset;
   data["matrixLayout"] = config.layout; data["matrixSpacing"] = config.spacing; data["matrixMotion"] = config.motion;
+  data['matrixTheme'] = config.theme;
   // Dispatch in the receiving document; no cross-origin message or global store.
   const event = doc.createEvent("Event"); event.initEvent(changed, false, false); doc.dispatchEvent(event);
 }

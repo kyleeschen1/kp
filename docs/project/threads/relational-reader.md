@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 resumed integration: [rectangular first-cell candidate](../reviews/2026-10-01-rectangular-product.md)
+is ready for layout review under the existing matrix-authoring contract. The
+approved continuation remains all-cell selection and source-only variation.
+Its shared dot player includes the requested beige light-mode toggle.
+
 October 1 next-step review: [rectangular composition of the dot passage](../reviews/2026-10-01-next-step-review.md).
 Recommend returning to the preserved authoring-reuse proof after focus tuning;
 no implementation or checkpoint acceptance is implied by this review.

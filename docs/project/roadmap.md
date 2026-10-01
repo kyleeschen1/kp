@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1 rectangular candidate: [first-cell integration](reviews/2026-10-01-rectangular-product.md)
+reuses the accepted dot passage in matrix context and adds result placement.
+The existing authoring contract owns its layout review, then all-cell selection
+and source-only variation. User-requested light mode is available in the player
+and shared menu; default math is 20px with matched row/column spacing.
+
 October 1 next-step recommendation: [compose the dot passage inside a rectangular
 product](reviews/2026-10-01-next-step-review.md), returning to the preserved
 authoring-reuse proof. This review starts no implementation and does not waive

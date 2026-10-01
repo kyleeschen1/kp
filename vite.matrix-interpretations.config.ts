@@ -7,5 +7,6 @@ export default defineConfig({ plugins: [semanticCostInventory()], build: kpViteP
   matrixInterpretations: resolve(root, "experiments/matrix-column-combinations/index.html"),
   matrixExamples: resolve(root, "experiments/matrix-examples/index.html"),
   dotPassage: resolve(root, "experiments/dot-product-passage/index.html"),
+  rectangularProduct: resolve(root, "experiments/rectangular-product/index.html"),
   matrixDotProduct: resolve(root, "experiments/matrix-column-product/index.html")
 } }) });

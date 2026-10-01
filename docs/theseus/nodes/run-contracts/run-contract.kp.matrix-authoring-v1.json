@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review centered dots and whole-product grouping before integration.",
+  "summary": "HUMAN_CHECKPOINT: review first-cell rectangular context and result placement, with 20px math and beige light-mode toggle; rectangular slice remains in progress before all-cell/source-only continuation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -38,7 +38,8 @@
     {
       "id": "rectangular",
       "title": "Post-acceptance rectangular matrix integration",
-      "status": "planned"
+      "summary": "Build one-cell rectangular context and result handoff; stop for its layout review before all-cell and source-only pressure.",
+      "status": "in-progress"
     },
     {
       "id": "source-only",

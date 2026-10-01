@@ -4,7 +4,7 @@
   "title": "Prove rectangular animation authoring through a reusable dot passage",
   "status": "blocked",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: grouped dot products ready in shared menu.",
+  "summary": "HUMAN_CHECKPOINT: first-cell rectangular layout ready; review at /experiments/rectangular-product/ before all-cell and source-only continuation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -295,6 +295,46 @@
       "scope": "Restored rise-and-pivot exemplar",
       "checkedAt": "2026-10-01T09:05:10.599Z",
       "notes": "Six browser tests, four semantic unit tests, full typecheck and production build pass. New checks verify initial vertical lift, shared column axis, upright glyphs and bracket presence at pivot onset and reverse. Screenshots inspected."
+    },
+    {
+      "command": "npm run test:rectangular-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T14:03:30.676Z"
+    },
+    {
+      "command": "npm run visual:rectangular-product",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T14:03:31.454Z"
+    },
+    {
+      "command": "npm run visual:dot-passage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T14:03:32.012Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T14:03:32.560Z"
+    },
+    {
+      "command": "npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T14:03:33.249Z"
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-01T14:03:33.815Z"
     }
-  ]
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "First-cell rectangular candidate ready at /experiments/rectangular-product/ and shared menu; see docs/project/reviews/2026-10-01-rectangular-product.md. All-cell selection and source-only variation await the layout checkpoint."
+  }
 }
