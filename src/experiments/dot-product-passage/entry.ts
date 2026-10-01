@@ -20,8 +20,8 @@ async function mount() {
     <input id="dot-background-veil" data-background-veil type="range" min="0" max="100" step="1" value="70">
     <output for="dot-background-veil" data-veil-value>70%</output></div>
     <div class="matrix-controls dot-tuning"><label for="dot-glow">Glow strength</label>
-    <input id="dot-glow" data-glow type="range" min="0" max="100" step="1" value="60">
-    <output for="dot-glow" data-glow-value>60%</output></div></section>
+    <input id="dot-glow" data-glow type="range" min="0" max="100" step="1" value="0">
+    <output for="dot-glow" data-glow-value>0%</output></div></section>
     <p class="matrix-help">Use Next to inspect each step, or scrub backward through the calculation. On narrow screens, scroll the stage horizontally.</p>
     <details><summary>Read the calculation</summary><div class="dot-static">${renderLatexToHtml(calculationLatex(passage, true), { output: "htmlAndMathml", trust: true })}</div>
     <p>The row and column change arrangement while their entries retain the same mathematical identities. Multiplication produces three new values; addition produces the final result. In real Euclidean coordinates, this pairing also represents the dot product uᵀv.</p></details>`;

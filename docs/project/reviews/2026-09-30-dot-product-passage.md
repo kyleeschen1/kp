@@ -545,6 +545,16 @@ Existing prepare-time scale neutralization preserves native geometry measurement
 Browser checks verify matching 96% context scales, unchanged active token size
 against the initial source, and reverse restoration to 100%.
 
+September 30, inherited source bracket ink: remove the fixed syntax-grey paint
+from source enclosures; structural bracket borders now use currentColor from the
+source context. Active-expression syntax retains its grey treatment. Glow now
+defaults to zero, with its control retained. A browser probe changes the parent
+context color and checks that bracket paint follows it; stroke equality and
+geometry remain covered. Important correction to the preceding discussion:
+fixed grey was already beneath the veil, not bypassing it. Inheriting the current
+dark context ink actually darkens source brackets slightly. This isolates the
+ownership experiment and does not claim to resolve their visual dominance.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

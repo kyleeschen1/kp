@@ -29,7 +29,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-inputs :is(.mopen, .mclose) { visibility: hidden; }
 .dot-inputs [data-dot-vector]::before, .dot-inputs [data-dot-vector]::after {
   content: ""; position: absolute; top: var(--dot-bracket-top, -.15em); bottom: var(--dot-bracket-bottom, -.15em); width: .25em;
-  border: var(--dot-bracket-stroke) solid var(--dot-syntax-ink); pointer-events: none;
+  border: var(--dot-bracket-stroke) solid currentColor; pointer-events: none;
 }
 .dot-inputs [data-dot-vector]::before { left: var(--dot-bracket-left, .12em); border-right: 0; }
 .dot-inputs [data-dot-vector]::after { right: var(--dot-bracket-right, .12em); border-left: 0; }
@@ -37,8 +37,8 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-pairs, .dot-products, .dot-sum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: .25em; }
 .dot-term { display: inline-flex; justify-content: center; transform-origin: center; }
 .dot-inputs [data-kp-dot-key], .dot-work [data-kp-dot-key], .dot-plus { display: inline-block; transform-origin: center; }
-.dot-plus, [data-kp-dot-key^="syntax-"], .dot-inputs .mopen, .dot-inputs .mclose { color: var(--dot-syntax-ink); }
-.dot-stage .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct) { color: var(--dot-syntax-ink); }
+.dot-plus, [data-kp-dot-key^="syntax-"] { color: var(--dot-syntax-ink); }
+.dot-work .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct), .dot-static .katex :is(.mbin, .mrel, .mopen, .mclose, .mpunct) { color: var(--dot-syntax-ink); }
 .dot-plus, [data-kp-dot-key^="syntax-multiply-"] { font-size: .85em; }
 .dot-inputs :is(.mopen, .mclose) { display: inline-block; transform-origin: center; }
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
