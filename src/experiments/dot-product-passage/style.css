@@ -12,7 +12,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-plus .katex, [data-kp-dot-key^="syntax-"], .dot-negative-sign { font-weight: 700; -webkit-text-stroke: 0; }
 .dot-negative-sign { display: inline-block; font-size: .5em; vertical-align: .12em; color: inherit; }
 .dot-static .katex :is(.mbin, .mrel) { font-size: .85em; }
-.dot-stage, .dot-static { --dot-syntax-ink: #464646; }
+.dot-stage, .dot-static { --dot-syntax-ink: #464646; --dot-focus-ink: #2563eb; }
 .dot-stage { position: relative; height: 330px; min-width: 650px; font-size: calc(var(--kp-equation-type-size) * .9); color: var(--kp-st-ink); }
 .dot-stage { transform-style: preserve-3d; }
 .dot-work { transform: translateZ(70px); }
@@ -44,6 +44,7 @@ body { background: var(--kp-st-paper); color: var(--kp-st-ink); font-weight: 600
 .dot-material { position: absolute; inset: 0; pointer-events: none; }
 .dot-paint, .dot-shadow { position: absolute; left: 0; top: 0; color: var(--kp-st-ink); }
 .dot-shadow { color: #000; pointer-events: none; }
+.dot-stage [data-dot-focused] { color: var(--dot-focus-ink); }
 .dot-static { overflow-x: auto; }
 .dot-tuning output { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
 :root[data-matrix-layout="side"] .dot-stage { min-width: 1150px; }

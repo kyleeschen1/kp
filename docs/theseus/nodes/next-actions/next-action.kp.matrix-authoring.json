@@ -239,6 +239,13 @@
       "scope": "Neutral palette and stronger moving shadows",
       "checkedAt": "2026-10-01T00:55:12.690Z",
       "notes": "Three browser tests, four unit tests, full typecheck and build pass. Neutral white surfaces, stronger projected shadow and unchanged contact landing checked. Lift screenshot inspected. Local visual checkpoint retained."
+    },
+    {
+      "command": "npm run visual:dot-passage; npm run test:dot-passage; npm run typecheck; npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Semantic token focus ink in the dot passage",
+      "checkedAt": "2026-10-01T01:02:42.746Z",
+      "notes": "Three browser tests, four unit tests, typecheck and build pass. Blue operands/products/result, signed-token inheritance, cloned fill/stroke, neutral syntax/shadows and reverse neutral restoration checked. Entry 6.74 KB gzip."
     }
   ]
 }

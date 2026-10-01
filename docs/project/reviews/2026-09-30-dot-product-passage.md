@@ -476,6 +476,19 @@ Constant glyph size, source references and evaluation choreography are preserved
 Three browser tests, four unit tests and build pass (entry 6.63 KB gzip); the lift
 capture was inspected. These palette/shadow values remain local visual candidates.
 
+September 30, focus ink: user chooses solid #2563EB tokens, explicitly declining
+highlight backgrounds. The local beat projector derives focused scalar IDs
+from the dot's operands, products and result; all native and moving occurrences
+of those contributors receive the same blue. Initial matrix presentation remains
+neutral. Negative signs inherit their signed token's focus ink, while delimiters,
+binary operators and decorative shadows retain grey/black. Cloned glyph fill
+and optical stroke both follow currentColor, preventing retained neutral stroke
+paint during the native/material handoff. Focus is recomputed from the playhead,
+including reversal and geometry reprepare; there is no new global focus store.
+Scoped browser checks cover operand, product and final-result blue, negative
+sign inheritance, neutral syntax/shadows and neutral restoration at the start.
+This is the local exemplar's focus mapping, not a catalogue-wide rollout.
+
 HUMAN_CHECKPOINT: select this evaluation treatment before integrating it into
 the 2×3 by 3×2 case. The independently reversible unit is this passage and its
 menu/build/test integration. After acceptance, resume the existing rectangular

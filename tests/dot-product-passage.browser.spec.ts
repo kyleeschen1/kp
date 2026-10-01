@@ -24,6 +24,7 @@ test("signed dot passage preserves references through pairing, products and sum"
   await page.setViewportSize({ width: 1200, height: 950 });
   await page.goto("/experiments/dot-product-passage/");
   const root = page.locator("#dot-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
   // Short font delimiters and tall SVG delimiters must not own competing paint.
   const brackets = await page.locator(".dot-inputs [data-dot-vector]").evaluateAll(nodes => nodes.flatMap(node =>
     ["::before", "::after"].map(pseudo => {
@@ -113,6 +114,10 @@ test("signed dot passage preserves references through pairing, products and sum"
   expect(initialFrontColor).toBe("color(srgb 1 1 1 / 0.7)");
   await expect(page.locator(".dot-plane-working")).toHaveCSS("background-color", initialFrontColor);
   const nativeInk = await page.locator('[data-kp-dot-key="pair-left-0"]').evaluate(node => getComputedStyle(node).color);
+  expect(nativeInk).toBe("rgb(37, 99, 235)");
+  await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("-webkit-text-stroke-color", nativeInk);
+  await expect(page.locator('[data-occurrence="pair-left-1"] .dot-negative-sign')).toHaveCSS("color", nativeInk);
+  for (const shadow of await page.locator(".dot-shadow").all()) await expect(shadow).toHaveCSS("color", "rgb(0, 0, 0)");
   for (const copy of await page.locator(".dot-paint").all()) await expect(copy).toHaveCSS("color", nativeInk);
   await expect(page.locator('[data-occurrence="pair-left-0"] .mord')).toHaveCSS("font-weight", "400");
   const lifted = await page.locator('[data-occurrence="pair-right-0"]').boundingBox();
@@ -212,6 +217,16 @@ test("signed dot passage preserves references through pairing, products and sum"
     expect(visiblePluses).toHaveLength(progress <= .5 ? 0 : 2);
     expect(visiblePluses.every(text => text?.includes("+"))).toBe(true);
   }
+  await chooser.selectOption("1");
+  for (const progress of [.25, .5, .75, 1]) {
+    await slider.fill(String(progress));
+    const key = progress === .25 ? "pair-left-0" : progress === 1 ? "sum" : "product-0";
+    await expect(page.locator(`[data-kp-dot-key="${key}"]`)).toHaveCSS("color", "rgb(37, 99, 235)");
+    for (const syntax of await page.locator('[data-kp-dot-key^="syntax-"]').all()) await expect(syntax).toHaveCSS("color", "rgb(70, 70, 70)");
+  }
+  await slider.fill("0");
+  await expect(page.locator("[data-dot-focused]")).toHaveCount(0);
+  await expect(page.locator('[data-kp-dot-key="left-0"]')).toHaveCSS("color", "rgb(32, 32, 32)");
   await chooser.selectOption("1");
   const settledScale = await page.locator('[data-occurrence="pair-right-0"]').evaluate(node => new DOMMatrixReadOnly(getComputedStyle(node).transform).m11);
   expect(settledScale).toBe(1);

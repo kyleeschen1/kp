@@ -62,6 +62,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
   const reset = () => {
     for (const node of [pairs, products, sum, ...Object.values(vectors), ...stage.querySelectorAll<HTMLElement>(".dot-term, [data-kp-dot-key], .dot-plus, .dot-inputs .mopen, .dot-inputs .mclose")]) {
       node.style.opacity = "1"; node.style.transform = ""; node.style.clipPath = ""; node.style.color = "";
+      node.removeAttribute("data-dot-focused");
     }
   };
   const prepare = () => {
@@ -112,6 +113,7 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
       const node = document.createElement("span"); node.className = "dot-paint";
       for (const part of [clone, ...clone.querySelectorAll<HTMLElement>("*")]) {
         part.style.textShadow = "inherit"; part.style.color = "inherit"; part.style.setProperty("-webkit-text-fill-color", "currentColor");
+        part.style.setProperty("-webkit-text-stroke-color", "currentColor");
       }
       node.append(clone); makeKpMaterialOwnerInert(node);
       node.dataset["sourceId"] = pair[side].id; node.dataset["occurrence"] = to;
@@ -134,6 +136,19 @@ export function mountPresentation(root: HTMLElement, passage: DotPassage) {
     if (disposed) return frame;
     reset();
     stage.dataset["progress"] = String(frame.progress);
+    // Focus follows the beat's mathematical contributors and result, so native
+    // and moving occurrences agree through seeks, reprepare and ownership handoff.
+    const focusedIds = new Set<string>();
+    for (const pair of passage.dot.pairs) {
+      if (frame.index === 1 || frame.index === 2) {
+        focusedIds.add(pair.left.id); focusedIds.add(pair.right.id);
+      }
+      if (frame.index >= 2) focusedIds.add(pair.product.id);
+    }
+    if (frame.index === 4) focusedIds.add(passage.dot.result.id);
+    for (const node of [...native.values(), ...owners.map(owner => owner.node)]) {
+      node.toggleAttribute("data-dot-focused", focusedIds.has(node.dataset["sourceId"] ?? ""));
+    }
     // The surface shares the entries' depth, without owning their semantic paint.
     const planeLift = frame.index === 0 ? 0 : frame.index === 1 ? ease(frame.local / .2) : 1;
     stage.style.setProperty("--dot-back-scale", "1");
