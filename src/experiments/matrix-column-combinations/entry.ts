@@ -48,7 +48,10 @@ async function mount() {
       <p>Numerical check for this Q: ${scene.evidence.status}; tolerance ${scene.evidence.tolerance}. This checks the displayed example, not a symbolic proof for arbitrary matrices.</p></section>` : ""}
     <p><a href="/experiments/matrix-column-product/">Compare the row–column dot-product view</a></p>`;
   await document.fonts.ready;
-  const view = mountPresentation(root, scene);
+  // Keep the discovery treatment confined to one explicitly selected exemplar.
+  const continuity = query.get("motion") === "continuous" && scene.kind === "columns" && !composition;
+  const candidate = continuity ? (await import("./continuity.ts")).prepareContinuity : undefined;
+  const view = mountPresentation(root, scene, candidate);
   const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-column-combinations", durationMs });
   let config = readMatrixConfig(document);
   const stepsOnly = () => reduced.matches || config.motion === "steps";

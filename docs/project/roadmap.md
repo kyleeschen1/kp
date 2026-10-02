@@ -25,6 +25,22 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 1 project-wide check-in: the user identified fragmentation, competing
+implementations and unclear completion. The latest [convergence recommendation](reviews/2026-10-01-next-step-review.md#project-wide-convergence-recommendation)
+now owns the approved bounded two-domain authoring-to-animation milestone before
+more topic or reader expansion. The user approved the priorities and asked to go
+as far as possible. `run-contract.kp.animation-convergence-v1` owns execution;
+existing visual checkpoints remain pending. This supersedes immediate topic
+expansion. The [bounded ownership evidence](reviews/2026-10-01-animation-convergence-evidence.md)
+identifies the selected paths and their limits.
+
+October 1 return to animation work: the user requested priorities after reader
+and speech exploration. The [updated next-step review](reviews/2026-10-01-next-step-review.md#return-to-animations-after-reader-experiments)
+recommends completing rectangular product reuse, then polynomial-to-coefficient
+representation, then one elimination row operation. Later items are proposals;
+the rectangular first-cell visual checkpoint remains pending. Reader experiments
+are preserved without further work being started.
+
 October 1 scrolltelling comparison: the user approved the bounded
 [discourse-guided dot passage](reviews/2026-10-01-discourse-scrolltelling-next-step.md).
 The separate route reuses the dot player and existing split-view scroll

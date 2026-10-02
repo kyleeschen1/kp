@@ -31,6 +31,64 @@ test("all matrix pages and the menu use the three-term page theme", async ({ pag
 });
 
 const route = "/experiments/matrix-column-combinations/";
+test("continuity candidate receives enclosures and evaluates without switching whole lines", async ({ page }, info) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.setViewportSize({ width: 1200, height: 950 });
+  await page.goto(route + "?motion=continuous");
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+  const slider = page.getByRole("slider", { name: "Animation position" });
+  const seek = async (phase: number, local: number) => slider.fill(String(Number(((phase - 1 + local) / 6).toFixed(4))));
+  const poses = () => page.locator('.comb-stage [style]').evaluateAll(nodes => nodes.map(node => {
+    const style = getComputedStyle(node);
+    return { transform: style.transform, opacity: style.opacity, clip: style.clipPath };
+  }));
+  const captures: KpVisualContactSheetItem[] = [];
+  for (const [phase, local] of [[1, .25], [1, .55], [3, .5], [4, .35], [4, .85], [5, .35], [5, .85], [6, 1]] as const) {
+    await seek(phase, local);
+    const held = await poses();
+    await slider.fill("1"); await slider.fill("0"); await seek(phase, local);
+    expect(await poses()).toEqual(held);
+    const file = info.outputPath(`continuous-${phase}-${local}.png`);
+    const buffer = await page.locator('.matrix-card').screenshot({ path: file });
+    captures.push({ id: `${phase}-${local}`, label: `Phase ${phase}, ${local}`, progress: (phase - 1 + local) / 6,
+      viewport: { width: 1200, height: 950 }, file, dataUrl: `data:image/png;base64,${buffer.toString('base64')}` });
+  }
+  await seek(1, .55);
+  const bracket = page.locator('[data-column-shell="0"] .katex-html .mopen');
+  const opacity = Number(await bracket.evaluate(node => getComputedStyle(node).opacity));
+  expect(opacity).toBeGreaterThan(0); expect(opacity).toBeLessThan(1);
+  await expect(page.locator('[data-kp-comb-key="column-0-0"]')).toHaveCSS('opacity', '1');
+  await expect(page.locator('[data-occurrence="column-0-0"]')).toHaveCSS('opacity', '0');
+  await seek(3, .5);
+  expect(await bracket.evaluate(node => getComputedStyle(node).transform)).not.toBe('none');
+  for (const phase of [4, 5]) {
+    await seek(phase, .85);
+    await expect(page.locator(`.comb-evaluated > [data-reveal="${phase}"]`).first()).toHaveCSS('opacity', '1');
+    const target = page.locator(`[data-kp-comb-key="${phase === 4 ? 'scaled-0-0' : 'sum-0'}"]`);
+    await expect(target).toHaveCSS('opacity', '1');
+    expect(await target.evaluate(node => getComputedStyle(node).transform)).not.toBe('none');
+    await page.getByRole('combobox', { name: 'Milestone' }).selectOption(String(phase));
+    await expect(target).toHaveCSS('transform', 'none');
+    await expect(page.locator('[data-contributor-occurrence]').filter({ visible: true }).first()).toHaveCSS('opacity', '0');
+  }
+  await expect(page.locator('.comb-material [data-kp-comb-key]')).toHaveCount(0);
+  await expect(page.locator('[data-contributor-occurrence="scaled-0-0:input:0"]')).toHaveAttribute('data-source-id', combination.terms[0]!.pairs[0]!.right.id);
+  await expect(page.locator('[data-contributor-occurrence="scaled-0-0:input:1"]')).toHaveAttribute('data-source-id', combination.terms[0]!.pairs[0]!.left.id);
+  await expect(page.locator('[data-contributor-occurrence="sum-0:input:0"]')).toHaveAttribute('data-source-id', combination.terms[0]!.entries[0]!.id);
+  await expect(page.locator('[data-contributor-occurrence="sum-0:input:0"]')).toHaveAttribute('data-result-id', combination.result.entries[0]!.id);
+  await slider.fill('1');
+  await expect(page.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('4');
+  await expect(page.locator('[data-kp-comb-key="c-1-0"]')).toHaveText('10');
+  // Resize must rebuild from untransformed native endpoints, not sampled paint.
+  await seek(4, .85); await page.setViewportSize({ width: 1050, height: 950 });
+  await expect(page.locator('.comb-stage')).toHaveAttribute('data-progress', '0.6417');
+  const resized = await poses(); await slider.fill('0'); await seek(4, .85); expect(await poses()).toEqual(resized);
+  expect(errors).toEqual([]);
+  const sheet = await page.context().newPage(); await sheet.setViewportSize({ width: 1500, height: 1000 });
+  await sheet.setContent(buildKpVisualContactSheetHtml(captures, { title: 'Column continuity candidate', columns: 2, imageFit: 'contain', imageHeightPx: 320 }));
+  await sheet.screenshot({ path: info.outputPath('continuity-contact-sheet.png'), fullPage: true }); await sheet.close();
+});
+
 test("columns and coefficients retain source identity through readable weighted-sum milestones", async ({ page }, info) => {
   test.setTimeout(60000);
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));

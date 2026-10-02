@@ -1,0 +1,16 @@
+{
+  "schema": "kp.algebra.fraction-chain.v1",
+  "id": "convergence-fraction-add-reduce",
+  "title": "Count eighths, then reduce",
+  "states": [
+    { "id": "unlike", "latex": "\\frac{3}{8}+\\frac{1}{8}" },
+    { "id": "aligned", "latex": "\\frac{6}{16}+\\frac{2}{16}" },
+    { "id": "combined", "latex": "\\frac{8}{16}" },
+    { "id": "reduced", "latex": "\\frac{1}{2}" }
+  ],
+  "moves": [
+    { "id": "align", "from": "unlike", "to": "aligned", "prose": "Split every eighth in two. Three eighths becomes six sixteenths and one eighth becomes two sixteenths, preserving each quantity." },
+    { "id": "combine", "from": "aligned", "to": "combined", "prose": "Both terms count sixteenths. Six plus two gives eight sixteenths." },
+    { "id": "reduce", "from": "combined", "to": "reduced", "prose": "Divide numerator and denominator by eight: eight sixteenths is one half." }
+  ]
+}

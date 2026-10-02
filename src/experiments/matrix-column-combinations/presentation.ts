@@ -3,6 +3,7 @@ import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMateri
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 import { example, type ColumnExample, numberOf, sample } from "./model.ts";
+import type { prepareContinuity } from "./continuity.ts";
 
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-comb-key=${key}}{${numberOf(entry)}}`;
@@ -38,13 +39,13 @@ export function stageHtml(scene: ColumnExample = example()) {
       ).join("\\\\")}\\end{bmatrix}`)}</span>`).join(`<span data-reveal="3">${math("+")}</span>`)}
     </div>
     <div class="comb-evaluated"><span data-reveal="4">${math("=")}</span>
-      ${combination.terms.map(term => `<span data-reveal="4">${vector(term.entries, `scaled-${term.index}`)}</span>`).join(`<span data-reveal="4">${math("+")}</span>`)}
+      ${combination.terms.map(term => `<span data-reveal="4">${vector(term.entries, `scaled-${term.index}`)}</span>`).join(`<span data-sum-operator data-reveal="4">${math("+")}</span>`)}
       <span data-reveal="5">${math("=")}</span><span data-reveal="5">${vector(combination.result.entries, "sum")}</span>
     </div><div class="comb-material"></div></div>`;
 }
 
 interface Position { x: number; y: number }
-export function mountPresentation(root: HTMLElement, scene: ColumnExample = example()) {
+export function mountPresentation(root: HTMLElement, scene: ColumnExample = example(), continuity?: typeof prepareContinuity) {
   const { combination } = scene;
   const stage = root.querySelector<HTMLElement>(".comb-stage")!;
   const layer = root.querySelector<HTMLElement>(".comb-material")!;
@@ -61,8 +62,10 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
   const points = new Map<string, Position>();
   const owners: { owner: HTMLElement; from: string; to: string; phase: number; grow: boolean }[] = [];
   let disposed = false;
+  let continuous: ReturnType<typeof prepareContinuity> | undefined;
   const prepare = () => {
     if (disposed) return;
+    continuous?.dispose();
     for (const node of stage.querySelectorAll<HTMLElement>("[data-reveal]")) node.style.opacity = "1";
     for (const node of native.values()) { node.style.opacity = "1"; node.style.transform = ""; node.classList.remove("comb-focus"); }
     layer.replaceChildren(); owners.length = 0;
@@ -92,6 +95,7 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
       });
     }
     combination.result.entries.forEach((entry, i) => copy(`sum-${i}`, `c-${i}-${scene.column}`, entry, 6));
+    continuous = continuity?.(stage, layer, native, scene);
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const render = (progress: number) => {
@@ -131,15 +135,17 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
       }
     }
     for (const { owner, from, to, phase, grow } of owners) {
-      const t = ease(frame.local);
+      const transit = continuous && phase === 1 ? Math.min(1, frame.local / continuous.materialTransitEnd) : frame.local;
+      const t = ease(transit);
       const a = points.get(from)!, b = points.get(to)!;
       const x = grow ? b.x : a.x + (b.x - a.x) * t;
       const y = grow ? b.y : a.y + (b.y - a.y) * t;
       owner.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${grow ? growth : 1})`;
-      owner.style.opacity = frame.index === phase && frame.local > 0 && frame.local < 1 && (!grow || growth > 0) ? "1" : "0";
+      owner.style.opacity = frame.index === phase && frame.local > 0 && transit < 1 && (!grow || growth > 0) ? "1" : "0";
     }
+    continuous?.render(frame.index, frame.local);
     return frame;
   };
   prepare();
-  return { prepare, render, dispose() { disposed = true; layer.replaceChildren(); } };
+  return { prepare, render, dispose() { disposed = true; continuous?.dispose(); layer.replaceChildren(); } };
 }

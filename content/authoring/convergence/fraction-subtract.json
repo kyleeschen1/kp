@@ -1,0 +1,14 @@
+{
+  "schema": "kp.algebra.fraction-chain.v1",
+  "id": "convergence-fraction-subtract",
+  "title": "Subtract quarters from sixths in their written order",
+  "states": [
+    { "id": "unlike", "latex": "\\frac{5}{6}-\\frac{1}{4}" },
+    { "id": "aligned", "latex": "\\frac{10}{12}-\\frac{3}{12}" },
+    { "id": "combined", "latex": "\\frac{7}{12}" }
+  ],
+  "moves": [
+    { "id": "align", "from": "unlike", "to": "aligned", "prose": "Express both quantities in twelfths and preserve the order: five sixths is ten twelfths, while one quarter is three twelfths." },
+    { "id": "combine", "from": "aligned", "to": "combined", "prose": "Subtract the numerator counts in their written order. Ten minus three is seven, so the result is seven twelfths." }
+  ]
+}

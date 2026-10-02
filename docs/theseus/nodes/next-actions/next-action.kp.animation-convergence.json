@@ -1,0 +1,64 @@
+{
+  "id": "next-action.kp.animation-convergence",
+  "kind": "next-action",
+  "title": "Prove reusable smooth mathematical authoring across matrix and algebra",
+  "status": "blocked",
+  "domain": "kinetic-press",
+  "summary": "HUMAN_CHECKPOINT: review column continuity at /experiments/matrix-column-combinations/?motion=continuous. Two packages complete; changed-input integration, reader review and closeout remain approved. See docs/project/reviews/2026-10-01-animation-convergence-evidence.md.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-next-step-review.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-interpretations",
+      "status": "passed",
+      "scope": "18 semantic and interpretation checks",
+      "checkedAt": "2026-10-02T00:15:25.219Z"
+    },
+    {
+      "command": "npm run test:semantic-cost",
+      "status": "passed",
+      "scope": "21 semantic reuse checks",
+      "checkedAt": "2026-10-02T00:15:26.176Z"
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "10 Chromium preservation checks; final candidate metadata/profile change also passed focused rerun",
+      "checkedAt": "2026-10-02T00:15:27.030Z"
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "Test types",
+      "checkedAt": "2026-10-02T00:15:28.046Z"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "Application types",
+      "checkedAt": "2026-10-02T00:15:28.987Z"
+    },
+    {
+      "command": "npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Scoped production artifact",
+      "checkedAt": "2026-10-02T00:15:30.044Z"
+    },
+    {
+      "command": "npm run visual:algebra-convergence",
+      "status": "passed",
+      "scope": "Three independent exact-source existing-host applications",
+      "checkedAt": "2026-10-02T00:15:31.016Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/algebra-convergence-source.test.ts",
+      "status": "passed",
+      "scope": "Four source checks including located unsupported negative result",
+      "checkedAt": "2026-10-02T00:15:32.050Z"
+    }
+  ]
+}

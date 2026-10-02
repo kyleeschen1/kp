@@ -1,0 +1,14 @@
+{
+  "schema": "kp.algebra.fraction-chain.v1",
+  "id": "convergence-fraction-two-sided",
+  "title": "Combine sixths and quarters in twelfths",
+  "states": [
+    { "id": "unlike", "latex": "\\frac{1}{6}+\\frac{1}{4}" },
+    { "id": "aligned", "latex": "\\frac{2}{12}+\\frac{3}{12}" },
+    { "id": "combined", "latex": "\\frac{5}{12}" }
+  ],
+  "moves": [
+    { "id": "align", "from": "unlike", "to": "aligned", "prose": "A sixth contains two twelfths; a quarter contains three. Rename both fractions without changing either quantity." },
+    { "id": "combine", "from": "aligned", "to": "combined", "prose": "Now the parts share a size. Add their counts: two plus three is five, so the sum is five twelfths." }
+  ]
+}

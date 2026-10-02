@@ -5,6 +5,12 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 1 approved priority: [two-domain animation convergence](../reviews/2026-10-01-next-step-review.md#project-wide-convergence-recommendation)
+comes before further reader or topic expansion. The user approved proceeding as
+far as possible. `run-contract.kp.animation-convergence-v1` owns execution; this
+thread preserves reader work without authorizing additional layout experiments.
+Existing visual checkpoints are not waived.
+
 October 1 approved comparison: [discourse-guided scrolltelling](../reviews/2026-10-01-discourse-scrolltelling-next-step.md)
 adds a separate dot-product reading projection and one exact-return detour.
 Review the reader experience before a recursive authoring schema; the existing

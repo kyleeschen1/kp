@@ -1,0 +1,66 @@
+{
+  "id": "run-contract.kp.animation-convergence-v1",
+  "kind": "run-contract",
+  "title": "Two-domain animation convergence",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review column continuity at /experiments/matrix-column-combinations/?motion=continuous. Two packages complete; changed-input integration, reader review and closeout remain approved. See docs/project/reviews/2026-10-01-animation-convergence-evidence.md.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-convergence.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-interpretations",
+    "npm run visual:matrix-interpretations",
+    "npm run typecheck:tests"
+  ],
+  "allowedWork": [
+    "Map existing owners; repair reported discontinuities in one matrix exemplar; three source variations per family; existing authoring checks; evidence and scoped retirement after acceptance"
+  ],
+  "disallowedWork": [
+    "No universal rewrite, new topic family, reader redesign, paid calls, deployment, merge or promotion before visual acceptance"
+  ],
+  "goal": "Checked source to smooth inspectable animation with changed inputs and explicit support limits",
+  "target": "next-action.kp.animation-convergence",
+  "slices": [
+    {
+      "id": "ownership",
+      "title": "Bounded path and duplication map",
+      "summary": "Bounded owner map identifies selected matrix and fraction paths, snap cause, preservation boundaries and no justified deletion yet. See animation-convergence-evidence review.",
+      "status": "complete"
+    },
+    {
+      "id": "algebra",
+      "title": "Existing algebra path and independent source reproduction",
+      "summary": "Independent author reproduced three changed fraction sources through existing host: source checks 4/4 and Chromium 3/3. Negative result compile gap retained as regression evidence. See algebra-convergence-reproduction report.",
+      "status": "complete"
+    },
+    {
+      "id": "matrix-exemplar",
+      "title": "Matrix entrance and enclosure continuity checkpoint",
+      "summary": "HUMAN_CHECKPOINT: verified opt-in candidate at /experiments/matrix-column-combinations/?motion=continuous. Review reception, evaluation pacing and addition crowding before promotion.",
+      "status": "in-progress"
+    },
+    {
+      "id": "matrix-reuse",
+      "title": "Post-acceptance matrix source variations and integration",
+      "status": "planned"
+    },
+    {
+      "id": "reader-review",
+      "title": "Formative author and reader review",
+      "status": "planned"
+    },
+    {
+      "id": "closeout",
+      "title": "Canonical release path and explicit limits",
+      "status": "planned"
+    }
+  ]
+}
