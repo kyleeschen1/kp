@@ -6,7 +6,7 @@ import { checkFractionChainAuthorSource } from "../src/authoring/fraction-chain-
 import { readFractionChainSource } from "../src/authoring/fraction-chain-source.ts";
 import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 
-for (const id of ["fraction-add-reduce", "fraction-two-sided", "fraction-subtract"]) {
+for (const id of ["fraction-add-reduce", "fraction-two-sided", "fraction-subtract", "fraction-negative"]) {
   const input = readFileSync(new URL(`../content/authoring/convergence/${id}.json`, import.meta.url), "utf8");
   const checked = checkFractionChainAuthorSource(input);
   const parsed = readFractionChainSource(JSON.parse(input));

@@ -1,0 +1,39 @@
+{
+  "id": "run-contract.kp.signed-fraction-repair-v1",
+  "kind": "run-contract",
+  "title": "Signed fraction endpoint repair",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.signed-fraction-repair.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-signed-fraction-repair.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test:equation-surface-preservation",
+    "npm run visual:algebra-convergence"
+  ],
+  "allowedWork": [
+    "Endpoint matching, signed regression cases, source fixture, real-host preservation checks and evidence"
+  ],
+  "disallowedWork": [
+    "New motion, general algebra solver, deployment, reader study"
+  ],
+  "goal": "Compile negative-result fractions through existing authoring and host with exact endpoint validation",
+  "target": "next-action.kp.signed-fraction-repair",
+  "slices": [
+    {
+      "id": "repair",
+      "title": "Signed endpoint repair and host preservation",
+      "summary": "Shared signed-literal endpoint matching repaired; signed source compiles and passes real-host preservation. Incorrect endpoints and unsupported signed reduction remain rejected.",
+      "status": "complete"
+    }
+  ]
+}

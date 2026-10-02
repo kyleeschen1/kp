@@ -46,6 +46,12 @@ Semantic acceptance is not paint certification. Signed/zero results have
 semantic coverage but not general visual reduction support. The existing
 numeric reduction is not a new fluent reduction motif.
 
+Signed integer numerators are accepted by alignment and raw combination endpoint
+validation. The retained `content/authoring/convergence/fraction-negative.json`
+and adjacent Article demonstrate `1/6−3/4 → 2/12−9/12 → (-7)/12` through the
+existing host's publication fixture (`npm run visual:algebra-convergence`). This
+is not a new public preview route or support for signed reduction animation.
+
 The canonical host is `/experiments/fraction-chain/#counting-parts`, built from
 the retained source and adjacent Article. Its Vite/publication owners recheck
 source, emit static explanation and pin the interactive revision. Checking an

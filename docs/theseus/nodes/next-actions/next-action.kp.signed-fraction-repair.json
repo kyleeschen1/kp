@@ -1,0 +1,52 @@
+{
+  "id": "next-action.kp.signed-fraction-repair",
+  "kind": "next-action",
+  "title": "Repair signed fraction endpoint validation",
+  "status": "resolved",
+  "domain": "kinetic-press",
+  "summary": "Signed alignment and combination endpoints repaired with 18 focused, 39 fraction, 11 preservation, 12 reachability and four browser checks; full typecheck passes.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-01-signed-fraction-repair.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/algebra-convergence-source.test.ts tests/equation-series-integer-endpoint.test.ts tests/equation-series-like-denominator-authoring.test.ts tests/equation-series-common-denominator-authoring.test.ts",
+      "status": "passed",
+      "scope": "18 focused checks",
+      "checkedAt": "2026-10-02T05:43:48.513Z"
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "39 checks including preserved signed-reduction gap",
+      "checkedAt": "2026-10-02T05:43:49.366Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "11 preservation checks",
+      "checkedAt": "2026-10-02T05:43:50.217Z"
+    },
+    {
+      "command": "npm run visual:algebra-convergence",
+      "status": "passed",
+      "scope": "Four Chromium real-host cases including signed result and native endpoints",
+      "checkedAt": "2026-10-02T05:43:51.062Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full app node tests Svelte and domains; final test-only edits also pass typecheck:tests",
+      "checkedAt": "2026-10-02T05:43:51.921Z"
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "12 checks; generated count updated for two new modules",
+      "checkedAt": "2026-10-02T05:43:52.761Z"
+    }
+  ]
+}

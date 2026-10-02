@@ -31,9 +31,10 @@ owns the bounded two-domain authoring-to-animation milestone, now closed for
 engineering after the user's explicit approval to defer reader validation.
 `run-contract.kp.animation-convergence-v1` records the amended outcome; existing
 visual checkpoints remain pending. The [bounded ownership evidence](reviews/2026-10-01-animation-convergence-evidence.md)
-identifies the adopted paths and their limits. The next proposed engineering
-repair is the signed-fraction endpoint mismatch; implementation is not yet
-authorized by this closeout.
+identifies the adopted paths and their limits. The user subsequently authorized
+the [signed-fraction endpoint repair](reviews/2026-10-01-signed-fraction-repair.md).
+The negative-result chain now compiles and passes existing-host preservation;
+signed reduction remains an explicit presentation gap.
 
 The user accepted the column-continuity exemplar. Its existing renderer now owns
 the default treatment and three changed typed inputs; the temporary comparison

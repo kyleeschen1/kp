@@ -6,6 +6,11 @@ evidence map, not a second execution plan.
 
 ## Engineering readiness decision
 
+Subsequent authorized repair: the [signed-fraction endpoint mismatch](2026-10-01-signed-fraction-repair.md)
+is resolved for alignment and raw combination, with real-host preservation.
+The residual-gap discussion below records the convergence closeout before that
+repair; signed reduction and learner validation remain outside that evidence.
+
 The user explicitly approved closing the engineering milestone and deferring
 reader validation by answering “go” to that concrete scope-amendment question.
 The bounded engineering scope is complete. No new animation implementation or

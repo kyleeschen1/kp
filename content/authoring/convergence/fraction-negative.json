@@ -1,0 +1,14 @@
+{
+  "schema": "kp.algebra.fraction-chain.v1",
+  "id": "convergence-fraction-negative",
+  "title": "Subtracting more than we started with",
+  "states": [
+    { "id": "unlike", "latex": "\\frac{1}{6}-\\frac{3}{4}" },
+    { "id": "aligned", "latex": "\\frac{2}{12}-\\frac{9}{12}" },
+    { "id": "combined", "latex": "\\frac{-7}{12}" }
+  ],
+  "moves": [
+    { "id": "align", "from": "unlike", "to": "aligned", "prose": "Write both quantities in twelfths: one sixth is two twelfths and three quarters is nine twelfths." },
+    { "id": "combine", "from": "aligned", "to": "combined", "prose": "Two minus nine is negative seven. Keep the shared denominator: the result is negative seven twelfths." }
+  ]
+}

@@ -42,10 +42,12 @@ test("wrong, skipped, reordered, forged and unsupported adjacencies return expli
     (source: ReturnType<typeof input>) => { source.moves.splice(1, 1); }
   ]) { const source = input(); mutate(source); assert.equal(compileFractionChain(source).status, "repair-required"); }
 });
-test("true but unsupported zero reduction returns a presentation repair, never substitute motion", () => {
+for (const [before, after] of [["0/6", "0/1"], ["(-6)/12", "(-1)/2"]]) {
+test(`unsupported reduction ${before} returns a presentation repair, never substitute motion`, () => {
   const result = compileFractionChain({ schema: "kp.algebra.fraction-chain.v1", id: "zero-reduction", title: "Zero",
-    states: [{ id: "before", latex: "0/6" }, { id: "after", latex: "0/1" }],
+    states: [{ id: "before", latex: before! }, { id: "after", latex: after! }],
     moves: [{ id: "reduce", from: "before", to: "after", hint: "reduce", prose: "Divide both integers by six." }] });
   assert.equal(result.status, "repair-required");
   if (result.status === "repair-required") assert.equal(result.code, "fraction-chain.presentation");
 });
+}

@@ -9,8 +9,10 @@ October 1 approved priority: [two-domain animation convergence](../reviews/2026-
 has reached engineering closure after explicit user approval to defer reader
 validation. `run-contract.kp.animation-convergence-v1` records that amended
 outcome; this thread preserves reader work without authorizing additional layout
-experiments. Existing visual checkpoints are not waived. The signed-fraction
-endpoint mismatch is the next proposed repair, not an active implementation.
+experiments. Existing visual checkpoints are not waived. The subsequently
+approved [signed-fraction repair](../reviews/2026-10-01-signed-fraction-repair.md)
+now supports the negative-result chain through the existing host; signed
+reduction remains outside its presentation support.
 
 The column-continuity checkpoint was subsequently accepted (“Looks great!”).
 Changed typed matrix inputs are integrated through the existing player. Reader

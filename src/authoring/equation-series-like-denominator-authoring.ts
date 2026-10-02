@@ -1,4 +1,5 @@
 import type { ParsedLatexExpression } from "../math/latex-parser.ts";
+import { matchesInteger } from "./equation-series-integer-endpoint.ts";
 import {
   isKpVerifiedLikeDenominatorCombination,
   KP_LIKE_DENOMINATOR_COMBINATION_OPERATION_AUTHORITY,
@@ -330,15 +331,6 @@ function matchesTerm(
   return expression.kind === "binary" && expression.operator === "/" &&
     matchesInteger(expression.left, term.numerator.value) &&
     matchesInteger(expression.right, term.denominator.value);
-}
-
-function matchesInteger(
-  expression: ParsedLatexExpression,
-  expected: bigint
-): boolean {
-  return expression.kind === "number" &&
-    Number.isSafeInteger(expression.value) &&
-    BigInt(expression.value) === expected;
 }
 
 function transformationEntityIds(
