@@ -3,6 +3,14 @@
 Status: HUMAN_CHECKPOINT; the rectangular slice remains in progress.
 Contract: `run-contract.kp.matrix-authoring-v1`.
 
+Resumed after convergence and signed-fraction repair: the user approved the
+inspectable-authoring direction. The existing first-cell checkpoint remains
+the prerequisite; no all-cell or inspector rollout occurred. The shared server
+returned HTTP 200 and `npm run visual:rectangular-product` passed both Chromium
+checks again. Current captures show substantial separation between source
+matrices and working terms; whether this preserves a clear explanatory connection
+is the concrete visual question. No layout change was made during revalidation.
+
 Canonical page: http://localhost:8000/experiments/rectangular-product/.
 Shared menu: http://localhost:8000/experiments/matrix-examples/ →
 Rectangular product · first cell. The existing three-term dot page remains the

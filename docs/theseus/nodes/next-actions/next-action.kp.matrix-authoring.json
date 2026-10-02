@@ -331,6 +331,12 @@
       "status": "passed",
       "scope": "focused",
       "checkedAt": "2026-10-01T14:03:33.815Z"
+    },
+    {
+      "command": "npm run visual:rectangular-product",
+      "status": "passed",
+      "scope": "Two Chromium checks revalidated on existing shared server; source correspondence, seek, resize, result handoff and menu",
+      "checkedAt": "2026-10-02T05:49:11.829Z"
     }
   ],
   "progress": {

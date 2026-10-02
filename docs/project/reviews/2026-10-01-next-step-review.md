@@ -1,5 +1,45 @@
 # Next: compose the dot passage inside a rectangular product
 
+## Recommendation after signed-fraction repair
+
+The convergence milestone and signed-fraction repair are complete. The next
+recommended outcome is a small, inspectable explanation authored from semantic
+selections and short annotations. The outstanding uncertainty is explanatory
+reuse: numeric substitutions within a fixed layout do not establish that an
+author can change the question, selected entities or sequence without renderer
+edits. The user's subsequent “go” authorizes this direction; execution resumes
+at the existing rectangular first-cell visual checkpoint. It does not itself
+accept that layout or waive the gate. Any inspector extension still needs an
+explicit contract amendment because the older contract excludes inspector work.
+
+Use the existing rectangular product as the bounded test. First review its
+pending first-cell integration; then complete the already planned all-cell and
+changed-input path. Demonstrate selecting a different result cell, retaining its
+original row/column and contribution references, attaching brief explanations
+to existing meaningful beats, and replaying that local calculation. If annotation
+or inspection needs new implementation beyond the existing contract, propose
+that delta explicitly rather than silently adding it to the old loop.
+
+Canonical host: `/experiments/rectangular-product/`; paint: native KaTeX and the
+existing dot passage/material adapter; truth: `matrix-product.ts`. Preserve the
+accepted standalone dot choreography, source identity and accessible calculation.
+The rollback unit is the rectangular authoring/context integration, not the math
+model. No new page family, universal schema or catalogue rollout is implied.
+
+| Candidate | Authoring and reuse | Reliability / continuity | Risk | Recommendation |
+| --- | --- | --- | --- | --- |
+| Finish inspectable rectangular explanation and vary its semantic selection | High; tests explanatory reuse beyond changing numbers | Closes an existing unfinished integration | Bounded; existing visual gate first | Next engineering priority |
+| Intended-reader observations | High information about usefulness | No engine changes | Requires actual participants | Remains deferred; strongest external validation step |
+| Polynomial representation or signed reduction | Useful additional coverage | Adds another supported case | More presentation work before authoring question is settled | Later |
+| Universal authoring rewrite or more focus controls | Speculative benefit | Expands competing work | High or distracting | Do not prioritize |
+
+Done criterion: a second explanation changes selected cell, values and short
+annotations through the supported authoring surface, while reusing motion and
+retaining auditable source relationships. Record every remaining engine edit.
+No learner-effectiveness claim follows from this engineering result. Earlier
+shadow/layout experiments remain provenance; rectangular visual approval remains
+pending. Current focus is semantic authoring reuse, not a content library.
+
 Status: recommendation following focus tuning; no implementation started by
 this review. The existing matrix-authoring contract retains its visual gate.
 

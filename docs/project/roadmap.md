@@ -36,6 +36,13 @@ the [signed-fraction endpoint repair](reviews/2026-10-01-signed-fraction-repair.
 The negative-result chain now compiles and passes existing-host preservation;
 signed reduction remains an explicit presentation gap.
 
+Approved direction: [finish one inspectable rectangular explanation](reviews/2026-10-01-next-step-review.md#recommendation-after-signed-fraction-repair)
+and demonstrate changes to semantic selection and annotations without changing
+motion code. Numeric variation is established; explanatory reuse is still the
+question. The user's “go” resumes the existing first-cell visual gate; the page
+and two scoped browser checks are verified. Layout acceptance is still required
+before all-cell continuation. Deferred reader validation remains unchanged.
+
 The user accepted the column-continuity exemplar. Its existing renderer now owns
 the default treatment and three changed typed inputs; the temporary comparison
 switch is retired. [Authoring instructions](authoring/matrix-column-authoring-packet.md)
