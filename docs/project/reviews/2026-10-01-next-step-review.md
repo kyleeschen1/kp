@@ -67,7 +67,8 @@ reader experiments are preserved, with no further work started by this review.
 
 ## Project-wide convergence recommendation
 
-Status: approved; execution boundary below. This responds to the user's concern
+Status: engineering milestone closed under the explicit amendment below;
+reader validation deferred. This responds to the user's concern
 about fragmentation and no visible finish line and supersedes expansion of animation
 topics immediately, not any accepted implementation contract or visual gate.
 The reported abrupt appearances concern entire lines of matrix operations and
@@ -122,6 +123,17 @@ seek/reverse, preserved accessible static content and measured delivery/runtime
 cost. A fresh agent should reproduce one variation from the documented entrypoint.
 If these criteria fail, report the specific failure rather than claim broad
 Algebra I/II coverage or a general-purpose animation system.
+
+### Approved closeout amendment
+
+The user answered “go” to the explicit question proposing engineering closure
+with reader validation deferred. This closes the bounded engineering milestone
+and defers the intended-reader study in item 4; it does not mark that study
+completed or establish learning effectiveness. The existing Theseus contract
+records the reader-review slice as skipped and the engineering closeout as
+complete. Older rectangular/basis visual gates remain intact. Deployment and
+implementation of the proposed signed-fraction endpoint repair are outside this
+amendment. The evidence report owns the final disposition and residual limits.
 
 ### Approved execution boundary
 

@@ -4,12 +4,12 @@ Approved scope and rationale: [next-step review](2026-10-01-next-step-review.md#
 Execution authority: `run-contract.kp.animation-convergence-v1`. This is an
 evidence map, not a second execution plan.
 
-## Prepared readiness decision
+## Engineering readiness decision
 
-On the user's subsequent “go”, the remaining local closeout was reviewed.
-No new animation implementation or repeated certification is needed for unchanged
-code. The following is a concrete proposed disposition, not a waiver of the
-approved intended-reader gate.
+The user explicitly approved closing the engineering milestone and deferring
+reader validation by answering “go” to that concrete scope-amendment question.
+The bounded engineering scope is complete. No new animation implementation or
+repeated certification is needed for unchanged code.
 
 | Deliverable | Disposition and evidence boundary |
 | --- | --- |
@@ -20,11 +20,10 @@ approved intended-reader gate.
 | Learner-facing readiness | Undetermined. No intended-reader observations have been collected. Visual acceptance and automated tests do not resolve this. |
 | Public release/deployment | Not performed or authorized by this milestone. |
 
-Recommendation for an explicit scope amendment: close the bounded **engineering**
-milestone and retain intended-reader validation as an unresolved follow-up. Until
-the user chooses that amendment or supplies reader observations, the original
-milestone remains open. A bare continuation request was not treated as permission
-to invent observations or silently remove a mandatory gate.
+Approved scope amendment: close the bounded **engineering** milestone and retain
+intended-reader validation as a deferred follow-up. The reader-review slice is
+skipped, not completed; no observations or learning-effectiveness claim are
+implied. Older visual checkpoints and deployment authority remain unchanged.
 
 Residual work has concrete owners:
 
@@ -148,18 +147,18 @@ For each observation retain familiarity with the topic, task, unaided response,
 confusing beat, static comparison and author-versus-reader finding. This is a
 short qualitative check, not a scored examination or efficacy study. An expert
 project owner's approval is valuable design evidence but does not substitute for
-responses from the intended readers. The approved plan explicitly requires this
-human input before its final release/readiness decision.
+responses from the intended readers. This human input remains necessary for a
+learner-facing readiness decision; the approved amendment defers it beyond this
+engineering milestone.
 
 Engineering disposition: adopt the one accepted column treatment and its bounded
 typed source path; preserve the existing checked fraction publication path.
 Retire the temporary motion comparison switch. Keep the other mathematical
-interpretations because no equivalent replacement has been demonstrated. Final
-milestone closeout awaits the formative evidence; arbitrary algebra, negative
-fraction-result compilation and matrix Article publication remain explicit gaps.
-Resume through `npx theseus work context next-action.kp.animation-convergence --mode brief`
-when reader observations are available; continue the existing contract rather
-than creating a new implementation plan.
+interpretations because no equivalent replacement has been demonstrated. The
+engineering milestone is closed; arbitrary algebra, negative fraction-result
+compilation and matrix Article publication remain explicit gaps. Use this
+prepared protocol when reader evaluation resumes; the closed contract does not
+claim that evaluation occurred or authorize additional implementation.
 
 The following discovery record describes the initial trial at `29d7ed277`;
 the accepted integration above supersedes its temporary comparison setup.

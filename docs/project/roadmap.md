@@ -27,18 +27,20 @@ nor its evidence. The ledger remains retrievable at
 
 October 1 project-wide check-in: the user identified fragmentation, competing
 implementations and unclear completion. The latest [convergence recommendation](reviews/2026-10-01-next-step-review.md#project-wide-convergence-recommendation)
-now owns the approved bounded two-domain authoring-to-animation milestone before
-more topic or reader expansion. The user approved the priorities and asked to go
-as far as possible. `run-contract.kp.animation-convergence-v1` owns execution;
-existing visual checkpoints remain pending. This supersedes immediate topic
-expansion. The [bounded ownership evidence](reviews/2026-10-01-animation-convergence-evidence.md)
-identifies the selected paths and their limits.
+owns the bounded two-domain authoring-to-animation milestone, now closed for
+engineering after the user's explicit approval to defer reader validation.
+`run-contract.kp.animation-convergence-v1` records the amended outcome; existing
+visual checkpoints remain pending. The [bounded ownership evidence](reviews/2026-10-01-animation-convergence-evidence.md)
+identifies the adopted paths and their limits. The next proposed engineering
+repair is the signed-fraction endpoint mismatch; implementation is not yet
+authorized by this closeout.
 
 The user accepted the column-continuity exemplar. Its existing renderer now owns
 the default treatment and three changed typed inputs; the temporary comparison
 switch is retired. [Authoring instructions](authoring/matrix-column-authoring-packet.md)
-state the bounded 2×2 preview contract. Formative reader evidence remains separate
-from visual acceptance; older rectangular/basis layout checkpoints are preserved.
+state the bounded 2×2 preview contract. Formative reader evaluation is deferred,
+with no learning-effectiveness claim; older rectangular/basis layout checkpoints
+are preserved.
 
 October 1 return to animation work: the user requested priorities after reader
 and speech exploration. The [updated next-step review](reviews/2026-10-01-next-step-review.md#return-to-animations-after-reader-experiments)

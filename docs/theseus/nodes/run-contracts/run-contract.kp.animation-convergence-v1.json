@@ -2,8 +2,8 @@
   "id": "run-contract.kp.animation-convergence-v1",
   "kind": "run-contract",
   "title": "Two-domain animation convergence",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: engineering closeout decision prepared. Await actual reader observations or explicit approval to defer that gate and close only engineering scope. Four packages complete; no further implementation started.",
+  "status": "resolved",
+  "summary": "Amended engineering scope complete: five slices completed and reader-review skipped by explicit user-approved deferral. No deployment or learning-effectiveness claim.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -56,14 +56,14 @@
     {
       "id": "reader-review",
       "title": "Formative author and reader review",
-      "summary": "Formative protocol prepared in convergence evidence; user prompt presented. Intended-reader observations unavailable; visual approval is not learning evidence.",
-      "status": "in-progress"
+      "summary": "User explicitly approved engineering closure with reader validation deferred. No reader observations collected; no efficacy claim. Prepared protocol remains a follow-up.",
+      "status": "skipped"
     },
     {
       "id": "closeout",
       "title": "Canonical release path and explicit limits",
-      "summary": "Preparing concrete bounded readiness decision and residual-gap ownership. Final disposition still awaits reader observations or an explicit user-approved deferral; no gate waived.",
-      "status": "in-progress"
+      "summary": "Engineering disposition adopted and documented under explicit user-approved scope amendment. Reader validation deferred; existing visual gates preserved. Signed-fraction repair remains proposed.",
+      "status": "complete"
     }
   ]
 }

@@ -6,14 +6,15 @@ Last Updated: 2026-10-01
 ## Canonical direction
 
 October 1 approved priority: [two-domain animation convergence](../reviews/2026-10-01-next-step-review.md#project-wide-convergence-recommendation)
-comes before further reader or topic expansion. The user approved proceeding as
-far as possible. `run-contract.kp.animation-convergence-v1` owns execution; this
-thread preserves reader work without authorizing additional layout experiments.
-Existing visual checkpoints are not waived.
+has reached engineering closure after explicit user approval to defer reader
+validation. `run-contract.kp.animation-convergence-v1` records that amended
+outcome; this thread preserves reader work without authorizing additional layout
+experiments. Existing visual checkpoints are not waived. The signed-fraction
+endpoint mismatch is the next proposed repair, not an active implementation.
 
 The column-continuity checkpoint was subsequently accepted (“Looks great!”).
-Continuation integrates changed typed matrix inputs through the existing player;
-it does not reopen reader layout work or infer teaching effectiveness.
+Changed typed matrix inputs are integrated through the existing player. Reader
+validation remains deferred; this does not infer teaching effectiveness.
 
 October 1 approved comparison: [discourse-guided scrolltelling](../reviews/2026-10-01-discourse-scrolltelling-next-step.md)
 adds a separate dot-product reading projection and one exact-return detour.
