@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Two-domain animation convergence",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: matrix motion accepted and source integration complete. Four of six packages complete. Formative intended-reader observations are required by the approved plan before final release/readiness closeout; protocol and evidence are prepared.",
+  "summary": "HUMAN_CHECKPOINT: engineering closeout decision prepared. Await actual reader observations or explicit approval to defer that gate and close only engineering scope. Four packages complete; no further implementation started.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -62,7 +62,8 @@
     {
       "id": "closeout",
       "title": "Canonical release path and explicit limits",
-      "status": "planned"
+      "summary": "Preparing concrete bounded readiness decision and residual-gap ownership. Final disposition still awaits reader observations or an explicit user-approved deferral; no gate waived.",
+      "status": "in-progress"
     }
   ]
 }

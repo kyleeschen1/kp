@@ -4,6 +4,50 @@ Approved scope and rationale: [next-step review](2026-10-01-next-step-review.md#
 Execution authority: `run-contract.kp.animation-convergence-v1`. This is an
 evidence map, not a second execution plan.
 
+## Prepared readiness decision
+
+On the user's subsequent “go”, the remaining local closeout was reviewed.
+No new animation implementation or repeated certification is needed for unchanged
+code. The following is a concrete proposed disposition, not a waiver of the
+approved intended-reader gate.
+
+| Deliverable | Disposition and evidence boundary |
+| --- | --- |
+| Numerical 2×2 column combinations | Adopt the accepted existing host and one renderer; original plus three typed inputs, both columns, semantic correspondence and replay are verified. |
+| Bounded fraction-chain authoring | Retain the existing checked JSON/Article publication path; three independently authored sources applied through the real host test fixture. No general algebra coverage claim. |
+| Temporary matrix motion selector | Retired. Existing links use the accepted implementation. |
+| Other matrix readings and reader layouts | Preserve as distinct interpretations or separately gated experiments; this work does not establish equivalence needed to delete them. |
+| Learner-facing readiness | Undetermined. No intended-reader observations have been collected. Visual acceptance and automated tests do not resolve this. |
+| Public release/deployment | Not performed or authorized by this milestone. |
+
+Recommendation for an explicit scope amendment: close the bounded **engineering**
+milestone and retain intended-reader validation as an unresolved follow-up. Until
+the user chooses that amendment or supplies reader observations, the original
+milestone remains open. A bare continuation request was not treated as permission
+to invent observations or silently remove a mandatory gate.
+
+Residual work has concrete owners:
+
+- Reader usefulness: the prepared formative protocol below; requires actual
+  intended readers and their observations. No external recruitment was sent.
+- Negative fraction results: `equation-series-like-denominator-authoring.ts`
+  validates endpoints with `matchesInteger`, which accepts only a numeric AST
+  node. `latex-parser.ts` represents a leading minus as a unary node. This is a
+  likely representation-boundary cause of the retained negative-result rejection,
+  not evidence that signed arithmetic is unsupported everywhere. A future repair
+  must pressure signed endpoints and exact native paint before claiming support.
+- Matrix publication: the current typed-source path is an internal preview;
+  it is not an Article/`author:check` application path and provides no published
+  no-JavaScript fallback.
+- Delivery headroom: composition's complete conservative closure has only 353
+  gzip bytes below its current ceiling. Diagnose before extending that consumer;
+  no budget increase is implied by closeout.
+
+The next engineering recommendation, if a further slice is authorized after
+closeout, is the observed signed-fraction endpoint mismatch. It addresses a real
+authoring failure in an existing path and requires no new page family. It has
+not been started as an implementation task.
+
 ## Accepted integration
 
 The user accepted the matrix exemplar with “Looks great!” The accepted motion
