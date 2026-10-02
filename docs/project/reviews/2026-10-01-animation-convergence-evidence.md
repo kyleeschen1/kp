@@ -4,11 +4,127 @@ Approved scope and rationale: [next-step review](2026-10-01-next-step-review.md#
 Execution authority: `run-contract.kp.animation-convergence-v1`. This is an
 evidence map, not a second execution plan.
 
+## Accepted integration
+
+The user accepted the matrix exemplar with “Looks great!” The accepted motion
+is now the column renderer's default, including its existing named callers.
+The temporary query switch and optional renderer injection have been removed;
+old `?motion=continuous` links reach the same implementation. This does not
+accept the separate rectangular or basis-composition layout checkpoints.
+
+Three retained TypeScript sources (`signed`, `zero`, `larger`) reach the existing
+host through `columnExampleFromProduct`, for both result columns. Their factor
+values, derived answers, operand IDs and destination IDs are checked in the real
+browser. See [matrix authoring packet](../authoring/matrix-column-authoring-packet.md)
+and `content/authoring/convergence/matrices.ts`. The source file supplies values
+and typed mathematical relationships; no input-specific paint or timing was added.
+
+The ordinary, identity and orthonormality callers reuse this adapter. This is
+bounded local integration, not a new certified compositor mechanism or universal
+renderer seam. The underlying fusion projection already has the distinct dot
+passage caller; it was not rewritten for these examples.
+
+Checks executed after acceptance:
+
+- Matrix semantic cohort: 19 passing.
+- Complete matrix Chromium cohort: 14 passing.
+- Representative accepted-motion/source cohort: 15 passing across Chromium,
+  Firefox and WebKit; further containment checks retained for changed sources.
+- Full `npm run typecheck`: passed, including Svelte and domain types.
+- `npm run build:bundle`, scoped matrix/cost builds and dependency-budget
+  measurement: passed.
+- `npm run visual:semantic-cost`: both complete-resource and one/ten-instance
+  lifecycle checks passed. No budget was increased.
+
+The first added browser checks used a malformed range value (`.64`); corrected
+to `0.64` and reran the entire matrix cohort. A later visual suspicion of
+multi-digit overflow did not reproduce under shell and bracket containment
+checks. No layout alteration was made solely on that suspicion. Crowding remains
+an aesthetic limit to assess for more extreme inputs.
+
+The broad unit run found a stale generated reachability file count. Regeneration
+changed only `scannedFileCount` (4870 → 4907), not roots or caller authority;
+`npm run test:equation-reachability` passed all 12 checks afterward. The broad
+`npm test` run completed with 7,255 passing and that one failure (7,256 total).
+It is not described as a clean full-suite pass. The scoped rerun verifies the
+generated-count-only repair; no failed semantic or runtime assertion was waived.
+
+After adding the final containment assertions, the source browser rerun passed
+Chromium/WebKit but hit three Firefox 30-second end-to-end timeouts. Earlier
+Firefox cases passed in 13–17 seconds; the failing run overlapped the full unit
+suite and a separately owned browser suite in the editor repository. No product
+assertion failed before the timeouts. Keep all checks and bound each two-column
+navigation/reversal case at 60 seconds, matching the existing full-milestone
+browser case. This is an explicit test-execution budget amendment; readiness
+assertion timeouts, frame/resource budgets and product behavior are unchanged.
+The final `npm run visual:matrix-interpretations -- --project=firefox --project=webkit --grep "source-only"`
+rerun passed all nine cases, including containment, across the three browsers;
+Firefox took 36–42 seconds per two-column case under the observed load. Final
+`npm run typecheck:tests` also passed after those test edits.
+
+Complete column-page JS closure: 106,126 gzip bytes; CSS: 14,533 gzip bytes.
+The conservative composition closure is 110,647 / 111,000 allowed JS bytes,
+so its remaining headroom is small. Three numeric inputs add a lazy 330-byte
+gzip source chunk. These are compressed artifact estimates; cold/warm browser
+transfer and fonts are measured separately by the cost suite.
+
+Local Chromium column samples: one stage mounted in 48.7 ms with 598 elements;
+ten different sources mounted in 513.7 ms with 5,964 elements. The earlier
+column sample had 5,269 elements for ten; extra contributor occurrences have a
+real DOM cost. Timings include animation-frame waits and were collected during
+other verification, so they are not a controlled performance comparison.
+Warm-up added zero assets; sampled p95 frame interval was 17.5 ms for ten
+different inputs. After repeated mount/play/dispose, DOM nodes and listeners
+returned to the warmed baseline (661 nodes, 31 listeners). This is a bounded
+retention check, not proof of zero browser memory growth.
+
+Reader evaluation remains distinct from visual acceptance. A formative prompt
+has been presented to the user about the result column's meaning and any hard
+transition. Do not infer learning effectiveness or a completed reader study from
+the visual approval, source tests or fresh-agent algebra reproduction.
+
+### Prepared formative review
+
+Use the canonical column page and `/experiments/fraction-chain/` with a few
+intended readers; no recruitment or external messages have been sent. The changed
+fraction sources remain exact-host test fixtures, not new public preview routes.
+
+1. Before explaining the controls, ask the reader to find the original inputs
+   for one result entry. Record whether the source relationship is recoverable.
+2. Hold before evaluation and ask what will happen next. For the original matrix
+   first column, the two weighted columns are 2·(1,3) and 1·(2,4), summing to
+   (4,10). Record the reader's explanation before giving that answer.
+3. Ask them to replay or reverse a confusing change. Record the beat and what
+   the motion helped or obscured; separate control difficulty from mathematics.
+4. Repeat a term-origin and next-result question on the fraction passage.
+5. Where practical, compare the visible static calculation with the animated
+   version. Record whether motion adds anything and where it costs attention.
+
+For each observation retain familiarity with the topic, task, unaided response,
+confusing beat, static comparison and author-versus-reader finding. This is a
+short qualitative check, not a scored examination or efficacy study. An expert
+project owner's approval is valuable design evidence but does not substitute for
+responses from the intended readers. The approved plan explicitly requires this
+human input before its final release/readiness decision.
+
+Engineering disposition: adopt the one accepted column treatment and its bounded
+typed source path; preserve the existing checked fraction publication path.
+Retire the temporary motion comparison switch. Keep the other mathematical
+interpretations because no equivalent replacement has been demonstrated. Final
+milestone closeout awaits the formative evidence; arbitrary algebra, negative
+fraction-result compilation and matrix Article publication remain explicit gaps.
+Resume through `npx theseus work context next-action.kp.animation-convergence --mode brief`
+when reader observations are available; continue the existing contract rather
+than creating a new implementation plan.
+
+The following discovery record describes the initial trial at `29d7ed277`;
+the accepted integration above supersedes its temporary comparison setup.
+
 ## Bounded ownership map
 
 | Path | Semantic authority | Presentation / host | Disposition |
 | --- | --- | --- | --- |
-| Matrix column combinations | `src/math/matrix-product.ts`, `matrix-interpretations.ts` | `src/experiments/matrix-column-combinations/presentation.ts`, its existing experiment route and reader timeline clock | Selected entrance/evaluation exemplar; preserve baseline while candidate is reviewed |
+| Matrix column combinations | `src/math/matrix-product.ts`, `matrix-interpretations.ts` | `src/experiments/matrix-column-combinations/presentation.ts`, its existing experiment route and reader timeline clock | Accepted local treatment; temporary baseline branch removed after source pressure |
 | Matrix row–column story | Same product and immutable scalar identities | `src/experiments/matrix-column-product/presentation.ts` | Alternate interpretation; not redundant solely because it uses matrices |
 | Three-term dot passage | Product contributions projected into the dot model | `src/experiments/dot-product-passage/presentation.ts`, `fusion.ts` | Existing optical evaluation reference; preserve current choreography |
 | Rectangular first cell | Same matrix product, selected cell and destination | `src/experiments/rectangular-product/presentation.ts` embeds the dot player | Existing separate visual checkpoint; not accepted by this work |
@@ -119,7 +235,8 @@ line; this is a visual judgment to resolve, not a reason to invent a new arc.
 
 The stable browser command generates a disposable contact sheet under
 `tmp/codex/matrix-interpretations-review/`; durable evidence is the command and
-its assertions, not the screenshot path. Human acceptance is still pending.
+its assertions, not the screenshot path. The user subsequently accepted this
+visual treatment; the accepted integration section records continuation.
 No reader study, broad compositor certification, deletion of alternative
 interpretations or catalog-wide promotion is claimed. The contract retains the
 post-review matrix variations, formative review and closeout work.

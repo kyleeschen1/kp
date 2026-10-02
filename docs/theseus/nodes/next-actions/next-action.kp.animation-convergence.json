@@ -4,7 +4,7 @@
   "title": "Prove reusable smooth mathematical authoring across matrix and algebra",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: review column continuity at /experiments/matrix-column-combinations/?motion=continuous. Two packages complete; changed-input integration, reader review and closeout remain approved. See docs/project/reviews/2026-10-01-animation-convergence-evidence.md.",
+  "summary": "HUMAN_CHECKPOINT: matrix motion accepted and source integration complete. Four of six packages complete. Formative intended-reader observations are required by the approved plan before final release/readiness closeout; protocol and evidence are prepared.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,6 +59,78 @@
       "status": "passed",
       "scope": "Four source checks including located unsupported negative result",
       "checkedAt": "2026-10-02T00:15:32.050Z"
+    },
+    {
+      "command": "npm run test:matrix-interpretations",
+      "status": "passed",
+      "scope": "19 checks including three exact source products",
+      "checkedAt": "2026-10-02T01:35:22.334Z"
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "14 Chromium checks; accepted default and changed inputs",
+      "checkedAt": "2026-10-02T01:35:31.503Z"
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --project=firefox --project=webkit --grep \"accepted|source-only\"",
+      "status": "passed",
+      "scope": "15 representative checks across Chromium Firefox and WebKit",
+      "checkedAt": "2026-10-02T01:35:41.633Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full application node test Svelte and domain types",
+      "checkedAt": "2026-10-02T01:35:51.026Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Full production build; existing large-chunk warnings retained",
+      "checkedAt": "2026-10-02T01:36:02.695Z"
+    },
+    {
+      "command": "npm run build:semantic-cost",
+      "status": "passed",
+      "scope": "Scoped production and instance harness builds",
+      "checkedAt": "2026-10-02T01:38:45.830Z"
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Complete closures within unchanged ceilings",
+      "checkedAt": "2026-10-02T01:38:53.852Z"
+    },
+    {
+      "command": "npm run visual:semantic-cost",
+      "status": "passed",
+      "scope": "2 passing: cold-warm assets and one-ten-instance lifecycle",
+      "checkedAt": "2026-10-02T01:39:01.186Z"
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "12 passing after generated file-count repair",
+      "checkedAt": "2026-10-02T01:39:08.542Z"
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "7255 passed, one stale generated scannedFileCount failed; count-only regeneration verified by 12 passing reachability tests. No clean full-suite pass claimed.",
+      "checkedAt": "2026-10-02T01:39:56.848Z"
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --project=firefox --project=webkit --grep source-only",
+      "status": "passed",
+      "scope": "Final 9 changed-input cases passing with containment on three browsers; explicit 60-second end-to-end test budget, no product checks removed.",
+      "checkedAt": "2026-10-02T01:42:22.087Z"
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "Final test edits including containment and bounded end-to-end timeout",
+      "checkedAt": "2026-10-02T01:42:28.309Z"
     }
   ]
 }

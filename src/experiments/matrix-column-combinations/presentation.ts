@@ -3,7 +3,7 @@ import { cloneElementWithComputedStyles, makeKpMaterialOwnerInert, stripKpMateri
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
 import type { KpScalarValue } from "../../math/typed-semantic-math.ts";
 import { example, type ColumnExample, numberOf, sample } from "./model.ts";
-import type { prepareContinuity } from "./continuity.ts";
+import { prepareContinuity } from "./continuity.ts";
 
 const math = (latex: string) => renderLatexToHtml(latex, { trust: true });
 const tag = (key: string, entry: KpScalarValue) => `\\htmlData{kp-comb-key=${key}}{${numberOf(entry)}}`;
@@ -45,7 +45,7 @@ export function stageHtml(scene: ColumnExample = example()) {
 }
 
 interface Position { x: number; y: number }
-export function mountPresentation(root: HTMLElement, scene: ColumnExample = example(), continuity?: typeof prepareContinuity) {
+export function mountPresentation(root: HTMLElement, scene: ColumnExample = example()) {
   const { combination } = scene;
   const stage = root.querySelector<HTMLElement>(".comb-stage")!;
   const layer = root.querySelector<HTMLElement>(".comb-material")!;
@@ -95,7 +95,7 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
       });
     }
     combination.result.entries.forEach((entry, i) => copy(`sum-${i}`, `c-${i}-${scene.column}`, entry, 6));
-    continuous = continuity?.(stage, layer, native, scene);
+    continuous = prepareContinuity(stage, layer, native, scene);
   };
   const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const render = (progress: number) => {

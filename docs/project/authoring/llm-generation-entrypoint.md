@@ -69,6 +69,10 @@ For bounded integer-fraction chains, select `equation.fraction-chain` and read
 raw addition/subtraction and reduction without hints. This is not an arbitrary
 LaTeX solver or a claim that every checked numeric caller has certified paint.
 
+For numerical 2×2 matrix column combinations, use
+`matrix-column-authoring-packet.md`. This local typed-source preview reuses the
+accepted column renderer; it is not an `author:check` task or a publication path.
+
 For the existing momentum-energy derivation assumptions, select
 `mechanics.momentum-energy`. This exposes its mechanics-owned checker and
 reference-only host; it does not infer new physics, edit notation or apply drafts.

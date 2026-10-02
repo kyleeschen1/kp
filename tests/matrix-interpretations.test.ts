@@ -5,6 +5,23 @@ import { createKpScalarExpression, createKpScalarParameter, createKpTypedMatrix,
   evaluateKpTypedMatrix, transposeKpTypedMatrix, type KpTypedMatrix, type KpScalarValue } from "../src/math/typed-semantic-math.ts";
 import { matrixProduct, MatrixProductGap } from "../src/math/matrix-product.ts";
 import { columnCombinations, gramMatrix, inspectOrthonormality } from "../src/math/matrix-interpretations.ts";
+import { matrixInputs } from "../content/authoring/convergence/matrices.ts";
+import { columnExampleFromProduct } from "../src/experiments/matrix-column-combinations/model.ts";
+
+test('three authored matrix inputs retain exact products and both column projections', () => {
+  const expected = [[[8, -13], [-6, 11]], [[0, 2], [3, 0]], [[16, -29], [61, -4]]];
+  matrixInputs.forEach(({ product }, index) => {
+    assert.deepEqual(evaluateKpTypedMatrix(product.result, {}), expected[index]);
+    for (const column of [0, 1]) {
+      const scene = columnExampleFromProduct(product, column);
+      assert.equal(scene.env.product, product);
+      for (const row of [0, 1]) {
+        assert.equal(scene.combination.result.entries[row], product.cell(row, column).result);
+        scene.combination.terms.forEach((term, k) => assert.equal(term.pairs[row], product.cell(row, column).dot.pairs[k]));
+      }
+    }
+  });
+});
 
 const scalar = (id: string, value: number) => createKpScalarExpression({ id, expression: constant(value) });
 const matrix = (id: string, values: readonly (readonly number[])[]) => createKpTypedMatrixFromRows({

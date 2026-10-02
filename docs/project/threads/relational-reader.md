@@ -11,6 +11,10 @@ far as possible. `run-contract.kp.animation-convergence-v1` owns execution; this
 thread preserves reader work without authorizing additional layout experiments.
 Existing visual checkpoints are not waived.
 
+The column-continuity checkpoint was subsequently accepted (“Looks great!”).
+Continuation integrates changed typed matrix inputs through the existing player;
+it does not reopen reader layout work or infer teaching effectiveness.
+
 October 1 approved comparison: [discourse-guided scrolltelling](../reviews/2026-10-01-discourse-scrolltelling-next-step.md)
 adds a separate dot-product reading projection and one exact-return detour.
 Review the reader experience before a recursive authoring schema; the existing

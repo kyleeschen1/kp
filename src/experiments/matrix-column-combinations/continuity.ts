@@ -6,7 +6,7 @@ import type { ColumnExample } from "./model.ts";
 const ease = (value: number) => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
 const windowProgress = (t: number, start: number, end: number) => ease((t - start) / (end - start));
 
-/** Reversible local trial: reuse optical profiles without claiming native
+/** Accepted column presentation: reuse optical profiles without claiming native
  * compositor certification. Original expressions remain as readable history;
  * inert contributor occurrences carry the derivation into the next line. */
 export function prepareContinuity(stage: HTMLElement, layer: HTMLElement, native: ReadonlyMap<string, HTMLElement>, scene: ColumnExample) {

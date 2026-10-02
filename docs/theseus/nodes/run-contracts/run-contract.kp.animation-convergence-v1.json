@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Two-domain animation convergence",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review column continuity at /experiments/matrix-column-combinations/?motion=continuous. Two packages complete; changed-input integration, reader review and closeout remain approved. See docs/project/reviews/2026-10-01-animation-convergence-evidence.md.",
+  "summary": "HUMAN_CHECKPOINT: matrix motion accepted and source integration complete. Four of six packages complete. Formative intended-reader observations are required by the approved plan before final release/readiness closeout; protocol and evidence are prepared.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -44,18 +44,20 @@
     {
       "id": "matrix-exemplar",
       "title": "Matrix entrance and enclosure continuity checkpoint",
-      "summary": "HUMAN_CHECKPOINT: verified opt-in candidate at /experiments/matrix-column-combinations/?motion=continuous. Review reception, evaluation pacing and addition crowding before promotion.",
-      "status": "in-progress"
+      "summary": "User approved the bracket reception and contributor-fusion candidate: Looks great.",
+      "status": "complete"
     },
     {
       "id": "matrix-reuse",
       "title": "Post-acceptance matrix source variations and integration",
-      "status": "planned"
+      "summary": "Accepted treatment is default; comparison switch retired. Three typed source inputs and both columns verified across three browsers. Existing interpretations, accessible calculation and cost/lifecycle bounds preserved.",
+      "status": "complete"
     },
     {
       "id": "reader-review",
       "title": "Formative author and reader review",
-      "status": "planned"
+      "summary": "Formative protocol prepared in convergence evidence; user prompt presented. Intended-reader observations unavailable; visual approval is not learning evidence.",
+      "status": "in-progress"
     },
     {
       "id": "closeout",

@@ -1,7 +1,8 @@
 import { readMatrixConfig, observeMatrixConfig } from "../matrix-examples/config.ts";
 import "./style.css";
 import "../matrix-example-page.css";
-import { example, numberOf, durationMs, sample } from "./model.ts";
+import { example, columnExampleFromProduct, numberOf, durationMs, sample } from "./model.ts";
+import { MatrixColumnGap } from "../matrix-column-product/environment.ts";
 import { stageHtml, mountPresentation, calculationLatex } from "./presentation.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaffold.ts";
@@ -20,7 +21,11 @@ async function mount() {
   const composition = query.get("example") === "composition"
     ? (await import('./basis-composition.ts')).basisComposition(query.get('basis') === 'standard' ? 'standard' : 'adapted', column)
     : undefined;
-  const scene = composition?.scene ?? example(query.get("example") ?? "columns", column);
+  const input = query.get("input");
+  if (input && query.has("example")) throw new MatrixColumnGap("Choose either a source input or a named interpretation.");
+  const authored = input ? (await import("../../../content/authoring/convergence/matrices.ts")).matrixInputs.find(item => item.id === input) : undefined;
+  if (input && !authored) throw new MatrixColumnGap("Choose the signed, zero or larger matrix input.");
+  const scene = authored ? columnExampleFromProduct(authored.product, column) : composition?.scene ?? example(query.get("example") ?? "columns", column);
   const { beats } = scene;
   document.querySelector("h1")!.textContent = scene.title;
   document.title = scene.title;
@@ -28,11 +33,13 @@ async function mount() {
   intro.textContent = composition ? "The same two maps have different matrices in different bases. Their composition is unchanged when the coordinates at the join agree." : scene.evidence ? "Each entry of QᵀQ is a dot product between two columns of Q. Diagonal entries measure squared length; off-diagonal entries measure orthogonality." : "Each column of the right matrix tells us how to combine the columns of the left matrix.";
   const links = ["columns", "identity", "orthonormality"].map((kind, i) => `<a href="?example=${kind}&column=0#weights">${["Column combinations", "Identity", "Orthonormality"][i]}</a>`).join(" · ");
   const root = document.querySelector<HTMLElement>("#comb-player")!;
+  root.dataset["sourceId"] = scene.env.product.id;
   const contextHtml = composition ? (await import('./basis-composition-view.ts')).basisCompositionHtml(composition) : '';
   const basisQuery = composition ? `&basis=${composition.mode}` : '';
   root.innerHTML = `<nav aria-label="Matrix examples">${links}</nav>
+    <nav aria-label="Matrix source inputs">Inputs: <a href="?column=${column}">Original</a> · ${["signed", "zero", "larger"].map(id => `<a href="?input=${id}&column=${column}">${id}</a>`).join(" · ")}</nav>
     ${contextHtml}
-    <p>Result column: <a href="?example=${scene.kind}${basisQuery}&column=0#weights">1</a> · <a href="?example=${scene.kind}${basisQuery}&column=1#weights">2</a></p>
+    <p>Result column: <a href="?${input ? `input=${input}` : `example=${scene.kind}${basisQuery}`}&column=0#weights">1</a> · <a href="?${input ? `input=${input}` : `example=${scene.kind}${basisQuery}`}&column=1#weights">2</a></p>
     <section class="matrix-card kp-focus-deck" aria-label="Column combination animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Column combination; scroll horizontally on narrow screens">${stageHtml(scene)}</div>
@@ -48,10 +55,7 @@ async function mount() {
       <p>Numerical check for this Q: ${scene.evidence.status}; tolerance ${scene.evidence.tolerance}. This checks the displayed example, not a symbolic proof for arbitrary matrices.</p></section>` : ""}
     <p><a href="/experiments/matrix-column-product/">Compare the row–column dot-product view</a></p>`;
   await document.fonts.ready;
-  // Keep the discovery treatment confined to one explicitly selected exemplar.
-  const continuity = query.get("motion") === "continuous" && scene.kind === "columns" && !composition;
-  const candidate = continuity ? (await import("./continuity.ts")).prepareContinuity : undefined;
-  const view = mountPresentation(root, scene, candidate);
+  const view = mountPresentation(root, scene);
   const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-column-combinations", durationMs });
   let config = readMatrixConfig(document);
   const stepsOnly = () => reduced.matches || config.motion === "steps";
