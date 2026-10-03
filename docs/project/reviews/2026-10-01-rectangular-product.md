@@ -1,6 +1,8 @@
 # Rectangular product: first-cell review
 
-Status: HUMAN_CHECKPOINT; the rectangular slice remains in progress.
+Status: first-cell layout accepted by the user's “This looks great!” on October 2.
+The [pouring successor](2026-10-02-matrix-pouring.md) is now the visual checkpoint;
+historical pending-review language below describes the earlier gate.
 Contract: `run-contract.kp.matrix-authoring-v1`.
 
 Resumed after convergence and signed-fraction repair: the user approved the

@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Rectangular matrix authoring proof",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review first-cell rectangular context and result placement, with 20px math and beige light-mode toggle; rectangular slice remains in progress before all-cell/source-only continuation.",
+  "summary": "First-cell layout accepted. Current priority is the approved pouring successor under run-contract.kp.matrix-pouring-v1; source-only continuation awaits that visual choice, not old layout reapproval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -38,7 +38,7 @@
     {
       "id": "rectangular",
       "title": "Post-acceptance rectangular matrix integration",
-      "summary": "Build one-cell rectangular context and result handoff; stop for its layout review before all-cell and source-only pressure.",
+      "summary": "First-cell layout accepted by user. New approved pouring choreography has its own review contract; older source-only continuation is preserved, with no repeat first-cell approval needed.",
       "status": "in-progress"
     },
     {

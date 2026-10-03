@@ -4,7 +4,10 @@ import { context } from './source.ts';
 
 const root = document.querySelector<HTMLElement>('#rectangular-player')!;
 let cleanup: (() => void) | undefined, disposed = false;
-void mountDotPlayer(root, context.passage, true, context).then(dispose => {
+const mount = new URLSearchParams(location.search).get('view') === 'pouring'
+  ? import('./pouring-player.ts').then(({ mountPouringPlayer }) => mountPouringPlayer(root))
+  : mountDotPlayer(root, context.passage, true, context);
+void mount.then(dispose => {
   if (disposed) dispose(); else cleanup = dispose;
 }).catch(error => {
   root.setAttribute('aria-busy', 'false'); root.dataset['gap'] = 'true';

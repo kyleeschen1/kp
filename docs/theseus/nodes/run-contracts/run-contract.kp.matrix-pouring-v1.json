@@ -1,0 +1,37 @@
+{
+  "id": "run-contract.kp.matrix-pouring-v1",
+  "kind": "run-contract",
+  "title": "Matrix pouring exemplar",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: implementation and discovery checks complete; exemplar slice remains in progress pending visual judgment. No shared promotion or source-only variation claimed.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.matrix-pouring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-02-matrix-pouring.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:matrix-pouring"
+  ],
+  "allowedWork": [
+    "Local pouring adapter, original semantic objects, existing fusion, focused checks and evidence"
+  ],
+  "disallowedWork": [
+    "Universal renderer, inspector, rollout, deployment, reader efficacy claims"
+  ],
+  "goal": "One reversible two-column pouring explanation for C equals B A",
+  "target": "next-action.kp.matrix-pouring",
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Pouring exemplar and visual checkpoint",
+      "summary": "User approved new pouring exemplar after accepting prior rectangular layout.",
+      "status": "in-progress"
+    }
+  ]
+}

@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 2: the user accepted the rectangular first-cell layout, then explicitly
+approved the [matrix pouring exemplar](reviews/2026-10-02-matrix-pouring.md).
+Its opt-in existing-host query now demonstrates C = BA: each input column is
+copied through both receiving rows, evaluated and collected, then C returns to
+the equation. `run-contract.kp.matrix-pouring-v1` owns the new visual checkpoint.
+The accepted first-cell layout is preserved; its old layout gate is satisfied.
+Source-only authoring pressure follows selection of the new choreography, not
+another review of the unchanged old layout. Reader validation remains deferred.
+
 October 1 project-wide check-in: the user identified fragmentation, competing
 implementations and unclear completion. The latest [convergence recommendation](reviews/2026-10-01-next-step-review.md#project-wide-convergence-recommendation)
 owns the bounded two-domain authoring-to-animation milestone, now closed for
@@ -39,9 +48,8 @@ signed reduction remains an explicit presentation gap.
 Approved direction: [finish one inspectable rectangular explanation](reviews/2026-10-01-next-step-review.md#recommendation-after-signed-fraction-repair)
 and demonstrate changes to semantic selection and annotations without changing
 motion code. Numeric variation is established; explanatory reuse is still the
-question. The user's “go” resumes the existing first-cell visual gate; the page
-and two scoped browser checks are verified. Layout acceptance is still required
-before all-cell continuation. Deferred reader validation remains unchanged.
+question. The first-cell layout was subsequently accepted; the pouring treatment
+above is the current visual question. Deferred reader validation remains unchanged.
 
 The user accepted the column-continuity exemplar. Its existing renderer now owns
 the default treatment and three changed typed inputs; the temporary comparison

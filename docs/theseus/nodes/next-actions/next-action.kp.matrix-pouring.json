@@ -1,0 +1,40 @@
+{
+  "id": "next-action.kp.matrix-pouring",
+  "kind": "next-action",
+  "title": "Review matrix column pouring choreography",
+  "status": "blocked",
+  "domain": "kinetic-press",
+  "summary": "HUMAN_CHECKPOINT: opt-in pouring exemplar ready at /experiments/rectangular-product/?view=pouring. Review tilt, downward copying, arithmetic pace and result collection. Checks passed; no promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-02-matrix-pouring.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-pouring",
+      "status": "passed",
+      "scope": "Two semantic reference and deterministic sample tests",
+      "checkedAt": "2026-10-03T01:12:54.267Z"
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "One Chromium case with 21 phase captures, lanes, native handoffs, seek, light mode, narrow viewport, MathML, reduced-motion restoration and disposal",
+      "checkedAt": "2026-10-03T01:12:55.583Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full application, node, tests, Svelte and domain checks",
+      "checkedAt": "2026-10-03T01:12:56.937Z"
+    },
+    {
+      "command": "npm run visual:rectangular-product",
+      "status": "passed",
+      "scope": "Two preserved original-page Chromium cases",
+      "checkedAt": "2026-10-03T01:12:58.858Z"
+    }
+  ]
+}

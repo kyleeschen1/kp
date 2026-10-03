@@ -1,0 +1,20 @@
+.pour-stage { position: relative; min-width: 800px; height: 570px; overflow: clip; }
+.pour-stage .pour-equation { position: absolute; inset: 35px 0 auto; display: flex; justify-content: center; align-items: center; gap: 32px; height: 145px; }
+.pour-matrix { position: relative; display: inline-block; }
+.pour-matrix > .pour-name { display: block; text-align: center; margin-top: 12px; }
+.pour-row { position: absolute; left: 255px; width: 500px; height: 105px; }
+.pour-row .dot-stage { min-width: 0; height: 105px; overflow: visible; }
+.pour-row .dot-inputs { display: none; }
+.pour-row .dot-work { top: 12px; }
+.pour-material { position: absolute; inset: 0; pointer-events: none; }
+.pour-ink { position: absolute; left: 0; top: 0; display: flex; transform-origin: center; }
+.pour-column-bracket { position: absolute; border: 1.5px solid currentColor; border-top-width: 1.5px; border-bottom-width: 1.5px; width: 9px; }
+.pour-column-bracket[data-side="left"] { border-right: 0; }
+.pour-column-bracket[data-side="right"] { border-left: 0; }
+.pour-collection { position: absolute; left: 85px; top: 298px; }
+.pour-collection [data-pour-entry] { display: inline-block; }
+.pour-stage [data-pour-entry], .pour-stage [data-kp-dot-key] { display: inline-block; }
+.pour-stage .katex { font-size: var(--dot-math-size, 20px); }
+.pour-stage .dot-work { color: var(--kp-st-ink); }
+.pour-stage .pour-equation [data-pour-entry] { transition: none; }
+.pour-static { overflow-x: auto; }

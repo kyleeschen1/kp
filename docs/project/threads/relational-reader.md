@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 2: rectangular first-cell layout accepted. The user then approved
+[column pouring](../reviews/2026-10-02-matrix-pouring.md), a new choreography
+candidate on the existing rectangular host. Its local Theseus contract owns
+visual review; reader layouts and deferred reader validation are unchanged.
+
 October 1 approved priority: [two-domain animation convergence](../reviews/2026-10-01-next-step-review.md#project-wide-convergence-recommendation)
 has reached engineering closure after explicit user approval to defer reader
 validation. `run-contract.kp.animation-convergence-v1` records that amended
