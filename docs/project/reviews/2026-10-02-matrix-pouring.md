@@ -1,5 +1,43 @@
 # Matrix pouring exemplar
 
+## October 3 structural view and composition
+
+User approved a number-free alternative to reduce competing arithmetic motion
+and expose dimensional compatibility. Canonical candidate:
+`/experiments/rectangular-product/?view=structure#initial`. The numeric pouring
+query and accepted plain route remain available. The same review contract owns
+this refinement; no broader catalogue promotion is authorized.
+
+Semantic authority remains `matrixProduct` and typed matrix entries. Segmented
+DOM bands are a local structural projection: B has two three-position receiving
+rows; A supplies two three-component inputs; each complete input reaches both
+rows, contracts to two output components, and joins C. C's exact result object
+then becomes the right factor of DC, where D has three two-position rows. Only
+C's first column is animated through D, explicitly labeled as such. Component
+counts describe dimensions, not magnitudes; compatible meanings/bases remain a
+separate requirement. This is not a Markov or machine-learning support claim.
+
+The existing player, clock, themes, annotations, seek/reverse and accessibility
+are reused. Three local structural files plus the query/player dispatch are the
+independently reversible unit. This is a new local presentation, not source-only
+authoring reuse or a promoted rendering abstraction.
+
+Acceptance questions: does the whole input visibly reach every row; is copying
+distinguishable from dividing a quantity; does one output per row explain the
+output size; and does the next two-component input make the matching interface
+clear? Review this exemplar before any shared motif or cross-domain rollout.
+
+Focused evidence: three semantic/sample tests and three scoped Chromium cases
+cover exact intermediate-object identity, derived results, source lineage,
+number-free bands, real playback, deterministic seeks, light mode,
+reduced-motion restoration, disposal and preservation of numeric pouring.
+The browser contact sheet includes 16 structural phases. These checks establish
+implementation behavior, not learner comprehension.
+
+Full typechecking, both original rectangular Chromium checks and all 12
+reachability checks pass. Regeneration changes only scanned-file count
+(4914 to 4916); no existing reachability root changes and no budget is raised.
+
 ## October 3 compact revision
 
 Playback correction: the preparation guard used inherited `visibility:hidden`.

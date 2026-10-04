@@ -1,5 +1,43 @@
 import { test, expect } from '@playwright/test';
 
+test('structural view shows whole inputs, matched ports and composed output without numerals in bands', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/experiments/rectangular-product/?view=structure#initial');
+  const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+  await expect(root.locator('.katex-error')).toHaveCount(0);
+  expect((await root.locator('[data-band]').allTextContents()).every(text => text === '')).toBe(true);
+  await expect(root.locator('[data-band="source-0"] > span')).toHaveCount(3);
+  await expect(root.locator('[data-band="row-0"] > span')).toHaveCount(3);
+  await expect(root.locator('[data-band^="next-row-"]')).toHaveCount(3);
+  await expect(root.locator('[data-band="next-row-0"] > span')).toHaveCount(2);
+  const sourceIds = await root.locator('[data-band="source-0"]').getAttribute('data-source-ids');
+  for (let r = 0; r < 2; r++) await expect(root.locator(`[data-band="copy-0-${r}"]`)).toHaveAttribute('data-source-ids', sourceIds!);
+  await root.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect.poll(async () => Number(await root.locator('.structure-stage').getAttribute('data-phase'))).toBeGreaterThan(.1);
+  await root.getByRole('button', { name: 'Pause', exact: true }).click();
+  await expect(root.locator('[data-band="copy-0-0"]')).toHaveCSS('visibility', 'visible');
+  const slider = root.getByRole('slider', { name: 'Animation position' });
+  const pose = () => root.locator('.structure-stage [style]').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')));
+  for (const phase of [0, .5, 1, 1.5, 2, 2.6, 3, 4, 6, 8, 8.6, 9, 9.5, 10, 11, 12]) {
+    const p = String(Number((phase / 12).toFixed(4)));
+    await slider.fill(p); const before = await pose();
+    await slider.fill('1'); await slider.fill('0'); await slider.fill(p); expect(await pose()).toEqual(before);
+    await root.locator('.matrix-card').screenshot({ path: info.outputPath(`structure-${phase}.png`) });
+  }
+  const resultIds = await root.locator('[data-band="result-0-0"], [data-band="result-0-1"]').evaluateAll(nodes => nodes.map(n => n.getAttribute('data-source-ids')).join(' '));
+  await expect(root.locator('[data-band="next-copy-0"]')).toHaveAttribute('data-source-ids', resultIds);
+  await expect(root.locator('[data-band^="next-result-"]')).toHaveCount(3);
+  await root.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await root.locator('.matrix-card').screenshot({ path: info.outputPath('structure-light.png') });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await root.getByRole('combobox', { name: 'Milestone' }).selectOption('8');
+  await page.reload(); await expect(root).toHaveAttribute('data-milestone', 'C');
+  expect(errors).toEqual([]);
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false })));
+  await expect(root).not.toHaveAttribute('data-ready');
+});
+
 test('autoplay paints moving copies between native endpoints after preparation', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/experiments/rectangular-product/?view=pouring#initial');

@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 3: the approved [structural pouring alternative](../reviews/2026-10-02-matrix-pouring.md)
+uses number-free component bands and one further compatible transformation to
+explain input/output dimensions. Its opt-in query shares the pouring player and
+existing visual checkpoint. Numeric pouring and reader layouts are preserved.
+
 October 2: rectangular first-cell layout accepted. The user then approved
 [column pouring](../reviews/2026-10-02-matrix-pouring.md), a new choreography
 candidate on the existing rectangular host. Its local Theseus contract owns

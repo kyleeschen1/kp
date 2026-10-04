@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 3 follow-up: user approved the number-free structural view at
+`?view=structure` on the same rectangular host. It shows complete inputs reaching
+each receiving row, component counts, and C's first column entering a compatible
+next matrix. The [pouring review](reviews/2026-10-02-matrix-pouring.md) owns scope
+and review questions; the same contract owns its visual checkpoint. Numeric
+pouring is preserved, and no shared structural renderer is promoted.
+
 October 3: user approved a compact revision of the pouring exemplar. B now
 descends as one bracketed grid, opens only horizontally, and retains native row
 spacing through result collection; the input column tips directly from A.

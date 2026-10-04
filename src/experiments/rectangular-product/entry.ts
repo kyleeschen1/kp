@@ -4,8 +4,9 @@ import { context } from './source.ts';
 
 const root = document.querySelector<HTMLElement>('#rectangular-player')!;
 let cleanup: (() => void) | undefined, disposed = false;
-const mount = new URLSearchParams(location.search).get('view') === 'pouring'
-  ? import('./pouring-player.ts').then(({ mountPouringPlayer }) => mountPouringPlayer(root))
+const requestedView = new URLSearchParams(location.search).get('view');
+const mount = requestedView === 'pouring' || requestedView === 'structure'
+  ? import('./pouring-player.ts').then(({ mountPouringPlayer }) => mountPouringPlayer(root, requestedView === 'structure' ? 'structure' : 'numeric'))
   : mountDotPlayer(root, context.passage, true, context);
 void mount.then(dispose => {
   if (disposed) dispose(); else cleanup = dispose;

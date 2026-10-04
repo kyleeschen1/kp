@@ -4,7 +4,7 @@
   "title": "Review matrix column pouring choreography",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: compact pouring revision ready at same query URL; B stays a bracketed grid with native row spacing. Review compact legibility and pacing.",
+  "summary": "HUMAN_CHECKPOINT: structural view ready at rectangular-product/?view=structure. Review whole-input copying, one output per row, and three-to-two-to-three dimensional composition. Numeric view preserved.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -47,6 +47,36 @@
       "status": "passed",
       "scope": "Two cases pass; new actual autoplay test failed before fix with cloned visibility hidden, then passed alongside all existing compact geometry and handoff checks",
       "checkedAt": "2026-10-04T02:27:43.090Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Structural projection, shared player and full repository type checks",
+      "checkedAt": "2026-10-04T04:11:46.138Z"
+    },
+    {
+      "command": "npm run test:matrix-pouring",
+      "status": "passed",
+      "scope": "Three semantic/sample checks including exact composition identity and dimensional references",
+      "checkedAt": "2026-10-04T04:11:47.721Z"
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Three Chromium cases: structural playback and 16 phases, lineage, theme, reverse, restore, disposal, and preserved numeric animation",
+      "checkedAt": "2026-10-04T04:12:09.865Z"
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "Twelve reachability checks; generated graph changes only scanned file count from 4914 to 4916",
+      "checkedAt": "2026-10-04T04:12:11.044Z"
+    },
+    {
+      "command": "npm run visual:rectangular-product",
+      "status": "passed",
+      "scope": "Both accepted original-route Chromium preservation checks pass after structural query addition",
+      "checkedAt": "2026-10-04T04:12:27.442Z"
     }
   ]
 }
