@@ -41,6 +41,12 @@
       "status": "passed",
       "scope": "Compact revision: preserved row spacing during block descent, evaluation, docking and assembly; direct tilt; existing handoffs, reverse, themes and disposal",
       "checkedAt": "2026-10-04T02:08:46.789Z"
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Two cases pass; new actual autoplay test failed before fix with cloned visibility hidden, then passed alongside all existing compact geometry and handoff checks",
+      "checkedAt": "2026-10-04T02:27:43.090Z"
     }
   ]
 }

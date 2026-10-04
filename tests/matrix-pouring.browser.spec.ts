@@ -1,5 +1,23 @@
 import { test, expect } from '@playwright/test';
 
+test('autoplay paints moving copies between native endpoints after preparation', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/experiments/rectangular-product/?view=pouring#initial');
+  const root = page.locator('#rectangular-player');
+  await expect(root).toHaveAttribute('data-ready', 'true');
+  await root.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect.poll(async () => Number(await root.locator('.pour-stage').getAttribute('data-phase'))).toBeGreaterThan(.15);
+  await root.getByRole('button', { name: 'Pause', exact: true }).click();
+  const copy = root.locator('[data-occurrence="0-0-left-0"]');
+  await expect(copy).toHaveCSS('opacity', '1');
+  // Wrapper opacity alone misses inherited visibility frozen into cloned ink.
+  for (const ink of await copy.locator('*').all()) await expect(ink).toHaveCSS('visibility', 'visible');
+  const before = await copy.getAttribute('style');
+  await root.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect.poll(() => copy.getAttribute('style')).not.toBe(before);
+  await root.getByRole('button', { name: 'Pause', exact: true }).click();
+});
+
 test('pouring retains lineage, native destinations, reversible holds and readable captures', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/experiments/rectangular-product/?view=pouring');

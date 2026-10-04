@@ -1,5 +1,7 @@
 .pour-stage { position: relative; min-width: 800px; height: 375px; overflow: clip; }
-.matrix-player[aria-busy="true"] .pour-stage { visibility: hidden; }
+/* Hide only the composite during measurement. Inherited visibility would be
+   frozen into computed-style material copies and hide their entire journey. */
+.matrix-player[aria-busy="true"] .pour-stage { opacity: 0; }
 .pour-stage .pour-equation { position: absolute; inset: 35px 0 auto; display: flex; justify-content: center; align-items: center; gap: 32px; height: 145px; }
 .pour-matrix { position: relative; display: inline-block; }
 .pour-matrix > .pour-name { display: block; text-align: center; margin-top: 12px; }

@@ -2,6 +2,16 @@
 
 ## October 3 compact revision
 
+Playback correction: the preparation guard used inherited `visibility:hidden`.
+Computed-style moving clones captured it, leaving invisible transit followed by
+visible native endpoints. Previous endpoint/pose checks missed actual ink
+visibility. The guard now hides the stage composite with non-inherited opacity;
+material descendants retain visible paint. A new real Play/Pause browser test
+reproduced the failure before the fix and passes afterward, checking descendant
+visibility and changing intermediate transforms. Both scoped browser cases and
+test typechecking pass. This repairs paint continuity without changing timing or
+overriding reduced-motion preferences; visual review remains the existing gate.
+
 User approved trying a more compact choreography after the first pouring trial:
 preserve B's gestalt, descend as a single bracketed grid, expand horizontally
 only, and tip each input directly from A. This revision replaces the trial at
