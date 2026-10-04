@@ -19,6 +19,30 @@ test('pouring retains lineage, native destinations, reversible holds and readabl
   const center = async (selector: string) => root.locator(selector).evaluate(node => {
     const b = node.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 };
   });
+  const sourceTop = await center('[data-pour-entry="B-0-0"]');
+  const sourceBottom = await center('[data-pour-entry="B-1-0"]');
+  const sourceSpacing = sourceBottom.y - sourceTop.y;
+  for (const phase of [.5, 1, 3, 4, 6, 7, 8, 12, 15, 16, 17]) {
+    await slider.fill(String(Number((phase / 17).toFixed(4))));
+    for (const c of [0, 1]) {
+      const top = await center(`.pour-row[data-column="${c}"][data-row="0"] [data-kp-dot-key="sum"]`);
+      const bottom = await center(`.pour-row[data-column="${c}"][data-row="1"] [data-kp-dot-key="sum"]`);
+      expect(bottom.y - top.y).toBeCloseTo(sourceSpacing, 1);
+    }
+    for (const label of ['collected', 'C']) {
+      const top = await center(`[data-pour-entry="${label}-0-0"]`), bottom = await center(`[data-pour-entry="${label}-1-0"]`);
+      expect(bottom.y - top.y).toBeCloseTo(sourceSpacing, 1);
+    }
+  }
+  for (const phase of [.3, .6]) {
+    await slider.fill(String(Number((phase / 17).toFixed(4))));
+    const top = await center('[data-occurrence="0-0-left-0"]'), bottom = await center('[data-occurrence="0-1-left-0"]');
+    expect(bottom.y - top.y).toBeCloseTo(sourceSpacing, 1);
+    await expect(root.locator('.pour-working-bracket').first()).toHaveCSS('opacity', '1');
+  }
+  await slider.fill(String(Number((1.7 / 17).toFixed(4))));
+  const originalInput = await center('[data-pour-entry="A-1-0"]'), movingInput = await center('[data-occurrence="0-0-right-1"]');
+  expect(movingInput.y).toBeGreaterThan(originalInput.y);
   await root.getByRole('combobox', { name: 'Milestone' }).selectOption('4');
   for (let k = 0; k < 3; k++) {
     const first = await center(`.pour-row[data-column="0"][data-row="0"] [data-kp-dot-key="pair-right-${k}"]`);

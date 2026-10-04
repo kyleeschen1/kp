@@ -1,5 +1,31 @@
 # Matrix pouring exemplar
 
+## October 3 compact revision
+
+User approved trying a more compact choreography after the first pouring trial:
+preserve B's gestalt, descend as a single bracketed grid, expand horizontally
+only, and tip each input directly from A. This revision replaces the trial at
+the same query URL. The original first-cell page remains unchanged.
+
+Working row positions now derive from B's measured native row centers plus one
+shared downward translation. The collection aligns to those same row centers;
+no vertical compression occurs during docking or final assembly. Native bracket
+copies travel with B, expand around the receiving slots, narrow during addition,
+and hand off to the collection. The separate 42px column lift is removed. Input
+selection/tilt replaces the former lift milestone. The stage is 375px rather
+than 570px high. Math identities, scalar fusion, shared clock and theme remain
+unchanged; these local layout/motion edits are the rollback unit.
+
+Verified: two semantic/sample tests and the pouring Chromium check, including
+new measured invariants for source/work/result row-spacing equality, rigid row
+descent, and direct downward input transit. Native handoffs, seek/reverse, light
+mode, reduced-motion restoration, accessibility and disposal remain covered.
+Application and test TypeScript checks plus the original rectangular browser
+checks protect the preservation boundary. No new source modules or budget changes.
+Visual review remains required for compact pairing legibility and pacing.
+
+The following records the original, more spread-out trial and its provenance.
+
 Approved: user accepted the rectangular layout, discussed the column-pouring
 story, then explicitly requested implementation. This new visual question takes
 priority over the older source-only continuation; it does not accept its own look.

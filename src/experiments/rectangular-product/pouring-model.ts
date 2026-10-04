@@ -19,8 +19,8 @@ export function pouringModel(product = pouringProduct) {
 }
 export const pouringBeats = Object.freeze([
   ['initial', 'B acts on each column of A. The result is C = BA.'],
-  ['rows-1', 'Open the two receiving rows. Each will receive the same input.'],
-  ['lift-1', 'Lift the first input column from A.'],
+  ['rows-1', 'Move B down as one block, opening space beside each coefficient.'],
+  ['input-1', 'Tip the first input column directly from A toward the receiving grid.'],
   ['tilt-1', 'Tip its components into their matching positions in the first row.'],
   ['pour-1', 'Keep one copy here; pass the same components to the next row.'],
   ['products-1', 'Multiply each matched pair.'],
@@ -28,7 +28,7 @@ export const pouringBeats = Object.freeze([
   ['sums-1', 'Each receiving row produces one component of the output.'],
   ['dock-1', 'Keep those results together as the first column of C.'],
   ['rows-2', 'The same receiving rows are ready for the next input.'],
-  ['lift-2', 'Lift the second column of A.'],
+  ['input-2', 'Tip the second column directly into the same receiving grid.'],
   ['tilt-2', 'Use the same matching positions.'],
   ['pour-2', 'Every row receives this whole input too.'],
   ['products-2', 'Multiply the new pairs.'],

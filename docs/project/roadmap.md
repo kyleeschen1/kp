@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 3: user approved a compact revision of the pouring exemplar. B now
+descends as one bracketed grid, opens only horizontally, and retains native row
+spacing through result collection; the input column tips directly from A.
+The same pouring contract and URL own review. This supersedes the trial's
+separate column lift and widely spaced receiving rows, not its semantic model.
+
 October 2: the user accepted the rectangular first-cell layout, then explicitly
 approved the [matrix pouring exemplar](reviews/2026-10-02-matrix-pouring.md).
 Its opt-in existing-host query now demonstrates C = BA: each input column is

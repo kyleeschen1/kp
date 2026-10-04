@@ -4,7 +4,7 @@
   "title": "Review matrix column pouring choreography",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: opt-in pouring exemplar ready at /experiments/rectangular-product/?view=pouring. Review tilt, downward copying, arithmetic pace and result collection. Checks passed; no promotion.",
+  "summary": "HUMAN_CHECKPOINT: compact pouring revision ready at same query URL; B stays a bracketed grid with native row spacing. Review compact legibility and pacing.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,12 @@
       "status": "passed",
       "scope": "Two preserved original-page Chromium cases",
       "checkedAt": "2026-10-03T01:12:58.858Z"
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Compact revision: preserved row spacing during block descent, evaluation, docking and assembly; direct tilt; existing handoffs, reverse, themes and disposal",
+      "checkedAt": "2026-10-04T02:08:46.789Z"
     }
   ]
 }

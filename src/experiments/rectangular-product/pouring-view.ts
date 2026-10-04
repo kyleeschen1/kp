@@ -1,6 +1,5 @@
 import { renderLatexToHtml } from '../../rendering/katex-adapter.ts';
 import { cloneElementWithComputedStyles, stripKpMaterialCloneAuthority, makeKpMaterialOwnerInert } from '../../rendering/computed-style-clone.ts';
-import { kpCanonicalFunctionWrapMotionProfile as wrap } from '../../animation/function-wrap-motif.ts';
 import type { KpTypedMatrix } from '../../math/typed-semantic-math.ts';
 import { stageHtml, signedToken } from '../dot-product-passage/presentation.ts';
 import { prepareFusion } from '../dot-product-passage/fusion.ts';
@@ -14,7 +13,7 @@ export function pouringHtml(model: PouringModel) {
   const { product } = model;
   const matrix = (value: KpTypedMatrix, label: string) => `<span class="pour-matrix" data-matrix="${label}">${math(matrixLatex(value, label))}<span class="pour-name">${math(label)}</span></span>`;
   return `<div class="pour-stage" aria-hidden="true"><div class="pour-equation">${matrix(product.result, 'C')}${math('=')}${matrix(product.left, 'B')}${math('\\cdot')}${matrix(product.right, 'A')}</div>
-    ${model.columns.map((column, c) => column.map((passage, r) => `<div class="pour-row" data-column="${c}" data-row="${r}" style="top:${270 + r * 110}px">${stageHtml(passage)}</div>`).join('')).join('')}
+    ${model.columns.map((column, c) => column.map((passage, r) => `<div class="pour-row" data-column="${c}" data-row="${r}">${stageHtml(passage)}</div>`).join('')).join('')}
     <div class="pour-collection">${math(matrixLatex(product.result, 'collected'))}</div><div class="pour-material"></div></div>`;
 }
 interface Point { x: number; y: number }
@@ -49,9 +48,7 @@ export function mountPouringView(root: HTMLElement, model: PouringModel) {
   let points = new Map<HTMLElement, Point>();
   let assembly = { x: 0, y: 0 };
   let disposed = false;
-  const brackets = ['left', 'right'].map(side => {
-    const node = document.createElement('span'); node.className = 'pour-column-bracket'; node.dataset['side'] = side; layer.append(node); return node;
-  });
+  let brackets: { node: HTMLElement; side: number; start: Point; opened: Point; closed: Point; dock: Point }[] = [];
   const reset = () => {
     for (const node of stage.querySelectorAll<HTMLElement>('.pour-row, [data-kp-dot-key], .dot-plus, .dot-pairs, .dot-products, .dot-sum, [data-pour-entry], .pour-collection, .pour-collection .mopen, .pour-collection .mclose')) {
       node.style.opacity = '1'; node.style.transform = ''; node.style.clipPath = '';
@@ -59,7 +56,8 @@ export function mountPouringView(root: HTMLElement, model: PouringModel) {
   };
   const prepare = () => {
     if (disposed) return;
-    reset(); copies.forEach(copy => copy.node.remove()); copies = []; points = new Map();
+    reset(); copies.forEach(copy => copy.node.remove()); brackets.forEach(bracket => bracket.node.remove());
+    copies = []; brackets = []; points = new Map();
     const bounds = stage.getBoundingClientRect();
     const point = (node: HTMLElement) => {
       const b = node.getBoundingClientRect(); const p = { x: b.x - bounds.x + b.width / 2, y: b.y - bounds.y + b.height / 2 }; points.set(node, p); return p;
@@ -73,6 +71,19 @@ export function mountPouringView(root: HTMLElement, model: PouringModel) {
       const width = Math.max(...operands.map(node => node.getBoundingClientRect().width));
       operands.forEach(node => { node.style.width = `${width}px`; node.style.textAlign = 'center'; });
     }
+    // Translate the source grid as a block: row spacing is measured from B,
+    // never chosen independently for the working rows or output collection.
+    const descent = 125;
+    for (const row of rows) {
+      row.container.style.top = '0px';
+      const offset = point(row.native('pair-left-0')).y;
+      row.container.style.top = `${point(entry(`B-${row.r}-0`)).y + descent - offset}px`;
+    }
+    const firstRow = rows[0]!;
+    const leftEdge = firstRow.container.querySelector<HTMLElement>('.dot-pairs .dot-term')!.getBoundingClientRect().left - bounds.left;
+    collection.style.left = `${leftEdge - collection.getBoundingClientRect().width - 30}px`;
+    collection.style.top = '0px';
+    collection.style.top = `${point(firstRow.native('sum')).y - point(entry('collected-0-0')).y}px`;
     // Prepare all native geometry before hiding inactive columns. Layout is
     // immutable during playback; every seek projects from these same endpoints.
     for (const row of rows) {
@@ -101,6 +112,21 @@ export function mountPouringView(root: HTMLElement, model: PouringModel) {
     const a = collection.querySelector<HTMLElement>('.katex')!.getBoundingClientRect();
     const b = stage.querySelector<HTMLElement>('[data-matrix="C"] > .katex')!.getBoundingClientRect();
     assembly = { x: b.x - a.x, y: b.y - a.y };
+    const terms = [...firstRow.container.querySelectorAll<HTMLElement>('.dot-pairs .dot-term')];
+    const rightEdge = terms.at(-1)!.getBoundingClientRect().right - bounds.left;
+    const sumCenter = point(firstRow.native('sum')).x;
+    const sumWidth = Math.max(...rows.map(row => row.native('sum').getBoundingClientRect().width));
+    for (const [side, selector] of [[-1, '.mopen'], [1, '.mclose']] as const) {
+      const source = stage.querySelector<HTMLElement>(`[data-matrix="B"] > .katex .katex-html ${selector}`)!;
+      const destination = collection.querySelector<HTMLElement>(`.katex-html ${selector}`)!;
+      const ink = cloneElementWithComputedStyles(source); stripKpMaterialCloneAuthority(ink);
+      const node = document.createElement('span'); node.className = 'pour-ink pour-working-bracket';
+      node.dataset['matrixSourceId'] = model.product.left.id; node.dataset['side'] = String(side);
+      node.append(ink); makeKpMaterialOwnerInert(node); layer.append(node);
+      const start = point(source), y = start.y + descent;
+      brackets.push({ node, side, start, opened: { x: side < 0 ? leftEdge - 8 : rightEdge + 8, y },
+        closed: { x: sumCenter + side * (sumWidth / 2 + 9), y }, dock: point(destination) });
+    }
   };
   const render = (progress: number) => {
     if (disposed) return;
@@ -109,11 +135,8 @@ export function mountPouringView(root: HTMLElement, model: PouringModel) {
     const assemblyT = ease((phase - 16) / .85);
     collection.style.transform = `translate(${assembly.x * assemblyT}px, ${assembly.y * assemblyT}px)`;
     collection.style.opacity = phase >= 17 ? '0' : '1';
-    const reception = ease((phase - 7 - wrap.enclosureReception.start) / (wrap.enclosureReception.end - wrap.enclosureReception.start));
     for (const node of collection.querySelectorAll<HTMLElement>('.katex-html .mopen, .katex-html .mclose')) {
-      const side = node.classList.contains('mopen') ? -1 : 1;
-      node.style.opacity = String(reception);
-      node.style.transform = `translateX(${side * 12 * (1 - reception)}px) scale(${1 + (wrap.enclosureReception.initialScale - 1) * (1 - reception)})`;
+      node.style.opacity = phase >= 8 ? '1' : '0';
     }
     for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
       entry(`C-${r}-${c}`).style.opacity = phase >= 17 ? '1' : '0';
@@ -156,14 +179,13 @@ export function mountPouringView(root: HTMLElement, model: PouringModel) {
         visible = q > 0 && q < 1; position = mix(copy.start, copy.end, ease(q / .85));
       } else if (copy.r === 0) {
         visible = q > 1 && q < 3;
-        const lifted = { x: copy.start.x, y: copy.start.y - 42 * ease((q - 1) / .8) };
-        position = lifted;
-        if (q >= 2) {
+        position = copy.start;
+        if (q >= 1) {
           // One column axis pivots; letters remain upright. Its ordered radii
           // open to the measured receiving slots without changing vector type.
           const cohort = copies.filter(other => other.c === copy.c && other.r === 0 && other.side === 'right');
-          const center = cohort[1]!; const t = ease((q - 2) / .85);
-          const axis = mix({ x: center.start.x, y: center.start.y - 42 }, center.end, t);
+          const center = cohort[1]!; const t = ease((q - 1.15) / 1.7);
+          const axis = mix(center.start, center.end, t);
           const radius = (copy.start.y - center.start.y) * (1 - t) + (copy.end.x - center.end.x) * t;
           position = { x: axis.x + radius * Math.sin(t * Math.PI / 2), y: axis.y + radius * Math.cos(t * Math.PI / 2) };
         }
@@ -174,16 +196,17 @@ export function mountPouringView(root: HTMLElement, model: PouringModel) {
       }
       at(copy.node, position); copy.node.style.opacity = visible ? '1' : '0';
     }
-    const c = phase >= 9 ? 1 : 0, q = phase - c * 8;
-    const column = copies.filter(copy => copy.c === c && copy.r === 0 && copy.side === 'right');
-    const top = column[0]!.start, bottom = column[2]!.start;
-    brackets.forEach((node, i) => {
-      node.style.left = `${top.x + (i === 0 ? -22 : 13)}px`;
-      node.style.top = `${top.y - 17 - 42 * ease((q - 1) / .8)}px`;
-      node.style.height = `${bottom.y - top.y + 34}px`;
-      node.style.opacity = q > 1 && q < 3 ? String(1 - ease((q - 2) / .55)) : '0';
+    const c = phase >= 8 ? 1 : 0, q = phase - c * 8;
+    brackets.forEach(bracket => {
+      let position = mix(bracket.start, bracket.opened, ease(q / .85));
+      if (q >= 6) position = mix(bracket.opened, bracket.closed, ease((q - 6) / .85));
+      if (q >= 7) position = mix(bracket.closed, bracket.dock, ease((q - 7) / .85));
+      at(bracket.node, position);
+      // First-column enclosure hands off at the collected matrix. For the
+      // second column, merge the arriving enclosure into that same frame.
+      bracket.node.style.opacity = q > 0 && q < 8 ? String(c === 1 && q >= 7 ? 1 - ease((q - 7) / .85) : 1) : '0';
     });
   };
   prepare();
-  return { prepare, render, dispose() { disposed = true; copies.forEach(copy => copy.node.remove()); brackets.forEach(node => node.remove()); } };
+  return { prepare, render, dispose() { disposed = true; copies.forEach(copy => copy.node.remove()); brackets.forEach(bracket => bracket.node.remove()); } };
 }

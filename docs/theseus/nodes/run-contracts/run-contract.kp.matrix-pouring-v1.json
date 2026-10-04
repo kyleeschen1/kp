@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Matrix pouring exemplar",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: implementation and discovery checks complete; exemplar slice remains in progress pending visual judgment. No shared promotion or source-only variation claimed.",
+  "summary": "HUMAN_CHECKPOINT: compact revision requested by user is implemented and checked; visual acceptance pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,7 +30,7 @@
     {
       "id": "exemplar",
       "title": "Pouring exemplar and visual checkpoint",
-      "summary": "User approved new pouring exemplar after accepting prior rectangular layout.",
+      "summary": "User-requested compact revision implemented: shared native row spacing, bracketed block descent, direct tilt and compact result collection. Await revised visual judgment.",
       "status": "in-progress"
     }
   ]
