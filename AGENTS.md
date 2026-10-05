@@ -53,6 +53,43 @@ collaboration experiment, not a learner-facing editorial voice standard.
 
 ## Codex execution reliability
 
+### Standing Git checkpoint and backup policy
+
+User-approved on 2026-10-05; applies to every workflow, including generic
+Theseus loops and visual discovery. See
+`docs/project/decisions/2026-10-05-git-checkpoints-and-backup.md`.
+
+- Commit each coherent, recoverable work slice after its relevant checks;
+  include implementation and evidence together. Do not wait for visual approval
+  to commit an otherwise checked candidate. Explicitly label unfinished
+  checkpoints and record failing or unrun checks; never call them verified.
+- During active work, push unbacked commits at least hourly, and before every
+  session handoff, visual-review stop, or task/branch switch. If a slice runs
+  longer than an hour, create a clearly labeled recoverable checkpoint of owned
+  work and push it. Check cadence at slice boundaries and before long operations;
+  if an operation overruns it, back up immediately when control returns.
+- Standing authorization covers normal, non-force pushes of the current
+  `feature/...` or `spike/...` branch to the same-named branch on `origin`, only
+  when its push destination is `github.com:kyleeschen1/kp.git` (SSH or HTTPS).
+  No repeated user confirmation is needed within that scope. Verify the actual
+  push URL before pushing; use an explicit branch refspec and set upstream.
+- This does not authorize merges, direct pushes to `main`/`dev`, force pushes,
+  remote branch deletion, deployment, or publication. Merge only after the
+  bounded work is accepted and required checks pass, within merge authority.
+  `branch:finish` also merges/deletes: never use it just to checkpoint or back up.
+- Stage exact owned paths/hunks after reviewing the diff. Preserve unrelated
+  dirty work and never sweep it into a checkpoint. Existing unrelated dirt does
+  not prevent committing owned changes or pushing existing commits.
+- At session start inspect branch, upstream, dirty work and unpushed commits.
+  At handoff verify the remote branch tip matches local HEAD after the push;
+  report the branch/commit and any uncommitted or unbacked work. If network,
+  authentication or remote divergence blocks backup, retain local commits,
+  report the exact blocker and retry next opportunity. Never force or merge
+  automatically to resolve it, and never report an attempted push as a backup.
+
+This is an agent execution obligation, not a background timer. On abrupt
+interruption, recover and perform the overdue checkpoint/backup on resumption.
+
 - Standing user direction (2026-09-06): during an approved loop, continue across
   routine nonvisual checkpoints and repairable verification failures until a
   required visual approval is needed. This rule persists across sessions.
