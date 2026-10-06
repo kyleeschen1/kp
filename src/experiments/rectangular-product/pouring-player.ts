@@ -32,7 +32,7 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     ${structural ? '<p>B has two rows of three coefficients: it accepts three components and produces two. A has two such input columns, so C has shape 2 × 2. D has three rows of two coefficients. It accepts C’s two-component columns and produces three components each. The animation follows C’s first column through D; it does not animate the second. Matching counts are necessary; applications also require compatible meanings, bases and units.</p>' : ''}</details>`;
   await document.fonts.ready;
   const view = polynomial ? polynomial.mountPolynomialView(root) : structural ? structural.mountStructureView(root) : mountPouringView(root, model);
-  const clock = createKpReaderTimelinePlaybackClock({ id: `${root.id}.${mode}`, durationMs: polynomial ? 16000 : structural ? 24000 : 34000 });
+  const clock = createKpReaderTimelinePlaybackClock({ id: `${root.id}.${mode}`, durationMs: polynomial ? 28000 : structural ? 24000 : 34000 });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let config = readMatrixConfig(document), disposed = false, lastCue = '';
   const slider = root.querySelector<HTMLInputElement>('[data-scrub]')!;

@@ -10,17 +10,36 @@ test('polynomial extraction retains coefficient grid and shared basis through re
   const slider = root.getByRole('slider', { name: 'Animation position' });
   const coefficients = root.locator('[data-poly^="coefficient-"]:not(svg)');
   const positions = () => coefficients.evaluateAll(nodes => nodes.map(n => { const b = n.getBoundingClientRect(); return [b.x, b.y]; }));
-  await slider.fill('0.25'); const grid = await positions();
+  await expect(root.locator('[data-poly="coefficient-1-0"]')).toHaveCSS('opacity', '0');
+  await expect(root.locator('[data-unit]')).toHaveCSS('opacity', '0');
+  await slider.fill('0.125'); const grid = await positions();
+  await expect(root.locator('[data-unit]')).toHaveCSS('opacity', '1');
   const persistentName = root.locator('[data-poly="name-0"]');
   const namePaint = await persistentName.screenshot();
   const poses = () => root.locator('.polynomial-stage [style]').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')));
-  for (const phase of [0, .5, 1, 1.5, 1.8, 2, 2.5, 3, 3.5, 4]) {
-    await slider.fill(String(phase / 4));
+  for (const phase of [0, .5, 1, 2, 2.2, 2.5, 3, 3.5, 4, 4.75, 5, 6, 7, 8]) {
+    const position = String(Number((phase / 8).toFixed(4)));
+    await slider.fill(position);
     if (phase >= 1) expect(await positions()).toEqual(grid);
-    const before = await poses(); await slider.fill('1'); await slider.fill('0'); await slider.fill(String(phase / 4));
+    const before = await poses(); await slider.fill('1'); await slider.fill('0'); await slider.fill(position);
     expect(await poses()).toEqual(before);
     for (const ink of await root.locator('[data-poly="name-0"] .katex *').all()) await expect(ink).toHaveCSS('visibility', 'visible');
-    if (phase >= 1) expect(await persistentName.screenshot()).toEqual(namePaint);
+    if ([1, 3, 4, 5, 8].includes(phase)) expect(await persistentName.screenshot()).toEqual(namePaint);
+    if (phase >= 2.2 && phase <= 4.75) await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
+    if (phase === 6) {
+      await expect(root.locator('[data-poly="coefficient-0-1"]')).toHaveCSS('opacity', '1');
+      await expect(root.locator('[data-poly="coefficient-1-1"]')).toHaveCSS('opacity', '0.45');
+    }
+    if (phase === 7) {
+      await expect(root.locator('[data-poly="coefficient-1-0"]')).toHaveCSS('opacity', '1');
+      await expect(root.locator('[data-poly="basis-0-0"]')).toHaveCSS('opacity', '1');
+      await expect(root.locator('[data-poly="coefficient-0-1"]')).toHaveCSS('opacity', '0.45');
+    }
+    if (phase === 8) await expect(root.locator('[data-poly="coefficient-1-1"]')).toHaveCSS('opacity', '1');
+    if (phase >= 3 && phase <= 4) {
+      const centers = await root.locator('[data-poly^="basis-0-"]').evaluateAll(nodes => nodes.map(n => { const b = n.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }));
+      for (let i = 1; i < centers.length; i++) expect(Math.hypot(centers[i]!.x - centers[i - 1]!.x, centers[i]!.y - centers[i - 1]!.y)).toBeCloseTo(72, 1);
+    }
     const card = root.locator('.matrix-card');
     const cardBox = (await card.boundingBox())!, nameBox = (await persistentName.boundingBox())!;
     const capture = await card.screenshot({ path: info.outputPath(`polynomial-phase-${phase}.png`) });
@@ -41,7 +60,7 @@ test('polynomial extraction retains coefficient grid and shared basis through re
     await expect(second).toHaveCSS('opacity', '0');
   }
   await root.getByRole('button', { name: 'Previous', exact: true }).click();
-  await expect.poll(async () => Number(await root.locator('.polynomial-stage').getAttribute('data-phase'))).toBeLessThan(3.5);
+  await expect.poll(async () => Number(await root.locator('.polynomial-stage').getAttribute('data-phase'))).toBeLessThan(7.5);
   await slider.fill('0');
   await root.getByRole('button', { name: 'Play', exact: true }).click();
   await expect.poll(async () => Number(await root.locator('.polynomial-stage').getAttribute('data-phase'))).toBeGreaterThan(.1);
@@ -49,7 +68,7 @@ test('polynomial extraction retains coefficient grid and shared basis through re
   await root.getByRole('button', { name: 'Light mode', exact: true }).click();
   await slider.fill('1'); await root.locator('.matrix-card').screenshot({ path: info.outputPath('polynomial-light.png') });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await root.getByRole('combobox', { name: 'Milestone' }).selectOption('4');
+  await root.getByRole('combobox', { name: 'Milestone' }).selectOption('5');
   await page.reload(); await expect(root).toHaveAttribute('data-milestone', 'matrix');
   expect(errors).toEqual([]);
   await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false })));

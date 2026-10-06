@@ -16,7 +16,7 @@ test('polynomial factorization keeps declared basis identities, missing terms an
     const values = polynomialProduct.result.rows.map(row => compileExpression(row[0]!.expression)({ t }));
     assert.deepEqual(values, [2 * t ** 3 - t + 4, t ** 3 + 3 * t ** 2 - 2]);
   }
-  polynomialBeats.forEach((beat, i) => assert.equal(samplePolynomial(i / 4).beat, beat));
+  polynomialBeats.forEach((beat, i) => assert.equal(samplePolynomial(i / (polynomialBeats.length - 1)).beat, beat));
   assert.throws(() => samplePolynomial(NaN), /finite/);
 });
 

@@ -1,5 +1,54 @@
 # Polynomial basis extraction exemplar
 
+## Six design objections and approved repair (October 6)
+
+The user requested durable recording and a repair for each objection below.
+All six remain visual-review questions even after executable checks pass.
+
+1. **The coefficient grid is recognized too late.** Align first, then hold the
+   stable grid before extraction; brackets should confirm an established shape.
+2. **Collection looks like deletion rather than shared structure.** Before
+   extraction, emphasize both cubic terms and their coefficients together.
+   Preserve their shared basis reference through collection and reverse expansion.
+3. **The pivot changes translation, angle and spacing at once.** Keep header and
+   vector spacing identical and rotate the arrangement around one fixed pivot;
+   keep individual glyphs upright.
+4. **Equality remains visible during invalid intermediate arrangements.**
+   Withdraw equality before decomposition and restore only when the complete
+   matrix equation is assembled. Reverse playback must obey the same condition.
+5. **Explicit unit coefficients make the opening awkward.** Begin with ordinary
+   polynomial notation, then reveal implicit ones and missing zeros deliberately.
+6. **The endpoint gets less explanatory attention than the journey.** Hold the
+   completed equation; show polynomial-to-row and basis-to-column correspondence,
+   then return to an undimmed final hold.
+
+Scope: the existing polynomial query, local model/view and focused tests. Preserve
+the mathematical product, numeric/structural views and shared clock. The rollback
+unit is this local choreography revision. No global salience/motif promotion.
+
+All six repairs are implemented in the revised nine-milestone, 28-second
+candidate. `align` holds the fixed grid; `notice` emphasizes both cubic terms;
+`collect` begins only after equality has withdrawn; `pivot` retains 72px spacing
+under one rigid quarter-turn; `matrix` restores equality after enclosure;
+`rows` and `columns` inspect correspondences; `hold` restores full context.
+The opening suppresses implicit positive ones and the magnitude of −1 while
+retaining the negative sign and semantic coefficient identity. Zero terms and
+unit coefficients emerge during alignment.
+
+Executable checks cover hidden/revealed unit coefficients, fixed grid positions,
+constant inter-basis distances throughout the turn, equality absence during
+decomposition, row/column attention, restored final context, reverse-seek parity
+and persistent paint. Four semantic tests, four browser cases and affected
+application/test TypeScript checks pass. The first browser attempt exposed a
+test range value not aligned to the slider's precision; normalizing sampled
+positions to its four-decimal step repaired the harness. Visual effectiveness
+of all six treatments remains for the user to assess.
+
+## Initial implementation provenance
+
+The following describes the original candidate. Its explicit-unit opening,
+five-beat timing and changing pivot spacing are superseded by the revision above.
+
 Approved by the user after the square-cell pouring review. Pause further pouring
 refinement: the spaced pairing rows obscure the matrix gestalt. The next test
 is reversible polynomial-to-matrix representation, preserving a coefficient grid

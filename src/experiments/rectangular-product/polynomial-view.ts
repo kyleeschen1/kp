@@ -12,12 +12,12 @@ export const polynomialEquation = String.raw`\begin{bmatrix}p(t)\\q(t)\end{bmatr
 export function polynomialHtml() {
   return `<div class="polynomial-stage" aria-hidden="true">
     ${polynomialCoefficients.map((row, r) => token(`name-${r}`, polynomialProduct.result.rows[r]![0]!.id, r ? 'q(t)' : 'p(t)') + token(`equals-${r}`, 'poly.representation', '=') + row.map((n, c) =>
-      token(`coefficient-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, String(n)) +
+      (n === -1 ? `<span class="poly-token" data-poly="coefficient-${r}-${c}" data-source-id="${polynomialProduct.left.rows[r]![c]!.id}">${latex('-')}<span data-unit>${latex('1')}</span></span>` : token(`coefficient-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, String(n))) +
       token(`basis-${r}-${c}`, polynomialBasis[c]!.id, expressionToLatex(polynomialBasis[c]!.expression)) +
       token(`plus-${r}-${c}`, `poly.sum.${r}`, '+') + token(`dot-${r}-${c}`, `poly.term.${r}.${c}`, '\\cdot')
     ).join('')).join('')}
     ${enclosure('coefficient-brackets', 215, 177, 266, 98)}
-    ${enclosure('basis-brackets', 534, 129, 52, 194)}
+    ${enclosure('basis-brackets', 534, 93, 52, 266)}
     ${enclosure('output-brackets', 75, 177, 74, 98)}
   </div>`;
 }
@@ -35,28 +35,50 @@ export function mountPolynomialView(root: HTMLElement) {
   const render = (progress: number) => {
     if (disposed) return;
     const { phase } = samplePolynomial(progress); stage.dataset['phase'] = String(phase);
-    const align = ease(phase), collect = ease((phase - 1) / .8), turn = ease(phase - 2), enclose = ease(phase - 3);
+    const align = ease(phase), collect = ease((phase - 2.2) / .6), turn = ease(phase - 3), enclose = ease((phase - 4) / .7);
+    // Equality only accompanies complete expressions, including on reverse seek.
+    const equality = 1 - ease((phase - 2) / .2) + ease((phase - 4.85) / .15);
+    const cubicFocus = ease(phase - 1) * (1 - ease((phase - 2) / .2));
+    const rowFocus = ease(phase - 5) * (1 - ease(phase - 6));
+    const columnFocus = ease(phase - 6) * (1 - ease(phase - 7));
     for (let r = 0; r < 2; r++) {
       const y = 202 + r * 48;
       pose(`name-${r}`, 112, y);
-      pose(`equals-${r}`, 174, mix(y, 226, enclose), r ? 1 - enclose : 1);
+      pose(`equals-${r}`, 174, mix(y, 226, enclose), equality * (r ? 1 - enclose : 1));
       for (let c = 0; c < 4; c++) {
         const value = polynomialCoefficients[r]![c]!;
         const presentBefore = polynomialCoefficients[r]!.slice(0, c).filter(n => n !== 0).length;
         const x = mix(240 + presentBefore * 96, 240 + c * 72, align);
         const presence = value === 0 ? align : 1;
-        pose(`coefficient-${r}-${c}`, x, y, presence);
+        pose(`coefficient-${r}-${c}`, x, y, value === 1 ? align : presence);
+        nodes.get(`coefficient-${r}-${c}`)!.querySelector<HTMLElement>('[data-unit]')?.style.setProperty('opacity', String(align));
         pose(`plus-${r}-${c}`, x - 24, y, c > 0 && value >= 0 ? presence * (1 - collect) : 0);
         // A single retained occurrence owns each collected basis expression.
         // Its sibling converges to that exact pose before relinquishing paint.
-        const angle = turn * Math.PI / 2, offset = (c - 1.5) * mix(72, 48, turn);
-        const bx = mix(348, 560, turn) + offset * Math.cos(angle);
-        const by = mix(118, 226, turn) + offset * Math.sin(angle);
+        // Rotate the arrangement rigidly around one fixed point. All inter-term
+        // distances remain 72px; upright native glyphs do not rotate with it.
+        const angle = turn * Math.PI / 2, dx = 240 + c * 72 - 400, dy = 118 - 278;
+        const bx = 400 + dx * Math.cos(angle) - dy * Math.sin(angle);
+        const by = 278 + dx * Math.sin(angle) + dy * Math.cos(angle);
         const basisPresence = c === 3 ? align : presence;
-        pose(`basis-${r}-${c}`, mix(x + 23, bx, collect), mix(y, by, collect),
-          basisPresence * (r ? 1 - ease((phase - 1.8) / .2) : 1));
+        const initialOffset = value === 1 ? 0 : value === -1 ? 14 : 23;
+        pose(`basis-${r}-${c}`, mix(x + mix(initialOffset, 23, align), bx, collect), mix(y, by, collect),
+          basisPresence * (r ? 1 - ease((phase - 2.8) / .2) : 1));
         pose(`dot-${r}-${c}`, x + 11, y, c === 3 ? align * (1 - collect) : 0);
       }
+    }
+    // Correspondence is resolved against the fixture's row and basis roles;
+    // opacity expresses attention, independently of each occurrence's presence.
+    for (const [id, node] of nodes) {
+      const coefficient = /^coefficient-(\d)-(\d)$/.exec(id);
+      const basis = /^basis-(\d)-(\d)$/.exec(id);
+      const name = /^name-(\d)$/.exec(id);
+      const fade = Math.max(
+        cubicFocus * ((coefficient?.[2] === '0' || basis?.[2] === '0') ? 0 : 1),
+        rowFocus * ((coefficient?.[1] === '0' || name?.[1] === '0') ? 0 : 1),
+        columnFocus * ((coefficient?.[2] === '0' || basis?.[2] === '0') ? 0 : 1),
+      );
+      if (coefficient || basis || name) node.style.opacity = String(Number(node.style.opacity) * (1 - .55 * fade));
     }
     for (const id of ['coefficient-brackets', 'basis-brackets', 'output-brackets']) {
       const node = nodes.get(id)!;

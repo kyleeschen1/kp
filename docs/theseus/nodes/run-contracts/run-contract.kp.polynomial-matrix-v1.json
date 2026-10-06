@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Polynomial basis extraction exemplar",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: one bounded polynomial basis extraction exemplar implemented and checked; visual judgment required before generalizing.",
+  "summary": "HUMAN_CHECKPOINT: six-objection repair implemented and verified; ordinary notation, stable grid, source emphasis, rigid pivot, equality gating and endpoint correspondences await visual acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,7 +30,7 @@
     {
       "id": "exemplar",
       "title": "Exemplar",
-      "summary": "User-approved stable coefficient grid and reversible collection of declared polynomial basis; visual gate before promotion.",
+      "summary": "User requested durable record and repair of all six design objections; local revised choreography and focused regression checks implemented, visual checkpoint remains.",
       "status": "in-progress"
     }
   ]

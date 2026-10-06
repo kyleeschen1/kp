@@ -4,7 +4,7 @@
   "title": "Review reversible polynomial basis extraction",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: polynomial extraction candidate ready on existing host. Review stable grid, shared header collection, pivot and reverse expansion before promotion.",
+  "summary": "HUMAN_CHECKPOINT: all six recorded designer objections have implemented repairs and focused checks; review nine-milestone polynomial sequence before promotion.",
   "verificationRecords": [
     {
       "command": "npm run visual:matrix-pouring",
@@ -23,6 +23,12 @@
       "status": "passed",
       "scope": "Both accepted original-route cases pass; application and test TypeScript checks and twelve reachability checks also pass.",
       "checkedAt": "2026-10-06T22:51:13.826Z"
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Four browser cases pass; focused final rerun checks six-objection repair: ordinary opening, fixed grid, rigid basis spacing, equality gating, correspondence attention, restored context and reverse paint. Four semantic tests and affected app/test types pass.",
+      "checkedAt": "2026-10-06T23:08:41.206Z"
     }
   ]
 }
