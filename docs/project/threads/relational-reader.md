@@ -5,6 +5,10 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 6: [polynomial basis extraction](../reviews/2026-10-06-polynomial-matrix.md)
+is the approved next exemplar. Pouring refinement is parked while this tests
+matrix gestalt and reversible expansion. Reader layouts remain unchanged.
+
 October 3: the approved [structural pouring alternative](../reviews/2026-10-02-matrix-pouring.md)
 uses number-free component bands and one further compatible transformation to
 explain input/output dimensions. Its opt-in query shares the pouring player and

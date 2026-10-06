@@ -1,0 +1,6 @@
+.polynomial-stage { position: relative; min-width: 680px; height: 390px; color: var(--kp-st-ink); overflow: clip; }
+.matrix-player[aria-busy="true"] .polynomial-stage { opacity: 0; }
+/* Isolate the bounded moving token set: rapid seeks otherwise lost unchanged
+   KaTeX paint in Chromium while DOM geometry and visibility remained correct. */
+.poly-token { position: absolute; left: 0; top: 0; white-space: nowrap; will-change: transform, opacity; }
+.poly-enclosure { position: absolute; overflow: visible; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-dasharray: 1; }

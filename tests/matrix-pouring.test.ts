@@ -3,6 +3,22 @@ import test from 'node:test';
 import { pouringModel, pouringBeats, samplePouring } from '../src/experiments/rectangular-product/pouring-model.ts';
 import { valueOf } from '../src/experiments/dot-product-passage/model.ts';
 import { structureModel, structureBeats, sampleStructure } from '../src/experiments/rectangular-product/structure-model.ts';
+import { polynomialProduct, polynomialBasis, polynomialBeats, samplePolynomial } from '../src/experiments/rectangular-product/polynomial-model.ts';
+import { compileExpression } from '../src/math/expression.ts';
+
+test('polynomial factorization keeps declared basis identities, missing terms and exact values', () => {
+  assert.deepEqual(polynomialProduct.left.rows.map(row => row.map(valueOf)), [[2, 0, -1, 4], [1, 3, 0, -2]]);
+  for (let r = 0; r < 2; r++) polynomialProduct.cell(r, 0).dot.pairs.forEach((pair, c) => {
+    assert.equal(pair.right, polynomialBasis[c]);
+    assert.equal(pair.left, polynomialProduct.left.rows[r]![c]);
+  });
+  for (const t of [-4, -1, 0, .5, 1, 3]) {
+    const values = polynomialProduct.result.rows.map(row => compileExpression(row[0]!.expression)({ t }));
+    assert.deepEqual(values, [2 * t ** 3 - t + 4, t ** 3 + 3 * t ** 2 - 2]);
+  }
+  polynomialBeats.forEach((beat, i) => assert.equal(samplePolynomial(i / 4).beat, beat));
+  assert.throws(() => samplePolynomial(NaN), /finite/);
+});
 
 test('both receiving rows reuse each input component and preserve output column order', () => {
   const model = pouringModel();

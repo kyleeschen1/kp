@@ -1,0 +1,37 @@
+{
+  "id": "run-contract.kp.polynomial-matrix-v1",
+  "kind": "run-contract",
+  "title": "Polynomial basis extraction exemplar",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: one bounded polynomial basis extraction exemplar implemented and checked; visual judgment required before generalizing.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.polynomial-matrix.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-06-polynomial-matrix.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:matrix-pouring"
+  ],
+  "allowedWork": [
+    "Local symbolic fixture and projection, shared existing player, focused checks and evidence"
+  ],
+  "disallowedWork": [
+    "General basis inference, universal renderer, catalogue rollout, deployment"
+  ],
+  "goal": "One reversible stable-grid polynomial to matrix representation",
+  "target": "next-action.kp.polynomial-matrix",
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Exemplar",
+      "summary": "User-approved stable coefficient grid and reversible collection of declared polynomial basis; visual gate before promotion.",
+      "status": "in-progress"
+    }
+  ]
+}

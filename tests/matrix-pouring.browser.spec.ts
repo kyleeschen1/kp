@@ -1,5 +1,61 @@
 import { test, expect } from '@playwright/test';
 
+test('polynomial extraction retains coefficient grid and shared basis through reversible collection', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/experiments/rectangular-product/?view=polynomials#polynomials');
+  const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+  await expect(root.locator('.katex-error')).toHaveCount(0);
+  await expect(root.locator('math')).toHaveCount(1);
+  const slider = root.getByRole('slider', { name: 'Animation position' });
+  const coefficients = root.locator('[data-poly^="coefficient-"]:not(svg)');
+  const positions = () => coefficients.evaluateAll(nodes => nodes.map(n => { const b = n.getBoundingClientRect(); return [b.x, b.y]; }));
+  await slider.fill('0.25'); const grid = await positions();
+  const persistentName = root.locator('[data-poly="name-0"]');
+  const namePaint = await persistentName.screenshot();
+  const poses = () => root.locator('.polynomial-stage [style]').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')));
+  for (const phase of [0, .5, 1, 1.5, 1.8, 2, 2.5, 3, 3.5, 4]) {
+    await slider.fill(String(phase / 4));
+    if (phase >= 1) expect(await positions()).toEqual(grid);
+    const before = await poses(); await slider.fill('1'); await slider.fill('0'); await slider.fill(String(phase / 4));
+    expect(await poses()).toEqual(before);
+    for (const ink of await root.locator('[data-poly="name-0"] .katex *').all()) await expect(ink).toHaveCSS('visibility', 'visible');
+    if (phase >= 1) expect(await persistentName.screenshot()).toEqual(namePaint);
+    const card = root.locator('.matrix-card');
+    const cardBox = (await card.boundingBox())!, nameBox = (await persistentName.boundingBox())!;
+    const capture = await card.screenshot({ path: info.outputPath(`polynomial-phase-${phase}.png`) });
+    const inkPixels = await page.evaluate(async ({ png, box }) => {
+      const img = new Image(); img.src = `data:image/png;base64,${png}`; await img.decode();
+      const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+      const ctx = canvas.getContext('2d')!; ctx.drawImage(img, 0, 0);
+      const pixels = ctx.getImageData(box.x, box.y, box.width, box.height).data;
+      const bg = [...pixels.slice(0, 3)]; let ink = 0;
+      for (let i = 0; i < pixels.length; i += 4) if (Math.abs(pixels[i]! - bg[0]!) + Math.abs(pixels[i + 1]! - bg[1]!) + Math.abs(pixels[i + 2]! - bg[2]!) > 90) ink++;
+      return ink;
+    }, { png: capture.toString('base64'), box: { x: Math.floor(nameBox.x - cardBox.x), y: Math.floor(nameBox.y - cardBox.y), width: Math.ceil(nameBox.width), height: Math.ceil(nameBox.height) } });
+    expect(inkPixels).toBeGreaterThan(20);
+  }
+  for (let c = 0; c < 4; c++) {
+    const first = root.locator(`[data-poly="basis-0-${c}"]`), second = root.locator(`[data-poly="basis-1-${c}"]`);
+    expect(await first.getAttribute('data-source-id')).toEqual(await second.getAttribute('data-source-id'));
+    await expect(second).toHaveCSS('opacity', '0');
+  }
+  await root.getByRole('button', { name: 'Previous', exact: true }).click();
+  await expect.poll(async () => Number(await root.locator('.polynomial-stage').getAttribute('data-phase'))).toBeLessThan(3.5);
+  await slider.fill('0');
+  await root.getByRole('button', { name: 'Play', exact: true }).click();
+  await expect.poll(async () => Number(await root.locator('.polynomial-stage').getAttribute('data-phase'))).toBeGreaterThan(.1);
+  await root.getByRole('button', { name: 'Pause', exact: true }).click();
+  await root.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await slider.fill('1'); await root.locator('.matrix-card').screenshot({ path: info.outputPath('polynomial-light.png') });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await root.getByRole('combobox', { name: 'Milestone' }).selectOption('4');
+  await page.reload(); await expect(root).toHaveAttribute('data-milestone', 'matrix');
+  expect(errors).toEqual([]);
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false })));
+  await expect(root).not.toHaveAttribute('data-ready');
+});
+
 test('structural view shows whole inputs, matched ports and composed output without numerals in bands', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.emulateMedia({ reducedMotion: 'no-preference' });

@@ -1,5 +1,9 @@
 # Matrix pouring exemplar
 
+October 6: further refinement is parked by user agreement in favor of the
+[polynomial basis extraction exemplar](2026-10-06-polynomial-matrix.md).
+The current query views are preserved; no visual acceptance is inferred.
+
 ## October 5 square-cell pouring revision
 
 User approved fixed square cells, matching horizontal/vertical pitch, continuous

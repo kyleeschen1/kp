@@ -1,0 +1,28 @@
+{
+  "id": "next-action.kp.polynomial-matrix",
+  "kind": "next-action",
+  "title": "Review reversible polynomial basis extraction",
+  "status": "blocked",
+  "domain": "kinetic-press",
+  "summary": "HUMAN_CHECKPOINT: polynomial extraction candidate ready on existing host. Review stable grid, shared header collection, pivot and reverse expansion before promotion.",
+  "verificationRecords": [
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Four browser cases pass; polynomial fixed grid, basis identity, reversible seeks, gradual brackets, actual persistent-name raster and full-card ink, themes, MathML, disposal; existing numeric and structural views preserved.",
+      "checkedAt": "2026-10-06T22:51:12.009Z"
+    },
+    {
+      "command": "npm run test:matrix-pouring",
+      "status": "passed",
+      "scope": "Four semantic/sample checks including polynomial values, zero coefficients and shared basis reference identity",
+      "checkedAt": "2026-10-06T22:51:12.996Z"
+    },
+    {
+      "command": "npm run visual:rectangular-product",
+      "status": "passed",
+      "scope": "Both accepted original-route cases pass; application and test TypeScript checks and twelve reachability checks also pass.",
+      "checkedAt": "2026-10-06T22:51:13.826Z"
+    }
+  ]
+}

@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 6: user approved the [polynomial-to-matrix exemplar](reviews/2026-10-06-polynomial-matrix.md).
+Pause further pouring refinement: expanded row gaps obscure matrix shape. The
+new existing-host polynomial view keeps coefficients stable while collecting and
+pivoting an explicit shared basis. Its own visual checkpoint precedes reuse;
+prior pouring candidates remain available and unapproved.
+
 October 3 follow-up: user approved the number-free structural view at
 `?view=structure` on the same rectangular host. It shows complete inputs reaching
 each receiving row, component counts, and C's first column entering a compatible
