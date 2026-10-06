@@ -25,7 +25,7 @@ test('structural view shows whole inputs, matched ports and composed output with
     await slider.fill(String(Number((phase / 12).toFixed(4))));
     hinges.push(await root.locator('[data-band="copy-0-0"]').evaluate(node => {
       const el = node as HTMLElement, matrix = new DOMMatrix(getComputedStyle(el).transform);
-      const width = parseFloat(el.style.width), height = parseFloat(el.style.height);
+      const width = parseFloat(getComputedStyle(el).width), height = parseFloat(getComputedStyle(el).height);
       const point = matrix.transformPoint(new DOMPoint(width / 2, 0));
       return { x: point.x + width / 2, y: point.y + height / 2 };
     }));
@@ -33,6 +33,18 @@ test('structural view shows whole inputs, matched ports and composed output with
   for (const hinge of hinges) {
     expect(hinge.x).toBeCloseTo(480, 0); expect(hinge.y).toBeCloseTo(210, 0);
   }
+  for (const phase of [.3, .8, 1.4, 2.2, 2.6, 3.5]) {
+    await slider.fill(String(Number((phase / 12).toFixed(4))));
+    const cells = await root.locator('[data-band="copy-0-0"] > span, [data-band="source-0"] > span, [data-band="row-0"] > span').evaluateAll(nodes => nodes.map(n => {
+      const b = n.getBoundingClientRect(); return { width: b.width, height: b.height };
+    }));
+    for (const cell of cells) expect(cell.width).toBeCloseTo(cell.height, 2);
+  }
+  await slider.fill(String(Number((.7008 / 12).toFixed(4))));
+  const parent = await root.locator('[data-band="copy-0-0"]').boundingBox();
+  const child = await root.locator('[data-band="copy-0-1"]').boundingBox();
+  expect(child!.x).toBeCloseTo(parent!.x, 2); expect(child!.y).toBeCloseTo(parent!.y, 2);
+  await expect(root.locator('[data-band="copy-0-1"]')).toHaveCSS('visibility', 'visible');
   await slider.fill(String(Number((1 / 12).toFixed(4))));
   const parts = await root.locator('[data-band="copy-0-0"] > span').evaluateAll(nodes => nodes.map(n => n.getBoundingClientRect().x));
   expect(parts[0]).toBeLessThan(parts[1]!); expect(parts[1]).toBeLessThan(parts[2]!);

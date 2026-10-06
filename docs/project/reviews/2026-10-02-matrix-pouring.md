@@ -1,5 +1,30 @@
 # Matrix pouring exemplar
 
+## October 5 square-cell pouring revision
+
+User approved fixed square cells, matching horizontal/vertical pitch, continuous
+copy emergence and a separate evaluation beat. The structural query remains the
+canonical exemplar, using its existing DOM projection and semantic matrix model.
+The first-column passage owns visual review; numeric pouring is unchanged.
+Local structural paint/motion and the scoped test form the rollback unit.
+
+Cells are 24px squares on a 28px pitch in either orientation. The column makes
+a rigid lower-end turn with smooth acceleration/deceleration. Its next working
+occurrence begins coincident with the first, then separates downward while the
+turn settles. Paired strips occupy distinct slots, with 60px between receiving
+rows. Evaluation waits for reception; individual squares converge and shrink
+uniformly, then a square result grows. Collection closes the working row spacing
+to the same 28px pitch used by subsequent input columns. No strip is stretched
+to fit a receiver. The existing later continuation inherits square dimensions;
+it is not a separately promoted pouring motif.
+
+Three semantic tests, three scoped Chromium cases and application/test
+TypeScript checks pass. Added assertions cover square aspect ratios during
+pivot, reception and evaluation, and coincident copy emergence; existing hinge,
+component ordering, reverse seek, playback and numeric preservation checks pass.
+Visual review still decides perceived smoothness and clarity. No shared motif,
+new authoring contract or catalogue rollout is introduced.
+
 ## October 5 equation-order and anchored pivot revision
 
 User approved implementing the design assessment: preserve `C = B A` in

@@ -17,7 +17,7 @@ export function structureHtml() {
     <div class="structure-label" style="left:128px;top:62px">${math('2\\times2')}</div>
     <div class="structure-label" style="left:404px;top:62px">${math('2\\times3')}</div>
     <div class="structure-label" style="left:488px;top:62px">${math('3\\times2')}</div>
-    <div class="structure-label" style="left:340px;top:290px">${annotation('B.ports', '3 in → 2 out')}</div>
+    <div class="structure-label" style="left:340px;top:330px">${annotation('B.ports', '3 in → 2 out')}</div>
     ${product.rightParts.columns.map((col, c) => band(`source-${c}`, col.entries.map(e => e.id), true, 'structure-input')).join('')}
     ${product.leftParts.rows.map((row, r) => band(`row-${r}`, row.entries.map(e => e.id), false, 'structure-receiver')).join('')}
     ${product.columns.map((column, c) => column.map((cell, r) => band(`copy-${c}-${r}`, cell.column.entries.map(e => e.id), false, 'structure-copy') + band(`result-${c}-${r}`, [cell.result.id], false, 'structure-result')).join('')).join('')}
@@ -29,12 +29,20 @@ export function structureHtml() {
     <div class="structure-chain">${math('\\mathbb{R}^{3}\\xrightarrow{B}\\mathbb{R}^{2}\\xrightarrow{D}\\mathbb{R}^{3}')}</div>
   </div>`;
 }
-const ease = (x: number) => { const t = Math.max(0, Math.min(1, x)); return t * t * (3 - 2 * t); };
+const ease = (x: number) => { const t = Math.max(0, Math.min(1, x)); return t * t * t * (t * (t * 6 - 15) + 10); };
 const interpolate = (a: number, b: number, t: number) => a + (b - a) * t;
 export function mountStructureView(root: HTMLElement) {
   const stage = root.querySelector<HTMLElement>('.structure-stage')!;
   const bands = new Map([...stage.querySelectorAll<HTMLElement>('[data-band]')].map(node => [node.dataset['band']!, node]));
   let disposed = false;
+  // Square cells share a pitch in both orientations. Evaluation converges
+  // cells individually; changing the strip width would distort their identity.
+  const fuse = (id: string, amount: number) => {
+    const children = bands.get(id)!.children;
+    [...children].forEach((child, i) => {
+      (child as HTMLElement).style.transform = `translateX(${((children.length - 1) / 2 - i) * 28 * amount}px) scale(${1 - amount})`;
+    });
+  };
   const pose = (id: string, x: number, y: number, width: number, angle = 0, present = true) => {
     const node = bands.get(id); if (!node) throw new Error(`Missing structural occurrence ${id}`);
     node.style.width = `${width}px`; node.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%) rotate(${angle}deg)`;
@@ -43,52 +51,55 @@ export function mountStructureView(root: HTMLElement) {
   const render = (progress: number) => {
     if (disposed) return;
     const { phase } = sampleStructure(progress); stage.dataset['phase'] = String(phase);
-    for (let c = 0; c < 2; c++) pose(`source-${c}`, 480 + c * 36, 156, 24);
-    for (let r = 0; r < 2; r++) pose(`row-${r}`, 426, 230 + r * 36, 108);
+    for (let c = 0; c < 2; c++) pose(`source-${c}`, 480 + c * 28, 170, 24);
+    for (let r = 0; r < 2; r++) pose(`row-${r}`, 440, 242 + r * 60, 80);
     for (let c = 0; c < 2; c++) {
       const q = phase - c * 4;
       for (let r = 0; r < 2; r++) {
-        const y = 230 + r * 36;
-        let x = 426, cy = y - 20, angle = 0;
-        if (r === 0 && q < 1) {
-          const turn = ease(q / .65);
+        const y = 242 + r * 60;
+        let x = 440, cy = 210, angle = 0;
+        if (q < 1) {
+          const turn = ease(q / .85);
           angle = interpolate(90, 0, turn);
           // The band's right endpoint is the lower hinge. CSS's downward y axis
           // makes this Cartesian 90→180 turn a CSS 90→0 rotation. DOM order
           // remains top-to-bottom at departure and left-to-right at reception.
           const radians = angle * Math.PI / 180;
-          x = 480 + c * 36 - 54 * Math.cos(radians) - c * 36 * ease((q - .65) / .2);
-          cy = 210 - 54 * Math.sin(radians);
-        } else if (r === 1 && q < 2) cy = interpolate(210, y - 20, ease((q - 1) / .65));
+          x = 480 + c * 28 - 40 * Math.cos(radians) - c * 28 * ease((q - .85) / .15);
+          cy = 210 - 40 * Math.sin(radians);
+        }
+        // The next occurrence starts superimposed on the moving parent and
+        // peels away while the pivot settles: no distant visibility jump.
+        cy += r * 60 * ease((q - .7) / 1.2);
         const synthesis = ease((q - 2.25) / .55);
         cy = interpolate(cy, y, synthesis);
         // A row-vector pairing changes semantic role only when synthesis ends.
         // Retain lineage on the incoming band; the resulting tile owns the scalar.
-        pose(`copy-${c}-${r}`, x, cy, interpolate(108, 24, synthesis), angle, q > r && q < 2.8);
-        const thinning = r === 0 ? ease(q / .65) : 1;
-        bands.get(`copy-${c}-${r}`)!.style.height = `${interpolate(interpolate(24, 16, thinning), 36, synthesis)}px`;
+        pose(`copy-${c}-${r}`, x, cy, 80, angle, q > (r ? .7 : 0) && q < 2.8);
+        fuse(`copy-${c}-${r}`, synthesis);
         const docking = ease((q - 3) / .8);
-        pose(`result-${c}-${r}`, interpolate(426, 132 + c * 36, docking), y, 24, 0, q >= 2.8);
-        bands.get(`result-${c}-${r}`)!.style.height = '36px';
+        pose(`result-${c}-${r}`, interpolate(440, 132 + c * 28, docking), interpolate(y, 242 + r * 28, docking), 24, 0, q > 2.55);
+        fuse(`result-${c}-${r}`, 1 - ease((q - 2.55) / .25));
       }
     }
     const nextReveal = ease((phase - 8) / .35);
     const nextPanel = stage.querySelector<HTMLElement>('.structure-next')!;
     nextPanel.style.opacity = String(nextReveal);
     for (let r = 0; r < 3; r++) {
-      const y = 437 + r * 36;
-      pose(`next-row-${r}`, 320, y, 72 * nextReveal);
+      const y = 437 + r * 60;
+      pose(`next-row-${r}`, 320, y, 52);
       let x = 320, cy = y, angle = 0;
       if (r === 0 && phase < 9) {
         const t = ease((phase - 8.35) / .55);
-        x = interpolate(132, 320, t); cy = interpolate(248, 437, t); angle = interpolate(90, 0, t);
+        x = interpolate(132, 320, t); cy = interpolate(256, 437, t); angle = interpolate(90, 0, t);
       } else if (r > 0) cy = interpolate(437, y, ease((phase - 9 - (r - 1) * .2) / .6));
       const synth = ease((phase - 10) / .8);
-      pose(`next-copy-${r}`, x, cy, interpolate(72, 24, synth), angle,
+      pose(`next-copy-${r}`, x, cy, 52, angle,
         phase > (r === 0 ? 8.35 : 9 + (r - 1) * .2) && phase < 10.8);
-      bands.get(`next-copy-${r}`)!.style.height = `${interpolate(24, 36, synth)}px`;
-      pose(`next-result-${r}`, interpolate(320, 540, ease((phase - 11) / .8)), y, 24, 0, phase >= 10.8);
-      bands.get(`next-result-${r}`)!.style.height = '36px';
+      fuse(`next-copy-${r}`, synth);
+      const collect = ease((phase - 11) / .8);
+      pose(`next-result-${r}`, interpolate(320, 540, collect), interpolate(y, 437 + r * 28, collect), 24, 0, phase > 10.55);
+      fuse(`next-result-${r}`, 1 - ease((phase - 10.55) / .25));
     }
     stage.querySelector<HTMLElement>('.structure-chain')!.style.opacity = String(ease((phase - 11) / .6));
   };
