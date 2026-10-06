@@ -4,7 +4,7 @@
   "title": "Review matrix column pouring choreography",
   "status": "blocked",
   "domain": "kinetic-press",
-  "summary": "HUMAN_CHECKPOINT: structural view ready at rectangular-product/?view=structure. Review whole-input copying, one output per row, and three-to-two-to-three dimensional composition. Numeric view preserved.",
+  "summary": "HUMAN_CHECKPOINT: review structural initial through column-1 for equation order, anchored Cartesian 90-to-180 pivot, pairing hold and output collection.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -77,6 +77,18 @@
       "status": "passed",
       "scope": "Both accepted original-route Chromium preservation checks pass after structural query addition",
       "checkedAt": "2026-10-04T04:12:27.442Z"
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Equation-order revision: three cases pass; lower hinge fixed at intermediate poses, component order and exposed receiving row, result left of factors, numeric preservation. Initial connection refused repaired by restarting shared dev server.",
+      "checkedAt": "2026-10-06T03:00:57.091Z"
+    },
+    {
+      "command": "npm run test:matrix-pouring",
+      "status": "passed",
+      "scope": "Three semantic and deterministic sample checks; application and test TypeScript checks also passed",
+      "checkedAt": "2026-10-06T03:00:58.366Z"
     }
   ]
 }

@@ -10,16 +10,20 @@ const band = (id: string, ids: readonly string[], vertical: boolean, extra = '')
 export function structureHtml() {
   const { product, next } = structureModel;
   return `<div class="structure-stage" aria-hidden="true">
-    <div class="structure-label" style="left:45px;top:22px">${math('A (3\\times2)')}</div>
-    <div class="structure-label" style="left:245px;top:22px">${math('B (2\\times3)')}</div>
-    <div class="structure-label" style="left:515px;top:22px">${math('C=BA')}</div>
-    <div class="structure-label" style="left:245px;top:70px">${annotation('B.ports', '3 in → 2 out')}</div>
+    <div class="structure-label" style="left:142px;top:22px">${math('C')}</div>
+    <div class="structure-label" style="left:265px;top:22px">${math('=')}</div>
+    <div class="structure-label" style="left:418px;top:22px">${math('B')}</div>
+    <div class="structure-label" style="left:490px;top:22px">${math('A')}</div>
+    <div class="structure-label" style="left:128px;top:62px">${math('2\\times2')}</div>
+    <div class="structure-label" style="left:404px;top:62px">${math('2\\times3')}</div>
+    <div class="structure-label" style="left:488px;top:62px">${math('3\\times2')}</div>
+    <div class="structure-label" style="left:340px;top:290px">${annotation('B.ports', '3 in → 2 out')}</div>
     ${product.rightParts.columns.map((col, c) => band(`source-${c}`, col.entries.map(e => e.id), true, 'structure-input')).join('')}
     ${product.leftParts.rows.map((row, r) => band(`row-${r}`, row.entries.map(e => e.id), false, 'structure-receiver')).join('')}
     ${product.columns.map((column, c) => column.map((cell, r) => band(`copy-${c}-${r}`, cell.column.entries.map(e => e.id), false, 'structure-copy') + band(`result-${c}-${r}`, [cell.result.id], false, 'structure-result')).join('')).join('')}
-    <div class="structure-next"><div class="structure-label" style="left:245px;top:245px">${math('D (3\\times2)')}</div>
-    <div class="structure-label" style="left:245px;top:280px">${annotation('D.ports', '2 in → 3 out')}</div>
-    <div class="structure-label" style="left:510px;top:245px">${annotation('DC.first', 'First column of DC')}</div>
+    <div class="structure-next"><div class="structure-label" style="left:245px;top:345px">${math('D (3\\times2)')}</div>
+    <div class="structure-label" style="left:245px;top:380px">${annotation('D.ports', '2 in → 3 out')}</div>
+    <div class="structure-label" style="left:510px;top:345px">${annotation('DC.first', 'First column of DC')}</div>
     ${next.leftParts.rows.map((row, r) => band(`next-row-${r}`, row.entries.map(e => e.id), false, 'structure-receiver')).join('')}</div>
     ${next.columns[0]!.map((cell, r) => band(`next-copy-${r}`, cell.column.entries.map(e => e.id), false, 'structure-copy') + band(`next-result-${r}`, [cell.result.id], false, 'structure-result')).join('')}
     <div class="structure-chain">${math('\\mathbb{R}^{3}\\xrightarrow{B}\\mathbb{R}^{2}\\xrightarrow{D}\\mathbb{R}^{3}')}</div>
@@ -39,24 +43,32 @@ export function mountStructureView(root: HTMLElement) {
   const render = (progress: number) => {
     if (disposed) return;
     const { phase } = sampleStructure(progress); stage.dataset['phase'] = String(phase);
-    for (let c = 0; c < 2; c++) pose(`source-${c}`, 75 + c * 36, 151, 24);
-    for (let r = 0; r < 2; r++) pose(`row-${r}`, 320, 135 + r * 36, 108);
+    for (let c = 0; c < 2; c++) pose(`source-${c}`, 480 + c * 36, 156, 24);
+    for (let r = 0; r < 2; r++) pose(`row-${r}`, 426, 230 + r * 36, 108);
     for (let c = 0; c < 2; c++) {
       const q = phase - c * 4;
       for (let r = 0; r < 2; r++) {
-        const y = 135 + r * 36;
-        let x = 320, cy = y, angle = 0;
+        const y = 230 + r * 36;
+        let x = 426, cy = y - 20, angle = 0;
         if (r === 0 && q < 1) {
-          const t = ease(q / .85);
-          x = interpolate(75 + c * 36, 320, t); cy = interpolate(151, 135, t); angle = interpolate(90, 0, t);
-        } else if (r === 1 && q < 2) cy = interpolate(135, y, ease((q - 1) / .85));
-        const synthesis = ease((q - 2) / .8);
+          const turn = ease(q / .65);
+          angle = interpolate(90, 0, turn);
+          // The band's right endpoint is the lower hinge. CSS's downward y axis
+          // makes this Cartesian 90→180 turn a CSS 90→0 rotation. DOM order
+          // remains top-to-bottom at departure and left-to-right at reception.
+          const radians = angle * Math.PI / 180;
+          x = 480 + c * 36 - 54 * Math.cos(radians) - c * 36 * ease((q - .65) / .2);
+          cy = 210 - 54 * Math.sin(radians);
+        } else if (r === 1 && q < 2) cy = interpolate(210, y - 20, ease((q - 1) / .65));
+        const synthesis = ease((q - 2.25) / .55);
+        cy = interpolate(cy, y, synthesis);
         // A row-vector pairing changes semantic role only when synthesis ends.
         // Retain lineage on the incoming band; the resulting tile owns the scalar.
         pose(`copy-${c}-${r}`, x, cy, interpolate(108, 24, synthesis), angle, q > r && q < 2.8);
-        bands.get(`copy-${c}-${r}`)!.style.height = `${interpolate(24, 36, synthesis)}px`;
+        const thinning = r === 0 ? ease(q / .65) : 1;
+        bands.get(`copy-${c}-${r}`)!.style.height = `${interpolate(interpolate(24, 16, thinning), 36, synthesis)}px`;
         const docking = ease((q - 3) / .8);
-        pose(`result-${c}-${r}`, interpolate(320, 540 + c * 36, docking), y, 24, 0, q >= 2.8);
+        pose(`result-${c}-${r}`, interpolate(426, 132 + c * 36, docking), y, 24, 0, q >= 2.8);
         bands.get(`result-${c}-${r}`)!.style.height = '36px';
       }
     }
@@ -64,13 +76,13 @@ export function mountStructureView(root: HTMLElement) {
     const nextPanel = stage.querySelector<HTMLElement>('.structure-next')!;
     nextPanel.style.opacity = String(nextReveal);
     for (let r = 0; r < 3; r++) {
-      const y = 337 + r * 36;
+      const y = 437 + r * 36;
       pose(`next-row-${r}`, 320, y, 72 * nextReveal);
       let x = 320, cy = y, angle = 0;
       if (r === 0 && phase < 9) {
         const t = ease((phase - 8.35) / .55);
-        x = interpolate(540, 320, t); cy = interpolate(153, 337, t); angle = interpolate(90, 0, t);
-      } else if (r > 0) cy = interpolate(337, y, ease((phase - 9 - (r - 1) * .2) / .6));
+        x = interpolate(132, 320, t); cy = interpolate(248, 437, t); angle = interpolate(90, 0, t);
+      } else if (r > 0) cy = interpolate(437, y, ease((phase - 9 - (r - 1) * .2) / .6));
       const synth = ease((phase - 10) / .8);
       pose(`next-copy-${r}`, x, cy, interpolate(72, 24, synth), angle,
         phase > (r === 0 ? 8.35 : 9 + (r - 1) * .2) && phase < 10.8);

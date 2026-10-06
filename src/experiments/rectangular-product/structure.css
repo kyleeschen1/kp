@@ -1,4 +1,4 @@
-.structure-stage { position: relative; min-width: 740px; height: 500px; color: var(--kp-st-ink); overflow: clip; }
+.structure-stage { position: relative; min-width: 740px; height: 600px; color: var(--kp-st-ink); overflow: clip; }
 .matrix-player[aria-busy="true"] .structure-stage { opacity: 0; }
 .structure-band { position: absolute; left: 0; top: 0; height: 24px; display: flex; border-radius: 4px; transform-origin: center; box-sizing: border-box; overflow: hidden; }
 .structure-band > span { flex: 1; min-width: 0; border-right: 1px solid var(--kp-st-paper); }
@@ -7,8 +7,8 @@
 .structure-vertical > span { border-right: 0; border-bottom: 1px solid var(--kp-st-paper); }
 .structure-vertical > span:last-child { border-bottom: 0; }
 .structure-input { background: var(--kp-st-ink); opacity: .65; }
-.structure-receiver { background: var(--kp-st-ink); opacity: .18; outline: 1px solid currentColor; height: 32px; }
+.structure-receiver { background: var(--kp-st-ink); opacity: .4; outline: 1px solid currentColor; height: 12px; }
 .structure-copy, .structure-result { background: var(--kp-st-focus); }
 .structure-label { position: absolute; }
 .structure-label .kp-focus-deck__annotation { position: static; }
-.structure-chain { position: absolute; top: 455px; left: 220px; }
+.structure-chain { position: absolute; top: 555px; left: 220px; }

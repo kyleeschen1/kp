@@ -1,5 +1,34 @@
 # Matrix pouring exemplar
 
+## October 5 equation-order and anchored pivot revision
+
+User approved implementing the design assessment: preserve `C = B A` in
+left-to-right layout, and swing the column left around its lower endpoint
+(Cartesian 90 to 180 degrees). The same structural query is the canonical
+candidate. Semantic matrix objects, numeric pouring and the shared player are
+preserved; local structure layout/motion and its focused check are the rollback
+unit. No shared motion API or catalogue promotion is included.
+
+The first column now hinges in place rather than translating around its center.
+Its top component arrives at the leftmost receiving position. A narrow incoming
+band rests just above each receiving row so both factors remain visible. A hold
+precedes synthesis, then the resulting column collects to the left in C's
+reserved position. The second column repeats the same phrase with a short
+horizontal alignment after its pivot. The existing D continuation is retained
+below, relocated to accommodate the new top layout; its choreography is not
+promoted or redesigned in this revision.
+
+Review the first column through `column-1`: stable equation order, a recognizable
+hinge, preserved component order, legible pairing and distinct synthesis. This
+remains a human visual checkpoint, not evidence of instructional effectiveness.
+
+Focused regression checks measure the hinge through intermediate poses, preserve
+component order, keep the receiving row visible and assert result/factor order.
+The initial browser run could not connect because the shared server was stopped;
+it was restarted before rerunning the suite.
+All three browser cases then passed, alongside three semantic/sample tests and
+application/test TypeScript checks. Numeric choreography remains unchanged.
+
 ## October 3 structural view and composition
 
 User approved a number-free alternative to reduce competing arithmetic motion

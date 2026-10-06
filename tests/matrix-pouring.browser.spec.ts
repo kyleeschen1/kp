@@ -18,6 +18,32 @@ test('structural view shows whole inputs, matched ports and composed output with
   await root.getByRole('button', { name: 'Pause', exact: true }).click();
   await expect(root.locator('[data-band="copy-0-0"]')).toHaveCSS('visibility', 'visible');
   const slider = root.getByRole('slider', { name: 'Animation position' });
+  // Verify the physical endpoint, not only the declared rotation: the lower
+  // hinge must stay put and source order must survive the quarter-turn.
+  const hinges = [];
+  for (const phase of [.15, .35, .55]) {
+    await slider.fill(String(Number((phase / 12).toFixed(4))));
+    hinges.push(await root.locator('[data-band="copy-0-0"]').evaluate(node => {
+      const el = node as HTMLElement, matrix = new DOMMatrix(getComputedStyle(el).transform);
+      const width = parseFloat(el.style.width), height = parseFloat(el.style.height);
+      const point = matrix.transformPoint(new DOMPoint(width / 2, 0));
+      return { x: point.x + width / 2, y: point.y + height / 2 };
+    }));
+  }
+  for (const hinge of hinges) {
+    expect(hinge.x).toBeCloseTo(480, 0); expect(hinge.y).toBeCloseTo(210, 0);
+  }
+  await slider.fill(String(Number((1 / 12).toFixed(4))));
+  const parts = await root.locator('[data-band="copy-0-0"] > span').evaluateAll(nodes => nodes.map(n => n.getBoundingClientRect().x));
+  expect(parts[0]).toBeLessThan(parts[1]!); expect(parts[1]).toBeLessThan(parts[2]!);
+  const input = await root.locator('[data-band="copy-0-0"]').boundingBox();
+  const receiver = await root.locator('[data-band="row-0"]').boundingBox();
+  expect(input!.y + input!.height).toBeLessThan(receiver!.y);
+  const source = await root.locator('[data-band="source-0"]').boundingBox();
+  expect(receiver!.x).toBeLessThan(source!.x);
+  await slider.fill(String(Number((4 / 12).toFixed(4))));
+  const result = await root.locator('[data-band="result-0-0"]').boundingBox();
+  expect(result!.x + result!.width).toBeLessThan(receiver!.x);
   const pose = () => root.locator('.structure-stage [style]').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')));
   for (const phase of [0, .5, 1, 1.5, 2, 2.6, 3, 4, 6, 8, 8.6, 9, 9.5, 10, 11, 12]) {
     const p = String(Number((phase / 12).toFixed(4)));
