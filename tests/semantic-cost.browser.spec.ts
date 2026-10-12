@@ -29,7 +29,7 @@ async function record(name: string, data: unknown) {
 
 test('canonical production pages: cold/warm transfers, fonts and readiness', async ({ browser }) => {
   const reports = [];
-  for (const [route, root] of [['dot-product-passage', '#dot-player'], ['matrix-column-product', '#matrix-player'], ['matrix-column-combinations', '#comb-player'], ['matrix-examples', '#dot-player'], ['matrix-column-combinations/?example=composition', '#comb-player']]) {
+  for (const [route, root] of [['dot-product-passage', '#dot-player'], ['matrix-column-product', '#matrix-player'], ['matrix-column-combinations', '#comb-player'], ['matrix-examples', '#dot-player'], ['matrix-column-combinations/?example=composition', '#comb-player'], ['rectangular-product/?view=polynomials', '#rectangular-player'], ['rectangular-product/?view=system', '#rectangular-player'], ['rectangular-product/?view=polynomials&example=reordered', '#rectangular-player']]) {
     const context = await browser.newContext({ baseURL: 'http://127.0.0.1:4196', viewport: { width: 1200, height: 950 } });
     const page = await context.newPage();
     const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
@@ -67,7 +67,7 @@ test('canonical production pages: cold/warm transfers, fonts and readiness', asy
 
 test('one and ten instances: inactive, mounted, playing and disposed', async ({ browser }) => {
   const reports = [];
-  for (const reading of ['dot', 'rows', 'columns'] as const) {
+  for (const reading of ['dot', 'rows', 'columns', 'collection'] as const) {
     const context = await browser.newContext({ baseURL: 'http://127.0.0.1:4196', viewport: { width: 1200, height: 950 } });
     const page = await context.newPage();
     const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
@@ -121,5 +121,5 @@ test('one and ten instances: inactive, mounted, playing and disposed', async ({ 
     reports.push({ reading, baseline, cases, afterCycles }); await context.close();
   }
   await record('instances-browser', { browser: browser.version(), reports,
-    note: 'Dot uses the full existing player. Rows/columns use the real adapters and clock in a stage-only measurement host. All instances run concurrently, including offscreen ones. CDP heap samples follow forced GC; they are not total process memory. Frame samples are local observations, not fixed performance guarantees.' });
+    note: 'Dot uses the full existing player. Rows/columns/collection use the real adapters and clock in a stage-only measurement host. All instances run concurrently, including offscreen ones. CDP heap samples follow forced GC; they are not total process memory. Frame samples are local observations, not fixed performance guarantees.' });
 });

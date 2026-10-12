@@ -5,6 +5,14 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 12: [bounded LA collection reuse](../authoring/la-collection-authoring-packet.md)
+has reached its accepted milestone. Polynomial and linear-system callers share
+one local view with static readings, typed repairs and production/browser
+evidence. The [closeout](../reviews/2026-10-11-next-step-review.md#accepted-milestone-closeout)
+records costs, browser repairs and source-only versus engine-edit distinctions.
+Elementary row operations are the proposed next semantic pressure, requiring
+new scope authorization. Reader layouts and deferred learner testing are unchanged.
+
 October 11: polynomial visual structure accepted; timing and wording remain
 provisional. The user authorized [bounded LA explanatory reuse](../reviews/2026-10-11-next-step-review.md),
 tracked by `run-contract.kp.la-explanatory-reuse-v1`. Preserve reader layouts and

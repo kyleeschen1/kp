@@ -107,6 +107,41 @@ test('static system explanation remains readable with JavaScript disabled', asyn
   } finally { await context.close(); }
 });
 
+test('collection remains reachable at narrow widths, in both themes and forced colors', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const view of ['polynomials', 'system']) {
+    await page.goto(`/experiments/rectangular-product/?view=${view}`);
+    const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+    for (const width of [390, 1200]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const light of [false, true]) {
+        const toggle = root.getByRole('button', { name: 'Light mode', exact: true });
+        if (await toggle.getAttribute('aria-pressed') !== String(light)) await toggle.click();
+        await root.getByRole('combobox', { name: 'Milestone' }).selectOption('8');
+        await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '1');
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+        expect(overflow).toBeLessThanOrEqual(1);
+        const scroll = root.getByRole('region', { name: 'Animation; scroll horizontally on narrow screens' });
+        await expect(scroll).toHaveAttribute('tabindex', '0');
+        const reachable = await scroll.evaluate(el => {
+          el.scrollLeft = el.scrollWidth;
+          const edge = el.getBoundingClientRect().right;
+          return el.querySelector('[data-poly="basis-brackets"]')!.getBoundingClientRect().right <= edge;
+        });
+        expect(reachable).toBe(true);
+      }
+    }
+    await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+    await root.getByRole('slider', { name: 'Animation position' }).focus();
+    await page.keyboard.press('Home');
+    await expect(root).toHaveAttribute('data-milestone', 'polynomials');
+    await page.keyboard.press('End');
+    await expect(root).toHaveAttribute('data-milestone', 'hold');
+    await expect(root.locator('.katex-error')).toHaveCount(0);
+    await page.emulateMedia({ forcedColors: 'none', reducedMotion: 'reduce' });
+  }
+});
+
 test('linear system reuses collection while retaining unknowns, independent RHS and weighted navigation', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -197,11 +232,13 @@ test('polynomial extraction retains coefficient grid and shared basis through re
     if (phase === 8) await expect(root.locator('[data-poly="coefficient-1-1"]')).toHaveCSS('opacity', '1');
     if (phase >= 3 && phase <= 4) {
       const centers = await root.locator('[data-poly^="basis-0-"]').evaluateAll(nodes => nodes.map(n => { const b = n.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; }));
-      for (let i = 1; i < centers.length; i++) expect(Math.hypot(centers[i]!.x - centers[i - 1]!.x, centers[i]!.y - centers[i - 1]!.y)).toBeCloseTo(72, 1);
+      // WebKit rounds percentage-centering translations at subpixel boundaries.
+      // Keep the rigid-spacing guard within a quarter CSS pixel on every engine.
+      for (let i = 1; i < centers.length; i++) expect(Math.abs(Math.hypot(centers[i]!.x - centers[i - 1]!.x, centers[i]!.y - centers[i - 1]!.y) - 72)).toBeLessThan(.25);
     }
     const card = root.locator('.matrix-card');
     const cardBox = (await card.boundingBox())!, nameBox = (await persistentName.boundingBox())!;
-    const capture = await card.screenshot({ path: info.outputPath(`polynomial-phase-${phase}.png`) });
+    const capture = await card.screenshot({ path: info.outputPath(`polynomial-phase-${phase}.png`), scale: 'css' });
     const inkPixels = await page.evaluate(async ({ png, box }) => {
       const img = new Image(); img.src = `data:image/png;base64,${png}`; await img.decode();
       const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;

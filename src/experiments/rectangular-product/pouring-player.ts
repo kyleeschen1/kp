@@ -33,6 +33,9 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     <details><summary>Read the calculation</summary><div class="pour-static">${renderLatexToHtml(equation, { trust: true, output: 'htmlAndMathml' })}</div>
     ${collection ? `<p>${collection.kind === 'linear-system' ? 'Each row is an equation constraining the ordered unknowns. The separate right-hand-side vector is retained. The display uses b = Ax, equivalent to Ax = b; it neither solves the system nor claims the unknowns satisfy it for arbitrary values.' : 'Each row defines a polynomial in the explicitly ordered input expressions. Missing terms have zero coefficients. Reversing this representation uses retained symbolic relationships; it does not invert numerical matrix multiplication.'}</p>` : '<p>C = BA. Each column of A is paired with both rows of B. Working copies keep the original values; a tilted arrangement is not a transpose operation.</p>'}
     ${structural ? '<p>B has two rows of three coefficients: it accepts three components and produces two. A has two such input columns, so C has shape 2 × 2. D has three rows of two coefficients. It accepts C’s two-component columns and produces three components each. The animation follows C’s first column through D; it does not animate the second. Matching counts are necessary; applications also require compatible meanings, bases and units.</p>' : ''}</details>`;
+  // Discover newly inserted KaTeX font faces before awaiting readiness. WebKit
+  // can otherwise resolve the old ready promise and measure fallback glyphs.
+  root.getBoundingClientRect();
   await document.fonts.ready;
   const view = polynomial ? polynomial.mountPolynomialView(root, collection) : structural ? structural.mountStructureView(root) : mountPouringView(root, model);
   const clock = createKpReaderTimelinePlaybackClock({ id: `${root.id}.${mode}`, durationMs: collection?.durationMs ?? (structural ? 24000 : 34000) });

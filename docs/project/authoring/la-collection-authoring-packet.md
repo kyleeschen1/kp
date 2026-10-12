@@ -1,7 +1,8 @@
-# Bounded LA collection authoring candidate
+# Bounded LA collection authoring
 
-Status: engineering candidate; the polynomial structure is accepted, timing and
-text remain provisional, and the linear-system caller awaits visual review.
+Status: bounded mechanism and second caller accepted October 12, including
+responsive factor gaps, signed-addend notation and overlapping settling/enclosure.
+Timing and text remain editable and are not claims of measured learning benefit.
 This is an internal typed TypeScript source boundary, not a universal LA format,
 JSON ingestion endpoint, parser, proof checker or promoted native compositor.
 
@@ -97,21 +98,36 @@ equations, the matrix equation, correspondence explanation and escaped annotatio
 text. This is a separate export; the interactive experiment itself still mounts
 through JavaScript, not a newly introduced Article publication path.
 
-Run `npm run test:matrix-pouring` and `npm run visual:matrix-pouring`. The latter
+Run `npm run test:matrix-pouring` and `npm run visual:matrix-pouring:cohort`. The latter
 retains the accepted polynomial, numeric and structural checks and adds the
 system and reordered-source cases. Verification covers source identity, distinct
 RHS, signed/zero/unit inputs, constant-first ordering, located repair gaps,
 weighted stops, direct/reverse seeks, static reading and existing paint continuity.
-Timing/text quality and understanding remain human judgments.
+The cohort runs Chromium, Firefox and WebKit, including narrow-width horizontal
+access, light/dark themes and forced-color keyboard navigation. Screenshots
+support inspection; these checks do not certify contrast or every accessibility
+requirement. Timing/text quality and understanding remain human judgments.
 
 ## Cost and evidence limits
 
 The second domain adds a source file and host selection, not a second renderer or
 CSS file. The reordered polynomial changes only source after that host support.
+Discovery did require shared-view repairs: the three-input caller exposed an
+inherited four-input factor gap, signed inputs needed explicit grouped addition,
+and constant-first order needed role-based visibility/spacing. The accepted
+view now owns those decisions. Do not report this as zero engine intervention
+over the entire trial; source-only reuse describes the resulting bounded API.
 This is current-agent authoring evidence, not an independent LLM benchmark or
 proof of arbitrary shapes. Runtime continues to use one clock and the existing
-local token/SVG mechanism; no framework/library was added. Production payload,
-many-card runtime and supported-browser promotion checks remain for promotion.
+local token/SVG mechanism; no framework/library was added. Production measurement
+uses `npm run build:semantic-cost`, `npm run measure:semantic-cost` and
+`npm run visual:semantic-cost`. See the
+[cost boundary](../decisions/2026-10-12-la-collection-cost-boundary.md) for the
+explicit all-view budget amendment, preserved cold-page limit and runtime limits.
+The final polynomial/system/reordered closures measure approximately 106.5,
+107.2 and 107.1 kB compressed JavaScript, plus 15.4 kB CSS each, excluding fonts.
+Those shared assets are cached; additional mounted stages still incur DOM and
+clock work. One/ten-instance desktop observations do not establish mobile scale.
 
 The static generator measured 4542 bytes for the original, 4104 for the system,
 and 4154 for the reordered source on this candidate, uncompressed with no JS,

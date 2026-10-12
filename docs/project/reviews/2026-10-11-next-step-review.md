@@ -1,9 +1,9 @@
 # Next step: prove bounded explanatory reuse
 
-Status: bounded recommendation subsequently authorized October 11; polynomial
-visual structure accepted. The October 8 strategy handoff remains noncanonical
-inbox provenance. Second-caller review and deferred reader evaluation remain in
-force. Theseus owns execution status.
+Status: bounded recommendation authorized October 11; both callers and the final
+settling/enclosure treatment accepted October 12. See accepted milestone closeout
+below. The October 8 strategy handoff remains noncanonical inbox provenance.
+Reader evaluation remains deferred. Theseus owns execution status.
 
 ## Recommendation
 
@@ -211,3 +211,68 @@ fonts; this does not turn the experiment host into a no-JavaScript Article.
 The source-format trial demonstrates reuse by this agent, not independent LLM
 authoring success or learner comprehension. Theseus owns remaining review and
 promotion status rather than a duplicated completion table here.
+
+## Accepted milestone closeout
+
+October 12: “Beautiful. Continue on” accepted the overlapping settling/enclosure
+treatment after the user had judged both examples effective and approved the
+context-sensitive gap and signed-addend fixes. Remaining promotion work is now
+checked. This closes the approved bounded reuse outcome; it does not authorize
+the proposed row-operation family or claim learner comprehension.
+
+The authoring packet is discoverable from the generation entrypoint. Authors can
+change bounded coefficients, ordered inputs, selected correspondences, annotations
+and beat intervals without editing the final view. Polynomial derived outputs
+and independent system right-hand sides remain different domain cases. The
+reordered constant-first source supplies a third pressure example. Static output
+retains the same equations and correspondence annotations without animation code.
+
+The original trial was not zero-intervention: parameterization removed fixed
+shape/last-constant assumptions, and second-caller review required shared gap and
+signed-grouping repairs. Those changes now belong to one renderer. There is no
+second choreography, stylesheet or clock. This is current-agent source reuse,
+not an independently measured LLM-authoring success rate.
+
+Final executed checks:
+
+- `npm run test:matrix-pouring`: nine semantic/source/static tests passed.
+- `npm run typecheck`: application, node, test, Svelte and domain checks passed.
+- `npm run visual:matrix-pouring:cohort`: all 30 Chromium/Firefox/WebKit cases
+  passed, retaining numeric and structural modes and adding narrow-width,
+  theme, forced-color keyboard, signed grouping, reversal and paint checks.
+- `npm run build:semantic-cost` and `npm run measure:semantic-cost`: production
+  builds and complete-consumer budgets passed after the explicit
+  [budget amendment](../decisions/2026-10-12-la-collection-cost-boundary.md).
+- `npm run visual:semantic-cost`: both cold/warm host and one/ten-instance
+  lifecycle cohorts passed. This is a desktop sample, not mobile certification.
+- `npm run author:la-collection-readings`: all three no-script readings emitted.
+
+The first browser cohort passed 24/27. WebKit measured fallback fonts before
+new KaTeX faces had been discovered, causing signed-group overlap and an older
+numeric collection endpoint shift. The existing player now forces layout before
+awaiting font readiness. This repairs the preparation boundary for its modes;
+the existing spacing/endpoint checks reproduce the defect and pass on all three
+engines. No glyph-specific offsets or browser-specific motion were introduced.
+The screenshot crop also needed CSS-scale capture on a device-scale-two browser.
+A subsequent spacing check exposed 0.117px percentage-centering quantization;
+its bound is now 0.25 CSS pixel instead of 0.05, retaining a subpixel guard.
+
+The initial rectangular all-mode payload gate also failed. The complete union
+remains counted; a documented bounded amendment retains the old cold-page ceiling
+and adds separately measured collection activations. Final collection JS is
+106469/107183/107100 gzip bytes plus 15412 CSS each, excluding fonts. The second
+domain adds 714 JS bytes over the polynomial closure. No payload reduction is
+claimed. One polynomial stage has 297 elements; ten cached instances still incur
+independent DOM and clock work. See the decision for exact limits and caveats.
+
+The run's original control record lacked execution-policy fields and
+the installed update-contract CLI does not expose a repair for those fields.
+Scope, four packages, approval, verification and stopping rule remained governed
+by this reviewed proposal and standing repository policy; no graph JSON was
+edited directly to silence hygiene reporting. Completion is recorded through
+the supported slice/progress/transition commands.
+
+Reader comprehension, independent author trials, arbitrary shapes and generalized
+native compositor certification remain unclaimed. The next useful proposal is
+one elementary row operation that shows why its solution set is preserved, using
+this accepted representation as the starting point.

@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 12: the user accepted both collection examples and the final overlapping
+settling/enclosure treatment. The bounded authoring-reuse milestone is complete:
+one typed source/view supports polynomial and linear-system explanations, with
+three source fixtures, static readings and measured delivery costs. Start with
+the [authoring packet](authoring/la-collection-authoring-packet.md); final evidence
+and limits are in the [delivery review](reviews/2026-10-11-next-step-review.md#accepted-milestone-closeout).
+The next proposed pressure is an elementary row operation with explicit
+solution-set preservation; that is new scope, not an active implementation queue.
+Reader testing remains deferred, and no universal LA format is claimed.
+
 October 11: user accepted the polynomial visual structure, with timing and text
 provisional, and authorized the [bounded authoring-reuse work](reviews/2026-10-11-next-step-review.md).
 `run-contract.kp.la-explanatory-reuse-v1` owns execution: parameterize the accepted

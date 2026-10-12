@@ -1,13 +1,18 @@
 import { costExample, type CostProduct, type MountedReading } from './cases.ts';
+import { collectionExample, mountCollection } from './collection.ts';
+import type { CollectionModel } from '../rectangular-product/collection-source.ts';
 
 const query = new URLSearchParams(location.search);
 const reading = query.get('reading') ?? 'dot';
-if (reading !== 'dot' && reading !== 'rows' && reading !== 'columns') throw new Error('Unknown cost reading');
+if (reading !== 'dot' && reading !== 'rows' && reading !== 'columns' && reading !== 'collection') throw new Error('Unknown cost reading');
 const host = document.querySelector<HTMLElement>('#cost-instances')!;
-const mountReading = reading === 'dot'
+const mountOrdinary = reading === 'dot'
   ? (await import('./dot.ts')).mount
-  : (root: HTMLElement, product: CostProduct, column: number) => import('./readings.ts').then(module => module.mount(root, product, reading, column));
-let models: CostProduct[] = [], players: MountedReading[] = [];
+  : (root: HTMLElement, product: CostProduct, column: number) => {
+    if (reading === 'collection') throw new Error('Collection requires its own typed model.');
+    return import('./readings.ts').then(module => module.mount(root, product, reading, column));
+  };
+let models: (CostProduct | CollectionModel)[] = [], players: MountedReading[] = [];
 let serial = 0;
 const dispose = () => {
   for (const player of players) player.dispose();
@@ -18,8 +23,9 @@ const api = {
     if (![1, 10].includes(count)) throw new Error('Benchmark supports one or ten instances');
     dispose();
     const start = performance.now();
-    const first = costExample(0, reading);
-    models = Array.from({ length: count }, (_, i) => different && i > 0 ? costExample(i, reading) : first);
+    const example = (i: number) => reading === 'collection' ? collectionExample(i) : costExample(i, reading);
+    const first = example(0);
+    models = Array.from({ length: count }, (_, i) => different && i > 0 ? example(i) : first);
     return { prepareMs: performance.now() - start, models: models.length, uniqueProducts: new Set(models).size };
   },
   async mount() {
@@ -28,7 +34,7 @@ const api = {
     for (const [index, product] of models.entries()) {
       const root = document.createElement('div'); root.id = `cost-player-${serial++}`;
       host.append(root);
-      players.push(await mountReading(root, product, index % 2));
+      players.push(await ('status' in product ? mountCollection(root, product) : mountOrdinary(root, product, index % 2)));
     }
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     return { mountMs: performance.now() - start, nodes: host.querySelectorAll('*').length };

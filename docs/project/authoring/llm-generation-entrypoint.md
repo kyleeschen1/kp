@@ -73,6 +73,12 @@ For numerical 2×2 matrix column combinations, use
 `matrix-column-authoring-packet.md`. This local typed-source preview reuses the
 accepted column renderer; it is not an `author:check` task or a publication path.
 
+For reversible polynomial/linear-system collection into matrix notation, use
+`la-collection-authoring-packet.md`. The accepted bounded TypeScript source
+supports two rows and two to four ordered inputs through one existing view.
+Use its domain-specific validation and located repair gaps; it is not an
+`author:check` task, arbitrary LA generator or Article publication path.
+
 For the existing momentum-energy derivation assumptions, select
 `mechanics.momentum-energy`. This exposes its mechanics-owned checker and
 reference-only host; it does not infer new physics, edit notation or apply drafts.

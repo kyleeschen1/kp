@@ -1,7 +1,7 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 import { performance } from 'node:perf_hooks';
-import { collectKpHtmlBundleFiles, type KpBundleManifest } from './bundle-closure-attribution.ts';
+import { collectKpHtmlBundleFiles, collectKpBundleManifestFiles, type KpBundleManifest } from './bundle-closure-attribution.ts';
 import { constant } from '../src/math/expression.ts';
 import { createKpScalarExpression, createKpTypedMatrixFromRows } from '../src/math/typed-semantic-math.ts';
 import { matrixProduct } from '../src/math/matrix-product.ts';
@@ -10,13 +10,16 @@ import budgets from './semantic-cost-budgets.json' with { type: 'json' };
 
 const root = 'dist/matrix-interpretations';
 const manifest: KpBundleManifest = JSON.parse(await readFile(`${root}/.vite/manifest.json`, 'utf8'));
-const pages = ['dot-product-passage', 'rectangular-product', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
+const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
 const closures = [];
 for (const page of pages) {
-  const html = `experiments/${page === 'matrix-composition' ? 'matrix-column-combinations' : page}/index.html`;
+  const collection = page.startsWith('collection-');
+  const html = `experiments/${page === 'matrix-composition' ? 'matrix-column-combinations' : collection || page === 'rectangular-default' ? 'rectangular-product' : page}/index.html`;
   // Composition activates both lazy modules; include their full dependencies,
   // not only the ordinary page's cold static closure.
-  const files = [html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-composition' || page === 'rectangular-product')];
+  const activation = collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
+    ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : [];
+  const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-composition' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, activation)])];
   const measured = await Promise.all(files.map(async file => {
     const data = await readFile(`${root}/${file}`);
     return { file, raw: data.byteLength, gzip: gzipSync(data).byteLength };
@@ -30,9 +33,11 @@ const modules = [...new Set(inventory.filter(chunk => reachableFiles.has(chunk.f
 for (const module of modules) if (budgets.forbiddenModuleFragments.some(part => module.includes(part))) {
   throw new Error(`Unrelated module reached ordinary animations: ${module}`);
 }
+console.log(JSON.stringify({ measuredClosures: closures.map(({ files: _files, ...entry }) => entry) }, null, 2));
 for (const closure of closures) {
   const limit = budgets.entries[closure.page as keyof typeof budgets.entries];
-  if (closure.js.gzip > limit.jsGzip || closure.css.gzip > limit.cssGzip) throw new Error(`Entry budget exceeded: ${closure.page}`);
+  if (!limit) throw new Error(`Missing complete-consumer budget: ${closure.page}`);
+  if (closure.js.gzip > limit.jsGzip || closure.css.gzip > limit.cssGzip) throw new Error(`Entry budget exceeded: ${closure.page}; JS ${closure.js.gzip}/${limit.jsGzip}, CSS ${closure.css.gzip}/${limit.cssGzip} gzip bytes`);
 }
 // An iframe is a separate document, but its assets still belong to this reader.
 // Account for the union rather than reporting only the tiny menu script.
