@@ -1,0 +1,80 @@
+{
+  "id": "run-contract.kp.la-explanatory-reuse-v1",
+  "kind": "run-contract",
+  "title": "Bounded LA explanatory reuse",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-11-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-06-la-composable-format-path.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-06-polynomial-matrix.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-pouring"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-pouring",
+      "status": "passed",
+      "scope": "authoring-boundary baseline",
+      "checkedAt": "2026-10-12T01:52:05.303Z",
+      "notes": "Four semantic and deterministic sample tests pass; no visual acceptance inferred."
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Chromium existing exemplar baseline",
+      "checkedAt": "2026-10-12T01:52:47.320Z",
+      "notes": "All four browser cases passed, including polynomial grid, reversible collection and persistent paint. No choreography changes or human visual acceptance."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: one of four packages complete. Polynomial visual acceptance or explicit waiver is required before renderer parameterization; live host port 8000. Preparation complete."
+  },
+  "allowedWork": [
+    "Prepare contract and baseline now; implementation follows explicit polynomial visual acceptance or explicit gate waiver",
+    "Supported semantic source, annotations, existing renderer parameterization, typed repairs and focused verification"
+  ],
+  "disallowedWork": [
+    "No new universal IR, reader layout changes, catalogue migration, or promotion before required review"
+  ],
+  "goal": "Author polynomial extraction and a linear system through one bounded presentation mechanism",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "authoring-boundary",
+      "title": "Prepare supported authoring boundary and preserve baseline",
+      "summary": "Documented canonical host, source authoring boundary, domain distinctions, preservation checks and rollback. Existing four tests pass; waiting for required visual acceptance before source parameterization.",
+      "status": "complete"
+    },
+    {
+      "id": "polynomial-source",
+      "title": "Parameterize visually accepted polynomial exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "linear-system",
+      "title": "Pressure mechanism with linear-system caller",
+      "status": "planned"
+    },
+    {
+      "id": "authoring-packet",
+      "title": "Publish and verify bounded authoring packet",
+      "status": "planned"
+    }
+  ]
+}

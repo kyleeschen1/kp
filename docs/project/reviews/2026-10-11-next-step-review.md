@@ -71,3 +71,75 @@ See the October 6 proposal for source paths, invariants and fuller exit criteria
 
 No existing plan is marked superseded. The new handoff supplies hypotheses and
 evaluation criteria; the roadmap and approved contracts retain authority.
+
+## Authorized delivery boundary (October 11)
+
+The user subsequently requested the dev server and execution as far as possible.
+`run-contract.kp.la-explanatory-reuse-v1` owns execution status. This authorizes
+the bounded recommendation, not a waiver of the polynomial visual checkpoint.
+Preparation may proceed independently; renderer parameterization and a second
+visual caller follow acceptance or an explicit checkpoint amendment.
+
+Canonical artifact: the polynomial factorization fixture in
+`src/experiments/rectangular-product/polynomial-model.ts`. Host:
+`/experiments/rectangular-product/?view=polynomials#polynomials`. Renderer:
+`polynomial-view.ts`, local KaTeX tokens/SVG enclosures, mounted through the
+existing pouring player. Semantic authority: typed scalar expressions, typed
+matrices and `matrixProduct`; no new parser or inferred basis authority.
+
+### Reviewable authoring boundary
+
+Proposed inputs are a stable explanation ID, rectangular real numeric
+coefficients, explicitly ordered typed input expressions, named outputs,
+instructional selections and plain-language annotations. Keep two explicit
+domain cases: polynomial outputs refer to derived expressions; linear-system
+outputs are equations with independently supplied right-hand sides. Do not
+label an arbitrary input family a proven basis or replace a right-hand side
+with a computed polynomial value.
+
+Derive matrix dimensions, row/column lenses, contribution references and the
+expanded expression from those inputs. An occurrence points to a semantic
+referent and its row/column role; matching strings never establish identity.
+Selected rows/columns are validated against the actual shape. A bounded
+presentation capability check rejects shapes/labels the layout cannot support;
+it must not reject otherwise valid mathematics as mathematically invalid.
+
+Preserve the current two-row/four-input candidate exactly as the first source.
+Pressure variations include changed signed/zero/unit coefficients, reordered
+inputs, and a different non-square shape. Determine the supported geometry
+envelope from measured layout after visual acceptance; do not promise arbitrary
+dimensions, arbitrary labels or automatic responsive packing in advance.
+
+Existing hardcoded owners needing replacement are the fixture imports and
+two-by-four loops, output names, static equation string, bracket dimensions,
+constant-term treatment and row/column attention IDs in `polynomial-view.ts`.
+The last-column-is-constant assumption must become an explicit expression/role
+decision: the same presentation cannot silently suppress an unknown variable
+because it occupies the final column. Derive static math from the same source
+as animated occurrences, with escaped labels through existing renderers.
+
+The learning question is whether a reader can reconstruct an expanded row and
+identify the coefficient column for a selected input expression. Prepare one
+unseen coefficient/input-order example as a prediction prompt. This is a probe
+design, not evidence of comprehension or authorization to recruit participants.
+
+### Preservation, verification and rollback
+
+Preserve numeric/structural modes, existing clock, semantic values and provenance,
+themes, current polynomial beat sequence, fixed coefficient grid, upright glyphs,
+equality withdrawal during incomplete notation and restored final context.
+Do not fix presentation by modifying semantic truth or introducing a new clock.
+
+Use focused semantic/source validation tests and the existing matrix/polynomial
+visual command during discovery; inspect `verify:impact` for changed paths and
+run affected type checks. Promote only after the second caller and required
+visual review, then execute broader integration/cost checks. The rollback unit
+is source parameterization plus its adapter changes, fixtures and tests; later
+second-caller integration is a separate coherent checkpoint.
+
+There is no inferred numerical time/token budget. Scope is the four packages in
+the contract; finish at their acceptance conditions or a named visual/authority
+blocker, and reserve closeout effort before expanding checks. Existing engineering
+budget-repair authority applies; no new library, reader layout, universal IR,
+paid service or deployment is authorized. Prepare one concrete visual packet
+rather than reopening routine implementation decisions.
