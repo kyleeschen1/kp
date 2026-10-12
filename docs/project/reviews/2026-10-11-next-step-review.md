@@ -1,8 +1,9 @@
 # Next step: prove bounded explanatory reuse
 
-Status: recommendation only; no implementation authorization or roadmap change.
-The October 8 strategy handoff remains noncanonical inbox provenance. Existing
-visual checkpoints and deferred reader evaluation remain in force.
+Status: bounded recommendation subsequently authorized October 11; polynomial
+visual structure accepted. The October 8 strategy handoff remains noncanonical
+inbox provenance. Second-caller review and deferred reader evaluation remain in
+force. Theseus owns execution status.
 
 ## Recommendation
 
@@ -76,9 +77,10 @@ evaluation criteria; the roadmap and approved contracts retain authority.
 
 The user subsequently requested the dev server and execution as far as possible.
 `run-contract.kp.la-explanatory-reuse-v1` owns execution status. This authorizes
-the bounded recommendation, not a waiver of the polynomial visual checkpoint.
-Preparation may proceed independently; renderer parameterization and a second
-visual caller follow acceptance or an explicit checkpoint amendment.
+the bounded recommendation. The user subsequently accepted the polynomial
+visual structure and explicitly directed “annotate and proceed”; timing and text
+remain provisional. Renderer parameterization and the second caller are now
+authorized, with second-caller review before final promotion.
 
 Canonical artifact: the polynomial factorization fixture in
 `src/experiments/rectangular-product/polynomial-model.ts`. Host:
@@ -143,3 +145,41 @@ blocker, and reserve closeout effort before expanding checks. Existing engineeri
 budget-repair authority applies; no new library, reader layout, universal IR,
 paid service or deployment is authorized. Prepare one concrete visual packet
 rather than reopening routine implementation decisions.
+
+## Candidate review packet
+
+The accepted polynomial now consumes a bounded typed source. A two-equation,
+three-unknown system and a reordered polynomial with constant-first inputs use
+the same local view. Author annotations, selected row/column and beat intervals
+are independent of mathematical values and geometry. See the
+[authoring packet](../authoring/la-collection-authoring-packet.md) for actual
+supported inputs and repair cases. No second renderer, CSS family, animation
+clock or dependency was introduced.
+
+Review on the shared server:
+
+- `http://127.0.0.1:8000/experiments/rectangular-product/?view=system`
+- `http://127.0.0.1:8000/experiments/rectangular-product/?view=polynomials&example=reordered`
+
+Inspect the opening, collection, matrix endpoint and reverse expansion. Does
+the system preserve recognizable rows and independent RHS values? Does the
+reordered example make input-to-column correspondence clear? The system is
+displayed as b = Ax to preserve the accepted output-on-left composition; this
+is not solving for x. Text/pacing remain provisional and the input vector keeps
+the exemplar's 72px spacing. This candidate has not been promoted as arbitrary
+LA support.
+
+Executed: nine semantic/source/static-reading tests; seven Chromium cases
+covering all modes plus JavaScript-disabled standalone reading; application,
+node and test TypeScript checks. A test initially used Array.toReversed beyond
+the configured target; replacing it with copied-array reverse passed the same
+test typecheck. Static inspection then prompted ordinary signed/unit notation;
+semantic tests and the focused no-JavaScript browser case were rerun. Broad
+production payload, many-card performance and supported-browser promotion
+checks are deferred to the promotion boundary, not claimed passed here.
+
+The exported standalone readings are generated without scripts or external
+fonts; this does not turn the experiment host into a no-JavaScript Article.
+The source-format trial demonstrates reuse by this agent, not independent LLM
+authoring success or learner comprehension. Theseus owns remaining review and
+promotion status rather than a duplicated completion table here.

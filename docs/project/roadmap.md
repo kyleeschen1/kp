@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 11: user accepted the polynomial visual structure, with timing and text
+provisional, and authorized the [bounded authoring-reuse work](reviews/2026-10-11-next-step-review.md).
+`run-contract.kp.la-explanatory-reuse-v1` owns execution: parameterize the accepted
+exemplar, pressure it with a linear-system caller, then prepare the bounded
+authoring packet. The new strategy handoff remains noncanonical. Reader testing
+is still deferred; no universal format or renderer promotion is implied.
+
 October 6: user approved the [polynomial-to-matrix exemplar](reviews/2026-10-06-polynomial-matrix.md).
 Pause further pouring refinement: expanded row gaps obscure matrix shape. The
 new existing-host polynomial view keeps coefficients stable while collecting and

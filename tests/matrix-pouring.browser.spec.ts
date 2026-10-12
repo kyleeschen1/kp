@@ -1,4 +1,71 @@
 import { test, expect } from '@playwright/test';
+import { renderCollectionReading } from '../src/experiments/rectangular-product/collection-reading.ts';
+import { linearSystemModel } from '../src/experiments/rectangular-product/linear-system-source.ts';
+
+test('static system explanation remains readable with JavaScript disabled', async ({ browser }, info) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.setContent(renderCollectionReading(linearSystemModel));
+    await expect(page.locator('math')).toHaveCount(2);
+    await expect(page.locator('script')).toHaveCount(0);
+    await expect(page.locator('h1')).toHaveText('A linear system as a matrix equation');
+    await expect(page.locator('li')).toHaveCount(9);
+    await page.screenshot({ path: info.outputPath('linear-system-static.png'), fullPage: true });
+  } finally { await context.close(); }
+});
+
+test('linear system reuses collection while retaining unknowns, independent RHS and weighted navigation', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/experiments/rectangular-product/?view=system');
+  const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+  await expect(root.locator('[data-poly="name-0"]')).toHaveAttribute('data-source-id', 'system.rhs.0');
+  await expect(root.locator('[data-poly="name-0"]')).toContainText('7');
+  await expect(root.locator('[data-poly="basis-0-2"]')).toHaveCSS('opacity', '1');
+  await expect(root.locator('[data-poly="plus-1-1"]')).toHaveCSS('opacity', '0');
+  await expect(root.locator('[data-poly^="coefficient-"]:not(svg)')).toHaveCount(6);
+  const chooser = root.getByRole('combobox', { name: 'Milestone' });
+  await chooser.selectOption('1');
+  const grid = await root.locator('[data-poly^="coefficient-"]:not(svg)').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')?.split(';')[0]));
+  for (const [index, phase] of [['3', '3'], ['4', '4'], ['5', '5'], ['8', '8']]) {
+    await chooser.selectOption(index!);
+    await expect(root.locator('.polynomial-stage')).toHaveAttribute('data-phase', phase!);
+    expect(await root.locator('[data-poly^="coefficient-"]:not(svg)').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')?.split(';')[0]))).toEqual(grid);
+    if (index === '3' || index === '4') await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
+  }
+  await chooser.selectOption('6');
+  await expect(root.locator('[data-poly="coefficient-1-1"]')).toHaveCSS('opacity', '1');
+  await expect(root.locator('[data-poly="coefficient-0-1"]')).toHaveCSS('opacity', '0.45');
+  await chooser.selectOption('7');
+  await expect(root.locator('[data-poly="basis-0-2"]')).toHaveCSS('opacity', '1');
+  const poses = await root.locator('.polynomial-stage [style]').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')));
+  await chooser.selectOption('0'); await chooser.selectOption('7');
+  expect(await root.locator('.polynomial-stage [style]').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')))).toEqual(poses);
+  await root.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(root).toHaveAttribute('data-milestone', 'hold');
+  await root.locator('.matrix-card').screenshot({ path: info.outputPath('linear-system-endpoint.png') });
+  await page.reload(); await expect(root).toHaveAttribute('data-milestone', 'hold');
+  await expect(root.locator('.katex-error')).toHaveCount(0);
+  await root.getByText('Read the calculation', { exact: true }).click();
+  await expect(root.locator('math')).toHaveCount(1);
+  await expect(root.locator('details')).toContainText('neither solves');
+  expect(errors).toEqual([]);
+});
+
+test('reordered polynomial source keeps constant units visible and arbitrary last input present', async ({ page }, info) => {
+  await page.goto('/experiments/rectangular-product/?view=polynomials&example=reordered');
+  const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+  await expect(root.locator('[data-poly="coefficient-0-0"]')).toHaveCSS('opacity', '1');
+  await expect(root.locator('[data-poly="coefficient-1-0"] [data-unit]')).toHaveCSS('opacity', '1');
+  await expect(root.locator('[data-poly="basis-1-2"]')).toHaveCSS('opacity', '1');
+  await expect(root.locator('[data-poly="basis-1-0"]')).toHaveCSS('opacity', '0');
+  await root.getByRole('combobox', { name: 'Milestone' }).selectOption('5');
+  await expect(root.locator('[data-poly="basis-0-0"]')).toHaveCSS('opacity', '1');
+  await expect(root.locator('[data-poly="coefficient-brackets"]')).toHaveAttribute('width', '194');
+  await expect(root.locator('.katex-error')).toHaveCount(0);
+  await root.locator('.matrix-card').screenshot({ path: info.outputPath('reordered-polynomial-endpoint.png') });
+});
 
 test('polynomial extraction retains coefficient grid and shared basis through reversible collection', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));

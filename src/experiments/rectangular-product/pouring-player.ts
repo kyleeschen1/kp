@@ -6,33 +6,36 @@ import { applyMatrixConfig, observeMatrixConfig, readMatrixConfig } from '../mat
 import { pouringModel, pouringBeats as numericBeats, samplePouring as sampleNumeric } from './pouring-model.ts';
 import { pouringHtml, mountPouringView, matrixLatex } from './pouring-view.ts';
 
-export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 'structure' | 'polynomials' = 'numeric') {
+export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 'structure' | 'polynomials' | 'system' = 'numeric') {
   const structural = mode === 'structure' ? await import('./structure-view.ts') : undefined;
-  const polynomial = mode === 'polynomials' ? await import('./polynomial-view.ts') : undefined;
-  const pouringBeats = polynomial?.polynomialBeats ?? structural?.structureBeats ?? numericBeats;
-  const samplePouring = polynomial?.samplePolynomial ?? structural?.sampleStructure ?? sampleNumeric;
+  const polynomial = mode === 'polynomials' || mode === 'system' ? await import('./polynomial-view.ts') : undefined;
+  const reordered = mode === 'polynomials' && new URLSearchParams(location.search).get('example') === 'reordered';
+  const collection = mode === 'system' ? (await import('./linear-system-source.ts')).linearSystemModel
+    : reordered ? (await import('./collection-variation.ts')).reorderedPolynomialModel : polynomial?.polynomialModel;
+  const pouringBeats = collection?.beats ?? structural?.structureBeats ?? numericBeats;
+  const samplePouring = polynomial && collection ? (p: number) => polynomial.sampleCollection(collection, p) : structural?.sampleStructure ?? sampleNumeric;
   const model = pouringModel();
-  document.title = polynomial ? 'Extracting a shared basis' : structural ? 'Why the dimensions fit' : 'One column in, one column out';
+  document.title = mode === 'system' ? 'The same equations, in matrix form' : polynomial ? 'Extracting a shared basis' : structural ? 'Why the dimensions fit' : 'One column in, one column out';
   document.querySelector('h1')!.textContent = document.title;
-  document.querySelector('#matrix-story > p')!.textContent = polynomial ? 'Keep the coefficients in place. Collect the shared powers of t, then turn them into a basis vector.' : structural
+  document.querySelector('#matrix-story > p')!.textContent = mode === 'system' ? 'Keep the coefficients and right-hand sides. Collect the unknowns into one ordered vector.' : polynomial ? 'Keep the coefficients in place. Collect the shared input expressions, then turn them into an ordered vector.' : structural
     ? 'Follow whole inputs through receiving rows. Shape shows component counts—not numerical size.'
     : 'C = BA. Each three-component column of A passes through both rows of B to become a two-component column of C.';
   root.classList.add('dot-player', 'matrix-player');
-  const equation = polynomial?.polynomialEquation ?? `${matrixLatex(model.product.result)}=${matrixLatex(model.product.left)}${matrixLatex(model.product.right)}`;
+  const equation = collection ? `\\begin{gathered}${collection.expandedEquation}\\\\[1em]${collection.equation}\\end{gathered}` : `${matrixLatex(model.product.result)}=${matrixLatex(model.product.left)}${matrixLatex(model.product.right)}`;
   root.innerHTML = `<section class="matrix-card kp-focus-deck" aria-label="${document.title}">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
-    <div class="matrix-scroll" tabindex="0" role="region" aria-label="Animation; scroll horizontally on narrow screens">${polynomial ? polynomial.polynomialHtml() : structural ? structural.structureHtml() : pouringHtml(model)}</div>
+    <div class="matrix-scroll" tabindex="0" role="region" aria-label="Animation; scroll horizontally on narrow screens">${polynomial ? polynomial.polynomialHtml(collection) : structural ? structural.structureHtml() : pouringHtml(model)}</div>
     <div class="matrix-controls"><button data-back>Previous</button><button data-play>Play</button><button data-next>Next</button>
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${pouringBeats.map((beat, i) => `<option value="${i}">${beat.id}</option>`).join('')}</select>
     <button data-theme aria-pressed="false">Light mode</button></div></section>
-    <p class="matrix-help">${polynomial ? 'Use Previous or scrub backward to distribute the basis expressions into the polynomial rows.' : structural ? 'The bands hide arithmetic, not relationships. Every receiving row gets the whole input.' : 'One input column, two receiving rows, one output column.'} <a href="?view=pouring">Numbers</a> · <a href="?view=structure">Structure</a> · <a href="?view=polynomials">Polynomials</a>.</p>
+    <p class="matrix-help">${polynomial ? 'Use Previous or scrub backward to expand the rows again.' : structural ? 'The bands hide arithmetic, not relationships. Every receiving row gets the whole input.' : 'One input column, two receiving rows, one output column.'} <a href="?view=pouring">Numbers</a> · <a href="?view=structure">Structure</a> · <a href="?view=polynomials">Polynomials</a> · <a href="?view=system">Linear system</a>.</p>
     <details><summary>Read the calculation</summary><div class="pour-static">${renderLatexToHtml(equation, { trust: true, output: 'htmlAndMathml' })}</div>
-    ${polynomial ? '<p>p(t) = 2t³ − t + 4 and q(t) = t³ + 3t² − 2. The declared ordered basis is (t³, t², t, 1). Missing terms have zero coefficients. Each matrix row contains the coordinates of one polynomial in that basis. This reverses a representation using retained symbolic relationships; it does not invert a numerical matrix multiplication.</p>' : '<p>C = BA. Each column of A is paired with both rows of B. Working copies keep the original values; a tilted arrangement is not a transpose operation.</p>'}
+    ${collection ? `<p>${collection.kind === 'linear-system' ? 'Each row is an equation constraining the ordered unknowns. The separate right-hand-side vector is retained. The display uses b = Ax, equivalent to Ax = b; it neither solves the system nor claims the unknowns satisfy it for arbitrary values.' : 'Each row defines a polynomial in the explicitly ordered input expressions. Missing terms have zero coefficients. Reversing this representation uses retained symbolic relationships; it does not invert numerical matrix multiplication.'}</p>` : '<p>C = BA. Each column of A is paired with both rows of B. Working copies keep the original values; a tilted arrangement is not a transpose operation.</p>'}
     ${structural ? '<p>B has two rows of three coefficients: it accepts three components and produces two. A has two such input columns, so C has shape 2 × 2. D has three rows of two coefficients. It accepts C’s two-component columns and produces three components each. The animation follows C’s first column through D; it does not animate the second. Matching counts are necessary; applications also require compatible meanings, bases and units.</p>' : ''}</details>`;
   await document.fonts.ready;
-  const view = polynomial ? polynomial.mountPolynomialView(root) : structural ? structural.mountStructureView(root) : mountPouringView(root, model);
-  const clock = createKpReaderTimelinePlaybackClock({ id: `${root.id}.${mode}`, durationMs: polynomial ? 28000 : structural ? 24000 : 34000 });
+  const view = polynomial ? polynomial.mountPolynomialView(root, collection) : structural ? structural.mountStructureView(root) : mountPouringView(root, model);
+  const clock = createKpReaderTimelinePlaybackClock({ id: `${root.id}.${mode}`, durationMs: collection?.durationMs ?? (structural ? 24000 : 34000) });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let config = readMatrixConfig(document), disposed = false, lastCue = '';
   const slider = root.querySelector<HTMLInputElement>('[data-scrub]')!;
@@ -55,20 +58,20 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     }
   };
   const go = (index: number, animate = false) => {
-    const i = Math.max(0, Math.min(pouringBeats.length - 1, index)), target = i / (pouringBeats.length - 1);
+    const i = Math.max(0, Math.min(pouringBeats.length - 1, index)), target = collection?.stops[i] ?? i / (pouringBeats.length - 1);
     clock.pause(); history.replaceState(null, '', `${location.pathname}${location.search}#${pouringBeats[i]!.id}`);
     if (animate && !stepsOnly()) clock.play({ direction: target < clock.getSnapshot().progress ? 'rewind' : 'forward', stopAt: target });
     else clock.seek(target);
     render();
   };
   const navigate = (offset: number) => {
-    const phase = clock.getSnapshot().progress * (pouringBeats.length - 1);
+    const phase = samplePouring(clock.getSnapshot().progress).phase;
     go(offset > 0 ? Math.floor(phase + 1e-8) + 1 : Math.ceil(phase - 1e-8) - 1, true);
   };
   const unsubscribe = clock.subscribe(render);
   slider.oninput = () => clock.seek(Number(slider.value));
   slider.onkeydown = event => {
-    const target = readKpFocusDeckScrubberKeyTarget(event, clock.getSnapshot().progress * (pouringBeats.length - 1), pouringBeats.length);
+    const target = readKpFocusDeckScrubberKeyTarget(event, samplePouring(clock.getSnapshot().progress).phase, pouringBeats.length);
     if (target !== undefined) { event.preventDefault(); go(target); }
   };
   chooser.onchange = () => go(Number(chooser.value));

@@ -5,6 +5,12 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 11: polynomial visual structure accepted; timing and wording remain
+provisional. The user authorized [bounded LA explanatory reuse](../reviews/2026-10-11-next-step-review.md),
+tracked by `run-contract.kp.la-explanatory-reuse-v1`. Preserve reader layouts and
+deferred evaluation. A second-caller candidate does not establish universal
+presentation support or learning effectiveness.
+
 October 6: [polynomial basis extraction](../reviews/2026-10-06-polynomial-matrix.md)
 is the approved next exemplar. Pouring refinement is parked while this tests
 matrix gestalt and reversible expansion. Reader layouts remain unchanged.

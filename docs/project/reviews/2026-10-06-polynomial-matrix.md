@@ -1,5 +1,15 @@
 # Polynomial basis extraction exemplar
 
+## Visual acceptance (October 11)
+
+The user accepted the visual structure: “The visual looks good, although the
+timing and text could be improved,” then authorized “annotate and proceed.”
+This satisfies the exemplar checkpoint for bounded source parameterization and
+the linear-system caller. Timing and wording remain provisional authoring
+choices, not fixed global defaults. Preserve the accepted choreography and
+review the second caller before claiming the bounded format ready. Historical
+pending-review statements below describe the pre-acceptance candidate.
+
 ## Six design objections and approved repair (October 6)
 
 The user requested durable recording and a repair for each objection below.

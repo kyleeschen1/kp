@@ -5,7 +5,7 @@ import { context } from './source.ts';
 const root = document.querySelector<HTMLElement>('#rectangular-player')!;
 let cleanup: (() => void) | undefined, disposed = false;
 const requestedView = new URLSearchParams(location.search).get('view');
-const mount = requestedView === 'pouring' || requestedView === 'structure' || requestedView === 'polynomials'
+const mount = requestedView === 'pouring' || requestedView === 'structure' || requestedView === 'polynomials' || requestedView === 'system'
   ? import('./pouring-player.ts').then(({ mountPouringPlayer }) => mountPouringPlayer(root, requestedView === 'pouring' ? 'numeric' : requestedView))
   : mountDotPlayer(root, context.passage, true, context);
 void mount.then(dispose => {

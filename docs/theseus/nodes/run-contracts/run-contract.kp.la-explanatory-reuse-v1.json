@@ -39,11 +39,58 @@
       "scope": "Chromium existing exemplar baseline",
       "checkedAt": "2026-10-12T01:52:47.320Z",
       "notes": "All four browser cases passed, including polynomial grid, reversible collection and persistent paint. No choreography changes or human visual acceptance."
+    },
+    {
+      "command": "npm run test:matrix-pouring",
+      "status": "passed",
+      "scope": "bounded collection source and existing semantic callers",
+      "checkedAt": "2026-10-12T02:09:40.075Z",
+      "notes": "Nine tests pass: provenance, independent RHS, pacing/reversal, typed repairs, static reading and existing matrix semantics."
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "failed",
+      "scope": "first new collection test attempt",
+      "checkedAt": "2026-10-12T02:09:40.818Z",
+      "notes": "New test used Array.toReversed beyond configured library target. Repaired with copied array reverse; final rerun passed. No compiler target or test scope relaxed."
+    },
+    {
+      "command": "npm run typecheck:tests",
+      "status": "passed",
+      "scope": "final integrated tests",
+      "checkedAt": "2026-10-12T02:09:41.568Z",
+      "notes": "Passed after local test compatibility repair."
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "final Chromium candidate and preservation checks",
+      "checkedAt": "2026-10-12T02:09:42.325Z",
+      "notes": "Seven tests pass including original, system, reordered source and standalone MathML with JavaScript disabled. Second-caller human acceptance still pending."
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "affected application types",
+      "checkedAt": "2026-10-12T02:10:07.744Z"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "static export script types",
+      "checkedAt": "2026-10-12T02:10:08.679Z"
+    },
+    {
+      "command": "npm run visual:matrix-pouring -- --grep static",
+      "status": "passed",
+      "scope": "signed notation export follow-up",
+      "checkedAt": "2026-10-12T02:11:32.329Z",
+      "notes": "Focused no-JavaScript static browser case passed after signed/unit notation cleanup; nine semantic tests also rerun and pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: one of four packages complete. Polynomial visual acceptance or explicit waiver is required before renderer parameterization; live host port 8000. Preparation complete."
+    "summary": "HUMAN_CHECKPOINT: two packages complete; linear-system candidate and authoring packet implemented but not promoted. Review view=system and view=polynomials&example=reordered on port 8000. Original accepted choreography preserved; timing and wording provisional."
   },
   "allowedWork": [
     "Prepare contract and baseline now; implementation follows explicit polynomial visual acceptance or explicit gate waiver",
@@ -64,17 +111,20 @@
     {
       "id": "polynomial-source",
       "title": "Parameterize visually accepted polynomial exemplar",
-      "status": "planned"
+      "summary": "Accepted polynomial refactored through bounded typed source; baseline semantic tests, four Chromium cases and application types passed. Timing and annotations are editable independently; subsequent combined verification includes new caller.",
+      "status": "complete"
     },
     {
       "id": "linear-system",
       "title": "Pressure mechanism with linear-system caller",
-      "status": "planned"
+      "summary": "Integrated two-by-three system and reordered polynomial pressure caller through the same view; running focused regression and visual checks before checkpoint.",
+      "status": "in-progress"
     },
     {
       "id": "authoring-packet",
       "title": "Publish and verify bounded authoring packet",
-      "status": "planned"
+      "summary": "Draft packet and standalone readings prepared and checked. Final publication, production costs and promotion await second-caller visual review.",
+      "status": "in-progress"
     }
   ]
 }

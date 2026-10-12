@@ -1,8 +1,9 @@
 # Proposed path to a durable composable LA format
 
-Status: recommendation, not implementation authorization. The polynomial
-exemplar still awaits visual acceptance. This proposal does not reopen parked
-catalogue work or authorize a universal renderer.
+Status: bounded first milestone authorized October 11 through the
+[next-step review](2026-10-11-next-step-review.md). Polynomial visual structure
+accepted; timing and text provisional. Later stages remain proposals. This does
+not reopen parked catalogue work or authorize a universal renderer.
 
 ## Evidence and target
 
