@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 12 follow-up: the user authorized [one row replacement](../reviews/2026-10-12-row-replacement-exemplar.md)
+from the accepted linear-system endpoint. The same-host candidate is awaiting
+its first visual review under `run-contract.kp.row-replacement-v1`. It adds exact
+row/RHS authority and inverse reasoning without changing reader layouts.
+
 October 12: [bounded LA collection reuse](../authoring/la-collection-authoring-packet.md)
 has reached its accepted milestone. Polynomial and linear-system callers share
 one local view with static readings, typed repairs and production/browser

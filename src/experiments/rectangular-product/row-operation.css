@@ -1,0 +1,3 @@
+.row-operation-stage { position: relative; min-width: 680px; height: 390px; color: var(--kp-st-ink); }
+.matrix-player[aria-busy="true"] .row-operation-stage { opacity: 0; }
+.row-operation-ink { display: inline-block; }

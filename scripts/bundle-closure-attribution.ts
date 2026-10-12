@@ -19,6 +19,25 @@ export type KpBundleManifest = Readonly<Record<string, {
   readonly css?: readonly string[] | undefined;
 }>>;
 
+/** A module imported both statically and dynamically can become a shared chunk
+ * with a generated manifest key. Resolve through emitted ownership evidence,
+ * never by guessing filenames or silently dropping that activation. */
+export function resolveKpBundleActivationRoots(manifest: KpBundleManifest,
+  inventory: readonly { readonly file: string; readonly modules: readonly string[] }[], sources: readonly string[]): readonly string[] {
+  const byFile = new Map(Object.entries(manifest).map(([key, chunk]) => [chunk.file, key]));
+  const roots = sources.flatMap(source => {
+    if (manifest[source]) return [source];
+    const owners = inventory.filter(chunk => chunk.modules.includes(source));
+    if (!owners.length) throw new Error(`Production inventory lacks activation module ${source}.`);
+    return owners.map(owner => {
+      const key = byFile.get(owner.file);
+      if (!key) throw new Error(`Production manifest lacks activation owner ${owner.file}.`);
+      return key;
+    });
+  });
+  return Object.freeze([...new Set(roots)]);
+}
+
 /** Vite can coalesce identical HTML entries and omit their manifest keys.
  * Actual emitted script/link roots still own their full dependency closure. */
 export function collectKpHtmlBundleFiles(html: string, manifest: KpBundleManifest, includeDynamicImports = false): readonly string[] {

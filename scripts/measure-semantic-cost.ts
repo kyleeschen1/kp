@@ -1,7 +1,7 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { gzipSync } from 'node:zlib';
 import { performance } from 'node:perf_hooks';
-import { collectKpHtmlBundleFiles, collectKpBundleManifestFiles, type KpBundleManifest } from './bundle-closure-attribution.ts';
+import { collectKpHtmlBundleFiles, collectKpBundleManifestFiles, resolveKpBundleActivationRoots, type KpBundleManifest } from './bundle-closure-attribution.ts';
 import { constant } from '../src/math/expression.ts';
 import { createKpScalarExpression, createKpTypedMatrixFromRows } from '../src/math/typed-semantic-math.ts';
 import { matrixProduct } from '../src/math/matrix-product.ts';
@@ -10,6 +10,7 @@ import budgets from './semantic-cost-budgets.json' with { type: 'json' };
 
 const root = 'dist/matrix-interpretations';
 const manifest: KpBundleManifest = JSON.parse(await readFile(`${root}/.vite/manifest.json`, 'utf8'));
+const inventory: { file: string; modules: string[] }[] = JSON.parse(await readFile(`${root}/module-inventory.json`, 'utf8'));
 const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
 const closures = [];
 for (const page of pages) {
@@ -19,7 +20,7 @@ for (const page of pages) {
   // not only the ordinary page's cold static closure.
   const activation = collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
     ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : [];
-  const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-composition' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, activation)])];
+  const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-composition' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, resolveKpBundleActivationRoots(manifest, inventory, activation))])];
   const measured = await Promise.all(files.map(async file => {
     const data = await readFile(`${root}/${file}`);
     return { file, raw: data.byteLength, gzip: gzipSync(data).byteLength };
@@ -27,7 +28,6 @@ for (const page of pages) {
   const sum = (suffix: string) => measured.filter(f => f.file.endsWith(suffix)).reduce((a, f) => ({ raw: a.raw + f.raw, gzip: a.gzip + f.gzip }), { raw: 0, gzip: 0 });
   closures.push({ page, js: sum('.js'), css: sum('.css'), html: sum('.html'), files: measured });
 }
-const inventory: { file: string; modules: string[] }[] = JSON.parse(await readFile(`${root}/module-inventory.json`, 'utf8'));
 const reachableFiles = new Set(closures.flatMap(closure => closure.files.map(file => file.file)));
 const modules = [...new Set(inventory.filter(chunk => reachableFiles.has(chunk.file)).flatMap(chunk => chunk.modules))].sort();
 for (const module of modules) if (budgets.forbiddenModuleFragments.some(part => module.includes(part))) {

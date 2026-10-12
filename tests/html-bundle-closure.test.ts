@@ -1,6 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { collectKpHtmlBundleFiles } from "../scripts/bundle-closure-attribution.ts";
+import { collectKpHtmlBundleFiles, collectKpBundleManifestFiles, resolveKpBundleActivationRoots } from "../scripts/bundle-closure-attribution.ts";
+
+test('activation sources retain complete ownership when moved into shared chunks', () => {
+  const manifest = { direct: { file: 'assets/direct.js' }, shared: { file: 'assets/shared.js', imports: ['direct'], css: ['assets/shared.css'] } };
+  const inventory = [{ file: 'assets/shared.js', modules: ['system.ts', 'other.ts'] }];
+  const roots = resolveKpBundleActivationRoots(manifest, inventory, ['system.ts', 'direct', 'other.ts']);
+  assert.deepEqual(roots, ['shared', 'direct']);
+  assert.deepEqual(collectKpBundleManifestFiles(manifest, roots), ['assets/direct.js', 'assets/shared.css', 'assets/shared.js']);
+  assert.throws(() => resolveKpBundleActivationRoots(manifest, inventory, ['missing.ts']), /lacks activation module/);
+  assert.throws(() => resolveKpBundleActivationRoots({}, inventory, ['system.ts']), /lacks activation owner/);
+});
 
 test("coalesced HTML roots retain shared, direct CSS and lazy dependencies without a manifest entry", () => {
   const manifest = { shared: { file: "assets/shared.js", imports: ["dependency"], dynamicImports: ["lazy"] },

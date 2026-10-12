@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 12 follow-up: user authorized the proposed elementary row-operation
+exemplar. The [row-replacement candidate](reviews/2026-10-12-row-replacement-exemplar.md)
+reuses the accepted system endpoint, contributor fusion and shared player.
+`run-contract.kp.row-replacement-v1` owns its first visual checkpoint. The
+candidate adds R2 to R1 including RHS, retains R2 and explains inverse recovery;
+no elimination engine or general row-operation renderer is promoted.
+
 October 12: the user accepted both collection examples and the final overlapping
 settling/enclosure treatment. The bounded authoring-reuse milestone is complete:
 one typed source/view supports polynomial and linear-system explanations, with

@@ -73,8 +73,8 @@ export function compileCollectionSource(source: CollectionSource) {
   // A system RHS is supplied independently. It must never inherit the identity
   // of the computed left-hand expression, even when the printed values match.
   const outputs = Object.freeze(coefficients.map((_, r) => source.domain.kind === 'polynomials'
-    ? Object.freeze({ id: product.result.rows[r]![0]!.id, latex: source.domain.names[r]! })
-    : Object.freeze({ id: `${source.id}.rhs.${r}`, latex: String(source.domain.rhs[r]), value: scalar(`${source.id}.rhs.${r}`, constant(source.domain.rhs[r]!)) })));
+    ? Object.freeze({ kind: 'derived-expression' as const, id: product.result.rows[r]![0]!.id, latex: source.domain.names[r]! })
+    : Object.freeze({ kind: 'constraint-rhs' as const, id: `${source.id}.rhs.${r}`, latex: String(source.domain.rhs[r]), value: scalar(`${source.id}.rhs.${r}`, constant(source.domain.rhs[r]!)) })));
   const durationMs = durations.reduce((a, b) => a + b, 0);
   const starts = [0]; durations.forEach(ms => starts.push(starts.at(-1)! + ms));
   const stops = Object.freeze(starts.map(ms => ms / durationMs));
