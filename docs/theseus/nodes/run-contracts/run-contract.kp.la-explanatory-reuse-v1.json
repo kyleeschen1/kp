@@ -100,11 +100,18 @@
       "scope": "signed coefficient and relational spacing final",
       "checkedAt": "2026-10-12T02:26:50.108Z",
       "notes": "All eight Chromium cases pass after repair. Nine semantic tests and application/test type checks also pass."
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "settling enclosure overlap",
+      "checkedAt": "2026-10-12T15:54:47.243Z",
+      "notes": "Nine Chromium cases pass. New regression verifies simultaneous overlap, equality gating, endpoint hold, reverse seek and merged navigation for uniform and weighted timing. Nine semantic tests and app/test types also pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: user accepted examples as effective; approved spacing and signed-addend fixes are implemented and tested. Inspect align then collect in system and reordered views. Promotion work remains separately tracked."
+    "summary": "Approved settling/enclosure refinement implemented and checked. Two packages complete; existing broader promotion work remains. Visual refinement ready on shared collection host."
   },
   "allowedWork": [
     "Prepare contract and baseline now; implementation follows explicit polynomial visual acceptance or explicit gate waiver",

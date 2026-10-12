@@ -1,6 +1,50 @@
 import { test, expect } from '@playwright/test';
 import { renderCollectionReading } from '../src/experiments/rectangular-product/collection-reading.ts';
 import { linearSystemModel } from '../src/experiments/rectangular-product/linear-system-source.ts';
+import { polynomialModel } from '../src/experiments/rectangular-product/polynomial-model.ts';
+
+test('settling and all enclosures form one reversible event before the completed equation holds', async ({ page }, info) => {
+  for (const [view, model] of [['polynomials', polynomialModel], ['system', linearSystemModel]] as const) {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(`/experiments/rectangular-product/?view=${view}`);
+    const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+    const slider = root.getByRole('slider', { name: 'Animation position' });
+    const seek = async (phase: number) => {
+      const i = Math.floor(phase), next = model.stops[i + 1] ?? model.stops[i]!;
+      await slider.fill(String(Number((model.stops[i]! + (phase - i) * (next - model.stops[i]!)).toFixed(4))));
+    };
+    const paint = () => root.locator('.polynomial-stage [style]').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')));
+    const enclosures = root.locator('.poly-enclosure');
+    await seek(3.6);
+    for (const node of await enclosures.all()) await expect(node).toHaveCSS('opacity', '0');
+    await seek(3.8);
+    const mid = await paint();
+    const opacities = await enclosures.evaluateAll(nodes => nodes.map(n => Number(getComputedStyle(n).opacity)));
+    expect(opacities).toHaveLength(3);
+    expect(new Set(opacities).size).toBe(1);
+    expect(opacities[0]).toBeGreaterThan(0); expect(opacities[0]).toBeLessThan(1);
+    await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
+    const moving = await root.locator('[data-poly="basis-0-0"]').getAttribute('style');
+    await root.locator('.matrix-card').screenshot({ path: info.outputPath(`${view}-settling-enclosures.png`) });
+    await seek(4);
+    expect(await root.locator('[data-poly="basis-0-0"]').getAttribute('style')).not.toEqual(moving);
+    await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
+    await seek(4.3);
+    for (const node of await enclosures.all()) await expect(node).toHaveCSS('opacity', '1');
+    await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '1');
+    const complete = await paint(); await seek(5); expect(await paint()).toEqual(complete);
+    await seek(3.8); expect(await paint()).toEqual(mid);
+    const chooser = root.getByRole('combobox', { name: 'Milestone' });
+    await expect(chooser.locator('option[value="4"]')).toHaveCount(0);
+    await chooser.selectOption('3');
+    await root.getByRole('button', { name: 'Next', exact: true }).click();
+    await expect(root).toHaveAttribute('data-milestone', 'matrix');
+    await root.getByRole('button', { name: 'Previous', exact: true }).click();
+    await expect(root).toHaveAttribute('data-milestone', 'collect');
+    await slider.focus(); await page.keyboard.press('ArrowRight');
+    await expect(root).toHaveAttribute('data-milestone', 'matrix');
+  }
+});
 
 test('factor gaps follow content and negative coefficients explicitly become signed addends', async ({ page }, info) => {
   for (const query of ['view=polynomials', 'view=system', 'view=polynomials&example=reordered']) {
@@ -76,11 +120,11 @@ test('linear system reuses collection while retaining unknowns, independent RHS 
   const chooser = root.getByRole('combobox', { name: 'Milestone' });
   await chooser.selectOption('1');
   const grid = await root.locator('[data-poly^="coefficient-"]:not(svg)').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')?.split(';')[0]));
-  for (const [index, phase] of [['3', '3'], ['4', '4'], ['5', '5'], ['8', '8']]) {
+  for (const [index, phase] of [['3', '3'], ['5', '5'], ['8', '8']]) {
     await chooser.selectOption(index!);
     await expect(root.locator('.polynomial-stage')).toHaveAttribute('data-phase', phase!);
     expect(await root.locator('[data-poly^="coefficient-"]:not(svg)').evaluateAll(nodes => nodes.map(n => n.getAttribute('style')?.split(';')[0]))).toEqual(grid);
-    if (index === '3' || index === '4') await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
+    if (index === '3') await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
   }
   await chooser.selectOption('6');
   await expect(root.locator('[data-poly="coefficient-1-1"]')).toHaveCSS('opacity', '1');
@@ -140,7 +184,7 @@ test('polynomial extraction retains coefficient grid and shared basis through re
     expect(await poses()).toEqual(before);
     for (const ink of await root.locator('[data-poly="name-0"] .katex *').all()) await expect(ink).toHaveCSS('visibility', 'visible');
     if ([1, 3, 4, 5, 8].includes(phase)) expect(await persistentName.screenshot()).toEqual(namePaint);
-    if (phase >= 2.2 && phase <= 4.75) await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
+    if (phase >= 2.2 && phase <= 4.1) await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
     if (phase === 6) {
       await expect(root.locator('[data-poly="coefficient-0-1"]')).toHaveCSS('opacity', '1');
       await expect(root.locator('[data-poly="coefficient-1-1"]')).toHaveCSS('opacity', '0.45');

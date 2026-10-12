@@ -148,6 +148,16 @@ rather than reopening routine implementation decisions.
 
 ## Candidate review packet
 
+October 12: user approved overlapping final column settling and all three
+enclosures. The shared collection adapter now begins enclosure at phase 3.65,
+finishes at 4.1 after the pivot ends at 4, and restores equality during 4.1–4.25.
+The remainder through phase 5 is a complete equation hold. Collection navigation
+skips the intermediate pivot stop while retaining its internal score/URL identity.
+Regression checks cover synchronized enclosure, absent equality during assembly,
+held endpoint, reverse-seek parity and reduced-motion/keyboard navigation with
+both uniform polynomial and weighted system timing. These are local provisional
+timings, not shared global motif policy; semantic objects and paths are preserved.
+
 The user subsequently judged these examples effective and approved two bounded
 visual corrections: factor spacing should adapt to the actual coefficient
 matrix, and aligned negative terms should explicitly read as addition of signed

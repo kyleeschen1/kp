@@ -57,6 +57,14 @@ Default intervals remain 3500ms; the existing polynomial lasts 28000ms. The
 clock, navigation and sampler use the same weighted stops. Changing pacing must
 not change mathematical endpoints or reverse-seek behavior.
 
+October 12 timing refinement: brackets begin during the last part of the pivot
+and finish just after the column settles. Equality returns only after enclosure,
+followed by a completed-equation hold. Next/Previous, keyboard stepping and the
+milestone menu treat collect → matrix as one event. The internal `pivot` beat
+remains in the score for annotations, pacing, scrubbing and existing deep links;
+it is no longer an extra reader-facing stop. Numeric/structural players retain
+their existing stops.
+
 Polynomial callers instead supply `domain: { kind: 'polynomials', names: [...] }`.
 Outputs identify derived expressions. A system supplies independent RHS values;
 the view displays `b = Ax`, equivalent to `Ax = b`, and does not solve or certify

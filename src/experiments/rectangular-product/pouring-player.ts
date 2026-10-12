@@ -27,7 +27,7 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Animation; scroll horizontally on narrow screens">${polynomial ? polynomial.polynomialHtml(collection) : structural ? structural.structureHtml() : pouringHtml(model)}</div>
     <div class="matrix-controls"><button data-back>Previous</button><button data-play>Play</button><button data-next>Next</button>
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
-    <select aria-label="Milestone">${pouringBeats.map((beat, i) => `<option value="${i}">${beat.id}</option>`).join('')}</select>
+    <select aria-label="Milestone">${pouringBeats.map((beat, i) => collection && beat.id === 'pivot' ? '' : `<option value="${i}">${beat.id}</option>`).join('')}</select>
     <button data-theme aria-pressed="false">Light mode</button></div></section>
     <p class="matrix-help">${polynomial ? 'Use Previous or scrub backward to expand the rows again.' : structural ? 'The bands hide arithmetic, not relationships. Every receiving row gets the whole input.' : 'One input column, two receiving rows, one output column.'} <a href="?view=pouring">Numbers</a> · <a href="?view=structure">Structure</a> · <a href="?view=polynomials">Polynomials</a> · <a href="?view=system">Linear system</a>.</p>
     <details><summary>Read the calculation</summary><div class="pour-static">${renderLatexToHtml(equation, { trust: true, output: 'htmlAndMathml' })}</div>
@@ -49,7 +49,7 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     if (disposed) return;
     const frame = samplePouring(clock.getSnapshot().progress); view.render(frame.progress);
     slider.value = String(frame.progress); slider.setAttribute('aria-valuetext', frame.beat.cue);
-    chooser.value = String(frame.index); root.dataset['milestone'] = frame.beat.id;
+    chooser.value = String(collection && frame.beat.id === 'pivot' ? 5 : frame.index); root.dataset['milestone'] = frame.beat.id;
     back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
     play.textContent = clock.getStatus() === 'playing' ? 'Pause' : stepsOnly() ? 'Next step' : frame.progress === 1 ? 'Replay' : 'Play';
     theme.setAttribute('aria-pressed', String(config.theme === 'light'));
@@ -66,13 +66,18 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
   };
   const navigate = (offset: number) => {
     const phase = samplePouring(clock.getSnapshot().progress).phase;
-    go(offset > 0 ? Math.floor(phase + 1e-8) + 1 : Math.ceil(phase - 1e-8) - 1, true);
+    const index = offset > 0 ? Math.floor(phase + 1e-8) + 1 : Math.ceil(phase - 1e-8) - 1;
+    go(collection && index === 4 ? offset > 0 ? 5 : 3 : index, true);
   };
   const unsubscribe = clock.subscribe(render);
   slider.oninput = () => clock.seek(Number(slider.value));
   slider.onkeydown = event => {
     const target = readKpFocusDeckScrubberKeyTarget(event, samplePouring(clock.getSnapshot().progress).phase, pouringBeats.length);
-    if (target !== undefined) { event.preventDefault(); go(target); }
+    if (target !== undefined) {
+      event.preventDefault();
+      const phase = samplePouring(clock.getSnapshot().progress).phase;
+      go(collection && target === 4 ? target > phase ? 5 : 3 : target);
+    }
   };
   chooser.onchange = () => go(Number(chooser.value));
   back.onclick = () => navigate(-1); next.onclick = () => navigate(1);

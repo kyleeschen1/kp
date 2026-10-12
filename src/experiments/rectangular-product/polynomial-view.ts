@@ -66,13 +66,16 @@ export function mountPolynomialView(root: HTMLElement, model: CollectionModel = 
   const render = (progress: number) => {
     if (disposed) return;
     const { phase } = sampleCollection(model, progress); stage.dataset['phase'] = String(phase);
-    const align = ease(phase), collect = ease((phase - 2.2) / .6), turn = ease(phase - 3), enclose = ease((phase - 4) / .7);
+    const align = ease(phase), collect = ease((phase - 2.2) / .6), turn = ease(phase - 3);
+    // Enclosure receives the settling column as one event, then the equation
+    // holds. Equality waits for both the rigid turn and every enclosure.
+    const enclose = ease((phase - 3.65) / .45);
     // Establish grouping before introducing addition; reverse seek removes the
     // plus first. The signed coefficient itself is never replaced or detached.
     const grouping = ease(phase / .4) * (1 - collect);
     const negativeAddition = ease((phase - .4) / .6) * (1 - collect);
     // Equality only accompanies complete expressions, including on reverse seek.
-    const equality = 1 - ease((phase - 2) / .2) + ease((phase - 4.85) / .15);
+    const equality = 1 - ease((phase - 2) / .2) + ease((phase - 4.1) / .15);
     const cubicFocus = ease(phase - 1) * (1 - ease((phase - 2) / .2));
     const rowFocus = ease(phase - 5) * (1 - ease(phase - 6));
     const columnFocus = ease(phase - 6) * (1 - ease(phase - 7));
