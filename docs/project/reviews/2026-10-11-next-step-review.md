@@ -148,6 +148,24 @@ rather than reopening routine implementation decisions.
 
 ## Candidate review packet
 
+The user subsequently judged these examples effective and approved two bounded
+visual corrections: factor spacing should adapt to the actual coefficient
+matrix, and aligned negative terms should explicitly read as addition of signed
+coefficients. This accepts the explanatory mechanism, not final timing/text.
+The shared view anchors the input enclosure 53px beyond the coefficient enclosure
+and derives the rigid pivot from that destination. Wider signed constants/powers
+reserve extra column room; glyph-to-parenthesis clearance uses measured token
+widths. Coefficients remain fixed after alignment, and the rigid turn preserves
+the header's spacing rather than imposing 72px for every source.
+
+Negative coefficients retain their semantic ID and minus sign. Temporary
+parentheses establish grouping before a plus appears; both withdraw during
+collection. A leading negative has no leading plus. Reverse sampling restores
+subtraction notation. The added browser regression checks clearances, factor
+gaps, centered endpoints and reversible syntax across all three sources. Its
+first run caught a parenthesis overlapping a squared input; measured input width
+repaired the shared cause rather than adding a glyph-specific offset.
+
 The accepted polynomial now consumes a bounded typed source. A two-equation,
 three-unknown system and a reordered polynomial with constant-first inputs use
 the same local view. Author annotations, selected row/column and beat intervals
@@ -166,7 +184,7 @@ the system preserve recognizable rows and independent RHS values? Does the
 reordered example make input-to-column correspondence clear? The system is
 displayed as b = Ax to preserve the accepted output-on-left composition; this
 is not solving for x. Text/pacing remain provisional and the input vector keeps
-the exemplar's 72px spacing. This candidate has not been promoted as arbitrary
+the header's spacing throughout the rigid turn. This candidate has not been promoted as arbitrary
 LA support.
 
 Executed: nine semantic/source/static-reading tests; seven Chromium cases

@@ -86,11 +86,25 @@
       "scope": "signed notation export follow-up",
       "checkedAt": "2026-10-12T02:11:32.329Z",
       "notes": "Focused no-JavaScript static browser case passed after signed/unit notation cleanup; nine semantic tests also rerun and pass."
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "failed",
+      "scope": "signed coefficient first regression",
+      "checkedAt": "2026-10-12T02:26:48.982Z",
+      "notes": "Seven passed and one failed: squared-input width overlapped closing parenthesis. Measured input width and bounded wider-column spacing repaired the cause."
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "signed coefficient and relational spacing final",
+      "checkedAt": "2026-10-12T02:26:50.108Z",
+      "notes": "All eight Chromium cases pass after repair. Nine semantic tests and application/test type checks also pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: two packages complete; linear-system candidate and authoring packet implemented but not promoted. Review view=system and view=polynomials&example=reordered on port 8000. Original accepted choreography preserved; timing and wording provisional."
+    "summary": "HUMAN_CHECKPOINT: user accepted examples as effective; approved spacing and signed-addend fixes are implemented and tested. Inspect align then collect in system and reordered views. Promotion work remains separately tracked."
   },
   "allowedWork": [
     "Prepare contract and baseline now; implementation follows explicit polynomial visual acceptance or explicit gate waiver",

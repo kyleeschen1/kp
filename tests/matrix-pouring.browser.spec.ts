@@ -2,6 +2,54 @@ import { test, expect } from '@playwright/test';
 import { renderCollectionReading } from '../src/experiments/rectangular-product/collection-reading.ts';
 import { linearSystemModel } from '../src/experiments/rectangular-product/linear-system-source.ts';
 
+test('factor gaps follow content and negative coefficients explicitly become signed addends', async ({ page }, info) => {
+  for (const query of ['view=polynomials', 'view=system', 'view=polynomials&example=reordered']) {
+    await page.goto(`/experiments/rectangular-product/?${query}`);
+    const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+    const chooser = root.getByRole('combobox', { name: 'Milestone' });
+    await chooser.selectOption('1');
+    const coefficient = root.locator('[data-poly="coefficient-0-1"]');
+    // Both three-input fixtures have -1 in column 1; the original has -1 in column 2.
+    const c = query === 'view=polynomials' ? 2 : 1;
+    const part = (name: string) => root.locator(`[data-poly="${name}-0-${c}"]`);
+    await expect(part('plus')).toHaveCSS('opacity', '1');
+    await expect(part('open')).toHaveCSS('opacity', '1');
+    await expect(part('close')).toHaveCSS('opacity', '1');
+    expect(await part('open').getAttribute('data-source-id')).toEqual(await part('coefficient').getAttribute('data-source-id'));
+    const negativeBox = (await part('coefficient').boundingBox())!;
+    const plusBox = (await part('plus').boundingBox())!, openBox = (await part('open').boundingBox())!;
+    const closeBox = (await part('close').boundingBox())!, inputBox = (await part('basis').boundingBox())!;
+    expect(plusBox.x + plusBox.width).toBeLessThan(openBox.x);
+    expect(openBox.x + openBox.width).toBeLessThan(negativeBox.x);
+    expect(closeBox.x).toBeGreaterThan(negativeBox.x + negativeBox.width);
+    expect(closeBox.x + closeBox.width).toBeLessThan(inputBox.x);
+    if (query.includes('reordered')) {
+      await expect(root.locator('[data-poly="plus-1-0"]')).toHaveCSS('opacity', '0');
+      const dot = (await root.locator('[data-poly="dot-1-0"]').boundingBox())!;
+      const constant = (await root.locator('[data-poly="basis-1-0"]').boundingBox())!;
+      const nextPlus = (await root.locator('[data-poly="plus-1-1"]').boundingBox())!;
+      expect(dot.x + dot.width).toBeLessThan(constant.x);
+      expect(constant.x + constant.width).toBeLessThan(nextPlus.x);
+    }
+    await root.locator('.matrix-card').screenshot({ path: info.outputPath(`${query.replaceAll('&', '-')}-signed.png`) });
+    const fixed = await coefficient.boundingBox();
+    await chooser.selectOption('3');
+    await expect(part('plus')).toHaveCSS('opacity', '0');
+    await expect(part('open')).toHaveCSS('opacity', '0');
+    await expect(part('close')).toHaveCSS('opacity', '0');
+    await expect(part('coefficient')).toContainText('−');
+    await chooser.selectOption('8');
+    const matrix = (await root.locator('[data-poly="coefficient-brackets"]').boundingBox())!;
+    const vector = (await root.locator('[data-poly="basis-brackets"]').boundingBox())!;
+    expect(vector.x - matrix.x - matrix.width).toBeCloseTo(53, 1);
+    expect(vector.y + vector.height / 2).toBeCloseTo(matrix.y + matrix.height / 2, 1);
+    expect(await coefficient.boundingBox()).toEqual(fixed);
+    await chooser.selectOption('1'); await expect(part('open')).toHaveCSS('opacity', '1');
+    await chooser.selectOption('0'); await expect(part('open')).toHaveCSS('opacity', '0');
+    await expect(part('plus')).toHaveCSS('opacity', '0');
+  }
+});
+
 test('static system explanation remains readable with JavaScript disabled', async ({ browser }, info) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
@@ -62,7 +110,7 @@ test('reordered polynomial source keeps constant units visible and arbitrary las
   await expect(root.locator('[data-poly="basis-1-0"]')).toHaveCSS('opacity', '0');
   await root.getByRole('combobox', { name: 'Milestone' }).selectOption('5');
   await expect(root.locator('[data-poly="basis-0-0"]')).toHaveCSS('opacity', '1');
-  await expect(root.locator('[data-poly="coefficient-brackets"]')).toHaveAttribute('width', '194');
+  await expect(root.locator('[data-poly="coefficient-brackets"]')).toHaveAttribute('width', '230');
   await expect(root.locator('.katex-error')).toHaveCount(0);
   await root.locator('.matrix-card').screenshot({ path: info.outputPath('reordered-polynomial-endpoint.png') });
 });
