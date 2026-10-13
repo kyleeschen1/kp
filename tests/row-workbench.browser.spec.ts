@@ -6,7 +6,8 @@ test('compact operations compose, retain unchanged DOM, scrub deterministically 
   const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
   const stage = root.locator('.row-wb-stage');
   const equality = stage.locator('.row-wb-equal');
-  const equalityBounds = await equality.boundingBox();
+  const equalityPose = () => equality.evaluate(n => { const b = n.getBoundingClientRect(), card = n.closest('.matrix-card')!.getBoundingClientRect(); return { x: b.x - card.x, y: b.y - card.y, width: b.width, height: b.height }; });
+  const equalityBounds = await equalityPose();
   const originals = await root.locator('[data-native] [data-source-id]').elementHandles();
   const ids = await root.locator('[data-native] [data-source-id]').evaluateAll(ns => ns.map(n => n.getAttribute('data-source-id')));
   await root.locator('.matrix-card').screenshot({ path: info.outputPath('compact-initial.png') });
@@ -20,7 +21,7 @@ test('compact operations compose, retain unchanged DOM, scrub deterministically 
       await slider.fill('0.02'); await slider.fill('0.99'); await slider.fill(String(phase)); expect(await paint()).toEqual(before);
       await expect(equality).toBeVisible();
       await expect(equality).toHaveCSS('opacity', '1');
-      expect(await equality.boundingBox()).toEqual(equalityBounds);
+      expect(await equalityPose()).toEqual(equalityBounds);
       await root.locator('.matrix-card').screenshot({ path: info.outputPath(`compact-${step}-${phase}.png`) });
     }
     await root.locator('[data-finish]').click(); await expect(root).toHaveAttribute('data-cursor', String(step));

@@ -14,3 +14,6 @@
 .row-workbench .row-wb-history li { margin-block: .75rem; }
 .row-workbench .row-wb-history [data-undone] { opacity: .6; }
 .row-workbench .row-wb-status { padding-inline: .75rem; margin-block: .4rem; min-height: 1.5em; }
+.row-wb-reading { margin-block: 1rem; }
+.row-wb-reading .kp-focus-deck__annotation { position: static; }
+.row-wb-reading article { overflow-x: auto; padding: .75rem; }

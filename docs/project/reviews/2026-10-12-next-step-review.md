@@ -1,8 +1,41 @@
 # Next step after the repeatable row workbench
 
-Status: recommendation only; no implementation scope authorized by this review.
+Status: user approved the recommended authored-operation slice with “ill tae the
+rec. go”. Other ranked options remain proposals.
 
-## Current focus and evidence
+## Approved delivery boundary
+
+Canonical source: a bounded typed workbench source supplying two equations,
+three ordered unknowns, named checked operations and before/after annotations.
+Canonical host: the existing rectangular-product `?view=row-operation` route,
+with an example selector and shareable example query. Renderer: the accepted
+native KaTeX/SVG workbench, existing clock and contributor-fusion sampler.
+The existing exact row-operation checker remains mathematical authority.
+
+Two packages: (1) typed source compilation, sequential validation and fixtures;
+(2) same-host integration, annotation/history continuity, static readings and
+source-only variation evidence. Standard verification: focused semantic and
+authoring tests, affected/full types at integration, scoped Chromium checks,
+production closure measurement and Theseus validation. Commit checked packages
+and push before the review stop. No minimum run duration; stop when the bounded
+review candidate is checked, reserving time for evidence and backup.
+
+Preserve the default example, compact fixed layout, persistent equals sign,
+manual operations, exact history, current guided path and all other host modes.
+Rollback units: the source compiler/examples; then the workbench source/host
+adapter and its tests. Reject unsupported numeric values, unknown names, steps
+and presentation envelopes with located repairs. No new solver, global scene
+language, larger matrices, morphology, or catalogue promotion. The linked
+equation representation remains the follow-up after reviewing this slice;
+static mathematical readings here do not introduce its cross-view interaction.
+
+Review both contrasting stories in one packet: does the same animation clearly
+explain redundancy versus contradiction, and do annotations remain truthful
+after cancellation, undo and free exploration? Finish the implementation and
+checks, then stop at that explanatory review before broader promotion. The new
+Theseus contract owns execution status; no duplicate live slice table is kept here.
+
+## Evidence at proposal time
 
 The accepted workbench now supports repeated swap, nonzero scale and row
 addition, exact rational values, atomic history, Undo/Redo and persistent
@@ -68,12 +101,45 @@ explaining why a row operation changes an equation but preserves the solution
 set. Any universal API, automatic elimination, wider shape rollout, graph layer
 or reader redesign is separate scope.
 
+## Implemented review candidate
+
+The source compiler and examples now live in `row-workbench-source.ts` and
+`row-workbench-examples.ts`. The same host accepts `example=original`,
+`example=redundant`, or `example=inconsistent` alongside `view=row-operation`.
+The default remains the original three-operation workbench. The source format,
+limits and static-reading command are documented in the
+[authoring packet](../authoring/row-workbench-authoring-packet.md).
+
+Engine work was necessary once: parameterize unknowns and initial state, connect
+named annotations to committed transactions, expose a selector and static
+readings, and reserve responsive caption height. An initial browser check caught
+long captions moving the matrix; caption reservation now preserves its position.
+An initial typecheck caught overly narrow inferred RHS types; the accumulator now
+uses the existing LinearSystem contract. Neither repair changes the motif.
+
+After that extraction, both contrasting examples and a browser pressure fixture
+with different letters, coefficients and annotations use source-only changes.
+The latter mounts the real player. Ten focused tests and nine scoped Chromium
+checks pass, including cancellation, Undo/Redo, manual branching, native MathML
+readings with JavaScript disabled, persistent equality and the guided path.
+Production build and semantic-cost gates pass without budget changes: the
+workbench closure is 104697 JS / 15284 CSS gzip bytes; all-mode closure is
+124366 / 16914, close to its existing 124500 / 17000 ceilings.
+
+Review the two examples using Next example step, then Undo and Redo. The
+redundant result leaves 0 = 0; the inconsistent result displays 1 = 0 in the
+preserved b = Ax order (equivalently 0 = 1). Judge whether the explanation and
+timing make the different conclusions clear. Arithmetic checks do not certify
+the authored prose or learning effectiveness. Larger shapes, new choreography,
+and linked interactive equation views remain outside this candidate.
+
 ## Continuity and limits
 
 Older recommendations to implement the first row operation are fulfilled, not
 the next queue. Reader-layout and broad content-library work stay deferred;
-no new run is created by this assessment. The roadmap links this proposal without
-making it active implementation work. `theseus work resume` and `work next`
+the subsequent user approval created the bounded run named above.
+During the initial assessment, `theseus work resume` and `work next`
 both hit existing tool-output limits (1641/1200 and 306/300 tokens); direct
 canonical documents, the completed run contract and source inspection supplied
-this review. No tool budget or execution queue was modified.
+this review. The implementation uses named contract context; no tool budget was
+raised to retrieve the broader queue.

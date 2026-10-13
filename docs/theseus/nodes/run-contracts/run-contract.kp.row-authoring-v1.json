@@ -1,0 +1,78 @@
+{
+  "id": "run-contract.kp.row-authoring-v1",
+  "kind": "run-contract",
+  "title": "Authored row-operation explanations",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-12-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "npm run test:row-operation",
+    "npm run visual:row-operation",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation",
+      "status": "passed",
+      "scope": "Source compiler and transaction lifecycle",
+      "checkedAt": "2026-10-13T01:01:34.988Z",
+      "notes": "10 tests passed; exact sequence checks, located repairs and annotation cancellation/undo/redo/manual branching."
+    },
+    {
+      "command": "npm run visual:row-operation",
+      "status": "passed",
+      "scope": "Canonical workbench and guided preservation",
+      "checkedAt": "2026-10-13T01:01:35.735Z",
+      "notes": "9 Chromium checks passed. Initial long-caption displacement repaired with width-specific caption reservation; full scoped rerun passed. Includes real source-only pressure caller and JavaScript-disabled MathML readings."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full repository TypeScript and Svelte",
+      "checkedAt": "2026-10-13T01:01:36.484Z",
+      "notes": "Full rerun passed, including tests and domains; initial source-accumulator inference repaired with existing LinearSystem type."
+    },
+    {
+      "command": "npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "Production matrix host",
+      "checkedAt": "2026-10-13T01:01:37.230Z",
+      "notes": "Production build passed; npm run measure:semantic-cost passed without budget changes. Workbench gzip JS 104697 CSS 15284; all-mode JS 124366 CSS 16914."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: source package complete; integration candidate verified and awaiting review of redundancy versus contradiction. No general renderer promotion or linked interactive equation view."
+  },
+  "allowedWork": [
+    "Bounded typed source, named annotations, sequential checks, two contrasting fixtures, existing-host selector and static readings; preserve default free operations and exact history"
+  ],
+  "disallowedWork": [
+    "No general solver, new motion motif, larger matrix shapes, universal scene API or catalogue promotion; linked equation interaction follows review"
+  ],
+  "goal": "Author contrasting redundant and inconsistent systems through the accepted workbench without caller-specific renderer changes",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "row-source",
+      "title": "Typed source and checked sequence",
+      "summary": "Typed source validates full exact sequences with located repair gaps; ten focused tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "row-authoring",
+      "title": "Same-host authored explanation checkpoint",
+      "summary": "Same-host source-only examples and static readings are checked and ready for the required explanatory review.",
+      "status": "in-progress"
+    }
+  ]
+}

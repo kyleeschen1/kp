@@ -25,11 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Proposed next after the accepted row workbench: test a small authored-operation
-source on redundant versus inconsistent systems, then consider a linked equation
-representation. The [next-step review](reviews/2026-10-12-next-step-review.md)
-ranks options and defines the bounded finish line. This is a recommendation,
-not authorization to start a new run; reader validation remains deferred.
+The user approved bounded authored-operation reuse after the accepted row
+workbench. Redundant and inconsistent systems now use one source interface and
+player, with named annotations, exact sequence validation and static readings.
+The [next-step review](reviews/2026-10-12-next-step-review.md) records the candidate;
+`run-contract.kp.row-authoring-v1` owns the explanatory checkpoint. Start with
+the [authoring packet](authoring/row-workbench-authoring-packet.md). Linked
+equation interaction remains a follow-up; reader validation remains deferred.
 
 October 12 follow-up: user revised the elementary row-operation exemplar into
 compact, repeatable swap, scale and add-multiple operations on one persistent

@@ -5,6 +5,14 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 12 authored-operation continuation: the user approved the recommendation
+to pressure the workbench with redundancy versus inconsistency. One typed source
+now supplies systems, unknowns, checked sequences and annotations to the existing
+player. See the [authoring packet](../authoring/row-workbench-authoring-packet.md)
+and [review](../reviews/2026-10-12-next-step-review.md). The new
+`run-contract.kp.row-authoring-v1` stops for explanatory review; same-shape reuse
+does not promote a general renderer or authorize linked equation interaction.
+
 October 12 follow-up: the user revised [the row-operation exemplar](../reviews/2026-10-12-row-replacement-exemplar.md#current-compact-candidate)
 into a compact persistent system with repeated swap, scale and add-multiple
 controls, exact rational values and inspectable Undo/Redo history. The amended

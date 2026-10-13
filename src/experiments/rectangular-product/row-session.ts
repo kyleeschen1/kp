@@ -1,14 +1,17 @@
 import { checkLinearSystemRowOperation, readExactRowValue, type CheckedRowOperation, type LinearSystem, type RowOperation } from '../../math/linear-system-row-operation.ts';
+import type { KpScalarValue } from '../../math/typed-semantic-math.ts';
 
 export interface RowTransaction { readonly step: CheckedRowOperation; readonly direction: 'forward' | 'rewind'; readonly action: 'apply' | 'undo' | 'redo' }
 /** Local exemplar envelope, separate from the exact mathematical checker. */
-export function rowPresentationGap(step: CheckedRowOperation): string | undefined {
-  const values = [...step.after.coefficients.rows.flat(), ...step.after.rhs,
-    ...step.contributions.flatMap(p => [p.multiplier, p.scaled])];
-  if (step.before.coefficients.rowCount !== 2 || step.before.coefficients.columnCount !== 3) return 'This compact exemplar needs two equations and three unknowns.';
-  if (values.some(v => { const q = readExactRowValue(v)!; return q.numerator < -99n || q.numerator > 99n || q.denominator > 9n; }))
+export function rowSystemPresentationGap(system: LinearSystem, extra: readonly KpScalarValue[] = []): string | undefined {
+  const values = [...system.coefficients.rows.flat(), ...system.rhs, ...extra];
+  if (system.coefficients.rowCount !== 2 || system.coefficients.columnCount !== 3) return 'This compact exemplar needs two equations and three unknowns.';
+  if (values.some(v => { const q = readExactRowValue(v); return !q || q.numerator < -99n || q.numerator > 99n || q.denominator > 9n; }))
     return 'This compact layout supports numerators from -99 to 99 and denominators up to 9. Try a smaller factor or undo a step.';
   return undefined;
+}
+export function rowPresentationGap(step: CheckedRowOperation): string | undefined {
+  return rowSystemPresentationGap(step.after, step.contributions.flatMap(p => [p.multiplier, p.scaled]));
 }
 export function createRowSession(initial: LinearSystem) {
   let history: readonly CheckedRowOperation[] = [], cursor = 0, serial = 0, pending: RowTransaction | undefined;

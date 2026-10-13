@@ -1,5 +1,6 @@
 import { expressionToLatex } from '../../math/expression.ts';
 import type { CheckedRowOperation, LinearSystem } from '../../math/linear-system-row-operation.ts';
+import type { KpScalarValue } from '../../math/typed-semantic-math.ts';
 import { renderLatexToHtml } from '../../rendering/katex-adapter.ts';
 import { prepareFusion } from '../dot-product-passage/fusion.ts';
 import './row-workbench.css';
@@ -11,7 +12,7 @@ const x = (column: number) => column === 3 ? 90 : 220 + column * 90;
 const y = (row: number) => 75 + row * 90;
 const math = (latex: string) => renderLatexToHtml(latex, { displayMode: false });
 const brackets = (left: number, top: number, width: number, height: number) => `<svg class="row-wb-bracket" style="left:${left}px;top:${top}px" width="${width}" height="${height}" aria-hidden="true"><path d="M10 2H2V${height - 2}H10 M${width - 10} 2H${width - 2}V${height - 2}H${width - 10}"/></svg>`;
-export const rowWorkbenchStageHtml = `<div class="row-wb-stage" aria-hidden="true">${brackets(52, 46, 76, 148)}${brackets(177, 46, 266, 148)}${brackets(480, 30, 64, 180)}<span class="row-wb-equal">${math('=')}</span><div data-native></div><div data-transient></div>${['x', 'y', 'z'].map((v, i) => `<span class="row-wb-token" style="transform:translate(512px,${60 + i * 60}px) translate(-50%,-50%)">${math(v)}</span>`).join('')}</div>`;
+export const rowWorkbenchStageHtml = (unknowns: readonly KpScalarValue[]) => `<div class="row-wb-stage" aria-hidden="true">${brackets(52, 46, 76, 148)}${brackets(177, 46, 266, 148)}${brackets(480, 30, 64, 180)}<span class="row-wb-equal">${math('=')}</span><div data-native></div><div data-transient></div>${unknowns.map((v, i) => `<span class="row-wb-token" data-unknown="${v.id}" style="transform:translate(512px,${60 + i * 60}px) translate(-50%,-50%)">${math(expressionToLatex(v.expression))}</span>`).join('')}</div>`;
 
 /** Persistent semantic occurrences stay mounted. Only changed values are retired;
  * the shared fusion sampler owns evaluation, not the transport carrier. */
