@@ -5,6 +5,13 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 12 linked-equation continuation: the user approved the next recommendation
+after accepting the two authored stories. The
+[same-host candidate](../reviews/2026-10-12-linked-row-equations.md) derives exact
+equations and bidirectional row correspondence from the current checked system.
+`run-contract.kp.linked-row-equations-v1` owns the compactness/clarity checkpoint.
+This does not add equation morphing, larger shapes or coefficient-level controls.
+
 October 12 authored-operation continuation: the user approved the recommendation
 to pressure the workbench with redundancy versus inconsistency. One typed source
 now supplies systems, unknowns, checked sequences and annotations to the existing

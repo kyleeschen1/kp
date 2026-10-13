@@ -79,6 +79,12 @@ supports two rows and two to four ordered inputs through one existing view.
 Use its domain-specific validation and located repair gaps; it is not an
 `author:check` task, arbitrary LA generator or Article publication path.
 
+For repeatable row operations and authored redundant/inconsistent systems, use
+`row-workbench-authoring-packet.md`. Its accepted source supports two equations,
+three unknowns, exact checked operations and named annotations. The linked
+equation panel is a local review candidate derived from that same source; it
+does not introduce a new authoring schema or arbitrary elimination solver.
+
 For the existing momentum-energy derivation assumptions, select
 `mechanics.momentum-energy`. This exposes its mechanics-owned checker and
 reference-only host; it does not infer new physics, edit notation or apply drafts.

@@ -59,7 +59,7 @@ test('changed coefficients, unknowns, annotations and step IDs run through the s
   await expect(root.locator('[data-native] [data-row="1"][data-column="3"]')).toHaveText('1');
   await root.locator('.row-wb-reading summary').click();
   await expect(root.locator('.row-wb-reading')).toContainText('Inspect u, v and w.');
-  await expect(root.locator('.row-wb-reading math')).toHaveCount(4);
+  await expect(root.locator('.row-wb-reading math')).toHaveCount(6);
 });
 
 test('authored static readings are usable without scripts and expose the same endpoints', async ({ browser }) => {
@@ -67,7 +67,7 @@ test('authored static readings are usable without scripts and expose the same en
   for (const { model } of rowWorkbenchExamples) {
     await page.setContent(rowWorkbenchReading(model, 'mathml'));
     await expect(page.locator('script')).toHaveCount(0);
-    await expect(page.locator('math')).toHaveCount(1 + model.steps.length * 3);
+    await expect(page.locator('math')).toHaveCount(2 + model.steps.length * 4);
     await expect(page.locator('article')).toContainText(model.steps.at(-1)!.after);
   }
   await context.close();

@@ -8,6 +8,7 @@ import { rowOperationLatex, rowSystemLatex } from './row-workbench-model.ts';
 import { rowWorkbenchExamples } from './row-workbench-examples.ts';
 import { rowWorkbenchReading } from './row-workbench-reading.ts';
 import { createRowAuthoredStory } from './row-authored-story.ts';
+import { mountRowEquationPanel } from './row-equation-panel.ts';
 import type { CompiledRowStep, CompiledRowWorkbench } from './row-workbench-source.ts';
 import { mountRowWorkbenchView, rowWorkbenchStageHtml } from './row-workbench-view.ts';
 
@@ -26,6 +27,7 @@ export async function mountRowWorkbench(root: HTMLElement, authoredModel?: Compi
     <div class="matrix-controls"><label>Example <select data-example aria-label="Example; changing it resets history">${rowWorkbenchExamples.map(e => `<option value="${e.key}">${e.label}</option>`).join('')}</select></label></div>
     <div class="matrix-cue" data-cue></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="System animation; scroll horizontally on narrow screens">${rowWorkbenchStageHtml(model.unknowns)}</div>
+    <section class="row-wb-equations" aria-label="Linked equations"><p data-equation-status></p><div data-equations></div></section>
     <form class="matrix-controls" data-form>
       <label>Operation <select data-operation><option value="add">Add multiple</option><option value="scale">Scale</option><option value="swap">Swap</option></select></label>
       <label>Target <select data-target>${rows}</select></label>
@@ -40,6 +42,7 @@ export async function mountRowWorkbench(root: HTMLElement, authoredModel?: Compi
   </section><details class="row-wb-reading"><summary>Read the authored walkthrough from its starting system</summary>${rowWorkbenchReading(model)}</details><p class="matrix-help"><a href="?view=pouring">Numbers</a> · <a href="?view=structure">Structure</a> · <a href="?view=polynomials">Polynomials</a> · <a href="?view=system">Linear system</a> · <a href="?view=row-operation&guided=1">Guided row addition</a></p>`;
   const get = <T extends HTMLElement>(name: string) => root.querySelector<T>(`[data-${name}]`)!;
   const view = mountRowWorkbenchView(root), session = createRowSession(model.initial), story = createRowAuthoredStory(model, session);
+  const equations = mountRowEquationPanel(root, model);
   const clock = createKpReaderTimelinePlaybackClock({ id: `${root.id}.row-workbench`, durationMs: 4200 });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let config = readMatrixConfig(document), disposed = false, renderFrame: ((p: number) => void) | undefined;
@@ -81,7 +84,7 @@ export async function mountRowWorkbench(root: HTMLElement, authoredModel?: Compi
       return `<li ${i >= snapshot.cursor ? 'data-undone' : ''}>${math(rowOperationLatex(step.operation))}${i >= snapshot.cursor ? ' (undone)' : ''}${annotation ? renderKpFocusDeckAnnotation({ entityId: annotation.id, text: annotation.after, role: 'support' }) : ''}<details><summary>Why this preserves the solutions</summary><p>${step.witness.residualIdentity}</p><p>Inverse: ${math(rowOperationLatex(step.inverse))}</p>${math(rowSystemLatex(step.before, model.unknowns))}<p>becomes</p>${math(rowSystemLatex(step.after, model.unknowns))}</details></li>`;
     }).join('');
   };
-  const restore = () => { armed = false; renderFrame = undefined; clock.pause(); view.show(session.current()); history(); controls(); };
+  const restore = () => { armed = false; renderFrame = undefined; clock.pause(); view.show(session.current()); equations.update(session.current()); equations.preview(false); history(); controls(); };
   const complete = (transaction: RowTransaction) => {
     if (!session.commit(transaction)) return;
     restore(); settledCue(); status(`Step ${session.snapshot().cursor} complete. Same solutions.`);
@@ -102,6 +105,7 @@ export async function mountRowWorkbench(root: HTMLElement, authoredModel?: Compi
     const result = session.begin(action, operation);
     if (result.status !== 'pending') { status(`${result.path}: ${result.message}`); return; }
     const transaction = result.transaction;
+    equations.preview(true);
     if (authoredStep) story.attach(transaction, authoredStep);
     const annotation = story.annotation(transaction.step);
     armed = false; renderFrame = undefined; controls();
@@ -149,7 +153,7 @@ export async function mountRowWorkbench(root: HTMLElement, authoredModel?: Compi
   };
   get('undo').onclick = () => { void run('undo'); };
   get('redo').onclick = () => { void run('redo'); };
-  get('reset').onclick = () => { session.reset(); restore(); settledCue(); status('Original system restored.'); };
+  get('reset').onclick = () => { session.reset(); equations.reset(); restore(); settledCue(); status('Original system restored.'); };
   get('demo').onclick = () => { const step = story.next(); if (step) void run('apply', step.operation, step); };
   get('cancel').onclick = () => { session.cancel(); restore(); settledCue(); status('Operation cancelled. The last completed system is unchanged.'); };
   get('finish').onclick = () => { const transaction = session.snapshot().pending; if (transaction && renderFrame) clock.seek(transaction.direction === 'forward' ? 1 : 0); };
@@ -163,7 +167,7 @@ export async function mountRowWorkbench(root: HTMLElement, authoredModel?: Compi
   const pagehide = (event: PageTransitionEvent) => { if (event.persisted) refresh(); else dispose(); };
   let width = root.clientWidth;
   const observer = new ResizeObserver(() => { if (root.clientWidth !== width) { width = root.clientWidth; refresh(); } }); observer.observe(root);
-  const dispose = () => { if (disposed) return; disposed = true; session.cancel(); unsubscribe(); stopConfig(); observer.disconnect(); clock.dispose(); view.dispose();
+  const dispose = () => { if (disposed) return; disposed = true; session.cancel(); unsubscribe(); stopConfig(); observer.disconnect(); clock.dispose(); equations.dispose(); view.dispose();
     document.removeEventListener('visibilitychange', visibility); window.removeEventListener('pagehide', pagehide); reduced.removeEventListener('change', refresh);
     for (const node of root.querySelectorAll<HTMLElement>('button,select,input,form')) { node.onclick = node.onchange = node.oninput = node.onsubmit = null; }
     delete root.dataset['ready']; };

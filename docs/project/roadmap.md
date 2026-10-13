@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The user approved linked equations after accepting authored row stories.
+The [linked-equation candidate](reviews/2026-10-12-linked-row-equations.md)
+adds bidirectional row selection and exact committed equation readings on the
+same workbench. `run-contract.kp.linked-row-equations-v1` owns the new human
+checkpoint; accepted matrix motion and source contracts remain unchanged.
+
 The user approved bounded authored-operation reuse after the accepted row
 workbench. Redundant and inconsistent systems now use one source interface and
 player, with named annotations, exact sequence validation and static readings.
@@ -32,7 +38,7 @@ The user accepted both examples (“these are good”). The
 [next-step review](reviews/2026-10-12-next-step-review.md) records the closeout;
 `run-contract.kp.row-authoring-v1` owns the completed bounded milestone. Start with
 the [authoring packet](authoring/row-workbench-authoring-packet.md). Linked
-equation interaction remains a follow-up; reader validation remains deferred.
+equation interaction is the approved candidate above; reader validation remains deferred.
 
 October 12 follow-up: user revised the elementary row-operation exemplar into
 compact, repeatable swap, scale and add-multiple operations on one persistent

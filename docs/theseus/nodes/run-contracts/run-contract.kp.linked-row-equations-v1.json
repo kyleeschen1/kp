@@ -1,0 +1,85 @@
+{
+  "id": "run-contract.kp.linked-row-equations-v1",
+  "kind": "run-contract",
+  "title": "Linked row equations",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-12-linked-row-equations.md"
+    }
+  ],
+  "verification": [
+    "npm run test:row-operation",
+    "npm run visual:row-operation",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation",
+      "status": "passed",
+      "scope": "Exact equation and correspondence projection",
+      "checkedAt": "2026-10-13T01:22:28.113Z",
+      "notes": "13 tests pass including signed fractions, zero/unit omission with preserved referents, independent RHS, equal-valued distinct identities and swap row bindings."
+    },
+    {
+      "command": "npm run visual:row-operation",
+      "status": "passed",
+      "scope": "Linked canonical workbench and preservation",
+      "checkedAt": "2026-10-13T01:22:29.197Z",
+      "notes": "11 Chromium checks pass: bidirectional pointer/keyboard selection, unchanged matrix geometry, preview status, suspended focus during motion, cancel, reverse scrubbing, Undo/Redo, reset, reduced motion, light narrow reading, static MathML, source-only variation and preserved guided view. Captures inspected; human visual judgment remains pending."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full TypeScript and Svelte",
+      "checkedAt": "2026-10-13T01:22:30.017Z",
+      "notes": "App, node, tests, Svelte and domains all pass."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "failed",
+      "scope": "Initial complete all-mode union",
+      "checkedAt": "2026-10-13T01:22:30.955Z",
+      "notes": "Measured 126214 JS / 17153 CSS gzip exceeded prior 124500 / 17000 ceilings. Local panel and existing focus/correspondence owners account for 1848 JS / 239 CSS growth; cold and other consumers unchanged. Explicit bounded amendment documented, not hidden optimization."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Final complete consumers after documented policy amendment",
+      "checkedAt": "2026-10-13T01:22:31.769Z",
+      "notes": "All gates pass after union-only ceiling amendment to 128000 JS / 17600 CSS. Workbench 106545 / 15523 remains under unchanged 110000 / 16000; cold default unchanged 94806 / 14686. Build and static MathML export also pass."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: exact projection complete, linked-panel candidate checked. Review row outlines, compactness and committed-reference preview semantics before promotion. No equation morph or larger shape support."
+  },
+  "allowedWork": [
+    "Local equation projection, bidirectional row selection, static readings and lifecycle checks through existing semantic and focus owners"
+  ],
+  "disallowedWork": [
+    "No larger shapes, coefficient interaction, solver, new motion motif or general renderer promotion"
+  ],
+  "goal": "Inspect matrix rows as equations through one checked current system",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "row-equations",
+      "title": "Exact equation and correspondence projection",
+      "summary": "13 focused tests pass; exact signed equations retain zero and unit term correspondences, independent RHS and checked swap bindings.",
+      "status": "complete"
+    },
+    {
+      "id": "linked-panel",
+      "title": "Same-host linked equation checkpoint",
+      "summary": "Same-host equation panel and bidirectional row controls implemented; testing lifecycle, accessible reading and layout preservation.",
+      "status": "in-progress"
+    }
+  ]
+}

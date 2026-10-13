@@ -71,3 +71,26 @@ coefficients, RHS, IDs and annotations through the same compiler and player.
 It establishes same-shape authoring reuse, not a new geometry or general LA
 renderer. Acceptance covers the redundant and inconsistent stories; broader
 promotion still requires structural pressure beyond this fixed shape.
+
+## Linked equations candidate
+
+The same host now derives a conventional equation for each committed row. The
+source schema is unchanged: ordered unknowns, exact coefficients and independent
+RHS values supply both representations. Negative terms use subtraction, unit
+coefficients are implicit, zero terms are omitted, and an all-zero sum reads `0`.
+The matrix's `b = Ax` order is preserved, so the contradiction is visibly `1 = 0`.
+Static readings include the equations too.
+
+Select a numbered matrix row or equation to inspect the same constraint. Selection
+means the row position in the current system; after a swap its referents are the
+checked values now at that position. During preview, the equations explicitly
+retain the committed system; selection paint is suspended until completion or
+cancellation. Reset clears selection. No partial arithmetic frame is asserted to
+be a settled equation, and no extra equation animation is implied.
+
+`row-equations.ts` retains coefficient/unknown IDs for every term, including
+omitted zeros and implicit units, and supplies the existing cross-view map and
+attention compiler. The local panel uses the reader semantic-focus service;
+there is no second solver, clock or global focus store. Coefficient-level
+interaction and a general scene API are outside this candidate. The linked
+panel has its own [review checkpoint](../reviews/2026-10-12-linked-row-equations.md).
