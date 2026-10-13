@@ -1,7 +1,8 @@
 # Next step after the repeatable row workbench
 
-Status: user approved the recommended authored-operation slice with “ill tae the
-rec. go”. Other ranked options remain proposals.
+Status: bounded authored-operation milestone complete. The user approved the
+implementation with “ill tae the rec. go” and accepted both resulting examples
+with “these are good”. Other ranked options remain proposals.
 
 ## Approved delivery boundary
 
@@ -102,6 +103,13 @@ set. Any universal API, automatic elimination, wider shape rollout, graph layer
 or reader redesign is separate scope.
 
 ## Implemented review candidate
+
+Accepted closeout: the user reviewed and accepted both examples. This satisfies
+the explanatory checkpoint for the existing shape and motion. Existing recorded
+checks remain applicable; this closeout changes only documentation and execution
+status. No new implementation, renderer promotion or learner-outcome claim is
+implied. The recommended next scope remains linked equation/matrix representations
+of one current system, proposed separately from this completed milestone.
 
 The source compiler and examples now live in `row-workbench-source.ts` and
 `row-workbench-examples.ts`. The same host accepts `example=original`,

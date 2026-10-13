@@ -1,6 +1,6 @@
 # Authored row-operation workbench
 
-Status: bounded authoring interface; explanatory review pending. The accepted
+Status: bounded authoring interface; both explanatory examples accepted. The accepted
 motion remains local to the two-equation, three-unknown workbench.
 
 Canonical host: `/experiments/rectangular-product/?view=row-operation`.
@@ -69,4 +69,5 @@ Run `npm run test:row-operation` and `npm run visual:row-operation` for compiler
 history and browser evidence. The browser pressure caller changes unknowns,
 coefficients, RHS, IDs and annotations through the same compiler and player.
 It establishes same-shape authoring reuse, not a new geometry or general LA
-renderer. Review the redundant and inconsistent stories before broader promotion.
+renderer. Acceptance covers the redundant and inconsistent stories; broader
+promotion still requires structural pressure beyond this fixed shape.

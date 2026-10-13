@@ -2,7 +2,8 @@
   "id": "run-contract.kp.row-authoring-v1",
   "kind": "run-contract",
   "title": "Authored row-operation explanations",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -50,8 +51,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: source package complete; integration candidate verified and awaiting review of redundancy versus contradiction. No general renderer promotion or linked interactive equation view."
+    "state": "complete",
+    "summary": "COMPLETE: two packages delivered and both stories accepted. Exact authored sequences, named annotations, same-host examples and static readings established within the fixed two-row three-unknown layout. Linked equation interaction remains proposed new scope."
   },
   "allowedWork": [
     "Bounded typed source, named annotations, sequential checks, two contrasting fixtures, existing-host selector and static readings; preserve default free operations and exact history"
@@ -71,8 +72,8 @@
     {
       "id": "row-authoring",
       "title": "Same-host authored explanation checkpoint",
-      "summary": "Same-host source-only examples and static readings are checked and ready for the required explanatory review.",
-      "status": "in-progress"
+      "summary": "User accepted both explanatory examples: these are good. Existing checked source-only variations, static readings and lifecycle evidence satisfy this bounded milestone.",
+      "status": "complete"
     }
   ]
 }

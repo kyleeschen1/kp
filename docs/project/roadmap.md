@@ -28,8 +28,9 @@ nor its evidence. The ledger remains retrievable at
 The user approved bounded authored-operation reuse after the accepted row
 workbench. Redundant and inconsistent systems now use one source interface and
 player, with named annotations, exact sequence validation and static readings.
-The [next-step review](reviews/2026-10-12-next-step-review.md) records the candidate;
-`run-contract.kp.row-authoring-v1` owns the explanatory checkpoint. Start with
+The user accepted both examples (“these are good”). The
+[next-step review](reviews/2026-10-12-next-step-review.md) records the closeout;
+`run-contract.kp.row-authoring-v1` owns the completed bounded milestone. Start with
 the [authoring packet](authoring/row-workbench-authoring-packet.md). Linked
 equation interaction remains a follow-up; reader validation remains deferred.
 

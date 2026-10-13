@@ -10,7 +10,8 @@ to pressure the workbench with redundancy versus inconsistency. One typed source
 now supplies systems, unknowns, checked sequences and annotations to the existing
 player. See the [authoring packet](../authoring/row-workbench-authoring-packet.md)
 and [review](../reviews/2026-10-12-next-step-review.md). The new
-`run-contract.kp.row-authoring-v1` stops for explanatory review; same-shape reuse
+`run-contract.kp.row-authoring-v1` records the completed milestone after the user
+accepted both stories (“these are good”); same-shape reuse
 does not promote a general renderer or authorize linked equation interaction.
 
 October 12 follow-up: the user revised [the row-operation exemplar](../reviews/2026-10-12-row-replacement-exemplar.md#current-compact-candidate)
