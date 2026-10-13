@@ -88,6 +88,13 @@
       "scope": "final complete consumer costs",
       "checkedAt": "2026-10-12T18:13:03.993Z",
       "notes": "All existing gates pass. Rectangular all-mode union 114834 JS / 16316 CSS gzip bytes; cold default 94667 / 14686. Increment 3653 / 159 for union, 10 / 0 for default. No forbidden modules or ceiling changes."
+    },
+    {
+      "command": "npm run test:row-operation",
+      "status": "passed",
+      "scope": "repeatable exact operations and transaction authority",
+      "checkedAt": "2026-10-13T00:29:27.162Z",
+      "notes": "Six tests pass: exact fractional inverses for all three operations; RHS and retained referents; integer compatibility; invalid inputs; stale transactions, cancellation, undo, redo and history branching. Full typecheck also passes."
     }
   ],
   "progress": {
@@ -95,10 +102,10 @@
     "summary": "HUMAN_CHECKPOINT: semantic package complete; first row-replacement visual candidate checked and ready at rectangular-product view=row-operation. Await choreography and explanatory-clarity review before completing exemplar package or generalizing. One of two packages complete."
   },
   "allowedWork": [
-    "One bounded exact row-addition helper, same-host adapter, static explanation and scoped checks"
+    "User-approved revision: exact rational swap, nonzero scale and row addition; compact repeatable same-host system, history, controls and checks"
   ],
   "disallowedWork": [
-    "No generic solver, second caller, universal format, reader layout changes or renderer promotion"
+    "No generic solver, automatic elimination, catalogue migration or renderer promotion before compact sequence review"
   ],
   "goal": "Show one solution-preserving row replacement through the accepted system view",
   "target": "workflow.kp.delivery",
@@ -112,14 +119,14 @@
   "slices": [
     {
       "id": "row-authority",
-      "title": "Exact row-addition authority and inverse witness",
-      "summary": "Exact integer row-addition checker preserves independent RHS, unchanged source referents and derived entry lineage. Inverse recovery and residual identities pass across varied rows and multiples; unsupported values return located repair gaps.",
+      "title": "Exact repeatable Gaussian operation authority",
+      "summary": "Exact rational swap, nonzero scaling and row addition share one checked authority; integer API delegates. Six semantic and transaction tests pass; full typecheck passes.",
       "status": "complete"
     },
     {
       "id": "row-exemplar",
-      "title": "Same-host row replacement visual checkpoint",
-      "summary": "Opt-in same-host view uses accepted collection tokens, contributor fusion and shared clock. Initial two Chromium smoke cases pass; inspecting the contact sheet before the required human checkpoint.",
+      "title": "Compact persistent operation sequence checkpoint",
+      "summary": "Compact persistent workbench implemented; initial Chromium sequence and guided preservation checks pass. Inspecting frames and complete activation costs before visual review.",
       "status": "in-progress"
     }
   ]

@@ -1,5 +1,35 @@
 # One reversible row replacement
 
+## Authorized revision: repeatable compact operations
+
+The user subsequently requested all three Gaussian operations repeatedly, with
+buttons and a more compact presentation, then approved that direction with
+“go”. This explicitly revises the pending exemplar; it is not acceptance of
+the prior long choreography. Retain the two-package contract, reopening semantic
+authority for exact rational scale/swap/add and replacing the pending visual
+target with a persistent interactive system. The older walkthrough remains
+available through `?view=row-operation&guided=1` as an explanation reference.
+
+Use the existing rational arithmetic, typed scalar/matrix referents and playback
+clock. Keep immutable before/after systems and operation/inverse history. Apply
+is atomic: lock edits during preparation/playback; commit only a complete
+endpoint. Provide Pause/Resume, Finish, Cancel, Undo/Redo and Reset. Unsupported
+numeric/presentation inputs return a located message without changing history.
+Use one short sequence exercising swap, addition and fractional scaling. Default
+compact arithmetic is the first visual candidate; broad result/explanation-mode
+abstraction and other matrix shapes await review. Preserve the b=Ax arrangement,
+RHS participation, shared themes and other accepted host modes. Reuse contributor
+fusion for arithmetic and bounded whole-row movement for swap. No new global
+clock, generic solver, automatic elimination or catalogue migration.
+
+Canonical host remains `?view=row-operation`; semantic authority moves from the
+integer-only helper to one exact rational row-operation checker, with the old
+integer API delegating to it. Native token identities persist across unchanged
+rows and swaps. The rollback unit is the compact adapter/session and opt-in route;
+semantic expansion is separately testable. Stop for review of a repeated sequence
+before reusable promotion or a wider visual rollout. Focused exact arithmetic,
+history/cancellation tests, type checks and Chromium captures precede that gate.
+
 Authorized October 12 by “go” after the bounded collection closeout recommended
 one elementary row operation with explicit solution-set preservation.
 
