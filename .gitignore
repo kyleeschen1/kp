@@ -34,6 +34,9 @@ coverage/
 # Durable local visual-review inbox (private, never a source artifact)
 /.kp/review-logs/
 
+# Explicit local authoring selections; source Articles remain versioned.
+/.kp/authoring/
+
 # Editor and OS files
 .DS_Store
 .idea/

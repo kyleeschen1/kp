@@ -12,6 +12,10 @@ one complete selected-source rail passage and preserve the existing canonical
 host; stop for its authoring/visual review before card generalization. A selective
 flagship publication serves the authoring tool, with broader mathematical
 exploration the long-term direction. Theseus owns package status.
+The [rail authoring candidate](../reviews/2026-10-13-authored-rail-exemplar.md)
+and [author packet](../authoring/equation-rail-authoring-packet.md) are ready for
+the first review. This is structural/editorial authorship over two supported
+checked derivations, not arbitrary formula/operation authoring or a shipped editor.
 
 October 13 frontier feedback: desktop affine candidate accepted, but the user
 wants a new explanatory frontier rather than more familiar examples. See the

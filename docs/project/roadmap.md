@@ -33,6 +33,9 @@ starts with selected-source rail authoring, then a reviewed top-text card and a
 connected change-and-composition publication. `run-contract.kp.explanation-authoring-v1`
 owns execution and mandatory exemplar gates. This supersedes the standalone
 next-animation recommendation below; Gaussian elimination remains frozen.
+The [first authored rail candidate](reviews/2026-10-13-authored-rail-exemplar.md)
+now supports checked derivation includes and explicit selected-byte preview;
+review its authoring/reading experience before the top-text card package.
 
 October 13 frontier review: the user says the affine example works but objects
 to retreading old material. Desktop acceptance does not certify phone layout.

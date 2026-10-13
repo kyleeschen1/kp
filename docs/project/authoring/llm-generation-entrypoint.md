@@ -90,6 +90,12 @@ For the existing momentum-energy derivation assumptions, select
 `mechanics.momentum-energy`. This exposes its mechanics-owned checker and
 reference-only host; it does not infer new physics, edit notation or apply drafts.
 
+For complete prose passages using the accepted mechanics equation rails, use
+`equation-rail-authoring-packet.md` and `npm run author:rail`. Its selected-source
+preview binds supported checked derivation includes, title and surrounding prose
+without copying equation chains. This is a separate bounded Article workflow,
+not an extension of `mechanics.momentum-energy` or arbitrary mathematical authoring.
+
 For the independent scalar cancellation persistent-reader candidate, use
 `scalar-cancellation-reader-packet.md`. It documents the file-based checked
 source/Article workflow, shared physics-reader pipeline, supported notation

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.explanation-authoring-v1",
   "kind": "run-contract",
   "title": "Author complete explanations",
-  "status": "ready",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: review selected-source equation-rail passage before top-text card caller. Two of six complete; third awaits human acceptance, not a failing technical gate.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +21,47 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:rail-authoring",
+      "status": "passed",
+      "scope": "source selection and canonical mechanics preservation",
+      "checkedAt": "2026-10-13T23:28:49.375Z",
+      "notes": "35 tests pass; checked references supply exact notation; invalid or tampered selections rejected; source-only omission changes host content."
+    },
+    {
+      "command": "npm run visual:rail-authoring",
+      "status": "passed",
+      "scope": "canonical authored rail review candidate",
+      "checkedAt": "2026-10-13T23:31:38.386Z",
+      "notes": "Four Chromium checks pass: source revision and rejected draft preservation; pointer reverse; keyboard endpoints; exact refinement return; no-JavaScript typography; 390px phone smoke. Not cross-browser promotion."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "full app node tests Svelte domains",
+      "checkedAt": "2026-10-13T23:31:39.236Z",
+      "notes": "Full final typecheck passes; no type erasure or budget amendment."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency and semantic authority preservation",
+      "checkedAt": "2026-10-13T23:31:39.811Z",
+      "notes": "Architecture gates and conformance gateway pass. Existing browser runtime unchanged."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "new route and production integration",
+      "checkedAt": "2026-10-13T23:31:40.387Z",
+      "notes": "Build passes; production reader closure and budget commands also pass. Authored rail JS/CSS closure identical to existing physics argument; see review for measured bytes and exclusions."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: two of six packages complete; rail-exemplar implemented and checked, pending authoring/reading acceptance. Review docs/project/reviews/2026-10-13-authored-rail-exemplar.md and localhost:8000/experiments/authored-rails/. Card/publication/reuse remain unstarted behind the review gate."
+  },
   "allowedWork": [
     "Bounded selected-source authoring, existing presentation integrations, connected argument, proportional validation and documented repairs"
   ],
@@ -46,12 +88,14 @@
     {
       "id": "rail-source",
       "title": "Checked selected-source authoring",
-      "status": "planned"
+      "summary": "Source controls prose, title and included supported rails; checked plans generate notation. Explicit Apply stores exact bytes atomically; invalid draft retains last valid selection.",
+      "status": "complete"
     },
     {
       "id": "rail-exemplar",
       "title": "Canonical rail preview and human checkpoint",
-      "status": "planned"
+      "summary": "Canonical host integration passes initial desktop browser checks; completing phone smoke, author packet, closure evidence and review handoff.",
+      "status": "in-progress"
     },
     {
       "id": "card-caller",
