@@ -7,6 +7,7 @@ import {
 import {
   compileKpFoldableDistributionLessonModel
 } from "./foldable-distribution-lesson-model.ts";
+import { affineCollectionEnvelope } from "../../semantic/affine-collection-source.ts";
 
 export function compileKpFoldableDistributionEquationLesson(
   markdown: string
@@ -14,6 +15,7 @@ export function compileKpFoldableDistributionEquationLesson(
   const model = compileKpFoldableDistributionLessonModel(markdown);
   return compileKpCanonicalEquationLessonPromotion({
     model,
+    equationSource: model.authored ? affineCollectionEnvelope(model.derivation) : undefined,
     compiledLessonId: "compiled.lesson.algebra.foldable-distribution",
     description:
       "Distribute two grouped products, evaluate them, gather like terms, and collect the result.",
@@ -24,6 +26,6 @@ export function compileKpFoldableDistributionEquationLesson(
       label: "Browse the animation library"
     },
     annotateState: (state) =>
-      createKpFoldableDistributionSelectorAnnotatedLatex(state.id)
+      createKpFoldableDistributionSelectorAnnotatedLatex(state.id, model.derivation)
   });
 }

@@ -1,0 +1,104 @@
+{
+  "id": "run-contract.kp.authored-affine-collection-v1",
+  "kind": "run-contract",
+  "title": "Source-authored affine collection",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-13-authored-affine-collection.md"
+    }
+  ],
+  "verification": [
+    "npm run test:foldable-distribution"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:foldable-distribution",
+      "status": "passed",
+      "scope": "default preservation",
+      "checkedAt": "2026-10-13T20:24:20.783Z",
+      "notes": "103 tests pass; original animation asset SHA256 remains byte-identical."
+    },
+    {
+      "command": "npm run visual:affine-collection -- --grep 390",
+      "status": "failed",
+      "scope": "phone preservation pressure",
+      "checkedAt": "2026-10-13T20:25:25.656Z",
+      "notes": "Reference and variant both fail existing mixed two-row/single-row sequence policy. No guard waived, no phone certification; retained executable reproduction and review limitation."
+    },
+    {
+      "command": "npm run visual:affine-collection -- --grep 1100",
+      "status": "passed",
+      "scope": "desktop reference and negative-result candidate",
+      "checkedAt": "2026-10-13T20:25:27.767Z",
+      "notes": "Two Chromium tests pass, native final 7y−2, forward/reverse and interrupted evaluation; default reference mounts. Human visual judgment pending."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "app node tests Svelte domains",
+      "checkedAt": "2026-10-13T20:26:05.715Z",
+      "notes": "Full typecheck passes after source binding and observed-paint axis repair."
+    },
+    {
+      "command": "npm run test:affine-collection",
+      "status": "passed",
+      "scope": "source authoring and signed ownership",
+      "checkedAt": "2026-10-13T20:26:40.608Z",
+      "notes": "Five tests pass: validated source, located repairs, revision binding, exact reference hash, static/browser agreement, bounded coefficient pressure and signed final ownership."
+    },
+    {
+      "command": "npm run build:bundle && npm run check:reader-production && npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "production integration and existing budgets",
+      "checkedAt": "2026-10-13T20:26:41.581Z",
+      "notes": "Build and 12-route closure pass; reader runtime closure 154659 gzip bytes within existing budget; no ceiling amendment."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "complete deterministic regression suite",
+      "checkedAt": "2026-10-13T20:30:28.795Z",
+      "notes": "Final complete run passes 7305 tests with zero skips and authorized localhost sockets. Initial import gate repaired via public API, generated reachability refreshed with unchanged root set, sandbox EPERM resolved by permitted test execution. Phone browser failure remains separate."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "final built reader closure",
+      "checkedAt": "2026-10-13T20:30:29.713Z",
+      "notes": "Final built runtime-code closure is 154649 gzip bytes after complete-observation guard refinement, within unchanged 5 percent budget. Source envelope remains 230 bytes; no raised ceilings."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: desktop source-authored 4(y+1)+3(y-2) to 7y-2 is ready for canonical visual review. Derive complete; reader retained in progress pending review and explicit phone limitation. No generalization or new layout authorized."
+  },
+  "allowedWork": [
+    "Bounded affine source, existing owner parameterization, source revision transport, preservation and cost checks"
+  ],
+  "disallowedWork": [
+    "Generic solver; alternative proof order; new renderer or motion; LA work; catalogue rollout"
+  ],
+  "goal": "One checked source drives proof, notation, readings and existing browser for a negative-result algebra variation",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "derive",
+      "title": "Checked derivation and native notation",
+      "summary": "Validated bounded source drives checked expression trees and certificates; default asset hash preserved; source/static/browser data agreement tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "reader",
+      "title": "Source-bound canonical reader and visual checkpoint",
+      "summary": "Integrating source-bound canonical reader, browser signed-result checks and source revision validation.",
+      "status": "in-progress"
+    }
+  ]
+}

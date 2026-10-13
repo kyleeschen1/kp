@@ -25,13 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-October 13 authoring assessment: the small algebra visual is accepted and its
-run closed. The approved [richer authoring test](reviews/2026-10-13-rich-algebra-authoring-test.md)
-finds that prose/checkpoint selection is source-driven, but mathematics and
-operation order remain fixture-bound. No engine rewrite was performed. Recommended
-next work is one checked derivation feeding the existing native/static/browser
-projections, with `4(y+1)+3(y-2) → 7y-2` as the fixed acceptance case. This is a
-recommendation, not implementation authority. Gaussian elimination stays frozen.
+October 13 authoring implementation: the user approved the diagnostic's next
+step. The [source-authored affine collection candidate](reviews/2026-10-13-authored-affine-collection.md)
+now derives `4(y+1)+3(y-2) → 7y-2` from one short source through existing checked
+trees, native notation, static readings and the canonical browser. The original
+asset is byte-identical. Desktop visual review is next; an existing phone
+two-row/one-row continuity incompatibility remains explicitly unverified. This
+is a bounded two-product shape and fixed operation sequence, not a general
+solver or arbitrary proof authoring. Gaussian elimination stays frozen.
 
 October 13 non-LA pivot: freeze Gaussian elimination at its accepted generator
 and consistency milestones. The user approved a bounded distribution-then-collection

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 4918,
+  "scannedFileCount": 4979,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -53,6 +53,7 @@
       "testCallers": [
         "tests/canonical-equation-semantic-focus.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribute-collect.test.ts",
         "tests/composed-algebra-distribution-v2.test.ts",
         "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",
@@ -947,6 +948,7 @@
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribute-collect.test.ts",
         "tests/composed-algebra-distribution-v2.test.ts",
         "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",
@@ -1596,6 +1598,7 @@
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribute-collect.test.ts",
         "tests/composed-algebra-distribution-v2.test.ts",
         "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",
@@ -2055,6 +2058,7 @@
         "tests/animation-catalogue-solve-x-preservation.test.ts",
         "tests/canonical-animation-construction-round-trip.test.ts",
         "tests/common-factor-presentation.test.ts",
+        "tests/composed-algebra-distribute-collect.test.ts",
         "tests/composed-algebra-distribution-v2.test.ts",
         "tests/composed-algebra-owner-paths.test.ts",
         "tests/composed-algebra-presentation.test.ts",

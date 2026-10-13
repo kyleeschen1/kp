@@ -130,7 +130,9 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
 });
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
-const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant);
+const equationSource = document.body.dataset["kpReaderEquationSource"];
+const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant,
+  equationSource === undefined ? undefined : JSON.parse(equationSource));
 const fractionCompositionSalience = lessonDescriptor.id === "fraction-composition"
   ? (await import("./fraction-composition-salience-adapter.ts"))
       .createKpFractionCompositionSalienceReaderCapability({

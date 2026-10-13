@@ -1,3 +1,4 @@
+import { defaultAffineCollection, assertAffineCollection, type AffineCollectionDerivation } from "./affine-collection-source.ts";
 import {
   createKpStructuredExpression,
   type KpStructuredExpression,
@@ -22,27 +23,28 @@ export interface KpFoldableDistributionExpressionVerification {
   readonly diagnostics: readonly string[];
 }
 
-export function createKpFoldableDistributionExpressionChain():
+export function createKpFoldableDistributionExpressionChain(d: AffineCollectionDerivation = defaultAffineCollection):
   readonly KpFoldableDistributionExpressionState[] {
+  assertAffineCollection(d);
   return Object.freeze([
     state(
       "expression.foldable-distribution.factored",
-      "3(x + 2) + 2(x - 1)",
+      d.latex[0]!,
       sum("factored.root",
         product("factored.left-product",
-          number("factored.left-factor", 3),
+          number("factored.left-factor", d.a),
           sum("factored.left-group",
-            symbol("factored.left-x", "x"),
-            number("factored.left-constant", 2)
+            symbol("factored.left-x", d.x),
+            number("factored.left-constant", d.b)
           )
         ),
         product("factored.right-product",
-          number("factored.right-factor", 2),
+          number("factored.right-factor", d.c),
           sum("factored.right-group",
-            symbol("factored.right-x", "x"),
+            symbol("factored.right-x", d.x),
             negate(
               "factored.right-negative-one",
-              number("factored.right-one", 1)
+              number("factored.right-one", -d.d)
             )
           )
         )
@@ -50,84 +52,86 @@ export function createKpFoldableDistributionExpressionChain():
     ),
     state(
       "expression.foldable-distribution.distributed",
-      "3x + 6 + 2x - 2",
+      d.latex[2]!,
       sum("distributed.root",
         product("distributed.term-3x",
-          number("distributed.coefficient-3", 3),
-          symbol("distributed.x-from-left", "x")
+          number("distributed.coefficient-3", d.a),
+          symbol("distributed.x-from-left", d.x)
         ),
-        number("distributed.constant-6", 6),
+        number("distributed.constant-6", d.p),
         product("distributed.term-2x",
-          number("distributed.coefficient-2", 2),
-          symbol("distributed.x-from-right", "x")
+          number("distributed.coefficient-2", d.c),
+          symbol("distributed.x-from-right", d.x)
         ),
         negate(
           "distributed.negative-2",
-          number("distributed.constant-2", 2)
+          number("distributed.constant-2", -d.q)
         )
       )
     ),
     state(
       "expression.foldable-distribution.grouped",
-      "(3x + 2x) + (6 - 2)",
+      d.latex[3]!,
       sum("grouped.root",
         sum("grouped.coefficients",
           product("grouped.term-3x",
-            number("grouped.coefficient-3", 3),
-            symbol("grouped.x-from-left", "x")
+            number("grouped.coefficient-3", d.a),
+            symbol("grouped.x-from-left", d.x)
           ),
           product("grouped.term-2x",
-            number("grouped.coefficient-2", 2),
-            symbol("grouped.x-from-right", "x")
+            number("grouped.coefficient-2", d.c),
+            symbol("grouped.x-from-right", d.x)
           )
         ),
         sum("grouped.constants",
-          number("grouped.constant-6", 6),
+          number("grouped.constant-6", d.p),
           negate(
             "grouped.negative-2",
-            number("grouped.constant-2", 2)
+            number("grouped.constant-2", -d.q)
           )
         )
       )
     ),
     state(
       "expression.foldable-distribution.coefficient-factored",
-      "(3 + 2)x + (6 - 2)",
+      d.latex[4]!,
       sum("coefficient-factored.root",
         product("coefficient-factored.variable-term",
           sum("coefficient-factored.coefficients",
-            number("coefficient-factored.coefficient-3", 3),
-            number("coefficient-factored.coefficient-2", 2)
+            number("coefficient-factored.coefficient-3", d.a),
+            number("coefficient-factored.coefficient-2", d.c)
           ),
-          symbol("coefficient-factored.x", "x")
+          symbol("coefficient-factored.x", d.x)
         ),
         sum("coefficient-factored.constants",
-          number("coefficient-factored.constant-6", 6),
+          number("coefficient-factored.constant-6", d.p),
           negate(
             "coefficient-factored.negative-2",
-            number("coefficient-factored.constant-2", 2)
+            number("coefficient-factored.constant-2", -d.q)
           )
         )
       )
     ),
     state(
       "expression.foldable-distribution.collected",
-      "5x + 4",
+      d.latex[5]!,
       sum("collected.root",
         product("collected.term-5x",
-          number("collected.coefficient-5", 5),
-          symbol("collected.x", "x")
+          number("collected.coefficient-5", d.coefficient),
+          symbol("collected.x", d.x)
         ),
-        number("collected.constant-4", 4)
+        number("collected.constant-4", d.constant)
       )
     )
   ]);
 }
 
 export function verifyKpFoldableDistributionExpressionChain(
-  chain: readonly KpFoldableDistributionExpressionState[]
+  chain: readonly KpFoldableDistributionExpressionState[],
+  d: AffineCollectionDerivation = defaultAffineCollection
 ): KpFoldableDistributionExpressionVerification {
-  const expected = freezeNormalForm({ coefficients: { x: 5 }, constant: 4 });
+  assertAffineCollection(d);
+  const expected = freezeNormalForm({ coefficients: { [d.x]: d.coefficient }, constant: d.constant });
   const diagnostics: string[] = [];
   if (chain.length !== 5) {
     diagnostics.push(`Expected 5 expression states, received ${chain.length}.`);

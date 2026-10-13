@@ -14,6 +14,7 @@ import {
 } from "../../animation/transformation-phase-cohorts.ts";
 
 export interface KpEquationExemplarPageInput {
+  readonly equationSource?: unknown;
   readonly animation: KpAnimationAsset;
   readonly title: string;
   readonly description: string;
@@ -48,6 +49,7 @@ export function compileKpEquationExemplarPage(
     description: input.description,
     stylesheetHref: "/src/reader/app/exemplar.css",
     bodyAttributes: [
+      ...(input.equationSource === undefined ? [] : [{ name: "data-kp-reader-equation-source", value: JSON.stringify(input.equationSource) }]),
       { name: "data-kp-reader", value: "semantic-document" },
       { name: "data-kp-reader-document-id", value: input.documentId },
       { name: "data-kp-reader-document-version", value: input.documentVersion },

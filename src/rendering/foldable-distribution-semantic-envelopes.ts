@@ -4,12 +4,13 @@ import type {
 import {
   createKpFoldableDistributionAnnotatedEndpoints
 } from "./foldable-distribution-selector-annotated-latex.ts";
+import { defaultAffineCollection, type AffineCollectionDerivation } from "../semantic/affine-collection-source.ts";
 
 export function bindKpFoldableDistributionSemanticEnvelopes(input: {
   readonly root: HTMLElement;
   readonly state: KpSemanticAssetObject;
-}): void {
-  const endpoint = createKpFoldableDistributionAnnotatedEndpoints()
+}, d: AffineCollectionDerivation = defaultAffineCollection): void {
+  const endpoint = createKpFoldableDistributionAnnotatedEndpoints(d)
     .find(({ objectId }) => objectId === input.state.id);
   if (endpoint === undefined) return;
   const transition = input.root

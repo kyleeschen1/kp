@@ -4,7 +4,7 @@ import { normalizeKpScalarSumProductEndpoint } from "./common-factor-normalizer.
 import { verifyKpDistributionBeforeCollection } from "../semantic/distribute-collect.ts";
 import { resolveDistributionBeforeCollection, resolveKpFactoringOperationBinding, resolveKpEvaluationOperationBinding } from "./canonical-algebra-operation-binding.ts";
 import { composeKpEquationOperationAssets } from "../animation/compose-equation-operation-assets.ts";
-import { sha256 } from "../kernel/sha256.ts";
+import { sha256 } from "../kernel/public-api.ts";
 
 const issued = new WeakMap<object, string>();
 

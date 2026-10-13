@@ -22,6 +22,7 @@ type KpEquationExemplarLessonModel =
   ReturnType<typeof compileKpEquationExemplarLessonModel>;
 
 export interface KpCanonicalEquationLessonPromotionInput {
+  readonly equationSource?: unknown;
   readonly model: KpEquationExemplarLessonModel;
   readonly compiledLessonId: string;
   readonly description: string;
@@ -53,6 +54,7 @@ export function compileKpCanonicalEquationLessonPromotion(
   }
   const html = compileKpEquationExemplarPage({
     animation: input.model.animation,
+    equationSource: input.equationSource,
     title: input.model.document.title,
     description: input.description,
     documentId: input.model.document.id,

@@ -1,3 +1,4 @@
+import { defaultAffineCollection, type AffineCollectionDerivation } from "./affine-collection-source.ts";
 import {
   createSemanticTransformationRef
 } from "./animation.ts";
@@ -16,12 +17,12 @@ import {
   createKpFoldableSignedTermGroupingCertificate
 } from "./foldable-distribution-operation-certificates.ts";
 
-export function createKpFoldableDistributionEvaluationTree():
+export function createKpFoldableDistributionEvaluationTree(d: AffineCollectionDerivation = defaultAffineCollection):
   EditableSemanticTransformationTree {
-  const fanOut = createKpFoldableDistributionFanOutCertificates();
-  const products = createKpFoldableProductEvaluationCertificates();
-  const grouping = createKpFoldableSignedTermGroupingCertificate();
-  const collection = createKpFoldableFinalCollectionCertificate();
+  const fanOut = createKpFoldableDistributionFanOutCertificates(d);
+  const products = createKpFoldableProductEvaluationCertificates(d);
+  const grouping = createKpFoldableSignedTermGroupingCertificate(d);
+  const collection = createKpFoldableFinalCollectionCertificate(d);
   const distributionNode = createSemanticTransformationParallel({
     id: "evaluation.foldable-distribution.distribute",
     label: "Distribute both factors",

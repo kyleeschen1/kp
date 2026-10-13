@@ -461,7 +461,7 @@ function dispatchReaderEquationPresentation(input: {
         input.base,
         plan.visualMotif.kind,
         plan.visualMotif.kind === "copy-fan-out"
-          ? persistentOperatorAxisIds(input.renderTransition)
+          ? persistentOperatorAxisIds(input.renderTransition, input.source, input.target)
           : undefined
       );
     case "distribution":
@@ -469,14 +469,14 @@ function dispatchReaderEquationPresentation(input: {
         return { planKind: plan.planKind, canonicalInput: {
           ...input.base,
           trackProjection: createKpFractionDistributionCoherentMotion(plan.distributionOperationPlans),
-          horizontalAxisSemanticEntityIds: persistentOperatorAxisIds(input.renderTransition)
+          horizontalAxisSemanticEntityIds: persistentOperatorAxisIds(input.renderTransition, input.source, input.target)
         }, motionProfile: "default", successorSynthesisCount: 0 };
       }
       return routedDispatch(
         plan.planKind,
         input.base,
         plan.visualMotif.kind,
-        persistentOperatorAxisIds(input.renderTransition)
+        persistentOperatorAxisIds(input.renderTransition, input.source, input.target)
       );
     case "fraction-material":
       return routedDispatch(
@@ -665,14 +665,27 @@ function routedDispatch(
 }
 
 function persistentOperatorAxisIds(
-  transition: KpReaderEquationTransitionPlan
+  transition: KpReaderEquationTransitionPlan,
+  source: KpNativeKatexRenderedSceneObservation,
+  target: KpNativeKatexRenderedSceneObservation
 ): readonly string[] {
   const kinds = new Map([
     ...transition.source.flatMap((state) => state.selectors),
     ...transition.target.flatMap((state) => state.selectors)
   ].map((selector) => [selector.id, selector.semanticKind] as const));
+  // Semantic persistence can change spelling (subtraction to addition of a
+  // signed product). Only unchanged paint has a persistent motion axis.
+  const changesPaint = (relation: KpReaderEquationTransitionPlan["relations"][number]) => {
+    const from = source.atoms.filter(atom => relation.sourceSelectorIds.includes(atom.semanticEntityId));
+    const to = target.atoms.filter(atom => relation.targetSelectorIds.includes(atom.semanticEntityId));
+    // Leave missing observations to the compositor's strict missing-paint guard.
+    return relation.sourceSelectorIds.every(id => from.some(atom => atom.semanticEntityId === id)) &&
+      relation.targetSelectorIds.every(id => to.some(atom => atom.semanticEntityId === id)) &&
+      JSON.stringify(from.map(atom => atom.visualKey).sort()) !== JSON.stringify(to.map(atom => atom.visualKey).sort());
+  };
   return Object.freeze([...new Set(transition.relations.flatMap((relation) =>
     (relation.lifecycle === "persist" || relation.lifecycle === "role-change") &&
+      !changesPaint(relation) &&
       [...relation.sourceSelectorIds, ...relation.targetSelectorIds].every(
         (selectorId) => kinds.get(selectorId) === "operator"
       )

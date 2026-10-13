@@ -1,3 +1,4 @@
+import { defaultAffineCollection, type AffineCollectionDerivation } from "./affine-collection-source.ts";
 import {
   createKpFoldableDistributionExpressionChain
 } from "./foldable-distribution-expression-chain.ts";
@@ -95,20 +96,20 @@ export interface KpFoldableFinalCollectionCertificate {
   readonly arithmetic: readonly [
     {
       readonly id: "collection.foldable-distribution.coefficient";
-      readonly inputValues: readonly [3, 2];
-      readonly targetValue: 5;
+      readonly inputValues: readonly [number, number];
+      readonly targetValue: number;
     },
     {
       readonly id: "collection.foldable-distribution.constant";
-      readonly inputValues: readonly [6, -2];
-      readonly targetValue: 4;
+      readonly inputValues: readonly [number, number];
+      readonly targetValue: number;
     }
   ];
   readonly factoringTransformation: KpSemanticTransformation;
   readonly transformation: KpSemanticTransformation;
   readonly factoringPresentation: {
     readonly requiredMotif: "merge-fan-in";
-    readonly commonFactor: "x";
+    readonly commonFactor: string;
     readonly coefficientEvaluation: "deferred";
     readonly geometryAuthority: "renderer-session-measurement";
   };
@@ -122,9 +123,9 @@ export interface KpFoldableFinalCollectionCertificate {
 
 // Governed authoring may select these certificate-backed operations, but the
 // certificates below remain the authority for laws, values, and lineage.
-export function createKpFoldableDistributionFanOutCertificates():
+export function createKpFoldableDistributionFanOutCertificates(d: AffineCollectionDerivation = defaultAffineCollection):
   readonly KpFoldableDistributionFanOutCertificate[] {
-  const factored = createKpFoldableDistributionExpressionChain()[0]!.expression;
+  const factored = createKpFoldableDistributionExpressionChain(d)[0]!.expression;
   return Object.freeze([
     certifyBranch({
       branch: "left",
@@ -138,7 +139,7 @@ export function createKpFoldableDistributionFanOutCertificates():
         groupedSum: "factored.left-group",
         addends: ["factored.left-x", "factored.left-constant"]
       },
-      targetExpression: leftDistributedExpression(),
+      targetExpression: leftDistributedExpression(d),
       target: {
         root: "distribution.left.raw",
         terms: [
@@ -167,7 +168,7 @@ export function createKpFoldableDistributionFanOutCertificates():
         groupedSum: "factored.right-group",
         addends: ["factored.right-x", "factored.right-negative-one"]
       },
-      targetExpression: rightDistributedExpression(),
+      targetExpression: rightDistributedExpression(d),
       target: {
         root: "distribution.right.raw",
         terms: [
@@ -187,10 +188,10 @@ export function createKpFoldableDistributionFanOutCertificates():
   ]);
 }
 
-export function createKpFoldableProductEvaluationCertificates():
+export function createKpFoldableProductEvaluationCertificates(d: AffineCollectionDerivation = defaultAffineCollection):
   readonly KpFoldableProductEvaluationCertificate[] {
-  const fanOut = createKpFoldableDistributionFanOutCertificates();
-  const distributed = createKpFoldableDistributionExpressionChain()[1]!.expression;
+  const fanOut = createKpFoldableDistributionFanOutCertificates(d);
+  const distributed = createKpFoldableDistributionExpressionChain(d)[1]!.expression;
   return Object.freeze([
     certifyProduct({
       id: "certificate.foldable-distribution.product.three-times-two",
@@ -199,12 +200,12 @@ export function createKpFoldableProductEvaluationCertificates():
         "distribution.left.factor-3-constant",
         "distribution.left.constant-2"
       ],
-      inputValues: [3, 2],
+      inputValues: [d.a, d.b],
       operatorSelectorId:
         "expression.foldable-distribution.distributed.operator.three-times-two",
       targetExpression: distributed,
       targetSubtreeId: "distributed.constant-6",
-      targetValue: 6
+      targetValue: d.p
     }),
     certifyProduct({
       id: "certificate.foldable-distribution.product.two-times-negative-one",
@@ -213,19 +214,19 @@ export function createKpFoldableProductEvaluationCertificates():
         "distribution.right.factor-2-constant",
         "distribution.right.negative-one"
       ],
-      inputValues: [2, -1],
+      inputValues: [d.c, d.d],
       operatorSelectorId:
         "expression.foldable-distribution.distributed.operator.two-times-negative-one",
       targetExpression: distributed,
       targetSubtreeId: "distributed.negative-2",
-      targetValue: -2
+      targetValue: d.q
     })
   ]);
 }
 
-export function createKpFoldableSignedTermGroupingCertificate():
+export function createKpFoldableSignedTermGroupingCertificate(d: AffineCollectionDerivation = defaultAffineCollection):
   KpFoldableSignedTermGroupingCertificate {
-  const chain = createKpFoldableDistributionExpressionChain();
+  const chain = createKpFoldableDistributionExpressionChain(d);
   const source = chain[1]!.expression;
   const target = chain[2]!.expression;
   const mappings = Object.freeze([
@@ -379,9 +380,9 @@ export function createKpFoldableSignedTermGroupingCertificate():
   });
 }
 
-export function createKpFoldableFinalCollectionCertificate():
+export function createKpFoldableFinalCollectionCertificate(d: AffineCollectionDerivation = defaultAffineCollection):
   KpFoldableFinalCollectionCertificate {
-  const chain = createKpFoldableDistributionExpressionChain();
+  const chain = createKpFoldableDistributionExpressionChain(d);
   const coefficientFactored = chain[3]!.expression;
   const collected = chain[4]!.expression;
   const coefficientInputs = [
@@ -430,7 +431,7 @@ export function createKpFoldableFinalCollectionCertificate():
     id: "transform.foldable-distribution.factor-common-x",
     definitionId: "definition.generated.distribution.factor-common-term",
     transformType: "factorCommonTerm",
-    title: "Factor x from the like terms",
+    title: `Factor ${d.x} from the like terms`,
     sourceObjectIds: ["expression.foldable-distribution.grouped"],
     targetObjectIds: [
       "expression.foldable-distribution.coefficient-factored"
@@ -443,13 +444,13 @@ export function createKpFoldableFinalCollectionCertificate():
           `${id}.factor.coefficient-three`,
           "grouped.coefficient-3",
           "coefficient-factored.coefficient-3",
-          "Coefficient three persists inside the factored coefficient sum."
+          d.isDefault ? "Coefficient three persists inside the factored coefficient sum." : `Coefficient ${d.a} persists inside the factored coefficient sum.`
         ),
         identityRecord(
           `${id}.factor.coefficient-two`,
           "grouped.coefficient-2",
           "coefficient-factored.coefficient-2",
-          "Coefficient two persists inside the factored coefficient sum."
+          d.isDefault ? "Coefficient two persists inside the factored coefficient sum." : `Coefficient ${d.c} persists inside the factored coefficient sum.`
         ),
         identityRecord(
           `${id}.factor.coefficient-plus`,
@@ -466,7 +467,7 @@ export function createKpFoldableFinalCollectionCertificate():
           ],
           targetSelectorIds: ["coefficient-factored.x"],
           summary:
-            "The repeated x factors coalesce into one exact common factor."
+            `The repeated ${d.x} factors coalesce into one exact common factor.`
         },
         ...[
           ["left-parenthesis", "grouped.coefficients.left-parenthesis",
@@ -492,7 +493,7 @@ export function createKpFoldableFinalCollectionCertificate():
             `${id}.factor.${suffix}`,
             sourceSelectorId!,
             targetSelectorId!,
-            "Unrelated structure persists while x is factored."
+            `Unrelated structure persists while ${d.x} is factored.`
           )
         )
       ]
@@ -523,7 +524,7 @@ export function createKpFoldableFinalCollectionCertificate():
             "coefficient-factored.coefficient-2"
           ],
           targetSelectorIds: ["collected.coefficient-5"],
-          summary: "Three and two coalesce into coefficient five."
+          summary: d.isDefault ? "Three and two coalesce into coefficient five." : `${d.a} and ${d.c} coalesce into coefficient ${d.coefficient}.`
         },
         {
           id: `${id}.common-x-persists`,
@@ -531,7 +532,7 @@ export function createKpFoldableFinalCollectionCertificate():
           sourceSelectorIds: ["coefficient-factored.x"],
           targetSelectorIds: ["collected.x"],
           summary:
-            "The already factored x persists at one exact baseline."
+            `The already factored ${d.x} persists at one exact baseline.`
         },
         {
           id: `${id}.constants-merge`,
@@ -541,14 +542,14 @@ export function createKpFoldableFinalCollectionCertificate():
             "coefficient-factored.negative-2"
           ],
           targetSelectorIds: ["collected.constant-4"],
-          summary: "Six and signed negative two coalesce into four."
+          summary: d.isDefault ? "Six and signed negative two coalesce into four." : `${d.p} and signed ${d.q} coalesce into ${d.constant}.`
         },
         {
           id: `${id}.outer-plus-persists`,
-          relation: "identity",
+          relation: d.constant < 0 ? "removal" : "identity",
           sourceSelectorIds: ["coefficient-factored.outer-plus"],
-          targetSelectorIds: ["collected.plus"],
-          summary: "Addition persists between the collected result terms."
+          targetSelectorIds: d.constant < 0 ? [] : ["collected.plus"],
+          summary: d.constant < 0 ? "The outer addition retires; the negative result owns its sign." : "Addition persists between the collected result terms."
         },
         {
           id: `${id}.grouping-retires`,
@@ -576,13 +577,13 @@ export function createKpFoldableFinalCollectionCertificate():
     Object.freeze([
       Object.freeze({
         id: "collection.foldable-distribution.coefficient" as const,
-        inputValues: Object.freeze([3, 2]) as readonly [3, 2],
-        targetValue: 5 as const
+        inputValues: Object.freeze(coefficientInputs),
+        targetValue: coefficientTarget
       }),
       Object.freeze({
         id: "collection.foldable-distribution.constant" as const,
-        inputValues: Object.freeze([6, -2]) as readonly [6, -2],
-        targetValue: 4 as const
+        inputValues: Object.freeze(constantInputs),
+        targetValue: constantTarget
       })
     ]);
 
@@ -597,7 +598,7 @@ export function createKpFoldableFinalCollectionCertificate():
     transformation,
     factoringPresentation: Object.freeze({
       requiredMotif: "merge-fan-in" as const,
-      commonFactor: "x" as const,
+      commonFactor: d.x,
       coefficientEvaluation: "deferred" as const,
       geometryAuthority: "renderer-session-measurement" as const
     }),
@@ -881,39 +882,39 @@ function semanticFingerprint(node: KpStructuredExpressionNode): string {
   }
 }
 
-function leftDistributedExpression(): KpStructuredExpression {
+function leftDistributedExpression(d: AffineCollectionDerivation): KpStructuredExpression {
   return createKpStructuredExpression({
     root: sum(
       "distribution.left.raw",
       product(
         "distribution.left.term-x",
-        number("distribution.left.factor-3-x", 3),
-        symbol("distribution.left.x", "x")
+        number("distribution.left.factor-3-x", d.a),
+        symbol("distribution.left.x", d.x)
       ),
       product(
         "distribution.left.term-constant",
-        number("distribution.left.factor-3-constant", 3),
-        number("distribution.left.constant-2", 2)
+        number("distribution.left.factor-3-constant", d.a),
+        number("distribution.left.constant-2", d.b)
       )
     )
   });
 }
 
-function rightDistributedExpression(): KpStructuredExpression {
+function rightDistributedExpression(d: AffineCollectionDerivation): KpStructuredExpression {
   return createKpStructuredExpression({
     root: sum(
       "distribution.right.raw",
       product(
         "distribution.right.term-x",
-        number("distribution.right.factor-2-x", 2),
-        symbol("distribution.right.x", "x")
+        number("distribution.right.factor-2-x", d.c),
+        symbol("distribution.right.x", d.x)
       ),
       product(
         "distribution.right.term-constant",
-        number("distribution.right.factor-2-constant", 2),
+        number("distribution.right.factor-2-constant", d.c),
         negate(
           "distribution.right.negative-one",
-          number("distribution.right.one", 1)
+          number("distribution.right.one", -d.d)
         )
       )
     )

@@ -1,3 +1,4 @@
+import { defaultAffineCollection, type AffineCollectionDerivation } from "../semantic/affine-collection-source.ts";
 import {
   createKpAnimationAsset,
   type KpAnimationAsset
@@ -22,10 +23,10 @@ import {
   createKpFoldableDistributionEvaluationTree
 } from "../semantic/foldable-distribution-evaluation-tree.ts";
 
-export function createKpFoldableDistributionEquationAnimationAsset():
+export function createKpFoldableDistributionEquationAnimationAsset(d: AffineCollectionDerivation = defaultAffineCollection):
   KpAnimationAsset {
-  const source = createKpFoldableDistributionEquationAsset();
-  const tree = createKpFoldableDistributionEvaluationTree();
+  const source = createKpFoldableDistributionEquationAsset(d);
+  const tree = createKpFoldableDistributionEvaluationTree(d);
   return createKpAnimationAsset({
     id: "animation.foldable-distribution.collect-like-terms",
     title: "Distribute and collect like terms",

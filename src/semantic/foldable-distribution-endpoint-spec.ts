@@ -1,3 +1,4 @@
+import { defaultAffineCollection, assertAffineCollection, type AffineCollectionDerivation } from "./affine-collection-source.ts";
 export interface KpFoldableDistributionGroupEnvelope {
   readonly id: string;
   readonly memberSelectorIds: readonly string[];
@@ -18,25 +19,26 @@ export type KpFoldableDistributionEndpointToken =
  * declared separately because a term can be both a persistent group during
  * reflow and a set of individual contributors during later collection.
  */
-export function createKpFoldableDistributionEndpointSpecs():
+export function createKpFoldableDistributionEndpointSpecs(d: AffineCollectionDerivation = defaultAffineCollection):
   readonly KpFoldableDistributionEndpointSpec[] {
+  assertAffineCollection(d);
   return Object.freeze([
     endpoint({
       objectId: "expression.foldable-distribution.factored",
-      label: "Three times x plus two, plus two times x minus one",
+      label: d.isDefault ? "Three times x plus two, plus two times x minus one" : d.latex[0]!,
       tokens: [
-        ["factored.left-factor", "3"],
+        ["factored.left-factor", String(d.a)],
         ["expression.foldable-distribution.left.factored.left-parenthesis", "("],
-        ["factored.left-x", "x"],
+        ["factored.left-x", d.x],
         ["expression.foldable-distribution.left.factored.connector", "+"],
-        ["factored.left-constant", "2"],
+        ["factored.left-constant", String(d.b)],
         ["expression.foldable-distribution.left.factored.right-parenthesis", ")"],
         ["factored.outer-plus", "+"],
-        ["factored.right-factor", "2"],
+        ["factored.right-factor", String(d.c)],
         ["expression.foldable-distribution.right.factored.left-parenthesis", "("],
-        ["factored.right-x", "x"],
+        ["factored.right-x", d.x],
         ["expression.foldable-distribution.right.factored.connector", "-"],
-        ["factored.right-negative-one", "1"],
+        ["factored.right-negative-one", String(-d.d)],
         ["expression.foldable-distribution.right.factored.right-parenthesis", ")"]
       ],
       groups: [
@@ -90,27 +92,27 @@ export function createKpFoldableDistributionEndpointSpecs():
     endpoint({
       objectId: "expression.foldable-distribution.distributed-raw",
       label:
-        "Three x plus three times two, plus two x plus two times negative one",
+        d.isDefault ? "Three x plus three times two, plus two x plus two times negative one" : d.latex[1]!,
       tokens: [
-        ["distribution.left.factor-3-x", "3"],
-        ["distribution.left.x", "x"],
+        ["distribution.left.factor-3-x", String(d.a)],
+        ["distribution.left.x", d.x],
         ["expression.foldable-distribution.left.distributed-raw.connector", "+"],
-        ["distribution.left.factor-3-constant", "3"],
+        ["distribution.left.factor-3-constant", String(d.a)],
         [
           "expression.foldable-distribution.distributed.operator.three-times-two",
           "\\cdot"
         ],
-        ["distribution.left.constant-2", "2"],
+        ["distribution.left.constant-2", String(d.b)],
         ["distribution.outer-plus", "+"],
-        ["distribution.right.factor-2-x", "2"],
-        ["distribution.right.x", "x"],
+        ["distribution.right.factor-2-x", String(d.c)],
+        ["distribution.right.x", d.x],
         ["expression.foldable-distribution.right.distributed-raw.connector", "+"],
-        ["distribution.right.factor-2-constant", "2"],
+        ["distribution.right.factor-2-constant", String(d.c)],
         [
           "expression.foldable-distribution.distributed.operator.two-times-negative-one",
           "\\cdot"
         ],
-        ["distribution.right.negative-one", "(-1)"]
+        ["distribution.right.negative-one", `(${d.d})`]
       ],
       groups: [
         group("layout.foldable-distribution.raw", [
@@ -166,15 +168,15 @@ export function createKpFoldableDistributionEndpointSpecs():
     }),
     endpoint({
       objectId: "expression.foldable-distribution.distributed",
-      label: "Three x plus six, plus two x minus two",
+      label: d.isDefault ? "Three x plus six, plus two x minus two" : d.latex[2]!,
       tokens: [
-        ["distributed.term-3x", "3x"],
+        ["distributed.term-3x", `${d.a}${d.x}`],
         ["distributed.plus-left", "+"],
-        ["distributed.constant-6", "6"],
+        ["distributed.constant-6", String(d.p)],
         ["distributed.outer-plus", "+"],
-        ["distributed.term-2x", "2x"],
+        ["distributed.term-2x", `${d.c}${d.x}`],
         ["distributed.minus-right", "-"],
-        ["distributed.negative-2", "2"]
+        ["distributed.negative-2", String(-d.q)]
       ],
       groups: [
         group("layout.foldable-distribution.distributed", [
@@ -200,20 +202,20 @@ export function createKpFoldableDistributionEndpointSpecs():
     }),
     endpoint({
       objectId: "expression.foldable-distribution.grouped",
-      label: "Three x plus two x, grouped with six minus two",
+      label: d.isDefault ? "Three x plus two x, grouped with six minus two" : d.latex[3]!,
       tokens: [
         ["grouped.coefficients.left-parenthesis", "("],
-        ["grouped.coefficient-3", "3"],
-        ["grouped.x-from-left", "x"],
+        ["grouped.coefficient-3", String(d.a)],
+        ["grouped.x-from-left", d.x],
         ["grouped.coefficients.plus", "+"],
-        ["grouped.coefficient-2", "2"],
-        ["grouped.x-from-right", "x"],
+        ["grouped.coefficient-2", String(d.c)],
+        ["grouped.x-from-right", d.x],
         ["grouped.coefficients.right-parenthesis", ")"],
         ["grouped.outer-plus", "+"],
         ["grouped.constants.left-parenthesis", "("],
-        ["grouped.constant-6", "6"],
+        ["grouped.constant-6", String(d.p)],
         ["grouped.constants.minus", "-"],
-        ["grouped.negative-2", "2"],
+        ["grouped.negative-2", String(-d.q)],
         ["grouped.constants.right-parenthesis", ")"]
       ],
       groups: [
@@ -276,19 +278,19 @@ export function createKpFoldableDistributionEndpointSpecs():
     }),
     endpoint({
       objectId: "expression.foldable-distribution.coefficient-factored",
-      label: "Three plus two, times x, plus six minus two",
+      label: d.isDefault ? "Three plus two, times x, plus six minus two" : d.latex[4]!,
       tokens: [
         ["coefficient-factored.coefficients.left-parenthesis", "("],
-        ["coefficient-factored.coefficient-3", "3"],
+        ["coefficient-factored.coefficient-3", String(d.a)],
         ["coefficient-factored.coefficients.plus", "+"],
-        ["coefficient-factored.coefficient-2", "2"],
+        ["coefficient-factored.coefficient-2", String(d.c)],
         ["coefficient-factored.coefficients.right-parenthesis", ")"],
-        ["coefficient-factored.x", "x"],
+        ["coefficient-factored.x", d.x],
         ["coefficient-factored.outer-plus", "+"],
         ["coefficient-factored.constants.left-parenthesis", "("],
-        ["coefficient-factored.constant-6", "6"],
+        ["coefficient-factored.constant-6", String(d.p)],
         ["coefficient-factored.constants.minus", "-"],
-        ["coefficient-factored.negative-2", "2"],
+        ["coefficient-factored.negative-2", String(-d.q)],
         ["coefficient-factored.constants.right-parenthesis", ")"]
       ],
       groups: [
@@ -325,18 +327,18 @@ export function createKpFoldableDistributionEndpointSpecs():
     }),
     endpoint({
       objectId: "expression.foldable-distribution.collected",
-      label: "Five x plus four",
+      label: d.isDefault ? "Five x plus four" : d.latex[5]!,
       tokens: [
-        ["collected.coefficient-5", "5"],
-        ["collected.x", "x"],
-        ["collected.plus", "+"],
-        ["collected.constant-4", "4"]
+        ["collected.coefficient-5", String(d.coefficient)],
+        ["collected.x", d.x],
+        ...(d.constant < 0 ? [] : [["collected.plus", "+"] as const]),
+        ["collected.constant-4", String(d.constant)]
       ],
       groups: [
         group("layout.foldable-distribution.collected.result", [
           "collected.coefficient-5",
           "collected.x",
-          "collected.plus",
+          ...(d.constant < 0 ? [] : ["collected.plus"]),
           "collected.constant-4"
         ]),
         group("collected.term-5x", [

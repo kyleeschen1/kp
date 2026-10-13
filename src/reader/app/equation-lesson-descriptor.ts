@@ -28,6 +28,8 @@ export interface KpReaderEquationStageLayoutCompiler {
 }
 
 export interface KpReaderEquationLessonDescriptor {
+  /** Only the registered domain owner can validate and bind serialized source. */
+  readonly bindSource?: (source: unknown) => KpReaderEquationLessonDescriptor;
   readonly id: string;
   readonly createAnimation: (
     profile: KpReaderEquationPresentationProfile
@@ -137,14 +139,18 @@ export const kpReaderEquationLessonVariants = Object.freeze(
 );
 
 export async function resolveKpReaderEquationLessonDescriptor(
-  variant: string
+  variant: string,
+  source?: unknown
 ): Promise<KpReaderEquationLessonDescriptor> {
   if (!Object.hasOwn(kpReaderEquationLessonDescriptorLoaders, variant)) {
     throw new Error(`Unknown reader equation lesson variant ${variant}.`);
   }
-  return kpReaderEquationLessonDescriptorLoaders[
+  const descriptor: KpReaderEquationLessonDescriptor = await kpReaderEquationLessonDescriptorLoaders[
     variant as KpReaderEquationLessonVariant
   ]();
+  if (source === undefined) return descriptor;
+  if (!descriptor.bindSource) throw new Error(`Lesson ${variant} does not accept source overrides.`);
+  return descriptor.bindSource(source);
 }
 
 export function compileKpReaderCanonicalTransitionPolicy(input: {

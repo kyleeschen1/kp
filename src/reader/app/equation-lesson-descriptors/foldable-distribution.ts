@@ -10,16 +10,24 @@ import {
 import {
   defineKpCanonicalEquationLessonDescriptor
 } from "../equation-lesson-descriptor.ts";
+import type { KpReaderEquationLessonDescriptor } from "../equation-lesson-descriptor.ts";
+import { defaultAffineCollection, readAffineCollectionEnvelope, type AffineCollectionDerivation } from "../../../semantic/affine-collection-source.ts";
 
-export const foldableDistributionDescriptor =
-  defineKpCanonicalEquationLessonDescriptor({
+export function createFoldableDistributionDescriptor(d: AffineCollectionDerivation = defaultAffineCollection) {
+  return defineKpCanonicalEquationLessonDescriptor({
     id: "foldable-distribution",
+    bindSource,
     createAnimation: () =>
-      createKpFoldableDistributionEquationAnimationAsset(),
-    bindStructuralAnchors: bindKpFoldableDistributionSemanticEnvelopes,
+      createKpFoldableDistributionEquationAnimationAsset(d),
+    bindStructuralAnchors: (input: Parameters<typeof bindKpFoldableDistributionSemanticEnvelopes>[0]) => bindKpFoldableDistributionSemanticEnvelopes(input, d),
     stageLayoutCompiler: Object.freeze({
-      apply: applyKpFoldableDistributionPhaseStageLayout
+      apply: (input: Parameters<typeof applyKpFoldableDistributionPhaseStageLayout>[0]) => applyKpFoldableDistributionPhaseStageLayout(input, d)
     }),
     readerControls: "foldable-distribution-v1" as const,
     compactTranscriptAvailable: true
   });
+}
+function bindSource(source: unknown): KpReaderEquationLessonDescriptor {
+  return createFoldableDistributionDescriptor(readAffineCollectionEnvelope(source));
+}
+export const foldableDistributionDescriptor = createFoldableDistributionDescriptor();

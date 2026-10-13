@@ -1,3 +1,4 @@
+import { defaultAffineCollection, type AffineCollectionDerivation } from "../semantic/affine-collection-source.ts";
 import {
   createKpFoldableDistributionEndpointSpecs,
   type KpFoldableDistributionGroupEnvelope
@@ -17,9 +18,9 @@ export interface KpFoldableDistributionAnnotatedEndpoint {
   readonly groupEnvelopes: readonly KpFoldableDistributionGroupEnvelope[];
 }
 
-export function createKpFoldableDistributionAnnotatedEndpoints():
+export function createKpFoldableDistributionAnnotatedEndpoints(d: AffineCollectionDerivation = defaultAffineCollection):
   readonly KpFoldableDistributionAnnotatedEndpoint[] {
-  return Object.freeze(createKpFoldableDistributionEndpointSpecs().map(
+  return Object.freeze(createKpFoldableDistributionEndpointSpecs(d).map(
     (spec) => {
       const segments: KpSelectorAnnotatedLatexSegment[] = [];
       spec.tokens.forEach(([selectorId, latex], index) => {
@@ -49,9 +50,10 @@ export function createKpFoldableDistributionAnnotatedEndpoints():
 }
 
 export function createKpFoldableDistributionSelectorAnnotatedLatex(
-  objectId: string
+  objectId: string,
+  d: AffineCollectionDerivation = defaultAffineCollection
 ): KpSelectorAnnotatedLatex | undefined {
-  return createKpFoldableDistributionAnnotatedEndpoints()
+  return createKpFoldableDistributionAnnotatedEndpoints(d)
     .find((endpoint) => endpoint.objectId === objectId)
     ?.annotated;
 }

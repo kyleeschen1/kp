@@ -1,3 +1,4 @@
+import { defaultAffineCollection, type AffineCollectionDerivation } from "./affine-collection-source.ts";
 import {
   createKpAssetBundle,
   createKpSemanticAssetObject,
@@ -45,13 +46,13 @@ const transformIds = Object.freeze({
   collection: "transform.foldable-distribution.collect-results"
 });
 
-export function createKpFoldableDistributionEquationAsset():
+export function createKpFoldableDistributionEquationAsset(d: AffineCollectionDerivation = defaultAffineCollection):
   KpFoldableDistributionEquationAsset {
-  const endpoints = createKpFoldableDistributionEndpointSpecs();
-  const fanOut = createKpFoldableDistributionFanOutCertificates();
-  const products = createKpFoldableProductEvaluationCertificates();
-  const grouping = createKpFoldableSignedTermGroupingCertificate();
-  const collection = createKpFoldableFinalCollectionCertificate();
+  const endpoints = createKpFoldableDistributionEndpointSpecs(d);
+  const fanOut = createKpFoldableDistributionFanOutCertificates(d);
+  const products = createKpFoldableProductEvaluationCertificates(d);
+  const grouping = createKpFoldableSignedTermGroupingCertificate(d);
+  const collection = createKpFoldableFinalCollectionCertificate(d);
   const factoredId = endpoints[0]!.objectId;
   const rawId = endpoints[1]!.objectId;
   const leftFanOut = transformation({
@@ -103,7 +104,7 @@ export function createKpFoldableDistributionEquationAsset():
         "foldable-distribution.left-variable-product-settles",
         ["distribution.left.factor-3-x", "distribution.left.x"],
         "distributed.term-3x",
-        "The left coefficient and variable settle as the persistent term 3x."
+        `The left coefficient and variable settle as the persistent term ${d.a}${d.x}.`
       ),
       identity(
         "foldable-distribution.left-plus-persists",
@@ -126,7 +127,7 @@ export function createKpFoldableDistributionEquationAsset():
         "foldable-distribution.right-variable-product-settles",
         ["distribution.right.factor-2-x", "distribution.right.x"],
         "distributed.term-2x",
-        "The right coefficient and variable settle as the persistent term 2x."
+        `The right coefficient and variable settle as the persistent term ${d.c}${d.x}.`
       ),
       roleChange(
         "foldable-distribution.signed-connector-settles",
@@ -208,7 +209,7 @@ function equationObject(input: {
     .map(({ id, memberSelectorIds }) => ({
       id,
       kind: "semantic-group",
-      label: id.endsWith("term-3x") ? "3x" : "2x",
+      label: input.endpoint.tokens.filter(([selectorId]) => memberSelectorIds.includes(selectorId)).map(([, latex]) => latex).join(""),
       metadata: {
         equationStructureRole: "semantic-group",
         memberSelectorIds: memberSelectorIds.join(","),

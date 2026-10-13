@@ -1,4 +1,5 @@
 import type { Plugin } from "vite";
+import { readFile } from "node:fs/promises";
 import type { buildKpAuthoredDistributionPreview } from "../src/experiments/authoring-structural/distribution-preview-build.ts";
 
 // Only registered local pages can choose a module; URL input is never imported.
@@ -15,6 +16,18 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         const path = request.url?.split("?")[0];
+        if (path === "/reader/foldable-distribution/" && new URL(request.url!, "http://localhost").searchParams.get("example") === "transfer") {
+          if (request.method !== "GET") { response.writeHead(405).end(); return; }
+          void (async () => {
+            try {
+              const markdown = await readFile(new URL("../content/lessons/foldable-distribution-transfer.md", import.meta.url), "utf8");
+              const module = await server.ssrLoadModule("/src/reader/compiler/foldable-distribution-equation-lesson.ts") as { compileKpFoldableDistributionEquationLesson: (source: string) => { html: string } };
+              const html = await server.transformIndexHtml(request.url!, module.compileKpFoldableDistributionEquationLesson(markdown).html);
+              response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
+            } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
+          })();
+          return;
+        }
         const algebraPage = path === "/experiments/reusable-reasoning/" ? algebraPages.get(new URL(request.url!, "http://localhost").searchParams.get("example") ?? "") : undefined;
         if (algebraPage) {
           if (request.method !== "GET") { response.writeHead(405).end(); return; }
