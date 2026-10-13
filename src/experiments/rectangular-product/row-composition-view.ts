@@ -9,10 +9,12 @@ const collection = collectionLayout(model.before);
 // Collection owns the docking geometry. Arithmetic uses its existing sampler
 // with an outward lane, leaving the compact receiving matrix in place.
 const layout: RowWorkbenchLayout = {
-  width: 680, height: 390, columns: [240 + collection.offsets[0]!, 240 + collection.offsets[1]!, 240 + collection.offsets[2]!, 112],
-  rows: [202, 250], lanes: [154, 298], equality: [174, 226], copyClearance: 32,
-  unknowns: collection.offsets.map(offset => [collection.vectorLeft + 26, 226 - collection.span / 2 + offset] as const),
-  brackets: [[215, 177, collection.matrixWidth, 98], [collection.vectorLeft, 226 - collection.span / 2 - 25, 52, collection.span + 50], [75, 177, 74, 98]], stroke: 1.5,
+  width: 680, height: 390, columns: [...collection.offsets.map(offset => 240 + offset), 112],
+  rows: model.before.coefficients.map((_, r) => 202 + r * 48),
+  lanes: model.before.coefficients.map((_, r) => r === 0 ? 154 : 202 + model.before.coefficients.length * 48),
+  equality: [174, collection.rowCenter], copyClearance: 32,
+  unknowns: collection.offsets.map(offset => [collection.vectorLeft + 26, collection.rowCenter - collection.span / 2 + offset] as const),
+  brackets: [[215, 177, collection.matrixWidth, collection.rowHeight], [collection.vectorLeft, collection.rowCenter - collection.span / 2 - 25, 52, collection.span + 50], [75, 177, 74, collection.rowHeight]], stroke: 1.5,
 };
 function rowCompositionHtml() {
   return `<div class="row-composition-stage" aria-hidden="true"><div data-composition-layer="before">${polynomialHtml(model.before)}</div><div data-composition-layer="operation">${model.steps.map((_, i) => `<div data-operation-index="${i}">${rowWorkbenchStageHtml(model.before.inputs, layout, false)}</div>`).join('')}</div><div data-composition-layer="after">${polynomialHtml(model.after)}</div></div>`;

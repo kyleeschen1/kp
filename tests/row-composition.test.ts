@@ -29,6 +29,8 @@ test('a composed sequence keeps every checked predecessor and exposes meaningful
     assert.ok(Math.abs(frame.local - .5) < 1e-10);
     assert.equal(sampleCompiledRowComposition(model, start).local, 0);
     assert.equal(sampleCompiledRowComposition(model, end).beat.cue, model.steps[i]!.after);
+    assert.equal(sampleCompiledRowComposition(model, end - Number.EPSILON).beat.cue, model.steps[i]!.after);
+    assert.equal(sampleCompiledRowComposition(model, end + Number.EPSILON).beat.cue, model.steps[i]!.after);
   }
   const samples = Array.from({ length: 101 }, (_, i) => i / 100);
   assert.deepEqual(samples.map(p => sampleCompiledRowComposition(model, p)), samples.reverse().map(p => sampleCompiledRowComposition(model, p)).reverse());
@@ -40,7 +42,7 @@ test('sequence compilation rejects invalid intermediate states and ambiguous mil
   const source = eliminationSequenceSource;
   const invalid = [
     { ...source, steps: [] },
-    { ...source, steps: Array.from({ length: 9 }, (_, i) => ({ ...source.steps[0]!, id: `step-${i}` })) },
+    { ...source, steps: Array.from({ length: 17 }, (_, i) => ({ ...source.steps[0]!, id: `step-${i}` })) },
     { ...source, steps: [source.steps[0]!, source.steps[0]!] },
     { ...source, steps: [{ ...source.steps[0]!, id: 'matrix' }] },
     { ...source, steps: [{ ...source.steps[0]!, operation: { kind: 'scale' as const, row: 0, factor: 0 } }] },
@@ -74,12 +76,21 @@ test('collection and expansion use the exact checked objects, not a reconstructe
   assert.equal(step.witness.relation, 'same-solution-set');
 });
 
-test('checked endpoints outside collection support yield located repairs without changing referents', () => {
+test('zero and fractional endpoints retain exact objects while oversized coefficients still repair', () => {
   const zero = requireRowWorkbenchSource(redundantRowSource).steps[0]!.checked.after;
-  assert.deepEqual(projectSystemCollection(linearSystemModel, zero), { status: 'repair-required', path: 'coefficients.1', message: 'A whole-zero row needs a separate collection presentation.' });
+  const zeroProjection = projectSystemCollection(linearSystemModel, zero);
+  assert.equal(zeroProjection.status, 'projected');
+  if (zeroProjection.status === 'projected') {
+    assert.equal(zeroProjection.model.product.left, zero.coefficients);
+    assert.match(zeroProjection.model.expandedEquation, /0=0/);
+  }
   const fractional = requireRowWorkbenchSource({ ...originalRowSource, coefficients: [['1/2', -1, 3], [0, 1, -2]], steps: [originalRowSource.steps[0]!] });
   const result = projectSystemCollection(linearSystemModel, fractional.initial);
-  assert.equal(result.status, 'repair-required'); if (result.status === 'repair-required') assert.equal(result.path, 'coefficients.0.0');
+  assert.equal(result.status, 'projected');
+  if (result.status === 'projected') {
+    assert.equal(result.model.product.left, fractional.initial.coefficients);
+    assert.match(result.model.expandedEquation, /\\frac\{1\}\{2\}x/);
+  }
   const big = requireRowWorkbenchSource({ ...originalRowSource, coefficients: [[10, -1, 3], [0, 1, -2]], steps: [originalRowSource.steps[0]!] });
   assert.equal(projectSystemCollection(linearSystemModel, big.initial).status, 'repair-required');
 });
@@ -114,7 +125,7 @@ test('source variation changes the receiving row while preserving actual referen
   assert.equal(model.durationMs, rowComposition.durationMs);
 });
 
-test('composition source fails closed for unsupported operations, annotations and zero-row endpoints', () => {
+test('composition source fails closed for unsupported operations and annotations while admitting zero rows', () => {
   const self = compileRowComposition({ ...originalRowCompositionSource, operation: { kind: 'add', sourceRow: 0, targetRow: 0, factor: 1 } });
   assert.equal(self.status, 'repair-required');
   const unsupported = compileRowComposition({ ...originalRowCompositionSource,
@@ -130,6 +141,6 @@ test('composition source fails closed for unsupported operations, annotations an
   assert.equal(before.status, 'projected');
   if (before.status !== 'projected') return;
   const zero = compileRowComposition({ ...originalRowCompositionSource, before: before.model });
-  assert.equal(zero.status, 'repair-required');
-  if (zero.status === 'repair-required') assert.equal(zero.path, 'after.coefficients.0');
+  assert.equal(zero.status, 'compiled');
+  if (zero.status === 'compiled') assert.match(zero.after.expandedEquation, /0=0/);
 });

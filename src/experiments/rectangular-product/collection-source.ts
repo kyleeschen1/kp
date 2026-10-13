@@ -43,9 +43,9 @@ export function compileCollectionSource(source: CollectionSource) {
     return gap('source', 'coefficients', 'Provide a nonempty rectangular coefficient grid matching the ordered inputs.');
   if (source.coefficients.some(row => row.some(n => !Number.isFinite(n))))
     return gap('source', 'coefficients', 'Coefficients must be finite real numbers.');
-  if (rows !== 2 || columns < 2 || columns > 4 || source.coefficients.some(row => row.some(n => !Number.isInteger(n) || Math.abs(n) > 9)))
-    return gap('presentation', 'coefficients', 'This adapter supports two rows, two to four inputs, and single-digit integer coefficients.');
-  if (source.coefficients.some(row => row.every(n => n === 0)))
+  if ((rows !== 2 && !(source.domain.kind === 'linear-system' && rows === 3)) || columns < 2 || columns > 4 || source.coefficients.some(row => row.some(n => !Number.isInteger(n) || Math.abs(n) > 9)))
+    return gap('presentation', 'coefficients', 'Use two rows (or three for systems), two to four inputs, and single-digit integer coefficients.');
+  if (source.domain.kind === 'polynomials' && source.coefficients.some(row => row.every(n => n === 0)))
     return gap('presentation', 'coefficients', 'An entirely zero row needs an explicit zero-expression presentation, not an empty opening.');
   if (source.inputs.some(e => !inputSupported(e)))
     return gap('presentation', 'inputs', 'Use single-letter inputs, their powers 2–4, or the constant 1.');
@@ -95,7 +95,7 @@ export function compileCollectionSource(source: CollectionSource) {
         : `${magnitude === 1 ? '' : magnitude}${expressionToLatex(expression)}`;
       return [{ negative: value < 0, body }];
     });
-    return `${output.latex}=${terms.map((term, i) => `${term.negative ? '-' : i ? '+' : ''}${term.body}`).join('')}`;
+    return `${output.latex}=${terms.map((term, i) => `${term.negative ? '-' : i ? '+' : ''}${term.body}`).join('') || '0'}`;
   }).join('\\\\');
   return Object.freeze({ status: 'compiled' as const, id: source.id, kind: source.domain.kind,
     coefficients, inputs, product, outputs, focus: Object.freeze({ ...focus }), beats, stops, durationMs, equation,

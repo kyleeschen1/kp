@@ -3,6 +3,7 @@ import { createKpSelectorAnnotatedLatex, type KpSelectorAnnotatedLatexSegment } 
 import { renderSelectorAnnotatedLatexToHtml } from '../../rendering/katex-adapter.ts';
 import { measureKpNativeKatexSubtreePaintRect } from '../../rendering/native-katex-paint-geometry.ts';
 import type { CollectionModel } from './collection-source.ts';
+import { rowValueLatex } from './row-value-latex.ts';
 
 function naturalRow(model: CollectionModel, r: number) {
   const segments: KpSelectorAnnotatedLatexSegment[] = [];
@@ -14,10 +15,11 @@ function naturalRow(model: CollectionModel, r: number) {
     const constant = model.inputs[c]!.expression.kind === 'constant';
     if (value < 0) part(`sign-${r}-${c}`, '-');
     else if (!first) part(`plus-${r}-${c}`, '+');
-    if (Math.abs(value) !== 1 || constant) part(`${value < 0 ? 'magnitude' : 'coefficient'}-${r}-${c}`, String(Math.abs(value)));
+    if (Math.abs(value) !== 1 || constant) part(`${value < 0 ? 'magnitude' : 'coefficient'}-${r}-${c}`, rowValueLatex(model.product.left.rows[r]![c]!, true));
     if (!constant) part(`basis-${r}-${c}`, expressionToLatex(model.inputs[c]!.expression));
     first = false;
   });
+  if (first) part(`zero-${r}`, '0');
   return createKpSelectorAnnotatedLatex({ id: `natural.row-${r}`, segments,
     expectedSelectorIds: segments.flatMap(s => s.kind === 'selector' ? [s.selectorId] : []) });
 }

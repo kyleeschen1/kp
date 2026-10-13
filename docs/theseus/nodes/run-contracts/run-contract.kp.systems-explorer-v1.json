@@ -47,11 +47,46 @@
       "scope": "Complete production closures including sequence activation",
       "checkedAt": "2026-10-13T15:44:25.206Z",
       "notes": "140-module build and all consumer gates pass after explicit bounded amendment. New sequence closure122437 JS and16527 CSS gzip; union136340/17431. No runtime improvement or network-transfer claim."
+    },
+    {
+      "command": "npm run test:row-operation; npm run test:matrix-pouring; npm run typecheck",
+      "status": "passed",
+      "scope": "Bounded exact systems, composed sources and full type chain",
+      "checkedAt": "2026-10-13T16:18:49.180Z",
+      "notes": "22 row tests including 480 rank/solution cases and 72 composition variations; 9 collection/pouring tests; full app/node/test/Svelte/domain type checks pass. Exact solutions and nullspace vectors substitute into original equations."
+    },
+    {
+      "command": "npm run visual:row-operation; npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Existing-host Chromium generator integration and preservation",
+      "checkedAt": "2026-10-13T16:18:50.204Z",
+      "notes": "22 row and 11 pouring checks pass. Six size/outcome cases cover every seam, seek/reversal, settled captions, themes and narrow overflow. Subsequent rank selector test-only extension passed focused generator controls rerun. Human density and timing review remains."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "failed",
+      "scope": "Initial explorer feature budget",
+      "checkedAt": "2026-10-13T16:18:50.981Z",
+      "notes": "Initial union and collection ceilings exceeded. Extracted exact-value leaf and lazy generator UI, measured complete closures and explicitly amended bounded feature costs; see systems-explorer-cost-boundary decision. No consumers removed."
+    },
+    {
+      "command": "npm run build:matrix-interpretations; npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Complete production activation including generator controls",
+      "checkedAt": "2026-10-13T16:18:51.742Z",
+      "notes": "Final union143110 JS/17431 CSS gzip, generator128327/16527. All complete-consumer gates pass under recorded bounded amendment. No simultaneous-instance mount or network-transfer claim."
+    },
+    {
+      "command": "npm run build:matrix-interpretations; npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Final diagnostic wording and production closure",
+      "checkedAt": "2026-10-13T16:19:46.455Z",
+      "notes": "Corrected shape-repair prose to include three-row systems. Final 146-module build and gates pass: union143096 JS/17431 CSS, generator128315/16527 gzip bytes. Decision updated to final measurements."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: composition slice has a checked three-step exemplar at row-composition example=elimination. Review swap to echelon, normalize, eliminate and natural expansion. After acceptance pressure a second source then continue zero rows, fractions, authoring, generation and square explorer; not complete."
+    "summary": "HUMAN_CHECKPOINT: functional bounded systems generator and animated solver delivered at row-composition example=generated. Five of six packages complete; final square-layout/interface pacing review remains. No independent approved implementation remains before this visual gate."
   },
   "allowedWork": [
     "Existing LA semantic owners, bounded composition, zero and fractional presentation, generated checked systems and local interpretation interface"
@@ -72,32 +107,38 @@
     {
       "id": "composition",
       "title": "Multi-operation-composition",
-      "status": "in-progress"
+      "summary": "User accepted three-step composition and requested continuation to the generator. Seventy-two source-only generated variations now reuse the same checked trace adapter; original composition browser checks remain passing.",
+      "status": "complete"
     },
     {
       "id": "zero-rows",
       "title": "Zero-row-meaning",
-      "status": "planned"
+      "summary": "Whole-zero rows preserve natural 0 equals RHS endpoints in the shared collection; generated consistent and contradictory cases pass exact and browser checks.",
+      "status": "complete"
     },
     {
       "id": "fractions",
       "title": "Exact-fraction-presentation",
-      "status": "planned"
+      "summary": "Exact normalized fractions flow through collection, row operations and solution families without numeric reconstruction; signed fractional typography and seek continuity checked.",
+      "status": "complete"
     },
     {
       "id": "authoring",
       "title": "Source-only-authoring",
-      "status": "planned"
+      "summary": "Seventy-two deterministic generated source variations reuse the same composition adapter and renderer with retained checked referents. No LLM throughput benchmark claimed.",
+      "status": "complete"
     },
     {
       "id": "generation",
       "title": "Bounded-generation-and-trace",
-      "status": "planned"
+      "summary": "Bounded seeded generator and independent exact elimination implemented for 2x2 and 3x3; 480 systems checked against independent ranks, solution substitution and nullspace laws.",
+      "status": "complete"
     },
     {
       "id": "explorer",
       "title": "Square-system-explorer",
-      "status": "planned"
+      "summary": "Functional generator, animated trace, echelon/rank questions and parameter controls delivered. All six size/outcome browser cases pass. Final human review of square layout and pacing remains.",
+      "status": "in-progress"
     }
   ]
 }

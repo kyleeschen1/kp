@@ -1,6 +1,8 @@
 import { addKpRationals, createKpRational, divideKpRationals, multiplyKpRationals, negateKpRational, type KpNormalizedRational } from '../../domains/math/exact-rational.ts';
 import { constant, divide } from './expression.ts';
 import { createKpScalarExpression, createKpTypedMatrixFromRows, type KpScalarValue, type KpScalarExpression, type KpTypedMatrix } from './typed-semantic-math.ts';
+import { readExactRowValue } from './row-exact-value.ts';
+export { readExactRowValue } from './row-exact-value.ts';
 
 export interface LinearSystem { readonly coefficients: KpTypedMatrix; readonly rhs: readonly KpScalarValue[] }
 export type RowOperation =
@@ -10,14 +12,6 @@ export type RowOperation =
 const repair = (path: string, message: string) => ({ status: 'repair-required' as const, path, message });
 const limit = BigInt(Number.MAX_SAFE_INTEGER);
 const fits = (n: KpNormalizedRational) => n.numerator >= -limit && n.numerator <= limit && n.denominator <= limit;
-export function readExactRowValue(value: KpScalarValue): KpNormalizedRational | undefined {
-  const e = value.expression;
-  if (e.kind === 'constant' && Number.isSafeInteger(e.value)) return createKpRational(BigInt(e.value));
-  if (e.kind === 'divide' && e.numerator.kind === 'constant' && e.denominator.kind === 'constant' &&
-      Number.isSafeInteger(e.numerator.value) && Number.isSafeInteger(e.denominator.value) && e.denominator.value !== 0)
-    return createKpRational(BigInt(e.numerator.value), BigInt(e.denominator.value));
-  return undefined;
-}
 export function parseRowFactor(text: string) {
   const match = /^\s*([+-]?\d{1,15})(?:\s*\/\s*([+-]?\d{1,15}))?\s*$/.exec(text);
   if (!match || (match[2] && BigInt(match[2]) === 0n)) return repair('factor', 'Enter an integer or fraction with a nonzero denominator, such as -2 or 1/2.');

@@ -4,6 +4,7 @@ import { polynomialModel } from './polynomial-model.ts';
 import { sampleCollection, type CollectionModel } from './collection-source.ts';
 import { collectionNaturalHtml, mountCollectionNaturalLayout } from './collection-natural-layout.ts';
 import './polynomial.css';
+import { rowValueLatex } from './row-value-latex.ts';
 export { polynomialBeats, samplePolynomial } from './polynomial-model.ts';
 export { polynomialModel } from './polynomial-model.ts';
 export { sampleCollection } from './collection-source.ts';
@@ -27,8 +28,10 @@ export function collectionLayout(model: CollectionModel) {
   // The destination and rigid pivot must agree, including for shorter factors.
   const vectorLeft = 215 + matrixWidth + 53, vectorX = vectorLeft + 26;
   const centerX = 240 + span / 2;
-  const pivotX = (vectorX + 118 + centerX - 226) / 2;
-  return { offsets, span, matrixWidth, vectorLeft, pivotX, pivotY: vectorX + 118 - pivotX };
+  const rowCenter = 202 + (model.coefficients.length - 1) * 24;
+  const rowHeight = (model.coefficients.length - 1) * 48 + 50;
+  const adjustedPivotX = (vectorX + 118 + centerX - rowCenter) / 2;
+  return { offsets, span, matrixWidth, vectorLeft, pivotX: adjustedPivotX, pivotY: vectorX + 118 - adjustedPivotX, rowCenter, rowHeight };
 }
 export const polynomialEquation = polynomialModel.equation;
 export function polynomialHtml(model: CollectionModel = polynomialModel) {
@@ -36,15 +39,16 @@ export function polynomialHtml(model: CollectionModel = polynomialModel) {
   const layout = collectionLayout(model);
   return `<div class="polynomial-stage" aria-hidden="true">
     ${collectionNaturalHtml(model)}
-    ${polynomialCoefficients.map((row, r) => token(`name-${r}`, model.outputs[r]!.id, model.outputs[r]!.latex) + token(`equals-${r}`, `${model.id}.representation`, '=') + row.map((n, c) =>
-      (n < 0 ? `<span class="poly-token" data-poly="coefficient-${r}-${c}" data-source-id="${polynomialProduct.left.rows[r]![c]!.id}"><span data-sign>${latex('-')}</span><span data-magnitude ${n === -1 ? 'data-unit' : ''}>${latex(String(-n))}</span></span>` : token(`coefficient-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, String(n))) +
+    ${polynomialCoefficients.map((row, r) => token(`name-${r}`, model.outputs[r]!.id, model.outputs[r]!.latex) + token(`equals-${r}`, `${model.id}.representation`, '=') +
+      (row.every(n => n === 0) ? token(`zero-${r}`, `${polynomialProduct.left.id}.row.${r}`, '0') : '') + row.map((n, c) =>
+      (n < 0 ? `<span class="poly-token" data-poly="coefficient-${r}-${c}" data-source-id="${polynomialProduct.left.rows[r]![c]!.id}"><span data-sign>${latex('-')}</span><span data-magnitude ${n === -1 ? 'data-unit' : ''}>${latex(rowValueLatex(polynomialProduct.left.rows[r]![c]!, true))}</span></span>` : token(`coefficient-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, rowValueLatex(polynomialProduct.left.rows[r]![c]!))) +
       (n < 0 ? token(`open-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, '(') + token(`close-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, ')') : '') +
       token(`basis-${r}-${c}`, polynomialBasis[c]!.id, expressionToLatex(polynomialBasis[c]!.expression)) +
       token(`plus-${r}-${c}`, `${model.id}.sum.${r}`, '+') + token(`dot-${r}-${c}`, `${model.id}.term.${r}.${c}`, '\\cdot')
     ).join('')).join('')}
-    ${enclosure('coefficient-brackets', 215, 177, layout.matrixWidth, 98)}
-    ${enclosure('basis-brackets', layout.vectorLeft, 226 - layout.span / 2 - 25, 52, layout.span + 50)}
-    ${enclosure('output-brackets', 75, 177, 74, 98)}
+    ${enclosure('coefficient-brackets', 215, 177, layout.matrixWidth, layout.rowHeight)}
+    ${enclosure('basis-brackets', layout.vectorLeft, layout.rowCenter - layout.span / 2 - 25, 52, layout.span + 50)}
+    ${enclosure('output-brackets', 75, 177, 74, layout.rowHeight)}
   </div>`;
 }
 const ease = (x: number) => { const t = Math.max(0, Math.min(1, x)); return t * t * t * (t * (t * 6 - 15) + 10); };
@@ -82,7 +86,10 @@ export function mountPolynomialView(root: HTMLElement, model: CollectionModel = 
     for (let r = 0; r < polynomialCoefficients.length; r++) {
       const y = 202 + r * 48;
       pose(`name-${r}`, 112, y);
-      pose(`equals-${r}`, 174, mix(y, 226, enclose), equality * (r ? 1 - enclose : 1));
+      pose(`equals-${r}`, 174, mix(y, layout.rowCenter, enclose), equality * (r ? 1 - enclose : 1));
+      if (nodes.has(`zero-${r}`)) {
+        pose(`zero-${r}`, 240, y, 1 - explicit);
+      }
       for (let c = 0; c < model.inputs.length; c++) {
         const value = polynomialCoefficients[r]![c]!;
         const presentBefore = polynomialCoefficients[r]!.slice(0, c).filter(n => n !== 0).length;

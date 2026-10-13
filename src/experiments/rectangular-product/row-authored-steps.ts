@@ -15,7 +15,7 @@ export const parseAuthoredRowFactor = (value: RowSourceValue) => typeof value ==
 
 /** Compose existing referents without importing the workbench's initial-system
  * constructor into collection consumers or reconstructing their incoming math. */
-export function compileAuthoredRowSteps(id: string, initial: LinearSystem, authored: RowWorkbenchSource['steps']) {
+export function compileAuthoredRowSteps(id: string, initial: LinearSystem, authored: RowWorkbenchSource['steps'], presentationGap = rowPresentationGap) {
   if (authored.length === 0 || authored.length > 24) return repair('steps', 'Supply one to 24 named steps.');
   const ids = new Set<string>(), steps: CompiledRowStep[] = [];
   let current: LinearSystem = initial;
@@ -34,7 +34,7 @@ export function compileAuthoredRowSteps(id: string, initial: LinearSystem, autho
     }
     const checked = checkLinearSystemRowOperation({ id: `${id}.step.${step.id}`, before: current, operation });
     if (checked.status !== 'checked') return repair(`${path}.operation.${checked.path}`, checked.message);
-    const gap = rowPresentationGap(checked); if (gap) return repair(`${path}.presentation`, gap);
+    const gap = presentationGap(checked); if (gap) return repair(`${path}.presentation`, gap);
     steps.push(Object.freeze({ id: `${id}.step.${step.id}`, operation: checked.operation, during: step.during, after: step.after, checked }));
     current = checked.after;
   }

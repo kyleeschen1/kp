@@ -7,8 +7,18 @@ import { pouringModel, pouringBeats as numericBeats, samplePouring as sampleNume
 import { pouringHtml, mountPouringView, matrixLatex } from './pouring-view.ts';
 
 export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 'structure' | 'polynomials' | 'system' | 'row-operation' | 'row-composition' = 'numeric') {
+  const params = new URLSearchParams(location.search);
+  const generated = mode === 'row-composition' && params.get('example') === 'generated';
+  const size = params.get('size') === '2' ? 2 : 3;
+  const requestedKind = params.get('kind'), kind = requestedKind === 'none' || requestedKind === 'infinite' ? requestedKind : 'unique';
+  const seed = Number(params.get('seed') ?? '1');
+  const rank = kind === 'unique' ? size : Number(params.get('rank') ?? size - 1);
+  const candidate = generated ? (await import('./systems-explorer-model.ts')).createSystemsExplorer({ size, kind, seed, rank }) : undefined;
+  if (candidate?.status === 'repair-required') throw new Error(`${candidate.path}: ${candidate.message}`);
+  const explorer = candidate?.status === 'ready' ? candidate : undefined;
+  const explorerControls = explorer ? await import('./systems-explorer-controls.ts') : undefined;
   const composition = mode === 'row-composition' ? (await import('./row-composition-view.ts')).createRowCompositionView(
-    new URLSearchParams(location.search).get('example') === 'elimination'
+    explorer ? explorer.model : new URLSearchParams(location.search).get('example') === 'elimination'
       ? (await import('./row-composition-sequence.ts')).eliminationSequenceComposition
       : new URLSearchParams(location.search).get('example') === 'eliminate-second'
       ? (await import('./row-composition-variation.ts')).eliminateSecondComposition : undefined) : undefined;
@@ -29,7 +39,7 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     : 'C = BA. Each three-component column of A passes through both rows of B to become a two-component column of C.';
   root.classList.add('dot-player', 'matrix-player');
   const equation = composition?.rowCompositionReading ?? row?.rowOperationReading ?? (collection ? `\\begin{gathered}${collection.expandedEquation}\\\\[1em]${collection.equation}\\end{gathered}` : `${matrixLatex(model.product.result)}=${matrixLatex(model.product.left)}${matrixLatex(model.product.right)}`);
-  root.innerHTML = `<section class="matrix-card kp-focus-deck" aria-label="Mathematical animation">
+  root.innerHTML = `${explorerControls?.form({ size, kind, seed, rank }) ?? ''}<section class="matrix-card kp-focus-deck" aria-label="Mathematical animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Animation; scroll horizontally on narrow screens">${composition ? composition.rowCompositionHtml() : row ? row.rowOperationHtml() : polynomial ? polynomial.polynomialHtml(collection) : structural ? structural.structureHtml() : pouringHtml(model)}</div>
     <div class="matrix-controls"><button data-back>Previous</button><button data-play>Play</button><button data-next>Next</button>
@@ -37,7 +47,8 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     <select aria-label="Milestone">${pouringBeats.map((beat, i) => collection && beat.id === 'pivot' ? '' : `<option value="${i}">${beat.id}</option>`).join('')}</select>
     <button data-theme aria-pressed="false">Light mode</button></div></section>
     <p class="matrix-help">${composition ? 'Scrub in either direction through collection, row addition and expansion.' : row ? 'Scrub backward to inspect the same row replacement in reverse.' : polynomial ? 'Use Previous or scrub backward to expand the rows again.' : structural ? 'The bands hide arithmetic, not relationships. Every receiving row gets the whole input.' : 'One input column, two receiving rows, one output column.'} <a href="?view=pouring">Numbers</a> · <a href="?view=structure">Structure</a> · <a href="?view=polynomials">Polynomials</a> · <a href="?view=system">Linear system</a> · <a href="?view=row-operation">Row operation</a> · <a href="?view=row-composition">Equations through a matrix</a>.</p>
-    ${composition ? '<p class="matrix-help"><a href="?view=row-composition">Change the first equation</a> · <a href="?view=row-composition&amp;example=eliminate-second">Eliminate from the second equation</a> · <a href="?view=row-composition&amp;example=elimination">Three-step elimination</a></p>' : ''}
+    ${composition ? '<p class="matrix-help"><a href="?view=row-composition">Change the first equation</a> · <a href="?view=row-composition&amp;example=eliminate-second">Eliminate from the second equation</a> · <a href="?view=row-composition&amp;example=elimination">Three-step elimination</a> · <a href="?view=row-composition&amp;example=generated">Systems generator</a></p>' : ''}
+    ${explorer && explorerControls ? explorerControls.details(explorer) : ''}
     <details><summary>Read the calculation</summary><div class="pour-static">${renderLatexToHtml(equation, { trust: true, output: 'htmlAndMathml' })}</div>
     ${composition ? '<p>Each complete row operation is reversible: exchange the rows again, multiply by the reciprocal of a nonzero scale factor, or subtract the multiple that was added. Apply the same operation to the right-hand side. Every intermediate system therefore has the same solutions. This does not say the coefficient matrices are equal.</p>' : row ? '<p>Every solution of the original equations satisfies their sum and the retained source equation. Conversely, subtracting the retained source equation from the sum recovers the original target equation. Therefore both systems have exactly the same solutions. This does not say their coefficient matrices are equal, or solve for the unknowns. Omitting the right-hand side or discarding the source equation would invalidate this argument.</p>' : collection ? `<p>${collection.kind === 'linear-system' ? 'Each row is an equation constraining the ordered unknowns. The separate right-hand-side vector is retained. The display uses b = Ax, equivalent to Ax = b; it neither solves the system nor claims the unknowns satisfy it for arbitrary values.' : 'Each row defines a polynomial in the explicitly ordered input expressions. Missing terms have zero coefficients. Reversing this representation uses retained symbolic relationships; it does not invert numerical matrix multiplication.'}</p>` : '<p>C = BA. Each column of A is paired with both rows of B. Working copies keep the original values; a tilted arrangement is not a transpose operation.</p>'}
     ${structural ? '<p>B has two rows of three coefficients: it accepts three components and produces two. A has two such input columns, so C has shape 2 × 2. D has three rows of two coefficients. It accepts C’s two-component columns and produces three components each. The animation follows C’s first column through D; it does not animate the second. Matching counts are necessary; applications also require compatible meanings, bases and units.</p>' : ''}</details>`;
@@ -51,7 +62,7 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let config = readMatrixConfig(document), disposed = false, lastCue = '';
   const slider = root.querySelector<HTMLInputElement>('[data-scrub]')!;
-  const chooser = root.querySelector<HTMLSelectElement>('select')!;
+  const chooser = root.querySelector<HTMLSelectElement>('select[aria-label="Milestone"]')!;
   const play = root.querySelector<HTMLButtonElement>('[data-play]')!;
   const back = root.querySelector<HTMLButtonElement>('[data-back]')!;
   const next = root.querySelector<HTMLButtonElement>('[data-next]')!;
@@ -65,8 +76,9 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
     play.textContent = clock.getStatus() === 'playing' ? 'Pause' : stepsOnly() ? 'Next step' : frame.progress === 1 ? 'Replay' : 'Play';
     theme.setAttribute('aria-pressed', String(config.theme === 'light'));
-    if (frame.beat.id !== lastCue) {
-      root.querySelector('[data-cue]')!.innerHTML = renderKpFocusDeckAnnotation({ entityId: frame.beat.id, text: frame.beat.cue }); lastCue = frame.beat.id;
+    const cueKey = `${frame.beat.id}:${frame.beat.cue}`;
+    if (cueKey !== lastCue) {
+      root.querySelector('[data-cue]')!.innerHTML = renderKpFocusDeckAnnotation({ entityId: frame.beat.id, text: frame.beat.cue }); lastCue = cueKey;
     }
   };
   const go = (index: number, animate = false) => {
@@ -92,6 +104,8 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     }
   };
   chooser.onchange = () => go(Number(chooser.value));
+  const stopExplorer = explorer && explorerControls ? explorerControls.mount(root, explorer,
+    id => go(pouringBeats.findIndex(beat => beat.id === id))) : undefined;
   back.onclick = () => navigate(-1); next.onclick = () => navigate(1);
   play.onclick = () => {
     if (clock.getStatus() === 'playing') clock.pause();
@@ -119,6 +133,7 @@ export async function mountPouringPlayer(root: HTMLElement, mode: 'numeric' | 's
     document.removeEventListener('visibilitychange', visibility); reduced.removeEventListener('change', motion);
     slider.oninput = slider.onkeydown = chooser.onchange = null;
     back.onclick = next.onclick = play.onclick = theme.onclick = null;
+    stopExplorer?.();
     delete root.dataset['ready'];
   };
   restore(); root.dataset['ready'] = 'true'; root.setAttribute('aria-busy', 'false');

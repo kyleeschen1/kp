@@ -4,15 +4,16 @@ import type { KpScalarValue } from '../../math/typed-semantic-math.ts';
 import { renderLatexToHtml } from '../../rendering/katex-adapter.ts';
 import { prepareFusion } from '../dot-product-passage/fusion.ts';
 import './row-workbench.css';
+import { rowValueLatex } from './row-value-latex.ts';
 
 const ease = (p: number) => { const t = Math.max(0, Math.min(1, p)); return t * t * t * (t * (t * 6 - 15) + 10); };
 const ink = (node: HTMLElement) => node.firstElementChild as HTMLElement;
 const pose = (node: HTMLElement, x: number, y: number) => { node.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`; };
 export interface RowWorkbenchLayout {
   readonly width: number; readonly height: number;
-  readonly columns: readonly [number, number, number, number];
-  readonly rows: readonly [number, number];
-  readonly lanes: readonly [number, number];
+  readonly columns: readonly number[];
+  readonly rows: readonly number[];
+  readonly lanes: readonly number[];
   readonly equality: readonly [number, number];
   readonly unknowns: readonly (readonly [number, number])[];
   readonly brackets: readonly (readonly [number, number, number, number])[];
@@ -54,7 +55,7 @@ export function mountRowWorkbenchView(root: HTMLElement, layout: RowWorkbenchLay
     system.coefficients.rows.forEach((row, r) => [...row, system.rhs[r]!].forEach((value, c) => {
       retained.add(value.id);
       let node = nodes.get(value.id);
-      if (!node) { node = token(expressionToLatex(value.expression), native, value.id); nodes.set(value.id, node); }
+      if (!node) { node = token(rowValueLatex(value), native, value.id); nodes.set(value.id, node); }
       reset(node); node.dataset['row'] = String(r); node.dataset['column'] = String(c); pose(node, x(c), y(r));
     }));
     for (const [id, node] of nodes) if (!retained.has(id)) { node.remove(); nodes.delete(id); }
@@ -77,10 +78,10 @@ export function mountRowWorkbenchView(root: HTMLElement, layout: RowWorkbenchLay
     const targetY = y(targetRow), laneY = layout.lanes[targetRow]!;
     const entries = step.contributions.map(p => {
       const target = nodes.get(p.target.id)!, cx = x(p.column);
-      const copy = op.kind === 'add' ? token(expressionToLatex(p.source.expression), transient, p.source.id) : target;
-      const factor = token(`(${expressionToLatex(p.multiplier.expression)})`, transient), dot = token('\\cdot', transient);
-      const scaled = token(expressionToLatex(p.scaled.expression), transient, p.scaled.id);
-      const result = token(expressionToLatex(p.result.expression), transient, p.result.id);
+      const copy = op.kind === 'add' ? token(rowValueLatex(p.source), transient, p.source.id) : target;
+      const factor = token(`(${rowValueLatex(p.multiplier)})`, transient), dot = token('\\cdot', transient);
+      const scaled = token(rowValueLatex(p.scaled), transient, p.scaled.id);
+      const result = token(rowValueLatex(p.result), transient, p.result.id);
       const plus = token('+', transient);
       for (const [role, node] of [['factor', factor], ['dot', dot], ['operand', copy]] as const) {
         node.dataset['arithmeticRole'] = role; node.dataset['arithmeticColumn'] = String(p.column);

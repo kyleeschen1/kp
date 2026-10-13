@@ -1,5 +1,23 @@
 # Authored row-operation workbench
 
+## October 13 composed explorer extension
+
+The standalone interactive workbench below retains its 2-equation/3-unknown
+envelope. The composed host also accepts checked 2×2 and 3×3 systems, zero rows
+and exact fractions. `composeCheckedRowSteps` consumes 1–16 predecessor-linked
+checked records; it preserves their referents rather than checking reconstructed
+numbers under new identities. `compileRowSequenceComposition` remains the
+source-authored route. Intermediate collection coefficients have numerator
+magnitude ≤9 and denominator ≤9; RHS numerator magnitude ≤99 and denominator
+≤9. Unsupported input returns a located repair.
+
+`createSystemsExplorer({size: 3, kind: 'infinite', seed: 1, rank: 1})` is the
+bounded generated route, using the same player/view. It retries up to 64 seeds
+for presentation eligibility and requires a nonempty trace. Tests pressure 72
+source-only variations without renderer edits; this is evidence for this typed
+source family, not a measured LLM authoring benchmark. See the
+[delivery review](../reviews/2026-10-13-systems-explorer-direction.md#generator-delivery).
+
 Status: bounded authoring interface; both explanatory examples accepted. The accepted
 motion remains local to the two-equation, three-unknown workbench.
 

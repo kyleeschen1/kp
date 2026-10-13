@@ -1,6 +1,5 @@
 import { checkLinearSystemRowOperation, parseRowFactor, readExactRowValue, type LinearSystem } from '../../math/linear-system-row-operation.ts';
 import { matrixProduct } from '../../math/matrix-product.ts';
-import { expressionToLatex } from '../../math/expression.ts';
 import type { KpScalarExpression } from '../../math/typed-semantic-math.ts';
 import type { CollectionModel } from './collection-source.ts';
 import { linearSystemModel } from './linear-system-source.ts';
@@ -8,31 +7,34 @@ import { projectRowEquations } from './row-equations.ts';
 import { rowOperationLatex, rowSystemLatex } from './row-workbench-model.ts';
 import { compileAuthoredRowSteps, type CompiledRowStep } from './row-authored-steps.ts';
 import type { RowWorkbenchSource } from './row-workbench-source.ts';
+import { rowValueLatex } from './row-value-latex.ts';
+import { rowValuesPresentationGap } from './row-session.ts';
 
 const gap = (path: string, message: string) => ({ status: 'repair-required' as const, path, message });
 
 /** Project existing checked referents into collection's bounded presentation.
  * Numeric layout data is derived; it never replaces the supplied math objects. */
 export function projectSystemCollection(template: CollectionModel, system: LinearSystem) {
-  if (template.kind !== 'linear-system' || template.inputs.length !== 3 || system.coefficients.rowCount !== 2 || system.coefficients.columnCount !== 3 || system.rhs.length !== 2)
-    return gap('shape', 'This composition needs two constraints and three unknowns.');
+  if (template.kind !== 'linear-system' || template.inputs.length < 2 || template.inputs.length > 3 ||
+    system.coefficients.rowCount < 2 || system.coefficients.rowCount > 3 ||
+    system.coefficients.columnCount !== template.inputs.length || system.rhs.length !== system.coefficients.rowCount)
+    return gap('shape', 'This composition needs two or three constraints and unknowns.');
   const coefficients: number[][] = [];
   for (const [r, row] of system.coefficients.rows.entries()) {
     const values: number[] = [];
     for (const [c, value] of row.entries()) {
       const q = readExactRowValue(value);
-      if (!q || q.denominator !== 1n || q.numerator < -9n || q.numerator > 9n)
-        return gap(`coefficients.${r}.${c}`, 'Collection currently requires single-digit integer coefficients.');
-      values.push(Number(q.numerator));
+      if (!q || q.denominator > 9n || q.numerator < -9n || q.numerator > 9n)
+        return gap(`coefficients.${r}.${c}`, 'Collection supports exact coefficients with numerators -9 to 9 and denominators 1 to 9.');
+      values.push(Number(q.numerator) / Number(q.denominator));
     }
-    if (values.every(n => n === 0)) return gap(`coefficients.${r}`, 'A whole-zero row needs a separate collection presentation.');
     coefficients.push(values);
   }
   const rhs: KpScalarExpression[] = [];
   for (const [r, value] of system.rhs.entries()) {
     const q = readExactRowValue(value);
-    if (value.kind !== 'scalar-expression' || !q || q.denominator !== 1n || q.numerator < -99n || q.numerator > 99n)
-      return gap(`rhs.${r}`, 'Collection currently requires integer scalar RHS values from -99 to 99.');
+    if (value.kind !== 'scalar-expression' || !q || q.denominator > 9n || q.numerator < -99n || q.numerator > 99n)
+      return gap(`rhs.${r}`, 'Collection supports exact RHS values with numerators -99 to 99 and denominators 1 to 9.');
     rhs.push(value);
   }
   const equations = projectRowEquations(system, template.inputs, template.id);
@@ -40,7 +42,7 @@ export function projectSystemCollection(template: CollectionModel, system: Linea
     coefficients: Object.freeze(coefficients.map(row => Object.freeze(row))),
     product: matrixProduct({ id: `${system.coefficients.id}.collection`, left: system.coefficients, right: template.product.right }),
     outputs: Object.freeze(rhs.map(value => Object.freeze({ kind: 'constraint-rhs' as const, id: value.id,
-      value, latex: expressionToLatex(value.expression) }))),
+      value, latex: rowValueLatex(value) }))),
     equation: rowSystemLatex(system, template.inputs),
     expandedEquation: `\\begin{gathered}${equations.rows.map(row => row.latex).join('\\\\')}\\end{gathered}`,
   });
@@ -101,7 +103,7 @@ export function compileRowSequenceComposition(source: RowSequenceCompositionSour
   for (const id of ['equations', 'matrix', 'expanded'] as const)
     if (!source.annotations[id]?.trim() || source.annotations[id].length > 600)
       return gap(`annotations.${id}`, 'Supply nonempty plain text, up to 600 characters.');
-  if (!source.steps.length || source.steps.length > 8) return gap('steps', 'This composed presentation supports one to eight operations.');
+  if (!source.steps.length || source.steps.length > 16) return gap('steps', 'This composed presentation supports one to sixteen operations.');
   if (source.steps.some(step => ['equations', 'matrix', 'expanded'].includes(step.id)))
     return gap('steps', 'Step identifiers must not replace the collection or expansion milestones.');
   const rhs: KpScalarExpression[] = [];
@@ -112,17 +114,34 @@ export function compileRowSequenceComposition(source: RowSequenceCompositionSour
   const initial = { coefficients: source.before.product.left, rhs };
   const initialProjection = projectSystemCollection(source.before, initial);
   if (initialProjection.status !== 'projected') return gap(`before.${initialProjection.path}`, initialProjection.message);
-  const sequence = compileAuthoredRowSteps(source.id, initial, source.steps);
+  const sequence = compileAuthoredRowSteps(source.id, initial, source.steps,
+    step => rowValuesPresentationGap(step.after, step.contributions.flatMap(p => [p.multiplier, p.scaled])));
   if (sequence.status !== 'compiled') return sequence;
+  return composeCheckedRowSteps(source, sequence.steps.map((step, i) => Object.freeze({ ...step, id: source.steps[i]!.id })));
+}
+
+/** Consume a solver-issued trace directly: do not re-run arithmetic under new
+ * identities and then pretend its equal-valued result is the solver's object. */
+export function composeCheckedRowSteps(source: Pick<RowSequenceCompositionSource, 'before' | 'title' | 'introduction' | 'annotations'>, steps: readonly CompiledRowStep[]) {
+  if (!steps.length || steps.length > 16) return gap('steps', 'Supply one to sixteen checked steps.');
+  let previous = source.before.product.left, previousRhs = source.before.outputs.map(o => o.kind === 'constraint-rhs' ? o.value : undefined);
   let after = source.before;
-  for (const [i, step] of sequence.steps.entries()) {
+  const ids = new Set(['equations', 'matrix', 'expanded']);
+  for (const [i, step] of steps.entries()) {
+    if (!/^[A-Za-z][\w.-]*$/.test(step.id) || ids.has(step.id)) return gap(`steps.${i}.id`, 'Use unique, non-reserved milestone IDs.');
+    ids.add(step.id);
+    if (step.checked.before.coefficients !== previous || step.checked.before.rhs.some((v, r) => v !== previousRhs[r]))
+      return gap(`steps.${i}.before`, 'Checked steps must retain their actual predecessor referents.');
+    const valueGap = rowValuesPresentationGap(step.checked.after, step.checked.contributions.flatMap(p => [p.multiplier, p.scaled]));
+    if (valueGap) return gap(`steps.${i}.presentation`, valueGap);
     const projection = projectSystemCollection(source.before, step.checked.after);
     if (projection.status !== 'projected') return gap(`steps.${i}.after.${projection.path}`, projection.message);
     after = projection.model;
+    previous = step.checked.after.coefficients; previousRhs = [...step.checked.after.rhs].map(v => v.kind === 'scalar-expression' ? v : undefined);
   }
   // Short authored IDs are the stable host milestones; checked IDs retain the
   // source namespace and derivation provenance independently of URL spelling.
-  return assembleComposition(source, sequence.steps.map((step, i) => Object.freeze({ ...step, id: source.steps[i]!.id })), after);
+  return assembleComposition(source, steps, after);
 }
 
 function assembleComposition(source: Pick<RowSequenceCompositionSource, 'before' | 'title' | 'introduction' | 'annotations'>,
@@ -165,7 +184,10 @@ export const rowCompositionReading = rowComposition.reading;
 export function sampleRowComposition(progress: number) { return sampleCompiledRowComposition(rowComposition, progress); }
 export function sampleCompiledRowComposition(model: RowComposition, progress: number) {
   if (!Number.isFinite(progress)) throw new Error('Composition progress must be finite.');
-  const p = Math.max(0, Math.min(1, progress));
+  const bounded = Math.max(0, Math.min(1, progress));
+  // Clock milliseconds and range values round differently. Canonicalize only
+  // machine-scale endpoint noise so a settled cue cannot remain a transit cue.
+  const p = model.stops.find(stop => Math.abs(stop - bounded) < 1e-10) ?? bounded;
   const { stops: rowCompositionStops, beats: rowCompositionBeats, matrixStop } = model;
   const index = rowCompositionStops.findIndex(stop => stop >= p);
   const phase = index === 0 ? 0 : index - 1 + (p - rowCompositionStops[index - 1]!) / (rowCompositionStops[index]! - rowCompositionStops[index - 1]!);

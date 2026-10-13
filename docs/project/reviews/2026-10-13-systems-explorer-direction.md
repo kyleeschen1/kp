@@ -1,5 +1,63 @@
 # Systems explorer direction and approved continuation
 
+## Generator delivery
+
+The user accepted the composed exemplar and requested continuation until the
+generator/animated solver exists. The working candidate is at
+`http://127.0.0.1:8000/experiments/rectangular-product/?view=row-composition&example=generated`.
+Choose size, desired solution count, coefficient rank and seed, then Generate.
+Play, step, scrub and reverse the exact elimination; inspect echelon form or
+the final equations through the question selector. For infinite solutions,
+change the free-variable sliders and inspect the evaluated original `Ax=b`.
+
+Canonical artifact: generated checked trace adapted by
+`systems-explorer-model.ts`. Host: existing rectangular-product composition
+player. Renderer: existing native KaTeX collection and row-operation surfaces.
+Semantic authority: exact rational linear-system row checker; generation and
+elimination remain separate. No independent renderer arithmetic or fallback
+motion. Original single/sequence sources and workbench remain supported.
+
+Supported: square 2×2/3×3 systems; unique, infinitely many, or no solutions;
+rank one/two as appropriate; exact fractions; whole-zero equations; forward
+echelon and backward RREF for consistent systems; explicit contradictory row
+for inconsistent systems. Parameterization includes the actual particular
+solution and nullspace directions, rather than merely naming free variables.
+Questions are five checked, deterministic topics—not free-form AI answers.
+
+Limits: bounded seeded construction, not uniformly random systems, custom input,
+rank-zero generation or arbitrary dimensions. Up to 64 deterministic candidates
+may be tried to fit presentation bounds; original URL seed reproduces the
+admitted system and the actual generated seed is displayed. Already-solved
+zero-operation traces are retried. Changing outcome type does not promise the
+same coefficient matrix. No geometric line/plane renderer or learning efficacy
+claim. At most 16 premeasured step surfaces; many-instance mount cost is not
+certified. Further generalization is outside this bounded delivery.
+
+Evidence: `npm run test:row-operation` (22 tests, including independent minor/
+determinant rank checks across 480 systems and 72 composed source variations);
+`npm run test:matrix-pouring` (9); `npm run visual:row-operation` (22 Chromium);
+`npm run visual:matrix-pouring` (11 Chromium); full `npm run typecheck`;
+production `build:matrix-interpretations` and `measure:semantic-cost`.
+Browser checks cover all six size/outcome combinations, every operation handoff,
+direct seek/reversal, captions, themes, narrow overflow, controls and parameters.
+Rank-control changes additionally receive the focused generator-control test.
+No full-repository test or cross-browser release certification is claimed.
+
+Failures resolved: obsolete zero/fraction rejection assertions were replaced
+with exact supported-value checks; a milestone rounding defect left during
+captions after settled frames. The sampler now canonicalizes near-endpoint
+progress, with ±machine-epsilon regression checks; the host keys caption
+updates by both ID and text. Initial cost ceilings failed. Boundary extractions
+and the [explicit bounded amendment](../decisions/2026-10-13-systems-explorer-cost-boundary.md)
+retain complete consumers and executable gates.
+
+Final human checkpoint: review the three-variable unique example for density
+and readable pacing, then infinite rank one for the two-parameter family, and
+inconsistent for the zero-row contradiction. Existing motifs are preserved;
+the new square layout/interface is not yet claimed visually accepted or
+promoted across other families. Smallest rollback unit is this integrated
+generator/presentation extension; preserve the prior accepted composition.
+
 ## Implementation authorization and execution boundary
 
 The subsequent user instruction, "This seems excellent. implement for as long
