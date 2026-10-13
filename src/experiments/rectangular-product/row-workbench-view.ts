@@ -18,13 +18,10 @@ export const rowWorkbenchStageHtml = `<div class="row-wb-stage" aria-hidden="tru
 export function mountRowWorkbenchView(root: HTMLElement) {
   const stage = root.querySelector<HTMLElement>('.row-wb-stage')!;
   const native = stage.querySelector<HTMLElement>('[data-native]')!, transient = stage.querySelector<HTMLElement>('[data-transient]')!;
-  const equality = stage.querySelector<HTMLElement>('.row-wb-equal')!;
+  // Equality is a persistent scene anchor, outside operation paint ownership.
   const passage = (frame: (progress: number) => void) => (progress: number) => {
     if (!Number.isFinite(progress)) throw new Error('Operation progress must be finite.');
     const p = Math.max(0, Math.min(1, progress));
-    // Withdraw equality before opening the row, then restore it only once the
-    // complete native equation exists. Working stacks are not extra equations.
-    equality.style.transform = `translate(-50%,-50%) scale(${1 - ease(p / .06) + ease((p - .94) / .06)})`;
     frame(Math.max(0, Math.min(1, (p - .06) / .88)));
     stage.dataset['progress'] = String(p);
   };
@@ -38,7 +35,6 @@ export function mountRowWorkbenchView(root: HTMLElement) {
   const reset = (node: HTMLElement) => { node.style.opacity = '1'; ink(node).style.cssText = ''; };
   const show = (system: LinearSystem) => {
     transient.replaceChildren(); stage.dataset['progress'] = '0';
-    equality.style.transform = 'translate(-50%,-50%)';
     const retained = new Set<string>();
     system.coefficients.rows.forEach((row, r) => [...row, system.rhs[r]!].forEach((value, c) => {
       retained.add(value.id);

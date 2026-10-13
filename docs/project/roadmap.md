@@ -29,8 +29,10 @@ October 12 follow-up: user revised the elementary row-operation exemplar into
 compact, repeatable swap, scale and add-multiple operations on one persistent
 system. The [current candidate](reviews/2026-10-12-row-replacement-exemplar.md#current-compact-candidate)
 has exact rational authority, atomic history and Undo/Redo on the same host.
-`run-contract.kp.row-replacement-v1` owns its pending visual checkpoint; the old
-guided walkthrough remains available. No solver or general renderer is promoted.
+The user accepted the workbench; the requested tighter spacing and persistent
+equals sign are implemented and checked. `run-contract.kp.row-replacement-v1`
+records the bounded closeout. The old guided walkthrough remains available.
+No solver or general renderer is promoted.
 
 October 12: the user accepted both collection examples and the final overlapping
 settling/enclosure treatment. The bounded authoring-reuse milestone is complete:

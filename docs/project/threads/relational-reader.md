@@ -8,8 +8,9 @@ Last Updated: 2026-10-01
 October 12 follow-up: the user revised [the row-operation exemplar](../reviews/2026-10-12-row-replacement-exemplar.md#current-compact-candidate)
 into a compact persistent system with repeated swap, scale and add-multiple
 controls, exact rational values and inspectable Undo/Redo history. The amended
-`run-contract.kp.row-replacement-v1` owns its pending visual review. Existing
-reader layouts and the prior guided addition remain preserved.
+`run-contract.kp.row-replacement-v1` records the accepted workbench and completed
+spacing/equality corrections. Existing reader layouts and the prior guided
+addition remain preserved; broader renderer promotion is not authorized.
 
 October 12: [bounded LA collection reuse](../authoring/la-collection-authoring-packet.md)
 has reached its accepted milestone. Polynomial and linear-system callers share

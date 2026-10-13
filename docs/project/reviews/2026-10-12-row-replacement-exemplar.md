@@ -51,8 +51,9 @@ Review whether this feels like repeatedly editing one system, rather than
 restarting a lecture. Rows stay near their destinations; addition uses the gap
 between rows, and multiplication by one is omitted. RHS and coefficients share
 each operation. The unknown vector and enclosure locations remain fixed.
-Equality withdraws before arithmetic opens and returns after the equation
-settles. Swap carries existing DOM occurrences; unchanged rows retain their
+Per the user's final correction, equality remains visible and stationary during
+every operation, including arithmetic previews. It is outside operation paint
+ownership. Swap carries existing DOM occurrences; unchanged rows retain their
 semantic referents and native nodes. Changed values cite their contributors.
 
 Pause and scrub an active operation, Finish it, or Cancel without committing.

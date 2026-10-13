@@ -5,6 +5,8 @@ test('compact operations compose, retain unchanged DOM, scrub deterministically 
   await page.goto('/experiments/rectangular-product/?view=row-operation');
   const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
   const stage = root.locator('.row-wb-stage');
+  const equality = stage.locator('.row-wb-equal');
+  const equalityBounds = await equality.boundingBox();
   const originals = await root.locator('[data-native] [data-source-id]').elementHandles();
   const ids = await root.locator('[data-native] [data-source-id]').evaluateAll(ns => ns.map(n => n.getAttribute('data-source-id')));
   await root.locator('.matrix-card').screenshot({ path: info.outputPath('compact-initial.png') });
@@ -16,6 +18,9 @@ test('compact operations compose, retain unchanged DOM, scrub deterministically 
     for (const phase of [.1, .28, .47, .65, .83, .99]) {
       await slider.fill(String(phase)); const before = await paint();
       await slider.fill('0.02'); await slider.fill('0.99'); await slider.fill(String(phase)); expect(await paint()).toEqual(before);
+      await expect(equality).toBeVisible();
+      await expect(equality).toHaveCSS('opacity', '1');
+      expect(await equality.boundingBox()).toEqual(equalityBounds);
       await root.locator('.matrix-card').screenshot({ path: info.outputPath(`compact-${step}-${phase}.png`) });
     }
     await root.locator('[data-finish]').click(); await expect(root).toHaveAttribute('data-cursor', String(step));
@@ -73,7 +78,7 @@ test('a negative fractional add evaluates multiplication before addition, with s
     const paint = await root.locator('.row-wb-stage [style]').evaluateAll(ns => ns.map(n => n.getAttribute('style')));
     await slider.fill('0.99'); await slider.fill(String(p));
     expect(await root.locator('.row-wb-stage [style]').evaluateAll(ns => ns.map(n => n.getAttribute('style')))).toEqual(paint);
-    expect(await root.locator('.row-wb-equal').evaluate(n => { const m = new DOMMatrix(getComputedStyle(n).transform); return [m.a, m.d]; })).toEqual([0, 0]);
+    expect(await root.locator('.row-wb-equal').evaluate(n => { const m = new DOMMatrix(getComputedStyle(n).transform); return [m.a, m.d]; })).toEqual([1, 1]);
     await root.locator('.matrix-card').screenshot({ path: info.outputPath(`negative-fraction-${p}.png`) });
   }
   await root.locator('[data-finish]').click(); await expect(root).toHaveAttribute('data-cursor', '1');
