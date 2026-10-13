@@ -2,7 +2,8 @@
   "id": "run-contract.kp.row-composition-v1",
   "kind": "run-contract",
   "title": "Equations through a checked row operation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -50,8 +51,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: slice 1 complete; slice 2 implemented and verified, awaiting canonical visual review at /experiments/rectangular-product/?view=row-composition. Review whether collection, row addition and expansion read as one explanation. No generic composition framework or broad promotion."
+    "state": "complete",
+    "summary": "COMPLETE: both packages accepted by the user. Follow-on work is bounded source-only variation pressure, not generic promotion."
   },
   "allowedWork": [
     "One existing-host composed exemplar, checked projection adapters, layout handoff, shared clock and bounded preservation checks"
@@ -71,8 +72,8 @@
     {
       "id": "composition-view",
       "title": "Same-host reversible composition checkpoint",
-      "summary": "Same-clock composition implemented; pressure native paint handoffs, copy clearance and reverse seeks before review.",
-      "status": "in-progress"
+      "summary": "User accepted the composed explanation: excellent! continue. Existing native handoff, reversal and delivery evidence retained.",
+      "status": "complete"
     }
   ]
 }

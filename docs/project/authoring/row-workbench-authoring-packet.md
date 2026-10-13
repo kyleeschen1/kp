@@ -98,7 +98,10 @@ qualified acceptance: technically fine, but the user does not anticipate using
 this animation. Retain its correspondence evidence without treating its layout
 as a recommended presentation or promoting it broadly.
 
-## Composed explanation candidate
+## Composed explanation and bounded authoring reuse
+
+The original composed explanation was accepted (“excellent! continue”). Its
+source parameterization is now pressured by a second receiving-row caller.
 
 `?view=row-composition` now uses the actual `linearSystemModel` objects through
 collection, one checked row addition and reverse collection of the derived
@@ -117,3 +120,46 @@ This is one opt-in sequence, not a generic authoring API. Expansion still reject
 whole-zero rows, fractional coefficients and coefficient magnitudes above nine.
 The standalone workbench's wider numeric envelope does not remove those gaps.
 Review continuity and explanatory value before generalizing the adapter.
+
+Author with `RowCompositionSource` and `compileRowComposition` from
+`row-composition-model.ts`. Supply an existing compiled linear-system collection,
+one unit row addition, a title/introduction and four named annotations:
+
+```ts
+const source: RowCompositionSource = {
+  id: 'my-system.add-first-to-second',
+  before: myCompiledCollection,
+  title: 'Eliminate an unknown from one equation',
+  introduction: 'Opposite coefficients cancel when the equations are added.',
+  operation: { kind: 'add', sourceRow: 0, targetRow: 1, factor: 1 },
+  annotations: {
+    equations: 'Find the opposite coefficients.',
+    matrix: 'They occupy the same column in the two rows.',
+    changed: 'Add row 1 to row 2, including the right-hand side. Retain row 1.',
+    expanded: 'Read the resulting equations. Their joint solutions are unchanged.',
+  },
+};
+const result = compileRowComposition(source);
+// result is compiled or repair-required with a located path and message.
+```
+
+Start from `row-composition-variation.ts` for a complete runnable source. It uses
+`[[1,2,-1],[-1,1,2]]`, RHS `[4,2]`, and unknowns `u,v,w`. The resulting second
+equation is `6 = 3v + w`; the first remains `4 = u + 2v - w`. Preview through
+`?view=row-composition&example=eliminate-second`; the menu links both examples.
+The original route and default remain intact. A new source needs explicit host
+selection; this is not a file-upload or arbitrary runtime ingestion interface.
+
+Indices are zero-based. The type admits only unit addition; the exact checker
+rejects self-addition, while the projection rejects unsupported endpoints. For
+example, opposite entire rows produce `repair-required` at
+`after.coefficients.<target>` rather than an empty equation. Missing annotations
+are located at `annotations.<beat>`. Text remains editorially reviewed; the
+checker verifies arithmetic and correspondence, not authored teaching claims.
+
+The parameterization changed the existing view into a factory and generalized
+the model sampler. The second caller itself changes only source and host
+selection: no new coordinates, easing, CSS, renderer, clock or arithmetic.
+No new row-operation families, arbitrary sequence length or larger grid support
+are inferred from this test. `test:row-operation`, `visual:row-operation` and the
+complete `measure:semantic-cost` consumers retain both examples.

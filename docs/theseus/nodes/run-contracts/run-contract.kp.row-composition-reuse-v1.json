@@ -1,0 +1,65 @@
+{
+  "id": "run-contract.kp.row-composition-reuse-v1",
+  "kind": "run-contract",
+  "title": "Author a second composed row explanation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-12-post-linked-equations.md"
+    }
+  ],
+  "verification": [
+    "npm run test:row-operation",
+    "npm run visual:row-operation",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation; npm run test:matrix-pouring; npm run typecheck",
+      "status": "passed",
+      "scope": "Typed source and retained semantic referents",
+      "checkedAt": "2026-10-13T03:59:49.202Z",
+      "notes": "18 row and 9 collection tests pass; full typecheck passes. Initial optional sampler argument broke Array.map callback compatibility, detected by unit/type checks; preserve unary original sampler and add explicit model-first sampler. Negative type and runtime repairs cover nonunit addition, self-addition, missing annotation and zero-row endpoint."
+    },
+    {
+      "command": "npm run visual:row-operation; npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Both compositions and existing host preservation",
+      "checkedAt": "2026-10-13T03:59:50.355Z",
+      "notes": "14 row browser and 10 collection/pouring browser checks pass in Chromium. Both composed sources traverse exact native geometry/raster handoffs, exclusive paint ownership, reverse seeks, retained RHS and receiving-row copy clearance. Inspected changed copy and final frames. No new geometry, CSS or motion implementation. Human review of second caller remains pending."
+    },
+    {
+      "command": "npm run build:matrix-interpretations; npm run measure:semantic-cost; git diff --check",
+      "status": "passed",
+      "scope": "Complete consumers and build",
+      "checkedAt": "2026-10-13T03:59:51.315Z",
+      "notes": "132-module build passes. Initial cost check failed on missing variation budget; added explicit 118500 JS / 17000 CSS complete-consumer gate for measured 117525 / 16463 gzip. All prior ceilings retained. Union 131403 / 17367, only 97 JS bytes headroom. Original composition 116682 / 16463. Cost rationale appended to row-composition-cost-boundary decision."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: implementation and preservation checks pass. Review /experiments/rectangular-product/?view=row-composition&example=eliminate-second. One source-reuse package awaits changed receiving-row visual acceptance. Original exemplar accepted and closed."
+  },
+  "allowedWork": [
+    "Typed local source, one changed receiving-row caller, preserved host and scoped checks"
+  ],
+  "disallowedWork": [
+    "No general composer, new motion, larger shapes or new operation families"
+  ],
+  "goal": "Change equations, receiving row and annotations without new motion code",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "source-reuse",
+      "title": "Source-driven-composition",
+      "summary": "User continuation after visual acceptance; bounded authoring reuse on the accepted host.",
+      "status": "in-progress"
+    }
+  ]
+}

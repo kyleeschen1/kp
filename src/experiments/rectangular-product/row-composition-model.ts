@@ -45,31 +45,75 @@ export function projectSystemCollection(template: CollectionModel, system: Linea
   return { status: 'projected' as const, model };
 }
 
-const before = linearSystemModel;
-const initial = { coefficients: before.product.left, rhs: before.outputs.map(output => {
-  if (output.kind !== 'constraint-rhs') throw new Error('Composition requires independent constraint RHS values.');
-  return output.value;
-}) };
-const factor = parseRowFactor('1');
-if (factor.status !== 'parsed') throw new Error(factor.message);
-const step = checkLinearSystemRowOperation({ id: 'system.composition.add-second-to-first', before: initial,
-  operation: { kind: 'add', sourceRow: 1, targetRow: 0, factor: factor.value } });
-if (step.status !== 'checked') throw new Error(`${step.path}: ${step.message}`);
-const projected = projectSystemCollection(before, step.after);
-if (projected.status !== 'projected') throw new Error(`${projected.path}: ${projected.message}`);
-const matrixStop = before.stops[5]!, transferMs = before.durationMs * matrixStop;
-export const rowCompositionDurationMs = transferMs * 2 + 2800;
-export const rowCompositionStops = [0, transferMs / rowCompositionDurationMs, (transferMs + 2800) / rowCompositionDurationMs, 1] as const;
-export const rowComposition = Object.freeze({ before, after: projected.model, step, matrixStop });
-export const rowCompositionBeats = [
-  { id: 'equations', cue: 'Two equations, one set of unknowns. Follow the same coefficients through three representations.' },
-  { id: 'matrix', cue: 'Collect x, y and z into one vector. The coefficients and right-hand sides stay with their equations.' },
-  { id: 'changed', cue: 'Add row 2 to row 1, including the right-hand side. Keep row 2 so the change can be undone.' },
-  { id: 'expanded', cue: 'Expand the new rows: 6 = 2x + z and −1 = y − 2z. The equations changed; their joint solutions did not.' },
-] as const;
-export function sampleRowComposition(progress: number) {
+const beatIds = ['equations', 'matrix', 'changed', 'expanded'] as const;
+export interface RowCompositionSource {
+  readonly id: string;
+  readonly before: CollectionModel;
+  readonly title: string;
+  readonly introduction: string;
+  // This presentation has only been established for one unscaled row copy.
+  readonly operation: { readonly kind: 'add'; readonly sourceRow: 0 | 1; readonly targetRow: 0 | 1; readonly factor: 1 };
+  readonly annotations: Readonly<Record<typeof beatIds[number], string>>;
+}
+export function compileRowComposition(source: RowCompositionSource) {
+  if (!/^[A-Za-z][\w.-]*$/.test(source.id)) return gap('id', 'Supply a stable composition identifier.');
+  for (const key of ['title', 'introduction'] as const)
+    if (!source[key].trim() || source[key].length > 600) return gap(key, 'Supply nonempty plain text, up to 600 characters.');
+  for (const id of beatIds)
+    if (!source.annotations[id]?.trim() || source.annotations[id].length > 600) return gap(`annotations.${id}`, 'Supply nonempty plain text, up to 600 characters.');
+  if (source.operation.kind !== 'add' || source.operation.factor !== 1)
+    return gap('operation', 'This composition supports one unit row addition.');
+  const before = source.before, rhs: KpScalarExpression[] = [];
+  for (const [r, output] of before.outputs.entries()) {
+    if (output.kind !== 'constraint-rhs') return gap(`before.outputs.${r}`, 'Composition requires independent constraint RHS values.');
+    rhs.push(output.value);
+  }
+  const initial = { coefficients: before.product.left, rhs };
+  const initialProjection = projectSystemCollection(before, initial);
+  if (initialProjection.status !== 'projected') return gap(`before.${initialProjection.path}`, initialProjection.message);
+  const factor = parseRowFactor('1');
+  if (factor.status !== 'parsed') return gap('operation.factor', factor.message);
+  const step = checkLinearSystemRowOperation({ id: source.id, before: initial, operation: { ...source.operation, factor: factor.value } });
+  if (step.status !== 'checked') return gap(`operation.${step.path}`, step.message);
+  const projected = projectSystemCollection(before, step.after);
+  if (projected.status !== 'projected') return gap(`after.${projected.path}`, projected.message);
+  const matrixStop = before.stops[5]!, transferMs = before.durationMs * matrixStop;
+  const durationMs = transferMs * 2 + 2800;
+  const stops = [0, transferMs / durationMs, (transferMs + 2800) / durationMs, 1] as const;
+  const reading = `\\begin{gathered}${before.expandedEquation}\\\\[1em]${before.equation}\\\\[1em]
+${rowOperationLatex(step.operation)}\\\\[1em]${projected.model.equation}\\\\[1em]${projected.model.expandedEquation}\\end{gathered}`;
+  return Object.freeze({ status: 'compiled' as const, before, after: projected.model, step, matrixStop,
+    title: source.title, introduction: source.introduction, durationMs, stops: Object.freeze(stops), reading,
+    beats: Object.freeze(beatIds.map(id => Object.freeze({ id, cue: source.annotations[id] }))) });
+}
+export type RowComposition = Extract<ReturnType<typeof compileRowComposition>, { status: 'compiled' }>;
+export function requireRowComposition(source: RowCompositionSource): RowComposition {
+  const result = compileRowComposition(source);
+  if (result.status !== 'compiled') throw new Error(`${result.path}: ${result.message}`);
+  return result;
+}
+export const originalRowCompositionSource: RowCompositionSource = {
+  id: 'system.composition.add-second-to-first', before: linearSystemModel,
+  title: 'Equations, through a matrix and back',
+  introduction: 'Collect the unknowns, add the second row to the first, then expand the new equations. Follow the coefficients and right-hand sides throughout.',
+  operation: { kind: 'add', sourceRow: 1, targetRow: 0, factor: 1 },
+  annotations: {
+    equations: 'Two equations, one set of unknowns. Follow the same coefficients through three representations.',
+    matrix: 'Collect x, y and z into one vector. The coefficients and right-hand sides stay with their equations.',
+    changed: 'Add row 2 to row 1, including the right-hand side. Keep row 2 so the change can be undone.',
+    expanded: 'Expand the new rows: 6 = 2x + z and −1 = y − 2z. The equations changed; their joint solutions did not.',
+  },
+};
+export const rowComposition = requireRowComposition(originalRowCompositionSource);
+export const rowCompositionDurationMs = rowComposition.durationMs;
+export const rowCompositionStops = rowComposition.stops;
+export const rowCompositionBeats = rowComposition.beats;
+export const rowCompositionReading = rowComposition.reading;
+export function sampleRowComposition(progress: number) { return sampleCompiledRowComposition(rowComposition, progress); }
+export function sampleCompiledRowComposition(model: RowComposition, progress: number) {
   if (!Number.isFinite(progress)) throw new Error('Composition progress must be finite.');
   const p = Math.max(0, Math.min(1, progress));
+  const { stops: rowCompositionStops, beats: rowCompositionBeats, matrixStop } = model;
   const index = rowCompositionStops.findIndex(stop => stop >= p);
   const phase = index === 0 ? 0 : index - 1 + (p - rowCompositionStops[index - 1]!) / (rowCompositionStops[index]! - rowCompositionStops[index - 1]!);
   return { progress: p, phase, index, beat: rowCompositionBeats[index]!,
@@ -78,5 +122,3 @@ export function sampleRowComposition(progress: number) {
       : p < rowCompositionStops[2] ? (p - rowCompositionStops[1]) / (rowCompositionStops[2] - rowCompositionStops[1])
       : (1 - p) / (1 - rowCompositionStops[2]) * matrixStop };
 }
-export const rowCompositionReading = `\\begin{gathered}${before.expandedEquation}\\\\[1em]${before.equation}\\\\[1em]
-${rowOperationLatex(step.operation)}\\\\[1em]${projected.model.equation}\\\\[1em]${projected.model.expandedEquation}\\end{gathered}`;

@@ -25,13 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-The user approved the composed explanation with “go”. The existing-host
-`?view=row-composition` candidate now collects the original equations, adds row
+The user accepted the composed explanation (“excellent! continue”). The
+existing-host `?view=row-composition` collects the original equations, adds row
 2 to row 1 and expands the checked result. `run-contract.kp.row-composition-v1`
-owns the native-handoff and explanation checkpoint. The
+is complete. The bounded continuation `run-contract.kp.row-composition-reuse-v1`
+pressures the same motion with source-authored equations, annotations and the
+opposite receiving row at `&example=eliminate-second`. The
 [approved boundary and evidence](reviews/2026-10-12-post-linked-equations.md)
 preserve standalone defaults; no general composer or wider collection support
-is claimed.
+is claimed. The [authoring packet](authoring/row-workbench-authoring-packet.md)
+documents this local source boundary and its remaining presentation gaps.
 
 The linked-equation experiment is complete with qualified acceptance: “this is
 fine, although I don't see using this animation”. Preserve its semantic and

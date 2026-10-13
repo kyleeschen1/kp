@@ -132,5 +132,52 @@ claiming a repository-wide test-suite run.
 Initial delivery measurement exceeded the all-mode JS ceiling. The
 [explicit cost amendment](../decisions/2026-10-12-row-composition-cost-boundary.md)
 attributes the growth and adds a complete composed-mode activation gate. No
-consumer, semantic guarantee or check is removed. Human judgment of the composed
-explanation remains pending; automated continuity does not establish usefulness.
+consumer, semantic guarantee or check is removed. The user accepted the composed
+explanation with “excellent! continue”. This closes the exemplar checkpoint;
+automated continuity and visual acceptance do not establish learner outcomes.
+
+## Bounded continuation: authoring reuse
+
+Interpret “continue” as the next local reuse test: keep the accepted chain and
+change its inputs, receiving row and annotations through a typed source. One
+second caller cancels the first unknown from the second equation by adding the
+first equation. It uses the existing collection and unit-addition mechanisms on
+the same host, with no new timing, geometry, CSS, or clock. The exact row checker
+continues to derive results and preserve referents.
+
+Deliver one source compiler with located repairs, the original and changed
+sources, existing-host selection and a small authoring example. Preserve the
+original fixture and default route. Only two constraints, three unknowns and
+one unit row addition are admitted; whole-zero rows and fractional coefficients
+remain explicit gaps. Other operations and arbitrary scene composition are not
+part of this continuation. The rollback unit is source parameterization and its
+opt-in variation, leaving the accepted original intact.
+
+Verify actual identity, changed target-row lineage, invalid operation/endpoint
+repairs, both native handoffs and reverse seeks with the existing scoped tests.
+Run types and complete production-cost measurement at integration. One bounded
+implementation package ends at a visual check of the changed receiving row;
+do not request another review of the unchanged original. Reserve final work for
+verification and backup; no minimum execution duration. Commit and push the
+checked candidate and evidence together.
+
+### Continuation evidence
+
+The source compiler, view factory and second caller are implemented. Only the
+existing host chooses the example; both use the same layout, collection sampler,
+arithmetic renderer and clock. The original source/model identities and route
+remain intact. New-source declaration is separate from the one-time engine
+parameterization needed to admit it; this is not a generic composition API.
+
+18 row semantic tests and 9 collection/pouring tests pass. All 14 row browser
+checks pass, including raster/geometry handoffs, reverse seeks, retained RHS
+paint and receiving-row clearance for both sources. Full typechecking and the
+132-module production build pass. An initial unit/type failure caught an optional
+sampler parameter accidentally consuming Array.map's index; the original unary
+sampler is preserved and the parameterized sampler uses a separate model-first
+entrypoint. The existing regression now guards that compatibility boundary.
+
+Complete delivery measurement passes with the new variation activation gate;
+all existing ceilings are retained. See the cost decision's continuation section.
+The opposite receiving-row explanation awaits visual review. The original
+acceptance is final; there is no repeated checkpoint for its unchanged motion.

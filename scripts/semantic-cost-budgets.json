@@ -8,6 +8,7 @@
     "row-workbench": { "jsGzip": 110000, "cssGzip": 16000 },
     "row-guided": { "jsGzip": 115000, "cssGzip": 16000 },
     "row-composition": { "jsGzip": 117500, "cssGzip": 17000 },
+    "row-composition-variation": { "jsGzip": 118500, "cssGzip": 17000 },
     "collection-polynomials": { "jsGzip": 112000, "cssGzip": 16000 },
     "collection-system": { "jsGzip": 112000, "cssGzip": 16000 },
     "collection-reordered": { "jsGzip": 112000, "cssGzip": 16000 },

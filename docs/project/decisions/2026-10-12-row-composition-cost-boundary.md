@@ -47,3 +47,23 @@ reduces the full union. Lazy activation remains useful and is measured separatel
 Reproduce with `npm run build:matrix-interpretations` and
 `npm run measure:semantic-cost`. These are sums of compressed emitted assets,
 not actual network/heap measurements; existing separate font accounting remains.
+
+## Accepted-exemplar authoring continuation
+
+Source parameterization and one lazily selected variation add 1856 JS gzip bytes
+to the all-mode union: 131403 / 17367. The existing 131500 / 17600 union ceiling
+is unchanged, leaving only 97 JS bytes of headroom; further growth needs fresh
+diagnosis. The original composition activates 116682 / 16463, within its unchanged
+117500 / 17000 gate. The variation adds 843 JS bytes on top of that closure and
+receives a new complete-consumer gate of 118500 / 17000 for its measured
+117525 / 16463. No previous consumer or ceiling is removed or increased.
+
+The initial measurement deliberately failed on the missing new-consumer budget.
+The new gate accounts for the complete host, shared source compiler, both
+renderers and variation source, rather than measuring only the small new chunk.
+Cold default is 94847 / 14686, workbench 107616 / 15523, guided 112864 / 15571,
+collection-system 108304 / 15412; all retain their prior ceilings. Matrix
+composition remains 111045 / 14533. New compiler checks, a reusable view factory
+and example navigation account for shared growth; no CSS, clock, geometry or
+motion module was added. The alternative of embedding another fixed sequence
+would avoid the source checks but perpetuate caller-specific implementation.

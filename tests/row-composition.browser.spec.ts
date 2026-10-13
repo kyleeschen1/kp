@@ -1,10 +1,15 @@
 import { test, expect } from '@playwright/test';
-import { rowComposition, rowCompositionStops } from '../src/experiments/rectangular-product/row-composition-model.ts';
+import { rowComposition } from '../src/experiments/rectangular-product/row-composition-model.ts';
+import { eliminateSecondComposition } from '../src/experiments/rectangular-product/row-composition-variation.ts';
 import { decodePngRgba, normalizedPngRasterDelta } from './helpers/png-raster-diff.ts';
 
-test('composition has exclusive continuous handoffs and deterministic reversal', async ({ page }, info) => {
+for (const example of [
+  { id: 'original', model: rowComposition, query: '', retainedRow: 1, retainedRhs: '−1', zero: '0-1' },
+  { id: 'eliminate-second', model: eliminateSecondComposition, query: '&example=eliminate-second', retainedRow: 0, retainedRhs: '4', zero: '1-0' },
+]) test(`composition ${example.id} has exclusive continuous handoffs and deterministic reversal`, async ({ page }, info) => {
+  const rowComposition = example.model, rowCompositionStops = rowComposition.stops;
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
-  await page.goto('/experiments/rectangular-product/?view=row-composition');
+  await page.goto(`/experiments/rectangular-product/?view=row-composition${example.query}`);
   const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
   const stage = root.locator('.row-composition-stage'), slider = root.getByRole('slider', { name: 'Animation position' });
   // Native range snapping is not the sampler's precision. Feed exact seam probes
@@ -60,7 +65,7 @@ test('composition has exclusive continuous handoffs and deterministic reversal',
     const card = root.locator('.matrix-card');
     const raster = decodePngRgba(await card.screenshot({ path: info.outputPath(`composition-${name}.png`), scale: 'css' }));
     if (name === 'final') {
-      const rect = await stage.locator('[data-composition-layer="after"] [data-poly="name-1"]').evaluate(n => {
+      const rect = await stage.locator(`[data-composition-layer="after"] [data-poly="name-${example.retainedRow}"]`).evaluate(n => {
         const b = n.getBoundingClientRect(), c = n.closest('.matrix-card')!.getBoundingClientRect();
         return { x: b.x - c.x, y: b.y - c.y, w: b.width, h: b.height };
       });
@@ -71,13 +76,13 @@ test('composition has exclusive continuous handoffs and deterministic reversal',
     }
   }
   await expect(stage).toHaveAttribute('data-owner', 'after');
-  await expect(stage.locator('[data-composition-layer="after"] [data-poly="name-0"]')).toHaveText('6');
-  const retainedRhs = stage.locator('[data-composition-layer="after"] [data-poly="name-1"]');
-  await expect(retainedRhs).toHaveText('−1');
+  await expect(stage.locator(`[data-composition-layer="after"] [data-poly="name-${1 - example.retainedRow}"]`)).toHaveText('6');
+  const retainedRhs = stage.locator(`[data-composition-layer="after"] [data-poly="name-${example.retainedRow}"]`);
+  await expect(retainedRhs).toHaveText(example.retainedRhs);
   const crop = decodePngRgba(await retainedRhs.screenshot({ path: info.outputPath('retained-rhs.png') }));
   const inkPixels = Array.from({ length: crop.width * crop.height }, (_, i) => crop.pixels[i * 4]!).filter(n => n > 100).length;
   expect(inkPixels, 'retained RHS must paint, not only occupy DOM bounds').toBeGreaterThan(15);
-  await expect(stage.locator('[data-composition-layer="after"] [data-poly="coefficient-0-1"]')).toHaveCSS('opacity', '0');
+  await expect(stage.locator(`[data-composition-layer="after"] [data-poly="coefficient-${example.zero}"]`)).toHaveCSS('opacity', '0');
   await root.getByText('Read the calculation', { exact: true }).click(); await expect(root.locator('details')).toContainText('same solutions');
   expect(errors).toEqual([]);
 });

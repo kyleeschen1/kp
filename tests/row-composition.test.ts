@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { rowComposition, rowCompositionStops, sampleRowComposition, projectSystemCollection } from '../src/experiments/rectangular-product/row-composition-model.ts';
+import { rowComposition, rowCompositionStops, sampleRowComposition, sampleCompiledRowComposition, projectSystemCollection, compileRowComposition, originalRowCompositionSource } from '../src/experiments/rectangular-product/row-composition-model.ts';
+import { eliminateSecondComposition, eliminateSecondSource } from '../src/experiments/rectangular-product/row-composition-variation.ts';
 import { linearSystemModel } from '../src/experiments/rectangular-product/linear-system-source.ts';
 import { requireRowWorkbenchSource } from '../src/experiments/rectangular-product/row-workbench-source.ts';
 import { originalRowSource, redundantRowSource } from '../src/experiments/rectangular-product/row-workbench-examples.ts';
@@ -45,4 +46,43 @@ test('composition seeks and reverses through the same ordered semantic stages', 
   assert.equal(sampleRowComposition(1).local, 0);
   assert.throws(() => sampleRowComposition(NaN), /finite/);
   assert.equal(sampleRowComposition(-1).progress, 0); assert.equal(sampleRowComposition(2).progress, 1);
+});
+
+test('source variation changes the receiving row while preserving actual referents and clock semantics', () => {
+  const model = eliminateSecondComposition;
+  assert.equal(model.before, eliminateSecondSource.before);
+  assert.equal(model.step.before.coefficients, model.before.product.left);
+  assert.equal(model.after.product.left, model.step.after.coefficients);
+  assert.equal(model.after.inputs, model.before.inputs);
+  assert.deepEqual(model.after.coefficients, [[1, 2, -1], [0, 3, 1]]);
+  assert.match(model.after.expandedEquation, /4=u\+2v-w/);
+  assert.match(model.after.expandedEquation, /6=3v\+w/);
+  for (let c = 0; c < 3; c++) {
+    assert.equal(model.step.before.coefficients.rows[0]![c], model.step.after.coefficients.rows[0]![c]);
+    assert.notEqual(model.step.before.coefficients.rows[1]![c], model.step.after.coefficients.rows[1]![c]);
+  }
+  assert.equal(model.step.before.rhs[0], model.step.after.rhs[0]);
+  assert.equal(sampleCompiledRowComposition(model, model.stops[1]).local, 0);
+  assert.equal(sampleCompiledRowComposition(model, 1).local, 0);
+  assert.equal(model.durationMs, rowComposition.durationMs);
+});
+
+test('composition source fails closed for unsupported operations, annotations and zero-row endpoints', () => {
+  const self = compileRowComposition({ ...originalRowCompositionSource, operation: { kind: 'add', sourceRow: 0, targetRow: 0, factor: 1 } });
+  assert.equal(self.status, 'repair-required');
+  const unsupported = compileRowComposition({ ...originalRowCompositionSource,
+    // @ts-expect-error A non-unit operation needs its own presentation evidence.
+    operation: { kind: 'add', sourceRow: 0, targetRow: 1, factor: -1 } });
+  assert.equal(unsupported.status, 'repair-required');
+  if (unsupported.status === 'repair-required') assert.equal(unsupported.path, 'operation');
+  const missing = compileRowComposition({ ...originalRowCompositionSource, annotations: { ...originalRowCompositionSource.annotations, changed: '' } });
+  assert.equal(missing.status, 'repair-required');
+  if (missing.status === 'repair-required') assert.equal(missing.path, 'annotations.changed');
+  const opposite = requireRowWorkbenchSource({ ...originalRowSource, coefficients: [[1, 2, 3], [-1, -2, -3]], rhs: [1, -1] });
+  const before = projectSystemCollection(linearSystemModel, opposite.initial);
+  assert.equal(before.status, 'projected');
+  if (before.status !== 'projected') return;
+  const zero = compileRowComposition({ ...originalRowCompositionSource, before: before.model });
+  assert.equal(zero.status, 'repair-required');
+  if (zero.status === 'repair-required') assert.equal(zero.path, 'after.coefficients.0');
 });
