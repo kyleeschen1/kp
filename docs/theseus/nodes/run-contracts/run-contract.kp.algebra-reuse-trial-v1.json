@@ -1,0 +1,62 @@
+{
+  "id": "run-contract.kp.algebra-reuse-trial-v1",
+  "kind": "run-contract",
+  "title": "Distribution then collection reuse trial",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-13-algebra-reuse-trial.md"
+    }
+  ],
+  "verification": [
+    "npm run test:composed-algebra-authoring"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "Primary and transfer semantic composition and existing authoring preservation",
+      "checkedAt": "2026-10-13T19:04:27.039Z",
+      "notes": "103 tests pass after preserving the established compound-only task boundary and correcting a test direction label."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep distribute-collect",
+      "status": "passed",
+      "scope": "Two source-only examples through actual canonical Chromium compositor",
+      "checkedAt": "2026-10-13T19:04:50.695Z",
+      "notes": "Two tests pass; native stops, repeatable interior frames after rewind, reduced motion and narrow resize. A visual candidate, not broad certification."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: both examples implemented and checked; visual judgment outstanding. Inspect existing-host distribute-collect route and transfer link. No additional algebra scope or LA refinement."
+  },
+  "allowedWork": [
+    "Bounded proof-backed algebra composition and existing-host integration with focused checks"
+  ],
+  "disallowedWork": [
+    "LA refinement; generic algebra solver; new renderer; broad motif promotion"
+  ],
+  "goal": "One checked algebra explanation and one mathematical source variation using canonical motion",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "primary",
+      "title": "Checked distribution then collection exemplar",
+      "summary": "Checked three-operation composition and existing-host mount; 103 semantic tests and app/node/test types pass.",
+      "status": "complete"
+    },
+    {
+      "id": "variation",
+      "title": "Source variation and visual review packet",
+      "summary": "Source-only coefficient/variable variation implemented and browser checked; awaiting canonical visual judgment.",
+      "status": "in-progress"
+    }
+  ]
+}

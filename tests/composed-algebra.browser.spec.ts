@@ -9,6 +9,43 @@ import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtu
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import intuitionTransfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
 
+for (const variant of ["primary", "transfer"]) test(`distribute-collect ${variant}: native stops and reversible canonical motion`, async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(`/experiments/reusable-reasoning/?example=distribute-collect&variant=${variant}`);
+  const root = page.locator("#authored-focus-card"), card = root.locator("[data-composed-card]");
+  await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+  await expect(card.locator("[data-kp-canonical-equation-host]")).toHaveCount(1);
+  await expect(card.locator("[data-kp-reader-transition]")).toHaveCount(3);
+  const slider = card.locator("[data-kp-focus-deck-scrubber]");
+  const poses = new Map<number, unknown>();
+  for (const step of [0, .5, 1, 1.5, 2, 2.5, 3, 2.5, 1.5, .5, 0]) {
+    await slider.evaluate((node, value) => { (node as HTMLInputElement).value = String(value); node.dispatchEvent(new Event("input")); }, step);
+    await expect.poll(async () => Number(await card.getAttribute("data-composed-step"))).toBeCloseTo(step, 8);
+    const active = card.locator('[data-kp-reader-transition-active="true"]');
+    await expect(active).toHaveCount(1);
+    const pose = await active.evaluate(root => [...root.querySelectorAll<HTMLElement>("[data-kp-equation-material-semantic-entity-id]")].map(node => {
+      const rect = node.getBoundingClientRect();
+      return { id: node.dataset["kpEquationMaterialSemanticEntityId"], text: node.textContent,
+        x: rect.x, y: rect.y, width: rect.width, height: rect.height, opacity: getComputedStyle(node).opacity };
+    }));
+    if (step % 1) expect(pose.length).toBeGreaterThan(0);
+    if (poses.has(step)) expect(pose).toEqual(poses.get(step)); else poses.set(step, pose);
+    if (Number.isInteger(step)) {
+      const suffix = ["initial", "distributed", "collected", "evaluated"][step]!;
+      await expect(card).toHaveAttribute("data-common-factor-state", new RegExp(`\\.${suffix}$`));
+    }
+    await card.screenshot({ path: info.outputPath(`distribute-collect-${step}.png`) });
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await expect(card).toHaveAttribute("data-composed-step", "1");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(card).toHaveAttribute("data-common-factor-state", /\.distributed$/);
+  expect(errors).toEqual([]);
+});
+
 test("extended controls settle reverse gestures and interrupt without losing semantic state", async ({ page }) => {
   test.setTimeout(180_000);
   for (const source of [intuition, intuitionTransfer]) {

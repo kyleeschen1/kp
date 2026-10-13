@@ -8,6 +8,13 @@ import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts
 import { encodeKpHtmlAttribute as escapeComposedAlgebraText } from "../../rendering/html-output-encoding.ts";
 import { composedAlgebraSequence, composedAlgebraSequenceV2, composedAlgebraWindowV2, sampleComposedAlgebraSequence, type KpComposedAlgebraReaderSequence } from "./sequence.ts";
 import type { KpComposedAlgebraSubexplanation } from "./subexplanations.ts";
+import type { DistributeCollectPresentation } from "../../authoring/distribute-collect-presentation.ts";
+import { distributeCollectSequence } from "./sequence.ts";
+import { mountDistributeCollectNative } from "../common-factor/native.ts";
+
+export function mountDistributeCollectCard(container: HTMLElement, draft: DistributeCollectPresentation) {
+  return mountResolvedCard(container, distributeCollectSequence(draft), card => mountDistributeCollectNative(card, draft));
+}
 
 export function mountComposedAlgebraCard(container: HTMLElement, draft: KpComposedAlgebraPresentation) {
   return mountResolvedCard(container, composedAlgebraSequence(draft), card => mountCanonicalComposedAlgebraPresentation(card, draft));

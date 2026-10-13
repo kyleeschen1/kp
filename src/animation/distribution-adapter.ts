@@ -24,6 +24,14 @@ import { projectKpIntegerMultipleFactoring } from "../semantic/integer-multiple-
 import type { KpVerifiedComposedDistribution } from "../semantic/composed-algebra-distribution.ts";
 import { projectKpComposedDistribution } from "../semantic/composed-algebra-distribution-projection.ts";
 import { createKpAssetBundle, type KpAssetMetadataValue } from "../semantic/asset.ts";
+import { projectKpDistributionBeforeCollection, type KpDistributionBeforeCollection } from "../semantic/distribute-collect.ts";
+
+export function createDistributionBeforeCollectionAnimation(proof: KpDistributionBeforeCollection): KpAnimationAsset {
+  const projection = projectKpDistributionBeforeCollection(proof), id = `authored.distribute-collect.${proof.revisionId.slice(7)}`;
+  return createDistributionSemanticAnimation({ id, title: "Distribute to both occurrences",
+    bundle: createKpAssetBundle({ id: `asset.${id}`, title: "Distribute then collect", objects: projection.endpoints.map(e => e.object) }),
+    transformations: [projection.transformation], sourceRefIds: [proof.revisionId], metadata: { sourceProofRevision: proof.revisionId } });
+}
 
 export class KpCommonFactorPresentationGap extends Error {
   readonly code = "unsupported-presentation";

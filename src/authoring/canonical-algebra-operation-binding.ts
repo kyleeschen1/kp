@@ -11,6 +11,15 @@ import type { KpVerifiedComposedProductEvaluation } from "../semantic/composed-a
 import { KpComposedAlgebraRepair } from "./composed-algebra-source.ts";
 import { compileKpEquationAssetMigrationV2 } from "../domain-ir/equation-asset-migration-v2.ts";
 import { compileKpEquationEvaluationFamilyCertificateV2, type KpVerifiedEquationEvaluationFamilyCertificateV2 } from "../domain-ir/equation-evaluation-family-certificate-v2.ts";
+import { createDistributionBeforeCollectionAnimation } from "../animation/distribution-adapter.ts";
+import type { KpDistributionBeforeCollection } from "../semantic/distribute-collect.ts";
+
+export function resolveDistributionBeforeCollection(proof: KpDistributionBeforeCollection): KpCanonicalDistributionOperationBinding {
+  const animation = createDistributionBeforeCollectionAnimation(proof), plan = canonicalPlan(animation);
+  if (plan.planKind !== "distribution") throw gap("Distribution requires its canonical fan-out choreography.");
+  return Object.freeze({ kind: "distribution", animation, plan,
+    canonicalReference: "editor-animation.sample.animation.distribution.expand-a-sum", evaluationCertificates: Object.freeze([] as const) });
+}
 
 export interface KpCanonicalFactoringOperationBinding {
   readonly kind: "factoring";

@@ -3,6 +3,7 @@ import type { buildKpAuthoredDistributionPreview } from "../src/experiments/auth
 
 // Only registered local pages can choose a module; URL input is never imported.
 const algebraPages = new Map([
+  ["distribute-collect", { directory: "distribute-collect", builder: "buildDistributeCollectPage", title: "Distribute, then collect" }],
   ["common-factor", { directory: "common-factor", builder: "buildKpCommonFactorInitialPage", title: "Common factoring" }],
   ["algebra-intuition", { directory: "composed-algebra-intuition", builder: "buildKpAlgebraIntuitionInitialPage", title: "Regroup without losing contributions" }],
   ["composed-algebra", { directory: "composed-algebra", builder: "buildKpComposedAlgebraInitialPage", title: "Composed algebra" }]
@@ -19,8 +20,8 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
           if (request.method !== "GET") { response.writeHead(405).end(); return; }
           void (async () => {
             try {
-              const module = await server.ssrLoadModule(`/src/experiments/${algebraPage.directory}/page.ts`) as Record<string, () => string>;
-              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${algebraPage.title} · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authoring-distribution-focus-card/style.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/src/experiments/common-factor/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module[algebraPage.builder]!()}</main><script type="module" src="/src/experiments/${algebraPage.directory}/entry.ts"></script></body></html>`);
+              const module = await server.ssrLoadModule(`/src/experiments/${algebraPage.directory}/page.ts`) as Record<string, (url?: string) => string>;
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${algebraPage.title} · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authoring-distribution-focus-card/style.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/src/experiments/common-factor/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module[algebraPage.builder]!(request.url)}</main><script type="module" src="/src/experiments/${algebraPage.directory}/entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
             } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
           })();

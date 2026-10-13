@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13 non-LA pivot: freeze Gaussian elimination at its accepted generator
+and consistency milestones. The user approved a bounded distribution-then-collection
+trial plus one mathematical source variation, superseding the compact/detail LA
+recommendation below. See [scope and review](reviews/2026-10-13-algebra-reuse-trial.md).
+The candidate uses the existing canonical KaTeX card at
+`/experiments/reusable-reasoning/?example=distribute-collect`; its Theseus run owns
+the visual checkpoint. This does not open a general algebra or infrastructure run.
+
 October 13 consistency contrast: the user approved the same-matrix comparison.
 The 2×2 exemplar is now accepted and its run complete. Approved continuation
 adds one 3×3 sum-of-rows caller at `?view=row-composition&example=contrast&size=3`;

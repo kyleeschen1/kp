@@ -39,6 +39,10 @@ export function resolveKpComposedAlgebraPresentation(checked: KpSourceBoundCompo
   }
 }
 function resolveCheckedPresentation(checked: KpSourceBoundComposedAlgebraProof): KpComposedAlgebraPresentation {
+  // Atomic collection is still an opt-in exemplar. Its projection must not
+  // silently widen the established compound-expression authoring contract.
+  const factor = checked.chain.steps[0].factor;
+  if (factor.kind !== "sum" && factor.kind !== "product") throw gap("This authoring task requires a compound common factor.");
   const first = resolve(checked.chain.steps[0]), second = resolve(checked.chain.steps[1]);
   if (first.kind !== "factoring" || second.kind !== "evaluation") throw gap("The bounded chain requires factoring followed by evaluation.");
   const before = first.animation.bundle.objects[0]!, middle = first.animation.bundle.objects[1]!, after = second.animation.bundle.objects[1]!;

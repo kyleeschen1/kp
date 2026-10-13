@@ -5,6 +5,12 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 13 non-LA pivot: Gaussian elimination is frozen at its accepted milestone.
+The [bounded algebra reuse trial](../reviews/2026-10-13-algebra-reuse-trial.md)
+supersedes the compact/detail recommendation below. One distribution-then-collection
+explanation and one coefficient/variable variation now use the canonical equation
+card. Await visual judgment before extending this trial; no new reader layout work.
+
 October 13: same-matrix 2×2 consistency contrast accepted. The user approved
 continuation; one 3×3 sum-of-rows source now uses the same host and adapter. The
 [review](../reviews/2026-10-13-systems-consistency-contrast.md) explains the shared

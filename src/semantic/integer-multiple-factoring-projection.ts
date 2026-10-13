@@ -7,7 +7,7 @@ import type { KpSemanticOperationProjection } from "./semantic-operation-project
 
 export function projectKpIntegerMultipleFactoring(proof: KpVerifiedComposedFactoring): KpSemanticOperationProjection {
   if (!isKpVerifiedComposedFactoring(proof)) throw new TypeError("Factoring projection requires issued proof.");
-  if (proof.factor.kind !== "sum" && proof.factor.kind !== "product")
+  if (proof.factor.kind !== "sum" && proof.factor.kind !== "product" && proof.factor.kind !== "symbol")
     throw new KpScalarLatexProjectionGap("This compound-factor projection requires a grouped sum or product; atomic numeric factors need explicit-product notation.");
   const from = proof.source.root.id, to = proof.target.root.id, [left, right] = proof.coefficients;
   const factor = projectKpStructuredScalarLatex(proof.factor, "display");

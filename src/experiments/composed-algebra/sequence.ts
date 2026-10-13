@@ -3,6 +3,12 @@ import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentati
 import { createKpFocusDeckCheckpointMap, resolveKpFocusDeckVisibleBeat } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { encodeKpHtmlAttribute } from "../../rendering/html-output-encoding.ts";
 import { assertComposedAlgebraSubexplanation, type KpComposedAlgebraSubexplanation } from "./subexplanations.ts";
+import { assertDistributeCollect, type DistributeCollectPresentation } from "../../authoring/distribute-collect-presentation.ts";
+
+export function distributeCollectSequence(draft: DistributeCollectPresentation): KpComposedAlgebraReaderSequence {
+  assertDistributeCollect(draft);
+  return bindSequence(draft, ["Two occurrences in one group", "Distribute to both", "Collect like terms", "Evaluate the coefficient"]);
+}
 
 const brand = Symbol("composed-algebra-reader-sequence");
 const issued = new WeakSet<object>();
@@ -30,7 +36,7 @@ export function composedAlgebraWindowV2(draft: KpComposedAlgebraPresentationV2, 
   issued.add(sequence);
   return sequence;
 }
-function bindSequence(draft: KpComposedAlgebraPresentation | KpComposedAlgebraPresentationV2, titles: readonly string[]): KpComposedAlgebraReaderSequence {
+function bindSequence(draft: KpComposedAlgebraPresentation | KpComposedAlgebraPresentationV2 | DistributeCollectPresentation, titles: readonly string[]): KpComposedAlgebraReaderSequence {
   if (draft.checkpointProgress.length !== draft.checked.source.states.length) throw new Error("A composed state must have exactly one beat and clock checkpoint.");
   const sequence: KpComposedAlgebraReaderSequence = Object.freeze({ [brand]: true as const, revisionId: draft.revisionId,
     checkpointProgress: draft.checkpointProgress, checkpoints: createKpFocusDeckCheckpointMap(draft.checkpointProgress),

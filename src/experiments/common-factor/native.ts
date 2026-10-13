@@ -18,6 +18,14 @@ import { resolveKpReaderEquationPresentationProfile } from "../../reader/documen
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import type { KpReaderEquationLessonDescriptor } from "../../reader/app/equation-lesson-descriptor.ts";
 import { createKpFocusDeckCheckpointMap } from "../../tutorial/focus-deck-beat-navigation.ts";
+import { assertDistributeCollect, type DistributeCollectPresentation } from "../../authoring/distribute-collect-presentation.ts";
+import { distributeCollectEndpoints } from "./endpoints.ts";
+
+export function mountDistributeCollectNative(card: HTMLElement, presentation: DistributeCollectPresentation) {
+  assertDistributeCollect(presentation);
+  return mountResolvedCanonicalOperation(card, { ...presentation, canonicalReference: presentation.steps.map(s => s.canonicalReference).join(" ") },
+    presentation.animation, distributeCollectEndpoints(presentation), presentation.steps.flatMap(s => s.evaluationCertificates), presentation.checkpointProgress);
+}
 
 export async function mountCommonFactorNativeSurface(card: HTMLElement, draft: KpPreparedCommonFactorDraft) {
   assertKpPreparedCommonFactorDraft(draft);

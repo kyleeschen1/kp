@@ -5,6 +5,12 @@ import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/stru
 import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
 import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
+import { assertDistributeCollect, type DistributeCollectPresentation } from "../../authoring/distribute-collect-presentation.ts";
+
+export function distributeCollectEndpoints(presentation: DistributeCollectPresentation): readonly KpStructuredEquationAnnotatedEndpoint[] {
+  assertDistributeCollect(presentation);
+  return presentation.animation.bundle.objects.map(annotateCanonicalAlgebraEndpoint);
+}
 
 export function composedAlgebraEndpointsV2(presentation: KpComposedAlgebraPresentationV2): readonly KpStructuredEquationAnnotatedEndpoint[] {
   assertKpComposedAlgebraPresentationV2(presentation);
