@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Proposed next after the accepted row workbench: test a small authored-operation
+source on redundant versus inconsistent systems, then consider a linked equation
+representation. The [next-step review](reviews/2026-10-12-next-step-review.md)
+ranks options and defines the bounded finish line. This is a recommendation,
+not authorization to start a new run; reader validation remains deferred.
+
 October 12 follow-up: user revised the elementary row-operation exemplar into
 compact, repeatable swap, scale and add-multiple operations on one persistent
 system. The [current candidate](reviews/2026-10-12-row-replacement-exemplar.md#current-compact-candidate)
