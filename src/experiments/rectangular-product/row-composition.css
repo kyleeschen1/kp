@@ -4,4 +4,5 @@
    rasters when returning directly to an unchanged coefficient or RHS. */
 .row-composition-stage .poly-token { will-change: auto; }
 .row-composition-stage .row-wb-stage { margin: 0; }
+.row-composition-stage [data-operation-index] { position: absolute; inset: 0; opacity: 0; }
 .matrix-player[aria-busy="true"] .row-composition-stage { visibility: hidden; }

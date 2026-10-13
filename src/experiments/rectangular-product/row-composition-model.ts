@@ -6,6 +6,8 @@ import type { CollectionModel } from './collection-source.ts';
 import { linearSystemModel } from './linear-system-source.ts';
 import { projectRowEquations } from './row-equations.ts';
 import { rowOperationLatex, rowSystemLatex } from './row-workbench-model.ts';
+import { compileAuthoredRowSteps, type CompiledRowStep } from './row-authored-steps.ts';
+import type { RowWorkbenchSource } from './row-workbench-source.ts';
 
 const gap = (path: string, message: string) => ({ status: 'repair-required' as const, path, message });
 
@@ -77,14 +79,65 @@ export function compileRowComposition(source: RowCompositionSource) {
   if (step.status !== 'checked') return gap(`operation.${step.path}`, step.message);
   const projected = projectSystemCollection(before, step.after);
   if (projected.status !== 'projected') return gap(`after.${projected.path}`, projected.message);
-  const matrixStop = before.stops[5]!, transferMs = before.durationMs * matrixStop;
-  const durationMs = transferMs * 2 + 2800;
-  const stops = [0, transferMs / durationMs, (transferMs + 2800) / durationMs, 1] as const;
-  const reading = `\\begin{gathered}${before.expandedEquation}\\\\[1em]${before.equation}\\\\[1em]
-${rowOperationLatex(step.operation)}\\\\[1em]${projected.model.equation}\\\\[1em]${projected.model.expandedEquation}\\end{gathered}`;
-  return Object.freeze({ status: 'compiled' as const, before, after: projected.model, step, matrixStop,
-    title: source.title, introduction: source.introduction, durationMs, stops: Object.freeze(stops), reading,
-    beats: Object.freeze(beatIds.map(id => Object.freeze({ id, cue: source.annotations[id] }))) });
+  return assembleComposition(source, [Object.freeze({ id: 'changed', operation: step.operation,
+    during: source.annotations.changed, after: source.annotations.changed, checked: step })], projected.model);
+}
+
+export interface RowSequenceCompositionSource {
+  readonly id: string;
+  readonly before: CollectionModel;
+  readonly title: string;
+  readonly introduction: string;
+  readonly steps: RowWorkbenchSource['steps'];
+  readonly annotations: Readonly<Record<'equations' | 'matrix' | 'expanded', string>>;
+}
+
+/** The collection envelope is checked for every intermediate system, before a
+ * player can mount. Unsupported endpoints never become a partial animation. */
+export function compileRowSequenceComposition(source: RowSequenceCompositionSource) {
+  if (!/^[A-Za-z][\w.-]*$/.test(source.id)) return gap('id', 'Supply a stable composition identifier.');
+  for (const key of ['title', 'introduction'] as const)
+    if (!source[key].trim() || source[key].length > 600) return gap(key, 'Supply nonempty plain text, up to 600 characters.');
+  for (const id of ['equations', 'matrix', 'expanded'] as const)
+    if (!source.annotations[id]?.trim() || source.annotations[id].length > 600)
+      return gap(`annotations.${id}`, 'Supply nonempty plain text, up to 600 characters.');
+  if (!source.steps.length || source.steps.length > 8) return gap('steps', 'This composed presentation supports one to eight operations.');
+  if (source.steps.some(step => ['equations', 'matrix', 'expanded'].includes(step.id)))
+    return gap('steps', 'Step identifiers must not replace the collection or expansion milestones.');
+  const rhs: KpScalarExpression[] = [];
+  for (const [r, output] of source.before.outputs.entries()) {
+    if (output.kind !== 'constraint-rhs') return gap(`before.outputs.${r}`, 'Composition requires independent constraint RHS values.');
+    rhs.push(output.value);
+  }
+  const initial = { coefficients: source.before.product.left, rhs };
+  const initialProjection = projectSystemCollection(source.before, initial);
+  if (initialProjection.status !== 'projected') return gap(`before.${initialProjection.path}`, initialProjection.message);
+  const sequence = compileAuthoredRowSteps(source.id, initial, source.steps);
+  if (sequence.status !== 'compiled') return sequence;
+  let after = source.before;
+  for (const [i, step] of sequence.steps.entries()) {
+    const projection = projectSystemCollection(source.before, step.checked.after);
+    if (projection.status !== 'projected') return gap(`steps.${i}.after.${projection.path}`, projection.message);
+    after = projection.model;
+  }
+  // Short authored IDs are the stable host milestones; checked IDs retain the
+  // source namespace and derivation provenance independently of URL spelling.
+  return assembleComposition(source, sequence.steps.map((step, i) => Object.freeze({ ...step, id: source.steps[i]!.id })), after);
+}
+
+function assembleComposition(source: Pick<RowSequenceCompositionSource, 'before' | 'title' | 'introduction' | 'annotations'>,
+  steps: readonly CompiledRowStep[], after: CollectionModel) {
+  const before = source.before, matrixStop = before.stops[5]!, transferMs = before.durationMs * matrixStop;
+  const durationMs = transferMs * 2 + 2800 * steps.length;
+  const stops: [number, number, number, ...number[]] = [0, transferMs / durationMs, (transferMs + 2800) / durationMs,
+    ...steps.slice(1).map((_, i) => (transferMs + 2800 * (i + 2)) / durationMs), 1];
+  const reading = `\\begin{gathered}${before.expandedEquation}\\\\[1em]${before.equation}\\\\[1em]${steps.map(step =>
+    `${rowOperationLatex(step.operation)}\\\\[1em]${rowSystemLatex(step.checked.after, before.inputs)}`).join('\\\\[1em]')}\\\\[1em]${after.expandedEquation}\\end{gathered}`;
+  const beats = [{ id: 'equations', cue: source.annotations.equations }, { id: 'matrix', cue: source.annotations.matrix },
+    ...steps.map(step => ({ id: step.id, cue: step.after })), { id: 'expanded', cue: source.annotations.expanded }];
+  return Object.freeze({ status: 'compiled' as const, before, after, step: steps[0]!.checked,
+    steps: Object.freeze(steps), matrixStop, title: source.title, introduction: source.introduction,
+    durationMs, stops: Object.freeze(stops), reading, beats: Object.freeze(beats.map(beat => Object.freeze(beat))) });
 }
 export type RowComposition = Extract<ReturnType<typeof compileRowComposition>, { status: 'compiled' }>;
 export function requireRowComposition(source: RowCompositionSource): RowComposition {
@@ -116,9 +169,15 @@ export function sampleCompiledRowComposition(model: RowComposition, progress: nu
   const { stops: rowCompositionStops, beats: rowCompositionBeats, matrixStop } = model;
   const index = rowCompositionStops.findIndex(stop => stop >= p);
   const phase = index === 0 ? 0 : index - 1 + (p - rowCompositionStops[index - 1]!) / (rowCompositionStops[index]! - rowCompositionStops[index - 1]!);
-  return { progress: p, phase, index, beat: rowCompositionBeats[index]!,
-    layer: p < rowCompositionStops[1] ? 'before' as const : p < rowCompositionStops[2] ? 'operation' as const : 'after' as const,
-    local: p < rowCompositionStops[1] ? p / rowCompositionStops[1] * matrixStop
-      : p < rowCompositionStops[2] ? (p - rowCompositionStops[1]) / (rowCompositionStops[2] - rowCompositionStops[1])
-      : (1 - p) / (1 - rowCompositionStops[2]) * matrixStop };
+  const start = rowCompositionStops[1]!, end = rowCompositionStops[rowCompositionStops.length - 2]!;
+  const operationIndex = Math.min(model.steps.length - 1, Math.max(0,
+    rowCompositionStops.slice(2, -1).findIndex(stop => p < stop)));
+  const operationStart = rowCompositionStops[operationIndex + 1]!, operationEnd = rowCompositionStops[operationIndex + 2]!;
+  const layer = p < start ? 'before' as const : p < end ? 'operation' as const : 'after' as const;
+  const beat = layer === 'operation' && p > operationStart
+    ? { id: model.steps[operationIndex]!.id, cue: model.steps[operationIndex]!.during } : rowCompositionBeats[index]!;
+  return { progress: p, phase, index, beat, operationIndex, layer,
+    local: layer === 'before' ? p / start * matrixStop
+      : layer === 'operation' ? Math.max(0, Math.min(1, (p - operationStart) / (operationEnd - operationStart)))
+      : (1 - p) / (1 - end) * matrixStop };
 }

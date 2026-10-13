@@ -1,7 +1,9 @@
 import { constant, divide, variable } from '../../math/expression.ts';
-import { checkLinearSystemRowOperation, parseRowFactor, type CheckedRowOperation, type LinearSystem, type RowOperation } from '../../math/linear-system-row-operation.ts';
+import type { RowOperation } from '../../math/linear-system-row-operation.ts';
 import { createKpScalarExpression, createKpTypedMatrixFromRows, type KpScalarExpression } from '../../math/typed-semantic-math.ts';
-import { rowPresentationGap, rowSystemPresentationGap } from './row-session.ts';
+import { rowSystemPresentationGap } from './row-session.ts';
+import { compileAuthoredRowSteps, parseAuthoredRowFactor as factor } from './row-authored-steps.ts';
+export type { CompiledRowStep } from './row-authored-steps.ts';
 
 export type RowSourceValue = number | string;
 export type AuthoredRowOperation = Extract<RowOperation, { kind: 'swap' }>
@@ -21,18 +23,9 @@ export interface RowWorkbenchSource {
     readonly after: string;
   }[];
 }
-export interface CompiledRowStep {
-  readonly id: string;
-  readonly operation: RowOperation;
-  readonly during: string;
-  readonly after: string;
-  readonly checked: CheckedRowOperation;
-}
 const repair = (path: string, message: string) => ({ status: 'repair-required' as const, path, message });
 const idPattern = /^[A-Za-z][\w.-]*$/;
 const readable = (text: string) => text.trim().length > 0 && text.length <= 600;
-const factor = (value: RowSourceValue) => typeof value === 'number' && !Number.isSafeInteger(value)
-  ? repair('value', 'Use safe integers or explicit fraction strings, such as "1/2".') : parseRowFactor(String(value));
 
 /** Typed authoring boundary, not an arbitrary-JSON decoder. Validate the entire
  * sequence before exposing any partial story or evaluating authored claims. */
@@ -62,30 +55,12 @@ export function compileRowWorkbenchSource(source: RowWorkbenchSource) {
   const initial = Object.freeze({ coefficients: createKpTypedMatrixFromRows({ id: `${source.id}.coefficients`, rows }), rhs: Object.freeze(rhs) });
   const initialGap = rowSystemPresentationGap(initial); if (initialGap) return repair('initial', initialGap);
   const unknowns = Object.freeze(source.unknowns.map((name, c) => createKpScalarExpression({ id: `${source.id}.input.${c}`, expression: variable(name) })));
-  if (source.steps.length === 0 || source.steps.length > 24) return repair('steps', 'Supply one to 24 named steps.');
-  const ids = new Set<string>(), steps: CompiledRowStep[] = [];
-  let current: LinearSystem = initial;
-  for (const [index, step] of source.steps.entries()) {
-    const path = `steps.${index}`;
-    if (!idPattern.test(step.id) || ids.has(step.id)) return repair(`${path}.id`, 'Step identifiers must be stable and unique.');
-    ids.add(step.id);
-    for (const key of ['during', 'after'] as const) if (!readable(step[key])) return repair(`${path}.${key}`, 'Supply nonempty text, up to 600 characters.');
-    let operation: RowOperation;
-    if (step.operation.kind === 'swap') operation = step.operation;
-    else {
-      const parsed = factor(step.operation.factor);
-      if (parsed.status !== 'parsed') return repair(`${path}.operation.factor`, parsed.message);
-      operation = { ...step.operation, factor: parsed.value };
-    }
-    const checked = checkLinearSystemRowOperation({ id: `${source.id}.step.${step.id}`, before: current, operation });
-    if (checked.status !== 'checked') return repair(`${path}.operation.${checked.path}`, checked.message);
-    const gap = rowPresentationGap(checked); if (gap) return repair(`${path}.presentation`, gap);
-    steps.push(Object.freeze({ id: `${source.id}.step.${step.id}`, operation: checked.operation, during: step.during, after: step.after, checked }));
-    current = checked.after;
-  }
+  const sequence = compileAuthoredRowSteps(source.id, initial, source.steps);
+  if (sequence.status !== 'compiled') return sequence;
   return Object.freeze({ status: 'compiled' as const, id: source.id, title: source.title, introduction: source.introduction,
-    initial, unknowns, steps: Object.freeze(steps) });
+    initial, unknowns, steps: sequence.steps });
 }
+
 export type CompiledRowWorkbench = Extract<ReturnType<typeof compileRowWorkbenchSource>, { status: 'compiled' }>;
 export function requireRowWorkbenchSource(source: RowWorkbenchSource): CompiledRowWorkbench {
   const result = compileRowWorkbenchSource(source);

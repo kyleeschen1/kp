@@ -1,5 +1,30 @@
 # Systems explorer direction and approved continuation
 
+## Implementation authorization and execution boundary
+
+The subsequent user instruction, "This seems excellent. implement for as long
+as possible", approves implementing the discussed bounded explorer as well as
+the enabling sequence. The older proposed-status wording below describes the
+discussion at that time. Execution now uses
+`run-contract.kp.systems-explorer-v1`: composition, zero rows, fractions,
+source-only authoring, bounded generation/trace, and square-system explorer.
+No arbitrary solver, free-form answer authority or catalogue-wide rollout.
+
+First package: connect up to eight named checked operations using the existing
+composition host and row renderer. Validate all intermediate states, preserve
+single-step sources, and expose a short swap/scale/add exemplar. The observable
+checkpoint is continuous operation-to-operation paint and readable mathematical
+progress, with natural equations at both ends. Human review precedes generalizing
+new compact-layout choreography. Subsequent packages preserve that treatment.
+
+Checks: scoped semantic/source tests, affected types, existing-host Chromium
+continuity/seek/reversal checks, production consumer costs at integration, and
+Theseus validation. Each coherent checked package is committed and backed up.
+Use standard verification for semantic work and focused checks during visual
+discovery; broad promotion checks follow accepted exemplars. Reserve closeout
+time before each stop. End at the bounded explorer outcome or a named visual,
+external, scope or resource stop; duration is uncertain, not a minimum quota.
+
 The user accepted the recommended sequence from
 [the ten-loop review](2026-10-13-next-ten-loops.md): 1 → 2 → 3 → 5,
 and authorized sustained execution. Approval persists; it does not require
@@ -92,3 +117,58 @@ generator, square-shape presentation and solution interpretation milestone with
 evidence from that work. Larger geometry, arbitrary question answering and a
 general solver are not silently included in the current implementation scope.
 Earlier parked pouring/linked-panel work and deferred reader testing stay parked.
+
+## First composition review
+
+Canonical URL: <http://127.0.0.1:8000/experiments/rectangular-product/?view=row-composition&example=elimination>.
+The existing host menu also exposes **Three-step elimination**. Use Play or the
+milestones: equations → matrix → swap → normalize → eliminate → expanded.
+
+Inspect whether swapping into echelon form, normalizing the second pivot, then
+eliminating above it reads as one argument. Check arithmetic spacing, preserved
+equality and RHS, and whether the final free-variable explanation is clear.
+The first swap exposes echelon form in a rectangular matrix; this is not yet
+the proposed square upper-triangular example or a generated-problem interface.
+
+The typed `RowSequenceCompositionSource` supplies an existing collection, named
+checked operations and during/after annotations. Its compiler retains actual
+matrix/scalar referents through every step and validates all intermediate
+collection endpoints before mounting. Existing single-step sources retain their
+API, checked IDs, URLs and timings. Workbench step compilation is shared rather
+than reconstructed in the composition adapter.
+
+One premeasured operation surface per step avoids DOM rebuilding or measuring
+during scrubbing. Only the active surface paints and samples, using the existing
+host clock. The local bound is eight steps; no arbitrary-length runtime claim.
+No universal source schema or compositor certification is introduced.
+
+Observed bug: fixed factor/operand offsets overflowed compact arithmetic cells.
+The owning row renderer now centers each complete product using measured token
+widths. Browser regression checks require clearance between factor/operator/
+operand and neighboring cells, alongside the pixel-level endpoint handoff checks.
+The new negative addition also honors the layout's existing outward-copy
+clearance. These checks cover the exemplar, not every fraction or font/shape
+combination. Human judgment still owns cadence and legibility.
+
+Verification: `npm run test:row-operation` passes 20 tests;
+`npm run visual:row-operation` passes all 15 Chromium checks;
+`npm run typecheck` passes the full application/node/tests/Svelte/domain chain;
+`npm run build:matrix-interpretations` passes (140 modules);
+`npm run measure:semantic-cost` passes after the explicit
+[cost amendment](../decisions/2026-10-13-row-sequence-cost-boundary.md).
+The new browser check covers every operation seam, direct seek/reversal,
+arithmetic spacing, URL restoration and light mode; existing tests retain
+reduced-motion, cancellation, history and disposal coverage. The two initial
+new unit failures were test assumptions (checker snapshot wrappers versus
+referent identity, and an accidentally duplicated fixture ID), corrected to
+assert actual math identity and the intended intermediate-value repair.
+
+No full repository test suite, cross-browser release cohort, new multi-instance
+runtime benchmark or learning-effectiveness claim. The impact selector had no
+focused rule for this local module; the package used the explicit scoped checks
+above rather than claiming the generic full-suite recommendation was executed.
+
+Next after acceptance: source-only second sequence, then zero-row presentation
+and fractional collection. Keep the new explorer goal and bounded generation
+scope; do not return to unrelated parked work. This candidate's rollback unit
+is the checked multi-operation composition package, not semantic history.

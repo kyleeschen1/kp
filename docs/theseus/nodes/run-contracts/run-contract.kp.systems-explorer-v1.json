@@ -1,0 +1,103 @@
+{
+  "id": "run-contract.kp.systems-explorer-v1",
+  "kind": "run-contract",
+  "title": "Checked systems explorer",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-13-systems-explorer-direction.md"
+    }
+  ],
+  "verification": [
+    "npm run test:row-operation",
+    "npm run visual:row-operation",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation; npm run typecheck",
+      "status": "passed",
+      "scope": "Composition referents, intermediate repairs and affected type boundaries",
+      "checkedAt": "2026-10-13T15:44:22.263Z",
+      "notes": "20 unit tests and full app/node/test/Svelte/domain type chain pass. New tests preserve actual matrix/scalar identity and located intermediate repair; initial test-fixture assumptions corrected as recorded in review."
+    },
+    {
+      "command": "npm run visual:row-operation",
+      "status": "passed",
+      "scope": "Existing-host Chromium composition and workbench preservation",
+      "checkedAt": "2026-10-13T15:44:23.703Z",
+      "notes": "15 checks pass. Every new operation seam passes raster continuity; direct seek, reversal, annotation milestones, measured product spacing, URL and theme checked. Existing workbench cancellation/history/disposal retained. Human cadence review pending."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "failed",
+      "scope": "Initial sequence budget measurements",
+      "checkedAt": "2026-10-13T15:44:24.457Z",
+      "notes": "Initial union 136124 exceeds 136000; after shared compiler boundary extraction union136340, composition121566 and variation122412 still exceed prior ceilings. Explicit measured feature-cost amendment recorded in 2026-10-13-row-sequence-cost-boundary.md; no consumers omitted."
+    },
+    {
+      "command": "npm run build:matrix-interpretations; npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Complete production closures including sequence activation",
+      "checkedAt": "2026-10-13T15:44:25.206Z",
+      "notes": "140-module build and all consumer gates pass after explicit bounded amendment. New sequence closure122437 JS and16527 CSS gzip; union136340/17431. No runtime improvement or network-transfer claim."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: composition slice has a checked three-step exemplar at row-composition example=elimination. Review swap to echelon, normalize, eliminate and natural expansion. After acceptance pressure a second source then continue zero rows, fractions, authoring, generation and square explorer; not complete."
+  },
+  "allowedWork": [
+    "Existing LA semantic owners, bounded composition, zero and fractional presentation, generated checked systems and local interpretation interface"
+  ],
+  "disallowedWork": [
+    "No arbitrary solver, free-form mathematical authority, unrelated reader redesign or catalogue-wide rollout"
+  ],
+  "goal": "Generate bounded systems and inspect checked elimination with natural equation endpoints",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 6,
+  "commitCadence": "Commit checked packages and back up before visual review or handoff",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human review of new exemplar choreography before promotion"
+  ],
+  "slices": [
+    {
+      "id": "composition",
+      "title": "Multi-operation-composition",
+      "status": "in-progress"
+    },
+    {
+      "id": "zero-rows",
+      "title": "Zero-row-meaning",
+      "status": "planned"
+    },
+    {
+      "id": "fractions",
+      "title": "Exact-fraction-presentation",
+      "status": "planned"
+    },
+    {
+      "id": "authoring",
+      "title": "Source-only-authoring",
+      "status": "planned"
+    },
+    {
+      "id": "generation",
+      "title": "Bounded-generation-and-trace",
+      "status": "planned"
+    },
+    {
+      "id": "explorer",
+      "title": "Square-system-explorer",
+      "status": "planned"
+    }
+  ]
+}

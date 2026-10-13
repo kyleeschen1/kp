@@ -1,7 +1,67 @@
 import { test, expect } from '@playwright/test';
 import { rowComposition } from '../src/experiments/rectangular-product/row-composition-model.ts';
 import { eliminateSecondComposition } from '../src/experiments/rectangular-product/row-composition-variation.ts';
+import { eliminationSequenceComposition } from '../src/experiments/rectangular-product/row-composition-sequence.ts';
 import { decodePngRgba, normalizedPngRasterDelta } from './helpers/png-raster-diff.ts';
+
+test('multi-operation composition preserves every seam and can seek directly into each operation', async ({ page }, info) => {
+  const model = eliminationSequenceComposition, errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/experiments/rectangular-product/?view=row-composition&example=elimination');
+  const root = page.locator('#rectangular-player'), stage = root.locator('.row-composition-stage');
+  await expect(root).toHaveAttribute('data-ready', 'true');
+  const slider = root.getByRole('slider', { name: 'Animation position' });
+  await slider.evaluate(n => n.setAttribute('step', 'any'));
+  const seek = (p: number) => slider.evaluate((n, p) => {
+    if (!(n instanceof HTMLInputElement)) throw new Error('Expected range input');
+    n.value = String(p); n.dispatchEvent(new Event('input', { bubbles: true }));
+  }, p);
+  for (const [i, seam] of model.stops.slice(1, -1).entries()) {
+    await seek(seam - .000001);
+    const left = await stage.screenshot({ path: info.outputPath(`sequence-seam-${i}-before.png`), scale: 'css' });
+    await seek(seam + .000001);
+    const right = await stage.screenshot({ path: info.outputPath(`sequence-seam-${i}-after.png`), scale: 'css' });
+    expect(normalizedPngRasterDelta(left, right), `continuous seam ${i}`).toBeLessThan(.0002);
+  }
+  for (const [i, step] of model.steps.entries()) {
+    if (step.operation.kind !== 'swap') {
+      const opening = step.operation.kind === 'scale' ? .28 : .35;
+      await seek(model.stops[i + 1]! + (model.stops[i + 2]! - model.stops[i + 1]!) * opening);
+      const active = stage.locator(`[data-operation-index="${i}"]`);
+      const groups = await active.evaluate(s => Array.from({ length: 4 }, (_, column) =>
+        ['factor', 'dot', 'operand'].map(role => {
+          const node = s.querySelector<HTMLElement>(`[data-arithmetic-column="${column}"][data-arithmetic-role="${role}"]`)!;
+          const b = node.getBoundingClientRect(); return { left: b.left, right: b.right };
+        })));
+      for (const group of groups) {
+        expect(group[1]!.left - group[0]!.right, 'factor and operator clearance').toBeGreaterThan(3);
+        expect(group[2]!.left - group[1]!.right, 'operator and operand clearance').toBeGreaterThan(3);
+      }
+      for (let column = 1; column < 3; column++)
+        expect(groups[column]![0]!.left - groups[column - 1]![2]!.right, 'adjacent arithmetic cells').toBeGreaterThan(3);
+    }
+    const p = model.stops[i + 1]! + (model.stops[i + 2]! - model.stops[i + 1]!) * .45;
+    await seek(p);
+    await expect(stage).toHaveAttribute('data-operation-index', String(i));
+    await expect(root.locator('[data-cue]')).toHaveText(step.during);
+    const active = stage.locator(`[data-operation-index="${i}"]`);
+    const styles = () => active.locator('[style]').evaluateAll(ns => ns.map(n => n.getAttribute('style')));
+    const first = await styles();
+    await root.locator('.matrix-card').screenshot({ path: info.outputPath(`sequence-${step.id}.png`) });
+    await seek(1); await seek(0); await seek(p); expect(await styles()).toEqual(first);
+    await expect(active.locator('.row-wb-equal')).toHaveCSS('opacity', '1');
+    expect(await stage.locator('[data-operation-index]').evaluateAll(ns => ns.filter(n => getComputedStyle(n).opacity === '1').length)).toBe(1);
+  }
+  await seek(1); await root.locator('.matrix-card').screenshot({ path: info.outputPath('sequence-expanded.png') });
+  await expect(root.locator('[data-cue]')).toContainText('Any real z');
+  await root.getByRole('combobox', { name: 'Milestone' }).selectOption('3');
+  await expect(root.locator('[data-cue]')).toContainText('pivot is now 1');
+  await page.reload(); await expect(root).toHaveAttribute('data-milestone', 'normalize');
+  await root.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await root.locator('.matrix-card').screenshot({ path: info.outputPath('sequence-light.png') });
+  await expect(root.locator('[data-cue]')).toContainText('pivot is now 1');
+  expect(errors).toEqual([]);
+});
 
 for (const example of [
   { id: 'original', model: rowComposition, query: '', retainedRow: 1, retainedRhs: '−1', zero: '0-1' },

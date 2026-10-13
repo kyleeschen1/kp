@@ -164,3 +164,23 @@ selection: no new coordinates, easing, CSS, renderer, clock or arithmetic.
 No new row-operation families, arbitrary sequence length or larger grid support
 are inferred from this test. `test:row-operation`, `visual:row-operation` and the
 complete `measure:semantic-cost` consumers retain both examples.
+
+## Multi-operation composition candidate
+
+`RowSequenceCompositionSource` and `compileRowSequenceComposition` now connect
+one to eight named swap/scale/add operations through the same host and checked
+step compiler. Start from `row-composition-sequence.ts`; preview at
+`?view=row-composition&example=elimination`. This new connected presentation is
+awaiting human review, not promoted as a general elimination interface.
+
+Supply `before`, title/introduction, `steps` using the workbench's existing
+`id`, `operation`, `during`, `after` fields, and `equations`, `matrix`, `expanded`
+annotations. Each step's short ID is a host milestone; it must be unique and
+cannot shadow those three reserved milestones. Every intermediate system must
+fit the current collection envelope; repairs locate `steps.<index>.after`.
+Fractions can be operation factors when results remain supported integers;
+whole-zero rows and fractional collection endpoints remain explicit gaps.
+
+The candidate demonstrates echelon then reduced echelon form with one free
+variable. Those prose claims are reviewed authored explanations, not a new rank
+checker or generator. The source uses no coordinates, timing or per-example CSS.

@@ -5,6 +5,12 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 13 implementation: bounded explorer approved. The
+[first composition review](../reviews/2026-10-13-systems-explorer-direction.md#first-composition-review)
+links the working three-operation candidate and evidence. The systems-explorer
+run owns remaining work and the visual gate; the older discussion-only scope
+below is superseded by this implementation approval.
+
 October 13 continuation: recommended loops 1 → 2 → 3 → 5 approved for sustained
 work. The [systems-explorer direction](../reviews/2026-10-13-systems-explorer-direction.md)
 records the user's short-term product goal and discussion boundary. It supersedes

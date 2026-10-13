@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13 implementation: user approved the discussed bounded explorer.
+`run-contract.kp.systems-explorer-v1` owns execution. Its first visual candidate
+composes swap, normalization and elimination on the existing host at
+`?view=row-composition&example=elimination`. See the
+[implementation review](reviews/2026-10-13-systems-explorer-direction.md#first-composition-review).
+Review this connected argument before promoting the new sequence treatment;
+zero rows, fractions, authoring pressure and generated square systems remain
+approved subsequent work, not completed capabilities.
+
 October 13 continuation: the user approved loops 1 → 2 → 3 → 5 and sustained
 execution, and requested discussion of a systems-generator/elimination explorer.
 The [durable direction](reviews/2026-10-13-systems-explorer-direction.md) owns

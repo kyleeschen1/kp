@@ -82,13 +82,24 @@ export function mountRowWorkbenchView(root: HTMLElement, layout: RowWorkbenchLay
       const scaled = token(expressionToLatex(p.scaled.expression), transient, p.scaled.id);
       const result = token(expressionToLatex(p.result.expression), transient, p.result.id);
       const plus = token('+', transient);
+      for (const [role, node] of [['factor', factor], ['dot', dot], ['operand', copy]] as const) {
+        node.dataset['arithmeticRole'] = role; node.dataset['arithmeticColumn'] = String(p.column);
+      }
       const productY = op.kind === 'add' ? laneY : targetY;
-      pose(copy, cx + 24, productY); pose(factor, cx - 24, productY); pose(dot, cx, productY); pose(scaled, cx, productY);
+      // Center the complete product by measured advance widths. Fixed operand
+      // offsets over-reserved space for small glyphs and crossed compact cells.
+      const width = (node: HTMLElement) => node.getBoundingClientRect().width;
+      const factorWidth = width(factor), copyWidth = width(copy), dotWidth = width(dot), gap = 4;
+      const total = factorWidth + copyWidth + dotWidth + gap * 2;
+      const factorX = -total / 2 + factorWidth / 2;
+      const dotX = -total / 2 + factorWidth + gap + dotWidth / 2;
+      const copyX = total / 2 - copyWidth / 2;
+      pose(copy, cx + copyX, productY); pose(factor, cx + factorX, productY); pose(dot, cx + dotX, productY); pose(scaled, cx, productY);
       pose(result, cx, targetY); pose(plus, cx, (laneY + targetY) / 2);
       const multiply = prepareFusion(stage, [ink(factor), ink(copy)], [ink(dot)], ink(op.kind === 'add' ? scaled : result));
       if (unitAddition) pose(copy, cx, laneY);
       const add = op.kind === 'add' ? prepareFusion(stage, [ink(target), ink(unitAddition ? copy : scaled)], [ink(plus)], ink(result)) : undefined;
-      return { target, copy, factor, dot, scaled, result, plus, multiply, add, cx };
+      return { target, copy, factor, dot, scaled, result, plus, multiply, add, cx, copyX };
     });
     return passage((progress: number) => {
       stage.dataset['progress'] = String(progress);
@@ -109,7 +120,7 @@ export function mountRowWorkbenchView(root: HTMLElement, layout: RowWorkbenchLay
           if (progress < .48) ink(plus).style.transform = `scale(${presence})`;
         } else if (op.kind === 'add') {
           const travel = ease(progress / .24), open = ease((progress - .2) / .12);
-          pose(copy, cx + 24 * open, y(op.sourceRow) * (1 - travel) + laneY * travel);
+          pose(copy, cx + e.copyX * open + (layout.copyClearance ?? 0) * Math.sin(Math.PI * travel), y(op.sourceRow) * (1 - travel) + laneY * travel);
           copy.style.opacity = progress === 0 ? '0' : '1';
           multiply(ease((progress - .34) / .23));
           factor.style.opacity = dot.style.opacity = String(open);
@@ -121,7 +132,7 @@ export function mountRowWorkbenchView(root: HTMLElement, layout: RowWorkbenchLay
           else ink(e.result).style.opacity = '0';
         } else {
           const open = ease(progress / .22);
-          pose(copy, cx + 24 * open, targetY);
+          pose(copy, cx + e.copyX * open, targetY);
           multiply(ease((progress - .3) / .65));
           factor.style.opacity = dot.style.opacity = String(open);
           if (progress < .3) ink(factor).style.transform = ink(dot).style.transform = `scale(${open})`;

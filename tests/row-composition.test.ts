@@ -5,6 +5,53 @@ import { eliminateSecondComposition, eliminateSecondSource } from '../src/experi
 import { linearSystemModel } from '../src/experiments/rectangular-product/linear-system-source.ts';
 import { requireRowWorkbenchSource } from '../src/experiments/rectangular-product/row-workbench-source.ts';
 import { originalRowSource, redundantRowSource } from '../src/experiments/rectangular-product/row-workbench-examples.ts';
+import { compileRowSequenceComposition } from '../src/experiments/rectangular-product/row-composition-model.ts';
+import { eliminationSequenceSource, eliminationSequenceComposition } from '../src/experiments/rectangular-product/row-composition-sequence.ts';
+
+test('a composed sequence keeps every checked predecessor and exposes meaningful exact milestones', () => {
+  const model = eliminationSequenceComposition;
+  assert.deepEqual(model.steps.map(step => step.operation.kind), ['swap', 'scale', 'add']);
+  assert.equal(model.steps[0]!.checked.before.coefficients, model.before.product.left);
+  for (let i = 1; i < model.steps.length; i++) {
+    assert.equal(model.steps[i]!.checked.before.coefficients, model.steps[i - 1]!.checked.after.coefficients);
+    model.steps[i]!.checked.before.rhs.forEach((value, r) => assert.equal(value, model.steps[i - 1]!.checked.after.rhs[r]));
+  }
+  assert.equal(model.after.product.left, model.steps.at(-1)!.checked.after.coefficients);
+  assert.deepEqual(model.after.coefficients, [[1, 0, -2], [0, 1, 1]]);
+  assert.match(model.after.expandedEquation, /-1=x-2z/);
+  assert.match(model.after.expandedEquation, /2=y\+z/);
+  assert.deepEqual(model.beats.map(beat => beat.id), ['equations', 'matrix', 'swap', 'normalize', 'eliminate', 'expanded']);
+  for (let i = 0; i < model.steps.length; i++) {
+    const start = model.stops[i + 1]!, end = model.stops[i + 2]!;
+    const frame = sampleCompiledRowComposition(model, (start + end) / 2);
+    assert.equal(frame.operationIndex, i); assert.equal(frame.layer, 'operation');
+    assert.equal(frame.beat.cue, model.steps[i]!.during);
+    assert.ok(Math.abs(frame.local - .5) < 1e-10);
+    assert.equal(sampleCompiledRowComposition(model, start).local, 0);
+    assert.equal(sampleCompiledRowComposition(model, end).beat.cue, model.steps[i]!.after);
+  }
+  const samples = Array.from({ length: 101 }, (_, i) => i / 100);
+  assert.deepEqual(samples.map(p => sampleCompiledRowComposition(model, p)), samples.reverse().map(p => sampleCompiledRowComposition(model, p)).reverse());
+  // The claimed free-variable family satisfies the original two constraints.
+  for (const z of [-3, 0, 4]) { const x = 2 * z - 1, y = 2 - z; assert.equal(2 * y + 2 * z, 4); assert.equal(x + y - z, 1); }
+});
+
+test('sequence compilation rejects invalid intermediate states and ambiguous milestones before playback', () => {
+  const source = eliminationSequenceSource;
+  const invalid = [
+    { ...source, steps: [] },
+    { ...source, steps: Array.from({ length: 9 }, (_, i) => ({ ...source.steps[0]!, id: `step-${i}` })) },
+    { ...source, steps: [source.steps[0]!, source.steps[0]!] },
+    { ...source, steps: [{ ...source.steps[0]!, id: 'matrix' }] },
+    { ...source, steps: [{ ...source.steps[0]!, operation: { kind: 'scale' as const, row: 0, factor: 0 } }] },
+    { ...source, steps: [{ ...source.steps[0]!, id: 'oversize', operation: { kind: 'scale' as const, row: 0, factor: 10 } }, source.steps[0]!] },
+  ];
+  for (const input of invalid) assert.equal(compileRowSequenceComposition(input).status, 'repair-required');
+  const result = compileRowSequenceComposition(invalid[5]!);
+  if (result.status !== 'repair-required') assert.fail('Expected bounded collection repair');
+  assert.equal(result.path, 'steps.0.after.coefficients.0.1');
+  assert.deepEqual(source.before.coefficients, [[0, 2, 2], [1, 1, -1]]);
+});
 
 test('collection and expansion use the exact checked objects, not a reconstructed matching fixture', () => {
   const { before, step, after } = rowComposition;
