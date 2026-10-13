@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13 consistency contrast: the user approved the same-matrix comparison.
+`run-contract.kp.systems-consistency-contrast-v1` owns one 2×2 candidate at
+`?view=row-composition&example=contrast`. See the
+[review and preservation boundary](reviews/2026-10-13-systems-consistency-contrast.md).
+Review the compatible/incompatible pair before any larger-shape extension.
+
 October 13 generator delivery: the accepted composition now drives generated
 2×2 and 3×3 systems with unique, infinite and inconsistent outcomes, exact
 elimination, echelon inspection, rank questions and free-parameter controls.

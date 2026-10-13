@@ -2,6 +2,36 @@ import { test, expect } from '@playwright/test';
 import { createSystemsExplorer } from '../src/experiments/rectangular-product/systems-explorer-model.ts';
 import { normalizedPngRasterDelta } from './helpers/png-raster-diff.ts';
 
+test('same-matrix contrast retains milestones across cases and reverses deterministically', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
+  await page.goto('/experiments/rectangular-product/?view=row-composition&example=contrast');
+  const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+  const chooser = root.getByRole('combobox', { name: 'Milestone' });
+  await chooser.selectOption('2');
+  await expect(root).toHaveAttribute('data-milestone', 'eliminate');
+  await expect(root.locator('[data-cue]')).toContainText('0 = 0');
+  const stage = root.locator('.row-composition-stage');
+  const first = await stage.screenshot({ scale: 'css' });
+  await chooser.selectOption('0'); await chooser.selectOption('2');
+  expect(normalizedPngRasterDelta(first, await stage.screenshot({ scale: 'css' }))).toBeLessThan(.0002);
+  await root.getByRole('link', { name: 'b = (3, 7)', exact: true }).click();
+  await expect(root).toHaveAttribute('data-ready', 'true'); await expect(page).toHaveURL(/case=incompatible#eliminate/);
+  await expect(root).toHaveAttribute('data-milestone', 'eliminate');
+  await expect(root.locator('[data-cue]')).toContainText('1 = 0');
+  await root.getByText('Why the right-hand side matters', { exact: true }).click();
+  await expect(root.locator('[data-contrast-reading]')).toContainText('Rank of the augmented matrix: 2');
+  await chooser.selectOption('3');
+  await root.screenshot({ path: info.outputPath('contrast-incompatible.png') });
+  await root.getByRole('link', { name: 'b = (3, 6)', exact: true }).click();
+  await expect(root).toHaveAttribute('data-ready', 'true'); await expect(page).toHaveURL(/case=compatible#expanded/);
+  await expect(root.locator('[data-cue]')).toContainText('infinitely many');
+  await root.getByRole('button', { name: 'Light mode', exact: true }).click();
+  await root.screenshot({ path: info.outputPath('contrast-compatible-light.png') });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(391);
+  expect(errors).toEqual([]);
+});
+
 for (const size of [2, 3] as const) for (const kind of ['unique', 'infinite', 'none'] as const)
 test(`generated ${size} ${kind}: exact endpoints, continuous handoffs and structural questions`, async ({ page }, info) => {
   const candidate = createSystemsExplorer({ size, kind, seed: 1 });

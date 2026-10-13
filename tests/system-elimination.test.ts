@@ -4,6 +4,34 @@ import { addKpRationals, multiplyKpRationals, createKpRational, equalKpRationals
 import { readExactRowValue } from '../src/math/linear-system-row-operation.ts';
 import { generateSystemProblem } from '../src/math/system-generator.ts';
 import { createSystemsExplorer } from '../src/experiments/rectangular-product/systems-explorer-model.ts';
+import { consistencyCases, selectConsistencyCase } from '../src/experiments/rectangular-product/systems-contrast.ts';
+
+test('consistency contrast holds A and the operation fixed while exposing distinct RHS witnesses', () => {
+  const a = consistencyCases.compatible, b = consistencyCases.incompatible;
+  assert.equal(a.initial.coefficients, b.initial.coefficients);
+  assert.equal(a.initial.rhs[0], b.initial.rhs[0]);
+  assert.notEqual(a.initial.rhs[1], b.initial.rhs[1]);
+  assert.equal(a.trace.steps.length, 1); assert.equal(b.trace.steps.length, 1);
+  assert.deepEqual(a.trace.steps[0]!.checked.operation, b.trace.steps[0]!.checked.operation);
+  assert.deepEqual(a.model.stops, b.model.stops);
+  assert.equal(a.model.steps[0]!.checked, a.trace.steps[0]!.checked);
+  assert.equal(b.model.steps[0]!.checked, b.trace.steps[0]!.checked);
+  for (let r = 0; r < 2; r++) for (let c = 0; c < 2; c++) {
+    assert.deepEqual(readExactRowValue(a.trace.final.coefficients.rows[r]![c]!), readExactRowValue(b.trace.final.coefficients.rows[r]![c]!));
+  }
+  assert.equal(a.residual.numerator, 0n); assert.equal(b.residual.numerator, 1n);
+  assert.equal(a.trace.solution.kind, 'infinite'); assert.equal(b.trace.solution.kind, 'none');
+  assert.equal(a.trace.rank, 1); assert.equal(b.trace.rank, 1);
+  assert.equal(a.trace.augmentedRank, 1); assert.equal(b.trace.augmentedRank, 2);
+  // Arbitrary members of the compatible family satisfy both rows; the altered
+  // second RHS is always missed by exactly one, independent of the parameter.
+  for (const y of [-7, 0, 4]) {
+    const x = 3 - y;
+    assert.equal(x + y, 3); assert.equal(2 * x + 2 * y, 6);
+    assert.equal(7 - (2 * x + 2 * y), 1);
+  }
+  assert.equal(selectConsistencyCase('unknown').status, 'repair-required');
+});
 
 test('seeded generated cases have independently measured rank and exact solution witnesses', () => {
   for (const size of [2, 3] as const) for (const kind of ['unique', 'infinite', 'none'] as const) for (let seed = 0; seed < 80; seed++) {

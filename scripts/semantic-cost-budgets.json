@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "rationale": "October 13 systems-explorer amendment: complete union 143096 JS / 17431 CSS gzip; generator 128315/16527. Lazy generator controls and a leaf exact-value reader preserve ordinary activation boundaries. Allow 145000 union, 130000 generator, 113000 system/reordered collections; other ceilings unchanged. See docs/project/decisions/2026-10-13-systems-explorer-cost-boundary.md for diagnosis, alternatives and measured policy changes; prior sequence/natural-layout decisions remain provenance.",
+  "rationale": "October 13 consistency-contrast amendment: complete union145408 and contrast125938 JS gzip; allow147000 union and127000 contrast, retaining all prior individual and CSS ceilings. The contrast is lazy and uses the existing solver/view. See docs/project/reviews/2026-10-13-systems-consistency-contrast.md for measured diagnosis and explicit policy amendment; the systems-explorer-cost-boundary decision retains the prior baseline.",
   "entries": {
     "dot-product-passage": { "jsGzip": 100000, "cssGzip": 16000 },
-    "rectangular-product": { "jsGzip": 145000, "cssGzip": 17600 },
+    "rectangular-product": { "jsGzip": 147000, "cssGzip": 17600 },
     "rectangular-default": { "jsGzip": 100000, "cssGzip": 16000 },
     "row-workbench": { "jsGzip": 110000, "cssGzip": 16000 },
     "row-guided": { "jsGzip": 117000, "cssGzip": 16000 },
@@ -11,6 +11,7 @@
     "row-composition-variation": { "jsGzip": 124000, "cssGzip": 17000 },
     "row-composition-sequence": { "jsGzip": 124000, "cssGzip": 17000 },
     "row-composition-generator": { "jsGzip": 130000, "cssGzip": 17000 },
+    "row-composition-contrast": { "jsGzip": 127000, "cssGzip": 17000 },
     "collection-polynomials": { "jsGzip": 112000, "cssGzip": 16000 },
     "collection-system": { "jsGzip": 113000, "cssGzip": 16000 },
     "collection-reordered": { "jsGzip": 113000, "cssGzip": 16000 },

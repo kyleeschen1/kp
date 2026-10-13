@@ -1,0 +1,71 @@
+{
+  "id": "run-contract.kp.systems-consistency-contrast-v1",
+  "kind": "run-contract",
+  "title": "Same-matrix consistency contrast",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-13-systems-consistency-contrast.md"
+    }
+  ],
+  "verification": [
+    "npm run test:row-operation",
+    "npm run visual:row-operation"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation; npm run typecheck",
+      "status": "passed",
+      "scope": "Shared coefficient identity, exact consistency witnesses and type boundaries",
+      "checkedAt": "2026-10-13T16:38:58.140Z",
+      "notes": "23 tests pass, including paired identity, equal operations/stops, checked source retention, rank and residual laws. Full app/node/test/Svelte/domain type chain passes. No renderer edits or arithmetic fallback."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "failed",
+      "scope": "Initial feature cost",
+      "checkedAt": "2026-10-13T16:38:59.334Z",
+      "notes": "Union145396 exceeded145000. The new module is already lazy; final complete activation measured and bounded amendment documented in the contrast review. All prior individual budgets retained."
+    },
+    {
+      "command": "npm run build:matrix-interpretations; npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Complete contrast and preserved generator production closures",
+      "checkedAt": "2026-10-13T16:39:00.150Z",
+      "notes": "147 modules; union145408 and contrast125938 JS gzip, CSS unchanged. All gates pass under explicit bounded feature amendment. Generator128849 remains within130000. No consumer omitted."
+    },
+    {
+      "command": "npm run visual:row-operation",
+      "status": "passed",
+      "scope": "Paired case navigation and existing host preservation",
+      "checkedAt": "2026-10-13T16:39:31.529Z",
+      "notes": "23 Chromium tests pass. Contrast preserves equivalent named milestones, deterministic reversal, exact captions, accessible rank reading, light/dark themes and narrow overflow; all six generator size/outcome cases remain passing. Screenshot inspected. Human comparison review pending."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: one checked 2x2 contrast is ready at row-composition example=contrast. Compare b=(3,6) and b=(3,7) at eliminate or expanded; only RHS changes. Existing motion and generator preserved. Review clarity of sequential comparison before any extension."
+  },
+  "allowedWork": [
+    "One paired 2x2 source, existing composition host navigation, semantic and browser preservation checks"
+  ],
+  "disallowedWork": [
+    "No 3x3 rollout before visual acceptance, new renderer or generic paired generator"
+  ],
+  "goal": "Compare two right-hand sides through identical checked elimination on one shared coefficient matrix",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "contrast",
+      "title": "Paired-consistency-exemplar",
+      "summary": "Implement the approved paired 2x2 source using shared matrix referents and existing composition motion.",
+      "status": "in-progress"
+    }
+  ]
+}
