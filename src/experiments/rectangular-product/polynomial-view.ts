@@ -2,6 +2,7 @@ import { renderLatexToHtml } from '../../rendering/katex-adapter.ts';
 import { expressionToLatex } from '../../math/expression.ts';
 import { polynomialModel } from './polynomial-model.ts';
 import { sampleCollection, type CollectionModel } from './collection-source.ts';
+import { collectionNaturalHtml, mountCollectionNaturalLayout } from './collection-natural-layout.ts';
 import './polynomial.css';
 export { polynomialBeats, samplePolynomial } from './polynomial-model.ts';
 export { polynomialModel } from './polynomial-model.ts';
@@ -34,8 +35,9 @@ export function polynomialHtml(model: CollectionModel = polynomialModel) {
   const { coefficients: polynomialCoefficients, inputs: polynomialBasis, product: polynomialProduct } = model;
   const layout = collectionLayout(model);
   return `<div class="polynomial-stage" aria-hidden="true">
+    ${collectionNaturalHtml(model)}
     ${polynomialCoefficients.map((row, r) => token(`name-${r}`, model.outputs[r]!.id, model.outputs[r]!.latex) + token(`equals-${r}`, `${model.id}.representation`, '=') + row.map((n, c) =>
-      (n === -1 ? `<span class="poly-token" data-poly="coefficient-${r}-${c}" data-source-id="${polynomialProduct.left.rows[r]![c]!.id}">${latex('-')}<span data-unit>${latex('1')}</span></span>` : token(`coefficient-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, String(n))) +
+      (n < 0 ? `<span class="poly-token" data-poly="coefficient-${r}-${c}" data-source-id="${polynomialProduct.left.rows[r]![c]!.id}"><span data-sign>${latex('-')}</span><span data-magnitude ${n === -1 ? 'data-unit' : ''}>${latex(String(-n))}</span></span>` : token(`coefficient-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, String(n))) +
       (n < 0 ? token(`open-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, '(') + token(`close-${r}-${c}`, polynomialProduct.left.rows[r]![c]!.id, ')') : '') +
       token(`basis-${r}-${c}`, polynomialBasis[c]!.id, expressionToLatex(polynomialBasis[c]!.expression)) +
       token(`plus-${r}-${c}`, `${model.id}.sum.${r}`, '+') + token(`dot-${r}-${c}`, `${model.id}.term.${r}.${c}`, '\\cdot')
@@ -53,10 +55,7 @@ export function mountPolynomialView(root: HTMLElement, model: CollectionModel = 
   const nodes = new Map([...stage.querySelectorAll<HTMLElement>('[data-poly]')].map(n => [n.dataset['poly']!, n]));
   const layout = collectionLayout(model);
   const tokenWidths = new Map<string, number>();
-  const prepare = () => {
-    for (const [id, node] of nodes) if (node.classList.contains('poly-token')) tokenWidths.set(id, node.getBoundingClientRect().width);
-  };
-  prepare();
+  const natural = mountCollectionNaturalLayout(stage, model, nodes);
   let disposed = false;
   const pose = (id: string, x: number, y: number, opacity = 1) => {
     const node = nodes.get(id)!;
@@ -66,14 +65,15 @@ export function mountPolynomialView(root: HTMLElement, model: CollectionModel = 
   const render = (progress: number) => {
     if (disposed) return;
     const { phase } = sampleCollection(model, progress); stage.dataset['phase'] = String(phase);
-    const align = ease(phase), collect = ease((phase - 2.2) / .6), turn = ease(phase - 3);
+    const align = ease(phase / .65), explicit = ease((phase - .65) / .35);
+    const collect = ease((phase - 2.2) / .6), turn = ease(phase - 3);
     // Enclosure receives the settling column as one event, then the equation
     // holds. Equality waits for both the rigid turn and every enclosure.
     const enclose = ease((phase - 3.65) / .45);
     // Establish grouping before introducing addition; reverse seek removes the
     // plus first. The signed coefficient itself is never replaced or detached.
-    const grouping = ease(phase / .4) * (1 - collect);
-    const negativeAddition = ease((phase - .4) / .6) * (1 - collect);
+    const grouping = ease((phase - .65) / .2) * (1 - collect);
+    const negativeAddition = ease((phase - .85) / .15) * (1 - collect);
     // Equality only accompanies complete expressions, including on reverse seek.
     const equality = 1 - ease((phase - 2) / .2) + ease((phase - 4.1) / .15);
     const cubicFocus = ease(phase - 1) * (1 - ease((phase - 2) / .2));
@@ -86,19 +86,19 @@ export function mountPolynomialView(root: HTMLElement, model: CollectionModel = 
       for (let c = 0; c < model.inputs.length; c++) {
         const value = polynomialCoefficients[r]![c]!;
         const presentBefore = polynomialCoefficients[r]!.slice(0, c).filter(n => n !== 0).length;
-        const x = mix(240 + presentBefore * 96, 240 + layout.offsets[c]!, align);
-        const presence = value === 0 ? align : 1;
+        const x = 240 + layout.offsets[c]!;
+        const presence = value === 0 ? explicit : 1;
         const expression = model.inputs[c]!.expression;
         const constantInput = expression.kind === 'constant' && expression.value === 1;
-        pose(`coefficient-${r}-${c}`, x, y, value === 1 && !constantInput ? align : presence);
-        nodes.get(`coefficient-${r}-${c}`)!.querySelector<HTMLElement>('[data-unit]')?.style.setProperty('opacity', String(constantInput ? 1 : align));
+        pose(`coefficient-${r}-${c}`, x, y, value === 1 && !constantInput ? explicit : presence);
+        nodes.get(`coefficient-${r}-${c}`)!.querySelector<HTMLElement>('[data-unit]')?.style.setProperty('opacity', String(constantInput ? 1 : explicit));
         const halfWidth = (tokenWidths.get(`coefficient-${r}-${c}`) ?? 0) / 2;
         if (value < 0) {
           pose(`open-${r}-${c}`, x - halfWidth - 4, y, grouping);
           pose(`close-${r}-${c}`, x + halfWidth + 4, y, grouping);
         }
         pose(`plus-${r}-${c}`, x - (value < 0 ? halfWidth + 18 : 24), y, value >= 0
-          ? mix(presentBefore > 0 && value !== 0 ? 1 : 0, c > 0 ? 1 : 0, align) * (1 - collect)
+          ? mix(presentBefore > 0 && value !== 0 ? 1 : 0, c > 0 ? 1 : 0, explicit) * (1 - collect)
           : c > 0 ? negativeAddition : 0);
         // A single retained occurrence owns each collected basis expression.
         // Its sibling converges to that exact pose before relinquishing paint.
@@ -108,14 +108,13 @@ export function mountPolynomialView(root: HTMLElement, model: CollectionModel = 
         const angle = turn * Math.PI / 2, dx = 240 + layout.offsets[c]! - pivotX, dy = 118 - pivotY;
         const bx = pivotX + dx * Math.cos(angle) - dy * Math.sin(angle);
         const by = pivotY + dx * Math.sin(angle) + dy * Math.cos(angle);
-        const basisPresence = constantInput ? align : presence;
-        const initialOffset = value === 1 ? 0 : value === -1 ? 14 : 23;
+        const basisPresence = constantInput ? explicit : presence;
         const closingHalfWidth = (tokenWidths.get(`close-${r}-${c}`) ?? 0) / 2;
         const inputHalfWidth = (tokenWidths.get(`basis-${r}-${c}`) ?? 0) / 2;
         const groupedOffset = value < 0 ? Math.max(23, halfWidth + 4 + closingHalfWidth + inputHalfWidth + (constantInput ? 18 : 6)) : 23;
-        pose(`basis-${r}-${c}`, mix(x + mix(initialOffset, groupedOffset, align), bx, collect), mix(y, by, collect),
+        pose(`basis-${r}-${c}`, mix(x + groupedOffset, bx, collect), mix(y, by, collect),
           basisPresence * (r ? 1 - ease((phase - 2.8) / .2) : 1));
-        pose(`dot-${r}-${c}`, x + (value < 0 ? halfWidth + 12 : 11), y, constantInput ? align * (1 - collect) : 0);
+        pose(`dot-${r}-${c}`, x + (value < 0 ? halfWidth + 12 : 11), y, constantInput ? explicit * (1 - collect) : 0);
       }
     }
     // Correspondence is resolved against the fixture's row and basis roles;
@@ -136,6 +135,13 @@ export function mountPolynomialView(root: HTMLElement, model: CollectionModel = 
       node.style.opacity = String(enclose);
       node.style.strokeDashoffset = String(1 - enclose);
     }
+    natural.render(align);
   };
+  const prepare = () => {
+    for (const [id, node] of nodes) if (node.classList.contains('poly-token')) tokenWidths.set(id, node.getBoundingClientRect().width);
+    render(model.stops[1]!);
+    natural.prepare();
+  };
+  prepare();
   return { prepare, render, dispose() { disposed = true; nodes.clear(); tokenWidths.clear(); } };
 }

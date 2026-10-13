@@ -4,3 +4,6 @@
    KaTeX paint in Chromium while DOM geometry and visibility remained correct. */
 .poly-token { position: absolute; left: 0; top: 0; white-space: nowrap; will-change: transform, opacity; }
 .poly-enclosure { position: absolute; overflow: visible; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-dasharray: 1; }
+.poly-natural { position: absolute; inset: 0; pointer-events: none; }
+.poly-natural-row { position: absolute; white-space: nowrap; }
+.poly-natural [data-kp-motion-id] { position: relative; }

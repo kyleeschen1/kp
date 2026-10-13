@@ -65,7 +65,7 @@ for (const example of [
     const card = root.locator('.matrix-card');
     const raster = decodePngRgba(await card.screenshot({ path: info.outputPath(`composition-${name}.png`), scale: 'css' }));
     if (name === 'final') {
-      const rect = await stage.locator(`[data-composition-layer="after"] [data-poly="name-${example.retainedRow}"]`).evaluate(n => {
+      const rect = await stage.locator(`[data-composition-layer="after"] [data-natural-key="name-${example.retainedRow}"]`).evaluate(n => {
         const b = n.getBoundingClientRect(), c = n.closest('.matrix-card')!.getBoundingClientRect();
         return { x: b.x - c.x, y: b.y - c.y, w: b.width, h: b.height };
       });
@@ -77,7 +77,7 @@ for (const example of [
   }
   await expect(stage).toHaveAttribute('data-owner', 'after');
   await expect(stage.locator(`[data-composition-layer="after"] [data-poly="name-${1 - example.retainedRow}"]`)).toHaveText('6');
-  const retainedRhs = stage.locator(`[data-composition-layer="after"] [data-poly="name-${example.retainedRow}"]`);
+  const retainedRhs = stage.locator(`[data-composition-layer="after"] [data-natural-key="name-${example.retainedRow}"]`);
   await expect(retainedRhs).toHaveText(example.retainedRhs);
   const crop = decodePngRgba(await retainedRhs.screenshot({ path: info.outputPath('retained-rhs.png') }));
   const inkPixels = Array.from({ length: crop.width * crop.height }, (_, i) => crop.pixels[i * 4]!).filter(n => n > 100).length;

@@ -25,11 +25,18 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The user accepted both composed examples and requested natural resting notation.
+The [natural-layout candidate](reviews/2026-10-12-natural-collection-layout.md)
+uses complete native KaTeX rows, measured fragment reflow, and the existing
+working layout across the shared collection family. The
+`run-contract.kp.natural-collection-layout-v1` checkpoint concerns natural
+spacing and preparation cadence, not new semantics or catalogue promotion.
+
 The user accepted the composed explanation (“excellent! continue”). The
 existing-host `?view=row-composition` collects the original equations, adds row
 2 to row 1 and expands the checked result. `run-contract.kp.row-composition-v1`
-is complete. The bounded continuation `run-contract.kp.row-composition-reuse-v1`
-pressures the same motion with source-authored equations, annotations and the
+is complete. The completed continuation `run-contract.kp.row-composition-reuse-v1`
+proved bounded reuse with source-authored equations, annotations and the
 opposite receiving row at `&example=eliminate-second`. The
 [approved boundary and evidence](reviews/2026-10-12-post-linked-equations.md)
 preserve standalone defaults; no general composer or wider collection support

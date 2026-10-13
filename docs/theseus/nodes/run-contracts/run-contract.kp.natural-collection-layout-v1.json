@@ -1,0 +1,79 @@
+{
+  "id": "run-contract.kp.natural-collection-layout-v1",
+  "kind": "run-contract",
+  "title": "Natural resting equations",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-12-natural-collection-layout.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:matrix-pouring",
+    "npm run visual:row-operation",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation; npm run test:matrix-pouring; npm run typecheck",
+      "status": "passed",
+      "scope": "Semantic preservation and typed native layout adapter",
+      "checkedAt": "2026-10-13T05:25:47.315Z",
+      "notes": "18 row and 9 collection tests pass; full types pass. Source APIs, checked referents and matrix/arithmetic endpoints preserved. Natural equation layout is renderer-owned."
+    },
+    {
+      "command": "npm run visual:matrix-pouring; npm run visual:row-operation",
+      "status": "passed",
+      "scope": "Natural endpoint and existing host preservation",
+      "checkedAt": "2026-10-13T05:25:48.715Z",
+      "notes": "11 collection and 14 row Chromium checks pass. Additional focused natural-layout rerun passes after stronger plain-KaTeX size comparison. Initial raster seam failed with wrapper bounds; repaired using existing subtree paint measurement. Old working-token assertions now follow actual paint owner, retaining full-frame ink checks. Reverse/seek/resize and matrix handoffs preserved; human review pending."
+    },
+    {
+      "command": "npm run measure:semantic-cost; npm run visual:semantic-cost -- --grep one-and-ten",
+      "status": "failed",
+      "scope": "Initial feature-cost gates before documented amendments",
+      "checkedAt": "2026-10-13T05:25:49.484Z",
+      "notes": "Bundle union 134207 JS exceeded 131500. Representative collection 404 DOM elements exceeded 340. Diagnosed native rows and shared annotation/paint measurement cost; exact scope and amendments in docs/project/decisions/2026-10-12-natural-layout-cost-boundary.md. Actual browser invocation used the spaced one and ten test-name filter."
+    },
+    {
+      "command": "npm run build:semantic-cost; npm run measure:semantic-cost; npm run visual:semantic-cost",
+      "status": "passed",
+      "scope": "Both production builds, complete closures and scoped one/ten-instance lifecycle",
+      "checkedAt": "2026-10-13T05:25:50.247Z",
+      "notes": "138-module product and 76-module cost-harness builds pass. All consumer gates pass after explicit bounded amendments. Browser test selected one and ten instances only: DOM 404/4040/3370, mount 26.4/123/99.8 ms, p95 frames 17.3/17.2/17.1 ms. Baseline nodes/listeners restored after cycles, zero new warm assets. Full cold/warm transfer test was not rerun. Final cost evidence uses rebuilt harness; earlier stale-harness pass is not candidate evidence."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: one shared-family natural-layout package implemented and checked. Review ordinary resting equations, smooth preparation and natural expanded endpoint on row-composition and polynomial routes. No other renderer migration."
+  },
+  "allowedWork": [
+    "Shared collection layout adapter, native fragment measurements and scoped preservation checks"
+  ],
+  "disallowedWork": [
+    "No semantic changes, other renderer migrations or new arithmetic"
+  ],
+  "goal": "Read natural equations before and after shared collection motion",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 1,
+  "commitCadence": "One checked reversible package; backup before review",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human review of natural layout and preparation cadence"
+  ],
+  "slices": [
+    {
+      "id": "natural-layout",
+      "title": "Native-equation-layout",
+      "summary": "Implement user-approved family-wide natural endpoints through native KaTeX fragment layout.",
+      "status": "in-progress"
+    }
+  ]
+}

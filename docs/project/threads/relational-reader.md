@@ -5,12 +5,19 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 12 natural-layout continuation: both composition callers are accepted.
+The user requested ordinary equation spacing at rest, opening only for the
+explanation and returning naturally on expansion. The shared collection view
+now has a native KaTeX layout candidate; see the
+[review boundary](../reviews/2026-10-12-natural-collection-layout.md).
+`run-contract.kp.natural-collection-layout-v1` owns its visual checkpoint.
+
 October 12 composition continuation: the user accepted the
 [composition proposal](../reviews/2026-10-12-post-linked-equations.md). One
 existing-host explanation connects collection, a checked addition and expansion,
 with actual referents retained and matching native paint handoffs.
 `run-contract.kp.row-composition-v1` is complete. The user requested continuation;
-`run-contract.kp.row-composition-reuse-v1` tests the opposite receiving row through
+`run-contract.kp.row-composition-reuse-v1` completed the opposite receiving row through
 a local typed source and unchanged motion. Preserve the
 standalone collection/workbench and do not infer a general composition format.
 

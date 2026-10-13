@@ -2,7 +2,8 @@
   "id": "run-contract.kp.row-composition-reuse-v1",
   "kind": "run-contract",
   "title": "Author a second composed row explanation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -43,8 +44,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: implementation and preservation checks pass. Review /experiments/rectangular-product/?view=row-composition&example=eliminate-second. One source-reuse package awaits changed receiving-row visual acceptance. Original exemplar accepted and closed."
+    "state": "complete",
+    "summary": "COMPLETE: typed source and opposite receiving-row caller accepted."
   },
   "allowedWork": [
     "Typed local source, one changed receiving-row caller, preserved host and scoped checks"
@@ -58,8 +59,8 @@
     {
       "id": "source-reuse",
       "title": "Source-driven-composition",
-      "summary": "User continuation after visual acceptance; bounded authoring reuse on the accepted host.",
-      "status": "in-progress"
+      "summary": "User accepted second caller: This looks good. Follow-up is natural resting layout, not rejection of reuse.",
+      "status": "complete"
     }
   ]
 }

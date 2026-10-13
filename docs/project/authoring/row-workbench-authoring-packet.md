@@ -100,8 +100,9 @@ as a recommended presentation or promoting it broadly.
 
 ## Composed explanation and bounded authoring reuse
 
-The original composed explanation was accepted (“excellent! continue”). Its
-source parameterization is now pressured by a second receiving-row caller.
+Both composed explanations are accepted. Their shared collection view now has
+a natural resting-layout candidate, recorded in
+`../reviews/2026-10-12-natural-collection-layout.md`.
 
 `?view=row-composition` now uses the actual `linearSystemModel` objects through
 collection, one checked row addition and reverse collection of the derived

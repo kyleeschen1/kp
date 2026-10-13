@@ -23,6 +23,14 @@ Preview on the shared server:
 
 ## What authors change
 
+Natural resting-layout candidate: all collection callers now begin with native
+whole-equation spacing. The renderer measures annotated fragments and opens them
+into the accepted grid before explicit units, zeros and signed grouping appear.
+Reverse collection settles back into the same native equations. This is a shared
+view change; sources, matrix geometry and arithmetic remain unchanged. Review is
+tracked in `../reviews/2026-10-12-natural-collection-layout.md`; it is not a global
+typography migration or native compositor certification.
+
 The source supplies stable ID, coefficients, explicitly ordered expressions,
 domain, annotations, optional row/column focus and optional beat pacing. The
 renderer supplies geometry, paths, easing and brackets. For example:

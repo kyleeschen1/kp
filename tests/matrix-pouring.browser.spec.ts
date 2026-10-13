@@ -2,6 +2,55 @@ import { test, expect } from '@playwright/test';
 import { renderCollectionReading } from '../src/experiments/rectangular-product/collection-reading.ts';
 import { linearSystemModel } from '../src/experiments/rectangular-product/linear-system-source.ts';
 import { polynomialModel } from '../src/experiments/rectangular-product/polynomial-model.ts';
+import { reorderedPolynomialModel } from '../src/experiments/rectangular-product/collection-variation.ts';
+import { normalizedPngRasterDelta } from './helpers/png-raster-diff.ts';
+import { renderLatexToHtml } from '../src/rendering/katex-adapter.ts';
+
+test('natural equations open from native typesetting and return without a paint jump', async ({ page }, info) => {
+  for (const [query, model] of [['view=system', linearSystemModel], ['view=polynomials', polynomialModel], ['view=polynomials&example=reordered', reorderedPolynomialModel]] as const) {
+    await page.goto(`/experiments/rectangular-product/?${query}`);
+    const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+    const stage = root.locator('.polynomial-stage'), slider = root.getByRole('slider');
+    await slider.evaluate(n => n.setAttribute('step', 'any'));
+    const seek = (phase: number) => slider.evaluate((n, p) => {
+      if (!(n instanceof HTMLInputElement)) throw new Error('Expected canonical scrubber.');
+      n.value = String(p); n.dispatchEvent(new Event('input', { bubbles: true }));
+    }, phase * model.stops[1]!);
+    const styles = () => stage.locator('[style]').evaluateAll(ns => ns.map(n => n.getAttribute('style')));
+    await seek(0);
+    const original = await styles();
+    const rows = stage.locator('.poly-natural-row');
+    const equations = model.expandedEquation.slice('\\begin{gathered}'.length, -'\\end{gathered}'.length).split('\\\\');
+    for (const [r, row] of (await rows.all()).entries()) {
+      const delta = await row.evaluate((node, html) => {
+        const plain = document.createElement('div'); plain.className = node.className;
+        plain.style.cssText = node.getAttribute('style')!; plain.style.visibility = 'hidden';
+        plain.innerHTML = html; node.parentElement!.append(plain);
+        const a = node.getBoundingClientRect(), b = plain.getBoundingClientRect();
+        plain.remove(); return { width: Math.abs(a.width - b.width), height: Math.abs(a.height - b.height) };
+      }, renderLatexToHtml(equations[r]!, { displayMode: false }));
+      expect(delta.width, 'bindings must preserve ordinary whole-equation spacing').toBeLessThan(.1);
+      expect(delta.height, 'bindings must preserve native baseline metrics').toBeLessThan(.1);
+    }
+    const native = await stage.screenshot({ path: info.outputPath(`${model.id}-natural.png`), scale: 'css' });
+    await seek(.65 - .000001);
+    const before = await stage.screenshot({ path: info.outputPath(`${model.id}-natural-handoff-before.png`), scale: 'css' });
+    await seek(.65 + .000001);
+    const after = await stage.screenshot({ path: info.outputPath(`${model.id}-natural-handoff-after.png`), scale: 'css' });
+    expect(normalizedPngRasterDelta(before, after), 'native-fragment to working-token paint').toBeLessThan(.0002);
+    await seek(1); await seek(.3); const middle = await styles();
+    await seek(0); await seek(.3); expect(await styles()).toEqual(middle);
+    await seek(0); expect(await styles()).toEqual(original);
+    expect(normalizedPngRasterDelta(native, await stage.screenshot({ scale: 'css' }))).toBe(0);
+    // Resizing must remeasure from rest, never from previously translated fragments.
+    await seek(.3); await page.setViewportSize({ width: 1100, height: 800 });
+    await expect.poll(() => stage.evaluate(n => n.clientWidth)).toBeGreaterThan(680);
+    await page.waitForTimeout(50); await seek(0);
+    const equalCenters = await stage.locator('[data-natural-key^="equals-"]').evaluateAll(ns => ns.map(n => { const b = n.getBoundingClientRect(); return b.x + b.width / 2; }));
+    expect(Math.abs(equalCenters[0]! - equalCenters[1]!)).toBeLessThan(.1);
+    await root.locator('.matrix-card').screenshot({ path: info.outputPath(`${model.id}-natural-resized.png`) });
+  }
+});
 
 test('settling and all enclosures form one reversible event before the completed equation holds', async ({ page }, info) => {
   for (const [view, model] of [['polynomials', polynomialModel], ['system', linearSystemModel]] as const) {
@@ -217,7 +266,9 @@ test('polynomial extraction retains coefficient grid and shared basis through re
     if (phase >= 1) expect(await positions()).toEqual(grid);
     const before = await poses(); await slider.fill('1'); await slider.fill('0'); await slider.fill(position);
     expect(await poses()).toEqual(before);
-    for (const ink of await root.locator('[data-poly="name-0"] .katex *').all()) await expect(ink).toHaveCSS('visibility', 'visible');
+    const activeName = phase < .65 ? root.locator('[data-natural-key="name-0"]') : persistentName;
+    await expect(activeName).toHaveCSS('visibility', 'visible');
+    if (phase < .65) await expect(persistentName).toHaveCSS('visibility', 'hidden');
     if ([1, 3, 4, 5, 8].includes(phase)) expect(await persistentName.screenshot()).toEqual(namePaint);
     if (phase >= 2.2 && phase <= 4.1) await expect(root.locator('[data-poly="equals-0"]')).toHaveCSS('opacity', '0');
     if (phase === 6) {
@@ -237,7 +288,7 @@ test('polynomial extraction retains coefficient grid and shared basis through re
       for (let i = 1; i < centers.length; i++) expect(Math.abs(Math.hypot(centers[i]!.x - centers[i - 1]!.x, centers[i]!.y - centers[i - 1]!.y) - 72)).toBeLessThan(.25);
     }
     const card = root.locator('.matrix-card');
-    const cardBox = (await card.boundingBox())!, nameBox = (await persistentName.boundingBox())!;
+    const cardBox = (await card.boundingBox())!, nameBox = (await activeName.boundingBox())!;
     const capture = await card.screenshot({ path: info.outputPath(`polynomial-phase-${phase}.png`), scale: 'css' });
     const inkPixels = await page.evaluate(async ({ png, box }) => {
       const img = new Image(); img.src = `data:image/png;base64,${png}`; await img.decode();
