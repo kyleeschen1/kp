@@ -10,4 +10,4 @@ export {
   negateExactRational as negateKpRational,
   subtractExactRationals as subtractKpRationals,
   type NormalizedExactRational as KpNormalizedRational
-} from "../../protocols/public-api.ts";
+} from "../../protocols/exact-rational-public-api.ts";

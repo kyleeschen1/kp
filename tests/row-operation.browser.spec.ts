@@ -3,7 +3,7 @@ import { rowOperation } from '../src/experiments/rectangular-product/row-operati
 
 test('whole-row replacement preserves source and RHS lineage through reversible fusion and docking', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/experiments/rectangular-product/?view=row-operation');
+  await page.goto('/experiments/rectangular-product/?view=row-operation&guided=1');
   const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
   await expect(root.locator('.katex-error')).toHaveCount(0);
   const slider = root.getByRole('slider', { name: 'Animation position' });
@@ -39,7 +39,7 @@ test('whole-row replacement preserves source and RHS lineage through reversible 
 
 test('row operation shares reduced-motion navigation, restoration, theme and disposal', async ({ page }, info) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/experiments/rectangular-product/?view=row-operation#replace');
+  await page.goto('/experiments/rectangular-product/?view=row-operation&guided=1#replace');
   const root = page.locator('#rectangular-player'); await expect(root).toHaveAttribute('data-ready', 'true');
   await expect(root).toHaveAttribute('data-milestone', 'replace');
   await root.getByRole('button', { name: 'Next', exact: true }).click(); await expect(root).toHaveAttribute('data-milestone', 'why');

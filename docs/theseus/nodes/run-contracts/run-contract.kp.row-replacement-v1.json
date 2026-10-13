@@ -95,11 +95,46 @@
       "scope": "repeatable exact operations and transaction authority",
       "checkedAt": "2026-10-13T00:29:27.162Z",
       "notes": "Six tests pass: exact fractional inverses for all three operations; RHS and retained referents; integer compatibility; invalid inputs; stale transactions, cancellation, undo, redo and history branching. Full typecheck also passes."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "failed",
+      "scope": "initial repeatable-workbench import and delivery budgets",
+      "checkedAt": "2026-10-13T00:36:31.880Z",
+      "notes": "125476-byte all-mode JS closure exceeded 116000; attribution exposed unrelated protocol schema initialization. Narrow public rational entrypoint saved 3752 bytes on the same revision. Explicit bounded feature/activation and composition headroom amendment documented; no consumer omitted."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "final complete consumer delivery gates",
+      "checkedAt": "2026-10-13T00:36:33.006Z",
+      "notes": "Production build passes. All-mode 122023 JS / 16832 CSS, cold 94838 / 14686, compact workbench 105248 / 15202, guided 112456 / 15571 gzip bytes. New forbidden-schema gate and all existing consumers pass under documented amendment."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repeatable workbench and narrow rational entrypoint",
+      "checkedAt": "2026-10-13T00:36:33.891Z",
+      "notes": "Full app, node, tests, Svelte and domains passed. Test typecheck rerun after final browser case and passes. Twelve arithmetic/public-boundary tests and concept-room gate pass; deep-import rejection retained."
+    },
+    {
+      "command": "npm run visual:row-operation",
+      "status": "passed",
+      "scope": "compact sequence and preserved guided exemplar",
+      "checkedAt": "2026-10-13T00:36:34.757Z",
+      "notes": "Five Chromium cases pass: four-step mixed sequence, persistent DOM on swaps, exact endpoints, deterministic reverse scrubbing, Undo/Redo, invalid inputs, cancel/reset, reduced motion/disposal, negative fractional multiply-then-add, source stability and equality withdrawal. Captures inspected; human visual review pending."
+    },
+    {
+      "command": "npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "accepted host modes preservation",
+      "checkedAt": "2026-10-13T00:36:35.641Z",
+      "notes": "All ten Chromium cases pass for existing collection, polynomial, system, reordered, numeric and structural modes."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: semantic package complete; first row-replacement visual candidate checked and ready at rectangular-product view=row-operation. Await choreography and explanatory-clarity review before completing exemplar package or generalizing. One of two packages complete."
+    "summary": "HUMAN_CHECKPOINT: 1 of 2 packages complete. Exact authority and transaction history checked; compact four-operation exemplar ready for visual judgment. Guided addition retained at guided=1; generalization and broader browser/shape work await acceptance."
   },
   "allowedWork": [
     "User-approved revision: exact rational swap, nonzero scale and row addition; compact repeatable same-host system, history, controls and checks"
@@ -126,7 +161,7 @@
     {
       "id": "row-exemplar",
       "title": "Compact persistent operation sequence checkpoint",
-      "summary": "Compact persistent workbench implemented; initial Chromium sequence and guided preservation checks pass. Inspecting frames and complete activation costs before visual review.",
+      "summary": "HUMAN_CHECKPOINT: compact persistent swap, scale and add-multiple workbench ready at view=row-operation. Five scoped Chromium cases, ten preservation cases, exact semantics, typecheck and bounded delivery gates pass. Await repeated-sequence visual review; no renderer promotion.",
       "status": "in-progress"
     }
   ]

@@ -30,6 +30,58 @@ semantic expansion is separately testable. Stop for review of a repeated sequenc
 before reusable promotion or a wider visual rollout. Focused exact arithmetic,
 history/cancellation tests, type checks and Chromium captures precede that gate.
 
+## Current compact candidate
+
+Open `http://127.0.0.1:8000/experiments/rectangular-product/?view=row-operation`.
+Press **Next example step** four times: exchange rows, add row 1 to row 2,
+scale row 2 by 1/2, then exchange rows again. The result is
+`[3,-1]ᵀ = [[1,0,1/2],[0,1,-2]] [x,y,z]ᵀ`. This is still an underdetermined
+system, not a claimed unique solution. Apply also accepts manually chosen rows
+and factors; Reset restores the example sequence after manual exploration.
+
+Review whether this feels like repeatedly editing one system, rather than
+restarting a lecture. Rows stay near their destinations; addition uses the gap
+between rows, and multiplication by one is omitted. RHS and coefficients share
+each operation. The unknown vector and enclosure locations remain fixed.
+Equality withdraws before arithmetic opens and returns after the equation
+settles. Swap carries existing DOM occurrences; unchanged rows retain their
+semantic referents and native nodes. Changed values cite their contributors.
+
+Pause and scrub an active operation, Finish it, or Cancel without committing.
+Undo traverses the saved operation backward; Redo reapplies it. History includes
+before/after systems, the exact inverse, and the residual identity explaining
+solution preservation. The semantic checker supports exact safe-integer rational
+leaves; this local **two-equation, three-unknown** layout rejects numerators
+outside -99…99 or denominators above 9, including intermediates, before changing
+history. Wider values and other shapes need a separately reviewed presentation.
+
+The compact host is a local native KaTeX/SVG adapter using the existing reader
+clock and contributor-fusion sampler. It does not introduce a promoted Gaussian
+renderer, auto-solver, generic lesson mode, or native-compositor certification.
+Only this exemplar is proposed for visual acceptance. Existing collection,
+numeric pouring, structural and guided-addition paths remain available.
+
+Checks for this revision: six semantic/transaction tests; twelve neutral exact
+arithmetic and architecture tests; the concept-room import gate; full app,
+node, test, Svelte and domain type checks; scoped Chromium operation/history/
+cancellation/reversal/theme checks and ten existing pouring/collection cases;
+production build and complete-consumer cost measurement. Initial test failures
+were corrected (range values needed leading zeroes; two test annotations needed
+the actual union type). The original integer API now delegates to the rational
+checker. Human visual acceptance and broad browser/shape promotion remain pending.
+
+The measured protocol import fanout was repaired through one explicit narrow
+public subpath, with preserved deep-import rejection and arithmetic conformance.
+See the [cost amendment](../decisions/2026-10-12-repeatable-row-cost-boundary.md)
+for before/after attribution, complete activation gates, bounded ceilings and
+limitations. First semantic checkpoint: `23d090c2d`. Theseus owns subsequent
+verification receipts and the pending visual checkpoint.
+
+## Previous guided candidate: retained provenance
+
+The sections below describe the earlier unit-addition walkthrough, now at
+`?view=row-operation&guided=1`; they do not describe the default compact route.
+
 Authorized October 12 by “go” after the bounded collection closeout recommended
 one elementary row operation with explicit solution-set preservation.
 

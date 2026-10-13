@@ -14,6 +14,10 @@ test("architecture fitness allows declared dependencies through public APIs", ()
       source: 'import type {} from "../protocols/public-api.ts";'
     },
     {
+      path: "domains/exact-value.ts",
+      source: 'export {} from "../protocols/exact-rational-public-api.ts";'
+    },
+    {
       path: "src/app-adapters/room.ts",
       source: 'const projection = import("../projections/public-api.ts");'
     }

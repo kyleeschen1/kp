@@ -111,7 +111,10 @@ test("compatibility facades delegate to one exact-rational implementation", asyn
   ]);
 
   assert.match(protocolApi, /from "\.\/exact-rational\.ts"/);
-  assert.match(domainFacade, /from "\.\.\/\.\.\/protocols\/public-api\.ts"/);
+  assert.match(domainFacade, /from "\.\.\/\.\.\/protocols\/exact-rational-public-api\.ts"/);
+  const narrowApi = await readFile('protocols/exact-rational-public-api.ts', 'utf8');
+  assert.match(narrowApi, /from '\.\/exact-rational\.ts'/);
+  assert.doesNotMatch(narrowApi, /from ['"](?!\.\/exact-rational\.ts)/);
   assert.match(providerFacade, /from "\.\.\/\.\.\/protocols\/public-api\.ts"/);
 
   // Facades may preserve names, but normalization and bigint arithmetic must

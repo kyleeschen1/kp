@@ -25,12 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-October 12 follow-up: user authorized the proposed elementary row-operation
-exemplar. The [row-replacement candidate](reviews/2026-10-12-row-replacement-exemplar.md)
-reuses the accepted system endpoint, contributor fusion and shared player.
-`run-contract.kp.row-replacement-v1` owns its first visual checkpoint. The
-candidate adds R2 to R1 including RHS, retains R2 and explains inverse recovery;
-no elimination engine or general row-operation renderer is promoted.
+October 12 follow-up: user revised the elementary row-operation exemplar into
+compact, repeatable swap, scale and add-multiple operations on one persistent
+system. The [current candidate](reviews/2026-10-12-row-replacement-exemplar.md#current-compact-candidate)
+has exact rational authority, atomic history and Undo/Redo on the same host.
+`run-contract.kp.row-replacement-v1` owns its pending visual checkpoint; the old
+guided walkthrough remains available. No solver or general renderer is promoted.
 
 October 12: the user accepted both collection examples and the final overlapping
 settling/enclosure treatment. The bounded authoring-reuse milestone is complete:

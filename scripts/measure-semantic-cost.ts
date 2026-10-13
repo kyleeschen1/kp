@@ -11,14 +11,17 @@ import budgets from './semantic-cost-budgets.json' with { type: 'json' };
 const root = 'dist/matrix-interpretations';
 const manifest: KpBundleManifest = JSON.parse(await readFile(`${root}/.vite/manifest.json`, 'utf8'));
 const inventory: { file: string; modules: string[] }[] = JSON.parse(await readFile(`${root}/module-inventory.json`, 'utf8'));
-const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
+const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
 const closures = [];
 for (const page of pages) {
   const collection = page.startsWith('collection-');
-  const html = `experiments/${page === 'matrix-composition' ? 'matrix-column-combinations' : collection || page === 'rectangular-default' ? 'rectangular-product' : page}/index.html`;
+  const row = page.startsWith('row-');
+  const html = `experiments/${page === 'matrix-composition' ? 'matrix-column-combinations' : collection || row || page === 'rectangular-default' ? 'rectangular-product' : page}/index.html`;
   // Composition activates both lazy modules; include their full dependencies,
   // not only the ordinary page's cold static closure.
-  const activation = collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
+  const activation = row ? page === 'row-workbench' ? ['src/experiments/rectangular-product/row-workbench.ts']
+    : ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/row-operation-view.ts']
+    : collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
     ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : [];
   const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-composition' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, resolveKpBundleActivationRoots(manifest, inventory, activation))])];
   const measured = await Promise.all(files.map(async file => {

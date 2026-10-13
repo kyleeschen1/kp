@@ -63,7 +63,7 @@ test("the neutral protocol is the only arithmetic implementation", async () => {
   ]);
 
   assert.doesNotMatch(authority, /(?:domains|providers|src)\//);
-  assert.match(domainFacade, /from "\.\.\/\.\.\/protocols\/public-api\.ts"/);
+  assert.match(domainFacade, /from "\.\.\/\.\.\/protocols\/exact-rational-public-api\.ts"/);
   assert.doesNotMatch(
     domainFacade,
     /\bexport\s+function\b|\bwhile\s*\(|\bObject\.freeze\b/

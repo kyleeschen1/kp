@@ -1,20 +1,22 @@
 {
   "schemaVersion": 1,
-  "rationale": "October 1 ceilings remain except the explicit October 12 rectangular all-view amendment: 111179 JS / 16157 CSS measured against 116000 / 17000 allowed. The cold default retains 100000 / 16000; each collection activation has its own complete closure gate. Collection DOM allows 340 elements against 297 measured; all other DOM limits unchanged. Timings and heap remain observations. See docs/project/decisions/2026-10-12-la-collection-cost-boundary.md and docs/project/reviews/2026-10-01-basis-composition.md.",
+  "rationale": "October 12 repeatable-row amendment: all-view union measured 122023 JS / 16832 CSS after removing protocol-schema import fanout; allow 124500 / 17000 and retain the 100000 / 16000 cold gate. New complete workbench and guided closures have separate limits. Composition measured 111035 after generated chunk changes; its 111000 limit gains 500 bounded bytes. Collection DOM and all other ceilings remain unchanged. See docs/project/decisions/2026-10-12-repeatable-row-cost-boundary.md and 2026-10-12-la-collection-cost-boundary.md. Timings and heap remain observations.",
   "entries": {
     "dot-product-passage": { "jsGzip": 100000, "cssGzip": 16000 },
-    "rectangular-product": { "jsGzip": 116000, "cssGzip": 17000 },
+    "rectangular-product": { "jsGzip": 124500, "cssGzip": 17000 },
     "rectangular-default": { "jsGzip": 100000, "cssGzip": 16000 },
+    "row-workbench": { "jsGzip": 110000, "cssGzip": 16000 },
+    "row-guided": { "jsGzip": 115000, "cssGzip": 16000 },
     "collection-polynomials": { "jsGzip": 112000, "cssGzip": 16000 },
     "collection-system": { "jsGzip": 112000, "cssGzip": 16000 },
     "collection-reordered": { "jsGzip": 112000, "cssGzip": 16000 },
     "matrix-column-product": { "jsGzip": 111000, "cssGzip": 16000 },
     "matrix-column-combinations": { "jsGzip": 111000, "cssGzip": 16000 },
     "matrix-examples": { "jsGzip": 1200, "cssGzip": 16000 },
-    "matrix-composition": { "jsGzip": 111000, "cssGzip": 16000 }
+    "matrix-composition": { "jsGzip": 111500, "cssGzip": 16000 }
   },
   "menuWithDefaultChild": { "jsGzip": 113000, "cssGzip": 32000 },
-  "forbiddenModuleFragments": ["research/", "src/experiments/la-knowledge-graph/", "node_modules/three/", "src/editor/", "src/experiments/semantic-cost/"],
+  "forbiddenModuleFragments": ["research/", "src/experiments/la-knowledge-graph/", "node_modules/three/", "src/editor/", "src/experiments/semantic-cost/", "protocols/dev-review", "protocols/linear-problem", "protocols/runtime-schema.ts"],
   "domElementsPerInstance": { "dot": 520, "rows": 500, "columns": 640, "collection": 340 },
   "newAssetsAfterWarmup": 0
 }

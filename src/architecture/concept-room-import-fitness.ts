@@ -47,7 +47,7 @@ export function checkKpConceptRoomImports(
         continue;
       }
 
-      if (targetFile !== targetBoundary.publicEntryPoint) {
+      if (targetFile !== targetBoundary.publicEntryPoint && !targetBoundary.publicSubpaths?.includes(targetFile)) {
         violations.push({
           sourceFile: file.path,
           specifier,

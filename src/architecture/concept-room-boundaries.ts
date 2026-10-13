@@ -12,6 +12,7 @@ export interface KpConceptRoomBoundary {
   readonly id: KpConceptRoomBoundaryId;
   readonly root: string;
   readonly publicEntryPoint: string;
+  readonly publicSubpaths?: readonly string[];
   readonly mayImport: readonly KpConceptRoomBoundaryId[];
 }
 
@@ -28,6 +29,7 @@ export const kpConceptRoomBoundaries = [
     id: "protocols",
     root: "protocols",
     publicEntryPoint: "protocols/public-api.ts",
+    publicSubpaths: ["protocols/exact-rational-public-api.ts"],
     mayImport: []
   },
   {
