@@ -130,11 +130,18 @@
       "scope": "accepted host modes preservation",
       "checkedAt": "2026-10-13T00:36:35.641Z",
       "notes": "All ten Chromium cases pass for existing collection, polynomial, system, reordered, numeric and structural modes."
+    },
+    {
+      "command": "npm run visual:row-operation",
+      "status": "passed",
+      "scope": "accepted workbench compact spacing refinement",
+      "checkedAt": "2026-10-13T00:40:58.492Z",
+      "notes": "User accepted the prior workbench and approved tighter fixed spacing. Five Chromium cases pass; initial, fractional addition and scaling captures inspected. Row pitch 90, column pitch 90, stage 580 by 240; 48-pixel arithmetic lane retained. Production build and semantic cost gates pass without budget changes."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: 1 of 2 packages complete. Exact authority and transaction history checked; compact four-operation exemplar ready for visual judgment. Guided addition retained at guided=1; generalization and broader browser/shape work await acceptance."
+    "summary": "HUMAN_CHECKPOINT: 1 of 2 packages complete. User accepted the repeatable interaction, then authorized tighter layout. That local refinement is ready with five browser checks, production build and unchanged cost gates passing."
   },
   "allowedWork": [
     "User-approved revision: exact rational swap, nonzero scale and row addition; compact repeatable same-host system, history, controls and checks"
@@ -161,7 +168,7 @@
     {
       "id": "row-exemplar",
       "title": "Compact persistent operation sequence checkpoint",
-      "summary": "HUMAN_CHECKPOINT: compact persistent swap, scale and add-multiple workbench ready at view=row-operation. Five scoped Chromium cases, ten preservation cases, exact semantics, typecheck and bounded delivery gates pass. Await repeated-sequence visual review; no renderer promotion.",
+      "summary": "Prior repeatable workbench accepted by user. Approved local spacing refinement implemented and checked: smaller fixed grid and chrome, same arithmetic clearance and semantics. HUMAN_CHECKPOINT for the tightened appearance; no wider promotion.",
       "status": "in-progress"
     }
   ]

@@ -32,6 +32,14 @@ history/cancellation tests, type checks and Chromium captures precede that gate.
 
 ## Current compact candidate
 
+The user accepted the repeatable workbench (“Looks great!”), then approved a
+further spacing pass. This local presentation refinement reduces row pitch
+110→90px, coefficient-column pitch 100→90px, and stage size 640×300→580×240px.
+Caption and control padding are tighter. The 48px arithmetic lane is retained
+for fractions and plus signs; the matrix does not expand during operations.
+Values, identities, timing, history and other host modes are preserved. The
+rollback unit is the workbench view geometry and its scoped stylesheet.
+
 Open `http://127.0.0.1:8000/experiments/rectangular-product/?view=row-operation`.
 Press **Next example step** four times: exchange rows, add row 1 to row 2,
 scale row 2 by 1/2, then exchange rows again. The result is

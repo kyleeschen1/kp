@@ -1,15 +1,16 @@
-.row-wb-stage { position: relative; width: 640px; min-width: 640px; margin-inline: auto; height: 300px; color: var(--kp-st-ink); }
+.row-wb-stage { position: relative; width: 580px; min-width: 580px; margin-inline: auto; height: 240px; color: var(--kp-st-ink); }
 .row-wb-token { position: absolute; left: 0; top: 0; white-space: nowrap; will-change: transform; }
 .row-wb-ink { display: inline-block; }
 .row-wb-bracket { position: absolute; fill: none; stroke: currentColor; stroke-width: 1.4; }
-.row-wb-equal { position: absolute; left: 165px; top: 150px; transform: translate(-50%, -50%); }
+.row-wb-equal { position: absolute; left: 150px; top: 120px; transform: translate(-50%, -50%); }
+.row-workbench .matrix-controls { padding: .5rem .75rem; gap: .5rem; }
 .row-workbench .matrix-controls label { display: inline-flex; align-items: center; gap: .4rem; }
 .row-workbench .matrix-controls input[data-factor] { flex: none; width: 4rem; min-width: 0; padding: .35rem; color: inherit; background: var(--kp-st-paper); border: 1px solid var(--kp-st-rule); border-radius: .3rem; }
 .row-workbench .matrix-controls [hidden] { display: none; }
 .row-workbench .matrix-controls[hidden] { display: none; }
-.row-workbench .matrix-cue { flex-wrap: wrap; gap: .75rem; }
+.row-workbench .matrix-cue { flex-wrap: wrap; gap: .5rem; min-height: 3rem; padding: .75rem 1rem .25rem; }
 .row-workbench .matrix-controls button:disabled { opacity: .45; cursor: default; }
-.row-workbench .row-wb-history { padding: 1rem; }
+.row-workbench .row-wb-history { padding: .6rem .75rem; }
 .row-workbench .row-wb-history li { margin-block: .75rem; }
 .row-workbench .row-wb-history [data-undone] { opacity: .6; }
-.row-workbench .row-wb-status { padding-inline: 1rem; min-height: 1.5em; }
+.row-workbench .row-wb-status { padding-inline: .75rem; margin-block: .4rem; min-height: 1.5em; }

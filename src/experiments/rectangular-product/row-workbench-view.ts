@@ -7,11 +7,11 @@ import './row-workbench.css';
 const ease = (p: number) => { const t = Math.max(0, Math.min(1, p)); return t * t * t * (t * (t * 6 - 15) + 10); };
 const ink = (node: HTMLElement) => node.firstElementChild as HTMLElement;
 const pose = (node: HTMLElement, x: number, y: number) => { node.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`; };
-const x = (column: number) => column === 3 ? 100 : 240 + column * 100;
-const y = (row: number) => 95 + row * 110;
+const x = (column: number) => column === 3 ? 90 : 220 + column * 90;
+const y = (row: number) => 75 + row * 90;
 const math = (latex: string) => renderLatexToHtml(latex, { displayMode: false });
 const brackets = (left: number, top: number, width: number, height: number) => `<svg class="row-wb-bracket" style="left:${left}px;top:${top}px" width="${width}" height="${height}" aria-hidden="true"><path d="M10 2H2V${height - 2}H10 M${width - 10} 2H${width - 2}V${height - 2}H${width - 10}"/></svg>`;
-export const rowWorkbenchStageHtml = `<div class="row-wb-stage" aria-hidden="true">${brackets(62, 66, 76, 168)}${brackets(197, 66, 286, 168)}${brackets(520, 48, 64, 204)}<span class="row-wb-equal">${math('=')}</span><div data-native></div><div data-transient></div>${['x', 'y', 'z'].map((v, i) => `<span class="row-wb-token" style="transform:translate(552px,${78 + i * 72}px) translate(-50%,-50%)">${math(v)}</span>`).join('')}</div>`;
+export const rowWorkbenchStageHtml = `<div class="row-wb-stage" aria-hidden="true">${brackets(52, 46, 76, 148)}${brackets(177, 46, 266, 148)}${brackets(480, 30, 64, 180)}<span class="row-wb-equal">${math('=')}</span><div data-native></div><div data-transient></div>${['x', 'y', 'z'].map((v, i) => `<span class="row-wb-token" style="transform:translate(512px,${60 + i * 60}px) translate(-50%,-50%)">${math(v)}</span>`).join('')}</div>`;
 
 /** Persistent semantic occurrences stay mounted. Only changed values are retired;
  * the shared fusion sampler owns evaluation, not the transport carrier. */
@@ -61,6 +61,8 @@ export function mountRowWorkbenchView(root: HTMLElement) {
     }
     const targetRow = op.kind === 'add' ? op.targetRow : op.row;
     const unitAddition = op.kind === 'add' && op.factor.numerator === op.factor.denominator;
+    // Preserve the arithmetic lane's clearance for fractions and the plus sign;
+    // compact the rest of the grid without expanding it during an operation.
     const targetY = y(targetRow), laneY = targetY + (targetRow === 0 ? 48 : -48);
     const entries = step.contributions.map(p => {
       const target = nodes.get(p.target.id)!, cx = x(p.column);
