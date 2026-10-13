@@ -25,11 +25,19 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13 frontier review: the user says the affine example works but objects
+to retreading old material. Desktop acceptance does not certify phone layout.
+The [next-frontier review](reviews/2026-10-13-next-frontier.md) recommends one
+small-change propagation explanation: composed functions, exact finite change,
+linear prediction and visible error. Existing calculus/LA foundations are
+preserved. This is a proposal, not new implementation authority; additional
+algebra parameter variants are not the recommended next work.
+
 October 13 authoring implementation: the user approved the diagnostic's next
 step. The [source-authored affine collection candidate](reviews/2026-10-13-authored-affine-collection.md)
 now derives `4(y+1)+3(y-2) → 7y-2` from one short source through existing checked
 trees, native notation, static readings and the canonical browser. The original
-asset is byte-identical. Desktop visual review is next; an existing phone
+asset is byte-identical. Desktop visual review was accepted; an existing phone
 two-row/one-row continuity incompatibility remains explicitly unverified. This
 is a bounded two-product shape and fixed operation sequence, not a general
 solver or arbitrary proof authoring. Gaussian elimination stays frozen.

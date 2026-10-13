@@ -5,10 +5,16 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 13 frontier feedback: desktop affine candidate accepted, but the user
+wants a new explanatory frontier rather than more familiar examples. See the
+[small-change propagation recommendation](../reviews/2026-10-13-next-frontier.md).
+No new implementation is approved. Preserve the accepted work and the unresolved
+phone limitation; do not interpret acceptance as a catalogue rollout.
+
 October 13: following the rich authoring diagnostic, the user approved the
 [bounded source-to-projection implementation](../reviews/2026-10-13-authored-affine-collection.md).
 Its short affine source now drives checked mathematics and the existing desktop
-reader; the negative-result caller is awaiting visual judgment. The operation
+reader; the negative-result caller is now accepted on desktop. The operation
 order is still fixed, and the original asset remains byte-identical. The phone
 layout incompatibility affects both examples and is recorded as a separate
 unresolved limitation, not concealed by a new fallback. No new layout or motif
