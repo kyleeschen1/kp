@@ -2,7 +2,8 @@
   "id": "run-contract.kp.systems-contrast-reuse-v1",
   "kind": "run-contract",
   "title": "Sum-of-rows consistency contrast",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,11 +40,18 @@
       "scope": "Three-row seams and preservation of accepted callers",
       "checkedAt": "2026-10-13T17:40:11.380Z",
       "notes": "24 Chromium tests pass. Both 3x3 cases cross every operation seam continuously, reverse deterministically and retain both named subtraction milestones through RHS switching. Existing 2x2 and all generated cases remain passing. Intermediate and final screenshots inspected."
+    },
+    {
+      "command": "npm run visual:row-operation -- --project=firefox --project=webkit --grep contrast",
+      "status": "passed",
+      "scope": "Accepted bounded contrast supported-browser cohort",
+      "checkedAt": "2026-10-13T18:50:38.161Z",
+      "notes": "Six tests pass: both contrast tests in Chromium, Firefox and WebKit. Semantic endpoints, operation seams, reverse seek, case URL milestones, theme and narrow overflow checked. No runtime repair needed; no wider generated-system cross-browser certification claimed."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: the 3x3 sum-of-rows source is ready at row-composition example=contrast size=3. Review subtract-first then eliminate with both RHS vectors. All checks pass; accepted 2x2 and generator preserved. No additional implementation before this bounded review."
+    "state": "complete",
+    "summary": "COMPLETE: accepted 2x2 and 3x3 consistency comparisons, exact checked traces, preserved generator and focused cross-browser evidence. Compact/detail row-operation inspection is recommended as new scope, not started."
   },
   "allowedWork": [
     "One source-driven 3x3 paired comparison, existing host and checked row operations, preservation of accepted 2x2 caller"
@@ -57,8 +65,8 @@
     {
       "id": "reuse",
       "title": "Three-row-contrast",
-      "summary": "Extend local source content to a third-row sum dependency while preserving the accepted two-row default.",
-      "status": "in-progress"
+      "summary": "User accepted the 3x3 caller. Both bounded sources share the adapter and pass focused supported-browser checks; no runtime changes needed after acceptance.",
+      "status": "complete"
     }
   ]
 }

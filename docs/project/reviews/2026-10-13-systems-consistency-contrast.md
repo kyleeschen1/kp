@@ -1,5 +1,26 @@
 # Same coefficients, different consistency
 
+## Accepted bounded pair
+
+The user accepted the 3×3 caller with “approve. continue”. Both the doubled-row
+and sum-of-rows comparisons are now accepted local sources using one adapter.
+Post-acceptance `npm run visual:row-operation -- --project=firefox --project=webkit --grep contrast`
+passes all six tests (the npm command also selects Chromium): two contrast
+tests in Chromium, Firefox and WebKit. They cover the two-case navigation,
+3×3 operation seams, direct reversal, captions, theme and narrow overflow.
+This is supported-browser evidence for these bounded contrasts, not a claim
+that all generated systems or all KaTeX mechanisms are certified everywhere.
+No runtime changes were needed during closeout; prior mathematical, type and
+production-cost evidence remains applicable.
+
+Next recommendation: loop 4 from the next-ten-loops review, one row-operation
+step at two depths. A compact step should preserve the overall elimination
+argument; an explicit inspect action should expose the existing multiplication
+and addition detail, then return to the exact same checked state. Start with
+one add-multiple step, retain one semantic trace/playhead and current detailed
+presentation, and avoid a second arithmetic authority. This is proposed new
+scope, not an unrecorded continuation of the finished consistency run.
+
 ## Accepted continuation: a different dependency
 
 The user approved the 2×2 comparison and said “continue”. The next bounded

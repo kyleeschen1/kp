@@ -28,9 +28,13 @@ nor its evidence. The ledger remains retrievable at
 October 13 consistency contrast: the user approved the same-matrix comparison.
 The 2×2 exemplar is now accepted and its run complete. Approved continuation
 adds one 3×3 sum-of-rows caller at `?view=row-composition&example=contrast&size=3`;
-`run-contract.kp.systems-contrast-reuse-v1` owns its delivery. See the
+Both examples are now visually accepted, with focused Chromium, Firefox and
+WebKit checks passing; `run-contract.kp.systems-contrast-reuse-v1` is complete. See the
 [review and preservation boundary](reviews/2026-10-13-systems-consistency-contrast.md).
 The same source adapter handles both; no new renderer or general generator.
+Recommended next scope is compact row-operation playback with optional arithmetic
+inspection (loop 4), pending approval; do not open another implementation run
+from this recommendation alone.
 
 October 13 generator delivery: the accepted composition now drives generated
 2×2 and 3×3 systems with unique, infinite and inconsistent outcomes, exact

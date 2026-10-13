@@ -2,6 +2,17 @@
 
 ## October 13 composed explorer extension
 
+The accepted local consistency contrast now has two sources in
+`systems-contrast-sources.ts`: doubled rows (2×2) and a sum-of-rows dependency
+(3×3). The same builder retains A and unchanged RHS referents, compiles each
+exact elimination trace, and projects it through the existing composition
+view. The `contrast` example defaults to size 2; `&size=3` selects the second
+source. RHS case links retain named milestones; changing size restarts at the
+original equations. Both sources have semantic and Chromium/Firefox/WebKit
+evidence; see the [bounded review](../reviews/2026-10-13-systems-consistency-contrast.md).
+This is not a generic dependency-inference or paired-generation API. Changed
+source prose still needs review and trace-specific tests.
+
 The standalone interactive workbench below retains its 2-equation/3-unknown
 envelope. The composed host also accepts checked 2×2 and 3×3 systems, zero rows
 and exact fractions. `composeCheckedRowSteps` consumes 1–16 predecessor-linked
