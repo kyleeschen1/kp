@@ -9,8 +9,11 @@ October 12 linked-equation continuation: the user approved the next recommendati
 after accepting the two authored stories. The
 [same-host candidate](../reviews/2026-10-12-linked-row-equations.md) derives exact
 equations and bidirectional row correspondence from the current checked system.
-`run-contract.kp.linked-row-equations-v1` owns the compactness/clarity checkpoint.
-This does not add equation morphing, larger shapes or coefficient-level controls.
+`run-contract.kp.linked-row-equations-v1` records qualified acceptance and closeout:
+the user finds it fine but does not see using this animation. No layout promotion
+or further polish follows. The [composition recommendation](../reviews/2026-10-12-post-linked-equations.md)
+is the next proposed scope. This does not add equation morphing, larger shapes
+or coefficient-level controls.
 
 October 12 authored-operation continuation: the user approved the recommendation
 to pressure the workbench with redundancy versus inconsistency. One typed source

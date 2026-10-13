@@ -82,8 +82,9 @@ Use its domain-specific validation and located repair gaps; it is not an
 For repeatable row operations and authored redundant/inconsistent systems, use
 `row-workbench-authoring-packet.md`. Its accepted source supports two equations,
 three unknowns, exact checked operations and named annotations. The linked
-equation panel is a local review candidate derived from that same source; it
-does not introduce a new authoring schema or arbitrary elimination solver.
+equation panel is a technically accepted local inspection experiment, not a
+preferred teaching presentation. It does not introduce a new authoring schema
+or arbitrary elimination solver.
 
 For the existing momentum-energy derivation assumptions, select
 `mechanics.momentum-energy`. This exposes its mechanics-owned checker and

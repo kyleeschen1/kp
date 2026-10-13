@@ -1,6 +1,9 @@
 # Linked equations in the row workbench
 
-Status: implementation approved by “go” after the linked-equation recommendation.
+Status: bounded experiment complete. User feedback: “this is fine, although I
+don't see using this animation. proceed”. Accept technical adequacy, not product
+adoption or a reusable presentation standard. Do not invest further in this
+panel's appearance or promote it without a concrete explanatory use.
 
 Outcome: make each matrix row readable as a complete equation, with selection
 working in either representation. Both views derive from the same checked
@@ -75,7 +78,8 @@ select either numbered row or equation; run the next step; confirm the unchanged
 committed reference is clearly labeled during preview, then inspect `1 = 0`.
 Undo and Redo should update both representations. Judge compactness, the outline
 association and the usefulness of retaining a reference equation during motion.
-These subjective judgments remain pending; this is not shared-renderer promotion.
+The subsequent qualified acceptance closes this checkpoint; it does not establish
+that the user wants this layout in explanations or justify shared promotion.
 
 The generic impact selector had no focused rule for the local workbench and
 suggested repository-wide tests/build. The approved discovery contract instead

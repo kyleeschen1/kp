@@ -25,11 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-The user approved linked equations after accepting authored row stories.
-The [linked-equation candidate](reviews/2026-10-12-linked-row-equations.md)
-adds bidirectional row selection and exact committed equation readings on the
-same workbench. `run-contract.kp.linked-row-equations-v1` owns the new human
-checkpoint; accepted matrix motion and source contracts remain unchanged.
+The linked-equation experiment is complete with qualified acceptance: “this is
+fine, although I don't see using this animation”. Preserve its semantic and
+correspondence evidence; do not treat the panel as a preferred teaching layout
+or spend further polish on it. `run-contract.kp.linked-row-equations-v1` records
+closeout. The [next-step assessment](reviews/2026-10-12-post-linked-equations.md)
+recommends composing collection, a checked row operation and expansion into one
+explanation. This is proposed new implementation scope, not an active run.
 
 The user approved bounded authored-operation reuse after the accepted row
 workbench. Redundant and inconsistent systems now use one source interface and
@@ -38,7 +40,7 @@ The user accepted both examples (“these are good”). The
 [next-step review](reviews/2026-10-12-next-step-review.md) records the closeout;
 `run-contract.kp.row-authoring-v1` owns the completed bounded milestone. Start with
 the [authoring packet](authoring/row-workbench-authoring-packet.md). Linked
-equation interaction is the approved candidate above; reader validation remains deferred.
+equation interaction is the completed experiment above; reader validation remains deferred.
 
 October 12 follow-up: user revised the elementary row-operation exemplar into
 compact, repeatable swap, scale and add-multiple operations on one persistent

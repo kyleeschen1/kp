@@ -2,7 +2,8 @@
   "id": "run-contract.kp.linked-row-equations-v1",
   "kind": "run-contract",
   "title": "Linked row equations",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -57,8 +58,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: exact projection complete, linked-panel candidate checked. Review row outlines, compactness and committed-reference preview semantics before promotion. No equation morph or larger shape support."
+    "state": "complete",
+    "summary": "COMPLETE: two bounded packages checked and technically accepted with explicit user reservation about usefulness. Composition is proposed separately; no new implementation scope opened."
   },
   "allowedWork": [
     "Local equation projection, bidirectional row selection, static readings and lifecycle checks through existing semantic and focus owners"
@@ -78,8 +79,8 @@
     {
       "id": "linked-panel",
       "title": "Same-host linked equation checkpoint",
-      "summary": "Same-host equation panel and bidirectional row controls implemented; testing lifecycle, accessible reading and layout preservation.",
-      "status": "in-progress"
+      "summary": "User qualified acceptance: this is fine, although I do not see using this animation. Technical checkpoint closed; retain inspection evidence, no presentation promotion or further polish.",
+      "status": "complete"
     }
   ]
 }

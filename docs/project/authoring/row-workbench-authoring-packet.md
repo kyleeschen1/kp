@@ -72,7 +72,7 @@ It establishes same-shape authoring reuse, not a new geometry or general LA
 renderer. Acceptance covers the redundant and inconsistent stories; broader
 promotion still requires structural pressure beyond this fixed shape.
 
-## Linked equations candidate
+## Linked equations inspection experiment
 
 The same host now derives a conventional equation for each committed row. The
 source schema is unchanged: ordered unknowns, exact coefficients and independent
@@ -93,4 +93,7 @@ omitted zeros and implicit units, and supplies the existing cross-view map and
 attention compiler. The local panel uses the reader semantic-focus service;
 there is no second solver, clock or global focus store. Coefficient-level
 interaction and a general scene API are outside this candidate. The linked
-panel has its own [review checkpoint](../reviews/2026-10-12-linked-row-equations.md).
+panel's [review](../reviews/2026-10-12-linked-row-equations.md) is closed with
+qualified acceptance: technically fine, but the user does not anticipate using
+this animation. Retain its correspondence evidence without treating its layout
+as a recommended presentation or promoting it broadly.
