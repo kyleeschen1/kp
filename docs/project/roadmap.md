@@ -30,8 +30,12 @@ October 13 generator delivery: the accepted composition now drives generated
 elimination, echelon inspection, rank questions and free-parameter controls.
 Open `?view=row-composition&example=generated` on the rectangular-product host.
 The [delivery review](reviews/2026-10-13-systems-explorer-direction.md#generator-delivery)
-owns supported limits and evidence. The explorer is a working bounded candidate
-for final visual review; the older proposal-only statements below are historical.
+owns supported limits and evidence. The user accepted the explorer (“This is
+marvelous! resume”); the bounded generator/animated-solver outcome is complete.
+The older proposal-only and pending-review statements below are historical.
+Recommended next scope: a controlled contrast with the same coefficient matrix
+and different right-hand sides, explaining consistency. This is a proposal,
+not an additional approved run.
 
 October 13 implementation: user approved the discussed bounded explorer.
 `run-contract.kp.systems-explorer-v1` owns execution. Its first visual candidate

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.systems-explorer-v1",
   "kind": "run-contract",
   "title": "Checked systems explorer",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -85,8 +86,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: functional bounded systems generator and animated solver delivered at row-composition example=generated. Five of six packages complete; final square-layout/interface pacing review remains. No independent approved implementation remains before this visual gate."
+    "state": "complete",
+    "summary": "COMPLETE: all six packages delivered and visually accepted. Bounded 2x2 and 3x3 generation, checked elimination, zero/fraction presentation, echelon/rank questions and exact free-parameter inspection. Same-matrix consistency contrast recommended as new scope, not started."
   },
   "allowedWork": [
     "Existing LA semantic owners, bounded composition, zero and fractional presentation, generated checked systems and local interpretation interface"
@@ -137,8 +138,8 @@
     {
       "id": "explorer",
       "title": "Square-system-explorer",
-      "summary": "Functional generator, animated trace, echelon/rank questions and parameter controls delivered. All six size/outcome browser cases pass. Final human review of square layout and pacing remains.",
-      "status": "in-progress"
+      "summary": "User accepted the final explorer with This is marvelous! resume. Functional bounded generator, exact animated solver and structural inspection meet the approved outcome; all six packages complete. No runtime changes during closeout.",
+      "status": "complete"
     }
   ]
 }

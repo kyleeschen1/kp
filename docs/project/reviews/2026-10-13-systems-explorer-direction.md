@@ -2,6 +2,26 @@
 
 ## Generator delivery
 
+### Accepted closeout
+
+The user accepted the final explorer with “This is marvelous! resume”. This
+closes the remaining visual gate for the bounded square-system interface;
+existing programmatic evidence below remains valid because no runtime code
+changed during closeout. All six approved packages have reached their outcome.
+Acceptance does not establish learning effectiveness, arbitrary-system support
+or catalogue-wide renderer promotion.
+
+Recommended next bounded outcome: hold the coefficient matrix fixed while
+contrasting a compatible RHS with an incompatible RHS. Animate the same forward
+elimination, exposing `0 = 0` versus a contradiction. This directly addresses
+the common conflation of dependent equations with no solutions, using the
+accepted solver and motion rather than a new page family. The existing generator
+does not promise the same A when switching solution type, so this needs an
+explicit paired source and checked witnesses. Preserve current standalone
+generation, exact arithmetic and URL reproducibility; review one 2×2 pair before
+extending to 3×3. This is a recommendation requiring new scope approval, not a
+seventh package silently appended to the completed run.
+
 The user accepted the composed exemplar and requested continuation until the
 generator/animated solver exists. The working candidate is at
 `http://127.0.0.1:8000/experiments/rectangular-product/?view=row-composition&example=generated`.
