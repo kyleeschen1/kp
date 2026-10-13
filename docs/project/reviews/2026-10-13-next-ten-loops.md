@@ -1,6 +1,8 @@
 # Ten potential loops after natural layout
 
-Status: proposal only; no new implementation run authorized.
+Status: subsequent approval covers 1 → 2 → 3 → 5; remaining loops are proposals.
+See [accepted continuation and systems-explorer discussion](2026-10-13-systems-explorer-direction.md).
+The original planning assessment below is retained as provenance.
 
 The user accepted the natural resting layout ("Wonderful!") and requested ten
 potential loops with rationale. The natural-layout run is complete. These are

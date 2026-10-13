@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 13 continuation: recommended loops 1 → 2 → 3 → 5 approved for sustained
+work. The [systems-explorer direction](../reviews/2026-10-13-systems-explorer-direction.md)
+records the user's short-term product goal and discussion boundary. It supersedes
+the planning-only status below for those four loops, not for the other options.
+
 October 13: natural resting layout accepted; its run is complete. The
 [ranked next-loop options](../reviews/2026-10-13-next-ten-loops.md) recommend
 short checked multi-operation composition next. This is a planning request,

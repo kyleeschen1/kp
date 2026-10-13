@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13 continuation: the user approved loops 1 → 2 → 3 → 5 and sustained
+execution, and requested discussion of a systems-generator/elimination explorer.
+The [durable direction](reviews/2026-10-13-systems-explorer-direction.md) owns
+that approval, the proposed product envelope and mathematical distinctions.
+Implementation approval persists; the complete generator and larger-shape
+interface remain a design proposal beyond the accepted enabling sequence.
+
 October 13: the user accepted the natural resting layout ("Wonderful!").
 `run-contract.kp.natural-collection-layout-v1` is complete. The
 [ten potential loops](reviews/2026-10-13-next-ten-loops.md) are proposals only;
