@@ -25,13 +25,21 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The user approved the composed explanation with “go”. The existing-host
+`?view=row-composition` candidate now collects the original equations, adds row
+2 to row 1 and expands the checked result. `run-contract.kp.row-composition-v1`
+owns the native-handoff and explanation checkpoint. The
+[approved boundary and evidence](reviews/2026-10-12-post-linked-equations.md)
+preserve standalone defaults; no general composer or wider collection support
+is claimed.
+
 The linked-equation experiment is complete with qualified acceptance: “this is
 fine, although I don't see using this animation”. Preserve its semantic and
 correspondence evidence; do not treat the panel as a preferred teaching layout
 or spend further polish on it. `run-contract.kp.linked-row-equations-v1` records
 closeout. The [next-step assessment](reviews/2026-10-12-post-linked-equations.md)
 recommends composing collection, a checked row operation and expansion into one
-explanation. This is proposed new implementation scope, not an active run.
+explanation. The subsequent approval and active candidate are recorded above.
 
 The user approved bounded authored-operation reuse after the accepted row
 workbench. Redundant and inconsistent systems now use one source interface and

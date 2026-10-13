@@ -11,7 +11,7 @@ import budgets from './semantic-cost-budgets.json' with { type: 'json' };
 const root = 'dist/matrix-interpretations';
 const manifest: KpBundleManifest = JSON.parse(await readFile(`${root}/.vite/manifest.json`, 'utf8'));
 const inventory: { file: string; modules: string[] }[] = JSON.parse(await readFile(`${root}/module-inventory.json`, 'utf8'));
-const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
+const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
 const closures = [];
 for (const page of pages) {
   const collection = page.startsWith('collection-');
@@ -20,6 +20,7 @@ for (const page of pages) {
   // Composition activates both lazy modules; include their full dependencies,
   // not only the ordinary page's cold static closure.
   const activation = row ? page === 'row-workbench' ? ['src/experiments/rectangular-product/row-workbench.ts']
+    : page === 'row-composition' ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/row-composition-view.ts']
     : ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/row-operation-view.ts']
     : collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
     ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : [];

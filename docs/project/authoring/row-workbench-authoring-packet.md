@@ -97,3 +97,23 @@ panel's [review](../reviews/2026-10-12-linked-row-equations.md) is closed with
 qualified acceptance: technically fine, but the user does not anticipate using
 this animation. Retain its correspondence evidence without treating its layout
 as a recommended presentation or promoting it broadly.
+
+## Composed explanation candidate
+
+`?view=row-composition` now uses the actual `linearSystemModel` objects through
+collection, one checked row addition and reverse collection of the derived
+result. `row-composition-model.ts` owns the bounded sequence and located
+projection repairs. It does not copy numerical source data into a second fixture.
+`CollectionOutput` now explicitly permits RHS IDs owned by checked derivations;
+they need not resemble the original source's naming convention.
+
+The existing collection view owns its geometry; the existing row renderer takes
+matching positions and uses its ordinary fusion sampler. An outward copy lane
+has a small lateral clearance to avoid crossing the receiving glyphs. The
+shared host still owns the sole clock. Three prepared native surfaces have
+exclusive paint ownership at matching endpoints, including direct reversal.
+
+This is one opt-in sequence, not a generic authoring API. Expansion still rejects
+whole-zero rows, fractional coefficients and coefficient magnitudes above nine.
+The standalone workbench's wider numeric envelope does not remove those gaps.
+Review continuity and explanatory value before generalizing the adapter.

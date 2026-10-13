@@ -8,15 +8,29 @@ import './row-workbench.css';
 const ease = (p: number) => { const t = Math.max(0, Math.min(1, p)); return t * t * t * (t * (t * 6 - 15) + 10); };
 const ink = (node: HTMLElement) => node.firstElementChild as HTMLElement;
 const pose = (node: HTMLElement, x: number, y: number) => { node.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%)`; };
-const x = (column: number) => column === 3 ? 90 : 220 + column * 90;
-const y = (row: number) => 75 + row * 90;
+export interface RowWorkbenchLayout {
+  readonly width: number; readonly height: number;
+  readonly columns: readonly [number, number, number, number];
+  readonly rows: readonly [number, number];
+  readonly lanes: readonly [number, number];
+  readonly equality: readonly [number, number];
+  readonly unknowns: readonly (readonly [number, number])[];
+  readonly brackets: readonly (readonly [number, number, number, number])[];
+  readonly stroke: number;
+  readonly copyClearance?: number;
+}
+const defaultLayout: RowWorkbenchLayout = {
+  width: 580, height: 240, columns: [220, 310, 400, 90], rows: [75, 165], lanes: [123, 117], equality: [150, 120],
+  unknowns: [[512, 60], [512, 120], [512, 180]], brackets: [[52, 46, 76, 148], [177, 46, 266, 148], [480, 30, 64, 180]], stroke: 1.4,
+};
 const math = (latex: string) => renderLatexToHtml(latex, { displayMode: false });
-const brackets = (left: number, top: number, width: number, height: number) => `<svg class="row-wb-bracket" style="left:${left}px;top:${top}px" width="${width}" height="${height}" aria-hidden="true"><path d="M10 2H2V${height - 2}H10 M${width - 10} 2H${width - 2}V${height - 2}H${width - 10}"/></svg>`;
-export const rowWorkbenchStageHtml = (unknowns: readonly KpScalarValue[]) => `<div class="row-wb-stage"><div aria-hidden="true">${brackets(52, 46, 76, 148)}${brackets(177, 46, 266, 148)}${brackets(480, 30, 64, 180)}<span class="row-wb-equal">${math('=')}</span><div data-native></div><div data-transient></div>${unknowns.map((v, i) => `<span class="row-wb-token" data-unknown="${v.id}" style="transform:translate(512px,${60 + i * 60}px) translate(-50%,-50%)">${math(expressionToLatex(v.expression))}</span>`).join('')}</div>${[0, 1].map(row => `<button type="button" class="row-wb-row-select" data-matrix-row="${row}" aria-label="Select matrix row ${row + 1}" style="top:${y(row)}px">${row + 1}</button>`).join('')}</div>`;
+const brackets = (left: number, top: number, width: number, height: number, stroke: number) => `<svg class="row-wb-bracket" style="left:${left}px;top:${top}px;stroke-width:${stroke}" width="${width}" height="${height}" aria-hidden="true"><path d="M10 2H2V${height - 2}H10 M${width - 10} 2H${width - 2}V${height - 2}H${width - 10}"/></svg>`;
+export const rowWorkbenchStageHtml = (unknowns: readonly KpScalarValue[], layout: RowWorkbenchLayout = defaultLayout, interactive = true) => `<div class="row-wb-stage" style="width:${layout.width}px;min-width:${layout.width}px;height:${layout.height}px"><div aria-hidden="true">${layout.brackets.map(b => brackets(...b, layout.stroke)).join('')}<span class="row-wb-equal" style="left:${layout.equality[0]}px;top:${layout.equality[1]}px">${math('=')}</span><div data-native></div><div data-transient></div>${unknowns.map((v, i) => `<span class="row-wb-token" data-unknown="${v.id}" data-source-id="${v.id}" style="transform:translate(${layout.unknowns[i]![0]}px,${layout.unknowns[i]![1]}px) translate(-50%,-50%)">${math(expressionToLatex(v.expression))}</span>`).join('')}</div>${interactive ? [0, 1].map(row => `<button type="button" class="row-wb-row-select" data-matrix-row="${row}" aria-label="Select matrix row ${row + 1}" style="top:${layout.rows[row]}px">${row + 1}</button>`).join('') : ''}</div>`;
 
 /** Persistent semantic occurrences stay mounted. Only changed values are retired;
  * the shared fusion sampler owns evaluation, not the transport carrier. */
-export function mountRowWorkbenchView(root: HTMLElement) {
+export function mountRowWorkbenchView(root: HTMLElement, layout: RowWorkbenchLayout = defaultLayout) {
+  const x = (column: number) => layout.columns[column]!, y = (row: number) => layout.rows[row]!;
   const stage = root.querySelector<HTMLElement>('.row-wb-stage')!;
   const native = stage.querySelector<HTMLElement>('[data-native]')!, transient = stage.querySelector<HTMLElement>('[data-transient]')!;
   // Equality is a persistent scene anchor, outside operation paint ownership.
@@ -60,7 +74,7 @@ export function mountRowWorkbenchView(root: HTMLElement) {
     const unitAddition = op.kind === 'add' && op.factor.numerator === op.factor.denominator;
     // Preserve the arithmetic lane's clearance for fractions and the plus sign;
     // compact the rest of the grid without expanding it during an operation.
-    const targetY = y(targetRow), laneY = targetY + (targetRow === 0 ? 48 : -48);
+    const targetY = y(targetRow), laneY = layout.lanes[targetRow]!;
     const entries = step.contributions.map(p => {
       const target = nodes.get(p.target.id)!, cx = x(p.column);
       const copy = op.kind === 'add' ? token(expressionToLatex(p.source.expression), transient, p.source.id) : target;
@@ -85,7 +99,9 @@ export function mountRowWorkbenchView(root: HTMLElement) {
         for (const node of [e.target, copy, factor, dot, scaled, e.result, plus]) reset(node);
         if (op.kind === 'add' && unitAddition) {
           const travel = ease(progress / .3), presence = ease((progress - .3) / .15);
-          pose(copy, cx, y(op.sourceRow) * (1 - travel) + laneY * travel);
+          // An outward lane may cross the receiving row. The layout supplies
+          // clearance only for that crossing; the ordinary compact path is direct.
+          pose(copy, cx + (layout.copyClearance ?? 0) * Math.sin(Math.PI * travel), y(op.sourceRow) * (1 - travel) + laneY * travel);
           copy.style.opacity = progress === 0 ? '0' : '1';
           add!(ease((progress - .48) / .49));
           factor.style.opacity = dot.style.opacity = scaled.style.opacity = '0';

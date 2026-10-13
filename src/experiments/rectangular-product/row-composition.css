@@ -1,0 +1,7 @@
+.row-composition-stage { position: relative; min-width: 680px; height: 390px; }
+.row-composition-stage > [data-composition-layer] { position: absolute; inset: 0; opacity: 0; will-change: opacity; pointer-events: none; }
+/* The surface owns compositing here. Hidden per-glyph layers could retain stale
+   rasters when returning directly to an unchanged coefficient or RHS. */
+.row-composition-stage .poly-token { will-change: auto; }
+.row-composition-stage .row-wb-stage { margin: 0; }
+.matrix-player[aria-busy="true"] .row-composition-stage { visibility: hidden; }

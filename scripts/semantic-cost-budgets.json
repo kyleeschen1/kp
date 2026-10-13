@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "rationale": "October 12 linked-equation amendment: all-view union grows from 124366 JS / 16914 CSS to 126214 / 17153; admit 128000 / 17600 with bounded headroom. Workbench 106545 / 15523 stays under its unchanged 110000 / 16000 gate; cold default, guided and composition closures are unchanged. See docs/project/decisions/2026-10-12-linked-equation-cost-boundary.md for attribution and alternatives; prior row and collection decisions retain other policies. Timings and heap remain observations.",
+  "rationale": "October 12 row-composition amendment: all-view union grows from 126214 JS / 17153 CSS to 129547 / 17367; allow 131500 JS, retaining 17600 CSS. New complete row-composition activation measures 115680 / 16463 and receives 117500 / 17000 gates. All previous activation ceilings remain unchanged. See docs/project/decisions/2026-10-12-row-composition-cost-boundary.md for attribution, alternatives and retained consumer accounting; prior decisions retain other policies. Timings and heap remain observations.",
   "entries": {
     "dot-product-passage": { "jsGzip": 100000, "cssGzip": 16000 },
-    "rectangular-product": { "jsGzip": 128000, "cssGzip": 17600 },
+    "rectangular-product": { "jsGzip": 131500, "cssGzip": 17600 },
     "rectangular-default": { "jsGzip": 100000, "cssGzip": 16000 },
     "row-workbench": { "jsGzip": 110000, "cssGzip": 16000 },
     "row-guided": { "jsGzip": 115000, "cssGzip": 16000 },
+    "row-composition": { "jsGzip": 117500, "cssGzip": 17000 },
     "collection-polynomials": { "jsGzip": 112000, "cssGzip": 16000 },
     "collection-system": { "jsGzip": 112000, "cssGzip": 16000 },
     "collection-reordered": { "jsGzip": 112000, "cssGzip": 16000 },

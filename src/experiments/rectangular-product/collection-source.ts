@@ -1,5 +1,5 @@
 import { constant, expressionToLatex, type MathExpression } from '../../math/expression.ts';
-import { createKpScalarExpression, createKpTypedMatrixFromRows } from '../../math/typed-semantic-math.ts';
+import { createKpScalarExpression, createKpTypedMatrixFromRows, type KpScalarExpression } from '../../math/typed-semantic-math.ts';
 import { matrixProduct } from '../../math/matrix-product.ts';
 
 export const collectionBeatIds = ['polynomials', 'align', 'notice', 'collect', 'pivot', 'matrix', 'rows', 'columns', 'hold'] as const;
@@ -23,6 +23,11 @@ export interface CollectionRepair {
   readonly path: string;
   readonly message: string;
 }
+// A constraint RHS can be derived by a checked operation. Its identity belongs
+// to that referent, not necessarily the initial source's naming convention.
+export type CollectionOutput =
+  | { readonly kind: 'derived-expression'; readonly id: string; readonly latex: string }
+  | { readonly kind: 'constraint-rhs'; readonly id: string; readonly latex: string; readonly value: KpScalarExpression };
 const scalar = (id: string, expression: MathExpression) => createKpScalarExpression({ id, expression });
 const gap = (code: CollectionRepair['code'], path: string, message: string): CollectionRepair => ({ status: 'repair-required', code, path, message });
 const symbol = (e: MathExpression) => e.kind === 'variable' && /^[a-zA-Z]$/.test(e.name);
@@ -72,7 +77,7 @@ export function compileCollectionSource(source: CollectionSource) {
   });
   // A system RHS is supplied independently. It must never inherit the identity
   // of the computed left-hand expression, even when the printed values match.
-  const outputs = Object.freeze(coefficients.map((_, r) => source.domain.kind === 'polynomials'
+  const outputs: readonly CollectionOutput[] = Object.freeze(coefficients.map((_, r) => source.domain.kind === 'polynomials'
     ? Object.freeze({ kind: 'derived-expression' as const, id: product.result.rows[r]![0]!.id, latex: source.domain.names[r]! })
     : Object.freeze({ kind: 'constraint-rhs' as const, id: `${source.id}.rhs.${r}`, latex: String(source.domain.rhs[r]), value: scalar(`${source.id}.rhs.${r}`, constant(source.domain.rhs[r]!)) })));
   const durationMs = durations.reduce((a, b) => a + b, 0);

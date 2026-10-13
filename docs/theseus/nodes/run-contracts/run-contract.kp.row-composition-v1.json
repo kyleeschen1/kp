@@ -1,0 +1,78 @@
+{
+  "id": "run-contract.kp.row-composition-v1",
+  "kind": "run-contract",
+  "title": "Equations through a checked row operation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-12-post-linked-equations.md"
+    }
+  ],
+  "verification": [
+    "npm run test:row-operation",
+    "npm run visual:row-operation",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation; npm run test:matrix-pouring; npm run typecheck",
+      "status": "passed",
+      "scope": "Semantic composition and preserved collection/workbench contracts",
+      "checkedAt": "2026-10-13T02:57:20.784Z",
+      "notes": "16 row-operation tests and 9 matrix-pouring tests passed; full typecheck passed. Initial RHS template-ID inference failure repaired with explicit CollectionOutput union preserving actual checker-derived IDs."
+    },
+    {
+      "command": "npm run visual:row-operation; npm run visual:matrix-pouring",
+      "status": "passed",
+      "scope": "Composition Chromium exemplar and existing hosts",
+      "checkedAt": "2026-10-13T02:57:21.885Z",
+      "notes": "13 row-operation and 10 matrix-pouring browser tests passed. Composition also passed three repeated runs and a final two-test run after adding copy-clearance regression assertion. Tests cover exclusive paint ownership, subpixel geometry and raster handoffs, retained RHS paint, reverse seeks, reduced motion, hash, theme and disposal. Initial range input harness issue fixed; observed copy overlap and missing retained raster repaired at layout and compositor ownership boundaries. Human choreography review remains pending."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "failed",
+      "scope": "Initial all-mode cost ceiling",
+      "checkedAt": "2026-10-13T02:57:22.671Z",
+      "notes": "Measured union 129547 JS gzip exceeded old 128000 ceiling; CSS 17367 within 17600. Diagnosed feature and shared-layout cost, retained all complete consumers; rationale in docs/project/decisions/2026-10-12-row-composition-cost-boundary.md."
+    },
+    {
+      "command": "npm run build:matrix-interpretations; npm run measure:semantic-cost; git diff --check",
+      "status": "passed",
+      "scope": "Complete production closures and explicit cost amendment",
+      "checkedAt": "2026-10-13T02:57:23.415Z",
+      "notes": "Production build passed, 131 modules. All cost gates passed after documented bounded union JS ceiling amendment to 131500 and new composed consumer gate 117500 JS / 17000 CSS. Composed activation measured 115680 / 16463 gzip. Existing consumer ceilings unchanged; diff check clean."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: slice 1 complete; slice 2 implemented and verified, awaiting canonical visual review at /experiments/rectangular-product/?view=row-composition. Review whether collection, row addition and expansion read as one explanation. No generic composition framework or broad promotion."
+  },
+  "allowedWork": [
+    "One existing-host composed exemplar, checked projection adapters, layout handoff, shared clock and bounded preservation checks"
+  ],
+  "disallowedWork": [
+    "No generic composition framework, solver, larger shapes, linked-panel polish or catalogue promotion"
+  ],
+  "goal": "Compose collection, row addition and expansion without losing semantic identity or native continuity",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "composition-model",
+      "title": "Checked composition and retained referents",
+      "summary": "16 row semantic tests and 9 collection tests pass. Checked projections retain actual objects; unsupported collection values produce located repairs.",
+      "status": "complete"
+    },
+    {
+      "id": "composition-view",
+      "title": "Same-host reversible composition checkpoint",
+      "summary": "Same-clock composition implemented; pressure native paint handoffs, copy clearance and reverse seeks before review.",
+      "status": "in-progress"
+    }
+  ]
+}

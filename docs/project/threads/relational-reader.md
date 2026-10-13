@@ -5,6 +5,13 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 12 composition continuation: the user approved the
+[composition proposal](../reviews/2026-10-12-post-linked-equations.md). One
+existing-host candidate connects collection, a checked addition and expansion,
+with actual referents retained and matching native paint handoffs.
+`run-contract.kp.row-composition-v1` owns its visual checkpoint. Preserve the
+standalone collection/workbench and do not infer a general composition format.
+
 October 12 linked-equation continuation: the user approved the next recommendation
 after accepting the two authored stories. The
 [same-host candidate](../reviews/2026-10-12-linked-row-equations.md) derives exact

@@ -11,7 +11,7 @@ const latex = (s: string) => renderLatexToHtml(s, { displayMode: false });
 const token = (id: string, source: string, math: string) => `<span class="poly-token" data-poly="${id}" data-source-id="${source}">${latex(math)}</span>`;
 const enclosure = (id: string, x: number, y: number, w: number, h: number) =>
   `<svg class="poly-enclosure" data-poly="${id}" style="left:${x}px;top:${y}px" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path pathLength="1" d="M10 2 H2 V${h - 2} H10 M${w - 10} 2 H${w - 2} V${h - 2} H${w - 10}"/></svg>`;
-function collectionLayout(model: CollectionModel) {
+export function collectionLayout(model: CollectionModel) {
   const offsets = [0];
   for (let c = 1; c < model.inputs.length; c++) {
     const previous = model.inputs[c - 1]!.expression;
