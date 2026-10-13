@@ -5,6 +5,13 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 13: the small algebra trial is accepted. The subsequent
+[rich authoring test](../reviews/2026-10-13-rich-algebra-authoring-test.md) is a
+negative result for source-authored mathematics and operation order, and a
+positive result for source-only prose/checkpoint selection. Preserve that
+distinction. No reader-layout work or engine rewrite is active; the findings name
+the next proposed semantic-to-projection boundary.
+
 October 13 non-LA pivot: Gaussian elimination is frozen at its accepted milestone.
 The [bounded algebra reuse trial](../reviews/2026-10-13-algebra-reuse-trial.md)
 supersedes the compact/detail recommendation below. One distribution-then-collection

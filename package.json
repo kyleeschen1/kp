@@ -65,6 +65,8 @@
     "test:compositor-extensions": "node --disable-warning=ExperimentalWarning --test tests/native-katex-scene-contribution.test.ts tests/native-katex-renderer-ready-scene-plan.test.ts tests/native-katex-contributor-fusion-sampling.test.ts",
     "test:common-factor-authoring": "node --disable-warning=ExperimentalWarning --test tests/common-factor-*.test.ts",
     "test:composed-algebra-authoring": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-*.test.ts",
+    "test:rich-algebra-authoring": "node --disable-warning=ExperimentalWarning --test tests/rich-algebra-authoring.test.ts tests/foldable-distribution-lesson-model.test.ts tests/foldable-distribution-reader-integration.test.ts",
+    "check:rich-algebra-authoring": "node --disable-warning=ExperimentalWarning scripts/check-rich-algebra-authoring.ts",
     "check:common-factor-workflow": "node --disable-warning=ExperimentalWarning scripts/check-common-factor-workflow.ts",
     "check:composed-algebra-workflow": "node --disable-warning=ExperimentalWarning scripts/check-composed-algebra-workflow.ts",
     "check:unfamiliar-authoring-trial": "node --disable-warning=ExperimentalWarning scripts/check-unfamiliar-authoring-trial.ts",

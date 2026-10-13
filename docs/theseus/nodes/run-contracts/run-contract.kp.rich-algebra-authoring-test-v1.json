@@ -1,0 +1,50 @@
+{
+  "id": "run-contract.kp.rich-algebra-authoring-test-v1",
+  "kind": "run-contract",
+  "title": "Measure rich algebra source-only authorability",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-13-rich-algebra-authoring-test.md"
+    }
+  ],
+  "verification": [
+    "npm run test:rich-algebra-authoring"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:rich-algebra-authoring",
+      "status": "passed",
+      "scope": "Authoring threshold measurement and existing lesson/native-scene compilation",
+      "checkedAt": "2026-10-13T19:15:14.951Z",
+      "notes": "Seven tests pass. Product threshold FAILS: mathematical variation and changed operation order remain fixture-bound. Baseline and shorter explanation succeed. Initial harness parser and test narrowing errors repaired; Node and test type checks pass."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "COMPLETE diagnostic, negative authoring result. Source-authored mathematical derivation feeding existing projections is recommended, not implemented or authorized by this completed test."
+  },
+  "allowedWork": [
+    "Diagnostic harness, fixed inputs, tests and findings; preserve existing animation"
+  ],
+  "disallowedWork": [
+    "Renderer or motion edits; fixture parameterization; new host; broad authoring framework"
+  ],
+  "goal": "Reproduce whether mathematical variation and explanation changes reach the existing canonical compiler without engine edits",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "probe",
+      "title": "Execute authoring threshold and record exact boundaries",
+      "summary": "Diagnostic COMPLETE: baseline and shorter explanation succeed; math and operation-order variation fail source-only threshold. Exact missing boundaries and fixed next acceptance case recorded; no engine implementation claimed.",
+      "status": "complete"
+    }
+  ]
+}
