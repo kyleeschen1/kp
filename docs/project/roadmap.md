@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13 authoring direction: the user approved near-term explanation authoring,
+long-term mathematical exploration, and selective exceptional publications. The
+preferred formats are equation rails and horizontal focus cards with text above
+the stage. [The approved delivery plan](2026-10-13-explanation-authoring-delivery.md)
+starts with selected-source rail authoring, then a reviewed top-text card and a
+connected change-and-composition publication. `run-contract.kp.explanation-authoring-v1`
+owns execution and mandatory exemplar gates. This supersedes the standalone
+next-animation recommendation below; Gaussian elimination remains frozen.
+
 October 13 frontier review: the user says the affine example works but objects
 to retreading old material. Desktop acceptance does not certify phone layout.
 The [next-frontier review](reviews/2026-10-13-next-frontier.md) recommends one

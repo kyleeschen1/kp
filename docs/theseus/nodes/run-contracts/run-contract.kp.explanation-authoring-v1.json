@@ -1,0 +1,72 @@
+{
+  "id": "run-contract.kp.explanation-authoring-v1",
+  "kind": "run-contract",
+  "title": "Author complete explanations",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-13-explanation-authoring-delivery.md"
+    }
+  ],
+  "verification": [
+    "npm run test:rail-authoring",
+    "npm run visual:rail-authoring",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Bounded selected-source authoring, existing presentation integrations, connected argument, proportional validation and documented repairs"
+  ],
+  "disallowedWork": [
+    "Universal solver, new renderer or clock, catalogue rollout, deployment, paid API, unrelated working changes"
+  ],
+  "goal": "Author and preview complete passages through accepted equation rails and top-text horizontal cards, then test a connected change-and-composition argument",
+  "target": "workflow.kp.delivery",
+  "runMode": "run",
+  "maxSlices": 6,
+  "commitCadence": "Commit each checked recoverable package and push before review or handoff.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Mandatory rail exemplar human review before card work; card review before publication; publication review before reuse promotion.",
+    "Completion, user pause, three-hour initial ceiling with verification reserve, or unresolvable scope and authority blocker."
+  ],
+  "slices": [
+    {
+      "id": "boundary",
+      "title": "Confirm authoring and presentation owners",
+      "summary": "Accepted affine run reconciled; six-package authoring plan and exact references recorded. No card or mathematical generalization inferred.",
+      "status": "complete"
+    },
+    {
+      "id": "rail-source",
+      "title": "Checked selected-source authoring",
+      "status": "planned"
+    },
+    {
+      "id": "rail-exemplar",
+      "title": "Canonical rail preview and human checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "card-caller",
+      "title": "Top-text horizontal authored card after review",
+      "status": "planned"
+    },
+    {
+      "id": "publication",
+      "title": "Connected change-and-composition argument after format reviews",
+      "status": "planned"
+    },
+    {
+      "id": "reuse",
+      "title": "Source-only reuse and closeout",
+      "status": "planned"
+    }
+  ]
+}

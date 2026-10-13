@@ -2,7 +2,8 @@
   "id": "run-contract.kp.authored-affine-collection-v1",
   "kind": "run-contract",
   "title": "Source-authored affine collection",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Desktop candidate accepted; source-authoring trial complete within its documented bounded scope. Phone failure retained as a limitation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -97,8 +98,8 @@
     {
       "id": "reader",
       "title": "Source-bound canonical reader and visual checkpoint",
-      "summary": "Integrating source-bound canonical reader, browser signed-result checks and source revision validation.",
-      "status": "in-progress"
+      "summary": "User accepted desktop affine candidate and then requested a new frontier. Phone continuity failure remains recorded; no mobile certification or expanded scope.",
+      "status": "complete"
     }
   ]
 }

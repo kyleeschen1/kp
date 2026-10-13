@@ -5,6 +5,14 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 13: execute the [explanation-authoring plan](../2026-10-13-explanation-authoring-delivery.md)
+under `run-contract.kp.explanation-authoring-v1`. The user selected equation rails
+and horizontal cards with text above as the authoring destinations. Begin with
+one complete selected-source rail passage and preserve the existing canonical
+host; stop for its authoring/visual review before card generalization. A selective
+flagship publication serves the authoring tool, with broader mathematical
+exploration the long-term direction. Theseus owns package status.
+
 October 13 frontier feedback: desktop affine candidate accepted, but the user
 wants a new explanatory frontier rather than more familiar examples. See the
 [small-change propagation recommendation](../reviews/2026-10-13-next-frontier.md).
