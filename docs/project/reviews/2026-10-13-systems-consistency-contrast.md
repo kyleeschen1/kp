@@ -1,5 +1,64 @@
 # Same coefficients, different consistency
 
+## Accepted continuation: a different dependency
+
+The user approved the 2×2 comparison and said “continue”. The next bounded
+caller is 3×3 with row 3 = row 1 + row 2, rather than one doubled row:
+A = [[1,0,1],[0,1,1],[1,1,2]], b = [3,2,5] versus [3,2,6]. Two checked
+subtractions reveal 0 = 0 or 1 = 0. Both traces retain the same initial A and
+unchanged RHS referents; the compatible family is x=3−z, y=2−z.
+
+The canonical host/renderer and semantic authority below remain unchanged.
+Add a size selector to the local contrast, using the accepted navigation and
+preserving named endpoints across its paired RHS cases. Source-specific prose
+must describe both steps accurately; do not carry the doubled-row explanation
+into the sum-of-rows case. The rollback unit is the 3×3 source plus bounded
+source-driven extraction; preserve the accepted 2×2 URL and milestone IDs.
+
+Acceptance: shared A/unchanged RHS identity, equal checked operations and
+coefficient endpoints across both cases, exact witnesses and rank, matching
+milestones, direct seek/reversal and native paint continuity at both operation
+seams. Use one local source adapter, no new geometry or generic paired generator.
+Run focused laws, the row browser suite, affected types and production costs.
+Finish after one reviewable second caller; human review concerns third-row
+density and whether the intermediate subtraction explains the dependency.
+
+### Second-caller candidate
+
+Open `http://127.0.0.1:8000/experiments/rectangular-product/?view=row-composition&example=contrast&size=3`.
+At `subtract-first`, the third coefficient row matches row 2. Switch between
+b=(3,2,5) and b=(3,2,6): the matching rows either have matching RHS values or
+do not. Continue to `eliminate` to expose the exact residual. The final family
+is x=3−z, y=2−z for the compatible case; the other case has no solutions.
+
+The local `systems-contrast-sources.ts` owns each example's coefficients, ordered
+unknowns, RHS, relation reading and step prose. Both pass through the same
+builder, exact solver and unchanged row/collection renderer. Trace length must
+match the declared annotations; law tests bind the authored prose to the two
+actual subtractions and the intermediate row equality. This is bounded source
+reuse, not automatic inference of explanations for arbitrary dependencies.
+
+Existing 2×2 defaults and milestone IDs remain. RHS switching preserves named
+milestones; choosing a different dependency starts at its original equations.
+Unknown contrast sizes return a typed repair. No CSS or new scheduling path.
+Only the selected case mounts animation surfaces, although the small local
+module constructs both pairs' checked models.
+
+Production build: 148 modules. Complete union146135 JS/17431 CSS gzip;
+contrast126665/16527, versus145408 and125938 JS for the accepted first caller.
+All existing ceilings pass unchanged; no new cost amendment. The same activated
+contrast module includes both sources, so the existing contrast consumer accounts
+for both sizes. No many-instance runtime or network-transfer claim.
+
+Second-caller checks pass: 24 tests in `test:row-operation`, full `typecheck`,
+24 Chromium tests in `visual:row-operation`, scoped build and cost gates. The
+browser test checks every 3×3 operation seam, reverse seek, both paired-case
+milestones, selected-case navigation, themes and narrow overflow. Intermediate
+and final screenshots inspected. The original 2×2 test and all generated-system
+cases still pass. Final checkpoint: inspect `subtract-first` then `eliminate`;
+assess whether the intermediate matching coefficient rows make the RHS conflict
+intuitive. No cross-browser release or learner-effectiveness claim.
+
 Approved by the user's “go” following the proposed same-matrix contrast.
 Use the KP delivery loop; one bounded 2×2 exemplar, then human review before
 any 3×3 extension. No general paired-problem generator is authorized here.

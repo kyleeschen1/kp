@@ -2,7 +2,8 @@
   "id": "run-contract.kp.systems-consistency-contrast-v1",
   "kind": "run-contract",
   "title": "Same-matrix consistency contrast",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -49,8 +50,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: one checked 2x2 contrast is ready at row-composition example=contrast. Compare b=(3,6) and b=(3,7) at eliminate or expanded; only RHS changes. Existing motion and generator preserved. Review clarity of sequential comparison before any extension."
+    "state": "complete",
+    "summary": "COMPLETE: 2x2 comparison accepted. Continue separately with one 3x3 sum-of-rows dependency; preserve the accepted source and renderer."
   },
   "allowedWork": [
     "One paired 2x2 source, existing composition host navigation, semantic and browser preservation checks"
@@ -64,8 +65,8 @@
     {
       "id": "contrast",
       "title": "Paired-consistency-exemplar",
-      "summary": "Implement the approved paired 2x2 source using shared matrix referents and existing composition motion.",
-      "status": "in-progress"
+      "summary": "User approved the 2x2 same-matrix contrast and requested continuation to the structurally different caller.",
+      "status": "complete"
     }
   ]
 }

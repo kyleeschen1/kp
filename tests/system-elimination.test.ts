@@ -4,7 +4,43 @@ import { addKpRationals, multiplyKpRationals, createKpRational, equalKpRationals
 import { readExactRowValue } from '../src/math/linear-system-row-operation.ts';
 import { generateSystemProblem } from '../src/math/system-generator.ts';
 import { createSystemsExplorer } from '../src/experiments/rectangular-product/systems-explorer-model.ts';
-import { consistencyCases, selectConsistencyCase } from '../src/experiments/rectangular-product/systems-contrast.ts';
+import { consistencyCases, consistencyPairs, selectConsistencyCase } from '../src/experiments/rectangular-product/systems-contrast.ts';
+
+test('sum-of-rows contrast preserves the paired trace and its intermediate dependency', () => {
+  const a = consistencyPairs[3].compatible, b = consistencyPairs[3].incompatible;
+  assert.equal(a.initial.coefficients, b.initial.coefficients);
+  for (const i of [0, 1]) assert.equal(a.initial.rhs[i], b.initial.rhs[i]);
+  assert.notEqual(a.initial.rhs[2], b.initial.rhs[2]);
+  assert.deepEqual(a.model.stops, b.model.stops);
+  assert.equal(a.trace.steps.length, 2); assert.equal(b.trace.steps.length, 2);
+  for (const [i, step] of a.trace.steps.entries()) {
+    const other = b.trace.steps[i]!;
+    assert.deepEqual(step.checked.operation, other.checked.operation);
+    assert.deepEqual(step.checked.operation, { kind: 'add', sourceRow: i, targetRow: 2, factor: createKpRational(-1n) });
+    assert.equal(a.model.steps[i]!.checked, step.checked);
+    assert.equal(b.model.steps[i]!.checked, other.checked);
+    assert.deepEqual(step.checked.after.coefficients.rows.map(row => row.map(readExactRowValue)), other.checked.after.coefficients.rows.map(row => row.map(readExactRowValue)));
+  }
+  for (const c of [a, b]) {
+    const intermediate = c.trace.steps[0]!.checked.after;
+    assert.deepEqual(intermediate.coefficients.rows[2]!.map(readExactRowValue), intermediate.coefficients.rows[1]!.map(readExactRowValue));
+    assert.equal(c.trace.rank, 2);
+  }
+  assert.equal(a.residual.numerator, 0n); assert.equal(b.residual.numerator, 1n);
+  assert.equal(a.trace.augmentedRank, 2); assert.equal(b.trace.augmentedRank, 3);
+  assert.equal(a.trace.solution.kind, 'infinite'); assert.equal(b.trace.solution.kind, 'none');
+  if (a.trace.solution.kind !== 'infinite') throw new Error('Expected a family');
+  assert.deepEqual(a.trace.solution.freeColumns, [2]);
+  assert.deepEqual(a.trace.solution.particular.map(q => q.numerator), [3n, 2n, 0n]);
+  assert.deepEqual(a.trace.solution.directions[0]!.map(q => q.numerator), [-1n, -1n, 1n]);
+  for (const z of [-4, 0, 7]) {
+    const point = [3 - z, 2 - z, z];
+    const image = a.initial.coefficients.rows.map(row => row.reduce((sum, v, i) => sum + Number(readExactRowValue(v)!.numerator) * point[i]!, 0));
+    assert.deepEqual(image, [3, 2, 5]);
+    assert.equal(6 - image[2]!, 1);
+  }
+  assert.equal(selectConsistencyCase('compatible', '4').status, 'repair-required');
+});
 
 test('consistency contrast holds A and the operation fixed while exposing distinct RHS witnesses', () => {
   const a = consistencyCases.compatible, b = consistencyCases.incompatible;

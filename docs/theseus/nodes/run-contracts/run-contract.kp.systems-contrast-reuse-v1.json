@@ -1,0 +1,64 @@
+{
+  "id": "run-contract.kp.systems-contrast-reuse-v1",
+  "kind": "run-contract",
+  "title": "Sum-of-rows consistency contrast",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-13-systems-consistency-contrast.md"
+    }
+  ],
+  "verification": [
+    "npm run test:row-operation",
+    "npm run visual:row-operation"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:row-operation; npm run typecheck",
+      "status": "passed",
+      "scope": "Both bounded sources, paired trace identity and full types",
+      "checkedAt": "2026-10-13T17:39:47.797Z",
+      "notes": "24 semantic tests pass. Third-row dependency checked before and between subtractions; paired A and retained RHS identity, operations, exact residuals, rank and parameterization verified. Full app/node/test/Svelte/domain type chain passes."
+    },
+    {
+      "command": "npm run build:matrix-interpretations; npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Complete activated two-source contrast and other consumers",
+      "checkedAt": "2026-10-13T17:39:49.135Z",
+      "notes": "148 modules; union146135 JS/17431 CSS gzip and contrast126665/16527. All existing ceilings unchanged and passing. New source is included in the existing contrast activation; no renderer or CSS changes."
+    },
+    {
+      "command": "npm run visual:row-operation",
+      "status": "passed",
+      "scope": "Three-row seams and preservation of accepted callers",
+      "checkedAt": "2026-10-13T17:40:11.380Z",
+      "notes": "24 Chromium tests pass. Both 3x3 cases cross every operation seam continuously, reverse deterministically and retain both named subtraction milestones through RHS switching. Existing 2x2 and all generated cases remain passing. Intermediate and final screenshots inspected."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: the 3x3 sum-of-rows source is ready at row-composition example=contrast size=3. Review subtract-first then eliminate with both RHS vectors. All checks pass; accepted 2x2 and generator preserved. No additional implementation before this bounded review."
+  },
+  "allowedWork": [
+    "One source-driven 3x3 paired comparison, existing host and checked row operations, preservation of accepted 2x2 caller"
+  ],
+  "disallowedWork": [
+    "No new renderer, arbitrary paired generator or catalogue-wide rollout"
+  ],
+  "goal": "Reuse accepted paired consistency presentation for a 3x3 sum-of-rows dependency",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "reuse",
+      "title": "Three-row-contrast",
+      "summary": "Extend local source content to a third-row sum dependency while preserving the accepted two-row default.",
+      "status": "in-progress"
+    }
+  ]
+}

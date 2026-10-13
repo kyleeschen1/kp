@@ -5,11 +5,12 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
-October 13: same-matrix consistency contrast approved and implemented as one
-2×2 candidate on the existing host. The
+October 13: same-matrix 2×2 consistency contrast accepted. The user approved
+continuation; one 3×3 sum-of-rows source now uses the same host and adapter. The
 [review](../reviews/2026-10-13-systems-consistency-contrast.md) explains the shared
 referents, mathematical contrast, costs and inspection instructions. Its
-dedicated run owns the visual checkpoint; the generator run remains complete.
+reuse run owns the third-row checkpoint; the first contrast and generator runs
+remain complete.
 
 October 13 generator delivery: composition accepted; generated square systems
 now reuse it, retaining actual checked row-operation referents. See

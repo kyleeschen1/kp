@@ -1,6 +1,48 @@
 import { test, expect } from '@playwright/test';
 import { createSystemsExplorer } from '../src/experiments/rectangular-product/systems-explorer-model.ts';
 import { normalizedPngRasterDelta } from './helpers/png-raster-diff.ts';
+import { consistencyPairs } from '../src/experiments/rectangular-product/systems-contrast.ts';
+
+test('three-row contrast shares continuous seams and retains both subtraction milestones', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  const root = page.locator('#rectangular-player');
+  for (const kind of ['compatible', 'incompatible'] as const) {
+    await page.goto(`/experiments/rectangular-product/?view=row-composition&example=contrast&size=3&case=${kind}`);
+    await expect(root).toHaveAttribute('data-ready', 'true');
+    const slider = root.getByRole('slider', { name: 'Animation position' }), stage = root.locator('.row-composition-stage');
+    await slider.evaluate(n => n.setAttribute('step', 'any'));
+    const seek = (p: number) => slider.evaluate((node, value) => {
+      if (!(node instanceof HTMLInputElement)) throw new Error('Expected slider');
+      node.value = String(value); node.dispatchEvent(new Event('input', { bubbles: true }));
+    }, p);
+    for (const seam of consistencyPairs[3][kind].model.stops.slice(1, -1)) {
+      await seek(seam - .000001); const left = await stage.screenshot({ scale: 'css' });
+      await seek(seam + .000001);
+      expect(normalizedPngRasterDelta(left, await stage.screenshot({ scale: 'css' }))).toBeLessThan(.0002);
+    }
+    await seek(.65); const middle = await stage.screenshot({ scale: 'css' });
+    await seek(1); await seek(0); await seek(.65);
+    expect(normalizedPngRasterDelta(middle, await stage.screenshot({ scale: 'css' }))).toBeLessThan(.0002);
+    await root.getByRole('combobox', { name: 'Milestone' }).selectOption('2');
+    await expect(root).toHaveAttribute('data-milestone', 'subtract-first');
+    await expect(root.locator('[data-cue]')).toContainText('now matches row 2');
+    await root.screenshot({ path: info.outputPath(`${kind}-intermediate.png`) });
+    await root.getByRole('link', { name: kind === 'compatible' ? 'b = (3, 2, 6)' : 'b = (3, 2, 5)', exact: true }).click();
+    await expect(root).toHaveAttribute('data-ready', 'true');
+    await expect(root).toHaveAttribute('data-milestone', 'subtract-first');
+    await root.getByRole('combobox', { name: 'Milestone' }).selectOption('4');
+    await expect(root.locator('[data-cue]')).toContainText(kind === 'compatible' ? '1 = 0' : '0 = 0');
+    await root.getByText('Why the right-hand side matters', { exact: true }).click();
+    await expect(root.locator('[data-contrast-reading]')).toContainText('row 3 is the sum');
+    await root.getByRole('button', { name: 'Light mode', exact: true }).click();
+    await root.screenshot({ path: info.outputPath(`${kind}-other-final-light.png`) });
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(391);
+  await root.getByRole('link', { name: '2 × 2: doubled row', exact: true }).click();
+  await expect(root).toHaveAttribute('data-ready', 'true'); await expect(root).toHaveAttribute('data-milestone', 'equations');
+  expect(errors).toEqual([]);
+});
 
 test('same-matrix contrast retains milestones across cases and reverses deterministically', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
