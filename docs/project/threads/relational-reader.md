@@ -12,16 +12,19 @@ one complete selected-source rail passage and preserve the existing canonical
 host; stop for its authoring/visual review before card generalization. A selective
 flagship publication serves the authoring tool, with broader mathematical
 exploration the long-term direction. Theseus owns package status.
-The [rail authoring candidate](../reviews/2026-10-13-authored-rail-exemplar.md)
-and [author packet](../authoring/equation-rail-authoring-packet.md) are ready for
-the first review. This is structural/editorial authorship over two supported
-checked derivations, not arbitrary formula/operation authoring or a shipped editor.
+The rail review is accepted. The user approved the calculus card as the next
+milestone, with actual source control over functions and intermediate prose.
+The [change-propagation candidate](../reviews/2026-10-13-change-propagation-card.md)
+uses the existing expression engine, reader clock and top-text scaffold. Review
+its finite-versus-linear comparison before the connected publication. It remains
+a bounded authoring format, not general formula rewriting or a shipped editor.
 
 October 13 frontier feedback: desktop affine candidate accepted, but the user
 wants a new explanatory frontier rather than more familiar examples. See the
 [small-change propagation recommendation](../reviews/2026-10-13-next-frontier.md).
-No new implementation is approved. Preserve the accepted work and the unresolved
-phone limitation; do not interpret acceptance as a catalogue rollout.
+The subsequently approved calculus card above is the bounded new implementation.
+Preserve the accepted affine work and its unresolved phone limitation; do not
+interpret acceptance as a catalogue rollout.
 
 October 13: following the rich authoring diagnostic, the user approved the
 [bounded source-to-projection implementation](../reviews/2026-10-13-authored-affine-collection.md).

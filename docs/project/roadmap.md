@@ -33,17 +33,20 @@ starts with selected-source rail authoring, then a reviewed top-text card and a
 connected change-and-composition publication. `run-contract.kp.explanation-authoring-v1`
 owns execution and mandatory exemplar gates. This supersedes the standalone
 next-animation recommendation below; Gaussian elimination remains frozen.
-The [first authored rail candidate](reviews/2026-10-13-authored-rail-exemplar.md)
-now supports checked derivation includes and explicit selected-byte preview;
-review its authoring/reading experience before the top-text card package.
+The authored rail was accepted. The user approved a genuinely source-controlled
+calculus composition because they can judge calculus more confidently than physics.
+The [change-propagation card](reviews/2026-10-13-change-propagation-card.md) now
+accepts functions and intermediate prose and compares finite changes with local
+linear predictions. Review this top-text card before the connected publication;
+it does not claim a new symbolic chain-rule choreography.
 
 October 13 frontier review: the user says the affine example works but objects
 to retreading old material. Desktop acceptance does not certify phone layout.
 The [next-frontier review](reviews/2026-10-13-next-frontier.md) recommends one
 small-change propagation explanation: composed functions, exact finite change,
 linear prediction and visible error. Existing calculus/LA foundations are
-preserved. This is a proposal, not new implementation authority; additional
-algebra parameter variants are not the recommended next work.
+preserved. The calculus card above now supplies bounded implementation authority;
+additional algebra parameter variants are not the recommended next work.
 
 October 13 authoring implementation: the user approved the diagnostic's next
 step. The [source-authored affine collection candidate](reviews/2026-10-13-authored-affine-collection.md)

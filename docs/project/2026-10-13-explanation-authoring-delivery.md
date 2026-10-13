@@ -51,6 +51,26 @@ passing implementation tests.
 
 ## Canonical references and preservation
 
+October 13 refinement after rail acceptance: the next card is a new calculus
+explanation of `u = x²; y = sin(u)`, which the user can judge more confidently
+than physics. Its source must control both functions and the intermediate prose;
+wrapping another fixed derivation would not meet this milestone. Canonical source:
+`examples/calculus/change-propagation.json`; host:
+`/experiments/change-propagation/`. Existing expression parsing, evaluation and
+differentiation own mathematical results; native KaTeX owns notation; the existing
+reader clock and Focus Deck input own travel. A bounded SVG interval comparison
+shows actual finite changes against local linear predictions, with fixed scales
+while the input increment changes. It does not claim glyph-level chain-rule
+rewriting. Unsupported expressions return located repair gaps, not a substituted
+animation. Source prose remains author-supplied, not certified mathematical claims.
+
+Acceptance: change functions and prose without renderer edits; inspect each
+local derivative and their product; distinguish finite change from differential,
+including negative and zero increments and zero derivatives; reverse/seek without
+losing state. Text stays above one persistent stage. Review this one card before
+the connected publication or shared promotion. Rollback unit: this new source,
+bounded calculus adapter and host; existing rails/cards remain unchanged.
+
 Rail: `examples/physics/momentum-energy.article.md`,
 `/experiments/mechanics-relations/#energy-from-momentum`; native KaTeX,
 `renderCheckedDerivationPassage` and `enhanceEnergyDerivation`; physics-owned

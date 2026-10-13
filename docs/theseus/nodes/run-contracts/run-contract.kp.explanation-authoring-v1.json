@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Author complete explanations",
   "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: review selected-source equation-rail passage before top-text card caller. Two of six complete; third awaits human acceptance, not a failing technical gate.",
+  "summary": "HUMAN_CHECKPOINT: review the source-authored calculus top-text card before the connected publication, as required by the approved plan. Three of six packages complete; card-caller remains in-progress until acceptance. Review docs/project/reviews/2026-10-13-change-propagation-card.md. After acceptance complete card-caller and resume publication via the existing contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -56,11 +56,46 @@
       "scope": "new route and production integration",
       "checkedAt": "2026-10-13T23:31:40.387Z",
       "notes": "Build passes; production reader closure and budget commands also pass. Authored rail JS/CSS closure identical to existing physics argument; see review for measured bytes and exclusions."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "failed",
+      "scope": "card-caller",
+      "checkedAt": "2026-10-13T23:51:58.905Z",
+      "notes": "Initial browser candidate stopped during mount due to a hyphenated dataset key. Repaired with explicit setAttribute and permanent complete-mount, source-edit, reversal and URL tests. Initial unit/type failures were an erasable-TypeScript parameter property and an implicit multiplication fixture; both repaired before final reruns."
+    },
+    {
+      "command": "npm run test:change-propagation",
+      "status": "passed",
+      "scope": "card-caller",
+      "checkedAt": "2026-10-13T23:51:59.862Z",
+      "notes": "Eight mathematical/source tests pass, covering finite versus linear differences, zero derivatives, signs, interval bounds, source-only changes, unsupported syntax before simplification, reversal and escaped static publication."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "passed",
+      "scope": "card-caller",
+      "checkedAt": "2026-10-13T23:52:00.469Z",
+      "notes": "Four Chromium checks pass: persistent native math, continuous shrinking and reverse, reduced-motion keyboard, native horizontal input, interrupted playback, URL restoration, source-only function and prose revision, rejected-draft preservation, phone overflow and no-script reading. Human visual judgment pending."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "card-caller",
+      "checkedAt": "2026-10-13T23:52:01.042Z",
+      "notes": "Production build passes. Existing large unrelated chunks still warn. Stable measure:change-propagation reports declared initial JS 73142 bytes, gzip 23566; CSS 40255, gzip 10859; HTML 58706, gzip 5992. Excludes fonts and lazy authoring imports."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "card-caller",
+      "checkedAt": "2026-10-13T23:52:29.546Z",
+      "notes": "Final full app, node, tests, Svelte and domain checks pass. Architecture gate and 35 rail-authoring preservation tests also pass; full unit corpus and multi-browser promotion intentionally deferred until exemplar acceptance."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: two of six packages complete; rail-exemplar implemented and checked, pending authoring/reading acceptance. Review docs/project/reviews/2026-10-13-authored-rail-exemplar.md and localhost:8000/experiments/authored-rails/. Card/publication/reuse remain unstarted behind the review gate."
+    "summary": "Three of six packages complete. Card-caller implementation verified and reviewable at /experiments/change-propagation/. Source-only x-cubed then u-squared variation changes derived mathematics. Review density and explanatory value; no new symbolic glyph choreography or publication promotion claimed."
   },
   "allowedWork": [
     "Bounded selected-source authoring, existing presentation integrations, connected argument, proportional validation and documented repairs"
@@ -94,13 +129,14 @@
     {
       "id": "rail-exemplar",
       "title": "Canonical rail preview and human checkpoint",
-      "summary": "Canonical host integration passes initial desktop browser checks; completing phone smoke, author packet, closure evidence and review handoff.",
-      "status": "in-progress"
+      "summary": "User accepted the rail and approved a genuinely source-authored calculus card as the next package.",
+      "status": "complete"
     },
     {
       "id": "card-caller",
       "title": "Top-text horizontal authored card after review",
-      "status": "planned"
+      "summary": "Build source-controlled calculus functions and intermediate explanations in one top-text horizontal card.",
+      "status": "in-progress"
     },
     {
       "id": "publication",

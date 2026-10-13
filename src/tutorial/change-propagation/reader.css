@@ -1,0 +1,76 @@
+@import "../focus-deck-scaffold.css";
+
+:root { color-scheme: light; background: #f3eee3; color: #242925; }
+body { margin: 0; }
+.change-page { max-width: 64rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
+.change-intro { max-width: 43rem; margin: 0 auto 2rem; }
+.change-intro h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 500; margin: .5rem 0; }
+.change-intro p { line-height: 1.6; }
+.change-card {
+  --kp-st-paper: #f8f4eb; --kp-st-header: #283d3b; --kp-st-header-ink: #f8f4eb;
+  --kp-st-strong: #242925; --kp-st-ink: #242925; --kp-st-muted: #53615b;
+  --kp-st-rule: #c8cdc1; --kp-st-focus: #245d74;
+}
+.change-card *, .change-card *::before, .change-card *::after { box-sizing: border-box; }
+.change-card .kp-focus-deck__card { height: auto; grid-template-rows: 10rem auto; }
+.change-card .kp-focus-deck__narrative { order: -1; border-bottom: 1px solid var(--kp-st-rule); }
+.change-card .kp-focus-deck__narrative > section { display: flex; align-items: safe end; }
+.change-card .kp-focus-deck__passage-page { min-height: 0; width: 100%; box-sizing: border-box; }
+.change-card h2 { font-size: 1.15rem; margin: 0 0 .6rem; font-weight: 600; }
+.change-stage { padding: .65rem 1.4rem .35rem; min-width: 0; }
+.change-flow { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.change-node { min-width: 0; padding: .6rem; border-bottom: 2px solid transparent; }
+.change-node + .change-node { border-left: 1px solid var(--kp-st-rule); }
+.change-card .kp-focus-deck__annotation { position: static; }
+.change-formula { min-height: 2.4rem; display: flex; align-items: center; overflow-x: auto; margin: .2rem 0; }
+.change-base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .2rem; }
+.change-gain { min-height: 3.8rem; padding-top: .6rem; overflow-x: auto; }
+.change-gain > span { display: block; margin-top: .35rem; }
+.change-meter { width: 100%; height: auto; aspect-ratio: 240 / 82; display: block; overflow: visible; }
+.change-meter, .change-axis-labels { max-width: 15rem; margin-inline: auto; }
+.change-axis { stroke: var(--kp-st-rule); fill: none; stroke-width: 1; }
+.change-actual-line, .change-actual { stroke: #245d74; fill: #245d74; stroke-width: 2; }
+.change-prediction-line, .change-prediction { stroke: #242925; fill: var(--kp-st-paper); stroke-width: 2; }
+.change-prediction-line { stroke-dasharray: 3 3; }
+.change-axis-labels { display: flex; width: 100%; justify-content: space-between; padding: 0 7%; margin-bottom: .5rem; }
+.change-reading { display: flex; justify-content: space-between; gap: .2rem; padding: .25rem 0; }
+.change-reading.actual { color: #245d74; }
+.change-reading.prediction { color: #242925; }
+.change-card output { font-variant-numeric: tabular-nums; font-family: var(--kp-focus-card-ui-font, system-ui, sans-serif); white-space: nowrap; }
+.change-rule { text-align: center; padding: .4rem; border-block: 2px solid transparent; margin-top: .35rem; overflow-x: auto; }
+.change-rule > div { margin: .5rem 0; }
+.change-product { display: flex; justify-content: center; align-items: center; gap: .65rem; flex-wrap: wrap; }
+.change-error { padding: .7rem .3rem; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; border-bottom: 2px solid transparent; }
+.change-error > span { display: flex; align-items: center; gap: .65rem; }
+.change-node[data-focused="true"], .change-rule[data-focused="true"], .change-error[data-focused="true"] { border-bottom-color: var(--kp-st-focus); }
+.change-legend { margin: .6rem 0; color: var(--kp-st-muted); text-align: center; }
+.change-controls { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: .75rem; align-items: center; padding: .8rem 0; border-top: 1px solid var(--kp-st-rule); }
+.change-controls[hidden], .change-author[hidden] { display: none; }
+.change-controls label { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: .3rem; }
+.change-controls input { grid-column: 1 / -1; width: 100%; min-width: 0; accent-color: var(--kp-st-focus); }
+.change-controls button, .change-author button { border: 1px solid #a6afa4; border-radius: .25rem; padding: .6rem; background: transparent; color: inherit; cursor: pointer; }
+.change-author, .change-reading-source { margin: 1.6rem auto; max-width: 52rem; line-height: 1.65; }
+.change-reading-source p { overflow-x: auto; }
+summary { cursor: pointer; }
+.change-author textarea { display: block; width: 100%; min-height: 24rem; box-sizing: border-box; padding: 1rem; background: #fffdf8; color: #242925; margin: .5rem 0; }
+.change-author label { display: block; }
+@media (max-width: 600px) {
+  .change-page { padding: 1rem .35rem 3rem; }
+  .change-intro { padding-inline: .7rem; margin-bottom: 1rem; }
+  .change-card .kp-focus-deck__card { grid-template-rows: 16rem auto; }
+  .change-stage { padding: .5rem; }
+  .change-flow { grid-template-columns: 1fr; }
+  .change-node { display: grid; grid-template-columns: 1fr 1fr; gap: .2rem .65rem; padding-block: .6rem; }
+  .change-node + .change-node { border-left: 0; border-top: 1px solid var(--kp-st-rule); }
+  .change-node > .kp-focus-deck__annotation { grid-column: 1; }
+  .change-formula { grid-column: 1; min-height: 2rem; }
+  .change-base { grid-column: 1; }
+  .change-gain { grid-column: 1; min-height: 0; padding-top: .2rem; }
+  .change-meter { grid-column: 2; grid-row: 1 / 4; align-self: center; }
+  .change-axis-labels { grid-column: 2; grid-row: 4; margin: 0; align-self: start; }
+  .change-reading { grid-column: 2; }
+  .change-reading.actual { grid-row: 5; }
+  .change-reading.prediction { grid-row: 6; }
+  .change-controls { grid-template-columns: 1fr 1fr; }
+  .change-error { gap: .5rem; }
+}

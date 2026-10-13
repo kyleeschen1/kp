@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 import { kpViteAuthoringMarketPreview } from "./scripts/vite-authoring-market-preview.ts";
 import { kpViteAuthoringStructuralPreview } from "./scripts/vite-authoring-structural-preview.ts";
 import { kpViteMechanicsRelations } from "./scripts/vite-mechanics-relations.ts";
+import { kpViteChangePropagation } from "./scripts/vite-change-propagation.ts";
 import { kpViteFractionChain } from "./scripts/vite-fraction-chain.ts";
 import { kpViteCodeReasoning } from "./scripts/vite-code-reasoning.ts";
 import { kpViteRepertoireDashboard } from "./scripts/vite-repertoire-dashboard.ts";
@@ -159,6 +160,7 @@ export default defineConfig({
   plugins: [
     kpViteRepertoireDashboard(projectRoot),
     kpViteMechanicsRelations(projectRoot),
+    kpViteChangePropagation(projectRoot),
     kpViteFractionChain(projectRoot),
     kpViteCodeReasoning(projectRoot),
     {
@@ -343,6 +345,7 @@ export default defineConfig({
       mechanicsRelations: resolve(projectRoot, "experiments/mechanics-relations/index.html"),
       forceWithoutWork: resolve(projectRoot, "experiments/mechanics-relations/force-without-work/index.html"),
       authoredRails: resolve(projectRoot, "experiments/authored-rails/index.html"),
+      changePropagation: resolve(projectRoot, "experiments/change-propagation/index.html"),
       repertoire: resolve(projectRoot, "experiments/repertoire/index.html"),
       scalarCancellation: resolve(projectRoot, "experiments/scalar-cancellation/index.html"),
       fractionChain: resolve(projectRoot, "experiments/fraction-chain/index.html"),

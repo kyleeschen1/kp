@@ -1,0 +1,14 @@
+{
+  "title": "How a small change travels",
+  "inner": "x^2",
+  "outer": "\\sin(u)",
+  "x": 0.75,
+  "h": 0.4,
+  "steps": [
+    { "id": "input", "title": "One input, two transformations", "text": "Change x by h. Squaring changes the intermediate value u; taking its sine changes the output y. The filled markers follow what actually happens. The rings show what the local linear model predicts." },
+    { "id": "inner", "title": "The first transformation has a local scale", "text": "Near the starting point, a small input change is scaled by f′(x). This predicts du, not the exact finite change Δu. Move the input-change slider: the filled marker and its ring agree more closely for smaller changes." },
+    { "id": "outer", "title": "The second scale acts on the first", "text": "The next local scale is g′(u), evaluated at the original intermediate value. It acts on the predicted du to give dy. The exact path instead sends the actual changed intermediate value through g. Those are two different calculations." },
+    { "id": "compose", "title": "Local scales multiply", "text": "The chain rule multiplies the two local scales. It gives an exact derivative, but multiplying that derivative by a finite h gives a prediction. Try x = 0: here the prediction is zero, although a nonzero finite input change still changes the output." },
+    { "id": "limit", "title": "Shrink the change; keep the local scales", "text": "Travelling into this step shrinks h to one tenth of the trial change. The base point and local scales stay fixed. Compare the output markers and the error. The chain rule says error divided by h tends to zero as h tends to zero; rounded numerical agreement is an illustration, not a proof." }
+  ]
+}

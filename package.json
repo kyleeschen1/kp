@@ -7,6 +7,9 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "test:change-propagation": "node --disable-warning=ExperimentalWarning --test tests/change-propagation.test.ts",
+    "measure:change-propagation": "node --disable-warning=ExperimentalWarning scripts/measure-change-propagation.ts",
+    "visual:change-propagation": "playwright test --config playwright.change-propagation.config.ts --project=chromium --workers=1",
     "author:rail": "node --disable-warning=ExperimentalWarning scripts/author-rail-publication.ts",
     "test:rail-authoring": "node --disable-warning=ExperimentalWarning --test tests/authored-rail-publication.test.ts tests/momentum-energy.test.ts",
     "visual:rail-authoring": "playwright test --config playwright.rail-authoring.config.ts --project=chromium --workers=1",
