@@ -5,6 +5,11 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+October 13: natural resting layout accepted; its run is complete. The
+[ranked next-loop options](../reviews/2026-10-13-next-ten-loops.md) recommend
+short checked multi-operation composition next. This is a planning request,
+not authorization to start the proposed loops. Reader evaluation stays deferred.
+
 October 12 natural-layout continuation: both composition callers are accepted.
 The user requested ordinary equation spacing at rest, opening only for the
 explanation and returning naturally on expansion. The shared collection view

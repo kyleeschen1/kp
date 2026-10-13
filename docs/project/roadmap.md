@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13: the user accepted the natural resting layout ("Wonderful!").
+`run-contract.kp.natural-collection-layout-v1` is complete. The
+[ten potential loops](reviews/2026-10-13-next-ten-loops.md) are proposals only;
+the recommended next scope is a short composed elimination argument using
+existing checked operations. No new implementation loop is active.
+
 The user accepted both composed examples and requested natural resting notation.
 The [natural-layout candidate](reviews/2026-10-12-natural-collection-layout.md)
 uses complete native KaTeX rows, measured fragment reflow, and the existing

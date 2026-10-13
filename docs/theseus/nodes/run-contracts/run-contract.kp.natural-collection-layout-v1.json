@@ -2,7 +2,8 @@
   "id": "run-contract.kp.natural-collection-layout-v1",
   "kind": "run-contract",
   "title": "Natural resting equations",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -50,8 +51,8 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: one shared-family natural-layout package implemented and checked. Review ordinary resting equations, smooth preparation and natural expanded endpoint on row-composition and polynomial routes. No other renderer migration."
+    "state": "complete",
+    "summary": "COMPLETE: natural resting equations accepted. Next action is a ranked proposal of ten potential loops, not a new implementation run."
   },
   "allowedWork": [
     "Shared collection layout adapter, native fragment measurements and scoped preservation checks"
@@ -72,8 +73,8 @@
     {
       "id": "natural-layout",
       "title": "Native-equation-layout",
-      "summary": "Implement user-approved family-wide natural endpoints through native KaTeX fragment layout.",
-      "status": "in-progress"
+      "summary": "User accepted the natural resting layout with Wonderful and requested ten potential next loops. New implementation scope remains unapproved.",
+      "status": "complete"
     }
   ]
 }
