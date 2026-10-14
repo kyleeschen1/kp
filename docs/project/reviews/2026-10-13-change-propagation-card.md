@@ -6,6 +6,12 @@ Run: `run-contract.kp.explanation-authoring-v1`, card-caller package.
 Status: implementation candidate; human review required before publication or
 promotion. The preceding authored rail was accepted by the user.
 
+Subsequent user feedback: the card is busy and its pedagogical value and intended
+destination are unclear. It has **not** passed the human checkpoint. The
+[research synthesis and learner-context direction](../decisions/2026-10-13-learner-context-and-chain-rule.md)
+supersede treating this candidate as the recommended introductory explanation.
+Its source-authoring evidence remains valid; publication promotion is still gated.
+
 ## What is new
 
 The author now controls the functions and each intermediate explanation. The

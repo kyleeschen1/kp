@@ -27,6 +27,15 @@ learner-facing product definition.
 
 ## Product Thesis
 
+October 13 learner-context clarification: explanations should be designed for a
+learner's starting knowledge and present question; there is no assumed universally
+best explanation. Correct, source-controlled mathematics does not establish
+pedagogical usefulness. A proposed KP advantage is multiple inspectable routes
+through shared mathematical referents, including local prerequisite unfolding and
+return to the argument. This is an accepted design emphasis and an unproven product
+hypothesis, not a new learner-model architecture or automatic-personalization
+mandate. See [research and direction](decisions/2026-10-13-learner-context-and-chain-rule.md).
+
 Accepted authoring target: mathematical chains rendered with KaTeX, plus sparse
 context, should support high-precision LLM inference into typed semantic moves
 and appropriate motifs across disciplines. Domain-owned validation, explicit

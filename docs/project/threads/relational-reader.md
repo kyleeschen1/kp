@@ -5,6 +5,13 @@ Last Updated: 2026-10-01
 
 ## Canonical direction
 
+Latest October 13 feedback: the calculus dashboard was judged busy and its
+pedagogical value questioned; it has not passed review. The user asked to record
+the [chain-rule research and learner-context insight](../decisions/2026-10-13-learner-context-and-chain-rule.md).
+Next discussion should identify a learner's starting knowledge, current question
+and intended conceptual change. Multiple paths through shared semantic objects
+are promising; a new personalized-learning architecture is not approved.
+
 October 13: execute the [explanation-authoring plan](../2026-10-13-explanation-authoring-delivery.md)
 under `run-contract.kp.explanation-authoring-v1`. The user selected equation rails
 and horizontal cards with text above as the authoring destinations. Begin with

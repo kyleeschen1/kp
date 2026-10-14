@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 13 pedagogical feedback: the user found the calculus card busy and its
+teaching purpose unclear. It is not accepted for promotion. Preserve the checked
+authoring capability, but select a learner context and explanatory question before
+redesigning its presentation. [Recorded research and learner-context direction](decisions/2026-10-13-learner-context-and-chain-rule.md)
+distinguishes established mathematical relationships from proposed paths through
+them. Context-sensitive explanations are a product hypothesis, not authorization
+for an adaptive platform. The current contract remains at its card review gate.
+
 October 13 authoring direction: the user approved near-term explanation authoring,
 long-term mathematical exploration, and selective exceptional publications. The
 preferred formats are equation rails and horizontal focus cards with text above
