@@ -244,7 +244,7 @@ async function mount() {
       restoreTarget = validateBayesLocation(candidate.draft, saved);
       if (candidate.draft.revisionId === session.current().revisionId) active.restoreLocation(restoreTarget);
       else {
-        const result = await session.apply(candidate.draft.sourceText);
+        const result = await session.applyDraft(candidate.draft);
         if (result.status === "repair-gap") throw new Error(result.diagnostic.expected);
         if (result.status === "superseded") return;
       }

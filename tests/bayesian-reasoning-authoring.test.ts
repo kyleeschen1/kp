@@ -6,6 +6,17 @@ import { editorialFixture } from "./fixtures/bayes-editorial-source.ts";
 import spam from "../content/authoring/r4b-spam-filter.bayes.json" with { type: "json" };
 import urn from "../content/authoring/r4b-urn-explanation.bayes.json" with { type: "json" };
 
+test("checked history drafts retain real Bayes authority and reject copied or foreign values", async () => {
+  const checked = checkBayesDraft(JSON.stringify(createBayesDraft()));
+  if (checked.status !== "compiled") throw new Error(checked.diagnostic.expected);
+  let preparations = 0;
+  const session = createBayesAuthoringSession({ initial: checked.draft,
+    prepare: async () => { preparations++; return { dispose() {} }; }, commit() {} });
+  assert.equal((await session.applyDraft(checked.draft)).status, "applied");
+  await assert.rejects(session.applyDraft({ ...checked.draft }), /Compile the source/);
+  assert.equal(preparations, 1);
+});
+
 for (const [version, source] of [["v1", createBayesDraft()], ["v2", editorialFixture()],
   ["authored spam", structuredClone(spam)], ["authored urn", structuredClone(urn)]] as const)
 test(`${version} atomic preview retains current on invalid, failed or superseded preparation and disposes stale resources`, async () => {

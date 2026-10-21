@@ -5,6 +5,7 @@ import { renderBayesCardRevision } from "../src/experiments/bayesian-reasoning/p
 import { check as checkAlgebra } from "../src/authoring/algebra/compile.ts";
 import { createKpComposedAlgebraExampleV2 } from "../src/authoring/composed-algebra-example-v2.ts";
 import { renderAlgebraIntuitionCard } from "../src/experiments/composed-algebra-intuition/page.ts";
+import { createBayesAuthoringSession } from "../src/experiments/bayesian-reasoning/authoring.ts";
 
 // Complete source/check/static preparation, without pretending to measure DOM
 // mounting or browser latency. Repeated results are consumed and compared.
@@ -36,3 +37,25 @@ console.log(JSON.stringify({
     })
   ]
 }, null, 2));
+
+const text = JSON.stringify(createBayesDraft()), initial = checkBayesDraft(text);
+if (initial.status !== "compiled") throw new Error(initial.diagnostic.expected);
+for (const recheck of [true, false]) {
+  let html = "", preparations = 0;
+  const session = createBayesAuthoringSession({ initial: initial.draft,
+    prepare: async draft => { preparations++; return { html: renderBayesCardRevision(draft), dispose() {} }; },
+    commit: surface => { html = surface.html; }
+  });
+  const samples: number[] = [], expected = renderBayesCardRevision(initial.draft);
+  for (let i = 0; i < 25; i++) {
+    const start = performance.now(), candidate = checkBayesDraft(text);
+    if (candidate.status !== "compiled") throw new Error(candidate.diagnostic.expected);
+    const result = await (recheck ? session.apply(candidate.draft.sourceText) : session.applyDraft(candidate.draft));
+    samples.push(performance.now() - start);
+    if (result.status !== "applied" || html !== expected) throw new Error("History preparation changed output");
+  }
+  session.dispose(); samples.sort((a, b) => a - b);
+  console.log(JSON.stringify({ name: recheck ? "history-recheck-comparator" : "history-issued",
+    note: "Former versus current checked-history path, using real source checks and static preparation, not browser mounting.",
+    preparations, medianMs: samples[12], p95Ms: samples[23] }));
+}

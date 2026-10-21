@@ -62,7 +62,14 @@ they do **not** prove the mathematical transitions or authorize rendering.
 `source.Repair` is the same diagnostic class used by compilation.
 
 For transactional previews, import `session` from `algebra/session.ts`. It
-retains the existing prepare/commit/dispose lifecycle. The complete convenience
+retains the existing prepare/commit/dispose lifecycle.
+Session `apply(json)` checks external source; `applyDraft(draft)` accepts an
+already-issued draft when a caller has checked it to validate a saved location.
+Both prepare fresh surfaces and share supersession/disposal rules. A serialized
+or copied draft is not proof authority and is rejected. This avoids duplicate
+checking; it does not cache surfaces or change source-equality policy.
+
+The complete convenience
 namespace at `authoring/algebra.ts` combines all these capabilities; use it when
 the caller actually needs compilation and editing, not just JSON validation.
 

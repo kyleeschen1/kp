@@ -78,3 +78,22 @@ The first fixture run waited on missing built files after a main build cleared
 dist; rebuilding the existing fixture allowed the intentional regression to
 execute (one pass, one failure). This is an execution prerequisite problem,
 not a runtime failure or a passing pre-repair run. P6 will make it explicit.
+
+## Checked revision reuse
+
+Bayes history restoration now passes its already-issued draft to the prepared
+session after validating the pinned location. It performs one semantic check
+instead of two, with no cache or retained live surface. `applyDraft` uses the
+same authority assertion, generation and disposal owner as source Apply.
+
+Nine focused tests pass, covering real Bayes authority, copied-draft rejection,
+mixed checked/source requests, invalidation, disposal, invalid source and failed
+preparation. Full types and complete authoring consumer budgets pass. The actual
+Bayes history browser test passes direct addresses, reload, Back and Forward;
+real Apply retains the last valid revision after a repair gap.
+
+The measurement command includes both history paths with 25 fresh preparations.
+This run measured medians 5.840 ms (double check) and 5.241 ms (issued draft),
+with p95 8.965 and 7.711 ms. Concurrent local checks make these noisy diagnostics,
+not a statistical latency claim; the deterministic saving is one check per
+restored source. General compiler caching remains unjustified by this evidence.

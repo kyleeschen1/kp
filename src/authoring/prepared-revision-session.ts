@@ -18,6 +18,23 @@ export function createKpPreparedRevisionSession<Draft, Surface extends { dispose
 }) {
   input.assertDraft(input.initial);
   let current = input.initial, generation = 0, disposed = false;
+  async function prepare(draft: Draft, ticket: number) {
+    // Reuse issued mathematics, never a serialized/copy-forged claim to it.
+    // Live surfaces are still prepared freshly and owned by this transaction.
+    input.assertDraft(draft);
+    let surface: Surface | undefined;
+    try {
+      surface = await input.prepare(draft);
+      if (disposed || ticket !== generation) return { status: "superseded" as const };
+      input.commit(surface, draft);
+      current = draft;
+      surface = undefined;
+      return { status: "applied" as const, current };
+    } catch (error) {
+      if (disposed || ticket !== generation) return { status: "superseded" as const };
+      return { status: "repair-gap" as const, diagnostic: input.preparationFailure(error) };
+    } finally { surface?.dispose(); }
+  }
   return Object.freeze({
     current: () => current,
     invalidate: () => { ++generation; },
@@ -27,19 +44,13 @@ export function createKpPreparedRevisionSession<Draft, Surface extends { dispose
       if (disposed) return { status: "superseded" as const };
       const candidate = input.check(json);
       if (candidate.status === "repair-gap") return candidate;
-      input.assertDraft(candidate.draft);
-      let surface: Surface | undefined;
-      try {
-        surface = await input.prepare(candidate.draft);
-        if (disposed || ticket !== generation) return { status: "superseded" as const };
-        input.commit(surface, candidate.draft);
-        current = candidate.draft;
-        surface = undefined;
-        return { status: "applied" as const, current };
-      } catch (error) {
-        if (disposed || ticket !== generation) return { status: "superseded" as const };
-        return { status: "repair-gap" as const, diagnostic: input.preparationFailure(error) };
-      } finally { surface?.dispose(); }
+      return prepare(candidate.draft, ticket);
+    },
+    /** For callers that already checked a source to validate a pinned location. */
+    async applyDraft(draft: Draft) {
+      const ticket = ++generation;
+      if (disposed) return { status: "superseded" as const };
+      return prepare(draft, ticket);
     }
   });
 }

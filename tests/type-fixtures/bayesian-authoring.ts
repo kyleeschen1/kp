@@ -2,6 +2,7 @@ import { BinaryJointModel } from "../../domains/probability/binary-joint-model.t
 import { checkBayesDraft, createBayesDraft, type PreparedBayesDraft } from "../../src/experiments/bayesian-reasoning/draft.ts";
 import { createUrnBayesDraft } from "../../src/experiments/bayesian-reasoning/urn-source.ts";
 import type { BayesDisclosure } from "../../src/experiments/bayesian-reasoning/extraction.ts";
+import { createBayesAuthoringSession } from "../../src/experiments/bayesian-reasoning/authoring.ts";
 
 for (const source of [createBayesDraft(), createUrnBayesDraft()]) {
   const result = checkBayesDraft(JSON.stringify(source));
@@ -9,6 +10,11 @@ for (const source of [createBayesDraft(), createUrnBayesDraft()]) {
     const draft: PreparedBayesDraft = result.draft;
     const exact: bigint = draft.tree.query.value.numerator;
     void exact;
+    const session = createBayesAuthoringSession({ initial: draft,
+      prepare: async () => ({ dispose() {} }), commit() {} });
+    void session.applyDraft(draft);
+    // @ts-expect-error Source data is not an issued compiled draft.
+    void session.applyDraft(source);
     // @ts-expect-error Compiled joint truth is immutable.
     draft.model.sourceId = "mutated";
   } else {

@@ -54,8 +54,8 @@
     {
       "id": "p3",
       "title": "Preparation",
-      "summary": "Remove duplicate compilation in checked history restoration without cache or surface sharing.",
-      "status": "in-progress"
+      "summary": "Issued-draft reuse removes duplicate check; no cache. Authority, stale requests, disposal and real history preserved.",
+      "status": "complete"
     },
     {
       "id": "p4",

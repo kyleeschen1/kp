@@ -43,6 +43,13 @@
       "scope": "p2",
       "checkedAt": "2026-10-21T17:24:26.804Z",
       "notes": "Seven production tests pass; initial-hidden callback failure reproduced before shared notification repair. Bayes repeated swaps and responsive browser checks pass with zero idle paint."
+    },
+    {
+      "command": "npm run check:authoring; npm run typecheck; npm run visual:bayesian-reasoning:shared -- --grep history; focused session and domain tests",
+      "status": "passed",
+      "scope": "p3",
+      "checkedAt": "2026-10-21T17:29:17.760Z",
+      "notes": "Nine focused tests, complete consumers and types pass; actual Bayes addresses restore and author apply browser tests both pass. One check replaces two; fresh preparations and authority retained."
     }
   ],
   "expectedLearning": [
