@@ -110,7 +110,8 @@
     },
     {
       "id": "second-owner",
-      "status": "planned"
+      "summary": "Composed static transfer verified through real CLI and strengthened closure tests; no algebra engine changes.",
+      "status": "complete"
     },
     {
       "id": "author-task-replay",

@@ -182,6 +182,20 @@
       "scope": "capability-routing",
       "checkedAt": "2026-10-21T19:30:37.831Z",
       "notes": "Twenty-two checks and full types pass; all twelve starters retain bounded lazy loading and reports retain not-performed handoff."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/composed-algebra-publication.test.ts tests/composed-algebra-publication-v2.test.ts tests/immutable-local-edition.test.ts",
+      "status": "passed",
+      "scope": "second-owner",
+      "checkedAt": "2026-10-21T19:32:47.088Z",
+      "notes": "Nine checks and full types pass; four-state transfer and five-state primary keep existing rendering and identity while rejecting nested undeclared output."
+    },
+    {
+      "command": "npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-intuition-transfer.json --check",
+      "status": "passed",
+      "scope": "second-owner",
+      "checkedAt": "2026-10-21T19:32:48.006Z",
+      "notes": "Actual local CLI build then check reproduces the selected existing transfer source."
     }
   ],
   "expectedLearning": [

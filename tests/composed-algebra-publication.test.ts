@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { prepareKpComposedAlgebraDraft } from "../src/authoring/composed-algebra-session.ts";
@@ -16,6 +16,14 @@ for (const base of [prepareKpComposedAlgebraDraft().checked.source, primary, tra
     const path = join(fixture, "source.json"), bytes = JSON.stringify(source, null, 2) + "\n"; writeFileSync(path, bytes);
     const first = buildComposedAlgebraEdition(path); editions.push(first.directory);
     assert.equal(buildComposedAlgebraEdition(path, true).checked, true);
+    const reading = readFileSync(join(first.directory, "index.html"), "utf8");
+    assert.doesNotMatch(reading, /<script|data-kp-focus-deck-scrubber/);
+    const undeclared = join(first.directory, "styles", "injected.js");
+    writeFileSync(undeclared, "untrusted extra output");
+    assert.throws(() => buildComposedAlgebraEdition(path, true), /unexpected output/);
+    assert.equal(readFileSync(join(first.directory, "index.html"), "utf8"), reading);
+    unlinkSync(undeclared);
+    assert.equal(buildComposedAlgebraEdition(path, true).byteEditionId, first.byteEditionId);
     assert.equal(readFileSync(join(first.directory, "source.json"), "utf8"), bytes);
     assert.equal(readFileSync(join(first.directory, "styles/tutorial/focus-deck-typography.css"), "utf8"), readFileSync(new URL("../src/tutorial/focus-deck-typography.css", import.meta.url), "utf8"));
     assert.equal(readFileSync(join(first.directory, "styles/tutorial/focus-deck-scaffold.css"), "utf8"), readFileSync(new URL("../src/tutorial/focus-deck-scaffold.css", import.meta.url), "utf8"));

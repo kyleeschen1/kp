@@ -28,3 +28,16 @@ styles/reader bytes may change the edition without changing the explanation.
 Neither a valid envelope nor a digest proves mathematical truth: the domain
 compiler must reproduce the publication from the selected source. No universal
 identity migration or new identity type is required.
+
+The shared writer now verifies all output entries, including unexpected files,
+directories and symlinks. Its manifest algorithm and valid edition identities
+remain unchanged. Interrupted writes clean staging; a concurrent rename collision
+is accepted only after full verification of the winning directory. Six independent
+processes plus injected write/rename/corruption cases exercise this boundary.
+
+The second owner is the existing composed-algebra static edition, including its
+four-state two-unknown transfer source and five-state primary source. Both retain
+their existing semantic and rendering owners. Their publication checks now also
+reject an undeclared nested file while retaining the original reading and byte
+identity after removal. No new algebra code, interactive promotion or shared
+compiler abstraction was needed.
