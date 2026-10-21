@@ -121,3 +121,21 @@ algebra subexplanation navigation remains local because it has different
 publication and return-state policy. Four revision setup implementations have
 become one 25-line owner, with failure cleanup strengthened; this is a small
 maintenance improvement, not a new universal authoring layer.
+
+## Verification routing
+
+Visibility previously selected zero discovery checks despite matching the
+reader rule. Its scoped discovery route now executes four actual production
+browser laws, and promotion retains the existing reader closure and budget
+checks. Prepared revision/staging selects all four domains' session laws plus
+real staging/Bayes tests; promotion adds both algebra hosts and common-factor.
+Concise capability discovery selects existing complete authoring tests, with
+consumer cost/type measurement added at contract tier. Unknown and explicit
+release paths retain their broad gates.
+
+The semantic-cost npm command builds its fixtures through a pre-hook, removing
+the missing-dist prerequisite encountered earlier. The actual visibility
+`verify:impact --run` invocation passes all four checks after building. Thirty-
+seven routing/command tests and Node types pass. The short guide is
+`docs/project/authoring/engineering-checks.md`; no new runner or budget amendment
+was introduced. Main and fixture builds still must run sequentially.

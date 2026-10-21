@@ -6,6 +6,10 @@ const scripts = (JSON.parse(readFileSync("package.json", "utf8")) as {
   readonly scripts: Readonly<Record<string, string>>;
 }).scripts;
 
+test("semantic cost browser command builds its production fixtures before starting the server", () => {
+  assert.equal(scripts["previsual:semantic-cost"], "npm run build:semantic-cost");
+});
+
 test("pre-expansion health has focused and explicit release commands", () => {
   const focused = scripts["health:pre-expansion"] ?? "";
   for (const gate of [

@@ -12,6 +12,20 @@ test("Theseus-only changes keep verification focused", () => {
   assert.deepEqual(ids(result), ["theseus-validate"]);
 });
 
+test("visibility and prepared authoring owners cannot silently select an empty discovery gate", () => {
+  const visibility = selectKpVerificationImpact(["src/reader/runtime/playback-visibility.ts"], { mode: "discovery" });
+  assert.deepEqual(ids(visibility), ["playback-visibility-browser"]);
+  const preparation = selectKpVerificationImpact(["src/authoring/staged-preview.ts"], { mode: "discovery" });
+  assert.deepEqual(ids(preparation), ["authoring-session-unit", "authoring-preview-browser"]);
+  assert.deepEqual(ids(selectKpVerificationImpact(["src/authoring/algebra/source.ts"], { mode: "discovery" })), ["authoring-boundaries-unit"]);
+  const promotion = ids(selectKpVerificationImpact(["src/reader/runtime/playback-visibility.ts"]));
+  for (const gate of ["typecheck", "reader-production-closure", "reader-route-budgets", "build"]) assert.ok(promotion.includes(gate), gate);
+  assert.ok(ids(selectKpVerificationImpact(["src/authoring/prepared-revision-session.ts"], { mode: "contract" })).includes("authoring-consumer-costs"));
+  const revisionPromotion = ids(selectKpVerificationImpact(["src/authoring/prepared-revision-session.ts"]));
+  for (const gate of ["algebra-preview-browser", "factor-preview-browser", "authoring-preview-browser"]) assert.ok(revisionPromotion.includes(gate), gate);
+  assert.ok(ids(selectKpVerificationImpact(["src/authoring/unclassified.ts"])).includes("test"));
+});
+
 test("shared input tiers cover all actual callers without weakening unknown or release gates", () => {
   const paths = ["src/tutorial/focus-deck-native-input.ts", "src/tutorial/focus-deck-checkpoint-playback.ts"];
   assert.deepEqual(ids(selectKpVerificationImpact(paths, { mode: "discovery" })), ["focus-input-unit"]);

@@ -30,6 +30,36 @@ export interface KpVerificationSelectionOptions {
 }
 
 const checks = {
+  playbackVisibility: check(
+    "playback-visibility-browser", ["npm", "run", "visual:semantic-cost", "--", "--grep", "visibility|failing pause"],
+    "medium", "Exercise document ownership, initial-hidden pause, cancellation and callback isolation.", "discovery"
+  ),
+  authoringSession: check(
+    "authoring-session-unit", ["node", "--test", "tests/prepared-revision-session.test.ts",
+      "tests/bayesian-reasoning-authoring.test.ts", "tests/composed-algebra-session-v2.test.ts",
+      "tests/composed-algebra-session.test.ts", "tests/common-factor-session.test.ts", "tests/authoring-preview-boundary.test.ts"],
+    "medium", "Check issued authority, invalidation, supersession and preview dependency ownership.", "discovery"
+  ),
+  authoringPreview: check(
+    "authoring-preview-browser", ["npm", "run", "visual:authoring-entrypoints", "--", "--grep", "staged preview|Bayes author apply|R4B lifecycle"],
+    "medium", "Exercise actual DOM staging, failure cleanup and repeated native revision swaps.", "discovery"
+  ),
+  algebraPreview: check(
+    "algebra-preview-browser", ["npm", "run", "visual:composed-algebra", "--", "--grep", "both extended sources download|composed authoring applies|composed remount"],
+    "medium", "Preserve both algebra hosts through source reload, Apply and stale-owner release.", "promotion"
+  ),
+  factorPreview: check(
+    "factor-preview-browser", ["npm", "run", "visual:common-factor-authoring", "--", "--project=chromium", "--grep", "repeated Apply"],
+    "medium", "Preserve common-factor Apply, disposal and reduced motion.", "promotion"
+  ),
+  authoringBoundaries: check(
+    "authoring-boundaries-unit", ["npm", "run", "test:authoring-boundaries"],
+    "medium", "Check complete source examples, semantic authority and import boundaries.", "discovery"
+  ),
+  authoringCosts: check(
+    "authoring-consumer-costs", ["npm", "run", "measure:authoring-boundaries", "--", "--check", "--types"],
+    "medium", "Budget every complete authoring consumer without rerunning its selected unit suite."
+  ),
   focusInputUnit: check(
     "focus-input-unit", ["npm", "run", "test:focus-deck-multi-card"], "medium",
     "Exercise card models, ownership and revocable travel without a browser.", "discovery"
@@ -405,6 +435,27 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: "playback-visibility",
+    matches: path => path === "src/reader/runtime/playback-visibility.ts" || path === "tests/semantic-cost.browser.spec.ts",
+    checks: [checks.playbackVisibility, checks.typecheck],
+    reason: "Shared document visibility needs a real browser even in discovery."
+  },
+  {
+    id: "prepared-revision",
+    matches: path => ["src/authoring/prepared-revision-session.ts", "src/authoring/staged-preview.ts",
+      "tests/prepared-revision-session.test.ts", "tests/staged-preview.browser.spec.ts",
+      "tests/authoring-preview-boundary.test.ts"].includes(path),
+    checks: [checks.authoringSession, checks.authoringPreview, checks.typecheck, checks.authoringCosts, checks.build, checks.algebraPreview, checks.factorPreview],
+    reason: "Revision authority and temporary DOM must preserve real editor lifetimes."
+  },
+  {
+    id: "authoring-capabilities",
+    matches: path => path.startsWith("src/authoring/algebra/") || path === "src/authoring/algebra.ts" ||
+      path === "src/math/authoring/matrices.ts",
+    checks: [checks.authoringBoundaries, checks.typecheck, checks.authoringCosts, checks.build],
+    reason: "Concise capabilities retain complete source, compile and editing consumers."
+  },
   {
     id: "focus-input-authority",
     matches: path => [

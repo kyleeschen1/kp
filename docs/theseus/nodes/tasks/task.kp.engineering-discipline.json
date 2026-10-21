@@ -64,6 +64,13 @@
       "scope": "p5",
       "checkedAt": "2026-10-21T17:32:49.515Z",
       "notes": "Full types pass after four-caller staging migration. Four focused boundary/session tests and three selected common-factor/composed browser tests pass; reachability regenerated."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/reader/runtime/playback-visibility.ts --mode discovery --run",
+      "status": "passed",
+      "scope": "p6",
+      "checkedAt": "2026-10-21T17:34:27.484Z",
+      "notes": "Four browser laws pass with automatic fixture build. Prepared-session discovery also passes domain laws and three actual browser cases; 37 routing tests and Node types pass."
     }
   ],
   "expectedLearning": [

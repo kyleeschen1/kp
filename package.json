@@ -31,6 +31,7 @@
     "measure:semantic-cost": "node --disable-warning=ExperimentalWarning scripts/measure-semantic-cost.ts",
     "build:semantic-cost": "npm run build:matrix-interpretations && vite build --config vite.semantic-cost.config.ts",
     "serve:semantic-cost": "node --disable-warning=ExperimentalWarning scripts/serve-semantic-cost.ts",
+    "previsual:semantic-cost": "npm run build:semantic-cost",
     "visual:semantic-cost": "playwright test --config playwright.semantic-cost.config.ts --project=chromium --workers=1",
     "test:semantic-cost": "node --disable-warning=ExperimentalWarning --test tests/semantic-cost.test.ts tests/matrix-product.test.ts tests/matrix-interpretations.test.ts tests/matrix-column-story.test.ts tests/dot-product-passage.test.ts",
     "fetch:la-graph": "python3 scripts/la-knowledge-graph/fetch.py",

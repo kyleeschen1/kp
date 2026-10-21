@@ -72,7 +72,8 @@
     {
       "id": "p6",
       "title": "Verification",
-      "status": "planned"
+      "summary": "Actual discovery routing passes; fixture prerequisites automatic, complete promotion callers explicit.",
+      "status": "complete"
     },
     {
       "id": "p7",
