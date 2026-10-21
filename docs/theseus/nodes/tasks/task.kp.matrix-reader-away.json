@@ -1,0 +1,36 @@
+{
+  "id": "task.kp.matrix-reader-away",
+  "kind": "task",
+  "title": "Matrix settlement and reader lifecycle",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-reader-away.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep \"result placement|cold matrix\" --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "settlement native handoff and cold font readiness",
+      "checkedAt": "2026-10-21T22:11:59.461Z",
+      "notes": "12 passed across Chromium, Firefox and WebKit; original geometry probes failed before repairs"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "settlement and preparation checkpoint",
+      "checkedAt": "2026-10-21T22:14:07.635Z",
+      "notes": "Full clean rerun after correcting new test locator typing"
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep \"reading updates|phone playback\" --project=firefox --project=webkit",
+      "status": "passed",
+      "scope": "preparation ownership",
+      "checkedAt": "2026-10-21T22:14:08.577Z",
+      "notes": "Six passed; original reading-update regression failed before stage-only observer repair"
+    }
+  ]
+}

@@ -62,11 +62,28 @@ export function mountColumnPlayer(root: HTMLElement, scene: ColumnExample,
     render();
   };
   const unsubscribe = clock.subscribe(render);
-  const resize = () => { clock.pause(); view.prepare(); render(); };
-  const stopConfig = observeMatrixConfig(document, next => { config = next; resize(); });
+  const stage = root.querySelector<HTMLElement>(".comb-stage")!;
+  let measuredWidth = stage.clientWidth, measuredHeight = stage.clientHeight;
+  const resize = () => {
+    if (disposed) return;
+    clock.pause(); view.prepare(); render();
+    measuredWidth = stage.clientWidth; measuredHeight = stage.clientHeight;
+  };
+  const stopConfig = observeMatrixConfig(document, next => {
+    const geometryChanged = next.layout !== config.layout || next.spacing !== config.spacing || next.theme !== config.theme;
+    const motionChanged = next.motion !== config.motion;
+    config = next;
+    if (geometryChanged) resize();
+    else if (motionChanged) { clock.pause(); render(); }
+  });
   const visibility = () => { if (document.hidden) { clock.pause(); render(); } };
   const motion = () => { clock.pause(); if (stepsOnly()) go(sample(clock.getSnapshot().progress, beats).index, false); render(); };
-  const observer = new ResizeObserver(resize); observer.observe(root);
+  // As in the dot player, cue wrapping and expanded reading change the host's
+  // height, not its stage. They must not interrupt playback or rebuild clones.
+  const observer = new ResizeObserver(() => {
+    if (stage.clientWidth !== measuredWidth || stage.clientHeight !== measuredHeight) resize();
+  });
+  observer.observe(stage);
   document.addEventListener("visibilitychange", visibility);
   reduced.addEventListener("change", motion);
   const dispose = () => {

@@ -72,6 +72,10 @@ async function navigate(url: URL, push: boolean) {
       return;
     }
     const page = await loadColumnPage(url);
+    // This finite numeric 2×2 renderer uses Main entries and Size3 delimiters.
+    // No math is connected yet: fonts.ready alone can resolve before these
+    // faces are requested, permanently capturing fallback-font endpoints.
+    await Promise.all(["KaTeX_Main", "KaTeX_Size3"].map(face => document.fonts.load(`20px ${face}`)));
     await document.fonts.ready;
     handoff.commit(token, () => {
       if (disposed) return;

@@ -60,7 +60,7 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
   }
   const weighted = stage.querySelector<HTMLElement>(".comb-weighted")!;
   const points = new Map<string, Position>();
-  const owners: { owner: HTMLElement; from: string; to: string; phase: number; grow: boolean }[] = [];
+  const owners: { owner: HTMLElement; a: Position; b: Position; anchor: Position; phase: number; grow: boolean }[] = [];
   let disposed = false;
   let continuous: ReturnType<typeof prepareContinuity> | undefined;
   const prepare = () => {
@@ -70,6 +70,14 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
     for (const node of native.values()) { node.style.opacity = "1"; node.style.transform = ""; node.classList.remove("comb-focus"); }
     layer.replaceChildren(); owners.length = 0;
     const bounds = stage.getBoundingClientRect();
+    // Inline native spans and detached inline-block clones have different line
+    // boxes. Align their contents, not the wrapper's baseline/leading, so the
+    // same numeric glyph reaches its native destination without a final jump.
+    const contentCenter = (node: HTMLElement): Position => {
+      const range = document.createRange(); range.selectNodeContents(node);
+      const box = range.getBoundingClientRect();
+      return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    };
     for (const [key, node] of native) {
       const box = node.getBoundingClientRect(); points.set(key, { x: box.x - bounds.x + box.width / 2, y: box.y - bounds.y + box.height / 2 });
     }
@@ -83,7 +91,13 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
       }
       owner.append(clone); makeKpMaterialOwnerInert(owner);
       owner.dataset["sourceId"] = source.id; owner.dataset["occurrence"] = to;
-      layer.append(owner); owners.push({ owner, from, to, phase, grow });
+      layer.append(owner);
+      const a = contentCenter(original), b = contentCenter(native.get(to)!);
+      const ink = contentCenter(clone), box = owner.getBoundingClientRect();
+      const anchor = { x: ink.x - box.x, y: ink.y - box.y };
+      owner.style.transformOrigin = `${anchor.x}px ${anchor.y}px`;
+      owners.push({ owner, a: { x: a.x - bounds.x, y: a.y - bounds.y },
+        b: { x: b.x - bounds.x, y: b.y - bounds.y }, anchor, phase, grow });
     };
     for (const term of combination.terms) {
       term.vector.entries.forEach((entry, i) => copy(`a-${i}-${term.index}`, `column-${term.index}-${i}`, entry, 1));
@@ -134,13 +148,12 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
         });
       }
     }
-    for (const { owner, from, to, phase, grow } of owners) {
+    for (const { owner, a, b, anchor, phase, grow } of owners) {
       const transit = continuous && phase === 1 ? Math.min(1, frame.local / continuous.materialTransitEnd) : frame.local;
       const t = ease(transit);
-      const a = points.get(from)!, b = points.get(to)!;
       const x = grow ? b.x : a.x + (b.x - a.x) * t;
       const y = grow ? b.y : a.y + (b.y - a.y) * t;
-      owner.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${grow ? growth : 1})`;
+      owner.style.transform = `translate(${x - anchor.x}px, ${y - anchor.y}px) scale(${grow ? growth : 1})`;
       owner.style.opacity = frame.index === phase && frame.local > 0 && transit < 1 && (!grow || growth > 0) ? "1" : "0";
     }
     continuous?.render(frame.index, frame.local);

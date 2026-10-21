@@ -1,0 +1,50 @@
+{
+  "id": "run-contract.kp.matrix-reader-away-v1",
+  "kind": "run-contract",
+  "title": "Matrix reader away engineering",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-reader-away.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-reader-away.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-interpretations",
+    "npm run visual:matrix-interpretations",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Recorded away portfolio; deterministic repairs and bounded investigations within four hours"
+  ],
+  "disallowedWork": [
+    "New aesthetics, lessons, frameworks, calculus, paid services, deployment or unrelated work"
+  ],
+  "goal": "Diagnose final jerk and repair objective preparation and recovery defects while preserving accepted motion",
+  "target": "task.kp.matrix-reader-away",
+  "slices": [
+    {
+      "id": "settlement",
+      "summary": "Recorded bug; deterministic wrapper and cold-font defects repaired with three-engine regression. User confirmation of reported sensation remains open, no aesthetic changes made",
+      "status": "complete"
+    },
+    {
+      "id": "preparation",
+      "summary": "Unrelated host updates and identical/motion-only settings no longer rebuild material; full phone playback and true resize preservation pass three engines",
+      "status": "complete"
+    },
+    {
+      "id": "recovery",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "status": "planned"
+    }
+  ]
+}
