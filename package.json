@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "author:calculus-publication": "node --disable-warning=ExperimentalWarning scripts/build-calculus-edition.ts",
+    "visual:calculus-editions": "playwright test --config playwright.calculus-editions.config.ts --workers=1",
     "measure:authoring-boundaries": "node --disable-warning=ExperimentalWarning scripts/measure-authoring-boundaries.ts",
     "measure:revision-preparation": "node --disable-warning=ExperimentalWarning scripts/measure-revision-preparation.ts",
     "measure:camera-fit": "node --disable-warning=ExperimentalWarning scripts/measure-camera-fit.ts",

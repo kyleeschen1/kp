@@ -50,7 +50,8 @@
     },
     {
       "id": "static-edition",
-      "status": "planned"
+      "summary": "Static CLI build/check, five tests, no-script browser and full types pass.",
+      "status": "complete"
     },
     {
       "id": "manifest-integrity",

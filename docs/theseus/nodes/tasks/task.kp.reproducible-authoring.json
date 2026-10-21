@@ -56,6 +56,20 @@
       "scope": "calculus-artifact",
       "checkedAt": "2026-10-21T19:10:17.490Z",
       "notes": "Four checks and full typecheck pass; complete domain reproduction rejects altered payloads even with recomputed hashes."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-edition.test.ts tests/calculus-publication.test.ts",
+      "status": "passed",
+      "scope": "static-edition",
+      "checkedAt": "2026-10-21T19:11:47.710Z",
+      "notes": "Five tests pass; full types pass. Real CLI check reproduces selected stationary edition."
+    },
+    {
+      "command": "npm run visual:calculus-editions -- --project=chromium",
+      "status": "passed",
+      "scope": "static-edition",
+      "checkedAt": "2026-10-21T19:11:48.589Z",
+      "notes": "Static edition reads all five passages and native math with JavaScript disabled and no external resources."
     }
   ],
   "expectedLearning": [
