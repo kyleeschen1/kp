@@ -98,6 +98,13 @@
       "scope": "style-closure",
       "checkedAt": "2026-10-21T19:17:14.200Z",
       "notes": "Ten checks and full types pass; every referenced font and shared style preserved."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-reader-build.test.ts",
+      "status": "passed",
+      "scope": "reader-build",
+      "checkedAt": "2026-10-21T19:18:38.600Z",
+      "notes": "Two independent production builds yield identical complete local closure; renderer editor remains lazy; full types pass."
     }
   ],
   "expectedLearning": [

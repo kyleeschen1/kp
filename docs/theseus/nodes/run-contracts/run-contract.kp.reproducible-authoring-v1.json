@@ -70,7 +70,8 @@
     },
     {
       "id": "reader-build",
-      "status": "planned"
+      "summary": "Reproducible standalone reader closure and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "reader-capabilities",
