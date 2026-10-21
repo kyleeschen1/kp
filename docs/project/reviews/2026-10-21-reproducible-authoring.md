@@ -19,3 +19,12 @@ tests/composed-algebra-publication-v2.test.ts` passes all nine tests.
 76,642 declared initial JS bytes / 25,222 gzip; CSS 40,345 / 10,893 gzip;
 HTML 58,781 / 6,004 gzip. This excludes fonts, dynamic editing imports and network
 overhead. It is an asset-size baseline, not a timing measurement.
+
+Identity contract: reuse the existing artifact `source.sha256` for exact selected
+UTF-8 bytes, calculus `model.revision` for normalized source (including prose and
+initial controls), and the writer-issued `byteEditionId` for the complete output
+manifest. Whitespace may change source bytes without changing explanation identity;
+styles/reader bytes may change the edition without changing the explanation.
+Neither a valid envelope nor a digest proves mathematical truth: the domain
+compiler must reproduce the publication from the selected source. No universal
+identity migration or new identity type is required.

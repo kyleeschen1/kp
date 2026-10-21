@@ -40,7 +40,8 @@
     },
     {
       "id": "identity-contract",
-      "status": "planned"
+      "summary": "Existing identity types reused; four focused checks and full types pass.",
+      "status": "complete"
     },
     {
       "id": "calculus-artifact",

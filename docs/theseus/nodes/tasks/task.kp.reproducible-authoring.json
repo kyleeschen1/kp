@@ -42,6 +42,13 @@
       "status": "passed",
       "scope": "source-input",
       "checkedAt": "2026-10-21T19:06:56.215Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-publication-identity.test.ts tests/kp-compiled-publication-artifact.test.ts",
+      "status": "passed",
+      "scope": "identity-contract",
+      "checkedAt": "2026-10-21T19:08:40.730Z",
+      "notes": "Four tests pass; existing source, explanation and branded edition identities suffice. Full typecheck also passes including negative identity assignment."
     }
   ],
   "expectedLearning": [
