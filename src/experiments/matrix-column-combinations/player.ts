@@ -10,8 +10,6 @@ import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotatio
 export function mountColumnPlayer(root: HTMLElement, scene: ColumnExample,
   progress: number, onSettled: (progress: number) => void) {
   const { beats } = scene;
-  const view = mountPresentation(root, scene);
-  const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-column-combinations", durationMs });
   let config = readMatrixConfig(document);
   const stepsOnly = () => reduced.matches || config.motion === "steps";
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -20,6 +18,8 @@ export function mountColumnPlayer(root: HTMLElement, scene: ColumnExample,
   const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
   const back = root.querySelector<HTMLButtonElement>("[data-back]")!;
   const next = root.querySelector<HTMLButtonElement>("[data-next]")!;
+  const view = mountPresentation(root, scene);
+  const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-column-combinations", durationMs });
   let disposed = false, lastBeat = "";
   const render = () => {
     if (disposed) return;
@@ -61,7 +61,8 @@ export function mountColumnPlayer(root: HTMLElement, scene: ColumnExample,
     else { if (clock.getSnapshot().progress === 1) clock.seek(0); clock.play({ direction: "forward", stopAt: 1 }); }
     render();
   };
-  const unsubscribe = clock.subscribe(render);
+  let unsubscribe = () => {}, stopConfig = () => {};
+  let observer: ResizeObserver | undefined;
   const stage = root.querySelector<HTMLElement>(".comb-stage")!;
   let measuredWidth = stage.clientWidth, measuredHeight = stage.clientHeight;
   const resize = () => {
@@ -69,31 +70,36 @@ export function mountColumnPlayer(root: HTMLElement, scene: ColumnExample,
     clock.pause(); view.prepare(); render();
     measuredWidth = stage.clientWidth; measuredHeight = stage.clientHeight;
   };
-  const stopConfig = observeMatrixConfig(document, next => {
-    const geometryChanged = next.layout !== config.layout || next.spacing !== config.spacing || next.theme !== config.theme;
-    const motionChanged = next.motion !== config.motion;
-    config = next;
-    if (geometryChanged) resize();
-    else if (motionChanged) { clock.pause(); render(); }
-  });
   const visibility = () => { if (document.hidden) { clock.pause(); render(); } };
   const motion = () => { clock.pause(); if (stepsOnly()) go(sample(clock.getSnapshot().progress, beats).index, false); render(); };
-  // As in the dot player, cue wrapping and expanded reading change the host's
-  // height, not its stage. They must not interrupt playback or rebuild clones.
-  const observer = new ResizeObserver(() => {
-    if (stage.clientWidth !== measuredWidth || stage.clientHeight !== measuredHeight) resize();
-  });
-  observer.observe(stage);
-  document.addEventListener("visibilitychange", visibility);
-  reduced.addEventListener("change", motion);
   const dispose = () => {
     if (disposed) return; disposed = true;
-    stopConfig(); observer.disconnect(); unsubscribe(); clock.dispose(); view.dispose();
+    stopConfig(); observer?.disconnect(); unsubscribe(); clock.dispose(); view.dispose();
     document.removeEventListener("visibilitychange", visibility);
     reduced.removeEventListener("change", motion);
     slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
   };
-  try { clock.seek(progress); render(); }
+  // Setup is a transaction: a failure after any registration must release the
+  // partial player before navigation can reinstall the previous source.
+  try {
+    unsubscribe = clock.subscribe(render);
+    stopConfig = observeMatrixConfig(document, next => {
+      const geometryChanged = next.layout !== config.layout || next.spacing !== config.spacing || next.theme !== config.theme;
+      const motionChanged = next.motion !== config.motion;
+      config = next;
+      if (geometryChanged) resize();
+      else if (motionChanged) { clock.pause(); render(); }
+    });
+    // As in the dot player, cue wrapping and expanded reading change the host's
+    // height, not its stage. They must not interrupt playback or rebuild clones.
+    observer = new ResizeObserver(() => {
+      if (stage.clientWidth !== measuredWidth || stage.clientHeight !== measuredHeight) resize();
+    });
+    observer.observe(stage);
+    document.addEventListener("visibilitychange", visibility);
+    reduced.addEventListener("change", motion);
+    clock.seek(progress); render();
+  }
   catch (error) { dispose(); throw error; }
   return { dispose, prepare: resize, pause: () => { clock.pause(); render(); },
     progress: () => clock.getSnapshot().progress,

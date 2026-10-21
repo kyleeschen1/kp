@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 away continuation: the user reported a final jerk and authorized
+objective work while unavailable. The [bounded engineering pass](2026-10-21-matrix-reader-away.md)
+records the report and repairs measured endpoint/font discontinuities, unnecessary
+preparation, partial-player cleanup and restored-location ownership. See
+[evidence and remaining visual uncertainty](reviews/2026-10-21-matrix-reader-away.md).
+The report remains open for confirmation of the perceived jerk; no new timing,
+color or choreography treatment is inferred from the user's absence.
+
 October 21 completed continuation: both source-authored LA explanations are accepted.
 The user's request to continue authorizes the bounded
 [matrix reader engineering pass](2026-10-21-matrix-reader-continuation.md):

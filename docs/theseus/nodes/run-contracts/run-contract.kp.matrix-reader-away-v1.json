@@ -2,7 +2,8 @@
   "id": "run-contract.kp.matrix-reader-away-v1",
   "kind": "run-contract",
   "title": "Matrix reader away engineering",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -40,11 +41,13 @@
     },
     {
       "id": "recovery",
-      "status": "planned"
+      "summary": "Partial setup and post-install rollback return to one player; persisted restore respects incoming URL. Full types and focused three-engine checks pass",
+      "status": "complete"
     },
     {
       "id": "integration",
-      "status": "planned"
+      "summary": "COMPLETE bounded engineering portfolio: clean full gates, complete costs and retention recorded. Original subjective jerk report remains open for user confirmation; no new motion treatment",
+      "status": "complete"
     }
   ]
 }

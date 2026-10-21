@@ -159,6 +159,8 @@ export function mountPresentation(root: HTMLElement, scene: ColumnExample = exam
     continuous?.render(frame.index, frame.local);
     return frame;
   };
-  prepare();
-  return { prepare, render, dispose() { disposed = true; continuous?.dispose(); layer.replaceChildren(); } };
+  const dispose = () => { disposed = true; continuous?.dispose(); layer.replaceChildren(); };
+  try { prepare(); }
+  catch (error) { dispose(); throw error; }
+  return { prepare, render, dispose };
 }

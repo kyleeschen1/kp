@@ -401,10 +401,16 @@ test("columns and coefficients retain source identity through readable weighted-
     const scalarCopy = page.locator(`[data-occurrence="factor-${term.index}-${i}"]`);
     await expect(scalarCopy).toHaveAttribute("data-source-id", pair.right.id);
     await expect(scalarCopy).toHaveCSS("opacity", "1");
-    const target = await page.locator(`[data-kp-comb-key="factor-${term.index}-${i}"]`).boundingBox();
-    const copy = await scalarCopy.boundingBox();
-    expect(Math.abs(copy!.x + copy!.width / 2 - target!.x - target!.width / 2)).toBeLessThan(1);
-    expect(Math.abs(copy!.y + copy!.height / 2 - target!.y - target!.height / 2)).toBeLessThan(1);
+    // Compare numeral contents: the material holder's line box can include
+    // different leading/advance space than the native operand wrapper.
+    const center = (node: Element) => {
+      const range = document.createRange(); range.selectNodeContents(node);
+      const box = range.getBoundingClientRect(); return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    };
+    const target = await page.locator(`[data-kp-comb-key="factor-${term.index}-${i}"]`).evaluate(center);
+    const copy = await scalarCopy.locator(":scope > span").evaluate(center);
+    expect(Math.abs(copy.x - target.x)).toBeLessThan(1);
+    expect(Math.abs(copy.y - target.y)).toBeLessThan(1);
   }
   for (const term of combination.terms) {
     const copies = await page.locator(`[data-occurrence^="factor-${term.index}-"]`).evaluateAll(nodes => nodes.map(node => {

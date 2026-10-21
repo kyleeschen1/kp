@@ -62,6 +62,80 @@ test("phone playback completes across changing cue heights without preparing aga
   expect(new URL(page.url()).hash).toBe("#placed");
 });
 
+test("partial player setup failure releases registrations before restoring the prior source", async ({ page }) => {
+  await page.addInitScript(() => {
+    const listeners = new Set<EventListenerOrEventListenerObject>();
+    const add = EventTarget.prototype.addEventListener, remove = EventTarget.prototype.removeEventListener;
+    EventTarget.prototype.addEventListener = function (type, listener, options) {
+      if (this === document && type === "kp-matrix-example-config" && listener) {
+        listeners.add(listener); document.documentElement.dataset["configListeners"] = String(listeners.size);
+      }
+      add.call(this, type, listener, options);
+    };
+    EventTarget.prototype.removeEventListener = function (type, listener, options) {
+      if (this === document && type === "kp-matrix-example-config" && listener) {
+        listeners.delete(listener); document.documentElement.dataset["configListeners"] = String(listeners.size);
+      }
+      remove.call(this, type, listener, options);
+    };
+    const observers = new Set<ResizeObserver>(), Native = window.ResizeObserver;
+    window.ResizeObserver = class extends Native {
+      override observe(target: Element, options?: ResizeObserverOptions) {
+        observers.add(this); document.documentElement.dataset["observerCount"] = String(observers.size); super.observe(target, options);
+      }
+      override disconnect() { observers.delete(this); document.documentElement.dataset["observerCount"] = String(observers.size); super.disconnect(); }
+    };
+  });
+  await page.goto(`${route}?input=dependent-columns#p=0.64`);
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-ready", "true"); await frames(page);
+  await expect(page.locator("html")).toHaveAttribute("data-config-listeners", "1");
+  await page.evaluate(() => {
+    const observe = ResizeObserver.prototype.observe;
+    ResizeObserver.prototype.observe = function (target, options) {
+      observe.call(this, target, options);
+      ResizeObserver.prototype.observe = observe;
+      throw new Error("Injected player registration failure");
+    };
+  });
+  await page.getByRole("link", { name: "Identity", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("Injected player registration failure");
+  await expect(page.getByRole("slider")).toHaveValue("0.64");
+  await expect(page.locator("html")).toHaveAttribute("data-config-listeners", "1");
+  await expect(page.locator("html")).toHaveAttribute("data-observer-count", "1");
+  // A failure after installation is a different rollback boundary: the new
+  // player already exists when the browser rejects a history write.
+  await page.evaluate(() => {
+    const push = history.pushState;
+    history.pushState = function () { history.pushState = push; throw new Error("Injected history failure"); };
+  });
+  await page.getByRole("link", { name: "Identity", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("Injected history failure");
+  await expect(page.getByRole("slider")).toHaveValue("0.64");
+  await expect(page.locator("html")).toHaveAttribute("data-config-listeners", "1");
+  await expect(page.locator("html")).toHaveAttribute("data-observer-count", "1");
+  await page.getByRole("link", { name: "2", exact: true }).click();
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-column", "1");
+  await expect(page.getByRole("slider")).toHaveValue("0.64");
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+  await expect(page.locator("html")).toHaveAttribute("data-config-listeners", "0");
+  await expect(page.locator("html")).toHaveAttribute("data-observer-count", "0");
+});
+
+test("persisted page restoration reads the incoming location before publishing old progress", async ({ page }) => {
+  await page.goto(`${route}?input=dependent-columns#p=0.64`);
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-ready", "true"); await frames(page);
+  await page.evaluate(() => {
+    window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+    // The browser restores the history entry before delivering pageshow.
+    history.replaceState(null, "", "#p=0.42");
+    window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
+  await expect(page.getByRole("slider")).toHaveValue("0.42");
+  expect(new URL(page.url()).hash).toBe("#p=0.42");
+  await page.getByRole("button", { name: "Play", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
+});
+
 for (const input of ["dependent-columns", "signed", "larger"]) {
   test(`${input} result placement preserves glyph geometry at the native handoff`, async ({ page }, info) => {
     await page.setViewportSize({ width: 1200, height: 950 });

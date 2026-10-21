@@ -57,7 +57,8 @@ slice status and receipts; this file owns scope and rationale.
 
 ## Bug record
 
-**KP-MATRIX-END-JERK — open.** User observes a jerk at the end. Exact phase,
+**KP-MATRIX-END-JERK — open for user confirmation; measured defects repaired.**
+User observes a jerk at the end. Exact phase,
 browser and cause are unconfirmed. Candidate boundary is `sum` → `placed`, where
 material occurrences yield to native result-matrix entries. Investigate geometry,
 paint ownership and any late preparation before considering timing changes.

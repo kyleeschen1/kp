@@ -70,3 +70,93 @@ No wall-time performance claim is inferred from that count.
 
 No new framework, lesson, public API, service or retained prepared-scene cache.
 Additional measurement happens at preparation, never inside the animation loop.
+
+## Failed setup and restoration
+
+Three reproducible failure paths violated reader ownership:
+
+1. A failure while registering the observer left the already-registered config
+   listener and observer alive. After rollback, instrumentation counted two of
+   each instead of one. Player setup now registers within the existing cleanup
+   transaction; partial presentation preparation also clears its material layer.
+2. A browser history write rejected after installing a new source leaked that
+   installed player when the old source was restored. A single `releasePlayer`
+   boundary clears active ownership before disposing, and rollback releases the
+   newly installed player as well. Both injected failure points now return to one
+   listener/observer, preserve progress 0.64, and allow another column selection;
+   final disposal returns both counts to zero.
+3. Persisted-page `pageshow` prepared the old frame before reading the restored
+   URL. Its settlement callback replaced an incoming `#p=0.42` with old `#p=0.64`.
+   Restoration now holds the navigation guard during preparation, so the incoming
+   location remains authoritative. The regression dispatches persisted lifecycle
+   events and the browser's location-before-pageshow ordering; it is not a claim
+   that every engine admitted a real page into its back-forward cache.
+
+The original assertions failed before these repairs. Twelve focused checks across
+three engines passed, including existing delayed-selection and preparation-error
+rollback cases. A subsequent typecheck exposed TypeScript's stale narrowing of
+the global active state across `install`; the explicit release boundary repairs
+that without casts. The clean full typecheck rerun passed; integration follows below.
+
+## Integration and cost
+
+Full types passed after the release-boundary repair. Production bundle and matrix
+builds passed. The application build retains its pre-existing large-chunk warning;
+the complete matrix consumer gates below pass without budget amendments.
+
+The first full matrix browser run passed 28/29 checks. The remaining assertion
+compared a growing scalar's *holder* center with its native wrapper; after the
+anchor repair, their different line/advance boxes need not match. The assertion
+now compares the actual numeral contents on both sides, retaining its original
+one-pixel center tolerance. Its focused rerun passed. A full clean rerun is
+required; the initial full run is not represented as passing.
+
+`npm run measure:semantic-cost` passed every existing consumer and forbidden-import
+gate. Gzip JavaScript closure bytes, compared with the preceding committed review:
+
+| Complete consumer | Before | After |
+| --- | ---: | ---: |
+| Original matrix reader | 108,184 | 108,480 |
+| Projection source selected | 109,603 | 109,899 |
+| Dependent source selected | 109,864 | 110,160 |
+| Numeric source selected | 108,708 | 109,004 |
+| Basis composition selected | 112,387 | 112,682 |
+| All matrix dynamic chunks | 115,540 | 115,835 |
+
+Matrix CSS remains 14,533 gzip bytes. No limits were increased. These are JS/CSS
+closure measurements, not total network bytes including fonts or response headers.
+The explicit font wait requests faces already used by this local renderer.
+
+`npm run visual:semantic-cost -- --grep 'matrix source navigation'` passed against
+the built production fixture. After warming both sources, twelve selections
+issued zero new requests and retained one document, 2,772 DOM nodes and 30 event
+listeners after GC. Sampled JS heap was 4.14 MB before and 4.42 MB after; this
+bounded retention check does not prove constant memory or deployment performance.
+
+Final browser verification: the full Chromium command passed all 29 checks.
+The supported-browser cohort passed 33/33 using:
+
+```sh
+npm run visual:matrix-interpretations -- --project=firefox --project=webkit --grep 'cold matrix|reading updates|phone playback|partial player|persisted page|result placement|columns and coefficients|shared configuration|accepted continuity'
+```
+
+`npm run typecheck:tests` also passed after the legacy assertion correction.
+The first `npm test` integration run passed 7,388/7,389 tests; its sole failure was
+the generated reachability graph's scanned-file count, 5,070 instead of 5,071
+after adding the browser regression module. `npm run generate:equation-reachability`
+updated that count only, preserving all 68 declared roots. The clean full
+`npm test` rerun passed all 7,389 tests, with zero failures, skips or cancellations.
+
+## Outcome and return point
+
+**COMPLETE — bounded engineering portfolio.** All four packages are satisfied;
+no new aesthetic treatment or dependent visual rollout was introduced. The
+objective invariants have executable safeguards, but the original subjective bug
+report remains open until the user can confirm the final transfer feels right.
+
+Return to `http://localhost:8000/experiments/matrix-column-combinations/?input=dependent-columns#sum`
+and use Next to inspect settlement, then compare the other result column. The
+existing shared server remains running. No further package is implied by unused
+time in the four-hour ceiling. Existing unrelated editor-test and inbox changes
+are preserved. The next engineering run should start from this evidence and the
+user's remaining observation, not repeat the completed loading/lifecycle audit.

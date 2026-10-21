@@ -12,6 +12,11 @@ let active: Active | undefined;
 let disposed = false;
 let navigating = false;
 
+function releasePlayer() {
+  const previous = active; active = undefined;
+  previous?.player.dispose();
+}
+
 function settle(progress: number) {
   if (!active || disposed || navigating) return;
   active.url.hash = columnProgressHash(progress);
@@ -81,7 +86,7 @@ async function navigate(url: URL, push: boolean) {
       if (disposed) return;
       const restoreFocus = focus && document.activeElement === focus;
       const previous = active && { page: active.page, url: active.url, progress: active.player.progress() };
-      active?.player.dispose(); active = undefined;
+      releasePlayer();
       try {
         install(page, url, progress);
         if (push) history.pushState(null, "", url);
@@ -90,6 +95,8 @@ async function navigate(url: URL, push: boolean) {
       } catch (error) {
         // Preparation needs connected native endpoints. If it fails after the
         // old view was released, restore its exact known source and held state.
+        // History can also reject a write after the new player was installed.
+        releasePlayer();
         if (previous) {
           try { install(previous.page, previous.url, previous.progress); }
           catch { active = undefined; delete root.dataset["ready"]; }
@@ -116,10 +123,16 @@ const pagehide = (event: PageTransitionEvent) => {
   if (event.persisted) { navigating = false; active?.player.pause(); root.setAttribute("aria-busy", "false"); }
   else dispose();
 };
-const pageshow = (event: PageTransitionEvent) => { if (event.persisted) { active?.player.prepare(); restore(); } };
+const pageshow = (event: PageTransitionEvent) => {
+  if (event.persisted) {
+    // Repreparation publishes the held sample. Keep it from overwriting the
+    // incoming history location before restore has read that location.
+    navigating = true; active?.player.prepare(); restore();
+  }
+};
 function dispose() {
   if (disposed) return; disposed = true;
-  handoff.invalidate(); active?.player.dispose(); active = undefined;
+  handoff.invalidate(); releasePlayer();
   root.removeEventListener("click", click);
   window.removeEventListener("popstate", restore); window.removeEventListener("hashchange", restore);
   window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow);
