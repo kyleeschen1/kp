@@ -7,6 +7,18 @@ import type { KpAuthorTaskOwners } from "../src/authoring/author-task-owner-cont
 /** Every discoverable task supplies both lazy entrypoints. Adding an owner must
  * not require mirrored switches or import another domain before selection. */
 const owners = {
+  "calculus.change-propagation": {
+    example: () => JSON.parse(readFileSync(new URL("../content/authoring/transfer/stationary-change.json", import.meta.url), "utf8")) as unknown,
+    check: async (json: string) => {
+      const { compileChangeSource } = await import("../src/tutorial/change-propagation/model.ts");
+      const result = compileChangeSource(json);
+      if (result.status === "repair-gap") return result;
+      // Report mathematical evidence without serializing executable model authority.
+      const { source, latex } = result.model;
+      return { status: "compiled" as const, source, latex, revision: result.model.revision,
+        initial: result.model.sample(source.x, source.h), prose: "editorial" as const };
+    }
+  },
   "mechanics.momentum-energy": {
     example: async () => (await import("../src/authoring/mechanics-derivation-author-check.ts")).createMechanicsDerivationAuthorExample(),
     check: async (json: string) => (await import("../src/authoring/mechanics-derivation-author-check.ts")).checkMechanicsDerivationAuthorSource(json)

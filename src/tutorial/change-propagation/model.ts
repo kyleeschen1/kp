@@ -1,6 +1,7 @@
 import { compileExpression, differentiate, expressionToLatex, type MathExpression } from "../../math/expression.ts";
 import { parseLatexExpression, type ParsedLatexExpression } from "../../math/latex-parser.ts";
 import { parsedLatexExpressionToMathExpression } from "../../math/latex-to-expression.ts";
+import { sha256 } from "../../kernel/sha256.ts";
 
 export const changeSteps = ["input", "inner", "outer", "compose", "limit"] as const;
 export type ChangeStep = typeof changeSteps[number];
@@ -13,6 +14,7 @@ export interface ChangeSource {
   readonly steps: readonly { readonly id: ChangeStep; readonly title: string; readonly text: string }[];
 }
 export interface ChangeModel {
+  readonly revision: string;
   readonly source: ChangeSource;
   readonly latex: { readonly inner: string; readonly outer: string; readonly innerDerivative: string; readonly outerDerivative: string };
   sample(x: number, h: number): ChangeSample;
@@ -61,10 +63,10 @@ export function compileChangeSource(bytes: string): ChangeCompilation {
       const step = record(rawSteps[index], `steps[${index}]`);
       keys(step, ["id", "title", "text"], `steps[${index}]`);
       if (step["id"] !== id) gap(`steps[${index}].id`, `Expected ${id}; this bounded explanation has a fixed semantic order.`);
-      return { id, title: text(step["title"], `steps[${index}].title`, 100), text: text(step["text"], `steps[${index}].text`, 1000) };
+      return Object.freeze({ id, title: text(step["title"], `steps[${index}].title`, 100), text: text(step["text"], `steps[${index}].text`, 1000) });
     });
-    const source: ChangeSource = { title: text(raw["title"], "title", 100), inner: text(raw["inner"], "inner", 160),
-      outer: text(raw["outer"], "outer", 160), x: bounded(raw["x"], "x", -2, 2), h: bounded(raw["h"], "h", -.5, .5), steps };
+    const source: ChangeSource = Object.freeze({ title: text(raw["title"], "title", 100), inner: text(raw["inner"], "inner", 160),
+      outer: text(raw["outer"], "outer", 160), x: bounded(raw["x"], "x", -2, 2), h: bounded(raw["h"], "h", -.5, .5), steps: Object.freeze(steps) });
     const inner = expression(source.inner, "x", "inner"), outer = expression(source.outer, "u", "outer");
     const df = differentiate(inner, "x"), dg = differentiate(outer, "u");
     const f = compileExpression(inner), g = compileExpression(outer), first = compileExpression(df), second = compileExpression(dg);
@@ -72,9 +74,9 @@ export function compileChangeSource(bytes: string): ChangeCompilation {
     const uBounds = interval(inner, [-2.5, 2.5]);
     const bounds = [...uBounds, ...interval(outer, uBounds), ...interval(df, [-2.5, 2.5]), ...interval(dg, uBounds)];
     if (bounds.some(value => !Number.isFinite(value) || Math.abs(value) > 1000)) gap("functions", "These functions exceed the bounded comparison range (1000). Use smaller coefficients or powers.");
-    return { status: "checked", model: {
-      source,
-      latex: { inner: expressionToLatex(inner), outer: expressionToLatex(outer), innerDerivative: expressionToLatex(df), outerDerivative: expressionToLatex(dg) },
+    return { status: "checked", model: Object.freeze<ChangeModel>({
+      source, revision: `sha256:${sha256(JSON.stringify(source))}`,
+      latex: Object.freeze({ inner: expressionToLatex(inner), outer: expressionToLatex(outer), innerDerivative: expressionToLatex(df), outerDerivative: expressionToLatex(dg) }),
       sample(x, h) {
         bounded(x, "x", -2, 2); bounded(h, "h", -.5, .5);
         const u = f({ x }), y = g({ u }), deltaU = f({ x: x + h }) - u;
@@ -89,7 +91,7 @@ export function compileChangeSource(bytes: string): ChangeCompilation {
         return [.5, Math.max(.01, Math.abs(ur[0] - u), Math.abs(ur[1] - u), Math.abs(first({ x })) * .5),
           Math.max(.01, Math.abs(yr[0] - y), Math.abs(yr[1] - y), Math.abs(first({ x }) * second({ u })) * .5)];
       }
-    } };
+    }) };
   } catch (error) {
     if (error instanceof SourceGap) return { status: "repair-gap", path: error.path, message: error.message };
     throw error;

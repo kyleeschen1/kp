@@ -36,7 +36,8 @@
     {
       "id": "entrypoint",
       "title": "Entrypoint",
-      "status": "planned"
+      "summary": "Existing calculus compiler exposed through lazy read-only task reporting; source revision and runtime immutability preserve source/function coherence; inventory and loading gates pass.",
+      "status": "complete"
     },
     {
       "id": "workflow",

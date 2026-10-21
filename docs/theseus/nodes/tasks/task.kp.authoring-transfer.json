@@ -29,6 +29,20 @@
       "scope": "source-audit",
       "checkedAt": "2026-10-21T18:38:12.255Z",
       "notes": "11 tests pass; both source files satisfy exact finite-change identities across signed and zero increments. Initial strict signed-zero test assertion corrected; engine unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-inventory.test.ts tests/author-example-loading.test.ts",
+      "status": "passed",
+      "scope": "entrypoint",
+      "checkedAt": "2026-10-21T18:43:46.117Z",
+      "notes": "All 15 tests pass; all 12 task starters remain lazy and checked. Calculus starter capped at seven loaded files."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "passed",
+      "scope": "workflow",
+      "checkedAt": "2026-10-21T18:43:47.066Z",
+      "notes": "Seven Chromium checks pass including both source revisions, reverse, mismatched reload and reapply, failed candidate mount preserving live output, phone and no-script preservation."
     }
   ],
   "expectedLearning": [

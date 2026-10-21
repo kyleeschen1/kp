@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { runAuthorCheckCli } from "../scripts/author-check.ts";
 import { compileChangeSource, projectChange } from "../src/tutorial/change-propagation/model.ts";
 
 const source = (name: string) => readFileSync(`content/authoring/transfer/${name}.json`, "utf8");
 function checked(name: string) {
   const result = compileChangeSource(source(name));
-  assert.equal(result.status, "checked");
   if (result.status !== "checked") throw new Error(`${result.path}: ${result.message}`);
   return result.model;
 }
@@ -59,4 +59,28 @@ test("both authored cases retain deterministic travel and reject unlicensed mean
       if (result.status === "repair-gap") assert.equal(result.path, "inner");
     }
   }
+});
+
+test("checked source identity cannot drift away from its compiled functions", () => {
+  const model = checked("stationary-change");
+  assert.equal(Reflect.set(model.source, "inner", "x^3"), false);
+  for (const value of [model, model.source, model.source.steps, ...model.source.steps, model.latex]) assert.ok(Object.isFrozen(value));
+  const compact = compileChangeSource(JSON.stringify(JSON.parse(source("stationary-change"))));
+  assert.equal(compact.status === "checked" && compact.model.revision, model.revision);
+  const changed = compileChangeSource(JSON.stringify({ ...model.source, title: "Changed editorial intent" }));
+  assert.notEqual(changed.status === "checked" && changed.model.revision, model.revision);
+});
+
+test("real CLI routing reports both sources without claiming host application", async () => {
+  for (const name of ["stationary-change", "two-reversals"]) {
+    const report = await runAuthorCheckCli(["--task", "calculus.change-propagation", "--request", `content/authoring/transfer/${name}.json`]);
+    assert.ok(report && typeof report === "object" && "status" in report && report.status === "checked");
+    assert.ok("authority" in report && report.authority === "report-only");
+    assert.ok("handoff" in report && report.handoff && typeof report.handoff === "object"
+      && "execution" in report.handoff && report.handoff.execution === "not-performed");
+    assert.match(JSON.stringify(report), new RegExp(checked(name).revision));
+  }
+  const bad = await runAuthorCheckCli(["--task", "calculus.change-propagation", "--request", "bad"],
+    () => JSON.stringify({ ...checked("stationary-change").source, inner: "x/z" }));
+  assert.ok(bad && typeof bad === "object" && "status" in bad && bad.status === "repair-gap");
 });
