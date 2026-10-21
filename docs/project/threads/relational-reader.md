@@ -5,6 +5,13 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The approved [dependent-columns continuation](../2026-10-21-dependent-columns-authoring.md)
+now pressures the accepted editorial seam with nonzero signed contributions.
+It adds only a source and registry entry; mathematics and presentation owners
+are unchanged. The [review packet](../reviews/2026-10-21-dependent-columns-authoring.md)
+records the bounded reuse claim and remaining navigation/layout/loading limits.
+Review the explanation at `?input=dependent-columns` before broader promotion.
+
 The current [authoring reuse trial](../2026-10-21-projection-loss-authoring.md)
 asks why different inputs can share a matrix output. It reuses the accepted
 column-combination renderer and semantic product, adding only source-owned prose
@@ -13,8 +20,8 @@ are accepted by the user on October 21: all 15 Chromium matrix checks, full type
 and focused semantic/build checks pass. The bounded trial is complete; learner
 outcomes and unrestricted composition remain unproven. Next recommended pressure:
 dependent nonzero columns, using the same editorial seam to explain cancellation
-instead of multiplication by a zero column. No new run, broad generalization or
-renewed calculus polish is authorized by this acceptance.
+instead of multiplication by a zero column. The subsequent “go” authorizes the
+bounded continuation above, not broad generalization or renewed calculus polish.
 
 The accepted algebra [preparation investigation](../2026-10-21-algebra-preparation-investigation.md)
 is complete. Independent ink probes now share layout passes and repeated track

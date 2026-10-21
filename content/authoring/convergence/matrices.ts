@@ -1,6 +1,7 @@
 import * as M from "../../../src/math/authoring/matrices.ts";
 import type { ColumnReading } from "../../../src/experiments/matrix-column-combinations/model.ts";
 import { projectionLoss } from "../linear-algebra/projection-loss.ts";
+import { dependentColumns } from "../linear-algebra/dependent-columns.ts";
 
 type Matrix2 = readonly [readonly [number, number], readonly [number, number]];
 
@@ -22,4 +23,4 @@ export const matrixSources: readonly {
   readonly id: string;
   readonly product: ReturnType<typeof M.product>;
   readonly reading?: ColumnReading;
-}[] = Object.freeze([...matrixInputs, projectionLoss]);
+}[] = Object.freeze([...matrixInputs, projectionLoss, dependentColumns]);

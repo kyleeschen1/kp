@@ -1,0 +1,46 @@
+{
+  "id": "run-contract.kp.dependent-columns-authoring-v1",
+  "kind": "run-contract",
+  "title": "Dependent columns source reuse",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.dependent-columns-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-dependent-columns-authoring.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-interpretations",
+    "npm run visual:matrix-interpretations"
+  ],
+  "allowedWork": [
+    "One mathematical and editorial source, registry entry, focused checks and evidence; preserve the existing player"
+  ],
+  "disallowedWork": [
+    "New motion, layout, rendering framework or broader rollout before review"
+  ],
+  "goal": "Demonstrate signed nonzero cancellation with source-only authoring",
+  "target": "task.kp.dependent-columns-authoring",
+  "slices": [
+    {
+      "id": "source",
+      "summary": "Added typed source and registry entry only; 21 focused mathematical checks pass including nine compensating-shift inputs and independent transfer cases. No host or renderer edits.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "summary": "All 16 Chromium checks, 21 unit checks, full types and matrix build pass. Desktop and phone captures inspected; inherited scrolling and menu length documented.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "summary": "Source-only second explanation ready at shared server; review the cancellation argument before broader promotion.",
+      "status": "in-progress"
+    }
+  ]
+}

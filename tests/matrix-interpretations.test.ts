@@ -9,6 +9,7 @@ import { matrixInputs } from "../content/authoring/convergence/matrices.ts";
 import { columnExampleFromProduct } from "../src/experiments/matrix-column-combinations/model.ts";
 import type { ColumnReading } from "../src/experiments/matrix-column-combinations/model.ts";
 import { projectionLoss } from "../content/authoring/linear-algebra/projection-loss.ts";
+import { dependentColumns } from "../content/authoring/linear-algebra/dependent-columns.ts";
 import * as M from "../src/math/authoring/matrices.ts";
 
 test("projection loses the second coordinate without conflating input or result identities", () => {
@@ -31,6 +32,34 @@ test("projection loses the second coordinate without conflating input or result 
   const transfer = M.product({ id: "projection.transfer", left: product.left,
     right: M.matrix("projection.transfer.inputs", [[3, 4], [7, 2]]) });
   assert.deepEqual(M.evaluate(transfer.result, {}), [[3, 4], [0, 0]]);
+});
+
+test("dependent nonzero columns retain signed contributions while losing a compensating input change", () => {
+  const { product, reading } = dependentColumns;
+  assert.deepEqual(M.evaluate(product.left, {}), [[1, 2], [2, 4]]);
+  assert.deepEqual(M.evaluate(product.right, {}), [[3, 5], [-1, -2]]);
+  assert.deepEqual(M.evaluate(product.result, {}), [[1, 1], [2, 2]]);
+  const contributions = [[[3, 6], [-2, -4]], [[5, 10], [-4, -8]]];
+  for (const column of [0, 1] as const) {
+    const scene = columnExampleFromProduct(product, column, reading);
+    assert.equal(scene.env.product, product);
+    assert.deepEqual(scene.combination.terms.map(term => term.entries.map(value)), contributions[column]);
+    for (const beat of scene.beats) assert.equal(beat.cue, reading.cues[column][beat.id]);
+    for (const term of scene.combination.terms) {
+      assert.equal(term.coefficient, product.right.rows[term.index]![column]);
+      term.pairs.forEach((pair, row) => assert.equal(pair, product.cell(row, column).dot.pairs[term.index]));
+    }
+  }
+  assert.notEqual(product.cell(0, 0).result.id, product.cell(0, 1).result.id);
+  const transfer = M.product({ id: "dependence.transfer", left: product.left,
+    right: M.matrix("dependence.transfer.inputs", [[7, 7], [-3, -2]]) });
+  assert.deepEqual(M.evaluate(transfer.result, {}), [[1, 3], [2, 6]]);
+  // Pressure the claimed compensating direction beyond the two teaching inputs.
+  for (const x of [-3, 0, 4]) for (const y of [-2, 0, 5]) {
+    const shifted = M.product({ id: `dependence.shift.${x}.${y}`, left: product.left,
+      right: M.matrix(`dependence.inputs.${x}.${y}`, [[x, x + 2], [y, y - 1]]) });
+    assert.deepEqual(M.evaluate(shifted.result, {}), [[x + 2 * y, x + 2 * y], [2 * x + 4 * y, 2 * x + 4 * y]]);
+  }
 });
 
 // Authors describe every supported milestone; arbitrary/new motion IDs are

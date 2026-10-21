@@ -79,3 +79,11 @@ cue text does not itself bind semantic subobjects or verify explanatory claims.
 Acceptance covers this example. Pressure a structurally different caller before
 expanding that editorial seam or introducing another presentation abstraction.
 See `../reviews/2026-10-21-projection-loss-authoring.md`.
+
+The second candidate, `content/authoring/linear-algebra/dependent-columns.ts`,
+uses the same interface with two nonzero dependent columns and signed weights.
+Open `?input=dependent-columns` on this host. Its source and registry entry
+require no host/API changes; both inputs produce (1,2) through partial cancellation.
+The explanatory review is pending. This demonstrates another mathematical reading
+within the same sequence, not arbitrary lesson topology. See
+`../reviews/2026-10-21-dependent-columns-authoring.md` for limits and evidence.

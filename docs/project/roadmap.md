@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 continuation: the user approved the dependent-nonzero-column pressure
+case below. The [source-only trial](2026-10-21-dependent-columns-authoring.md)
+adds one mathematical/editorial source and registry entry with no player, renderer
+or API changes. [Evidence and limits](reviews/2026-10-21-dependent-columns-authoring.md)
+distinguish reuse within the fixed sequence from arbitrary narrative composition.
+The changed explanation at `?input=dependent-columns` awaits human review;
+this run does not authorize a new framework or catalogue-wide promotion.
+
 October 21 latest: the user approved an authoring reuse trial instead of another
 performance-only investigation. The [projection information-loss example](2026-10-21-projection-loss-authoring.md)
 uses the existing column-combination player and concise matrix API. Its source
@@ -36,7 +44,7 @@ bounded trial is complete. This establishes an accepted explanation, not measure
 learner outcomes or broad rollout authority. Fixed-sequence and comparison/navigation
 limits remain. The recommended next pressure case is dependent nonzero columns,
 testing whether the same editorial seam explains information loss through
-cancellation rather than a zero column. That is a recommendation, not active scope.
+cancellation rather than a zero column. That recommendation led to the trial above.
 Calculus stays as-is.
 
 October 21 accepted algebra preparation investigation is complete. The

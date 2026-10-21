@@ -1,0 +1,55 @@
+{
+  "id": "task.kp.dependent-columns-authoring",
+  "kind": "task",
+  "title": "Explain dependent nonzero columns through the accepted source interface",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-dependent-columns-authoring.md"
+    },
+    {
+      "kind": "file",
+      "path": "content/authoring/linear-algebra/dependent-columns.ts"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-dependent-columns-authoring.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-interpretations",
+      "status": "passed",
+      "scope": "source-and-semantics",
+      "checkedAt": "2026-10-21T21:14:20.059Z",
+      "notes": "21 checks pass, including both outputs, signed contributions, identity, transfer and nine compensating input shifts."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "types",
+      "checkedAt": "2026-10-21T21:14:20.673Z",
+      "notes": "All app, Node, test, Svelte and domain checks pass; final browser assertion additions also pass a subsequent typecheck:tests run."
+    },
+    {
+      "command": "npm run build:matrix-interpretations",
+      "status": "passed",
+      "scope": "production-preview",
+      "checkedAt": "2026-10-21T21:14:21.277Z",
+      "notes": "152 modules; source registry approximately 6.07 kB raw and 2.46 kB gzip. No engine edits."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "full-matrix-chromium",
+      "checkedAt": "2026-10-21T21:14:21.875Z",
+      "notes": "16 pass. Both authored explanations, scaled signed paint, identities, results, reversible motion, phones, themes and accepted original matrix scenes preserved."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: verified source-only reuse, no engine/API changes. Human review of the new explanation remains; no unrestricted composability claim."
+  }
+}
