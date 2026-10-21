@@ -36,3 +36,24 @@ Existing queue choices, locally modified generic skills, older open receipts
 and missing-source audit pressure are not owned by this delivery. Do not clear
 them merely to make a readiness report green; the approved explicit run owns
 this work and its local receipts.
+
+## Exact prepared descriptors
+
+The existing metadata generator now also emits two typed, narrow projections
+for the prepared log/exponent card and numeric change-of-base authoring card.
+Both retain exact descriptor equality against the complete catalogue, including
+promotion and controls. The full picker remains unchanged. Static runtime
+closure tests prevent either standalone caller from importing that catalogue.
+No descriptor policy or alternate hand-maintained data was introduced.
+
+Tax initial JS: 1,448,733 → 1,400,803 raw bytes; 392,893 → 387,663 gzip
+bytes (5,230 bytes, 1.33%). Deferred additional JS stays 140,669 gzip bytes.
+This is a measured loading reduction, not a demonstrated latency improvement:
+the new 6x samples show ready 1,248–1,541 ms and max frame gaps 200–216 ms,
+with noisy scheduling and overlapping local verification. Existing cost
+ceilings remain unchanged; dependency and exact-value checks protect the repair.
+
+Metadata parity tests, full typecheck, production build and six production
+tax loading samples pass. Eight focus-deck browser checks preserve first input,
+deferred activation, pagehide, reverse and URL ownership. The numeric authoring
+host is checked through its existing browser command.

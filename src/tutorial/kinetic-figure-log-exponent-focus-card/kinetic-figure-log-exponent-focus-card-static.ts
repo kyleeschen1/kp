@@ -2,7 +2,8 @@ import instruction from "./log-exponent-instruction.generated.json" with { type:
 import { createKpLogExponentAnimationAsset, kpLogExponentAnimationId } from "../../animation/log-exponent-adapter.ts";
 import type { KpAnimationAsset } from "../../animation/asset.ts";
 import type { KpEditorAnimationDescriptor } from "../../editor/animation-descriptor.ts";
-import { createKpEditorAnimationLibrary } from "../../editor/animation-library.ts";
+import descriptorData from "./descriptor.generated.ts";
+import { createKpEditorAnimationDescriptor } from "../../editor/animation-descriptor.ts";
 import { renderKpEditorAnimationPlayerShell } from "../../editor/animation-player-shell.ts";
 import { renderKpFocusDeckScaffold } from "../focus-deck-scaffold.ts";
 import { readKpLogExponentFocusCardBeatIndexFromHash, type KpLogExponentFocusCardScoreV1 } from "./kinetic-figure-log-exponent-focus-card-model.ts";
@@ -19,10 +20,8 @@ export interface KpLogExponentFocusCardAuthority {
 export function createKpLogExponentFocusCardAuthority():
 KpLogExponentFocusCardAuthority {
   const animation = createKpLogExponentAnimationAsset();
-  const descriptor = createKpEditorAnimationLibrary().find(
-    ({ animationId }) => animationId === kpLogExponentAnimationId
-  );
-  if (descriptor === undefined) {
+  const descriptor = createKpEditorAnimationDescriptor(descriptorData);
+  if (descriptor.animationId !== kpLogExponentAnimationId) {
     throw new Error("Missing canonical log-exponent animation descriptor.");
   }
   return Object.freeze({

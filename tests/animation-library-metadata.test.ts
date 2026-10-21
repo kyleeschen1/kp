@@ -14,6 +14,23 @@ import {
 import {
   createKpEditorAnimationLibrary
 } from "../src/editor/animation-library.ts";
+import logExponent from "../src/tutorial/kinetic-figure-log-exponent-focus-card/descriptor.generated.ts";
+import logarithmBase from "../src/experiments/authoring-market/equation-descriptor.generated.ts";
+import { collectKpRuntimeImportClosure } from "../scripts/runtime-import-closure.ts";
+
+test("prepared cards retain exact generated descriptors without importing the picker catalogue", () => {
+  const library = createKpEditorAnimationLibrary();
+  for (const descriptor of [logExponent, logarithmBase]) {
+    assert.deepEqual(descriptor, library.find(item => item.animationId === descriptor.animationId));
+    assert.deepEqual(validateKpEditorAnimationDescriptor(descriptor), []);
+  }
+  for (const entry of [
+    "src/tutorial/kinetic-figure-log-exponent-focus-card/kinetic-figure-log-exponent-focus-card-static.ts",
+    "src/experiments/authoring-market/authoring-equation-card.ts"
+  ]) {
+    assert.equal(collectKpRuntimeImportClosure(entry).some(path => /animation-library(?:-metadata)?(?:\.generated)?\.(?:ts|json)$/.test(path)), false, entry);
+  }
+});
 
 test("generated animation metadata matches concrete catalog projection", () => {
   const projected = projectKpAnimationAssetsToEditorDescriptors({

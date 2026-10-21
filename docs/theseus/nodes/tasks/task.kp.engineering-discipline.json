@@ -29,6 +29,13 @@
       "scope": "baseline",
       "checkedAt": "2026-10-21T17:17:46.812Z",
       "notes": "Six complete production tax samples preserve 392893 initial gzip JS bytes; CPU slowdown still exposes 216-266ms frame gaps."
+    },
+    {
+      "command": "npm run audit:architecture-cost -- --browser --tax-only --activation --acceptance",
+      "status": "passed",
+      "scope": "p1",
+      "checkedAt": "2026-10-21T17:20:28.959Z",
+      "notes": "Initial tax JS now 387663 gzip bytes, down 5230; deferred addition unchanged. Metadata parity, full types/build, eight focus-deck checks and numeric authoring browser pass."
     }
   ],
   "expectedLearning": [

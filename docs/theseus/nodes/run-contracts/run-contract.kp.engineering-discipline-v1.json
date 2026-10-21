@@ -42,13 +42,14 @@
     {
       "id": "p1",
       "title": "Loading",
-      "summary": "Remove full catalogue metadata from two exact prepared-descriptor callers; measure complete production path.",
-      "status": "in-progress"
+      "summary": "Checked exact descriptor projections and complete production loading savings.",
+      "status": "complete"
     },
     {
       "id": "p2",
       "title": "Lifetime",
-      "status": "planned"
+      "summary": "Consolidate Bayes visibility ownership and pressure initial-hidden callback failures; preserve retained scene and restore policy.",
+      "status": "in-progress"
     },
     {
       "id": "p3",

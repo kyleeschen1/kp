@@ -3,7 +3,8 @@ import { validateKpEquationTransformSeriesRequest } from "../../authoring/equati
 import { KP_EDITOR_ANIMATION_SURFACE_READINESS_EVENT } from "../../editor/animation-surface-readiness.ts";
 import { sampleKpEquationSeriesRuntime } from "../../authoring/equation-series-runtime.ts";
 import { createKpLogarithmChangeOfBaseExemplarAsset } from "../../animation/logarithm-change-of-base-exemplar.ts";
-import { createKpEditorAnimationLibrary } from "../../editor/animation-library.ts";
+import descriptorData from "./equation-descriptor.generated.ts";
+import { createKpEditorAnimationDescriptor } from "../../editor/animation-descriptor.ts";
 import { renderKpEditorAnimationPlayerShell } from "../../editor/animation-player-shell.ts";
 import { hydrateKpPreparedEditorAnimationPlayer, disposeKpEditorAnimationPlayer, disposeKpEditorAnimationPlayers, dispatchKpEditorAnimationPlaybackAction, KP_EDITOR_ANIMATION_FRAME_EVENT } from "../../editor/animation-player-controller.ts";
 import type { KpEditorAnimationPlayerState } from "../../editor/animation-player-state.ts";
@@ -23,8 +24,8 @@ export function mountKpAuthoringEquationCard(root: HTMLElement) {
   // stay in the editor and cannot become a partially populated live candidate.
   let compilation = initial;
   const animation = createKpLogarithmChangeOfBaseExemplarAsset();
-  const descriptor = createKpEditorAnimationLibrary().find(item => item.animationId === animation.id);
-  if (descriptor === undefined) throw new Error("Missing governed change-of-base descriptor.");
+  const descriptor = createKpEditorAnimationDescriptor(descriptorData);
+  if (descriptor.animationId !== animation.id) throw new Error("Missing governed change-of-base descriptor.");
   let displayedText = initialText;
   let disposed = false;
   let progress = 0;
