@@ -6,6 +6,7 @@ import { navigateKpFocusDeckPlayback } from "../focus-deck-playback.ts";
 import { boundKpFocusDeckTravel, settleKpFocusDeckTravel } from "../focus-deck-continuous-navigation.ts";
 import { changeSteps, projectChange, type ChangeModel } from "./model.ts";
 import { bindChangePaint } from "./paint.ts";
+import { readChangeLocation, writeChangeLocation } from "./location.ts";
 
 export function required<T extends Element>(selector: string, parent: ParentNode = document): T {
   const value = parent.querySelector<T>(selector);
@@ -45,8 +46,7 @@ export function mountChange(root: HTMLElement, model: ChangeModel, options: {
     window.clearTimeout(urlTimer);
     if (!active || mismatchedLink) return;
     urlTimer = window.setTimeout(() => {
-      const params = new URLSearchParams({ revision: model.revision, step: String(position()), x: String(x), h: String(h) });
-      history.replaceState(null, "", `#${params}`);
+      history.replaceState(null, "", writeChangeLocation(model.revision, { step: position(), x, h }));
     }, 250);
   };
   root.dataset["kpFocusDeckStatic"] = "false";
@@ -108,13 +108,14 @@ export function mountChange(root: HTMLElement, model: ChangeModel, options: {
   const resize = new ResizeObserver(render); cleanup.push(() => resize.disconnect()); resize.observe(viewport);
   function restorePosition() {
     if (!active) return;
-    const params = new URLSearchParams(location.hash.slice(1));
-    // Legacy unpinned links refer to the built-in source only. A mismatched
-    // revision cannot silently replay a different explanation after reload.
-    const revision = params.get("revision");
-    mismatchedLink = revision === null ? !restore : revision !== model.revision;
-    if (mismatchedLink) {
-      required("[data-change-diagnostic]").textContent = mode === "edition"
+    const result = readChangeLocation(location.hash, { revision: model.revision,
+      x: model.source.x, h: model.source.h, allowLegacy: restore });
+    const previouslyInvalid = mismatchedLink;
+    mismatchedLink = result.status === "repair-gap";
+    if (result.status === "repair-gap") {
+      required("[data-change-diagnostic]").textContent = result.code === "location"
+        ? `${result.message} Showing this source at its starting point; the link is unchanged.`
+        : mode === "edition"
         ? "This link belongs to a different source. Open the matching edition to restore its position; showing this edition at its starting point."
         : "This link belongs to a different source. Reapply that source to restore its position; showing this source at its starting point.";
       x = model.source.x; h = model.source.h;
@@ -122,13 +123,10 @@ export function mountChange(root: HTMLElement, model: ChangeModel, options: {
       native.cancel(); clock.seek(0, "url");
       return;
     }
-    const read = (key: string, fallback: number, low: number, high: number) => {
-      const raw = params.get(key), value = raw === null ? fallback : Number(raw);
-      return Number.isFinite(value) && value >= low && value <= high ? value : fallback;
-    };
-    x = read("x", model.source.x, -2, 2); h = read("h", model.source.h, -.5, .5);
+    if (previouslyInvalid) required("[data-change-diagnostic]").textContent = "";
+    x = result.location.x; h = result.location.h;
     xInput.value = String(x); hInput.value = String(h);
-    native.cancel(); clock.seek(read("step", 0, 0, 4) / 4, "url");
+    native.cancel(); clock.seek(result.location.step / 4, "url");
   }
   if (restore) restorePosition(); else render();
   window.addEventListener("hashchange", restorePosition, { signal });

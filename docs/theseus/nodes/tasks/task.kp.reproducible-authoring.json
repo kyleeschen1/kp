@@ -147,6 +147,20 @@
       "scope": "edition-restoration",
       "checkedAt": "2026-10-21T19:23:59.300Z",
       "notes": "All seven editor preservation checks pass; shared mounting options are explicit."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-location.test.ts tests/change-propagation.test.ts",
+      "status": "passed",
+      "scope": "location-input",
+      "checkedAt": "2026-10-21T19:25:53.761Z",
+      "notes": "Ten tests pass including round-trip grid, duplicate, malformed, nonfinite and out-of-range links; full types pass."
+    },
+    {
+      "command": "npm run visual:calculus-editions -- --project=chromium",
+      "status": "passed",
+      "scope": "location-input",
+      "checkedAt": "2026-10-21T19:25:54.666Z",
+      "notes": "Six browser cases pass including invalid link preservation and correction clearing the diagnostic."
     }
   ],
   "expectedLearning": [

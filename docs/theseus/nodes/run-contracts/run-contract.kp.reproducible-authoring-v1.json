@@ -90,7 +90,8 @@
     },
     {
       "id": "location-input",
-      "status": "planned"
+      "summary": "Typed whole-location gaps, deterministic serialization and corrected-link recovery verified; full types pass.",
+      "status": "complete"
     },
     {
       "id": "preview-lifetime",

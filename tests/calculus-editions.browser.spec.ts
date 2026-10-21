@@ -62,6 +62,16 @@ for (const key of ["stationary", "reversals"]) test(`${key}: reload and reverse 
 });
 test.afterAll(async () => { await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); });
 
+test("malformed links retain the embedded source and recover when corrected", async ({ page }) => {
+  await page.goto(`${origin}/stationary/#step=2&x=NaN`);
+  await expect(page.locator("[data-change-diagnostic]")).toContainText("Playback x");
+  await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "0");
+  expect(new URL(page.url()).hash).toBe("#step=2&x=NaN");
+  await page.evaluate(() => { location.hash = "step=2&x=1&h=-0.2"; });
+  await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "2");
+  await expect(page.locator("[data-change-diagnostic]")).toHaveText("");
+});
+
 test("static selected-source edition reads without JavaScript or external resources", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
