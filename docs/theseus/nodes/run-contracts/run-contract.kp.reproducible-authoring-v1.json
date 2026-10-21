@@ -55,7 +55,8 @@
     },
     {
       "id": "manifest-integrity",
-      "status": "planned"
+      "summary": "Complete output closure verified; eighteen tests and full types pass.",
+      "status": "complete"
     },
     {
       "id": "write-lifecycle",

@@ -70,6 +70,13 @@
       "scope": "static-edition",
       "checkedAt": "2026-10-21T19:11:48.589Z",
       "notes": "Static edition reads all five passages and native math with JavaScript disabled and no external resources."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/immutable-local-edition.test.ts tests/local-stylesheet-closure.test.ts tests/calculus-edition.test.ts tests/composed-algebra-publication.test.ts tests/common-factor-publication.test.ts tests/bayesian-reasoning-publication.test.ts",
+      "status": "passed",
+      "scope": "manifest-integrity",
+      "checkedAt": "2026-10-21T19:13:19.044Z",
+      "notes": "Eighteen checks and full types pass; all four writer consumers preserve valid editions while undeclared files, directories and links are rejected."
     }
   ],
   "expectedLearning": [

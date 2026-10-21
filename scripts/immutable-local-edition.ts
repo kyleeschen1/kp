@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { dirname, join, relative, isAbsolute } from "node:path";
-import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
 
 export const digestEditionBytes = (text: string | Uint8Array): `sha256:${string}` => `sha256:${createHash("sha256").update(text).digest("hex")}`;
 
@@ -22,7 +22,7 @@ export function writeKpImmutableLocalEditionReceipt(input: {
   const rootRelative = relative(input.repo, input.editionRoot);
   if (!rootRelative || rootRelative.startsWith("..") || isAbsolute(rootRelative)) throw new Error("Edition root must be a strict repository descendant.");
   const files = new Map(input.files);
-  for (const name of files.keys()) if (!name || isAbsolute(name) || name.split(/[\\/]/).some(part => part === ".." || part === "." || part === ""))
+  for (const name of files.keys()) if (!name || isAbsolute(name) || name.includes("\\") || name.split("/").some(part => part === ".." || part === "." || part === ""))
     throw new Error("Edition files require bounded relative paths.");
   if (files.has("edition.json")) throw new Error("The writer owns the edition manifest.");
   const manifest = { schemaVersion: input.schemaVersion, revisionId: input.revisionId,
@@ -38,6 +38,22 @@ export function writeKpImmutableLocalEditionReceipt(input: {
     }
   }
   if (input.check || existsSync(directory)) {
+    // Exact bytes are insufficient if an undeclared script or symlink can travel
+    // alongside them. Verify the complete directory, without following links.
+    const expectedDirectories = new Set<string>();
+    for (const name of files.keys()) {
+      const parts = name.split("/"); parts.pop();
+      while (parts.length) { expectedDirectories.add(parts.join("/")); parts.pop(); }
+    }
+    function inspect(relativePath: string) {
+      for (const entry of readdirSync(join(directory, relativePath), { withFileTypes: true })) {
+        const name = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+        if (entry.isSymbolicLink()) throw new Error(`Edition output cannot traverse symlinks: ${name}`);
+        if (entry.isDirectory() && expectedDirectories.has(name)) inspect(name);
+        else if (!entry.isFile() || !files.has(name)) throw new Error(`Edition contains unexpected output: ${name}`);
+      }
+    }
+    inspect("");
     for (const [name, bytes] of files) if (!readFileSync(join(directory, name)).equals(Buffer.from(bytes)))
       throw new Error(`Edition is stale or altered: ${name}`);
   } else {
