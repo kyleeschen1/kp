@@ -1,0 +1,14 @@
+{
+  "title": "Two local reversals can make an increase",
+  "inner": "-(x^2)",
+  "outer": "u^2",
+  "x": 1,
+  "h": 0.2,
+  "steps": [
+    { "id": "input", "title": "Follow the intermediate value", "text": "Start at x = 1. The first function is u = −x² and the second is y = u², so the intermediate value starts at −1 and the final value at 1. Predict the direction of each change before increasing x slightly." },
+    { "id": "inner", "title": "The first local rate is negative", "text": "At x = 1, the derivative of −x² is −2. A positive h therefore predicts a negative du: the intermediate value moves farther below zero. The exact finite change includes curvature, so its marker need not coincide with the prediction ring." },
+    { "id": "outer", "title": "The second local rate is negative too", "text": "The derivative of u² is 2u. At the original u = −1, that is −2. A negative change in u therefore predicts a positive change in y: squaring a more negative value makes a larger positive value. The sign is evaluated at the intermediate point, not at x." },
+    { "id": "compose", "title": "Multiply signed local rates", "text": "At the starting point, (−2) × (−2) = 4, predicting dy = 4h. Indeed, the composition is x⁴ and its derivative at x = 1 is 4. Moving the base point can change these signs; two negatives is a statement about the selected starting point, not a rule for all x." },
+    { "id": "limit", "title": "A derivative is still a local prediction", "text": "At x = 1, the actual output change is (1+h)⁴ − 1. Its linear part is 4h; the remaining terms are 6h² + 4h³ + h⁴. Dividing that error by h leaves terms that tend to zero. Shrink h and compare; try a negative h to reverse the output change near this starting point." }
+  ]
+}

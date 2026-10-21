@@ -1,0 +1,14 @@
+{
+  "title": "Zero slope does not mean no change",
+  "inner": "x^2",
+  "outer": "3*u",
+  "x": 0,
+  "h": 0.4,
+  "steps": [
+    { "id": "input", "title": "Start where the slope is zero", "text": "Start at x = 0. First square x to obtain u, then multiply u by three to obtain y. The complete function is y = 3x². Change x by h: the filled markers show the finite changes, while the rings show the local linear predictions." },
+    { "id": "inner", "title": "A horizontal tangent still permits change", "text": "At x = 0, the derivative of x² is zero, so its linear prediction is du = 0. But the new square is h², giving an actual change Δu = h². Try a negative h too: either direction away from zero increases the square." },
+    { "id": "outer", "title": "The second stage preserves the distinction", "text": "Multiplication by three is exactly linear. It sends the actual change h² to 3h² and the predicted change zero to zero. The discrepancy comes from approximating the squaring stage, not from the second stage." },
+    { "id": "compose", "title": "Zero is a first-order statement", "text": "At the starting point, the local scales multiply to 0 × 3 = 0. Thus dy = 0 even when Δy = 3h² is nonzero. If you move the base point x away from zero, the derivative becomes 6x; the finite change still includes an additional 3h²." },
+    { "id": "limit", "title": "Compare the error with the input change", "text": "Here the linear prediction error is 3h², so error divided by h is 3h whenever h is nonzero. That ratio tends to zero from either side. The derivative describes this first-order limit, not constancy on a whole interval. This last step shrinks the trial h tenfold; h = 0 has no error/h quotient." }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "task.kp.authoring-transfer",
+  "kind": "task",
+  "title": "Prove source-only calculus authoring transfer",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-authoring-transfer-delivery.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "task.kp.native-preparation"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:change-propagation",
+      "status": "passed",
+      "scope": "source-audit",
+      "checkedAt": "2026-10-21T18:38:12.255Z",
+      "notes": "11 tests pass; both source files satisfy exact finite-change identities across signed and zero increments. Initial strict signed-zero test assertion corrected; engine unchanged."
+    }
+  ],
+  "expectedLearning": [
+    "Measure source-only mathematical transfer, missing public capabilities and exact source-to-host identity without promoting unaccepted presentation."
+  ],
+  "allowedWork": [
+    "Existing calculus authoring owner, task discovery, preview lifecycle, source cases and verification"
+  ],
+  "disallowedWork": [
+    "New calculus proof engine, visual motifs, universal framework, paid calls or deployment"
+  ],
+  "criteria": [
+    {
+      "id": "authority",
+      "weight": "high"
+    },
+    {
+      "id": "transfer",
+      "weight": "high"
+    },
+    {
+      "id": "preservation",
+      "weight": "high"
+    }
+  ]
+}

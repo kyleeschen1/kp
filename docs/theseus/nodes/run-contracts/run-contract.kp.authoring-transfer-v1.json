@@ -1,0 +1,57 @@
+{
+  "id": "run-contract.kp.authoring-transfer-v1",
+  "kind": "run-contract",
+  "title": "Calculus authoring transfer",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.authoring-transfer.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-authoring-transfer-delivery.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test"
+  ],
+  "allowedWork": [
+    "Existing owner integration, demonstrated authoring repairs and measured transfer"
+  ],
+  "disallowedWork": [
+    "New visual treatment or arbitrary mathematics"
+  ],
+  "goal": "Discover, check and reproduce two structurally different calculus sources through existing owners",
+  "target": "task.kp.authoring-transfer",
+  "slices": [
+    {
+      "id": "source-audit",
+      "title": "Source-audit",
+      "summary": "Authored stationary-change and two-reversal cases; 11 focused tests pass; explanation brief records assumptions and limits.",
+      "status": "complete"
+    },
+    {
+      "id": "entrypoint",
+      "title": "Entrypoint",
+      "status": "planned"
+    },
+    {
+      "id": "workflow",
+      "title": "Workflow",
+      "status": "planned"
+    },
+    {
+      "id": "transfer",
+      "title": "Transfer",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "title": "Integration",
+      "status": "planned"
+    }
+  ]
+}
