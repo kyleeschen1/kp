@@ -2,7 +2,7 @@
   "id": "task.kp.dependent-columns-authoring",
   "kind": "task",
   "title": "Explain dependent nonzero columns through the accepted source interface",
-  "status": "ready",
+  "status": "resolved",
   "domain": "linear-algebra",
   "sourceRefs": [
     {
@@ -49,7 +49,7 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: verified source-only reuse, no engine/API changes. Human review of the new explanation remains; no unrestricted composability claim."
+    "state": "complete",
+    "summary": "COMPLETE: source-only second mathematical explanation accepted; engineering continuation addresses documented loading and comparison limits."
   }
 }

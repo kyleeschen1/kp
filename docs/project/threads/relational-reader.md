@@ -5,12 +5,18 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+Both LA sources are accepted. The active
+[matrix reader continuation](../2026-10-21-matrix-reader-continuation.md)
+addresses lazy source loading, in-document comparison and exact restoration,
+preserving accepted math, prose and motion. The user requested sustained execution;
+complete this bounded engineering outcome without routine aesthetic reapproval.
+
 The approved [dependent-columns continuation](../2026-10-21-dependent-columns-authoring.md)
 now pressures the accepted editorial seam with nonzero signed contributions.
 It adds only a source and registry entry; mathematics and presentation owners
 are unchanged. The [review packet](../reviews/2026-10-21-dependent-columns-authoring.md)
 records the bounded reuse claim and remaining navigation/layout/loading limits.
-Review the explanation at `?input=dependent-columns` before broader promotion.
+The user accepted the explanation at `?input=dependent-columns`; the trial is complete.
 
 The current [authoring reuse trial](../2026-10-21-projection-loss-authoring.md)
 asks why different inputs can share a matrix output. It reuses the accepted

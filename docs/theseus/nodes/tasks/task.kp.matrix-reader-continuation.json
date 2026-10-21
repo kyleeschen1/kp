@@ -1,0 +1,22 @@
+{
+  "id": "task.kp.matrix-reader-continuation",
+  "kind": "task",
+  "title": "Load selected matrix sources and compare in one persistent document",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-reader-continuation.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep \"discovery fetches|explanation keeps\"",
+      "status": "passed",
+      "scope": "lazy-loading",
+      "checkedAt": "2026-10-21T21:19:25.386Z",
+      "notes": "Three checks pass: menu fetch isolation and both accepted explanation preservations. Matrix units 22 pass and production build passes."
+    }
+  ]
+}

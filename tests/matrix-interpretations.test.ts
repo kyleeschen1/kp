@@ -6,11 +6,23 @@ import { createKpScalarExpression, createKpScalarParameter, createKpTypedMatrix,
 import { matrixProduct, MatrixProductGap } from "../src/math/matrix-product.ts";
 import { columnCombinations, gramMatrix, inspectOrthonormality } from "../src/math/matrix-interpretations.ts";
 import { matrixInputs } from "../content/authoring/convergence/matrices.ts";
+import { matrixSources, loadMatrixSource } from "../content/authoring/convergence/matrix-sources.ts";
 import { columnExampleFromProduct } from "../src/experiments/matrix-column-combinations/model.ts";
 import type { ColumnReading } from "../src/experiments/matrix-column-combinations/model.ts";
 import { projectionLoss } from "../content/authoring/linear-algebra/projection-loss.ts";
 import { dependentColumns } from "../content/authoring/linear-algebra/dependent-columns.ts";
 import * as M from "../src/math/authoring/matrices.ts";
+
+test("matrix discovery loads matching sources without hiding unknown identifiers", async () => {
+  assert.equal(new Set(matrixSources.map(source => source.id)).size, matrixSources.length);
+  for (const descriptor of matrixSources) {
+    const source = await loadMatrixSource(descriptor.id);
+    assert.equal(source.id, descriptor.id);
+    if (source.reading) assert.equal(source.reading.title, descriptor.title);
+    assert.equal((await loadMatrixSource(descriptor.id)).product, source.product);
+  }
+  await assert.rejects(loadMatrixSource("not-registered"), /Choose a matrix input/);
+});
 
 test("projection loses the second coordinate without conflating input or result identities", () => {
   const { product, reading } = projectionLoss;

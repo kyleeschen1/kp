@@ -25,12 +25,19 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 active continuation: both source-authored LA explanations are accepted.
+The user's request to continue authorizes the bounded
+[matrix reader engineering pass](2026-10-21-matrix-reader-continuation.md):
+selected-source loading, persistent column comparison and exact URL restoration
+through the existing player. Preserve the accepted visual treatment and validate
+loading, lifecycle and complete route costs; no new lesson family or framework.
+
 October 21 continuation: the user approved the dependent-nonzero-column pressure
 case below. The [source-only trial](2026-10-21-dependent-columns-authoring.md)
 adds one mathematical/editorial source and registry entry with no player, renderer
 or API changes. [Evidence and limits](reviews/2026-10-21-dependent-columns-authoring.md)
 distinguish reuse within the fixed sequence from arbitrary narrative composition.
-The changed explanation at `?input=dependent-columns` awaits human review;
+The changed explanation at `?input=dependent-columns` is accepted;
 this run does not authorize a new framework or catalogue-wide promotion.
 
 October 21 latest: the user approved an authoring reuse trial instead of another

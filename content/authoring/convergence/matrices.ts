@@ -1,7 +1,4 @@
 import * as M from "../../../src/math/authoring/matrices.ts";
-import type { ColumnReading } from "../../../src/experiments/matrix-column-combinations/model.ts";
-import { projectionLoss } from "../linear-algebra/projection-loss.ts";
-import { dependentColumns } from "../linear-algebra/dependent-columns.ts";
 
 type Matrix2 = readonly [readonly [number, number], readonly [number, number]];
 
@@ -16,11 +13,3 @@ export const matrixInputs = ([
   product: M.product({ id: `convergence.${id}.product`,
     left: M.matrix(`convergence.${id}.A`, left), right: M.matrix(`convergence.${id}.B`, right) })
 }));
-
-/** Selection and navigation share one registry. The legacy numeric trials
- * retain their fixed preservation cohort separately from authored lessons. */
-export const matrixSources: readonly {
-  readonly id: string;
-  readonly product: ReturnType<typeof M.product>;
-  readonly reading?: ColumnReading;
-}[] = Object.freeze([...matrixInputs, projectionLoss, dependentColumns]);

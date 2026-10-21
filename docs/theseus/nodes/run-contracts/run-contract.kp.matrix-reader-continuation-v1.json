@@ -1,0 +1,50 @@
+{
+  "id": "run-contract.kp.matrix-reader-continuation-v1",
+  "kind": "run-contract",
+  "title": "Matrix reader loading and comparison",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-reader-continuation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-reader-continuation.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-interpretations",
+    "npm run visual:matrix-interpretations",
+    "npm run typecheck",
+    "npm test"
+  ],
+  "allowedWork": [
+    "Lazy source discovery, bounded player lifecycle and location handling, checks and complete-consumer cost measurement"
+  ],
+  "disallowedWork": [
+    "New lesson families, visual treatments, universal frameworks, paid services, deployment or merges"
+  ],
+  "goal": "Selected-source loading and exact persistent comparison with preserved accepted visuals",
+  "target": "task.kp.matrix-reader-continuation",
+  "slices": [
+    {
+      "id": "loading",
+      "summary": "Discovery uses lazy loaders; selected source identity/title checked. 22 mathematical checks, three Chromium checks and matrix build pass.",
+      "status": "complete"
+    },
+    {
+      "id": "player",
+      "status": "planned"
+    },
+    {
+      "id": "location",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "status": "planned"
+    }
+  ]
+}

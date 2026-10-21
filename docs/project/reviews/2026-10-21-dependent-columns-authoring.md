@@ -1,7 +1,8 @@
 # Dependent nonzero columns: source reuse evidence
 
 Scope: [approved trial](../2026-10-21-dependent-columns-authoring.md).
-Candidate for explanatory review, not yet human-accepted. Live preview:
+User accepted this explanation on October 21 with “approved. go as long as possible”.
+This is exemplar acceptance, not measured learner efficacy. Live preview:
 <http://localhost:8000/experiments/matrix-column-combinations/?input=dependent-columns>.
 
 ## Outcome and authoring cost
@@ -75,6 +76,7 @@ their total remains nonzero? Does the comparison explain why a zero column is
 unnecessary for information loss? Can the reader predict the two transfer outputs?
 Automated correctness and reuse checks do not answer those teaching questions.
 
-Outcome: **HUMAN_CHECKPOINT**, source and exemplar checks complete;
-the changed explanation awaits review before broader promotion. Next context:
+Outcome: **COMPLETE**, source, exemplar checks and human review accepted.
+The subsequent engineering continuation addresses loading and comparison through
+the existing player; it does not imply broader visual promotion. Retrieval context:
 `theseus work context task.kp.dependent-columns-authoring --mode working`.

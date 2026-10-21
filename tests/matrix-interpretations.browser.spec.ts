@@ -34,6 +34,21 @@ test("all matrix pages and the menu use the three-term page theme", async ({ pag
 });
 
 const route = "/experiments/matrix-column-combinations/";
+test("matrix discovery fetches only the selected authored source", async ({ page }) => {
+  const sources: string[] = [];
+  page.on("request", request => {
+    if (request.url().includes("/content/authoring/")) sources.push(request.url());
+  });
+  await page.goto(route);
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+  expect(sources.some(url => url.includes("/linear-algebra/"))).toBe(false);
+  expect(sources.some(url => url.includes("/convergence/matrices.ts"))).toBe(false);
+  await page.getByRole("link", { name: projectionLoss.reading.title, exact: true }).click();
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-source-id", projectionLoss.product.id);
+  expect(sources.some(url => url.includes("/projection-loss.ts"))).toBe(true);
+  expect(sources.some(url => url.includes("/dependent-columns.ts"))).toBe(false);
+});
+
 for (const { source, result, label } of [
   { source: projectionLoss, result: [3, 0], label: "projection" },
   { source: dependentColumns, result: [1, 2], label: "dependent columns" }

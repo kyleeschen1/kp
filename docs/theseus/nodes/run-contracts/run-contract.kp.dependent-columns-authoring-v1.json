@@ -2,7 +2,8 @@
   "id": "run-contract.kp.dependent-columns-authoring-v1",
   "kind": "run-contract",
   "title": "Dependent columns source reuse",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,8 +40,8 @@
     },
     {
       "id": "review",
-      "summary": "Source-only second explanation ready at shared server; review the cancellation argument before broader promotion.",
-      "status": "in-progress"
+      "summary": "User approved the explanatory candidate and requested sustained continuation; no efficacy claim inferred.",
+      "status": "complete"
     }
   ]
 }

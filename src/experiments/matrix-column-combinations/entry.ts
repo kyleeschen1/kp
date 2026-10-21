@@ -9,6 +9,7 @@ import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaf
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
 import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
+import { matrixSources, loadMatrixSource } from "../../../content/authoring/convergence/matrix-sources.ts";
 
 async function mount() {
   const query = new URLSearchParams(location.search);
@@ -24,9 +25,7 @@ async function mount() {
     : undefined;
   const input = query.get("input");
   if (input && query.has("example")) throw new MatrixColumnGap("Choose either a source input or a named interpretation.");
-  const { matrixSources } = await import("../../../content/authoring/convergence/matrices.ts");
-  const authored = input ? matrixSources.find(item => item.id === input) : undefined;
-  if (input && !authored) throw new MatrixColumnGap(`Choose a matrix input: ${matrixSources.map(source => source.id).join(", ")}.`);
+  const authored = input ? await loadMatrixSource(input) : undefined;
   const scene = authored ? columnExampleFromProduct(authored.product, column, authored.reading) : composition?.scene ?? example(query.get("example") ?? "columns", column);
   const { beats } = scene;
   document.querySelector("h1")!.textContent = scene.title;
@@ -39,7 +38,7 @@ async function mount() {
   const contextHtml = composition ? (await import('./basis-composition-view.ts')).basisCompositionHtml(composition) : '';
   const basisQuery = composition ? `&basis=${composition.mode}` : '';
   root.innerHTML = `<nav aria-label="Matrix examples">${links}</nav>
-    <nav aria-label="Matrix source inputs">Inputs: <a href="?column=${column}">Original</a> · ${matrixSources.map(({ id, reading }) => `<a href="?input=${encodeURIComponent(id)}&column=${column}">${escape(reading?.title ?? id)}</a>`).join(" · ")}</nav>
+    <nav aria-label="Matrix source inputs">Inputs: <a href="?column=${column}">Original</a> · ${matrixSources.map(({ id, title }) => `<a href="?input=${encodeURIComponent(id)}&column=${column}">${escape(title)}</a>`).join(" · ")}</nav>
     ${contextHtml}
     <p>Result column: <a href="?${input ? `input=${encodeURIComponent(input)}` : `example=${scene.kind}${basisQuery}`}&column=0#weights">1</a> · <a href="?${input ? `input=${encodeURIComponent(input)}` : `example=${scene.kind}${basisQuery}`}&column=1#weights">2</a></p>
     <section class="matrix-card kp-focus-deck" aria-label="Column combination animation">
