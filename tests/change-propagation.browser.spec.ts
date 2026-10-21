@@ -154,3 +154,32 @@ test("failed candidate mount preserves live card, reading, URL and recovery", as
   await expect(page.locator("h1")).toHaveText("Zero slope does not mean no change");
   await expect(page.locator(".change-card")).toHaveCount(1);
 });
+
+for (const action of ["edit", "dispose"] as const) test(`pending preview cannot publish after ${action}`, async ({ page }) => {
+  let release!: () => void, notify!: () => void;
+  const held = new Promise<void>(resolve => { release = resolve; });
+  const requested = new Promise<void>(resolve => { notify = resolve; });
+  await page.route("**/change-propagation/view.ts*", async route => { notify(); await held; await route.continue(); });
+  await page.goto(route); await page.locator(".change-author summary").click();
+  const originalTitle = await page.locator("h1").textContent();
+  await page.locator(".change-card").evaluate(node => node.setAttribute("data-original", "yes"));
+  const bytes = readFileSync("content/authoring/transfer/stationary-change.json", "utf8");
+  await page.locator("#change-source").fill(bytes);
+  const apply = page.getByRole("button", { name: "Preview this source" });
+  await apply.click(); await requested;
+  await apply.dispatchEvent("click"); // A duplicate event must not issue another mount.
+  if (action === "edit") await page.locator("#change-source").fill(readFileSync("content/authoring/transfer/two-reversals.json", "utf8"));
+  else await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+  release(); await expect(apply).toBeEnabled();
+  await expect(page.locator("h1")).toHaveText(originalTitle!);
+  await expect(page.locator(".change-card")).toHaveAttribute("data-original", "yes");
+  await expect(page.locator(".change-staging")).toHaveCount(0);
+  if (action === "edit") {
+    await expect(page.locator("[data-change-diagnostic]")).toContainText("Draft changed");
+    await apply.click();
+    await expect(page.locator("h1")).toHaveText("Two local reversals can make an increase");
+  } else {
+    await apply.dispatchEvent("click");
+    await expect(page.locator("h1")).toHaveText(originalTitle!);
+  }
+});

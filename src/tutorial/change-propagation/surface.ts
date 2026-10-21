@@ -135,6 +135,7 @@ export function mountChange(root: HTMLElement, model: ChangeModel, options: {
     active = true;
     if (new URLSearchParams(location.hash.slice(1)).get("revision") === model.revision) restorePosition();
     else render();
+    return mismatchedLink ? required("[data-change-diagnostic]").textContent : null;
   } };
   } catch (error) { dispose(); throw error; }
 }

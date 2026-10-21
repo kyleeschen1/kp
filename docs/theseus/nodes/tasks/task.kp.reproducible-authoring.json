@@ -161,6 +161,13 @@
       "scope": "location-input",
       "checkedAt": "2026-10-21T19:25:54.666Z",
       "notes": "Six browser cases pass including invalid link preservation and correction clearing the diagnostic."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "passed",
+      "scope": "preview-lifetime",
+      "checkedAt": "2026-10-21T19:27:29.214Z",
+      "notes": "Nine browser cases and full types pass; delayed renderer import proves draft edits, duplicate Apply and page disposal cannot publish stale work."
     }
   ],
   "expectedLearning": [

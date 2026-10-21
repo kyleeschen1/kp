@@ -95,7 +95,8 @@
     },
     {
       "id": "preview-lifetime",
-      "status": "planned"
+      "summary": "Pending candidates cannot publish after draft changes or disposal; stale errors suppressed; browser and types pass.",
+      "status": "complete"
     },
     {
       "id": "download-authority",
