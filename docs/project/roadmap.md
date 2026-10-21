@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 authoring continuation: [checked matrix source editions](2026-10-21-matrix-source-editions.md)
+remove the registry/module-edit requirement for the accepted numerical 2×2
+column-combination explanation. `author:check` checks one JSON source;
+`author:matrix-publication` packages a complete static or interactive local edition
+through the same mathematical objects and reader. [Evidence](reviews/2026-10-21-matrix-source-editions.md)
+records source/reader boundaries, three-engine preservation and complete-consumer
+costs. This is bounded source-only reuse, not a new animation, general matrix
+renderer, unrestricted narrative composer or validation of editorial claims.
+
 October 21 accepted-bug continuation: the [computed-style investigation](2026-10-21-computed-style-preparation.md)
 found no demonstrated startup benefit from declaration batching or repeated-length
 query removal. Both runtime candidates were reverted. [Evidence](reviews/2026-10-21-computed-style-preparation.md)

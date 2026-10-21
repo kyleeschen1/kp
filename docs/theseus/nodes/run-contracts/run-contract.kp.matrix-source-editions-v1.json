@@ -2,7 +2,8 @@
   "id": "run-contract.kp.matrix-source-editions-v1",
   "kind": "run-contract",
   "title": "Checked matrix source editions",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,7 +46,8 @@
     },
     {
       "id": "integration",
-      "status": "planned"
+      "summary": "7402 tests, full types/build, all 12 three-engine edition checks and complete-consumer budgets pass. Documentation and evidence recorded; no registry/player edit needed for supported file sources.",
+      "status": "complete"
     }
   ]
 }

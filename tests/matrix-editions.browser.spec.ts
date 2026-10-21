@@ -3,7 +3,7 @@ import { createServer, type Server } from "node:http";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildMatrixEdition } from "../scripts/build-matrix-edition.ts";
-import { example } from "../src/authoring/matrix-columns/example.ts";
+import { example } from "../content/authoring/convergence/matrix-example.ts";
 import { compile } from "../src/authoring/matrix-columns/compile.ts";
 import { projectionLoss } from "../content/authoring/linear-algebra/projection-loss.ts";
 import { evaluate } from "../src/math/authoring/matrices.ts";

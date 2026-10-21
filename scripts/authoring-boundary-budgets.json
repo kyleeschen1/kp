@@ -2,5 +2,7 @@
   "matrices": { "gzip": 2500, "types": 65000, "instantiations": 87000 },
   "algebra-source": { "gzip": 1700, "types": 62000, "instantiations": 82000 },
   "algebra-compile": { "gzip": 94000, "types": 117000, "instantiations": 172000 },
-  "algebra-editor": { "gzip": 95000, "types": 117000, "instantiations": 172000 }
+  "algebra-editor": { "gzip": 95000, "types": 117000, "instantiations": 172000 },
+  "matrix-source": { "gzip": 1800, "types": 62000, "instantiations": 81000 },
+  "matrix-compile": { "gzip": 5500, "types": 66000, "instantiations": 87000 }
 }

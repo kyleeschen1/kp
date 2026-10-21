@@ -1,0 +1,9 @@
+{
+  "readerJsRaw": 380000,
+  "readerJsGzip": 112000,
+  "staticClosureRaw": 1280000,
+  "staticClosureGzip": 940000,
+  "interactiveClosureRaw": 1660000,
+  "interactiveClosureGzip": 1055000,
+  "manifestRaw": 9000
+}

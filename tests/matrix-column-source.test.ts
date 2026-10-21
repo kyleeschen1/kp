@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { compile, check } from "../src/authoring/matrix-columns/compile.ts";
 import { read, Repair } from "../src/authoring/matrix-columns/source.ts";
-import { example } from "../src/authoring/matrix-columns/example.ts";
+import { example } from "../content/authoring/convergence/matrix-example.ts";
 import { dependentColumns } from "../content/authoring/linear-algebra/dependent-columns.ts";
 import { columnCombinations } from "../src/math/matrix-interpretations.ts";
 import { checkAuthorTask } from "../scripts/author-check-owner-dispatch.ts";

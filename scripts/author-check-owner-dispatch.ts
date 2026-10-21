@@ -8,7 +8,7 @@ import type { KpAuthorTaskOwners } from "../src/authoring/author-task-owner-cont
  * not require mirrored switches or import another domain before selection. */
 const owners = {
   "matrix.column-combinations": {
-    example: async () => (await import("../src/authoring/matrix-columns/example.ts")).example(),
+    example: async () => (await import("../content/authoring/convergence/matrix-example.ts")).example(),
     check: async (json: string) => {
       const { check } = await import("../src/authoring/matrix-columns/compile.ts");
       const checked = check(json);

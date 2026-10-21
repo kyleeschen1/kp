@@ -6,7 +6,7 @@ import { collectKpRuntimeImportClosure } from './runtime-import-closure.ts';
 import ts from 'typescript';
 import budgets from './authoring-boundary-budgets.json' with { type: 'json' };
 
-const consumers = ['matrices', 'algebra-source', 'algebra-compile', 'algebra-editor'] as const;
+const consumers = ['matrices', 'algebra-source', 'algebra-compile', 'algebra-editor', 'matrix-source', 'matrix-compile'] as const;
 const reports = [];
 const config = ts.readConfigFile('tsconfig.test.json', ts.sys.readFile);
 if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, '\n'));
@@ -60,6 +60,11 @@ if (process.argv.includes('--check')) {
     if (report.consumer === 'algebra-source' && report.staticLocalImports.some(path => path.startsWith('src/') &&
       !['src/authoring/algebra/source.ts', 'src/authoring/composed-algebra-source-v2.ts', 'src/authoring/composed-algebra-source.ts'].includes(path)))
       throw new Error('Source validation acquired an undeclared runtime dependency.');
+    if (report.consumer === 'matrix-source' && report.staticLocalImports.some(path => path.startsWith('src/') &&
+      !['src/authoring/matrix-columns/source.ts', 'src/authoring/author-source-limits.ts'].includes(path)))
+      throw new Error('Matrix source validation acquired an undeclared runtime dependency.');
+    if (report.consumer.startsWith('matrix-') && report.staticLocalImports.some(path => /src\/(?:experiments|rendering|reader|editor)\/|content\//.test(path)))
+      throw new Error('Matrix source checking must not load a host, renderer, editor or lesson.');
   }
   console.log('Authoring runtime and TypeScript budgets passed for every complete consumer.');
 }

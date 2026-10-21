@@ -1,6 +1,6 @@
 import * as M from "../../math/authoring/matrices.ts";
 import { compileExpression } from "../../math/expression.ts";
-import { sha256 } from "../../kernel/sha256.ts";
+import { sha256 } from "../../kernel/public-api.ts";
 import { parse, read, Repair } from "./source.ts";
 
 /** The file cannot supply results, lineage, motion or proof. Those are derived

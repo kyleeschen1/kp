@@ -1,5 +1,5 @@
-import { dependentColumns } from "../../../content/authoring/linear-algebra/dependent-columns.ts";
-import { evaluate } from "../../math/authoring/matrices.ts";
+import { dependentColumns } from "../linear-algebra/dependent-columns.ts";
+import { evaluate } from "../../../src/math/authoring/matrices.ts";
 
 /** One accepted source owns the starter's values and prose. This adapter has no
  * renderer or checker dependency and does not invent another lesson fixture. */

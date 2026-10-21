@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { example } from "../src/authoring/matrix-columns/example.ts";
+import { example } from "../content/authoring/convergence/matrix-example.ts";
 import { compileMatrixPublication, verifyMatrixPublication } from "../scripts/matrix-publication.ts";
 import { buildMatrixEdition } from "../scripts/build-matrix-edition.ts";
 

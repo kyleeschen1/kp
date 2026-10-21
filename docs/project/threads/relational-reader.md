@@ -5,6 +5,16 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The approved [matrix source-edition continuation](../2026-10-21-matrix-source-editions.md)
+lets an author check a numerical 2×2 JSON source and build a self-contained local
+reading or interactive edition without registering a lesson or changing the
+player. Both accepted sources pressure the same reader, native mathematics,
+revision restoration and complete static fallback. See the
+[integration evidence](../reviews/2026-10-21-matrix-source-editions.md) and
+[authoring packet](../authoring/matrix-column-authoring-packet.md). The fixed
+seven-beat sequence remains the limit; this does not establish arbitrary
+choreography or pedagogical effectiveness. Calculus remains unchanged.
+
 The user's “bug is fixed. continue” closes the matrix report and resumes objective
 engineering. The bounded [computed-style continuation](../2026-10-21-computed-style-preparation.md)
 found that 68% fewer individual style writes did not demonstrate a reader startup

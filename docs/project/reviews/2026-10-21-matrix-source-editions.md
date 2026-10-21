@@ -75,3 +75,76 @@ accepted source or choreography changes. Arithmetic remains JS numeric arithmeti
 extraction: complete edition JS 370,261 gzip bytes; editor JS 402,329. This is a
 sum of per-file compression estimates, not measured network transfer. Full new
 edition/boundary cost and supported-browser integration follow separately.
+
+## Complete consumers and integration
+
+`npm run visual:matrix-editions` passes all 12 checks across Chromium, Firefox and
+WebKit. These execute packaged production bytes, not a development build.
+`npm run measure:matrix-editions` measures the complete reader at 362,825 raw /
+107,431 gzip bytes (one chunk, 55 emitted modules). The two static editions span
+1,212,681–1,213,888 raw / 891,656–892,995 per-file gzip bytes; interactive editions
+span 1,578,741–1,580,046 raw / 999,845–1,001,386 gzip bytes. Static/interactive
+manifests add 8,499/8,591 bytes separately. All fonts and alternate font formats
+are counted; this is portable-package size, not actual browser transfer.
+
+New fixed-cohort budgets: reader 380,000 raw / 112,000 gzip; static complete closure
+1,280,000 / 940,000; interactive closure 1,660,000 / 1,055,000; manifest 9,000 bytes.
+These retain about 4–6% measured headroom, preserve every asset, and reject omitted
+cohort members or accidental registry/editor/lesson dependencies. They are new
+consumer budgets, not raised historical ceilings or limits on all possible prose.
+
+`npm run measure:authoring-boundaries -- --check --types` retains all four existing
+consumers and adds two complete independently built consumers. Matrix source:
+1,670 gzip bytes, 59,132 types, 76,880 instantiations; budgets 1,800 / 62,000 / 81,000.
+Matrix compiler: 5,174 gzip bytes, 63,125 types, 83,995 instantiations; budgets
+5,500 / 66,000 / 87,000. Source parsing loads only its own data validator and shared
+transport guard. Compiler imports cannot acquire presentation, editor or lessons.
+
+The first full `npm test` stopped at architecture checks: the starter imported
+content from inside the authoring boundary, and hashing used a kernel deep import.
+The starter now lives beside its accepted content in
+`content/authoring/convergence/matrix-example.ts`; compilation imports the kernel
+public API. Architecture and starter-loading checks pass after repair. The public
+API adds three static imports and 661 types / 1,605 instantiations versus the
+initial deep import, but emitted bytes are unchanged and existing budgets hold.
+No exception or boundary waiver was introduced. A new negative cost fixture also
+needed a literal tuple annotation; full type/test reruns follow that correction.
+
+`npm run build:bundle` passes (existing large-chunk warnings remain).
+`npm run build:semantic-cost` and `npm run measure:semantic-cost` pass unchanged
+historical ceilings: selected dependent source 110,232 gzip JS versus 110,160
+before; all-source union 115,904 versus 115,835; CSS 14,558 versus 14,533. The
+reader extraction adds 69–72 gzip JS bytes and the hash-wrapping rule adds 25 CSS
+bytes to the existing host. The new checker and edition entry do not enter that
+host's runtime closure. Reachability regeneration changes only scanned-file count;
+the 68 canonical roots and their graph remain unchanged.
+
+Control-record limitation: the initial contract used the creation command's
+advertised fields, which omit its run-mode/cadence/stop metadata options. Those
+constraints are explicit in the approved plan and were followed, but the global
+autonomy report flags the missing fields. The installed update command cannot
+amend those fields. Do not confuse workspace schema validation, recorded slice
+completion or passing product checks with a clean global readiness report.
+No competing contract or direct graph-file edit was used to hide the warning.
+
+Final integration: `npm test` passes all 7,402 tests after the architecture repair;
+`npm run typecheck` passes all app/node/test/Svelte/domain checks after the literal
+tuple correction. The final `npm run build:bundle` passes. The focused matrix
+command passes 12 tests, and all 14 discovery-loading checks pass after moving the
+starter. New cost gates and historical matrix/algebra budgets pass without raising
+any existing ceiling. The regenerated reachability count is 5,089 versus 5,071;
+no canonical root or edge changed.
+
+Local review artifact (existing port-8000 server, HTTP 200 verified):
+`/tmp/codex/matrix-editions/ec12cb34dee5aed554702642bef04dff65447de653ca77cc21ae0b2baa0320ae/index.html`.
+The artifact directory is disposable generated output; the commands and accepted
+source that reproduce it are committed. Its complete production bytes, independent
+of this development preview, are exercised by `visual:matrix-editions`.
+
+Outcome: source-file authoring and portable editions within the accepted numerical
+2×2 sequence. No registry/player edits are needed for another supported source.
+New maintenance consists of the bounded source checker, edition location/entry,
+publication adapter and their checks; page/player and local build ownership are
+shared. No new aesthetic, pedagogical-effectiveness claim or general matrix API
+is introduced. Long labels, unusually wide decimal values and free prose still
+need author review; checking does not certify arbitrary layout or explanation.
