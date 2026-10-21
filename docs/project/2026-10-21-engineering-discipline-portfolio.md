@@ -1,10 +1,10 @@
 # Engineering discipline and performance portfolio
 
-Status: reviewed-direction planning proposal; implementation has not started.
+Status: approved for execution on October 21.
 Authority: the user approved a day-long infrastructure/API portfolio with limited
 human feedback and requested this concrete plan. This document owns scope,
-selection rules and rationale. On execution, a linked Theseus run contract will
-own live slice status, verification, parking and stop state.
+selection rules and rationale. `run-contract.kp.engineering-discipline-v1` owns
+live slice status, verification, parking and stop state.
 
 ## Outcome and operating window
 
@@ -13,7 +13,7 @@ change, and less vulnerable to invalid lifecycle/ownership states. Preserve
 mathematical meaning, checked authority, supported input scope and accepted
 visual behavior. This is engineering work, not new educational content.
 
-Proposed ceiling: eight elapsed hours from execution start, including checks;
+Approved ceiling: eight elapsed hours from execution start, including checks;
 reserve the final two hours for integration, repairs, documentation and backup.
 Do not start new implementation during that reserve. This is an execution
 ceiling, not a promise of a continuously running background job or eight hours
@@ -235,6 +235,6 @@ checkpoint; never describe focused passes as a clean full-suite pass.
   Report COMPLETE, HUMAN_CHECKPOINT, STOP_CONDITION or the applicable standard
   outcome honestly. Do not manufacture work to consume eight hours.
 
-Execution starts only after this plan is presented and the user directs the run.
-At that point create the linked Theseus contract from these package IDs and
-scope. This planning document is not a claim of a running autonomous job.
+The user approved the presented plan and directed execution. Start time and
+package progress are recorded in Theseus; this document does not duplicate
+live status.

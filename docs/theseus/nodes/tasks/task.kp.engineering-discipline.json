@@ -1,0 +1,57 @@
+{
+  "id": "task.kp.engineering-discipline",
+  "kind": "task",
+  "title": "Measured codebase discipline and efficiency",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-engineering-discipline-portfolio.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "task.kp.authoring-boundaries"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run audit:architecture-cost -- --browser --tax-only --activation --acceptance",
+      "status": "passed",
+      "scope": "baseline",
+      "checkedAt": "2026-10-21T17:17:46.812Z",
+      "notes": "Six complete production tax samples preserve 392893 initial gzip JS bytes; CPU slowdown still exposes 216-266ms frame gaps."
+    }
+  ],
+  "expectedLearning": [
+    "Which existing reader/editor costs are avoidable without changing semantic or visual contracts"
+  ],
+  "allowedWork": [
+    "Approved P0-P7 engineering portfolio including measured repairs and independent continuation around local review gates"
+  ],
+  "disallowedWork": [
+    "New mathematics, renderer, visual redesign, global cache, unrelated cleanup or external publication"
+  ],
+  "criteria": [
+    {
+      "id": "preservation",
+      "weight": "high"
+    },
+    {
+      "id": "measured-benefit",
+      "weight": "high"
+    },
+    {
+      "id": "maintainability",
+      "weight": "high"
+    }
+  ]
+}

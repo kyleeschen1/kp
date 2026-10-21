@@ -1,0 +1,79 @@
+{
+  "id": "run-contract.kp.engineering-discipline-v1",
+  "kind": "run-contract",
+  "title": "Engineering discipline and performance",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.engineering-discipline.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-engineering-discipline-portfolio.md"
+    }
+  ],
+  "verification": [
+    "npm test"
+  ],
+  "allowedWork": [
+    "Approved portfolio permits independent slice selection and local review parking"
+  ],
+  "disallowedWork": [
+    "New visual or semantic behavior without review"
+  ],
+  "goal": "Improve measured loading, resources, repeated work and real authoring APIs with preserved behavior",
+  "target": "task.kp.engineering-discipline",
+  "runMode": "run",
+  "maxSlices": 8,
+  "commitCadence": "Verified coherent commits and hourly or handoff backups",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Eight elapsed hours with final two hours reserved; user pause, safety or external blocker, no justified eligible work, or human judgment with no independent remaining work"
+  ],
+  "slices": [
+    {
+      "id": "p0",
+      "title": "Baseline",
+      "summary": "Measured complete reader/editor baselines and identified bounded repairs; unrelated workflow metadata preserved.",
+      "status": "complete"
+    },
+    {
+      "id": "p1",
+      "title": "Loading",
+      "summary": "Remove full catalogue metadata from two exact prepared-descriptor callers; measure complete production path.",
+      "status": "in-progress"
+    },
+    {
+      "id": "p2",
+      "title": "Lifetime",
+      "status": "planned"
+    },
+    {
+      "id": "p3",
+      "title": "Preparation",
+      "status": "planned"
+    },
+    {
+      "id": "p4",
+      "title": "Authoring",
+      "status": "planned"
+    },
+    {
+      "id": "p5",
+      "title": "Consolidation",
+      "status": "planned"
+    },
+    {
+      "id": "p6",
+      "title": "Verification",
+      "status": "planned"
+    },
+    {
+      "id": "p7",
+      "title": "Integration",
+      "status": "planned"
+    }
+  ]
+}
