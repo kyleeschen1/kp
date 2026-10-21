@@ -25,3 +25,18 @@ draft cannot mutate the immutable semantic source.
 
 Full type checking and subsequent integration evidence are recorded with Theseus.
 No runtime presentation change is part of this source boundary.
+
+## Shared reader boundary
+
+The canonical registry entry and the file edition now call the same local reader
+controller and HTML scaffold. The extraction preserves the player, presentation,
+continuity, clock, font wait, failure restoration and disposal owners. Edition
+locations require the exact source revision alongside fractional progress; unknown
+registry selection, duplicate fields and invalid columns/positions are rejected.
+
+`npm run visual:matrix-interpretations -- --project=chromium` passes all 29 existing
+browser checks after extraction, including reversal, native handoff geometry,
+delayed/failed selection, font readiness, phone playback, preparation failure and
+history restoration. `npm run typecheck` passes. The two tests in
+`tests/matrix-edition-location.test.ts` pass. Production edition integration is
+checked in the packaging package; these checks alone do not certify that path.

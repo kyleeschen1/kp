@@ -35,7 +35,8 @@
     },
     {
       "id": "reader",
-      "status": "planned"
+      "summary": "Existing player lifecycle and page scaffold shared; revision-pinned edition entry and strict location checks added. Canonical 29-browser-check preservation and types pass.",
+      "status": "complete"
     },
     {
       "id": "edition",

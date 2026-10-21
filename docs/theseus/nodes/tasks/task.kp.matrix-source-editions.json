@@ -24,6 +24,13 @@
       "scope": "source",
       "checkedAt": "2026-10-21T22:59:43.517Z",
       "notes": "All application, node, test, Svelte and domain checks pass after starter row-copy typing repair."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --project=chromium",
+      "status": "passed",
+      "scope": "reader",
+      "checkedAt": "2026-10-21T23:03:45.825Z",
+      "notes": "All 29 canonical presentation and lifecycle preservation checks pass after sharing reader and page scaffold."
     }
   ]
 }
