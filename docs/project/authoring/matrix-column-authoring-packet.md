@@ -19,10 +19,30 @@ conclusion paragraphs and a question with its answer. Results and scalar
 contributions are derived; motion, geometry and authored result fields are
 rejected. Prose is editorial, not verified mathematical proof. Located repair
 gaps cover invalid fields, unsupported dimensions, missing cues and arithmetic
-overflow. `npm run test:matrix-source` checks this boundary and semantic identity.
+overflow. Values use JavaScript numerical arithmetic, not exact real arithmetic.
+Scientific notation in factors or derived values is a repair gap: the accepted
+renderer supports ordinary decimal numerals, not exponent choreography.
+`npm run test:matrix-source` checks this boundary and semantic identity.
 
-Selected-source editions are the next integration step; the registry preview
-below still uses its explicit TypeScript sources.
+## Make a local edition
+
+Run `npm run author:matrix-publication -- --source <file.json>` for a complete
+static reading. Add `--interactive` to include the accepted column player, or
+`--check` to reproduce and verify an existing edition's exact bytes. The command
+prints the content-addressed directory under `tmp/codex/matrix-editions/`, source
+revision and byte-edition identity. Keep authored files outside this generated
+directory. Serve the edition directory over local HTTP to open its `index.html`;
+the shared dev server also serves its reported repo-relative path on port 8000.
+
+Both modes include exact source bytes, publication evidence, all local styles and
+fonts, both result columns and all fourteen cues. Interactive mode includes the
+production reader without the registry, editor or other authored lessons. Column
+links preserve fractional progress; reload and copied URLs pin that position to
+the source revision. A stale pin produces an error. Static meaning remains
+available with JavaScript disabled, unavailable or rejected source setup.
+These are local artifacts, not deployed publications or proof of prose quality.
+
+The registry preview below continues to use its explicit TypeScript sources.
 
 ## Start and change an example
 

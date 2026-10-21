@@ -73,6 +73,13 @@ test("finite factors cannot create infinite intermediate or result paint", () =>
   assert.throws(() => compile(source), (e: unknown) => e instanceof Repair && e.code === "matrix.numeric-range" && e.path === "$.left[0]");
 });
 
+test("scientific notation cannot silently paint an algebraic e in source or derived entries", () => {
+  for (const left of [[[1e-7, 0], [0, 1]], [[1e21, 0], [0, 1]], [[1e20, 0], [0, 1]]]) {
+    const source = example(); source.left = left; source.right = [[10, 0], [0, 1]];
+    assert.throws(() => compile(source), (e: unknown) => e instanceof Repair && e.code === "matrix.numeric-notation");
+  }
+});
+
 test("direct source calls reject accessors, sparse arrays and hidden fields without invoking them", () => {
   const source = example(); let invoked = false;
   const accessor = { ...source }; Object.defineProperty(accessor, "left", { get() { invoked = true; return source.left; } });

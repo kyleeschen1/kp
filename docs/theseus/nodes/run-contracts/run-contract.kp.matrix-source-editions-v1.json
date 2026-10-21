@@ -40,7 +40,8 @@
     },
     {
       "id": "edition",
-      "status": "planned"
+      "summary": "Selected-source immutable editions package exact bytes, all cues, both columns and complete local assets; focused source/publication and Chromium checks pass.",
+      "status": "complete"
     },
     {
       "id": "integration",

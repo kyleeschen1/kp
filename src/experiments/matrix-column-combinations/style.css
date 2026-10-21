@@ -13,6 +13,8 @@
 .comb-focus { color: var(--kp-st-focus); }
 .comb-static { overflow-x: auto; }
 .comb-static > div { margin: 1rem 0; }
+/* Source revision hashes must not widen the complete reading on phones. */
+[data-matrix-reading] code { overflow-wrap: anywhere; }
 html[data-embedded] #comb-player > nav,
 html[data-embedded] #comb-player > p:has(a) { display: none; }
 

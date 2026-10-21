@@ -74,6 +74,10 @@ For numerical 2×2 matrix column combinations, use
 accepts bounded JSON factors and editorial cues, deriving results through the
 existing mathematical objects. The typed-source preview reuses the accepted
 column renderer. Checking alone does not apply a preview or publish an edition.
+Use `author:matrix-publication --source <file.json>` for an immutable local
+static reading, `--interactive` for the same accepted player with a revision-pinned
+location, and `--check` to verify its exact local bytes. Both result columns and
+all cues remain readable without JavaScript. Scientific notation is a repair gap.
 For concise matrix and bounded algebra imports, see `concise-domain-api.md`.
 Those entrypoints preserve the exact existing domain support and diagnostics.
 

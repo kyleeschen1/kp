@@ -31,6 +31,20 @@
       "scope": "reader",
       "checkedAt": "2026-10-21T23:03:45.825Z",
       "notes": "All 29 canonical presentation and lifecycle preservation checks pass after sharing reader and page scaffold."
+    },
+    {
+      "command": "npm run test:matrix-source",
+      "status": "passed",
+      "scope": "edition",
+      "checkedAt": "2026-10-21T23:07:36.572Z",
+      "notes": "Eleven source, location, exact-byte/static-publication and numeric-notation checks pass."
+    },
+    {
+      "command": "npm run visual:matrix-editions -- --project=chromium",
+      "status": "passed",
+      "scope": "edition",
+      "checkedAt": "2026-10-21T23:07:37.435Z",
+      "notes": "Four production browser checks pass on both accepted sources; static fallback, revision restoration, reversible poses, identity, values and mobile width preserved."
     }
   ]
 }

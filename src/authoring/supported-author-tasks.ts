@@ -6,7 +6,7 @@ export const supportedAuthorTasks = {
     input: "Two finite numerical 2x2 matrices and editorial text for both columns and seven fixed beats. Products and sums are derived; prose is not proof. No symbolic inputs, arbitrary dimensions or authored motion.",
     preview: { kind: "reference-only", url: "/experiments/matrix-column-combinations/?input=dependent-columns", reason: "Checking a file does not replace the registered source in this reference host." },
     extraction: { kind: "unsupported", reason: "No authored subexplanation extraction for this fixed seven-beat path." },
-    publication: { kind: "unsupported", reason: "Selected-source editions are not yet connected." }
+    publication: { kind: "local-edition", command: "author:matrix-publication", output: "immutable-content-addressed", input: "selected matrix source JSON; both columns and all cues by default, --interactive reuses the accepted reader; --check reproduces exact local bytes, not editorial proof or visual acceptance" }
   },
   "calculus.change-propagation": {
     owner: "src/tutorial/change-propagation/model.ts",
