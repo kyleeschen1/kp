@@ -1,5 +1,5 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
-import { createVerifiedIntegerMultipleFactoringAnimationAsset, createVerifiedComposedDistributionAnimationAsset } from "../animation/distribution-adapter.ts";
+import { createVerifiedIntegerMultipleFactoringAnimationAsset, createVerifiedComposedDistributionAnimationAsset } from "../animation/distribution-semantic-adapter.ts";
 import { createVerifiedContextualConstantSumAnimationAsset, createVerifiedContextualConstantProductAnimationAsset } from "../animation/operation-evaluation-adapter.ts";
 import { sampleKpAnimationRuntimeFrame } from "../animation/runtime-sampler.ts";
 import { projectKpReaderEquationRenderPlan } from "../reader/renderers/equation-render-plan.ts";
@@ -11,7 +11,7 @@ import type { KpVerifiedComposedProductEvaluation } from "../semantic/composed-a
 import { KpComposedAlgebraRepair } from "./composed-algebra-source.ts";
 import { compileKpEquationAssetMigrationV2 } from "../domain-ir/equation-asset-migration-v2.ts";
 import { compileKpEquationEvaluationFamilyCertificateV2, type KpVerifiedEquationEvaluationFamilyCertificateV2 } from "../domain-ir/equation-evaluation-family-certificate-v2.ts";
-import { createDistributionBeforeCollectionAnimation } from "../animation/distribution-adapter.ts";
+import { createDistributionBeforeCollectionAnimation } from "../animation/distribution-semantic-adapter.ts";
 import type { KpDistributionBeforeCollection } from "../semantic/distribute-collect.ts";
 
 export function resolveDistributionBeforeCollection(proof: KpDistributionBeforeCollection): KpCanonicalDistributionOperationBinding {

@@ -14,6 +14,14 @@
       "path": "docs/project/reviews/2026-10-21-authoring-boundaries.md"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "task.kp.concise-authoring"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
   "verification": [
     "npm run typecheck"
   ],
@@ -62,5 +70,19 @@
   ],
   "disallowedWork": [
     "Visual redesign or semantic expansion"
+  ],
+  "criteria": [
+    {
+      "id": "source-isolation",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "measured-cost",
+      "weight": "medium"
+    }
   ]
 }

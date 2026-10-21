@@ -81,3 +81,23 @@ examples. The next bounded investigation separates that demonstrated owner
 boundary without changing its shared asset/timeline constructor. Presence in
 source reachability alone does not establish shipped fixture bytes; emitted
 output and type costs must be measured before claiming savings.
+
+## Distribution follow-through
+
+Moved the three proof-driven factories and their unchanged shared constructor
+to `distribution-semantic-adapter.ts`. The historical adapter still selects
+fixtures and delegates to that same constructor, preserving its exports. The
+canonical operation binder now imports the proof-driven boundary directly.
+The compiler's runtime closure contains no fixture modules. Primary compilation
+retains revision `b06aee221f9f9bb0b0dbb13d4794758028f033fe66e3c82e8eb7f7f98925a92c`
+and exact animation JSON digest
+`267d8737df36bba834e09d658b0d2297b6806500c541d8716a12122dbaea91f3`
+before/after, including every checkpoint and timing field.
+
+This is an isolation/type-cost repair, **not** a runtime-byte optimization.
+Compile raw JS remains 380,053 bytes; gzip changes 88,758 → 88,802 from output
+ordering. Editor gzip changes 89,165 → 89,211. Compiler static files fall
+181 → 176, checked files 290 → 287, types 111,350 → 109,851, instantiations
+162,508 → 161,897. Editor checked files fall 293 → 290; types 109,937 and
+instantiations 161,925. Existing ceilings remain unchanged. A closure regression
+prevents fixture builders from returning through this proof-driven path.

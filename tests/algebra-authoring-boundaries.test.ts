@@ -40,4 +40,6 @@ test('source-only imports stay small; compiler and editor never import teaching 
     assert.equal(files.some(path => /\/examples\/|\/fixtures\/|composed-algebra-session-v2/.test(path)), false, entry);
   }
   assert.equal(closure('src/authoring/algebra/compile.ts').includes('src/authoring/prepared-revision-session.ts'), false);
+  assert.equal(closure('src/authoring/algebra/compile.ts').some(path => path.includes('fixture')), false,
+    'Proof-driven construction must not load tutorial fixture builders or registries.');
 });
