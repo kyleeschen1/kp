@@ -66,15 +66,15 @@ columnExampleFromProduct(product, column, reading);
 ```
 
 Omit `reading` to retain the existing generated text. Register a source alongside
-the numeric inputs in `matrixSources` in `content/authoring/convergence/matrices.ts`.
+the numeric inputs in `matrixSources` in `content/authoring/convergence/matrix-sources.ts`.
 That registry supplies both selection and menu links; the host needs no lesson-ID
 branch. Open `/experiments/matrix-column-combinations/?input=projection-loss` and
 use Result column 1/2 to inspect the two inputs. The selected source survives
 column navigation. The host remains a JavaScript preview, not a source-specific
 no-JavaScript publication or arbitrary LA authoring task.
 
-The trial exposes remaining limits: the seven-step sequence is fixed; comparing
-columns reloads the player; narrow screens require horizontal stage scrolling;
+The trial exposes remaining limits: the seven-step sequence is fixed;
+narrow screens require horizontal stage scrolling;
 cue text does not itself bind semantic subobjects or verify explanatory claims.
 Acceptance covers this example. Pressure a structurally different caller before
 expanding that editorial seam or introducing another presentation abstraction.
@@ -87,3 +87,19 @@ require no host/API changes; both inputs produce (1,2) through partial cancellat
 The user accepted the explanation on October 21. This demonstrates another mathematical reading
 within the same sequence, not arbitrary lesson topology. See
 `../reviews/2026-10-21-dependent-columns-authoring.md` for limits and evidence.
+
+## Persistent preview and lazy registration
+
+Register an ID, title and lazy `load` function in
+`content/authoring/convergence/matrix-sources.ts`. Keep source bodies out of its
+static imports. The loader checks the returned ID/title against the descriptor;
+the existing presentation still validates shape and finite values. Numeric trial
+data stays in `matrices.ts`. Only the selected source body is requested.
+
+Column comparison now stays in the same document at the held position; source
+and interpretation links use their declared starts. Exact fractional links use
+`#p=0.64`, alongside existing milestone links such as `#scaled`. Reload and
+Back/Forward retain source, column and position. Failed loads preserve the usable
+prior source. Each replacement disposes the old player instead of retaining
+prepared scenes. See `../reviews/2026-10-21-matrix-reader-continuation.md` for
+measured costs, lifecycle evidence and the unchanged presentation boundaries.

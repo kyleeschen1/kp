@@ -2,7 +2,8 @@
   "id": "run-contract.kp.matrix-reader-continuation-v1",
   "kind": "run-contract",
   "title": "Matrix reader loading and comparison",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -36,15 +37,18 @@
     },
     {
       "id": "player",
-      "status": "planned"
+      "summary": "Existing player lifecycle extracted; latest shared handoff gates publication, failed preparation restores prior source, old controls/observers dispose. Full 21-check browser cohort passes.",
+      "status": "complete"
     },
     {
       "id": "location",
-      "status": "planned"
+      "summary": "Exact fractional URLs, named milestones, focus, native links and Back/Forward pass. Scrubbing during playback captures input before pause publication can overwrite it.",
+      "status": "complete"
     },
     {
       "id": "integration",
-      "status": "planned"
+      "summary": "7389 tests, full types/build, 21 Chromium preservation checks, 18 three-engine checks, production network/retention and complete-cost gates pass. Budget amendments diagnosed against1689f1ab1; temporary worktree removed.",
+      "status": "complete"
     }
   ]
 }

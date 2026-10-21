@@ -5,11 +5,13 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
-Both LA sources are accepted. The active
+Both LA sources are accepted. The completed
 [matrix reader continuation](../2026-10-21-matrix-reader-continuation.md)
-addresses lazy source loading, in-document comparison and exact restoration,
-preserving accepted math, prose and motion. The user requested sustained execution;
-complete this bounded engineering outcome without routine aesthetic reapproval.
+delivers lazy source loading, in-document comparison and exact restoration,
+preserving accepted math, prose and motion. [Evidence](../reviews/2026-10-21-matrix-reader-continuation.md)
+records 7,389 passing repository tests, three-engine navigation preservation,
+production request/retention checks and explicit cost-policy amendments. The
+bounded engineering outcome is complete; no new aesthetic review is needed.
 
 The approved [dependent-columns continuation](../2026-10-21-dependent-columns-authoring.md)
 now pressures the accepted editorial seam with nonzero signed contributions.

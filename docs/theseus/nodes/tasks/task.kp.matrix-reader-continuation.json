@@ -2,12 +2,16 @@
   "id": "task.kp.matrix-reader-continuation",
   "kind": "task",
   "title": "Load selected matrix sources and compare in one persistent document",
-  "status": "ready",
+  "status": "resolved",
   "domain": "linear-algebra",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-10-21-matrix-reader-continuation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-matrix-reader-continuation.md"
     }
   ],
   "verificationRecords": [
@@ -17,6 +21,80 @@
       "scope": "lazy-loading",
       "checkedAt": "2026-10-21T21:19:25.386Z",
       "notes": "Three checks pass: menu fetch isolation and both accepted explanation preservations. Matrix units 22 pass and production build passes."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep \"persistent comparison|latest matrix|repeated selection\"",
+      "status": "failed",
+      "scope": "initial-navigation",
+      "checkedAt": "2026-10-21T21:23:32.995Z",
+      "notes": "Two lifecycle/race checks pass; comparison test tried clicking links intentionally hidden in embedded mode. Test now uses a visible host query to verify preservation without contradicting embedded UI."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "persistent-player",
+      "checkedAt": "2026-10-21T21:26:01.743Z",
+      "notes": "All 21 Chromium checks pass. Includes exact URLs, Back/Forward, focus, canceled stale selection, failure rollback, observer disposal and accepted motion."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "failed",
+      "scope": "integration-cost",
+      "checkedAt": "2026-10-21T21:26:03.468Z",
+      "notes": "Selected matrix routes fit the existing 111000-byte JS ceiling. Existing row-guided exceeds its ceiling by 98 bytes; composition union exceeds by 4040 bytes. Diagnose against baseline before any amendment."
+    },
+    {
+      "command": "npm run visual:semantic-cost -- --grep \"matrix source navigation\"",
+      "status": "passed",
+      "scope": "production-network-retention",
+      "checkedAt": "2026-10-21T21:31:28.032Z",
+      "notes": "One document request, zero requests after warmup, each selected source fetched once. Twelve switches retain 2772 DOM nodes and 30 listeners after GC; heap rises 4.07 to 4.39 MB and is diagnostic."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "complete-consumer-cost",
+      "checkedAt": "2026-10-21T21:31:28.660Z",
+      "notes": "Complete selected sources and explicit all-source union pass. Baseline1689f1ab1 reproduces pre-existing row overages; review records exact byte changes, unchanged row module sets and bounded policy amendments without dropping consumers."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository-integration",
+      "checkedAt": "2026-10-21T21:32:29.408Z",
+      "notes": "All architecture, inference, concept/promotion gates and all 7389 repository tests pass. No skipped tests or waived checks."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --project=firefox --project=webkit --grep \"persistent comparison|latest matrix|repeated selection|failed native preparation|explanation keeps\"",
+      "status": "failed",
+      "scope": "initial-cross-browser",
+      "checkedAt": "2026-10-21T21:33:43.307Z",
+      "notes": "WebKit check assumed pointer clicks focus links; use keyboard activation to test focus preservation. Scoped testDir also now excludes copied specs from scratch worktrees; the initial run included six duplicates, not six extra mechanisms."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --project=firefox --project=webkit --grep \"persistent comparison|latest matrix|repeated selection|failed native preparation|explanation keeps\"",
+      "status": "passed",
+      "scope": "three-engine-preservation",
+      "checkedAt": "2026-10-21T21:35:08.265Z",
+      "notes": "All 18 canonical checks pass, six each in Chromium, Firefox and WebKit. Keyboard focus test corrected; scoped testDir excludes scratch-worktree copies."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "final-types",
+      "checkedAt": "2026-10-21T21:35:09.232Z",
+      "notes": "All app, Node, test, Svelte and domain checks pass. Final test-only adjustment also passes typecheck:tests."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production-integration",
+      "checkedAt": "2026-10-21T21:35:09.852Z",
+      "notes": "Canonical source freshness checks and production application build pass; selected matrix production build and network fixture also verified separately."
     }
-  ]
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "COMPLETE: lazy selected loading, persistent exact-position comparison, history restoration, stale-load prevention and recovery delivered through existing accepted player. All four packages verified; no new aesthetic treatment."
+  }
 }

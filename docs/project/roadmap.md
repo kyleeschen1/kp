@@ -25,12 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-October 21 active continuation: both source-authored LA explanations are accepted.
+October 21 completed continuation: both source-authored LA explanations are accepted.
 The user's request to continue authorizes the bounded
 [matrix reader engineering pass](2026-10-21-matrix-reader-continuation.md):
 selected-source loading, persistent column comparison and exact URL restoration
-through the existing player. Preserve the accepted visual treatment and validate
-loading, lifecycle and complete route costs; no new lesson family or framework.
+through the existing player. [Evidence](reviews/2026-10-21-matrix-reader-continuation.md)
+records 7,389 passing repository tests, full types/build, 21 Chromium preservation
+checks, 18 focused checks across three engines, production request/retention tests
+and diagnosed complete-consumer budget amendments. The accepted visual treatment
+is preserved. The bounded run is complete; no new lesson family or framework was
+introduced. Remaining authoring limits are fixed sequence and numerical 2×2 scope.
 
 October 21 continuation: the user approved the dependent-nonzero-column pressure
 case below. The [source-only trial](2026-10-21-dependent-columns-authoring.md)

@@ -34,6 +34,117 @@ test("all matrix pages and the menu use the three-term page theme", async ({ pag
 });
 
 const route = "/experiments/matrix-column-combinations/";
+test("persistent comparison retains fractional positions, focus and browser history without reloading", async ({ page }) => {
+  let documents = 0;
+  page.on("request", request => { if (request.resourceType() === "document") documents++; });
+  await page.goto(`${route}?input=dependent-columns&context=compare#p=0.64`);
+  const root = page.locator("#comb-player"), slider = page.getByRole("slider");
+  await expect(root).toHaveAttribute("data-ready", "true");
+  await expect(slider).toHaveValue("0.64");
+  const oldSlider = await slider.elementHandle();
+  // WebKit does not focus links on pointer clicks. Exercise actual keyboard
+  // focus ownership rather than imposing another engine's pointer behavior.
+  const second = page.getByRole("link", { name: "2", exact: true });
+  await second.focus(); await second.press("Enter");
+  await expect(root).toHaveAttribute("data-column", "1");
+  await expect(slider).toHaveValue("0.64");
+  await expect(page.getByRole("link", { name: "2", exact: true })).toBeFocused();
+  expect(await oldSlider!.evaluate(node => node.oninput === null && !node.isConnected)).toBe(true);
+  expect(new URL(page.url()).searchParams.get("context")).toBe("compare");
+  await page.goBack(); await expect(root).toHaveAttribute("data-column", "0");
+  await expect(slider).toHaveValue("0.64");
+  await page.goForward(); await expect(root).toHaveAttribute("data-column", "1");
+  await expect(slider).toHaveValue("0.64");
+  await page.getByRole("link", { name: projectionLoss.reading.title, exact: true }).click();
+  await expect(root).toHaveAttribute("data-source-id", projectionLoss.product.id);
+  await expect(slider).toHaveValue("0");
+  await page.goBack(); await expect(root).toHaveAttribute("data-source-id", dependentColumns.product.id);
+  await expect(root).toHaveAttribute("data-column", "1"); await expect(slider).toHaveValue("0.64");
+  expect(documents).toBe(1);
+  await page.reload(); await expect(root).toHaveAttribute("data-ready", "true");
+  await expect(slider).toHaveValue("0.64");
+  await page.getByRole("button", { name: "Play", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Pause", exact: true })).toBeVisible();
+  await slider.fill("0.42"); await expect(slider).toHaveValue("0.42");
+  expect(new URL(page.url()).hash).toBe("#p=0.42");
+});
+
+test("latest matrix selection wins delayed loads and failed loads preserve the usable source", async ({ page }) => {
+  let release = () => {};
+  const held = new Promise<void>(resolve => { release = resolve; });
+  await page.route("**/content/authoring/linear-algebra/dependent-columns.ts*", async request => { await held; await request.continue(); });
+  await page.goto(`${route}?input=projection-loss#scaled`);
+  const root = page.locator("#comb-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  await page.getByRole("link", { name: dependentColumns.reading.title, exact: true }).click();
+  await expect(root).toHaveAttribute("aria-busy", "true");
+  await page.getByRole("link", { name: "Identity", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Identity selects each column");
+  const loaded = page.waitForResponse(response => response.url().includes("/linear-algebra/dependent-columns.ts"));
+  release(); await loaded;
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Identity selects each column");
+  await expect(root).toHaveAttribute("aria-busy", "false");
+  const previous = page.url();
+  await page.getByRole("link", { name: "Original", exact: true }).evaluate(link => link.setAttribute("href", "?input=missing"));
+  await page.getByRole("link", { name: "Original", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("Choose a matrix input");
+  expect(page.url()).toBe(previous);
+  await page.getByRole("slider").fill("0.64"); await expect(page.getByRole("slider")).toHaveValue("0.64");
+  await page.getByRole("link", { name: "2", exact: true }).click();
+  await expect(root).toHaveAttribute("data-column", "1"); await expect(page.getByRole("alert")).toHaveCount(0);
+});
+
+test("repeated selection releases old player observers and page disposal cancels playback", async ({ page }) => {
+  await page.addInitScript(() => {
+    const observers = new Set<ResizeObserver>();
+    const Native = window.ResizeObserver;
+    window.ResizeObserver = class extends Native {
+      override observe(target: Element, options?: ResizeObserverOptions) {
+        observers.add(this); document.documentElement.dataset["observerCount"] = String(observers.size); super.observe(target, options);
+      }
+      override disconnect() { observers.delete(this); document.documentElement.dataset["observerCount"] = String(observers.size); super.disconnect(); }
+    };
+  });
+  await page.goto(`${route}?input=dependent-columns#scaled`);
+  const root = page.locator("#comb-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  const observers = await page.locator("html").getAttribute("data-observer-count");
+  for (let index = 0; index < 8; index++) {
+    const column = index % 2 === 0 ? 1 : 0;
+    await page.getByRole("link", { name: String(column + 1), exact: true }).click();
+    await expect(root).toHaveAttribute("data-column", String(column));
+    await expect(page.locator("html")).toHaveAttribute("data-observer-count", observers!);
+    await expect(page.locator(".comb-stage")).toHaveCount(1);
+  }
+  await page.getByRole("button", { name: "Play", exact: true }).click();
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+  await expect(page.locator("html")).toHaveAttribute("data-observer-count", "0");
+  expect(await page.getByRole("slider").evaluate(node => (node as HTMLInputElement).oninput)).toBe(null);
+  await expect(page.locator(".comb-material")).toBeEmpty();
+});
+
+test("failed native preparation restores the previous matrix source and held state", async ({ page }) => {
+  await page.goto(`${route}?input=projection-loss#p=0.64`);
+  const root = page.locator("#comb-player"); await expect(root).toHaveAttribute("data-ready", "true");
+  const previous = page.url();
+  await page.evaluate(() => {
+    const measure = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = function () {
+      if (this.classList.contains("comb-stage")) {
+        Element.prototype.getBoundingClientRect = measure;
+        throw new Error("Injected endpoint preparation failure");
+      }
+      return measure.call(this);
+    };
+  });
+  await page.getByRole("link", { name: "Identity", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("Injected endpoint preparation failure");
+  await expect(root).toHaveAttribute("data-source-id", projectionLoss.product.id);
+  await expect(page.getByRole("slider")).toHaveValue("0.64"); expect(page.url()).toBe(previous);
+  await page.getByRole("link", { name: "2", exact: true }).click();
+  await expect(root).toHaveAttribute("data-column", "1");
+  await expect(page.getByRole("slider")).toHaveValue("0.64");
+});
+
 test("matrix discovery fetches only the selected authored source", async ({ page }) => {
   const sources: string[] = [];
   page.on("request", request => {

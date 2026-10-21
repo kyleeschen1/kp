@@ -12,6 +12,20 @@ import type { ColumnReading } from "../src/experiments/matrix-column-combination
 import { projectionLoss } from "../content/authoring/linear-algebra/projection-loss.ts";
 import { dependentColumns } from "../content/authoring/linear-algebra/dependent-columns.ts";
 import * as M from "../src/math/authoring/matrices.ts";
+import { readColumnProgress, columnProgressHash } from "../src/experiments/matrix-column-combinations/location.ts";
+
+test("matrix locations round-trip exact held positions and retain milestone links", () => {
+  for (const progress of [0, 1 / 6, 0.3333333333333333, 0.64, 0.64000000001, 0.9999999, 1]) {
+    assert.equal(readColumnProgress(columnProgressHash(progress)), progress);
+  }
+  assert.equal(columnProgressHash(4 / 6), "#scaled");
+  assert.equal(readColumnProgress("#weights"), 2 / 6);
+  assert.equal(readColumnProgress(""), 0);
+  for (const hash of ["#p=", "#p= ", "#p=NaN", "#p=Infinity", "#p=-0.1", "#p=1.1"]) {
+    assert.throws(() => readColumnProgress(hash), /progress must be/);
+  }
+  for (const progress of [-1, NaN, Infinity, 2]) assert.throws(() => columnProgressHash(progress), /progress must be/);
+});
 
 test("matrix discovery loads matching sources without hiding unknown identifiers", async () => {
   assert.equal(new Set(matrixSources.map(source => source.id)).size, matrixSources.length);

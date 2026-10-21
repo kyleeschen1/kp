@@ -11,15 +11,23 @@ import budgets from './semantic-cost-budgets.json' with { type: 'json' };
 const root = 'dist/matrix-interpretations';
 const manifest: KpBundleManifest = JSON.parse(await readFile(`${root}/.vite/manifest.json`, 'utf8'));
 const inventory: { file: string; modules: string[] }[] = JSON.parse(await readFile(`${root}/module-inventory.json`, 'utf8'));
-const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition'];
+const matrixSources: Readonly<Record<string, readonly string[]>> = {
+  'matrix-projection-loss': ['content/authoring/linear-algebra/projection-loss.ts'],
+  'matrix-dependent-columns': ['content/authoring/linear-algebra/dependent-columns.ts'],
+  'matrix-numeric': ['content/authoring/convergence/matrices.ts']
+};
+const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition', 'matrix-all', ...Object.keys(matrixSources)];
 const closures = [];
 for (const page of pages) {
   const collection = page.startsWith('collection-');
   const row = page.startsWith('row-');
-  const html = `experiments/${page === 'matrix-composition' ? 'matrix-column-combinations' : collection || row || page === 'rectangular-default' ? 'rectangular-product' : page}/index.html`;
-  // Composition activates both lazy modules; include their full dependencies,
-  // not only the ordinary page's cold static closure.
-  const activation = row ? page === 'row-workbench' ? ['src/experiments/rectangular-product/row-workbench.ts']
+  const selectedMatrix = page === 'matrix-composition'
+    ? ['src/experiments/matrix-column-combinations/basis-composition.ts', 'src/experiments/matrix-column-combinations/basis-composition-view.ts']
+    : matrixSources[page];
+  const html = `experiments/${page === 'matrix-all' || selectedMatrix ? 'matrix-column-combinations' : collection || row || page === 'rectangular-default' ? 'rectangular-product' : page}/index.html`;
+  // Count complete selected closures and retain an explicit all-source union.
+  // Lazy declarations alone do not make unrelated sources part of activation.
+  const activation = selectedMatrix ?? (row ? page === 'row-workbench' ? ['src/experiments/rectangular-product/row-workbench.ts']
     : page.startsWith('row-composition') ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/row-composition-view.ts',
       ...(page === 'row-composition-variation' ? ['src/experiments/rectangular-product/row-composition-variation.ts']
         : page === 'row-composition-sequence' ? ['src/experiments/rectangular-product/row-composition-sequence.ts']
@@ -27,8 +35,8 @@ for (const page of pages) {
         : page === 'row-composition-contrast' ? ['src/experiments/rectangular-product/systems-contrast.ts'] : [])]
     : ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/row-operation-view.ts']
     : collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
-    ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : [];
-  const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-composition' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, resolveKpBundleActivationRoots(manifest, inventory, activation))])];
+    ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : []);
+  const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-all' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, resolveKpBundleActivationRoots(manifest, inventory, activation))])];
   const measured = await Promise.all(files.map(async file => {
     const data = await readFile(`${root}/${file}`);
     return { file, raw: data.byteLength, gzip: gzipSync(data).byteLength };
@@ -42,8 +50,15 @@ for (const module of modules) if (budgets.forbiddenModuleFragments.some(part => 
   throw new Error(`Unrelated module reached ordinary animations: ${module}`);
 }
 console.log(JSON.stringify({ measuredClosures: closures.map(({ files: _files, ...entry }) => entry) }, null, 2));
+// Preserve complete evidence even when a ceiling fails; diagnosis must not
+// depend on relaxing the gate before its offending closure can be inspected.
+await mkdir('tmp/codex/semantic-cost', { recursive: true });
+await writeFile('tmp/codex/semantic-cost/closures.json', JSON.stringify({ closures, inventory }, null, 2) + '\n');
 for (const closure of closures) {
-  const limit = budgets.entries[closure.page as keyof typeof budgets.entries];
+  // New selected-source cohorts retain the existing complete column-player
+  // ceiling. The matrix-all cohort retains the former all-lazy-chunk accounting.
+  const limit = budgets.entries[closure.page as keyof typeof budgets.entries]
+    ?? (matrixSources[closure.page] ? budgets.entries['matrix-column-combinations'] : undefined);
   if (!limit) throw new Error(`Missing complete-consumer budget: ${closure.page}`);
   if (closure.js.gzip > limit.jsGzip || closure.css.gzip > limit.cssGzip) throw new Error(`Entry budget exceeded: ${closure.page}; JS ${closure.js.gzip}/${limit.jsGzip}, CSS ${closure.css.gzip}/${limit.cssGzip} gzip bytes`);
 }

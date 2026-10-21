@@ -1,5 +1,5 @@
 import { test, expect, type Page, type CDPSession } from '@playwright/test';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import type {} from '../src/experiments/semantic-cost/entry.ts';
 import budgets from '../scripts/semantic-cost-budgets.json' with { type: 'json' };
 
@@ -26,6 +26,45 @@ async function record(name: string, data: unknown) {
   await mkdir('tmp/codex/semantic-cost', { recursive: true });
   await writeFile(`tmp/codex/semantic-cost/${name}.json`, JSON.stringify(data, null, 2) + '\n');
 }
+
+test('matrix source navigation loads selected production chunks once and retains one player', async ({ page, context }) => {
+  const inventory: { file: string; modules: string[] }[] = JSON.parse(await readFile('dist/matrix-interpretations/module-inventory.json', 'utf8'));
+  const sourceFile = (id: string) => {
+    const chunk = inventory.find(entry => entry.modules.includes(`content/authoring/linear-algebra/${id}.ts`));
+    expect(chunk, `production chunk for ${id}`).toBeDefined(); return `/${chunk!.file}`;
+  };
+  const projection = sourceFile('projection-loss'), dependent = sourceFile('dependent-columns');
+  expect(projection).not.toBe(dependent);
+  const requests: string[] = []; let documents = 0;
+  page.on('request', request => {
+    requests.push(new URL(request.url()).pathname);
+    if (request.resourceType() === 'document') documents++;
+  });
+  const cdp = await context.newCDPSession(page); await cdp.send('Performance.enable');
+  await page.goto('/experiments/matrix-column-combinations/');
+  const root = page.locator('#comb-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+  expect(requests).not.toContain(projection); expect(requests).not.toContain(dependent);
+  const select = async (id: string) => {
+    await page.locator(`nav[aria-label="Matrix source inputs"] a[href*="input=${id}"]`).click();
+    await expect(root).toHaveAttribute('data-source-id', `${id}.AB`);
+  };
+  await select('projection-loss'); expect(requests).toContain(projection); expect(requests).not.toContain(dependent);
+  await select('dependent-columns'); expect(requests).toContain(dependent);
+  await select('projection-loss');
+  const baseline = await metrics(cdp), warmedRequests = requests.length;
+  for (let i = 0; i < 6; i++) { await select('dependent-columns'); await select('projection-loss'); }
+  const after = await metrics(cdp);
+  expect(documents).toBe(1);
+  expect(requests.length).toBe(warmedRequests);
+  expect(requests.filter(path => path === projection)).toHaveLength(1);
+  expect(requests.filter(path => path === dependent)).toHaveLength(1);
+  expect(after['Documents']).toBe(baseline['Documents']);
+  expect(after['JSEventListeners']).toBeLessThanOrEqual(baseline['JSEventListeners']! + 2);
+  expect(after['Nodes']).toBeLessThanOrEqual(baseline['Nodes']! + 20);
+  await record('matrix-navigation', { baseline, after, documentRequests: documents,
+    newRequestsAfterWarmup: requests.length - warmedRequests, resources: await resources(page),
+    note: 'Production fixture, six source pairs after warmup; post-GC counters are retention evidence, not process memory.' });
+});
 
 test('visibility ownership shares resources and releases canceled registrations', async ({ page }) => {
   await page.goto('/cost/experiments/semantic-cost/?reading=rows');

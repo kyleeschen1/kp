@@ -1,133 +1,127 @@
-import { readMatrixConfig, observeMatrixConfig } from "../matrix-examples/config.ts";
 import "./style.css";
 import "../matrix-example-page.css";
-import { example, columnExampleFromProduct, numberOf, durationMs, sample } from "./model.ts";
-import { MatrixColumnGap } from "../matrix-column-product/environment.ts";
-import { stageHtml, mountPresentation, calculationLatex } from "./presentation.ts";
-import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
-import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaffold.ts";
-import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
-import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
-import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
-import { matrixSources, loadMatrixSource } from "../../../content/authoring/convergence/matrix-sources.ts";
+import { createKpReaderLatestSessionHandoff } from "../../reader/runtime/latest-session-handoff.ts";
+import { loadColumnPage } from "./page.ts";
+import { mountColumnPlayer } from "./player.ts";
+import { readColumnProgress, columnProgressHash, sameColumnSelection } from "./location.ts";
 
-async function mount() {
-  const query = new URLSearchParams(location.search);
-  document.documentElement.toggleAttribute("data-embedded", query.has("embedded"));
-  const column = Number(query.get("column") ?? "0");
-  const basisMode = query.get('basis') ?? 'adapted';
-  if (query.get('example') === 'composition' && basisMode !== 'adapted' && basisMode !== 'standard') {
-    const { BasisCompositionGap } = await import('./basis-composition.ts');
-    throw new BasisCompositionGap('Choose the adapted or standard intermediate basis.');
+const root = document.querySelector<HTMLElement>("#comb-player")!;
+const handoff = createKpReaderLatestSessionHandoff();
+type Active = { url: URL; page: Awaited<ReturnType<typeof loadColumnPage>>; player: ReturnType<typeof mountColumnPlayer> };
+let active: Active | undefined;
+let disposed = false;
+let navigating = false;
+
+function settle(progress: number) {
+  if (!active || disposed || navigating) return;
+  active.url.hash = columnProgressHash(progress);
+  if (location.href !== active.url.href) history.replaceState(null, "", active.url);
+  for (const link of root.querySelectorAll<HTMLAnchorElement>("[data-column-navigation] a")) {
+    const url = new URL(link.href); url.hash = active.url.hash;
+    // Keep embedding and other host-owned query state when comparing columns.
+    for (const [key, value] of active.url.searchParams) if (key !== "column") url.searchParams.set(key, value);
+    link.href = url.href;
+    link.setAttribute("aria-current", url.searchParams.get("column") === String(active.page.scene.column) ? "true" : "false");
   }
-  const composition = query.get("example") === "composition"
-    ? (await import('./basis-composition.ts')).basisComposition(query.get('basis') === 'standard' ? 'standard' : 'adapted', column)
-    : undefined;
-  const input = query.get("input");
-  if (input && query.has("example")) throw new MatrixColumnGap("Choose either a source input or a named interpretation.");
-  const authored = input ? await loadMatrixSource(input) : undefined;
-  const scene = authored ? columnExampleFromProduct(authored.product, column, authored.reading) : composition?.scene ?? example(query.get("example") ?? "columns", column);
-  const { beats } = scene;
-  document.querySelector("h1")!.textContent = scene.title;
-  document.title = scene.title;
-  const intro = document.querySelector("#matrix-story > p")!;
-  intro.textContent = scene.reading?.introduction ?? (composition ? "The same two maps have different matrices in different bases. Their composition is unchanged when the coordinates at the join agree." : scene.evidence ? "Each entry of QᵀQ is a dot product between two columns of Q. Diagonal entries measure squared length; off-diagonal entries measure orthogonality." : "Each column of the right matrix tells us how to combine the columns of the left matrix.");
-  const links = ["columns", "identity", "orthonormality"].map((kind, i) => `<a href="?example=${kind}&column=0#weights">${["Column combinations", "Identity", "Orthonormality"][i]}</a>`).join(" · ");
-  const root = document.querySelector<HTMLElement>("#comb-player")!;
-  root.dataset["sourceId"] = scene.env.product.id;
-  const contextHtml = composition ? (await import('./basis-composition-view.ts')).basisCompositionHtml(composition) : '';
-  const basisQuery = composition ? `&basis=${composition.mode}` : '';
-  root.innerHTML = `<nav aria-label="Matrix examples">${links}</nav>
-    <nav aria-label="Matrix source inputs">Inputs: <a href="?column=${column}">Original</a> · ${matrixSources.map(({ id, title }) => `<a href="?input=${encodeURIComponent(id)}&column=${column}">${escape(title)}</a>`).join(" · ")}</nav>
-    ${contextHtml}
-    <p>Result column: <a href="?${input ? `input=${encodeURIComponent(input)}` : `example=${scene.kind}${basisQuery}`}&column=0#weights">1</a> · <a href="?${input ? `input=${encodeURIComponent(input)}` : `example=${scene.kind}${basisQuery}`}&column=1#weights">2</a></p>
-    <section class="matrix-card kp-focus-deck" aria-label="Column combination animation">
-    <div class="matrix-cue" data-cue aria-live="polite"></div>
-    <div class="matrix-scroll" tabindex="0" role="region" aria-label="Column combination; scroll horizontally on narrow screens">${stageHtml(scene)}</div>
-    <div class="matrix-controls"><button data-back aria-label="Previous milestone">Previous</button><button data-play>Play</button><button data-next aria-label="Next milestone">Next</button>
-    <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
-    <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div></section>
-    <p class="matrix-help">Follow the columns, then watch each scalar reach every entry. Use the scrubber to revisit any moment. On narrow screens, scroll the stage horizontally.</p>
-    ${scene.reading ? `<section aria-label="What the comparison shows">${scene.reading.conclusion.map(text => `<p>${escape(text)}</p>`).join("")}
-      <p>${escape(scene.reading.question.prompt)}</p><details><summary>Check your reasoning</summary><p>${escape(scene.reading.question.answer)}</p></details></section>` : ""}
-    <details><summary>Read the calculation</summary><div class="comb-static">${renderLatexToHtml(calculationLatex(scene), { output: "htmlAndMathml" })}</div>
-    <p>The copied columns and weights refer to the original entries of the two factors. Multiplication produces derived entries; addition produces the result column. The columns of the left matrix do not need to form a basis.</p></details>
-    ${scene.evidence ? `<section aria-label="Column dot products"><h2>Why the result is the identity</h2>
-      <p>The columns of Q are (0.6, 0.8) and (−0.8, 0.6). Each has squared length 1, and their dot product is 0.</p>
-      ${scene.evidence.gram.cells.map(cell => `<p>${renderLatexToHtml(`q_${cell.rowIndex + 1} \\cdot q_${cell.columnIndex + 1} = ${cell.dot.pairs.map(pair => `(${numberOf(pair.left)})(${numberOf(pair.right)})`).join("+")} = ${numberOf(cell.result)}`, { output: "htmlAndMathml" })}</p>`).join("")}
-      <p>Numerical check for this Q: ${scene.evidence.status}; tolerance ${scene.evidence.tolerance}. This checks the displayed example, not a symbolic proof for arbitrary matrices.</p></section>` : ""}
-    <p><a href="/experiments/matrix-column-product/">Compare the row–column dot-product view</a></p>`;
-  await document.fonts.ready;
-  const view = mountPresentation(root, scene);
-  const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-column-combinations", durationMs });
-  let config = readMatrixConfig(document);
-  const stepsOnly = () => reduced.matches || config.motion === "steps";
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-  const slider = root.querySelector<HTMLInputElement>("[data-scrub]")!;
-  const chooser = root.querySelector<HTMLSelectElement>("select")!;
-  const play = root.querySelector<HTMLButtonElement>("[data-play]")!;
-  const back = root.querySelector<HTMLButtonElement>("[data-back]")!;
-  const next = root.querySelector<HTMLButtonElement>("[data-next]")!;
-  let disposed = false, lastBeat = "";
-  const render = () => {
-    if (disposed) return;
-    const frame = view.render(clock.getSnapshot().progress);
-    slider.value = String(frame.progress); slider.setAttribute("aria-valuetext", frame.beat.cue);
-    chooser.value = String(frame.index); back.disabled = frame.progress === 0; next.disabled = frame.progress === 1;
-    play.textContent = clock.getStatus() === "playing" ? "Pause" : stepsOnly() ? "Next step" : frame.progress === 1 ? "Replay" : "Play";
-    if (lastBeat !== frame.beat.id) {
-      root.querySelector("[data-cue]")!.innerHTML = renderKpFocusDeckAnnotation({ entityId: frame.beat.id, text: frame.beat.cue });
-      lastBeat = frame.beat.id;
-    }
-    root.dataset["milestone"] = frame.beat.id;
-  };
-  const go = (index: number, animate = true) => {
-    const i = Math.max(0, Math.min(beats.length - 1, index)), target = i / (beats.length - 1);
-    clock.pause(); history.replaceState(null, "", `#${beats[i]!.id}`);
-    if (animate && !stepsOnly()) clock.play({ direction: target < clock.getSnapshot().progress ? "rewind" : "forward", stopAt: target });
-    else clock.seek(target);
-    render();
-  };
-  const navigate = (offset: number) => {
-    const phase = clock.getSnapshot().progress * (beats.length - 1);
-    go(offset > 0 ? Math.floor(phase + 1e-8) + 1 : Math.ceil(phase - 1e-8) - 1);
-  };
-  slider.oninput = () => { clock.pause(); clock.seek(Number(slider.value)); };
-  slider.onkeydown = event => {
-    const target = readKpFocusDeckScrubberKeyTarget(event, clock.getSnapshot().progress * (beats.length - 1), beats.length);
-    if (target !== undefined) { event.preventDefault(); go(target, false); }
-  };
-  chooser.onchange = () => go(Number(chooser.value), false);
-  back.onclick = () => navigate(-1); next.onclick = () => navigate(1);
-  play.onclick = () => {
-    if (clock.getStatus() === "playing") clock.pause();
-    else if (stepsOnly()) { if (clock.getSnapshot().progress === 1) go(0, false); else navigate(1); }
-    else { if (clock.getSnapshot().progress === 1) clock.seek(0); clock.play({ direction: "forward", stopAt: 1 }); }
-    render();
-  };
-  const unsubscribe = clock.subscribe(render);
-  const restore = () => { const i = beats.findIndex(beat => beat.id === location.hash.slice(1)); go(i < 0 ? 0 : i, false); };
-  const resize = () => { clock.pause(); view.prepare(); render(); };
-  const stopConfig = observeMatrixConfig(document, next => { config = next; resize(); });
-  const visibility = () => { if (document.hidden) { clock.pause(); render(); } };
-  const motion = () => { clock.pause(); if (stepsOnly()) go(sample(clock.getSnapshot().progress, beats).index, false); render(); };
-  const pagehide = (event: PageTransitionEvent) => { if (event.persisted) clock.pause(); else dispose(); };
-  const pageshow = (event: PageTransitionEvent) => { if (event.persisted) resize(); };
-  const observer = new ResizeObserver(resize); observer.observe(root);
-  window.addEventListener("hashchange", restore); document.addEventListener("visibilitychange", visibility);
-  window.addEventListener("pagehide", pagehide); window.addEventListener("pageshow", pageshow); reduced.addEventListener("change", motion);
-  const dispose = () => {
-    if (disposed) return; disposed = true;
-    stopConfig(); observer.disconnect(); unsubscribe(); clock.dispose(); view.dispose();
-    window.removeEventListener("hashchange", restore); document.removeEventListener("visibilitychange", visibility);
-    window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); reduced.removeEventListener("change", motion);
-    slider.oninput = null; slider.onkeydown = null; chooser.onchange = null; play.onclick = null; back.onclick = null; next.onclick = null;
-  };
-  import.meta.hot?.dispose(dispose);
-  restore(); root.setAttribute("aria-busy", "false"); root.dataset["ready"] = "true";
 }
-void mount().catch(error => {
-  const root = document.querySelector<HTMLElement>("#comb-player")!;
-  root.setAttribute("aria-busy", "false"); root.dataset["gap"] = "true";
-  root.textContent = `The column combination could not be prepared: ${error instanceof Error ? error.message : String(error)}`;
-});
+
+function showError(error: unknown) {
+  const message = `The column combination could not be prepared: ${error instanceof Error ? error.message : String(error)}`;
+  root.setAttribute("aria-busy", "false");
+  if (!active) { root.dataset["gap"] = "true"; root.textContent = message; return; }
+  // A failed selection leaves the previous source, controls and location usable.
+  settle(active.player.progress());
+  let alert = root.querySelector<HTMLElement>("[data-load-error]");
+  if (!alert) { alert = document.createElement("p"); alert.dataset["loadError"] = "true"; alert.setAttribute("role", "alert"); root.prepend(alert); }
+  alert.textContent = message;
+}
+
+function install(page: Active["page"], url: URL, progress: number) {
+  root.innerHTML = page.html;
+  document.documentElement.toggleAttribute("data-embedded", url.searchParams.has("embedded"));
+  document.querySelector("h1")!.textContent = page.scene.title; document.title = page.scene.title;
+  document.querySelector("#matrix-story > p")!.textContent = page.introduction;
+  let player: ReturnType<typeof mountColumnPlayer> | undefined;
+  player = mountColumnPlayer(root, page.scene, progress, value => {
+    if (active && active.player === player) settle(value);
+  });
+  active = { page, url, player };
+  root.dataset["sourceId"] = page.scene.env.product.id;
+  delete root.dataset["gap"]; root.dataset["ready"] = "true";
+  root.dataset["column"] = String(page.scene.column); root.setAttribute("aria-busy", "false");
+}
+
+async function navigate(url: URL, push: boolean) {
+  if (disposed) return;
+  const token = handoff.issue();
+  const focus = document.activeElement instanceof HTMLAnchorElement && root.contains(document.activeElement)
+    ? document.activeElement : undefined;
+  if (push && active) settle(active.player.progress());
+  navigating = true;
+  active?.player.pause();
+  root.setAttribute("aria-busy", "true");
+  try {
+    const progress = readColumnProgress(url.hash);
+    if (active && sameColumnSelection(active.url, url)) {
+      handoff.commit(token, () => {
+        if (push) history.pushState(null, "", url);
+        navigating = false;
+        active!.url = url; active!.player.seek(progress);
+        root.querySelector("[data-load-error]")?.remove(); root.setAttribute("aria-busy", "false");
+      });
+      return;
+    }
+    const page = await loadColumnPage(url);
+    await document.fonts.ready;
+    handoff.commit(token, () => {
+      if (disposed) return;
+      const restoreFocus = focus && document.activeElement === focus;
+      const previous = active && { page: active.page, url: active.url, progress: active.player.progress() };
+      active?.player.dispose(); active = undefined;
+      try {
+        install(page, url, progress);
+        if (push) history.pushState(null, "", url);
+        navigating = false; settle(progress);
+        if (restoreFocus) [...root.querySelectorAll<HTMLAnchorElement>("a")].find(link => link.textContent === focus.textContent)?.focus({ preventScroll: true });
+      } catch (error) {
+        // Preparation needs connected native endpoints. If it fails after the
+        // old view was released, restore its exact known source and held state.
+        if (previous) {
+          try { install(previous.page, previous.url, previous.progress); }
+          catch { active = undefined; delete root.dataset["ready"]; }
+        }
+        navigating = false; showError(error);
+      }
+    });
+  } catch (error) { handoff.commit(token, () => { navigating = false; showError(error); }); }
+}
+
+const click = (event: MouseEvent) => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+  if (!link || link.target || link.hasAttribute("download")) return;
+  const url = new URL(link.href);
+  if (url.origin !== location.origin || url.pathname !== location.pathname) return;
+  if (active?.url.searchParams.has("embedded")) url.searchParams.set("embedded", active.url.searchParams.get("embedded")!);
+  if (link.closest("[data-column-navigation]") && active) url.hash = columnProgressHash(active.player.progress());
+  event.preventDefault(); void navigate(url, true);
+};
+const restore = () => { void navigate(new URL(location.href), false); };
+const pagehide = (event: PageTransitionEvent) => {
+  handoff.invalidate();
+  if (event.persisted) { navigating = false; active?.player.pause(); root.setAttribute("aria-busy", "false"); }
+  else dispose();
+};
+const pageshow = (event: PageTransitionEvent) => { if (event.persisted) { active?.player.prepare(); restore(); } };
+function dispose() {
+  if (disposed) return; disposed = true;
+  handoff.invalidate(); active?.player.dispose(); active = undefined;
+  root.removeEventListener("click", click);
+  window.removeEventListener("popstate", restore); window.removeEventListener("hashchange", restore);
+  window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow);
+}
+root.addEventListener("click", click);
+window.addEventListener("popstate", restore); window.addEventListener("hashchange", restore);
+window.addEventListener("pagehide", pagehide); window.addEventListener("pageshow", pageshow);
+import.meta.hot?.dispose(dispose);
+restore();
