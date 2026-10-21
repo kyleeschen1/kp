@@ -14,8 +14,13 @@ lane; the previous calculus review gate remains intact. The linked agenda owns
 future next-step priorities; Theseus owns live package status.
 The first authoring/loading delivery is implemented and checked; see
 [evidence and limitations](../reviews/2026-10-21-concise-authoring-and-loading.md).
-Next-step discussion should select a bounded host-lifecycle consolidation caller
-and many-card cost cohort, rather than repeat the API aliases or calculus review.
+The subsequent [reader-lifecycle delivery](../2026-10-21-reader-lifecycle-delivery.md)
+shares code/physics visibility ownership and measures four ten-player suspension
+and disposal cohorts. [Evidence and limits](../reviews/2026-10-21-reader-lifecycle.md)
+distinguish released listeners from retained mounted-scene and heap costs.
+Next-step discussion should measure ordinary matrix/algebra authoring closures
+and separate compiler/inspection/fixture imports where justified, rather than
+repeat API aliases, invent a universal host controller or reopen calculus review.
 
 Latest October 13 feedback: the calculus dashboard was judged busy and its
 pedagogical value questioned; it has not passed review. The user asked to record

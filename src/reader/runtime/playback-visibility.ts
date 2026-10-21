@@ -19,10 +19,17 @@ export function watchPlayback(target: Element, pause: () => void, signal: AbortS
   let owner = owners.get(document);
   if (!owner) {
     const targets = new Map<Element, Set<Registration>>();
+    const notify = (registration: Registration) => {
+      if (!registration.active) return;
+      // Separate DOM listeners used to isolate caller failures. Sharing their
+      // delivery must still pause the other cards and report the original error.
+      try { registration.pause(); }
+      catch (error) { view.reportError(error); }
+    };
     const hidden = () => {
       if (document.hidden) {
         for (const registrations of [...targets.values()]) {
-          for (const registration of [...registrations]) if (registration.active) registration.pause();
+          for (const registration of [...registrations]) notify(registration);
         }
       }
     };
@@ -31,7 +38,7 @@ export function watchPlayback(target: Element, pause: () => void, signal: AbortS
         if (entry.isIntersecting) continue;
         for (const registration of [...(targets.get(entry.target) ?? [])]) {
           // A queued exit from an earlier binding must not pause a new owner.
-          if (registration.active && entry.time >= registration.since) registration.pause();
+          if (entry.time >= registration.since) notify(registration);
         }
       }
     });

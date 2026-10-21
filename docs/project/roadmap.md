@@ -34,9 +34,15 @@ owns this bounded delivery. Use the linked agenda for future next-step reviews.
 The concise matrix/algebra entrypoints and prepared-card loading improvement
 are implemented; [delivery evidence](reviews/2026-10-21-concise-authoring-and-loading.md)
 records preserved source behavior and 23.4% less requested initial JavaScript
-in the measured tax-page cohort. Next recommended package: consolidate repeated
-host lifecycle wiring through existing owners, with many-card suspension and
-disposal measurements. Do not restart the completed authoring/loading slices.
+in the measured tax-page cohort. The subsequent
+[shared visibility delivery](2026-10-21-reader-lifecycle-delivery.md) under
+`run-contract.kp.reader-lifecycle-v1` consolidates code/physics pause ownership
+and adds ten-player suspension/disposal cohorts; see
+[evidence and limits](reviews/2026-10-21-reader-lifecycle.md).
+Next recommendation: measure and separate ordinary authoring dependency
+closures from compiler/inspection/fixture imports, using complete matrix and
+algebra consumers. Keep other host lifecycle responsibilities local until
+duplication is demonstrated. Do not restart completed authoring/loading work.
 The explanation-authoring contract below remains parked at its unaccepted card
 checkpoint; it is not the current execution lane and no visual gate is waived.
 

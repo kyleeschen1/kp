@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader-lifecycle-v1",
   "kind": "run-contract",
   "title": "Shared reader visibility",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +18,26 @@
   "verification": [
     "npm run typecheck"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:31:50.610Z",
+      "notes": "7323 passed, zero failures or skips; clean complete run."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:31:51.215Z",
+      "notes": "Final app, node, test, Svelte and domain checks pass."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "COMPLETE: shared visibility in code and physics readers; four ten-player suspension cohorts; cancellation and failure isolation; production and full-suite checks pass."
+  },
   "allowedWork": [
     "Shared visibility, two existing readers, cost harness and checks"
   ],
@@ -39,7 +60,8 @@
     {
       "id": "integration",
       "title": "Integration",
-      "status": "in-progress"
+      "summary": "Full integration verified; costs, limits and next recommendation durable.",
+      "status": "complete"
     }
   ]
 }

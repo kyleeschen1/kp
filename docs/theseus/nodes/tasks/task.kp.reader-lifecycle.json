@@ -2,8 +2,9 @@
   "id": "task.kp.reader-lifecycle",
   "kind": "task",
   "title": "Shared playback visibility and many-card costs",
-  "status": "ready",
+  "status": "resolved",
   "domain": "reader",
+  "summary": "Approved lifecycle and many-card cost outcomes implemented and verified; next import-closure work remains a recommendation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -42,6 +43,69 @@
       "scope": "integration",
       "checkedAt": "2026-10-21T16:27:40.326Z",
       "notes": "17 Chromium checks pass; focused mechanics and code preservation cases also pass."
+    },
+    {
+      "command": "npm run visual:semantic-cost",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:41.513Z",
+      "notes": "Final six-test suite passes including failure isolation, document boundaries, four real-player cohorts and retained legacy baseline."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:42.557Z",
+      "notes": "Final app, node, tests, Svelte and domains pass after failure-isolation repair."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:43.208Z",
+      "notes": "Final architecture boundaries and cross-domain gateway pass."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:43.838Z",
+      "notes": "Final production build passes; shared visibility chunk 940 raw / 527 gzip bytes."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:44.486Z",
+      "notes": "12 manifest routes pass."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:45.140Z",
+      "notes": "Existing production budgets pass unchanged."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:45.792Z",
+      "notes": "Production closure excludes development tooling."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:30:46.480Z",
+      "notes": "Existing complete-consumer bundle and semantic construction budgets pass unchanged."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:31:49.706Z",
+      "notes": "7323 passed, zero failures or skips; clean complete run."
     }
   ]
 }

@@ -11,6 +11,9 @@ viewport exits, multiple subscribers, cancellation during delivery, separate
 iframe documents, queued deliveries after disposal and remount are covered by
 the production browser fixture. Reentry neither seeks nor resumes. Existing
 pagehide/BFCache and reduced-motion owners stay local to their hosts.
+Shared delivery preserves the error isolation of separate browser listeners:
+one failing callback reports its error without preventing other cards pausing.
+An executable regression exercises both outcomes.
 
 This is deliberately not a universal host controller. It does not unmount
 offscreen scenes or prevent a caller from explicitly starting an already-hidden
@@ -32,12 +35,12 @@ Chromium, local production build, October 21:
 
 | Family | Mounted DOM elements, ten players | Listener delta after three cycles | DOM-node delta after three cycles | Post-GC JS heap delta |
 | --- | ---: | ---: | ---: | ---: |
-| Dot | 4,484 | 0 | 1 | 602,296 B |
-| Rows | 4,162 | 0 | 1 | 448,024 B |
-| Columns | 5,964 | 0 | 1 | 334,052 B |
-| Polynomial collection | 3,370 | 0 | 1 | 344,944 B |
+| Dot | 4,484 | 0 | 1 | 602,600 B |
+| Rows | 4,162 | 0 | 1 | 445,584 B |
+| Columns | 5,964 | 0 | 1 | 327,580 B |
+| Polynomial collection | 3,370 | 0 | 1 | 397,172 B |
 
-The shared production chunk is 910 bytes raw / 506 bytes gzip. That is chunk
+The shared production chunk is 940 bytes raw / 527 bytes gzip. That is chunk
 size, not a measured net page saving. Source inspection shows the former policy
 allocated an observer and document listener per session; the new mechanism test
 demonstrates sharing and final release. Existing renderers can own additional
@@ -54,13 +57,16 @@ are inexpensive. Demand mounting and bounded retained scenes remain useful.
 The focused physics/code browser checks preserve continuous control, exact
 reverse, held prose, disclosure and print behavior. TypeScript and architecture
 checks pass. Production build, reader closure/budgets and dev-tool exclusion pass.
-Full integration outcomes are recorded on `task.kp.reader-lifecycle`.
+All six cost-browser tests and 17 shared-reader Chromium conformance checks pass.
+The complete deterministic suite passes: 7,323 tests, zero failures or skips.
+The existing semantic-cost construction and complete-consumer bundle budgets
+pass unchanged. Integration outcomes are recorded on `task.kp.reader-lifecycle`.
 
 An initial full cost run failed because a concurrent main build cleared its
 fixture under the shared `dist` directory. The trace showed “Not found,” not a
 motion failure. Build and fixture-browser steps must run sequentially. The
 focused ownership/suspension run had passed before this orchestration failure;
-the complete cost suite is rerun against the restored fixture for acceptance.
+the complete cost suite subsequently passed against the restored fixture.
 
 ## Next recommendation
 
