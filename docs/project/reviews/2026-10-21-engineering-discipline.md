@@ -139,3 +139,62 @@ the missing-dist prerequisite encountered earlier. The actual visibility
 seven routing/command tests and Node types pass. The short guide is
 `docs/project/authoring/engineering-checks.md`; no new runner or budget amendment
 was introduced. Main and fixture builds still must run sequentially.
+
+## Integration cost amendment
+
+The first full-suite attempt stopped before the deterministic suite at the
+core inference gate: 116,499 types / 198,906 instantiations, six above its
+198,900 cap. The combined cohort passed at 179,819 / 303,819. This was a real
+failed integration attempt, not a passing run.
+
+Attribution temporarily compared the core with only the new Bayes session
+positive/negative type calls removed: 116,376 / 198,820. Restoring both calls
+adds 123 types / 86 instantiations. All coverage is restored and now explicitly
+guarded. An explicit shared result-union annotation was also measured; it made
+the complete core slightly worse (116,502 / 198,913) and was discarded.
+
+Under standing TypeScript-budget repair authority, amend only the exceeded
+core instantiation cap from 198,900 to 199,900: approximately 0.5% headroom
+over the complete measured cohort, rounded to hundreds. Retain the 117,700 type
+cap, combined caps, all 49 core/51 combined fixtures and every negative check.
+Update the measured core baseline and add a bounded-headroom test. This is an
+explicit policy adjustment for useful new coverage, not a compiler optimization.
+Contorting the API or deleting authority checks to save six instantiations
+would be the wrong tradeoff. No runtime or reader budget changed.
+
+## Remaining opportunities and limits
+
+These changes preserve the accepted explanations; they do not establish learner
+effectiveness or a broadly general authoring language. The loading saving is
+modest, while eliminating duplicated preparation and lifecycle ownership makes
+the affected editors easier to maintain. No cache, new clock, global registry,
+or alternative renderer was added.
+
+For the next engineering proposal, profile the observed throttled activation
+stalls before selecting another optimization. Separate native preparation,
+layout/measurement and first-input work in one complete reader workflow.
+Mounted ten-card DOM remains substantial; reducing it through eviction would
+change lifecycle/restore policy and needs a concrete proposal. Further aliases
+or blanket consolidation are not justified by this pass. Keep the deferred
+cross-domain authoring example and learner-context questions as product tests,
+not as requirements to solve through more infrastructure first.
+
+## Final integration
+
+Final `npm test` passes 7,347 tests, zero failures/skips, after architecture,
+inference, concept and promotion-memory gates. The earlier inference failure
+and measured amendment above remain part of the evidence. Full `npm run
+typecheck` passes, including app, Node, test, Svelte and domain checks.
+
+`npm run build:bundle`, `check:reader-production` (12 routes),
+`check:reader-budgets` and `check:dev-review-production` pass. The final
+`check:authoring` passes all complete consumers. All seven production
+`visual:semantic-cost` tests pass after the main build, including four real
+ten-player families and repeated disposal. Scoped actual editor tests are
+recorded above; routing/command tests pass separately (37 tests). Presentation
+was preserved rather than newly certified through subjective learner review.
+
+All approved packages have a delivered, verified disposition; no review-only
+candidate remains parked. The eight-hour limit was a ceiling, not a reason to
+invent more work after the admitted outcomes were complete. Pre-existing
+editor-animation browser changes and two inbox documents remain untouched.

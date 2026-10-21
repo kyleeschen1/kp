@@ -27,11 +27,17 @@ nor its evidence. The ledger remains retrievable at
 
 October 21 latest direction: the user prioritizes codebase discipline,
 performance and API efficiency while human feedback is limited. The
-[day-long engineering portfolio](2026-10-21-engineering-discipline-portfolio.md)
-proposes measured loading, lifetime and repeated-work repairs, followed by
-caller-driven API consolidation and verification improvements. It is being
-presented before execution; no new run is active yet. This defers the
-cross-domain explanation recommendation below without discarding it.
+[engineering portfolio](2026-10-21-engineering-discipline-portfolio.md)
+is implemented and verified: narrow prepared-card descriptors reduce initial
+tax JS by 5,230 gzip bytes, history restoration avoids duplicate checking,
+visibility failures are isolated, four editors share preview staging, and
+focused verification now covers those owners. See
+[measurements, integration and limits](reviews/2026-10-21-engineering-discipline.md).
+The final full suite passes 7,347 tests. A diagnosed core inference-budget
+amendment retains all consumers and negative checks. Next engineering scope
+should profile the remaining throttled activation stalls before adding another
+abstraction; no fresh run is authorized by this recommendation. The cross-domain
+explanation recommendation below remains deferred, not discarded.
 
 October 21 active priority: learner testing is constrained. The user approved
 the [architecture and concise-authoring agenda](2026-10-21-authoring-architecture-delivery.md)

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.engineering-discipline-v1",
   "kind": "run-contract",
   "title": "Engineering discipline and performance",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: all eight approved packages verified; no parked local review dependency remains.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -78,7 +79,8 @@
     {
       "id": "p7",
       "title": "Integration",
-      "status": "planned"
+      "summary": "Complete integration passes after diagnosed inference amendment; outcomes and next investigation recorded, all admitted packages delivered.",
+      "status": "complete"
     }
   ]
 }

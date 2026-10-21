@@ -21,7 +21,8 @@ test("both approved cohorts retain exact fixture membership and active checking"
   assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/native-katex-scene-contribution.ts"));
   assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/bayesian-authoring.ts"));
   assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts", "tests/type-fixtures/composed-algebra-consumers.ts"]);
-  assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 117700, instantiations: 198900 });
+  assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 117700, instantiations: 199900 });
+  assert.ok(typescriptInferenceBudget.ceilings.instantiations <= Math.ceil(typescriptInferenceBudget.measuredProject.instantiations * 1.005 / 100) * 100);
   const budget = combinedInferenceBudget;
   assert.deepEqual(budget.measuredProject, { types: 179268, instantiations: 303017 });
   assert.deepEqual(budget.ceilings, { types: 182100, instantiations: 309100 });
@@ -41,6 +42,13 @@ test("membership rejects omissions, unassigned fixtures, duplicates and cohort t
   assert.throws(() => assertInferenceMembership([...core.slice(1), ...frontendInferenceFixtures], core), /drift/);
 });
 
+test("Bayes cost coverage retains both issued application and source rejection", () => {
+  const fixture = readFileSync("tests/type-fixtures/bayesian-authoring.ts", "utf8");
+  assert.ok(fixture.includes("session.applyDraft(draft)"));
+  assert.ok(fixture.includes("session.applyDraft(source)"));
+  assert.ok(fixture.includes("@ts-expect-error Source data is not an issued compiled draft."));
+});
+
 test("editorial cost coverage retains actual author, card, reading, prompt and extraction consumers", () => {
   const fixture = readFileSync("tests/type-fixtures/authoring-entrypoint-consumers.ts", "utf8");
   for (const owner of ["page", "readings", "prompts", "extraction", "authoring", "editorial-binding"])
@@ -57,8 +65,9 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
   assert.ok(ceilings.instantiations > measuredProject.instantiations);
   assert.ok(ceilings.types / measuredProject.types < 1.05);
   assert.ok(ceilings.instantiations / measuredProject.instantiations < 1.08);
-  assert.equal(ceilings.types, ceilHundred(measuredProject.types * 1.02));
-  assert.ok(ceilings.instantiations <= ceilHundred(measuredProject.instantiations * 1.03));
+  // Passing caps stay fixed rather than growing with each new baseline.
+  assert.ok(ceilings.types <= ceilHundred(measuredProject.types * 1.02));
+  assert.ok(ceilings.instantiations <= ceilHundred(measuredProject.instantiations * 1.005));
   assert.equal(typescriptInferenceBudget.fixtureCount, coreInferenceFixtures.length);
 
   const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {

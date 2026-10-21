@@ -7,11 +7,15 @@ Last Updated: 2026-10-21
 
 Latest October 21 direction: prioritize disciplined infrastructure, performance
 and efficient APIs with limited human feedback. See the
-[engineering portfolio proposal](../2026-10-21-engineering-discipline-portfolio.md).
-It defines an eight-hour ceiling, a two-hour integration reserve and independent
-work that can continue around local review decisions. The user requested this
-plan for presentation; implementation has not started. The cross-domain
-explanation recommendation below is deferred.
+[approved engineering portfolio](../2026-10-21-engineering-discipline-portfolio.md)
+has delivered narrower standalone-card loading, issued-draft reuse, shared
+visibility and preview lifetimes, and usable focused verification routes.
+[Evidence and limits](../reviews/2026-10-21-engineering-discipline.md) record
+the 5,230 gzip-byte saving, full 7,347-test pass and explicit inference-budget
+amendment. No general cache, new renderer or visual policy was introduced.
+Next engineering assessment should locate the remaining throttled activation
+stalls; this recommendation does not authorize another run. The cross-domain
+explanation recommendation below remains deferred.
 
 October 21 supersedes the next-action recommendations below: execute the
 [approved concise-authoring and architecture agenda](../2026-10-21-authoring-architecture-delivery.md)

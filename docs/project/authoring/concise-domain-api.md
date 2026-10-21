@@ -113,3 +113,6 @@ process, enforcing small measured loading budgets before passing the example
 to its real checker. Example factories are source-only entrypoints; checking
 still selects the existing domain compiler. New tasks must join this complete
 inventory rather than silently escape the loading gate.
+
+For scoped runtime/preview checks and integration prerequisites, see
+[engineering checks](engineering-checks.md).
