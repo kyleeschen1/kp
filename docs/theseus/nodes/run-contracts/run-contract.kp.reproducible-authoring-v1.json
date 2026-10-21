@@ -100,7 +100,8 @@
     },
     {
       "id": "download-authority",
-      "status": "planned"
+      "summary": "Explicit draft and displayed downloads verified without restyling; browser and types pass.",
+      "status": "complete"
     },
     {
       "id": "capability-routing",

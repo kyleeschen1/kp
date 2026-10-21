@@ -8,6 +8,13 @@ async function applySource(page: Page, bytes: string) {
   await page.getByRole("button", { name: "Preview this source" }).click();
   await expect(page.locator("[data-change-diagnostic]")).toContainText("Preview updated");
 }
+async function downloadedSource(page: Page, label: string) {
+  const pending = page.waitForEvent("download");
+  await page.getByRole("button", { name: label, exact: true }).click();
+  const download = await pending, path = await download.path();
+  if (!path) throw new Error("Missing downloaded source");
+  return { bytes: readFileSync(path, "utf8"), filename: download.suggestedFilename() };
+}
 async function setRange(page: Page, selector: string, value: number) {
   await page.locator(selector).evaluate((element, next) => {
     if (!(element instanceof HTMLInputElement)) throw new Error("Expected a range input");
@@ -147,12 +154,26 @@ test("failed candidate mount preserves live card, reading, URL and recovery", as
   await expect(page.locator("[data-change-diagnostic]")).toContainText("Injected candidate mount failure");
   await expect(page.locator(".change-card")).toHaveAttribute("data-original", "yes");
   await expect(page.locator(".change-staging")).toHaveCount(0);
+  expect((await downloadedSource(page, "Download displayed source")).bytes).toBe(readFileSync("examples/calculus/change-propagation.json", "utf8"));
   expect(page.url()).toBe(before);
   await setRange(page, "[data-kp-focus-deck-scrubber]", 1);
   await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "1");
   await applySource(page, bytes);
   await expect(page.locator("h1")).toHaveText("Zero slope does not mean no change");
   await expect(page.locator(".change-card")).toHaveCount(1);
+});
+
+test("draft and displayed downloads retain their own exact bytes after rejection", async ({ page }) => {
+  await page.goto(route); await page.locator(".change-author summary").click();
+  const bytes = readFileSync("content/authoring/transfer/two-reversals.json", "utf8");
+  await applySource(page, bytes);
+  const invalid = '{"inner":"x/z"}';
+  await page.locator("#change-source").fill(invalid);
+  expect(await downloadedSource(page, "Download draft source")).toEqual({ bytes: invalid, filename: "change-propagation-draft.json" });
+  expect(await downloadedSource(page, "Download displayed source")).toEqual({ bytes, filename: "change-propagation.json" });
+  await page.getByRole("button", { name: "Preview this source" }).click();
+  await expect(page.locator("[data-change-diagnostic]")).toContainText("previous card is unchanged");
+  expect((await downloadedSource(page, "Download displayed source")).bytes).toBe(bytes);
 });
 
 for (const action of ["edit", "dispose"] as const) test(`pending preview cannot publish after ${action}`, async ({ page }) => {

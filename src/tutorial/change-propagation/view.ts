@@ -70,7 +70,7 @@ export function renderChangePublication(model: ChangeModel, bytes: string, mode:
     ${mode === "editor" ? `<details class="change-author" data-change-author hidden><summary>Edit the functions and explanation</summary>
       <p>This local preview accepts sums, explicit products such as 2*x, integer coefficients up to 10, integer powers 0–4, sin and cos. The first function binds x; the second binds u. Edit the five passages too: prose is author-supplied and is not checked for mathematical truth.</p>
       <label for="change-source">Explanation source</label><textarea id="change-source" spellcheck="false">${escape(bytes)}</textarea>
-      <button type="button" data-change-apply>Preview this source</button><button type="button" data-change-download>Download current source</button>
+      <button type="button" data-change-apply>Preview this source</button><button type="button" data-change-download>Download draft source</button><button type="button" data-change-download-displayed>Download displayed source</button>
       <p data-change-diagnostic role="status">Edits stay in this browser tab until downloaded. A rejected draft leaves the last valid card intact.</p>
     </details>` : `<p data-change-diagnostic role="status"></p>`}<script id="change-source-bytes" type="application/json">${JSON.stringify(bytes).replaceAll("<", "\\u003c")}</script>`;
 }

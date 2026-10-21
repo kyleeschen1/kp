@@ -168,6 +168,13 @@
       "scope": "preview-lifetime",
       "checkedAt": "2026-10-21T19:27:29.214Z",
       "notes": "Nine browser cases and full types pass; delayed renderer import proves draft edits, duplicate Apply and page disposal cannot publish stale work."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "passed",
+      "scope": "download-authority",
+      "checkedAt": "2026-10-21T19:29:02.140Z",
+      "notes": "Ten browser cases and full types pass; actual downloads distinguish draft bytes from displayed source through failed mounts and invalid drafts."
     }
   ],
   "expectedLearning": [

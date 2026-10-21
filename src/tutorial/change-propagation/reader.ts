@@ -7,6 +7,7 @@ if (typeof encoded !== "string") throw new Error("Missing selected change-propag
 const initial = compileChangeSource(encoded);
 if (initial.status !== "checked") throw new Error(`${initial.path}: ${initial.message}`);
 let active = mount(required(".change-card"), initial.model, { restore: true });
+let displayedBytes = encoded;
 let closed = false;
 let generation = 0;
 const authorEvents = new AbortController();
@@ -42,16 +43,19 @@ apply.addEventListener("click", async () => {
     required(".change-reading-source").replaceWith(reading);
     required("h1").textContent = result.model.source.title;
     document.title = `${result.model.source.title} · Kinetic Press`;
+    displayedBytes = bytes;
     const locationIssue = active.activate();
     diagnostic.textContent = "Preview updated from this source. Functions and derivatives were checked; prose remains author-supplied. Download to keep this draft." + (locationIssue ? ` ${locationIssue}` : "");
   } catch (error) { if (current()) diagnostic.textContent = `Preview failed: ${error instanceof Error ? error.message : String(error)}`; }
   finally { apply.disabled = false; }
 }, { signal: authorEvents.signal });
-required("[data-change-download]").addEventListener("click", () => {
-  const url = URL.createObjectURL(new Blob([editor.value], { type: "application/json" }));
-  const link = document.createElement("a"); link.href = url; link.download = "change-propagation.json"; link.click();
+function download(bytes: string, filename: string) {
+  const url = URL.createObjectURL(new Blob([bytes], { type: "application/json" }));
+  const link = document.createElement("a"); link.href = url; link.download = filename; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-}, { signal: authorEvents.signal });
+}
+required("[data-change-download]").addEventListener("click", () => download(editor.value, "change-propagation-draft.json"), { signal: authorEvents.signal });
+required("[data-change-download-displayed]").addEventListener("click", () => download(displayedBytes, "change-propagation.json"), { signal: authorEvents.signal });
 const close = () => { closed = true; ++generation; authorEvents.abort(); active.dispose(); };
 window.addEventListener("pagehide", event => { if (!event.persisted) close(); }, { signal: authorEvents.signal });
 if (import.meta.hot) import.meta.hot.dispose(close);
