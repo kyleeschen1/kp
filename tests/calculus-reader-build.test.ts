@@ -12,5 +12,5 @@ test("the production calculus reader has a reproducible complete local closure",
   assert.ok(first.chunks.every(c => c.modules.every(path => !path.includes("/experiments/authoring-market/") && !path.includes("/svelte-catalogue/"))));
   assert.ok(first.chunks.every(c => c.modules.every(path => !path.includes("node_modules/katex") && !path.endsWith("change-propagation/view.ts") && !path.includes("staged-preview"))), "Edition reading must not acquire editor capabilities");
   const total = [...first.files.values()].reduce((sum, bytes) => sum + gzipSync(bytes).length, 0);
-  assert.ok(total < 150000, `Unexpected reader plus editing closure: ${total} gzip bytes`);
+  assert.ok(total <= 14000, `Unexpected edition reader closure: ${total} gzip bytes`);
 });

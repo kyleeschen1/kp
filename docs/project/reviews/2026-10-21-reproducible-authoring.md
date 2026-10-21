@@ -63,3 +63,43 @@ layout is retained without clipping; the phone remains tall and the presentation
 remains dense. These are preservation results, not new pedagogical or aesthetic
 acceptance. Reproduce with `npm run visual:calculus-editions` (canonical dev
 server on port 8000); captures are disposable Playwright output.
+
+Slice 20 costs (`npm run measure:calculus-editions`, independently built complete
+consumers, sum of per-file gzip estimates):
+
+| Consumer | Raw bytes | Gzip bytes |
+| --- | ---: | ---: |
+| Read-only edition JS, all chunks | 34,538 | 11,845 |
+| Editor JS including lazy editing/rendering | 307,463 | 93,879 |
+| Stationary static complete archive | 1,231,501 | 889,801 |
+| Reversals static complete archive | 1,234,050 | 890,542 |
+
+Static totals include source and publication evidence plus **all** CSS-referenced
+font formats (1,076,572 raw font bytes), not merely requested fonts. Each manifest
+adds 7,749 raw bytes. Static HTML is 54,329/5,189 and 55,525/5,310 raw/gzip bytes.
+Interactive adds the edition JS and its script tag. Editor totals include a
+78,760-gzip-byte lazy view chunk; that is excluded from read-only editions.
+The earlier application initial-byte baseline is a different cohort and cannot
+establish a directly comparable reduction. No font pruning or renderer changes
+were needed; copying the complete CSS closure retains portability.
+
+New explicit `calculus-edition-budgets.json` ceilings: edition JS 14,000 gzip,
+complete editor JS 105,000 gzip, static closure 1,300,000 raw/950,000 gzip and
+manifest 9,000 raw. These retain roughly 5–18% headroom, tighten the provisional
+150,000-gzip reader test, and cover both sources and every lazy chunk. The two
+cost tests reject over-budget reports. Existing complete matrix/algebra runtime
+and TypeScript cohorts also pass `npm run measure:authoring-boundaries -- --check
+--types`, without a budget amendment. Full typecheck passes.
+
+`npm run visual:calculus-costs` measures unthrottled Chromium localhost separately
+from heavy verification. Three fresh-context loads take 35.8–38.9ms to load;
+same-context reloads 17.1–29.9ms. Observed ready (including automation overhead)
+is 68.9–72ms cold / 45.6–60.6ms warm. Each requests seven resources plus the
+document, 169,562 decoded bytes / 171,962 reported transfer bytes, with no observed
+long tasks. The plain server supplies neither compression nor cache headers;
+warm reload still transfers the bytes. These are diagnostics, not latency gates
+or device-performance guarantees. Ten alternating editor previews keep one
+ResizeObserver, zero after disposal, no staging remnants, five newly requested
+dev modules on first Apply and zero additional requests thereafter. This guards
+observer and preview ownership, not every possible heap leak. Both browser cost
+checks pass. No cache architecture was introduced.

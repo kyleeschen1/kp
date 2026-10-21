@@ -125,7 +125,8 @@
     },
     {
       "id": "cost-gates",
-      "status": "planned"
+      "summary": "Complete cost gates, repeated preview ownership, diagnostic cold/warm samples and full types pass.",
+      "status": "complete"
     },
     {
       "id": "author-packet",

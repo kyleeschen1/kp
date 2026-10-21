@@ -4,7 +4,7 @@ import { relative, resolve } from "node:path";
 
 /** Build only this existing reader, without the app config, public directory or
  * dev server. The edition writer owns publication of these captured bytes. */
-export async function buildCalculusReader() {
+export async function buildCalculusReader(mode: "edition" | "editor" = "edition") {
   const root = fileURLToPath(new URL("..", import.meta.url));
   const files = new Map<string, Buffer>();
   const chunks: { file: string; entry: boolean; imports: string[]; dynamicImports: string[]; modules: string[] }[] = [];
@@ -18,7 +18,7 @@ export async function buildCalculusReader() {
       }
     } }],
     build: { write: false, minify: true, target: "es2022", rolldownOptions: {
-      input: { reader: resolve(root, "src/tutorial/change-propagation/edition-reader.ts") },
+      input: { reader: resolve(root, `src/tutorial/change-propagation/${mode === "edition" ? "edition-reader" : "reader"}.ts`) },
       preserveEntrySignatures: "strict",
       output: { entryFileNames: "reader.js", chunkFileNames: "chunks/[name]-[hash].js", assetFileNames: "assets/[name]-[hash][extname]" }
     } } });

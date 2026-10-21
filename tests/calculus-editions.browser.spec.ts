@@ -147,3 +147,71 @@ test("interactive edition retains the complete reading when scripts are disabled
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   } finally { await context.close(); }
 });
+
+test("cost: repeated editor previews release observers and reuse loaded editing code", async ({ page }, info) => {
+  await page.addInitScript(() => {
+    const Original = window.ResizeObserver, active = new Set<ResizeObserver>();
+    const report = () => { document.documentElement.dataset["liveObservers"] = String(active.size); };
+    window.ResizeObserver = class extends Original {
+      override observe(target: Element, options?: ResizeObserverOptions) { active.add(this); report(); super.observe(target, options); }
+      override disconnect() { active.delete(this); report(); super.disconnect(); }
+    };
+  });
+  const scripts: string[] = []; page.on("request", r => { if (r.resourceType() === "script") scripts.push(r.url()); });
+  await page.goto("http://localhost:8000/experiments/change-propagation/");
+  await expect(page.locator(".change-card")).toHaveAttribute("data-kp-focus-deck-static", "false");
+  const initial = await page.locator("html").getAttribute("data-live-observers");
+  expect(Number(initial)).toBeGreaterThan(0);
+  const before = scripts.length; let loaded = 0;
+  await page.locator(".change-author summary").click();
+  for (let i = 0; i < 10; i++) {
+    const source = i % 2 ? "two-reversals" : "stationary-change";
+    await page.locator("#change-source").fill(readFileSync(`content/authoring/transfer/${source}.json`, "utf8"));
+    await page.getByRole("button", { name: "Preview this source" }).click();
+    await expect(page.locator("[data-change-diagnostic]")).toContainText("Preview updated");
+    await expect(page.locator("html")).toHaveAttribute("data-live-observers", initial!);
+    await expect(page.locator(".change-staging")).toHaveCount(0);
+    if (i === 0) loaded = scripts.length;
+    else expect(scripts.length).toBe(loaded);
+  }
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+  await expect(page.locator("html")).toHaveAttribute("data-live-observers", "0");
+  console.log(JSON.stringify({ resourceCohort: "ten editor previews", observers: Number(initial), afterDisposal: 0, initialScripts: before,
+    firstPreviewScripts: loaded - before, laterPreviewScripts: scripts.length - loaded }));
+  await info.attach("preview-resources.json", { body: JSON.stringify({ initialObservers: Number(initial), afterTenPreviews: Number(initial), afterDisposal: 0,
+    initialScriptRequests: before, firstPreviewAdditionalScripts: loaded - before, subsequentPreviewAdditionalScripts: scripts.length - loaded,
+    qualification: "Dev-host requests and observer ownership; not a production transfer or general heap-leak measurement." }), contentType: "application/json" });
+});
+
+test("cost: packaged reader cold and warm local navigation samples", async ({ browser, browserName }, info) => {
+  test.skip(browserName !== "chromium", "Timing diagnostic uses one fixed browser cohort.");
+  const samples = [];
+  for (let i = 0; i < 3; i++) {
+    const context = await browser.newContext();
+    try {
+      const page = await context.newPage();
+      await page.addInitScript(() => {
+        const tasks: number[] = [];
+        new PerformanceObserver(list => { for (const entry of list.getEntries()) tasks.push(entry.duration);
+          document.documentElement.dataset["longTasks"] = JSON.stringify(tasks);
+        }).observe({ type: "longtask", buffered: true });
+      });
+      for (const mode of ["cold", "warm"] as const) {
+        if (mode === "cold") await page.goto(`${origin}/stationary/`); else await page.reload();
+        await expect(page.locator(".change-card")).toHaveAttribute("data-kp-focus-deck-static", "false");
+        await page.evaluate(() => document.fonts.ready);
+        samples.push({ mode, sample: i + 1, ...await page.evaluate(() => {
+          const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+          const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];
+          return { loadMs: nav.loadEventEnd, observedReadyMs: performance.now(), requests: resources.length,
+            transferredBytes: nav.transferSize + resources.reduce((n, r) => n + r.transferSize, 0),
+            decodedBytes: nav.decodedBodySize + resources.reduce((n, r) => n + r.decodedBodySize, 0),
+            longTasks: JSON.parse(document.documentElement.dataset["longTasks"] || "[]") };
+        }) });
+      }
+    } finally { await context.close(); }
+  }
+  console.log(JSON.stringify({ navigationCohort: "unthrottled localhost without cache headers or compression", samples }));
+  await info.attach("navigation-costs.json", { body: JSON.stringify({ samples,
+    qualification: "Unthrottled localhost, plain HTTP test server without cache headers or compression; fresh-context cold and same-context reload warm. Observed readiness includes automation overhead; timings are diagnostic, not a learner-device latency guarantee." }), contentType: "application/json" });
+});

@@ -210,6 +210,13 @@
       "scope": "browser-preservation",
       "checkedAt": "2026-10-21T19:40:28.103Z",
       "notes": "27 checks pass across three engines; canonical-source checkpoints, narrow view, keyboard, reduced motion and no-script preserved. Representative captures inspected."
+    },
+    {
+      "command": "npm run measure:calculus-editions; npm run visual:calculus-costs; npm run measure:authoring-boundaries -- --check --types; npm run typecheck",
+      "status": "passed",
+      "scope": "cost-gates",
+      "checkedAt": "2026-10-21T19:43:57.574Z",
+      "notes": "Complete edition/editor/static closure measured and bounded; two unit gates pass; isolated Chromium timing and ten-preview ownership pass; existing consumer budgets unchanged."
     }
   ],
   "expectedLearning": [
