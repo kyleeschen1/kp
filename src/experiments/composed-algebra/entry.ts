@@ -5,6 +5,7 @@ import "./style.css";
 import { prepareKpComposedAlgebraDraft, exportKpComposedAlgebraSource, createKpComposedAlgebraAuthoringSession } from "../../authoring/composed-algebra-session.ts";
 import { renderComposedAlgebraCard } from "./page.ts";
 import { mountComposedAlgebraCard as mountCard } from "./card.ts";
+import { preparePreview } from "../../authoring/staged-preview.ts";
 import { projectComposedAlgebraReading } from "./readings.ts";
 import { projectComposedAlgebraPrompts, captureComposedAlgebraPosition, resolveComposedAlgebraPosition } from "./practice.ts";
 
@@ -26,11 +27,8 @@ async function mount() {
     prepare: async draft => {
       const full = projectComposedAlgebraReading(draft, "full"), compact = projectComposedAlgebraReading(draft, "compact");
       projectComposedAlgebraPrompts(draft);
-      const staging = document.createElement("div"); staging.className = "common-factor-staging";
-      staging.inert = true; staging.setAttribute("aria-hidden", "true"); staging.style.width = `${display.getBoundingClientRect().width}px`;
-      staging.innerHTML = renderComposedAlgebraCard(draft); display.after(staging);
-      try { const surface = await mountCard(staging, draft); return { staging, surface, full, compact, dispose() { surface.dispose(); staging.remove(); } }; }
-      catch (error) { staging.remove(); throw error; }
+      return { ...await preparePreview(display, { className: "common-factor-staging",
+        html: renderComposedAlgebraCard(draft), mount: staging => mountCard(staging, draft) }), full, compact };
     },
     commit: (prepared, draft) => {
       const previous = active; previous.cancel(); previous.clock.pause();

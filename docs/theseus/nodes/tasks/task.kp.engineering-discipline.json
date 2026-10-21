@@ -57,6 +57,13 @@
       "scope": "p4",
       "checkedAt": "2026-10-21T17:31:24.883Z",
       "notes": "Selected six browser cases cover staging failure, swaps, Apply, reload and stale disposal; full types and complete consumer budgets pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "p5",
+      "checkedAt": "2026-10-21T17:32:49.515Z",
+      "notes": "Full types pass after four-caller staging migration. Four focused boundary/session tests and three selected common-factor/composed browser tests pass; reachability regenerated."
     }
   ],
   "expectedLearning": [

@@ -4,6 +4,7 @@ import "./style.css";
 import { createKpCommonFactorExample } from "../../authoring/common-factor-author-check.ts";
 import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
 import { createKpCommonFactorAuthoringSession } from "../../authoring/common-factor-session.ts";
+import { preparePreview } from "../../authoring/staged-preview.ts";
 import { renderCommonFactorCard, commonFactorBeats } from "./page.ts";
 import { mountCommonFactorNativeSurface } from "./native.ts";
 import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
@@ -116,11 +117,8 @@ async function mount() {
     prepare: async draft => {
       const full = projectCommonFactorReading(draft, "full"), compact = projectCommonFactorReading(draft, "compact");
       projectCommonFactorPrompts(draft);
-      const staging = document.createElement("div"); staging.className = "common-factor-staging";
-      staging.inert = true; staging.setAttribute("aria-hidden", "true"); staging.style.width = `${display.getBoundingClientRect().width}px`;
-      staging.innerHTML = renderCommonFactorCard(draft); display.after(staging);
-      try { const surface = await mountCard(staging, draft); return { staging, surface, full, compact, dispose() { surface.dispose(); staging.remove(); } }; }
-      catch (error) { staging.remove(); throw error; }
+      return { ...await preparePreview(display, { className: "common-factor-staging",
+        html: renderCommonFactorCard(draft), mount: staging => mountCard(staging, draft) }), full, compact };
     },
     commit: (prepared, draft) => {
       const previous = active; previous.cancel(); previous.clock.pause();

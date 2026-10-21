@@ -111,3 +111,13 @@ The browser regression exercises a foreign document, mount rejection, throwing
 teardown, repeated disposal and preservation of the active view. Real Bayes
 repeated swaps and invalid Apply, plus both algebra sources' download/reload,
 coherent Apply and stale-owner remount checks pass (six tests altogether).
+
+The same staging responsibility is now consolidated in the older composed
+algebra and common-factor editors too. All four revision callers import the
+shared owner; an AST dependency check prevents their prepare callbacks from
+silently reacquiring element construction. Three additional real-host checks
+pass for coherent Apply, stale owner release and reduced motion. The separate
+algebra subexplanation navigation remains local because it has different
+publication and return-state policy. Four revision setup implementations have
+become one 25-line owner, with failure cleanup strengthened; this is a small
+maintenance improvement, not a new universal authoring layer.
