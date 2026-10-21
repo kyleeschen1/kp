@@ -50,7 +50,11 @@ function runtimeModuleSpecifiers(
       !statement.isTypeOnly &&
       statement.moduleSpecifier !== undefined &&
       ts.isStringLiteral(statement.moduleSpecifier)
-    ) return [statement.moduleSpecifier.text];
+    ) {
+      const clause = statement.exportClause;
+      if (clause && ts.isNamedExports(clause) && clause.elements.length > 0 && clause.elements.every(item => item.isTypeOnly)) return [];
+      return [statement.moduleSpecifier.text];
+    }
     return [];
   });
 }

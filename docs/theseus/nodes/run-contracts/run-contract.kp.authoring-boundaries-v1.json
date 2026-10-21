@@ -1,0 +1,62 @@
+{
+  "id": "run-contract.kp.authoring-boundaries-v1",
+  "kind": "run-contract",
+  "title": "Continued authoring architecture",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.authoring-boundaries.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-authoring-boundaries-continuation.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Architecture agenda: measured authoring imports, loading, lifecycle and cost gates across successive outcomes"
+  ],
+  "disallowedWork": [
+    "Visual redesign, new renderer, semantic scope expansion, unrelated projects"
+  ],
+  "goal": "Separate source-only authoring from checked compiler and editor costs, then follow demonstrated bottlenecks",
+  "target": "task.kp.authoring-boundaries",
+  "runMode": "run",
+  "maxSlices": 5,
+  "commitCadence": "Commit checked packages and push hourly and before handoff",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Four-hour ceiling with final quarter reserved; visual judgment, genuine external blocker, user pause or no justified eligible work"
+  ],
+  "slices": [
+    {
+      "id": "measurement",
+      "title": "Measure-complete-consumers",
+      "status": "complete"
+    },
+    {
+      "id": "boundaries",
+      "title": "Explicit-authoring-boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "acceptance",
+      "title": "Scoped-acceptance",
+      "status": "planned"
+    },
+    {
+      "id": "follow-through",
+      "title": "Demonstrated-next-bottleneck",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "title": "Final-integration",
+      "status": "planned"
+    }
+  ]
+}

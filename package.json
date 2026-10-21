@@ -7,6 +7,7 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "measure:authoring-boundaries": "node --disable-warning=ExperimentalWarning scripts/measure-authoring-boundaries.ts",
     "test:change-propagation": "node --disable-warning=ExperimentalWarning --test tests/change-propagation.test.ts",
     "measure:change-propagation": "node --disable-warning=ExperimentalWarning scripts/measure-change-propagation.ts",
     "visual:change-propagation": "playwright test --config playwright.change-propagation.config.ts --project=chromium --workers=1",

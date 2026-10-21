@@ -1,0 +1,38 @@
+{
+  "id": "task.kp.authoring-boundaries",
+  "kind": "task",
+  "title": "Small explicit authoring boundaries and measurable costs",
+  "status": "ready",
+  "domain": "authoring",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-authoring-boundaries-continuation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-authoring-boundaries.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run measure:authoring-boundaries -- --types",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T16:38:33.686Z",
+      "notes": "Four independent complete consumers measured before changes; source-only algebra emits 78821 gzip bytes and checks 292 local files."
+    }
+  ],
+  "expectedLearning": [
+    "Which authoring dependencies are required by complete source, compile and editor consumers"
+  ],
+  "allowedWork": [
+    "Measured source/compiler/editor boundary repairs and in-scope continuation"
+  ],
+  "disallowedWork": [
+    "Visual redesign or semantic expansion"
+  ]
+}
