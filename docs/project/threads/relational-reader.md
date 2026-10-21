@@ -18,9 +18,14 @@ The subsequent [reader-lifecycle delivery](../2026-10-21-reader-lifecycle-delive
 shares code/physics visibility ownership and measures four ten-player suspension
 and disposal cohorts. [Evidence and limits](../reviews/2026-10-21-reader-lifecycle.md)
 distinguish released listeners from retained mounted-scene and heap costs.
-Next-step discussion should measure ordinary matrix/algebra authoring closures
-and separate compiler/inspection/fixture imports where justified, rather than
-repeat API aliases, invent a universal host controller or reopen calculus review.
+The [authoring-boundaries continuation](../2026-10-21-authoring-boundaries-continuation.md)
+now separates source, compiler and editor capabilities and isolates all eleven
+starter example paths. [Measurements and preservation evidence](../reviews/2026-10-21-authoring-boundaries.md)
+record complete consumers and the `npm run check:authoring` acceptance command.
+Next-step discussion should select one cross-domain explanatory question and
+pressure existing composition owners with its concrete authoring needs. Avoid
+more aliases, a universal host controller or reopening calculus review without
+a learner-context decision.
 
 Latest October 13 feedback: the calculus dashboard was judged busy and its
 pedagogical value questioned; it has not passed review. The user asked to record

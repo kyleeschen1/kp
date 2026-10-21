@@ -2,7 +2,8 @@
   "id": "run-contract.kp.authoring-boundaries-v1",
   "kind": "run-contract",
   "title": "Continued authoring architecture",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: all five approved slices delivered and verified; no new visual or semantic scope introduced.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -57,8 +58,8 @@
     {
       "id": "integration",
       "title": "Final-integration",
-      "summary": "Final whole-repository integration, production budgets, durable results and backup.",
-      "status": "in-progress"
+      "summary": "COMPLETE: final deterministic suite, type/build/production budgets, scoped authoring costs and canonical host smoke pass; durable roadmap and review updated.",
+      "status": "complete"
     }
   ]
 }

@@ -2,8 +2,9 @@
   "id": "task.kp.authoring-boundaries",
   "kind": "task",
   "title": "Small explicit authoring boundaries and measurable costs",
-  "status": "ready",
+  "status": "resolved",
   "domain": "authoring",
+  "summary": "Delivered small source/compile/editor boundaries, fixture-free proof construction and all eleven cheap starter paths with checked complete-consumer budgets.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -88,6 +89,27 @@
       "scope": "focused",
       "checkedAt": "2026-10-21T16:59:28.216Z",
       "notes": "Exact executed subset: two browser tests pass after final request/source separation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T17:00:49.871Z",
+      "notes": "Final app, node, tests, Svelte and domain programs pass after complete inventory separation."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T17:00:50.788Z",
+      "notes": "Final production build passes; reader production closure, route budgets and dev-review exclusion gates also pass unchanged ceilings."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T17:04:07.496Z",
+      "notes": "Clean final full suite after all source/example moves; architecture, inference, catalogue and promotion gates included. No failed, skipped or cancelled tests."
     }
   ],
   "expectedLearning": [

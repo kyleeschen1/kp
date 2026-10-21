@@ -39,10 +39,17 @@ in the measured tax-page cohort. The subsequent
 `run-contract.kp.reader-lifecycle-v1` consolidates code/physics pause ownership
 and adds ten-player suspension/disposal cohorts; see
 [evidence and limits](reviews/2026-10-21-reader-lifecycle.md).
-Next recommendation: measure and separate ordinary authoring dependency
-closures from compiler/inspection/fixture imports, using complete matrix and
-algebra consumers. Keep other host lifecycle responsibilities local until
-duplication is demonstrated. Do not restart completed authoring/loading work.
+The [authoring-boundaries continuation](2026-10-21-authoring-boundaries-continuation.md)
+separates source reading, proof compilation and editor sessions; all eleven
+starter examples have measured independent loading gates. The
+[measured results](reviews/2026-10-21-authoring-boundaries.md) distinguish source
+reachability, actual loads, emitted bytes and TypeScript costs. Use
+`npm run check:authoring` for the scoped acceptance path.
+Next recommendation: pressure the concise authoring boundary with one concrete
+cross-domain explanation using existing semantic and presentation owners,
+chosen for its explanatory question. Do not add a universal composition layer
+before that caller demonstrates a need. Keep other host lifecycle responsibilities
+local until duplication is demonstrated; do not restart completed loading work.
 The explanation-authoring contract below remains parked at its unaccepted card
 checkpoint; it is not the current execution lane and no visual gate is waived.
 

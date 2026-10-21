@@ -93,3 +93,9 @@ compiler imports, default example payload and measured budget growth. Run
 `npm run measure:authoring-boundaries -- --types` for diagnostic measurements
 without acceptance; this does not change baselines. Full application, browser
 and renderer conformance remain separate integration checks.
+
+The same command also exercises every discoverable starter example in a fresh
+process, enforcing small measured loading budgets before passing the example
+to its real checker. Example factories are source-only entrypoints; checking
+still selects the existing domain compiler. New tasks must join this complete
+inventory rather than silently escape the loading gate.

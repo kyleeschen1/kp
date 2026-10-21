@@ -155,3 +155,34 @@ and after JSON digests are identical:
 The loading test compares its cohort list to the actual supported-task
 inventory, so new discoverable tasks must explicitly join the acceptance gate.
 No universal example representation is imposed on the domain owners.
+
+## Integration and limits
+
+The scoped authoring gate, full app/node/test/Svelte/domain typecheck, production
+build, reader production closure, reader route budgets and development-review
+production exclusion checks pass. Existing browser commands exercised both
+extended algebra source downloads/reloads, primary and transfer distribution
+with native handoff, numeric source editing and the pinned Graph3D host.
+These are preservation checks, not new aesthetic or pedagogical acceptance.
+
+Final clean `npm test`: **7,339 passed, zero failed/skipped/cancelled**,
+including architecture, inference, concept-catalogue and promotion-memory gates.
+The earlier architecture rejection was repaired by restoring the mechanics
+public import; a missing Graph3D constant import during extraction was caught
+by typecheck and the real checker tests, restored, and included in this clean
+final run. Theseus workspace validation also passes. Existing unrelated
+workflow pressure and two older missing-source-reference audit entries were
+not changed or represented as resolved by this delivery.
+
+No cost ceiling was raised. All historical exported names remain available.
+Maintenance adds narrow source/example modules and a shared cost gate rather
+than a second compiler, renderer or authoring language. The deliberate tradeoff
+is a few more small modules in exchange for explicit capabilities and cheap
+ordinary use. Compilation itself remains substantial, around 89 KB gzip for
+the complete algebra consumer; this delivery does not claim to eliminate that
+cost or to measure real-user authoring latency.
+
+The next useful pressure is one concrete explanation composed through existing
+owners in a structurally different domain. Select its learner question before
+changing presentation. Further generic dependency splitting without a measured
+problem would add maintenance rather than demonstrated authoring value.
