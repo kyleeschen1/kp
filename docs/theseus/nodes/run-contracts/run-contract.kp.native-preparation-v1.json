@@ -2,7 +2,8 @@
   "id": "run-contract.kp.native-preparation-v1",
   "kind": "run-contract",
   "title": "Native preparation investigation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -41,8 +42,8 @@
     {
       "id": "verification",
       "title": "Verification",
-      "summary": "Production acceptance, complete native compositor browser path, types and full deterministic regression",
-      "status": "in-progress"
+      "summary": "COMPLETE: final production cohort, 7351 tests, full types, realized compositor and three-engine geometry/retention pass; evidence records remaining stalls and unchanged budgets.",
+      "status": "complete"
     }
   ]
 }

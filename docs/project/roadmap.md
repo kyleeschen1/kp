@@ -25,15 +25,25 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 native-preparation continuation is complete. The user-approved
+[investigation](2026-10-21-native-preparation-investigation.md) batches only
+independent glyph baseline probes and preserves calibrated first-mount paint.
+[Evidence](reviews/2026-10-21-native-preparation.md) records roughly 34% less
+sampled preparation work and smaller ordinary throttled frame gaps, with
+approximately 150ms stalls still remaining. Full integration passes 7,351 tests;
+native geometry and first-mount retention pass in three browser engines.
+Next inspect remaining computed-style cloning and paint-alignment cost before
+considering caching or loading-policy changes. This is a recommendation; no new
+run is active and the earlier engineering portfolio remains complete.
+
 October 21 activation continuation: the user approved profiling the remaining
 reader stalls. The [bounded investigation](2026-10-21-reader-activation-investigation.md)
 is complete; [evidence](reviews/2026-10-21-reader-activation.md) attributes repeated
 camera-basis setup and records an exact-geometry batching repair. In three 6x
 samples, median startup script time falls 13.9% and readiness 5.4%; first-input
 frame gaps do not reliably improve. Full integration passes 7,349 tests.
-Next assess the first visible logarithm card's native preparation/measurement
-costs, preserving activation and endpoint policy; this is a recommendation,
-not another active run. The earlier engineering portfolio remains complete.
+Its native preparation recommendation led to the completed continuation above,
+with activation and endpoint policy preserved.
 
 October 21 latest direction: the user prioritizes codebase discipline,
 performance and API efficiency while human feedback is limited. The

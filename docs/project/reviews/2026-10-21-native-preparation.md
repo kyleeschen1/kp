@@ -109,3 +109,61 @@ loopback permission failures and one stale generated reachability file count.
 `npm run generate:equation-reachability` updates only scanned-file count
 5,031 → 5,032 for the added browser fixture; declared roots and callers do not
 change. The complete suite is rerunning outside the sandbox.
+
+## Final integration verification
+
+- `npm test`: final clean run, 7,351 passed, zero failures (276.5 seconds).
+  Architecture gates pass. Unchanged inference caps pass: core 116,543 types /
+  199,075 instantiations; combined 179,856 / 303,956.
+- `npm run typecheck`: final application, Node, tests, Svelte and domain checks
+  passed, including the first-mount repair.
+- `npm run test:browser:native-katex-compositor-conformance`: two real-paint and
+  lifecycle tests passed in Chromium.
+- `npm run visual:native-preparation`: final leaf/compound baseline geometry
+  fixture passed in Chromium, Firefox and WebKit.
+- The ten-test logarithm cohort above, with `initial logarithm preparation`
+  added to its selection, passes. That initial-owner regression additionally
+  passes in all three engines using `--project=firefox --project=webkit` on the
+  existing Chromium command.
+- `npm run test:equation-reachability`: all twelve generated-root/caller checks
+  pass after regenerating the fixture count.
+
+The changed boundaries now prevent redundant first-mount retirement and batch
+leaf probe writes before reads. Runtime guards exclude compound/empty owners;
+tests pressure geometry, cleanup, fresh observations, and actual compositor
+ownership. This does not certify every arbitrary CSS context or eliminate the
+remaining cost of computed-style cloning and paint alignment.
+
+## Combined production result
+
+Final source-mapped profile after both repairs, same 6x three-sample cohort:
+
+| Measure | Before | Both repairs |
+| --- | --- | --- |
+| First-transition layout count | 478 / 444 / 526 | 217 / 339 / 314 |
+| First-transition layout time, ms | 139.91 / 103.23 / 113.40 | 55.37 / 65.34 / 70.36 |
+| `prepareSurface` sampled inclusive time, ms | 247.11 / 206.98 / 189.79 | 135.87 / 138.38 / 136.59 |
+| Material-layer sampled inclusive time, ms | 138.63 / 118.80 / 105.43 | 57.39 / 58.08 / 58.18 |
+
+Median layout count falls 34.3%, layout time 42.4%, sampled preparation 34.0%
+and sampled material-layer work 51.1%. Inclusive times overlap and cannot be
+summed. The profile window includes native preparation and tax animation; layout
+counts vary with scheduling. These are work-attribution measurements, not user
+latency claims. Remaining measured work includes computed-style copying, clone
+ink/baseline alignment and scene-plan compilation; any follow-on should identify
+redundant work in those owners before introducing caching or new loading policy.
+
+The final ordinary production cohort passes complete loading/activation
+acceptance. At 6x, maximum first-transition frame gaps are 168.0 / 149.9 / 151.6ms,
+versus 482.6 / 315.6 / 216.9ms before. This is encouraging evidence of a visible
+improvement, but three local CPU-throttled samples are not a field-performance
+guarantee; approximately 150ms stalls remain. At 1x the final maximum gaps are
+33.4 / 18.7 / 18.6ms, with none over 50ms. The final initial JavaScript payload is
+387,790 gzip bytes (+109 over baseline); no missing assets or browser errors.
+Final production closure passes all twelve routes and existing reader budgets
+pass unchanged. No compiler, source or payload ceiling was raised.
+
+Outcome: COMPLETE, three contract packages. The two repairs are independently
+recoverable commits. Further native clone/alignment optimization is a
+recommendation, not another active run. Reproduce the ordinary cohort with
+`npm run build:bundle` followed by the acceptance audit above.

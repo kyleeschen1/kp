@@ -2,8 +2,9 @@
   "id": "task.kp.native-preparation",
   "kind": "task",
   "title": "Reduce measured native equation preparation cost",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "Measured native preparation reduction with preserved activation, geometry and ownership; complete, with remaining clone/alignment costs recorded.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -119,6 +120,48 @@
       "scope": "integration",
       "checkedAt": "2026-10-21T18:17:27.633Z",
       "notes": "All ten pass including owner-retention regression, operation boundaries, remount, readiness, failure and reversal."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:22:12.840Z",
+      "notes": "Final full run outside sandbox: 7351 passed, zero failures. Architecture and unchanged compiler-cost gates pass (core 116543 types / 199075 instantiations; combined 179856 / 303956)."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:22:15.686Z",
+      "notes": "Final source including first-mount repair: application, Node, tests, Svelte and domains pass."
+    },
+    {
+      "command": "npm run visual:focus-deck-input -- --project=firefox --project=webkit --grep 'initial logarithm preparation'",
+      "status": "passed",
+      "scope": "first-mount",
+      "checkedAt": "2026-10-21T18:22:40.446Z",
+      "notes": "Chromium, Firefox and WebKit all retain calibrated initial material owners."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-10-21T18:25:07.213Z",
+      "notes": "Final production build passes after both repairs; existing chunk-size warning retained."
+    },
+    {
+      "command": "npm run audit:architecture-cost -- --browser --tax-only --activation --acceptance",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-10-21T18:25:08.394Z",
+      "notes": "Final six ordinary samples pass; 6x max frame gaps 168/149.9/151.6ms; initial JS 387790 gzip bytes (+109). No asset or browser errors."
+    },
+    {
+      "command": "npm run audit:architecture-cost -- --browser --tax-only --activation --tax-profile",
+      "status": "passed",
+      "scope": "attribution",
+      "checkedAt": "2026-10-21T18:25:09.024Z",
+      "notes": "Final source-mapped cohort: median preparation 206.98 to 136.59ms; material 118.80 to 58.08ms; layout count 478 to 314. Instrumented, overlapping inclusive stacks; not ordinary latency."
     }
   ],
   "expectedLearning": [

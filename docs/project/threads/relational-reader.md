@@ -5,13 +5,23 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+October 21 native-preparation continuation is complete; see the
+[approved scope](../2026-10-21-native-preparation-investigation.md) and
+[measured result](../reviews/2026-10-21-native-preparation.md). Independent leaf
+baseline probes now batch within each fresh observation, and first mount retains
+its calibrated material owners. Sampled preparation falls about 34%; ordinary
+throttled frame gaps improve in the measured cohort but remain around 150ms.
+All 7,351 tests and full types pass, with three-engine geometry/retention checks.
+Next inspect remaining native clone/alignment work; no new run is active and no
+new visual, activation or caching policy is authorized by that recommendation.
+
 October 21 activation continuation is complete. The approved
 [investigation](../2026-10-21-reader-activation-investigation.md) reduces repeated
 camera projection setup while preserving exact fitted geometry; see
 [measurements and limits](../reviews/2026-10-21-reader-activation.md). Throttled
 median startup script improves 13.9%, readiness 5.4%; interaction gaps remain.
-The next performance question is native logarithm preparation, not a blanket
-change in companion activation or visual policy. No new run is active.
+Its native logarithm preparation recommendation is addressed above; companion
+activation and visual policy are preserved.
 
 Latest October 21 direction: prioritize disciplined infrastructure, performance
 and efficient APIs with limited human feedback. The
