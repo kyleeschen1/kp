@@ -4,12 +4,12 @@ import { relative, resolve } from "node:path";
 
 /** Capture the real read-only native reader closure, including lazy chunks and
  * emitted assets. No application config, public directory or dev runtime. */
-export async function buildAlgebraReader(mode: "edition" | "editor" = "edition") {
+export async function buildAlgebraReader(mode: "edition" | "editor" = "edition", sourcemap = false) {
   const root = fileURLToPath(new URL("..", import.meta.url));
   const files = new Map<string, Buffer>();
   const chunks: { file: string; entry: boolean; imports: string[]; dynamicImports: string[]; modules: string[] }[] = [];
   const result = await build({ root, configFile: false, publicDir: false, logLevel: "silent", base: "./",
-    build: { write: false, minify: true, target: "es2022", rolldownOptions: {
+    build: { write: false, minify: true, sourcemap: sourcemap ? "hidden" : false, target: "es2022", rolldownOptions: {
       input: { reader: resolve(root, `src/experiments/composed-algebra-intuition/${mode === "edition" ? "edition-reader" : "entry"}.ts`) },
       preserveEntrySignatures: "strict",
       output: { entryFileNames: "reader.js", chunkFileNames: "chunks/[name]-[hash].js", assetFileNames: "assets/[name]-[hash][extname]" }

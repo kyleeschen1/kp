@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.algebra-preparation-v1",
+  "kind": "run-contract",
+  "title": "Accepted algebra preparation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.algebra-preparation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-algebra-preparation-investigation.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:algebra-editions",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Production profiling and measured preparation-owner repairs with invariant regressions"
+  ],
+  "disallowedWork": [
+    "New visuals, deferred activation, dropped endpoints, deployment or calculus polishing"
+  ],
+  "goal": "Measure and remove justified redundant preparation while preserving native behavior",
+  "target": "task.kp.algebra-preparation",
+  "slices": [
+    {
+      "id": "profile",
+      "status": "complete"
+    },
+    {
+      "id": "repair",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "status": "in-progress"
+    }
+  ]
+}

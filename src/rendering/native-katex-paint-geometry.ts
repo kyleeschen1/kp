@@ -50,6 +50,26 @@ export function attachKpNativeKatexTrackPaintGeometry<
 }): readonly KpNativeKatexPaintMeasuredTrack<Track>[] {
   const sourceAtoms = new Map(input.source.atoms.map((atom) => [atom.id, atom]));
   const targetAtoms = new Map(input.target.atoms.map((atom) => [atom.id, atom]));
+  const endpoints = input.tracks.map(track => ({
+    source: track.startPaintRect === undefined
+      ? sourceAtoms.get(track.sourceAtomId ?? "") ?? targetAtoms.get(track.sourceAtomId ?? "") : undefined,
+    target: track.endPaintRect === undefined
+      ? targetAtoms.get(track.targetAtomId ?? "") ?? sourceAtoms.get(track.targetAtomId ?? "") : undefined
+  }));
+  // A fan-out may reference one atom several times. Within this synchronous
+  // read, measure it once, batching only explicit atomic text. Nothing is
+  // retained across style, layout, font or session changes.
+  const measure = (stage: HTMLElement, candidates: readonly (KpNativeKatexPaintAtomObservation | undefined)[]) => {
+    const atoms = [...new Set(candidates.filter(atom => atom !== undefined))];
+    const text = atoms.filter(atom => atom.paintMeasurement === "atomic-text" &&
+      typeof atom.sourceElement.ownerDocument.createRange === "function");
+    const ink = measureKpNativeKatexTextInkRects(stage, text.map(atom => atom.sourceElement));
+    const rects = new Map(text.map((atom, index) => [atom, ink[index]!]));
+    for (const atom of atoms) if (!rects.has(atom)) rects.set(atom, measureKpNativeKatexPaintAtomRect(stage, atom));
+    return rects;
+  };
+  const starts = measure(input.source.stage, endpoints.map(endpoint => endpoint.source));
+  const ends = measure(input.target.stage, endpoints.map(endpoint => endpoint.target));
   return Object.freeze(input.tracks.map((track) => {
     const sourceAtom =
       sourceAtoms.get(track.sourceAtomId ?? "") ??
@@ -63,10 +83,10 @@ export function attachKpNativeKatexTrackPaintGeometry<
     // overwriting it with the static endpoint measurement.
     const startPaintRect = track.startPaintRect ??
       (sourceAtom === undefined ? undefined :
-        measureKpNativeKatexPaintAtomRect(input.source.stage, sourceAtom));
+        starts.get(sourceAtom));
     const endPaintRect = track.endPaintRect ??
       (targetAtom === undefined ? undefined :
-        measureKpNativeKatexPaintAtomRect(input.target.stage, targetAtom));
+        ends.get(targetAtom));
     if (startPaintRect === undefined || endPaintRect === undefined) {
       throw new Error(
         "Native KaTeX render tracks require measured paint at both endpoints."
@@ -125,6 +145,36 @@ export function measureKpNativeKatexTextInkRect(
   stage: HTMLElement,
   element: HTMLElement
 ): KpStageRelativeRect {
+  return readTextInkRect(stage, element)();
+}
+
+/** Read untouched line boxes before inserting probes. Only independent leaves
+ * can share a baseline pass; nested wrappers retain sequential measurement. */
+export function measureKpNativeKatexTextInkRects(
+  stage: HTMLElement,
+  elements: readonly HTMLElement[]
+): readonly KpStageRelativeRect[] {
+  if (new Set(elements).size !== elements.length ||
+      elements.some(element => element.childElementCount !== 0 || visibleDirectText(element) === "")) {
+    return elements.map(element => measureKpNativeKatexTextInkRect(stage, element));
+  }
+  const readers = elements.map(element => readTextInkRect(stage, element));
+  const markers: HTMLElement[] = [];
+  let baselines: number[];
+  try {
+    for (const element of elements) {
+      const marker = createBaselineMarker(element);
+      markers.push(marker);
+      element.append(marker);
+    }
+    baselines = markers.map(marker => marker.getBoundingClientRect().top);
+  } finally {
+    for (const marker of markers) marker.remove();
+  }
+  return readers.map((read, index) => read(baselines[index]));
+}
+
+function readTextInkRect(stage: HTMLElement, element: HTMLElement): (baseline?: number) => KpStageRelativeRect {
   const range = element.ownerDocument.createRange();
   range.selectNodeContents(element);
   const rangeRect = range.getBoundingClientRect();
@@ -136,7 +186,7 @@ export function measureKpNativeKatexTextInkRect(
   const canvas = element.ownerDocument.createElement("canvas");
   const context = canvas.getContext("2d");
   if (context === null || text === "") {
-    return stageRelativeRect(stage, layoutRect);
+    return () => stageRelativeRect(stage, layoutRect);
   }
   context.font = [
     computed.fontStyle,
@@ -149,15 +199,14 @@ export function measureKpNativeKatexTextInkRect(
     !(metrics.width > 0) ||
     !(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent > 0)
   ) {
-    return stageRelativeRect(stage, layoutRect);
+    return () => stageRelativeRect(stage, layoutRect);
   }
   const scaleX = layoutRect.width / metrics.width;
   const lineHeight = Number.parseFloat(computed.lineHeight);
   const scaleY = Number.isFinite(lineHeight) && lineHeight > 0
     ? layoutRect.height / lineHeight
     : scaleX;
-  const baseline = measureInlineBaseline(element);
-  return stageRelativeRect(stage, {
+  return (baseline = measureInlineBaseline(element)) => stageRelativeRect(stage, {
     left: layoutRect.left - metrics.actualBoundingBoxLeft * scaleX,
     top: baseline - metrics.actualBoundingBoxAscent * scaleY,
     width:
@@ -176,14 +225,12 @@ export function measureKpNativeKatexSubtreePaintRect(
   stage: HTMLElement,
   root: HTMLElement
 ): KpStageRelativeRect | undefined {
-  const rects = [root, ...root.querySelectorAll<HTMLElement>("*")]
-    .filter((element) => element.closest(".katex-mathml") === null)
-    .flatMap((element) => [
-      ...(visibleDirectText(element) === ""
-        ? []
-        : [measureKpNativeKatexTextInkRect(stage, element)]),
-      ...measureBorderPaintRects(stage, element)
-    ]);
+  const elements = [root, ...root.querySelectorAll<HTMLElement>("*")]
+    .filter((element) => element.closest(".katex-mathml") === null);
+  const rects = [
+    ...measureKpNativeKatexTextInkRects(stage, elements.filter(element => visibleDirectText(element) !== "")),
+    ...elements.flatMap(element => measureBorderPaintRects(stage, element))
+  ];
   if (rects.length === 0) return undefined;
   const left = Math.min(...rects.map((rect) => rect.left));
   const top = Math.min(...rects.map((rect) => rect.top));

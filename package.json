@@ -14,6 +14,7 @@
     "visual:algebra-whole-and-parts": "playwright test --config playwright.algebra-whole-and-parts.config.ts --workers=1 --project=chromium",
     "visual:algebra-editions": "playwright test --config playwright.algebra-editions.config.ts --workers=1",
     "measure:algebra-editions": "node --disable-warning=ExperimentalWarning scripts/measure-algebra-editions.ts",
+    "visual:algebra-preparation": "node --disable-warning=ExperimentalWarning scripts/profile-algebra-preparation.ts",
     "visual:calculus-editions": "playwright test --config playwright.calculus-editions.config.ts --workers=1",
     "measure:authoring-boundaries": "node --disable-warning=ExperimentalWarning scripts/measure-authoring-boundaries.ts",
     "measure:revision-preparation": "node --disable-warning=ExperimentalWarning scripts/measure-revision-preparation.ts",

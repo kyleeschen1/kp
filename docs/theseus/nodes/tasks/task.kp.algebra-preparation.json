@@ -1,0 +1,47 @@
+{
+  "id": "task.kp.algebra-preparation",
+  "kind": "task",
+  "title": "Profile and repair accepted algebra native preparation",
+  "status": "ready",
+  "domain": "algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-algebra-preparation-investigation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-algebra-preparation.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:native-preparation",
+      "status": "passed",
+      "scope": "native-geometry",
+      "checkedAt": "2026-10-21T20:38:07.388Z",
+      "notes": "Six checks across three engines preserve independent ink measurements, transformed and changed typography, failure cleanup, fan-out measurement sharing and authored geometry."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "native-compositor",
+      "checkedAt": "2026-10-21T20:38:09.653Z",
+      "notes": "Both actual-paint and lifecycle checks pass; focused native unit cohorts also pass 82 and 33 checks."
+    },
+    {
+      "command": "npm run visual:algebra-editions",
+      "status": "passed",
+      "scope": "algebra-reader",
+      "checkedAt": "2026-10-21T20:38:52.198Z",
+      "notes": "25 checks pass across Chromium Firefox WebKit; two intentional non-Chromium timing skips. Both sources preserve forward/reverse motion, restoration, disposal, local closure and accessibility."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T20:38:53.268Z",
+      "notes": "App, Node, tests, Svelte and domains pass. Production build and complete algebra edition budgets also pass unchanged; reader JS grows 230 gzip bytes."
+    }
+  ]
+}
