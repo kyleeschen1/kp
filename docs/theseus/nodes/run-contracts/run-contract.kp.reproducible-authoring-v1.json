@@ -65,7 +65,8 @@
     },
     {
       "id": "style-closure",
-      "status": "planned"
+      "summary": "Ten closure checks, three browser engines and types pass; no production collector change needed.",
+      "status": "complete"
     },
     {
       "id": "reader-build",

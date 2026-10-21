@@ -26,8 +26,12 @@ test("static selected-source edition reads without JavaScript or external resour
   try {
     const page = await context.newPage(), failed: string[] = [], external: string[] = [];
     page.on("requestfailed", r => failed.push(r.url()));
+    page.on("response", r => { if (r.status() >= 400) failed.push(`${r.status()}: ${r.url()}`); });
     page.on("request", r => { if (!r.url().startsWith(origin)) external.push(r.url()); });
     await page.goto(origin);
+    // Firefox with page JavaScript disabled does not run callbacks attached to
+    // fonts.ready; inspect the browser's font state without scheduling page code.
+    await expect.poll(() => page.evaluate(() => document.fonts.status)).toBe("loaded");
     await expect(page.locator("h1")).toHaveText("Zero slope does not mean no change");
     await expect(page.locator(".change-card")).toHaveAttribute("data-kp-focus-deck-static", "true");
     for (const id of ["input", "inner", "outer", "compose", "limit"]) await expect(page.locator(`[data-kp-focus-deck-beat="${id}"]`)).toBeVisible();

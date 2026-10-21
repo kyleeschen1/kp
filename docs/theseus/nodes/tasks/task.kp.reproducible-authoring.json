@@ -84,6 +84,20 @@
       "scope": "write-lifecycle",
       "checkedAt": "2026-10-21T19:14:54.142Z",
       "notes": "Twenty-one tests and full types pass, including injected write/rename failures, corrupted race winner and six independent processes converging."
+    },
+    {
+      "command": "npm run visual:calculus-editions",
+      "status": "passed",
+      "scope": "style-closure",
+      "checkedAt": "2026-10-21T19:17:12.816Z",
+      "notes": "All three browsers pass no-script local reading and font load. Replaced unsupported promise callback in Firefox JavaScript-disabled test with synchronous font-state polling; product unchanged."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-edition.test.ts tests/local-stylesheet-closure.test.ts",
+      "status": "passed",
+      "scope": "style-closure",
+      "checkedAt": "2026-10-21T19:17:14.200Z",
+      "notes": "Ten checks and full types pass; every referenced font and shared style preserved."
     }
   ],
   "expectedLearning": [
