@@ -4,6 +4,23 @@ import test from "node:test";
 import { assessRetainedAuthorTask } from "../scripts/assess-authoring-task.ts";
 import { authorTaskExample, checkAuthorTask } from "../scripts/author-check-owner-dispatch.ts";
 
+test("selected calculus and algebra tasks distinguish valid wrong intent and invalid source", () => {
+  for (const [task, sourcePath, wrongPath] of [
+    ["calculus-stationary", "content/authoring/transfer/stationary-change.json", "content/authoring/transfer/two-reversals.json"],
+    ["calculus-two-reversals", "content/authoring/transfer/two-reversals.json", "content/authoring/transfer/stationary-change.json"],
+    ["composed-two-unknowns", "src/authoring/examples/composed-algebra-intuition-transfer.json", "src/authoring/examples/composed-algebra-intuition.json"]
+  ] as const) {
+    const source = JSON.parse(readFileSync(sourcePath, "utf8"));
+    assert.equal(assessRetainedAuthorTask(task, JSON.stringify(source)).status, "fulfilled");
+    assert.equal(assessRetainedAuthorTask(task, readFileSync(wrongPath, "utf8")).status, "intent-gap");
+    assert.equal(assessRetainedAuthorTask(task, "{}").status, "repair-gap");
+    if (task.startsWith("calculus")) {
+      source.h = -.1;
+      assert.equal(assessRetainedAuthorTask(task, JSON.stringify(source)).status, "intent-gap");
+    }
+  }
+});
+
 test("compilable untouched starters fail changed-task intent while retained sources fulfill it", async () => {
   for (const [task, owner, path] of [
     ["urn-prior-third", "bayes.binary", "content/authoring/r4a-urn-prior.bayes.json"],

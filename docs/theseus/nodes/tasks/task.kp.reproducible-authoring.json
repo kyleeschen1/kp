@@ -196,6 +196,13 @@
       "scope": "second-owner",
       "checkedAt": "2026-10-21T19:32:48.006Z",
       "notes": "Actual local CLI build then check reproduces the selected existing transfer source."
+    },
+    {
+      "command": "npm run check:reproducible-authoring; node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-fulfillment.test.ts; npm run typecheck",
+      "status": "passed",
+      "scope": "author-task-replay",
+      "checkedAt": "2026-10-21T19:38:09.850Z",
+      "notes": "Five CLI edition round trips, wrong-intent and repair cases, four fulfillment tests and full types pass."
     }
   ],
   "expectedLearning": [

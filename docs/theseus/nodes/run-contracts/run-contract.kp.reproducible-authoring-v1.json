@@ -115,7 +115,8 @@
     },
     {
       "id": "author-task-replay",
-      "status": "planned"
+      "summary": "Actual CLI source task replay and five reproducible edition round trips pass.",
+      "status": "complete"
     },
     {
       "id": "browser-preservation",

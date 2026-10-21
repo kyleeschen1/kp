@@ -41,3 +41,14 @@ their existing semantic and rendering owners. Their publication checks now also
 reject an undeclared nested file while retaining the original reading and byte
 identity after removal. No new algebra code, interactive promotion or shared
 compiler abstraction was needed.
+
+Slice 18: `npm run check:reproducible-authoring` executes real check/build/check
+CLI processes for both calculus sources (static and interactive) and the composed
+two-unknown source (static). All five editions reproduce. The existing task
+assessor now distinguishes selected function/initial-condition or ordered-state
+intent from merely compiling. Valid alternate sources fail the selected task;
+invalid sources return repair gaps with CLI exit 2. The first replay exposed an
+incorrect harness expectation of exit 0 for repair; the harness now requires 2.
+Four fulfillment tests and full typecheck pass. Rubrics are deliberately bounded
+to authored notation and do not grade equivalent expressions, prose, author time,
+model reliability or comprehension; zero external model calls were made.
