@@ -130,7 +130,8 @@
     },
     {
       "id": "author-packet",
-      "status": "planned"
+      "summary": "Author recipes, both working local URLs and source transfer verified; exact limits and identities recorded.",
+      "status": "complete"
     },
     {
       "id": "integration",

@@ -1,7 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { createServer, type Server } from "node:http";
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 import { buildCalculusEdition, buildInteractiveCalculusEdition } from "../scripts/build-calculus-edition.ts";
 
 let server: Server, origin: string;
@@ -146,6 +146,16 @@ test("interactive edition retains the complete reading when scripts are disabled
     expect(await page.locator("math").count()).toBeGreaterThan(20);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   } finally { await context.close(); }
+});
+
+test("documented dev-server edition links open the selected embedded sources", async ({ page }) => {
+  for (const name of ["stationary-change", "two-reversals"]) {
+    const source = `content/authoring/transfer/${name}.json`, edition = await buildInteractiveCalculusEdition(source);
+    await page.goto(`http://localhost:8000/${relative(process.cwd(), edition.directory)}/index.html`);
+    await expect(page.locator(".change-card")).toHaveAttribute("data-change-revision", edition.explanationRevisionId);
+    await expect(page.locator("h1")).toHaveText(JSON.parse(readFileSync(source, "utf8")).title);
+    await expect(page.locator(".change-card")).toHaveAttribute("data-kp-focus-deck-static", "false");
+  }
 });
 
 test("cost: repeated editor previews release observers and reuse loaded editing code", async ({ page }, info) => {

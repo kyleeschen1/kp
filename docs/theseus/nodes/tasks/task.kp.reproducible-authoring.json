@@ -217,6 +217,13 @@
       "scope": "cost-gates",
       "checkedAt": "2026-10-21T19:43:57.574Z",
       "notes": "Complete edition/editor/static closure measured and bounded; two unit gates pass; isolated Chromium timing and ten-preview ownership pass; existing consumer budgets unchanged."
+    },
+    {
+      "command": "npm run check:reproducible-authoring; npm run visual:calculus-editions -- --project=chromium --grep documented; node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-packet.test.ts tests/authoring-entrypoint-inventory.test.ts",
+      "status": "passed",
+      "scope": "author-packet",
+      "checkedAt": "2026-10-21T19:46:16.532Z",
+      "notes": "CLI recipes and copied-source reproduction pass; both review links open exact sources; four routing tests pass."
     }
   ],
   "expectedLearning": [

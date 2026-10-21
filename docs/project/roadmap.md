@@ -25,6 +25,17 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Latest October 21 continuation: the approved
+[reproducible-authoring run](2026-10-21-reproducible-authoring-long-loop.md) adds
+selected-source static/interactive local calculus editions, exact restoration,
+complete output verification and bounded reader/editor costs. The existing
+composed-algebra static path supplies the second owner. See the
+[author packet](authoring/calculus-change-packet.md) and
+[evidence](reviews/2026-10-21-reproducible-authoring.md); Theseus owns final
+integration status. This extends the completed source-transfer work below,
+preserving its unaccepted visual treatment. No new mathematical abstraction or
+external publication is authorized.
+
 Latest October 21 direction: the user approved the
 [authoring-transfer delivery](2026-10-21-authoring-transfer-delivery.md) after
 the [authoring-path discussion](reviews/2026-10-21-authoring-path.md).

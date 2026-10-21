@@ -118,9 +118,13 @@ This does not authorize arbitrary probability trees, geometry, or new motifs.
 
 For bounded finite-change versus derivative comparisons, use
 `calculus-change-packet.md` and task `calculus.change-propagation`. This routes
-the existing expression/differentiation owner, with explicit source preview and
-revision-pinned recovery. Its presentation remains unaccepted; no arbitrary
-calculus proof, new choreography or publication authority follows from checking.
+the existing expression/differentiation owner, with explicit source preview,
+separate draft/displayed downloads, and selected-source immutable local editions.
+Use `author:calculus-publication` with explicit `--source`, optional `--interactive`
+and `--check`; editions retain the embedded source across reload. Checking alone
+does not apply or export anything. Its presentation remains unaccepted; no
+arbitrary calculus proof, new choreography or external publication authority is
+implied.
 
 For the accepted three-stop compound factoring/evaluation task, use
 `composed-algebra-authoring-packet.md` and `equation.composed-algebra` discovery.
