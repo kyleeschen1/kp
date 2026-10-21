@@ -36,11 +36,11 @@ const owners = {
     check: async (json: string) => (await import("../src/experiments/reusable-reasoning/equation-author-check.ts")).checkEquationReasoningSource(json)
   },
   "reasoning.code": {
-    example: async () => (await import("../src/experiments/reusable-reasoning/code-evidence.ts")).createCodeReasoningSource(),
+    example: async () => (await import("../src/experiments/reusable-reasoning/code-source.ts")).createCodeReasoningSource(),
     check: async (json: string) => (await import("../src/experiments/reusable-reasoning/code-author-check.ts")).checkCodeReasoningSource(json)
   },
   "equation.logarithm-base": {
-    example: async () => (await import("../src/authoring/equation-series-logarithm-base-draft.ts")).createKpEquationSeriesLogarithmBaseDraft(),
+    example: async () => (await import("../src/authoring/equation-series-logarithm-base-source.ts")).createKpEquationSeriesLogarithmBaseDraft(),
     check: async (json: string) => {
       const { compileKpEquationSeriesLogarithmBaseText } = await import("../src/authoring/equation-series-logarithm-base-draft.ts");
       const result = compileKpEquationSeriesLogarithmBaseText(json);
@@ -49,7 +49,7 @@ const owners = {
     }
   },
   "graph3d.saddle": {
-    example: async () => (await import("./gallery-graph-3d-saddle-parameter-frontend.ts")).kpGalleryGraph3DSaddleParameterRequest,
+    example: async () => (await import("./gallery-graph-3d-saddle-parameter-request.ts")).kpGalleryGraph3DSaddleParameterRequest,
     check: async (json: string) => {
       const parsed = readJson(json); if (parsed.status === "repair-gap") return parsed;
       const { routeKpCrossDomainGalleryGeneration } = await import("./cross-domain-gallery-generation-router.ts");

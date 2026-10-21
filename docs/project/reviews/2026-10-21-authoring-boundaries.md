@@ -122,10 +122,15 @@ Fresh-process CLI example loads, measured by the Node module load hook in
 | Fraction chain | 229 | 7 |
 | Binary Bayes | 94 | 10 |
 | Momentum/energy (unchanged control) | 12 | 12 |
+| Logarithm base | 86 | 7 |
+| Code reasoning | 23 | 7 |
+| Graph3D saddle | 31 | 7 |
+| Equation reasoning (unchanged control) | 6 | 6 |
+| Graph2D supply/tax (unchanged control) | 5 | 5 |
 
 These are actual module loads, not emitted browser bytes or latency claims.
 Each selected example still passes its existing semantic checker; the fraction
-example retains its hint stripping. The scoped authoring gate now runs six
+example retains its hint stripping. The scoped authoring gate now runs eleven
 fresh-process regressions, forbids renderer/compiler capabilities in example
 loads, and allows only two modules of explicit count headroom per cohort.
 Existing CLI tests also exercise every declared task and invalid selection.
@@ -134,3 +139,19 @@ No compilation capability or supported mathematics was removed.
 The architecture gate rejected a trial direct mechanics-domain import.
 Restored the public boundary instead of weakening that gate for a five-module
 saving. Its small existing example closure is retained as a control cohort.
+
+The complete inventory exposed three more mixed owners during integration.
+Logarithm draft notation now supplies both the editable example and the
+historical pinned example; the trusted factory still supplies its own evidence.
+The Graph3D request is independent of its eagerly compiled frontend, with frozen
+pins and compatibility exports preserved. Code source uses the same generated
+stage IDs without loading runtime projection or behavior certificates. Before
+and after JSON digests are identical:
+
+- logarithm: `ce243b39ef0dfba4f306cdd596a40f35d0cdab2cae231620e03bf98fa38676c1`;
+- code: `632b15a09e9068e8e89326598720ec8d1ec477f06745347570948ba98abdbb55`;
+- Graph3D: `4af1973db6830accec0fc09f4b9b54db2c5a7d3e93e0124affc1112aad5f2b29`.
+
+The loading test compares its cohort list to the actual supported-task
+inventory, so new discoverable tasks must explicitly join the acceptance gate.
+No universal example representation is imposed on the domain owners.

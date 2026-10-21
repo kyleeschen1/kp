@@ -11,12 +11,8 @@ export class KpCodeReasoningRepairGap extends Error {
   constructor(path: string, expected: string) { super(`${path}: ${expected}`); this.path = path; this.expected = expected; }
 }
 
-export function createCodeReasoningSource() {
-  return { title: "One decision, two callers", statement: "The two callers can share a named threshold decision.",
-    explanation: "Name the helper, move the decision, then replace each caller. Check behavior at the declared threshold cases.",
-    sourceRevisionId: "free-shipping.before.v1", targetRevisionId: "free-shipping.after.v1",
-    stageIds: instruction.score.beats.map(beat => beat.stageId) };
-}
+import { createCodeReasoningSource } from "./code-source.ts";
+export { createCodeReasoningSource } from "./code-source.ts";
 
 /** Code owns syntax, correspondence and bounded proof; equation evidence is never imported. */
 export function bindCodeReasoningEvidence(value: unknown = createCodeReasoningSource()) {

@@ -1,5 +1,5 @@
 import { compileKpEquationTransformSeries, type KpEquationTransformSeriesCompilationState, type KpCompiledEquationTransformSeriesCandidate } from "./compile-equation-transform-series.ts";
-import { compileKpEquationSeriesLogarithmBaseExample, createKpEquationSeriesLogarithmBaseExample } from "./equation-series-logarithm-base-example.ts";
+import { compileKpEquationSeriesLogarithmBaseExample } from "./equation-series-logarithm-base-example.ts";
 import { createKpEquationSeriesLogarithmBaseSemanticSource, KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID } from "./equation-series-logarithm-base-authoring.ts";
 import { bindKpEquationSeriesGovernedRequest } from "./equation-series-governed-source-binding.ts";
 import { normalizeKpEquationTransformSeriesEndpoints } from "./equation-latex-endpoint-normalizer.ts";
@@ -14,11 +14,7 @@ export type KpLogarithmBaseDraftCompilation =
       readonly semantic: KpVerifiedLogarithmChangeOfBase })
   | (DraftAttempt & { readonly status: "repair-required" });
 
-export function createKpEquationSeriesLogarithmBaseDraft() {
-  const example = createKpEquationSeriesLogarithmBaseExample().value;
-  return { ...example, adjacencies: example.adjacencies.map(adjacency => ({ ...adjacency,
-    intent: { ...adjacency.intent, semanticArguments: {} } })) };
-}
+export { createKpEquationSeriesLogarithmBaseDraft } from "./equation-series-logarithm-base-source.ts";
 
 /** Untrusted text enters the same compiler in CLI and browser. Parse failures
  * use the existing repair taxonomy and preserve the last valid candidate. */

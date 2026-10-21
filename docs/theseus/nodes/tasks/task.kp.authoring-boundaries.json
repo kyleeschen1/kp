@@ -67,6 +67,27 @@
       "scope": "Four complete consumer budgets, authority laws and fresh-process examples",
       "checkedAt": "2026-10-21T16:54:45.668Z",
       "notes": "Source-only algebra 1549 gzip bytes; examples load 7-10 modules without compiler. Mechanics public boundary retained at 12."
+    },
+    {
+      "command": "npm run check:authoring",
+      "status": "passed",
+      "scope": "Complete eleven-task example inventory and four consumer runtime/type budgets",
+      "checkedAt": "2026-10-21T16:59:09.826Z",
+      "notes": "All selected examples now load 5-12 local modules; graph, code and logarithm starter JSON digests preserved. Real checkers retain unsupported-input repairs."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep R4A",
+      "status": "passed",
+      "scope": "Numeric CLI/browser and Graph3D pinned-host subset only",
+      "checkedAt": "2026-10-21T16:59:10.809Z",
+      "notes": "Executed only R4A numeric CLI and R4A Graph3D checked tests: 2 pass. This record does not claim the entire R4A cohort ran."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep 'R4A numeric CLI|R4A Graph3D checked'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T16:59:28.216Z",
+      "notes": "Exact executed subset: two browser tests pass after final request/source separation."
     }
   ],
   "expectedLearning": [

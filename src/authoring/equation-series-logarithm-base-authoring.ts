@@ -25,13 +25,8 @@ import type { KpEquationTransformSeriesRequest } from
 export const KP_LOGARITHM_BASE_EQUATION_SERIES_AUTHORING_AUTHORITY =
   "authoring.equation.logarithm-base.v1" as const;
 
-export const KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID =
-  "kp.algebra.change-logarithm-base" as const;
-
-export const KP_LOGARITHM_BASE_AUTHORING_PACK_PIN = Object.freeze({
-  packId: "kp.logarithm-change-of-base",
-  version: "1.0.0"
-} as const);
+import { KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID, KP_LOGARITHM_BASE_AUTHORING_PACK_PIN } from "./equation-series-logarithm-base-source.ts";
+export { KP_LOGARITHM_BASE_AUTHORING_OPERATION_ID, KP_LOGARITHM_BASE_AUTHORING_PACK_PIN } from "./equation-series-logarithm-base-source.ts";
 
 export const KP_LOGARITHM_BASE_AUTHORING_CONTRACT_KIND =
   "kp.semantic-contract.logarithm-change-of-base.v1" as const;

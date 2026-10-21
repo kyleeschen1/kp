@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 5016,
+  "scannedFileCount": 5019,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -119,6 +119,7 @@
         "src/authoring/equation-series-logarithm-base-authoring.ts",
         "src/authoring/equation-series-logarithm-base-draft.ts",
         "src/authoring/equation-series-logarithm-base-example.ts",
+        "src/authoring/equation-series-logarithm-base-source.ts",
         "src/authoring/logarithm-base-authoring-evidence.ts",
         "src/domain-ir/logarithm-change-of-base-migration-v2.ts",
         "src/editor/logarithm-change-of-base-surface-adapter.ts",
