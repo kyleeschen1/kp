@@ -175,6 +175,13 @@
       "scope": "download-authority",
       "checkedAt": "2026-10-21T19:29:02.140Z",
       "notes": "Ten browser cases and full types pass; actual downloads distinguish draft bytes from displayed source through failed mounts and invalid drafts."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-inventory.test.ts tests/authoring-entrypoint-publication.test.ts tests/authoring-entrypoint-handoff.test.ts tests/authoring-entrypoint-packet.test.ts tests/author-example-loading.test.ts",
+      "status": "passed",
+      "scope": "capability-routing",
+      "checkedAt": "2026-10-21T19:30:37.831Z",
+      "notes": "Twenty-two checks and full types pass; all twelve starters retain bounded lazy loading and reports retain not-performed handoff."
     }
   ],
   "expectedLearning": [

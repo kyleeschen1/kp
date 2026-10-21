@@ -44,3 +44,11 @@ test("numeric publication needs a selected market envelope; unsupported owners g
   for (const task of ["reasoning.code", "graph3d.saddle"] as const)
     assert.equal(supportedAuthorTasks[task].publication.kind, "unsupported");
 });
+test("calculus discovery names explicit local edition modes without claiming execution", async () => {
+  const task = supportedAuthorTasks["calculus.change-propagation"];
+  assert.equal(task.publication.kind, "local-edition");
+  assert.equal(task.publication.command, "author:calculus-publication");
+  assert.match(task.publication.input, /--interactive/);
+  assert.match(task.publication.input, /not visual acceptance or deployment/);
+  assert.equal(task.extraction.kind, "unsupported");
+});

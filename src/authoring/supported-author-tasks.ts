@@ -6,7 +6,7 @@ export const supportedAuthorTasks = {
     input: "Two bounded scalar expressions in x and u; five ordered editorial passages. Existing differentiation checks finite changes and local rates. No arbitrary proof, prose verification or visual certification.",
     preview: { kind: "explicit-apply", url: "/experiments/change-propagation/" },
     extraction: { kind: "unsupported", reason: "No reusable subexplanation extraction for this parameter comparison." },
-    publication: { kind: "unsupported", reason: "Local preview and static reading only; no selected-source edition command." }
+    publication: { kind: "local-edition", command: "author:calculus-publication", output: "immutable-content-addressed", input: "selected calculus source JSON; static reading by default, --interactive packages the existing reader; --check reproduces exact local bytes, not visual acceptance or deployment" }
   },
   "mechanics.momentum-energy": {
     owner: "src/authoring/mechanics-derivation-author-check.ts",

@@ -105,7 +105,8 @@
     },
     {
       "id": "capability-routing",
-      "status": "planned"
+      "summary": "Existing inventory advertises explicit edition command; no parallel registry; 22 checks and types pass.",
+      "status": "complete"
     },
     {
       "id": "second-owner",
