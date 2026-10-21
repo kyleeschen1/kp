@@ -1,0 +1,46 @@
+{
+  "id": "task.kp.concise-authoring",
+  "kind": "task",
+  "title": "Concise authoring and bounded reader activation",
+  "status": "ready",
+  "domain": "authoring",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-authoring-architecture-delivery.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/concise-authoring.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T15:38:59.532Z",
+      "notes": "Three facade tests; preserved matrix identities and algebra animation bytes, located repairs."
+    },
+    {
+      "command": "npm run test:matrix-interpretations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T15:39:00.588Z"
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T15:39:01.143Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T15:39:01.712Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-10-21T15:39:02.275Z"
+    }
+  ]
+}

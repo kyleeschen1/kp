@@ -1,0 +1,47 @@
+{
+  "id": "run-contract.kp.concise-authoring-v1",
+  "kind": "run-contract",
+  "title": "Concise authoring and reader activation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.concise-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-authoring-architecture-delivery.md"
+    }
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run typecheck",
+    "npm run build:bundle"
+  ],
+  "allowedWork": [
+    "Approved October 21 domain facades, caller migrations and measured loading boundary repairs"
+  ],
+  "disallowedWork": [
+    "New choreography, universal language, unrelated edits or deployment"
+  ],
+  "goal": "Reduce matrix and algebra author boilerplate and measured reader activation cost while preserving semantics and visuals",
+  "target": "task.kp.concise-authoring",
+  "slices": [
+    {
+      "id": "authoring",
+      "title": "Concise-domain-authoring",
+      "status": "complete"
+    },
+    {
+      "id": "activation",
+      "title": "Bounded-reader-activation",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "title": "Verification-and-author-guide",
+      "status": "planned"
+    }
+  ]
+}

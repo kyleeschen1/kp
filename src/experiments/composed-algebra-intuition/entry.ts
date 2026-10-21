@@ -2,7 +2,7 @@ import "../authoring-distribution-focus-card/style.css";
 import "../reusable-reasoning/style.css";
 import "../common-factor/style.css";
 import "../composed-algebra/style.css";
-import { prepareKpComposedAlgebraDraftV2, exportKpComposedAlgebraSourceV2, createKpComposedAlgebraAuthoringSessionV2 } from "../../authoring/composed-algebra-session-v2.ts";
+import * as algebra from "../../authoring/algebra.ts";
 import { mountComposedAlgebraCardV2 } from "../composed-algebra/card.ts";
 import { renderAlgebraIntuitionCard, renderAlgebraIntuitionLinks } from "./page.ts";
 import { projectComposedAlgebraSubexplanations } from "../composed-algebra/subexplanations.ts";
@@ -12,7 +12,7 @@ import { bindAlgebraIntuitionPractice } from "./practice.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 async function mount() {
-  const initial = prepareKpComposedAlgebraDraftV2(), display = root.querySelector<HTMLElement>("[data-composed-reader]")!;
+  const initial = algebra.compile(), display = root.querySelector<HTMLElement>("[data-composed-reader]")!;
   const editor = root.querySelector<HTMLTextAreaElement>("[data-reasoning-json]")!, status = root.querySelector<HTMLElement>("[data-reasoning-draft-status]")!;
   const apply = root.querySelector<HTMLButtonElement>("[data-composed-apply]")!, download = root.querySelector<HTMLButtonElement>("[data-composed-download]")!;
   let active = await mountComposedAlgebraCardV2(display, initial), disposed = false;
@@ -24,7 +24,7 @@ async function mount() {
   let exploration: { surface: Awaited<ReturnType<typeof mountComposedAlgebraCardV2>>; position: ReturnType<typeof captureComposedAlgebraPositionV2>;
     reference: ReturnType<typeof projectComposedAlgebraSubexplanations>[number];
     scrollY: number; origin: HTMLElement | undefined; parentUrl: string } | undefined;
-  const session = createKpComposedAlgebraAuthoringSessionV2({ initial,
+  const session = algebra.session({ initial,
     prepare: async draft => {
       const full = projectComposedAlgebraReadingV2(draft, "full"), compact = projectComposedAlgebraReadingV2(draft, "compact");
       const staging = document.createElement("div"); staging.className = "common-factor-staging";
@@ -104,7 +104,7 @@ async function mount() {
     void openIntuition(anchor.dataset["composedIntuition"]!, anchor).catch(reportReferenceError);
   };
   returnButton.onclick = closeIntuition;
-  editor.value = exportKpComposedAlgebraSourceV2(initial);
+  editor.value = algebra.serialize(initial);
   editor.oninput = () => { session.invalidate(); status.textContent = "Draft changed. Apply to prepare a new displayed revision."; };
   apply.onclick = async () => {
     status.textContent = "Checking and preparing…";
@@ -114,7 +114,7 @@ async function mount() {
     status.textContent = result.status === "applied" ? "Displayed revision updated." : `${result.diagnostic.code} at ${result.diagnostic.path}: ${result.diagnostic.expected}`;
   };
   download.onclick = () => {
-    const url = URL.createObjectURL(new Blob([exportKpComposedAlgebraSourceV2(session.current())], { type: "application/json" }));
+    const url = URL.createObjectURL(new Blob([algebra.serialize(session.current())], { type: "application/json" }));
     const link = document.createElement("a"); link.href = url; link.download = "composed-algebra-intuition.json"; link.click(); URL.revokeObjectURL(url);
   };
   const dispose = () => { if (disposed) return; disposed = true; practice.dispose(); subGeneration++; exploration?.surface.dispose(); exploration = undefined;

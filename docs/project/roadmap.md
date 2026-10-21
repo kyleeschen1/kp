@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-10-01
+Last Updated: 2026-10-21
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -24,6 +24,15 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+October 21 active priority: learner testing is constrained. The user approved
+the [architecture and concise-authoring agenda](2026-10-21-authoring-architecture-delivery.md)
+and implementation: simplify matrix/algebra authoring through existing owners,
+reduce measured reader activation cost, then consolidate demonstrated host
+duplication and performance acceptance. `run-contract.kp.concise-authoring-v1`
+owns this bounded delivery. Use the linked agenda for future next-step reviews.
+The explanation-authoring contract below remains parked at its unaccepted card
+checkpoint; it is not the current execution lane and no visual gate is waived.
 
 October 13 pedagogical feedback: the user found the calculus card busy and its
 teaching purpose unclear. It is not accepted for promotion. Preserve the checked

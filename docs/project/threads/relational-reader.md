@@ -1,9 +1,17 @@
 # Relational reader delivery
 
 Status: active direction; focused mechanics argument approved through first review
-Last Updated: 2026-10-01
+Last Updated: 2026-10-21
 
 ## Canonical direction
+
+October 21 supersedes the next-action recommendations below: execute the
+[approved concise-authoring and architecture agenda](../2026-10-21-authoring-architecture-delivery.md)
+under `run-contract.kp.concise-authoring-v1`. Preserve accepted visuals and
+semantic guarantees while reducing author boilerplate and measured activation
+cost. Learner-context work remains valuable but is not the current delivery
+lane; the previous calculus review gate remains intact. The linked agenda owns
+future next-step priorities; Theseus owns live package status.
 
 Latest October 13 feedback: the calculus dashboard was judged busy and its
 pedagogical value questioned; it has not passed review. The user asked to record
