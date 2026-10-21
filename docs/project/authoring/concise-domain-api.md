@@ -86,3 +86,10 @@ Validation: `tests/concise-authoring.test.ts` checks dimension inference, invali
 shapes/nonfinite inputs, stable identity, source mutation isolation, unchanged
 algebra animation artifacts, source round-trip and located repair diagnostics.
 The standard matrix/algebra suites and full typecheck retain their authority.
+
+Run `npm run check:authoring` for the focused semantic/authority tests and
+independently bundled/type-checked complete consumers. It rejects source-only
+compiler imports, default example payload and measured budget growth. Run
+`npm run measure:authoring-boundaries -- --types` for diagnostic measurements
+without acceptance; this does not change baselines. Full application, browser
+and renderer conformance remain separate integration checks.

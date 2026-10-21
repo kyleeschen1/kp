@@ -63,3 +63,21 @@ presentation authority, preserve legacy default output, and reject source-less
 calls to the concise compiler. Existing browser download/reload preserves exact
 revision IDs for both extended source variants. The author guide documents the
 distinction and migration.
+
+## Acceptance policy
+
+`npm run check:authoring` runs focused authority/compatibility tests, then all
+four complete runtime and TypeScript consumers. The budget is explicit and
+checked, not automatically refreshed: matrix/source gzip ceilings are 2,500 /
+1,700 bytes; compile/editor are 94,000 / 95,000. Type ceilings are 65,000 /
+62,000 / 117,000 / 117,000; instantiations 87,000 / 82,000 / 172,000 / 172,000.
+This gives roughly 5–10% measured headroom. Any amendment must explain the
+cause and preserve complete consumers. The source-only dependency allowlist
+and no-example-output condition are independent of byte budgets.
+
+The compiler still statically reaches a tutorial-fixture builder through the
+distribution adapter, which mixes proof-driven construction with catalogue
+examples. The next bounded investigation separates that demonstrated owner
+boundary without changing its shared asset/timeline constructor. Presence in
+source reachability alone does not establish shipped fixture bytes; emitted
+output and type costs must be measured before claiming savings.

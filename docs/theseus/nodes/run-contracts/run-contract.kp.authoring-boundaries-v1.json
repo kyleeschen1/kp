@@ -46,7 +46,7 @@
     {
       "id": "acceptance",
       "title": "Scoped-acceptance",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "follow-through",

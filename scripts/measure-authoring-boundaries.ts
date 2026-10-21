@@ -4,6 +4,7 @@ import { gzipSync } from 'node:zlib';
 import { build } from 'vite';
 import { collectKpRuntimeImportClosure } from './runtime-import-closure.ts';
 import ts from 'typescript';
+import budgets from './authoring-boundary-budgets.json' with { type: 'json' };
 
 const consumers = ['matrices', 'algebra-source', 'algebra-compile', 'algebra-editor'] as const;
 const reports = [];
@@ -47,3 +48,18 @@ console.log(JSON.stringify(reports.map(({ consumer, staticLocalImports, modules,
   staticLocalFiles: staticLocalImports.length, emittedModules: modules.length, raw, gzip,
   ...(types ? { types } : {}),
   emittedExamples: modules.filter(path => path.includes('/examples/')) })), null, 2));
+if (process.argv.includes('--check')) {
+  if (!process.argv.includes('--types')) throw new Error('Acceptance requires the complete runtime and TypeScript cohort; include --types.');
+  if (reports.length !== Object.keys(budgets).length) throw new Error('Every budgeted consumer must be measured.');
+  for (const report of reports) {
+    const budget = budgets[report.consumer];
+    if (!report.types || report.gzip > budget.gzip || report.types.count > budget.types || report.types.instantiations > budget.instantiations)
+      throw new Error(`Authoring cost exceeds ${report.consumer} budget; diagnose before changing ceilings.`);
+    if (report.consumer !== 'matrices' && report.modules.some(path => path.includes('/examples/')))
+      throw new Error(`${report.consumer} must not ship example content.`);
+    if (report.consumer === 'algebra-source' && report.staticLocalImports.some(path => path.startsWith('src/') &&
+      !['src/authoring/algebra/source.ts', 'src/authoring/composed-algebra-source-v2.ts', 'src/authoring/composed-algebra-source.ts'].includes(path)))
+      throw new Error('Source validation acquired an undeclared runtime dependency.');
+  }
+  console.log('Authoring runtime and TypeScript budgets passed for every complete consumer.');
+}

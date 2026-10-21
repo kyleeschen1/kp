@@ -45,6 +45,13 @@
       "scope": "standard",
       "checkedAt": "2026-10-21T16:43:08.119Z",
       "notes": "All app, node, test, Svelte and domain checks pass after capability split."
+    },
+    {
+      "command": "npm run check:authoring",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-10-21T16:45:33.720Z",
+      "notes": "Eleven focused tests and all four complete runtime/type budgets pass; explicit ceilings and no-example checks established."
     }
   ],
   "expectedLearning": [
