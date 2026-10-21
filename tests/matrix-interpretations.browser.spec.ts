@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { buildKpVisualContactSheetHtml, type KpVisualContactSheetItem } from "../scripts/capture-visual-contact-sheet.ts";
 import { env, combination, beats, numberOf } from "../src/experiments/matrix-column-combinations/model.ts";
 import { matrixInputs } from "../content/authoring/convergence/matrices.ts";
+import { projectionLoss } from "../content/authoring/linear-algebra/projection-loss.ts";
 
 test("all matrix pages and the menu use the three-term page theme", async ({ page }, info) => {
   const routes = ['dot-product-passage/', 'matrix-column-product/', 'matrix-column-combinations/',
@@ -32,6 +33,62 @@ test("all matrix pages and the menu use the three-term page theme", async ({ pag
 });
 
 const route = "/experiments/matrix-column-combinations/";
+test("projection explanation keeps authored cues above unchanged reversible contributions", async ({ page, browser }, info) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  await page.setViewportSize({ width: 1200, height: 950 });
+  await page.goto(`${route}?input=projection-loss`);
+  const root = page.locator("#comb-player");
+  await expect(root).toHaveAttribute("data-ready", "true");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(projectionLoss.reading.title);
+  await expect(page.locator("#matrix-story > p")).toHaveText(projectionLoss.reading.introduction);
+  for (const column of [0, 1] as const) {
+    const chooser = page.getByRole("combobox", { name: "Milestone" });
+    await expect(chooser.locator("option")).toHaveCount(7);
+    for (const [index, beat] of beats.entries()) {
+      await chooser.selectOption(String(index));
+      await expect(page.locator("[data-cue]")).toHaveText(projectionLoss.reading.cues[column][beat.id]);
+    }
+    for (const [row, result] of [3, 0].entries()) {
+      await expect(page.locator(`[data-kp-comb-key="c-${row}-${column}"]`)).toHaveText(String(result));
+      await expect(page.locator(`[data-kp-comb-key="c-${row}-${column}"]`)).toHaveCSS("opacity", "1");
+      await expect(page.locator(`[data-contributor-occurrence="scaled-1-${row}:input:0"]`))
+        .toHaveAttribute("data-source-id", projectionLoss.product.right.rows[1]![column]!.id);
+    }
+    const slider = page.getByRole("slider", { name: "Animation position" });
+    await slider.fill("0.64");
+    const pose = () => page.locator(".comb-material > span").evaluateAll(nodes => nodes.map(node => node.getAttribute("style")));
+    const held = await pose(); await slider.fill("1"); await slider.fill("0"); await slider.fill("0.64");
+    expect(await pose()).toEqual(held);
+    await chooser.selectOption("4");
+    const cue = await page.locator("[data-cue]").boundingBox(), stage = await page.locator(".comb-stage").boundingBox();
+    expect(cue!.y + cue!.height).toBeLessThanOrEqual(stage!.y);
+    await page.screenshot({ path: info.outputPath(`projection-${column}.png`), fullPage: true });
+    if (column === 0) {
+      await page.getByRole("link", { name: "2", exact: true }).click();
+      await expect(root).toHaveAttribute("data-ready", "true");
+      await expect(root).toHaveAttribute("data-source-id", projectionLoss.product.id);
+      expect(new URL(page.url()).searchParams.get("input")).toBe("projection-loss");
+    }
+  }
+  await expect(page.getByRole("region", { name: "What the comparison shows" })).toContainText("reverse playback is not a mathematical inverse");
+  await page.getByText("Check your reasoning", { exact: true }).click();
+  await expect(page.getByText(projectionLoss.reading.question.answer, { exact: true })).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.getByRole("slider").press("End");
+  await expect(root).toHaveAttribute("data-milestone", "placed");
+  await page.screenshot({ path: info.outputPath("projection-phone.png"), fullPage: true });
+  expect(errors).toEqual([]);
+  const noScript = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const staticPage = await noScript.newPage(); await staticPage.goto(`${route}?input=projection-loss`);
+    await expect(staticPage.locator("noscript p")).toContainText("needs JavaScript to load the selected matrices");
+    await expect(staticPage.locator("noscript p")).toBeVisible();
+    await expect(staticPage.locator('[data-ready="true"]')).toHaveCount(0);
+  } finally { await noScript.close(); }
+});
+
 test("accepted continuity receives enclosures and evaluates without switching whole lines", async ({ page }, info) => {
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   await page.setViewportSize({ width: 1200, height: 950 });

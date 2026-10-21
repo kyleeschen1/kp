@@ -8,6 +8,7 @@ import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeli
 import { readKpFocusDeckScrubberKeyTarget } from "../../tutorial/focus-deck-scaffold.ts";
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
 import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
 
 async function mount() {
   const query = new URLSearchParams(location.search);
@@ -23,23 +24,24 @@ async function mount() {
     : undefined;
   const input = query.get("input");
   if (input && query.has("example")) throw new MatrixColumnGap("Choose either a source input or a named interpretation.");
-  const authored = input ? (await import("../../../content/authoring/convergence/matrices.ts")).matrixInputs.find(item => item.id === input) : undefined;
-  if (input && !authored) throw new MatrixColumnGap("Choose the signed, zero or larger matrix input.");
-  const scene = authored ? columnExampleFromProduct(authored.product, column) : composition?.scene ?? example(query.get("example") ?? "columns", column);
+  const { matrixSources } = await import("../../../content/authoring/convergence/matrices.ts");
+  const authored = input ? matrixSources.find(item => item.id === input) : undefined;
+  if (input && !authored) throw new MatrixColumnGap(`Choose a matrix input: ${matrixSources.map(source => source.id).join(", ")}.`);
+  const scene = authored ? columnExampleFromProduct(authored.product, column, authored.reading) : composition?.scene ?? example(query.get("example") ?? "columns", column);
   const { beats } = scene;
   document.querySelector("h1")!.textContent = scene.title;
   document.title = scene.title;
   const intro = document.querySelector("#matrix-story > p")!;
-  intro.textContent = composition ? "The same two maps have different matrices in different bases. Their composition is unchanged when the coordinates at the join agree." : scene.evidence ? "Each entry of QᵀQ is a dot product between two columns of Q. Diagonal entries measure squared length; off-diagonal entries measure orthogonality." : "Each column of the right matrix tells us how to combine the columns of the left matrix.";
+  intro.textContent = scene.reading?.introduction ?? (composition ? "The same two maps have different matrices in different bases. Their composition is unchanged when the coordinates at the join agree." : scene.evidence ? "Each entry of QᵀQ is a dot product between two columns of Q. Diagonal entries measure squared length; off-diagonal entries measure orthogonality." : "Each column of the right matrix tells us how to combine the columns of the left matrix.");
   const links = ["columns", "identity", "orthonormality"].map((kind, i) => `<a href="?example=${kind}&column=0#weights">${["Column combinations", "Identity", "Orthonormality"][i]}</a>`).join(" · ");
   const root = document.querySelector<HTMLElement>("#comb-player")!;
   root.dataset["sourceId"] = scene.env.product.id;
   const contextHtml = composition ? (await import('./basis-composition-view.ts')).basisCompositionHtml(composition) : '';
   const basisQuery = composition ? `&basis=${composition.mode}` : '';
   root.innerHTML = `<nav aria-label="Matrix examples">${links}</nav>
-    <nav aria-label="Matrix source inputs">Inputs: <a href="?column=${column}">Original</a> · ${["signed", "zero", "larger"].map(id => `<a href="?input=${id}&column=${column}">${id}</a>`).join(" · ")}</nav>
+    <nav aria-label="Matrix source inputs">Inputs: <a href="?column=${column}">Original</a> · ${matrixSources.map(({ id, reading }) => `<a href="?input=${encodeURIComponent(id)}&column=${column}">${escape(reading?.title ?? id)}</a>`).join(" · ")}</nav>
     ${contextHtml}
-    <p>Result column: <a href="?${input ? `input=${input}` : `example=${scene.kind}${basisQuery}`}&column=0#weights">1</a> · <a href="?${input ? `input=${input}` : `example=${scene.kind}${basisQuery}`}&column=1#weights">2</a></p>
+    <p>Result column: <a href="?${input ? `input=${encodeURIComponent(input)}` : `example=${scene.kind}${basisQuery}`}&column=0#weights">1</a> · <a href="?${input ? `input=${encodeURIComponent(input)}` : `example=${scene.kind}${basisQuery}`}&column=1#weights">2</a></p>
     <section class="matrix-card kp-focus-deck" aria-label="Column combination animation">
     <div class="matrix-cue" data-cue aria-live="polite"></div>
     <div class="matrix-scroll" tabindex="0" role="region" aria-label="Column combination; scroll horizontally on narrow screens">${stageHtml(scene)}</div>
@@ -47,6 +49,8 @@ async function mount() {
     <input data-scrub type="range" min="0" max="1" step="0.0001" value="0" aria-label="Animation position">
     <select aria-label="Milestone">${beats.map((beat, i) => `<option value="${i}">${i + 1}. ${beat.id}</option>`).join("")}</select></div></section>
     <p class="matrix-help">Follow the columns, then watch each scalar reach every entry. Use the scrubber to revisit any moment. On narrow screens, scroll the stage horizontally.</p>
+    ${scene.reading ? `<section aria-label="What the comparison shows">${scene.reading.conclusion.map(text => `<p>${escape(text)}</p>`).join("")}
+      <p>${escape(scene.reading.question.prompt)}</p><details><summary>Check your reasoning</summary><p>${escape(scene.reading.question.answer)}</p></details></section>` : ""}
     <details><summary>Read the calculation</summary><div class="comb-static">${renderLatexToHtml(calculationLatex(scene), { output: "htmlAndMathml" })}</div>
     <p>The copied columns and weights refer to the original entries of the two factors. Multiplication produces derived entries; addition produces the result column. The columns of the left matrix do not need to form a basis.</p></details>
     ${scene.evidence ? `<section aria-label="Column dot products"><h2>Why the result is the identity</h2>

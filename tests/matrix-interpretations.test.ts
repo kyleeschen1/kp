@@ -7,6 +7,37 @@ import { matrixProduct, MatrixProductGap } from "../src/math/matrix-product.ts";
 import { columnCombinations, gramMatrix, inspectOrthonormality } from "../src/math/matrix-interpretations.ts";
 import { matrixInputs } from "../content/authoring/convergence/matrices.ts";
 import { columnExampleFromProduct } from "../src/experiments/matrix-column-combinations/model.ts";
+import type { ColumnReading } from "../src/experiments/matrix-column-combinations/model.ts";
+import { projectionLoss } from "../content/authoring/linear-algebra/projection-loss.ts";
+import * as M from "../src/math/authoring/matrices.ts";
+
+test("projection loses the second coordinate without conflating input or result identities", () => {
+  const { product, reading } = projectionLoss;
+  assert.deepEqual(M.evaluate(product.right, {}), [[3, 3], [2, -1]]);
+  assert.deepEqual(M.evaluate(product.result, {}), [[3, 3], [0, 0]]);
+  for (const column of [0, 1]) {
+    const scene = columnExampleFromProduct(product, column, reading);
+    const generic = columnExampleFromProduct(product, column);
+    assert.equal(scene.env.product, product);
+    assert.deepEqual(scene.beats.map(b => b.id), generic.beats.map(b => b.id));
+    assert.equal(scene.title, reading.title);
+    for (const beat of scene.beats) assert.equal(beat.cue, reading.cues[column === 0 ? 0 : 1][beat.id]);
+    assert.equal(scene.combination.terms[1]!.coefficient, product.right.rows[1]![column]);
+    assert.deepEqual(scene.combination.terms[1]!.entries.map(value), [0, 0]);
+    assert.equal(scene.combination.result.entries[0], product.cell(0, column).result);
+  }
+  assert.notEqual(product.cell(0, 0).result.id, product.cell(0, 1).result.id);
+  assert.notEqual(product.right.rows[0]![0]!.id, product.right.rows[0]![1]!.id);
+  const transfer = M.product({ id: "projection.transfer", left: product.left,
+    right: M.matrix("projection.transfer.inputs", [[3, 4], [7, 2]]) });
+  assert.deepEqual(M.evaluate(transfer.result, {}), [[3, 4], [0, 0]]);
+});
+
+// Authors describe every supported milestone; arbitrary/new motion IDs are
+// unavailable through the editorial contract.
+// @ts-expect-error Missing six required milestone cues.
+const incompleteCues: ColumnReading["cues"][0] = { initial: "Only the start" };
+void incompleteCues;
 
 test('three authored matrix inputs retain exact products and both column projections', () => {
   const expected = [[[8, -13], [-6, 11]], [[0, 2], [3, 0]], [[16, -29], [61, -4]]];

@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.projection-loss-authoring-v1",
+  "kind": "run-contract",
+  "title": "Projection explanation authoring trial",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.projection-loss-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-projection-loss-authoring.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-interpretations",
+    "npm run visual:matrix-interpretations"
+  ],
+  "allowedWork": [
+    "One matrix source and bounded optional editorial input on the existing column player; focused verification"
+  ],
+  "disallowedWork": [
+    "New choreography, universal schemas, calculus polish, deployment or broad rollout before review"
+  ],
+  "goal": "Demonstrate source-authored explanatory reuse and expose bounded API friction",
+  "target": "task.kp.projection-loss-authoring",
+  "slices": [
+    {
+      "id": "source",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "status": "in-progress"
+    }
+  ]
+}

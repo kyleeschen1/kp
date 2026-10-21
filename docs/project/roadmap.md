@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 latest: the user approved an authoring reuse trial instead of another
+performance-only investigation. The [projection information-loss example](2026-10-21-projection-loss-authoring.md)
+uses the existing column-combination player and concise matrix API. Its source
+now owns the explanation through a small optional editorial input; mathematical
+objects, renderer and choreography are unchanged. [Evidence and review](reviews/2026-10-21-projection-loss-authoring.md)
+record passing types/build, focused semantics and all 15 Chromium matrix checks.
+The candidate is awaiting human review at `?input=projection-loss`; no broader
+rollout is approved. The trial exposes fixed-sequence and comparison/navigation
+limits rather than claiming general lesson composability. Calculus stays as-is.
+
 October 21 accepted algebra preparation investigation is complete. The
 [approved scope](2026-10-21-algebra-preparation-investigation.md) batches independent
 native ink probes and measures repeated track endpoints once per synchronous

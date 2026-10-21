@@ -1,0 +1,69 @@
+{
+  "id": "task.kp.projection-loss-authoring",
+  "kind": "task",
+  "title": "Author a projection information-loss explanation through existing matrix machinery",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-projection-loss-authoring.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-projection-loss-authoring.md"
+    },
+    {
+      "kind": "file",
+      "path": "content/authoring/linear-algebra/projection-loss.ts"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-interpretations",
+      "status": "passed",
+      "scope": "source-and-semantics",
+      "checkedAt": "2026-10-21T20:54:11.772Z",
+      "notes": "20 checks pass. Both source outputs, source identity, derived contributions, cue preservation and transfer-case results checked. Full types, production matrix build and 23 semantic-cost unit checks also pass."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep projection",
+      "status": "failed",
+      "scope": "initial-exemplar",
+      "checkedAt": "2026-10-21T20:54:12.555Z",
+      "notes": "Candidate motion and source checks passed; new noscript assertion failed because the text matcher ignores the noscript parent. Assertion now targets the actual paragraph and verifies visible notice with no mounted player."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep projection",
+      "status": "passed",
+      "scope": "exemplar-and-preservation",
+      "checkedAt": "2026-10-21T20:54:13.376Z",
+      "notes": "Exact focused cohort rerun passes: new projection, accepted continuity and signed-input preservation. Includes reverse/direct seek, both columns, cue order, phone scrolling, reduced motion and no-script notice."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep \"projection explanation|source-only signed|accepted continuity\"",
+      "status": "failed",
+      "scope": "initial-exemplar",
+      "checkedAt": "2026-10-21T20:55:40.193Z",
+      "notes": "Exact executed command, correcting the earlier abbreviated command label. Initial run: 2 pass, 1 fails on noscript parent assertion only; product checks passed."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep \"projection explanation|source-only signed|accepted continuity\"",
+      "status": "passed",
+      "scope": "repaired-exemplar",
+      "checkedAt": "2026-10-21T20:55:41.333Z",
+      "notes": "Exact three-check rerun passes after querying the no-script paragraph rather than its excluded parent."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "complete-matrix-preservation",
+      "checkedAt": "2026-10-21T20:55:42.095Z",
+      "notes": "All 15 Chromium tests pass, including new explanation, original motion, three inputs, identity, orthonormality, themes, shared configuration and menu, phone/reduced-motion behavior."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: source and verified exemplar are ready at the shared server; review usefulness and comparison navigation before wider reuse. No human acceptance yet."
+  }
+}

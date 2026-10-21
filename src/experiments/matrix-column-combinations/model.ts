@@ -12,7 +12,15 @@ export const numberOf = (entry: KpScalarValue) => {
   if (!Number.isFinite(value)) throw new MatrixColumnGap("This exemplar requires finite numerical entries.");
   return value;
 };
-export const beats = Object.freeze([
+export type ColumnBeatId = "initial" | "columns" | "weights" | "distribute" | "scaled" | "sum" | "placed";
+export interface ColumnReading {
+  readonly title: string;
+  readonly introduction: string;
+  readonly cues: readonly [Readonly<Record<ColumnBeatId, string>>, Readonly<Record<ColumnBeatId, string>>];
+  readonly conclusion: readonly string[];
+  readonly question: { readonly prompt: string; readonly answer: string };
+}
+export const beats: readonly { readonly id: ColumnBeatId; readonly cue: string }[] = Object.freeze(([
   { id: "initial", cue: "One column of B supplies the weights for a whole result column." },
   { id: "columns", cue: "Separate the columns of A. These are copies of the same entries." },
   { id: "weights", cue: "The first column of B says: two copies of the first column, one of the second." },
@@ -20,7 +28,7 @@ export const beats = Object.freeze([
   { id: "scaled", cue: "Multiply each column by its weight. Each entry is the same product used in a row–column dot product." },
   { id: "sum", cue: "Add the weighted columns entry by entry: 4 above 10." },
   { id: "placed", cue: "The sum is the first column of AB. The other column is a separate combination." },
-].map(beat => Object.freeze(beat)));
+] satisfies { id: ColumnBeatId; cue: string }[]).map(beat => Object.freeze(beat)));
 
 // Local discovery cadence, borrowing the accepted copy/evaluate/place envelope.
 export const durationMs = 12600;
@@ -50,18 +58,20 @@ export function example(kind = "columns", column = 0) {
 /** Additional examples supply mathematics and selection, not presentation code.
  * Keep the demonstrated size/number boundary explicit rather than silently
  * routing unsupported inputs to unrelated choreography. */
-export function columnExampleFromProduct(product: ReturnType<typeof matrixProduct>, column = 0) {
+export function columnExampleFromProduct(product: ReturnType<typeof matrixProduct>, column = 0, reading?: ColumnReading) {
   matrixEnvironmentFromProduct(product);
   if (![0, 1].includes(column)) throw new MatrixColumnGap("Choose result column 0 or 1.");
-  return projectExample(product, column, "columns", undefined, false);
+  return projectExample(product, column, "columns", undefined, false, reading);
 }
 
 function projectExample(product: ReturnType<typeof matrixProduct>, column: number, kind: string,
-  evidence: ReturnType<typeof inspectOrthonormality> | undefined, legacyCues: boolean) {
+  evidence: ReturnType<typeof inspectOrthonormality> | undefined, legacyCues: boolean, reading?: ColumnReading) {
   const combination = columnCombinations(product).column(column);
   const labels = kind === "identity" ? ["A", "I", "AI"] : evidence ? ["Qᵀ", "Q", "QᵀQ"] : ["A", "B", "AB"];
   const ordinal = column === 0 ? "first" : "second";
-  const cues = legacyCues ? beats : beats.map(beat => ({ ...beat, cue: ({
+  // Editorial text describes existing milestones; it cannot add/reorder motion
+  // or change the mathematical objects inspected at those milestones.
+  const cues = reading ? beats.map(beat => Object.freeze({ ...beat, cue: reading.cues[column === 0 ? 0 : 1][beat.id] })) : legacyCues ? beats : beats.map(beat => ({ ...beat, cue: ({
     initial: evidence ? "QᵀQ compares the columns of Q with one another." : `The ${ordinal} column of ${labels[1]} supplies the weights for one result column.`,
     columns: `Separate the columns of ${labels[0]}. The entries retain their original references.`,
     weights: kind === "identity" ? `Column ${column + 1} of I selects column ${column + 1} of A: its weight is 1; the other weight is 0.` : `Use the ${ordinal} column of ${labels[1]} as the weights.`,
@@ -73,8 +83,8 @@ function projectExample(product: ReturnType<typeof matrixProduct>, column: numbe
   // Titles are authored presentation text, not a closed set of mathematical kinds.
   const title: string = evidence ? "Orthonormal columns produce the identity" : kind === "identity" ? "Identity selects each column" : "Columns, weighted and added";
   return Object.freeze({ kind, column, env: { A: product.left, B: product.right, product }, combination, labels,
-    beats: Object.freeze(cues), evidence,
-    title,
+    beats: Object.freeze(cues), evidence, reading,
+    title: reading?.title ?? title,
   });
 }
 export type ColumnExample = ReturnType<typeof example>;
