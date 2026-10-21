@@ -4,6 +4,7 @@ Approved: 2026-10-21. The user accepted the independent architecture audit and
 asked to preserve its recommendations and implement as far as possible.
 Execution record: `run-contract.kp.concise-authoring-v1`; this document owns
 rationale and scope, not live slice status.
+Acceptance is retained in the [priority decision](decisions/2026-10-21-architecture-and-authoring-priority.md).
 
 ## Direction and retained evidence
 

@@ -12,6 +12,10 @@ semantic guarantees while reducing author boilerplate and measured activation
 cost. Learner-context work remains valuable but is not the current delivery
 lane; the previous calculus review gate remains intact. The linked agenda owns
 future next-step priorities; Theseus owns live package status.
+The first authoring/loading delivery is implemented and checked; see
+[evidence and limitations](../reviews/2026-10-21-concise-authoring-and-loading.md).
+Next-step discussion should select a bounded host-lifecycle consolidation caller
+and many-card cost cohort, rather than repeat the API aliases or calculus review.
 
 Latest October 13 feedback: the calculus dashboard was judged busy and its
 pedagogical value questioned; it has not passed review. The user asked to record

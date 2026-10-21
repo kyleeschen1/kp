@@ -2,7 +2,8 @@
   "id": "run-contract.kp.concise-authoring-v1",
   "kind": "run-contract",
   "title": "Concise authoring and reader activation",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -19,6 +20,58 @@
     "npm run typecheck",
     "npm run build:bundle"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:16:43.534Z",
+      "notes": "Clean permitted rerun: 7323 passed, zero failed or skipped; earlier failed attempts and repairs retained in delivery review."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:16:44.115Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:16:44.724Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:16:45.351Z"
+    },
+    {
+      "command": "npm run audit:architecture-cost -- --browser --tax-only --activation --acceptance",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-10-21T16:16:45.929Z",
+      "notes": "All six production runs and remaining card activation passed tightened complete-resource budgets; no catalogue pack."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep source-only",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T16:16:46.529Z",
+      "notes": "Three actual source callers preserve correspondence, results and reverse."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"both extended sources download\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T16:16:47.167Z",
+      "notes": "Both source revisions apply, download and reload exactly."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "COMPLETE: concise matrix/algebra entrypoints, real caller migrations and 23.4 percent initial JS reduction. Next recommendation: existing host lifecycle consolidation and many-card costs. Older calculus gate remains preserved."
+  },
   "allowedWork": [
     "Approved October 21 domain facades, caller migrations and measured loading boundary repairs"
   ],
@@ -41,7 +94,8 @@
     {
       "id": "integration",
       "title": "Verification-and-author-guide",
-      "status": "in-progress"
+      "summary": "Full integration verified and durable next-step guidance recorded.",
+      "status": "complete"
     }
   ]
 }

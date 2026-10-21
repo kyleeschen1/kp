@@ -17,6 +17,11 @@ is `../authoring/concise-domain-api.md`.
 algebra animation artifacts, exercises source mutation, dimensions, nonfinite
 values, malformed shapes, source round-trip and located invalid-math repairs.
 Matrix, composed-algebra, architecture and full typecheck commands passed.
+The actual source callers also passed Chromium preservation checks:
+`npm run visual:matrix-interpretations -- --grep source-only` (three signed,
+zero and larger-value callers) and `npm run visual:composed-algebra -- --grep
+'both extended sources download'` (both sources apply, download and reload their
+exact checked revision). These establish preserved behavior, not learner benefit.
 
 ## Loading diagnosis and repair
 
@@ -73,6 +78,13 @@ and all 12 reachability/caller checks passed. The CLI test's subprocess returned
 no exit status under a long run; its unchanged five-test file passed separately
 (the stdin subprocess check took 539 ms). No timeout was raised or check removed.
 A clean full rerun is required before reporting full-suite success.
+
+Final integration: the clean permitted `npm test` rerun passed all 7,323 tests
+(no skips), including architecture, inference, catalogue and promotion-memory
+prechecks. Full `npm run typecheck`, production build, reader budgets, canonical
+construction budgets and the tightened production loading acceptance passed.
+The final full deterministic test phase took approximately 243 seconds. The
+earlier failed/interrupted attempts above remain part of the evidence.
 
 Next architectural priorities remain reducing repeated host lifecycle wiring
 and measuring many-card idle/disposal costs. Reuse the existing clocks, frame

@@ -2,12 +2,17 @@
   "id": "task.kp.concise-authoring",
   "kind": "task",
   "title": "Concise authoring and bounded reader activation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "authoring",
+  "summary": "Authoring and activation outcomes verified; complete scope with durable follow-up agenda.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-10-21-authoring-architecture-delivery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-concise-authoring-and-loading.md"
     }
   ],
   "verificationRecords": [
