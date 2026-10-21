@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 latest direction: the user prioritizes codebase discipline,
+performance and API efficiency while human feedback is limited. The
+[day-long engineering portfolio](2026-10-21-engineering-discipline-portfolio.md)
+proposes measured loading, lifetime and repeated-work repairs, followed by
+caller-driven API consolidation and verification improvements. It is being
+presented before execution; no new run is active yet. This defers the
+cross-domain explanation recommendation below without discarding it.
+
 October 21 active priority: learner testing is constrained. The user approved
 the [architecture and concise-authoring agenda](2026-10-21-authoring-architecture-delivery.md)
 and implementation: simplify matrix/algebra authoring through existing owners,

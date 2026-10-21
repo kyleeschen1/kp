@@ -5,6 +5,14 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+Latest October 21 direction: prioritize disciplined infrastructure, performance
+and efficient APIs with limited human feedback. See the
+[engineering portfolio proposal](../2026-10-21-engineering-discipline-portfolio.md).
+It defines an eight-hour ceiling, a two-hour integration reserve and independent
+work that can continue around local review decisions. The user requested this
+plan for presentation; implementation has not started. The cross-domain
+explanation recommendation below is deferred.
+
 October 21 supersedes the next-action recommendations below: execute the
 [approved concise-authoring and architecture agenda](../2026-10-21-authoring-architecture-delivery.md)
 under `run-contract.kp.concise-authoring-v1`. Preserve accepted visuals and
