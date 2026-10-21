@@ -77,6 +77,13 @@
       "scope": "manifest-integrity",
       "checkedAt": "2026-10-21T19:13:19.044Z",
       "notes": "Eighteen checks and full types pass; all four writer consumers preserve valid editions while undeclared files, directories and links are rejected."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/immutable-local-edition.test.ts tests/local-stylesheet-closure.test.ts tests/calculus-edition.test.ts tests/composed-algebra-publication.test.ts tests/common-factor-publication.test.ts tests/bayesian-reasoning-publication.test.ts",
+      "status": "passed",
+      "scope": "write-lifecycle",
+      "checkedAt": "2026-10-21T19:14:54.142Z",
+      "notes": "Twenty-one tests and full types pass, including injected write/rename failures, corrupted race winner and six independent processes converging."
     }
   ],
   "expectedLearning": [

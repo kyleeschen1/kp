@@ -37,7 +37,7 @@ export function writeKpImmutableLocalEditionReceipt(input: {
       if (lstatSync(current, { throwIfNoEntry: false })?.isSymbolicLink()) throw new Error("Edition output cannot traverse symlinks.");
     }
   }
-  if (input.check || existsSync(directory)) {
+  function verify() {
     // Exact bytes are insufficient if an undeclared script or symlink can travel
     // alongside them. Verify the complete directory, without following links.
     const expectedDirectories = new Set<string>();
@@ -56,12 +56,20 @@ export function writeKpImmutableLocalEditionReceipt(input: {
     inspect("");
     for (const [name, bytes] of files) if (!readFileSync(join(directory, name)).equals(Buffer.from(bytes)))
       throw new Error(`Edition is stale or altered: ${name}`);
-  } else {
+  }
+  if (input.check || existsSync(directory)) verify();
+  else {
     mkdirSync(input.editionRoot, { recursive: true });
     const staging = mkdtempSync(join(input.editionRoot, ".building-"));
     try {
       for (const [name, bytes] of files) { const target = join(staging, name); mkdirSync(dirname(target), { recursive: true }); writeFileSync(target, bytes, { flag: "wx" }); }
-      renameSync(staging, directory);
+      try { renameSync(staging, directory); }
+      catch (error) {
+        // A concurrent writer may have published identical content. Only that
+        // bounded collision is recoverable, after verifying the winner in full.
+        if (!(error instanceof Error) || !("code" in error) || !["EEXIST", "ENOTEMPTY"].includes(String(error.code))) throw error;
+        verify();
+      }
     } finally { rmSync(staging, { recursive: true, force: true }); }
   }
   return Object.freeze({ directory, explanationRevisionId: input.revisionId, byteEditionId });

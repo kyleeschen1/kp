@@ -60,7 +60,8 @@
     },
     {
       "id": "write-lifecycle",
-      "status": "planned"
+      "summary": "Partial writes clean up; exact concurrent winner accepted; corruption rejected; 21 checks and full types pass.",
+      "status": "complete"
     },
     {
       "id": "style-closure",
