@@ -1,24 +1,15 @@
 import katex from "katex";
-import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
 import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
 import * as algebra from "../../authoring/algebra/compile.ts";
 import primary from "../../authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import wholeAndParts from "../../../content/authoring/algebra/whole-and-parts.json" with { type: "json" };
-import { composedAlgebraSequenceV2, composedAlgebraWindowV2 } from "../composed-algebra/sequence.ts";
-import { projectComposedAlgebraSubexplanations, type KpComposedAlgebraSubexplanation } from "../composed-algebra/subexplanations.ts";
+import { projectComposedAlgebraSubexplanations } from "../composed-algebra/subexplanations.ts";
 import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
 import { projectComposedAlgebraReadingV2 } from "../composed-algebra/readings.ts";
 import { algebraIntuitionPracticeButtons, algebraIntuitionPracticePanel } from "./practice.ts";
+import { renderAlgebraIntuitionCard } from "./scaffold.ts";
+export { renderAlgebraIntuitionCard } from "./scaffold.ts";
 
-export function renderAlgebraIntuitionCard(draft: KpComposedAlgebraPresentationV2, reference?: KpComposedAlgebraSubexplanation, textFirst = false) {
-  const sequence = reference ? composedAlgebraWindowV2(draft, reference) : composedAlgebraSequenceV2(draft), total = sequence.beats.length;
-  return renderKpFocusDeckScaffold({ id: reference ? `composed-algebra-${reference.kind}` : "composed-algebra-intuition", ariaLabel: reference?.question ?? draft.checked.source.editorial.title,
-    activeBeatSlug: sequence.beats[0]!.slug, beats: sequence.beats, replayHidden: false,
-    stageHtml: '<div class="kp-focus-deck__stage" data-distribution-stage aria-label="Verified regrouping and distribution"></div>',
-    headerTrailingHtml: `<span data-composed-count aria-label="Step 1 of ${total}">1 / ${total}</span>`,
-    rootAttributes: { "data-kp-focus-card-enhancement": "preparing", "data-kp-reasoning-card": true, "data-composed-card": true,
-      ...(textFirst ? { "data-composed-text-first": true } : {}) } });
-}
 export function algebraIntuitionVariant(url: string) {
   const variants = new URL(url, "http://localhost").searchParams.getAll("variant");
   if (variants.length > 1 || (variants.length && variants[0] !== "whole-and-parts")) throw new Error("Unsupported algebra source variant; use whole-and-parts or omit variant for the original example.");

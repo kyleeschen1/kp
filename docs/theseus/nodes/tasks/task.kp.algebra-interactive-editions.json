@@ -1,0 +1,40 @@
+{
+  "id": "task.kp.algebra-interactive-editions",
+  "kind": "task",
+  "title": "Export and reopen checked native algebra readers",
+  "status": "ready",
+  "domain": "algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-algebra-interactive-editions.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-algebra-interactive-editions.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/algebra-edition-command.test.ts tests/algebra-edition-location.test.ts tests/algebra-interactive-edition.test.ts tests/composed-algebra-publication.test.ts tests/composed-algebra-publication-v2.test.ts",
+      "status": "passed",
+      "scope": "reader-publication",
+      "checkedAt": "2026-10-21T20:16:00.476Z",
+      "notes": "Seven checks pass; real CLI cycle and complete immutable output regression included."
+    },
+    {
+      "command": "npm run visual:algebra-editions -- --project=chromium",
+      "status": "passed",
+      "scope": "reader-publication",
+      "checkedAt": "2026-10-21T20:16:01.328Z",
+      "notes": "Six checks pass after final-output capture repair. Original host three checks, full types and architecture also pass."
+    },
+    {
+      "command": "npm run visual:algebra-editions",
+      "status": "failed",
+      "scope": "browser-cohort",
+      "checkedAt": "2026-10-21T20:16:01.935Z",
+      "notes": "17 of 18 pass; Firefox invisible-leaf coordinate differs by 1/60px. Exact identity and opacity retained; subpixel geometry tolerance repair requires rerun."
+    }
+  ]
+}

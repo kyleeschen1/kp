@@ -1,0 +1,49 @@
+{
+  "id": "run-contract.kp.algebra-interactive-editions-v1",
+  "kind": "run-contract",
+  "title": "Portable native algebra editions",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.algebra-interactive-editions.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-algebra-interactive-editions.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:algebra-editions"
+  ],
+  "allowedWork": [
+    "Existing native algebra reader packaging, pinned restoration, lifecycle, complete cost diagnosis and author workflow; six-hour ceiling with forty-minute reserve"
+  ],
+  "disallowedWork": [
+    "New mathematics or motifs, calculus polish, deployment, general publication framework"
+  ],
+  "goal": "Authors export and reopen exact checked algebra animation without the dev host",
+  "target": "task.kp.algebra-interactive-editions",
+  "slices": [
+    {
+      "id": "reader",
+      "summary": "Read-only native reader and bounded revision-pinned restoration pass focused and original-host checks.",
+      "status": "complete"
+    },
+    {
+      "id": "publication",
+      "summary": "Explicit interactive CLI packages final production closure; exact build/check and corruption detection pass, static paths preserved.",
+      "status": "complete"
+    },
+    {
+      "id": "preservation-costs",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "status": "planned"
+    }
+  ]
+}
