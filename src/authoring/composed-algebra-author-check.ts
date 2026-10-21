@@ -1,8 +1,6 @@
 import { checkKpComposedAlgebraDraft } from "./composed-algebra-session.ts";
-import { readKpComposedAlgebraSource } from "./composed-algebra-source.ts";
-import primary from "./examples/composed-algebra-primary.json" with { type: "json" };
 
-export function createKpComposedAlgebraExample() { return readKpComposedAlgebraSource(primary); }
+export { createKpComposedAlgebraExample } from "./composed-algebra-example.ts";
 
 /** Discovery reports cannot carry live proof, prepared paint or Apply authority. */
 export function checkKpComposedAlgebraAuthorSource(json: string) {

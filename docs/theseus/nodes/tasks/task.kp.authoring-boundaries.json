@@ -60,6 +60,13 @@
       "scope": "standard",
       "checkedAt": "2026-10-21T16:45:33.720Z",
       "notes": "Eleven focused tests and all four complete runtime/type budgets pass; explicit ceilings and no-example checks established."
+    },
+    {
+      "command": "npm run check:authoring",
+      "status": "passed",
+      "scope": "Four complete consumer budgets, authority laws and fresh-process examples",
+      "checkedAt": "2026-10-21T16:54:45.668Z",
+      "notes": "Source-only algebra 1549 gzip bytes; examples load 7-10 modules without compiler. Mechanics public boundary retained at 12."
     }
   ],
   "expectedLearning": [

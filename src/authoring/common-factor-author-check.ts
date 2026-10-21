@@ -1,10 +1,7 @@
 import { prepareKpCommonFactorDraft } from "./common-factor-draft.ts";
-import { parseKpCommonFactorSource, KpCommonFactorRepair, readKpCommonFactorSource } from "./common-factor-source.ts";
-import primarySource from "./examples/common-factor-primary.json" with { type: "json" };
+import { parseKpCommonFactorSource, KpCommonFactorRepair } from "./common-factor-source.ts";
 
-export function createKpCommonFactorExample() {
-  return readKpCommonFactorSource(primarySource);
-}
+export { createKpCommonFactorExample } from "./common-factor-example.ts";
 
 export function checkKpCommonFactorDraft(json: string) {
   try { return Object.freeze({ status: "compiled" as const, draft: prepareKpCommonFactorDraft(parseKpCommonFactorSource(json)) }); }

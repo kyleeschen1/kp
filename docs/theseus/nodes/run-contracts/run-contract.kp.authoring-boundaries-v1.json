@@ -51,12 +51,14 @@
     {
       "id": "follow-through",
       "title": "Demonstrated-next-bottleneck",
-      "status": "in-progress"
+      "summary": "Distribution ownership and starter example loading repaired; focused semantics, browser preservation, types and cost gates pass.",
+      "status": "complete"
     },
     {
       "id": "integration",
       "title": "Final-integration",
-      "status": "planned"
+      "summary": "Final whole-repository integration, production budgets, durable results and backup.",
+      "status": "in-progress"
     }
   ]
 }

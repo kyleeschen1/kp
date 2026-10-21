@@ -1,8 +1,6 @@
 import { check as checkKpComposedAlgebraDraftV2 } from "./algebra/compile.ts";
-import { read as readKpComposedAlgebraSourceV2 } from "./algebra/source.ts";
-import primary from "./examples/composed-algebra-intuition.json" with { type: "json" };
 
-export function createKpComposedAlgebraExampleV2() { return readKpComposedAlgebraSourceV2(primary); }
+export { createKpComposedAlgebraExampleV2 } from "./composed-algebra-example-v2.ts";
 /** Reports expose identities and counts, never live proof or prepared paint. */
 export function checkKpComposedAlgebraAuthorSourceV2(json: string) {
   const result = checkKpComposedAlgebraDraftV2(json);

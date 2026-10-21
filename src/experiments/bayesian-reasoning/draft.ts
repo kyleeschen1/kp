@@ -1,4 +1,4 @@
-import { BinaryJointModel, createFlaggedTicketSource, ProbabilityRepairGap, type ProbabilityRepairDiagnostic } from "../../../domains/probability/binary-joint-model.ts";
+import { BinaryJointModel, ProbabilityRepairGap, type ProbabilityRepairDiagnostic } from "../../../domains/probability/binary-joint-model.ts";
 import { compileBinaryProbabilityTrace } from "../../../domains/probability/binary-probability-trace.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 import { createBayesSourceAuthority, createBayesConstructionRequest, compileBayesConstruction } from "./evidence.ts";
@@ -11,11 +11,7 @@ import { bindBayesEditorial } from "./editorial-binding.ts";
 const preparedDrafts = new WeakSet<object>();
 const preparedBrand = Symbol("compiled Bayesian author draft");
 
-export function createBayesDraft() {
-  const model = createFlaggedTicketSource();
-  return { schemaVersion: "kp.bayes-source.v1", model,
-    teaching: { firstEventId: model.events[0]!.id, detailLevel: "complete" } };
-}
+export { createBayesDraft } from "./example.ts";
 
 function orderedJson(value: unknown): unknown {
   if (Array.isArray(value)) return value.map(orderedJson);

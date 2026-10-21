@@ -1,10 +1,7 @@
-import example from "../../examples/algebra/fraction-chain.json" with { type: "json" };
 import { compileFractionChain } from "./fraction-chain-compilation.ts";
 import { checkFractionChainHostEligibility } from "./fraction-chain-host-eligibility.ts";
 
-export function createFractionChainAuthorExample() {
-  return { ...structuredClone(example), moves: example.moves.map(({ hint: _hint, ...move }) => ({ ...move })) };
-}
+export { createFractionChainAuthorExample } from "./fraction-chain-example.ts";
 
 /** Report exact checked moves, without serializing live proof or promising paint
  * certification for arbitrary numeric callers. The host rechecks source. */

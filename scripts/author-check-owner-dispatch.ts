@@ -12,23 +12,23 @@ const owners = {
     check: async (json: string) => (await import("../src/authoring/mechanics-derivation-author-check.ts")).checkMechanicsDerivationAuthorSource(json)
   },
   "equation.fraction-chain": {
-    example: async () => (await import("../src/authoring/fraction-chain-author-check.ts")).createFractionChainAuthorExample(),
+    example: async () => (await import("../src/authoring/fraction-chain-example.ts")).createFractionChainAuthorExample(),
     check: async (json: string) => (await import("../src/authoring/fraction-chain-author-check.ts")).checkFractionChainAuthorSource(json)
   },
   "equation.algebra-intuition": {
-    example: async () => (await import("../src/authoring/composed-algebra-author-check-v2.ts")).createKpComposedAlgebraExampleV2(),
+    example: async () => (await import("../src/authoring/composed-algebra-example-v2.ts")).createKpComposedAlgebraExampleV2(),
     check: async (json: string) => (await import("../src/authoring/composed-algebra-author-check-v2.ts")).checkKpComposedAlgebraAuthorSourceV2(json)
   },
   "equation.composed-algebra": {
-    example: async () => (await import("../src/authoring/composed-algebra-author-check.ts")).createKpComposedAlgebraExample(),
+    example: async () => (await import("../src/authoring/composed-algebra-example.ts")).createKpComposedAlgebraExample(),
     check: async (json: string) => (await import("../src/authoring/composed-algebra-author-check.ts")).checkKpComposedAlgebraAuthorSource(json)
   },
   "equation.common-factor": {
-    example: async () => (await import("../src/authoring/common-factor-author-check.ts")).createKpCommonFactorExample(),
+    example: async () => (await import("../src/authoring/common-factor-example.ts")).createKpCommonFactorExample(),
     check: async (json: string) => (await import("../src/authoring/common-factor-author-check.ts")).checkKpCommonFactorAuthorSource(json)
   },
   "bayes.binary": {
-    example: async () => (await import("../src/experiments/bayesian-reasoning/draft.ts")).createBayesDraft(),
+    example: async () => (await import("../src/experiments/bayesian-reasoning/example.ts")).createBayesDraft(),
     check: async (json: string) => (await import("../src/experiments/bayesian-reasoning/author-check.ts")).checkBayesAuthorSource(json)
   },
   "reasoning.equation": {

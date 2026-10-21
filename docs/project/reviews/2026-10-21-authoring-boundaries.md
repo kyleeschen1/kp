@@ -101,3 +101,36 @@ ordering. Editor gzip changes 89,165 → 89,211. Compiler static files fall
 162,508 → 161,897. Editor checked files fall 293 → 290; types 109,937 and
 instantiations 161,925. Existing ceilings remain unchanged. A closure regression
 prevents fixture builders from returning through this proof-driven path.
+
+## Starter-example loading
+
+The existing author-task dispatcher already loads only the selected owner.
+However, five example factories shared modules with their heavy checkers.
+Moved those factories into source-only modules, retained compatibility exports,
+and changed only the example dispatch imports. Mechanics retains its required
+public domain entrypoint. No new registry, schema,
+compiler or renderer was introduced.
+
+Fresh-process CLI example loads, measured by the Node module load hook in
+`tests/fixtures/author-example-load.ts`:
+
+| Task | Local modules before | After |
+| --- | ---: | ---: |
+| Algebra intuition | 182 | 10 |
+| Composed algebra | 176 | 8 |
+| Common factor | 131 | 8 |
+| Fraction chain | 229 | 7 |
+| Binary Bayes | 94 | 10 |
+| Momentum/energy (unchanged control) | 12 | 12 |
+
+These are actual module loads, not emitted browser bytes or latency claims.
+Each selected example still passes its existing semantic checker; the fraction
+example retains its hint stripping. The scoped authoring gate now runs six
+fresh-process regressions, forbids renderer/compiler capabilities in example
+loads, and allows only two modules of explicit count headroom per cohort.
+Existing CLI tests also exercise every declared task and invalid selection.
+No compilation capability or supported mathematics was removed.
+
+The architecture gate rejected a trial direct mechanics-domain import.
+Restored the public boundary instead of weakening that gate for a five-module
+saving. Its small existing example closure is retained as a control cohort.
