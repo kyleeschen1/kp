@@ -31,9 +31,13 @@ uses the existing column-combination player and concise matrix API. Its source
 now owns the explanation through a small optional editorial input; mathematical
 objects, renderer and choreography are unchanged. [Evidence and review](reviews/2026-10-21-projection-loss-authoring.md)
 record passing types/build, focused semantics and all 15 Chromium matrix checks.
-The candidate is awaiting human review at `?input=projection-loss`; no broader
-rollout is approved. The trial exposes fixed-sequence and comparison/navigation
-limits rather than claiming general lesson composability. Calculus stays as-is.
+The user accepted the exemplar at `?input=projection-loss` on October 21; the
+bounded trial is complete. This establishes an accepted explanation, not measured
+learner outcomes or broad rollout authority. Fixed-sequence and comparison/navigation
+limits remain. The recommended next pressure case is dependent nonzero columns,
+testing whether the same editorial seam explains information loss through
+cancellation rather than a zero column. That is a recommendation, not active scope.
+Calculus stays as-is.
 
 October 21 accepted algebra preparation investigation is complete. The
 [approved scope](2026-10-21-algebra-preparation-investigation.md) batches independent

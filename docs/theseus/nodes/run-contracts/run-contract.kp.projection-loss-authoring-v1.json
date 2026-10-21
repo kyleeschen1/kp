@@ -2,7 +2,8 @@
   "id": "run-contract.kp.projection-loss-authoring-v1",
   "kind": "run-contract",
   "title": "Projection explanation authoring trial",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -37,7 +38,8 @@
     },
     {
       "id": "review",
-      "status": "in-progress"
+      "summary": "User approved the projection explanation exemplar. Acceptance closes the bounded trial; no learner-outcome claim or broader rollout authority inferred.",
+      "status": "complete"
     }
   ]
 }

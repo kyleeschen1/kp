@@ -1,7 +1,9 @@
 # Projection information-loss authoring trial
 
 Scope: [approved source reuse trial](../2026-10-21-projection-loss-authoring.md).
-Candidate, not human-accepted or promoted. Live preview:
+User accepted this exemplar on October 21, 2026 with “approved”. This closes the
+bounded trial; it does not establish learner outcomes or promote a general
+authoring framework. Live preview:
 <http://localhost:8000/experiments/matrix-column-combinations/?input=projection-loss>.
 
 ## What was authored and what changed
@@ -83,10 +85,17 @@ small enough to support the comparison? Is the distinction between reverse
 playback and mathematical inversion clear? These are human judgments, not facts
 established by the automated checks.
 
-The review package is intentionally the stopping point. The repository's
-exemplar-first instructions and KP delivery skill require an exemplar review
-before wider generalization. Existing layouts and unrelated work are preserved.
+The user accepted the review package. No specific claim about comparative
+learning efficacy or navigation burden is inferred from that approval. Existing
+layouts and unrelated work are preserved; fixed sequence, reload-based comparison
+and mobile scrolling remain known limits. This acceptance requires no code changes
+or repeat aesthetic checks.
 
-Outcome: **HUMAN_CHECKPOINT**, source and exemplar packages complete, review
-pending in `run-contract.kp.projection-loss-authoring-v1`. Next-session context:
+Recommended next scope: a second explanation with dependent nonzero columns,
+where distinct contributions cancel to the same output. This would pressure the
+same source-owned editorial interface against a different mathematical mechanism,
+without changing motion. It is a recommendation, not a new approved run.
+
+Outcome: **COMPLETE**, including the human review in
+`run-contract.kp.projection-loss-authoring-v1`. Retrieval context:
 `theseus work context task.kp.projection-loss-authoring --mode working`.

@@ -51,9 +51,9 @@ certification remains separate from this local optical-profile reuse.
 
 ## Explain a selected input
 
-`content/authoring/linear-algebra/projection-loss.ts` is a new explanatory trial:
-two different vectors are mapped to the same output by a projection. Its human
-review is pending. The matrices use the same `M.matrix` / `M.product` API. An
+`content/authoring/linear-algebra/projection-loss.ts` is an accepted explanatory trial:
+two different vectors are mapped to the same output by a projection. The user
+approved it on October 21, 2026. The matrices use the same `M.matrix` / `M.product` API. An
 optional `ColumnReading` supplies title, introduction, two cue records keyed by
 the seven existing milestone IDs, conclusion paragraphs and one question/answer.
 Prose is editorial, not checked mathematical evidence. All fields render as
@@ -76,5 +76,6 @@ no-JavaScript publication or arbitrary LA authoring task.
 The trial exposes remaining limits: the seven-step sequence is fixed; comparing
 columns reloads the player; narrow screens require horizontal stage scrolling;
 cue text does not itself bind semantic subobjects or verify explanatory claims.
-Review this example before expanding that editorial seam or introducing another
-presentation abstraction. See `../reviews/2026-10-21-projection-loss-authoring.md`.
+Acceptance covers this example. Pressure a structurally different caller before
+expanding that editorial seam or introducing another presentation abstraction.
+See `../reviews/2026-10-21-projection-loss-authoring.md`.

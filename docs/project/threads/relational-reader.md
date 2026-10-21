@@ -8,11 +8,13 @@ Last Updated: 2026-10-21
 The current [authoring reuse trial](../2026-10-21-projection-loss-authoring.md)
 asks why different inputs can share a matrix output. It reuses the accepted
 column-combination renderer and semantic product, adding only source-owned prose
-and cues to the existing projection. The [candidate and evidence](../reviews/2026-10-21-projection-loss-authoring.md)
-are ready for human review: all 15 Chromium matrix checks, full types and focused
-semantic/build checks pass. Preserve the fixed sequence and existing motion
-while judging whether this view explains the lost distinction. No generalization
-or renewed calculus polish is authorized by this checkpoint.
+and cues to the existing projection. The [exemplar and evidence](../reviews/2026-10-21-projection-loss-authoring.md)
+are accepted by the user on October 21: all 15 Chromium matrix checks, full types
+and focused semantic/build checks pass. The bounded trial is complete; learner
+outcomes and unrestricted composition remain unproven. Next recommended pressure:
+dependent nonzero columns, using the same editorial seam to explain cancellation
+instead of multiplication by a zero column. No new run, broad generalization or
+renewed calculus polish is authorized by this acceptance.
 
 The accepted algebra [preparation investigation](../2026-10-21-algebra-preparation-investigation.md)
 is complete. Independent ink probes now share layout passes and repeated track

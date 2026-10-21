@@ -2,7 +2,7 @@
   "id": "task.kp.projection-loss-authoring",
   "kind": "task",
   "title": "Author a projection information-loss explanation through existing matrix machinery",
-  "status": "ready",
+  "status": "resolved",
   "domain": "linear-algebra",
   "sourceRefs": [
     {
@@ -63,7 +63,7 @@
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: source and verified exemplar are ready at the shared server; review usefulness and comparison navigation before wider reuse. No human acceptance yet."
+    "state": "complete",
+    "summary": "COMPLETE: source, verified exemplar and user review accepted. Fixed sequence, reload-based column comparison and mobile stage scrolling remain documented limits."
   }
 }
