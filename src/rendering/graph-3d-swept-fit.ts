@@ -3,7 +3,7 @@ import type {
   Graph3DObject,
   GraphPoint3D
 } from "../semantic/graph.ts";
-import { projectGraphPoint3DToWebGLScreen } from "./graph-webgl.ts";
+import { projectGraphPoints3DToWebGLScreen } from "./graph-webgl.ts";
 import {
   insetKpStageFitRect,
   kpStageFitRectContains,
@@ -221,8 +221,7 @@ function cameraBounds(
   points: readonly GraphPoint3D[]
 ): KpStageFitRect {
   const xyGraph: Graph3DObject = { ...graph, viewMode: "xy", camera };
-  const projected = points.map((point) =>
-    projectGraphPoint3DToWebGLScreen(xyGraph, point, camera));
+  const projected = projectGraphPoints3DToWebGLScreen(xyGraph, points, camera);
   const left = Math.min(...projected.map(({ x }) => x));
   const top = Math.min(...projected.map(({ y }) => y));
   const right = Math.max(...projected.map(({ x }) => x));

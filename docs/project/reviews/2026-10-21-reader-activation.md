@@ -33,3 +33,36 @@ test guards complete membership. The next attempt encountered a generated helper
 without a map; explicit unmapped accounting repairs that tool assumption.
 Both errors are investigation-tool failures, not reader regressions. Three
 profiling/inventory tests and Node typechecking pass.
+
+## Camera-basis repair
+
+The existing graph projection owner now provides a batch call that constructs
+one camera basis for that call. Swept fitting uses it for each camera sample.
+The single-point API remains compatible and delegates to the same formula.
+There is no retained cache, new camera policy or reduced fitting coverage.
+
+Twenty-five focused graph/surface tests pass. Three pre-change fitted-plan
+digests remain byte-identical, covering the canonical field and opposite
+coefficient extremes. The independent Three.js projection comparison now
+checks 26 points at each of five transition positions. A camera-read regression
+requires one basis per batch and a fresh basis on the next call. The first test
+attempt used an incomplete graph fixture; it was repaired with a real issued
+stage graph. The first typecheck found the now-unused single-point import in
+the fit module; that import was removed.
+
+Complete Node preparation medians changed from 42.42 → 18.30 ms, 47.19 →
+19.63 ms, and 15.44 → 6.59 ms for (1,2), (.25,4), and (4,.25). These are warm
+CPU diagnostics with identical outputs, not reader startup promises.
+
+Ordinary production cohorts use `npm run audit:architecture-cost -- --browser
+--tax-only --activation --acceptance` without profiling, three fresh contexts
+at each CPU rate. At 6x, startup script samples were 903.58/782.75/768.60 ms
+before and 688.28/659.76/673.58 ms after; medians improve 13.9%. Readiness
+medians are 1,351.90 → 1,278.40 ms (5.4%), with overlapping ranges and no
+field-device claim. Initial requested JS is 387,663 → 387,681 gzip bytes
+(+18 bytes); loading acceptance passes with no budget change.
+
+First-interaction maximum frame gaps remain noisy: before 282.5/200.2/250 ms,
+after 266.8/232.3/316.5 ms. No interaction-smoothness improvement is established.
+The repair reduces real startup computation; it does not solve the separate
+native preparation/layout stall or justify changing companion activation policy.

@@ -106,6 +106,20 @@ export function projectGraphPoint3DToWebGLScreen(
   point: GraphPoint3D,
   camera: Graph3DObject["camera"] = graph.camera
 ): { readonly x: number; readonly y: number; readonly depth: number } {
+  return createScreenProjector(graph, camera)(point);
+}
+
+/** All points in one sample share a camera basis. No projection or camera
+ * state survives this call, so a later camera sample cannot reuse stale data. */
+export function projectGraphPoints3DToWebGLScreen(
+  graph: Graph3DObject,
+  points: readonly GraphPoint3D[],
+  camera: Graph3DObject["camera"] = graph.camera
+): readonly { readonly x: number; readonly y: number; readonly depth: number }[] {
+  return points.map(createScreenProjector(graph, camera));
+}
+
+function createScreenProjector(graph: Graph3DObject, camera: Graph3DObject["camera"]) {
   const azimuth = degreesToRadians(camera.azimuthDegrees);
   const elevation = degreesToRadians(camera.elevationDegrees);
   const view = normalizeVector({
@@ -116,16 +130,17 @@ export function projectGraphPoint3DToWebGLScreen(
   const up = graph3DWebGLCameraUp(graph, camera);
   const right = normalizeVector(cross(up, view));
   const screenUp = normalizeVector(cross(view, right));
-  const world = {
-    x: point.x + (camera.origin[0] - graph.width / 2) / camera.scale,
-    y: point.z + (graph.height / 2 - camera.origin[1]) / camera.scale,
-    z: point.y
-  };
-
-  return {
-    x: graph.width / 2 + dot(world, right) * camera.scale,
-    y: graph.height / 2 - dot(world, screenUp) * camera.scale,
-    depth: dot(world, view)
+  return (point: GraphPoint3D) => {
+    const world = {
+      x: point.x + (camera.origin[0] - graph.width / 2) / camera.scale,
+      y: point.z + (graph.height / 2 - camera.origin[1]) / camera.scale,
+      z: point.y
+    };
+    return {
+      x: graph.width / 2 + dot(world, right) * camera.scale,
+      y: graph.height / 2 - dot(world, screenUp) * camera.scale,
+      depth: dot(world, view)
+    };
   };
 }
 

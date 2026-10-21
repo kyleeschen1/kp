@@ -35,7 +35,8 @@
     {
       "id": "repair",
       "title": "Repair",
-      "status": "planned"
+      "summary": "Camera batching reduces measured startup work with exact geometry and unchanged input/URL preservation.",
+      "status": "complete"
     },
     {
       "id": "verification",
