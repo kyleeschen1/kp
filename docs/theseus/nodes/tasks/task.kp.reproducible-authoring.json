@@ -2,8 +2,9 @@
   "id": "task.kp.reproducible-authoring",
   "kind": "task",
   "title": "Deliver reproducible selected-source local editions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "Approved 22-slice scope delivered and verified; no further scope selected. See reproducible-authoring evidence and calculus author packet.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -224,6 +225,27 @@
       "scope": "author-packet",
       "checkedAt": "2026-10-21T19:46:16.532Z",
       "notes": "CLI recipes and copied-source reproduction pass; both review links open exact sources; four routing tests pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T19:52:45.981Z",
+      "notes": "7378 tests pass with zero failures or skips; architecture and inference gates also pass. Reachability regenerated for the 18 added scanned files."
+    },
+    {
+      "command": "npm run typecheck; npm run build:bundle; npm run check:animation-library-bundle-boundary; npm run measure:calculus-editions",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T19:52:47.073Z",
+      "notes": "Full types/build and complete cost/bundle gates pass. Existing large application chunk warnings retained. Canonical initial JS increase 714 gzip bytes recorded."
+    },
+    {
+      "command": "npm run visual:calculus-editions -- --grep-invert cost:; npm run visual:change-propagation; npm run visual:calculus-costs",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T19:52:47.772Z",
+      "notes": "30 three-engine edition preservation, 10 canonical editor and 2 separately sampled Chromium cost checks pass."
     }
   ],
   "expectedLearning": [

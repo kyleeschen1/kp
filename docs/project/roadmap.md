@@ -31,8 +31,9 @@ selected-source static/interactive local calculus editions, exact restoration,
 complete output verification and bounded reader/editor costs. The existing
 composed-algebra static path supplies the second owner. See the
 [author packet](authoring/calculus-change-packet.md) and
-[evidence](reviews/2026-10-21-reproducible-authoring.md); Theseus owns final
-integration status. This extends the completed source-transfer work below,
+[evidence](reviews/2026-10-21-reproducible-authoring.md). The bounded run is
+complete: 7,378 tests, full types/build, three-engine browser preservation and
+cost gates pass. This extends the completed source-transfer work below,
 preserving its unaccepted visual treatment. No new mathematical abstraction or
 external publication is authorized.
 

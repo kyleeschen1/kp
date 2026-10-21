@@ -11,8 +11,9 @@ turns the source-transfer cases into exact local static and interactive editions
 with complete asset integrity, revision restoration and measured reader costs.
 The existing algebra static edition demonstrates a second owner without a new
 compiler framework. Use the [author packet](../authoring/calculus-change-packet.md)
-and [evidence](../reviews/2026-10-21-reproducible-authoring.md); Theseus owns final
-integration. The existing calculus presentation remains unaccepted.
+and [evidence](../reviews/2026-10-21-reproducible-authoring.md). The bounded run is
+complete with 7,378 tests, full types/build, browser preservation and cost gates
+passing. The existing calculus presentation remains unaccepted.
 
 Latest October 21: the approved [authoring-transfer delivery](../2026-10-21-authoring-transfer-delivery.md)
 pressures existing calculus ownership with zero-slope/finite-change and signed

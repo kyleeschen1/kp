@@ -127,3 +127,53 @@ and `387f194b695589718df5f003b22e64130f858e859beb4af594a8011c1607b497`.
 Use the packet's working local URLs or the CLI JSON receipt directory. Renaming
 the source basename changes publication provenance and therefore edition bytes;
 moving it with the same basename does not.
+
+Integration measurements: the canonical application build now declares 78,604
+initial JS bytes / 25,936 gzip, up 1,962 raw / 714 gzip from the same-cohort
+baseline for location validation, preview ownership and explicit downloads.
+CSS remains 40,345 / 10,893; HTML is 58,866 / 6,018, up 85 / 14 bytes. This run
+delivers reliability and a narrow standalone reader, not a reduction of the
+canonical editor's initial payload. The production build and internal-studio
+bundle-boundary gate pass; Vite still warns about existing large application
+chunks outside this reader. No warning limit was changed.
+
+Each edition intentionally contains its complete portable asset closure. Its
+distinct directory gives assets distinct URLs; cross-edition browser cache reuse
+is not established. The measured reuse is within the already loaded editor.
+Shared multi-card publication, cross-edition asset delivery and device-level
+performance remain separate design questions, not solved by content addressing.
+
+What this run establishes: selected authored bytes can travel through checking,
+preview, immutable local output and exact reader restoration without acquiring
+editor capabilities or changing mathematical ownership. Runtime guards and
+regressions cover malformed links, stale candidates, failed mounting, altered
+closures and concurrent writes; they do not establish that arbitrary future
+failures are impossible. The multi-boundary run was justified, but reuse made
+several slices verification-only rather than reasons to add abstractions.
+
+Recommended next decision: choose one learner context and simplify one calculus
+explanation in a preferred equation-rail or top-text-card format. That requires a
+bounded visual checkpoint. If engineering remains the priority, pressure one
+concrete multi-card/shared-referent authoring need before proposing a common
+composition or asset-delivery layer. Neither recommendation opens another run.
+
+Final integration: `npm test` passes **7,378 tests**, zero failures or skips,
+including architecture/inference gates before the complete suite. Full
+`npm run typecheck`, `npm run build:bundle`, generated reachability freshness,
+`npm run check:animation-library-bundle-boundary`, the complete authoring runtime
+and type-cost cohort, calculus cost gates and CLI replay all pass. The generated
+reachability graph changes only its scanned-file count (5033 → 5051).
+Final browser preservation: 30 checks across Chromium/Firefox/WebKit via
+`npm run visual:calculus-editions -- --grep-invert cost:`, ten canonical editor
+checks via `npm run visual:change-propagation`, and two separately sampled
+Chromium resource/timing checks via `npm run visual:calculus-costs`. No unresolved
+verification failure remains. Disposable reports/captures are removed; generated
+review editions remain available and reproducible through committed commands.
+
+The approved 22-slice scope is complete. All work is checkpointed on
+`feature/20260929-symbolic-inspection`; handoff verifies its normal origin push
+against `git ls-remote origin refs/heads/feature/20260929-symbolic-inspection`.
+The pre-existing editor-animation browser-test modification and two inbox
+handoffs remain untouched and uncommitted. No merge, deployment, new mathematical
+coverage or visual acceptance is implied. Resume inspection with
+`theseus work resume`; further implementation requires a newly selected scope.
