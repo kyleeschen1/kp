@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 activation continuation: the user approved profiling the remaining
+reader stalls. The [bounded investigation](2026-10-21-reader-activation-investigation.md)
+is complete; [evidence](reviews/2026-10-21-reader-activation.md) attributes repeated
+camera-basis setup and records an exact-geometry batching repair. In three 6x
+samples, median startup script time falls 13.9% and readiness 5.4%; first-input
+frame gaps do not reliably improve. Full integration passes 7,349 tests.
+Next assess the first visible logarithm card's native preparation/measurement
+costs, preserving activation and endpoint policy; this is a recommendation,
+not another active run. The earlier engineering portfolio remains complete.
+
 October 21 latest direction: the user prioritizes codebase discipline,
 performance and API efficiency while human feedback is limited. The
 [engineering portfolio](2026-10-21-engineering-discipline-portfolio.md)

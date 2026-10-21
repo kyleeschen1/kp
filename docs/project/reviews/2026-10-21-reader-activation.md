@@ -26,11 +26,11 @@ can include a previously started companion transition, so their whole-window
 CPU must not be attributed solely to the newly activated card. Preserve the
 current visibility/interaction policy in this pass.
 
-The audit initially failed before browser execution because enumerating all
-tracked repository paths exceeded the subprocess buffer. It now enumerates
+The audit initially failed before browser execution with `ENOBUFS` because
+enumerating all tracked repository paths exceeded the subprocess buffer. It now enumerates
 only the four roots already selected by the old filter; an actual Git parity
-test guards complete membership. The next attempt encountered a generated helper
-without a map; explicit unmapped accounting repairs that tool assumption.
+test guards complete membership. The next attempt encountered `ENOENT` for a
+generated helper without a map; explicit unmapped accounting repairs that tool assumption.
 Both errors are investigation-tool failures, not reader regressions. Three
 profiling/inventory tests and Node typechecking pass.
 
@@ -66,3 +66,33 @@ First-interaction maximum frame gaps remain noisy: before 282.5/200.2/250 ms,
 after 266.8/232.3/316.5 ms. No interaction-smoothness improvement is established.
 The repair reduces real startup computation; it does not solve the separate
 native preparation/layout stall or justify changing companion activation policy.
+
+The next performance question is the first visible logarithm card's native
+preparation: separate source/target measurement and material construction before
+choosing a repair. The current evidence does not justify hiding the card,
+delaying first input, dropping native endpoints, or changing its visibility
+trigger. Forced initial page layout is also visible, but moving the same layout
+flush elsewhere would not itself be a performance improvement.
+
+Reproduce the tooling laws with `node --test scripts/architecture-cost-inventory.test.ts
+scripts/profile-gradient-cost.test.ts`. The profile command requires a local
+sourcemap build; the ordinary timing/acceptance command uses a normal production
+build. Never compare instrumented frame gaps with ordinary timing as if they
+were the same measurement.
+
+## Integration and disposition
+
+`npm test` passes all 7,349 tests with zero failures/skips, including architecture
+and inference gates. Full `npm run typecheck` passes. The production build,
+12-route reader closure, reader budgets and dev-review production closure pass.
+Three profiling/inventory laws pass separately; 25 focused graph/surface tests
+and twelve real browser cases cover fit, intermediate forward/reverse frames,
+native travel, direct URLs, deferred first input, pagehide and multi-card owners.
+No budget amendment was needed in this continuation.
+
+All three run packages are complete. The scoped repair is delivered; the
+separate first-interaction stall is explicitly unresolved, not reported as
+fixed. No new visual judgment or offscreen-eviction policy was introduced.
+Pre-existing editor-animation browser changes and two inbox documents were
+preserved. Investigation scratch is disposable; commands and results above
+are the durable evidence.

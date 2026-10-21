@@ -2,8 +2,9 @@
   "id": "task.kp.reader-activation",
   "kind": "task",
   "title": "Attribute and reduce reader activation stalls",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "COMPLETE: attributed reader startup and repaired repeated camera setup with exact geometry preservation; separate first-input native preparation remains a named next question.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -36,6 +37,13 @@
       "scope": "repair",
       "checkedAt": "2026-10-21T17:52:46.010Z",
       "notes": "Six ordinary samples pass; 6x median startup script 782.75 to 673.58ms, ready 1351.90 to 1278.40ms. First-interaction gaps not improved. Exact fitted plans and 25 focused tests pass; 12 browser cases and full types pass."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T17:57:23.857Z",
+      "notes": "7349 tests pass, zero failed/skipped; architecture and unchanged inference budgets pass. Full types, normal production build, twelve browser cases and reader production/budget checks pass."
     }
   ],
   "expectedLearning": [

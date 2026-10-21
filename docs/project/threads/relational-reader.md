@@ -5,8 +5,16 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+October 21 activation continuation is complete. The approved
+[investigation](../2026-10-21-reader-activation-investigation.md) reduces repeated
+camera projection setup while preserving exact fitted geometry; see
+[measurements and limits](../reviews/2026-10-21-reader-activation.md). Throttled
+median startup script improves 13.9%, readiness 5.4%; interaction gaps remain.
+The next performance question is native logarithm preparation, not a blanket
+change in companion activation or visual policy. No new run is active.
+
 Latest October 21 direction: prioritize disciplined infrastructure, performance
-and efficient APIs with limited human feedback. See the
+and efficient APIs with limited human feedback. The
 [approved engineering portfolio](../2026-10-21-engineering-discipline-portfolio.md)
 has delivered narrower standalone-card loading, issued-draft reuse, shared
 visibility and preview lifetimes, and usable focused verification routes.
