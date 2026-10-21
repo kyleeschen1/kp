@@ -2,7 +2,8 @@
   "id": "run-contract.kp.authoring-transfer-v1",
   "kind": "run-contract",
   "title": "Calculus authoring transfer",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: all five approved slices delivered and verified.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -54,8 +55,8 @@
     {
       "id": "integration",
       "title": "Integration",
-      "summary": "Final source packet, complete checks and production payload measurement; presentation remains unaccepted.",
-      "status": "in-progress"
+      "summary": "All 7357 tests, full types, seven browser checks, production build and complete-consumer authoring budgets pass. Reproduction packet and measured payload increase recorded; old calculus presentation remains unaccepted.",
+      "status": "complete"
     }
   ]
 }

@@ -69,7 +69,10 @@ No budget ceiling was raised.
 The full suite initially caught the newly registered task missing from the
 authoring packet. The packet and generation route were updated, and
 `node --disable-warning=ExperimentalWarning --test tests/authoring-entrypoint-packet.test.ts`
-passes both checks. Final integration results are recorded in Theseus.
+passes both checks. The final `npm test` rerun passes all 7,357 tests with zero
+skips or failures. Full types, seven browser checks, production build and
+`npm run measure:authoring-boundaries -- --check --types` pass. All five delivery
+packages are complete; Theseus retains the execution evidence.
 
 The useful conclusion is narrower than universal authoring: this mathematical
 family already supports meaningful source variation. Discoverability and reliable

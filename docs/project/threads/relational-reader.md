@@ -8,8 +8,9 @@ Last Updated: 2026-10-21
 Latest October 21: the approved [authoring-transfer delivery](../2026-10-21-authoring-transfer-delivery.md)
 pressures existing calculus ownership with zero-slope/finite-change and signed
 composition explanations. See [evidence](../reviews/2026-10-21-calculus-transfer.md)
-and [source workflow](../authoring/calculus-change-packet.md). The current run
-owns integration status. Source variation required no new mathematics; discovery,
+and [source workflow](../authoring/calculus-change-packet.md). The bounded run is
+complete with 7,357 tests, full types and seven browser checks passing.
+Source variation required no new mathematics; discovery,
 immutable source identity and transactional preview were concrete infrastructure
 needs. This supersedes the profiling-first recommendation below without accepting
 the old calculus dashboard or authorizing a universal composition abstraction.

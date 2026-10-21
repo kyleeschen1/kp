@@ -2,8 +2,9 @@
   "id": "task.kp.authoring-transfer",
   "kind": "task",
   "title": "Prove source-only calculus authoring transfer",
-  "status": "ready",
+  "status": "resolved",
   "domain": "architecture",
+  "summary": "COMPLETE: bounded source-authoring delivery verified; visual acceptance and shareable custom editions remain explicitly outside the delivered capability.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -64,6 +65,20 @@
       "scope": "integration",
       "checkedAt": "2026-10-21T18:50:20.004Z",
       "notes": "Production bundle builds; existing large-chunk warning remains. Final calculus declared JS is 76642 bytes, 25222 gzip."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:54:49.985Z",
+      "notes": "Final full suite passes all 7357 tests with zero skips or failures. Earlier run had one task-packet documentation mismatch, repaired and covered by this rerun."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:54:50.987Z",
+      "notes": "Final seven Chromium tests pass including rejecting legacy unpinned links on custom sources, matched-source recovery and injected mount failure."
     }
   ],
   "expectedLearning": [
