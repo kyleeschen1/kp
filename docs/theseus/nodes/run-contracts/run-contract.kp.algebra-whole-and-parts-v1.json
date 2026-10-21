@@ -1,0 +1,42 @@
+{
+  "id": "run-contract.kp.algebra-whole-and-parts-v1",
+  "kind": "run-contract",
+  "title": "Algebra whole and parts exemplar",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: one of two packages complete; candidate verified. Await human explanation/visual judgment at the whole-and-parts review URL. No calculus work or broader rollout authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.algebra-whole-and-parts.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-algebra-whole-and-parts.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:algebra-whole-and-parts"
+  ],
+  "allowedWork": [
+    "One source-authored algebra exemplar and bounded source-selection repair in the existing host; preserve primary, math, compositor and styles; two-hour ceiling with twenty-minute verification reserve"
+  ],
+  "disallowedWork": [
+    "Calculus polish, Gaussian elimination, new semantic support, new motifs, framework or rollout before human review"
+  ],
+  "goal": "Deliver one checked source-backed algebra card for human review",
+  "target": "task.kp.algebra-whole-and-parts",
+  "slices": [
+    {
+      "id": "exemplar",
+      "summary": "One source-backed whole-to-parts algebra candidate verified and ready at the canonical host; no math or motion engine changes.",
+      "status": "complete"
+    },
+    {
+      "id": "visual-review",
+      "summary": "HUMAN_CHECKPOINT: judge whether intact-group tracking and text-above presentation clarify the distinction. No promotion before acceptance.",
+      "status": "in-progress"
+    }
+  ]
+}

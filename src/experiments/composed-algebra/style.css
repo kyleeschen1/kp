@@ -5,3 +5,9 @@
 [data-composed-practice-panel][hidden], [data-composed-reading-toolbar][hidden] { display: none; }
 [data-composed-working] { display: block; width: 100%; box-sizing: border-box; margin-top: .5rem; font: inherit; }
 [data-composed-error] { color: #922f25; white-space: pre-wrap; }
+/* Opt-in exemplar: retain native math and inherited typography while giving
+   the explanation its accepted position above the evidence. Prose may grow. */
+[data-composed-text-first] .kp-focus-deck__card { height: auto; grid-template-rows: minmax(11rem, auto) 16rem; }
+[data-composed-text-first] .kp-focus-deck__narrative { order: -1; border-bottom: 1px solid var(--kp-st-rule); }
+[data-composed-text-first] .kp-focus-deck__narrative > section { height: auto; display: flex; align-items: end; }
+[data-composed-text-first] .kp-focus-deck__passage-page { min-height: 0; width: 100%; box-sizing: border-box; }

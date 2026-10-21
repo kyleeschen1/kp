@@ -1,0 +1,54 @@
+{
+  "id": "task.kp.algebra-whole-and-parts",
+  "kind": "task",
+  "title": "Show a compound quantity as whole groups and contributions",
+  "status": "ready",
+  "domain": "algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-algebra-whole-and-parts.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-algebra-whole-and-parts.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:algebra-whole-and-parts",
+      "status": "failed",
+      "scope": "initial-smoke",
+      "checkedAt": "2026-10-21T20:03:35.041Z",
+      "notes": "Initial query-only Playwright navigation resolved against root rather than the experiment route; changed test to the full route and reran all checks."
+    },
+    {
+      "command": "npm run author:check -- --task equation.algebra-intuition --request content/authoring/algebra/whole-and-parts.json; node --disable-warning=ExperimentalWarning --test tests/algebra-whole-and-parts.test.ts tests/composed-algebra-session-v2.test.ts tests/composed-algebra-sequence-v2.test.ts tests/composed-algebra-publication-v2.test.ts",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-10-21T20:03:35.989Z",
+      "notes": "Selected source uses three existing verified moves. Five focused checks pass, including changed groups and missing contribution rejection."
+    },
+    {
+      "command": "npm run visual:algebra-whole-and-parts",
+      "status": "passed",
+      "scope": "exemplar",
+      "checkedAt": "2026-10-21T20:03:36.596Z",
+      "notes": "Three Chromium tests pass after fixing test URL. Real native paths, reverse, exact selected source, question links, phone and static reading; desktop/phone captures inspected."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"both extended sources download|extended practice restores\"",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-21T20:03:37.223Z",
+      "notes": "Two existing primary and transfer checks pass: displayed download/reapply and exact practice return."
+    },
+    {
+      "command": "npm run typecheck; npm run check:architecture; npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T20:03:37.832Z",
+      "notes": "Full types, architecture and production build pass; generated reachability current. No full corpus or cross-browser promotion claim before review."
+    }
+  ]
+}

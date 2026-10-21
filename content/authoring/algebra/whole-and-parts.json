@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v2",
+  "id": "lesson.algebra.whole-and-parts",
+  "domain": "real-scalars",
+  "symbols": ["x", "y"],
+  "states": [
+    {
+      "id": "state.whole.repeated",
+      "latex": "3(x+y)+2(x+y)",
+      "narration": "The parentheses name the same whole quantity, x+y, twice. The first term takes three copies of that quantity; the second takes two. We do not need to know x or y to count the copies."
+    },
+    {
+      "id": "state.whole.collected",
+      "latex": "(3+2)(x+y)",
+      "narration": "Count the copies together: three plus two. Keep x+y intact. Only the count is being combined; neither x nor y has been added to that count."
+    },
+    {
+      "id": "state.whole.counted",
+      "latex": "5(x+y)",
+      "narration": "There are five copies of the whole quantity. Before opening the parentheses, predict how many contributions of x and how many of y those five copies contain."
+    },
+    {
+      "id": "state.whole.opened",
+      "latex": "5x+5y",
+      "narration": "Each copy contains both x and y. Five copies therefore contribute five x terms and five y terms. The total value has stayed the same; we have changed what we count together."
+    }
+  ],
+  "editorial": {
+    "title": "Count the whole, then count the parts",
+    "setup": "You can add three apples and two apples without knowing what each apple costs. Algebra uses the same idea with a whole expression: count copies of x+y first, then look inside. Here x and y are real numbers; a copy means one contribution to the sum.",
+    "summary": "The repeated quantity must really be the same. Compare 3(x+y)+2(x+z): the two parenthesized expressions differ, so this cannot generally become 5(x+y). Other rearrangements are possible, but this particular counting step requires one unchanged group."
+  }
+}

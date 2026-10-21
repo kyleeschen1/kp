@@ -11,6 +11,7 @@
     "check:reproducible-authoring": "node --disable-warning=ExperimentalWarning scripts/check-reproducible-authoring.ts",
     "measure:calculus-editions": "node --disable-warning=ExperimentalWarning scripts/measure-calculus-editions.ts",
     "visual:calculus-costs": "playwright test --config playwright.calculus-editions.config.ts --workers=1 --project=chromium --grep cost:",
+    "visual:algebra-whole-and-parts": "playwright test --config playwright.algebra-whole-and-parts.config.ts --workers=1 --project=chromium",
     "visual:calculus-editions": "playwright test --config playwright.calculus-editions.config.ts --workers=1",
     "measure:authoring-boundaries": "node --disable-warning=ExperimentalWarning scripts/measure-authoring-boundaries.ts",
     "measure:revision-preparation": "node --disable-warning=ExperimentalWarning scripts/measure-revision-preparation.ts",

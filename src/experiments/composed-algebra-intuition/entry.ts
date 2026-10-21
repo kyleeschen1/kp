@@ -3,9 +3,8 @@ import "../reusable-reasoning/style.css";
 import "../common-factor/style.css";
 import "../composed-algebra/style.css";
 import * as algebra from "../../authoring/algebra.ts";
-import primary from "../../authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import { mountComposedAlgebraCardV2 } from "../composed-algebra/card.ts";
-import { renderAlgebraIntuitionCard, renderAlgebraIntuitionLinks } from "./page.ts";
+import { algebraIntuitionVariant, renderAlgebraIntuitionCard, renderAlgebraIntuitionLinks } from "./page.ts";
 import { projectComposedAlgebraSubexplanations } from "../composed-algebra/subexplanations.ts";
 import { captureComposedAlgebraPositionV2, resolveComposedAlgebraPositionV2 } from "../composed-algebra/practice.ts";
 import { projectComposedAlgebraReadingV2 } from "../composed-algebra/readings.ts";
@@ -14,7 +13,10 @@ import { preparePreview } from "../../authoring/staged-preview.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 async function mount() {
-  const initial = algebra.compile(primary), display = root.querySelector<HTMLElement>("[data-composed-reader]")!;
+  const encoded = root.querySelector("[data-composed-initial-source]")?.textContent;
+  if (!encoded) throw new Error("Missing selected algebra source; reload the checked page.");
+  const variant = algebraIntuitionVariant(location.href);
+  const initial = algebra.compile(JSON.parse(encoded)), display = root.querySelector<HTMLElement>("[data-composed-reader]")!;
   const editor = root.querySelector<HTMLTextAreaElement>("[data-reasoning-json]")!, status = root.querySelector<HTMLElement>("[data-reasoning-draft-status]")!;
   const apply = root.querySelector<HTMLButtonElement>("[data-composed-apply]")!, download = root.querySelector<HTMLButtonElement>("[data-composed-download]")!;
   let active = await mountComposedAlgebraCardV2(display, initial), disposed = false;
@@ -30,7 +32,7 @@ async function mount() {
     prepare: async draft => {
       const full = projectComposedAlgebraReadingV2(draft, "full"), compact = projectComposedAlgebraReadingV2(draft, "compact");
       return { ...await preparePreview(display, { className: "common-factor-staging",
-        html: renderAlgebraIntuitionCard(draft), mount: staging => mountComposedAlgebraCardV2(staging, draft) }), full, compact };
+        html: renderAlgebraIntuitionCard(draft, undefined, Boolean(variant)), mount: staging => mountComposedAlgebraCardV2(staging, draft) }), full, compact };
     },
     commit: (prepared, draft) => {
       closeIntuition();
@@ -42,7 +44,7 @@ async function mount() {
       root.querySelector<HTMLElement>("[data-composed-sequence-summary]")!.textContent = `${draft.checked.source.states.length} states · ${draft.steps.length} verified moves`;
       root.querySelector<HTMLElement>("[data-reasoning-revision]")!.textContent = draft.revisionId;
       root.dataset["composedRevision"] = draft.revisionId;
-      links.innerHTML = renderAlgebraIntuitionLinks(draft);
+      links.innerHTML = renderAlgebraIntuitionLinks(draft, variant);
       readingOutput.innerHTML = prepared[mode].html; readingOutput.dataset["revision"] = draft.revisionId;
     }
   });
@@ -75,7 +77,7 @@ async function mount() {
     const parentUrl = new URL(location.href); parentUrl.searchParams.delete("intuition"); parentUrl.searchParams.delete("revision");
     const staging = document.createElement("div"); staging.className = "common-factor-staging";
     staging.inert = true; staging.setAttribute("aria-hidden", "true"); staging.style.width = `${display.getBoundingClientRect().width}px`;
-    staging.innerHTML = renderAlgebraIntuitionCard(draft, reference); display.after(staging);
+    staging.innerHTML = renderAlgebraIntuitionCard(draft, reference, Boolean(variant)); display.after(staging);
     root.dataset["intuitionStatus"] = "preparing";
     try {
       const surface = await mountComposedAlgebraCardV2(staging, draft, reference);

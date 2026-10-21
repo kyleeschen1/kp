@@ -95,7 +95,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Card review feedback: user finds the calculus display busy and its pedagogical purpose unclear; acceptance remains outstanding. Research and learner-context direction recorded in docs/project/decisions/2026-10-13-learner-context-and-chain-rule.md. Discuss a specific learner context before redesign; no adaptive-platform scope or publication promotion authorized."
+    "summary": "Latest user direction explicitly leaves the disliked calculus example alone and selects algebra or linear algebra. Do not resume calculus polish from this historical review gate. Current bounded candidate is run-contract.kp.algebra-whole-and-parts-v1; older uncompleted scope is not silently accepted or retired."
   },
   "allowedWork": [
     "Bounded selected-source authoring, existing presentation integrations, connected argument, proportional validation and documented repairs"

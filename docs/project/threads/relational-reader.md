@@ -5,6 +5,17 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+Latest October 21: the user explicitly rejects further calculus polish and asks
+for algebra or linear algebra. Continue with the bounded
+[whole-and-parts algebra exemplar](../2026-10-21-algebra-whole-and-parts.md), using
+the existing top-text card and checked algebra source. Preserve calculus as-is;
+its former redesign recommendation is superseded. Review this one exemplar
+before broadening presentation or authoring infrastructure.
+The [review candidate](../reviews/2026-10-21-algebra-whole-and-parts.md) is live
+through the existing host at `?example=algebra-intuition&variant=whole-and-parts`.
+Source checking, reversible native motion and original-caller preservation pass;
+judge the whole-to-parts explanation before any promotion.
+
 October 21 continuation: the approved
 [reproducible-authoring run](../2026-10-21-reproducible-authoring-long-loop.md)
 turns the source-transfer cases into exact local static and interactive editions,
