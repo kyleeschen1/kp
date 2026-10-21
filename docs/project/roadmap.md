@@ -25,6 +25,17 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+Latest October 21 direction: the user approved the
+[authoring-transfer delivery](2026-10-21-authoring-transfer-delivery.md) after
+the [authoring-path discussion](reviews/2026-10-21-authoring-path.md).
+Two bounded calculus explanations now reuse existing mathematics through source
+changes; task discovery, checked source identity and reliable preview recovery
+are the demonstrated engineering needs. See [evidence](reviews/2026-10-21-calculus-transfer.md)
+and the [author packet](authoring/calculus-change-packet.md). Theseus owns live
+integration status. This supersedes the profiling-first recommendation below;
+the existing calculus presentation remains unaccepted and no universal
+composition layer is authorized.
+
 October 21 native-preparation continuation is complete. The user-approved
 [investigation](2026-10-21-native-preparation-investigation.md) batches only
 independent glyph baseline probes and preserves calibrated first-mount paint.

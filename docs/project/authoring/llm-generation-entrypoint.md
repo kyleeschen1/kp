@@ -116,6 +116,12 @@ Exact joint masses or prior/likelihoods enter the probability-owned checker,
 then existing governed construction, card, readings, practice and edition paths.
 This does not authorize arbitrary probability trees, geometry, or new motifs.
 
+For bounded finite-change versus derivative comparisons, use
+`calculus-change-packet.md` and task `calculus.change-propagation`. This routes
+the existing expression/differentiation owner, with explicit source preview and
+revision-pinned recovery. Its presentation remains unaccepted; no arbitrary
+calculus proof, new choreography or publication authority follows from checking.
+
 For the accepted three-stop compound factoring/evaluation task, use
 `composed-algebra-authoring-packet.md` and `equation.composed-algebra` discovery.
 It accepts source-only oriented chains through existing verified operation

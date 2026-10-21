@@ -6,6 +6,7 @@ import { navigateKpFocusDeckPlayback } from "../focus-deck-playback.ts";
 import { boundKpFocusDeckTravel, settleKpFocusDeckTravel } from "../focus-deck-continuous-navigation.ts";
 import { changeSteps, compileChangeSource, projectChange, type ChangeModel } from "./model.ts";
 import { bindChangePaint } from "./paint.ts";
+import { preparePreview } from "../../authoring/staged-preview.ts";
 
 function required<T extends Element>(selector: string, parent: ParentNode = document): T {
   const value = parent.querySelector<T>(selector);
@@ -13,8 +14,12 @@ function required<T extends Element>(selector: string, parent: ParentNode = docu
   return value;
 }
 
-function mount(root: HTMLElement, model: ChangeModel, restore = false) {
+function mount(root: HTMLElement, model: ChangeModel, restore = false, staged = false) {
+  const cleanup: (() => void)[] = [];
+  const dispose = () => { for (const release of cleanup.splice(0).reverse()) release(); };
+  try {
   const abort = new AbortController(), { signal } = abort;
+  cleanup.push(() => abort.abort());
   const viewport = required<HTMLElement>("[data-kp-focus-deck-viewport]", root);
   const slider = required<HTMLInputElement>("[data-kp-focus-deck-scrubber]", root);
   const xInput = required<HTMLInputElement>("[data-change-x]", root), hInput = required<HTMLInputElement>("[data-change-h]", root);
@@ -23,15 +28,22 @@ function mount(root: HTMLElement, model: ChangeModel, restore = false) {
   const entities = changeSteps.map(id => required<HTMLElement>(`[data-change-entity="${id}"]`, root));
   const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const clock = createKpReaderTimelinePlaybackClock({ id: "change-propagation", durationMs: 7200, ownerWindow: window });
+  cleanup.push(() => clock.dispose());
   const focus = createKpReaderSemanticFocusService(changeSteps);
+  cleanup.push(() => focus.dispose());
   const paint = bindChangePaint(root, model);
   const position = () => clock.getSnapshot().progress * 4;
   let x = model.source.x, h = model.source.h;
   let urlTimer: number | undefined;
+  let active = !staged;
+  let mismatchedLink = false;
+  cleanup.push(() => window.clearTimeout(urlTimer));
+  root.dataset["changeRevision"] = model.revision;
   const persist = () => {
     window.clearTimeout(urlTimer);
+    if (!active || mismatchedLink) return;
     urlTimer = window.setTimeout(() => {
-      const params = new URLSearchParams({ step: String(position()), x: String(x), h: String(h) });
+      const params = new URLSearchParams({ revision: model.revision, step: String(position()), x: String(x), h: String(h) });
       history.replaceState(null, "", `#${params}`);
     }, 250);
   };
@@ -76,7 +88,9 @@ function mount(root: HTMLElement, model: ChangeModel, restore = false) {
       };
     }
   });
+  cleanup.push(() => native.dispose());
   const unbindKeyboard = bindKpFocusDeckKeyboard({ card: root, slider, enabled: () => true, position, checkpointCount: () => 5, navigate });
+  cleanup.push(unbindKeyboard);
   previous.addEventListener("click", () => navigate(Math.ceil(position()) - 1), { signal });
   next.addEventListener("click", () => navigate(Math.floor(position()) + 1), { signal });
   slider.addEventListener("input", () => { native.cancel(); clock.seek(Number(slider.value) / 4); }, { signal });
@@ -88,9 +102,22 @@ function mount(root: HTMLElement, model: ChangeModel, restore = false) {
     native.cancel(); clock.seek(0);
   }, { signal });
   const unsubscribe = clock.subscribe(render);
-  const resize = new ResizeObserver(render); resize.observe(viewport);
+  cleanup.push(unsubscribe);
+  const resize = new ResizeObserver(render); cleanup.push(() => resize.disconnect()); resize.observe(viewport);
   function restorePosition() {
+    if (!active) return;
     const params = new URLSearchParams(location.hash.slice(1));
+    // Legacy unpinned links refer to the built-in source only. A mismatched
+    // revision cannot silently replay a different explanation after reload.
+    const revision = params.get("revision");
+    mismatchedLink = revision !== null && revision !== model.revision;
+    if (revision !== null && revision !== model.revision) {
+      required("[data-change-diagnostic]").textContent = "This link belongs to a different source. Reapply that source to restore its position; showing this source at its starting point.";
+      x = model.source.x; h = model.source.h;
+      xInput.value = String(x); hInput.value = String(h);
+      native.cancel(); clock.seek(0, "url");
+      return;
+    }
     const read = (key: string, fallback: number, low: number, high: number) => {
       const raw = params.get(key), value = raw === null ? fallback : Number(raw);
       return Number.isFinite(value) && value >= low && value <= high ? value : fallback;
@@ -102,18 +129,25 @@ function mount(root: HTMLElement, model: ChangeModel, restore = false) {
   if (restore) restorePosition(); else render();
   window.addEventListener("hashchange", restorePosition, { signal });
   document.addEventListener("visibilitychange", () => { if (document.hidden) clock.pause(); }, { signal });
-  return () => { window.clearTimeout(urlTimer); abort.abort(); native.dispose(); unbindKeyboard(); unsubscribe(); resize.disconnect(); focus.dispose(); clock.dispose(); };
+  return { dispose, activate() {
+    active = true;
+    if (new URLSearchParams(location.hash.slice(1)).get("revision") === model.revision) restorePosition();
+    else render();
+  } };
+  } catch (error) { dispose(); throw error; }
 }
 
 const encoded: unknown = JSON.parse(required("#change-source-bytes").textContent ?? "null");
 if (typeof encoded !== "string") throw new Error("Missing selected change-propagation source.");
 const initial = compileChangeSource(encoded);
 if (initial.status !== "checked") throw new Error(`${initial.path}: ${initial.message}`);
-let dispose = mount(required(".change-card"), initial.model, true);
+let active = mount(required(".change-card"), initial.model, true);
+let closed = false;
 required<HTMLElement>("[data-change-author]").hidden = false;
 const editor = required<HTMLTextAreaElement>("#change-source"), diagnostic = required<HTMLElement>("[data-change-diagnostic]");
 const apply = required<HTMLButtonElement>("[data-change-apply]");
 apply.addEventListener("click", async () => {
+  if (apply.disabled) return;
   const bytes = editor.value, result = compileChangeSource(bytes);
   if (result.status !== "checked") { diagnostic.textContent = `${result.path}: ${result.message} The previous card is unchanged.`; return; }
   apply.disabled = true;
@@ -121,14 +155,21 @@ apply.addEventListener("click", async () => {
     // Editing pays for KaTeX authoring lazily; ordinary reading uses the native
     // math HTML already produced by the publication compiler.
     const { renderChangePublication } = await import("./view.ts");
+    if (closed) return;
     const template = document.createElement("template"); template.innerHTML = renderChangePublication(result.model, bytes);
     const card = required<HTMLElement>(".change-card", template.content);
     const reading = required<HTMLElement>(".change-reading-source", template.content);
-    dispose(); required("[data-change-host]").replaceChildren(card);
+    const host = required<HTMLElement>("[data-change-host]");
+    const prepared = await preparePreview(host, { className: "change-staging", html: card.outerHTML,
+      mount: async staging => mount(required(".change-card", staging), result.model, false, true) });
+    if (closed) { prepared.dispose(); return; }
+    const previous = active;
+    host.replaceChildren(...prepared.staging.childNodes);
+    active = prepared.surface; prepared.staging.remove(); previous.dispose();
     required(".change-reading-source").replaceWith(reading);
     required("h1").textContent = result.model.source.title;
     document.title = `${result.model.source.title} · Kinetic Press`;
-    dispose = mount(card, result.model);
+    active.activate();
     diagnostic.textContent = "Preview updated from this source. Functions and derivatives were checked; prose remains author-supplied. Download to keep this draft.";
   } catch (error) { diagnostic.textContent = `Preview failed: ${error instanceof Error ? error.message : String(error)}`; }
   finally { apply.disabled = false; }
@@ -138,5 +179,6 @@ required("[data-change-download]").addEventListener("click", () => {
   const link = document.createElement("a"); link.href = url; link.download = "change-propagation.json"; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
-window.addEventListener("pagehide", event => { if (!event.persisted) dispose(); });
-if (import.meta.hot) import.meta.hot.dispose(() => dispose());
+const close = () => { closed = true; active.dispose(); };
+window.addEventListener("pagehide", event => { if (!event.persisted) close(); });
+if (import.meta.hot) import.meta.hot.dispose(close);

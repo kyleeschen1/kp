@@ -42,17 +42,20 @@
     {
       "id": "workflow",
       "title": "Workflow",
-      "status": "planned"
+      "summary": "Staged candidate mount preserves last valid surface on failure; partial mounts clean up; source-pinned playback rejects mismatched reload and restores after matching reapply. Existing browser command passes all seven cases.",
+      "status": "complete"
     },
     {
       "id": "transfer",
       "title": "Transfer",
-      "status": "planned"
+      "summary": "Both selected files exercised through actual CLI and browser with matching compiler revision, deterministic reverse and source-specific recovery; invalid and mount-failure cases retain working output.",
+      "status": "complete"
     },
     {
       "id": "integration",
       "title": "Integration",
-      "status": "planned"
+      "summary": "Final source packet, complete checks and production payload measurement; presentation remains unaccepted.",
+      "status": "in-progress"
     }
   ]
 }

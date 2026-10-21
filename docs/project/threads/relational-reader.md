@@ -5,6 +5,15 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+Latest October 21: the approved [authoring-transfer delivery](../2026-10-21-authoring-transfer-delivery.md)
+pressures existing calculus ownership with zero-slope/finite-change and signed
+composition explanations. See [evidence](../reviews/2026-10-21-calculus-transfer.md)
+and [source workflow](../authoring/calculus-change-packet.md). The current run
+owns integration status. Source variation required no new mathematics; discovery,
+immutable source identity and transactional preview were concrete infrastructure
+needs. This supersedes the profiling-first recommendation below without accepting
+the old calculus dashboard or authorizing a universal composition abstraction.
+
 October 21 native-preparation continuation is complete; see the
 [approved scope](../2026-10-21-native-preparation-investigation.md) and
 [measured result](../reviews/2026-10-21-native-preparation.md). Independent leaf

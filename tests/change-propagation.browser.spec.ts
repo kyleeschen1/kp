@@ -1,7 +1,13 @@
 import { test, expect, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { compileChangeSource } from "../src/tutorial/change-propagation/model.ts";
 
 const route = "/experiments/change-propagation/";
+async function applySource(page: Page, bytes: string) {
+  await page.locator("#change-source").fill(bytes);
+  await page.getByRole("button", { name: "Preview this source" }).click();
+  await expect(page.locator("[data-change-diagnostic]")).toContainText("Preview updated");
+}
 async function setRange(page: Page, selector: string, value: number) {
   await page.locator(selector).evaluate((element, next) => {
     if (!(element instanceof HTMLInputElement)) throw new Error("Expected a range input");
@@ -88,4 +94,60 @@ test("phone stays readable; no-script retains all passages and native mathematic
     await staticPage.locator(".change-reading-source summary").click();
     await expect(staticPage.locator(".change-reading-source")).toContainText("prediction of a finite change generally is not");
   } finally { await context.close(); }
+});
+
+for (const name of ["stationary-change", "two-reversals"]) {
+  test(`${name}: selected source, reverse and revision-pinned recovery agree`, async ({ page }) => {
+    const bytes = readFileSync(`content/authoring/transfer/${name}.json`, "utf8");
+    const checked = compileChangeSource(bytes);
+    if (checked.status !== "checked") throw new Error(checked.message);
+    await page.goto(route); await page.locator(".change-author summary").click();
+    await applySource(page, bytes);
+    await expect(page.locator(".change-card")).toHaveAttribute("data-change-revision", checked.model.revision);
+    await expect(page.locator("h1")).toHaveText(checked.model.source.title);
+    const initial = await page.locator('[data-change-value="deltaY"]').textContent();
+    for (const position of [3.5, 4, 0]) await setRange(page, "[data-kp-focus-deck-scrubber]", position);
+    await expect(page.locator('[data-change-value="deltaY"]')).toHaveText(initial!);
+    await page.locator(".change-reading-source summary").click();
+    await expect(page.locator(".change-reading-source math").first()).toBeVisible();
+    await setRange(page, "[data-kp-focus-deck-scrubber]", 3.5);
+    await expect.poll(() => page.url()).toContain("step=3.5");
+    const pinned = page.url();
+    await page.reload();
+    await expect(page.locator("[data-change-diagnostic]")).toContainText("different source");
+    await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "0");
+    expect(page.url()).toBe(pinned);
+    await page.locator(".change-author summary").click(); await applySource(page, bytes);
+    await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "3.5");
+    await expect(page.locator(".change-card")).toHaveAttribute("data-change-revision", checked.model.revision);
+  });
+}
+
+test("failed candidate mount preserves live card, reading, URL and recovery", async ({ page }) => {
+  await page.goto(route); await page.locator(".change-author summary").click();
+  await setRange(page, "[data-kp-focus-deck-scrubber]", 2);
+  await expect.poll(() => page.url()).toContain("step=2");
+  const before = page.url();
+  await page.locator(".change-card").evaluate(node => node.setAttribute("data-original", "yes"));
+  await page.evaluate(() => {
+    const Original = window.ResizeObserver;
+    window.ResizeObserver = class extends Original {
+      constructor(callback: ResizeObserverCallback) {
+        super(callback); window.ResizeObserver = Original;
+        throw new Error("Injected candidate mount failure");
+      }
+    };
+  });
+  const bytes = readFileSync("content/authoring/transfer/stationary-change.json", "utf8");
+  await page.locator("#change-source").fill(bytes);
+  await page.getByRole("button", { name: "Preview this source" }).click();
+  await expect(page.locator("[data-change-diagnostic]")).toContainText("Injected candidate mount failure");
+  await expect(page.locator(".change-card")).toHaveAttribute("data-original", "yes");
+  await expect(page.locator(".change-staging")).toHaveCount(0);
+  expect(page.url()).toBe(before);
+  await setRange(page, "[data-kp-focus-deck-scrubber]", 1);
+  await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "1");
+  await applySource(page, bytes);
+  await expect(page.locator("h1")).toHaveText("Zero slope does not mean no change");
+  await expect(page.locator(".change-card")).toHaveCount(1);
 });
