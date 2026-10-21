@@ -1,5 +1,5 @@
 import { checkKpComposedAlgebraDraft } from "../src/authoring/composed-algebra-session.ts";
-import { checkKpComposedAlgebraDraftV2 } from "../src/authoring/composed-algebra-session-v2.ts";
+import { check as checkKpComposedAlgebraDraftV2 } from "../src/authoring/algebra/compile.ts";
 import { projectComposedAlgebraReading, projectComposedAlgebraReadingV2 } from "../src/experiments/composed-algebra/readings.ts";
 import { projectComposedAlgebraPrompts, projectComposedAlgebraPromptsV2 } from "../src/experiments/composed-algebra/practice.ts";
 import { projectComposedAlgebraSubexplanations } from "../src/experiments/composed-algebra/subexplanations.ts";

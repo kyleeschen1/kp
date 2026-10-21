@@ -1,1 +1,1 @@
-export { read, parse, Repair } from '../../../src/authoring/algebra.ts';
+export { read, parse, Repair } from '../../../src/authoring/algebra/source.ts';

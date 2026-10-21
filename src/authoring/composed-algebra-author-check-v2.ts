@@ -1,5 +1,5 @@
-import { checkKpComposedAlgebraDraftV2 } from "./composed-algebra-session-v2.ts";
-import { readKpComposedAlgebraSourceV2 } from "./composed-algebra-source-v2.ts";
+import { check as checkKpComposedAlgebraDraftV2 } from "./algebra/compile.ts";
+import { read as readKpComposedAlgebraSourceV2 } from "./algebra/source.ts";
 import primary from "./examples/composed-algebra-intuition.json" with { type: "json" };
 
 export function createKpComposedAlgebraExampleV2() { return readKpComposedAlgebraSourceV2(primary); }

@@ -3,6 +3,7 @@ import "../reusable-reasoning/style.css";
 import "../common-factor/style.css";
 import "../composed-algebra/style.css";
 import * as algebra from "../../authoring/algebra.ts";
+import primary from "../../authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import { mountComposedAlgebraCardV2 } from "../composed-algebra/card.ts";
 import { renderAlgebraIntuitionCard, renderAlgebraIntuitionLinks } from "./page.ts";
 import { projectComposedAlgebraSubexplanations } from "../composed-algebra/subexplanations.ts";
@@ -12,7 +13,7 @@ import { bindAlgebraIntuitionPractice } from "./practice.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 async function mount() {
-  const initial = algebra.compile(), display = root.querySelector<HTMLElement>("[data-composed-reader]")!;
+  const initial = algebra.compile(primary), display = root.querySelector<HTMLElement>("[data-composed-reader]")!;
   const editor = root.querySelector<HTMLTextAreaElement>("[data-reasoning-json]")!, status = root.querySelector<HTMLElement>("[data-reasoning-draft-status]")!;
   const apply = root.querySelector<HTMLButtonElement>("[data-composed-apply]")!, download = root.querySelector<HTMLButtonElement>("[data-composed-download]")!;
   let active = await mountComposedAlgebraCardV2(display, initial), disposed = false;

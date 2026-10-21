@@ -37,7 +37,7 @@ the math object's rectangular support does not broaden renderer support.
 ## Bounded algebra chains
 
 ```ts
-import * as algebra from "../../../src/authoring/algebra.ts";
+import * as algebra from "../../../src/authoring/algebra/compile.ts";
 
 const result = algebra.check(sourceJson);
 if (result.status === "compiled") {
@@ -50,12 +50,21 @@ if (result.status === "compiled") {
 }
 ```
 
-`compile(source)` checks an in-memory source and returns the existing issued
+`compile(source)` requires explicit source and returns the existing issued
 presentation, throwing `Repair` for supported diagnostics. `check(json)` returns
-the compiled/repair-gap union. `read` validates source objects, `parse` reads JSON,
-`serialize` exports checked source, and `session` retains the existing prepare/
-commit/dispose lifecycle. Omitting `compile`'s input retains the existing example
-default; supply source explicitly for authored work.
+the compiled/repair-gap union; `serialize(draft)` exports the checked source.
+The historical `prepareKpComposedAlgebraDraftV2()` still supplies its example for
+compatibility. The concise API no longer silently chooses teaching content.
+
+For source data alone, use `import * as source from ".../algebra/source.ts"`.
+`source.read(value)` and `source.parse(json)` validate shape and freeze data;
+they do **not** prove the mathematical transitions or authorize rendering.
+`source.Repair` is the same diagnostic class used by compilation.
+
+For transactional previews, import `session` from `algebra/session.ts`. It
+retains the existing prepare/commit/dispose lifecycle. The complete convenience
+namespace at `authoring/algebra.ts` combines all these capabilities; use it when
+the caller actually needs compilation and editing, not just JSON validation.
 
 This module supports the existing four/five-state real-scalar
 collect → evaluate count → distribute → optional product evaluation contract.
@@ -67,9 +76,11 @@ The real page and editor callers are `src/experiments/composed-algebra-intuition
 
 Use a namespace for a specific domain module, not one eager object assembling
 all KP capabilities. These modules have no new runtime registry or renderer.
-Concise algebra names currently alias the proven implementation; matrix creation
-additionally removes repeated scalar construction. The remaining authoring
-opportunity is fewer source concepts and shared host wiring, not more aliases.
+The algebra capability modules reuse the existing proof/presentation owners and
+contain no default examples. Namespace imports are fine within the chosen
+capability, but a broad barrel can retain compiler initialization even when a
+caller selects only `parse`. The cost gate builds complete callers rather than
+assuming tree shaking removes that work.
 
 Validation: `tests/concise-authoring.test.ts` checks dimension inference, invalid
 shapes/nonfinite inputs, stable identity, source mutation isolation, unchanged

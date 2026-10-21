@@ -1,7 +1,8 @@
 import katex from "katex";
 import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
 import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
-import * as algebra from "../../authoring/algebra.ts";
+import * as algebra from "../../authoring/algebra/compile.ts";
+import primary from "../../authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import { composedAlgebraSequenceV2, composedAlgebraWindowV2 } from "../composed-algebra/sequence.ts";
 import { projectComposedAlgebraSubexplanations, type KpComposedAlgebraSubexplanation } from "../composed-algebra/subexplanations.ts";
 import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
@@ -50,7 +51,7 @@ export function renderAlgebraIntuitionPage(draft: KpComposedAlgebraPresentationV
     <p><a href="/experiments/reusable-reasoning/?example=composed-algebra">Earlier three-state exemplar</a></p>`;
 }
 export function buildKpAlgebraIntuitionInitialPage() {
-  const draft = algebra.compile();
+  const draft = algebra.compile(primary);
   const truth = draft.checked.source.states.map(state => katex.renderToString(state.latex, { displayMode: true, throwOnError: true })).join("");
   return renderAlgebraIntuitionPage(draft) + `<noscript><style>[data-composed-reader],[data-reasoning-editor]{display:none}</style><h2>Verified endpoints</h2>${truth}</noscript>`;
 }

@@ -24,6 +24,27 @@
       "scope": "focused",
       "checkedAt": "2026-10-21T16:38:33.686Z",
       "notes": "Four independent complete consumers measured before changes; source-only algebra emits 78821 gzip bytes and checks 292 local files."
+    },
+    {
+      "command": "npm run measure:authoring-boundaries -- --types",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T16:43:06.553Z",
+      "notes": "After split: source consumer 1549 gzip bytes, four checked files; compiler 88758, editor 89165, no default fixtures. Same complete consumers."
+    },
+    {
+      "command": "npm run visual:composed-algebra -- --grep \"both extended sources download\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T16:43:07.532Z",
+      "notes": "Both actual source variants preserve revision, download and reload."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-10-21T16:43:08.119Z",
+      "notes": "All app, node, test, Svelte and domain checks pass after capability split."
     }
   ],
   "expectedLearning": [
