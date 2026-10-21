@@ -12,15 +12,18 @@ async function enhance(root: HTMLElement) {
   let disposed = false, restoring = false, locationValid = false;
   let surface: Awaited<ReturnType<typeof mountComposedAlgebraCardV2>> | undefined;
   let unsubscribe: (() => void) | undefined;
+  let locationTimer: number | undefined;
   let restore = () => {};
+  let persist = () => {};
   const dispose = () => {
     if (disposed) return;
-    disposed = true; unsubscribe?.(); surface?.dispose();
+    disposed = true; window.clearTimeout(locationTimer); unsubscribe?.(); surface?.dispose();
     window.removeEventListener("hashchange", restore);
     window.removeEventListener("pagehide", pagehide);
     root.dataset["composedStatus"] = "disposed";
   };
   const pagehide = (event: PageTransitionEvent) => {
+    window.clearTimeout(locationTimer); persist();
     if (event.persisted) { surface?.cancel(); surface?.clock.pause(); } else dispose();
   };
   // Register before asynchronous native preparation: a departing page must not
@@ -36,6 +39,7 @@ async function enhance(root: HTMLElement) {
     if (disposed) { surface.dispose(); return; }
     const active = surface;
     restore = () => {
+      window.clearTimeout(locationTimer);
       const result = readAlgebraEditionLocation(location.hash, draft.revisionId, sequence.checkpoints.last);
       locationValid = result.status === "ready";
       output.hidden = locationValid;
@@ -45,13 +49,19 @@ async function enhance(root: HTMLElement) {
       finally { restoring = false; }
     };
     restore();
-    unsubscribe = active.clock.subscribe(() => {
+    persist = () => {
       // Preserve an invalid incoming link for diagnosis until corrected. The
       // reader may still be explored; it never substitutes another source.
       if (disposed || restoring || !locationValid) return;
       const step = sequence.checkpoints.positionAt(active.clock.getSnapshot().progress);
       const url = new URL(location.href); url.hash = algebraEditionHash(draft.revisionId, step);
       if (url.href !== location.href) history.replaceState(history.state, "", url);
+    };
+    unsubscribe = active.clock.subscribe(() => {
+      // Browser history is not a rendering surface. Coalesce travel samples,
+      // then flush the exact final sample on idle or departure.
+      window.clearTimeout(locationTimer);
+      if (!disposed && !restoring && locationValid) locationTimer = window.setTimeout(persist, 250);
     });
     window.addEventListener("hashchange", restore);
     root.dataset["composedRevision"] = draft.revisionId;

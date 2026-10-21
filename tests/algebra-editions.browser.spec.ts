@@ -65,8 +65,9 @@ for (const c of cases) test(`${c.key}: native motion, exact reload, reverse, loc
       pose.forEach((p, i) => { expect(p.x).toBeCloseTo(prior[i]!.x, 1); expect(p.y).toBeCloseTo(prior[i]!.y, 1); });
     } else poses.set(step, pose);
   }
-  await seek(page, 1.5); const pinned = page.url();
-  expect(pinned).toContain("step=1.5");
+  await seek(page, 1.5);
+  await expect.poll(() => page.url()).toContain("step=1.5");
+  const pinned = page.url();
   await page.reload(); await expect(card).toHaveAttribute("data-composed-step", "1.5");
   const context = await browser.newContext();
   try {
@@ -152,4 +153,64 @@ test("departure during native preparation cannot resurrect a reader", async ({ p
   await page.locator("[data-kp-focus-deck-scrubber]").evaluate(node => { (node as HTMLInputElement).value = "2"; node.dispatchEvent(new Event("input")); });
   expect(page.url()).toBe(before);
   await expect(page.locator("[data-composed-card]")).toHaveAttribute("data-composed-step", "0");
+});
+
+test("rapid scrub samples coalesce history writes and pending work cannot overwrite a new link", async ({ page }) => {
+  await page.addInitScript(() => {
+    const replace = history.replaceState.bind(history);
+    let writes = 0;
+    history.replaceState = (data, unused, url) => {
+      document.documentElement.dataset["historyWrites"] = String(++writes);
+      replace(data, unused, url);
+    };
+  });
+  await page.goto(`${origin}/whole/`);
+  await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-status", "ready");
+  const writes = await page.locator("[data-kp-focus-deck-scrubber]").evaluate(node => {
+    const slider = node as HTMLInputElement;
+    for (let i = 0; i < 100; i++) { slider.value = String(i / 100); slider.dispatchEvent(new Event("input")); }
+    return Number(document.documentElement.dataset["historyWrites"] || 0);
+  });
+  expect(writes).toBe(0);
+  await expect(page.locator("html")).toHaveAttribute("data-history-writes", "1");
+  await expect.poll(() => new URL(page.url()).hash).toContain("step=0.99");
+  await seek(page, 2);
+  await page.evaluate(() => { location.hash = "step=1&revision=other"; });
+  await expect(page.locator("[data-composed-error]")).toContainText("matching source edition");
+  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true })));
+  expect(new URL(page.url()).hash).toBe("#step=1&revision=other");
+});
+
+test("cost: cold and warm complete local reader navigation", async ({ browser, browserName }, info) => {
+  test.skip(browserName !== "chromium", "Timing diagnostics use one fixed engine; preservation runs in all three.");
+  const samples = [];
+  for (let sample = 1; sample <= 3; sample++) {
+    const context = await browser.newContext();
+    try {
+      const page = await context.newPage();
+      await page.addInitScript(() => {
+        const tasks: number[] = [];
+        new PerformanceObserver(list => {
+          tasks.push(...list.getEntries().map(entry => entry.duration));
+          document.documentElement.dataset["algebraLongTasks"] = JSON.stringify(tasks);
+        }).observe({ type: "longtask", buffered: true });
+      });
+      for (const mode of ["cold", "warm"]) {
+        if (mode === "cold") await page.goto(`${origin}/whole/`); else await page.reload();
+        await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-status", "ready");
+        samples.push({ sample, mode, ...await page.evaluate(() => {
+          const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+          const resources = performance.getEntriesByType("resource") as PerformanceResourceTiming[];
+          return { observedReadyMs: performance.now(), loadMs: nav.loadEventEnd, requests: resources.length,
+            scriptRequests: resources.filter(r => new URL(r.name).pathname.endsWith(".js")).length,
+            decodedBytes: nav.decodedBodySize + resources.reduce((n, r) => n + r.decodedBodySize, 0),
+            transferBytes: nav.transferSize + resources.reduce((n, r) => n + r.transferSize, 0),
+            longTasks: JSON.parse(document.documentElement.dataset["algebraLongTasks"] || "[]") };
+        }) });
+      }
+    } finally { await context.close(); }
+  }
+  const report = { qualification: "Unthrottled localhost HTTP without compression or explicit cache headers. Warm is same-context reload; readiness includes automation overhead. Diagnostic samples, not learner-device performance or cross-edition caching guarantees.", samples };
+  console.log(JSON.stringify(report));
+  await info.attach("navigation-costs.json", { body: JSON.stringify(report), contentType: "application/json" });
 });

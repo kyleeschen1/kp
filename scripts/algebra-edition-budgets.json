@@ -1,0 +1,9 @@
+{
+  "editionJsGzip": 385000,
+  "editorJsGzip": 418000,
+  "staticClosureRaw": 1320000,
+  "staticClosureGzip": 940000,
+  "interactiveClosureRaw": 2820000,
+  "interactiveClosureGzip": 1330000,
+  "manifestRaw": 14000
+}

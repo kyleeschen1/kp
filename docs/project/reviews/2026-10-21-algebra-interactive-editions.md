@@ -61,4 +61,51 @@ Whole-and-parts static closure: 1,252,917 raw / 893,201 gzip bytes; interactive:
 2,674,251 raw / 1,266,191 gzip bytes. Manifest bytes are separate (8,254 / 13,106).
 The five-state case is also measured in the script. These are complete archives,
 including every font format and source/proof reading evidence, not actual HTTP
-transfer. Remaining dependency analysis and bounded gates are pending.
+transfer.
+
+## Preservation and cost result
+
+The final cohort passes 22 checks: seven preservation checks in Chromium,
+Firefox and WebKit, plus one Chromium timing diagnostic. The diagnostic is
+intentionally skipped in the other two engines, not a missing preservation gate.
+Tests cover both source lengths, fractional reload in a fresh browser context,
+reverse, exact identities/opacity, local asset closure, phone containment,
+reduced-motion keyboard, no-script reading, invalid source and location recovery,
+retained/final page lifecycle and departure while fonts/native preparation wait.
+
+The reader now coalesces travel samples before writing history (250ms idle), and
+flushes the exact position on page departure. One hundred rapid scrub samples
+produce one history update; a pending write cannot overwrite a newly invalid
+link. That lifecycle repair adds 155 raw / 45 gzip JavaScript bytes.
+
+A narrow-entrypoint extraction experiment did not improve complete emitted cost:
+48 fewer raw bytes but 60 more gzip bytes, with five additional modules. It was
+fully reverted. Existing tree shaking already removes unused function bodies;
+splitting these modules did not remove the real compiler/native dependencies.
+No semantic owner, required dependency or authenticated mount was weakened.
+
+Final complete JS: edition **1,409,774 raw / 370,019 gzip**; editor
+**1,520,247 raw / 402,100 gzip** (32,081 gzip bytes, about 8%, less for reading).
+Both contain 35 emitted JS chunks. Whole-and-parts interactive archive:
+2,674,406 raw / 1,266,236 gzip, plus 13,106 manifest bytes; five-state archive:
+2,675,832 raw / 1,265,717 gzip, plus 13,106 manifest bytes. Static bytes unchanged.
+
+`scripts/algebra-edition-budgets.json` establishes complete-consumer limits:
+385,000 / 418,000 JS gzip bytes for edition/editor; static archive
+1,320,000 raw / 940,000 gzip; interactive archive 2,820,000 raw / 1,330,000 gzip;
+manifest 14,000 raw. These initial ceilings retain roughly 4–7% bounded headroom
+over measured consumers, not an amendment to a previously failing budget.
+The executable gate includes all chunks/assets and prevents edition imports of
+editor sessions, draft staging, default fixtures or host selection. Mutation
+tests prove cost and authority violations fail. `npm run measure:algebra-editions`
+and `tests/algebra-edition-costs.test.ts` pass.
+
+Three unthrottled local cold samples observed readiness at 338–360ms; reloads at
+289–334ms. All requested 38 resources including 25 scripts, decoded 1,402,767
+bytes, and transferred 1,414,467 bytes with HTTP overhead. Recorded long tasks
+were 176–207ms. This plain test server has no compression or explicit cache
+headers; warm means same-context reload, not proven cache savings. Readiness
+includes automation overhead. These measurements expose remaining startup work;
+they do not establish performance on learner hardware or across many cards.
+Each immutable edition has its own asset directory; cross-edition deduplication
+and multi-card amortization are not implemented by this delivery.

@@ -39,7 +39,8 @@
     },
     {
       "id": "preservation-costs",
-      "status": "planned"
+      "summary": "Three-engine preservation and complete cost gates pass; browser history coalesced; unhelpful import extraction reverted.",
+      "status": "complete"
     },
     {
       "id": "integration",

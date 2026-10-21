@@ -35,6 +35,20 @@
       "scope": "browser-cohort",
       "checkedAt": "2026-10-21T20:16:01.935Z",
       "notes": "17 of 18 pass; Firefox invisible-leaf coordinate differs by 1/60px. Exact identity and opacity retained; subpixel geometry tolerance repair requires rerun."
+    },
+    {
+      "command": "npm run visual:algebra-editions",
+      "status": "passed",
+      "scope": "browser-cohort",
+      "checkedAt": "2026-10-21T20:21:01.606Z",
+      "notes": "Final 22 pass: 21 preservation checks across Chromium Firefox WebKit plus Chromium timing diagnostic; two non-Chromium timing-only skips. Includes coalesced history and pending-preparation disposal."
+    },
+    {
+      "command": "npm run measure:algebra-editions",
+      "status": "passed",
+      "scope": "complete-costs",
+      "checkedAt": "2026-10-21T20:21:02.923Z",
+      "notes": "Edition 370019 gzip JS vs editor 402100; all lazy chunks and full archives measured. Narrow module extraction yielded no benefit and was reverted. Initial bounded gates and mutation regression pass."
     }
   ]
 }

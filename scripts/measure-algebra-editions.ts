@@ -5,6 +5,7 @@ import { gzipSync } from "node:zlib";
 import { buildAlgebraReader } from "./algebra-reader-build.ts";
 import { buildInteractiveAlgebraEdition } from "./algebra-interactive-edition.ts";
 import { buildComposedAlgebraEdition } from "./build-composed-algebra-edition.ts";
+import budgets from "./algebra-edition-budgets.json" with { type: "json" };
 
 export async function measureAlgebraEditions() {
   const consumers = [];
@@ -31,11 +32,27 @@ export async function measureAlgebraEditions() {
   return { qualification: "Complete production JS consumers include every lazy chunk. Edition closures include all fonts, styles, source and publication evidence; manifest bytes are separate. Sum of per-file gzip is an estimate, not HTTP transfer. Renderer and compiler remain real dependencies.", consumers, editions };
 }
 
+export function checkAlgebraEditionCosts(report: Awaited<ReturnType<typeof measureAlgebraEditions>>) {
+  for (const consumer of report.consumers) {
+    if (consumer.gzip > budgets[consumer.mode === "edition" ? "editionJsGzip" : "editorJsGzip"])
+      throw new Error(`${consumer.mode} complete JavaScript exceeds budget; diagnose before amending.`);
+    if (consumer.mode === "edition" && consumer.modules.some(path => /src\/authoring\/(?:algebra\/session|prepared-revision-session|staged-preview|examples\/)|composed-algebra-intuition\/(?:entry|page)\.ts/.test(path)))
+      throw new Error("Read-only algebra edition acquired editor or fixture-selection authority.");
+  }
+  for (const edition of report.editions) {
+    const raw = edition.mode === "static" ? budgets.staticClosureRaw : budgets.interactiveClosureRaw;
+    const gzip = edition.mode === "static" ? budgets.staticClosureGzip : budgets.interactiveClosureGzip;
+    if (edition.raw > raw || edition.gzip > gzip || edition.manifestBytes > budgets.manifestRaw)
+      throw new Error(`${edition.mode} complete edition exceeds budget; preserve every asset while diagnosing.`);
+  }
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   if (process.argv.length !== 2) throw new Error("Run the fixed complete cohort without arguments.");
   const report = await measureAlgebraEditions();
   console.log(JSON.stringify({ qualification: report.qualification,
-    consumers: report.consumers.map(({ modules, ...rest }) => ({ ...rest, moduleCount: modules.length,
-      authorModules: modules.filter(path => path.startsWith("src/authoring/")) })),
+    consumers: report.consumers.map(({ modules, chunks, ...rest }) => ({ ...rest, moduleCount: modules.length,
+      chunkCount: chunks.length, largestChunks: [...chunks].sort((a, b) => b.gzip - a.gzip).slice(0, 5) })),
     editions: report.editions.map(({ files, ...rest }) => ({ ...rest, fileCount: files.length })) }, null, 2));
+  checkAlgebraEditionCosts(report);
 }
