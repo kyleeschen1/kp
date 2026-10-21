@@ -119,6 +119,20 @@
       "scope": "reader-capabilities",
       "checkedAt": "2026-10-21T19:20:04.435Z",
       "notes": "Seven canonical editor preservation checks pass after sharing one playback surface."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-edition.test.ts tests/calculus-reader-build.test.ts",
+      "status": "passed",
+      "scope": "interactive-edition",
+      "checkedAt": "2026-10-21T19:22:14.479Z",
+      "notes": "Five checks pass; static and interactive modes retain source identity, differ in byte identity, and detect reader alteration; full types pass."
+    },
+    {
+      "command": "npm run visual:calculus-editions -- --project=chromium",
+      "status": "passed",
+      "scope": "interactive-edition",
+      "checkedAt": "2026-10-21T19:22:15.461Z",
+      "notes": "Three cases pass: no-script static and both fresh interactive selected sources, no external requests or author controls."
     }
   ],
   "expectedLearning": [

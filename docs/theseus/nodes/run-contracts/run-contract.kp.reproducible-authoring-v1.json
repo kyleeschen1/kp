@@ -80,7 +80,8 @@
     },
     {
       "id": "interactive-edition",
-      "status": "planned"
+      "summary": "Explicit interactive local editions build/check and open exact sources; static mode remains synchronous and compatible.",
+      "status": "complete"
     },
     {
       "id": "edition-restoration",

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync, writeFileSync, mkdtempSync, mkdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { buildCalculusEdition, calculusEditionStyles } from "../scripts/build-calculus-edition.ts";
+import { buildCalculusEdition, buildInteractiveCalculusEdition, calculusEditionStyles } from "../scripts/build-calculus-edition.ts";
 import { verifyCalculusPublication } from "../scripts/calculus-publication.ts";
 
 test("calculus styles preserve shared scaffold and every referenced KaTeX font", () => {
@@ -15,6 +15,28 @@ test("calculus styles preserve shared scaffold and every referenced KaTeX font",
   const paths = [...css.matchAll(/url\(([^)]+)\)/g)].map(m => m[1]!);
   assert.ok(paths.length > 20);
   for (const path of paths) assert.deepEqual(files.get(path), readFileSync(join("node_modules/katex/dist", path)));
+});
+
+test("interactive edition checks exact reader bytes and retains the static edition", async () => {
+  mkdirSync("tmp/codex", { recursive: true });
+  const scratch = mkdtempSync("tmp/codex/calculus-interactive-test-"), outputs: string[] = [];
+  try {
+    const source = JSON.parse(readFileSync("content/authoring/transfer/stationary-change.json", "utf8"));
+    source.title = scratch;
+    const path = join(scratch, "source.json"); writeFileSync(path, JSON.stringify(source));
+    const staticEdition = buildCalculusEdition(path); outputs.push(staticEdition.directory);
+    const interactive = await buildInteractiveCalculusEdition(path); outputs.push(interactive.directory);
+    assert.equal(interactive.explanationRevisionId, staticEdition.explanationRevisionId);
+    assert.notEqual(interactive.byteEditionId, staticEdition.byteEditionId);
+    assert.equal((await buildInteractiveCalculusEdition(path, true)).checked, true);
+    assert.match(readFileSync(join(interactive.directory, "index.html"), "utf8"), /type="module" src="\.\/reader.js"/);
+    writeFileSync(join(interactive.directory, "reader.js"), "altered");
+    await assert.rejects(() => buildInteractiveCalculusEdition(path, true), /stale or altered/);
+    assert.equal(buildCalculusEdition(path, true).checked, true);
+  } finally {
+    for (const output of outputs) rmSync(output, { recursive: true, force: true });
+    rmSync(scratch, { recursive: true, force: true });
+  }
 });
 
 for (const name of ["stationary-change", "two-reversals"]) test(`${name}: static edition includes exact source, math and styles`, () => {
