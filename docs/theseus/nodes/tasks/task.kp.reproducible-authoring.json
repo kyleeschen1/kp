@@ -105,6 +105,20 @@
       "scope": "reader-build",
       "checkedAt": "2026-10-21T19:18:38.600Z",
       "notes": "Two independent production builds yield identical complete local closure; renderer editor remains lazy; full types pass."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-reader-build.test.ts tests/calculus-publication.test.ts tests/calculus-edition.test.ts tests/change-propagation.test.ts",
+      "status": "passed",
+      "scope": "reader-capabilities",
+      "checkedAt": "2026-10-21T19:20:03.516Z",
+      "notes": "Fifteen tests and full types pass; edition closure excludes KaTeX renderer, view and preview staging."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "passed",
+      "scope": "reader-capabilities",
+      "checkedAt": "2026-10-21T19:20:04.435Z",
+      "notes": "Seven canonical editor preservation checks pass after sharing one playback surface."
     }
   ],
   "expectedLearning": [

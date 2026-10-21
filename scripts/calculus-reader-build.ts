@@ -18,7 +18,7 @@ export async function buildCalculusReader() {
       }
     } }],
     build: { write: false, minify: true, target: "es2022", rolldownOptions: {
-      input: { reader: resolve(root, "src/tutorial/change-propagation/reader.ts") },
+      input: { reader: resolve(root, "src/tutorial/change-propagation/edition-reader.ts") },
       preserveEntrySignatures: "strict",
       output: { entryFileNames: "reader.js", chunkFileNames: "chunks/[name]-[hash].js", assetFileNames: "assets/[name]-[hash][extname]" }
     } } });

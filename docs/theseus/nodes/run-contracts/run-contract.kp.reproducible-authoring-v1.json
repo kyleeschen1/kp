@@ -75,7 +75,8 @@
     },
     {
       "id": "reader-capabilities",
-      "status": "planned"
+      "summary": "One shared playback surface; read-only bundle excludes authoring code; focused, browser and type gates pass.",
+      "status": "complete"
     },
     {
       "id": "interactive-edition",

@@ -11,7 +11,7 @@ export function compileCalculusPublication(sourceText: string, sourcePath: strin
   const checked = compileChangeSource(sourceText);
   if (checked.status !== "checked") throw new Error(`${checked.path}: ${checked.message}`);
   const model = checked.model;
-  const html = renderChangePublication(model, sourceText);
+  const html = renderChangePublication(model, sourceText, "reader");
   const payload = { source: model.source, revisionId: model.revision,
     latex: model.latex, initial: model.sample(model.source.x, model.source.h),
     checkpoints: model.source.steps.map(({ id, title }) => ({ id, title })),

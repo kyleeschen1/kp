@@ -11,6 +11,7 @@ for (const name of ["stationary-change", "two-reversals"]) test(`${name}: public
   assert.equal(artifact.source.sha256, digestEditionBytes(bytes));
   assert.equal(artifact.payload.proseAuthority, "editorial");
   assert.equal(artifact.payload.checkpoints.length, 5);
+  assert.doesNotMatch(artifact.payload.reading.html, /<textarea|data-change-author|data-change-apply/);
   assert.ok(artifact.math.fragmentCount > 20);
   for (const step of artifact.payload.source.steps) assert.ok(artifact.payload.reading.html.includes(step.text));
   for (const field of ["initial", "reading", "source", "revisionId"]) {

@@ -57,7 +57,7 @@ export function renderChangeCard(model: ChangeModel): string {
     beats: source.steps.map(step => ({ slug: step.id, title: step.title, html: `<h2>${escape(step.title)}</h2><p>${escape(step.text)}</p>` })) });
 }
 
-export function renderChangePublication(model: ChangeModel, bytes: string): string {
+export function renderChangePublication(model: ChangeModel, bytes: string, mode: "editor" | "reader" = "editor"): string {
   return `<header class="change-intro"><p>Kinetic Press · Calculus</p><h1>${escape(model.source.title)}</h1><p>What does the chain rule predict—and what does it leave out?</p></header>
     <div data-change-host>${renderChangeCard(model)}</div>
     <details class="change-reading-source"><summary>Read the mathematics without animation</summary>
@@ -67,10 +67,10 @@ export function renderChangePublication(model: ChangeModel, bytes: string): stri
       <p>These supported functions are differentiable everywhere. Differentiability gives ${math("\\Delta u=f'(x)h+o(h)")} and ${math("\\Delta y=g'(u)\\Delta u+o(\\Delta u)")}. Since ${math("\\Delta u=O(h)")}, substitution gives ${math("\\Delta y=g'(u)f'(x)h+o(h)")}, including when ${math("f'(x)=0")}.</p>
       <p>Readouts are rounded floating-point evaluations. “Actual” identifies the finite-difference definition, not exact numerical arithmetic. The ratio is undefined at h = 0 and is shown as a dash. Displayed zero may mean smaller than the shown precision.</p>
     </details>
-    <details class="change-author" data-change-author hidden><summary>Edit the functions and explanation</summary>
+    ${mode === "editor" ? `<details class="change-author" data-change-author hidden><summary>Edit the functions and explanation</summary>
       <p>This local preview accepts sums, explicit products such as 2*x, integer coefficients up to 10, integer powers 0–4, sin and cos. The first function binds x; the second binds u. Edit the five passages too: prose is author-supplied and is not checked for mathematical truth.</p>
       <label for="change-source">Explanation source</label><textarea id="change-source" spellcheck="false">${escape(bytes)}</textarea>
       <button type="button" data-change-apply>Preview this source</button><button type="button" data-change-download>Download current source</button>
       <p data-change-diagnostic role="status">Edits stay in this browser tab until downloaded. A rejected draft leaves the last valid card intact.</p>
-    </details><script id="change-source-bytes" type="application/json">${JSON.stringify(bytes).replaceAll("<", "\\u003c")}</script>`;
+    </details>` : `<p data-change-diagnostic role="status"></p>`}<script id="change-source-bytes" type="application/json">${JSON.stringify(bytes).replaceAll("<", "\\u003c")}</script>`;
 }

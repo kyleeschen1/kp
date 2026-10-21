@@ -8,9 +8,9 @@ test("the production calculus reader has a reproducible complete local closure",
   assert.deepEqual(first.files, second.files);
   const entry = first.chunks.find(c => c.entry)!;
   assert.equal(entry.file, "reader.js");
-  assert.ok(entry.modules.some(path => path.includes("change-propagation/reader.ts")));
+  assert.ok(entry.modules.some(path => path.includes("change-propagation/edition-reader.ts")));
   assert.ok(first.chunks.every(c => c.modules.every(path => !path.includes("/experiments/authoring-market/") && !path.includes("/svelte-catalogue/"))));
-  assert.ok(entry.modules.every(path => !path.includes("node_modules/katex")), "KaTeX editing must remain lazy");
+  assert.ok(first.chunks.every(c => c.modules.every(path => !path.includes("node_modules/katex") && !path.endsWith("change-propagation/view.ts") && !path.includes("staged-preview"))), "Edition reading must not acquire editor capabilities");
   const total = [...first.files.values()].reduce((sum, bytes) => sum + gzipSync(bytes).length, 0);
   assert.ok(total < 150000, `Unexpected reader plus editing closure: ${total} gzip bytes`);
 });
