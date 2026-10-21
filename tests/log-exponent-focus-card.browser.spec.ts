@@ -2,6 +2,30 @@ import { expect, test, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
+test("initial logarithm preparation retains its calibrated material owners", async ({ page }) => {
+  await page.addInitScript(() => {
+    const removed: string[] = [];
+    Object.defineProperty(window, "__kpRemovedInitialLogOwners", { value: removed });
+    new MutationObserver(records => {
+      for (const record of records) {
+        if (!(record.target instanceof Element) ||
+          !record.target.closest("[data-kp-log-exponent-stage]")) continue;
+        for (const node of record.removedNodes) {
+          if (node instanceof HTMLElement && node.dataset["kpEquationMaterialOwnerId"]) {
+            removed.push(node.dataset["kpEquationMaterialOwnerId"]);
+          }
+        }
+      }
+    }).observe(document, { childList: true, subtree: true });
+  });
+  await page.goto(`${path}#beat.log-exponent.locate-the-unknown`);
+  const player = page.locator("[data-kp-log-exponent-focus-card] [data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-surface-readiness", "ready");
+  expect(await player.locator("[data-kp-equation-material-owner-id]").count()).toBeGreaterThan(0);
+  const removed = await page.evaluate(() => Reflect.get(window, "__kpRemovedInitialLogOwners"));
+  expect(removed).toEqual([]);
+});
+
 test("prepared logarithm card activates without the algebra catalogue pack", async ({ page }) => {
   const requests: string[] = [];
   page.on("request", request => requests.push(request.url()));
@@ -901,6 +925,7 @@ test("an arrow interrupts an active rewrite and advances exactly one step", asyn
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto(path);
   const equation = page.locator("[data-kp-log-exponent-focus-card]");
+  await equation.scrollIntoViewIfNeeded();
   const stage = equation.locator("[data-kp-log-exponent-stage]");
   const next = equation.locator("[data-kp-focus-deck-next]");
   await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
@@ -935,6 +960,7 @@ test("an equation edge waits for native readiness instead of losing playback", a
 }) => {
   await page.goto(path);
   const equation = page.locator("[data-kp-log-exponent-focus-card]");
+  await equation.scrollIntoViewIfNeeded();
   const player = equation.locator("[data-kp-editor-animation-player]");
   const stage = equation.locator("[data-kp-log-exponent-stage]");
   const next = equation.locator("[data-kp-focus-deck-next]");
@@ -989,6 +1015,7 @@ test("a runtime native failure becomes an observable static fallback", async ({
 }) => {
   await page.goto(path);
   const equation = page.locator("[data-kp-log-exponent-focus-card]");
+  await equation.scrollIntoViewIfNeeded();
   const player = equation.locator("[data-kp-editor-animation-player]");
   const stage = equation.locator("[data-kp-log-exponent-stage]");
   const next = equation.locator("[data-kp-focus-deck-next]");

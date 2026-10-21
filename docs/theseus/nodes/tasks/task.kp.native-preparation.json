@@ -56,6 +56,69 @@
       "scope": "preservation",
       "checkedAt": "2026-10-21T18:09:53.268Z",
       "notes": "33 checks passed."
+    },
+    {
+      "command": "npm run visual:focus-deck-input -- --grep prepared-selected-cohort",
+      "status": "failed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-21T18:13:12.001Z",
+      "notes": "Nine selected tests: six passed, three waited for an offscreen deferred card before activation. Repair test setup to scroll the card into view, matching existing neighboring tests; production activation unchanged."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:14:50.465Z",
+      "notes": "Application, Node, test, Svelte and domain TypeScript passed; Svelte zero warnings."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "realized-paint",
+      "checkedAt": "2026-10-21T18:14:51.340Z",
+      "notes": "Two Chromium tests passed: real source/material/target seam traces and bounded lifecycle pressure."
+    },
+    {
+      "command": "npm run visual:focus-deck-input -- --grep 'prepared logarithm|final equation rewrites|automatic exponent|automatic division|disposing an active|arrow.*interrupt|equation edge|previous.*rewrite|native.*failure'",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:14:52.037Z",
+      "notes": "All nine selected tests passed after repairing only deferred-activation setup in three tests."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-10-21T18:14:52.806Z",
+      "notes": "Twelve reader manifest route closures passed."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-10-21T18:14:53.481Z",
+      "notes": "Existing reader budgets pass without amendment."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:17:25.778Z",
+      "notes": "Sandboxed attempt: 7337 pass, 14 fail. Thirteen loopback EPERM failures; one generated reachability count stale after adding browser fixture (5031 versus 5032). Regenerate exact inventory and rerun full suite outside sandbox."
+    },
+    {
+      "command": "npm run visual:focus-deck-input -- --grep 'initial logarithm preparation'",
+      "status": "failed",
+      "scope": "first-mount",
+      "checkedAt": "2026-10-21T18:17:26.785Z",
+      "notes": "Regression reproduced eight freshly calibrated material owners discarded on first mount; condition retirement on an actual predecessor."
+    },
+    {
+      "command": "npm run visual:focus-deck-input -- --grep 'initial logarithm preparation|prepared logarithm|final equation rewrites|automatic exponent|automatic division|disposing an active|arrow.*interrupt|equation edge|previous.*rewrite|native.*failure'",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:17:27.633Z",
+      "notes": "All ten pass including owner-retention regression, operation boundaries, remount, readiness, failure and reversal."
     }
   ],
   "expectedLearning": [

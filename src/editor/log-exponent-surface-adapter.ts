@@ -423,11 +423,13 @@ function applyFrame(
       failSurface(session, state, error);
       return;
     }
-    activeTransit?.transit.retire();
-    // A native KaTeX material layer has one renderer-session authority.
-    // Clearing it before an operation boundary prevents generic track IDs
-    // from reusing the preceding operation's computed-style clone.
-    syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+    if (activeTransit !== undefined) {
+      activeTransit.transit.retire();
+      // Generic track IDs cannot carry a preceding operation's clone across
+      // an authority boundary. First mount has no predecessor: retain the
+      // new session's already-calibrated paint instead of rebuilding it.
+      syncKpEquationMaterialLayer({ stage: session.stage, owners: [] });
+    }
     activeTransit = {
       operationIndex: frame.operationIndex,
       transit: nextTransit

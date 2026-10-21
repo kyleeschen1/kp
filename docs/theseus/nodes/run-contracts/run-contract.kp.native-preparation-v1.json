@@ -35,13 +35,14 @@
     {
       "id": "repair",
       "title": "Repair",
-      "summary": "Leaf-only fresh baseline observations with wrapper fallback, cleanup tests and three-engine geometry preservation; integration follows",
+      "summary": "Leaf baseline batching plus preservation of first-mount calibrated owners; ten logarithm browser checks pass, including operation boundaries and remount. Final production cohort and full suite pending.",
       "status": "complete"
     },
     {
       "id": "verification",
       "title": "Verification",
-      "status": "planned"
+      "summary": "Production acceptance, complete native compositor browser path, types and full deterministic regression",
+      "status": "in-progress"
     }
   ]
 }
