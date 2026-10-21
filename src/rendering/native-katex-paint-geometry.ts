@@ -201,6 +201,36 @@ export function measureKpNativeKatexBaselineY(stage: HTMLElement, element: HTMLE
   return measureInlineBaseline(element, stage);
 }
 
+/** One synchronous observation: write all probes, read all baselines, then
+ * remove them. No measured geometry survives into another layout revision. */
+export function measureKpNativeKatexBaselines(
+  stage: HTMLElement,
+  elements: readonly HTMLElement[]
+): readonly number[] {
+  // Nested wrapper probes can change each other's line boxes (especially
+  // vlists). Only independent leaf glyphs share a measurement transaction.
+  if (elements.some(element => element.childElementCount !== 0 || !element.textContent?.trim())) {
+    return elements.map(element => measureKpNativeKatexBaselineY(stage, element));
+  }
+  const markers: HTMLElement[] = [];
+  try {
+    for (const element of elements) {
+      const marker = createBaselineMarker(element);
+      markers.push(marker);
+      element.append(marker);
+    }
+    if (markers.length === 0) return [];
+    // Keep every probe present for both coordinate reads, including when
+    // their insertion triggers scroll anchoring or the stage is scaled.
+    const baselines = markers.map(marker => marker.getBoundingClientRect().top);
+    const rect = stage.getBoundingClientRect();
+    const scale = rect.height > 0 ? (stage.offsetHeight || rect.height) / rect.height : 1;
+    return baselines.map(baseline => (baseline - rect.top) * scale);
+  } finally {
+    for (const marker of markers) marker.remove();
+  }
+}
+
 function visibleDirectText(element: HTMLElement): string {
   return [...element.childNodes]
     .filter((node) => node.nodeType === Node.TEXT_NODE)
@@ -209,10 +239,15 @@ function visibleDirectText(element: HTMLElement): string {
     .replace(/[\s\u200b-\u200d\ufeff]+/g, "");
 }
 
-function measureInlineBaseline(element: HTMLElement, stage?: HTMLElement): number {
+function createBaselineMarker(element: HTMLElement): HTMLElement {
   const marker = element.ownerDocument.createElement("span");
   marker.setAttribute("aria-hidden", "true");
   marker.style.cssText = "display:inline-block;width:0;height:0;padding:0;margin:0;border:0;line-height:0;vertical-align:baseline";
+  return marker;
+}
+
+function measureInlineBaseline(element: HTMLElement, stage?: HTMLElement): number {
+  const marker = createBaselineMarker(element);
   element.append(marker);
   try {
     const baseline = marker.getBoundingClientRect().top;

@@ -1,0 +1,80 @@
+{
+  "id": "task.kp.native-preparation",
+  "kind": "task",
+  "title": "Reduce measured native equation preparation cost",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-native-preparation-investigation.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "task.kp.reader-activation"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:native-preparation",
+      "status": "failed",
+      "scope": "geometry",
+      "checkedAt": "2026-10-21T18:07:08.475Z",
+      "notes": "Unrestricted nested probes changed line boxes in all three browsers; narrowed batching to independent leaf glyphs and retained individual wrapper probes."
+    },
+    {
+      "command": "node --test tests/composed-algebra-baseline-probe.test.ts",
+      "status": "passed",
+      "scope": "geometry",
+      "checkedAt": "2026-10-21T18:09:50.772Z",
+      "notes": "Three tests: probe phase ordering, cleanup on failure, fresh observations, scroll anchoring, and compound-owner fallback."
+    },
+    {
+      "command": "npm run visual:native-preparation",
+      "status": "passed",
+      "scope": "geometry",
+      "checkedAt": "2026-10-21T18:09:51.705Z",
+      "notes": "Three browser engines preserve independent native baseline geometry with leaf-only batching; nested wrappers retain individual probes."
+    },
+    {
+      "command": "npm run test:real-katex-glyph-compositor",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-21T18:09:52.459Z",
+      "notes": "82 checks passed."
+    },
+    {
+      "command": "npm run test:canonical-equation-renderer",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-10-21T18:09:53.268Z",
+      "notes": "33 checks passed."
+    }
+  ],
+  "expectedLearning": [
+    "Attribute native preparation cost and preserve realized paint while removing avoidable work."
+  ],
+  "allowedWork": [
+    "Native preparation profiling and behavior-preserving responsible-owner repair"
+  ],
+  "disallowedWork": [
+    "New visual policy, activation deferral, endpoint omission, general cache framework"
+  ],
+  "criteria": [
+    {
+      "id": "preservation",
+      "weight": "high"
+    },
+    {
+      "id": "attribution",
+      "weight": "high"
+    }
+  ]
+}

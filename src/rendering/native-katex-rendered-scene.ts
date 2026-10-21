@@ -11,7 +11,8 @@ import {
   kpEquationSettlementTolerancePx
 } from "../animation/equation-shared-presentation-policy.ts";
 import {
-  measureKpNativeKatexBaselineY
+  measureKpNativeKatexBaselineY,
+  measureKpNativeKatexBaselines
 } from "./native-katex-paint-geometry.ts";
 
 export type KpNativeKatexPaintKind =
@@ -363,7 +364,7 @@ export function observeKpNativeKatexGlyphPaintAtoms(
       }
       return directPaintText(element) !== "";
     });
-  return Object.freeze(candidates.flatMap((sourceElement, ordinal) => {
+  const glyphs = candidates.flatMap((sourceElement, ordinal) => {
     const computed = getComputedStyle(sourceElement);
     const clientRect = sourceElement.getBoundingClientRect();
     if (
@@ -393,12 +394,17 @@ export function observeKpNativeKatexGlyphPaintAtoms(
         stageLayoutHeight,
         fragmentClientRect: clientRect
       }),
-      baselineY: measureKpNativeKatexBaselineY(input.stage, sourceElement),
       styleFingerprint: fingerprintKpNativeKatexPaintStyle(computed),
       zOrder: ordinal,
       fontRevision: input.fontRevision
     })];
-  }));
+  });
+  const baselines = measureKpNativeKatexBaselines(input.stage,
+    glyphs.map(glyph => glyph.sourceElement));
+  return Object.freeze(glyphs.map((glyph, index) => Object.freeze({
+    ...glyph,
+    baselineY: baselines[index]!
+  })));
 }
 
 export function observeKpNativeKatexPaintAtoms(input:

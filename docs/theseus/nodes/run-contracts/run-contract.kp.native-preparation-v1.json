@@ -1,0 +1,47 @@
+{
+  "id": "run-contract.kp.native-preparation-v1",
+  "kind": "run-contract",
+  "title": "Native preparation investigation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.native-preparation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-native-preparation-investigation.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Profile and repair existing native preparation owners"
+  ],
+  "disallowedWork": [
+    "New visual policy or activation deferral"
+  ],
+  "goal": "Reduce avoidable native preparation cost while preserving realized paint",
+  "target": "task.kp.native-preparation",
+  "slices": [
+    {
+      "id": "diagnosis",
+      "title": "Diagnosis",
+      "summary": "Source-mapped first transition shows 444-478 layouts and 67-93ms inclusive baseline probes at 6x; repair a bounded batch measurement owner, preserving geometry.",
+      "status": "complete"
+    },
+    {
+      "id": "repair",
+      "title": "Repair",
+      "summary": "Leaf-only fresh baseline observations with wrapper fallback, cleanup tests and three-engine geometry preservation; integration follows",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "title": "Verification",
+      "status": "planned"
+    }
+  ]
+}
