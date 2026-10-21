@@ -6,7 +6,8 @@ Mathematics, authoring input, seven beats, optical profiles and prose are preser
 
 ## Reported final jerk
 
-KP-MATRIX-END-JERK remains open for confirmation of the user's reported sensation.
+KP-MATRIX-END-JERK is resolved: on October 21 the user confirmed “bug is fixed.
+continue”. This acceptance supplements the objective evidence below.
 Two objective discontinuities were reproduced and repaired:
 
 - Native inline spans and material inline-block wrappers have different leading.
@@ -34,8 +35,8 @@ certification or a claim about all possible causes of perceived jerk.
 
 Existing transit focus color still yields to normal native color at settlement.
 No new color envelope, duration, path or aesthetic treatment was chosen while the
-user was away. If the remaining impression is that color change, it needs a
-separate visual judgment.
+user was away. The user subsequently accepted the repaired animation; no further
+color change is requested.
 
 ## Preparation ownership
 
@@ -66,7 +67,7 @@ No wall-time performance claim is inferred from that count.
   all six checks passed across the three engines, including uninterrupted full playback.
 - Full `npm run typecheck` rerun passed (application, scripts, browser tests,
   Svelte with zero warnings/errors, and domains).
-- Broad integration and complete-consumer costs remain for the final package.
+- Broad integration and complete-consumer costs are recorded below.
 
 No new framework, lesson, public API, service or retained prepared-scene cache.
 Additional measurement happens at preparation, never inside the animation loop.
@@ -151,12 +152,12 @@ updated that count only, preserving all 68 declared roots. The clean full
 
 **COMPLETE — bounded engineering portfolio.** All four packages are satisfied;
 no new aesthetic treatment or dependent visual rollout was introduced. The
-objective invariants have executable safeguards, but the original subjective bug
-report remains open until the user can confirm the final transfer feels right.
+objective invariants have executable safeguards. The user has now confirmed the
+reported jerk is fixed, closing the subjective bug report as well.
 
 Return to `http://localhost:8000/experiments/matrix-column-combinations/?input=dependent-columns#sum`
 and use Next to inspect settlement, then compare the other result column. The
 existing shared server remains running. No further package is implied by unused
 time in the four-hour ceiling. Existing unrelated editor-test and inbox changes
 are preserved. The next engineering run should start from this evidence and the
-user's remaining observation, not repeat the completed loading/lifecycle audit.
+accepted behavior, not repeat the completed loading/lifecycle audit.

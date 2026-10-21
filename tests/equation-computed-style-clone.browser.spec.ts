@@ -1,5 +1,62 @@
 import { expect, test } from "@playwright/test";
 
+test("computed style snapshots preserve replacement semantics across fresh contexts", async ({ page }) => {
+  await page.goto("/");
+  const result = await page.evaluate(async () => {
+    const modulePath = "/src/rendering/computed-style-clone.ts";
+    const { inlineElementComputedStyles } = await import(modulePath);
+    const styles = document.createElement("style");
+    styles.textContent = `
+      .clone-probe { font: italic 23px/31px serif; color: rgb(23,45,67); }
+      .clone-probe.changed { font-size: 37px; color: rgb(90,80,70); direction: rtl; }
+      .clone-probe span { margin-inline-start: 3px; padding-left: 2px; }
+      .clone-probe.changed span { writing-mode: vertical-rl; }
+    `;
+    const source = document.createElement("div");
+    source.className = "clone-probe";
+    source.innerHTML = `<span>x<em>y</em></span><span style="font-size: 12px !important; margin: 2px; margin-inline-start: 7px">z</span>
+      <svg viewBox="0 0 10 10"><path fill="currentColor" d="M0 10L5 0L10 10"/></svg>`;
+    // CSSOM permits escaped custom-property names and quoted punctuation. Neither
+    // can be interpolated as an unescaped declaration name or split on semicolons.
+    source.style.setProperty("--punct:uation", '"a;b:c"');
+    document.head.append(styles); document.body.append(source);
+    const snapshot = (node: Element) => [node, ...node.querySelectorAll("*")].map(element => {
+      const computed = getComputedStyle(element);
+      return ["font-family", "font-size", "font-style", "line-height", "color", "fill",
+        "margin-left", "margin-right", "padding-left", "direction", "writing-mode", "--punct:uation"]
+        .map(name => [name, computed.getPropertyValue(name)]);
+    });
+    const host = document.createElement("div");
+    host.style.cssText = "font: 50px monospace; color: red; direction: rtl";
+    document.body.append(host);
+    const comparisons = [];
+    try {
+      for (const changed of [false, true, false]) {
+        source.classList.toggle("changed", changed);
+        const actual = source.cloneNode(true);
+        if (!(actual instanceof HTMLElement)) throw new Error("Unexpected clone");
+        // Existing clone-only declarations must survive; important values must
+        // be replaced exactly as setProperty does, not win by textual cascade.
+        actual.style.setProperty("--clone-only", "kept");
+        actual.style.setProperty("color", "red", "important");
+        const before = source.outerHTML;
+        const expected = snapshot(source);
+        inlineElementComputedStyles(source, actual);
+        host.replaceChildren(actual);
+        comparisons.push({ actual: snapshot(actual), expected, untouched: source.outerHTML === before,
+          cloneOnly: actual.style.getPropertyValue("--clone-only"), priority: actual.style.getPropertyPriority("color") });
+      }
+      return comparisons;
+    } finally { source.remove(); styles.remove(); host.remove(); }
+  });
+  for (const sample of result) {
+    expect(sample.actual).toEqual(sample.expected);
+    expect(sample.untouched).toBe(true);
+    expect(sample.cloneOnly).toBe("kept");
+    expect(sample.priority).toBe("");
+  }
+});
+
 test("material templates reuse exact revisions without sharing mutable paint", async ({ page }) => {
   await page.goto("/");
   const result = await page.evaluate(async () => {

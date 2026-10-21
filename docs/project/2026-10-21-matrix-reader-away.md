@@ -57,11 +57,12 @@ slice status and receipts; this file owns scope and rationale.
 
 ## Bug record
 
-**KP-MATRIX-END-JERK — open for user confirmation; measured defects repaired.**
-User observes a jerk at the end. Exact phase,
-browser and cause are unconfirmed. Candidate boundary is `sum` → `placed`, where
-material occurrences yield to native result-matrix entries. Investigate geometry,
-paint ownership and any late preparation before considering timing changes.
-Resolution evidence will be recorded in
-`reviews/2026-10-21-matrix-reader-away.md`; user confirmation remains distinct
-from a programmatically demonstrated continuity repair.
+**KP-MATRIX-END-JERK — resolved, user-confirmed October 21.**
+The user reports “bug is fixed. continue” after the checked repairs below.
+The original report and investigation boundary follow as provenance.
+The user observed a jerk at the end without specifying its exact phase or browser.
+The candidate boundary was `sum` → `placed`, where material occurrences yield to
+native result-matrix entries. Investigation covered geometry, paint ownership
+and late preparation before considering timing changes. Resolution evidence is
+recorded in `reviews/2026-10-21-matrix-reader-away.md`; user confirmation supplements
+the programmatically demonstrated continuity repairs.

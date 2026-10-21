@@ -1,0 +1,48 @@
+{
+  "id": "run-contract.kp.computed-style-preparation-v1",
+  "kind": "run-contract",
+  "title": "Measured computed-style preparation",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.computed-style-preparation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-computed-style-preparation.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:algebra-preparation",
+    "npm run typecheck",
+    "npm test"
+  ],
+  "allowedWork": [
+    "Measured clone-owner maintenance and preservation checks"
+  ],
+  "disallowedWork": [
+    "New visuals, caches across observations, calculus polish, external services"
+  ],
+  "goal": "Reduce redundant material style copying while preserving accepted native math",
+  "target": "task.kp.computed-style-preparation",
+  "slices": [
+    {
+      "id": "diagnosis",
+      "summary": "Fresh production attribution confirms computed-style copying at 175ms median self time under 6x CPU; each empty clone currently performs hundreds of CSSOM writes",
+      "status": "complete"
+    },
+    {
+      "id": "repair",
+      "summary": "No runtime change retained: declaration batching removed 68 percent of clone writes but did not improve measured startup or sampled self time; cached length likewise unproven. Keep diagnostic and fresh-context safeguards only.",
+      "status": "complete"
+    },
+    {
+      "id": "integration",
+      "summary": "15 browser checks and 7389 repository tests pass; full and final affected types pass; no production diff, reader payload addition or visual review remains",
+      "status": "complete"
+    }
+  ]
+}

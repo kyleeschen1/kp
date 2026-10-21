@@ -1,0 +1,51 @@
+{
+  "id": "task.kp.computed-style-preparation",
+  "kind": "task",
+  "title": "Reduce accepted math clone preparation cost",
+  "status": "resolved",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-computed-style-preparation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-computed-style-preparation.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:computed-style-clone",
+      "status": "passed",
+      "scope": "style snapshot preservation",
+      "checkedAt": "2026-10-21T22:44:08.243Z",
+      "notes": "15 checks pass across Chromium Firefox and WebKit on the retained original runtime"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository types",
+      "checkedAt": "2026-10-21T22:44:08.916Z",
+      "notes": "Full types pass; final test and Node type checks also pass after diagnostic-output and test edits"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository integration",
+      "checkedAt": "2026-10-21T22:46:05.794Z",
+      "notes": "7389 pass with zero failures skips or cancellations; architecture and inference gates pass"
+    },
+    {
+      "command": "npm run visual:algebra-preparation -- --clone-counts --label=clone-final",
+      "status": "passed",
+      "scope": "retained diagnostic",
+      "checkedAt": "2026-10-21T22:46:06.651Z",
+      "notes": "Three identical cohorts: 33 initially empty and 21 inline clone styles, 23658 property writes, no declaration writes; count mode excludes timing output"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "COMPLETE: bounded investigation rejects two unproven optimizations, retains diagnostic and style-context safeguards, and records user-confirmed matrix bug resolution"
+  }
+}

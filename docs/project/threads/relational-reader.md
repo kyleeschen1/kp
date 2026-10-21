@@ -5,12 +5,21 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The user's “bug is fixed. continue” closes the matrix report and resumes objective
+engineering. The bounded [computed-style continuation](../2026-10-21-computed-style-preparation.md)
+found that 68% fewer individual style writes did not demonstrate a reader startup
+gain. Both runtime candidates were reverted; [evidence](../reviews/2026-10-21-computed-style-preparation.md)
+preserves a repeatable clone-count diagnostic and three-engine CSS-context checks.
+Do not repeat declaration batching or count-only micro-optimization without new
+evidence. Accepted lessons, motion and production dependencies are unchanged.
+
 The user's away request authorizes the bounded
 [matrix continuity/lifecycle pass](../2026-10-21-matrix-reader-away.md), preserving
 the accepted mathematical sources and visual treatment. Its
 [evidence](../reviews/2026-10-21-matrix-reader-away.md) separates reproducible
-geometry, font-readiness and lifecycle repairs from the still-unconfirmed final
-jerk report. Do not treat the user's absence as approval for a new motion style.
+geometry, font-readiness and lifecycle repairs from subjective review. The user
+now confirms “bug is fixed. continue”; the final jerk report is resolved.
+Preserve the accepted motion style.
 
 Both LA sources are accepted. The completed
 [matrix reader continuation](../2026-10-21-matrix-reader-continuation.md)

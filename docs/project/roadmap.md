@@ -25,13 +25,20 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 accepted-bug continuation: the [computed-style investigation](2026-10-21-computed-style-preparation.md)
+found no demonstrated startup benefit from declaration batching or repeated-length
+query removal. Both runtime candidates were reverted. [Evidence](reviews/2026-10-21-computed-style-preparation.md)
+records the measurements and retained developer-only diagnostics and CSS-context
+safeguards. Preserve the accepted renderer; do not repeat this micro-optimization
+without a materially different hypothesis or concrete authoring need.
+
 October 21 away continuation: the user reported a final jerk and authorized
 objective work while unavailable. The [bounded engineering pass](2026-10-21-matrix-reader-away.md)
 records the report and repairs measured endpoint/font discontinuities, unnecessary
 preparation, partial-player cleanup and restored-location ownership. See
-[evidence and remaining visual uncertainty](reviews/2026-10-21-matrix-reader-away.md).
-The report remains open for confirmation of the perceived jerk; no new timing,
-color or choreography treatment is inferred from the user's absence.
+[evidence and user acceptance](reviews/2026-10-21-matrix-reader-away.md).
+The user confirms “bug is fixed. continue”; the report is resolved. Preserve the
+accepted timing, color and choreography.
 
 October 21 completed continuation: both source-authored LA explanations are accepted.
 The user's request to continue authorizes the bounded
