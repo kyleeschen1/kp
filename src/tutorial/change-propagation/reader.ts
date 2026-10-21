@@ -110,8 +110,8 @@ function mount(root: HTMLElement, model: ChangeModel, restore = false, staged = 
     // Legacy unpinned links refer to the built-in source only. A mismatched
     // revision cannot silently replay a different explanation after reload.
     const revision = params.get("revision");
-    mismatchedLink = revision !== null && revision !== model.revision;
-    if (revision !== null && revision !== model.revision) {
+    mismatchedLink = revision === null ? !restore : revision !== model.revision;
+    if (mismatchedLink) {
       required("[data-change-diagnostic]").textContent = "This link belongs to a different source. Reapply that source to restore its position; showing this source at its starting point.";
       x = model.source.x; h = model.source.h;
       xInput.value = String(x); hInput.value = String(h);

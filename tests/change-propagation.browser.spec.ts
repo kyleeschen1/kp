@@ -120,6 +120,9 @@ for (const name of ["stationary-change", "two-reversals"]) {
     await page.locator(".change-author summary").click(); await applySource(page, bytes);
     await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "3.5");
     await expect(page.locator(".change-card")).toHaveAttribute("data-change-revision", checked.model.revision);
+    await page.evaluate(() => { location.hash = "step=4&x=2&h=0.5"; });
+    await expect(page.locator("[data-change-diagnostic]")).toContainText("different source");
+    await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "0");
   });
 }
 

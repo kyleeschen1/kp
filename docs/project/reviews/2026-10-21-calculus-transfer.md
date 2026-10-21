@@ -2,6 +2,8 @@
 
 The first two cases are source-only variations of the existing change-propagation
 model. Neither requires new differentiation, geometry, timing or rendering code.
+The complete source files are 1,726 and 1,781 UTF-8 bytes respectively, including
+all five prose passages; these are authored examples, not measured LLM outputs.
 The reference presentation is still unaccepted; these checks establish mathematics
 and authoring reach, not teaching effectiveness.
 
@@ -56,8 +58,8 @@ timing and the default calculus source are preserved. These are engineering
 preservation checks, not visual acceptance or learning evidence.
 
 `npm run build:bundle` and `npm run measure:change-propagation` report declared
-initial JS changing from 73,142 bytes / 23,566 gzip to 76,663 / 25,223 gzip
-(+1,657 gzip). The starting measurement used the pre-change built output;
+initial JS changing from 73,142 bytes / 23,566 gzip to 76,642 / 25,222 gzip
+(+1,656 gzip). The starting measurement used the pre-change built output;
 this is an asset-size comparison, not a runtime benchmark. Most added cost is
 the existing narrow SHA-256 module (1,069 gzip), followed by lifecycle/restore
 code. CSS adds 34 gzip bytes for hidden staging. The measurement excludes fonts,

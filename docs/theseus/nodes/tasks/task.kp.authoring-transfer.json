@@ -43,6 +43,27 @@
       "scope": "workflow",
       "checkedAt": "2026-10-21T18:43:47.066Z",
       "notes": "Seven Chromium checks pass including both source revisions, reverse, mismatched reload and reapply, failed candidate mount preserving live output, phone and no-script preservation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:50:18.218Z",
+      "notes": "Application, node, tests, Svelte and domain checks pass, including the selected-source browser tests."
+    },
+    {
+      "command": "npm run measure:authoring-boundaries -- --check --types",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:50:19.229Z",
+      "notes": "Every complete consumer passes runtime and TypeScript budgets; no ceilings raised."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T18:50:20.004Z",
+      "notes": "Production bundle builds; existing large-chunk warning remains. Final calculus declared JS is 76642 bytes, 25222 gzip."
     }
   ],
   "expectedLearning": [
