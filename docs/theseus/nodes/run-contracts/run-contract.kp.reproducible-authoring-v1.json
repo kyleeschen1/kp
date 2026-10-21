@@ -120,7 +120,8 @@
     },
     {
       "id": "browser-preservation",
-      "status": "planned"
+      "summary": "27 three-engine checks and full types pass; representative captures preserve existing layout.",
+      "status": "complete"
     },
     {
       "id": "cost-gates",

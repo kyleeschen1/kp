@@ -52,3 +52,14 @@ incorrect harness expectation of exit 0 for repair; the harness now requires 2.
 Four fulfillment tests and full typecheck pass. Rubrics are deliberately bounded
 to authored notation and do not grade equivalent expressions, prose, author time,
 model reliability or comprehension; zero external model calls were made.
+
+Slice 19: all 27 packaged-reader checks pass in Chromium, Firefox and WebKit.
+Both selected editions match canonical-editor native math and numerical readouts
+at every checkpoint, fractional shrink and reverse. Keyboard Home/End, reduced
+motion, 390px width, and interactive-edition reading with JavaScript disabled
+pass. Static/interactive requests stay inside the local closure. Full typecheck
+passes. Inspected the stationary phone and reversal desktop captures: existing
+layout is retained without clipping; the phone remains tall and the presentation
+remains dense. These are preservation results, not new pedagogical or aesthetic
+acceptance. Reproduce with `npm run visual:calculus-editions` (canonical dev
+server on port 8000); captures are disposable Playwright output.

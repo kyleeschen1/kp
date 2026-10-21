@@ -107,3 +107,43 @@ for (const [key, title, derivative] of [
   await expect(page.locator("textarea, [data-change-author]")).toHaveCount(0);
   expect(errors).toEqual([]); expect(external).toEqual([]);
 });
+
+for (const [key, source] of [["stationary", "stationary-change"], ["reversals", "two-reversals"]])
+test(`${key}: packaged checkpoints preserve canonical host, phone and keyboard behavior`, async ({ page, context }, info) => {
+  const editor = await context.newPage();
+  await editor.goto("http://localhost:8000/experiments/change-propagation/");
+  await editor.locator(".change-author summary").click();
+  await editor.locator("#change-source").fill(readFileSync(`content/authoring/transfer/${source}.json`, "utf8"));
+  await editor.getByRole("button", { name: "Preview this source" }).click();
+  await expect(editor.locator("[data-change-diagnostic]")).toContainText("Preview updated");
+  await page.goto(`${origin}/${key}/`);
+  await expect(page.locator(".change-card")).toHaveAttribute("data-kp-focus-deck-static", "false");
+  expect(await page.locator("math").allTextContents()).toEqual(await editor.locator("math").allTextContents());
+  for (const position of [0, 1, 2, 3, 3.5, 4, 0]) {
+    for (const target of [page, editor]) await setRange(target, "[data-kp-focus-deck-scrubber]", position);
+    expect(await page.locator("[data-change-value]").allTextContents()).toEqual(await editor.locator("[data-change-value]").allTextContents());
+    expect(await page.locator("[data-kp-focus-deck-beat][aria-current]").textContent()).toBe(await editor.locator("[data-kp-focus-deck-beat][aria-current]").textContent());
+  }
+  await page.screenshot({ path: info.outputPath("edition-desktop.png"), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const slider = page.locator("[data-kp-focus-deck-scrubber]");
+  await slider.focus(); await slider.press("End");
+  await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "4");
+  await slider.press("Home");
+  await expect(page.locator(".change-card")).toHaveAttribute("data-change-position", "0");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.screenshot({ path: info.outputPath("edition-phone.png"), fullPage: true });
+  await editor.close();
+});
+
+test("interactive edition retains the complete reading when scripts are disabled", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+  try {
+    const page = await context.newPage(); await page.goto(`${origin}/reversals/`);
+    for (const id of ["input", "inner", "outer", "compose", "limit"]) await expect(page.locator(`[data-kp-focus-deck-beat="${id}"]`)).toBeVisible();
+    await expect(page.locator(".kp-focus-deck__navigation")).toBeHidden();
+    expect(await page.locator("math").count()).toBeGreaterThan(20);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+  } finally { await context.close(); }
+});

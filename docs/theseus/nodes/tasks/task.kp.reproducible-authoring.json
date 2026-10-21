@@ -203,6 +203,13 @@
       "scope": "author-task-replay",
       "checkedAt": "2026-10-21T19:38:09.850Z",
       "notes": "Five CLI edition round trips, wrong-intent and repair cases, four fulfillment tests and full types pass."
+    },
+    {
+      "command": "npm run visual:calculus-editions; npm run typecheck",
+      "status": "passed",
+      "scope": "browser-preservation",
+      "checkedAt": "2026-10-21T19:40:28.103Z",
+      "notes": "27 checks pass across three engines; canonical-source checkpoints, narrow view, keyboard, reduced motion and no-script preserved. Representative captures inspected."
     }
   ],
   "expectedLearning": [
