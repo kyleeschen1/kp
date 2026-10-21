@@ -45,7 +45,8 @@
     },
     {
       "id": "calculus-artifact",
-      "status": "planned"
+      "summary": "Both source artifacts reproduce; unsupported mathematics and forged payloads rejected; types pass.",
+      "status": "complete"
     },
     {
       "id": "static-edition",

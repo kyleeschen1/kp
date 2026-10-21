@@ -49,6 +49,13 @@
       "scope": "identity-contract",
       "checkedAt": "2026-10-21T19:08:40.730Z",
       "notes": "Four tests pass; existing source, explanation and branded edition identities suffice. Full typecheck also passes including negative identity assignment."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-publication.test.ts tests/calculus-publication-identity.test.ts",
+      "status": "passed",
+      "scope": "calculus-artifact",
+      "checkedAt": "2026-10-21T19:10:17.490Z",
+      "notes": "Four checks and full typecheck pass; complete domain reproduction rejects altered payloads even with recomputed hashes."
     }
   ],
   "expectedLearning": [
