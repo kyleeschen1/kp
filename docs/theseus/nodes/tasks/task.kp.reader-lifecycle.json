@@ -1,0 +1,47 @@
+{
+  "id": "task.kp.reader-lifecycle",
+  "kind": "task",
+  "title": "Shared playback visibility and many-card costs",
+  "status": "ready",
+  "domain": "reader",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-reader-lifecycle-delivery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-reader-lifecycle.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:semantic-cost",
+      "status": "failed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:25:30.603Z",
+      "notes": "Concurrent build:bundle emptied shared dist during browser run; four readiness checks saw Not found. Rebuild cost fixture and rerun serialized after production build."
+    },
+    {
+      "command": "npm run visual:semantic-cost",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:27:38.498Z",
+      "notes": "Serialized rerun: all five tests pass, including cold/warm, concurrent one/ten, four suspension cohorts, cancellation and document isolation."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:27:39.611Z",
+      "notes": "All app, node, test, Svelte and domain checks pass; test types rerun after adding browser cases."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T16:27:40.326Z",
+      "notes": "17 Chromium checks pass; focused mechanics and code preservation cases also pass."
+    }
+  ]
+}

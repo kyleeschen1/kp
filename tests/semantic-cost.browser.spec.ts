@@ -27,6 +27,129 @@ async function record(name: string, data: unknown) {
   await writeFile(`tmp/codex/semantic-cost/${name}.json`, JSON.stringify(data, null, 2) + '\n');
 }
 
+test('visibility ownership shares resources and releases canceled registrations', async ({ page }) => {
+  await page.goto('/cost/experiments/semantic-cost/?reading=rows');
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  const result = await page.evaluate(async () => {
+    const watch = window.semanticCost.watchPlayback;
+    const original = window.IntersectionObserver;
+    const observers: IntersectionObserver[] = [];
+    let disconnected = 0, observed = 0, unobserved = 0;
+    window.IntersectionObserver = class extends original {
+      constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
+        super(callback, options); observers.push(this);
+      }
+      override observe(target: Element) { observed++; super.observe(target); }
+      override unobserve(target: Element) { unobserved++; super.unobserve(target); }
+      override disconnect() { disconnected++; super.disconnect(); }
+    };
+    const frame = () => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+    const root = document.createElement('div');
+    root.style.cssText = 'position:fixed;inset:0;width:20px;height:20px'; document.body.append(root);
+    let first = 0, second = 0, canceled = 0;
+    const a = new AbortController(), b = new AbortController(), c = new AbortController();
+    c.abort(); watch(root, () => canceled++, c.signal);
+    watch(root, () => first++, a.signal); watch(root, () => second++, b.signal);
+    await frame();
+    root.style.top = '200vh'; await frame();
+    const exit = { first, second, canceled, owners: observers.length, observed };
+    a.abort(); root.style.top = '0'; await frame();
+    const reentry = { first, second };
+    root.style.top = '200vh'; await frame();
+    const afterAbort = { first, second };
+    b.abort(); b.abort(); await frame();
+    // Rebinding creates a fresh observer; a pending old delivery cannot own it.
+    const d = new AbortController(); let remount = 0;
+    watch(root, () => remount++, d.signal); d.abort(); await frame();
+    const cleanup = { disconnected, unobserved, owners: observers.length, remount };
+    window.IntersectionObserver = original; root.remove();
+    return { exit, reentry, afterAbort, cleanup };
+  });
+  expect(result.exit).toEqual({ first: 1, second: 1, canceled: 0, owners: 1, observed: 1 });
+  expect(result.reentry).toEqual({ first: 1, second: 1 });
+  expect(result.afterAbort).toEqual({ first: 1, second: 2 });
+  expect(result.cleanup).toEqual({ disconnected: 2, unobserved: 2, owners: 2, remount: 0 });
+});
+
+test('ten real players suspend offscreen, hold on reentry and release after disposal', async ({ browser }) => {
+  const reports = [];
+  for (const reading of ['dot', 'rows', 'columns', 'collection']) {
+    const context = await browser.newContext({ viewport: { width: 1200, height: 950 } });
+    const page = await context.newPage();
+    const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+    const cdp = await context.newCDPSession(page); await cdp.send('Performance.enable');
+    await page.goto(`http://127.0.0.1:4196/cost/experiments/semantic-cost/?reading=${reading}`);
+    await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+    // Overlap benchmark stages so all ten share a visible viewport before exit;
+    // this pressures real renderers without an artificial 10-screen viewport.
+    await page.addStyleTag({ content: '#cost-instances > div { position:fixed; top:0; left:0; width:1000px; height:800px; overflow:hidden } #cost-instances.offscreen > div { top:200vh }' });
+    await page.evaluate(async () => { window.semanticCost.prepare(1, false); await window.semanticCost.mount({ suspendOffscreen: true }); window.semanticCost.dispose(); });
+    await page.locator('#cost-instances [data-source-id]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
+    const baseline = await metrics(cdp);
+    const cycles = [];
+    for (let cycle = 0; cycle < 3; cycle++) {
+      const mounted = await page.evaluate(async () => {
+        const api = window.semanticCost; api.prepare(10, true);
+        const result = await api.mount({ suspendOffscreen: true }); api.seek(.25); api.play(); return result;
+      });
+      await page.evaluate(() => document.querySelector('#cost-instances')!.classList.add('offscreen'));
+      await expect.poll(() => page.evaluate(() => window.semanticCost.visibilityPauses())).toBe(10);
+      const poses = () => page.locator('#cost-instances [data-source-id]').evaluateAll(nodes => nodes.map(node => node.getAttribute('style')));
+      const held = await poses(); expect(held.length).toBeGreaterThan(0);
+      const suspended = await metrics(cdp);
+      expect(await poses()).toEqual(held);
+      await page.evaluate(() => document.querySelector('#cost-instances')!.classList.remove('offscreen'));
+      const restored = await metrics(cdp);
+      expect(await poses()).toEqual(held);
+      await page.evaluate(() => { window.semanticCost.play(); window.semanticCost.dispose(); window.semanticCost.dispose(); });
+      await expect(page.locator('#cost-instances > *')).toHaveCount(0);
+      const disposed = await metrics(cdp);
+      expect(disposed['JSEventListeners']).toBeLessThanOrEqual(baseline['JSEventListeners']! + 3);
+      expect(disposed['Nodes']).toBeLessThanOrEqual(baseline['Nodes']! + 20);
+      cycles.push({ mounted, suspended, restored, disposed });
+    }
+    expect(errors).toEqual([]);
+    reports.push({ reading, baseline, cycles }); await context.close();
+  }
+  await record('visibility-browser', { browser: browser.version(), reports,
+    note: 'Ten real players per cohort, overlapping visible stages then offscreen exit. Held poses and repeated disposal are acceptance laws; post-GC heap is diagnostic, not process memory. No automatic reentry playback.' });
+});
+
+test('document visibility isolates owners and tolerates disposal during notification', async ({ page }) => {
+  await page.goto('/cost/experiments/semantic-cost/?reading=rows');
+  await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
+  const result = await page.evaluate(() => {
+    const watch = window.semanticCost.watchPlayback;
+    const root = document.createElement('div'); document.body.append(root);
+    const iframe = document.createElement('iframe'); document.body.append(iframe);
+    const other = iframe.contentDocument!;
+    const a = new AbortController(), b = new AbortController(), c = new AbortController();
+    let first = 0, canceled = 0, foreign = 0;
+    watch(root, () => { first++; b.abort(); }, a.signal);
+    watch(root, () => canceled++, b.signal);
+    watch(other.body, () => foreign++, c.signal);
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+    const hidden = { first, canceled, foreign };
+    Object.defineProperty(document, 'hidden', { configurable: true, value: false });
+    document.dispatchEvent(new Event('visibilitychange'));
+    const visible = { first, canceled, foreign };
+    Object.defineProperty(other, 'hidden', { configurable: true, value: true });
+    other.dispatchEvent(new Event('visibilitychange'));
+    const isolated = { first, canceled, foreign };
+    a.abort(); c.abort();
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+    const disposed = { first, canceled, foreign };
+    Reflect.deleteProperty(document, 'hidden'); root.remove(); iframe.remove();
+    return { hidden, visible, isolated, disposed };
+  });
+  expect(result.hidden).toEqual({ first: 1, canceled: 0, foreign: 0 });
+  expect(result.visible).toEqual(result.hidden);
+  expect(result.isolated).toEqual({ first: 1, canceled: 0, foreign: 1 });
+  expect(result.disposed).toEqual(result.isolated);
+});
+
 test('canonical production pages: cold/warm transfers, fonts and readiness', async ({ browser }) => {
   const reports = [];
   for (const [route, root] of [['dot-product-passage', '#dot-player'], ['matrix-column-product', '#matrix-player'], ['matrix-column-combinations', '#comb-player'], ['matrix-examples', '#dot-player'], ['matrix-column-combinations/?example=composition', '#comb-player'], ['rectangular-product/?view=polynomials', '#rectangular-player'], ['rectangular-product/?view=system', '#rectangular-player'], ['rectangular-product/?view=polynomials&example=reordered', '#rectangular-player']]) {

@@ -1,6 +1,7 @@
 import { costExample, type CostProduct, type MountedReading } from './cases.ts';
 import { collectionExample, mountCollection } from './collection.ts';
 import type { CollectionModel } from '../rectangular-product/collection-source.ts';
+import { watchPlayback } from '../../reader/runtime/playback-visibility.ts';
 
 const query = new URLSearchParams(location.search);
 const reading = query.get('reading') ?? 'dot';
@@ -14,7 +15,10 @@ const mountOrdinary = reading === 'dot'
   };
 let models: (CostProduct | CollectionModel)[] = [], players: MountedReading[] = [];
 let serial = 0;
+let visibility = new AbortController();
+let pauses = 0;
 const dispose = () => {
+  visibility.abort();
   for (const player of players) player.dispose();
   players = []; models = []; host.replaceChildren();
 };
@@ -28,13 +32,16 @@ const api = {
     models = Array.from({ length: count }, (_, i) => different && i > 0 ? example(i) : first);
     return { prepareMs: performance.now() - start, models: models.length, uniqueProducts: new Set(models).size };
   },
-  async mount() {
+  async mount(options: { suspendOffscreen?: boolean } = {}) {
     if (players.length) throw new Error('Dispose mounted instances before remounting');
     const start = performance.now();
+    visibility = new AbortController(); pauses = 0;
     for (const [index, product] of models.entries()) {
       const root = document.createElement('div'); root.id = `cost-player-${serial++}`;
       host.append(root);
-      players.push(await ('status' in product ? mountCollection(root, product) : mountOrdinary(root, product, index % 2)));
+      const player = await ('status' in product ? mountCollection(root, product) : mountOrdinary(root, product, index % 2));
+      players.push(player);
+      if (options.suspendOffscreen) watchPlayback(root, () => { pauses++; player.pause(); }, visibility.signal);
     }
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     return { mountMs: performance.now() - start, nodes: host.querySelectorAll('*').length };
@@ -42,6 +49,9 @@ const api = {
   seek(progress: number) { for (const player of players) player.seek(progress); },
   play() { for (const player of players) player.play(); },
   pause() { for (const player of players) player.pause(); },
+  visibilityPauses: () => pauses,
+  // Expose the real boundary only in this measurement host for lifecycle tests.
+  watchPlayback,
   dispose,
 };
 declare global { interface Window { semanticCost: typeof api } }

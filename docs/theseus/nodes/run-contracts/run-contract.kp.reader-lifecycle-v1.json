@@ -1,0 +1,45 @@
+{
+  "id": "run-contract.kp.reader-lifecycle-v1",
+  "kind": "run-contract",
+  "title": "Shared reader visibility",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.reader-lifecycle.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-reader-lifecycle-delivery.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Shared visibility, two existing readers, cost harness and checks"
+  ],
+  "disallowedWork": [
+    "Visual redesign, new semantic models, catalogue migration"
+  ],
+  "goal": "Consolidate demonstrated pause ownership and measure many-card suspension and disposal",
+  "target": "task.kp.reader-lifecycle",
+  "slices": [
+    {
+      "id": "visibility",
+      "title": "Shared-visibility",
+      "status": "complete"
+    },
+    {
+      "id": "measurement",
+      "title": "Many-card-costs",
+      "status": "complete"
+    },
+    {
+      "id": "integration",
+      "title": "Integration",
+      "status": "in-progress"
+    }
+  ]
+}

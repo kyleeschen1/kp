@@ -5,6 +5,7 @@ import { renderKpTypeScriptRefactorDomFrame } from "../../rendering/typescript-r
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
 import { sha256 } from "../../kernel/sha256.ts";
 import { mountShippingFocus } from "./shipping-focus.ts";
+import { watchPlayback } from "../../reader/runtime/playback-visibility.ts";
 
 export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void; dispose(): void } {
   const asset = createKpTypeScriptFreeShippingRuntimeProjection();
@@ -126,13 +127,11 @@ export function mountCodeReasoningInspection(root: HTMLElement): { pause(): void
   reduced.addEventListener("change", pause, options);
   // Closing, backgrounding or leaving the local inspection never runs hidden
   // motion; reopening samples the same held clock, not a fresh session.
-  document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, options);
-  const observer = new IntersectionObserver(entries => { if (!entries[0]?.isIntersecting) pause(); });
-  observer.observe(stage);
+  watchPlayback(stage, pause, abort.signal);
   render();
   seek.disabled = false;
   play.disabled = false;
   original.disabled = false;
   root.dataset["codeReady"] = "true";
-  return { pause, dispose() { abort.abort(); observer.disconnect(); off(); focus?.dispose(); clock.dispose(); host.replaceChildren(); delete root.dataset["codeReady"]; } };
+  return { pause, dispose() { abort.abort(); off(); focus?.dispose(); clock.dispose(); host.replaceChildren(); delete root.dataset["codeReady"]; } };
 }

@@ -6,6 +6,7 @@ import { projectMomentumEnergyAttention } from "./momentum-energy-attention.ts";
 import { enhanceEnergyDerivation } from "./momentum-energy-derivation-reader.ts";
 import { enhancePowerCorrespondence } from "./power-correspondence-reader.ts";
 import { enhanceMomentumMove } from "./momentum-move-reader.ts";
+import { watchPlayback } from "../../reader/runtime/playback-visibility.ts";
 
 import type { DerivationReaderBinding } from "./momentum-energy-derivation-reader.ts";
 import type { CheckedForceEnergy } from "../../../domains/physics/force-energy-derivation.ts";
@@ -70,15 +71,13 @@ function enhance(root: HTMLElement) {
     else { clock.play({ direction: "forward", stopAt: 1 }); update(); }
   }, options);
   get<HTMLButtonElement>("[data-physics-reset]").addEventListener("click", () => clock.seek(0), options);
-  document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); }, options);
   reduced.addEventListener("change", pause, options);
-  const observer = new IntersectionObserver(entries => { if (!entries[0]?.isIntersecting) pause(); });
-  observer.observe(get<HTMLElement>("figure"));
+  watchPlayback(get<HTMLElement>("figure"), pause, abort.signal);
   window.addEventListener("pagehide", event => {
     pause();
     // A cached document must retain its live owner when browser Back restores it.
     if (event.persisted) return;
-    observer.disconnect(); abort.abort(); clock.dispose(); stage.dispose();
+    abort.abort(); clock.dispose(); stage.dispose();
   }, options);
   controls.hidden = false;
   root.dataset["enhanced"] = "true";
