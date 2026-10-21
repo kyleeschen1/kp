@@ -1,0 +1,57 @@
+{
+  "id": "task.kp.reproducible-authoring",
+  "kind": "task",
+  "title": "Deliver reproducible selected-source local editions",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-reproducible-authoring-long-loop.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "task.kp.authoring-transfer"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-authoring-transfer.test.ts tests/composed-algebra-publication.test.ts tests/composed-algebra-publication-v2.test.ts",
+      "status": "passed",
+      "scope": "baseline",
+      "checkedAt": "2026-10-21T19:05:00.317Z",
+      "notes": "Nine baseline tests pass; current production sizes recorded in review."
+    }
+  ],
+  "expectedLearning": [
+    "Measure exact selected-source publication and restoration through existing domain and edition owners."
+  ],
+  "allowedWork": [
+    "The approved 22 slices in the reproducible-authoring proposal, within its ten-hour ceiling and preservation boundaries"
+  ],
+  "disallowedWork": [
+    "New mathematics, visual redesign, universal framework, deployment, unrelated cleanup or paid services"
+  ],
+  "criteria": [
+    {
+      "id": "authority",
+      "weight": "high"
+    },
+    {
+      "id": "reproducibility",
+      "weight": "high"
+    },
+    {
+      "id": "preservation",
+      "weight": "high"
+    }
+  ]
+}

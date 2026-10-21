@@ -1,7 +1,8 @@
 # Proposed long loop: reproducible authoring and local editions
 
-Status: proposed, awaiting approval. No executable contract has been created.
-Proposed contract ID: `run-contract.kp.reproducible-authoring-v1`.
+Status: approved by the user's “go” on 2026-10-21.
+Contract ID: `run-contract.kp.reproducible-authoring-v1`.
+Execution began at 19:04 UTC; ceiling 05:04 UTC October 22; reserve begins 03:34 UTC.
 The user requested Theseus long mode with minimal check-ins. This document owns
 the proposed scope; after approval Theseus owns execution status and evidence.
 
@@ -135,6 +136,4 @@ learner testing, and the older visual-review backlog. The next product decision
 after this run is whether to improve the explanation itself or pressure another
 authoring composition need, based on the measured result.
 
-Before approval: outcome HUMAN_CHECKPOINT, 0/22 executed, no contract installed.
-Approve with “Approve the reproducible-authoring long loop; go.” After approval,
-`theseus work resume` retrieves its durable execution state for later resumption.
+`theseus work resume` retrieves durable execution state for later resumption.

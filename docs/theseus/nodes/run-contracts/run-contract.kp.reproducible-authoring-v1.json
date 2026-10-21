@@ -1,0 +1,121 @@
+{
+  "id": "run-contract.kp.reproducible-authoring-v1",
+  "kind": "run-contract",
+  "title": "Reproducible authoring and local editions",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.reproducible-authoring.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-reproducible-authoring-long-loop.md"
+    }
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck",
+    "npm run build:bundle"
+  ],
+  "allowedWork": [
+    "Approved ordered slices with per-slice commits, hourly backup and ten-hour ceiling; final ninety minutes reserved for verification"
+  ],
+  "disallowedWork": [
+    "Visual redesign, new mathematical coverage, universal framework, external publication or unrelated changes"
+  ],
+  "goal": "Check, preview, export and reopen exact local calculus editions; preserve existing composed-algebra static consumers",
+  "target": "task.kp.reproducible-authoring",
+  "slices": [
+    {
+      "id": "baseline",
+      "summary": "Baseline capabilities, nine passing checks and production payload recorded.",
+      "status": "complete"
+    },
+    {
+      "id": "source-input",
+      "status": "planned"
+    },
+    {
+      "id": "identity-contract",
+      "status": "planned"
+    },
+    {
+      "id": "calculus-artifact",
+      "status": "planned"
+    },
+    {
+      "id": "static-edition",
+      "status": "planned"
+    },
+    {
+      "id": "manifest-integrity",
+      "status": "planned"
+    },
+    {
+      "id": "write-lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "style-closure",
+      "status": "planned"
+    },
+    {
+      "id": "reader-build",
+      "status": "planned"
+    },
+    {
+      "id": "reader-capabilities",
+      "status": "planned"
+    },
+    {
+      "id": "interactive-edition",
+      "status": "planned"
+    },
+    {
+      "id": "edition-restoration",
+      "status": "planned"
+    },
+    {
+      "id": "location-input",
+      "status": "planned"
+    },
+    {
+      "id": "preview-lifetime",
+      "status": "planned"
+    },
+    {
+      "id": "download-authority",
+      "status": "planned"
+    },
+    {
+      "id": "capability-routing",
+      "status": "planned"
+    },
+    {
+      "id": "second-owner",
+      "status": "planned"
+    },
+    {
+      "id": "author-task-replay",
+      "status": "planned"
+    },
+    {
+      "id": "browser-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "cost-gates",
+      "status": "planned"
+    },
+    {
+      "id": "author-packet",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "status": "planned"
+    }
+  ]
+}
