@@ -1,6 +1,13 @@
 /** Discovery metadata only. Domain checkers still own acceptance and evidence;
  * a host reference cannot certify that a draft is applied or published. */
 export const supportedAuthorTasks = {
+  "matrix.column-combinations": {
+    owner: "src/authoring/matrix-columns/compile.ts",
+    input: "Two finite numerical 2x2 matrices and editorial text for both columns and seven fixed beats. Products and sums are derived; prose is not proof. No symbolic inputs, arbitrary dimensions or authored motion.",
+    preview: { kind: "reference-only", url: "/experiments/matrix-column-combinations/?input=dependent-columns", reason: "Checking a file does not replace the registered source in this reference host." },
+    extraction: { kind: "unsupported", reason: "No authored subexplanation extraction for this fixed seven-beat path." },
+    publication: { kind: "unsupported", reason: "Selected-source editions are not yet connected." }
+  },
   "calculus.change-propagation": {
     owner: "src/tutorial/change-propagation/model.ts",
     input: "Two bounded scalar expressions in x and u; five ordered editorial passages. Existing differentiation checks finite changes and local rates. No arbitrary proof, prose verification or visual certification.",

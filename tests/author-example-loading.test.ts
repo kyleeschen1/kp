@@ -6,6 +6,7 @@ import type { SupportedAuthorTask } from "../src/authoring/supported-author-task
 import { supportedAuthorTasks } from "../src/authoring/supported-author-tasks.ts";
 
 const examples: readonly { task: SupportedAuthorTask; maximumFiles: number }[] = [
+  { task: "matrix.column-combinations", maximumFiles: 12 },
   { task: "calculus.change-propagation", maximumFiles: 7 },
   { task: "equation.algebra-intuition", maximumFiles: 12 },
   { task: "equation.composed-algebra", maximumFiles: 10 },

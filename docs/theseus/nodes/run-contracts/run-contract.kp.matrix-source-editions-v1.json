@@ -1,0 +1,49 @@
+{
+  "id": "run-contract.kp.matrix-source-editions-v1",
+  "kind": "run-contract",
+  "title": "Checked matrix source editions",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-source-editions.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-source-editions.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle"
+  ],
+  "allowedWork": [
+    "Bounded 2x2 source checking, existing player integration, local editions, preservation and cost checks"
+  ],
+  "disallowedWork": [
+    "New visuals, lessons, dimensions, symbolic math, framework, deployment or agents"
+  ],
+  "goal": "A source file checks and produces a portable accepted matrix explanation without registry edits",
+  "target": "task.kp.matrix-source-editions",
+  "slices": [
+    {
+      "id": "source",
+      "summary": "Finite 2x2 source checker, immutable revisions, semantic derivation, starter and author discovery implemented and checked.",
+      "status": "complete"
+    },
+    {
+      "id": "reader",
+      "status": "planned"
+    },
+    {
+      "id": "edition",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "status": "planned"
+    }
+  ]
+}

@@ -7,6 +7,16 @@ import type { KpAuthorTaskOwners } from "../src/authoring/author-task-owner-cont
 /** Every discoverable task supplies both lazy entrypoints. Adding an owner must
  * not require mirrored switches or import another domain before selection. */
 const owners = {
+  "matrix.column-combinations": {
+    example: async () => (await import("../src/authoring/matrix-columns/example.ts")).example(),
+    check: async (json: string) => {
+      const { check } = await import("../src/authoring/matrix-columns/compile.ts");
+      const checked = check(json);
+      if (checked.status === "repair-gap") return checked;
+      const { source, revision, result } = checked.draft;
+      return { status: "compiled" as const, source, revision, result, prose: "editorial" as const };
+    }
+  },
   "calculus.change-propagation": {
     example: () => JSON.parse(readFileSync(new URL("../content/authoring/transfer/stationary-change.json", import.meta.url), "utf8")) as unknown,
     check: async (json: string) => {

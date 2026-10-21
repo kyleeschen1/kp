@@ -4,6 +4,8 @@ import { constant, compileExpression } from "../../math/expression.ts";
 import { createKpScalarExpression, createKpTypedMatrixFromRows, type KpScalarValue } from "../../math/typed-semantic-math.ts";
 
 import { matrixProduct } from "../../math/matrix-product.ts";
+import type { ColumnBeatId, ColumnReading } from "../../authoring/matrix-columns/source.ts";
+export type { ColumnBeatId, ColumnReading } from "../../authoring/matrix-columns/source.ts";
 
 export const env = matrixEnvironment();
 export const combination = columnCombinations(env.product).column(0);
@@ -12,14 +14,6 @@ export const numberOf = (entry: KpScalarValue) => {
   if (!Number.isFinite(value)) throw new MatrixColumnGap("This exemplar requires finite numerical entries.");
   return value;
 };
-export type ColumnBeatId = "initial" | "columns" | "weights" | "distribute" | "scaled" | "sum" | "placed";
-export interface ColumnReading {
-  readonly title: string;
-  readonly introduction: string;
-  readonly cues: readonly [Readonly<Record<ColumnBeatId, string>>, Readonly<Record<ColumnBeatId, string>>];
-  readonly conclusion: readonly string[];
-  readonly question: { readonly prompt: string; readonly answer: string };
-}
 export const beats: readonly { readonly id: ColumnBeatId; readonly cue: string }[] = Object.freeze(([
   { id: "initial", cue: "One column of B supplies the weights for a whole result column." },
   { id: "columns", cue: "Separate the columns of A. These are copies of the same entries." },

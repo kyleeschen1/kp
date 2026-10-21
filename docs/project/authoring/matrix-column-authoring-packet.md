@@ -1,8 +1,28 @@
 # Bounded matrix column authoring
 
 Use this packet for numerical 2×2 multiplication in the accepted column-combination
-presentation. It is a typed TypeScript input path, not an `author:check` JSON task,
-Article publication schema, arbitrary-matrix renderer or symbolic simplifier.
+presentation. Both the typed TypeScript input path and the checked JSON task
+below use the same mathematical objects. Neither is an Article schema,
+arbitrary-matrix renderer or symbolic simplifier.
+
+## Check a source file
+
+Use `npm run author:check -- --task matrix.column-combinations --example` for a
+complete starter derived from the accepted dependent-columns source. Save its
+source as JSON, then run
+`npm run author:check -- --task matrix.column-combinations --request <file.json>`.
+The checker is read-only: it does not update a preview or publish anything.
+
+`kp.matrix-columns.v1` accepts an ID, finite numerical 2×2 `left` and `right`
+arrays, and `reading`: title, introduction, two complete seven-beat cue records,
+conclusion paragraphs and a question with its answer. Results and scalar
+contributions are derived; motion, geometry and authored result fields are
+rejected. Prose is editorial, not verified mathematical proof. Located repair
+gaps cover invalid fields, unsupported dimensions, missing cues and arithmetic
+overflow. `npm run test:matrix-source` checks this boundary and semantic identity.
+
+Selected-source editions are the next integration step; the registry preview
+below still uses its explicit TypeScript sources.
 
 ## Start and change an example
 

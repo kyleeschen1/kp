@@ -1,0 +1,29 @@
+{
+  "id": "task.kp.matrix-source-editions",
+  "kind": "task",
+  "title": "Author and package supported matrix explanations from a checked source file",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-source-editions.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-source",
+      "status": "passed",
+      "scope": "source",
+      "checkedAt": "2026-10-21T22:59:42.328Z",
+      "notes": "Six strict source, identity, mutation and overflow checks pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "source",
+      "checkedAt": "2026-10-21T22:59:43.517Z",
+      "notes": "All application, node, test, Svelte and domain checks pass after starter row-copy typing repair."
+    }
+  ]
+}

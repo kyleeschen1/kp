@@ -70,8 +70,10 @@ raw addition/subtraction and reduction without hints. This is not an arbitrary
 LaTeX solver or a claim that every checked numeric caller has certified paint.
 
 For numerical 2×2 matrix column combinations, use
-`matrix-column-authoring-packet.md`. This local typed-source preview reuses the
-accepted column renderer; it is not an `author:check` task or a publication path.
+`matrix-column-authoring-packet.md`. The `matrix.column-combinations` checker
+accepts bounded JSON factors and editorial cues, deriving results through the
+existing mathematical objects. The typed-source preview reuses the accepted
+column renderer. Checking alone does not apply a preview or publish an edition.
 For concise matrix and bounded algebra imports, see `concise-domain-api.md`.
 Those entrypoints preserve the exact existing domain support and diagnostics.
 
