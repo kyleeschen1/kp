@@ -35,7 +35,8 @@
     },
     {
       "id": "source-input",
-      "status": "planned"
+      "summary": "Actual 16000 UTF-8 byte calculus limit; Bayes edition uses bounded regular-file reader; fourteen checks and full types pass.",
+      "status": "complete"
     },
     {
       "id": "identity-contract",

@@ -29,6 +29,19 @@
       "scope": "baseline",
       "checkedAt": "2026-10-21T19:05:00.317Z",
       "notes": "Nine baseline tests pass; current production sizes recorded in review."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/calculus-source-boundary.test.ts tests/authoring-entrypoint-cli.test.ts tests/authoring-entrypoint-hardening.test.ts tests/bayesian-reasoning-publication.test.ts",
+      "status": "passed",
+      "scope": "source-input",
+      "checkedAt": "2026-10-21T19:06:55.225Z",
+      "notes": "Fourteen checks pass after correcting the test padding to count UTF-8 bytes; actual calculus limit and Bayes bounded reader fixed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "source-input",
+      "checkedAt": "2026-10-21T19:06:56.215Z"
     }
   ],
   "expectedLearning": [

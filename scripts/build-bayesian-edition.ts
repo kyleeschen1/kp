@@ -1,5 +1,5 @@
 import { basename, join, resolve } from "node:path";
-import { readFileSync } from "node:fs";
+import { readAuthorSource } from "./author-check.ts";
 import { collectFocusCardEditionStyles } from "./local-stylesheet-closure.ts";
 import { digestEditionBytes as digest, writeKpImmutableLocalEditionReceipt } from "./immutable-local-edition.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -57,7 +57,7 @@ export function verifyBayesPublication(value: unknown, sourceText: string, sourc
 export function buildBayesEdition(sourcePath: string, check = false) {
   const selected = resolve(sourcePath);
   if (selected.startsWith(`${bayesEditionRoot}/`)) throw new Error("Keep authored source outside generated editions.");
-  const sourceText = readFileSync(selected, "utf8"), artifact = compileBayesPublication(sourceText, selected);
+  const sourceText = readAuthorSource(selected), artifact = compileBayesPublication(sourceText, selected);
   const files = new Map<string, string | Buffer>([
     ["source.json", sourceText], ["publication.json", JSON.stringify(artifact, null, 2) + "\n"],
     ...collectFocusCardEditionStyles(repo, "experiments/bayesian-reasoning/style.css"),

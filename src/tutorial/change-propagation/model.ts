@@ -52,7 +52,7 @@ function bounded(value: unknown, path: string, low: number, high: number): numbe
 
 export function compileChangeSource(bytes: string): ChangeCompilation {
   try {
-    if (bytes.length > 16000) gap("source", "Source exceeds the 16 KB authoring limit.");
+    if (new TextEncoder().encode(bytes).byteLength > 16000) gap("source", "Source exceeds the 16,000 UTF-8 byte authoring limit.");
     let input: unknown;
     try { input = JSON.parse(bytes); } catch { return { status: "repair-gap", path: "source", message: "Expected valid JSON." }; }
     const raw = record(input, "source");
