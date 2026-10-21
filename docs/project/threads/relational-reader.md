@@ -6,15 +6,16 @@ Last Updated: 2026-10-21
 ## Canonical direction
 
 Latest October 21: the user explicitly rejects further calculus polish and asks
-for algebra or linear algebra. Continue with the bounded
+for algebra or linear algebra. The bounded
 [whole-and-parts algebra exemplar](../2026-10-21-algebra-whole-and-parts.md), using
-the existing top-text card and checked algebra source. Preserve calculus as-is;
-its former redesign recommendation is superseded. Review this one exemplar
-before broadening presentation or authoring infrastructure.
-The [review candidate](../reviews/2026-10-21-algebra-whole-and-parts.md) is live
+the existing top-text card and checked algebra source, is complete. Preserve
+calculus as-is; its former redesign recommendation is superseded.
+The [accepted exemplar](../reviews/2026-10-21-algebra-whole-and-parts.md) is live
 through the existing host at `?example=algebra-intuition&variant=whole-and-parts`.
 Source checking, reversible native motion and original-caller preservation pass;
-judge the whole-to-parts explanation before any promotion.
+the user confirms the whole remains recognizable before its parts separate.
+This closes the bounded review, without establishing learner outcomes or
+authorizing broader presentation or authoring infrastructure changes.
 
 October 21 continuation: the approved
 [reproducible-authoring run](../2026-10-21-reproducible-authoring-long-loop.md)

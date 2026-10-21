@@ -2,8 +2,9 @@
   "id": "task.kp.algebra-whole-and-parts",
   "kind": "task",
   "title": "Show a compound quantity as whole groups and contributions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "algebra",
+  "summary": "Verified exemplar and bounded human review complete; acceptance and limits recorded in the review document.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -50,5 +51,9 @@
       "checkedAt": "2026-10-21T20:03:37.832Z",
       "notes": "Full types, architecture and production build pass; generated reachability current. No full corpus or cross-browser promotion claim before review."
     }
-  ]
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "User accepted the exemplar on October 21: Yes it does confirms that x+y remains recognizable as one quantity before its contributions separate. Bounded visual acceptance only; no learner-outcome claim or wider rollout."
+  }
 }

@@ -1,6 +1,9 @@
 # Whole and parts: exemplar review
 
-Candidate, not visually accepted. User direction is algebra or linear algebra;
+Accepted on 2026-10-21: the user answered “Yes it does” to whether `x+y`
+remains recognizable as one quantity before its contributions separate. This
+accepts that visual distinction for this exemplar, not learner outcomes or
+broad promotion. User direction is algebra or linear algebra;
 the disliked calculus presentation is explicitly out of scope. Contract:
 `run-contract.kp.algebra-whole-and-parts-v1`; rationale and limits are in
 `../2026-10-21-algebra-whole-and-parts.md`.
@@ -59,8 +62,8 @@ The full unit corpus and multi-browser visual certification are intentionally
 not rerun for this pre-review exemplar. Static and mathematical preservation
 are evidence; they do not certify that the explanation is worth using.
 
-HUMAN_CHECKPOINT: is it useful to track the whole group before opening it, and
-does the top-text presentation make that distinction easy to follow? No further
-polish, second caller or promotion until that judgment. Resume with
-`theseus work resume`; accept/revise this candidate before the visual-review
-slice can be complete. The implementation commit is its rollback unit.
+COMPLETE: the bounded exemplar and human review are complete. The accepted
+whole-to-parts distinction is a reference for future work; it does not establish
+learner effectiveness or authorize a broader rollout. No approved implementation
+remains in this contract. Implementation commit `5a8dfb71f` is the rollback unit.
+Acceptance required no code changes or repetition of unchanged technical checks.

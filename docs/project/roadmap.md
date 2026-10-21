@@ -30,12 +30,14 @@ continue with algebra or linear algebra. The bounded
 [whole-and-parts algebra exemplar](2026-10-21-algebra-whole-and-parts.md) reuses
 the canonical top-text card to examine a compound expression as one quantity,
 then as its contributions. No calculus polish or Gaussian-elimination restart.
-Its visual review precedes further expansion; the previous technical run stays
-complete and its calculus-redesign recommendation is superseded.
-The [candidate is ready for review](reviews/2026-10-21-algebra-whole-and-parts.md):
+The previous technical run stays complete and its calculus-redesign
+recommendation is superseded.
+The [exemplar is accepted](reviews/2026-10-21-algebra-whole-and-parts.md):
 four source-authored states use the existing native compositor, with an opt-in
 text-above layout and exact selected-source initialization. Technical checks pass;
-explanatory quality remains a human checkpoint.
+the user confirms that the compound group remains recognizable before its
+contributions separate. The bounded run is complete. This is visual acceptance,
+not evidence of learner outcomes; further expansion remains separately scoped.
 
 Latest October 21 continuation: the approved
 [reproducible-authoring run](2026-10-21-reproducible-authoring-long-loop.md) adds

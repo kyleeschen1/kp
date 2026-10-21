@@ -2,8 +2,8 @@
   "id": "run-contract.kp.algebra-whole-and-parts-v1",
   "kind": "run-contract",
   "title": "Algebra whole and parts exemplar",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: one of two packages complete; candidate verified. Await human explanation/visual judgment at the whole-and-parts review URL. No calculus work or broader rollout authorized.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,8 +35,8 @@
     },
     {
       "id": "visual-review",
-      "summary": "HUMAN_CHECKPOINT: judge whether intact-group tracking and text-above presentation clarify the distinction. No promotion before acceptance.",
-      "status": "in-progress"
+      "summary": "User accepted whole-to-parts object continuity. Both packages complete; no code changes required by review and no further implementation authorized in this contract.",
+      "status": "complete"
     }
   ]
 }
