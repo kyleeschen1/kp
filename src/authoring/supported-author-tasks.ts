@@ -27,7 +27,7 @@ export const supportedAuthorTasks = {
     input: "Four or five checked states: factor a repeated binary group, evaluate its integer count, distribute, optionally evaluate the final nonnegative integer product. Declared real scalars; ordered contributions; no arbitrary solver. Prose is editorial.",
     preview: { kind: "explicit-apply", url: "/experiments/reusable-reasoning/?example=algebra-intuition" },
     extraction: { kind: "domain-owned", owner: "src/experiments/composed-algebra/subexplanations.ts", scope: "Two contextual questions, whole/scoped self-checks and revision-pinned exact return; no automatic grading or custom-source link persistence." },
-    publication: { kind: "local-edition", command: "author:composed-algebra-publication", output: "immutable-content-addressed", input: "selected v2 source JSON; static readings questions and self-checks, not interactive animation" }
+    publication: { kind: "local-edition", command: "author:composed-algebra-publication", output: "immutable-content-addressed", input: "selected v2 source JSON; static readings, questions and self-checks by default; --interactive adds the existing native reader with revision-pinned playback; --check verifies exact local bytes, not deployment" }
   },
   "equation.composed-algebra": {
     owner: "src/authoring/composed-algebra-author-check.ts",

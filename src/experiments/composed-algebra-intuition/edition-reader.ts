@@ -13,6 +13,7 @@ async function enhance(root: HTMLElement) {
   let surface: Awaited<ReturnType<typeof mountComposedAlgebraCardV2>> | undefined;
   let unsubscribe: (() => void) | undefined;
   let locationTimer: number | undefined;
+  let ownedHash = location.hash;
   let restore = () => {};
   let persist = () => {};
   const dispose = () => {
@@ -40,6 +41,7 @@ async function enhance(root: HTMLElement) {
     const active = surface;
     restore = () => {
       window.clearTimeout(locationTimer);
+      ownedHash = location.hash;
       const result = readAlgebraEditionLocation(location.hash, draft.revisionId, sequence.checkpoints.last);
       locationValid = result.status === "ready";
       output.hidden = locationValid;
@@ -52,10 +54,12 @@ async function enhance(root: HTMLElement) {
     persist = () => {
       // Preserve an invalid incoming link for diagnosis until corrected. The
       // reader may still be explored; it never substitutes another source.
-      if (disposed || restoring || !locationValid) return;
+      // A new hash can precede its queued hashchange event. Only the location
+      // we last restored or wrote is ours to replace, including on pagehide.
+      if (disposed || restoring || !locationValid || location.hash !== ownedHash) return;
       const step = sequence.checkpoints.positionAt(active.clock.getSnapshot().progress);
       const url = new URL(location.href); url.hash = algebraEditionHash(draft.revisionId, step);
-      if (url.href !== location.href) history.replaceState(history.state, "", url);
+      if (url.href !== location.href) { history.replaceState(history.state, "", url); ownedHash = location.hash; }
     };
     unsubscribe = active.clock.subscribe(() => {
       // Browser history is not a rendering surface. Coalesce travel samples,

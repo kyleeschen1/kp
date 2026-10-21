@@ -2,7 +2,8 @@
   "id": "run-contract.kp.algebra-interactive-editions-v1",
   "kind": "run-contract",
   "title": "Portable native algebra editions",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -44,7 +45,8 @@
     },
     {
       "id": "integration",
-      "status": "planned"
+      "summary": "Author packet and discovery updated; 7385 tests, full types/build, complete costs, actual workflow and 25 browser checks pass. All four packages complete.",
+      "status": "complete"
     }
   ]
 }

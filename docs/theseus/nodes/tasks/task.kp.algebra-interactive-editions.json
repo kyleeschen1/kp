@@ -2,8 +2,9 @@
   "id": "task.kp.algebra-interactive-editions",
   "kind": "task",
   "title": "Export and reopen checked native algebra readers",
-  "status": "ready",
+  "status": "resolved",
   "domain": "algebra",
+  "summary": "Explicit checked v2 source exports to immutable local native animation with pinned playback, static fallback, complete measured costs and three-browser preservation. Further native startup work is a recommendation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -49,6 +50,62 @@
       "scope": "complete-costs",
       "checkedAt": "2026-10-21T20:21:02.923Z",
       "notes": "Edition 370019 gzip JS vs editor 402100; all lazy chunks and full archives measured. Narrow module extraction yielded no benefit and was reverted. Initial bounded gates and mutation regression pass."
+    },
+    {
+      "command": "npm run visual:algebra-editions -- --project=chromium --grep rapid",
+      "status": "failed",
+      "scope": "navigation-race",
+      "checkedAt": "2026-10-21T20:25:26.424Z",
+      "notes": "Same-task hash change followed by pagehide overwrote the new link before hashchange. Regression reproduced; fixed by requiring ownership of current hash before persistence."
+    },
+    {
+      "command": "npm run visual:algebra-editions",
+      "status": "passed",
+      "scope": "final-browser",
+      "checkedAt": "2026-10-21T20:25:28.089Z",
+      "notes": "25 pass, two timing-only skips; both sources in three engines including navigation race and shared-server exact edition reopening."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T20:25:29.280Z",
+      "notes": "Full app, Node, tests, Svelte and domain types pass with final location ownership guard."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T20:25:30.441Z",
+      "notes": "Production build passes; existing unrelated large-chunk warnings retained."
+    },
+    {
+      "command": "npm run check:authoring",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T20:25:32.348Z",
+      "notes": "24 boundary tests and all complete runtime/TypeScript consumer budgets pass."
+    },
+    {
+      "command": "npm run check:reproducible-authoring",
+      "status": "passed",
+      "scope": "workflow",
+      "checkedAt": "2026-10-21T20:25:34.060Z",
+      "notes": "Actual CLI check/build/check cases pass; existing two-unknown algebra source now tested for both static and interactive output, calculus unchanged."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-21T20:27:12.879Z",
+      "notes": "7385 unit tests pass, zero failures/skips; architecture and inference gates pass. Final browser and focused reruns cover the late location-race guard."
+    },
+    {
+      "command": "npm run measure:algebra-editions",
+      "status": "passed",
+      "scope": "final-costs",
+      "checkedAt": "2026-10-21T20:27:13.819Z",
+      "notes": "Final complete edition JS 370031 gzip bytes; editor 402100. Initial bounded archive and authority gates pass. Final local byte edition a94dec90 reproduced by actual --check."
     }
   ]
 }

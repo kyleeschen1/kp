@@ -1,7 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { createServer, type Server } from "node:http";
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 import { buildInteractiveAlgebraEdition } from "../scripts/algebra-interactive-edition.ts";
 import whole from "../content/authoring/algebra/whole-and-parts.json" with { type: "json" };
 import primary from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
@@ -175,7 +175,13 @@ test("rapid scrub samples coalesce history writes and pending work cannot overwr
   await expect(page.locator("html")).toHaveAttribute("data-history-writes", "1");
   await expect.poll(() => new URL(page.url()).hash).toContain("step=0.99");
   await seek(page, 2);
-  await page.evaluate(() => { location.hash = "step=1&revision=other"; });
+  const departingHash = await page.evaluate(() => {
+    location.hash = "step=1&revision=other";
+    // Navigation can depart before the queued hashchange handler runs.
+    window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+    return location.hash;
+  });
+  expect(departingHash).toBe("#step=1&revision=other");
   await expect(page.locator("[data-composed-error]")).toContainText("matching source edition");
   await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true })));
   expect(new URL(page.url()).hash).toBe("#step=1&revision=other");
@@ -213,4 +219,14 @@ test("cost: cold and warm complete local reader navigation", async ({ browser, b
   const report = { qualification: "Unthrottled localhost HTTP without compression or explicit cache headers. Warm is same-context reload; readiness includes automation overhead. Diagnostic samples, not learner-device performance or cross-edition caching guarantees.", samples };
   console.log(JSON.stringify(report));
   await info.attach("navigation-costs.json", { body: JSON.stringify(report), contentType: "application/json" });
+});
+
+test("shared development server opens the exact generated edition", async ({ page }) => {
+  const edition = await buildInteractiveAlgebraEdition("content/authoring/algebra/whole-and-parts.json");
+  await page.goto(`http://localhost:8000/${relative(process.cwd(), edition.directory)}/index.html`);
+  await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-status", "ready");
+  await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-revision", edition.revisionId);
+  await seek(page, 1.5);
+  await expect.poll(() => page.url()).toContain("step=1.5");
+  await page.reload(); await expect(page.locator("[data-composed-card]")).toHaveAttribute("data-composed-step", "1.5");
 });

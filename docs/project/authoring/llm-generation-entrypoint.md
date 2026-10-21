@@ -135,6 +135,10 @@ For the accepted four/five-state question-oriented composition, use
 `reusable-algebra-intuition-packet.md` and `equation.algebra-intuition` discovery.
 It adds checked distribution and optional constant-product evaluation through
 the same canonical owners, plus contextual subquestions and static publication.
+Explicit `author:composed-algebra-publication --source <v2.json> --interactive`
+packages the existing native card with revision-pinned playback and complete
+static reading. Use the accepted whole-and-parts source as the text-above
+reference; checking alone does not export or apply it.
 
 ## Route The Task Before Generating
 

@@ -1,6 +1,6 @@
 # Portable algebra: implementation and evidence
 
-Active continuation: `run-contract.kp.algebra-interactive-editions-v1`, backed by
+Completed continuation: `run-contract.kp.algebra-interactive-editions-v1`, backed by
 `../2026-10-21-algebra-interactive-editions.md`. The accepted whole-and-parts
 source and existing five-state source now build through explicit
 `author:composed-algebra-publication --source <path> --interactive` selection.
@@ -65,7 +65,7 @@ transfer.
 
 ## Preservation and cost result
 
-The final cohort passes 22 checks: seven preservation checks in Chromium,
+The preservation checkpoint cohort passed 22 checks: seven preservation checks in Chromium,
 Firefox and WebKit, plus one Chromium timing diagnostic. The diagnostic is
 intentionally skipped in the other two engines, not a missing preservation gate.
 Tests cover both source lengths, fractional reload in a fresh browser context,
@@ -84,11 +84,11 @@ fully reverted. Existing tree shaking already removes unused function bodies;
 splitting these modules did not remove the real compiler/native dependencies.
 No semantic owner, required dependency or authenticated mount was weakened.
 
-Final complete JS: edition **1,409,774 raw / 370,019 gzip**; editor
-**1,520,247 raw / 402,100 gzip** (32,081 gzip bytes, about 8%, less for reading).
+Final complete JS: edition **1,409,843 raw / 370,031 gzip**; editor
+**1,520,247 raw / 402,100 gzip** (32,069 gzip bytes, about 8%, less for reading).
 Both contain 35 emitted JS chunks. Whole-and-parts interactive archive:
-2,674,406 raw / 1,266,236 gzip, plus 13,106 manifest bytes; five-state archive:
-2,675,832 raw / 1,265,717 gzip, plus 13,106 manifest bytes. Static bytes unchanged.
+2,674,475 raw / 1,266,248 gzip, plus 13,106 manifest bytes; five-state archive:
+2,675,901 raw / 1,265,729 gzip, plus 13,106 manifest bytes. Static bytes unchanged.
 
 `scripts/algebra-edition-budgets.json` establishes complete-consumer limits:
 385,000 / 418,000 JS gzip bytes for edition/editor; static archive
@@ -109,3 +109,61 @@ includes automation overhead. These measurements expose remaining startup work;
 they do not establish performance on learner hardware or across many cards.
 Each immutable edition has its own asset directory; cross-edition deduplication
 and multi-card amortization are not implemented by this delivery.
+
+## Integration follow-through
+
+An additional same-task navigation regression exposed a real race: changing the
+hash and immediately dispatching pagehide could flush the old playhead before
+the queued hashchange handler ran. The focused test failed with the new hash
+overwritten. The reader now records the last restored/written hash and refuses
+to overwrite a location it no longer owns. This adds 69 raw / 12 gzip bytes to
+the earlier measured reader; the final totals above include it. The existing
+coalescing and departure tests remain, and the three-engine rerun includes this
+race plus opening/reloading generated editions through the shared dev server.
+
+Final-rerun timing diagnostics (while other verification ran) observed cold
+readiness at 389–612ms and reloads at 332–427ms, with long tasks up to 355ms.
+All six samples requested 38 resources / 25 scripts and decoded 1,402,836 bytes.
+These are not a before/after optimization comparison: concurrent work changed
+the measurement conditions. The earlier quieter samples and this variability
+both support retaining startup cost as a real limitation.
+
+Local whole-and-parts edition:
+<http://localhost:8000/tmp/codex/composed-algebra-editions/a94dec90a681b454e288a4ea667d8caa4b939072c89e6ebf0501332e740e1a06/index.html>.
+The source revision remains
+`sha256:9e16fc7a10f4fcf3f79469ad98da36572f4ff1b42cf66fc702e6ab5e201fe6ef`;
+the path identifies complete output bytes, not a changed mathematical source.
+The generated directory is disposable and reproducible with the documented
+command; it is intentionally not committed or externally published.
+
+COMPLETE: all four packages delivered. Final verification:
+
+- `npm test`: 7,385 pass, no failures/skips, including architecture and inference
+  gates before the full unit corpus. Runtime location-race changes during this
+  run are additionally covered by the final focused and browser reruns below.
+- `npm run typecheck`: all app/Node/test/Svelte/domain checks pass.
+- `npm run build:bundle`: production build passes; existing unrelated large
+  application-chunk warnings remain.
+- `npm run check:authoring`: 24 focused boundary tests and complete runtime/type
+  cost consumers pass.
+- `npm run check:reproducible-authoring`: actual source-check/build/check processes
+  pass, now including interactive export for the existing two-unknown algebra
+  transfer source. No model calls or human-effort claim.
+- `npm run visual:algebra-editions`: final 25 pass in Chromium/Firefox/WebKit;
+  two non-Chromium timing diagnostics skipped by design. All preservation and
+  shared-server checks execute in each engine.
+- Final focused unit/CLI/publication/cost/discovery rerun: eight pass. Final
+  `author:check` accepts the unchanged whole-and-parts source; actual interactive
+  `--check` reproduces byte edition `a94dec90...`; complete cost gates pass.
+- Three original whole-and-parts host checks pass after scaffold extraction.
+  Theseus validates; generated equation reachability is current.
+
+No further implementation remains in this contract. The new recurring ownership
+is one small read-only edition host, a bounded location parser, builder and cost
+gate; the prior scaffold/compiler/native reader are reused. An attempted renderer
+split was discarded. Remaining compiler/native payload and startup long tasks
+are documented rather than described as solved. Recommended next investigation:
+profile cloning and paint alignment during native preparation on this accepted
+packaged algebra reference. Preserve the visual and semantic owners; new
+mathematical coverage or presentation design needs its own scoped decision.
+Resume durable project context with `theseus work resume`.

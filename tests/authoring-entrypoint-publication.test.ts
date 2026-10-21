@@ -52,3 +52,8 @@ test("calculus discovery names explicit local edition modes without claiming exe
   assert.match(task.publication.input, /not visual acceptance or deployment/);
   assert.equal(task.extraction.kind, "unsupported");
 });
+test("algebra discovery grants interactive export only to the checked v2 owner", () => {
+  assert.match(supportedAuthorTasks["equation.algebra-intuition"].publication.input, /--interactive/);
+  assert.match(supportedAuthorTasks["equation.algebra-intuition"].publication.input, /revision-pinned/);
+  assert.match(supportedAuthorTasks["equation.composed-algebra"].publication.input, /not interactive animation/);
+});

@@ -5,6 +5,16 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+October 21 continuation uses the accepted algebra source for
+[self-contained interactive local editions](../2026-10-21-algebra-interactive-editions.md).
+The existing compiler and native card own all mathematics and motion; the new
+host supplies pinned restoration, static fallback and immutable packaging.
+[Evidence](../reviews/2026-10-21-algebra-interactive-editions.md) records complete
+reader/editor costs and browser preservation. The bounded run is complete:
+7,385 tests, full types/build, authoring budgets and 25 browser checks pass.
+The measured remaining concern is native startup work, not a need for another
+authoring framework. Preserve the accepted layout and leave calculus as-is.
+
 Latest October 21: the user explicitly rejects further calculus polish and asks
 for algebra or linear algebra. The bounded
 [whole-and-parts algebra exemplar](../2026-10-21-algebra-whole-and-parts.md), using

@@ -7,6 +7,7 @@ This extends the bounded three-state task; it does not change v1 acceptance.
 
 - `src/authoring/examples/composed-algebra-intuition.json`: five states, one variable and a constant contribution.
 - `src/authoring/examples/composed-algebra-intuition-transfer.json`: four states, two variables and no final constant evaluation.
+- `content/authoring/algebra/whole-and-parts.json`: accepted four-state whole-to-parts explanation, with text above the native animation.
 
 Run from the repository root:
 
@@ -55,17 +56,49 @@ self-checks do not grade reasoning or establish learning/retention efficacy.
 Executable examples and recovery assertions live in
 `tests/composed-algebra-repair-v2.test.ts`.
 
-## Publish a static edition
+## Export and reopen a local edition
 
 ```sh
 npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-intuition.json
 npm run author:composed-algebra-publication -- --source src/authoring/examples/composed-algebra-intuition.json --check
+npm run author:composed-algebra-publication -- --source content/authoring/algebra/whole-and-parts.json --interactive
+npm run author:composed-algebra-publication -- --source content/authoring/algebra/whole-and-parts.json --interactive --check
 ```
 
 The existing immutable writer packages exact source bytes, build-time KaTeX,
 Full/Compact readings, both independent questions and self-checks. It rejects
 altered output; do not overwrite old editions. Shared template changes enter
-new content-addressed builds. This is not animated export or public deployment.
+new content-addressed builds. Without `--interactive`, output is static, including
+v1 compatibility. Explicit interactive output supports v2 only and packages the
+existing native card, with prose above its stage and complete static reading below.
+It contains no editor; author a new source and rebuild to change it.
+
+The command prints its `directory`, source digest, explanation revision and byte
+edition ID. With the shared dev server running, open the returned directory's
+`index.html` under `http://localhost:8000/` (remove the repository prefix from the
+filesystem path). Alternatively serve that directory over local HTTP. Copy the
+whole directory when moving it: the manifest includes all chunks, styles and
+fonts. Opening `file://` is not the supported module-loading route.
+
+Scrub, wait for the URL to settle, then reload or copy the URL to reopen the exact
+fractional position. Playback hashes include the source revision; another
+edition cannot silently interpret that position against different mathematics.
+Malformed/mismatched links show a repair message and leave the original hash
+intact. Clear or correct the hash to recover. Static content remains readable
+without JavaScript and when enhancement fails.
+
+`--check` reproduces the complete closure and rejects modified, missing or extra
+files. It does not repair an old edition by overwriting it. These are local
+outputs, not deployment or an arbitrary algebra generator. Smaller questions
+remain complete static readings in an edition; interactive scoped questions and
+editable practice remain capabilities of the development host.
+
+Use `npm run measure:algebra-editions` for complete reader/editor and archived
+asset costs, and `npm run visual:algebra-editions` for the isolated HTTP browser
+cohort. The native compiler/renderer is still substantial; output includes lazy
+chunks even when a particular explanation does not request them. Separate
+edition directories retain their own assets, with no cross-edition deduplication
+or multi-card amortization claim.
 
 ## Observed effort and limits
 

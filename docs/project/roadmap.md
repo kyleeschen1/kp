@@ -25,6 +25,18 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 continuation after whole-and-parts acceptance:
+[portable algebra editions](2026-10-21-algebra-interactive-editions.md) now package
+the existing native animation from explicit v2 source, with pinned fractional
+reopening and complete static reading. The [evidence](reviews/2026-10-21-algebra-interactive-editions.md)
+records three-engine preservation, complete payload budgets, rejected no-gain
+module splitting and remaining startup long tasks. The bounded run is complete:
+7,385 tests, full types/build, authoring budgets and 25 browser checks pass.
+Calculus remains unchanged. Next useful
+engineering investigation is native algebra preparation cost, using this accepted
+source and packaged reader as a repeatable measurement target; this is a
+recommendation, not another task queue or authorization for visual redesign.
+
 Latest October 21 user direction: leave the disliked calculus example alone and
 continue with algebra or linear algebra. The bounded
 [whole-and-parts algebra exemplar](2026-10-21-algebra-whole-and-parts.md) reuses

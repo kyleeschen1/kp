@@ -7,7 +7,7 @@ import { assessRetainedAuthorTask } from "./assess-authoring-task.ts";
 const cases = [
   { task: "calculus-stationary", owner: "calculus.change-propagation", source: "content/authoring/transfer/stationary-change.json", wrong: "content/authoring/transfer/two-reversals.json", builder: "build-calculus-edition.ts", interactive: true },
   { task: "calculus-two-reversals", owner: "calculus.change-propagation", source: "content/authoring/transfer/two-reversals.json", wrong: "content/authoring/transfer/stationary-change.json", builder: "build-calculus-edition.ts", interactive: true },
-  { task: "composed-two-unknowns", owner: "equation.algebra-intuition", source: "src/authoring/examples/composed-algebra-intuition-transfer.json", wrong: "src/authoring/examples/composed-algebra-intuition.json", builder: "build-composed-algebra-edition.ts", interactive: false }
+  { task: "composed-two-unknowns", owner: "equation.algebra-intuition", source: "src/authoring/examples/composed-algebra-intuition-transfer.json", wrong: "src/authoring/examples/composed-algebra-intuition.json", builder: "build-composed-algebra-edition.ts", interactive: true }
 ] as const;
 
 function cli(script: string, args: string[], input?: string, expectedExit = 0) {
