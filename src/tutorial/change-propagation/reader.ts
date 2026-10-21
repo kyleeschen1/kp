@@ -6,7 +6,7 @@ const encoded: unknown = JSON.parse(required("#change-source-bytes").textContent
 if (typeof encoded !== "string") throw new Error("Missing selected change-propagation source.");
 const initial = compileChangeSource(encoded);
 if (initial.status !== "checked") throw new Error(`${initial.path}: ${initial.message}`);
-let active = mount(required(".change-card"), initial.model, true);
+let active = mount(required(".change-card"), initial.model, { restore: true });
 let closed = false;
 required<HTMLElement>("[data-change-author]").hidden = false;
 const editor = required<HTMLTextAreaElement>("#change-source"), diagnostic = required<HTMLElement>("[data-change-diagnostic]");
@@ -26,7 +26,7 @@ apply.addEventListener("click", async () => {
     const reading = required<HTMLElement>(".change-reading-source", template.content);
     const host = required<HTMLElement>("[data-change-host]");
     const prepared = await preparePreview(host, { className: "change-staging", html: card.outerHTML,
-      mount: async staging => mount(required(".change-card", staging), result.model, false, true) });
+      mount: async staging => mount(required(".change-card", staging), result.model, { staged: true }) });
     if (closed) { prepared.dispose(); return; }
     const previous = active;
     host.replaceChildren(...prepared.staging.childNodes);

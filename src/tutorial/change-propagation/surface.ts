@@ -13,7 +13,10 @@ export function required<T extends Element>(selector: string, parent: ParentNode
   return value;
 }
 
-export function mountChange(root: HTMLElement, model: ChangeModel, restore = false, staged = false) {
+export function mountChange(root: HTMLElement, model: ChangeModel, options: {
+  readonly restore?: boolean; readonly staged?: boolean; readonly mode?: "editor" | "edition";
+} = {}) {
+  const { restore = false, staged = false, mode = "editor" } = options;
   const cleanup: (() => void)[] = [];
   const dispose = () => { for (const release of cleanup.splice(0).reverse()) release(); };
   try {
@@ -111,7 +114,9 @@ export function mountChange(root: HTMLElement, model: ChangeModel, restore = fal
     const revision = params.get("revision");
     mismatchedLink = revision === null ? !restore : revision !== model.revision;
     if (mismatchedLink) {
-      required("[data-change-diagnostic]").textContent = "This link belongs to a different source. Reapply that source to restore its position; showing this source at its starting point.";
+      required("[data-change-diagnostic]").textContent = mode === "edition"
+        ? "This link belongs to a different source. Open the matching edition to restore its position; showing this edition at its starting point."
+        : "This link belongs to a different source. Reapply that source to restore its position; showing this source at its starting point.";
       x = model.source.x; h = model.source.h;
       xInput.value = String(x); hInput.value = String(h);
       native.cancel(); clock.seek(0, "url");

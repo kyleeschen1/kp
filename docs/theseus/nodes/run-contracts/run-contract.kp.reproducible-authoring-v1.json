@@ -85,7 +85,8 @@
     },
     {
       "id": "edition-restoration",
-      "status": "planned"
+      "summary": "Exact embedded-source reload and reverse proven; editor compatibility and types pass.",
+      "status": "complete"
     },
     {
       "id": "location-input",

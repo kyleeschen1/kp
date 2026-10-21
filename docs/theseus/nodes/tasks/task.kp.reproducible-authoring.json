@@ -133,6 +133,20 @@
       "scope": "interactive-edition",
       "checkedAt": "2026-10-21T19:22:15.461Z",
       "notes": "Three cases pass: no-script static and both fresh interactive selected sources, no external requests or author controls."
+    },
+    {
+      "command": "npm run visual:calculus-editions -- --project=chromium",
+      "status": "passed",
+      "scope": "edition-restoration",
+      "checkedAt": "2026-10-21T19:23:58.428Z",
+      "notes": "Five browser cases pass: fresh-context and reload exact samples, reverse, signed/zero increments and explicit different-edition rejection. Full types pass."
+    },
+    {
+      "command": "npm run visual:change-propagation",
+      "status": "passed",
+      "scope": "edition-restoration",
+      "checkedAt": "2026-10-21T19:23:59.300Z",
+      "notes": "All seven editor preservation checks pass; shared mounting options are explicit."
     }
   ],
   "expectedLearning": [

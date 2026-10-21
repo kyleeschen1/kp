@@ -1,10 +1,16 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { createServer, type Server } from "node:http";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildCalculusEdition, buildInteractiveCalculusEdition } from "../scripts/build-calculus-edition.ts";
 
 let server: Server, origin: string;
+async function setRange(page: Page, selector: string, value: number) {
+  await page.locator(selector).evaluate((node, value) => {
+    if (!(node instanceof HTMLInputElement)) throw new Error("Expected range");
+    node.value = String(value); node.dispatchEvent(new Event("input", { bubbles: true }));
+  }, value);
+}
 test.beforeAll(async () => {
   const editions = new Map([
     ["static", buildCalculusEdition("content/authoring/transfer/stationary-change.json")],
@@ -23,6 +29,36 @@ test.beforeAll(async () => {
   await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
   const address = server.address(); if (!address || typeof address === "string") throw new Error("Missing local port");
   origin = `http://127.0.0.1:${address.port}`;
+});
+
+for (const key of ["stationary", "reversals"]) test(`${key}: reload and reverse retain embedded source and exact sample`, async ({ page, browser }) => {
+  await page.goto(`${origin}/${key}/`);
+  const card = page.locator(".change-card");
+  await expect(card).toHaveAttribute("data-kp-focus-deck-static", "false");
+  const revision = await card.getAttribute("data-change-revision");
+  await setRange(page, "[data-change-h]", -.3);
+  await setRange(page, "[data-kp-focus-deck-scrubber]", 3.5);
+  const sample = await page.locator("[data-change-value]").allTextContents();
+  await expect.poll(() => page.url()).toContain("step=3.5");
+  const pinned = page.url();
+  await page.reload();
+  await expect(card).toHaveAttribute("data-change-position", "3.5");
+  expect(await page.locator("[data-change-value]").allTextContents()).toEqual(sample);
+  for (const position of [4, 0, 3.5]) await setRange(page, "[data-kp-focus-deck-scrubber]", position);
+  expect(await page.locator("[data-change-value]").allTextContents()).toEqual(sample);
+  const context = await browser.newContext();
+  try {
+    const fresh = await context.newPage(); await fresh.goto(pinned);
+    await expect(fresh.locator(".change-card")).toHaveAttribute("data-change-revision", revision!);
+    expect(await fresh.locator("[data-change-value]").allTextContents()).toEqual(sample);
+    await setRange(fresh, "[data-change-h]", 0);
+    await expect(fresh.locator('[data-change-value="errorPerH"]')).toHaveText("—");
+  } finally { await context.close(); }
+  const other = key === "stationary" ? "reversals" : "stationary";
+  await page.goto(`${origin}/${other}/${new URL(pinned).hash}`);
+  await expect(page.locator("[data-change-diagnostic]")).toContainText("Open the matching edition");
+  await expect(card).toHaveAttribute("data-change-position", "0");
+  expect(new URL(page.url()).hash).toBe(new URL(pinned).hash);
 });
 test.afterAll(async () => { await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); });
 
