@@ -6,10 +6,12 @@ import { cpus, platform, arch } from "node:os";
 import { gzipSync } from "node:zlib";
 import { assertArchitectureLoadingAcceptance } from "./architecture-loading-acceptance.ts";
 import { profileGradientCost } from "./profile-gradient-cost.ts";
+import { startTaxProfile } from "./profile-tax-cost.ts";
+import { architectureSourcePaths } from "./architecture-cost-inventory.ts";
 
 // Measurements, not deletion candidates or automatically refreshed budgets.
 // Inventory only tracked files; browser mode executes already-built artifacts.
-const paths = execFileSync("git", ["ls-files", "-z"], { encoding: "utf8" }).split("\0").filter(Boolean);
+const paths = architectureSourcePaths();
 const revision = execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim();
 const counts: Record<string, { files: number; bytes: number; lines: number }> = {};
 const files = paths.filter(path => /^(src|tests|scripts|domains)\//.test(path) && /\.(ts|css|svelte|json)$/.test(path))
@@ -54,6 +56,7 @@ if (process.argv.includes("--browser")) {
       try {
         const page = await context.newPage(), cdp = await context.newCDPSession(page);
         await cdp.send("Emulation.setCPUThrottlingRate", { rate }); await cdp.send("Performance.enable");
+        const taxProfile = scenario.id === "canonical-tax" && process.argv.includes("--tax-profile");
         await page.addInitScript(() => {
           const tasks: number[] = [];
           Object.defineProperty(globalThis, "__kpCostTasks", { value: tasks });
@@ -75,10 +78,12 @@ if (process.argv.includes("--browser")) {
             await route.fulfill({ body: bytes, contentType });
           } catch { errors.push(`missing:${path}`); await route.abort(); }
         });
+        const finishStartup = taxProfile ? await startTaxProfile(cdp) : undefined;
         await page.goto(`http://localhost:8000${scenario.route}`, { waitUntil: "load", timeout: 60000 });
         await page.locator(scenario.ready).first().waitFor({ timeout: 60000 });
         await page.evaluate(() => document.fonts.ready);
         const readyMs = await page.evaluate(() => performance.now());
+        await finishStartup?.(scenario.output, "startup", rate, repeat);
         const before = await cdp.send("Performance.getMetrics");
         const dom = await page.evaluate(() => ({ elements: document.querySelectorAll("*").length,
           canvases: document.querySelectorAll("canvas").length,
@@ -86,6 +91,7 @@ if (process.argv.includes("--browser")) {
           longTasks: (globalThis as { __kpCostTasks?: number[] }).__kpCostTasks ?? [] }));
         // One ordinary next-step interaction; a static reader is the idle baseline.
         // This is host overhead evidence, not certification of every motion motif.
+        const finishTransition = taxProfile ? await startTaxProfile(cdp) : undefined;
         const frames = await page.evaluate(async card => {
           const button = document.querySelector<HTMLButtonElement>("[data-kp-focus-deck-next]");
           if (card && !button) throw new Error("Card must expose its canonical next control.");
@@ -96,6 +102,7 @@ if (process.argv.includes("--browser")) {
           return { samples: gaps.length, p50Ms: gaps[Math.floor(gaps.length * .5)], p95Ms: gaps[Math.floor(gaps.length * .95)],
             maxMs: gaps.at(-1), over50ms: gaps.filter(x => x > 50).length };
         }, scenario.card);
+        await finishTransition?.(scenario.output, "first-transition", rate, repeat);
         const after = await cdp.send("Performance.getMetrics");
         const metric = (data: typeof before, name: string) => data.metrics.find(m => m.name === name)?.value ?? 0;
         const resources = [...requested.entries()].map(([path, value]) => ({ path, ...value }));
@@ -103,12 +110,12 @@ if (process.argv.includes("--browser")) {
         if (acceptance && (scenario.id === "canonical-tax" || scenario.id === "gradient")) assertArchitectureLoadingAcceptance({ scenario: scenario.id, phase: "initial", assets: resources, errors });
         const totals = Object.fromEntries([".js", ".css", ".woff2", ".woff", ".ttf", ".html"].map(kind => [kind,
           resources.filter(r => r.kind === kind).reduce((sum, r) => ({ raw: sum.raw + r.raw, gzip: sum.gzip + r.gzip }), { raw: 0, gzip: 0 })]));
-        console.log(JSON.stringify({ kind: "browser", scenario: scenario.id, cpuSlowdown: rate, repeat,
+        console.log(JSON.stringify({ kind: "browser", scenario: scenario.id, cpuSlowdown: rate, repeat, instrumented: taxProfile,
           manifestSha256: createHash("sha256").update(manifest).digest("hex"), readyMs, dom, frames,
           startupScriptMs: metric(before, "ScriptDuration") * 1000, startupTaskMs: metric(before, "TaskDuration") * 1000,
           interactionScriptMs: (metric(after, "ScriptDuration") - metric(before, "ScriptDuration")) * 1000,
           jsHeapUsedBytes: metric(after, "JSHeapUsedSize"), totals, resources, errors }));
-        if (scenario.id === "canonical-tax" && rate === 1 && repeat === 3 && process.argv.includes("--activation")) {
+        if (scenario.id === "canonical-tax" && ((rate === 1 && repeat === 3) || taxProfile) && process.argv.includes("--activation")) {
           const initial = new Set(requested.keys());
           const states = await page.locator("[data-kp-deferred-card]").evaluateAll(elements => elements.map(element => {
             const stage = element.querySelector("[data-kp-log-exponent-focus-card-stage], [data-kp-surface-contour-stage], [data-kp-typescript-focus-card-stage]")!;
@@ -116,11 +123,13 @@ if (process.argv.includes("--browser")) {
           }));
           if (states.length !== 3 || states.some(item => (item.top >= item.viewport || item.bottom <= 0) && item.state !== "idle")) throw new Error(`Offscreen stages must remain unactivated: ${JSON.stringify(states)}`);
           for (const selector of ["[data-kp-log-exponent-focus-card]", "[data-kp-surface-contour-deck]", "[data-kp-typescript-focus-card]"]) {
+            const finishActivation = taxProfile ? await startTaxProfile(cdp) : undefined;
             const card = page.locator(selector);
             await card.scrollIntoViewIfNeeded();
             await page.waitForFunction(selector => document.querySelector(selector)?.getAttribute("data-kp-deferred-card") === "ready", selector);
             if (selector.includes("log-exponent")) await page.locator('[data-kp-log-exponent-animation-status="ready"]').waitFor();
             if (selector.includes("surface-contour")) await card.locator('[data-kp-surface-contour-capability="ready"]').waitFor();
+            await finishActivation?.(scenario.output, `activation:${selector}`, rate, repeat);
             const beforeBeat = await card.getAttribute("data-kp-focus-deck-active-beat");
             await card.locator("[data-kp-focus-deck-next]").click();
             await page.waitForFunction(({ selector, beforeBeat }) => document.querySelector(selector)?.getAttribute("data-kp-focus-deck-active-beat") !== beforeBeat, { selector, beforeBeat });

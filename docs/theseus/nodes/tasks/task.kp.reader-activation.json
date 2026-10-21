@@ -1,0 +1,53 @@
+{
+  "id": "task.kp.reader-activation",
+  "kind": "task",
+  "title": "Attribute and reduce reader activation stalls",
+  "status": "ready",
+  "domain": "architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-reader-activation-investigation.md"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "task.kp.engineering-discipline"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run audit:architecture-cost -- --browser --tax-only --activation --acceptance"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run audit:architecture-cost -- --browser --tax-only --activation --tax-profile",
+      "status": "passed",
+      "scope": "diagnosis",
+      "checkedAt": "2026-10-21T17:48:49.169Z",
+      "notes": "Six startup/transition/companion profiles completed. Swept-fit startup attribution 317-322ms at 6x; actual source parity and profile tests plus Node types pass."
+    }
+  ],
+  "expectedLearning": [
+    "Which startup, layout and first-input work causes observed stalls"
+  ],
+  "allowedWork": [
+    "Bounded profiling and behavior-preserving responsible-owner repairs"
+  ],
+  "disallowedWork": [
+    "New visual policy, eviction, general caching, renderer or deployment"
+  ],
+  "criteria": [
+    {
+      "id": "preservation",
+      "weight": "high"
+    },
+    {
+      "id": "attribution",
+      "weight": "high"
+    }
+  ]
+}

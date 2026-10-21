@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { SourceMap } from "node:module";
 import { resolve } from "node:path";
 import type { CDPSession, Page } from "@playwright/test";
@@ -31,23 +31,31 @@ export function summarizeGradientCpuProfile(profile: CpuProfile, sourceLabel: (f
 
 /** Profiles are separate from the ordinary timing cohort. Local source maps
  * explain generated frames; they are not sent to the browser or shipped policy. */
-export async function profileGradientCost(page: Page, cdp: CDPSession, output: string, cpuSlowdown: number, repeat: number, profileEnabled = true) {
-  const maps = new Map<string, SourceMap>(), labels = new Map<string, string>();
-  const label = (frame: CpuProfile["nodes"][number]["callFrame"]) => {
+export function createCpuSourceLabel(output: string) {
+  const maps = new Map<string, SourceMap | null>(), labels = new Map<string, string>();
+  return (frame: CpuProfile["nodes"][number]["callFrame"]) => {
     if (!frame.url.startsWith("http://localhost:8000/assets/")) return frame.functionName || "(native)";
     const key = `${frame.url}:${frame.lineNumber}:${frame.columnNumber}`;
     const cached = labels.get(key); if (cached) return cached;
     const pathname = new URL(frame.url).pathname.slice(1);
     if (!/^assets\/[A-Za-z0-9._-]+\.js$/.test(pathname)) throw new Error("Unexpected profiled asset path.");
     let map = maps.get(pathname);
-    if (!map) {
-      map = new SourceMap(JSON.parse(readFileSync(resolve(output, `${pathname}.map`), "utf8")));
+    if (map === undefined) {
+      const mapPath = resolve(output, `${pathname}.map`);
+      // Bundler-emitted helpers may have no original source map. Keep their
+      // sample cost explicit instead of dropping it or inventing attribution.
+      map = existsSync(mapPath) ? new SourceMap(JSON.parse(readFileSync(mapPath, "utf8"))) : null;
       maps.set(pathname, map);
     }
+    if (map === null) return `[unmapped] ${pathname}:${frame.lineNumber + 1} ${frame.functionName}`;
     const origin = map.findOrigin(frame.lineNumber + 1, frame.columnNumber + 1);
     const result = "fileName" in origin ? `${origin.fileName}:${origin.lineNumber} ${origin.name ?? frame.functionName}` : key;
     labels.set(key, result); return result;
   };
+}
+
+export async function profileGradientCost(page: Page, cdp: CDPSession, output: string, cpuSlowdown: number, repeat: number, profileEnabled = true) {
+  const label = createCpuSourceLabel(output);
   const comparisonStart = await page.locator("[data-kp-focus-deck-beat]").evaluateAll(elements => elements.findIndex(element => element.getAttribute("data-kp-focus-deck-beat") === "components"));
   if (comparisonStart < 0) throw new Error("Canonical comparison beat missing.");
   const cameraStart = await page.locator("[data-kp-focus-deck-beat]").evaluateAll(elements => elements.findIndex(element => element.getAttribute("data-kp-focus-deck-beat") === "magnitude"));

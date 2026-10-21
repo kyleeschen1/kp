@@ -1,0 +1,46 @@
+{
+  "id": "run-contract.kp.reader-activation-v1",
+  "kind": "run-contract",
+  "title": "Reader activation performance",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.reader-activation.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-reader-activation-investigation.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Approved bounded investigation and preservation repairs"
+  ],
+  "disallowedWork": [
+    "Changed semantic or visual policy"
+  ],
+  "goal": "Attribute observed reader stalls and remove demonstrated avoidable work",
+  "target": "task.kp.reader-activation",
+  "slices": [
+    {
+      "id": "diagnosis",
+      "title": "Diagnosis",
+      "summary": "Profile identifies repeated camera setup within swept fitting; preserve exact fitted outputs and isolate repair there.",
+      "status": "complete"
+    },
+    {
+      "id": "repair",
+      "title": "Repair",
+      "status": "planned"
+    },
+    {
+      "id": "verification",
+      "title": "Verification",
+      "status": "planned"
+    }
+  ]
+}

@@ -9,6 +9,7 @@
   "scripts": {
     "measure:authoring-boundaries": "node --disable-warning=ExperimentalWarning scripts/measure-authoring-boundaries.ts",
     "measure:revision-preparation": "node --disable-warning=ExperimentalWarning scripts/measure-revision-preparation.ts",
+    "measure:camera-fit": "node --disable-warning=ExperimentalWarning scripts/measure-camera-fit.ts",
     "test:authoring-boundaries": "node --disable-warning=ExperimentalWarning --test tests/runtime-import-closure.test.ts tests/algebra-authoring-boundaries.test.ts tests/author-example-loading.test.ts tests/concise-authoring.test.ts tests/composed-algebra-session-v2.test.ts tests/composed-algebra-repair-v2.test.ts tests/composed-algebra-readings-v2.test.ts tests/composed-algebra-transfer-v2.test.ts",
     "check:authoring": "npm run test:authoring-boundaries && npm run measure:authoring-boundaries -- --check --types",
     "test:change-propagation": "node --disable-warning=ExperimentalWarning --test tests/change-propagation.test.ts",
