@@ -36,6 +36,13 @@
       "scope": "p1",
       "checkedAt": "2026-10-21T17:20:28.959Z",
       "notes": "Initial tax JS now 387663 gzip bytes, down 5230; deferred addition unchanged. Metadata parity, full types/build, eight focus-deck checks and numeric authoring browser pass."
+    },
+    {
+      "command": "npm run visual:semantic-cost",
+      "status": "passed",
+      "scope": "p2",
+      "checkedAt": "2026-10-21T17:24:26.804Z",
+      "notes": "Seven production tests pass; initial-hidden callback failure reproduced before shared notification repair. Bayes repeated swaps and responsive browser checks pass with zero idle paint."
     }
   ],
   "expectedLearning": [

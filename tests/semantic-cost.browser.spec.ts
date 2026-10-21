@@ -150,20 +150,23 @@ test('document visibility isolates owners and tolerates disposal during notifica
   expect(result.disposed).toEqual(result.isolated);
 });
 
-test('one failing pause callback cannot leave another card playing', async ({ page }) => {
+for (const initiallyHidden of [false, true]) test(`one failing pause callback cannot leave another card playing (initially hidden: ${initiallyHidden})`, async ({ page }) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto('/cost/experiments/semantic-cost/?reading=rows');
   await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
-  const pauses = await page.evaluate(() => {
+  const pauses = await page.evaluate(initiallyHidden => {
     const root = document.createElement('div'); document.body.append(root);
     const lifetime = new AbortController(); let pauses = 0;
+    if (initiallyHidden) Object.defineProperty(document, 'hidden', { configurable: true, value: true });
     window.semanticCost.watchPlayback(root, () => { throw new Error('intentional pause failure'); }, lifetime.signal);
     window.semanticCost.watchPlayback(root, () => pauses++, lifetime.signal);
-    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
-    document.dispatchEvent(new Event('visibilitychange'));
+    if (!initiallyHidden) {
+      Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+    }
     lifetime.abort(); Reflect.deleteProperty(document, 'hidden'); root.remove();
     return pauses;
-  });
+  }, initiallyHidden);
   expect(pauses).toBe(1);
   await expect.poll(() => errors).toEqual(['intentional pause failure']);
 });

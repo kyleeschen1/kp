@@ -3,6 +3,7 @@ type VisibilityOwner = {
   targets: Map<Element, Set<Registration>>;
   observer: IntersectionObserver;
   hidden(): void;
+  notify(registration: Registration): void;
 };
 
 // Documents own browser visibility resources; individual sessions retain their
@@ -42,7 +43,7 @@ export function watchPlayback(target: Element, pause: () => void, signal: AbortS
         }
       }
     });
-    owner = { targets, observer, hidden };
+    owner = { targets, observer, hidden, notify };
     owners.set(document, owner);
     document.addEventListener("visibilitychange", hidden);
   }
@@ -68,5 +69,6 @@ export function watchPlayback(target: Element, pause: () => void, signal: AbortS
       owners.delete(document);
     }
   }, { once: true });
-  if (document.hidden) pause();
+  // Registration while hidden has the same error isolation as later events.
+  if (document.hidden) owner.notify(registration);
 }

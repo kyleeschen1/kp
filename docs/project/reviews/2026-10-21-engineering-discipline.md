@@ -57,3 +57,24 @@ Metadata parity tests, full typecheck, production build and six production
 tax loading samples pass. Eight focus-deck browser checks preserve first input,
 deferred activation, pagehide, reverse and URL ownership. The numeric authoring
 host is checked through its existing browser command.
+
+## Lifetime ownership
+
+Bayes now uses the existing document-owned playback visibility mechanism.
+Its signal is aborted before the clock is disposed; resize, fonts, BFCache and
+history remain local. Repeated source swaps pass with zero idle mutations and
+no surviving writes to detached cards. No scene eviction or automatic resume
+policy was introduced, and mounted DOM is not claimed to have shrunk.
+
+The new initial-hidden pressure case failed before the repair: immediate pause
+called the subscriber directly and threw out of registration. Both immediate
+and later notification now use the same error-isolating owner. Both cases pass,
+including reporting the original error and allowing the other card to pause.
+The full seven-test semantic-cost cohort passes, covering four ten-player
+families, repeated disposal, multiple documents, cold/warm and concurrent use.
+Full types and Bayes responsive/repeated-Apply browser tests pass.
+
+The first fixture run waited on missing built files after a main build cleared
+dist; rebuilding the existing fixture allowed the intentional regression to
+execute (one pass, one failure). This is an execution prerequisite problem,
+not a runtime failure or a passing pre-repair run. P6 will make it explicit.

@@ -16,6 +16,7 @@ import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
 import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";
 import { sampleBayesTree } from "./tree-frame.ts";
 import { mountBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
+import { watchPlayback } from "../../reader/runtime/playback-visibility.ts";
 
 async function mountCard(container: HTMLElement, evidence: PreparedBayesDraft) {
   const root = container.querySelector<HTMLElement>("[data-bayes-display-revision]");
@@ -51,6 +52,7 @@ async function mountRevision(root: HTMLElement, evidence: PreparedBayesDraft) {
   const practiceAnswer = root.querySelector<HTMLElement>("[data-bayes-answer]")!;
   let practiceReturn: BayesLocation | undefined;
   let disposed = false, visible = 0;
+  const lifetime = new AbortController();
   let nativeProgress: number | undefined;
   const invalidateNative = () => { nativeProgress = undefined; native.invalidate(); };
   let passage: ReturnType<typeof mountKpFocusDeckNativeInput> | undefined;
@@ -137,19 +139,15 @@ async function mountRevision(root: HTMLElement, evidence: PreparedBayesDraft) {
   passage = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed, position: navigation.position,
     begin: navigation.begin, reduced: () => reduced.matches, interrupt: cancel });
   const resize = () => { cancel(); clock.pause(); invalidateNative(); render(); };
-  const visibility = () => { if (document.hidden) { cancel(); clock.pause(); } };
   // Offscreen cards retain their exact position, but never consume playback
   // frames. Returning to view requires explicit intent; do not auto-resume.
-  const intersections = new IntersectionObserver(entries => {
-    if (!disposed && entries.some(entry => entry.target === card && !entry.isIntersecting)) { cancel(); clock.pause(); }
-  });
-  intersections.observe(card);
+  watchPlayback(card, () => { cancel(); clock.pause(); }, lifetime.signal);
   const unsubscribe = clock.subscribe(render);
-  const dispose = () => { if (disposed) return; cancel(); disposed = true; passage?.dispose(); keys(); unsubscribe(); navigation.dispose(); clock.dispose(); native.dispose();
-    intersections.disconnect(); document.fonts.removeEventListener("loadingdone", resize);
-    window.removeEventListener("resize", resize); window.removeEventListener("pagehide", pagehide); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize); };
+  const dispose = () => { if (disposed) return; lifetime.abort(); cancel(); disposed = true; passage?.dispose(); keys(); unsubscribe(); navigation.dispose(); clock.dispose(); native.dispose();
+    document.fonts.removeEventListener("loadingdone", resize);
+    window.removeEventListener("resize", resize); window.removeEventListener("pagehide", pagehide); reduced.removeEventListener("change", resize); };
   const pagehide = (event: PageTransitionEvent) => { cancel(); clock.pause(); if (!event.persisted) dispose(); };
-  window.addEventListener("resize", resize); window.addEventListener("pagehide", pagehide); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
+  window.addEventListener("resize", resize); window.addEventListener("pagehide", pagehide); reduced.addEventListener("change", resize);
   document.fonts.addEventListener("loadingdone", resize);
   render(); card.dataset["kpFocusCardEnhancement"] = "ready";
   return { dispose, pause: () => { cancel(); clock.pause(); },

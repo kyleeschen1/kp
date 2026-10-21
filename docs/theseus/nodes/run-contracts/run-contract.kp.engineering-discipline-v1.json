@@ -48,13 +48,14 @@
     {
       "id": "p2",
       "title": "Lifetime",
-      "summary": "Consolidate Bayes visibility ownership and pressure initial-hidden callback failures; preserve retained scene and restore policy.",
-      "status": "in-progress"
+      "summary": "Visibility lifetime consolidation and regression repair verified; retained-scene eviction remains outside preserved behavior.",
+      "status": "complete"
     },
     {
       "id": "p3",
       "title": "Preparation",
-      "status": "planned"
+      "summary": "Remove duplicate compilation in checked history restoration without cache or surface sharing.",
+      "status": "in-progress"
     },
     {
       "id": "p4",
