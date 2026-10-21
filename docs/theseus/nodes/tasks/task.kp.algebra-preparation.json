@@ -2,8 +2,9 @@
   "id": "task.kp.algebra-preparation",
   "kind": "task",
   "title": "Profile and repair accepted algebra native preparation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "algebra",
+  "summary": "Removed repeated synchronous native measurement: 35 percent fewer layouts and 19 percent less sampled preparation, with all integration gates passing. Remaining clone work is a separately scoped recommendation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -42,6 +43,20 @@
       "scope": "integration",
       "checkedAt": "2026-10-21T20:38:53.268Z",
       "notes": "App, Node, tests, Svelte and domains pass. Production build and complete algebra edition budgets also pass unchanged; reader JS grows 230 gzip bytes."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full-integration",
+      "checkedAt": "2026-10-21T20:42:32.221Z",
+      "notes": "All 7385 tests pass with no failures or skips, plus architecture and inference gates. Full types, production build, complete reader costs and three-engine preservation also pass."
+    },
+    {
+      "command": "npm run visual:algebra-preparation -- --label=final",
+      "status": "passed",
+      "scope": "production-preparation",
+      "checkedAt": "2026-10-21T20:43:11.561Z",
+      "notes": "Final ordinary six samples complete without failed requests: layouts 1232 to 800; median 6x readiness 2120.5 to 1858.1ms, 1x 313.3 to 275.2ms. Instrumented preparation median falls 19 percent; local diagnostic limitations recorded."
     }
   ]
 }

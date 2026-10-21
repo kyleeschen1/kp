@@ -5,6 +5,15 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The accepted algebra [preparation investigation](../2026-10-21-algebra-preparation-investigation.md)
+is complete. Independent ink probes now share layout passes and repeated track
+references share one synchronous endpoint measurement, without retained geometry
+across revisions. [Evidence](../reviews/2026-10-21-algebra-preparation.md) records
+about 35% fewer startup layouts and 19% less sampled preparation work; 7,385 tests,
+full types/build and three-engine preservation pass. Visuals and readiness stay
+unchanged. Computed-style cloning remains the next measured investigation target;
+new scope is not implied by this recommendation.
+
 October 21 continuation uses the accepted algebra source for
 [self-contained interactive local editions](../2026-10-21-algebra-interactive-editions.md).
 The existing compiler and native card own all mathematics and motion; the new

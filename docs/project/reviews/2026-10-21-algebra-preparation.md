@@ -44,8 +44,23 @@ browser verification and was discarded for timing conclusions. A quieter rerun
 gave 6× readiness **1951.2/1952.8/1915.6ms**. The final track-endpoint batching
 cohort gave counts **800/800/800**, layout milliseconds **307.49/290.87/322.88**,
 and readiness **2022.4/1904.5/1937.8ms**. Its 1× readiness was
-**438.0/296.8/292.0ms**, including a slow first sample. Final quiet validation is
-recorded below when complete.
+**438.0/296.8/292.0ms**, including a slow first sample.
+
+Final ordinary rerun after heavy verification stopped:
+`npm run visual:algebra-preparation -- --label=final`:
+
+| Metric | Baseline median | Final median |
+| --- | ---: | ---: |
+| 1× observed readiness | 313.3ms | 275.2ms |
+| 6× observed readiness | 2120.5ms | 1858.1ms |
+| 6× layout time | 381.79ms | 280.68ms |
+| 6× layout count | 1232 | 800 |
+
+Final 1× readiness samples: **449.0/274.6/275.2ms**; final 6× samples:
+**1858.1/1737.7/1941.8ms**. Final 6× layout times:
+**280.68/273.19/303.19ms**. Median observed readiness is about 12% lower in both
+cohorts, with a slower first 1× sample. This is a modest local startup improvement,
+not a 35% faster-reader claim or a statistical performance guarantee.
 
 Instrumented native `prepare` inclusive samples fell from
 **1676.15/1545.09/1494.29ms** to **1352.76/1191.10/1245.05ms**: median down about
@@ -75,7 +90,7 @@ The new immutable edition is
 `tmp/codex/composed-algebra-editions/8f650f08072e9e3ab7ac1c24fcf011013737db30f76ba73b0227cb3d2c26227a/index.html`.
 Its source revision is unchanged; the prior immutable edition remains intact.
 
-Checks passed so far:
+Checks passed:
 
 - `npm run visual:native-preparation`: 6/6 across Chromium, Firefox and WebKit.
 - `npm run test:real-katex-glyph-compositor`: 82/82.
@@ -88,6 +103,16 @@ Checks passed so far:
   for performance comparisons.
 - `npm run typecheck`: app, Node, tests, Svelte and domains pass.
 - `npm run build:bundle`: passes; pre-existing large application chunks remain.
+- `npm test`: **7,385 pass**, zero failures or skips; architecture and inference
+  gates pass before the complete deterministic suite.
 
-Full regression suite and final quiet timing closeout pending. No budget ceilings
-changed. No learner testing, visual redesign or cross-card cache was introduced.
+No budget ceilings changed. No learner testing, visual redesign or cross-card
+cache was introduced. The implementation checkpoint is `e9b171015`; final
+measurement and control-record closeout follow in the same feature branch.
+
+Outcome: **COMPLETE**, all three packages in
+`run-contract.kp.algebra-preparation-v1` complete. Theseus validates 1,225 nodes;
+no active run remains. Next-session entry is `theseus plan run`; retrieve this
+investigation with `theseus work context task.kp.algebra-preparation --mode working`.
+The handoff still reports two unrelated historical source-reference gaps and a
+thin queue; this run did not alter them or create new autonomous scope.

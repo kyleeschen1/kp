@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 accepted algebra preparation investigation is complete. The
+[approved scope](2026-10-21-algebra-preparation-investigation.md) batches independent
+native ink probes and measures repeated track endpoints once per synchronous
+observation. [Evidence](reviews/2026-10-21-algebra-preparation.md) records about
+35% fewer startup layouts and 19% less sampled preparation work, with accepted
+visuals and endpoint readiness preserved. All 7,385 tests, full types/build,
+three-engine geometry and algebra-reader checks pass; payload budgets remain
+unchanged. Computed-style cloning remains a measured cost for a future bounded
+investigation, not authorization for a broad cache or a new animation framework.
+
 October 21 continuation after whole-and-parts acceptance:
 [portable algebra editions](2026-10-21-algebra-interactive-editions.md) now package
 the existing native animation from explicit v2 source, with pinned fractional
