@@ -13,8 +13,8 @@ The complete source is `content/authoring/convergence/matrices.ts`. Change the
 { id: "signed", left: [[-2, 3], [4, -1]], right: [[-1, 2], [2, -3]] }
 ```
 
-The local helper binds immutable scalar expressions into matrices and calls
-`matrixProduct`. Scalar IDs come from the named input, factor, row and column,
+The [concise domain API](concise-domain-api.md) binds immutable scalar expressions
+through `M.matrix` and calls `M.product`. Scalar IDs come from the named input, factor, row and column,
 never from matching text. `columnExampleFromProduct(product, column)` retains
 the same product, operand references, contributions and derived results.
 Changing values requires no geometry, timing, CSS or renderer code.

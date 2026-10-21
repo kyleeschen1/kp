@@ -72,6 +72,8 @@ LaTeX solver or a claim that every checked numeric caller has certified paint.
 For numerical 2×2 matrix column combinations, use
 `matrix-column-authoring-packet.md`. This local typed-source preview reuses the
 accepted column renderer; it is not an `author:check` task or a publication path.
+For concise matrix and bounded algebra imports, see `concise-domain-api.md`.
+Those entrypoints preserve the exact existing domain support and diagnostics.
 
 For reversible polynomial/linear-system collection into matrix notation, use
 `la-collection-authoring-packet.md`. The accepted bounded TypeScript source

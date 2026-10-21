@@ -3,7 +3,7 @@
 import {
 dispatchKpEditorAnimationPlaybackAction,
 disposeKpEditorAnimationPlayers,
-hydrateKpEditorAnimationPlayers,
+hydrateKpPreparedEditorAnimationPlayer,
 KP_EDITOR_ANIMATION_FRAME_EVENT
 } from "../../editor/animation-player-controller.ts";
 import {
@@ -116,9 +116,18 @@ export function mountKpLogExponentFocusCard(input: {
     kpEditorAnimationSurfaceAdapterRegistry
   );
   hydrateKpEditorAnimationSurfaces(deck);
-  hydrateKpEditorAnimationPlayers(deck, {
-    animationOverrides: [input.authority.animation],
-    descriptorOverrides: [input.authority.descriptor]
+  // This card already owns its checked asset and registers its exact renderer.
+  // The catalogue override path still loads the entire algebra pack first.
+  void hydrateKpPreparedEditorAnimationPlayer({
+    player,
+    animation: input.authority.animation,
+    descriptor: input.authority.descriptor
+  }).catch((error: unknown) => {
+    if (disposed) return;
+    deck.dataset["kpLogExponentAnimationStatus"] = "failed";
+    deck.dataset["kpLogExponentAnimationError"] = error instanceof Error ? error.message : "Animation preparation failed.";
+    if (initialProjectionFrame !== undefined) window.cancelAnimationFrame(initialProjectionFrame);
+    initialProjectionFrame = undefined;
   });
 
   const semanticProgress = (): number => {

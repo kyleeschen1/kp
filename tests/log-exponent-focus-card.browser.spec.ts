@@ -2,6 +2,24 @@ import { expect, test, type Page } from "@playwright/test";
 
 const path = "/experiments/kinetic-figure/supply-tax/";
 
+test("prepared logarithm card activates without the algebra catalogue pack", async ({ page }) => {
+  const requests: string[] = [];
+  page.on("request", request => requests.push(request.url()));
+  await page.goto(`${path}#beat.log-exponent.locate-the-unknown`);
+  const card = page.locator("[data-kp-log-exponent-focus-card]");
+  const player = card.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-surface-readiness", "ready");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-pack-id", "pack.prepared-publication");
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await card.locator("[data-kp-focus-deck-next]").click();
+  await expect(card).toHaveAttribute("data-kp-log-exponent-transition", "settled", { timeout: 10000 });
+  await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "apply-logarithms");
+  await card.locator("[data-kp-focus-deck-previous]").click();
+  await expect(card).toHaveAttribute("data-kp-log-exponent-transition", "settled", { timeout: 10000 });
+  await expect(card).toHaveAttribute("data-kp-focus-deck-active-beat", "choose-logarithms");
+  expect(requests.filter(url => /\/catalog-packs\/algebra\.ts|\/algebra-[A-Za-z0-9_-]+\.js/.test(url))).toEqual([]);
+});
+
 test("deferred controller preserves the first slider keyboard command", async ({ page }) => {
   let release!: () => void;
   const held = new Promise<void>(resolve => { release = resolve; });
@@ -157,6 +175,9 @@ test("one route hosts graph, equation, 3D, and code cards through the same shell
 
   const player = equation.locator("[data-kp-editor-animation-player]");
   const stage = player.locator("[data-kp-log-exponent-stage]");
+  // Static shells exist before activation; exercise visibility before requiring
+  // a live renderer rather than implicitly demanding eager offscreen work.
+  await equation.locator("[data-kp-log-exponent-focus-card-stage]").scrollIntoViewIfNeeded();
   await expect(player).toHaveAttribute("data-kp-editor-animation-load-status",
     "ready");
   await expect(stage).toHaveAttribute("data-kp-log-exponent-stage", "ready");
@@ -167,6 +188,7 @@ test("one route hosts graph, equation, 3D, and code cards through the same shell
   await expect(player.locator(
     '[data-kp-log-exponent-endpoint-index="0"]'
   )).toHaveAttribute("aria-hidden", "false");
+  await code.scrollIntoViewIfNeeded();
   await expect(code.locator("[data-kp-typescript-refactor-stage]"))
     .toHaveAttribute("data-kp-typescript-active-projection",
       "projection.typescript.before");
@@ -181,6 +203,7 @@ test("semantic navigation changes only the card that owns the URL", async ({
   const equation = page.locator("[data-kp-log-exponent-focus-card]");
   const surface = page.locator("[data-kp-surface-contour-deck]");
   const code = page.locator("[data-kp-typescript-focus-card]");
+  await equation.locator("[data-kp-log-exponent-focus-card-stage]").scrollIntoViewIfNeeded();
   await expect(equation.locator("[data-kp-log-exponent-stage]"))
     .toHaveAttribute("data-kp-log-exponent-stage", "ready");
 

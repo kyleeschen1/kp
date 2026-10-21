@@ -36,12 +36,12 @@
     {
       "id": "activation",
       "title": "Bounded-reader-activation",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "integration",
       "title": "Verification-and-author-guide",
-      "status": "planned"
+      "status": "in-progress"
     }
   ]
 }

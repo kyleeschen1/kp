@@ -41,6 +41,27 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-10-21T15:39:02.275Z"
+    },
+    {
+      "command": "npm run audit:architecture-cost -- --browser --tax-only --activation --acceptance",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-10-21T16:10:03.468Z",
+      "notes": "Complete requested JS reduced from 512946 to 392893 gzip bytes; tightened ceilings and no catalogue-pack requests."
+    },
+    {
+      "command": "npm run visual:focus-deck-input -- --grep \"prepared logarithm|deferred|semantic navigation|one route hosts\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-21T16:10:04.347Z",
+      "notes": "Eight passed after two offscreen-eager test assumptions were corrected to trigger visibility."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-10-21T16:10:04.930Z",
+      "notes": "Permitted full run: 7321 passed, 2 failed: stale scannedFileCount and CLI subprocess timeout. Sandbox attempt separately failed EPERM and was interrupted. Generated inventory refreshed; 12 reachability checks and 5 unchanged CLI checks pass on focused rerun. Clean full rerun pending."
     }
   ]
 }

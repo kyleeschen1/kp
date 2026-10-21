@@ -4,8 +4,10 @@ export interface RequestedLoadingAsset { readonly path: string; readonly gzip: n
 // automatically refreshed baseline. Headroom retains meaningful audit savings.
 const limits = {
   "canonical-tax": {
-    initial: { js: 550_000, css: 25_000, fonts: 45_000, total: 625_000 },
-    activated: { js: 660_000, css: 25_000, fonts: 45_000, total: 740_000 }
+    // Prepared logarithm activation measured 392,893 initial JS gzip bytes on
+    // October 21. Retain bounded headroom without permitting the old pack load.
+    initial: { js: 425_000, css: 25_000, fonts: 45_000, total: 500_000 },
+    activated: { js: 570_000, css: 25_000, fonts: 45_000, total: 650_000 }
   },
   gradient: {
     initial: { js: 305_000, css: 20_000, fonts: 72_000, total: 400_000 },
@@ -18,6 +20,12 @@ export function assertArchitectureLoadingAcceptance(input: {
   readonly assets: readonly RequestedLoadingAsset[]; readonly errors: readonly string[];
 }): void {
   if (input.errors.length) throw new Error(input.errors.join("\n"));
+  // A supplied, prepared asset must not re-enter discovery and activate an
+  // unrelated family pack. Check real requests, including deferred activation.
+  if (input.scenario === "canonical-tax" && input.assets.some(asset =>
+    /\/algebra-[A-Za-z0-9_-]+\.js$/.test(asset.path))) {
+    throw new Error("Prepared focus cards must not request the algebra catalogue pack.");
+  }
   if (new Set(input.assets.map(asset => asset.path)).size !== input.assets.length) throw new Error("Request accounting must deduplicate by asset identity.");
   if (input.assets.some(asset => !Number.isFinite(asset.gzip) || asset.gzip < 0)) throw new Error("Invalid request byte measurement.");
   const sum = (accept: (kind: string) => boolean) => input.assets.filter(asset => accept(asset.kind)).reduce((n, asset) => n + asset.gzip, 0);
