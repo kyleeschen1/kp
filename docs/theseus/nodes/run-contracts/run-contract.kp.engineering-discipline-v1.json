@@ -60,7 +60,8 @@
     {
       "id": "p4",
       "title": "Authoring",
-      "status": "planned"
+      "summary": "Concise preparePreview with two real callers; domain publication and native ownership preserved.",
+      "status": "complete"
     },
     {
       "id": "p5",

@@ -10,6 +10,7 @@ import { projectComposedAlgebraSubexplanations } from "../composed-algebra/subex
 import { captureComposedAlgebraPositionV2, resolveComposedAlgebraPositionV2 } from "../composed-algebra/practice.ts";
 import { projectComposedAlgebraReadingV2 } from "../composed-algebra/readings.ts";
 import { bindAlgebraIntuitionPractice } from "./practice.ts";
+import { preparePreview } from "../../authoring/staged-preview.ts";
 
 const root = document.querySelector<HTMLElement>("#authored-focus-card")!;
 async function mount() {
@@ -28,11 +29,8 @@ async function mount() {
   const session = algebra.session({ initial,
     prepare: async draft => {
       const full = projectComposedAlgebraReadingV2(draft, "full"), compact = projectComposedAlgebraReadingV2(draft, "compact");
-      const staging = document.createElement("div"); staging.className = "common-factor-staging";
-      staging.inert = true; staging.setAttribute("aria-hidden", "true"); staging.style.width = `${display.getBoundingClientRect().width}px`;
-      staging.innerHTML = renderAlgebraIntuitionCard(draft); display.after(staging);
-      try { const surface = await mountComposedAlgebraCardV2(staging, draft); return { staging, surface, full, compact, dispose() { surface.dispose(); staging.remove(); } }; }
-      catch (error) { staging.remove(); throw error; }
+      return { ...await preparePreview(display, { className: "common-factor-staging",
+        html: renderAlgebraIntuitionCard(draft), mount: staging => mountComposedAlgebraCardV2(staging, draft) }), full, compact };
     },
     commit: (prepared, draft) => {
       closeIntuition();

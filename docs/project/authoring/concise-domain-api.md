@@ -73,6 +73,13 @@ The complete convenience
 namespace at `authoring/algebra.ts` combines all these capabilities; use it when
 the caller actually needs compilation and editing, not just JSON validation.
 
+Browser editors can use `preparePreview` from `authoring/staged-preview.ts`
+inside their session's `prepare` callback. It creates inert, width-matched
+temporary DOM, awaits the caller's mount, and removes abandoned DOM on disposal
+or failure. The mount still owns partial resource cleanup; the session owns
+supersession; the editor's synchronous `commit` owns publication and old-surface
+disposal. This helper is deliberately outside source/compile namespaces.
+
 This module supports the existing four/five-state real-scalar
 collect → evaluate count → distribute → optional product evaluation contract.
 The source schema, declared symbols, explicit state IDs and narration stay intact.

@@ -50,6 +50,13 @@
       "scope": "p3",
       "checkedAt": "2026-10-21T17:29:17.760Z",
       "notes": "Nine focused tests, complete consumers and types pass; actual Bayes addresses restore and author apply browser tests both pass. One check replaces two; fresh preparations and authority retained."
+    },
+    {
+      "command": "npm run visual:authoring-entrypoints -- --grep staged; npm run visual:composed-algebra; npm run typecheck; npm run check:authoring",
+      "status": "passed",
+      "scope": "p4",
+      "checkedAt": "2026-10-21T17:31:24.883Z",
+      "notes": "Selected six browser cases cover staging failure, swaps, Apply, reload and stale disposal; full types and complete consumer budgets pass."
     }
   ],
   "expectedLearning": [

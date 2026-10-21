@@ -97,3 +97,17 @@ This run measured medians 5.840 ms (double check) and 5.241 ms (issued draft),
 with p95 8.965 and 7.711 ms. Concurrent local checks make these noisy diagnostics,
 not a statistical latency claim; the deterministic saving is one check per
 restored source. General compiler caching remains unjustified by this evidence.
+
+## Temporary preview ownership
+
+Bayes and composed-algebra-intuition now use `preparePreview` for inert,
+width-matched sibling staging. The helper owns temporary DOM only: original
+domain restore/commit logic and native mount ownership remain unchanged. It uses
+the display's document, makes disposal idempotent, and removes staging even if
+surface disposal throws. Its mount callback still owns partial-resource cleanup
+when mounting rejects; this extraction does not promise to repair opaque mounts.
+
+The browser regression exercises a foreign document, mount rejection, throwing
+teardown, repeated disposal and preservation of the active view. Real Bayes
+repeated swaps and invalid Apply, plus both algebra sources' download/reload,
+coherent Apply and stale-owner remount checks pass (six tests altogether).

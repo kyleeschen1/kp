@@ -17,6 +17,7 @@ import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-in
 import { sampleBayesTree } from "./tree-frame.ts";
 import { mountBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
 import { watchPlayback } from "../../reader/runtime/playback-visibility.ts";
+import { preparePreview } from "../../authoring/staged-preview.ts";
 
 async function mountCard(container: HTMLElement, evidence: PreparedBayesDraft) {
   const root = container.querySelector<HTMLElement>("[data-bayes-display-revision]");
@@ -186,16 +187,8 @@ async function mount() {
     if (push) history.pushState(state, "", hash); else if (location.hash !== hash) history.replaceState(state, "", hash);
   };
   const session = createBayesAuthoringSession({ initial: initial.draft,
-    prepare: async draft => {
-      const staging = document.createElement("div");
-      staging.className = "bayes-staging"; staging.inert = true; staging.setAttribute("aria-hidden", "true");
-      staging.style.width = `${display.getBoundingClientRect().width}px`;
-      staging.innerHTML = renderBayesCardRevision(draft); display.after(staging);
-      try {
-        const surface = await mountCard(staging, draft);
-        return { staging, surface, dispose: () => { surface.dispose(); staging.remove(); } };
-      } catch (error) { staging.remove(); throw error; }
-    },
+    prepare: draft => preparePreview(display, { className: "bayes-staging",
+      html: renderBayesCardRevision(draft), mount: staging => mountCard(staging, draft) }),
     commit: prepared => {
       // Restore before acquiring display authority. No await is permitted in
       // this commit: prose, SVG, native ink and controls enter together.
