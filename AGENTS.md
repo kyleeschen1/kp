@@ -165,6 +165,11 @@ interruption, recover and perform the overdue checkpoint/backup on resumption.
 
 ## Exemplar-first collaboration
 
+At each user-facing completion or review handoff, include concrete “what to look
+for” instructions: a working URL or artifact, the relevant action or checkpoint,
+and the visible result or question to judge. For nonvisual work, name the newly
+enabled workflow and how to verify it. User direction: 2026-10-21.
+
 Apply this protocol to subjective visual, motion, interaction, and LLM-generated-output work. Do not add its review ceremony to objective maintenance or exact bug fixes with deterministic acceptance tests.
 
 - Respect the requested mode boundary. A request to diagnose, compare, explain, or plan does not authorize implementation.

@@ -1,0 +1,4 @@
+/* Both native views measure the same box. Ancestor opacity suppresses paint
+ * without contaminating computed styles copied into material glyph owners. */
+.comb-walk-views { display: grid; }
+.comb-walk-view { grid-area: 1 / 1; opacity: 0; pointer-events: none; }

@@ -1,0 +1,56 @@
+{
+  "id": "run-contract.kp.matrix-explanation-walk-v1",
+  "kind": "run-contract",
+  "title": "Matrix explanation walk exemplar and transfer",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: canonical dependent-columns walk awaits visual judgment before transfer; two of three packages complete",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-explanation-walk.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-explanation-walk.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-walk",
+    "npm run visual:matrix-walk"
+  ],
+  "revisitWhen": [
+    "User accepts the canonical matrix explanation walk or requests bounded corrections"
+  ],
+  "allowedWork": [
+    "Bounded local checkpoint walk, optional host, focused invariants and canonical visual review, then approved second caller and integration"
+  ],
+  "disallowedWork": [
+    "New choreography, universal renderer seam, schema migration or transfer before canonical human approval"
+  ],
+  "goal": "Author explanation order over existing matrix motion and review one canonical exemplar before transfer",
+  "target": "task.kp.matrix-explanation-walk",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Coherent checked slices; backup hourly and at handoff",
+  "verificationLevel": "focused",
+  "stopConditions": [
+    "Canonical exemplar requires human visual judgment before transfer"
+  ],
+  "slices": [
+    {
+      "id": "walk",
+      "summary": "Four focused semantic and path tests pass; immutable authored stops project onto original product and native motion; unsupported bridges return WalkGap",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "summary": "Canonical candidate ready at ?walk=1 with inspection instructions; four Chromium checks, four semantic tests, architecture and full types pass. Human review gates transfer.",
+      "status": "complete"
+    },
+    {
+      "id": "transfer",
+      "status": "planned"
+    }
+  ]
+}

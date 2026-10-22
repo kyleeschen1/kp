@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 [explanation-walk continuation](2026-10-21-matrix-explanation-walk.md)
+explores authoring the order of an argument, beyond editing inputs to a fixed
+sequence. The optional `?walk=1` dependent-columns exemplar names native stops,
+holds contributions, rewinds and changes inputs while retaining the accepted
+mathematical objects and compositor. [Review instructions and evidence](reviews/2026-10-21-matrix-explanation-walk.md)
+identify the canonical human gate before a second caller or shared API promotion.
+This is a local discovery format; checked JSON and edition contracts are unchanged.
+
 October 21 [matrix edit–preview continuation](2026-10-21-matrix-source-preview.md)
 adds optional `?author=1` to the existing matrix-column host. Authors can load or
 edit JSON, explicitly apply it, compare both columns and download draft versus

@@ -5,6 +5,14 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The [explanation-walk continuation](../2026-10-21-matrix-explanation-walk.md)
+tests whether authors can choose a useful argument order using existing native
+matrix checkpoints, including returns and a change of input. Canonical host:
+`/experiments/matrix-column-combinations/?walk=1`; [inspection instructions](../reviews/2026-10-21-matrix-explanation-walk.md)
+ask about pacing, the rewind and comparison without retaining the first result.
+This is an exemplar-local format awaiting human review before second-caller
+transfer, not a general score framework or a change to checked matrix JSON.
+
 The [matrix source-preview continuation](../2026-10-21-matrix-source-preview.md)
 closes the local edit–preview loop on the existing host at `?author=1`, with
 explicit Apply, last-displayed revision ownership and separate draft/displayed

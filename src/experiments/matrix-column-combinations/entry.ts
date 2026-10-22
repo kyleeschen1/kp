@@ -5,7 +5,11 @@ import { mountColumnReader } from "./reader.ts";
 
 const root = document.querySelector<HTMLElement>("#comb-player")!;
 let disposed = false, dispose: (() => void) | undefined;
-if (new URL(location.href).searchParams.get("author") === "1") {
+if (new URL(location.href).searchParams.get("walk") === "1") {
+  void import("./walk-host.ts").then(({ mountMatrixWalk }) => {
+    if (!disposed) dispose = mountMatrixWalk(root);
+  }).catch(error => { if (!disposed) { root.textContent = String(error); root.setAttribute("aria-busy", "false"); } });
+} else if (new URL(location.href).searchParams.get("author") === "1") {
   void import("./author.ts").then(({ mountColumnAuthor }) => {
     if (!disposed) dispose = mountColumnAuthor(root);
   }).catch(error => { if (!disposed) { root.textContent = String(error); root.setAttribute("aria-busy", "false"); } });

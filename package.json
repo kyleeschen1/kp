@@ -55,6 +55,8 @@
     "test:discourse-scrolltelling": "node --disable-warning=ExperimentalWarning --test tests/discourse-scrolltelling.test.ts tests/kp-tutorial-motion.test.ts tests/kp-tutorial-page-scroll-coordinator.test.ts",
     "build:discourse-scrolltelling": "vite build --config vite.discourse-scrolltelling.config.ts",
     "visual:matrix-interpretations": "playwright test --config playwright.matrix-interpretations.config.ts --project=chromium --workers=1",
+    "test:matrix-walk": "node --disable-warning=ExperimentalWarning --test tests/matrix-explanation-walk.test.ts",
+    "visual:matrix-walk": "playwright test --config playwright.matrix-walk.config.ts --project=chromium --workers=1",
     "visual:matrix-authoring": "playwright test --config playwright.matrix-authoring.config.ts --workers=1",
     "build:matrix-interpretations": "vite build --config vite.matrix-interpretations.config.ts",
     "test:matrix-interpretations": "node --disable-warning=ExperimentalWarning --test tests/matrix-interpretations.test.ts tests/matrix-product.test.ts tests/typed-semantic-math.test.ts tests/matrix-column-story.test.ts",

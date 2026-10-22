@@ -1,0 +1,70 @@
+{
+  "id": "task.kp.matrix-explanation-walk",
+  "kind": "task",
+  "title": "Author an explanation through existing matrix checkpoints",
+  "status": "deferred",
+  "domain": "linear-algebra",
+  "summary": "HUMAN_CHECKPOINT: two verified packages; human review required before transfer",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-explanation-walk.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-matrix-explanation-walk.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-walk",
+    "npm run visual:matrix-walk",
+    "npm run typecheck",
+    "npm run check:architecture"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-walk",
+      "status": "passed",
+      "scope": "Four semantic and checkpoint projection tests",
+      "checkedAt": "2026-10-22T01:02:44.598Z",
+      "notes": "Identity, reordering, 1001 samples, reverse, immutable stops, unsupported bridges pass after repairing strip-only syntax and test typing"
+    },
+    {
+      "command": "npm run visual:matrix-walk",
+      "status": "passed",
+      "scope": "Canonical Chromium discovery",
+      "checkedAt": "2026-10-22T01:02:45.212Z",
+      "notes": "Four tests pass; native paint parity, interruption, reverse, handoff, resize, keyboard, restoration and disposal. First run caught URL error erasure; final complete rerun passes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Existing architecture boundaries",
+      "checkedAt": "2026-10-22T01:02:45.828Z",
+      "notes": "All architecture gates and eight cross-domain tests pass; no shared renderer promotion"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full repository TypeScript, Svelte and domain checks",
+      "checkedAt": "2026-10-22T01:03:05.117Z",
+      "notes": "Final complete rerun passes; zero Svelte errors or warnings"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: authored walk and canonical host verified; transfer remains unstarted pending visual review of pauses, rewind length and comparison without retained first result"
+  },
+  "revisitWhen": [
+    "User accepts the canonical walk or requests bounded corrections"
+  ],
+  "expectedLearning": [
+    "Whether source-authored holds and returns make the existing matrix comparison legible; after acceptance determine transfer versus local-only boundary"
+  ],
+  "allowedWork": [
+    "Bounded local authored checkpoint walk and optional canonical host; second caller after human review"
+  ],
+  "disallowedWork": [
+    "New choreography, shared renderer promotion or source JSON migration before review"
+  ]
+}
