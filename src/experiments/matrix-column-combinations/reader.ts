@@ -2,6 +2,7 @@ import { createKpReaderLatestSessionHandoff } from "../../reader/runtime/latest-
 import type { ColumnExample } from "./model.ts";
 import { mountColumnPlayer } from "./player.ts";
 import { readColumnProgress, columnProgressHash, sameColumnSelection } from "./location.ts";
+import { prepareColumnFonts } from "./fonts.ts";
 
 export interface ColumnPage { readonly scene: ColumnExample; readonly introduction: string; readonly html: string }
 export interface ColumnLocation {
@@ -82,11 +83,7 @@ async function navigate(url: URL, push: boolean) {
       return;
     }
     const page = await loadColumnPage(url);
-    // This finite numeric 2×2 renderer uses Main entries and Size3 delimiters.
-    // No math is connected yet: fonts.ready alone can resolve before these
-    // faces are requested, permanently capturing fallback-font endpoints.
-    await Promise.all(["KaTeX_Main", "KaTeX_Size3"].map(face => document.fonts.load(`20px ${face}`)));
-    await document.fonts.ready;
+    await prepareColumnFonts();
     handoff.commit(token, () => {
       if (disposed) return;
       const restoreFocus = focus && document.activeElement === focus;

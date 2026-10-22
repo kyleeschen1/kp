@@ -23,6 +23,13 @@
       "scope": "session",
       "checkedAt": "2026-10-22T00:26:09.534Z",
       "notes": "Ten tests cover checked issuance, serialization, preservation, supersession and disposal."
+    },
+    {
+      "command": "npm run visual:matrix-authoring -- --project=chromium",
+      "status": "passed",
+      "scope": "preview",
+      "checkedAt": "2026-10-22T00:29:57.949Z",
+      "notes": "Five cases cover explicit apply, downloads, import, supersession, failed preparation, cleanup and reader separation."
     }
   ],
   "expectedLearning": [

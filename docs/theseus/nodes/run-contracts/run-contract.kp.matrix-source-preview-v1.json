@@ -44,7 +44,8 @@
     },
     {
       "id": "preview",
-      "status": "planned"
+      "summary": "Optional lazy local author host reuses canonical player and staged revision owner; Chromium preview and failure checks pass.",
+      "status": "complete"
     },
     {
       "id": "integration",

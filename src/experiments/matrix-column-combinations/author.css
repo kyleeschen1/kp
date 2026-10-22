@@ -1,0 +1,5 @@
+/* Reuse the JSON form's existing dimensions without importing another lesson. */
+[data-matrix-editor] { margin-block: 2rem; line-height: 1.5; }
+[data-matrix-json] { display: block; width: 100%; box-sizing: border-box; margin-block: .7rem; padding: .8rem; font: .8rem/1.5 monospace; }
+[data-matrix-revision] { overflow-wrap: anywhere; }
+.matrix-source-staging { position: fixed; top: 0; left: 0; opacity: 0; pointer-events: none; z-index: -1; }
