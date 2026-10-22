@@ -30,6 +30,7 @@ export const recoveringInput = defineArgument({
       math(String.raw`x${c1}+y${c2}=(x+2y)${c1}`),
       text("This tells us what the map remembers: the sum x + 2y. The output does not keep a separate record of how much each coordinate contributed."),
       inspect({ id: "column-weights", label: "Inspect how the input coordinates weight the columns", kind: "columns",
+        context: "Here the two example inputs, (3, −1) and (5, −2), are stored as the columns of a matrix B. Follow B’s first column: its coordinates supply the two weights, and the sum becomes the first column of AB.",
         scene: columnExampleFromProduct(dependentColumns.product, 0, dependentColumns.reading) })
     ] },
     { id: "same-output", title: "Different inputs can leave the same record", blocks: [
@@ -37,9 +38,10 @@ export const recoveringInput = defineArgument({
       math(`A${vector(inputs.before.entries)}=${vector(outputs.before.entries)},\\qquad A${vector(inputs.after.entries)}=${vector(outputs.after.entries)}`),
       text("What changed between those inputs? The first coordinate increased by 2 and the second decreased by 1. The extra twice-first-column contribution is cancelled by removing one second column."),
       math(`A${delta}=2${c1}-${c2}=${vector(combination.result.entries)}`),
-      text("Because matrix multiplication distributes over addition, the effect of an input change can be calculated on its own. Adding this change to any input adds zero to its output. That is why the equality above is structural, rather than a numerical accident."),
+      text("Call the original input u and this change d. Because matrix multiplication distributes over addition, the effect of the change can be calculated on its own. Adding d to any input adds zero to its output. That is why the equality above is structural, rather than a numerical accident."),
       math(String.raw`A(u+d)=Au+Ad,\qquad d=${delta},\quad Ad=\mathbf{0}`),
-      inspect({ id: "lost-change", label: "Inspect why this nonzero input change disappears", kind: "comparison", source: lost })
+      inspect({ id: "lost-change", label: "Inspect why this nonzero input change disappears", kind: "comparison", source: lost,
+        context: "The two inputs are labelled u and v. Their mappings stay above the working line as we subtract the inputs and follow the change through A." })
     ] },
     { id: "recover-a-relation", title: "You can recover a relation, but not a unique input", blocks: [
       text("Now suppose someone gives you only the output (1, 2). Since every output is (x + 2y) times (1, 2), you know that x + 2y must equal 1. That is useful information—but it is only one condition on two unknowns."),
@@ -55,7 +57,8 @@ export const recoveringInput = defineArgument({
       text("Change just the bottom-right entry of A from 4 to 5. The columns no longer cancel when we add twice the first and subtract the second. Keep the very same input change so we can isolate what the map changed."),
       math(`\\widetilde A=${matrix(distinguished.relation.product.left.rows)},\\qquad \\widetilde A${delta}=${vector(distinguished.relation.combination.result.entries)}`),
       text("The first output coordinate still agrees, but the second changes by −1. A zero coordinate is not a zero vector. This calculation shows that the new map detects this particular change; showing that it distinguishes every pair would require a further argument."),
-      inspect({ id: "surviving-change", label: "Inspect the same input change in the altered map", kind: "comparison", source: distinguished }),
+      inspect({ id: "surviving-change", label: "Inspect the same input change in the altered map", kind: "comparison", source: distinguished,
+        context: "This inspection labels the altered map A. Its bottom-right entry is 5; the inputs u and v are unchanged. Follow their difference to see which output coordinate changes." }),
       text("A nonzero input change that maps to zero is a lost direction. The collection of all inputs mapped to zero is called the kernel. The useful question behind the name is: which changes could have happened to the input without leaving any trace in the output?")
     ] }
   ]

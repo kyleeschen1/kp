@@ -4,7 +4,7 @@ import type { ComparisonSource } from "./comparison-source.ts";
 // Local editorial composition, not a replacement for Article or a proof schema.
 // An inspection contains the actual checked source, never a renderer selector or
 // an equation string that could silently select unrelated choreography.
-export type Inspection = Readonly<{ id: string; label: string } & (
+export type Inspection = Readonly<{ id: string; label: string; context: string } & (
   | { kind: "columns"; scene: ColumnExample }
   | { kind: "comparison"; source: ComparisonSource }
 )>;
@@ -46,7 +46,7 @@ export function defineArgument(source: MatrixArgument): MatrixArgument {
         case "math": nonempty(block.latex, at); break;
         case "question": nonempty(block.prompt, at); nonempty(block.answer, at); break;
         case "inspect": {
-          const item = block.inspection; id(item.id, at); nonempty(item.label, at);
+          const item = block.inspection; id(item.id, at); nonempty(item.label, at); nonempty(item.context, `${at}.context`);
           if (item.kind !== "columns" && item.kind !== "comparison") throw new ArgumentGap(at, "Use an existing column or comparison source.");
           return Object.freeze({ ...block, inspection: Object.freeze({ ...item }) });
         }

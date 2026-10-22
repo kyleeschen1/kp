@@ -88,6 +88,12 @@ cancellation case and contrasting review candidate use one fixed six-phase
 TypeScript source format; this is not the matrix JSON task, a publication path,
 or arbitrary comparison choreography.
 
+For the connected input-recovery reading, use `matrix-argument-packet.md`.
+This local candidate composes complete prose and native equations with optional
+inspections of the existing column/comparison sources. Human reading review is
+pending; it is not a promoted Article format, arbitrary solver, new choreography
+or portable publication path.
+
 For reversible polynomial/linear-system collection into matrix notation, use
 `la-collection-authoring-packet.md`. The accepted bounded TypeScript source
 supports two rows and two to four ordered inputs through one existing view.

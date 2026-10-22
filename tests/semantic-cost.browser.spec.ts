@@ -113,6 +113,41 @@ test('comparison production routes activate only their own player and selected s
   await record('matrix-comparison', { reports, note: 'Production requests include fonts; eight seek/reverse cycles per source after warmup. Post-GC counters describe retention, not performance or learner benefit.' });
 });
 
+test('connected argument loads players only on inspection and releases them between visits', async ({ page, context }) => {
+  const inventory: { file: string; modules: string[] }[] = JSON.parse(await readFile('dist/matrix-interpretations/module-inventory.json', 'utf8'));
+  const paths: string[] = []; page.on('request', request => paths.push(new URL(request.url()).pathname));
+  const cdp = await context.newCDPSession(page); await cdp.send('Performance.enable');
+  await page.goto('/experiments/matrix-column-combinations/?argument=1');
+  const root = page.locator('#comb-player'); await expect(root).toHaveAttribute('data-ready', 'true');
+  const reached = () => inventory.filter(chunk => paths.includes(`/${chunk.file}`)).flatMap(chunk => chunk.modules);
+  expect(reached()).toContain('content/authoring/linear-algebra/recovering-input.ts');
+  expect(reached().some(path => /matrix-column-combinations\/(?:comparison-player|comparison-view|player|presentation)\.ts$/.test(path))).toBe(false);
+  const readingResources = await resources(page);
+  const cycle = async () => {
+    for (const id of ['column-weights', 'lost-change', 'surviving-change']) {
+      await page.locator(`[data-inspect="${id}"]`).click();
+      const panel = page.locator(`[data-inspection="${id}"]`); await expect(panel).toHaveAttribute('data-ready', 'true');
+      await panel.locator('[data-scrub]').evaluate(node => {
+        if (!(node instanceof HTMLInputElement)) throw new Error('Expected inspection slider');
+        for (const value of [.48, 1, .27]) { node.value = String(value); node.dispatchEvent(new Event('input', { bubbles: true })); }
+      });
+      await panel.getByRole('button', { name: 'Return to the argument' }).click();
+      await expect(page.locator('.comb-material, .comparison-material')).toHaveCount(0);
+    }
+  };
+  await cycle();
+  const baseline = await metrics(cdp), warmedRequests = paths.length;
+  for (let i = 0; i < 4; i++) await cycle();
+  const after = await metrics(cdp);
+  expect(paths.length).toBe(warmedRequests);
+  expect(after['Documents']).toBe(baseline['Documents']);
+  expect(after['JSEventListeners']).toBe(baseline['JSEventListeners']);
+  expect(after['Nodes']).toBeLessThanOrEqual(baseline['Nodes']! + 20);
+  expect(reached().some(path => /matrix-column-combinations\/(?:reader|author|walk-host)\.ts$/.test(path))).toBe(false);
+  await record('matrix-argument', { baseline, after, readingResources, warmedResources: await resources(page), newRequestsAfterWarmup: paths.length - warmedRequests,
+    note: 'One live inspection, four full open/seek/reverse/close cycles after warmup. Post-GC counters are bounded retention observations, not a general scale or leak-free proof.' });
+});
+
 test('visibility ownership shares resources and releases canceled registrations', async ({ page }) => {
   await page.goto('/cost/experiments/semantic-cost/?reading=rows');
   await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');

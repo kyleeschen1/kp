@@ -2,12 +2,17 @@
   "id": "task.kp.connected-matrix-argument",
   "kind": "task",
   "title": "Read and inspect one connected matrix argument",
-  "status": "ready",
+  "status": "deferred",
   "domain": "linear-algebra",
+  "summary": "Awaiting reading and local-inspection judgment after technical completion.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-10-23-connected-matrix-argument.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-23-connected-matrix-argument.md"
     }
   ],
   "verificationRecords": [
@@ -31,6 +36,69 @@
       "scope": "Original column reader preservation",
       "checkedAt": "2026-10-22T04:11:26.102Z",
       "notes": "All 29 Chromium cases pass after extracting reusable card markup."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Final application, node, tests, Svelte and domains",
+      "checkedAt": "2026-10-22T04:22:22.061Z",
+      "notes": "Passed after source context and player extraction."
+    },
+    {
+      "command": "npm run visual:matrix-argument",
+      "status": "passed",
+      "scope": "Connected reading candidate",
+      "checkedAt": "2026-10-22T04:22:23.235Z",
+      "notes": "Five final Chromium tests pass; includes actual theme ink and native typography parity, lazy activation, one player, fractional reopen, cancellation, phone return and disposal."
+    },
+    {
+      "command": "npm run visual:semantic-cost -- --grep 'matrix source navigation|comparison production routes|connected argument'",
+      "status": "passed",
+      "scope": "Production closure and retention",
+      "checkedAt": "2026-10-22T04:22:23.876Z",
+      "notes": "Three tests pass. Initial reading excludes players; four warmed inspection cycles retain one document,3221 nodes,49 listeners and no new requests. Existing routes remain isolated."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "29 complete consumer closures",
+      "checkedAt": "2026-10-22T04:22:24.520Z",
+      "notes": "Passed under explicit measured budget amendment. Baseline replay c77d93535 reproduces prior costs; removed10261 gzip CSS bytes from discovery implementation, retained every consumer."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Production application",
+      "checkedAt": "2026-10-22T04:22:25.177Z",
+      "notes": "Passed; existing large-chunk warnings remain outside this reader."
+    },
+    {
+      "command": "npm run test:fraction-chain",
+      "status": "passed",
+      "scope": "Shared stylesheet preservation",
+      "checkedAt": "2026-10-22T04:22:25.803Z",
+      "notes": "39 tests pass; separate fraction/scalar/energy pre-enhancement browser style comparison also passes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Ownership and dependency boundaries",
+      "checkedAt": "2026-10-22T04:22:26.458Z",
+      "notes": "All checks and eight gateway tests passed."
+    },
+    {
+      "command": "npm run test:semantic-cost",
+      "status": "passed",
+      "scope": "Preserved mathematical consumers",
+      "checkedAt": "2026-10-22T04:22:27.105Z",
+      "notes": "All26 tests pass."
     }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: three implementation packages complete. Review complete reading and inspect-return experience at argument=1; no second caller or shared format promotion yet."
+  },
+  "revisitWhen": [
+    "User reviews argument=1 candidate"
   ]
 }

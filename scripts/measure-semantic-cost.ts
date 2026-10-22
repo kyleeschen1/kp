@@ -21,16 +21,25 @@ const comparisons: Readonly<Record<string, readonly string[]>> = {
   'matrix-comparison-lost': ['src/experiments/matrix-column-combinations/comparison-host.ts', 'content/authoring/linear-algebra/dependent-columns-comparison.ts'],
   'matrix-comparison-distinguished': ['src/experiments/matrix-column-combinations/comparison-host.ts', 'content/authoring/linear-algebra/distinguished-inputs-comparison.ts']
 };
+const argumentHost = 'src/experiments/matrix-column-combinations/argument-host.ts';
+const argumentColumns = ['src/experiments/matrix-column-combinations/player.ts', 'src/experiments/matrix-column-combinations/view.ts'];
+const argumentComparison = ['src/experiments/matrix-column-combinations/comparison-player.ts'];
+const argumentsByActivation: Readonly<Record<string, readonly string[]>> = {
+  'matrix-argument-reading': [argumentHost],
+  'matrix-argument-columns': [argumentHost, ...argumentColumns],
+  'matrix-argument-comparison': [argumentHost, ...argumentComparison],
+  'matrix-argument-all': [argumentHost, ...argumentColumns, ...argumentComparison]
+};
 const compositionSources = ['src/experiments/matrix-column-combinations/basis-composition.ts', 'src/experiments/matrix-column-combinations/basis-composition-view.ts'];
 const readerSources = [...compositionSources, ...Object.values(matrixSources).flat()];
-const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition', 'matrix-reader-all', 'matrix-author', 'matrix-all', ...Object.keys(matrixSources), ...Object.keys(comparisons)];
+const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition', 'matrix-reader-all', 'matrix-author', 'matrix-all', ...Object.keys(matrixSources), ...Object.keys(comparisons), ...Object.keys(argumentsByActivation)];
 const closures = [];
 for (const page of pages) {
   const collection = page.startsWith('collection-');
   const row = page.startsWith('row-');
   // The route shell is now lazy. A complete ordinary consumer must explicitly
   // activate its reader AND selected source; measuring the shell is not enough.
-  const selectedMatrix = comparisons[page] ?? (page === 'matrix-composition'
+  const selectedMatrix = argumentsByActivation[page] ?? comparisons[page] ?? (page === 'matrix-composition'
     ? [...ordinaryReader, ...compositionSources] : page === 'matrix-reader-all' ? [...ordinaryReader, ...readerSources]
     : page === 'matrix-author' ? ['src/experiments/matrix-column-combinations/author.ts']
     : page === 'matrix-column-combinations' ? [...ordinaryReader, ...matrixSources['matrix-numeric']!]
@@ -49,6 +58,11 @@ for (const page of pages) {
     ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : []);
   const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-all' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, resolveKpBundleActivationRoots(manifest, inventory, activation))])];
   const reachedModules = inventory.filter(chunk => files.includes(chunk.file)).flatMap(chunk => chunk.modules);
+  if (page === 'matrix-argument-reading' && reachedModules.some(path =>
+    /matrix-column-combinations\/(?:comparison-player|comparison-view|player|presentation)\.ts|rendering\/computed-style-clone\.ts/.test(path)))
+    throw new Error('The argument reading activated an unopened material player.');
+  if (page !== 'matrix-all' && !argumentsByActivation[page] && reachedModules.includes(argumentHost))
+    throw new Error(`An ordinary consumer activated the optional argument: ${page}`);
   if (comparisons[page] && reachedModules.some(path => ordinaryReader.includes(path) || /matrix-column-combinations\/(?:player|view)\.ts/.test(path)))
     throw new Error(`Comparison activated the ordinary calculation player: ${page}`);
   if ((matrixSources[page] || page === 'matrix-column-combinations' || page === 'matrix-reader-all' || page === 'matrix-composition') &&

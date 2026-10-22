@@ -84,3 +84,21 @@ test("phone reading, reduced motion and return anchoring retain the claim", asyn
   await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
   await expect(page.locator(".comparison-copy")).toHaveCount(0);
 });
+
+test("shared actions follow the matrix theme and inspection preserves native type", async ({ page, context }) => {
+  await page.goto(url); await open(page, "lost-change");
+  const standalone = await context.newPage();
+  await standalone.goto('/experiments/matrix-column-combinations/?compare=1');
+  await expect(standalone.locator('#comb-player')).toHaveAttribute('data-ready', 'true');
+  const typography = (page: Page) => page.locator('.comparison-stage .katex').first().evaluate(node => {
+    const css = getComputedStyle(node);
+    return { font: css.fontFamily, size: css.fontSize, weight: css.fontWeight, synthesis: css.fontSynthesis };
+  });
+  expect(await typography(page)).toEqual(await typography(standalone));
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(theme => { document.documentElement.dataset['matrixTheme'] = theme; document.dispatchEvent(new Event('kp-matrix-example-config')); }, theme);
+    const colors = await trigger(page, 'lost-change').evaluate(node => ({ action: getComputedStyle(node).color, reading: getComputedStyle(document.querySelector('#comb-player')!).color }));
+    expect(colors.action).toBe(colors.reading);
+  }
+  await standalone.close();
+});

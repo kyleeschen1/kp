@@ -5,6 +5,7 @@ import { argumentHtml } from "./argument-view.ts";
 import { prepareInspection } from "./argument-inspection.ts";
 import { createKpReaderLatestSessionHandoff } from "../../reader/runtime/latest-session-handoff.ts";
 import { holdDisclosureViewportAnchor } from "../../reader/runtime/disclosure-viewport-anchor.ts";
+import { encodeKpHtmlAttribute as escape } from "../../rendering/html-output-encoding.ts";
 
 type Player = ReturnType<Awaited<ReturnType<typeof prepareInspection>>["mount"]>;
 type OpenInspection = { id: string; button: HTMLButtonElement; panel: HTMLElement; returnTop: number } & (
@@ -63,7 +64,7 @@ export function mountMatrixArgument(root: HTMLElement) {
       const prepared = await prepareInspection(item);
       handoff.commit(token, () => {
         if (disposed) return;
-        panel.innerHTML = prepared.html + '<div class="energy-derivation-actions"><button data-return>Return to the argument</button></div>';
+        panel.innerHTML = `<p>${escape(item.context)}</p>` + prepared.html + '<div class="energy-derivation-actions"><button data-return>Return to the argument</button></div>';
         const player = prepared.mount(panel, saved.get(id) ?? 0, progress => saved.set(id, progress));
         active = { ...pending, state: "ready", player };
         panel.setAttribute("aria-busy", "false"); panel.dataset["ready"] = "true";
