@@ -5,6 +5,17 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The input-difference exemplar is now accepted. Its
+[bounded continuation](../2026-10-22-comparison-transfer.md) adds a contrasting
+nonzero output difference through the same local six-phase source boundary.
+`?compare=1&case=distinguished` changes the map while retaining the inputs;
+the output change (0,-1) shows why a zero coordinate is not a zero vector.
+The [author packet](../authoring/matrix-comparison-packet.md) and
+[integration evidence](../reviews/2026-10-22-comparison-transfer.md) distinguish
+source reuse, loading-cost repairs and remaining editorial review. The next
+decision is the value of this contrast, not another numerical example or
+automatic shared-renderer promotion.
+
 The user questioned the explanatory value of the walk and approved the
 [input-difference comparison](../2026-10-21-input-difference-comparison.md).
 Canonical host: `/experiments/matrix-column-combinations/?compare=1`.

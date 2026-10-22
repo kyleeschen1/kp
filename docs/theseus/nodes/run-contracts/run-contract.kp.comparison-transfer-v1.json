@@ -2,7 +2,8 @@
   "id": "run-contract.kp.comparison-transfer-v1",
   "kind": "run-contract",
   "title": "Accepted comparison transfer and integration",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: all three packages complete; no new promotion authorized before contrast review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -19,6 +20,9 @@
     "npm run visual:matrix-comparison:cohort",
     "npm run build",
     "npm test"
+  ],
+  "revisitWhen": [
+    "User reviews the distinguished-input comparison"
   ],
   "allowedWork": [
     "Bounded source selection, second mathematical source, preservation and complete-consumer cost checks"
@@ -41,8 +45,8 @@
     },
     {
       "id": "integration",
-      "summary": "Measured unnecessary ordinary-player activation on comparison route; repairing lazy boundary and accounting complete selected consumers plus all-source union.",
-      "status": "in-progress"
+      "summary": "Final 24 browser checks, affected production/type/architecture checks and25 complete closure gates pass; source packet and exact cost tradeoffs recorded. Human contrast review is next.",
+      "status": "complete"
     }
   ]
 }

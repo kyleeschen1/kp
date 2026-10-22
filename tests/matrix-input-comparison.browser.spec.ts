@@ -27,7 +27,8 @@ test("both mappings stay in place while the nonzero difference reaches zero", as
   for (const row of [0, 1]) await expect(page.locator(`[data-occ="zero-${row}"]`)).toHaveText("0");
   await expect(page.locator('[data-vector="zero"]')).toHaveCSS("opacity", "1");
   await page.getByText("Read the complete comparison", { exact: true }).click();
-  await expect(page.locator("details .katex-mathml")).toHaveCount(6);
+  await expect(page.locator("details .katex-mathml")).toHaveCount(7);
+  await expect(page.locator("details annotation").first()).toHaveText("A=\\begin{bmatrix}1&2\\\\2&4\\end{bmatrix}");
   expect(errors).toEqual([]);
 });
 
@@ -115,7 +116,8 @@ test("the contrast source reuses the same motion without treating a zero coordin
   await expect(page.locator("[data-cue]")).toContainText("vector is not");
   await page.reload(); await expect(page.locator("#comb-player")).toHaveAttribute("data-step", "output-change");
   await page.getByText("Read the complete comparison", { exact: true }).click();
-  await expect(page.locator("details .katex-mathml")).toHaveCount(6);
+  await expect(page.locator("details .katex-mathml")).toHaveCount(7);
+  await expect(page.locator("details annotation").first()).toHaveText("A=\\begin{bmatrix}1&2\\\\2&5\\end{bmatrix}");
   await page.locator(".matrix-card").screenshot({ path: info.outputPath("contrast-result.png") });
   await seek(page, .8); await page.locator(".matrix-card").screenshot({ path: info.outputPath("contrast-contributions.png") });
   expect(errors).toEqual([]);
@@ -155,4 +157,23 @@ test("invalid source selection is explicit and cannot install another explanatio
   await expect(page.locator("#comb-player")).toHaveAttribute("data-gap", "true");
   await expect(page.locator("#comb-player")).toContainText("Choose one comparison case");
   await expect(page.locator(".comparison-stage")).toHaveCount(0);
+});
+
+test("departing before a lazy route module arrives prevents late player installation", async ({ page }) => {
+  for (const module of ["reader", "comparison-host"]) {
+    let release = () => {};
+    const held = new Promise<void>(resolve => { release = resolve; });
+    const pattern = `**/matrix-column-combinations/${module}.ts*`;
+    await page.route(pattern, async request => { await held; await request.continue(); });
+    const requested = page.waitForRequest(request => request.url().includes(`/matrix-column-combinations/${module}.ts`));
+    await page.goto(module === "reader" ? "/experiments/matrix-column-combinations/" : route, { waitUntil: "domcontentloaded" });
+    await requested;
+    try {
+      await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+      const response = page.waitForResponse(response => response.url().includes(`/matrix-column-combinations/${module}.ts`));
+      release(); await response; await page.waitForLoadState("networkidle"); await frames(page);
+      await expect(page.locator("#comb-player")).not.toHaveAttribute("data-ready", "true");
+      await expect(page.locator(".matrix-card")).toHaveCount(0);
+    } finally { release(); await page.unroute(pattern); }
+  }
 });

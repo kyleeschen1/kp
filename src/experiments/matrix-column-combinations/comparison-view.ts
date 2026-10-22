@@ -38,6 +38,9 @@ export function comparisonStatic(relation: InputComparison) {
   const v = (entries: readonly KpScalarValue[]) => `\\begin{bmatrix}${entries.map(value).join("\\\\")}\\end{bmatrix}`;
   const delta = relation.inputDifference.rows.map(row => row[0]!);
   return [
+    // The animated stage is decorative to assistive technology. Retain the
+    // complete map here, not just its consequences, in the accessible reading.
+    `A=\\begin{bmatrix}${relation.product.left.rows.map(row => row.map(value).join("&")).join("\\\\")}\\end{bmatrix}`,
     `Au=A${v(relation.inputs.before.entries)}=${v(relation.outputs.before.entries)}`,
     `Av=A${v(relation.inputs.after.entries)}=${v(relation.outputs.after.entries)}`,
     `v-u=${v(relation.inputs.after.entries)}-${v(relation.inputs.before.entries)}=${v(delta)}`,

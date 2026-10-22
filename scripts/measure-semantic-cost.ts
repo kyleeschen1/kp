@@ -16,16 +16,25 @@ const matrixSources: Readonly<Record<string, readonly string[]>> = {
   'matrix-dependent-columns': ['content/authoring/linear-algebra/dependent-columns.ts'],
   'matrix-numeric': ['content/authoring/convergence/matrices.ts']
 };
+const ordinaryReader = ['src/experiments/matrix-column-combinations/reader.ts', 'src/experiments/matrix-column-combinations/page.ts'];
+const comparisons: Readonly<Record<string, readonly string[]>> = {
+  'matrix-comparison-lost': ['src/experiments/matrix-column-combinations/comparison-host.ts', 'content/authoring/linear-algebra/dependent-columns-comparison.ts'],
+  'matrix-comparison-distinguished': ['src/experiments/matrix-column-combinations/comparison-host.ts', 'content/authoring/linear-algebra/distinguished-inputs-comparison.ts']
+};
 const compositionSources = ['src/experiments/matrix-column-combinations/basis-composition.ts', 'src/experiments/matrix-column-combinations/basis-composition-view.ts'];
 const readerSources = [...compositionSources, ...Object.values(matrixSources).flat()];
-const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition', 'matrix-reader-all', 'matrix-author', 'matrix-all', ...Object.keys(matrixSources)];
+const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition', 'matrix-reader-all', 'matrix-author', 'matrix-all', ...Object.keys(matrixSources), ...Object.keys(comparisons)];
 const closures = [];
 for (const page of pages) {
   const collection = page.startsWith('collection-');
   const row = page.startsWith('row-');
-  const selectedMatrix = page === 'matrix-composition'
-    ? compositionSources : page === 'matrix-reader-all' ? readerSources
-    : page === 'matrix-author' ? ['src/experiments/matrix-column-combinations/author.ts'] : matrixSources[page];
+  // The route shell is now lazy. A complete ordinary consumer must explicitly
+  // activate its reader AND selected source; measuring the shell is not enough.
+  const selectedMatrix = comparisons[page] ?? (page === 'matrix-composition'
+    ? [...ordinaryReader, ...compositionSources] : page === 'matrix-reader-all' ? [...ordinaryReader, ...readerSources]
+    : page === 'matrix-author' ? ['src/experiments/matrix-column-combinations/author.ts']
+    : page === 'matrix-column-combinations' ? [...ordinaryReader, ...matrixSources['matrix-numeric']!]
+    : matrixSources[page] ? [...ordinaryReader, ...matrixSources[page]] : undefined);
   const html = `experiments/${page === 'matrix-all' || selectedMatrix ? 'matrix-column-combinations' : collection || row || page === 'rectangular-default' ? 'rectangular-product' : page}/index.html`;
   // Count complete selected closures and retain an explicit all-source union.
   // Lazy declarations alone do not make unrelated sources part of activation.
@@ -39,6 +48,12 @@ for (const page of pages) {
     : collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
     ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : []);
   const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-all' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, resolveKpBundleActivationRoots(manifest, inventory, activation))])];
+  const reachedModules = inventory.filter(chunk => files.includes(chunk.file)).flatMap(chunk => chunk.modules);
+  if (comparisons[page] && reachedModules.some(path => ordinaryReader.includes(path) || /matrix-column-combinations\/(?:player|view)\.ts/.test(path)))
+    throw new Error(`Comparison activated the ordinary calculation player: ${page}`);
+  if ((matrixSources[page] || page === 'matrix-column-combinations' || page === 'matrix-reader-all' || page === 'matrix-composition') &&
+      reachedModules.some(path => /matrix-column-combinations\/comparison-(?:host|view|source)\.ts/.test(path)))
+    throw new Error(`Ordinary reader activated an optional comparison: ${page}`);
   if (page !== 'matrix-author' && page !== 'matrix-all') {
     const reached = new Set(files);
     if (inventory.some(chunk => reached.has(chunk.file) && chunk.modules.some(path =>

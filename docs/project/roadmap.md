@@ -25,6 +25,17 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 22: the user accepted the input-difference comparison and approved
+[bounded transfer and integration](2026-10-22-comparison-transfer.md). The
+contrast at `?compare=1&case=distinguished` changes one matrix entry: the same
+input difference now produces (0,-1), without a new choreography. The
+[author packet](authoring/matrix-comparison-packet.md) states the finite source
+boundary; [evidence](reviews/2026-10-22-comparison-transfer.md) records browser
+preservation, selective host loading and complete-consumer cost tradeoffs.
+Review whether the contrast helps distinguish a zero coordinate from a zero
+vector. Do not infer general injectivity from one pair or automatically promote
+the local adapter into a shared rendering API.
+
 October 21 [input-difference comparison](2026-10-21-input-difference-comparison.md)
 responds to the user's objection that the walk demonstrated little explanatory
 value. `?compare=1` keeps both mappings visible and follows their nonzero input

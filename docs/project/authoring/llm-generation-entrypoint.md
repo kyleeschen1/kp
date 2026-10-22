@@ -81,6 +81,13 @@ all cues remain readable without JavaScript. Scientific notation is a repair gap
 For concise matrix and bounded algebra imports, see `concise-domain-api.md`.
 Those entrypoints preserve the exact existing domain support and diagnostics.
 
+For comparing two inputs through their difference, use
+`matrix-comparison-packet.md`. It retains both mappings while relating the input
+change to weighted column contributions and the output change. The accepted
+cancellation case and contrasting review candidate use one fixed six-phase
+TypeScript source format; this is not the matrix JSON task, a publication path,
+or arbitrary comparison choreography.
+
 For reversible polynomial/linear-system collection into matrix notation, use
 `la-collection-authoring-packet.md`. The accepted bounded TypeScript source
 supports two rows and two to four ordered inputs through one existing view.

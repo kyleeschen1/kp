@@ -2,8 +2,9 @@
   "id": "task.kp.comparison-transfer",
   "kind": "task",
   "title": "Compare preserved and lost input differences",
-  "status": "ready",
+  "status": "deferred",
   "domain": "linear-algebra",
+  "summary": "Checked contrasting explanation awaits human judgment; all scoped engineering work is complete.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,5 +14,84 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-10-22-comparison-transfer.md"
     }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full repository integration",
+      "checkedAt": "2026-10-22T03:11:41.203Z",
+      "notes": "7415 tests pass, with architecture, inference, concept-catalog and promotion-memory prerequisites. Final entry lifecycle/static-reading changes subsequently covered by focused production/browser and type checks."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Final types",
+      "checkedAt": "2026-10-22T03:11:42.108Z",
+      "notes": "Application, node, test, Svelte and domain checks pass after the lifecycle and accessible-reading changes."
+    },
+    {
+      "command": "npm run test:matrix-comparison",
+      "status": "passed",
+      "scope": "Mathematical/source boundary",
+      "checkedAt": "2026-10-22T03:11:42.694Z",
+      "notes": "Six tests pass for both relations, exact arithmetic, source closure and explicit rejected inputs."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "Ordinary reader preservation",
+      "checkedAt": "2026-10-22T03:11:43.278Z",
+      "notes": "All 29 Chromium tests pass after selective entry loading."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "Complete consumer costs",
+      "checkedAt": "2026-10-22T03:11:43.865Z",
+      "notes": "25 complete closures pass under explicitly diagnosed policy amendment; final selected comparison JS 102549 and101011 gzip bytes, all-route union139896. No consumers omitted."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Final architecture",
+      "checkedAt": "2026-10-22T03:11:44.455Z",
+      "notes": "Final ownership/dependency gates and eight cross-domain tests pass."
+    },
+    {
+      "command": "npm run visual:matrix-comparison:cohort",
+      "status": "passed",
+      "scope": "Final supported-browser cohort",
+      "checkedAt": "2026-10-22T03:12:45.800Z",
+      "notes": "24 tests pass in54.6s on isolated final rerun; earlier Firefox launch/setup and WebKit screenshot timeouts retained in evidence, no cases skipped or timeouts raised."
+    },
+    {
+      "command": "npm run visual:semantic-cost -- --grep 'matrix source navigation|comparison production routes'",
+      "status": "passed",
+      "scope": "Production loading and retention",
+      "checkedAt": "2026-10-22T03:12:46.818Z",
+      "notes": "Both final production tests pass: isolated selected player/source, warmed request and DOM/listener counts, disposal."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Application build",
+      "checkedAt": "2026-10-22T03:12:47.430Z",
+      "notes": "Full types and production application build passed for source transfer; build:bundle reran during integration and final affected production build ran via visual:semantic-cost."
+    },
+    {
+      "command": "npm run test:semantic-cost",
+      "status": "passed",
+      "scope": "Affected mathematical/consumer tests",
+      "checkedAt": "2026-10-22T03:12:48.038Z",
+      "notes": "26 tests pass; semantic and playback invariants preserved."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: three implementation packages complete; judge the contrast before further shared-renderer promotion."
+  },
+  "revisitWhen": [
+    "User reviews the distinguished-input comparison"
   ]
 }
