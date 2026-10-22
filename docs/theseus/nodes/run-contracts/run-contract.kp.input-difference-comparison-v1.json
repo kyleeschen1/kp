@@ -2,8 +2,8 @@
   "id": "run-contract.kp.input-difference-comparison-v1",
   "kind": "run-contract",
   "title": "Input difference comparison",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: two of two implementation packages checked; no second caller authorized before visual review",
+  "status": "resolved",
+  "summary": "Both implementation packages complete and canonical exemplar accepted by user.",
   "sourceRefs": [
     {
       "kind": "file",

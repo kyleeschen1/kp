@@ -96,3 +96,63 @@ test("cold preparation waits for the italic math face and can be disposed while 
   release(); await page.evaluate(() => document.fonts.ready); await frames(page);
   await expect(page.locator(".comparison-stage")).toHaveCount(0);
 });
+
+test("the contrast source reuses the same motion without treating a zero coordinate as zero output", async ({ page }, info) => {
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  const requests: string[] = []; page.on("request", request => requests.push(request.url()));
+  await page.goto(`${route}&case=distinguished`);
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-comparison", "distinguished-inputs");
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+  expect(requests.some(url => url.includes("dependent-columns-comparison"))).toBe(false);
+  for (const progress of [0, .2, .4, .6, .8, 1]) {
+    await seek(page, progress); const expected = await styles(page);
+    await seek(page, 0); await seek(page, 1); await seek(page, progress);
+    expect(await styles(page)).toEqual(expected);
+  }
+  await expect(page.locator('[data-occ="zero-0"]')).toHaveText("0");
+  await expect(page.locator('[data-occ="zero-1"]')).toHaveText("−1");
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-step", "output-change");
+  await expect(page.locator("[data-cue]")).toContainText("vector is not");
+  await page.reload(); await expect(page.locator("#comb-player")).toHaveAttribute("data-step", "output-change");
+  await page.getByText("Read the complete comparison", { exact: true }).click();
+  await expect(page.locator("details .katex-mathml")).toHaveCount(6);
+  await page.locator(".matrix-card").screenshot({ path: info.outputPath("contrast-result.png") });
+  await seek(page, .8); await page.locator(".matrix-card").screenshot({ path: info.outputPath("contrast-contributions.png") });
+  expect(errors).toEqual([]);
+});
+
+test("both sources preserve native handoff and reading across themes and narrow layouts", async ({ page }) => {
+  for (const variant of ["lost", "distinguished"]) {
+    await page.goto(`${route}&case=${variant}`); await expect(page.locator("#comb-player")).toHaveAttribute("data-ready", "true");
+    for (const theme of ["light", "dark"]) {
+      await page.evaluate(theme => {
+        document.documentElement.dataset["matrixTheme"] = theme;
+        document.dispatchEvent(new Event("kp-matrix-example-config"));
+      }, theme);
+      await page.setViewportSize({ width: 390, height: 844 }); await frames(page);
+      await seek(page, .4799);
+      const handoffs = await page.locator('.comparison-copy[data-to^="column-"]').evaluateAll(owners => owners.map(owner => {
+        const target = document.querySelector(`[data-occ="${owner.getAttribute("data-to")}"]`)!;
+        const rect = (node: Element) => { const range = document.createRange(); range.selectNodeContents(node); return range.getBoundingClientRect(); };
+        const a = rect(owner.firstElementChild!), b = rect(target);
+        return { same: owner.getAttribute("data-entity-id") === target.getAttribute("data-entity-id"), delta: Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y), Math.abs(a.width - b.width), Math.abs(a.height - b.height)) };
+      }));
+      expect(handoffs).toHaveLength(4);
+      for (const handoff of handoffs) { expect(handoff.same).toBe(true); expect(handoff.delta).toBeLessThan(.5); }
+      await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "active" });
+      // Changing to reduced motion settles the in-flight interval first.
+      await expect(page.locator("#comb-player")).toHaveAttribute("data-progress", "0.6");
+      await page.getByRole("button", { name: "Next", exact: true }).click();
+      await expect(page.locator("#comb-player")).toHaveAttribute("data-progress", "0.8");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.emulateMedia({ reducedMotion: "no-preference", forcedColors: "none" });
+    }
+  }
+});
+
+test("invalid source selection is explicit and cannot install another explanation", async ({ page }) => {
+  await page.goto(`${route}&case=unknown`);
+  await expect(page.locator("#comb-player")).toHaveAttribute("data-gap", "true");
+  await expect(page.locator("#comb-player")).toContainText("Choose one comparison case");
+  await expect(page.locator(".comparison-stage")).toHaveCount(0);
+});

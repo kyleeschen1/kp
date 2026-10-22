@@ -2,9 +2,9 @@
   "id": "task.kp.input-difference-comparison",
   "kind": "task",
   "title": "Explain equal outputs through cancelling input differences",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: review candidate implemented; explanatory value and choreography await user judgment",
+  "summary": "User approved the canonical comparison and requested continued work; visual acceptance does not establish learner outcomes.",
   "sourceRefs": [
     {
       "kind": "file",

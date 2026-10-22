@@ -1,0 +1,48 @@
+{
+  "id": "run-contract.kp.comparison-transfer-v1",
+  "kind": "run-contract",
+  "title": "Accepted comparison transfer and integration",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.comparison-transfer.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-22-comparison-transfer.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-comparison",
+    "npm run visual:matrix-comparison:cohort",
+    "npm run build",
+    "npm test"
+  ],
+  "allowedWork": [
+    "Bounded source selection, second mathematical source, preservation and complete-consumer cost checks"
+  ],
+  "disallowedWork": [
+    "New choreography, catalogue promotion, unrelated renderer migration or calculus changes"
+  ],
+  "goal": "Reuse the accepted comparison for a noncancelling input difference and verify its engineering boundaries",
+  "target": "task.kp.comparison-transfer",
+  "slices": [
+    {
+      "id": "source",
+      "summary": "Six-beat local source boundary checks target IDs and selection; first source retains its names and content. Six semantic/source tests and full types/build pass.",
+      "status": "complete"
+    },
+    {
+      "id": "contrast",
+      "summary": "Second source reuses unchanged native adapter and CSS; six semantic tests, 21 checks across three engines, full types/build and 7415 repository tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "integration",
+      "summary": "Measured unnecessary ordinary-player activation on comparison route; repairing lazy boundary and accounting complete selected consumers plus all-source union.",
+      "status": "in-progress"
+    }
+  ]
+}

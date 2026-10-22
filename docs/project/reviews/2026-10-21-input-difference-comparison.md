@@ -1,5 +1,10 @@
 # Input difference comparison: review candidate
 
+The user accepted this exemplar and requested continued work. The bounded
+[transfer and integration](../2026-10-22-comparison-transfer.md) now tests a
+noncancelling difference through the same presentation. This acceptance is a
+visual/editorial judgment, not evidence of learner outcomes.
+
 Plan: [relationship-first comparison](../2026-10-21-input-difference-comparison.md).
 Canonical host: `http://localhost:8000/experiments/matrix-column-combinations/?compare=1`.
 

@@ -4,6 +4,9 @@ import * as M from "../src/math/authoring/matrices.ts";
 import { compareInputs, InputComparisonGap } from "../src/math/matrix-input-comparison.ts";
 import { dependentColumns } from "../content/authoring/linear-algebra/dependent-columns.ts";
 import { compileExpression } from "../src/math/expression.ts";
+import { comparison as lost } from "../content/authoring/linear-algebra/dependent-columns-comparison.ts";
+import { comparison as distinguished } from "../content/authoring/linear-algebra/distinguished-inputs-comparison.ts";
+import { defineComparison, loadComparison, readComparisonCase } from "../src/experiments/matrix-column-combinations/comparison-source.ts";
 const values = (matrix: Parameters<typeof M.evaluate>[0]) => M.evaluate(matrix, {});
 
 test("the lost difference derives from original inputs and retains contribution identities", () => {
@@ -54,4 +57,35 @@ test("unsupported dimensions and inexact arithmetic fail instead of claiming can
   const product = M.product({ id: "wide", left: M.matrix("wide-a", [[1, 2, 3], [4, 5, 6]]), right: M.matrix("wide-b", [[1, 2], [3, 4], [5, 6]]) });
   assert.throws(() => compareInputs(product), InputComparisonGap);
   assert.throws(() => compareInputs(dependentColumns.product, -1, 1));
+});
+
+test("the second source changes the map, preserving the inputs but not their output equality", async () => {
+  assert.deepEqual(values(distinguished.relation.product.right), values(lost.relation.product.right));
+  assert.deepEqual(values(distinguished.relation.inputDifference), [[2], [-1]]);
+  assert.deepEqual(values(distinguished.relation.outputDifference), [[0], [-1]]);
+  assert.deepEqual(values(distinguished.relation.image.result), [[0], [-1]]);
+  assert.equal(distinguished.relation.kind, "distinguished-inputs");
+  assert.deepEqual(values(distinguished.relation.product.result), [[1, 1], [1, 0]]);
+  assert.equal(await loadComparison("lost"), lost);
+  assert.equal(await loadComparison("distinguished"), distinguished);
+  for (const source of [lost, distinguished]) {
+    assert.ok(Object.isFrozen(source)); assert.ok(Object.isFrozen(source.beats));
+    source.beats.forEach(beat => { assert.ok(Object.isFrozen(beat)); assert.ok(Object.isFrozen(beat.targets)); });
+  }
+});
+
+test("source errors fail before installing motion, and unknown selections never pick a fallback", () => {
+  const [a, b, c, d, e, f] = lost.beats;
+  for (const beat of [{ ...a, targets: ["invented-id"] }, { ...a, targets: [] }, { ...a, text: " " }, { ...a, id: "not a URL" }])
+    assert.throws(() => defineComparison({ ...lost, beats: [beat, b, c, d, e, f] }), InputComparisonGap);
+  assert.throws(() => defineComparison({ ...lost, beats: [a, a, c, d, e, f] }), InputComparisonGap);
+  assert.throws(() => defineComparison({ ...lost, title: " " }), InputComparisonGap);
+  assert.throws(() => defineComparison({ ...lost,
+    // @ts-expect-error The local choreography has exactly six semantic phases.
+    beats: [a, b, c, d, e]
+  }), InputComparisonGap);
+  assert.equal(readComparisonCase(new URLSearchParams()), "lost");
+  for (const id of ["lost", "distinguished"]) assert.equal(readComparisonCase(new URLSearchParams({ case: id })), id);
+  for (const query of ["case=", "case=unknown", "case=lost&case=distinguished", "case=lost&case=lost"])
+    assert.throws(() => readComparisonCase(new URLSearchParams(query)), InputComparisonGap);
 });

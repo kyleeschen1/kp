@@ -1,5 +1,5 @@
 import "./comparison.css";
-import { comparison as source } from "../../../content/authoring/linear-algebra/dependent-columns-comparison.ts";
+import { loadComparison, readComparisonCase, type ComparisonSource } from "./comparison-source.ts";
 import { comparisonHtml, comparisonStatic, mountComparisonView } from "./comparison-view.ts";
 import { prepareColumnFonts } from "./fonts.ts";
 import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
@@ -18,18 +18,19 @@ export function mountMatrixComparison(root: HTMLElement) {
   // Unlike the numeric column reader, this scene introduces italic u, v and A.
   // Request that actual face before measuring: fonts.ready before insertion
   // cannot wait for a face the document has not requested yet.
-  void Promise.all([prepareColumnFonts(), document.fonts.load("italic 20px KaTeX_Math")]).then(() => { if (!disposed) release = install(root); }).catch(error => {
+  const source = Promise.resolve().then(() => loadComparison(readComparisonCase(new URL(location.href).searchParams)));
+  void Promise.all([source, prepareColumnFonts(), document.fonts.load("italic 20px KaTeX_Math")]).then(([source]) => { if (!disposed) release = install(root, source); }).catch(error => {
     if (disposed) return;
     dispose(); root.textContent = String(error); root.setAttribute("aria-busy", "false"); root.dataset["gap"] = "true";
   });
   return dispose;
 }
 
-function install(root: HTMLElement) {
+function install(root: HTMLElement, source: ComparisonSource) {
   document.querySelector("h1")!.textContent = source.title; document.title = source.title;
   document.querySelector("#matrix-story > p")!.textContent = source.introduction;
-  root.innerHTML = `<p><a href="?input=dependent-columns">Inspect the original multiplication</a></p>
-    <section class="matrix-card kp-focus-deck" aria-label="What the map loses">
+  root.innerHTML = `<nav aria-label="Input comparisons"><a href="?compare=1">A difference disappears</a> · <a href="?compare=1&case=distinguished">A difference survives</a></nav>
+    <section class="matrix-card kp-focus-deck" aria-label="${escape(source.title)}">
       <div class="matrix-cue" data-cue aria-live="polite"></div>
       <div class="matrix-scroll" tabindex="0" role="region" aria-label="Input comparison; scroll horizontally on narrow screens">${comparisonHtml(source.relation)}</div>
       <div class="matrix-controls"><button data-back>Previous</button><button data-next>Next</button>
@@ -42,6 +43,7 @@ function install(root: HTMLElement) {
     <p>${escape(source.conclusion)}</p>
     <p>${escape(source.question)}</p><details><summary>Check your reasoning</summary><p>${escape(source.answer)}</p></details>
     <details><summary>Read the complete comparison</summary><div class="comparison-static">${comparisonStatic(source.relation)}</div></details>`;
+  root.dataset["comparison"] = source.relation.kind;
   const { beats } = source, last = beats.length - 1;
   // Keep the existing matrix interval cadence; timing stays outside the source.
   const clock = createKpReaderTimelinePlaybackClock({ id: "matrix-input-comparison", durationMs: 2100 * last });

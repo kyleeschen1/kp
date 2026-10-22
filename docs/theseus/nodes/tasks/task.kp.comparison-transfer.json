@@ -1,0 +1,17 @@
+{
+  "id": "task.kp.comparison-transfer",
+  "kind": "task",
+  "title": "Compare preserved and lost input differences",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-22-comparison-transfer.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-22-comparison-transfer.md"
+    }
+  ]
+}
