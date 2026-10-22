@@ -1,0 +1,68 @@
+{
+  "id": "task.kp.input-difference-comparison",
+  "kind": "task",
+  "title": "Explain equal outputs through cancelling input differences",
+  "status": "deferred",
+  "domain": "linear-algebra",
+  "summary": "HUMAN_CHECKPOINT: review candidate implemented; explanatory value and choreography await user judgment",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-input-difference-comparison.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-input-difference-comparison.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-comparison",
+    "npm run visual:matrix-comparison"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-comparison",
+      "status": "passed",
+      "scope": "Exact numerical relation and semantic provenance",
+      "checkedAt": "2026-10-22T01:46:07.749Z",
+      "notes": "Four tests including 41 signed maps; identities, lost versus identical/distinguished inputs and safe-integer repairs pass"
+    },
+    {
+      "command": "npm run visual:matrix-comparison",
+      "status": "passed",
+      "scope": "Canonical Chromium comparison discovery",
+      "checkedAt": "2026-10-22T01:46:08.431Z",
+      "notes": "Final four-test run passes: retained mappings, copies, native handoff, reverse/interruption, 390px visibility, restored URLs and cold font disposal. Earlier 1.328px drift diagnosed as late italic math font; no glyph offset used."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full application, node, test, Svelte and domain checks",
+      "checkedAt": "2026-10-22T01:46:09.093Z",
+      "notes": "Final complete rerun passes with zero Svelte diagnostics"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Existing ownership and dependency boundaries",
+      "checkedAt": "2026-10-22T01:46:09.761Z",
+      "notes": "Architecture gates and eight cross-domain tests pass; no generic renderer promotion"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: both implementation packages verified; compare cancellation explanation with complete static baseline before accepting or generalizing"
+  },
+  "revisitWhen": [
+    "User reviews the input-difference comparison"
+  ],
+  "expectedLearning": [
+    "Whether retaining both mappings and following the lost difference reveals the reason for equal outputs"
+  ],
+  "allowedWork": [
+    "Exact input-difference relation and one native comparison exemplar"
+  ],
+  "disallowedWork": [
+    "Walk promotion, new universal score or renderer framework, catalogue rollout"
+  ]
+}

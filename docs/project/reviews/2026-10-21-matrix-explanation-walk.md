@@ -1,5 +1,10 @@
 # Matrix explanation walk: canonical review candidate
 
+Review outcome: the user questioned its explanatory point. Its sequencing
+capability is retained, but promotion/transfer is superseded by the approved
+[input-difference comparison](../2026-10-21-input-difference-comparison.md).
+Technical success here is not visual or pedagogical acceptance.
+
 Plan: [bounded authoring continuation](../2026-10-21-matrix-explanation-walk.md).
 Run: `run-contract.kp.matrix-explanation-walk-v1`.
 

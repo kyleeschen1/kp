@@ -1,0 +1,52 @@
+{
+  "id": "run-contract.kp.input-difference-comparison-v1",
+  "kind": "run-contract",
+  "title": "Input difference comparison",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: two of two implementation packages checked; no second caller authorized before visual review",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.input-difference-comparison.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-input-difference-comparison.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-comparison",
+    "npm run visual:matrix-comparison"
+  ],
+  "revisitWhen": [
+    "User reviews the input-difference comparison"
+  ],
+  "allowedWork": [
+    "Bounded semantic relation and one optional native comparison host with focused checks"
+  ],
+  "disallowedWork": [
+    "Broad promotion or unrelated renderer migration"
+  ],
+  "goal": "Keep both mappings visible and show how their nonzero difference maps to zero",
+  "target": "task.kp.input-difference-comparison",
+  "runMode": "run",
+  "maxSlices": 2,
+  "commitCadence": "Coherent checked slices; backup hourly and at handoff",
+  "verificationLevel": "focused",
+  "stopConditions": [
+    "Canonical comparison requires human judgment before any second visual caller"
+  ],
+  "slices": [
+    {
+      "id": "relation",
+      "summary": "Four semantic tests pass: original refs, exact derived differences, cancellation versus identical/distinguishable inputs, signed cases and safe-integer repair boundary",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "summary": "Canonical retained-input comparison ready at ?compare=1 with native motion, complete static calculation and concrete inspection instructions; focused checks pass. Human review remains required before generalization.",
+      "status": "complete"
+    }
+  ]
+}

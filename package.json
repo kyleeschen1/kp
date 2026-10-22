@@ -56,6 +56,8 @@
     "build:discourse-scrolltelling": "vite build --config vite.discourse-scrolltelling.config.ts",
     "visual:matrix-interpretations": "playwright test --config playwright.matrix-interpretations.config.ts --project=chromium --workers=1",
     "test:matrix-walk": "node --disable-warning=ExperimentalWarning --test tests/matrix-explanation-walk.test.ts",
+    "test:matrix-comparison": "node --disable-warning=ExperimentalWarning --test tests/matrix-input-comparison.test.ts",
+    "visual:matrix-comparison": "playwright test --config playwright.matrix-comparison.config.ts --project=chromium --workers=1",
     "visual:matrix-walk": "playwright test --config playwright.matrix-walk.config.ts --project=chromium --workers=1",
     "visual:matrix-authoring": "playwright test --config playwright.matrix-authoring.config.ts --workers=1",
     "build:matrix-interpretations": "vite build --config vite.matrix-interpretations.config.ts",

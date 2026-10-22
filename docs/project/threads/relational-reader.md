@@ -5,13 +5,15 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
-The [explanation-walk continuation](../2026-10-21-matrix-explanation-walk.md)
-tests whether authors can choose a useful argument order using existing native
-matrix checkpoints, including returns and a change of input. Canonical host:
-`/experiments/matrix-column-combinations/?walk=1`; [inspection instructions](../reviews/2026-10-21-matrix-explanation-walk.md)
-ask about pacing, the rewind and comparison without retaining the first result.
-This is an exemplar-local format awaiting human review before second-caller
-transfer, not a general score framework or a change to checked matrix JSON.
+The user questioned the explanatory value of the walk and approved the
+[input-difference comparison](../2026-10-21-input-difference-comparison.md).
+Canonical host: `/experiments/matrix-column-combinations/?compare=1`.
+It retains both mappings while deriving the lost input difference and its
+cancelling contributions. [Inspection instructions](../reviews/2026-10-21-input-difference-comparison.md)
+ask whether this explains equal outputs beyond the static baseline. The new
+mathematical relation is reusable; the native adapter is local discovery code,
+not proof of source-only authoring. The walk's transfer is superseded and must
+not resume automatically. JSON/editor/edition contracts are unchanged.
 
 The [matrix source-preview continuation](../2026-10-21-matrix-source-preview.md)
 closes the local edit–preview loop on the existing host at `?author=1`, with

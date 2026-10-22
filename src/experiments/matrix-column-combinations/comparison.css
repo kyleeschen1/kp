@@ -1,0 +1,17 @@
+.comparison-stage { position: relative; min-width: 350px; padding: 1rem; color: var(--kp-st-ink); font-size: var(--kp-equation-type-size); }
+.comparison-context { display: flex; align-items: center; justify-content: center; gap: 3rem; min-height: 160px; }
+.comparison-mappings { display: grid; gap: 1rem; }
+.comparison-mappings > div, .comparison-line, .comparison-term { display: flex; align-items: center; justify-content: center; gap: .5rem; }
+.comparison-term { gap: .3rem; }
+.comparison-work { position: relative; height: 115px; margin-top: 1rem; border-top: 1px solid var(--kp-st-rule); }
+.comparison-line { position: absolute; inset: 1rem 0 auto; min-height: 75px; }
+.comparison-contribution { top: 1rem; }
+.comparison-material { position: absolute; inset: 0; pointer-events: none; }
+.comparison-copy { position: absolute; left: 0; top: 0; }
+.comparison-stage [data-occ], .comparison-stage [data-vector] { display: inline-block; transform-origin: center; }
+/* Fusion animates delimiters as boxes. Establish that layout before measuring
+ * any copy endpoint, not halfway through preparation after those measurements. */
+.comparison-stage .katex-html :is(.mopen, .mclose) { display: inline-block; }
+.comparison-static { overflow-x: auto; }
+.comparison-static > div { margin: 1rem 0; }
+@media (max-width: 650px) { .comparison-context { gap: 1rem; } }

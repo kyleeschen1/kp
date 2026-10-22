@@ -2,9 +2,9 @@
   "id": "task.kp.matrix-explanation-walk",
   "kind": "task",
   "title": "Author an explanation through existing matrix checkpoints",
-  "status": "deferred",
+  "status": "superseded",
   "domain": "linear-algebra",
-  "summary": "HUMAN_CHECKPOINT: two verified packages; human review required before transfer",
+  "summary": "Sequencing capability retained as evidence; user-approved input-difference comparison replaces promotion of this format",
   "sourceRefs": [
     {
       "kind": "file",
