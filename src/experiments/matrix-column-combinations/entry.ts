@@ -11,7 +11,11 @@ const release = () => {
 // that pending import because it has not mounted yet; the entry owns this gap.
 const pagehide = (event: PageTransitionEvent) => { if (!event.persisted) release(); };
 window.addEventListener("pagehide", pagehide);
-if (new URL(location.href).searchParams.get("compare") === "1") {
+if (new URL(location.href).searchParams.get("argument") === "1") {
+  void import("./argument-host.ts").then(({ mountMatrixArgument }) => {
+    if (!disposed) dispose = mountMatrixArgument(root);
+  }).catch(error => { if (!disposed) { root.textContent = String(error); root.setAttribute("aria-busy", "false"); } });
+} else if (new URL(location.href).searchParams.get("compare") === "1") {
   void import("./comparison-host.ts").then(({ mountMatrixComparison }) => {
     if (!disposed) dispose = mountMatrixComparison(root);
   }).catch(error => { if (!disposed) { root.textContent = String(error); root.setAttribute("aria-busy", "false"); } });

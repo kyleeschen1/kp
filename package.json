@@ -57,6 +57,8 @@
     "visual:matrix-interpretations": "playwright test --config playwright.matrix-interpretations.config.ts --project=chromium --workers=1",
     "test:matrix-walk": "node --disable-warning=ExperimentalWarning --test tests/matrix-explanation-walk.test.ts",
     "test:matrix-comparison": "node --disable-warning=ExperimentalWarning --test tests/matrix-input-comparison.test.ts",
+    "test:matrix-argument": "node --disable-warning=ExperimentalWarning --test tests/matrix-argument.test.ts tests/matrix-input-comparison.test.ts",
+    "visual:matrix-argument": "playwright test --config playwright.matrix-argument.config.ts --project=chromium --workers=1",
     "visual:matrix-comparison": "playwright test --config playwright.matrix-comparison.config.ts --project=chromium --workers=1",
     "visual:matrix-comparison:cohort": "playwright test --config playwright.matrix-comparison.config.ts --workers=1",
     "visual:matrix-walk": "playwright test --config playwright.matrix-walk.config.ts --project=chromium --workers=1",

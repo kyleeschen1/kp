@@ -1,0 +1,36 @@
+{
+  "id": "task.kp.connected-matrix-argument",
+  "kind": "task",
+  "title": "Read and inspect one connected matrix argument",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-23-connected-matrix-argument.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-argument",
+      "status": "passed",
+      "scope": "Source and mathematical invariants",
+      "checkedAt": "2026-10-22T04:11:23.933Z",
+      "notes": "Nine tests pass after replacing unsupported parameter-property syntax with an erasable declaration. Real source identities, retained-weight checks, solution-family samples and rejected blocks are covered; prose is not a proof certificate."
+    },
+    {
+      "command": "npm run visual:matrix-comparison",
+      "status": "passed",
+      "scope": "Original comparison preservation",
+      "checkedAt": "2026-10-22T04:11:25.347Z",
+      "notes": "Eight Chromium cases pass after extracting the same playback into an embeddable owner."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "Original column reader preservation",
+      "checkedAt": "2026-10-22T04:11:26.102Z",
+      "notes": "All 29 Chromium cases pass after extracting reusable card markup."
+    }
+  ]
+}

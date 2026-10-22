@@ -2,9 +2,9 @@
   "id": "task.kp.comparison-transfer",
   "kind": "task",
   "title": "Compare preserved and lost input differences",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "linear-algebra",
-  "summary": "Checked contrasting explanation awaits human judgment; all scoped engineering work is complete.",
+  "summary": "Accepted as working reference; next work is connected argument composition.",
   "sourceRefs": [
     {
       "kind": "file",

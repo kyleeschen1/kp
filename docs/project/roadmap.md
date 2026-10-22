@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+The user accepts the current comparisons and approves the next authoring
+milestone: [one connected matrix argument](2026-10-23-connected-matrix-argument.md).
+`?argument=1` connects retained weight, lost differences and input recovery, with
+optional local inspections through the existing players. The
+[review evidence](reviews/2026-10-23-connected-matrix-argument.md) separates
+source composition from the host intervention it still required. Review this
+reading experience before a structurally different argument or shared-format
+promotion. The old walk and calculus polish stay parked; reusable authorship,
+not more fixed-format numerical examples, is the medium-term test.
+
 October 22: the user accepted the input-difference comparison and approved
 [bounded transfer and integration](2026-10-22-comparison-transfer.md). The
 contrast at `?compare=1&case=distinguished` changes one matrix entry: the same

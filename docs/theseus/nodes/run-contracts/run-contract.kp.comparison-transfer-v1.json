@@ -2,8 +2,8 @@
   "id": "run-contract.kp.comparison-transfer-v1",
   "kind": "run-contract",
   "title": "Accepted comparison transfer and integration",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: all three packages complete; no new promotion authorized before contrast review.",
+  "status": "resolved",
+  "summary": "User accepts current contrast as fine and approves next connected-argument milestone.",
   "sourceRefs": [
     {
       "kind": "file",

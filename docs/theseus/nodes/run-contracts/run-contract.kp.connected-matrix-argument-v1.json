@@ -1,0 +1,47 @@
+{
+  "id": "run-contract.kp.connected-matrix-argument-v1",
+  "kind": "run-contract",
+  "title": "Connected matrix argument exemplar",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.connected-matrix-argument.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-23-connected-matrix-argument.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-argument",
+    "npm run visual:matrix-argument",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Bounded authored argument, comparison player embedding, local inspection lifecycle and relevant validation"
+  ],
+  "disallowedWork": [
+    "Generalization before exemplar review, new solver or renderer family, calculus, superseded walk, external publication"
+  ],
+  "goal": "Read a complete argument about recovering inputs and inspect existing calculations without losing the claim or playback position",
+  "target": "task.kp.connected-matrix-argument",
+  "slices": [
+    {
+      "id": "composition",
+      "summary": "Connected source binds real matrix and comparison objects; all nine source tests, eight comparison and29 ordinary browser checks pass. Full types pass after erasable-syntax repair.",
+      "status": "complete"
+    },
+    {
+      "id": "reader",
+      "summary": "One live native inspection with exact in-session progress, cancellation, return focus and viewport; four Chromium tests pass. Shared style imports narrowed after capture and cost diagnosis.",
+      "status": "complete"
+    },
+    {
+      "id": "evidence",
+      "summary": "Verify final style integration and complete argument closures; record cost policy and authoring limits before human reading checkpoint.",
+      "status": "in-progress"
+    }
+  ]
+}

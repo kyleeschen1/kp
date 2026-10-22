@@ -5,6 +5,15 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The current comparisons are accepted working references. The approved next
+milestone is [one connected input-recovery argument](../2026-10-23-connected-matrix-argument.md),
+with a complete main reading and optional local inspections on the existing
+matrix-column host at `?argument=1`. Preserve the accepted motion. The first
+reading/return experience needs review before a second argument or promotion;
+[evidence](../reviews/2026-10-23-connected-matrix-argument.md) records the concrete
+authoring and embedding limits. This replaces more numerical substitutions as
+the next frontier; it does not resume the superseded walk or calculus polish.
+
 The input-difference exemplar is now accepted. Its
 [bounded continuation](../2026-10-22-comparison-transfer.md) adds a contrasting
 nonzero output difference through the same local six-phase source boundary.

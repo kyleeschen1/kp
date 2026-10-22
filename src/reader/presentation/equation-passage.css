@@ -1,12 +1,8 @@
 @import "./equation-rail.css";
+@import "./reasoning-actions.css";
 /* Shared by energy, scalar and fraction passages. Historical class names are
    retained as the compatibility contract, not separate subject styling. */
 .energy-derivation { --derivation-inspection-accent: #986417; margin-block: 1.5rem; }
-.energy-derivation-actions { display: flex; align-items: center; gap: .5rem; }
-.energy-derivation-actions button { font: inherit; color: #52616d; background: transparent; border: 0; padding: .2rem .5rem; min-height: 2.75rem; cursor: pointer; }
-.energy-derivation-actions button:hover:not(:disabled) { text-decoration: underline; text-underline-offset: .2em; }
-.energy-derivation-actions button:disabled { opacity: .45; cursor: default; }
-.energy-derivation-actions button:focus-visible { outline: 2px solid #236b8e; }
 .energy-derivation [hidden] { display: none !important; }
 .energy-derivation-chain { position: relative; margin-left: 2.75rem; }
 .energy-derivation-history { list-style: none; padding: 0; margin: 0; }

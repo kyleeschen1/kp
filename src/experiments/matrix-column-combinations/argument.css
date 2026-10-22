@@ -1,0 +1,13 @@
+@import "../../reader/presentation/reasoning-document-layout.css";
+@import "../../reader/presentation/reasoning-actions.css";
+
+/* Only document placement belongs here. Reading type, controls, and native math
+ * continue to use the shared reasoning and matrix presentation owners. */
+#matrix-story.kp-reasoning-document { max-width: 46rem; }
+#matrix-story.kp-reasoning-document h2 { color: inherit; }
+.argument-inspection { margin-block: 1.5rem; --reasoning-action-ink: var(--kp-st-ink); --reasoning-action-focus: var(--kp-st-focus); }
+.argument-inspection [data-inspection]:not([hidden]) { margin-top: 1rem; }
+.argument-inspection .matrix-card { margin-block: 1rem; }
+.argument-inspection .energy-derivation-actions { flex-wrap: wrap; }
+.argument-inspection .energy-derivation-actions button { white-space: normal; text-align: left; }
+.argument-inspection [data-return] { margin-top: 1rem; }
