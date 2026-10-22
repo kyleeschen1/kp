@@ -1,0 +1,37 @@
+{
+  "id": "task.kp.matrix-source-preview",
+  "kind": "task",
+  "title": "Preview and export checked matrix source edits without rebuilding",
+  "status": "ready",
+  "domain": "linear-algebra",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-source-preview.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-source",
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/matrix-column-source.test.ts tests/matrix-column-session.test.ts",
+      "status": "passed",
+      "scope": "session",
+      "checkedAt": "2026-10-22T00:26:09.534Z",
+      "notes": "Ten tests cover checked issuance, serialization, preservation, supersession and disposal."
+    }
+  ],
+  "expectedLearning": [
+    "Whether checked matrix file editing and displayed-source export can reuse the existing transactional and renderer boundaries without affecting read-only payloads."
+  ],
+  "allowedWork": [
+    "Optional source editor using accepted matrix compiler, player and prepared revision session."
+  ],
+  "disallowedWork": [
+    "No new math, visuals, dimensions, lessons, framework, services, deployment or agents."
+  ]
+}

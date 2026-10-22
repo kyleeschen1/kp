@@ -57,7 +57,7 @@
     "visual:matrix-interpretations": "playwright test --config playwright.matrix-interpretations.config.ts --project=chromium --workers=1",
     "build:matrix-interpretations": "vite build --config vite.matrix-interpretations.config.ts",
     "test:matrix-interpretations": "node --disable-warning=ExperimentalWarning --test tests/matrix-interpretations.test.ts tests/matrix-product.test.ts tests/typed-semantic-math.test.ts tests/matrix-column-story.test.ts",
-    "test:matrix-source": "node --disable-warning=ExperimentalWarning --test tests/matrix-column-source.test.ts tests/matrix-edition-location.test.ts tests/matrix-publication.test.ts tests/matrix-edition-cost.test.ts",
+    "test:matrix-source": "node --disable-warning=ExperimentalWarning --test tests/matrix-column-source.test.ts tests/matrix-column-session.test.ts tests/matrix-edition-location.test.ts tests/matrix-publication.test.ts tests/matrix-edition-cost.test.ts",
     "author:matrix-publication": "node --disable-warning=ExperimentalWarning scripts/build-matrix-edition.ts",
     "visual:matrix-editions": "playwright test --config playwright.matrix-editions.config.ts --workers=1",
     "measure:matrix-editions": "node --disable-warning=ExperimentalWarning scripts/measure-matrix-editions.ts",

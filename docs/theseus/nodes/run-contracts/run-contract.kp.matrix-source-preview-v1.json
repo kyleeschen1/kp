@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.matrix-source-preview-v1",
+  "kind": "run-contract",
+  "title": "Checked matrix source preview",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-source-preview.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-21-matrix-source-preview.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle"
+  ],
+  "allowedWork": [
+    "Bounded source-session APIs, optional preview host, failure recovery and complete-cost preservation."
+  ],
+  "disallowedWork": [
+    "New visuals, dimensions, arbitrary choreography, calculus changes, agents or external publication."
+  ],
+  "goal": "An author can load, explicitly apply, inspect and export matrix source edits through the accepted player.",
+  "target": "task.kp.matrix-source-preview",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Commit each verified package and push at least hourly and before handoff.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Complete the three approved packages.",
+    "Four-hour ceiling with forty-five-minute closeout reserve; stop implementation at reserve.",
+    "Stop for user pause, required subjective review or genuine authority/external blocker."
+  ],
+  "slices": [
+    {
+      "id": "session",
+      "summary": "Checked matrix drafts and transactional session reuse existing revision owner; ten focused tests pass.",
+      "status": "complete"
+    },
+    {
+      "id": "preview",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "status": "planned"
+    }
+  ]
+}
