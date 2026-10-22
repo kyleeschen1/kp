@@ -2,12 +2,16 @@
   "id": "task.kp.matrix-source-preview",
   "kind": "task",
   "title": "Preview and export checked matrix source edits without rebuilding",
-  "status": "ready",
+  "status": "resolved",
   "domain": "linear-algebra",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-10-21-matrix-source-preview.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-21-matrix-source-preview.md"
     }
   ],
   "verification": [
@@ -30,8 +34,110 @@
       "scope": "preview",
       "checkedAt": "2026-10-22T00:29:57.949Z",
       "notes": "Five cases cover explicit apply, downloads, import, supersession, failed preparation, cleanup and reader separation."
+    },
+    {
+      "command": "npm run visual:matrix-interpretations",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:33:56.074Z",
+      "notes": "29 Chromium checks preserve accepted motion, fonts, native endpoints, navigation and lifecycle."
+    },
+    {
+      "command": "npm run visual:matrix-authoring -- --grep production",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:33:57.374Z",
+      "notes": "Three engines pass production-only assets, projection source import, both column results, contributor identities, reverse samples, export and phone width."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:38:01.502Z",
+      "notes": "One failure: generated reachability scanned-file count remained5095 after adding the production browser spec (5096). Regenerated through the committed generator; no root or semantic change. Full rerun required."
+    },
+    {
+      "command": "npm run measure:authoring-boundaries -- --types --check",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:38:06.621Z",
+      "notes": "All seven complete consumers pass; former six preserved, new matrix session bounded at6000 gzip and66000 types/87000 instantiations."
+    },
+    {
+      "command": "npm run measure:matrix-editions",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:38:11.363Z",
+      "notes": "Independent reader107436 gzip bytes and all four complete editions pass unchanged ceilings; editor/session dependencies forbidden."
+    },
+    {
+      "command": "npm run measure:semantic-cost",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:38:14.572Z",
+      "notes": "All23 complete closures pass with explicit editor union and bounded shared-chunk policy amendments; ordinary readers reject compiler and editor owners."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:39:06.344Z",
+      "notes": "Final production application build passes; pre-existing large-chunk warnings remain."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:39:41.749Z",
+      "notes": "Final app, Node, test, Svelte and domain typechecks pass without weakening fixtures or guarantees."
+    },
+    {
+      "command": "npm run visual:matrix-authoring",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:39:43.132Z",
+      "notes": "18 checks pass across Chromium, Firefox and WebKit, including the production cohort. Final keyboard-focus refinement additionally passes the explicit-edits case in all three engines."
+    },
+    {
+      "command": "npm run visual:matrix-authoring -- --grep explicit",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:39:44.033Z",
+      "notes": "Final focused Enter navigation preserves link focus and held animation position in all three engines."
+    },
+    {
+      "command": "npm run test:matrix-source",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:41:37.845Z",
+      "notes": "All15 source, revision-session, edition-location, publication and negative-cost tests pass."
+    },
+    {
+      "command": "npm run visual:matrix-authoring -- --grep explicit",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:41:38.761Z",
+      "notes": "All six final edit/export and file-import cases pass across three engines; Enter navigation preserves focus and held progress."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:41:39.588Z",
+      "notes": "Generated file count5096 is current; all68 canonical roots retained."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-22T00:43:40.363Z",
+      "notes": "Clean complete rerun passes7405 tests after regenerating the inventory count; architecture, inference, catalogue and promotion gates pass."
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "Local matrix source edit, explicit Apply, both-column preview and separate source downloads complete through existing authorities. All three packages verified; no new animation or scope."
+  },
   "expectedLearning": [
     "Whether checked matrix file editing and displayed-source export can reuse the existing transactional and renderer boundaries without affecting read-only payloads."
   ],

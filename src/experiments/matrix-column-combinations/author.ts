@@ -39,15 +39,18 @@ export function mountColumnAuthor(root: HTMLElement) {
   const owner = session({ initial,
     async prepare(draft) {
       const selected = column, progress = active?.surface.progress() ?? 0;
+      const focus = document.activeElement instanceof HTMLAnchorElement && display.contains(document.activeElement)
+        ? document.activeElement : undefined;
       const scene = columnExampleFromProduct(draft.product, selected, draft.source.reading);
       await prepareColumnFonts();
       const prepared = await preparePreview(display, { className: "matrix-source-staging",
         html: columnPageHtml(scene, { selection: "author=1", hash: "" }),
         mount: async staging => mountColumnPlayer(staging, scene, progress, () => {}) });
-      return { ...prepared, selected };
+      return { ...prepared, selected, focus };
     },
     commit(prepared, draft) {
       const previous = active;
+      const restoreFocus = prepared.focus && document.activeElement === prepared.focus;
       // Retain the mounted root itself: the matrix player queries it on every
       // sample. Moving only its children would silently strand that ownership.
       prepared.staging.className = ""; prepared.staging.style.removeProperty("width");
@@ -62,6 +65,7 @@ export function mountColumnAuthor(root: HTMLElement) {
       root.dataset["revision"] = draft.revision; root.dataset["sourceId"] = draft.product.id;
       for (const link of display.querySelectorAll<HTMLAnchorElement>("[data-column-navigation] a"))
         link.setAttribute("aria-current", new URL(link.href).searchParams.get("column") === String(prepared.selected) ? "true" : "false");
+      if (restoreFocus) display.querySelector<HTMLAnchorElement>('[data-column-navigation] a[aria-current="true"]')?.focus({ preventScroll: true });
       revision.textContent = `Displayed revision: ${draft.revision}`;
       displayedDownload.disabled = false;
     }
@@ -82,6 +86,9 @@ export function mountColumnAuthor(root: HTMLElement) {
   file.onchange = async () => {
     invalidate(); const ticket = fileGeneration, selected = file.files?.[0];
     if (!selected) return;
+    // Release the picker selection immediately so the same file can be chosen
+    // again even when typing supersedes its asynchronous read.
+    file.value = "";
     try {
       if (selected.size > authorSourceByteLimit) throw new Error("Keep source within 100,000 UTF-8 bytes.");
       const text = new TextDecoder("utf-8", { fatal: true }).decode(await selected.arrayBuffer());
@@ -89,7 +96,7 @@ export function mountColumnAuthor(root: HTMLElement) {
       editor.value = text; status.textContent = "File loaded into draft; Apply to check and preview it.";
     } catch (error) {
       if (!disposed && ticket === fileGeneration) status.textContent = `File not loaded: ${error instanceof Error ? error.message : String(error)}`;
-    } finally { if (ticket === fileGeneration) file.value = ""; }
+    }
   };
   function download(text: string, name: string) {
     const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));

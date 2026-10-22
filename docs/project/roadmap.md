@@ -25,6 +25,17 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 21 [matrix edit–preview continuation](2026-10-21-matrix-source-preview.md)
+adds optional `?author=1` to the existing matrix-column host. Authors can load or
+edit JSON, explicitly apply it, compare both columns and download draft versus
+displayed source without rebuilding. The accepted player and mathematical model
+remain responsible for the animation; failed edits retain the working preview.
+See [workflow](authoring/matrix-column-authoring-packet.md) and
+[evidence and cost accounting](reviews/2026-10-21-matrix-source-preview.md).
+This removes editing friction inside the existing finite numeric 2×2 sequence;
+it does not expand choreography or validate editorial claims. Reload intentionally
+restores the starter; downloaded source feeds immutable local editions.
+
 October 21 authoring continuation: [checked matrix source editions](2026-10-21-matrix-source-editions.md)
 remove the registry/module-edit requirement for the accepted numerical 2×2
 column-combination explanation. `author:check` checks one JSON source;

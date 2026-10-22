@@ -40,7 +40,7 @@ export async function measureMatrixEditions() {
 
 export function checkMatrixEditionCosts(report: Awaited<ReturnType<typeof measureMatrixEditions>>) {
   if (report.reader.gzip > budgets.readerJsGzip || report.reader.raw > budgets.readerJsRaw) throw new Error("Complete matrix reader exceeds budget; diagnose before amending.");
-  if (report.reader.modules.some(path => /content\/authoring\/|src\/(?:editor|authoring\/examples)\/|matrix-column-combinations\/(?:entry|page|basis-composition)\.ts|matrix-sources\.ts|research\/|node_modules\/three\//.test(path))) {
+  if (report.reader.modules.some(path => /content\/authoring\/|src\/(?:editor|authoring\/examples)\/|matrix-column-combinations\/(?:entry|page|author|basis-composition)\.ts|authoring\/(?:matrix-columns\/session|prepared-revision-session|staged-preview)\.ts|matrix-sources\.ts|research\/|node_modules\/three\//.test(path))) {
     throw new Error("Matrix edition acquired registry, authored lesson, editor or unrelated domain dependencies.");
   }
   const cohort = report.editions.map(edition => `${edition.source}:${edition.mode}`).sort();

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.matrix-source-preview-v1",
   "kind": "run-contract",
   "title": "Checked matrix source preview",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -49,7 +50,8 @@
     },
     {
       "id": "integration",
-      "status": "planned"
+      "summary": "Three-engine editor and production checks,29 canonical reader checks,7405 repository tests, full types/build and complete cost gates pass. Workflow and explicit budget amendments recorded.",
+      "status": "complete"
     }
   ]
 }

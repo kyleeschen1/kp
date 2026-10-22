@@ -5,6 +5,16 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+The [matrix source-preview continuation](../2026-10-21-matrix-source-preview.md)
+closes the local edit–preview loop on the existing host at `?author=1`, with
+explicit Apply, last-displayed revision ownership and separate draft/displayed
+downloads. It reuses the accepted player and shared prepared-revision owner.
+The [authoring packet](../authoring/matrix-column-authoring-packet.md) connects
+that workflow to immutable editions; [evidence](../reviews/2026-10-21-matrix-source-preview.md)
+distinguishes checked numerical structure from unverified prose and preserves
+read-only payload accounting. No new narrative topology or animation family is
+implied by this capability.
+
 The approved [matrix source-edition continuation](../2026-10-21-matrix-source-editions.md)
 lets an author check a numerical 2×2 JSON source and build a self-contained local
 reading or interactive edition without registering a lesson or changing the

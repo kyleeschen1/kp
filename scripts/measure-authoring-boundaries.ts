@@ -6,7 +6,7 @@ import { collectKpRuntimeImportClosure } from './runtime-import-closure.ts';
 import ts from 'typescript';
 import budgets from './authoring-boundary-budgets.json' with { type: 'json' };
 
-const consumers = ['matrices', 'algebra-source', 'algebra-compile', 'algebra-editor', 'matrix-source', 'matrix-compile'] as const;
+const consumers = ['matrices', 'algebra-source', 'algebra-compile', 'algebra-editor', 'matrix-source', 'matrix-compile', 'matrix-editor'] as const;
 const reports = [];
 const config = ts.readConfigFile('tsconfig.test.json', ts.sys.readFile);
 if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, '\n'));

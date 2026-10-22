@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
+  "sourcePreviewAmendment": "October21 optional matrix source preview retains the 117000 all-reader ceiling as matrix-reader-all, adds the complete matrix-author consumer at118000, and expands the still-complete matrix-all union to124000. Shared-chunk export/compression effects move row-composition-variation to124140 and collection-polynomials to112002; their explicit bounded ceilings become125000 and113000. No CSS ceiling changes. See docs/project/reviews/2026-10-21-matrix-source-preview.md.",
   "rationale": "October 21 measured matrix-reader continuation: preserve selected-source ceilings at111000, separate composition112387 from all-source union115540, bound them at113500 and117000. Baseline1689f1ab1 already exceeded row-guided and row-composition limits; current measured117098/123137/124008 justify bounded118000/124000/125000 ceilings for guided/composition/sequence. Other limits and all CSS ceilings remain. See docs/project/reviews/2026-10-21-matrix-reader-continuation.md for complete before/after attribution and the explicit policy amendment. October13 contrast/union limits remain unchanged.",
   "entries": {
     "dot-product-passage": { "jsGzip": 100000, "cssGzip": 16000 },
@@ -8,18 +9,20 @@
     "row-workbench": { "jsGzip": 110000, "cssGzip": 16000 },
     "row-guided": { "jsGzip": 118000, "cssGzip": 16000 },
     "row-composition": { "jsGzip": 124000, "cssGzip": 17000 },
-    "row-composition-variation": { "jsGzip": 124000, "cssGzip": 17000 },
+    "row-composition-variation": { "jsGzip": 125000, "cssGzip": 17000 },
     "row-composition-sequence": { "jsGzip": 125000, "cssGzip": 17000 },
     "row-composition-generator": { "jsGzip": 130000, "cssGzip": 17000 },
     "row-composition-contrast": { "jsGzip": 127000, "cssGzip": 17000 },
-    "collection-polynomials": { "jsGzip": 112000, "cssGzip": 16000 },
+    "collection-polynomials": { "jsGzip": 113000, "cssGzip": 16000 },
     "collection-system": { "jsGzip": 113000, "cssGzip": 16000 },
     "collection-reordered": { "jsGzip": 113000, "cssGzip": 16000 },
     "matrix-column-product": { "jsGzip": 111000, "cssGzip": 16000 },
     "matrix-column-combinations": { "jsGzip": 111000, "cssGzip": 16000 },
     "matrix-examples": { "jsGzip": 1200, "cssGzip": 16000 },
     "matrix-composition": { "jsGzip": 113500, "cssGzip": 16000 },
-    "matrix-all": { "jsGzip": 117000, "cssGzip": 16000 }
+    "matrix-reader-all": { "jsGzip": 117000, "cssGzip": 16000 },
+    "matrix-author": { "jsGzip": 118000, "cssGzip": 16000 },
+    "matrix-all": { "jsGzip": 124000, "cssGzip": 16000 }
   },
   "menuWithDefaultChild": { "jsGzip": 113000, "cssGzip": 32000 },
   "forbiddenModuleFragments": ["research/", "src/experiments/la-knowledge-graph/", "node_modules/three/", "src/editor/", "src/experiments/semantic-cost/", "protocols/dev-review", "protocols/linear-problem", "protocols/runtime-schema.ts"],

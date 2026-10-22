@@ -24,6 +24,29 @@ Scientific notation in factors or derived values is a repair gap: the accepted
 renderer supports ordinary decimal numerals, not exponent choreography.
 `npm run test:matrix-source` checks this boundary and semantic identity.
 
+## Edit and preview without rebuilding
+
+Open `http://localhost:8000/experiments/matrix-column-combinations/?author=1`.
+The accepted dependent-columns source is the starter. Load a local JSON file or
+edit the textarea, then select **Apply source**. Loading and typing change only the
+draft. Apply checks it and prepares the existing player before replacing the
+display; errors leave the previous animation usable. Result column 1/2 compares
+the displayed source at the held animation position, even if the draft is invalid.
+
+**Download draft** saves the exact textarea, including incomplete work.
+**Download displayed source** saves normalized checked JSON for the revision
+actually displayed. Feed that file to the edition command below. Files are never
+overwritten, and there is no autosave: reload restores the starter. Use a built
+edition for durable revision-pinned reading URLs. Text remains editorial; editing
+the factors does not update or verify explanatory claims automatically.
+
+`compile`, `check`, `serialize` in `src/authoring/matrix-columns/compile.ts` and
+`session` in the adjacent `session.ts` expose the checked source/revision boundary.
+The host reuses `columnExampleFromProduct` and `mountColumnPlayer`; it does not
+author geometry or motion. `npm run visual:matrix-authoring` checks file import,
+revision ownership, export, failures, cleanup and production playback across the
+supported browser engines. Ordinary readers do not load this editor.
+
 ## Make a local edition
 
 Run `npm run author:matrix-publication -- --source <file.json>` for a complete

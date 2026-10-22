@@ -32,8 +32,10 @@ test("explicit edits, both columns and downloads bind the displayed revision; re
   await expect(page.locator("h1 b")).toHaveCount(0);
   await expect(page.getByRole("slider")).toHaveValue("0.63");
   for (const column of [1, 0, 1]) {
-    await page.locator("[data-column-navigation] a").nth(column).click();
+    await page.locator("[data-column-navigation] a").nth(column).focus();
+    await page.locator("[data-column-navigation] a").nth(column).press("Enter");
     await expect(page.locator("#comb-player")).toHaveAttribute("data-column", String(column));
+    await expect(page.locator("[data-column-navigation] a").nth(column)).toBeFocused();
     await expect(page.getByRole("slider")).toHaveValue("0.63");
     await seek(page, 1); await seek(page, 0); await seek(page, 0.63);
   }
@@ -47,7 +49,7 @@ test("explicit edits, both columns and downloads bind the displayed revision; re
 });
 
 test("file import is bounded, explicit and round trips through the displayed download", async ({ page }) => {
-  await start(page); const source = example(); source.id = "imported"; source.reading.title = "Imported";
+  await start(page); const source = { ...example(), id: "imported" }; source.reading.title = "Imported";
   const file = page.locator("[data-matrix-file]");
   await file.setInputFiles({ name: "source.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(source)) });
   await expect(status(page)).toContainText("File loaded");
@@ -73,28 +75,38 @@ test("typing supersedes a slow file read and a pending preview", async ({ page }
     File.prototype.arrayBuffer = async function () {
       document.documentElement.dataset["filePending"] = "true";
       await new Promise<void>(resolve => window.addEventListener("release-file", () => resolve(), { once: true }));
-      return read.call(this);
+      const bytes = await read.call(this);
+      document.documentElement.dataset["fileReadDone"] = "true";
+      return bytes;
     };
   });
   await page.locator("[data-matrix-file]").setInputFiles({ name: "old.json", mimeType: "application/json", buffer: Buffer.from("old file") });
   await expect(page.locator("html")).toHaveAttribute("data-file-pending", "true");
   await draft(page).fill("new typing"); await page.evaluate(() => window.dispatchEvent(new Event("release-file")));
+  await expect(page.locator("html")).toHaveAttribute("data-file-read-done", "true");
   await expect(draft(page)).toHaveValue("new typing");
+  await expect(page.locator("[data-matrix-file]")).toHaveValue("");
   const before = await page.locator("#comb-player").getAttribute("data-revision");
   await page.evaluate(() => {
+    const observe = ResizeObserver.prototype.observe;
+    ResizeObserver.prototype.observe = function (target, options) {
+      document.documentElement.dataset["preparedCandidate"] = "true";
+      observe.call(this, target, options);
+    };
     const load = document.fonts.load.bind(document.fonts);
     document.fonts.load = async (...args) => {
       await new Promise<void>(resolve => window.addEventListener("release-fonts", () => resolve(), { once: true }));
       return load(...args);
     };
   });
-  const source = example(); source.id = "superseded";
+  const source = { ...example(), id: "superseded" };
   await draft(page).fill(JSON.stringify(source)); await page.getByRole("button", { name: "Apply source", exact: true }).click();
   await expect(status(page)).toHaveText("Preparing preview…");
   await draft(page).fill("newer"); await page.evaluate(() => window.dispatchEvent(new Event("release-fonts")));
+  await expect(page.locator("html")).toHaveAttribute("data-prepared-candidate", "true");
+  await expect(page.locator(".matrix-source-staging")).toHaveCount(0);
   await expect(page.locator("#comb-player")).toHaveAttribute("data-revision", before!);
   await expect(status(page)).toContainText("Draft changed");
-  await expect(page.locator(".matrix-source-staging")).toHaveCount(0);
 });
 
 test("mount failure preserves usable preview; repeated replacements and disposal release owners", async ({ page }) => {

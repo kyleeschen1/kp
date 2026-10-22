@@ -11,7 +11,8 @@ test("matrix cost gates reject omitted consumers, forbidden authority and hidden
   checkMatrixEditionCosts(report());
   const missing = report(); missing.editions.pop(); assert.throws(() => checkMatrixEditionCosts(missing), /every matrix edition/);
   const duplicate = report(); duplicate.editions[3] = duplicate.editions[2]!; assert.throws(() => checkMatrixEditionCosts(duplicate), /every matrix edition/);
-  for (const module of ["content/authoring/linear-algebra/dependent-columns.ts", "src/editor/main.ts", "src/experiments/matrix-column-combinations/page.ts"]) {
+  for (const module of ["content/authoring/linear-algebra/dependent-columns.ts", "src/editor/main.ts", "src/experiments/matrix-column-combinations/page.ts",
+    "src/experiments/matrix-column-combinations/author.ts", "src/authoring/matrix-columns/session.ts", "src/authoring/staged-preview.ts"]) {
     const forbidden = report(); forbidden.reader.modules.push(module); assert.throws(() => checkMatrixEditionCosts(forbidden), /dependencies/);
   }
   const reader = report(); reader.reader.gzip = 112001; assert.throws(() => checkMatrixEditionCosts(reader), /reader exceeds/);

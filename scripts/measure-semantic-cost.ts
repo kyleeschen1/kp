@@ -16,14 +16,16 @@ const matrixSources: Readonly<Record<string, readonly string[]>> = {
   'matrix-dependent-columns': ['content/authoring/linear-algebra/dependent-columns.ts'],
   'matrix-numeric': ['content/authoring/convergence/matrices.ts']
 };
-const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition', 'matrix-all', ...Object.keys(matrixSources)];
+const compositionSources = ['src/experiments/matrix-column-combinations/basis-composition.ts', 'src/experiments/matrix-column-combinations/basis-composition-view.ts'];
+const readerSources = [...compositionSources, ...Object.values(matrixSources).flat()];
+const pages = ['dot-product-passage', 'rectangular-product', 'rectangular-default', 'row-workbench', 'row-guided', 'row-composition', 'row-composition-variation', 'row-composition-sequence', 'row-composition-generator', 'row-composition-contrast', 'collection-polynomials', 'collection-system', 'collection-reordered', 'matrix-column-product', 'matrix-column-combinations', 'matrix-examples', 'matrix-composition', 'matrix-reader-all', 'matrix-author', 'matrix-all', ...Object.keys(matrixSources)];
 const closures = [];
 for (const page of pages) {
   const collection = page.startsWith('collection-');
   const row = page.startsWith('row-');
   const selectedMatrix = page === 'matrix-composition'
-    ? ['src/experiments/matrix-column-combinations/basis-composition.ts', 'src/experiments/matrix-column-combinations/basis-composition-view.ts']
-    : matrixSources[page];
+    ? compositionSources : page === 'matrix-reader-all' ? readerSources
+    : page === 'matrix-author' ? ['src/experiments/matrix-column-combinations/author.ts'] : matrixSources[page];
   const html = `experiments/${page === 'matrix-all' || selectedMatrix ? 'matrix-column-combinations' : collection || row || page === 'rectangular-default' ? 'rectangular-product' : page}/index.html`;
   // Count complete selected closures and retain an explicit all-source union.
   // Lazy declarations alone do not make unrelated sources part of activation.
@@ -37,6 +39,12 @@ for (const page of pages) {
     : collection ? ['src/experiments/rectangular-product/pouring-player.ts', 'src/experiments/rectangular-product/polynomial-view.ts',
     ...(page === 'collection-system' ? ['src/experiments/rectangular-product/linear-system-source.ts'] : page === 'collection-reordered' ? ['src/experiments/rectangular-product/collection-variation.ts'] : [])] : []);
   const files = [...new Set([html, ...collectKpHtmlBundleFiles(await readFile(`${root}/${html}`, 'utf8'), manifest, page === 'matrix-all' || page === 'rectangular-product'), ...collectKpBundleManifestFiles(manifest, resolveKpBundleActivationRoots(manifest, inventory, activation))])];
+  if (page !== 'matrix-author' && page !== 'matrix-all') {
+    const reached = new Set(files);
+    if (inventory.some(chunk => reached.has(chunk.file) && chunk.modules.some(path =>
+      /matrix-column-combinations\/author\.ts|authoring\/(?:matrix-columns\/(?:source|compile|session)|prepared-revision-session|staged-preview)\.ts/.test(path))))
+      throw new Error(`Read-only consumer acquired editor ownership: ${page}`);
+  }
   const measured = await Promise.all(files.map(async file => {
     const data = await readFile(`${root}/${file}`);
     return { file, raw: data.byteLength, gzip: gzipSync(data).byteLength };
@@ -49,7 +57,7 @@ const modules = [...new Set(inventory.filter(chunk => reachableFiles.has(chunk.f
 for (const module of modules) if (budgets.forbiddenModuleFragments.some(part => module.includes(part))) {
   throw new Error(`Unrelated module reached ordinary animations: ${module}`);
 }
-console.log(JSON.stringify({ measuredClosures: closures.map(({ files: _files, ...entry }) => entry) }, null, 2));
+console.log(JSON.stringify({ measuredClosures: closures.map(({ page, js, css }) => ({ page, jsGzip: js.gzip, cssGzip: css.gzip })) }));
 // Preserve complete evidence even when a ceiling fails; diagnosis must not
 // depend on relaxing the gate before its offending closure can be inspected.
 await mkdir('tmp/codex/semantic-cost', { recursive: true });
@@ -99,4 +107,4 @@ const report = { schemaVersion: 1, node: process.version, closures, menuWithDefa
   exclusions: ['Fonts are measured from actual browser requests separately.', 'Closure sizes are compressed estimates, not network transfers.', 'Node construction timings are local samples, not browser timings or a universal scaling claim.'] };
 await mkdir('tmp/codex/semantic-cost', { recursive: true });
 await writeFile('tmp/codex/semantic-cost/closure.json', JSON.stringify(report, null, 2) + '\n');
-console.log(JSON.stringify({ closures: closures.map(({ files: _files, ...entry }) => entry), menuWithDefaultChild, construction, serialization: report.serializationIllustration }, null, 2));
+console.log(JSON.stringify({ checkedClosures: closures.length, menuWithDefaultChild, construction, serialization: report.serializationIllustration }, null, 2));
