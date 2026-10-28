@@ -18,8 +18,10 @@
 /* Native endpoint measurement survives a host's generic [hidden] rule. The
    canonical stage owns visibility; hidden transitions remain measurable. */
 .kp-reader-equation-stage .kp-reader-equation-transition[data-kp-reader-transition] { display: block !important; }
-.kp-reader-equation-transition { position: absolute; inset: 0; visibility: hidden; }
-.kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
+/* Retained material can explicitly set visibility:visible. Parent opacity
+   prevents that paint from escaping an inactive, still-measurable transition. */
+.kp-reader-equation-transition { position: absolute; inset: 0; visibility: hidden; opacity: 0; }
+.kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; opacity: 1; }
 .kp-reader-equation-fit-surface, .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { position: absolute; inset: 0; }
 .kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface {
   /* Reader cards cap display type by their own width; the fit transform then

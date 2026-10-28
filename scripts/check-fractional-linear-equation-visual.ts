@@ -4,7 +4,7 @@ import path from "node:path";
 import type { Page } from "playwright";
 
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
-import { assertFractionalEvaluationPaint } from "./fractional-linear-theme-comparison.ts";
+import { assertFractionalEvaluationPaint, inspectPaint } from "./fractional-linear-theme-comparison.ts";
 
 const outputRoot = path.resolve(
   process.env["KP_FRACTIONAL_LINEAR_VISUAL_OUTPUT"]
@@ -17,7 +17,7 @@ const harness = createKpVisualReviewHarness(
 );
 const checkpoints = new Set([0, 167, 333, 500, 667, 833, 1_000]);
 const progressSamples = process.argv.includes("--smoke")
-  ? [0, 83, 167, 233, 333, 417, 500, 583, 667, 750, 833, 917, 970, 1_000]
+  ? [0, 83, 167, 233, 333, 417, 500, 501, 510, 530, 550, 583, 667, 750, 833, 917, 970, 1_000]
   : uniqueSorted([
   ...Array.from({ length: 31 }, (_, index) => Math.round(index * 1_000 / 30)),
   ...checkpoints
@@ -43,7 +43,10 @@ try {
 }
 
 async function checkStandardFrames(page: Page): Promise<void> {
-  const samples = [];
+  const samples: (Awaited<ReturnType<typeof sampleVisualFrame>> & {
+    readonly paint: Awaited<ReturnType<typeof inspectPaint>>;
+    readonly traversal: "direct" | "scroll";
+  })[] = [];
   for (const progress of progressSamples) {
     const url = new URL("/reader/solve-fractional-linear/", harness.baseUrl);
     url.searchParams.set("kpLesson", "lesson.solve-x.fractional-linear");
@@ -51,7 +54,7 @@ async function checkStandardFrames(page: Page): Promise<void> {
     url.searchParams.set("kpProgress", String(progress));
     await page.goto(url.toString(), { waitUntil: "networkidle" });
     await settle(page);
-    samples.push(await sampleVisualFrame(page, progress));
+    samples.push({ ...await sampleVisualFrame(page, progress), paint: await inspectPaint(page), traversal: "direct" });
     await assertFractionalEvaluationPaint(page);
     if (checkpoints.has(progress) || process.argv.includes("--smoke")) {
       await page.locator("[data-kp-reader-equation-stage]").screenshot({
@@ -65,9 +68,9 @@ async function checkStandardFrames(page: Page): Promise<void> {
     waitUntil: "networkidle"
   });
   await settle(page);
-  for (const [index, progress] of [233, 417, 750, 917, 970, 1_000, 970, 917, 750, 417, 233].entries()) {
+  for (const [index, progress] of [233, 417, 500, 501, 510, 530, 550, 583, 750, 917, 970, 1_000, 970, 917, 750, 583, 550, 530, 510, 501, 500, 417, 233].entries()) {
     await scrollToSemanticProgress(page, progress);
-    samples.push(await sampleVisualFrame(page, progress));
+    samples.push({ ...await sampleVisualFrame(page, progress), paint: await inspectPaint(page), traversal: "scroll" });
     await assertFractionalEvaluationPaint(page);
     await page.locator("[data-kp-reader-equation-stage]").screenshot({
       path: path.join(outputRoot, `scroll-${index}-${progress}.png`)
@@ -77,7 +80,20 @@ async function checkStandardFrames(page: Page): Promise<void> {
     ...pageErrors.map((message) => `browser error: ${message}`),
     ...samples.flatMap((sample) => sample.failures.map((failure) =>
       `progress ${sample.requestedProgress}: ${failure}`
-    ))
+    )),
+    ...samples.flatMap((sample) => sample.paint.glyphs
+      .filter((glyph) => glyph.transitionActive === "false" && glyph.opacity > 0)
+      .map((glyph) => `${sample.traversal} progress ${sample.requestedProgress}: inactive ${glyph.transitionId} still paints ${glyph.text}`)),
+    ...samples.filter((sample) => sample.traversal === "scroll").flatMap((sample) => {
+      const direct = samples.find((candidate) => candidate.traversal === "direct" &&
+        candidate.requestedProgress === sample.requestedProgress);
+      if (direct === undefined) return [];
+      const visible = (frame: typeof sample) => frame.paint.glyphs
+        .filter((glyph) => glyph.opacity > 0 && glyph.width > 0 && glyph.height > 0)
+        .map(({ id, text, opacity }) => ({ id, text, opacity })).sort((a, b) => a.id.localeCompare(b.id));
+      return JSON.stringify(visible(sample)) === JSON.stringify(visible(direct)) ? [] :
+        [`progress ${sample.requestedProgress}: scrolling paints different symbols than a direct seek`];
+    })
   ];
   const report = {
     schemaVersion: "kp.fractional-linear-equation-visual-check.v3",

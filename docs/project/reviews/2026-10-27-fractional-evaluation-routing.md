@@ -1,5 +1,9 @@
 # Fractional reader: execute the registered evaluation
 
+Follow-up: the [inactive-paint repair](2026-10-27-fractional-inactive-paint.md)
+addresses a separate retained-session duplication when scrolling into the next
+introduction. The routing checks below did not cover that inactive paint.
+
 The user approved tracing and repairing the last-step overlap while preserving
 standard animations. This follows the [matched-theme diagnosis](2026-10-27-fractional-theme-comparison.md).
 

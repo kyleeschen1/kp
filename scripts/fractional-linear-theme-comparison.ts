@@ -96,13 +96,13 @@ function assertEvaluationPaint(sample: Awaited<ReturnType<typeof inspectPaint>>)
   }
 }
 
-async function inspectPaint(page: Page) {
+export async function inspectPaint(page: Page) {
   return page.evaluate(() => {
     const stage = document.querySelector<HTMLElement>("[data-kp-reader-equation-stage]")!;
     const roots = stage.querySelectorAll<HTMLElement>([
       "[data-kp-reader-equation-material-fragment-id]",
       "[data-kp-equation-material-owner-id]",
-      "[data-kp-reader-transition-active=true] [data-kp-reader-equation-anchor-id]"
+      "[data-kp-reader-equation-anchor-id]"
     ].join(","));
     const glyphs = [...roots].flatMap((root) => {
       const id = root.dataset["kpReaderEquationMaterialFragmentId"] ??
@@ -121,7 +121,10 @@ async function inspectPaint(page: Page) {
           }
           if (style.visibility !== "visible") opacity = 0;
           const rect = node.getBoundingClientRect();
+          const transition = node.closest<HTMLElement>("[data-kp-reader-transition]");
           return { id, role, text: node.textContent, opacity,
+            transitionId: transition?.dataset["kpReaderTransition"] ?? null,
+            transitionActive: transition?.dataset["kpReaderTransitionActive"] ?? null,
             color: style.color, font: style.fontFamily, weight: style.fontWeight,
             size: style.fontSize, stroke: style.getPropertyValue("-webkit-text-stroke-width"),
             shadow: style.textShadow, filters,
