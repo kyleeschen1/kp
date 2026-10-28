@@ -78,3 +78,27 @@ four operation interiors, four-layer maximum, all-layer retirement on resize and
 font invalidation, and complete pagehide disposal. The 41-point smoke, app/test/
 script types and architecture also passed. This does not activate the older
 measured-scene/pure-plan cache for this family.
+
+## Bounded advance preparation
+
+The same builder can prepare one hidden neighbor after 120ms without foreground
+updates, only when requestIdleCallback reports more than 45ms. Browsers without
+that facility keep synchronous first use. No timeout forces a missed idle budget.
+Width, height, font, layout ownership and disposal invalidate queued work. Once
+a preparation exceeds 45ms, this mounted reader stops speculating. Idle budgets
+are advisory: the first cold preparation can still exceed them (about 65ms in
+one instrumented run); this is not cooperative or interruptible compilation.
+
+Prepared material must inherit normal visibility while its inactive host retains
+zero opacity. The cold/warm smoke comparison caught frozen hidden glyphs in the
+first candidate; the shared preparation boundary now samples normal subtree
+visibility under a verified zero-opacity host and restores it in a finally block.
+No visible or accessible ownership changes during that work. The pressure harness
+forces an idle opportunity to prove this path actually executes, then checks all
+12 reversal cycles and lifecycle invalidations. Performance measurements retain
+real browser idle budgets. The queue's unit checks cover insufficient budget,
+timeout, foreground activity, stale geometry and cancellation (8 passed).
+
+The 41-point cold/warm smoke, full types, architecture and production build pass.
+The direct-jump assertion now separates the one destination build from explicitly
+counted hidden-neighbor builds; it still forbids replay of skipped states.

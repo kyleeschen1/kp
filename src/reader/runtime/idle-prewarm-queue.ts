@@ -22,6 +22,9 @@ export interface KpReaderIdlePrewarmQueue {
 export function createKpReaderIdlePrewarmQueue(input: {
   readonly clock: KpReaderIdlePrewarmClock;
   readonly maximumPending?: number | undefined;
+  readonly minimumIdleMs?: number | undefined;
+  readonly allowTimeout?: boolean | undefined;
+  readonly isReady?: (() => boolean) | undefined;
 }): KpReaderIdlePrewarmQueue {
   const maximumPending = input.maximumPending ?? 2;
   if (!Number.isSafeInteger(maximumPending) || maximumPending <= 0) {
@@ -46,7 +49,9 @@ export function createKpReaderIdlePrewarmQueue(input: {
       if (disposed || requestedGeneration !== generation) return;
       // One bounded task may use a timed-out idle callback; otherwise leave
       // foreground frames alone until the browser exposes actual idle budget.
-      if (!deadline.didTimeout && deadline.timeRemaining() <= 1) {
+      if (input.isReady?.() === false ||
+          (!(deadline.didTimeout && input.allowTimeout !== false) &&
+            deadline.timeRemaining() <= (input.minimumIdleMs ?? 1))) {
         request();
         return;
       }

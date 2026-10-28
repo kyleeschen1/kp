@@ -450,7 +450,7 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
           readerCanonicalEquationSessionAdapter
             .observeKpNativeKatexRenderedScene,
         enableAdjacentPrewarm:
-          lessonDescriptor.id === "fraction-composition",
+          lessonDescriptor.id === "fraction-composition" || lessonDescriptor.focusPaint === 'native-color',
         enablePurePlanCache:
           lessonDescriptor.id === "fraction-composition",
         preparedCapacity: lessonDescriptor.focusPaint === 'native-color' ? 4 : 1,
@@ -1109,7 +1109,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     });
     // Neighbors remain visibility:hidden; prewarming may measure their settled
     // paint but never grants them material, native, or accessibility authority.
-    readerCanonicalEquationSession.prewarm(adjacent);
+    readerCanonicalEquationSession.prewarm(adjacent, () => lastMeasuredLayout === layout);
   }
   if (canonicalEquationSessionApplied) {
     materialLayer.sync([]);

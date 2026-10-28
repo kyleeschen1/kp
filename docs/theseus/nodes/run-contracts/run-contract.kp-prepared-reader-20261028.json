@@ -39,6 +39,12 @@
       "status": "passed",
       "scope": "Twelve bidirectional cycles preserve visible glyph geometry and identity with four builds; resize, font invalidation and pagehide retire all owned layers. Smoke 41 and architecture/types passed.",
       "checkedAt": "2026-10-28T21:48:25.910Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --preparation --base-url=http://127.0.0.1:8000; npm run typecheck",
+      "status": "passed",
+      "scope": "Forced idle ownership, twelve reverse cycles, resize/font/disposal; full types; 41 cold/warm smoke; queue eight units; architecture and production build.",
+      "checkedAt": "2026-10-28T22:01:27.068Z"
     }
   ],
   "allowedWork": [
@@ -71,7 +77,8 @@
     {
       "id": "ahead",
       "title": "Bounded-advance-preparation",
-      "status": "planned"
+      "summary": "One hidden neighbor may reuse complete preparation only after quiet and actual idle budget; cancellations and overrun stop guard speculation. Frozen hidden paint defect fixed and pressure tested.",
+      "status": "complete"
     },
     {
       "id": "pressure",

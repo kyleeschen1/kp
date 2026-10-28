@@ -9,6 +9,28 @@ import {
   type KpReaderIdleDeadline
 } from "../src/reader/runtime/public-api.ts";
 
+test('expensive preparation requires quiet and enough actual idle budget, even after timeout', () => {
+  let callback: ((deadline: KpReaderIdleDeadline) => void) | undefined;
+  let ready = false, runs = 0, cancelled = 0;
+  const queue = createKpReaderIdlePrewarmQueue({ minimumIdleMs: 45, allowTimeout: false,
+    isReady: () => ready,
+    clock: { request: run => { callback = run; return 1; }, cancel: () => { cancelled++; } }
+  });
+  queue.replace([{ id: 'next', run: () => { runs++; } }]);
+  callback!({ didTimeout: false, timeRemaining: () => 50 });
+  assert.equal(runs, 0);
+  ready = true;
+  callback!({ didTimeout: true, timeRemaining: () => 0 });
+  callback!({ didTimeout: false, timeRemaining: () => 20 });
+  assert.equal(runs, 0);
+  callback!({ didTimeout: false, timeRemaining: () => 50 });
+  assert.equal(runs, 1);
+  queue.replace([{ id: 'stale', run: () => { runs++; } }]);
+  queue.dispose();
+  callback!({ didTimeout: false, timeRemaining: () => 50 });
+  assert.equal(runs, 1); assert.equal(cancelled, 1);
+});
+
 test("idle prewarm is bounded, latest-only, and consumes one task per idle turn", () => {
   const callbacks = new Map<number, (deadline: KpReaderIdleDeadline) => void>();
   const cancelled: number[] = [];

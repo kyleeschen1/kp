@@ -6,6 +6,14 @@ import { inspectPaint, assertFractionalEvaluationPaint } from './fractional-line
 
 /** Pressures actual prepared DOM, not a synthetic cache-hit counter. */
 export async function checkFractionalReaderPreparation(page: Page, baseUrl: string, outputRoot: string) {
+  // Force an available idle budget for this ownership test. Performance runs
+  // use the browser's real budgets; this prevents load-dependent test coverage.
+  await page.addInitScript(() => {
+    const request = window.requestIdleCallback.bind(window);
+    window.requestIdleCallback = (callback, options) => request(deadline => callback({
+      didTimeout: deadline.didTimeout, timeRemaining: () => 50
+    }), options);
+  });
   await page.goto(new URL('/reader/solve-fractional-linear/?kpMotion=full', baseUrl).href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   const seek = async (progress: number) => {
@@ -29,6 +37,9 @@ export async function checkFractionalReaderPreparation(page: Page, baseUrl: stri
     })).sort((a, b) => a.id.localeCompare(b.id) || a.x - b.x);
   };
   const points = [233, 417, 750, 917];
+  const initial = await metrics();
+  assert.equal(initial.adjacentPrewarmCompilations, 1, 'Idle preparation must execute in this ownership test');
+  assert.equal(initial.canonicalSessionApplies, 0, 'Preparing a hidden neighbor must not advance the visible equation');
   const references = new Map<number, Awaited<ReturnType<typeof paint>>>();
   for (const progress of points) { await seek(progress); references.set(progress, await paint()); }
   const warmed = await metrics();
@@ -63,7 +74,7 @@ export async function checkFractionalReaderPreparation(page: Page, baseUrl: stri
   for (const layer of fontLayers) assert.equal(await layer.evaluate(node => node.isConnected), false, 'Font readiness invalidates retained geometry');
   await page.evaluate(() => dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false })));
   assert.equal(await page.locator('.kp-reader-canonical-equation-session-material').count(), 0);
-  const report = { warmed, repeated, resized, cycles: 12, points, resizeRetired: oldLayers.length, fontRetired: fontLayers.length, disposed: true };
+  const report = { initial, warmed, repeated, resized, cycles: 12, points, resizeRetired: oldLayers.length, fontRetired: fontLayers.length, disposed: true };
   await writeFile(path.join(outputRoot, 'preparation.json'), JSON.stringify(report, null, 2));
   process.stdout.write(JSON.stringify(report, null, 2) + '\n');
 }

@@ -74,8 +74,8 @@ export async function checkFractionalReaderJumps(page: Page, baseUrl: string, ou
     await page.evaluate(() => document.fonts.ready);
     const state = await snapshot();
     assert.equal(state.progress, progress);
-    assert.equal(state.runtime.canonicalSessionBuilds, 1,
-      'A cold semantic destination prepares once; initial ResizeObserver delivery is not a resize');
+    assert.equal(state.runtime.canonicalSessionBuilds - (state.runtime.canonicalSessionBuildReasons['ahead'] ?? 0), 1,
+      'A cold semantic destination prepares once; idle neighbors do not count as destination rebuilds');
     const observed = await page.evaluate(() => [...new Set(window.kpFractionalProgressProbe)]);
     assert.ok(observed.every((value) => value === 0 || value === progress),
       `URL ${progress} must not replay skipped states: ${observed.join(', ')}`);
