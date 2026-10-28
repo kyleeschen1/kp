@@ -13,7 +13,7 @@ const markdown = readFileSync(
 );
 
 test("caption shell rejects partial or nested compiler output", () => {
-  const flat = '<html><head></head><body><main><article class="kp-lesson"><h1>Intro</h1><section class="story"><li data-kp-beat="one"><div class="kp-beat-copy">Text</div></li></section></article></main></body></html>';
+  const flat = '<html><head></head><body><main><article class="kp-lesson"><h1>Intro</h1><section class="story"><div class="kp-animation-static">Equation</div><ol class="kp-animation-beats"><li data-kp-beat="one"><div class="kp-beat-copy">Text</div></li></ol></section></article></main></body></html>';
   assert.doesNotThrow(() => compileFractionalCaptionShell(flat, 1));
   assert.throws(() => compileFractionalCaptionShell(flat, 2), /complete flat beat sequence/);
   assert.throws(() => compileFractionalCaptionShell(flat.replace('Text', '<div data-kp-attention-phase="nested">Text</div>'), 1), /complete flat beat sequence/);
@@ -33,7 +33,7 @@ test("fractional lesson compiles into the shared searchable equation card", () =
   assert.match(artifact.html, /<noscript><style data-kp-static-document>/);
   assert.equal((artifact.html.match(/data-kp-rising-beat=/g) ?? []).length, 7);
   assert.equal((artifact.html.match(/class="kp-caption-copy"/g) ?? []).length, 7);
-  assert.equal((artifact.html.match(/data-kp-caption-slot=/g) ?? []).length, 7);
+  assert.doesNotMatch(artifact.html, /data-kp-caption-slot=|hidden="until-found"|kp-caption-preview/);
   assert.equal((artifact.html.match(/<h2 hidden/g) ?? []).length, 7);
   assert.match(artifact.html, /class="kp-caption-document-after">\s*<p[^>]*>We can check/);
   assert.match(artifact.html, /Start with <button[^>]*class="kp-semantic-link"/);

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { fractionalPassageOperation } from '../src/reader/app/fractional-passage-progress.ts';
-import { createFractionalRisingScroll, fractionalCaptionFrame } from '../src/reader/app/fractional-rising-scroll.ts';
+import { createFractionalRisingScroll, fractionalPassageIndex } from '../src/reader/app/fractional-rising-scroll.ts';
 import { sampleKpReaderScrollProgress } from '../src/reader/runtime/continuous-scroll-clock.ts';
 
 test('operation sliders retain passage ownership at repeated source/result holds and in reverse', () => {
@@ -13,10 +13,7 @@ test('operation sliders retain passage ownership at repeated source/result holds
       const target = operation.seek(geometry, fraction);
       assert.ok(Math.abs(sampleKpReaderScrollProgress(target.position, geometry) * 1000 - target.progress) < 1e-8);
       assert.ok(Math.abs(operation.fraction(target.progress) - fraction) < 1e-8);
-      const caption = fractionalCaptionFrame(stops.map((stop) => stop.positionPx), target.position, 800)!;
-      assert.equal(caption.index, i);
-      assert.equal(caption.preview, 0);
-      assert.equal(caption.exchange, 0);
+      assert.equal(fractionalPassageIndex(stops.map((stop) => stop.positionPx), target.position), i);
     }
     assert.equal(operation.fraction(0), 0);
     assert.equal(operation.fraction(1000), 1);

@@ -1,4 +1,4 @@
-import type { KpReaderPiecewiseScrollGeometry } from '../runtime/continuous-scroll-clock.ts';
+import type { KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 
 /** Local operation ownership: equal equation states can occur in several holds. */
 export function fractionalPassageOperation(start: number, end: number) {

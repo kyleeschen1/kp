@@ -5,6 +5,13 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+Latest October 28 candidate: [document-flow passages](../reviews/2026-10-28-document-flow-passages.md)
+replace hidden captions, preview copies and stand-in scroll slots with real
+paragraphs and native sticky operation holds. Text metrics determine the local
+centered layout; the equation renderer, sliders and clock remain. The approved
+boundary ends at this exemplar's visual checkpoint. Review the natural arrival,
+inspection pause and return to the document before any shared-format promotion.
+
 October 28: the fractional reader's latest approved-to-build, pending-review
 candidate uses [document-backed captions](../reviews/2026-10-28-fractional-caption-reader.md).
 The user accepted the narrow charcoal card and confirmed Cmd+F works. The latest

@@ -36,6 +36,7 @@ export {
 export {
   createKpReaderContinuousScrollClock,
   sampleKpReaderScrollPosition,
+  sampleKpReaderScrollProgress,
   type KpReaderContinuousScrollClock,
   type KpReaderPiecewiseScrollGeometry
 } from "./continuous-scroll-clock.ts";

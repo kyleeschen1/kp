@@ -1,5 +1,5 @@
 import { fractionalPassageOperation } from './fractional-passage-progress.ts';
-import type { KpReaderPiecewiseScrollGeometry } from '../runtime/continuous-scroll-clock.ts';
+import type { KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 
 /** Native controls project the host's rendered progress; they own no clock. */
 export function mountFractionalPassageSliders(input: {

@@ -55,8 +55,10 @@ export async function checkFractionalPassageSlider(page: Page, outputRoot: strin
   assert.equal(await passage.getAttribute('hidden'), null);
   const progress = Number(await page.locator('body').getAttribute('data-kp-reader-progress'));
   assert.ok(Math.abs(progress - (500 + rewound / 1000 * 167)) <= 1);
-  assert.ok(await page.locator('.kp-caption-preview').evaluate((node) => node.hasAttribute('hidden')),
-    'An active operation must not overlap approaching prose');
+  assert.equal(await page.locator('.kp-caption-preview').count(), 0,
+    'Document prose must not acquire a separate preview copy');
+  assert.ok(await passage.evaluate((node) => node.parentElement!.nextElementSibling!.querySelector('.kp-rising-passage')!.getBoundingClientRect().top > innerHeight),
+    'An active operation must keep its next paragraph below the viewport');
   await page.screenshot({ path: path.join(outputRoot, `passage-slider-rewind-${width}.png`) });
   await slider.press('End');
   await settle();

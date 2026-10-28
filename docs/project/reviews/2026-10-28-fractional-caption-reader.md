@@ -1,5 +1,9 @@
 # Document-backed captions for the fractional reader
 
+Superseded presentation: [the document-flow candidate](2026-10-28-document-flow-passages.md)
+replaces preview copies and hidden caption travel after the next user review.
+This record preserves the preceding implementation and its evidence.
+
 Status: local candidate with stronger side rails, operation sliders and a compact
 shared reading column awaits visual review. Document embedding, Nocturne, styled references,
 lighter prose and paired, unfaded departure remain the requested treatments.

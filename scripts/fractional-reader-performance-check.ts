@@ -70,6 +70,6 @@ export async function checkFractionalReaderPerformance(page: Page, baseUrl: stri
   await writeFile(path.join(outputRoot, "performance.json"), JSON.stringify(result, null, 2));
   process.stdout.write(JSON.stringify(result, null, 2) + "\n");
   assert.equal(await page.locator(".kp-caption-frame").count(), 1);
-  assert.equal(await page.locator(".kp-caption-preview").count(), 1);
+  assert.equal(await page.locator(".kp-caption-preview").count(), 0);
   await client.detach();
 }

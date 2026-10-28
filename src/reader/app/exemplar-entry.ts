@@ -255,7 +255,7 @@ const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
 const risingPassages = lessonVariant === "fractional-linear"
   ? (await import("./fractional-rising-passages.ts"))
-      .mountFractionalRisingPassages({ story, beats, onFind: releaseControlAuthority,
+      .mountFractionalRisingPassages({ story, beats, onLayout: onResize,
         onSeek: (progress, position) => setExplicitProgress(progress, 'controls', true,
           position - window.innerHeight * readerViewportAnchorFraction()) })
   : undefined;
@@ -592,9 +592,16 @@ function onResize(): void {
     return;
   }
   const progressPermille = lastSample().progressPermille;
+  const readingBeat = risingPassages?.activeBeat();
   applyResponsiveProjection();
   evaluationControls?.refreshViewport();
   updateScrollGeometry();
+  const passagePosition = risingPassages?.positionFor(readingBeat, progressPermille);
+  if (passagePosition !== undefined) {
+    setExplicitProgress(progressPermille, 'controls', false,
+      passagePosition - window.innerHeight * readerViewportAnchorFraction());
+    return;
+  }
   // A breakpoint changes the document's geometry. Re-anchor the semantic
   // moment so responsive projection cannot silently behave like navigation.
   if (isFocusStepperProjection()) {

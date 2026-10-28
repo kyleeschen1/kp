@@ -1,4 +1,4 @@
-/* Exemplar-only stacked projection. Static/print documents retain normal flow. */
+/* Local document-flow exemplar. Paragraphs retain their native reading order. */
 @media screen {
   body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] {
     --kp-rising-header-height: var(--kp-reader-masthead-height);
@@ -7,272 +7,131 @@
     --kp-line: var(--kp-tutorial-border);
     --kp-muted: var(--kp-ink);
     --kp-caption-width: min(440px, calc(100vw - 32px));
-    --kp-caption-card-top: calc(var(--kp-rising-header-height) + clamp(20px, 6vh, 56px));
-    --kp-caption-anchor: calc(var(--kp-rising-header-height) + (100svh - var(--kp-rising-header-height)) / 2);
-    --kp-caption-card-height: min(400px, calc(100svh - var(--kp-rising-header-height) - 136px));
-    --kp-caption-text-height: clamp(144px, 18svh, 160px);
+    --kp-caption-card-height: 320px;
+    --kp-caption-card-top: calc(var(--kp-rising-header-height) + (100svh - var(--kp-rising-header-height) - var(--kp-caption-card-height)) / 2);
+    --kp-flow-line-in-card: 160px;
+    --kp-flow-leading: 80px;
+    --kp-flow-tail: 160px;
+    --kp-flow-line: calc(var(--kp-caption-card-top) + var(--kp-flow-line-in-card));
+    --kp-flow-hold: 60svh;
+    --kp-flow-gap: 50svh;
     --kp-equation-type-size: clamp(.935rem, 1.3175vw, 1.02rem);
   }
   html:has(> body[data-kp-reader-layout="rising-passages"]) { background: #121826; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-layout > .kp-lesson-toc { display: none; }
   body[data-kp-reader-layout="rising-passages"]:not([data-kp-reader-hydrated]) .kp-animation-static > [data-kp-static-state][hidden] { display: none; }
   body[data-kp-reader-layout="rising-passages"]:not([data-kp-reader-hydrated]) .kp-animation-static > [data-kp-static-state]:not([hidden]) {
-    display: grid;
-    place-items: center;
-    height: 82px;
-    min-height: 0;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
+    display: grid; place-items: center; height: 82px; min-height: 0;
+    border: 0; border-radius: 0; background: transparent;
     font-size: var(--kp-equation-type-size);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-layout {
-    display: block;
-    width: var(--kp-caption-width);
-    margin-inline: auto;
+    display: block; width: var(--kp-caption-width); margin-inline: auto;
   }
-  body[data-kp-reader-layout="rising-passages"] .kp-lesson {
-    padding: 3rem 0 5rem;
-  }
+  body[data-kp-reader-layout="rising-passages"] .kp-lesson { padding: 3rem 0 5rem; }
   .kp-caption-document-intro, .kp-caption-document-after { width: 100%; padding-inline: 24px; margin: 0 auto; }
   .kp-caption-document-intro { margin-bottom: 4rem; }
   .kp-caption-document-after { padding-block: 3rem; min-height: 65vh; }
   .kp-caption-sequence { display: grid; grid-template-columns: minmax(0, 1fr); }
   .kp-caption-pin {
-    grid-area: 1 / 1;
-    position: sticky;
-    top: var(--kp-caption-card-top);
-    align-self: start;
-    justify-self: center;
-    height: var(--kp-caption-card-height);
-    width: var(--kp-caption-width);
-    margin-inline: 0;
+    grid-area: 1 / 1; position: sticky; top: var(--kp-caption-card-top);
+    align-self: start; height: var(--kp-caption-card-height); width: 100%;
     isolation: isolate;
   }
-  .kp-caption-scroll-slots {
-    grid-area: 1 / 1;
-    padding-top: calc(var(--kp-caption-anchor) - var(--kp-caption-card-top));
-    pointer-events: none;
-  }
-  .kp-caption-scroll-slot { height: 80vh; }
-  .kp-caption-scroll-slot:last-child {
-    /* Release after the final operation and a short reading hold. */
-    height: calc((100svh - var(--kp-rising-header-height)) * .6 + var(--kp-caption-card-height) - var(--kp-caption-anchor) + var(--kp-caption-card-top));
-  }
-  html body[data-kp-reader-layout="rising-passages"] .kp-animation-story {
-    display: contents;
-    margin-top: 0;
-    padding-bottom: 30vh;
-  }
+  html body[data-kp-reader-layout="rising-passages"] .kp-animation-story { display: contents; }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-static {
-    position: absolute;
-    z-index: 1;
-    top: calc(var(--kp-caption-text-height) + 38px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: var(--kp-caption-width);
-    height: calc(var(--kp-caption-card-height) - var(--kp-caption-text-height) - 64px);
+    position: absolute; top: calc(var(--kp-flow-line-in-card) + 14px);
+    left: 0; width: 100%; height: 82px;
   }
   html body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-stage {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 0;
-    padding: 0 24px;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    background: transparent;
-    overflow: visible;
+    display: flex; flex-direction: column; height: 100%; min-height: 0;
+    padding: 0 24px; border: 0; border-radius: 0; box-shadow: none;
+    background: transparent; overflow: visible;
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-stage-heading {
-    display: flex;
-    justify-content: flex-end;
-    min-height: 0;
+    display: flex; justify-content: flex-end; min-height: 0;
   }
   body[data-kp-caption-mode="captions"] .kp-reader-equation-stage-heading {
-    position: absolute;
-    top: calc(-1 * var(--kp-caption-text-height) - 26px);
-    right: 24px;
+    position: absolute; top: calc(-1 * var(--kp-flow-line-in-card) - 2px); right: 24px;
   }
-  body[data-kp-reader-layout="rising-passages"] :is([data-kp-reader-stage-kicker], [data-kp-reader-stage-status], .kp-reader-equation-hint) { display: none; }
+  body[data-kp-reader-layout="rising-passages"] :is([data-kp-reader-stage-kicker], [data-kp-reader-stage-status], .kp-reader-equation-hint, .kp-reader-equation-progress) { display: none; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-controls { margin: 0; }
   html body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-viewport {
-    /* Keep the native fit planner inside the card's stable mathematical area. */
-    flex: 1;
-    margin: 0;
-    width: 100%;
-    min-height: 0;
-  }
-  html body[data-kp-caption-mode="captions"] .kp-reader-equation-viewport {
-    /* A compact workspace at the region's top preserves the shared fit and
-       its motion clearance without centering math in the entire card. */
-    flex: 0 0 82px;
+    flex: 0 0 82px; margin: 0; width: 100%; min-height: 0;
   }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface) {
     --kp-canonical-equation-type-size: clamp(1.275rem, 5.95cqi, 1.7rem);
   }
-  body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress {
-    display: none;
-  }
-  body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress span { display: none; }
-  html body[data-kp-reader-layout="rising-passages"] .kp-animation-beats > li {
-    display: contents;
-    min-height: 0;
-    padding: 0;
-    border: 0;
-    opacity: 1;
-    transition: none;
-    scroll-margin-top: 50vh;
-  }
-  body[data-kp-reader-layout="rising-passages"] .kp-animation-beats { display: contents; }
-  body[data-kp-reader-layout="rising-passages"] .kp-rising-passage {
-    position: relative;
-    z-index: 2;
-    width: min(100%, 38rem);
-    margin-inline: auto;
-  }
-  body[data-kp-caption-mode="document"] .kp-rising-passage { padding-inline: 24px; }
-  body[data-kp-caption-mode="document"] :is(.kp-caption-sequence, .kp-caption-pin) { display: block; position: static; height: auto; width: auto; }
-  body[data-kp-caption-mode="document"] .kp-caption-scroll-slots { display: none; }
-  html body[data-kp-caption-mode="document"] :is(.kp-animation-story, .kp-animation-beats, .kp-animation-beats > li) { display: block; }
-  html body[data-kp-caption-mode="document"] .kp-animation-beats > li { padding: 1rem 0; }
-  html body[data-kp-caption-mode="document"] .kp-animation-static {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    width: 100%;
-    height: 150px;
-  }
-  body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-caption-active="true"] {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: var(--kp-caption-width);
-    height: calc(var(--kp-caption-text-height) + 32px);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    /* Keep the resting baseline, but let departing ink reach the card edge. */
-    padding-top: 56px;
-    padding-bottom: 6px;
-    padding-inline: 24px;
-    overflow: clip;
-  }
-  body[data-kp-caption-mode="captions"] .kp-caption-copy {
-    position: relative;
-    flex: 0 0 auto;
-    width: calc(100% + 48px);
-    margin-inline: -24px;
-    padding-inline: 24px;
-    max-height: 100%;
-    overflow: auto;
-    transform: translateY(var(--kp-caption-offset, 0px));
-  }
-  /* Passage controls travel with their prose; the shared motion stays intact. */
-  body[data-kp-caption-mode="captions"] .kp-caption-copy > .kp-beat-copy {
-    opacity: var(--kp-caption-opacity, 1);
-  }
-  body[data-kp-caption-mode="captions"] .kp-caption-preview[data-kp-caption-active="true"] {
-    /* Preview begins at the card's bottom and travels through its interior.
-       The original searchable caption keeps its smaller, stable region. */
-    height: calc(var(--kp-caption-card-height) - 12px);
-  }
-  .kp-caption-frame {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: var(--kp-caption-width);
-    height: var(--kp-caption-card-height);
-    border-block: 0;
-    border-inline: 3px solid var(--kp-tutorial-text-muted);
-    border-radius: 0;
-    background: var(--kp-surface);
-    box-shadow: none;
+  html body[data-kp-reader-layout="rising-passages"] .kp-animation-beats {
+    grid-area: 1 / 1; display: block; margin: 0; list-style: none;
+    padding: var(--kp-flow-leading) 0 var(--kp-flow-tail);
+    /* Only real prose accepts input; the stage remains operable in the gaps. */
     pointer-events: none;
   }
+  html body[data-kp-reader-layout="rising-passages"] .kp-animation-beats > li {
+    display: block; position: relative; min-height: 0; margin: 0 0 var(--kp-flow-gap);
+    padding: 0; border: 0; opacity: 1; transition: none;
+    /* A real box beneath the sticky paragraph provides its bounded hold.
+       Padding would put the constraint inside the content edge in some engines. */
+  }
+  body[data-kp-caption-mode="captions"] .kp-animation-beats > li::after {
+    content: ''; display: block; height: var(--kp-flow-hold);
+  }
+  html body[data-kp-reader-layout="rising-passages"] .kp-animation-beats > li:last-child { margin-bottom: 0; }
+  body[data-kp-reader-layout="rising-passages"] .kp-rising-passage {
+    position: sticky; top: var(--kp-passage-top, calc(var(--kp-flow-line) - 80px));
+    z-index: 2; margin: 0; padding-inline: 24px; pointer-events: auto;
+  }
+  body[data-kp-reader-layout="rising-passages"] .kp-caption-copy { width: 100%; }
+  .kp-caption-frame {
+    position: absolute; inset: 0; border-block: 0;
+    border-inline: 3px solid var(--kp-tutorial-text-muted);
+    background: var(--kp-surface); pointer-events: none;
+  }
   .kp-caption-reading-mode {
-    font: inherit;
-    font-size: .78rem;
-    color: inherit;
-    border: 1px solid var(--kp-line);
-    background: transparent;
-    border-radius: .25rem;
-    padding: .2rem .45rem;
-    cursor: pointer;
+    font: inherit; font-size: .78rem; color: inherit; border: 1px solid var(--kp-line);
+    background: transparent; border-radius: .25rem; padding: .2rem .45rem; cursor: pointer;
   }
   .kp-caption-reading-mode[aria-pressed="true"] { background: var(--kp-line); }
-  body[data-kp-reader-layout="rising-passages"] .kp-rising-passage:focus-within {
-    --kp-caption-opacity: 1 !important;
-  }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-rising-passage, .kp-caption-document-intro, .kp-caption-document-after) p {
-    color: var(--kp-ink);
-    margin: 0 0 .5rem;
-    font-family: inherit;
-    font-size: .9375rem;
-    font-weight: 300;
-    letter-spacing: .015em;
-    line-height: 1.6;
+    color: var(--kp-ink); margin: 0 0 .5rem; font-family: inherit;
+    font-size: .9375rem; font-weight: 300; letter-spacing: .015em; line-height: 1.6;
   }
-  body[data-kp-reader-layout="rising-passages"] :is(.kp-caption-copy, .kp-beat-copy) > :last-child { margin-bottom: 0; }
+  body[data-kp-reader-layout="rising-passages"] .kp-beat-copy > :last-child { margin-bottom: 0; }
   .kp-caption-operation-slider {
-    appearance: none;
-    display: block;
-    width: 100%;
-    height: 24px;
-    padding: 0;
-    margin: 0;
-    border: 0;
-    border-radius: 0;
+    appearance: none; display: block; width: 100%; height: 24px;
+    padding: 0; margin: 0; border: 0; border-radius: 0;
     background: linear-gradient(to right, var(--kp-relation) var(--kp-operation-progress, 0%), var(--kp-line) var(--kp-operation-progress, 0%)) center / 100% 2px no-repeat;
     cursor: ew-resize;
   }
   .kp-caption-operation-slider::-webkit-slider-thumb {
-    appearance: none;
-    width: 7px;
-    height: 7px;
-    border: 0;
-    border-radius: 50%;
-    background: var(--kp-relation);
+    appearance: none; width: 7px; height: 7px; border: 0; border-radius: 50%; background: var(--kp-relation);
   }
   .kp-caption-operation-slider::-moz-range-thumb {
-    width: 7px;
-    height: 7px;
-    border: 0;
-    border-radius: 50%;
-    background: var(--kp-relation);
+    width: 7px; height: 7px; border: 0; border-radius: 50%; background: var(--kp-relation);
   }
   .kp-caption-operation-slider::-moz-range-track { background: transparent; }
-  body[data-kp-caption-mode="document"] .kp-caption-operation-slider { display: none; }
   .kp-rising-navigation { position: relative; font-size: .78rem; }
   .kp-rising-navigation summary { cursor: pointer; }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-navigation .kp-lesson-toc {
-    position: absolute;
-    top: 2rem;
-    right: 0;
-    width: min(20rem, calc(100vw - 40px));
-    max-height: 70vh;
-    overflow: auto;
-    padding: 1rem;
-    border: 1px solid var(--kp-line);
+    position: absolute; top: 2rem; right: 0; width: min(20rem, calc(100vw - 40px));
+    max-height: 70vh; overflow: auto; padding: 1rem; border: 1px solid var(--kp-line);
     background: var(--kp-paper);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-lesson-toc ol { display: block; }
+  body[data-kp-caption-mode="document"] :is(.kp-caption-sequence, .kp-caption-pin, .kp-rising-passage) { display: block; position: static; height: auto; }
+  html body[data-kp-caption-mode="document"] .kp-animation-beats { padding: 0; }
+  html body[data-kp-caption-mode="document"] .kp-animation-beats > li { margin: 0; padding: 1rem 0; }
+  html body[data-kp-caption-mode="document"] .kp-animation-static { position: relative; top: auto; }
+  body[data-kp-caption-mode="document"] :is(.kp-caption-frame, .kp-caption-operation-slider) { display: none; }
 }
 @media screen and (max-width: 880px) {
-  body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] {
-    --kp-equation-type-size: clamp(.8925rem, 3.57vw, 1.02rem);
-  }
+  body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] { --kp-equation-type-size: clamp(.8925rem, 3.57vw, 1.02rem); }
 }
 @media screen and (max-width: 520px) {
   body[data-kp-reader-layout="rising-passages"] .kp-reader-wordmark { white-space: nowrap; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-mode { display: none; }
 }
 @media print {
-  .kp-caption-frame, .kp-caption-preview, .kp-caption-operation-slider { display: none; }
-  .kp-caption-scroll-slots { display: none; }
-  .kp-rising-passage { opacity: 1 !important; content-visibility: visible !important; }
+  .kp-caption-frame, .kp-caption-operation-slider { display: none; }
 }

@@ -25,6 +25,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 28 latest local revision: [real document passages](reviews/2026-10-28-document-flow-passages.md)
+replace the simulated caption travel after the user reported vertical drift and
+premature text arrival. Original paragraphs now remain in article flow, hold
+above the existing equation during their operations, then release naturally.
+Measured prose heights center the framed region below the header; one stage,
+sliders and semantic clock remain. Review arrival and pacing before promotion.
+This supersedes the caption-motion treatment below, not its mathematical work.
+
 October 28 latest visual candidate: [document-backed captions](reviews/2026-10-28-fractional-caption-reader.md)
 now sit bottom-aligned above the equation on a narrow Nocturne blue card. The user
 accepted the card and confirmed Cmd+F works, but rejected the earlier progress rail. A faint next

@@ -1,0 +1,91 @@
+{
+  "id": "run-contract.kp-document-flow-20261028",
+  "kind": "run-contract",
+  "title": "Document-flow equation passages",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: one verified document-flow exemplar ready for visual review; no additional pre-review scope remains.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-28-document-flow-passages.md",
+      "summary": "User-approved bounded document-flow candidate and preservation boundary"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-28-document-flow-passages.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "app, tools, tests, Svelte and domains",
+      "checkedAt": "2026-10-28T18:50:54.130Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "dependency, reader, semantic-animation and equation governance",
+      "checkedAt": "2026-10-28T18:50:55.067Z",
+      "notes": "Initial run found local deep imports; repaired through existing learner runtime entrypoint and reran successfully."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "41 direct and forward/reverse equation-paint samples",
+      "checkedAt": "2026-10-28T18:51:40.990Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fractional-rising-scroll.test.ts tests/fractional-passage-progress.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts",
+      "status": "passed",
+      "scope": "7 geometry, interval and compiler tests",
+      "checkedAt": "2026-10-28T18:51:42.399Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production compilation and static shell",
+      "checkedAt": "2026-10-28T18:52:14.176Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "desktop and phone document flow, native sliders, rewind, text reflow, search and lifecycle",
+      "checkedAt": "2026-10-28T18:52:46.977Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "production desktop/phone and static fallback",
+      "checkedAt": "2026-10-28T18:53:04.529Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews natural paragraph arrival, inspection pacing and held-stage crossing at /reader/solve-fractional-linear/"
+  ],
+  "allowedWork": [
+    "Local fractional reader compiler, layout, geometry, controls, focused checks and evidence"
+  ],
+  "disallowedWork": [
+    "Mathematical renderer changes, other lessons and shared-format promotion"
+  ],
+  "goal": "Replace simulated captions with measured document paragraphs held during their own mathematical operations, through one visual checkpoint",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "document-flow",
+      "title": "Document prose and operation holds",
+      "summary": "Real document paragraphs, measured centered region, native sticky operation holds and single-stage release implemented. Focused geometry, compiler, browser, paint, full types, architecture and production checks pass. Human visual review remains.",
+      "status": "complete"
+    }
+  ]
+}

@@ -12,24 +12,28 @@ export function compileFractionalCaptionShell(html: string, beatCount: number): 
     throw new Error('Fractional caption shell requires its compiled article and story.');
   }
   const intro = html.slice(introStart, storyStart).replace(/<h1\b/g, '<h1 hidden');
-  const slots: string[] = [];
   let wrapped = 0;
   const story = html.slice(storyStart, storyEnd).replace(/(<li\b[^>]*data-kp-beat="([^"]+)"[^>]*>)(<div class="kp-beat-copy">[\s\S]*?<\/div>)(<\/li>)/g,
     (_match, opening: string, id: string, copy: string, closing: string) => {
       wrapped += 1;
-      slots.push(`<div class="kp-caption-scroll-slot" data-kp-caption-slot="${id}"></div>`);
-      const presence = wrapped === 1 ? 'data-kp-caption-active="true"' : 'hidden="until-found"';
-      return `${opening}<div class="kp-rising-passage" id="caption.${id}" data-kp-rising-beat="${id}" ${presence}><div class="kp-caption-copy">${copy.replace(/<h2\b/g, '<h2 hidden')}</div></div>${closing}`;
+      return `${opening}<div class="kp-rising-passage" id="caption.${id}" data-kp-rising-beat="${id}"><div class="kp-caption-copy">${copy.replace(/<h2\b/g, '<h2 hidden')}</div></div>${closing}`;
     });
   if (wrapped !== beatCount || wrapped === 0 || story.includes('data-kp-attention-phase=') || story.slice(1).includes('<section ')) {
     throw new Error('Fractional caption shell requires the complete flat beat sequence.');
   }
-  // The native sticky surface and the measured scroll slots are siblings.
-  // Caption movement cannot move its own clock anchors or create a second transcript.
+  const staticStart = story.indexOf('<div class="kp-animation-static"');
+  const listStart = story.indexOf('<ol class="kp-animation-beats"');
+  if (staticStart < 0 || listStart <= staticStart) {
+    throw new Error('Document passages require the compiled equation surface followed by its prose list.');
+  }
+  // Actual paragraphs remain in flow beside one sticky equation surface.
+  // Beat containers own stable geometry; sticky paragraph paint never does.
+  const flowStory = story.slice(0, staticStart)
+    + '<div class="kp-caption-pin"><div class="kp-caption-frame"></div>'
+    + story.slice(staticStart, listStart) + '</div>' + story.slice(listStart);
   const result = html.slice(0, introStart)
     + `<div class="kp-caption-document-intro">${intro}</div>`
-    + `<div class="kp-caption-sequence"><div class="kp-caption-pin"><div class="kp-caption-frame"></div>${story}</div>`
-    + `<div class="kp-caption-scroll-slots" aria-hidden="true">${slots.join('')}</div></div>`
+    + `<div class="kp-caption-sequence">${flowStory}</div>`
     + `<div class="kp-caption-document-after">${html.slice(storyEnd, articleEnd)}</div>`
     + html.slice(articleEnd);
   return result.replace('<body', '<body data-kp-reader-layout="rising-passages" data-kp-caption-mode="captions"')
@@ -47,9 +51,10 @@ body[data-kp-reader-layout] .kp-rising-passage {
 body[data-kp-reader-layout] .kp-caption-copy { transform: none; max-height: none; width: auto; margin: 0; padding: 0; }
 body[data-kp-reader-layout] .kp-caption-frame { display: none; }
 body[data-kp-reader-layout] .kp-reader-layout > .kp-lesson-toc { display: block; position: static; }
-html body[data-kp-reader-layout] .kp-animation-beats > li { min-height: 0; padding-block: 1rem; }
+html body[data-kp-reader-layout] .kp-animation-beats { padding: 0; }
+html body[data-kp-reader-layout] .kp-animation-beats > li { min-height: 0; padding-block: 1rem; margin: 0; }
+html body[data-kp-reader-layout] .kp-animation-beats > li::after { display: none; }
 body[data-kp-reader-layout] :is(.kp-caption-sequence, .kp-caption-pin) { display: block; position: static; height: auto; }
-body[data-kp-reader-layout] .kp-caption-scroll-slots { display: none; }
 body[data-kp-reader-layout] .kp-lesson { padding: 2rem 0; }
 html body[data-kp-reader-layout] .kp-animation-static { position: static; transform: none; width: 100%; height: auto; }
 `;
