@@ -72,6 +72,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
           active: document.querySelectorAll('[data-kp-caption-active="true"]').length,
           progress: Number(document.body.dataset["kpReaderProgress"]),
           cardWidth: card.getBoundingClientRect().width,
+          cardTop: card.getBoundingClientRect().top,
           cardColor: getComputedStyle(card).backgroundColor,
           stageTop: stage.getBoundingClientRect().top,
           stageBottom: stage.getBoundingClientRect().bottom,
@@ -80,7 +81,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       });
       if (distance < .65) assert.equal(sample.opacity, "1", "Reading and mathematical action keep full-opacity captions");
       assert.ok(sample.active <= 2, "Only current text and its faint preview can paint");
-      assert.ok(!(Number(sample.opacity) > .5 && Number(sample.nextOpacity) > .5), "Two captions must not compete at full reading contrast");
+      assert.ok(!(sample.copyBottom > sample.cardTop && Number(sample.opacity) > .5 && Number(sample.nextOpacity) > .5), "Two visible captions must not compete at full reading contrast");
       assert.ok(sample.textColors.every((color) => color === sample.foreground));
       if (distance < .65) assert.ok(sample.stageTop - sample.copyBottom >= 11 && sample.stageTop - sample.copyBottom <= 14,
         "Caption content must rest just above the mathematical region");
@@ -110,8 +111,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(await page.locator(".kp-caption-rule").count(), 0);
     assert.equal(await page.locator(".kp-caption-preview[inert][aria-hidden='true']").count(), 1);
     assert.equal(await page.locator(".kp-caption-preview [id]").count(), 0);
-    assert.ok(Math.abs(Number(samples[5]!.opacity) - .035) < .000001,
-      'The outgoing caption must travel with the same faintness as the incoming preview');
+    assert.equal(samples[5]!.opacity, '1', 'The outgoing caption must leave without fading');
+    const gaps = samples.slice(4, 7).map((sample) => sample.previewTop - sample.copyBottom);
+    assert.ok(Math.max(...gaps) - Math.min(...gaps) < .1,
+      'Incoming and outgoing captions must keep a constant distance throughout their shared travel');
+    assert.ok(Math.abs(samples[5]!.top - samples[5]!.cardTop) < .1,
+      'Departure must clip at the card edge, not an inset caption boundary');
     assert.ok(Number(samples[6]!.nextOpacity) > 0 && Number(samples[6]!.nextOpacity) < 1);
     assert.deepEqual(samples[6], samples[8]);
     assert.deepEqual(samples[2], samples[9]);
@@ -130,13 +135,17 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await settle(page);
     const hint = await page.locator('.kp-caption-preview').evaluate((node) => ({
       opacity: Number(getComputedStyle(node).opacity), hidden: node.hasAttribute('hidden'),
-      bottomGap: document.querySelector('.kp-caption-frame')!.getBoundingClientRect().bottom - node.firstElementChild!.getBoundingClientRect().bottom
+      bottomGap: document.querySelector('.kp-caption-frame')!.getBoundingClientRect().bottom - node.firstElementChild!.getBoundingClientRect().bottom,
+      pairGap: node.firstElementChild!.getBoundingClientRect().top
+        - document.querySelector('[data-kp-rising-beat="beat.multiply"] .kp-caption-copy')!.getBoundingClientRect().bottom
     }));
     assert.ok(!hint.hidden && hint.opacity > 0 && hint.opacity <= .035);
+    assert.ok(Math.abs(hint.pairGap - gaps[0]!) < .1,
+      'The pair spacing must already hold when the preview first enters the card');
     assert.ok(hint.bottomGap >= 17 && hint.bottomGap < 60, 'The hint must enter from the bottom of the card');
     await page.screenshot({ path: path.join(outputRoot, `caption-bottom-preview-${size.width}.png`) });
     assert.equal(await page.locator('[data-kp-rising-beat="beat.multiply"]').evaluate((node) => getComputedStyle(node).opacity), '1',
-      'The next caption must approach before the current one starts leaving');
+      'The current caption must retain full opacity while the pair moves');
     const upcomingId = await page.evaluate(() => {
       const slot = document.querySelector('[data-kp-beat="beat.multiply"]')!;
       const next = slot.nextElementSibling!.querySelector<HTMLElement>('.kp-rising-passage')!;

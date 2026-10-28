@@ -114,14 +114,16 @@
   }
   body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-caption-active="true"] {
     position: fixed;
-    top: calc(var(--kp-caption-card-top) + 56px);
+    top: var(--kp-caption-card-top);
     left: 50%;
     transform: translateX(-50%);
     width: calc(var(--kp-caption-width) - 48px);
-    height: calc(var(--kp-caption-text-height) - 24px);
+    height: calc(var(--kp-caption-text-height) + 32px);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    /* Keep the resting baseline, but let departing ink reach the card edge. */
+    padding-top: 56px;
     padding-bottom: 6px;
     overflow: clip;
   }
@@ -134,7 +136,7 @@
   body[data-kp-caption-mode="captions"] .kp-caption-preview[data-kp-caption-active="true"] {
     /* Preview begins at the card's bottom and travels through its interior.
        The original searchable caption keeps its smaller, stable region. */
-    height: calc(var(--kp-caption-card-height) - 68px);
+    height: calc(var(--kp-caption-card-height) - 12px);
   }
   .kp-caption-frame {
     position: fixed;

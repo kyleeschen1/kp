@@ -65,10 +65,12 @@ export function mountFractionalRisingPassages(input: {
     document.body.dataset["kpCaptionMode"] = readAll ? "document" : "captions";
     const sample = fractionalCaptionFrame(positions, window.scrollY + anchor(), window.innerHeight - headerHeight);
     const exchange = sample?.exchange ?? 0;
-    const dimming = ease(Math.min(1, exchange / .08));
-    const departing = ease(Math.max(0, (exchange - .08) / .92));
     const approaching = ease(sample?.preview ?? 0);
     const travel = .12 * approaching + .88 * ease(exchange);
+    // Both captions ride the same translation from the preview's first arrival.
+    // Their spacing is layout-owned; departure is clipping, never an opacity fade.
+    const offset = readAll || reducedMotion.matches ? "0px"
+      : `calc((var(--kp-caption-card-height) - var(--kp-caption-text-height) - 44px) * ${-travel})`;
     // Stay barely visible while crossing the mathematical area; become
     // readable only near the caption's final position.
     const arriving = ease(Math.max(0, (travel - .92) / .08));
@@ -85,16 +87,14 @@ export function mountFractionalRisingPassages(input: {
     preview.hidden = !previewVisible;
     preview.dataset["kpCaptionActive"] = String(previewVisible);
     preview.style.setProperty("--kp-caption-opacity", String(.035 * approaching + .965 * arriving));
-    preview.style.setProperty("--kp-caption-offset", `calc((var(--kp-caption-card-height) - var(--kp-caption-text-height) - 44px) * ${-travel})`);
+    preview.style.setProperty("--kp-caption-offset", offset);
     passages.forEach((passage, index) => {
-      // Match the preview's faintness before the outgoing text starts moving.
-      let opacity = index === sample?.index ? .035 + .965 * (1 - dimming) : 0;
+      let opacity = index === sample?.index ? 1 : 0;
       if (reducedMotion.matches) opacity = index === (exchange < .5 ? sample?.index : sample?.nextIndex) ? 1 : 0;
       const visible = readAll || opacity > 0;
       const activeValue = String(!readAll && visible);
       if (passage.dataset["kpCaptionActive"] !== activeValue) passage.dataset["kpCaptionActive"] = activeValue;
       passage.style.setProperty("--kp-caption-opacity", String(readAll ? 1 : opacity));
-      const offset = readAll || reducedMotion.matches ? "0px" : `calc((var(--kp-caption-text-height) - 24px) * ${-departing})`;
       passage.style.setProperty("--kp-caption-offset", offset);
       if (visible && passage.hasAttribute("hidden")) passage.removeAttribute("hidden");
       else if (!visible && passage.getAttribute("hidden") !== "until-found") passage.setAttribute("hidden", "until-found");

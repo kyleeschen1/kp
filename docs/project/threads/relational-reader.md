@@ -10,8 +10,9 @@ candidate uses [document-backed captions](../reviews/2026-10-28-fractional-capti
 The user accepted the narrow charcoal card and confirmed Cmd+F works. The latest
 candidate bottom-aligns prose, top-aligns the math workspace and replaces the
 rejected rail with a faint approaching caption during the result hold. The next
-revision restores the spec's Nocturne blue and moves outgoing text at the same
-faint opacity. Compiler-owned initial markup prevents the old article flash;
+revision retains the spec's Nocturne blue. Outgoing text stays fully opaque and
+moves at fixed spacing ahead of the faint incoming copy, clipping at the card
+edge. Compiler-owned initial markup prevents the old article flash;
 persisted pagehide retains the runtime. The reported tab crash remains
 unexplained: bounded local stress found stable retained JS heap and idle layout,
 with substantial development startup and active-scroll work still measured.

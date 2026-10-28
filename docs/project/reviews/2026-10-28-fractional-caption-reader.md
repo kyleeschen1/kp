@@ -1,13 +1,13 @@
 # Document-backed captions for the fractional reader
 
-Status: user accepted the card and confirmed Cmd+F works; the latest equal-faintness
-departure and restored Nocturne theme await visual review.
+Status: user accepted the card and confirmed Cmd+F works; the latest fixed-spacing,
+unfaded departure awaits visual review. Nocturne remains the requested theme.
 
 The user prefers explanations that behave like closed captions. The latest
 revision addresses the missing anticipation: captions sit above the equation
 on a phone-width card. The user found the rail unhelpful; a faint approaching
 caption now supplies anticipation directly.
-Text remains still during its operation, then rises and evaporates as the next
+Text remains still during its operation, then rises beyond the card edge as the next
 caption materializes. Native search and ordinary document scrolling remain
 explicit requirements. This supersedes the local rising/fading presentation in
 [the preceding experiment](2026-10-28-fractional-rising-passages.md), not its
@@ -43,13 +43,14 @@ for its unchanged mathematical program, then holds its result. The final 18%
 of available-height scrolling before the next instruction exchanges captions.
 During the preceding 8%, the next explanation appears at the bottom of the card
 and begins rising, at no more than 3.5% opacity, while the current caption stays
-fully legible. The outgoing text dims to 3.5% during the first 8% of the exchange,
-then travels upward through its caption region at that same faintness as the
-incoming copy traverses the card. The preview remains extremely faint through the
+fully legible. Both captions use the same translation from the moment the preview
+appears, preserving their geometric separation throughout travel. The outgoing
+text stays at full opacity; its clipping box now begins at the card's top edge,
+so it disappears by crossing that edge, not by fading. The preview remains extremely faint through the
 mathematical area and becomes readable only in the final 8% of its travel,
 near its settled caption position. The original caption remains clipped to
-its own region; the inert preview is clipped to the card interior.
-Both captions are never at full reading contrast together. The equation holds
+the card's top edge; the inert preview is clipped to the card interior.
+The outgoing copy is clipped away before the arriving copy reaches full contrast. The equation holds
 throughout the preview and exchange; its
 next operation starts only after the new caption has settled and received its
 reading interval. Geometry reserves a result hold before exchange even for
@@ -130,6 +131,10 @@ completion, print return and static fallback. An unsupported-capability
 simulation checks that prose stays exposed.
 The preview check also verifies inert/hidden accessibility, absence of copied
 IDs, and native reveal of the complete original while its faint copy is visible.
+The latest local check also measures a constant gap from first preview entry
+through departure, full outgoing opacity and a clipping boundary at the card
+edge, with exact reverse samples. The shared translation prevents independent
+departure and arrival curves from drifting apart; equation motion is unchanged.
 The 41-sample equation smoke protects direct/forward/reverse paint and the
 previous duplicate-owner repairs. Full typecheck includes app, tools, tests,
 Svelte and domains. These checks passed for this candidate; screenshots were
@@ -198,8 +203,9 @@ regression above.
 Open `http://localhost:8000/reader/solve-fractional-linear/` and choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the
 multiplication, then keep scrolling: the equation holds and the next caption
-first appears very faintly near the bottom of the card. The old caption dims to
-that same faintness and rises away while the new one travels upward, brightening only as it reaches the
+first appears very faintly near the bottom of the card. The old caption stays
+fully opaque and moves upward at a fixed distance ahead of it, disappearing only
+past the card edge. The incoming caption brightens only as it reaches the
 caption region. The next
 operation waits until that new explanation settles. Reverse through the
 exchange and drag the scrollbar to check direct navigation.

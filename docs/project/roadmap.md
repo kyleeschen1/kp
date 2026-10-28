@@ -29,7 +29,8 @@ October 28 latest visual candidate: [document-backed captions](reviews/2026-10-2
 now sit bottom-aligned above the equation on a narrow Nocturne blue card. The user
 accepted the card and confirmed Cmd+F works, but rejected the rail. A faint next
 caption now approaches while the equation holds; native reveal and Read all
-remain. Outgoing text now travels at the same faint opacity; the compiler emits
+remain. Both captions now move together at fixed spacing, with no outgoing fade;
+departure is clipped at the card edge. The compiler emits
 the caption shell directly to prevent the old-layout startup flash. A bounded
 Chromium stress run found stable retained JS heap, but did not reproduce or
 explain the reported tab crash. Review caption exchange before promotion; mathematics
