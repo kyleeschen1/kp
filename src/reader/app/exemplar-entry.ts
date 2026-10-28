@@ -144,12 +144,13 @@ const fractionCompositionSalience = lessonDescriptor.id === "fraction-compositio
   : undefined;
 const usesCanonicalEquationRenderer =
   lessonDescriptor.canonicalTransitionSelection !== undefined;
-const readerCanonicalEquationSessionModule = usesCanonicalEquationRenderer
-  ? await import("./reader-canonical-equation-session.ts")
-  : undefined;
-const readerCanonicalEquationSessionAdapter = usesCanonicalEquationRenderer
-  ? await loadKpReaderEquationSceneCompositorAdapter()
-  : undefined;
+const [readerCanonicalEquationSessionModule, readerCanonicalEquationSessionAdapter] =
+  usesCanonicalEquationRenderer
+    ? await Promise.all([
+        import("./reader-canonical-equation-session.ts"),
+        loadKpReaderEquationSceneCompositorAdapter()
+      ])
+    : [undefined, undefined];
 const compiledEquationPresentation = defineKpReaderEquationPresentationCapability({
   defaultProfileId: resolveKpReaderEquationPresentationProfile(
     requiredData(document.body, "kpReaderEquationProfileDefault")

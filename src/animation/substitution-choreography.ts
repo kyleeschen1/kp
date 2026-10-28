@@ -7,12 +7,8 @@ import type {
   KpSemanticSceneTransition
 } from "../semantic/semantic-scene-protocol.ts";
 
-export const kpSubstitutionPhaseIds = [
-  "establish-value-source",
-  "transmit-substitution-value",
-  "replace-substitution-occupant",
-  "settle-substitution-replacement"
-] as const;
+import { kpSubstitutionPhaseIds } from "./choreography-phase-ids.ts";
+export { kpSubstitutionPhaseIds } from "./choreography-phase-ids.ts";
 
 export type KpSubstitutionPhaseId = (typeof kpSubstitutionPhaseIds)[number];
 

@@ -1,23 +1,10 @@
-import {
-  kpCopyFanOutPhaseIds,
-  type KpCopyFanOutPhaseId
-} from "../copy-fan-out-choreography.ts";
-import {
-  kpSubstitutionPhaseIds,
-  type KpSubstitutionPhaseId
-} from "../substitution-choreography.ts";
-import {
-  kpDerivativePowerPhaseIds,
-  type KpDerivativePowerPhaseId
-} from "../derivative-power-choreography.ts";
-import {
-  kpExponentLawChoreographyPhaseIds,
-  type KpExponentLawChoreographyPhaseId
-} from "../exponent-law-choreography.ts";
-import {
-  kpFractionChoreographyPhaseIds,
-  type KpFractionChoreographyPhaseId
-} from "../fraction-choreography.ts";
+import { kpCopyFanOutPhaseIds, kpSubstitutionPhaseIds, kpDerivativePowerPhaseIds,
+  kpExponentLawChoreographyPhaseIds, kpFractionChoreographyPhaseIds } from "../choreography-phase-ids.ts";
+import type { KpCopyFanOutPhaseId } from "../copy-fan-out-choreography.ts";
+import type { KpSubstitutionPhaseId } from "../substitution-choreography.ts";
+import type { KpDerivativePowerPhaseId } from "../derivative-power-choreography.ts";
+import type { KpExponentLawChoreographyPhaseId } from "../exponent-law-choreography.ts";
+import type { KpFractionChoreographyPhaseId } from "../fraction-choreography.ts";
 
 export type VisualMotionPrimitiveId =
   | "enter"

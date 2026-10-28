@@ -22,15 +22,8 @@ import {
 } from "./focus-profile.ts";
 import type { KpOrganicPathVariant } from "./organic-path-planner.ts";
 
-export const kpDerivativePowerPhaseIds = [
-  "orient-exponent",
-  "reflow-continuants",
-  "branch-exponent",
-  "drop-coefficient",
-  "decrement-successor",
-  "settle-derivative",
-  "release-derivative-focus"
-] as const;
+import { kpDerivativePowerPhaseIds } from "./choreography-phase-ids.ts";
+export { kpDerivativePowerPhaseIds } from "./choreography-phase-ids.ts";
 
 export type KpDerivativePowerPhaseId =
   (typeof kpDerivativePowerPhaseIds)[number];

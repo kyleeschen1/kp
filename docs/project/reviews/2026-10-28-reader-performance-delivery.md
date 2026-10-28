@@ -94,3 +94,22 @@ The division browser canary additionally proves repeated identical seeks do not
 apply the compositor. Fractional smoke (41) and full rising-document preservation
 pass, as do app/tools types and native glyph compositor units. Timings from the
 instrumented run are not used as a production speed claim.
+
+## Loading
+
+Phase-name metadata now lives in a dependency-free leaf; all five original
+choreography modules re-export the same values. The motif catalog no longer
+loads their implementations just to construct its phase inventory. A runtime
+import-closure test guards this boundary, while actual choreography tests retain
+the original API and behavior. Independent canonical host/adapter imports start
+together after descriptor capability selection.
+
+Eight fresh production cohorts (`--production-performance --label=loading`)
+observe 91 JavaScript assets instead of 93, with JavaScript decreasing from
+859,469 to 808,201 raw bytes and 254,956 to 240,126 gzip bytes. Total observed
+assets decrease from 97 to 95 and 963,270 to 912,002 raw bytes. This is a modest
+payload gain, not a renderer-family split. Full build, architecture and equation
+surface preservation pass; 20 motif/choreography units pass. App/tools types
+pass. The full typecheck found a test fixture using `backward` instead of the
+clock's `rewind`; that spelling is corrected and the full gate will rerun during
+final integration. No type/bundle ceilings were raised.

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { collectKpRuntimeImportClosure } from "../scripts/runtime-import-closure.ts";
 
 import { createKpAnimationAssetBuilder } from "../src/animation/asset.ts";
 import {
@@ -15,6 +16,12 @@ import {
 import {
   defaultEquationTransformVisualMotifRules
 } from "../src/animation/motifs/equation-visual-motif-defaults.ts";
+
+test('motif phase metadata does not load choreography implementations', () => {
+  const closure = collectKpRuntimeImportClosure('src/animation/motifs/visual-motif.ts');
+  assert.ok(closure.some(path => path.endsWith('/choreography-phase-ids.ts')));
+  assert.deepEqual(closure.filter(path => path.endsWith('-choreography.ts')), []);
+});
 
 test("animation asset visual motif timeline uses definition-backed defaults", () => {
   const initial = createKpSemanticAssetObject({

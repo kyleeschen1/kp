@@ -2,14 +2,8 @@ export type KpExponentLawChoreographyKind =
   | "peel-one-factor"
   | "absorb-unit-exponent";
 
-export const kpExponentLawChoreographyPhaseIds = [
-  "focus-power-role",
-  "reserve-product-layout",
-  "emit-factor-and-operator",
-  "decrement-or-absorb-exponent",
-  "settle-native-product",
-  "release-power-focus"
-] as const;
+import { kpExponentLawChoreographyPhaseIds } from "./choreography-phase-ids.ts";
+export { kpExponentLawChoreographyPhaseIds } from "./choreography-phase-ids.ts";
 
 export type KpExponentLawChoreographyPhaseId =
   typeof kpExponentLawChoreographyPhaseIds[number];

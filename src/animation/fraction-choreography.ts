@@ -3,14 +3,8 @@ export type KpFractionChoreographyKind =
   | "separate-common-factor"
   | "simplify-unit-factor";
 
-export const kpFractionChoreographyPhaseIds = [
-  "focus-roles",
-  "reflow-continuants",
-  "transmit-structure",
-  "change-artifacts",
-  "settle-native",
-  "release-focus"
-] as const;
+import { kpFractionChoreographyPhaseIds } from "./choreography-phase-ids.ts";
+export { kpFractionChoreographyPhaseIds } from "./choreography-phase-ids.ts";
 
 export type KpFractionChoreographyPhaseId =
   typeof kpFractionChoreographyPhaseIds[number];

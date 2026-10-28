@@ -39,6 +39,12 @@
       "status": "passed",
       "scope": "Focused preparation canary only: identical seeks, bounded paint, focus, resize and disposal; primary smoke/rising, frame identity units and app/tools types also passed. Full cancellation cohort reserved for integration.",
       "checkedAt": "2026-10-28T20:47:22.811Z"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "Loading: production build and eight cold/warm cohorts; actual JavaScript bytes reduced; architecture, surface preservation and motif units pass. Full type gate remains for integration.",
+      "checkedAt": "2026-10-28T20:52:16.243Z"
     }
   ],
   "allowedWork": [
@@ -71,7 +77,8 @@
     {
       "id": "loading",
       "title": "Loading-and-startup",
-      "status": "planned"
+      "summary": "Measured production payload reduction with metadata-only phase authority and parallel selected-capability imports. Original choreography APIs preserved.",
+      "status": "complete"
     },
     {
       "id": "integration",

@@ -3,13 +3,8 @@ import {
   type KpSemanticLineageGraph
 } from "../semantic/semantic-lineage-graph.ts";
 
-export const kpCopyFanOutPhaseIds = [
-  "contract-source",
-  "branch-descendants",
-  "transit-descendants",
-  "arrive-descendants",
-  "settle-descendants"
-] as const;
+import { kpCopyFanOutPhaseIds } from "./choreography-phase-ids.ts";
+export { kpCopyFanOutPhaseIds } from "./choreography-phase-ids.ts";
 
 export type KpCopyFanOutPhaseId = typeof kpCopyFanOutPhaseIds[number];
 

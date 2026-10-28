@@ -28,7 +28,7 @@ test('frame reuse distinguishes every semantic, focus and font input without qua
   assert.equal(initial, equationFrameKey({ ...input }));
   for (const change of [
     { animationProgress: .50001 }, { progressPermille: 501 }, { visualProgress: .50001 },
-    { mode: 'checkpoint' }, { preference: 'reduced' }, { direction: 'backward' as const },
+    { mode: 'checkpoint' }, { preference: 'reduced' }, { direction: 'rewind' as const },
     { focusRevision: 3 }, { fontRevision: 2 }, { beatId: 'beat.two' }, { attentionPhaseId: 'inspect' }
   ]) assert.notEqual(initial, equationFrameKey({ ...input, ...change }));
   assert.throws(() => equationFrameKey({ ...input, animationProgress: NaN }));
