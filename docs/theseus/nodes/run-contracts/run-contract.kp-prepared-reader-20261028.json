@@ -1,0 +1,80 @@
+{
+  "id": "run-contract.kp-prepared-reader-20261028",
+  "kind": "run-contract",
+  "title": "Prepared reader performance",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-28-prepared-reader-delivery.md",
+      "summary": "User-approved continuation focused on perceptible responsiveness and static/prepared rendering"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:equation-surface-preservation",
+    "npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fractional-linear-equation -- --production-performance --label=static-candidate --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "Eight cohorts compared with prepared-baseline; static candidate rejected for payload growth and unchanged layout counts. Semantic/compiler tests, app types, architecture, build and primary smoke passed before removal.",
+      "checkedAt": "2026-10-28T21:35:13.256Z"
+    },
+    {
+      "command": "npm run visual:computed-style-clone; npm run visual:cancellation; npm run check:architecture",
+      "status": "passed",
+      "scope": "Color focus projection across three engines, focused division lifecycle canary, and architecture; diagnostic builds 53 to 25.",
+      "checkedAt": "2026-10-28T21:43:14.961Z"
+    }
+  ],
+  "allowedWork": [
+    "Precompiled reader instructions, preparation and paint lifecycle repairs, bounded reuse and prewarming, measured resource checks, existing regression reconciliation"
+  ],
+  "disallowedWork": [
+    "New visual treatment, universal renderer, worker rewrite, fixed SVG replacement, derivation-trail product UI, deployment or destructive Git operations"
+  ],
+  "goal": "Reduce visible preparation stalls with precompiled instructions and bounded valid reuse",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "publication",
+      "title": "Static-publication",
+      "summary": "Baseline and static-publication experiment complete. Asset-only precompilation increased payload without meaningful traversal benefit and was removed; evidence identifies nominal publication constraints and prioritizes geometry reuse.",
+      "status": "complete"
+    },
+    {
+      "id": "focus",
+      "title": "Paint-and-geometry",
+      "summary": "Declared color-only focus refreshes inert material paint without invalidating geometry; interpolation remains native and bounded host scheduling cancels on retirement.",
+      "status": "complete"
+    },
+    {
+      "id": "reuse",
+      "title": "Prepared-replay",
+      "status": "planned"
+    },
+    {
+      "id": "ahead",
+      "title": "Bounded-advance-preparation",
+      "status": "planned"
+    },
+    {
+      "id": "pressure",
+      "title": "Reliability-and-loading",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "title": "Integration-and-evidence",
+      "status": "planned"
+    }
+  ]
+}

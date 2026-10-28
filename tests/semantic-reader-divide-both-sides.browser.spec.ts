@@ -68,7 +68,7 @@ test("divide-both-sides remains searchable without JavaScript and contained on p
   await phone.close();
 });
 
-test("divide-both-sides preparation reuses bounded paint and retires it on focus, resize and disposal", async ({ page }) => {
+test("divide-both-sides preparation reuses color-only focus and retires on resize and disposal", async ({ page }) => {
   await page.goto(`${route}?kpMotion=full`, { waitUntil: "networkidle" });
   const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
   const seek = async (progress: number) => {
@@ -105,7 +105,8 @@ test("divide-both-sides preparation reuses bounded paint and retires it on focus
   for (let index = 0; index < 5; index++) await seek(600);
   expect(await applies()).toBe(beforeRepeated);
   await page.locator('.kp-semantic-link').first().dispatchEvent('pointerover');
-  await expect.poll(() => initial!.evaluate(node => node.isConnected)).toBe(false);
+  await page.waitForTimeout(200);
+  expect(await initial!.evaluate(node => node.isConnected)).toBe(true);
   const focused = await layer.elementHandle();
   await page.setViewportSize({ width: 600, height: 800 });
   await expect.poll(() => focused!.evaluate(node => node.isConnected)).toBe(false);

@@ -31,6 +31,8 @@ export interface KpReaderEquationLessonDescriptor {
   /** Only the registered domain owner can validate and bind serialized source. */
   readonly bindSource?: (source: unknown) => KpReaderEquationLessonDescriptor;
   readonly id: string;
+  /** Native focus changes only color; geometry and presence keep their owners. */
+  readonly focusPaint?: 'native-color' | undefined;
   readonly createAnimation: (
     profile: KpReaderEquationPresentationProfile
   ) => KpAnimationAsset;

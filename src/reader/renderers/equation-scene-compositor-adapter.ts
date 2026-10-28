@@ -1,4 +1,5 @@
 import { createKpCertifiedNativeKatexContributorFusionRealization } from "../../rendering/native-katex-operation-evaluation-contributor-fusion.ts";
+import { refreshKpEquationMaterialNativeColors } from '../../rendering/equation-material-layer-dom.ts';
 import type {
   KpCanonicalNativeKatexPureScenePlan,
   KpCanonicalNativeKatexSceneInput,
@@ -63,6 +64,7 @@ import {
 
 export interface KpReaderEquationMeasuredRendererSession
   extends KpNativeKatexRendererSession {
+  readonly refreshNativeColors: () => boolean;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly presentationMode:
     | "verified-motion"
@@ -331,6 +333,7 @@ export function createKpReaderEquationSceneCompositorSession(
       : 0;
   return Object.freeze({
     ...canonical.session,
+    refreshNativeColors: () => refreshKpEquationMaterialNativeColors(input.source.stage),
     mode:
       dispatch.planKind !== "explicit-static-checkpoint"
         ? canonical.session.mode

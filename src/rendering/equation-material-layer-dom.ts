@@ -29,6 +29,62 @@ const materialVisualCaches = new WeakMap<
   }>
 >();
 
+/** Color-only emphasis can refresh inert paint without replacing measured
+ * geometry. Presence, transforms and typography remain compositor-owned. */
+export function refreshKpEquationMaterialNativeColors(stage: HTMLElement): boolean {
+  const layer = stage.querySelector<HTMLElement>('[data-kp-editor-equation-material-layer]');
+  const state = layer && materialLayerStates.get(layer);
+  if (!state) return false;
+  const view = stage.ownerDocument.defaultView;
+  if (view === null) return false;
+  const colors = ['color', 'border-top-color', 'border-right-color',
+    'border-bottom-color', 'border-left-color', 'text-decoration-color', 'fill', 'stroke'] as const;
+  const reads = new Map<Element, readonly string[]>();
+  const writes: { element: HTMLElement | SVGElement; values: readonly string[] }[] = [];
+  const collect = (source: Element, visual: Element) => {
+    if (!(visual instanceof HTMLElement || visual instanceof SVGElement)) return;
+    let values = reads.get(source);
+    if (!values) {
+      const style = view.getComputedStyle(source);
+      values = colors.map(property => style.getPropertyValue(property));
+      reads.set(source, values);
+    }
+    writes.push({ element: visual, values });
+    if (source.children.length !== visual.children.length) {
+      throw new Error('Native color refresh requires the original clone topology.');
+    }
+    for (let index = 0; index < source.children.length; index++) {
+      collect(source.children[index]!, visual.children[index]!);
+    }
+  };
+  for (const owner of state.owners.values()) {
+    for (const { sourceElement, visual } of materialVisualCaches.get(owner)?.values() ?? []) {
+      const source = sourceElement instanceof SVGElement && !(sourceElement instanceof SVGSVGElement)
+        ? sourceElement.ownerSVGElement ?? sourceElement : sourceElement;
+      collect(source, visual);
+    }
+  }
+  // Read all native paint first; no geometry reads or read/write interleaving.
+  for (const { element, values } of writes) {
+    // Native interpolation owns this interval; a second transition would lag.
+    const transitions = element.style.transitionProperty.split(',').map(value => value.trim());
+    if (transitions.includes('color') || transitions.includes('all')) {
+      element.style.transitionProperty = transitions.filter(value => value !== 'color' && value !== 'all').join(', ') || 'none';
+    }
+    colors.forEach((property, index) => {
+      if (element.style.getPropertyValue(property) !== values[index]) {
+        element.style.setProperty(property, values[index]!);
+      }
+    });
+  }
+  // Native focus can be a CSS color transition. Follow its realized paint for
+  // that bounded interval; a one-time snapshot would freeze the old color.
+  return stage.getAnimations({ subtree: true }).some(animation =>
+    animation instanceof CSSTransition && animation.transitionProperty === 'color'
+      && animation.playState === 'running' && animation.effect instanceof KeyframeEffect
+      && animation.effect.target !== null && !layer.contains(animation.effect.target));
+}
+
 export function syncKpEquationMaterialLayer(input: {
   readonly stage: HTMLElement;
   readonly owners: readonly KpEquationMaterialLayerOwnerFrame[];

@@ -13,6 +13,7 @@ import type {
 
 export const divideBothSidesDescriptor = {
   id: "divide-both-sides",
+  focusPaint: 'native-color',
   createAnimation: () => createDivideBothSidesEquationAnimationAsset(),
   canonicalTransitionSelection: [
     divideBothSidesEquationAssetIds.cancelCoefficient

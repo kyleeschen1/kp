@@ -1076,7 +1076,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     motionMode: projection.mode,
     fontReadiness,
     typographyCacheKey: `legacy:${equationPresentationProfile.id}`,
-    presentationRevision,
+    presentationRevision: lessonDescriptor.focusPaint === 'native-color'
+      ? semanticSaliencePresentationRevision : presentationRevision,
+    ...(lessonDescriptor.focusPaint === 'native-color' ? { colorRevision: presentationRevision } : {}),
     measurementIdentity: context.fit.measurementIdentity,
     appliedStageLayout: context.appliedStageLayout
   };

@@ -43,6 +43,8 @@ export interface KpReaderCanonicalEquationFrame {
   readonly fontReadiness: KpEquationFontReadiness;
   readonly typographyCacheKey: string;
   readonly presentationRevision: string;
+  /** Only declared native-color focus may bypass geometric invalidation. */
+  readonly colorRevision?: string | undefined;
   readonly measurementIdentity: KpEquationStageMeasurementIdentity;
   readonly appliedStageLayout?:
     KpAppliedEquationStageLayout<
@@ -95,6 +97,8 @@ export function createKpReaderCanonicalEquationSession(input: {
   let session:
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
+  let colorRevision: string | undefined;
+  let colorRefresh: { window: Window; id: number } | undefined;
   let lastBuildParts: readonly (string | number)[] | undefined;
   let structuralSessionKey: string | undefined;
   let structuralFitSurface: HTMLElement | undefined;
@@ -114,6 +118,8 @@ export function createKpReaderCanonicalEquationSession(input: {
       | "measurement-invalidated",
     preserveStructuralSuccession = false
   ): void => {
+    if (colorRefresh !== undefined) colorRefresh.window.cancelAnimationFrame(colorRefresh.id);
+    colorRefresh = undefined;
     session?.retire({
       kind: "native-katex-paint-preserving-retirement",
       reason,
@@ -123,6 +129,7 @@ export function createKpReaderCanonicalEquationSession(input: {
     });
     session = undefined;
     sessionKey = undefined;
+    colorRevision = undefined;
     structuralSessionKey = undefined;
     if (structuralFitSurface !== undefined) {
       delete structuralFitSurface.dataset["kpReaderCanonicalEquationSession"];
@@ -355,6 +362,20 @@ export function createKpReaderCanonicalEquationSession(input: {
         );
       }
       const ownership = activeSession.apply(frame.progress);
+      if (frame.colorRevision !== undefined && frame.colorRevision !== colorRevision) {
+        if (colorRefresh !== undefined) colorRefresh.window.cancelAnimationFrame(colorRefresh.id);
+        const view = frame.fitSurface.ownerDocument.defaultView;
+        // The host follows native CSS focus paint; semantic progress is held.
+        const refresh = () => {
+          colorRefresh = undefined;
+          if (session !== activeSession || disposed || view === null) return;
+          if (activeSession.refreshNativeColors()) {
+            colorRefresh = { window: view, id: view.requestAnimationFrame(refresh) };
+          }
+        };
+        refresh();
+        colorRevision = frame.colorRevision;
+      }
       const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
       if (ownerWindow !== null) {
         recordKpReaderCanonicalSessionApply(ownerWindow);

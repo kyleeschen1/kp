@@ -1,5 +1,48 @@
 import { expect, test } from "@playwright/test";
 
+test("native color refresh follows focus and reversal without measuring or changing geometry", async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const result = await page.evaluate(async () => {
+    const path = '/src/rendering/equation-material-layer-dom.ts';
+    const { syncKpEquationMaterialLayer, refreshKpEquationMaterialNativeColors } = await import(path);
+    const stage = document.createElement('div');
+    const source = document.createElement('span');
+    source.innerHTML = '<span>x</span><svg viewBox="0 0 10 10"><path fill="currentColor" d="M0 0L10 10" /></svg>';
+    source.style.cssText = 'color: rgb(23,45,67); font: 23px serif; transition: color 120ms linear';
+    const layer = document.createElement('div');
+    layer.dataset['kpEditorEquationMaterialLayer'] = 'true';
+    layer.dataset['kpEquationMaterialVisualCache'] = 'dual-revision';
+    stage.append(source, layer); document.body.append(stage);
+    syncKpEquationMaterialLayer({ stage, owners: [{ ownerId: 'x', sourceElement: source,
+      rect: { left: 2, top: 3, width: 40, height: 20 }, opacity: .7, transform: 'translate(5px, 6px)' }] });
+    const owner = layer.firstElementChild!;
+    const visual = owner.firstElementChild!;
+    const geometry = () => [owner, ...owner.querySelectorAll('*')].map(element => {
+      const style = getComputedStyle(element);
+      return [style.opacity, style.transform, style.fontSize, style.fontFamily, style.width, style.height];
+    });
+    const before = geometry();
+    let reads = 0;
+    const original = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = function () { reads++; return original.call(this); };
+    const samples = [];
+    try {
+      for (const color of ['rgb(90, 80, 70)', 'rgb(23, 45, 67)']) {
+        source.style.color = color;
+        while (refreshKpEquationMaterialNativeColors(stage)) await new Promise(requestAnimationFrame);
+        samples.push({ native: getComputedStyle(source).color, clone: getComputedStyle(visual).color,
+          child: getComputedStyle(visual.firstElementChild!).color,
+          fill: getComputedStyle(visual.querySelector('path')!).fill });
+      }
+      return { samples, reads, before, after: geometry(), retained: owner.firstElementChild === visual };
+    } finally { Element.prototype.getBoundingClientRect = original; stage.remove(); }
+  });
+  expect(result.reads).toBe(0);
+  expect(result.after).toEqual(result.before);
+  expect(result.retained).toBe(true);
+  expect(result.samples).toEqual(['rgb(90, 80, 70)', 'rgb(23, 45, 67)'].map(color => ({ native: color, clone: color, child: color, fill: color })));
+});
+
 test("computed style snapshots preserve replacement semantics across fresh contexts", async ({ page }) => {
   await page.goto("/");
   const result = await page.evaluate(async () => {

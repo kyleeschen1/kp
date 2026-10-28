@@ -13,6 +13,7 @@ import type {
 
 export const fractionalLinearDescriptor = {
   id: "fractional-linear",
+  focusPaint: 'native-color',
   createAnimation: () => createFractionalLinearEquationAnimationAsset(),
   canonicalTransitionSelection: [
     fractionalLinearEquationAssetIds.cancelAdditive,
