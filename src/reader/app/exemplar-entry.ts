@@ -805,12 +805,12 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   });
   const attentionProjection = projectKpReaderAttention({
     attention,
-    progressPermille: projection.progressPermille
+    // Integer permilles belong to URL/UI serialization. Motion and attention
+    // must retain the scroll clock's precision, including within short acts.
+    progressPermille: projection.progress * 1_000
   });
   const visualProgress = attentionProjection === undefined
-    ? sample.source === "controls"
-      ? projection.progress
-      : projection.progressPermille / 1_000
+    ? projection.progress
     : attentionProjection.visualProgressPermille / 1_000;
   const visualProgressPermille = Math.round(visualProgress * 1_000);
   risingPassages?.render(visualProgress * 1000);

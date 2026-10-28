@@ -6,7 +6,7 @@ import type { Page } from "playwright";
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 import { assertFractionalEvaluationPaint, inspectPaint } from "./fractional-linear-theme-comparison.ts";
 import { createFractionalRisingScroll } from "../src/reader/app/fractional-rising-scroll.ts";
-import { sampleKpReaderScrollPosition } from "../src/reader/runtime/continuous-scroll-clock.ts";
+import { sampleKpReaderScrollPosition, sampleKpReaderScrollProgress } from "../src/reader/runtime/continuous-scroll-clock.ts";
 
 const outputRoot = path.resolve(
   process.env["KP_FRACTIONAL_LINEAR_VISUAL_OUTPUT"]
@@ -33,7 +33,11 @@ try {
     reducedMotion: "no-preference"
   });
   page.on("pageerror", (error) => pageErrors.push(error.stack ?? error.message));
-  if (process.argv.includes('--preparation')) {
+  if (process.argv.includes('--continuity')) {
+    const { checkFractionalReaderContinuity } = await import('./fractional-reader-continuity-check.ts');
+    await checkFractionalReaderContinuity(page, harness.baseUrl, outputRoot, process.argv.includes('--baseline'));
+    if (pageErrors.length > 0) throw new Error(pageErrors.join('\n'));
+  } else if (process.argv.includes('--preparation')) {
     const { checkFractionalReaderPreparation } = await import('./fractional-reader-preparation-check.ts');
     await checkFractionalReaderPreparation(page, harness.baseUrl, outputRoot);
     if (pageErrors.length > 0) throw new Error(pageErrors.join('\n'));
@@ -64,6 +68,7 @@ try {
 async function checkStandardFrames(page: Page): Promise<void> {
   const samples: (Awaited<ReturnType<typeof sampleVisualFrame>> & {
     readonly paint: Awaited<ReturnType<typeof inspectPaint>>;
+    readonly directReference?: Awaited<ReturnType<typeof inspectPaint>>;
     readonly traversal: "direct" | "scroll";
   })[] = [];
   for (const progress of progressSamples) {
@@ -88,9 +93,19 @@ async function checkStandardFrames(page: Page): Promise<void> {
   });
   await settle(page);
   for (const [index, progress] of [233, 417, 500, 501, 510, 530, 550, 583, 750, 917, 970, 1_000, 970, 917, 750, 583, 550, 530, 510, 501, 500, 417, 233].entries()) {
-    await scrollToSemanticProgress(page, progress);
-    samples.push({ ...await sampleVisualFrame(page, progress), paint: await inspectPaint(page), traversal: "scroll" });
+    const actualProgress = await scrollToSemanticProgress(page, progress);
+    const sample = { ...await sampleVisualFrame(page, progress), paint: await inspectPaint(page) };
     await assertFractionalEvaluationPaint(page);
+    // Physical scrolling rounds to device-supported positions, not to semantic
+    // permilles. Compare direct seeking at that exact position, including near
+    // native/material ownership boundaries, rather than a rounded URL neighbor.
+    await page.locator('[data-kp-reader-attention-scrubber]').evaluate((node, value) => {
+      if (!(node instanceof HTMLInputElement)) throw new Error('Expected progress control');
+      node.step = 'any'; node.value = String(value);
+      node.dispatchEvent(new Event('input', { bubbles: true }));
+    }, actualProgress);
+    await settle(page);
+    samples.push({ ...sample, directReference: await inspectPaint(page), traversal: 'scroll' });
     await page.locator("[data-kp-reader-equation-stage]").screenshot({
       path: path.join(outputRoot, `scroll-${index}-${progress}.png`)
     });
@@ -104,13 +119,12 @@ async function checkStandardFrames(page: Page): Promise<void> {
       .filter((glyph) => glyph.transitionActive === "false" && glyph.opacity > 0)
       .map((glyph) => `${sample.traversal} progress ${sample.requestedProgress}: inactive ${glyph.transitionId} still paints ${glyph.text}`)),
     ...samples.filter((sample) => sample.traversal === "scroll").flatMap((sample) => {
-      const direct = samples.find((candidate) => candidate.traversal === "direct" &&
-        candidate.requestedProgress === sample.requestedProgress);
+      const direct = sample.directReference;
       if (direct === undefined) return [];
-      const visible = (frame: typeof sample) => frame.paint.glyphs
+      const visible = (frame: typeof direct) => frame.glyphs
         .filter((glyph) => glyph.opacity > 0 && glyph.width > 0 && glyph.height > 0)
         .map(({ id, text, opacity }) => ({ id, text, opacity })).sort((a, b) => a.id.localeCompare(b.id));
-      return JSON.stringify(visible(sample)) === JSON.stringify(visible(direct)) ? [] :
+      return JSON.stringify(visible(sample.paint)) === JSON.stringify(visible(direct)) ? [] :
         [`progress ${sample.requestedProgress}: scrolling paints different symbols than a direct seek`];
     })
   ];
@@ -392,7 +406,7 @@ async function settle(page: Page): Promise<void> {
   });
 }
 
-async function scrollToSemanticProgress(page: Page, progress: number): Promise<void> {
+async function scrollToSemanticProgress(page: Page, progress: number): Promise<number> {
   const measured = await page.evaluate(() => {
     const stops = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")]
       .map((beat) => {
@@ -421,6 +435,7 @@ async function scrollToSemanticProgress(page: Page, progress: number): Promise<v
     Math.abs(Number(document.body.dataset["kpReaderProgress"]) - requested) <= 1,
   progress);
   await settle(page);
+  return sampleKpReaderScrollProgress(await page.evaluate(() => scrollY) + measured.anchorY, geometry) * 1000;
 }
 
 function uniqueSorted(values: readonly number[]): readonly number[] {

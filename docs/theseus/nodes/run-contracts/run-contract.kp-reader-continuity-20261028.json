@@ -1,0 +1,68 @@
+{
+  "id": "run-contract.kp-reader-continuity-20261028",
+  "kind": "run-contract",
+  "title": "Reader continuity and quiet prose",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-28-reader-motion-continuity.md",
+      "summary": "User-approved performance and local prose continuation after choppy-motion diagnosis"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:reader-runtime-hardening",
+    "npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fractional-linear-equation -- --continuity --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "Zero rounded repeats across three moving intervals, exact reversal; 41-point smoke, 14 focused units, app and node types pass.",
+      "checkedAt": "2026-10-28T22:34:23.760Z"
+    }
+  ],
+  "allowedWork": [
+    "Measured reader performance repairs, continuous progress, precise invalidation, bounded native preparation improvements, local prose line height and near-presentation visibility"
+  ],
+  "disallowedWork": [
+    "New renderer, inertia clock, semantic changes, catalogue-wide typography or reveal promotion, deployment, destructive Git operations"
+  ],
+  "goal": "Continuous equation motion with measured frame costs and nearby prose presentation",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "precision",
+      "title": "Continuous-progress",
+      "summary": "Preserved continuous progress through scroll and attention; real motion resolution measured and exact physical-seek parity checked.",
+      "status": "complete"
+    },
+    {
+      "id": "invalidation",
+      "title": "Precise-geometry-invalidation",
+      "status": "planned"
+    },
+    {
+      "id": "costs",
+      "title": "Measured-frame-and-preparation-costs",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "title": "Performance-integration",
+      "status": "planned"
+    },
+    {
+      "id": "prose",
+      "title": "Quiet-prose-exemplar",
+      "status": "planned"
+    }
+  ]
+}

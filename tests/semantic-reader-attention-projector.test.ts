@@ -65,6 +65,19 @@ test("lessons without attention preserve the existing projection path", () => {
   );
 });
 
+test("sub-permille movement stays continuous and does not cross attention boundaries early", () => {
+  const samples = [174.91, 174.92, 174.93, 174.94].map(progressPermille =>
+    projectKpReaderAttention({ attention, progressPermille })!);
+  assert.equal(new Set(samples.map(sample => sample.visualProgressPermille)).size, samples.length);
+  for (let index = 1; index < samples.length; index++) {
+    assert.ok(samples[index]!.visualProgressPermille > samples[index - 1]!.visualProgressPermille);
+  }
+  assert.equal(projectKpReaderAttention({ attention, progressPermille: 49.9999 })!.motionGate, 'hold');
+  assert.equal(projectKpReaderAttention({ attention, progressPermille: 50.0001 })!.motionGate, 'play');
+  assert.equal(projectKpReaderAttention({ attention, progressPermille: 299.9999 })!.motionGate, 'play');
+  assert.equal(projectKpReaderAttention({ attention, progressPermille: 300 })!.motionGate, 'hold');
+});
+
 function phase(
   cycle: string,
   kind: "orient" | "act" | "settle" | "inspect",
