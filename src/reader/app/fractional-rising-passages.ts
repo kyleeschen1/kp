@@ -26,6 +26,13 @@ export function mountFractionalRisingPassages(input: {
   const summary = document.createElement('summary');
   summary.textContent = 'Steps';
   navigation.append(summary, toc);
+  const motionControl = document.querySelector<HTMLElement>('.kp-reader-motion-control');
+  if (motionControl === null) throw new Error('Document reader requires its motion preference control.');
+  const motionHome = document.createComment('motion preference home');
+  motionControl.before(motionHome);
+  // A reader-wide preference belongs in the toolbar menu, outside the scene.
+  // Move the bound control rather than creating a second preference owner.
+  toc.append(motionControl);
   masthead.append(navigation);
   const closeNavigation = (event: Event) => {
     if (event.target instanceof Element && event.target.closest('a')) navigation.open = false;
@@ -170,6 +177,7 @@ export function mountFractionalRisingPassages(input: {
       readingMode.removeEventListener('click', toggleReading);
       readingMode.remove();
       navigation.removeEventListener('click', closeNavigation);
+      motionHome.replaceWith(motionControl);
       tocHome.replaceWith(toc);
       navigation.remove();
     }

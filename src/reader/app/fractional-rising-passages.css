@@ -49,10 +49,7 @@
     background: transparent; overflow: visible;
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-stage-heading {
-    display: flex; justify-content: flex-end; min-height: 0;
-  }
-  body[data-kp-caption-mode="captions"] .kp-reader-equation-stage-heading {
-    position: absolute; top: calc(-1 * var(--kp-flow-line-in-card) - 2px); right: 24px;
+    display: none;
   }
   body[data-kp-reader-layout="rising-passages"] :is([data-kp-reader-stage-kicker], [data-kp-reader-stage-status], .kp-reader-equation-hint, .kp-reader-equation-progress) { display: none; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-controls { margin: 0; }
@@ -84,10 +81,15 @@
   }
   body[data-kp-reader-layout="rising-passages"] .kp-caption-copy { width: 100%; }
   .kp-caption-frame {
-    position: absolute; inset: 0; border-block: 0;
-    border-inline: 3px solid var(--kp-tutorial-text-muted);
+    position: absolute; inset: 0; border: 0;
     background: var(--kp-surface); pointer-events: none;
   }
+  .kp-caption-frame::before, .kp-caption-frame::after {
+    content: ''; position: absolute; inset-block: 0; width: 10px;
+    border: 1px solid color-mix(in srgb, var(--kp-tutorial-text-muted) 45%, transparent);
+  }
+  .kp-caption-frame::before { left: 0; border-right: 0; border-radius: 2px 0 0 2px; }
+  .kp-caption-frame::after { right: 0; border-left: 0; border-radius: 0 2px 2px 0; }
   .kp-caption-reading-mode {
     font: inherit; font-size: .78rem; color: inherit; border: 1px solid var(--kp-line);
     background: transparent; border-radius: .25rem; padding: .2rem .45rem; cursor: pointer;
@@ -119,6 +121,10 @@
     background: var(--kp-paper);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-lesson-toc ol { display: block; }
+  body[data-kp-reader-layout="rising-passages"] .kp-rising-navigation .kp-reader-motion-control {
+    display: flex; justify-content: space-between; margin-top: .8rem; padding-top: .8rem;
+    border-top: 1px solid var(--kp-line);
+  }
   body[data-kp-caption-mode="document"] :is(.kp-caption-sequence, .kp-caption-pin, .kp-rising-passage) { display: block; position: static; height: auto; }
   html body[data-kp-caption-mode="document"] .kp-animation-beats { padding: 0; }
   html body[data-kp-caption-mode="document"] .kp-animation-beats > li { margin: 0; padding: 1rem 0; }

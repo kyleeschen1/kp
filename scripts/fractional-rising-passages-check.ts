@@ -12,6 +12,15 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await page.setViewportSize(size);
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.waitForSelector('.kp-caption-operation-slider');
+    assert.equal(await page.locator('.kp-caption-pin [data-kp-reader-motion-preference]').count(), 0);
+    assert.equal(await page.locator('.kp-reader-masthead [data-kp-reader-motion-preference]').count(), 1);
+    await page.locator('.kp-rising-navigation summary').click();
+    await page.getByRole('combobox', { name: 'Motion preference' }).selectOption('reduced');
+    await settle(page);
+    assert.equal(await page.locator('body').getAttribute('data-kp-reader-motion-preference'), 'reduced');
+    await page.getByRole('combobox', { name: 'Motion preference' }).selectOption('system');
+    await page.screenshot({ path: path.join(outputRoot, `flow-preferences-${size.width}.png`) });
+    await page.locator('.kp-rising-navigation summary').click();
     assert.equal(await page.locator('.kp-rising-passage').count(), 7);
     assert.equal(await page.locator('.kp-caption-preview, .kp-caption-scroll-slot, .kp-rising-passage[hidden]').count(), 0);
     assert.deepEqual(await page.locator('.kp-rising-passage').evaluateAll((nodes) => nodes.map((node) =>

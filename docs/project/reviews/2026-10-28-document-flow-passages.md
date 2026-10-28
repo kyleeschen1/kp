@@ -48,6 +48,63 @@ The existing Nocturne palette, 15px prose, smaller math, semantic reference
 styling and grey side rails remain. This does not install Gill Sans or change
 mathematical fonts. Headings remain metadata/navigation labels.
 
+The next chrome revision moves the existing bound Motion control into the
+toolbar's Steps menu. Its preference owner, persistence and accessibility label
+remain the same. The theater heading no longer paints controls. The rails are
+now 1px at 45% of the muted palette color, with 10px inward ends and slight corner
+rounding. They are CSS decorations and add no measured elements or runtime loop.
+The scoped browser check exercises the relocated control on desktop and phone;
+captures of the bracket rails and menu were inspected. App/tools type checks pass.
+
+## Theater sizing and measurement audit
+
+The current container adapts to the measured maximum prose height, but reserves
+an explicit **82px mathematical workspace** and a minimum 320px overall frame.
+It is not yet a general container for composed scenes. The next useful boundary
+is a renderer-supplied scene footprint, including its motion clearance, consumed
+by the theater together with prose and controls. Reserve stable bounds through
+an operation; avoid resizing the theater to individual moving glyphs. Invalidate
+those bounds for content/font/available-width changes, not ordinary playhead
+updates. Broader sizing work is a recommendation, not implemented here.
+
+The committed diagnostic now counts `getBoundingClientRect` calls without adding
+layout reads. Run:
+
+```sh
+npm run visual:fractional-linear-equation -- --performance --base-url=http://127.0.0.1:8000
+```
+
+One local Vite/headless Chromium run, four complete forward/back traversals:
+
+| Counter | After startup | After four traversals | After 3s idle |
+| --- | ---: | ---: | ---: |
+| Paragraph bounds reads | 42 | 42 | 42 |
+| Beat-container bounds reads | 28 | 28 | 28 |
+| All bounds reads | 519 | 26,173 | 26,173 |
+| Browser layout count | 76 | 9,467 | 9,467 |
+| Scroll-geometry rebuilds | 4 | 4 | 4 |
+| Canonical session builds | 0 | 53 | 53 |
+
+The last three traversals each added 6,289 bounds reads, 2,312 browser layouts and
+13 canonical session builds. Thus the prose adapter does not continuously
+remeasure while scrolling, but the wider rendering path still does substantial
+geometry work. A bounds read is not necessarily a forced layout; these counters
+must not be equated. The diagnostic counts the whole page, so it does not assign
+every read to a particular compositor function or prove all reads avoidable.
+There were no additional bounds reads/layouts in the final idle window.
+
+This was instrumented development Chromium, alongside other local checks.
+Timing is not presented as a production benchmark or before/after improvement.
+The next performance investigation should attribute the compositor preparation
+and transit reads, preserve native ownership/reversal, and measure whether
+cached footprints can remove work. Do not blindly enable a cache; an earlier
+cache experiment broke reverse geometry, as recorded in the preceding review.
+
+The agreed focus-threshold/crossfade and below-stage operation-slider design
+remains a separate pending presentation change. Sliders should be associated
+explicitly with animation-bearing passages; paragraph order alone is not the
+general authoring rule. This chrome pass does not claim that promotion.
+
 ## Search, lifecycle and cost
 
 Native search now operates on exposed original prose without hidden-until-found

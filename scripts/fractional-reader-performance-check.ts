@@ -3,8 +3,27 @@ import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { Page } from "playwright";
 
+declare global {
+  interface Window {
+    kpFractionalMeasurementProbe: { total: number; prose: number; beat: number };
+  }
+}
+
 /** Bounded diagnostic, not a production memory or cross-browser benchmark. */
 export async function checkFractionalReaderPerformance(page: Page, baseUrl: string, outputRoot: string) {
+  // Count calls without performing additional layout reads. This diagnostic
+  // belongs only to the browser harness, never the reader payload.
+  await page.addInitScript(() => {
+    window.kpFractionalMeasurementProbe = { total: 0, prose: 0, beat: 0 };
+    const original = Element.prototype.getBoundingClientRect;
+    Element.prototype.getBoundingClientRect = function (this: Element) {
+      const counts = window.kpFractionalMeasurementProbe;
+      counts.total++;
+      if (this.classList.contains('kp-rising-passage')) counts.prose++;
+      if (this.hasAttribute('data-kp-beat')) counts.beat++;
+      return original.call(this);
+    };
+  });
   const client = await page.context().newCDPSession(page);
   await client.send("Performance.enable");
   const responseBytes: number[] = [];
@@ -31,6 +50,7 @@ export async function checkFractionalReaderPerformance(page: Page, baseUrl: stri
       nodes: metrics.find((metric) => metric.name === "Nodes")?.value,
       layouts: metrics.find((metric) => metric.name === "LayoutCount")?.value,
       scriptSeconds: metrics.find((metric) => metric.name === "ScriptDuration")?.value,
+      boundsReads: await page.evaluate(() => ({ ...window.kpFractionalMeasurementProbe })),
       runtime: await runtime()
     };
   };
