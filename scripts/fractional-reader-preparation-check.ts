@@ -37,6 +37,10 @@ export async function checkFractionalReaderPreparation(page: Page, baseUrl: stri
     })).sort((a, b) => a.id.localeCompare(b.id) || a.x - b.x);
   };
   const points = [233, 417, 750, 917];
+  await page.waitForFunction(async () => {
+    const path = '/src/reader/runtime/reader-runtime-metrics.ts';
+    return (await import(/* @vite-ignore */ path)).inspectKpReaderRuntimeMetrics(window).adjacentPrewarmCompilations === 1;
+  }, undefined, { timeout: 5000 });
   const initial = await metrics();
   assert.equal(initial.adjacentPrewarmCompilations, 1, 'Idle preparation must execute in this ownership test');
   assert.equal(initial.canonicalSessionApplies, 0, 'Preparing a hidden neighbor must not advance the visible equation');

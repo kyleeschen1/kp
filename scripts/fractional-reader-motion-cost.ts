@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { Page } from 'playwright';
@@ -55,6 +56,8 @@ export async function checkFractionalMotionCost(page: Page, baseUrl: string, out
             callbackP95Ms: intervals[Math.floor(intervals.length * .95)], callbackMaxMs: intervals.at(-1),
             over33ms: intervals.filter(ms => ms > 33.4).length };
         }, { from, to });
+        assert.ok(traversal.changedScroll > 0 && traversal.changedGeometry > traversal.changedScroll * .8,
+          `${operation}: a cost sample requires a moving equation, not an idle or failed renderer`);
         const after = await metrics();
         const difference = (a: typeof after, b: typeof after) => Object.fromEntries(Object.keys(a).map(key => [key, a[key]! - b[key]!]));
         samples.push({ cpu, visit, operation, entry: difference(entryAfter, entryBefore), sweep: difference(after, entryAfter), ...traversal });

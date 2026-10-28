@@ -59,13 +59,14 @@
     {
       "id": "costs",
       "title": "Measured-frame-and-preparation-costs",
-      "summary": "Profile operation-local first preparation and live sweeps; preserve only demonstrated optimizations within existing paint and clock ownership.",
-      "status": "in-progress"
+      "summary": "Measured frame work reduced through existing focus and idle queue owners; failed/no-gain experiments recorded, preservation checks passed.",
+      "status": "complete"
     },
     {
       "id": "integration",
       "title": "Performance-integration",
-      "status": "planned"
+      "summary": "Integrate types, architecture, reader preservation, production closure and complete-consumer budgets before local prose candidate.",
+      "status": "in-progress"
     },
     {
       "id": "prose",

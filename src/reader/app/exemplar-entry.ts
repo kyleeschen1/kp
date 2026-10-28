@@ -467,6 +467,8 @@ const materialLayer = createKpReaderEquationMaterialLayer(
 let lastMeasuredLayout: LayoutState | undefined;
 let measuredViewportSize: { width: number; height: number } | undefined;
 let lastEquationFrame: { layout: LayoutState; key: string } | undefined;
+let appliedFocusRevision = -1;
+let lastPrewarm: { layout: LayoutState; key: string } | undefined;
 let chromeFreeLayoutRevision = -1;
 
 const rendererRegistry = createKpReaderAdapterRegistry<
@@ -1041,11 +1043,12 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   });
   // Native semantic state is established before the canonical session samples
   // paint; the session alone then carries that presentation through transit.
-  applyKpCanonicalEquationSemanticFocus({
-    stage,
-    linkRoot: document,
-    projection: semanticFocus
-  });
+  // Native selector/link DOM is stable for this mounted reader. Moving the
+  // playhead does not change focus; new material clones read these native styles.
+  if (appliedFocusRevision !== focusSnapshot.revision) {
+    applyKpCanonicalEquationSemanticFocus({ stage, linkRoot: document, projection: semanticFocus });
+    appliedFocusRevision = focusSnapshot.revision;
+  }
   const transition = context.renderPlan.transitions[0];
   const semanticSaliencePresentationRevision = fractionCompositionSalience?.render({
     root: context.element,
@@ -1088,7 +1091,11 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   };
   const canonicalEquationSessionApplied =
     readerCanonicalEquationSession?.apply(canonicalFrame) ?? false;
-  if (readerCanonicalEquationSession !== undefined) {
+  const prewarmKey = JSON.stringify([transitionId, projection.mode, fontReadiness.revision, presentationRevision]);
+  // The idle queue already waits for a quiet window. Replacing unchanged
+  // work on every frame repeats geometry reads and cancels that scheduling.
+  if (readerCanonicalEquationSession !== undefined &&
+      (lastPrewarm?.layout !== layout || lastPrewarm.key !== prewarmKey)) {
     const activeIndex = canonicalTransitionIds.indexOf(transitionId);
     const adjacent = [activeIndex - 1, activeIndex + 1].flatMap((index) => {
       const adjacentId = canonicalTransitionIds[index];
@@ -1110,6 +1117,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     // Neighbors remain visibility:hidden; prewarming may measure their settled
     // paint but never grants them material, native, or accessibility authority.
     readerCanonicalEquationSession.prewarm(adjacent, () => lastMeasuredLayout === layout);
+    lastPrewarm = { layout, key: prewarmKey };
   }
   if (canonicalEquationSessionApplied) {
     materialLayer.sync([]);

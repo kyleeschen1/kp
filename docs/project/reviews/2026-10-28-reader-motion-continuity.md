@@ -49,3 +49,42 @@ all prepared layers for a used math font. Baseline unrelated-font retirement was
 one layer per reader; now zero. This is avoided-work evidence, not a claim about
 how often production pages load unrelated fonts. Unknown events, viewport resize
 and disposal retain the existing preparation-pressure safeguards.
+
+## Moving-frame work
+
+The mounted reader now applies native semantic focus only when its focus
+revision changes. Native selector/link DOM is stable for this mount; newly
+prepared material reads the established native paint. Adjacent preparation is
+requested only when transition, layout identity, motion, font or presentation
+changes. The existing idle queue retains responsibility for waiting, cancellation
+and stale-geometry checks; no second scheduler or cache was added.
+
+`npm run visual:fractional-linear-equation -- --motion-cost --profile --label=before --base-url=http://127.0.0.1:8000`
+and the same command with `--label=frame-work` sampled three 1.2-second moving
+intervals. Repeat-visit scripting totals in local Chromium were:
+
+| Interval | Normal CPU, before → after | 4× slowdown, before → after |
+| --- | --- | --- |
+| Cancellation | 78.5 → 61.6 ms | 212.2 → 136.1 ms |
+| Evaluation | 104.2 → 84.0 ms | 249.9 → 181.3 ms |
+| Denominator | 84.7 → 62.4 ms | 233.4 → 155.1 ms |
+
+These are profiled development diagnostics, not a controlled population estimate
+or presented-frame benchmark. Callback p95 remained about 17.2–17.6 ms in both
+runs, with no intervals over 33.4 ms. Each sweep changes about 45–48 CSS-pixel
+positions, so fewer changing positions than RAF callbacks is expected here.
+First-use preparation remains substantially more expensive than warm playback.
+
+A separate experiment captured scroll position once before frame writes. It
+did not reduce layout counts (about 89–95 per sweep) or improve scripting, and
+was removed. Its first draft failed with an incorrectly scoped variable; that
+run is invalid and excluded. The cost probe now also rejects an idle/failed
+renderer rather than writing a misleading fast sample. Large changes to material
+positioning or preparation are not justified by these small warmed intervals.
+
+Preparation pressure initially sampled before the idle task had run; it now
+waits for the observable preparation event under its existing forced idle
+budget. The corrected test passes with and without the request guard: four
+builds remain four over twelve forward/reverse cycles; resize/font changes
+retire all retained layers, and disposal removes them. All 140 one-pixel
+continuity samples still change position and reverse exactly.
