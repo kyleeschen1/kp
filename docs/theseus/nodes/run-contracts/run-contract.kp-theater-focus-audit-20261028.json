@@ -2,7 +2,8 @@
   "id": "run-contract.kp-theater-focus-audit-20261028",
   "kind": "run-contract",
   "title": "Theater focus handoff and performance audit",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -26,6 +27,13 @@
       "scope": "behavior: desktop and phone focus, reversal, controls, search and static fallback; production and equation smoke also passed",
       "checkedAt": "2026-10-28T19:56:11.874Z",
       "notes": "See docs/project/reviews/2026-10-28-theater-focus-and-performance.md for complete commands and visual limitations."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --performance --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "audit: traversal, idle measurement invariants, cold and repeated TOC jumps, fresh mid-operation URL restoration",
+      "checkedAt": "2026-10-28T20:03:31.508Z",
+      "notes": "Instrumented Vite/Chromium diagnosis, not production benchmark. Tools typecheck passed; full findings in docs/project/reviews/2026-10-28-theater-focus-and-performance.md."
     }
   ],
   "allowedWork": [
@@ -46,7 +54,8 @@
     {
       "id": "audit",
       "title": "Performance and narrative-jump audit",
-      "status": "in-progress"
+      "summary": "Behavior candidate and independent audit delivered. Recommendations recorded; no renderer optimization or motif promotion. Visual candidate ready for user review.",
+      "status": "complete"
     }
   ]
 }

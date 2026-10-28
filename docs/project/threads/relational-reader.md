@@ -5,12 +5,16 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
-Latest October 28 candidate: [document-flow passages](../reviews/2026-10-28-document-flow-passages.md)
-replace hidden captions, preview copies and stand-in scroll slots with real
-paragraphs and native sticky operation holds. Text metrics determine the local
-centered layout; the equation renderer, sliders and clock remain. The approved
-boundary ends at this exemplar's visual checkpoint. Review the natural arrival,
-inspection pause and return to the document before any shared-format promotion.
+Latest October 28 candidate: [theater focus and performance audit](../reviews/2026-10-28-theater-focus-and-performance.md)
+adds scroll-derived complementary paragraph focus at the stage boundary and one
+below-stage slider owned only by explicit operation associations. Real document
+flow, search and the mathematical renderer remain. The next paragraph enters
+immediately after the operation, without an extra inspection hold. Review its
+focus threshold and prose/math overlap before shared-format promotion. The audit
+finds direct jumps without intermediate replay, but repeated destination-session
+preparation dominates active work. The next engineering recommendation is precise
+geometry/paint invalidation and bounded preparation reuse, preserving reverse
+paint ownership; no cache activation or renderer replacement is approved here.
 
 October 28: the fractional reader's latest approved-to-build, pending-review
 candidate uses [document-backed captions](../reviews/2026-10-28-fractional-caption-reader.md).

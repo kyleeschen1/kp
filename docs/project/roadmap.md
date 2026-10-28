@@ -25,13 +25,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-October 28 latest local revision: [real document passages](reviews/2026-10-28-document-flow-passages.md)
-replace the simulated caption travel after the user reported vertical drift and
-premature text arrival. Original paragraphs now remain in article flow, hold
-above the existing equation during their operations, then release naturally.
-Measured prose heights center the framed region below the header; one stage,
-sliders and semantic clock remain. Review arrival and pacing before promotion.
-This supersedes the caption-motion treatment below, not its mathematical work.
+October 28 latest local revision: [theater focus and performance audit](reviews/2026-10-28-theater-focus-and-performance.md)
+retains real document paragraphs and adds complementary focus as incoming text
+crosses the stage boundary. One thin slider below the equation belongs only to
+explicit operations; it dissolves as the next paragraph enters. Review the focus
+threshold and prose/math overlap before promotion. The audit confirms direct
+narrative jumps without replay, but finds repeated mathematical session builds
+dominate active work. Prioritize precise invalidation and bounded preparation
+reuse next; no speculative cache activation is included. This supersedes the
+caption-motion treatments below, not their mathematical work.
 
 October 28 latest visual candidate: [document-backed captions](reviews/2026-10-28-fractional-caption-reader.md)
 now sit bottom-aligned above the equation on a narrow Nocturne blue card. The user
