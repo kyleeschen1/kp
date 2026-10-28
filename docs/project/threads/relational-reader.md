@@ -5,6 +5,16 @@ Last Updated: 2026-10-28
 
 ## Canonical direction
 
+October 28 continuity continuation: [evidence and local review](../reviews/2026-10-28-reader-motion-continuity.md)
+records removal of rounded scroll positions, irrelevant font retirement and
+redundant per-frame focus/preparation work. The fractional reader's prose now has
+1.8 line height and a short arrival/release presence window around each hold;
+native search/selection and Read all preserve access. Review this local treatment
+before generalization. Moving callback cadence is even in the measured samples,
+but cold preparation and actual presented-frame pacing remain distinct limits.
+The [approved delivery](../2026-10-28-reader-motion-continuity.md) is implemented;
+its evidence records preservation, rejected experiments and review instructions.
+
 October 28 prepared-reader continuation: [delivery evidence](../reviews/2026-10-28-prepared-reader-delivery.md)
 records explicit color-only focus, four bounded retained transitions and one
 conservative idle neighbor. Repeat traversal now avoids rebuilding measured

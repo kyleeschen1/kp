@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 28 continuity continuation: [motion and prose evidence](reviews/2026-10-28-reader-motion-continuity.md)
+records continuous scroll progress, scoped font invalidation and fewer redundant
+focus/preparation requests. Slow one-pixel samples no longer repeat rounded
+positions; production moving sweeps have even callback timing, while cold
+preparation remains expensive under slowdown. The local fractional reader now
+uses roomier prose and annotations visible only near their presentation holds.
+Review that candidate before promotion; native search, real reading, reverse and
+direct jumps remain. This is measured progress, not a claim that displayed-frame
+pacing or all performance work is finished.
+
 October 28 performance continuation: [prepared-reader evidence](reviews/2026-10-28-prepared-reader-delivery.md)
 supersedes the earlier next-step recommendation to separate focus and geometry.
 Declared native-color focus now preserves measured preparation; bounded reuse

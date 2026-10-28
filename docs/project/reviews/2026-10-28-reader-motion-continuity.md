@@ -107,3 +107,40 @@ first-use denominator preparation still costs about 225 ms of scripting under
 4× slowdown. Real device input, high-refresh displays and presented-frame pacing
 remain unproven. Lower measured work and removal of rounded positions do not
 justify a promise of universally smooth playback.
+
+## Quiet prose candidate
+
+Local paragraph line height increases from 1.6 to 1.8 without changing font size,
+weight or mathematical typography. An annotation is absent until the final
+24 CSS pixels of approach to its bottom-aligned reading position, fully present
+through its reading/operation hold, then withdrawn over the first 24 pixels of
+release. This supersedes the faint always-visible floor and earlier stage-top
+crossfade. These optical distances are provisional, local to this exemplar.
+
+The existing layout measurement supplies arrival/hold windows once; normal
+scrolling uses one binary lookup and sparse paint updates. Overlapping windows
+retain an exact dense fallback. Finite ordered positions and valid holds are
+checked at compilation. The change adds no per-frame layout measurements,
+timers or mathematical state. Hidden annotations do not intercept pointer input.
+Native selection/find reveals the real selected paragraph, keyboard focus keeps
+its existing reveal, and removing selection restores scroll-derived presence.
+No text copies, hidden DOM or custom search implementation are introduced.
+
+Eight focused projection/scroll tests pass, including sparse/dense parity,
+invalid geometry, distant jumps and operation-only controls. The stable
+`npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000`
+passes desktop/phone centering, holds, release, reverse, native find, selection
+and clearing, font reflow, Read all, reduced motion, print and no-JS reading.
+Desktop and phone screenshots were inspected. App/node/test types, rebuilt
+production closure/budgets, the 41-sample equation smoke and all 140 continuity
+positions pass after this candidate. No budget ceiling changed.
+
+Outcome: HUMAN_CHECKPOINT. All five delivery outcomes are implemented and
+checked; the local prose treatment awaits visual judgment before promotion.
+Open http://localhost:8000/reader/solve-fractional-linear/, scroll slowly into
+and out of “A factor of two enters on each side,” then reverse through a
+cancellation. Judge the roomier prose and whether the short arrival/release
+window is sufficiently quiet. Also try Cmd+F and Read all in the actual browser;
+automated native-find evidence does not certify every browser's find UI.
+The performance work is preserved independently of the prose rollback unit.
+Next context command: `theseus work context workflow.kp.delivery --mode brief`.

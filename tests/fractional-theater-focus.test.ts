@@ -4,19 +4,24 @@ import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalSlider
 import { fractionalPassageIndex } from '../src/reader/app/fractional-rising-scroll.ts';
 import { fractionalPassageOperations } from '../src/reader/compiler/fractional-passage-operations.ts';
 
-test('the measured stage crossing drives complementary emphasis with identical reverse and direct seeks', () => {
-  const input = { positions: [100, 600, 1100], heights: [72, 96, 48], stageOffset: 14 };
+test('prose is present only near arrival and through its hold, including reverse and direct seeks', () => {
+  const input = { positions: [100, 600, 1100], holds: [300, 300, 100] };
   const focus = (position: number) => fractionalTheaterFocus({ ...input, position });
-  assert.deepEqual(focus(300), [1, .12, .12]);
-  assert.deepEqual(focus(490), [1, .12, .12]);
-  assert.deepEqual(focus(514), [.12, 1, .12]);
-  for (const position of [490, 496, 502, 508, 514, 508, 502, 496, 490]) {
-    const state = focus(position);
-    assert.ok(Math.abs(state[0]! + state[1]! - 1.12) < 1e-12);
-    assert.deepEqual(state, focus(position));
-  }
-  assert.deepEqual(focus(2000), [.12, .12, 1]);
-  assert.throws(() => fractionalTheaterFocus({ ...input, heights: [], position: 300 }), /measured passage heights/);
+  assert.deepEqual(focus(75), [0, 0, 0]);
+  assert.deepEqual(focus(88), [.5, 0, 0]);
+  assert.deepEqual(focus(100), [1, 0, 0]);
+  assert.deepEqual(focus(300), [1, 0, 0]);
+  assert.deepEqual(focus(400), [1, 0, 0]);
+  assert.deepEqual(focus(412), [.5, 0, 0]);
+  assert.deepEqual(focus(424), [0, 0, 0]);
+  assert.deepEqual(focus(588), [0, .5, 0]);
+  assert.deepEqual(focus(2000), [0, 0, 0]);
+  assert.throws(() => fractionalTheaterFocus({ ...input, holds: [], position: 300 }), /one hold per passage/);
+  for (const invalid of [
+    { positions: [100, 90], holds: [0, 0] },
+    { positions: [NaN], holds: [0] },
+    { positions: [100], holds: [-1] }
+  ]) assert.throws(() => compileFractionalTheaterFocus(invalid), /ordered finite/);
 });
 
 test('slider dissolves only after completion, including reverse traversal', () => {
@@ -28,15 +33,15 @@ test('slider dissolves only after completion, including reverse traversal', () =
 test('sparse focus matches the complete law for long documents, jumps, reversals and overlapping spans', () => {
   for (const input of [
     { positions: Array.from({ length: 10000 }, (_, i) => 100 + i * 120),
-      heights: Array.from({ length: 10000 }, (_, i) => 24 + (i % 3) * 24), stageOffset: 14 },
-    { positions: [100, 115, 130], heights: [24, 24, 24], stageOffset: 14 }
+      holds: Array.from({ length: 10000 }, () => 60) },
+    { positions: [100, 115, 130], holds: [24, 24, 24] }
   ]) {
     const focus = compileFractionalTheaterFocus(input);
     for (const position of [-100, 0, 62, 70, 80, 86, 95, 210, 101200, 1199990, 2000000, 70]) {
       const expected = fractionalTheaterFocus({ ...input, position });
       const actual = focus(position);
-      assert.deepEqual(expected, expected.map((_, index) => actual.get(index) ?? .12));
-      if (input.positions.length === 10000) assert.ok(actual.size <= 2);
+      assert.deepEqual(expected, expected.map((_, index) => actual.get(index) ?? 0));
+      if (input.positions.length === 10000) assert.ok(actual.size <= 1);
     }
   }
 });

@@ -2,7 +2,8 @@
   "id": "run-contract.kp-reader-continuity-20261028",
   "kind": "run-contract",
   "title": "Reader continuity and quiet prose",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,8 +40,18 @@
       "status": "passed",
       "scope": "Full types, architecture, production build and closure/budgets, 17 reader conformance, 18 three-engine color/clone checks, 41-sample smoke, 25 hardening and 11 preservation tests pass. Production moving sweeps measured separately from cold entry.",
       "checkedAt": "2026-10-28T22:55:56.132Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "Local prose desktop/phone, native find, selection/clearing, holds, reversal, sliders, reflow, Read all, reduced motion, print/no-JS pass; 8 pure tests, types, final equation smoke/continuity and rebuilt production closure/budgets pass.",
+      "checkedAt": "2026-10-28T23:02:04.356Z"
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "HUMAN_CHECKPOINT: five implementation outcomes checked. Review local line spacing and near-presentation annotation presence before promotion; cold preparation and actual presented-frame pacing remain documented limits."
+  },
   "allowedWork": [
     "Measured reader performance repairs, continuous progress, precise invalidation, bounded native preparation improvements, local prose line height and near-presentation visibility"
   ],
@@ -77,8 +88,8 @@
     {
       "id": "prose",
       "title": "Quiet-prose-exemplar",
-      "summary": "Local line spacing and near-presentation annotation presence, preserving real prose, native search, keyboard, Read all, static and print.",
-      "status": "in-progress"
+      "summary": "Reversible local prose candidate checked and ready for human review; no catalogue-wide promotion.",
+      "status": "complete"
     }
   ]
 }

@@ -25,6 +25,18 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await page.locator('.kp-rising-navigation summary').click();
     assert.equal(await page.locator('.kp-rising-passage').count(), 7);
     assert.equal(await page.locator('.kp-caption-preview, .kp-caption-scroll-slot, .kp-rising-passage[hidden]').count(), 0);
+    const accessiblePassage = page.locator('[data-kp-rising-beat="beat.cancel-denominator"]');
+    assert.equal(await accessiblePassage.evaluate(node => getComputedStyle(node).opacity), '0');
+    assert.equal(await accessiblePassage.evaluate(node => getComputedStyle(node).pointerEvents), 'none');
+    await accessiblePassage.evaluate(node => {
+      const range = document.createRange(); range.selectNodeContents(node);
+      const selection = document.getSelection()!; selection.removeAllRanges(); selection.addRange(range);
+    });
+    await settle(page);
+    assert.equal(await accessiblePassage.evaluate(node => getComputedStyle(node).opacity), '1', 'Selecting hidden prose reveals its real text');
+    await page.evaluate(() => document.getSelection()?.removeAllRanges());
+    await settle(page);
+    assert.equal(await accessiblePassage.evaluate(node => getComputedStyle(node).opacity), '0', 'Clearing selection restores scroll-derived presence');
     assert.ok(await page.locator('.kp-rising-passage').evaluateAll((nodes) => nodes.every((node) =>
       getComputedStyle(node).position === 'sticky')));
     await page.evaluate(() => {
@@ -73,9 +85,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.deepEqual(frames[2], frames[10], 'Reversing reaches the same prose and math placement');
     assert.ok(Math.max(...frames.map((frame) => frame.stageTop)) - Math.min(...frames.map((frame) => frame.stageTop)) < 1,
       'Equation workspace must not move during paragraph travel');
+    const nextArrival = await page.locator('[data-kp-beat="beat.cancel-denominator"]').evaluate(node =>
+      scrollY + node.getBoundingClientRect().top + node.querySelector('.kp-rising-passage')!.getBoundingClientRect().height -
+      parseFloat(document.body.style.getPropertyValue('--kp-flow-line')));
     const exchanges = [];
     for (const offset of [0, 12, 24, 12, 0]) {
-      await page.evaluate((y) => { dispatchEvent(new WheelEvent('wheel')); scrollTo(0, y); }, geometry.arrival + geometry.hold + geometry.gap - 14 + offset);
+      await page.evaluate((y) => { dispatchEvent(new WheelEvent('wheel')); scrollTo(0, y); }, nextArrival - 24 + offset);
       await settle(page);
       const exchange = await page.evaluate(() => {
         const previous = document.querySelector('[data-kp-rising-beat="beat.multiply"]')!;
@@ -84,14 +99,18 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
           gap: next.getBoundingClientRect().top - previous.getBoundingClientRect().bottom,
           sliderHidden: (document.querySelector('.kp-caption-operation-slider') as HTMLInputElement).hidden };
       });
-      assert.ok(Math.abs(exchange.previous + exchange.next - 1.12) < .001, 'Paired emphasis is complementary');
+      assert.equal(exchange.previous, 0, 'Departed prose has withdrawn instead of lingering over the scene');
       assert.ok(Math.abs(exchange.gap - geometry.gap) < 1, 'Paragraphs preserve their separation while moving');
-      assert.ok(exchange.sliderHidden, 'Completed slider dissolves before the caption handoff');
+      if (offset < 24) assert.ok(exchange.sliderHidden, 'Completed slider dissolves before the caption handoff');
       exchanges.push(exchange);
       if (offset === 12) await page.screenshot({ path: path.join(outputRoot, `flow-crossfade-${size.width}.png`) });
     }
     assert.deepEqual(exchanges[1], exchanges[3], 'Interrupted exchange reverses exactly');
-    assert.ok(exchanges[0]!.previous > .98 && exchanges[2]!.next > .98);
+    assert.ok(exchanges[0]!.next < .01 && exchanges[2]!.next > .98, 'Incoming prose appears only in the last 24px before presentation');
+    const lineHeight = await page.locator('.kp-rising-passage p').first().evaluate(node => {
+      const style = getComputedStyle(node); return parseFloat(style.lineHeight) / parseFloat(style.fontSize);
+    });
+    assert.ok(lineHeight >= 1.79, 'Prose has roomier line spacing');
     await checkFractionalPassageSlider(page, outputRoot, size.width);
 
     // Resize/wrapping must remeasure actual prose, keeping its mathematical moment.
@@ -112,6 +131,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), '500');
     assert.equal(await page.evaluate(() => 'find' in window && typeof window.find === 'function' && window.find('The same x remains')), true);
     await settle(page);
+    assert.equal(await page.evaluate(() => {
+      const anchor = window.getSelection()?.anchorNode;
+      const element = anchor instanceof Element ? anchor : anchor?.parentElement;
+      const passage = element?.closest('.kp-rising-passage');
+      return passage ? getComputedStyle(passage).opacity : undefined;
+    }), '1', 'Native find must reveal the actual matched paragraph');
     assert.equal(await page.locator('.kp-rising-passage[hidden]').count(), 0);
     await page.evaluate(() => { window.getSelection()?.removeAllRanges(); location.hash = 'caption.beat.multiply'; });
     await settle(page);

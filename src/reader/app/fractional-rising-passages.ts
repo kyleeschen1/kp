@@ -42,7 +42,8 @@ export function mountFractionalRisingPassages(input: {
   let readingLine = 0;
   let positions: readonly number[] = [];
   let heights: readonly number[] = [];
-  let focusAt = compileFractionalTheaterFocus({ positions: [], heights: [], stageOffset: 14 });
+  let focusAt = compileFractionalTheaterFocus({ positions: [], holds: [] });
+  let selectedPassages = new Set<number>();
   let painted = new Set(passages.map((_, index) => index));
   let selected = -1;
   let geometry: KpReaderPiecewiseScrollGeometry | undefined;
@@ -67,17 +68,20 @@ export function mountFractionalRisingPassages(input: {
     const presence = operation && geometry ? fractionalSliderPresence(position, operation.seek(geometry, 1).position) : 0;
     sliders.render(active, progress, readAll ? 0 : presence);
     const opacity = focusAt(position);
-    const changed = new Set([...painted, ...opacity.keys(), selected, active]);
+    const changed = new Set([...painted, ...opacity.keys(), ...selectedPassages, selected, active]);
     for (const index of changed) {
       const passage = passages[index];
       if (passage === undefined) continue;
       const activeValue = String(index === active);
-      const paint = String(opacity.get(index) ?? .12);
+      const alpha = selectedPassages.has(index) ? 1 : opacity.get(index) ?? 0;
+      const paint = String(alpha);
+      const present = String(alpha > 0);
+      if (passage.dataset['kpCaptionPresent'] !== present) passage.dataset['kpCaptionPresent'] = present;
       if (passage.dataset['kpCaptionActive'] !== activeValue) passage.dataset['kpCaptionActive'] = activeValue;
       if (passage.style.getPropertyValue('--kp-passage-opacity') !== paint)
         passage.style.setProperty('--kp-passage-opacity', paint);
     }
-    painted = new Set(opacity.keys());
+    painted = new Set([...opacity.keys(), ...selectedPassages]);
     selected = active;
   };
   const measure = () => {
@@ -106,12 +110,13 @@ export function mountFractionalRisingPassages(input: {
     // Release brings the next real paragraph into the theater immediately.
     // Both paragraphs then travel at the same native scroll velocity.
     style.setProperty('--kp-flow-gap', `${cardHeight - lineWithinCard + 4}px`);
+    const holds = passages.map((_, index) => sliders.operationAt(index) ? cadence.hold : cadence.read);
     passages.forEach((passage, index) => {
       passage.style.setProperty('--kp-passage-top', `${Math.max(headerHeight + 12, readingLine - heights[index]!)}px`);
-      input.beats[index]!.style.setProperty('--kp-flow-hold', `${sliders.operationAt(index) ? cadence.hold : cadence.read}px`);
+      input.beats[index]!.style.setProperty('--kp-flow-hold', `${holds[index]}px`);
     });
     positions = input.beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
-    focusAt = compileFractionalTheaterFocus({ positions, heights, stageOffset: 14 });
+    focusAt = compileFractionalTheaterFocus({ positions, holds });
   };
   measure();
   const toggleReading = () => {
@@ -130,6 +135,15 @@ export function mountFractionalRisingPassages(input: {
     render();
   };
   readingMode.addEventListener('click', toggleReading);
+  // Native find and text selection must reveal their real paragraph even away
+  // from its presentation window. No duplicate transcript or search handler.
+  const onSelectionChange = () => {
+    const selection = document.getSelection();
+    selectedPassages = new Set(passages.flatMap((passage, index) =>
+      selection && !selection.isCollapsed && selection.containsNode(passage, true) ? [index] : []));
+    render();
+  };
+  document.addEventListener('selectionchange', onSelectionChange);
   // Observe intrinsic prose metrics, not sticky locations or scroll progress.
   // Font loading, wrapping and edited text must invalidate the same geometry.
   let metrics = passages.map((passage) => passage.getBoundingClientRect().height).join(',');
@@ -193,6 +207,7 @@ export function mountFractionalRisingPassages(input: {
     measure,
     render,
     dispose() {
+      document.removeEventListener('selectionchange', onSelectionChange);
       observer.disconnect();
       sliders.dispose();
       readingMode.removeEventListener('click', toggleReading);
