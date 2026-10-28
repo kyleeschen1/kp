@@ -36,7 +36,7 @@ export async function compareFractionalReaderThemes(page: Page, baseUrl: string,
   })[] = [];
   try {
     for (theme of ["nocturne", "paper"] as const) {
-      for (const progress of [750, 780, 790, 800, 833, 950, 960, 965, 970, 975, 980, 990, 1000]) {
+      for (const progress of [417, 470, 750, 780, 790, 800, 833, 875, 917, 950, 960, 965, 970, 975, 980, 990, 1000]) {
         const url = new URL("/reader/solve-fractional-linear/", baseUrl);
         url.searchParams.set("kpLesson", "lesson.solve-x.fractional-linear");
         url.searchParams.set("kpVersion", "1");
@@ -49,6 +49,7 @@ export async function compareFractionalReaderThemes(page: Page, baseUrl: string,
           await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
         });
         const sample = await inspectPaint(page);
+        assertEvaluationPaint(sample);
         const expectedBackground = theme === "paper" ? "rgb(247, 245, 238)" : "rgb(18, 24, 38)";
         if (sample.background !== expectedBackground) {
           throw new Error(`Expected ${theme} background ${expectedBackground}, received ${sample.background}`);
@@ -73,6 +74,25 @@ export async function compareFractionalReaderThemes(page: Page, baseUrl: string,
   process.stdout.write(`${JSON.stringify({ report: reportPath, samples: samples.length, differences }, null, 2)}\n`);
   if (differences.length > 0) {
     throw new Error("Theme comparison changed non-color paint or geometry; inspect the paired samples.");
+  }
+}
+
+export async function assertFractionalEvaluationPaint(page: Page): Promise<void> {
+  assertEvaluationPaint(await inspectPaint(page));
+}
+
+function assertEvaluationPaint(sample: Awaited<ReturnType<typeof inspectPaint>>) {
+  if (!sample.transitionId.includes(".simplify-right-")) return;
+  if (sample.executedProgram !== "kp.executable-program.operation-evaluation" ||
+      sample.presentationMode !== "verified-motion" || sample.legacyFragments !== 0) {
+    throw new Error(`${sample.transitionId} bypassed the registered evaluation compositor`);
+  }
+  // The registered evaluation keeps opaque carriers and retires their geometry.
+  // A translucent source/result crossfade is the regression, not brief contact.
+  for (const glyph of sample.glyphs) {
+    if (glyph.opacity > 0 && glyph.opacity < 1) {
+      throw new Error(`${sample.transitionId} paints translucent ${glyph.role} ${glyph.text}`);
+    }
   }
 }
 
@@ -108,7 +128,14 @@ async function inspectPaint(page: Page) {
             x: rect.x, y: rect.y, width: rect.width, height: rect.height };
         });
     });
-    return { background: getComputedStyle(document.body).backgroundColor,
+    return {
+      transitionId: document.body.dataset["kpReaderTransition"] ?? "",
+      executedProgram: stage.querySelector<HTMLElement>("[data-kp-executed-motif-program-id]")
+        ?.dataset["kpExecutedMotifProgramId"] ?? null,
+      presentationMode: stage.querySelector<HTMLElement>("[data-kp-reader-canonical-equation-presentation-mode]")
+        ?.dataset["kpReaderCanonicalEquationPresentationMode"] ?? null,
+      legacyFragments: stage.querySelectorAll("[data-kp-reader-equation-material-fragment-id]").length,
+      background: getComputedStyle(document.body).backgroundColor,
       surface: getComputedStyle(stage).backgroundColor, glyphs };
   });
 }

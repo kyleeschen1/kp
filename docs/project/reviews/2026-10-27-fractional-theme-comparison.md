@@ -1,5 +1,9 @@
 # Fractional reader: matched light/dark paint diagnosis
 
+Historical baseline: the subsequent [evaluation routing repair](2026-10-27-fractional-evaluation-routing.md)
+changes the arithmetic implementation. The observations below describe the
+pre-repair page; rerunning the command now checks the corrected candidate.
+
 User direction: preserve the standard animations; compare the exact last two
 steps in light and dark before attributing the doubled appearance to typography
 or changing choreography. No application code or motion policy changed here.

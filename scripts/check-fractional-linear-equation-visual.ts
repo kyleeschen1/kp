@@ -4,6 +4,7 @@ import path from "node:path";
 import type { Page } from "playwright";
 
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
+import { assertFractionalEvaluationPaint } from "./fractional-linear-theme-comparison.ts";
 
 const outputRoot = path.resolve(
   process.env["KP_FRACTIONAL_LINEAR_VISUAL_OUTPUT"]
@@ -16,7 +17,7 @@ const harness = createKpVisualReviewHarness(
 );
 const checkpoints = new Set([0, 167, 333, 500, 667, 833, 1_000]);
 const progressSamples = process.argv.includes("--smoke")
-  ? [0, 83, 167, 233, 333, 417, 500, 583, 667, 750, 833, 917, 1_000]
+  ? [0, 83, 167, 233, 333, 417, 500, 583, 667, 750, 833, 917, 970, 1_000]
   : uniqueSorted([
   ...Array.from({ length: 31 }, (_, index) => Math.round(index * 1_000 / 30)),
   ...checkpoints
@@ -51,6 +52,7 @@ async function checkStandardFrames(page: Page): Promise<void> {
     await page.goto(url.toString(), { waitUntil: "networkidle" });
     await settle(page);
     samples.push(await sampleVisualFrame(page, progress));
+    await assertFractionalEvaluationPaint(page);
     if (checkpoints.has(progress) || process.argv.includes("--smoke")) {
       await page.locator("[data-kp-reader-equation-stage]").screenshot({
         path: path.join(outputRoot, `checkpoint-${String(progress).padStart(4, "0")}.png`)
@@ -63,9 +65,10 @@ async function checkStandardFrames(page: Page): Promise<void> {
     waitUntil: "networkidle"
   });
   await settle(page);
-  for (const [index, progress] of [233, 750, 1_000, 233].entries()) {
+  for (const [index, progress] of [233, 417, 750, 917, 970, 1_000, 970, 917, 750, 417, 233].entries()) {
     await scrollToSemanticProgress(page, progress);
     samples.push(await sampleVisualFrame(page, progress));
+    await assertFractionalEvaluationPaint(page);
     await page.locator("[data-kp-reader-equation-stage]").screenshot({
       path: path.join(outputRoot, `scroll-${index}-${progress}.png`)
     });

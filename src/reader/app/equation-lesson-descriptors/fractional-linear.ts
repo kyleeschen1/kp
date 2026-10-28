@@ -16,7 +16,11 @@ export const fractionalLinearDescriptor = {
   createAnimation: () => createFractionalLinearEquationAnimationAsset(),
   canonicalTransitionSelection: [
     fractionalLinearEquationAssetIds.cancelAdditive,
-    fractionalLinearEquationAssetIds.cancelDenominator
+    // Execute the registered evaluation plan instead of the legacy fading
+    // sampler. Both arithmetic steps share the standard evaluation authority.
+    fractionalLinearEquationAssetIds.simplifyDifference,
+    fractionalLinearEquationAssetIds.cancelDenominator,
+    fractionalLinearEquationAssetIds.simplifyProduct
   ],
   bindStructuralAnchors: bindKpFractionalLinearStructuralAnchors,
   compactTranscriptAvailable: true
