@@ -2,10 +2,12 @@
 
 Status: implemented local candidate; human reading and native Cmd+F review pending.
 
-The user prefers explanations that behave like closed captions: remain still
-and fully visible during the operation, then leave without a fading transition.
-Native search and ordinary document scrolling are explicit requirements. This
-supersedes the local rising/fading presentation in
+The user prefers explanations that behave like closed captions. The latest
+revision addresses the missing anticipation: captions sit above the equation
+on a phone-width card, with a right-hand rail announcing the next exchange.
+Text remains still during its operation, then rises and evaporates as the next
+caption materializes. Native search and ordinary document scrolling remain
+explicit requirements. This supersedes the local rising/fading presentation in
 [the preceding experiment](2026-10-28-fractional-rising-passages.md), not its
 mathematical programs or the broader reader architecture.
 
@@ -15,7 +17,7 @@ mathematical programs or the broader reader architecture.
 - Canonical artifact and mathematical source:
   `src/semantic/fractional-linear-equation-asset.ts`.
 - Rendering remains the existing mixed native KaTeX/material and legacy
-  introduction path. No new equation renderer, copied equation, motion motif,
+  introduction path. No new equation renderer, copied equation, math motion motif,
   semantic state, or clock is introduced.
 - Rollback unit: this caption candidate commit. Its local layout/geometry
   adapter and reader hooks can be reverted together. Other lessons do not adopt
@@ -25,15 +27,25 @@ mathematical programs or the broader reader architecture.
 
 ## Behavior
 
-The stage retains the available-height midpoint divider, bottom-aligned math,
-current dark palette and existing typography. One caption appears just below
-the divider. It stays fixed and fully opaque while scrolling advances the
-equation. There is no text fade, entrance movement, or automatic playback.
+The latest local candidate uses a centered card up to 440px wide. Its charcoal
+surface, `#202222`, comes from `src/experiments/matrix-theme.css`, with a darker
+neutral page (`#181a1a`) replacing the blue reader background. Mathematical ink
+and typography remain unchanged. The caption sits above a grey rule; the native
+equation renderer occupies a stable area below it. The right-hand rail has a
+moving indicator and a marked **Next** endpoint. The final interval says
+**Finish**, then **Done**, rather than promising another caption.
 
 Each operation gets 14% of available-height scroll distance for reading, 32%
-for its unchanged mathematical program, and 10% for a result hold. The caption
-then disappears until the next step. These distances are local visual choices,
-not reusable timing policy. Reverse motion samples the same geometry.
+for its unchanged mathematical program, then holds its result. The final 18%
+of available-height scrolling before the next instruction exchanges captions:
+the outgoing text rises up to 24px and fades, then incoming text rises from a
+20px offset and becomes solid. Their readable paint does not overlap. The rail
+reaches its endpoint at exchange start. The equation holds throughout; its
+next operation starts only after the new caption has settled and received its
+reading interval. Geometry reserves a result hold before exchange even for
+shorter measured slots. These are provisional local choices, not reusable
+timing policy. Reverse motion samples the same geometry. Reduced-motion users
+get a clean caption replacement without translation or fading.
 
 All explanations remain their original HTML nodes, in document order. Stable
 in-flow step slots own scroll measurement; pinned caption rectangles cannot
@@ -78,15 +90,20 @@ npm run typecheck
 ```
 
 Pure geometry checks cover reading holds, motion intervals, result holds,
-caption withdrawal, reverse sampling, inverse seeks and invalid measurements.
-The scoped Chromium check covers 1280×900 and 390×844 layouts, fixed/full-opacity
-text, clean withdrawal, exact rewind, held-position reload, menu navigation,
-native scrolling, keyboard scrolling, document mode, print return and static
-fallback. An unsupported-capability simulation checks that prose stays exposed.
+rail anticipation, held math throughout caption exchanges, inverse seeks and
+invalid measurements. The scoped Chromium check covers 1280×900 and 390×844
+cards, caption/rail ordering, the restored charcoal, exact reverse sampling
+during both halves of an exchange, held-position reload, menu navigation,
+native scrolling, keyboard scrolling, document mode, reduced motion, final
+completion, print return and static fallback. An unsupported-capability
+simulation checks that prose stays exposed.
 The 41-sample equation smoke protects direct/forward/reverse paint and the
 previous duplicate-owner repairs. Full typecheck includes app, tools, tests,
 Svelte and domains. These checks passed for this candidate; screenshots were
 inspected at both viewport sizes. No cross-browser promotion is claimed.
+The previous smoke palette assertion was updated from Nocturne blue to the
+user-requested neutral page; all mathematical ink and paint-ownership assertions
+remain. This is an explicit presentation change, not a waived failure.
 
 Search evidence is deliberately split: Chromium `window.find()` locates an
 inactive explanation, but does not invoke its native Find toolbar's reveal
@@ -99,10 +116,13 @@ Safari/Firefox behavior remain manual review items; do not call them certified.
 
 Open `http://localhost:8000/reader/solve-fractional-linear/` and choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the
-multiplication, then keep scrolling: the result holds and the caption clears
-without fading. Reverse and drag the scrollbar to check direct navigation.
+multiplication, then keep scrolling: the rail reaches **Next**, the equation
+holds, and the old caption rises away as the new one materializes. The next
+operation waits until that new explanation settles. Reverse through the
+exchange and drag the scrollbar to check direct navigation.
 
 Use Cmd+F for **A factor of two enters on each side** from a different step.
-The actual passage should appear beneath the equation at its source state.
+The actual passage should appear above the equation at its source state.
 Close Find and continue scrolling in either direction. Also try **Read all**.
-Judge the caption rhythm and whether native search feels like a normal document.
+Judge whether the rail makes changes predictable without demanding attention of
+its own, and whether native search still feels like a normal document.

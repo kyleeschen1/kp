@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createFractionalRisingScroll, fractionalCaptionIndex } from "../src/reader/app/fractional-rising-scroll.ts";
+import { createFractionalRisingScroll, fractionalCaptionFrame } from "../src/reader/app/fractional-rising-scroll.ts";
 import { sampleKpReaderScrollProgress, sampleKpReaderScrollPosition } from "../src/reader/runtime/continuous-scroll-clock.ts";
 
 test("each operation allows reading before moving, then holds its result", () => {
@@ -28,11 +28,22 @@ test("invalid measurement cannot create an inverted animation interval", () => {
   assert.throws(() => createFractionalRisingScroll({ stops }, NaN), /positive available height/);
 });
 
-test("captions stay present through motion and result hold; reverse is identical", () => {
-  const positions = [0, 800, 1600];
-  for (const position of [800, 912, 1040, 1168, 1247, 1248, 1600, 1248, 1247, 800]) {
-    const expected = position === 1248 ? undefined : position === 1600 ? 2 : 1;
-    assert.equal(fractionalCaptionIndex(positions, position, 800), expected);
+test("the rail anticipates the exchange, while mathematical progress holds", () => {
+  const narrative = { stops: [0, 500, 1000].map((progressPermille, i) => ({ positionPx: 500 + i * 600, progressPermille })) };
+  const geometry = createFractionalRisingScroll(narrative, 800);
+  const positions = narrative.stops.map((stop) => stop.positionPx);
+  const exchangeStart = positions[2]! - 800 * .18;
+  for (const position of [1100, 1400, exchangeStart, 1600, 1699, 1700, 1699, 1600, exchangeStart]) {
+    const frame = fractionalCaptionFrame(positions, position, 800)!;
+    if (position >= exchangeStart && position < 1700) {
+      assert.equal(frame.rail, 1);
+      assert.equal(frame.nextIndex, 2);
+      assert.equal(sampleKpReaderScrollProgress(position, geometry), .5);
+    }
+    assert.ok(frame.exchange >= 0 && frame.exchange <= 1);
   }
-  assert.equal(fractionalCaptionIndex([], 0, 800), undefined);
+  assert.equal(fractionalCaptionFrame(positions, 1700, 800)!.exchange, 0);
+  assert.equal(fractionalCaptionFrame(positions, 2100, 800)!.nextIndex, undefined);
+  assert.equal(fractionalCaptionFrame(positions, 2100, 800)!.rail, 1);
+  assert.equal(fractionalCaptionFrame([], 0, 800), undefined);
 });

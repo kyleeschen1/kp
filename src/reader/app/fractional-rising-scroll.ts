@@ -17,8 +17,10 @@ export function createFractionalRisingScroll(
     const passage = narrative.stops[index]!;
     const previous = narrative.stops[index - 1]!;
     const start = passage.positionPx + availableHeight * 0.14;
+    // Reserve the next caption's exchange plus a result hold. Text must never
+    // compete with an unfinished mathematical operation.
     const end = Math.min(start + availableHeight * 0.32,
-      (narrative.stops[index + 1]?.positionPx ?? Infinity) - 1);
+      (narrative.stops[index + 1]?.positionPx ?? Infinity) - availableHeight * 0.26);
     if (end <= start) throw new Error("Captions need room to read before animation.");
     stops.push(
       { positionPx: passage.positionPx, progressPermille: previous.progressPermille },
@@ -29,11 +31,19 @@ export function createFractionalRisingScroll(
   return { stops };
 }
 
-/** Read, animate, hold the result, then withdraw without a fading transition. */
-export function fractionalCaptionIndex(positions: readonly number[], position: number, height: number): number | undefined {
+/** One scroll-derived projection for caption presence and the approaching cue. */
+export function fractionalCaptionFrame(positions: readonly number[], position: number, height: number) {
+  if (positions.length === 0) return undefined;
   let index = 0;
   while (index + 1 < positions.length && positions[index + 1]! <= position) index += 1;
-  if (positions.length === 0) return undefined;
-  // The introduction stays readable until the first instructional beat.
-  return index === 0 || position < positions[index]! + height * 0.56 ? index : undefined;
+  const start = positions[index]!;
+  const next = positions[index + 1];
+  const exchangeStart = next === undefined ? start + height * 0.46 : next - height * 0.18;
+  const clamp = (value: number) => Math.min(1, Math.max(0, value));
+  return {
+    index,
+    nextIndex: next === undefined ? undefined : index + 1,
+    rail: clamp((position - start) / Math.max(1, exchangeStart - start)),
+    exchange: next === undefined ? 0 : clamp((position - exchangeStart) / (next - exchangeStart))
+  };
 }

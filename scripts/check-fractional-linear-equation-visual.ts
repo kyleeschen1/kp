@@ -178,9 +178,9 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
     if (stage.dataset["kpReaderEquationDepthRecipe"] !== "flat-v1") {
       failures.push("the fractional exemplar re-enabled depth");
     }
-    if (getComputedStyle(document.body).backgroundColor !== "rgb(18, 24, 38)" ||
+    if (getComputedStyle(document.body).backgroundColor !== "rgb(24, 26, 26)" ||
         getComputedStyle(document.body).color !== "rgb(242, 240, 232)") {
-      failures.push("the tutorial does not use the specified Nocturne palette");
+      failures.push("the tutorial does not use the requested charcoal surface with preserved mathematical ink");
     }
     for (const fragment of stage.querySelectorAll<HTMLElement>(
       "[data-kp-reader-equation-semantic-depth]"

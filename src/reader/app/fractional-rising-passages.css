@@ -1,8 +1,18 @@
 /* Exemplar-only stacked projection. Static/print documents retain normal flow. */
 @media screen {
-  body[data-kp-reader-layout="rising-passages"] {
-    --kp-surface: var(--kp-paper);
+  body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] {
+    /* Restore the matrix card's neutral charcoal instead of the blue reader
+       palette. This is local visual discovery, not a shared theme change. */
+    --kp-paper: #181a1a;
+    --kp-surface: #202222;
+    --kp-line: #4c5050;
+    --kp-muted: #aeb1b1;
+    --kp-caption-width: min(440px, calc(100vw - 32px));
+    --kp-caption-card-top: calc(var(--kp-rising-header-height) + clamp(20px, 6vh, 56px));
+    --kp-caption-card-height: min(540px, calc(100svh - var(--kp-rising-header-height) - 136px));
+    --kp-caption-text-height: clamp(180px, 25svh, 220px);
   }
+  html:has(> body[data-kp-reader-layout="rising-passages"]) { background: #181a1a; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-layout {
     display: block;
     width: min(100% - 40px, 46rem);
@@ -19,17 +29,18 @@
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-static {
     position: fixed;
     z-index: 1;
-    top: var(--kp-rising-header-height);
-    left: 0;
-    width: 100%;
-    height: calc((100vh - var(--kp-rising-header-height)) / 2);
+    top: calc(var(--kp-caption-card-top) + var(--kp-caption-text-height) + 48px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--kp-caption-width);
+    height: calc(var(--kp-caption-card-height) - var(--kp-caption-text-height) - 64px);
   }
   html body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-stage {
     display: flex;
     flex-direction: column;
     height: 100%;
     min-height: 0;
-    padding: .75rem max(20px, calc((100% - 60rem) / 2)) 0;
+    padding: 0 24px;
     border: 0;
     border-radius: 0;
     box-shadow: none;
@@ -41,24 +52,22 @@
     justify-content: flex-end;
     min-height: 0;
   }
+  body[data-kp-caption-mode="captions"] .kp-reader-equation-stage-heading {
+    position: absolute;
+    top: calc(-1 * var(--kp-caption-text-height) - 36px);
+    right: 24px;
+  }
   body[data-kp-reader-layout="rising-passages"] :is([data-kp-reader-stage-kicker], [data-kp-reader-stage-status], .kp-reader-equation-hint) { display: none; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-controls { margin: 0; }
   html body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-viewport {
-    /* The shared fit planner centers complete motion bounds inside this
-       compact workspace; place the workspace at the stage's lower edge. */
-    flex: 0 1 120px;
-    margin-top: auto;
+    /* Keep the native fit planner inside the card's stable mathematical area. */
+    flex: 1;
+    margin: 0;
     width: 100%;
     min-height: 0;
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    margin: 0;
-    height: 1px;
-    background: rgb(255 255 255 / 26%);
+    display: none;
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress span { display: none; }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-beats > li {
@@ -75,20 +84,81 @@
     z-index: 2;
     width: min(100%, 38rem);
     margin-inline: auto;
+    opacity: var(--kp-caption-opacity, 1);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-caption-intro-slot { min-height: 80vh; }
   html body[data-kp-caption-mode="document"] .kp-animation-static {
     z-index: 3;
     background: var(--kp-paper);
+    top: var(--kp-rising-header-height);
+    left: 0;
+    transform: none;
+    width: 100%;
+    height: calc((100vh - var(--kp-rising-header-height)) / 2);
   }
   body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-caption-active="true"] {
     position: fixed;
-    top: calc(var(--kp-rising-header-height) + (100vh - var(--kp-rising-header-height)) / 2 + 1rem);
+    top: calc(var(--kp-caption-card-top) + 56px);
+    left: 50%;
+    transform: translate(-50%, var(--kp-caption-offset, 0px));
+    width: calc(var(--kp-caption-width) - 80px);
+    max-height: calc(var(--kp-caption-text-height) - 32px);
+    overflow: auto;
+  }
+  .kp-caption-frame {
+    position: fixed;
+    top: var(--kp-caption-card-top);
     left: 50%;
     transform: translateX(-50%);
-    width: min(100% - 40px, 38rem);
-    max-height: calc((100vh - var(--kp-rising-header-height)) / 2 - 5rem);
-    overflow: auto;
+    width: var(--kp-caption-width);
+    height: var(--kp-caption-card-height);
+    border: 1px solid var(--kp-line);
+    border-radius: 12px;
+    background: var(--kp-surface);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 14%);
+    pointer-events: none;
+  }
+  .kp-caption-rule {
+    position: absolute;
+    top: calc(var(--kp-caption-text-height) + 32px);
+    left: 24px;
+    right: 24px;
+    height: 1px;
+    background: var(--kp-line);
+  }
+  .kp-caption-rail {
+    position: absolute;
+    top: 56px;
+    bottom: calc(var(--kp-caption-card-height) - var(--kp-caption-text-height) - 8px);
+    right: 18px;
+    width: 2px;
+    background: var(--kp-line);
+  }
+  .kp-caption-rail::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: -3px;
+    width: 8px;
+    height: 2px;
+    background: var(--kp-muted);
+  }
+  .kp-caption-marker {
+    position: absolute;
+    top: calc(var(--kp-caption-progress, 0) * 100%);
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--kp-ink);
+    transform: translate(-50%, -50%);
+  }
+  .kp-caption-rail-label {
+    position: absolute;
+    top: calc(var(--kp-caption-text-height) + 12px);
+    right: 10px;
+    font-size: .625rem;
+    color: var(--kp-muted);
   }
   .kp-caption-reading-mode {
     font: inherit;
@@ -103,7 +173,7 @@
   .kp-caption-reading-mode[aria-pressed="true"] { background: var(--kp-line); }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-passage:focus-within {
     opacity: 1 !important;
-    background: var(--kp-paper);
+    background: var(--kp-surface);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-passage :is(h1, h2, p) {
     margin: 0 0 .5rem;
@@ -133,5 +203,6 @@
   body[data-kp-reader-layout="rising-passages"] .kp-reader-mode { display: none; }
 }
 @media print {
+  .kp-caption-frame { display: none; }
   .kp-rising-passage { opacity: 1 !important; content-visibility: visible !important; }
 }

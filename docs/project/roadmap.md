@@ -26,9 +26,9 @@ nor its evidence. The ledger remains retrievable at
 ## Executive Direction
 
 October 28 latest visual candidate: [document-backed captions](reviews/2026-10-28-fractional-caption-reader.md)
-replaces rising/fading prose on the fractional equation reader. Captions remain
-still through each operation, with native-search reveal and a Read all option.
-Review the reading rhythm and actual Cmd+F behavior before promotion; mathematics
+now sit above the equation on a narrow charcoal card. A right-hand rail announces
+caption exchanges while the equation holds; native-search reveal and Read all
+remain. Review anticipation and actual Cmd+F behavior before promotion; mathematics
 remains unchanged and the historical derivation trail is still pending.
 
 October 27 prototype planning: the user selects multi-step algebra to test the
