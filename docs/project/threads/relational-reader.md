@@ -5,6 +5,12 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+October 27 planning focus: [multi-step algebra derivation trail](../reviews/2026-10-27-next-step-review.md).
+The user selects retained historical equations and a moving continuation as the
+prototype feature. The proposed first caller is the existing fractional linear
+solve. This supersedes the unimplemented completing-square recommendation;
+implementation remains proposed and the matrix review below remains pending.
+
 The current comparisons are accepted working references. The approved next
 milestone is [one connected input-recovery argument](../2026-10-23-connected-matrix-argument.md),
 with a complete main reading and optional local inspections on the existing

@@ -25,6 +25,12 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 27 prototype planning: the user selects multi-step algebra to test the
+new document-anchored derivation trail. The [proposed implementation plan](reviews/2026-10-27-next-step-review.md)
+uses the existing fractional linear solve, with retained equation snapshots and
+one moving continuation. This is the current planning focus; implementation and
+format promotion are not yet approved. Preserve the matrix review below.
+
 The user accepts the current comparisons and approves the next authoring
 milestone: [one connected matrix argument](2026-10-23-connected-matrix-argument.md).
 `?argument=1` connects retained weight, lost differences and input recovery, with
