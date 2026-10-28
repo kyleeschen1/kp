@@ -30,6 +30,18 @@ try {
     reducedMotion: "no-preference"
   });
   page.on("pageerror", (error) => pageErrors.push(error.message));
+  if (process.argv.includes("--compare-themes")) {
+    const { compareFractionalReaderThemes } = await import("./fractional-linear-theme-comparison.ts");
+    await compareFractionalReaderThemes(page, harness.baseUrl, outputRoot);
+    if (pageErrors.length > 0) throw new Error(pageErrors.join("\n"));
+  } else {
+    await checkStandardFrames(page);
+  }
+} finally {
+  await harness.close();
+}
+
+async function checkStandardFrames(page: Page): Promise<void> {
   const samples = [];
   for (const progress of progressSamples) {
     const url = new URL("/reader/solve-fractional-linear/", harness.baseUrl);
@@ -82,8 +94,6 @@ try {
     process.stderr.write(`${failures.join("\n")}\n`);
     process.exitCode = 1;
   }
-} finally {
-  await harness.close();
 }
 
 async function sampleVisualFrame(page: Page, requestedProgress: number) {
