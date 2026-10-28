@@ -2,6 +2,7 @@
 @import "../../rendering/canonical-equation-stage.css";
 @import "./canonical-equation-surface.css";
 @import "./tutorial-palette.css";
+@import "./fractional-rising-passages.css";
 
 :root {
   color: #16231d;

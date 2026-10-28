@@ -253,6 +253,10 @@ if (equationProfileSelect !== null) {
 }
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+const risingPassages = lessonVariant === "fractional-linear"
+  ? (await import("./fractional-rising-passages.ts"))
+      .mountFractionalRisingPassages({ story, beats })
+  : undefined;
 const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
 ];
@@ -564,6 +568,7 @@ function createScrollClock(): KpReaderContinuousScrollClock {
 
 function updateScrollGeometry(): void {
   viewportAnchorCache.invalidate();
+  risingPassages?.measure();
   const geometry = scrollGeometry();
   document.body.dataset["kpReaderViewportAnchor"] = String(
     readerViewportAnchorFraction()
@@ -622,6 +627,7 @@ function readerViewportAnchorFraction(): number {
 }
 
 function measureReaderViewportAnchorFraction(): number {
+  if (risingPassages !== undefined) return 0.5;
   recordKpReaderScrollAnchorRead(window);
   const stickyVisualBottomPx = stickyVisualBottom();
   return resolveKpReaderViewportAnchorFraction({
@@ -733,6 +739,7 @@ function measureLayout(revision: number): LayoutState {
 }
 
 function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
+  risingPassages?.render();
   const projection = projectKpReaderMotion({
     clock: sample,
     checkpoints: accessibleCheckpoints,
@@ -1619,6 +1626,7 @@ function setStyleIfChanged(
 }
 
 function dispose(): void {
+  risingPassages?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);

@@ -31,7 +31,11 @@ try {
     reducedMotion: "no-preference"
   });
   page.on("pageerror", (error) => pageErrors.push(error.message));
-  if (process.argv.includes("--compare-themes")) {
+  if (process.argv.includes("--rising")) {
+    const { checkFractionalRisingPassages } = await import("./fractional-rising-passages-check.ts");
+    await checkFractionalRisingPassages(page, harness.baseUrl, outputRoot);
+    if (pageErrors.length > 0) throw new Error(pageErrors.join("\n"));
+  } else if (process.argv.includes("--compare-themes")) {
     const { compareFractionalReaderThemes } = await import("./fractional-linear-theme-comparison.ts");
     await compareFractionalReaderThemes(page, harness.baseUrl, outputRoot);
     if (pageErrors.length > 0) throw new Error(pageErrors.join("\n"));

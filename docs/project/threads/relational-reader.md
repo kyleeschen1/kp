@@ -5,6 +5,11 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+October 28: the fractional reader now has an approved-to-build, pending-review
+[upper stage/rising passage candidate](../reviews/2026-10-28-fractional-rising-passages.md).
+The user's 50vh boundary governs the layout; existing animations and semantic
+checkpoints remain. Review this local presentation before generalization.
+
 October 27 planning focus: [multi-step algebra derivation trail](../reviews/2026-10-27-next-step-review.md).
 The user selects retained historical equations and a moving continuation as the
 prototype feature. The proposed first caller is the existing fractional linear
