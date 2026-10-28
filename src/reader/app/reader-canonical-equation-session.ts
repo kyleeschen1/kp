@@ -95,6 +95,7 @@ export function createKpReaderCanonicalEquationSession(input: {
   let session:
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
+  let lastBuildParts: readonly (string | number)[] | undefined;
   let structuralSessionKey: string | undefined;
   let structuralFitSurface: HTMLElement | undefined;
   let materialLayer: HTMLElement | undefined;
@@ -228,7 +229,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         // attention boundary does not flash through asynchronous recapture.
         return false;
       }
-      const nextKey = [
+      const nextParts = [
         transitionId,
         frame.renderPlan.id,
         frame.materialPlan.id,
@@ -240,7 +241,8 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.appliedStageLayout?.applicationId ?? "native",
         frame.fitSurface.offsetWidth,
         frame.fitSurface.offsetHeight
-      ].join(":");
+      ];
+      const nextKey = nextParts.join(":");
       const nextStructuralSessionKey = [
         transitionId,
         frame.renderPlan.id,
@@ -266,6 +268,9 @@ export function createKpReaderCanonicalEquationSession(input: {
         );
       }
       if (session === undefined || sessionKey !== nextKey) {
+        const names = ['transition', 'render-plan', 'material-plan', 'presentation', 'motion', 'font', 'coordinate-space', 'measurement', 'stage-layout', 'width', 'height'];
+        const reasons = lastBuildParts === undefined ? ['initial'] : names.filter((_name, index) => lastBuildParts![index] !== nextParts[index]);
+        if (reasons.length === 0) reasons.push('invalidated');
         const handoffToken = sessionHandoff.issue();
         const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
         const buildStartedAt = ownerWindow?.performance.now() ?? Date.now();
@@ -318,6 +323,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         const committed = sessionHandoff.commit(handoffToken, () => {
           session = candidateSession;
           sessionKey = nextKey;
+          lastBuildParts = nextParts;
           structuralSessionKey = nextStructuralSessionKey;
           structuralFitSurface = frame.fitSurface;
         });
@@ -332,7 +338,8 @@ export function createKpReaderCanonicalEquationSession(input: {
         if (ownerWindow !== null) {
           recordKpReaderCanonicalSessionBuild(
             ownerWindow,
-            ownerWindow.performance.now() - buildStartedAt
+            ownerWindow.performance.now() - buildStartedAt,
+            reasons
           );
         }
       } else {

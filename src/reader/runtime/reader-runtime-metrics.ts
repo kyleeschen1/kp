@@ -3,6 +3,7 @@ export interface KpReaderRuntimeMetricsSnapshot {
   readonly scrollAnchorReads: number;
   readonly canonicalSessionBuilds: number;
   readonly canonicalSessionBuildDurationMs: number;
+  readonly canonicalSessionBuildReasons: Readonly<Record<string, number>>;
   readonly canonicalSessionReuses: number;
   readonly canonicalSessionApplies: number;
   readonly purePlanCompilations: number;
@@ -17,6 +18,7 @@ interface MutableKpReaderRuntimeMetrics {
   scrollAnchorReads: number;
   canonicalSessionBuilds: number;
   canonicalSessionBuildDurationMs: number;
+  canonicalSessionBuildReasons: Record<string, number>;
   canonicalSessionReuses: number;
   canonicalSessionApplies: number;
   purePlanCompilations: number;
@@ -31,7 +33,8 @@ const metricsByWindow = new WeakMap<Window, MutableKpReaderRuntimeMetrics>();
 export function inspectKpReaderRuntimeMetrics(
   ownerWindow: Window
 ): KpReaderRuntimeMetricsSnapshot {
-  return Object.freeze({ ...metricsFor(ownerWindow) });
+  const metrics = metricsFor(ownerWindow);
+  return Object.freeze({ ...metrics, canonicalSessionBuildReasons: Object.freeze({ ...metrics.canonicalSessionBuildReasons }) });
 }
 
 export function resetKpReaderRuntimeMetrics(ownerWindow: Window): void {
@@ -48,11 +51,13 @@ export function recordKpReaderScrollAnchorRead(ownerWindow: Window): void {
 
 export function recordKpReaderCanonicalSessionBuild(
   ownerWindow: Window,
-  durationMs: number
+  durationMs: number,
+  reasons: readonly string[] = []
 ): void {
   const metrics = metricsFor(ownerWindow);
   metrics.canonicalSessionBuilds += 1;
   metrics.canonicalSessionBuildDurationMs += Math.max(0, durationMs);
+  for (const reason of reasons) metrics.canonicalSessionBuildReasons[reason] = (metrics.canonicalSessionBuildReasons[reason] ?? 0) + 1;
 }
 
 export function recordKpReaderCanonicalSessionReuse(
@@ -107,6 +112,7 @@ function createMetrics(): MutableKpReaderRuntimeMetrics {
     scrollAnchorReads: 0,
     canonicalSessionBuilds: 0,
     canonicalSessionBuildDurationMs: 0,
+    canonicalSessionBuildReasons: {},
     canonicalSessionReuses: 0,
     canonicalSessionApplies: 0,
     purePlanCompilations: 0,

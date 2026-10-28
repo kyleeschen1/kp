@@ -1,0 +1,68 @@
+{
+  "id": "run-contract.kp-reader-performance-20261028",
+  "kind": "run-contract",
+  "title": "Reader performance delivery",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-28-reader-performance-delivery.md",
+      "summary": "User-approved full performance agenda with preserved presentation"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:equation-surface-preservation",
+    "npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fractional-linear-equation -- --production-performance --label=baseline --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "baseline: eight production cohorts and actual asset requests; app/tools types and dev invalidation diagnostic also passed",
+      "checkedAt": "2026-10-28T20:28:10.708Z"
+    }
+  ],
+  "allowedWork": [
+    "Measured performance repairs in reader loading, preparation, sampling and lifecycle; bounded investigations and verification"
+  ],
+  "disallowedWork": [
+    "Changed mathematics or choreography, new universal renderer, speculative worker rewrite, deployment or destructive Git operations"
+  ],
+  "goal": "Reduce current reader loading and interaction costs with verified unchanged behavior",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "baseline",
+      "title": "Production-baseline",
+      "summary": "Production baseline and session rebuild reasons captured in durable review.",
+      "status": "complete"
+    },
+    {
+      "id": "preparation",
+      "title": "Preparation-reuse",
+      "status": "in-progress"
+    },
+    {
+      "id": "frames",
+      "title": "Frame-work",
+      "status": "planned"
+    },
+    {
+      "id": "loading",
+      "title": "Loading-and-startup",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "title": "Scaling-and-integration",
+      "status": "planned"
+    }
+  ]
+}
