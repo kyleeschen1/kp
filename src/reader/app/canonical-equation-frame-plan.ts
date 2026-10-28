@@ -17,6 +17,27 @@ export interface KpReaderCanonicalEquationFramePlan {
   readonly phaseProgress: number;
 }
 
+/** Exact sampling/presentation identity; callers also compare measured layout
+ * identity. Clock sequence and document scroll position do not change math. */
+export function equationFrameKey(input: {
+  readonly animationProgress: number;
+  readonly progressPermille: number;
+  readonly visualProgress: number;
+  readonly mode: string;
+  readonly preference: string;
+  readonly direction: KpReaderClockSample["direction"];
+  readonly focusRevision: number;
+  readonly fontRevision: number;
+  readonly beatId: string | undefined;
+  readonly attentionPhaseId: string | undefined;
+}): string {
+  requireUnitProgress(input.animationProgress);
+  requireUnitProgress(input.visualProgress);
+  return JSON.stringify([input.animationProgress, input.progressPermille,
+    input.visualProgress, input.mode, input.preference, input.direction,
+    input.focusRevision, input.fontRevision, input.beatId, input.attentionPhaseId]);
+}
+
 /**
  * Hosts choose where progress comes from, but canonical semantic frame
  * selection is shared. Rewind changes traversal, not the forward semantic

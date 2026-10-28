@@ -33,6 +33,12 @@
       "status": "passed",
       "scope": "Preparation: four traversal diagnostic and single-build cold URL assertions, primary smoke/rising and division lifecycle preservation; app and tools types, architecture and native preparation cohort.",
       "checkedAt": "2026-10-28T20:40:52.245Z"
+    },
+    {
+      "command": "npm run visual:cancellation -- --grep divide-both-sides",
+      "status": "passed",
+      "scope": "Focused preparation canary only: identical seeks, bounded paint, focus, resize and disposal; primary smoke/rising, frame identity units and app/tools types also passed. Full cancellation cohort reserved for integration.",
+      "checkedAt": "2026-10-28T20:47:22.811Z"
     }
   ],
   "allowedWork": [
@@ -59,7 +65,8 @@
     {
       "id": "frames",
       "title": "Frame-work",
-      "status": "planned"
+      "summary": "Exact successful-frame reuse reduces repeated compositor applies by 41 percent; prose and controls still follow scroll. Preservation and invalidation tests pass.",
+      "status": "complete"
     },
     {
       "id": "loading",

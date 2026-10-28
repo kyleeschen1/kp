@@ -72,10 +72,12 @@ test("divide-both-sides preparation reuses bounded paint and retires it on focus
   await page.goto(`${route}?kpMotion=full`, { waitUntil: "networkidle" });
   const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
   const seek = async (progress: number) => {
-    await scrubber.evaluate((node, value) => {
+    await scrubber.evaluate(async (node, value) => {
       if (!(node instanceof HTMLInputElement)) throw new Error("Expected semantic scrubber");
       node.value = String(value);
       node.dispatchEvent(new Event("input", { bubbles: true }));
+      await new Promise(requestAnimationFrame);
+      await new Promise(requestAnimationFrame);
     }, progress);
     await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", String(progress));
   };
@@ -93,6 +95,15 @@ test("divide-both-sides preparation reuses bounded paint and retires it on focus
   })));
   expect(caches.length).toBeGreaterThan(0);
   expect(caches.every(cache => cache.children <= 2 && cache.misses <= 2 && cache.active === 1)).toBe(true);
+  await seek(600); // Settle playback direction before testing an identical frame.
+  const applies = () => page.evaluate(async () => {
+    const path = '/src/reader/runtime/reader-runtime-metrics.ts';
+    const { inspectKpReaderRuntimeMetrics } = await import(path);
+    return inspectKpReaderRuntimeMetrics(window).canonicalSessionApplies;
+  });
+  const beforeRepeated = await applies();
+  for (let index = 0; index < 5; index++) await seek(600);
+  expect(await applies()).toBe(beforeRepeated);
   await page.locator('.kp-semantic-link').first().dispatchEvent('pointerover');
   await expect.poll(() => initial!.evaluate(node => node.isConnected)).toBe(false);
   const focused = await layer.elementHandle();

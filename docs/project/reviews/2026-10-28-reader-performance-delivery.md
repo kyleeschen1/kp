@@ -73,3 +73,24 @@ Its initial test range crossed a genuine narrative-focus boundary; the test was
 corrected to stay inside one focus interval, with explicit invalidation tested
 separately. An initial TypeScript inference error was repaired without a cast;
 the subsequent app/tools checks passed.
+
+## Unchanged frames
+
+The reader now separates continued prose scrolling from equation repainting.
+One last-successful-frame identity includes exact (unrounded) progress, motion,
+focus revision, font revision, narrative/attention identity and measured layout.
+Only identical mathematical frames reuse existing paint. Changed geometry,
+direction, focus and settings still render; failed frames never publish reuse.
+Unchanged passage attributes and status text also avoid DOM replacement.
+
+The four-cycle diagnostic applies the canonical compositor 196 times instead of
+332 (41% fewer), with the same legitimate 53 preparations. Layout count remains
+7,825: preparation, rather than the remaining sampling work, still dominates.
+A trial batching material-clone normalization did not reduce this workload's
+counts and was removed instead of adding another optimization path.
+
+Frame identity units include sub-permille changes and every presentation input.
+The division browser canary additionally proves repeated identical seeks do not
+apply the compositor. Fractional smoke (41) and full rising-document preservation
+pass, as do app/tools types and native glyph compositor units. Timings from the
+instrumented run are not used as a production speed claim.

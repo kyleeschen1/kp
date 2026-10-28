@@ -79,6 +79,7 @@ import {
   resolveKpReaderEquationLessonDescriptor
 } from "./equation-lesson-descriptor.ts";
 import {
+  equationFrameKey,
   planKpReaderCanonicalEquationFrame
 } from "./canonical-equation-frame-plan.ts";
 import {
@@ -463,6 +464,7 @@ const materialLayer = createKpReaderEquationMaterialLayer(
 );
 let lastMeasuredLayout: LayoutState | undefined;
 let measuredViewportSize: { width: number; height: number } | undefined;
+let lastEquationFrame: { layout: LayoutState; key: string } | undefined;
 let chromeFreeLayoutRevision = -1;
 
 const rendererRegistry = createKpReaderAdapterRegistry<
@@ -823,8 +825,21 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     evaluationControls?.projectAnimationProgress(
       visualSample.progress
     ) ?? visualSample.progress;
+  updateActiveBeat(projection.progressPermille, attentionProjection);
+  const frameKey = equationFrameKey({
+    animationProgress, progressPermille: projection.progressPermille, visualProgress,
+    mode: projection.mode, preference: motionPreference, direction: sample.direction,
+    focusRevision: focus.getSnapshot().revision, fontRevision: fontReadiness.revision,
+    beatId: activeBeat?.dataset['kpBeat'], attentionPhaseId: attentionProjection?.phaseId
+  });
+  // Prose still follows every scroll sample above. Exact unchanged math keeps
+  // its existing paint; any seek, focus, font, motion or layout change renders.
+  if (chromeFreeCanonicalEquationSession === undefined &&
+      lastEquationFrame?.layout === layout && lastEquationFrame.key === frameKey) {
+    setDatasetIfChanged(document.body, "kpReaderFramePlans", String(rendererInspection().framePlanCount + 1));
+    return;
+  }
   if (chromeFreeCanonicalEquationSession !== undefined) {
-    updateActiveBeat(projection.progressPermille, attentionProjection);
     const focusSnapshot = focus.getSnapshot();
     const snapshot = chromeFreeCanonicalEquationSession.sample({
       clock: visualSample,
@@ -986,7 +1001,6 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   });
   // Attention selects semantic presentation for this exact sample before the
   // renderer observes native styles, avoiding a one-frame endpoint color lag.
-  updateActiveBeat(projection.progressPermille, attentionProjection);
   const focusSnapshot = focus.getSnapshot();
   if (motion.linearRearrangement === undefined) {
     delete stage.dataset["kpReaderEquationPersistentReflowProgress"];
@@ -1233,6 +1247,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     previousReviewFrameAtMs = atMs;
     previousReviewScrollY = window.scrollY;
   }
+  // Publish reuse only after the complete frame succeeds.
+  lastEquationFrame = { layout, key: frameKey };
 }
 
 function syncAnnihilationWitness(
@@ -1370,9 +1386,10 @@ function updateActiveBeat(
   )[0];
   if (activeBeat === undefined) return;
   activeLocation.sync(requiredData(activeBeat, "kpBeat"));
-  status.value = attentionProjection?.cue
+  const cue = attentionProjection?.cue
     ?? activeBeat.querySelector("h2")?.textContent?.trim()
     ?? "Follow the symbols";
+  if (status.value !== cue) status.value = cue;
   syncActiveAttention(attentionProjection);
   focus.set("story", attentionProjection?.focusRefs ?? dataRefs(activeBeat));
 }
@@ -1393,7 +1410,7 @@ function syncActiveAttention(
   }
   for (const element of attentionElements) {
     const active = requiredData(element, "kpAttentionPhase") === projection?.phaseId;
-    element.dataset["kpAttentionPhaseActive"] = String(active);
+    setDatasetIfChanged(element, "kpAttentionPhaseActive", String(active));
   }
   syncFocusStepper(projection);
 }
@@ -1402,8 +1419,9 @@ function syncFocusStepper(projection: KpReaderAttentionProjection | undefined): 
   if (projection === undefined || attention === undefined) return;
   const index = attention.phases.findIndex((phase) => phase.id === projection.phaseId);
   if (index < 0) throw new Error(`Unknown active attention phase ${projection.phaseId}.`);
-  attentionStatus.value = projection.cue;
-  attentionCount.textContent = `Step ${index + 1} of ${attention.phases.length}`;
+  if (attentionStatus.value !== projection.cue) attentionStatus.value = projection.cue;
+  const count = `Step ${index + 1} of ${attention.phases.length}`;
+  if (attentionCount.textContent !== count) attentionCount.textContent = count;
   attentionScrubber.value = String(projection.semanticProgressPermille);
   attentionScrubber.setAttribute(
     "aria-valuetext",

@@ -9,6 +9,7 @@ import {
   findKpAnimationTransformationPhaseCohort
 } from "../src/animation/transformation-phase-cohorts.ts";
 import {
+  equationFrameKey,
   planKpReaderCanonicalEquationFrame
 } from "../src/reader/app/canonical-equation-frame-plan.ts";
 import {
@@ -18,6 +19,20 @@ import {
 
 const animation = createKpFractionCompositionEquationAnimationAsset();
 const cohorts = compileKpAnimationTransformationPhaseCohorts(animation);
+
+test('frame reuse distinguishes every semantic, focus and font input without quantizing progress', () => {
+  const input = { animationProgress: .5, progressPermille: 500, visualProgress: .5,
+    mode: 'continuous', preference: 'full', direction: 'forward' as const,
+    focusRevision: 2, fontRevision: 1, beatId: 'beat.one', attentionPhaseId: 'act' };
+  const initial = equationFrameKey(input);
+  assert.equal(initial, equationFrameKey({ ...input }));
+  for (const change of [
+    { animationProgress: .50001 }, { progressPermille: 501 }, { visualProgress: .50001 },
+    { mode: 'checkpoint' }, { preference: 'reduced' }, { direction: 'backward' as const },
+    { focusRevision: 3 }, { fontRevision: 2 }, { beatId: 'beat.two' }, { attentionPhaseId: 'inspect' }
+  ]) assert.notEqual(initial, equationFrameKey({ ...input, ...change }));
+  assert.throws(() => equationFrameKey({ ...input, animationProgress: NaN }));
+});
 
 test("canonical frame planning preserves the reader calculation at sampled points", () => {
   for (const [progress, previousProgress] of [

@@ -65,8 +65,11 @@ export function mountFractionalRisingPassages(input: {
     sliders.render(active, progress, readAll ? 0 : presence);
     const opacity = fractionalTheaterFocus({ positions, heights, position, stageOffset: 14 });
     passages.forEach((passage, index) => {
-      passage.dataset['kpCaptionActive'] = String(index === active);
-      passage.style.setProperty('--kp-passage-opacity', String(opacity[index] ?? 1));
+      const selected = String(index === active);
+      const paint = String(opacity[index] ?? 1);
+      if (passage.dataset['kpCaptionActive'] !== selected) passage.dataset['kpCaptionActive'] = selected;
+      if (passage.style.getPropertyValue('--kp-passage-opacity') !== paint)
+        passage.style.setProperty('--kp-passage-opacity', paint);
     });
   };
   const measure = () => {
