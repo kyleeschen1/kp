@@ -1,8 +1,11 @@
+import type { FractionalPassageOperationBinding } from './fractional-passage-operations.ts';
+
 /** Prepare only the known flat fractional-reader markup, before first paint.
  * This is not an arbitrary HTML parser: fail closed if its compiler shape
  * changes (e.g. nested attention lists), rather than hydrating half a layout.
  */
-export function compileFractionalCaptionShell(html: string, beatCount: number): string {
+export function compileFractionalCaptionShell(html: string, beatCount: number,
+  operations: ReadonlyMap<string, FractionalPassageOperationBinding> = new Map()): string {
   const article = html.indexOf('<article class="kp-lesson"');
   const introStart = html.indexOf('>', article) + 1;
   const storyStart = html.indexOf('<section ', introStart);
@@ -16,7 +19,10 @@ export function compileFractionalCaptionShell(html: string, beatCount: number): 
   const story = html.slice(storyStart, storyEnd).replace(/(<li\b[^>]*data-kp-beat="([^"]+)"[^>]*>)(<div class="kp-beat-copy">[\s\S]*?<\/div>)(<\/li>)/g,
     (_match, opening: string, id: string, copy: string, closing: string) => {
       wrapped += 1;
-      return `${opening}<div class="kp-rising-passage" id="caption.${id}" data-kp-rising-beat="${id}"><div class="kp-caption-copy">${copy.replace(/<h2\b/g, '<h2 hidden')}</div></div>${closing}`;
+      const operation = operations.get(id);
+      const attributes = operation === undefined ? ''
+        : ` data-kp-operation-id="${operation.transformationId.replaceAll('&', '&amp;').replaceAll('"', '&quot;')}" data-kp-operation-start="${operation.start}" data-kp-operation-end="${operation.end}"`;
+      return `${opening.slice(0, -1)}${attributes}><div class="kp-rising-passage" id="caption.${id}" data-kp-rising-beat="${id}"><div class="kp-caption-copy">${copy.replace(/<h2\b/g, '<h2 hidden')}</div></div>${closing}`;
     });
   if (wrapped !== beatCount || wrapped === 0 || story.includes('data-kp-attention-phase=') || story.slice(1).includes('<section ')) {
     throw new Error('Fractional caption shell requires the complete flat beat sequence.');

@@ -1,0 +1,52 @@
+{
+  "id": "run-contract.kp-theater-focus-audit-20261028",
+  "kind": "run-contract",
+  "title": "Theater focus handoff and performance audit",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-28-theater-focus-and-audit.md",
+      "summary": "User-approved behavior-first then audit scope"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "behavior: desktop and phone focus, reversal, controls, search and static fallback; production and equation smoke also passed",
+      "checkedAt": "2026-10-28T19:56:11.874Z",
+      "notes": "See docs/project/reviews/2026-10-28-theater-focus-and-performance.md for complete commands and visual limitations."
+    }
+  ],
+  "allowedWork": [
+    "Local reader presentation, explicit operation associations, focused checks and subsequent read-only performance diagnosis"
+  ],
+  "disallowedWork": [
+    "Mathematical choreography changes, renderer replacement, catalog promotion and speculative cache activation"
+  ],
+  "goal": "Implement the approved local passage handoff, then measure slow frames and direct-jump work",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "behavior",
+      "title": "Theater focus handoff",
+      "summary": "Local reversible candidate checked; visual judgment deferred until independently approved audit is delivered.",
+      "status": "complete"
+    },
+    {
+      "id": "audit",
+      "title": "Performance and narrative-jump audit",
+      "status": "in-progress"
+    }
+  ]
+}

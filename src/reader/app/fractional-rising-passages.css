@@ -79,6 +79,8 @@
     position: sticky; top: var(--kp-passage-top, calc(var(--kp-flow-line) - 80px));
     z-index: 2; margin: 0; padding-inline: 24px; pointer-events: auto;
   }
+  body[data-kp-caption-mode="captions"] .kp-rising-passage { opacity: var(--kp-passage-opacity, 1); }
+  body[data-kp-caption-mode="captions"] .kp-rising-passage:focus-within { opacity: 1; }
   body[data-kp-reader-layout="rising-passages"] .kp-caption-copy { width: 100%; }
   .kp-caption-frame {
     position: absolute; inset: 0; border: 0;
@@ -101,16 +103,19 @@
   }
   body[data-kp-reader-layout="rising-passages"] .kp-beat-copy > :last-child { margin-bottom: 0; }
   .kp-caption-operation-slider {
-    appearance: none; display: block; width: 100%; height: 24px;
+    appearance: none; display: block; position: absolute;
+    top: calc(var(--kp-flow-line-in-card) + 14px + 82px + 6px);
+    left: 24px; width: calc(100% - 48px); height: 24px;
     padding: 0; margin: 0; border: 0; border-radius: 0;
-    background: linear-gradient(to right, var(--kp-relation) var(--kp-operation-progress, 0%), var(--kp-line) var(--kp-operation-progress, 0%)) center / 100% 2px no-repeat;
+    background: linear-gradient(to right, var(--kp-relation) var(--kp-operation-progress, 0%), var(--kp-line) var(--kp-operation-progress, 0%)) center / 100% 1px no-repeat;
     cursor: ew-resize;
   }
+  .kp-caption-operation-slider[hidden] { display: none; }
   .kp-caption-operation-slider::-webkit-slider-thumb {
-    appearance: none; width: 7px; height: 7px; border: 0; border-radius: 50%; background: var(--kp-relation);
+    appearance: none; width: 4px; height: 4px; border: 0; border-radius: 50%; background: var(--kp-relation);
   }
   .kp-caption-operation-slider::-moz-range-thumb {
-    width: 7px; height: 7px; border: 0; border-radius: 50%; background: var(--kp-relation);
+    width: 4px; height: 4px; border: 0; border-radius: 50%; background: var(--kp-relation);
   }
   .kp-caption-operation-slider::-moz-range-track { background: transparent; }
   .kp-rising-navigation { position: relative; font-size: .78rem; }

@@ -1,7 +1,7 @@
 import { createFractionalRisingScroll, fractionalPassageCadence, fractionalPassageIndex } from './fractional-rising-scroll.ts';
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { mountFractionalPassageSliders } from './fractional-passage-sliders.ts';
-import { fractionalPassageOperation } from './fractional-passage-progress.ts';
+import { fractionalSliderPresence, fractionalTheaterFocus } from './fractional-theater-focus.ts';
 
 /** Real article paragraphs, native sticky holds, and the existing semantic clock. */
 export function mountFractionalRisingPassages(input: {
@@ -41,6 +41,7 @@ export function mountFractionalRisingPassages(input: {
   let headerHeight = masthead.getBoundingClientRect().height;
   let readingLine = 0;
   let positions: readonly number[] = [];
+  let heights: readonly number[] = [];
   let geometry: KpReaderPiecewiseScrollGeometry | undefined;
   let readAll = false;
   let returnIndex = 0;
@@ -52,24 +53,31 @@ export function mountFractionalRisingPassages(input: {
   readingMode.textContent = 'Read all';
   readingMode.setAttribute('aria-pressed', 'false');
   masthead.insertBefore(readingMode, navigation);
-  const sliders = mountFractionalPassageSliders({ beats: input.beats, passages, geometry: () => geometry, seek: input.onSeek });
+  const host = input.story.querySelector('.kp-caption-pin');
+  if (!(host instanceof HTMLElement)) throw new Error('Theater control requires its stage host.');
+  const sliders = mountFractionalPassageSliders({ beats: input.beats, host, geometry: () => geometry, seek: input.onSeek });
   const render = (progress = renderedProgress) => {
     renderedProgress = progress;
-    sliders.render(progress);
     const active = readAll ? returnIndex : indexAtPosition();
+    const position = window.scrollY + readingLine;
+    const operation = sliders.operationAt(active);
+    const presence = operation && geometry ? fractionalSliderPresence(position, operation.seek(geometry, 1).position) : 0;
+    sliders.render(active, progress, readAll ? 0 : presence);
+    const opacity = fractionalTheaterFocus({ positions, heights, position, stageOffset: 14 });
     passages.forEach((passage, index) => {
       passage.dataset['kpCaptionActive'] = String(index === active);
+      passage.style.setProperty('--kp-passage-opacity', String(opacity[index] ?? 1));
     });
   };
   const measure = () => {
     if (readAll) return;
     headerHeight = masthead.getBoundingClientRect().height;
     const available = window.innerHeight - headerHeight;
-    const heights = passages.map((passage) => passage.getBoundingClientRect().height);
+    heights = passages.map((passage) => passage.getBoundingClientRect().height);
     const maxHeight = Math.max(...heights);
     // Paragraph height affects layout once, not the equation's position on each
     // passage exchange. A short caption shares the same bottom reading line.
-    const groupHeight = maxHeight + 14 + 82;
+    const groupHeight = maxHeight + 14 + 82 + 6 + 24;
     const cardHeight = Math.max(320, groupHeight + 64);
     const cardTop = headerHeight + Math.max(16, (available - cardHeight) / 2);
     const lineWithinCard = (cardHeight - groupHeight) / 2 + maxHeight;
@@ -84,11 +92,12 @@ export function mountFractionalRisingPassages(input: {
     style.setProperty('--kp-flow-leading', `${lineWithinCard - heights[0]!}px`);
     style.setProperty('--kp-flow-tail', `${cardHeight - lineWithinCard}px`);
     style.setProperty('--kp-flow-hold', `${cadence.hold}px`);
-    // At release the next real paragraph is still below the viewport. Its
-    // subsequent arrival is ordinary document motion, never a timed reveal.
-    style.setProperty('--kp-flow-gap', `${Math.max(32, window.innerHeight - readingLine + 24)}px`);
+    // Release brings the next real paragraph into the theater immediately.
+    // Both paragraphs then travel at the same native scroll velocity.
+    style.setProperty('--kp-flow-gap', `${cardHeight - lineWithinCard + 4}px`);
     passages.forEach((passage, index) => {
       passage.style.setProperty('--kp-passage-top', `${Math.max(headerHeight + 12, readingLine - heights[index]!)}px`);
+      input.beats[index]!.style.setProperty('--kp-flow-hold', `${sliders.operationAt(index) ? cadence.hold : cadence.read}px`);
     });
     positions = input.beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
   };
@@ -130,12 +139,12 @@ export function mountFractionalRisingPassages(input: {
     positionFor(beat: HTMLElement | undefined, progress: number) {
       if (beat === undefined || geometry === undefined) return undefined;
       const index = input.beats.indexOf(beat);
-      if (index === 0 && progress === 0) return positions[0];
-      if (index < 1) return undefined;
-      const start = Number(input.beats[index - 1]!.dataset['kpCheckpoint']);
-      const end = Number(beat.dataset['kpCheckpoint']);
+      if (index < 0) return undefined;
+      const operation = sliders.operationAt(index);
+      if (operation === undefined) return progress === Number(beat.dataset['kpCheckpoint']) ? positions[index] : undefined;
+      const start = Number(beat.dataset['kpOperationStart']);
+      const end = Number(beat.dataset['kpOperationEnd']);
       if (progress < start || progress > end) return undefined;
-      const operation = fractionalPassageOperation(start, end);
       return operation.seek(geometry, operation.fraction(progress)).position;
     },
     arrival(beat: HTMLElement) {

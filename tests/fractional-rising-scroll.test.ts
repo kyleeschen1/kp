@@ -34,3 +34,16 @@ test('invalid geometry cannot truncate an operation to fit overlapping paragraph
   assert.throws(() => createFractionalRisingScroll({ stops }, 800), /room to read/);
   assert.throws(() => createFractionalRisingScroll({ stops }, NaN), /positive available height/);
 });
+
+test('a comment between operations holds its existing result without an artificial animation interval', () => {
+  const geometry = createFractionalRisingScroll({ stops: [
+    { positionPx: 0, progressPermille: 0 },
+    { positionPx: 600, progressPermille: 500 },
+    { positionPx: 1200, progressPermille: 500 },
+    { positionPx: 1800, progressPermille: 1000 }
+  ] }, 800);
+  for (const position of [1200, 1300, 1500, 1800]) {
+    assert.equal(sampleKpReaderScrollProgress(position, geometry), .5);
+  }
+  assert.equal(geometry.stops.filter((stop) => stop.positionPx >= 1200 && stop.positionPx < 1800).length, 1);
+});

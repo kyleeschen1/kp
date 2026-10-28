@@ -3,17 +3,22 @@ import path from 'node:path';
 import type { Page } from 'playwright';
 
 export async function checkFractionalPassageSlider(page: Page, outputRoot: string, width: number) {
-  assert.equal(await page.locator('.kp-animation-beats .kp-caption-operation-slider').count(), 6);
+  assert.equal(await page.locator('.kp-caption-pin .kp-caption-operation-slider').count(), 1);
+  assert.equal(await page.locator('.kp-animation-beats [data-kp-operation-id]').count(), 6);
   assert.equal(await page.locator('[data-kp-rising-beat="beat.read"] input').count(), 0);
   await page.locator('.kp-rising-navigation summary').click();
   await page.locator('.kp-lesson-toc a[href="#beat.multiply"]').click();
   const passage = page.locator('[data-kp-rising-beat="beat.multiply"]');
-  const slider = passage.getByRole('slider');
+  const slider = page.locator('.kp-caption-operation-slider');
   const value = () => slider.evaluate((node: HTMLInputElement) => node.valueAsNumber);
   const settle = () => page.waitForTimeout(240);
   await settle();
+  assert.equal(await slider.getAttribute('data-kp-operation-beat'), 'beat.multiply');
+  assert.equal(await slider.getAttribute('aria-describedby'), 'caption.beat.multiply');
   const box = await slider.boundingBox();
   assert.ok(box && box.height >= 24, 'The thin track must have a usable interaction area');
+  const stage = await page.locator('.kp-reader-equation-viewport').boundingBox();
+  assert.ok(stage && box.y >= stage.y + stage.height, 'Control belongs below the mathematical workspace');
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();
   await page.mouse.up();
@@ -57,8 +62,8 @@ export async function checkFractionalPassageSlider(page: Page, outputRoot: strin
   assert.ok(Math.abs(progress - (500 + rewound / 1000 * 167)) <= 1);
   assert.equal(await page.locator('.kp-caption-preview').count(), 0,
     'Document prose must not acquire a separate preview copy');
-  assert.ok(await passage.evaluate((node) => node.parentElement!.nextElementSibling!.querySelector('.kp-rising-passage')!.getBoundingClientRect().top > innerHeight),
-    'An active operation must keep its next paragraph below the viewport');
+  assert.ok(await passage.evaluate((node) => node.parentElement!.nextElementSibling!.querySelector('.kp-rising-passage')!.getBoundingClientRect().top > document.querySelector('.kp-caption-frame')!.getBoundingClientRect().bottom),
+    'An active operation must keep its next paragraph below the theater');
   await page.screenshot({ path: path.join(outputRoot, `passage-slider-rewind-${width}.png`) });
   await slider.press('End');
   await settle();

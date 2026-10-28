@@ -32,6 +32,9 @@ test("fractional lesson compiles into the shared searchable equation card", () =
   assert.match(artifact.html, /class="kp-caption-frame"/);
   assert.match(artifact.html, /<noscript><style data-kp-static-document>/);
   assert.equal((artifact.html.match(/data-kp-rising-beat=/g) ?? []).length, 7);
+  assert.equal((artifact.html.match(/data-kp-operation-id=/g) ?? []).length, 6);
+  assert.match(artifact.html, /data-kp-operation-start="500" data-kp-operation-end="667"/);
+  assert.doesNotMatch(artifact.html, /<li[^>]*data-kp-beat="beat.read"[^>]*data-kp-operation-id/);
   assert.equal((artifact.html.match(/class="kp-caption-copy"/g) ?? []).length, 7);
   assert.doesNotMatch(artifact.html, /data-kp-caption-slot=|hidden="until-found"|kp-caption-preview/);
   assert.equal((artifact.html.match(/<h2 hidden/g) ?? []).length, 7);

@@ -10,7 +10,9 @@ export function fractionalPassageCadence(availableHeight: number) {
   }
   const read = availableHeight * .12;
   const act = availableHeight * .32;
-  const inspect = availableHeight * .16;
+  // The exchange itself is the result-inspection interval. Release immediately
+  // at completion instead of adding another blank scroll hold.
+  const inspect = 0;
   return { read, act, inspect, hold: read + act + inspect };
 }
 
@@ -25,6 +27,10 @@ export function createFractionalRisingScroll(
   for (let index = 1; index < narrative.stops.length; index++) {
     const passage = narrative.stops[index]!;
     const previous = narrative.stops[index - 1]!;
+    if (passage.progressPermille === previous.progressPermille) {
+      stops.push(passage);
+      continue;
+    }
     const start = passage.positionPx + cadence.read;
     const end = start + cadence.act;
     if ((narrative.stops[index + 1]?.positionPx ?? Infinity) <= end + cadence.inspect) {

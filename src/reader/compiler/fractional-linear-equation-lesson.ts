@@ -11,6 +11,7 @@ import {
 } from "./fractional-linear-equation-lesson-model.ts";
 import { serializeKpReaderHydrationManifest } from "./hydration-manifest.ts";
 import { compileFractionalCaptionShell } from "./fractional-caption-shell.ts";
+import { fractionalPassageOperations } from './fractional-passage-operations.ts';
 
 export function compileKpFractionalLinearEquationLesson(markdown: string) {
   const model = compileKpFractionalLinearEquationLessonModel(markdown);
@@ -32,7 +33,8 @@ export function compileKpFractionalLinearEquationLesson(markdown: string) {
     equationPresentation: requireEquationPresentation(model.hydration.blocks[0]),
     annotateState: (state) =>
       createKpFractionalLinearSelectorAnnotatedLatex(state)?.annotated
-  }), model.hydration.blocks[0]!.checkpoints.length);
+  }), model.hydration.blocks[0]!.checkpoints.length,
+    fractionalPassageOperations(model.hydration.blocks[0]!.checkpoints, model.animation.transformations));
 
   return createKpCompiledLessonArtifact({
     id: "compiled.lesson.solve-x.fractional-linear",
