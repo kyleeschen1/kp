@@ -13,7 +13,8 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await startupPage.goto(new URL('/reader/solve-fractional-linear/', baseUrl).toString(), { waitUntil: 'networkidle' });
     assert.equal(await startupPage.locator('body').getAttribute('data-kp-caption-mode'), 'captions');
     assert.equal(await startupPage.locator('body').getAttribute('data-kp-reader-hydrated'), null);
-    assert.ok(await startupPage.locator('.kp-rising-intro .kp-caption-copy').isVisible());
+    assert.ok(await startupPage.locator('.kp-caption-document-intro').isVisible());
+    assert.ok(await startupPage.locator('[data-kp-rising-beat="beat.read"] .kp-caption-copy').isVisible());
     assert.ok(await startupPage.locator('.kp-animation-static .katex').first().isVisible());
     assert.equal(await startupPage.locator('.kp-animation-static > [data-kp-static-state]:visible').count(), 1,
       'Only the initial equation may paint before hydration');
@@ -43,10 +44,47 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(await page.locator('.kp-caption-frame').count(), 1);
     assert.equal(await page.locator('.kp-caption-preview').count(), 1);
     await page.screenshot({ path: path.join(outputRoot, `caption-card-initial-${size.width}.png`) });
+    const embedding = await page.evaluate(() => {
+      const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
+      const section = document.querySelector('.kp-caption-sequence')!.getBoundingClientRect();
+      const target = parseFloat(getComputedStyle(pin).top);
+      const paragraph = pin.querySelector('[data-kp-rising-beat="beat.read"] p')!;
+      const link = paragraph.querySelector('.kp-semantic-link')!;
+      return {
+        start: scrollY + section.top - target,
+        end: scrollY + section.bottom - pin.getBoundingClientRect().height - target,
+        target, initialTop: pin.getBoundingClientRect().top,
+        weight: getComputedStyle(paragraph).fontWeight,
+        spacing: parseFloat(getComputedStyle(paragraph).letterSpacing),
+        linkColor: getComputedStyle(link).color, textColor: getComputedStyle(paragraph).color,
+        headingsHidden: [...pin.querySelectorAll('h2')].every((heading) => getComputedStyle(heading).display === 'none')
+      };
+    });
+    assert.ok(embedding.initialTop > embedding.target + 40, 'The card must begin in the document, below its pin position');
+    assert.ok(embedding.headingsHidden);
+    assert.equal(embedding.weight, '300');
+    assert.ok(embedding.spacing > .2);
+    assert.notEqual(embedding.linkColor, embedding.textColor, 'Semantic references must retain their palette color');
+    for (const [name, y, expectedTop] of [
+      ['approach', embedding.start / 2, embedding.initialTop - embedding.start / 2],
+      ['pinned', embedding.start + 100, embedding.target],
+      ['release', embedding.end + 100, embedding.target - 100],
+      ['rewind', embedding.start + 100, embedding.target]
+    ] as const) {
+      await page.evaluate((top) => { window.dispatchEvent(new WheelEvent('wheel')); scrollTo(0, top); }, y);
+      await settle(page);
+      const top = await page.locator('.kp-caption-pin').evaluate((node) => node.getBoundingClientRect().top);
+      assert.ok(Math.abs(top - expectedTop) < 2, `Document ${name} must follow native sticky geometry: ${top} vs ${expectedTop}`);
+      if (name === 'release') {
+        assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), '1000');
+        assert.ok(await page.locator('.kp-caption-document-after').evaluate((node) => node.getBoundingClientRect().top < innerHeight));
+      }
+      await page.screenshot({ path: path.join(outputRoot, `caption-${name}-${size.width}.png`) });
+    }
     const samples = [];
     for (const distance of [.01, .15, .35, .65, .8, .86, .94, 1.01, .94, .35, .01]) {
       await page.evaluate((fraction) => {
-        const slot = document.querySelector<HTMLElement>('[data-kp-beat="beat.multiply"]')!;
+        const slot = document.querySelector<HTMLElement>('[data-kp-caption-slot="beat.multiply"]')!;
         const header = document.querySelector(".kp-reader-masthead")!.getBoundingClientRect().height;
         const available = innerHeight - header;
         const next = slot.nextElementSibling!;
@@ -65,7 +103,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
           top: passage.getBoundingClientRect().top,
           nextOpacity: getComputedStyle(preview).opacity,
           copyBottom: passage.firstElementChild!.getBoundingClientRect().bottom,
-          textColors: [...passage.querySelectorAll('h2, p')].map((node) => getComputedStyle(node).color),
+          textColors: [...passage.querySelectorAll('p')].map((node) => getComputedStyle(node).color),
           foreground: getComputedStyle(document.body).color,
           previewTop: preview.firstElementChild?.getBoundingClientRect().top ?? 0,
           previewBottom: preview.firstElementChild?.getBoundingClientRect().bottom ?? 0,
@@ -127,7 +165,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(await page.locator('[data-kp-rising-beat="beat.multiply"]').getAttribute("hidden"), null);
 
     await page.evaluate(() => {
-      const slot = document.querySelector('[data-kp-beat="beat.multiply"]')!;
+      const slot = document.querySelector('[data-kp-caption-slot="beat.multiply"]')!;
       const header = document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().height;
       const span = slot.nextElementSibling!.getBoundingClientRect().top - slot.getBoundingClientRect().top;
       window.scrollTo(0, scrollY + slot.getBoundingClientRect().top - header - (innerHeight - header) / 2 + span * .72);
@@ -196,10 +234,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await settle(page);
     assert.equal(await page.locator(".kp-rising-passage[hidden]:not([inert])").count(), 0);
     assert.equal(await page.locator("body").getAttribute("data-kp-caption-mode"), "document");
-    const readingOffset = await page.locator('[data-kp-rising-beat="beat.multiply"]').evaluate((passage) =>
-      passage.getBoundingClientRect().top - document.querySelector('[data-kp-reader-equation-stage]')!.getBoundingClientRect().bottom);
-    assert.ok(readingOffset >= -2 && readingOffset < 30,
-      "Read all must retain the current passage at the reading boundary");
+    assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), '500',
+      'Reading the ordinary transcript must not scrub the held equation');
+    assert.ok(await page.locator('[data-kp-rising-beat="beat.multiply"]').evaluate((node) => {
+      const rect = node.getBoundingClientRect(); return rect.top >= 0 && rect.bottom <= innerHeight;
+    }),
+      "Read all must retain the current passage in the reading viewport");
     await page.screenshot({ path: path.join(outputRoot, `captions-document-${size.width}.png`) });
     await page.getByRole("button", { name: "Read all", exact: true }).click();
     await page.keyboard.press("PageDown");
@@ -210,7 +250,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
   await page.locator(".kp-rising-navigation summary").click();
   await page.locator('.kp-lesson-toc a[href="#beat.multiply"]').click();
   await page.evaluate(() => {
-    const slot = document.querySelector('[data-kp-beat="beat.multiply"]')!;
+    const slot = document.querySelector('[data-kp-caption-slot="beat.multiply"]')!;
     const span = slot.nextElementSibling!.getBoundingClientRect().top - slot.getBoundingClientRect().top;
     window.scrollBy(0, span * .86);
   });
@@ -261,7 +301,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
   } finally {
     await fallbackContext.close();
   }
-  process.stdout.write("Caption card: desktop/phone alignment, held-equation previews, rewind, URL, search indexing, native reveal, document mode, reduced motion, completion and print return passed.\n");
+  process.stdout.write("Caption card: document entry/pin/release/rewind, prose styling, desktop/phone alignment, held-equation previews, URL, search, document mode, reduced motion and static/print fallback passed.\n");
 }
 
 async function settle(page: Page) {

@@ -17,9 +17,8 @@ export function mountFractionalRisingPassages(input: {
     if (node === null) throw new Error(`Missing compiled caption shell: ${selector}`);
     return node;
   };
-  const introSlot = required(article, '.kp-caption-intro-slot');
-  const intro = required(introSlot, '.kp-rising-intro');
-  const passages = [intro, ...input.beats.map((beat) => required(beat, '.kp-rising-passage'))];
+  const pin = required(article, '.kp-caption-pin');
+  const passages = input.beats.map((beat) => required(beat, '.kp-rising-passage'));
   const toc = document.querySelector<HTMLElement>(".kp-lesson-toc")!;
   const tocHome = document.createComment("rising passage navigation home");
   toc.before(tocHome);
@@ -49,7 +48,7 @@ export function mountFractionalRisingPassages(input: {
   readingMode.setAttribute("aria-pressed", String(readAll));
   readingMode.disabled = !supportsFind;
   masthead.insertBefore(readingMode, navigation);
-  const slots = [introSlot, ...input.beats];
+  const slots = input.beats.map((beat) => required(article, `[data-kp-caption-slot="${beat.dataset['kpBeat']}"]`));
   const frame = required(document, '.kp-caption-frame');
   // A clipped preview must not become a second searchable match, or prevent
   // native find from revealing the full, original instruction via beforematch.
@@ -57,9 +56,10 @@ export function mountFractionalRisingPassages(input: {
   preview.className = "kp-rising-passage kp-caption-preview";
   preview.inert = true;
   preview.setAttribute("aria-hidden", "true");
-  document.body.append(preview);
+  pin.append(preview);
   let previewIndex: number | undefined;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let documentReturnIndex = 0;
   const ease = (t: number) => t * t * (3 - 2 * t);
   const render = () => {
     document.body.dataset["kpCaptionMode"] = readAll ? "document" : "captions";
@@ -101,9 +101,12 @@ export function mountFractionalRisingPassages(input: {
     });
   };
   const toggleReading = () => {
+    if (!readAll) documentReturnIndex = fractionalCaptionFrame(positions, window.scrollY + anchor(), window.innerHeight - headerHeight)?.index ?? 0;
     readAll = !readAll;
     readingMode.setAttribute("aria-pressed", String(readAll));
     render();
+    if (readAll) passages[documentReturnIndex]!.scrollIntoView({ block: 'center' });
+    else window.scrollTo(0, positions[documentReturnIndex]! - anchor());
   };
   readingMode.addEventListener("click", toggleReading);
   const revealMatch = (event: Event) => {
@@ -119,24 +122,28 @@ export function mountFractionalRisingPassages(input: {
   };
   for (const passage of passages) passage.addEventListener("beforematch", revealMatch);
   return {
+    readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
       geometry = createFractionalRisingScroll(narrative, window.innerHeight - headerHeight);
       return geometry;
     },
     activeBeat() {
+      if (readAll) return input.beats[documentReturnIndex];
       const position = window.scrollY + anchor();
       let index = 0;
-      while (index + 1 < input.beats.length && (positions[index + 2] ?? Infinity) <= position) index += 1;
+      while (index + 1 < input.beats.length && (positions[index + 1] ?? Infinity) <= position) index += 1;
       return input.beats[index];
     },
     arrival(beat: HTMLElement) {
       const index = input.beats.indexOf(beat);
-      const position = positions[index + 1];
+      if (readAll && index >= 0) documentReturnIndex = index;
+      const position = readAll && index >= 0
+        ? window.scrollY + passages[index]!.getBoundingClientRect().top : positions[index];
       if (index < 0 || position === undefined) return undefined;
       return { position, progress: Number(input.beats[Math.max(0, index - 1)]!.dataset["kpCheckpoint"]) };
     },
     encodeHref(href: URL) {
-      if (geometry === undefined) return href;
+      if (geometry === undefined || readAll) return href;
       const start = geometry.stops[0]!.positionPx;
       const end = geometry.stops.at(-1)!.positionPx;
       // Holds share mathematical progress. Preserve their distinct reading
@@ -159,12 +166,19 @@ export function mountFractionalRisingPassages(input: {
     viewportAnchorFraction() {
       return (headerHeight + (window.innerHeight - headerHeight) / 2) / window.innerHeight;
     },
+    anchorTop(beat: HTMLElement) {
+      const index = input.beats.indexOf(beat);
+      if (index < 0) throw new Error('Caption clock requires its authored beat.');
+      return readAll && positions[index] !== undefined
+        ? positions[index]! - window.scrollY : slots[index]!.getBoundingClientRect().top;
+    },
     measure() {
       headerHeight = masthead.getBoundingClientRect().height;
       document.body.style.setProperty("--kp-rising-header-height", `${headerHeight}px`);
       // Cache document coordinates with the reader's existing geometry reads.
       // Slots remain in flow when captions are pinned or hidden. Measuring
       // caption paint would make resize and find change the animation clock.
+      if (readAll && positions.length > 0) return;
       positions = slots.map((slot) => {
         const rect = slot.getBoundingClientRect();
         return window.scrollY + rect.top;
@@ -181,7 +195,6 @@ export function mountFractionalRisingPassages(input: {
       tocHome.replaceWith(toc);
       navigation.remove();
       for (const passage of passages) passage.replaceWith(...passage.firstElementChild!.childNodes);
-      introSlot.replaceWith(...introSlot.childNodes);
       delete document.body.dataset["kpReaderLayout"];
       delete document.body.dataset["kpCaptionMode"];
       document.body.style.removeProperty("--kp-rising-header-height");

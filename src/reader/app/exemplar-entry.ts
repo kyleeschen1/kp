@@ -583,6 +583,12 @@ function updateScrollGeometry(): void {
 
 function onResize(): void {
   if (printMedia.matches) return;
+  if (risingPassages?.readingDocument()) {
+    updateScrollGeometry();
+    renderer.refresh('resize');
+    renderCurrentSample();
+    return;
+  }
   const progressPermille = lastSample().progressPermille;
   applyResponsiveProjection();
   evaluationControls?.refreshViewport();
@@ -670,7 +676,7 @@ function maximumBeatNarrativeHeight(): number {
 }
 
 function beatNarrativeAnchor(beat: HTMLElement): number {
-  if (risingPassages !== undefined) return beat.getBoundingClientRect().top;
+  if (risingPassages !== undefined) return risingPassages.anchorTop(beat);
   const bounds = beatNarrativeBounds(beat);
   return bounds.top + bounds.height / 2;
 }
@@ -718,7 +724,7 @@ function scheduleScrollSample(): void {
   // frame. A second rAF here added one frame of latency and let stale samples
   // reach an otherwise latest-wins scheduler.
   renderWithAdapter(
-    controlSample ?? scrollClock.samplePosition(readerPosition())
+    risingPassages?.readingDocument() ? lastSample() : controlSample ?? scrollClock.samplePosition(readerPosition())
   );
 }
 

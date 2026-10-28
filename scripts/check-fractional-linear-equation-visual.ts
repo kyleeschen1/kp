@@ -391,7 +391,9 @@ async function scrollToSemanticProgress(page: Page, progress: number): Promise<v
           .filter((rect) => rect.width > 0 && rect.height > 0);
         const top = Math.min(...rects.map((rect) => rect.top));
         const bottom = Math.max(...rects.map((rect) => rect.bottom));
-        const anchor = document.body.dataset["kpReaderLayout"] === "rising-passages" ? beat.getBoundingClientRect().top : (top + bottom) / 2;
+        const anchor = document.body.dataset["kpReaderLayout"] === "rising-passages"
+          ? document.querySelector(`[data-kp-caption-slot="${beat.dataset['kpBeat']}"]`)!.getBoundingClientRect().top
+          : (top + bottom) / 2;
         return { progress: Number(beat.dataset["kpCheckpoint"]), y: scrollY + anchor };
       });
     const anchor = Number(document.body.dataset["kpReaderViewportAnchor"]);

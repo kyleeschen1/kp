@@ -126,6 +126,30 @@ test("ordinary external links are not silently treated as semantic focus", () =>
   );
 });
 
+test('caption Markdown is opt-in and uses the existing safe semantic inline vocabulary', () => {
+  const parse = (content: string, contentFormat?: string) => parseKpLessonMarkdown({
+    sourceId: 'content/captions.md', id: 'lesson.captions', version: '1', title: 'Captions',
+    markdown: '# Captions\n\n```kp-animation-story\n' + JSON.stringify({
+      id: 'story.captions', asset: { id: 'animation.captions', version: '1' },
+      beats: [{ id: 'beat.read', title: 'Read', progressPermille: 0, content, contentFormat }]
+    }) + '\n```'
+  });
+  const source = 'Watch [x](kp:focus/equation.x "The unknown") move.';
+  const plain = parse(source).blocks[1];
+  assert.ok(plain?.kind === 'animation-story');
+  assert.equal(plain.beats[0]?.content[0]?.kind, 'text');
+  const formatted = parse(source, 'markdown').blocks[1];
+  assert.ok(formatted?.kind === 'animation-story');
+  const link = formatted.beats[0]?.content[1];
+  assert.ok(link?.kind === 'semantic-link');
+  assert.deepEqual(link.objectRefs, ['equation.x']);
+  assert.equal(link.source?.start.line, 3);
+  for (const unsafe of ['[x](javascript:alert)', '<script>bad()</script>', '# Heading', 'One\n\nTwo']) {
+    assert.throws(() => parse(unsafe, 'markdown'), KpLessonMarkdownError);
+  }
+  assert.throws(() => parse('Text', 'html'), /exemplar schema/);
+});
+
 function attentionPhase(
   kind: "orient" | "act" | "settle" | "inspect",
   beatId: "beat.read" | "beat.subtract",

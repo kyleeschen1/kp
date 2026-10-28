@@ -13,7 +13,8 @@ Follow [x](kp:focus/equation.fractional-linear.initial.fraction.numerator.x "x r
     {
       "id": "beat.read",
       "title": "Read the fraction",
-      "content": "Start with x divided by two, plus three, equals seven.",
+      "contentFormat": "markdown",
+      "content": "Start with [x](kp:focus/equation.fractional-linear.initial.fraction.numerator.x) divided by two, plus three, equals seven.",
       "progressPermille": 0,
       "focusRefs": ["equation.fractional-linear.initial"]
     },
@@ -62,3 +63,7 @@ Follow [x](kp:focus/equation.fractional-linear.initial.fraction.numerator.x "x r
   ]
 }
 ```
+
+We can check the result in the original equation: eight divided by two is four, and four plus three is seven.
+
+The useful pattern is to undo operations in reverse order. First undo the addition; then undo the division. Each move acts on both sides, so the equation keeps expressing the same equality.

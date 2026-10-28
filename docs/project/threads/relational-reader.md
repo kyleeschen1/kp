@@ -18,6 +18,10 @@ unexplained: bounded local stress found stable retained JS heap and idle layout,
 with substantial development startup and active-scroll work still measured.
 Native reveal, Read all, animations and semantic checkpoints remain. Review
 preview anticipation and closer alignment before generalization.
+The latest candidate adds native sticky document entry/release, hidden caption
+headings, lighter/wider-spaced prose and preserved semantic reference styling.
+The original opening/closing prose stays in document flow; stable sibling slots
+drive the existing clock. General multi-card hosting remains unpromoted.
 
 October 27 planning focus: [multi-step algebra derivation trail](../reviews/2026-10-27-next-step-review.md).
 The user selects retained historical equations and a moving continuation as the

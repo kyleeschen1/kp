@@ -36,6 +36,11 @@ Chromium stress run found stable retained JS heap, but did not reproduce or
 explain the reported tab crash. Review caption exchange before promotion; mathematics
 remains unchanged and the historical derivation trail is still pending.
 
+The latest local revision embeds that card in an ordinary document using native
+sticky entry/release. Caption headings remain only as metadata, references retain
+their color, and prose is lighter with slightly wider tracking. Review this
+single embedding before proposing a general multi-card authoring interface.
+
 October 27 prototype planning: the user selects multi-step algebra to test the
 new document-anchored derivation trail. The [proposed implementation plan](reviews/2026-10-27-next-step-review.md)
 uses the existing fractional linear solve, with retained equation snapshots and

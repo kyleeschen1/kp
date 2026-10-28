@@ -8,6 +8,7 @@
     --kp-muted: var(--kp-ink);
     --kp-caption-width: min(440px, calc(100vw - 32px));
     --kp-caption-card-top: calc(var(--kp-rising-header-height) + clamp(20px, 6vh, 56px));
+    --kp-caption-anchor: calc(var(--kp-rising-header-height) + (100svh - var(--kp-rising-header-height)) / 2);
     --kp-caption-card-height: min(540px, calc(100svh - var(--kp-rising-header-height) - 136px));
     --kp-caption-text-height: clamp(180px, 25svh, 220px);
   }
@@ -30,17 +31,42 @@
     margin-inline: auto;
   }
   body[data-kp-reader-layout="rising-passages"] .kp-lesson {
-    padding: calc((100vh - var(--kp-rising-header-height)) / 2 + 2rem) 0 40vh;
+    padding: 3rem 0 5rem;
+  }
+  .kp-caption-document-intro, .kp-caption-document-after { max-width: 38rem; margin: 0 auto; }
+  .kp-caption-document-intro { margin-bottom: 4rem; }
+  .kp-caption-document-after { padding: 3rem 0; min-height: 65vh; }
+  .kp-caption-sequence { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .kp-caption-pin {
+    grid-area: 1 / 1;
+    position: sticky;
+    top: var(--kp-caption-card-top);
+    align-self: start;
+    justify-self: center;
+    height: var(--kp-caption-card-height);
+    width: var(--kp-caption-width);
+    margin-inline: 0;
+    isolation: isolate;
+  }
+  .kp-caption-scroll-slots {
+    grid-area: 1 / 1;
+    padding-top: calc(var(--kp-caption-anchor) - var(--kp-caption-card-top));
+    pointer-events: none;
+  }
+  .kp-caption-scroll-slot { height: 80vh; }
+  .kp-caption-scroll-slot:last-child {
+    /* Release after the final operation and a short reading hold. */
+    height: calc((100svh - var(--kp-rising-header-height)) * .6 + var(--kp-caption-card-height) - var(--kp-caption-anchor) + var(--kp-caption-card-top));
   }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-story {
-    display: block;
+    display: contents;
     margin-top: 0;
     padding-bottom: 30vh;
   }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-static {
-    position: fixed;
+    position: absolute;
     z-index: 1;
-    top: calc(var(--kp-caption-card-top) + var(--kp-caption-text-height) + 38px);
+    top: calc(var(--kp-caption-text-height) + 38px);
     left: 50%;
     transform: translateX(-50%);
     width: var(--kp-caption-width);
@@ -87,14 +113,15 @@
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress span { display: none; }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-beats > li {
-    align-content: start;
-    min-height: 80vh;
+    display: contents;
+    min-height: 0;
     padding: 0;
     border: 0;
     opacity: 1;
     transition: none;
     scroll-margin-top: 50vh;
   }
+  body[data-kp-reader-layout="rising-passages"] .kp-animation-beats { display: contents; }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-passage {
     position: relative;
     z-index: 2;
@@ -102,19 +129,21 @@
     margin-inline: auto;
     opacity: var(--kp-caption-opacity, 1);
   }
-  body[data-kp-reader-layout="rising-passages"] .kp-caption-intro-slot { min-height: 80vh; }
+  body[data-kp-caption-mode="document"] :is(.kp-caption-sequence, .kp-caption-pin) { display: block; position: static; height: auto; width: auto; }
+  body[data-kp-caption-mode="document"] .kp-caption-scroll-slots { display: none; }
+  html body[data-kp-caption-mode="document"] :is(.kp-animation-story, .kp-animation-beats, .kp-animation-beats > li) { display: block; }
+  html body[data-kp-caption-mode="document"] .kp-animation-beats > li { padding: 1rem 0; }
   html body[data-kp-caption-mode="document"] .kp-animation-static {
-    z-index: 3;
-    background: var(--kp-paper);
-    top: var(--kp-rising-header-height);
-    left: 0;
+    position: relative;
+    top: auto;
+    left: auto;
     transform: none;
     width: 100%;
-    height: calc((100vh - var(--kp-rising-header-height)) / 2);
+    height: 150px;
   }
   body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-caption-active="true"] {
-    position: fixed;
-    top: var(--kp-caption-card-top);
+    position: absolute;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: calc(var(--kp-caption-width) - 48px);
@@ -139,8 +168,8 @@
     height: calc(var(--kp-caption-card-height) - 12px);
   }
   .kp-caption-frame {
-    position: fixed;
-    top: var(--kp-caption-card-top);
+    position: absolute;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: var(--kp-caption-width);
@@ -166,16 +195,16 @@
     opacity: 1 !important;
     background: var(--kp-surface);
   }
-  body[data-kp-reader-layout="rising-passages"] .kp-rising-passage :is(h1, h2, p) {
+  body[data-kp-reader-layout="rising-passages"] :is(.kp-rising-passage, .kp-caption-document-intro, .kp-caption-document-after) p {
     color: var(--kp-ink);
     margin: 0 0 .5rem;
     font-family: inherit;
     font-size: 1.0625rem;
-    font-weight: 400;
+    font-weight: 300;
+    letter-spacing: .015em;
     line-height: 1.6;
   }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-caption-copy, .kp-beat-copy) > :last-child { margin-bottom: 0; }
-  body[data-kp-reader-layout="rising-passages"] .kp-rising-passage :is(a, button) { color: var(--kp-ink); }
   .kp-rising-navigation { position: relative; font-size: .78rem; }
   .kp-rising-navigation summary { cursor: pointer; }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-navigation .kp-lesson-toc {
@@ -197,5 +226,6 @@
 }
 @media print {
   .kp-caption-frame, .kp-caption-preview { display: none; }
+  .kp-caption-scroll-slots { display: none; }
   .kp-rising-passage { opacity: 1 !important; content-visibility: visible !important; }
 }

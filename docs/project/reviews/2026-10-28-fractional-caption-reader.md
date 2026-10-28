@@ -1,7 +1,8 @@
 # Document-backed captions for the fractional reader
 
-Status: user accepted the card and confirmed Cmd+F works; the latest fixed-spacing,
-unfaded departure awaits visual review. Nocturne remains the requested theme.
+Status: local candidate with document embedding, styled references, no visible
+step headings and lighter prose awaits visual review. Nocturne and paired,
+unfaded departure remain the requested treatments.
 
 The user prefers explanations that behave like closed captions. The latest
 revision addresses the missing anticipation: captions sit above the equation
@@ -32,11 +33,30 @@ mathematical programs or the broader reader architecture.
 The latest local candidate uses a centered card up to 440px wide. Per the user's
 correction it restores the spec's Nocturne palette: `#121826` page and `#1B2535`
 card, through the existing shared tutorial palette variables. Mathematical ink
-and typography remain unchanged. All caption text and card controls use the
-foreground color. The separator is removed; captions retain their bottom
+and typography remain unchanged. Ordinary prose uses foreground ink, weight 300
+and `.015em` tracking; semantic links retain the shared relation blue instead
+of being forced to foreground. Step headings stay hidden as metadata for IDs
+and navigation labels, not visible caption content. The separator is removed; captions retain their bottom
 alignment just above the mathematical region. The native equation renderer uses a compact 96px workspace at the
 top of its region, retaining its existing fit and motion clearance. The rail
 and its labels are removed. The final caption remains with the solved equation.
+
+The card is now embedded between the authored opening and closing paragraphs.
+A single native CSS sticky surface contains the card, original captions and
+equation. It scrolls into position, remains pinned through the sequence, then
+releases after the final operation and a short reading hold so the document
+continues. Rewinding re-enters the same sequence. Empty, aria-hidden sibling
+slots supply stable document coordinates to the existing semantic scroll clock;
+neither the sticky surface nor moving caption rectangles measure their own
+progress. No second transcript, scroll lock, or per-frame pin-position loop is
+introduced. This remains one local exemplar, not a general multi-card host API.
+
+Story JSON can opt into `contentFormat: "markdown"` for a single paragraph using
+the existing plain-text/`kp:focus` inline vocabulary. Plain strings retain their
+existing literal behavior. The first caption demonstrates a styled `x` reference.
+Compilation rejects raw HTML, ordinary external links, multiple paragraphs and
+unsupported formats. Decoded JSON fragment offsets are attributed to the
+containing story source rather than falsely reported as document character spans.
 
 Each operation gets 14% of available-height scroll distance for reading, 32%
 for its unchanged mathematical program, then holds its result. The final 18%
@@ -74,11 +94,14 @@ so searching during a clipped preview can reveal the complete instruction and
 seek its source equation. The preview is rebuilt only when its source changes,
 and removed on disposal; original nodes retain their identity and bindings.
 **Read all** exposes every passage in flow, including for assistive-technology
-reading. Browsers without `beforematch` support default to that mode, preserving
+reading. It holds the selected equation while the shorter transcript scrolls,
+then returns to the selected caption instead of interpreting transcript pixels
+as animation progress. Browsers without `beforematch` support default to that mode, preserving
 searchability rather than hiding unsupported content. Print exposes all prose;
 without JavaScript a noscript stylesheet exposes all original text in normal flow.
 
-The compiler now emits the caption frame, intro and beat wrappers directly.
+The compiler now emits the document prose, sticky surface, caption frame,
+source beat wrappers and separate measurement slots directly.
 Previously runtime imports completed before wrapping the old article, producing
 the reported startup flash. A local fail-closed adapter accepts only this
 compiler's flat beat structure; count/shape drift raises an error. Enhancement
@@ -113,6 +136,7 @@ or that every browser/search implementation behaves identically.
 
 ```sh
 node --disable-warning=ExperimentalWarning --test tests/fractional-rising-scroll.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts
+node --disable-warning=ExperimentalWarning --test tests/semantic-reader-lesson-markdown-parser.test.ts tests/semantic-reader-static-prose-compiler.test.ts
 npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000
 npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000
 npm run typecheck
@@ -135,6 +159,9 @@ The latest local check also measures a constant gap from first preview entry
 through departure, full outgoing opacity and a clipping boundary at the card
 edge, with exact reverse samples. The shared translation prevents independent
 departure and arrival curves from drifting apart; equation motion is unchanged.
+Embedding checks cover in-flow entry, pinning, release at the solved state and
+rewind on desktop and phone. They verify hidden step headings, prose weight and
+tracking, retained semantic reference color, and held progress during Read all.
 The 41-sample equation smoke protects direct/forward/reverse paint and the
 previous duplicate-owner repairs. Full typecheck includes app, tools, tests,
 Svelte and domains. These checks passed for this candidate; screenshots were
@@ -200,7 +227,13 @@ regression above.
 
 ## What to inspect
 
-Open `http://localhost:8000/reader/solve-fractional-linear/` and choose **Steps →
+Open `http://localhost:8000/reader/solve-fractional-linear/` without a saved query.
+The opening paragraphs precede the card. Scroll until the card reaches its pin
+position, follow it to `x = 8`, then continue into the closing paragraphs. Reverse
+to check re-entry. Inside the card, look for body text without headlines and a
+blue `x` reference in the first caption. Judge the lighter weight and tracking.
+
+Choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the
 multiplication, then keep scrolling: the equation holds and the next caption
 first appears very faintly near the bottom of the card. The old caption stays

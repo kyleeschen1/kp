@@ -42,6 +42,7 @@ interface KpStorySource {
     readonly id: string;
     readonly title: string;
     readonly content: string;
+    readonly contentFormat?: "plain" | "markdown" | undefined;
     readonly progressPermille: number;
     readonly checkpointId?: string | undefined;
     readonly focusRefs?: readonly string[] | undefined;
@@ -169,7 +170,7 @@ function parseAnimationStory(node: Code, sourceId: string) {
     beats: story.beats.map((beat) => kpLesson.beat({
       id: beat.id,
       title: beat.title,
-      content: [beat.content],
+      content: beat.contentFormat === 'markdown' ? parseStoryInline(beat.content, sourceId, node) : [beat.content],
       checkpoint: {
         id: beat.checkpointId ?? `checkpoint.${beat.id}`,
         progressPermille: beat.progressPermille
@@ -179,6 +180,23 @@ function parseAnimationStory(node: Code, sourceId: string) {
     })),
     source
   });
+}
+
+function parseStoryInline(markdown: string, sourceId: string, sourceNode: Code): readonly KpLessonInline[] {
+  const { root } = parseKpMarkdownAst({ sourceId, markdown });
+  const paragraph = root.children[0];
+  if (root.children.length !== 1 || paragraph?.type !== 'paragraph') {
+    throw markdownError(sourceId, sourceNode, 'Markdown caption content must be one inline paragraph');
+  }
+  // JSON escapes make fragment offsets different from Markdown source offsets.
+  // Attribute these inlines to the containing story rather than inventing a span.
+  try {
+    return parseInlineContent(paragraph.children, sourceId)
+      .map((inline) => ({ ...inline, source: sourceLocation(sourceId, sourceNode) }));
+  } catch (error) {
+    if (!(error instanceof KpLessonMarkdownError)) throw error;
+    throw markdownError(sourceId, sourceNode, `Invalid caption Markdown: ${error.message}`);
+  }
 }
 
 function isStorySource(value: unknown): value is KpStorySource {
@@ -196,6 +214,7 @@ function isStorySource(value: unknown): value is KpStorySource {
     && typeof beat["id"] === "string"
     && typeof beat["title"] === "string"
     && typeof beat["content"] === "string"
+    && (beat["contentFormat"] === undefined || beat["contentFormat"] === 'plain' || beat["contentFormat"] === 'markdown')
     && typeof beat["progressPermille"] === "number"
     && (beat["checkpointId"] === undefined || typeof beat["checkpointId"] === "string")
     && (beat["focusRefs"] === undefined
