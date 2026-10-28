@@ -27,3 +27,25 @@ motif. The first smoke run compared exact scrolling to rounded URL samples and
 failed four comparisons near a handoff and a fading introduction. It now compares
 scrolling to direct control sampling at the exact physical scroll-derived progress,
 retaining exact identity/opacity checks. The original direct URL samples remain.
+
+## Invalidation attribution
+
+The proposed broad document-layout repair was not retained: changing prose height
+already preserves preparation in both the fractional and division reader probes.
+The source-level suspicion in the earlier review did not demonstrate waste in
+those actual layouts. Whole-pool retirement remains when layout is invalidated;
+no outer-size heuristic is substituted for internal mathematical geometry.
+
+Known unrelated font-loading events did retire preparation in both readers. Font
+readiness now optionally scopes those events to current family declarations in
+the equation viewport. Other callers keep the original conservative behavior;
+unknown/empty events, disconnected scopes and unusual family syntax invalidate.
+Current declarations are checked only on font events, covering families changed
+after initial preparation without an extra per-frame scan or font cache.
+
+`npm run visual:fractional-linear-equation -- --invalidation --base-url=http://127.0.0.1:8000`
+now retains preparation through prose changes and unrelated fonts, and retires
+all prepared layers for a used math font. Baseline unrelated-font retirement was
+one layer per reader; now zero. This is avoided-work evidence, not a claim about
+how often production pages load unrelated fonts. Unknown events, viewport resize
+and disposal retain the existing preparation-pressure safeguards.

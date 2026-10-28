@@ -581,7 +581,7 @@
     "perf:fraction-composition-scroll": "playwright test tests/semantic-reader-fraction-composition-performance.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "perf:fraction-composition-scroll:chromium": "playwright test tests/semantic-reader-fraction-composition-performance.browser.spec.ts --project=chromium --workers=1",
     "test:reader-runtime-hardening": "node --disable-warning=ExperimentalWarning --test tests/reader-compositor-geometry-cache-identity.test.ts tests/reader-compositor-pure-plan-cache.test.ts tests/reader-idle-prewarm-queue.test.ts tests/reader-latest-session-handoff.test.ts tests/reader-viewport-anchor-cache.test.ts tests/semantic-reader-frame-scheduler.test.ts tests/semantic-reader-scheduled-adapter.test.ts tests/semantic-reader-semantic-focus.test.ts tests/semantic-reader-location-settlement.test.ts",
-    "visual:native-preparation": "playwright test tests/native-katex-baseline-batch.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
+    "visual:native-preparation": "playwright test tests/native-katex-baseline-batch.browser.spec.ts tests/equation-font-readiness.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "visual:computed-style-clone": "playwright test tests/equation-computed-style-clone.browser.spec.ts --project=chromium --project=firefox --project=webkit --workers=1",
     "test:browser:real-katex-glyph-compositor": "playwright test tests/native-katex-fragment-observer.browser.spec.ts --project=chromium --workers=1",
     "test:browser:native-katex-compositor-conformance": "playwright test tests/native-katex-compositor-conformance.browser.spec.ts --project=chromium --workers=1",

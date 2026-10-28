@@ -280,7 +280,7 @@ const printMedia = window.matchMedia("print");
 const motionPreferenceStorageKey = "kp.reader.motion-preference.v1";
 let motionPreference = initialMotionPreference();
 motionSelect.value = motionPreference;
-const fontReadiness = createKpEquationFontReadiness(document);
+const fontReadiness = createKpEquationFontReadiness(document, viewport);
 const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
 ].filter((element) => phaseCohorts.some((cohort) =>

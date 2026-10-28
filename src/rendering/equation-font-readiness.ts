@@ -9,7 +9,8 @@ export interface KpEquationFontReadiness {
 }
 
 export function createKpEquationFontReadiness(
-  ownerDocument: Document
+  ownerDocument: Document,
+  fontScope?: Element
 ): KpEquationFontReadiness {
   const fonts = ownerDocument.fonts;
   const listeners = new Set<(reason: KpEquationFontInvalidationReason) => void>();
@@ -25,7 +26,9 @@ export function createKpEquationFontReadiness(
     revision += 1;
     for (const listener of listeners) listener(reason);
   };
-  const onLoadingDone = (): void => publish("loading-done");
+  const onLoadingDone = (event: Event): void => {
+    if (status !== 'ready' || affectsFontScope(event, fontScope)) publish("loading-done");
+  };
   fonts?.addEventListener("loadingdone", onLoadingDone);
   const ready = fonts === undefined
     ? Promise.resolve()
@@ -49,4 +52,29 @@ export function createKpEquationFontReadiness(
       listeners.clear();
     }
   };
+}
+
+/** A font event is evidence of stale metrics only for its consumers. Unknown
+ * events and unusual family syntax remain conservative; never guess them away. */
+function affectsFontScope(event: Event, scope: Element | undefined): boolean {
+  if (!scope || !scope.isConnected || !('fontfaces' in event) || !Array.isArray(event.fontfaces)
+    || event.fontfaces.length === 0) return true;
+  const families = new Set<string>();
+  const normalize = (family: string) => family.trim().replace(/^["']|["']$/g, '').toLowerCase();
+  const faces: readonly unknown[] = event.fontfaces;
+  for (const face of faces) {
+    if (typeof face !== 'object' || face === null || !('family' in face) || typeof face.family !== 'string'
+      || /[,\\]/.test(face.family)) return true;
+    const family = normalize(face.family);
+    if (!family) return true;
+    families.add(family);
+  }
+  const view = scope.ownerDocument.defaultView;
+  if (!view) return true;
+  // Read current declarations only on font events, not every frame. This also
+  // covers new font families introduced after the scope was first prepared.
+  return [scope, ...scope.querySelectorAll('*')].some(element => {
+    const family = view.getComputedStyle(element).fontFamily;
+    return family.includes('\\') || family.split(',').some(value => families.has(normalize(value)));
+  });
 }

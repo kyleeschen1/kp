@@ -27,6 +27,12 @@
       "status": "passed",
       "scope": "Zero rounded repeats across three moving intervals, exact reversal; 41-point smoke, 14 focused units, app and node types pass.",
       "checkedAt": "2026-10-28T22:34:23.760Z"
+    },
+    {
+      "command": "npm run visual:native-preparation",
+      "status": "passed",
+      "scope": "12 checks across Chromium, Firefox and WebKit; two-reader invalidation probe and runtime hardening 25 pass. First WebKit harness constructor assumption repaired without changing runtime fallback.",
+      "checkedAt": "2026-10-28T22:41:11.220Z"
     }
   ],
   "allowedWork": [
@@ -47,12 +53,14 @@
     {
       "id": "invalidation",
       "title": "Precise-geometry-invalidation",
-      "status": "planned"
+      "summary": "Retained already-correct prose reflow behavior; removed unrelated-font invalidation using current scoped family declarations and conservative unknown-event fallback.",
+      "status": "complete"
     },
     {
       "id": "costs",
       "title": "Measured-frame-and-preparation-costs",
-      "status": "planned"
+      "summary": "Profile operation-local first preparation and live sweeps; preserve only demonstrated optimizations within existing paint and clock ownership.",
+      "status": "in-progress"
     },
     {
       "id": "integration",

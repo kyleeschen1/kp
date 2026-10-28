@@ -33,7 +33,16 @@ try {
     reducedMotion: "no-preference"
   });
   page.on("pageerror", (error) => pageErrors.push(error.stack ?? error.message));
-  if (process.argv.includes('--continuity')) {
+  if (process.argv.includes('--motion-cost')) {
+    const { checkFractionalMotionCost } = await import('./fractional-reader-motion-cost.ts');
+    await checkFractionalMotionCost(page, harness.baseUrl, outputRoot,
+      process.argv.find(argument => argument.startsWith('--label='))?.slice(8) ?? 'current', process.argv.includes('--profile'));
+    if (pageErrors.length > 0) throw new Error(pageErrors.join('\n'));
+  } else if (process.argv.includes('--invalidation')) {
+    const { checkReaderEquationInvalidation } = await import('./reader-equation-invalidation-check.ts');
+    await checkReaderEquationInvalidation(page, harness.baseUrl, outputRoot, process.argv.includes('--baseline'));
+    if (pageErrors.length > 0) throw new Error(pageErrors.join('\n'));
+  } else if (process.argv.includes('--continuity')) {
     const { checkFractionalReaderContinuity } = await import('./fractional-reader-continuity-check.ts');
     await checkFractionalReaderContinuity(page, harness.baseUrl, outputRoot, process.argv.includes('--baseline'));
     if (pageErrors.length > 0) throw new Error(pageErrors.join('\n'));

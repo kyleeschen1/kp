@@ -10,21 +10,13 @@ import { sampleKpReaderScrollPosition } from '../src/reader/runtime/continuous-s
 export async function checkFractionalReaderContinuity(page: Page, baseUrl: string, outputRoot: string, baseline: boolean) {
   await page.goto(new URL('/reader/solve-fractional-linear/?kpMotion=full', baseUrl).href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
-  const measured = await page.evaluate(() => ({
-    stops: [...document.querySelectorAll<HTMLElement>('[data-kp-beat]')].map(beat => ({
-      progressPermille: Number(beat.dataset['kpCheckpoint']),
-      positionPx: scrollY + beat.getBoundingClientRect().top + beat.querySelector('.kp-rising-passage')!.getBoundingClientRect().height
-    })),
-    anchor: innerHeight * Number(document.body.dataset['kpReaderViewportAnchor']),
-    available: innerHeight - document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().height
-  }));
-  const geometry = createFractionalRisingScroll({ stops: measured.stops }, measured.available);
+  const { geometry, anchor } = await measureFractionalScroll(page);
   const cases = [];
   // These interiors are the existing motifs' moving intervals, after their
   // intentional holds. A hold is not a repeated-frame regression.
   for (const [name, start, end] of [['cancellation', .237, .265], ['evaluation', .39, .42], ['denominator', .737, .765]] as const) {
-    const from = Math.ceil(sampleKpReaderScrollPosition(start, geometry) - measured.anchor);
-    const to = Math.floor(sampleKpReaderScrollPosition(end, geometry) - measured.anchor);
+    const from = Math.ceil(sampleKpReaderScrollPosition(start, geometry) - anchor);
+    const to = Math.floor(sampleKpReaderScrollPosition(end, geometry) - anchor);
     const result = await page.evaluate(async ({ from, to }) => {
       const settle = async () => { await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame); };
       const paint = () => [...document.querySelectorAll<HTMLElement>(
@@ -58,4 +50,16 @@ export async function checkFractionalReaderContinuity(page: Page, baseUrl: strin
   const report = { baseline, environment: 'Chromium, settled one-pixel real-scroll samples; not a frame-rate benchmark', cases };
   await writeFile(path.join(outputRoot, `continuity-${baseline ? 'baseline' : 'current'}.json`), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
+}
+
+export async function measureFractionalScroll(page: Page) {
+  const measured = await page.evaluate(() => ({
+    stops: [...document.querySelectorAll<HTMLElement>('[data-kp-beat]')].map(beat => ({
+      progressPermille: Number(beat.dataset['kpCheckpoint']),
+      positionPx: scrollY + beat.getBoundingClientRect().top + beat.querySelector('.kp-rising-passage')!.getBoundingClientRect().height
+    })),
+    anchor: innerHeight * Number(document.body.dataset['kpReaderViewportAnchor']),
+    available: innerHeight - document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().height
+  }));
+  return { geometry: createFractionalRisingScroll({ stops: measured.stops }, measured.available), anchor: measured.anchor };
 }

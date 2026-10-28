@@ -25,3 +25,36 @@ test("font readiness exposes a stable initial gate and later invalidations", asy
   expect(result.finalRevision).toBe(result.changed.revision);
   expect(result.reasons.at(-1)).toBe("loading-done");
 });
+
+test('scoped fonts retain unrelated preparation and invalidate current, unknown and detached consumers', async ({ page }) => {
+  await page.goto('/');
+  const revisions = await page.evaluate(async () => {
+    // @ts-expect-error Vite resolves this browser-side absolute module specifier.
+    const { createKpEquationFontReadiness } = await import('/src/rendering/equation-font-readiness.ts');
+    await document.fonts.ready;
+    const root = document.createElement('div');
+    root.style.fontFamily = 'KP_current_probe, serif';
+    root.textContent = 'Equation'; document.body.append(root);
+    const readiness = createKpEquationFontReadiness(document, root);
+    await readiness.whenReady();
+    const initial = readiness.revision;
+    const values = [initial];
+    const load = (family: string) => {
+      // WebKit delivers font events without exposing their constructor.
+      const event = new Event('loadingdone');
+      Object.defineProperty(event, 'fontfaces', { value: [new FontFace(family, 'local(Arial)')] });
+      document.fonts.dispatchEvent(event);
+      values.push(readiness.revision);
+    };
+    load('KP_unrelated_probe');
+    load('KP_current_probe');
+    root.style.fontFamily = 'KP_replaced_probe, serif';
+    load('KP_current_probe');
+    load('KP_replaced_probe');
+    document.fonts.dispatchEvent(new Event('loadingdone')); values.push(readiness.revision);
+    root.remove(); load('KP_unrelated_probe');
+    readiness.dispose(); load('KP_replaced_probe');
+    return values.map(value => value - initial);
+  });
+  expect(revisions).toEqual([0, 0, 1, 1, 2, 3, 4, 4]);
+});
