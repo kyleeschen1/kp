@@ -1,5 +1,9 @@
 # Upper stage with rising passages
 
+Presentation superseded by the user-directed
+[document-backed caption candidate](2026-10-28-fractional-caption-reader.md).
+The record below preserves the preceding experiment and its evidence.
+
 User-approved exemplar implementation: the stage occupies the upper half of
 the page; text rises from below, reaches peak emphasis at the 50vh division,
 then fades as it crosses the stage. The user's follow-up makes that division

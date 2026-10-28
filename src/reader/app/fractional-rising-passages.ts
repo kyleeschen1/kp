@@ -1,24 +1,29 @@
-import { createFractionalRisingScroll } from "./fractional-rising-scroll.ts";
+import { createFractionalRisingScroll, fractionalCaptionIndex } from "./fractional-rising-scroll.ts";
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from "../runtime/continuous-scroll-clock.ts";
 
 /** One local layout experiment around the existing reader clock and renderer. */
 export function mountFractionalRisingPassages(input: {
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
+  readonly onFind: () => void;
 }) {
   const document = input.story.ownerDocument;
   const window = document.defaultView!;
   const article = input.story.closest<HTMLElement>(".kp-lesson")!;
   const intro = document.createElement("div");
   intro.className = "kp-rising-intro kp-rising-passage";
-  article.prepend(intro);
+  const introSlot = document.createElement("div");
+  introSlot.className = "kp-caption-intro-slot";
+  introSlot.append(intro);
+  article.prepend(introSlot);
   for (const child of [...article.children]) {
-    if (child !== intro && child !== input.story && !child.contains(input.story)) intro.append(child);
+    if (child !== introSlot && child !== input.story && !child.contains(input.story)) intro.append(child);
   }
-  const passages = [intro, ...input.beats.map((beat) => {
+  const passages: HTMLElement[] = [intro, ...input.beats.map((beat) => {
     const passage = document.createElement("div");
     passage.className = "kp-rising-passage";
     passage.dataset["kpRisingBeat"] = beat.dataset["kpBeat"];
+    passage.id = `caption.${beat.dataset["kpBeat"]}`;
     passage.append(...beat.childNodes);
     beat.append(passage);
     return passage;
@@ -43,6 +48,45 @@ export function mountFractionalRisingPassages(input: {
   let positions: readonly number[] = [];
   let geometry: KpReaderPiecewiseScrollGeometry | undefined;
   const anchor = () => headerHeight + (window.innerHeight - headerHeight) / 2;
+  const supportsFind = "onbeforematch" in document.documentElement;
+  let readAll = !supportsFind;
+  const readingMode = document.createElement("button");
+  readingMode.type = "button";
+  readingMode.className = "kp-caption-reading-mode";
+  readingMode.textContent = "Read all";
+  readingMode.setAttribute("aria-pressed", String(readAll));
+  readingMode.disabled = !supportsFind;
+  masthead.insertBefore(readingMode, navigation);
+  const slots = [introSlot, ...input.beats];
+  const render = () => {
+    document.body.dataset["kpCaptionMode"] = readAll ? "document" : "captions";
+    const active = fractionalCaptionIndex(positions, window.scrollY + anchor(), window.innerHeight - headerHeight);
+    passages.forEach((passage, index) => {
+      const visible = readAll || index === active;
+      const activeValue = String(!readAll && visible);
+      if (passage.dataset["kpCaptionActive"] !== activeValue) passage.dataset["kpCaptionActive"] = activeValue;
+      if (visible && passage.hasAttribute("hidden")) passage.removeAttribute("hidden");
+      else if (!visible && passage.getAttribute("hidden") !== "until-found") passage.setAttribute("hidden", "until-found");
+    });
+  };
+  const toggleReading = () => {
+    readAll = !readAll;
+    readingMode.setAttribute("aria-pressed", String(readAll));
+    render();
+  };
+  readingMode.addEventListener("click", toggleReading);
+  const revealMatch = (event: Event) => {
+    if (!(event.target instanceof HTMLElement)) return;
+    const index = passages.indexOf(event.target);
+    const position = positions[index];
+    if (index < 0 || position === undefined) return;
+    // Native find reveals the actual authored node. Align its stable slot
+    // before the browser scrolls to the now-visible caption; no duplicate text.
+    input.onFind();
+    window.scrollTo(0, position - anchor() + 1);
+    render();
+  };
+  for (const passage of passages) passage.addEventListener("beforematch", revealMatch);
   return {
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
       geometry = createFractionalRisingScroll(narrative, window.innerHeight - headerHeight);
@@ -50,11 +94,9 @@ export function mountFractionalRisingPassages(input: {
     },
     activeBeat() {
       const position = window.scrollY + anchor();
-      return input.beats.reduce<HTMLElement | undefined>((closest, beat, index) => {
-        const candidate = positions[index + 1];
-        const previous = closest === undefined ? undefined : positions[input.beats.indexOf(closest) + 1];
-        return candidate !== undefined && (previous === undefined || Math.abs(candidate - position) < Math.abs(previous - position)) ? beat : closest;
-      }, undefined);
+      let index = 0;
+      while (index + 1 < input.beats.length && (positions[index + 2] ?? Infinity) <= position) index += 1;
+      return input.beats[index];
     },
     arrival(beat: HTMLElement) {
       const index = input.beats.indexOf(beat);
@@ -90,30 +132,25 @@ export function mountFractionalRisingPassages(input: {
       headerHeight = masthead.getBoundingClientRect().height;
       document.body.style.setProperty("--kp-rising-header-height", `${headerHeight}px`);
       // Cache document coordinates with the reader's existing geometry reads.
-      // Scroll sampling only projects opacity; it does not remeasure paragraphs.
-      positions = passages.map((passage) => {
-        const rect = passage.getBoundingClientRect();
+      // Slots remain in flow when captions are pinned or hidden. Measuring
+      // caption paint would make resize and find change the animation clock.
+      positions = slots.map((slot) => {
+        const rect = slot.getBoundingClientRect();
         return window.scrollY + rect.top;
       });
     },
-    render() {
-      for (const [index, passage] of passages.entries()) {
-        const position = positions[index];
-        if (position === undefined) continue;
-        const y = (position - window.scrollY - headerHeight) / Math.max(1, window.innerHeight - headerHeight);
-        // Maximum emphasis at the boundary, then retreat before the equation's
-        // center. These local optical values remain a human-review candidate.
-        const t = Math.min(1, Math.max(0, y < 0.5 ? (y - 0.45) / 0.05 : (0.95 - y) / 0.45));
-        const opacity = y < 0.5 ? t * t * (3 - 2 * t) : 0.35 + 0.65 * t * t * (3 - 2 * t);
-        passage.style.opacity = String(opacity);
-      }
-    },
+    render,
     dispose() {
+      readingMode.removeEventListener("click", toggleReading);
+      readingMode.remove();
+      for (const passage of passages) passage.removeEventListener("beforematch", revealMatch);
       navigation.removeEventListener("click", closeNavigation);
       tocHome.replaceWith(toc);
       navigation.remove();
       for (const passage of passages) passage.replaceWith(...passage.childNodes);
+      introSlot.replaceWith(...introSlot.childNodes);
       delete document.body.dataset["kpReaderLayout"];
+      delete document.body.dataset["kpCaptionMode"];
       document.body.style.removeProperty("--kp-rising-header-height");
     }
   };

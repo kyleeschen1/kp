@@ -5,10 +5,12 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
-October 28: the fractional reader now has an approved-to-build, pending-review
-[upper stage/rising passage candidate](../reviews/2026-10-28-fractional-rising-passages.md).
-The user's 50vh boundary governs the layout; existing animations and semantic
-checkpoints remain. Review this local presentation before generalization.
+October 28: the fractional reader's latest approved-to-build, pending-review
+candidate uses [document-backed captions](../reviews/2026-10-28-fractional-caption-reader.md).
+Explanations stay still during each operation, then withdraw without fading;
+native-search reveal and Read all preserve access to the original text. The
+available-height midpoint, animations and semantic checkpoints remain. Review
+this local presentation and actual Cmd+F behavior before generalization.
 
 October 27 planning focus: [multi-step algebra derivation trail](../reviews/2026-10-27-next-step-review.md).
 The user selects retained historical equations and a moving continuation as the

@@ -25,10 +25,11 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-October 28 visual candidate: [upper stage with rising passages](reviews/2026-10-28-fractional-rising-passages.md)
-implements the user's 50vh handoff on the fractional equation reader. Review
-the passage-to-stage attention transfer before promoting the layout; existing
-mathematics remains unchanged and the historical derivation trail is still pending.
+October 28 latest visual candidate: [document-backed captions](reviews/2026-10-28-fractional-caption-reader.md)
+replaces rising/fading prose on the fractional equation reader. Captions remain
+still through each operation, with native-search reveal and a Read all option.
+Review the reading rhythm and actual Cmd+F behavior before promotion; mathematics
+remains unchanged and the historical derivation trail is still pending.
 
 October 27 prototype planning: the user selects multi-step algebra to test the
 new document-anchored derivation trail. The [proposed implementation plan](reviews/2026-10-27-next-step-review.md)

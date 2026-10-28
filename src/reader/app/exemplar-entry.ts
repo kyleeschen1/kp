@@ -255,7 +255,7 @@ const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
 const risingPassages = lessonVariant === "fractional-linear"
   ? (await import("./fractional-rising-passages.ts"))
-      .mountFractionalRisingPassages({ story, beats })
+      .mountFractionalRisingPassages({ story, beats, onFind: releaseControlAuthority })
   : undefined;
 const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
@@ -271,6 +271,7 @@ const accessibleCheckpoints = beats.map((beat) => ({
   progressPermille: Number(requiredData(beat, "kpCheckpoint"))
 }));
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const printMedia = window.matchMedia("print");
 const motionPreferenceStorageKey = "kp.reader.motion-preference.v1";
 let motionPreference = initialMotionPreference();
 motionSelect.value = motionPreference;
@@ -314,6 +315,7 @@ let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 let urlAuthorityReady = false;
 let controlSample: KpReaderClockSample | undefined;
+let controlScrollPosition: number | undefined;
 // The semantic URL is the scroll authority. Browser history restoration can
 // otherwise race a requested frame when moving between two lesson URLs.
 const locationSettlement = createKpReaderLocationSettlement({
@@ -487,6 +489,7 @@ const unsubscribeFocus = focus.subscribe(() => {
   locationSettlement.updateShare();
 });
 const resizeObserver = new ResizeObserver(() => {
+  if (printMedia.matches) return;
   updateScrollGeometry();
   renderer.refresh("resize");
   scheduleScrollSample();
@@ -515,6 +518,7 @@ const semanticLinkBindings = bindKpReaderSemanticLinks({
 });
 window.addEventListener("pagehide", dispose, { once: true });
 reducedMotion.addEventListener("change", renderCurrentSample);
+printMedia.addEventListener("change", onPrintChange);
 motionSelect.addEventListener("change", onMotionPreferenceChange);
 equationProfileSelect?.addEventListener("change", onEquationProfileChange);
 attentionPrevious.addEventListener("click", onAttentionPrevious);
@@ -578,6 +582,7 @@ function updateScrollGeometry(): void {
 }
 
 function onResize(): void {
+  if (printMedia.matches) return;
   const progressPermille = lastSample().progressPermille;
   applyResponsiveProjection();
   evaluationControls?.refreshViewport();
@@ -589,6 +594,14 @@ function onResize(): void {
     scrollFocusWorkspaceIntoView();
   } else {
     scrollToProgress(progressPermille);
+    controlScrollPosition = window.scrollY;
+  }
+}
+
+function onPrintChange(): void {
+  if (!printMedia.matches) {
+    onResize();
+    renderCurrentSample();
   }
 }
 
@@ -657,8 +670,8 @@ function maximumBeatNarrativeHeight(): number {
 }
 
 function beatNarrativeAnchor(beat: HTMLElement): number {
+  if (risingPassages !== undefined) return beat.getBoundingClientRect().top;
   const bounds = beatNarrativeBounds(beat);
-  if (risingPassages !== undefined) return bounds.top;
   return bounds.top + bounds.height / 2;
 }
 
@@ -679,6 +692,11 @@ function beatNarrativeBounds(beat: HTMLElement): {
 }
 
 function onScroll(): void {
+  if (printMedia.matches) return;
+  // Native find and scrollbar drags do not emit wheel/key events. Preserve
+  // exact controlled samples only while still at their commanded position.
+  if (risingPassages !== undefined && controlScrollPosition !== undefined &&
+    Math.abs(window.scrollY - controlScrollPosition) > 1) releaseControlAuthority();
   scheduleScrollSample();
   locationSettlement.schedule(180);
 }
@@ -692,6 +710,7 @@ function onReaderKeyDown(event: KeyboardEvent): void {
 
 function releaseControlAuthority(): void {
   controlSample = undefined;
+  controlScrollPosition = undefined;
 }
 
 function scheduleScrollSample(): void {
@@ -741,6 +760,9 @@ function measureLayout(revision: number): LayoutState {
 }
 
 function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
+  // Print deliberately removes the interactive surface. A queued frame must
+  // not ask its compositor to measure a zero-width surface during that change.
+  if (printMedia.matches) return;
   risingPassages?.render();
   const projection = projectKpReaderMotion({
     clock: sample,
@@ -1416,6 +1438,7 @@ function onTocNavigation(event: MouseEvent): void {
   if (arrival !== undefined) {
     setExplicitProgress(arrival.progress, "controls", false);
     window.scrollTo(0, arrival.position - window.innerHeight * readerViewportAnchorFraction());
+    controlScrollPosition = window.scrollY;
     renderCurrentSample();
     locationSettlement.settle();
     return;
@@ -1450,6 +1473,7 @@ function setExplicitProgress(
     checkpointId: phase?.checkpointId
   });
   if (!isFocusStepperProjection()) scrollToProgress(progressPermille);
+  controlScrollPosition = window.scrollY;
   renderWithAdapter(controlSample);
   if (updateLocation) locationSettlement.settle();
 }
@@ -1547,6 +1571,7 @@ function restoreUrlLocation(): void {
     setExplicitProgress(progress, "url", false);
   }
   risingPassages?.restoreReadingPosition(window.location.href, progress);
+  controlScrollPosition = window.scrollY;
 }
 
 function isFocusStepperProjection(): boolean {
@@ -1641,6 +1666,7 @@ function dispose(): void {
   risingPassages?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
+  printMedia.removeEventListener("change", onPrintChange);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);
   equationProfileSelect?.removeEventListener("change", onEquationProfileChange);
   attentionPrevious.removeEventListener("click", onAttentionPrevious);

@@ -13,7 +13,7 @@
   }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-story {
     display: block;
-    margin-top: 10vh;
+    margin-top: 0;
     padding-bottom: 30vh;
   }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-static {
@@ -62,8 +62,9 @@
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress span { display: none; }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-beats > li {
-    min-height: 72vh;
-    padding: 12vh 0;
+    align-content: start;
+    min-height: 80vh;
+    padding: 0;
     border: 0;
     opacity: 1;
     transition: none;
@@ -75,6 +76,31 @@
     width: min(100%, 38rem);
     margin-inline: auto;
   }
+  body[data-kp-reader-layout="rising-passages"] .kp-caption-intro-slot { min-height: 80vh; }
+  html body[data-kp-caption-mode="document"] .kp-animation-static {
+    z-index: 3;
+    background: var(--kp-paper);
+  }
+  body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-caption-active="true"] {
+    position: fixed;
+    top: calc(var(--kp-rising-header-height) + (100vh - var(--kp-rising-header-height)) / 2 + 1rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100% - 40px, 38rem);
+    max-height: calc((100vh - var(--kp-rising-header-height)) / 2 - 5rem);
+    overflow: auto;
+  }
+  .kp-caption-reading-mode {
+    font: inherit;
+    font-size: .78rem;
+    color: inherit;
+    border: 1px solid var(--kp-line);
+    background: transparent;
+    border-radius: .25rem;
+    padding: .2rem .45rem;
+    cursor: pointer;
+  }
+  .kp-caption-reading-mode[aria-pressed="true"] { background: var(--kp-line); }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-passage:focus-within {
     opacity: 1 !important;
     background: var(--kp-paper);
@@ -107,5 +133,5 @@
   body[data-kp-reader-layout="rising-passages"] .kp-reader-mode { display: none; }
 }
 @media print {
-  .kp-rising-passage { opacity: 1 !important; }
+  .kp-rising-passage { opacity: 1 !important; content-visibility: visible !important; }
 }

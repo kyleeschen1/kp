@@ -16,10 +16,10 @@ export function createFractionalRisingScroll(
   for (let index = 1; index < narrative.stops.length; index += 1) {
     const passage = narrative.stops[index]!;
     const previous = narrative.stops[index - 1]!;
-    const start = passage.positionPx + availableHeight * 0.05;
+    const start = passage.positionPx + availableHeight * 0.14;
     const end = Math.min(start + availableHeight * 0.32,
       (narrative.stops[index + 1]?.positionPx ?? Infinity) - 1);
-    if (end <= start) throw new Error("Rising passages need room to clear before animation.");
+    if (end <= start) throw new Error("Captions need room to read before animation.");
     stops.push(
       { positionPx: passage.positionPx, progressPermille: previous.progressPermille },
       { positionPx: start, progressPermille: previous.progressPermille },
@@ -27,4 +27,13 @@ export function createFractionalRisingScroll(
     );
   }
   return { stops };
+}
+
+/** Read, animate, hold the result, then withdraw without a fading transition. */
+export function fractionalCaptionIndex(positions: readonly number[], position: number, height: number): number | undefined {
+  let index = 0;
+  while (index + 1 < positions.length && positions[index + 1]! <= position) index += 1;
+  if (positions.length === 0) return undefined;
+  // The introduction stays readable until the first instructional beat.
+  return index === 0 || position < positions[index]! + height * 0.56 ? index : undefined;
 }

@@ -32,7 +32,7 @@ try {
     viewport: { width: 1280, height: 900 },
     reducedMotion: "no-preference"
   });
-  page.on("pageerror", (error) => pageErrors.push(error.message));
+  page.on("pageerror", (error) => pageErrors.push(error.stack ?? error.message));
   if (process.argv.includes("--rising")) {
     const { checkFractionalRisingPassages } = await import("./fractional-rising-passages-check.ts");
     await checkFractionalRisingPassages(page, harness.baseUrl, outputRoot);
@@ -387,7 +387,7 @@ async function scrollToSemanticProgress(page: Page, progress: number): Promise<v
           .filter((rect) => rect.width > 0 && rect.height > 0);
         const top = Math.min(...rects.map((rect) => rect.top));
         const bottom = Math.max(...rects.map((rect) => rect.bottom));
-        const anchor = document.body.dataset["kpReaderLayout"] === "rising-passages" ? top : (top + bottom) / 2;
+        const anchor = document.body.dataset["kpReaderLayout"] === "rising-passages" ? beat.getBoundingClientRect().top : (top + bottom) / 2;
         return { progress: Number(beat.dataset["kpCheckpoint"]), y: scrollY + anchor };
       });
     const anchor = Number(document.body.dataset["kpReaderViewportAnchor"]);
