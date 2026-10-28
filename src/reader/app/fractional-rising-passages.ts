@@ -34,24 +34,32 @@ export function mountFractionalRisingPassages(input: {
   };
   navigation.addEventListener("click", closeNavigation);
   document.body.dataset["kpReaderLayout"] = "rising-passages";
-  let centers: readonly number[] = [];
+  const masthead = document.querySelector<HTMLElement>(".kp-reader-masthead")!;
+  let headerHeight = masthead.getBoundingClientRect().height;
+  document.body.style.setProperty("--kp-rising-header-height", `${headerHeight}px`);
+  let positions: readonly number[] = [];
   return {
+    viewportAnchorFraction() {
+      return (headerHeight + (window.innerHeight - headerHeight) / 2) / window.innerHeight;
+    },
     measure() {
+      headerHeight = masthead.getBoundingClientRect().height;
+      document.body.style.setProperty("--kp-rising-header-height", `${headerHeight}px`);
       // Cache document coordinates with the reader's existing geometry reads.
       // Scroll sampling only projects opacity; it does not remeasure paragraphs.
-      centers = passages.map((passage) => {
+      positions = passages.map((passage) => {
         const rect = passage.getBoundingClientRect();
-        return window.scrollY + rect.top + rect.height / 2;
+        return window.scrollY + rect.top;
       });
     },
     render() {
       for (const [index, passage] of passages.entries()) {
-        const center = centers[index];
-        if (center === undefined) continue;
-        const y = (center - window.scrollY) / window.innerHeight;
+        const position = positions[index];
+        if (position === undefined) continue;
+        const y = (position - window.scrollY - headerHeight) / Math.max(1, window.innerHeight - headerHeight);
         // Maximum emphasis at the boundary, then retreat before the equation's
         // center. These local optical values remain a human-review candidate.
-        const t = Math.min(1, Math.max(0, y < 0.5 ? (y - 0.30) / 0.20 : (0.95 - y) / 0.45));
+        const t = Math.min(1, Math.max(0, y < 0.5 ? (y - 0.45) / 0.05 : (0.95 - y) / 0.45));
         const opacity = y < 0.5 ? t * t * (3 - 2 * t) : 0.35 + 0.65 * t * t * (3 - 2 * t);
         passage.style.opacity = String(opacity);
       }
@@ -62,6 +70,7 @@ export function mountFractionalRisingPassages(input: {
       navigation.remove();
       for (const passage of passages) passage.replaceWith(...passage.childNodes);
       delete document.body.dataset["kpReaderLayout"];
+      document.body.style.removeProperty("--kp-rising-header-height");
     }
   };
 }

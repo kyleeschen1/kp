@@ -612,7 +612,7 @@ function scrollGeometry(): KpReaderPiecewiseScrollGeometry {
     // Semantic checkpoints belong at their authored narrative beats. A linear
     // first/last interpolation drifted unequal timelines away from their copy.
     stops: beats.map((beat) => ({
-      positionPx: window.scrollY + beatNarrativeCenter(beat),
+      positionPx: window.scrollY + beatNarrativeAnchor(beat),
       progressPermille: Number(requiredData(beat, "kpCheckpoint"))
     }))
   };
@@ -627,7 +627,7 @@ function readerViewportAnchorFraction(): number {
 }
 
 function measureReaderViewportAnchorFraction(): number {
-  if (risingPassages !== undefined) return 0.5;
+  if (risingPassages !== undefined) return risingPassages.viewportAnchorFraction();
   recordKpReaderScrollAnchorRead(window);
   const stickyVisualBottomPx = stickyVisualBottom();
   return resolveKpReaderViewportAnchorFraction({
@@ -655,8 +655,9 @@ function maximumBeatNarrativeHeight(): number {
   return Math.max(0, ...beats.map((beat) => beatNarrativeBounds(beat).height));
 }
 
-function beatNarrativeCenter(beat: HTMLElement): number {
+function beatNarrativeAnchor(beat: HTMLElement): number {
   const bounds = beatNarrativeBounds(beat);
+  if (risingPassages !== undefined) return bounds.top;
   return bounds.top + bounds.height / 2;
 }
 

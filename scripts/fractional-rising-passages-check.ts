@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import path from "node:path";
 import type { Page } from "playwright";
+import { inspectPaint } from "./fractional-linear-theme-comparison.ts";
 
 export async function checkFractionalRisingPassages(page: Page, baseUrl: string, outputRoot: string) {
   for (const size of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
@@ -8,12 +9,13 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await page.goto(new URL("/reader/solve-fractional-linear/", baseUrl).toString(), { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.body.dataset["kpReaderLayout"] === "rising-passages");
     const samples = [];
-    for (const y of [0.75, 0.5, 0.35, 0.22, 0.5]) {
+    for (const y of [0.75, 0.5, 0.475, 0.45, 0.5]) {
       await page.evaluate((fraction) => {
         const passage = document.querySelector<HTMLElement>('[data-kp-rising-beat="beat.multiply"]')!;
         const rect = passage.getBoundingClientRect();
+        const header = document.querySelector(".kp-reader-masthead")!.getBoundingClientRect().height;
         window.dispatchEvent(new WheelEvent("wheel"));
-        window.scrollTo(0, scrollY + rect.top + rect.height / 2 - innerHeight * fraction);
+        window.scrollTo(0, scrollY + rect.top - header - (innerHeight - header) * fraction);
       }, y);
       await settle(page);
       const sample = await page.evaluate(() => {
@@ -21,7 +23,11 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
         const stage = document.querySelector<HTMLElement>('[data-kp-reader-equation-stage]')!;
         const rect = passage.getBoundingClientRect();
         const stageRect = stage.getBoundingClientRect();
-        return { y: (rect.top + rect.height / 2) / innerHeight,
+        const header = document.querySelector(".kp-reader-masthead")!.getBoundingClientRect().height;
+        const divider = document.querySelector(".kp-reader-equation-progress")!;
+        return { y: (rect.top - header) / (innerHeight - header), header,
+          textSizes: [...document.querySelectorAll(".kp-rising-passage h1, .kp-rising-passage h2, .kp-rising-passage p")].map((node) => getComputedStyle(node).fontSize),
+          dividerColor: getComputedStyle(divider).backgroundColor,
           opacity: Number(getComputedStyle(passage).opacity),
           stageTop: stageRect.top, stageBottom: stageRect.bottom,
           stageBorder: getComputedStyle(stage).borderTopWidth,
@@ -29,9 +35,15 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
           overflow: document.documentElement.scrollWidth - innerWidth };
       });
       assert.ok(Math.abs(sample.y - y) < 0.002);
-      assert.ok(Math.abs(sample.stageBottom - size.height * 0.5) < 1);
+      assert.ok(Math.abs(sample.stageBottom - (sample.header + (size.height - sample.header) / 2)) < 1);
+      assert.deepEqual([...new Set(sample.textSizes)], ["17px"]);
+      assert.equal(sample.dividerColor, "rgba(255, 255, 255, 0.26)");
       assert.equal(sample.stageBorder, "0px");
       assert.ok(sample.overflow <= 1);
+      const ink = (await inspectPaint(page)).glyphs.filter((glyph) => glyph.opacity > 0 && glyph.width > 0 && glyph.height > 0);
+      const inkBottom = Math.max(...ink.map((glyph) => glyph.y + glyph.height));
+      assert.ok(sample.stageBottom - inkBottom >= 12 && sample.stageBottom - inkBottom < 80,
+        "The equation should sit near the divider with breathing room");
       samples.push(sample);
       await page.screenshot({ path: path.join(outputRoot, `rising-${size.width}-${samples.length}-${y}.png`) });
     }

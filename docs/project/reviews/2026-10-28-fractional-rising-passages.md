@@ -2,7 +2,9 @@
 
 User-approved exemplar implementation: the stage occupies the upper half of
 the page; text rises from below, reaches peak emphasis at the 50vh division,
-then fades as it crosses the stage. This follows the removal of the temporary
+then fades as it crosses the stage. The user's follow-up makes that division
+halfway through the available space below the masthead, rather than raw 50vh.
+This follows the removal of the temporary
 typography controls. It is a local visual candidate, not a new reader default.
 
 ## Authority and preservation
@@ -17,20 +19,25 @@ new animation path, and the inactive-paint containment repair remains intact.
 
 The local layout module wraps the existing prose nodes, including the opening
 text, and exposes measure/render/dispose hooks to the current reader. Narrative
-centers are cached with scroll geometry; opacity is projected from absolute
+leading edges are cached with scroll geometry; opacity is projected from absolute
 scroll position without another listener, frame loop, history state or per-frame
-paragraph measurement. Semantic progress still maps to the authored beat
-centers; changing the layout does not retime the mathematical operations.
+paragraph measurement. Semantic progress maps the authored checkpoints to the
+passage's leading edge at the divider, so incoming prose stays below the
+bottom-aligned equation. Mathematical operation timings remain unchanged.
 
 ## Candidate behavior
 
-- The borderless stage stays above a full-width divider at 50vh, on the same
-  dark page background as the prose. The existing progress rail occupies that
-  divider. Mathematics retains its previous typography.
-- Each passage's center reaches opacity 1 at the division. Incoming prose
-  rises from 0.35 opacity; departing prose smoothly reaches zero by 30vh.
-  These optical thresholds are provisional. An initial longer fade lingered
-  too strongly over the equation and was shortened after visual inspection.
+- The borderless stage stays above a full-width, 1px translucent white divider
+  halfway through the space below the measured masthead. The gold progress
+  fill is hidden. The existing fit planner works in a compact 120px workspace
+  at the bottom of the stage, leaving breathing room above the line while
+  retaining motion clearance. Mathematics retains its previous typography.
+- Passage headings and paragraphs use the same 17px regular text treatment;
+  semantic heading elements remain for navigation/accessibility.
+- Each passage's leading edge reaches opacity 1 at the division. Incoming prose
+  rises from 0.35 opacity; departing prose reaches zero after crossing 5% of the
+  available height (about 40px at the checked viewports). The earlier slow fade
+  is superseded by the user's request for a rapid retreat.
 - Passages occupy one centered reading measure and move over the stage.
   Phone spacing preserves the same relationship rather than inheriting the
   compact transcript's closely spaced beats.
@@ -54,8 +61,9 @@ npm run typecheck
 
 The 41-frame animation preservation smoke passed, including direct, forward
 and reverse traversal and inactive-paint checks. Chromium layout checks use
-1280×900 and 390×844 viewports: passage positions at 75%, 50%, 35%, 22%, and
-back to 50%; peak/fading opacity; stable stage boundary; no horizontal overflow;
+1280×900 and 390×844 viewports: passage positions at 75%, 50%, 47.5%, 45%, and
+back to 50% of usable height; peak/fading opacity; measured masthead exclusion;
+uniform text sizes; white divider; bottom ink clearance; no horizontal overflow;
 exact rewind; URL reload; Steps navigation; print and no-JavaScript readability.
 Full app, tooling, tests, Svelte and domains typecheck passed. Captures were
 inspected on both viewport sizes. No cross-browser promotion is claimed.
