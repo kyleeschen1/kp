@@ -9,8 +9,9 @@
     --kp-caption-width: min(440px, calc(100vw - 32px));
     --kp-caption-card-top: calc(var(--kp-rising-header-height) + clamp(20px, 6vh, 56px));
     --kp-caption-anchor: calc(var(--kp-rising-header-height) + (100svh - var(--kp-rising-header-height)) / 2);
-    --kp-caption-card-height: min(540px, calc(100svh - var(--kp-rising-header-height) - 136px));
-    --kp-caption-text-height: clamp(180px, 25svh, 220px);
+    --kp-caption-card-height: min(400px, calc(100svh - var(--kp-rising-header-height) - 136px));
+    --kp-caption-text-height: clamp(144px, 18svh, 160px);
+    --kp-equation-type-size: clamp(.935rem, 1.3175vw, 1.02rem);
   }
   html:has(> body[data-kp-reader-layout="rising-passages"]) { background: #121826; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-layout > .kp-lesson-toc { display: none; }
@@ -18,7 +19,7 @@
   body[data-kp-reader-layout="rising-passages"]:not([data-kp-reader-hydrated]) .kp-animation-static > [data-kp-static-state]:not([hidden]) {
     display: grid;
     place-items: center;
-    height: 96px;
+    height: 82px;
     min-height: 0;
     border: 0;
     border-radius: 0;
@@ -106,7 +107,10 @@
   html body[data-kp-caption-mode="captions"] .kp-reader-equation-viewport {
     /* A compact workspace at the region's top preserves the shared fit and
        its motion clearance without centering math in the entire card. */
-    flex: 0 0 96px;
+    flex: 0 0 82px;
+  }
+  body[data-kp-reader-layout="rising-passages"] :is(.kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface) {
+    --kp-canonical-equation-type-size: clamp(1.275rem, 5.95cqi, 1.7rem);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress {
     display: none;
@@ -167,21 +171,9 @@
     overflow: auto;
     transform: translateY(var(--kp-caption-offset, 0px));
   }
-  /* The passage owns both motion and its marker; only its prose fades.
-     Keep the gutter inside the clipped copy so ticks leave at the same edge. */
+  /* Passage controls travel with their prose; the shared motion stays intact. */
   body[data-kp-caption-mode="captions"] .kp-caption-copy > .kp-beat-copy {
     opacity: var(--kp-caption-opacity, 1);
-  }
-  body[data-kp-caption-mode="captions"] .kp-caption-copy::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: .85rem;
-    width: 11px;
-    height: 1px;
-    background: var(--kp-ink);
-    opacity: .7;
-    pointer-events: none;
   }
   body[data-kp-caption-mode="captions"] .kp-caption-preview[data-kp-caption-active="true"] {
     /* Preview begins at the card's bottom and travels through its interior.
@@ -196,7 +188,7 @@
     width: var(--kp-caption-width);
     height: var(--kp-caption-card-height);
     border-block: 0;
-    border-inline: 1px solid var(--kp-line);
+    border-inline: 3px solid var(--kp-tutorial-text-muted);
     border-radius: 0;
     background: var(--kp-surface);
     box-shadow: none;
@@ -215,18 +207,46 @@
   .kp-caption-reading-mode[aria-pressed="true"] { background: var(--kp-line); }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-passage:focus-within {
     --kp-caption-opacity: 1 !important;
-    background: var(--kp-surface);
   }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-rising-passage, .kp-caption-document-intro, .kp-caption-document-after) p {
     color: var(--kp-ink);
     margin: 0 0 .5rem;
     font-family: inherit;
-    font-size: 1.0625rem;
+    font-size: .9375rem;
     font-weight: 300;
     letter-spacing: .015em;
     line-height: 1.6;
   }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-caption-copy, .kp-beat-copy) > :last-child { margin-bottom: 0; }
+  .kp-caption-operation-slider {
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 24px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: linear-gradient(to right, var(--kp-relation) var(--kp-operation-progress, 0%), var(--kp-line) var(--kp-operation-progress, 0%)) center / 100% 2px no-repeat;
+    cursor: ew-resize;
+  }
+  .kp-caption-operation-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 7px;
+    height: 7px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--kp-relation);
+  }
+  .kp-caption-operation-slider::-moz-range-thumb {
+    width: 7px;
+    height: 7px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--kp-relation);
+  }
+  .kp-caption-operation-slider::-moz-range-track { background: transparent; }
+  body[data-kp-caption-mode="document"] .kp-caption-operation-slider { display: none; }
   .kp-rising-navigation { position: relative; font-size: .78rem; }
   .kp-rising-navigation summary { cursor: pointer; }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-navigation .kp-lesson-toc {
@@ -242,12 +262,17 @@
   }
   body[data-kp-reader-layout="rising-passages"] .kp-lesson-toc ol { display: block; }
 }
+@media screen and (max-width: 880px) {
+  body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] {
+    --kp-equation-type-size: clamp(.8925rem, 3.57vw, 1.02rem);
+  }
+}
 @media screen and (max-width: 520px) {
   body[data-kp-reader-layout="rising-passages"] .kp-reader-wordmark { white-space: nowrap; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-mode { display: none; }
 }
 @media print {
-  .kp-caption-frame, .kp-caption-preview { display: none; }
+  .kp-caption-frame, .kp-caption-preview, .kp-caption-operation-slider { display: none; }
   .kp-caption-scroll-slots { display: none; }
   .kp-rising-passage { opacity: 1 !important; content-visibility: visible !important; }
 }

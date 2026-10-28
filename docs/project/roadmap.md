@@ -40,9 +40,11 @@ The latest local revision embeds that card in an ordinary document using native
 sticky entry/release. Caption headings remain only as metadata, references retain
 their color, and prose is lighter with slightly wider tracking. Review this
 single embedding before proposing a general multi-card authoring interface.
-The latest framing candidate uses only left/right borders, a visible left tick
-moving with each passage, and the same column/inset for document prose. The
-background and existing animation/scroll clocks remain unchanged.
+The latest compact candidate uses thicker grey side rails, no passage ticks,
+15px prose, smaller math and the same column/inset for document prose. Approaching
+text is readable during held equations; thin operation sliders track and scrub
+each passage's own motion interval, including rewind. The background, font family
+and existing animation/scroll clocks remain unchanged. Review this local revision.
 
 October 27 prototype planning: the user selects multi-step algebra to test the
 new document-anchored derivation trail. The [proposed implementation plan](reviews/2026-10-27-next-step-review.md)

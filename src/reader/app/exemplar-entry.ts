@@ -255,7 +255,9 @@ const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
 const risingPassages = lessonVariant === "fractional-linear"
   ? (await import("./fractional-rising-passages.ts"))
-      .mountFractionalRisingPassages({ story, beats, onFind: releaseControlAuthority })
+      .mountFractionalRisingPassages({ story, beats, onFind: releaseControlAuthority,
+        onSeek: (progress, position) => setExplicitProgress(progress, 'controls', true,
+          position - window.innerHeight * readerViewportAnchorFraction()) })
   : undefined;
 const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
@@ -769,7 +771,6 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   // Print deliberately removes the interactive surface. A queued frame must
   // not ask its compositor to measure a zero-width surface during that change.
   if (printMedia.matches) return;
-  risingPassages?.render();
   const projection = projectKpReaderMotion({
     clock: sample,
     checkpoints: accessibleCheckpoints,
@@ -788,6 +789,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       : projection.progressPermille / 1_000
     : attentionProjection.visualProgressPermille / 1_000;
   const visualProgressPermille = Math.round(visualProgress * 1_000);
+  risingPassages?.render(visualProgress * 1000);
   const visualSample = {
     ...sample,
     // Keep exact control-selected boundaries for renderer ownership. Permilles
@@ -1443,7 +1445,9 @@ function onTocNavigation(event: MouseEvent): void {
   const arrival = risingPassages?.arrival(beat);
   if (arrival !== undefined) {
     setExplicitProgress(arrival.progress, "controls", false);
-    window.scrollTo(0, arrival.position - window.innerHeight * readerViewportAnchorFraction());
+    // Browser scroll offsets round to pixels. Land inside the selected caption
+    // rather than just before its boundary on fractional mobile geometry.
+    window.scrollTo(0, Math.ceil(arrival.position - window.innerHeight * readerViewportAnchorFraction()));
     controlScrollPosition = window.scrollY;
     renderCurrentSample();
     locationSettlement.settle();
@@ -1463,7 +1467,8 @@ function onTocNavigation(event: MouseEvent): void {
 function setExplicitProgress(
   progressPermille: number,
   source: "controls" | "url",
-  updateLocation: boolean
+  updateLocation: boolean,
+  scrollPosition?: number
 ): void {
   const previous = lastSample();
   const phase = attention?.phases.find((candidate, index, phases) =>
@@ -1478,7 +1483,10 @@ function setExplicitProgress(
     sequence: previous.sequence + 1,
     checkpointId: phase?.checkpointId
   });
-  if (!isFocusStepperProjection()) scrollToProgress(progressPermille);
+  if (!isFocusStepperProjection()) {
+    if (scrollPosition === undefined) scrollToProgress(progressPermille);
+    else window.scrollTo(0, scrollPosition);
+  }
   controlScrollPosition = window.scrollY;
   renderWithAdapter(controlSample);
   if (updateLocation) locationSettlement.settle();

@@ -1,14 +1,15 @@
 # Document-backed captions for the fractional reader
 
-Status: local candidate with side rails, passage ticks and one shared reading
-column awaits visual review. Document embedding, Nocturne, styled references,
+Status: local candidate with stronger side rails, operation sliders and a compact
+shared reading column awaits visual review. Document embedding, Nocturne, styled references,
 lighter prose and paired, unfaded departure remain the requested treatments.
 
 The user prefers explanations that behave like closed captions. The latest
 revision addresses the missing anticipation: captions sit above the equation
 on a phone-width surface. The user found the earlier separate progress rail
-unhelpful. The new left/right framing rails and passage-bound ticks serve a
-different purpose: frame animation mode and make faint approaching prose trackable.
+unhelpful. The latest revision removes the subsequent passage ticks, strengthens
+the left/right framing rails and makes approaching prose readable. Thin controls
+under operation passages show and scrub that operation's progress.
 Text remains still during its operation, then rises beyond the card edge as the next
 caption materializes. Native search and ordinary document scrolling remain
 explicit requirements. This supersedes the local rising/fading presentation in
@@ -34,27 +35,32 @@ mathematical programs or the broader reader architecture.
 The latest local candidate uses a centered surface up to 440px wide. Per the user's
 correction it restores the spec's Nocturne palette: `#121826` page and `#1B2535`
 card, through the existing shared tutorial palette variables. Mathematical ink
-and typography remain unchanged. Ordinary prose uses foreground ink, weight 300
+remains unchanged. This local revision reduces mathematical type sizes to 85%
+of the preceding sizes through the existing fit-surface variables. Ordinary prose
+uses 15px foreground ink, weight 300
 and `.015em` tracking; semantic links retain the shared relation blue instead
 of being forced to foreground. Step headings stay hidden as metadata for IDs
 and navigation labels, not visible caption content. The separator is removed; captions retain their bottom
-alignment just above the mathematical region. The native equation renderer uses a compact 96px workspace at the
+alignment just above the mathematical region. The card is at most 400px tall;
+its caption region is 144–160px. The native equation renderer uses a compact 82px workspace at the
 top of its region, retaining its existing fit and motion clearance. The earlier
-progress indicator and labels remain removed. The final caption remains with the solved equation.
+progress rail and labels remain removed. The final caption remains with the solved equation.
+The prose family remains the existing Inter/system stack, not Gill Sans Thin;
+no Gill Sans font is loaded or newly claimed by this revision.
 
-Only the left and right borders remain: no horizontal borders, rounded corners
+Only the 3px grey (`#8994A6`, the existing muted palette role) left and right borders remain: no horizontal borders, rounded corners
 or enclosing shadow. The background colors are unchanged. Opening prose,
 animation surface and closing prose share the same outer column; prose and
 captions have the same 24px text inset and wrapping width.
 
-Each caption copy owns a short decorative tick at its first line, extending
-inward from the left rail. The tick shares the copy's translation and clipping,
-so it cannot drift away from its passage. It stays at steady visible contrast
-while the approaching prose is faint. Opacity belongs to the inner prose rather
-than their common ancestor. Ticks leave at the same top edge as their text;
-they add neither semantic nodes nor an independent clock. Print, no-JS and
-Read all omit these motion cues. Dimensions and contrast remain local visual
-choices pending review.
+Each of the six operation passages owns a native range control: a 2px track
+inside a 24px interaction area. The initial read-only passage has none. Its fill
+comes from the actual rendered mathematical progress; dragging or keyboard input
+seeks that passage's increasing interval in the existing scroll geometry. Equal
+equation states in earlier holds must not steal ownership of the control's 0%.
+There is no second clock. Controls travel with their prose, are hidden in Read all
+and print, and are disabled in the inert preview copy. Dimensions and contrast
+remain local visual choices pending review.
 
 The card is now embedded between the authored opening and closing paragraphs.
 A single native CSS sticky surface contains the card, original captions and
@@ -77,12 +83,12 @@ Each operation gets 14% of available-height scroll distance for reading, 32%
 for its unchanged mathematical program, then holds its result. The final 18%
 of available-height scrolling before the next instruction exchanges captions.
 During the preceding 8%, the next explanation appears at the bottom of the card
-and begins rising, at no more than 3.5% opacity, while the current caption stays
+and begins rising at 50% opacity, while the current caption stays
 fully legible. Both captions use the same translation from the moment the preview
 appears, preserving their geometric separation throughout travel. The outgoing
 text stays at full opacity; its clipping box now begins at the card's top edge,
-so it disappears by crossing that edge, not by fading. The preview remains extremely faint through the
-mathematical area and becomes readable only in the final 8% of its travel,
+so it disappears by crossing that edge, not by fading. The preview remains at half
+contrast through the mathematical area and reaches full contrast in the final 8% of its travel,
 near its settled caption position. The original caption remains clipped to
 the card's top edge; the inert preview is clipped to the card interior.
 The outgoing copy is clipped away before the arriving copy reaches full contrast. The equation holds
@@ -144,13 +150,24 @@ References: [HTML native find and hidden-until-found contract](https://html.spec
    bfcache return does not rerun module initialization. Disposal now occurs only
    for nonpersisted navigation and also removes scroll/resize listeners.
 
+4. A caption menu jump must land inside its selected passage. Fractional mobile
+   geometry could round the browser scroll offset just below the boundary. The
+   host rounds the arrival upward; desktop and phone menu-to-slider checks enforce
+   the selected caption's visibility.
+
+5. Native slider keyboard increments must survive progress projection. Controls
+   receive the exact rendered progress rather than the rounded URL permille;
+   one local increment can be smaller than one global permille. Browser checks
+   exercise ArrowRight, Home, End, reload and reverse scrolling. A focused passage
+   remains transparent so interaction cannot cover the framing rails.
+
 These are runtime lifecycle guards, not claims that types prove browser geometry
 or that every browser/search implementation behaves identically.
 
 ## Verification
 
 ```sh
-node --disable-warning=ExperimentalWarning --test tests/fractional-rising-scroll.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts
+node --disable-warning=ExperimentalWarning --test tests/fractional-passage-progress.test.ts tests/fractional-rising-scroll.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts
 node --disable-warning=ExperimentalWarning --test tests/semantic-reader-lesson-markdown-parser.test.ts tests/semantic-reader-static-prose-compiler.test.ts
 npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000
 npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000
@@ -162,7 +179,7 @@ Pure geometry checks cover reading holds, motion intervals, result holds,
 preview anticipation before departure, held math throughout caption exchanges, inverse seeks and
 invalid measurements. The scoped Chromium check covers 1280×900 and 390×844
 cards, foreground prose, absent divider, bottom-entry preview geometry, the
-3.5% opacity ceiling while crossing math, preserved caption alignment, math
+50% opacity while crossing held math, preserved caption alignment, math
 near the top of its region, the restored Nocturne palette, exact reverse sampling
 during both halves of an exchange, held-position reload, menu navigation,
 native scrolling, keyboard scrolling, document mode, reduced motion, final
@@ -177,9 +194,12 @@ departure and arrival curves from drifting apart; equation motion is unchanged.
 Embedding checks cover in-flow entry, pinning, release at the solved state and
 rewind on desktop and phone. They verify hidden step headings, prose weight and
 tracking, retained semantic reference color, and held progress during Read all.
-The side-rail revision checks matching prose/caption widths and left edges,
-vertical-only framing, constant tick contrast through faint preview travel,
-undimmed tick ancestors and alignment with the left rail. Desktop and phone
+The compact-control revision checks matching prose/caption widths and left edges,
+vertical-only grey framing, absent ticks, 15px prose and the reduced card/workspace.
+Its native input checks cover click, drag, Home/End, single keyboard increments,
+reload at the operation source and backward scrolling on desktop and phone.
+Pure interval tests exercise all six operations forward and backward, including
+their repeated source/result holds. Desktop and phone
 screenshots were inspected; the existing native search, reverse, entry/release,
 static and print checks passed. No wider renderer promotion is claimed.
 The 41-sample equation smoke protects direct/forward/reverse paint and the
@@ -251,15 +271,18 @@ Open `http://localhost:8000/reader/solve-fractional-linear/` without a saved que
 The opening paragraphs precede the card. Scroll until the card reaches its pin
 position, follow it to `x = 8`, then continue into the closing paragraphs. Reverse
 to check re-entry. Inside the card, look for body text without headlines and a
-blue `x` reference in the first caption. Judge the lighter weight and tracking.
-Look for the left tick approaching before its faint passage becomes readable,
-and watch it move with the text through an exchange. Check whether the open
-side rails mark animation mode clearly while the prose keeps one reading column.
+blue `x` reference in the first caption. Judge the smaller prose and math.
+There should be no left ticks. Check whether the stronger grey side rails mark
+animation mode clearly while the prose keeps one reading column.
 
 Choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the
-multiplication, then keep scrolling: the equation holds and the next caption
-first appears very faintly near the bottom of the card. The old caption stays
+multiplication, then try dragging the thin slider below that passage. Home/End
+should select its source/result; returning to 0% must retain the multiplication
+caption rather than jumping to an earlier explanation. Scroll backward and check
+that the fill follows the same mathematical operation. Then keep scrolling:
+the equation holds and the next caption appears at half contrast near the bottom
+of the card. The old caption stays
 fully opaque and moves upward at a fixed distance ahead of it, disappearing only
 past the card edge. The incoming caption brightens only as it reaches the
 caption region. The next
@@ -269,5 +292,5 @@ exchange and drag the scrollbar to check direct navigation.
 Use Cmd+F for **A factor of two enters on each side** from a different step.
 The actual passage should appear above the equation at its source state.
 Close Find and continue scrolling in either direction. Also try **Read all**.
-Judge whether the faint text provides anticipation without distracting from
-the current explanation, and whether the closer prose/math alignment reads well.
+Judge whether the more readable approaching text provides anticipation during
+the held equation, and whether the smaller layout remains comfortable to read.

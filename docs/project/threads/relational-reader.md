@@ -22,9 +22,11 @@ The latest candidate adds native sticky document entry/release, hidden caption
 headings, lighter/wider-spaced prose and preserved semantic reference styling.
 The original opening/closing prose stays in document flow; stable sibling slots
 drive the existing clock. General multi-card hosting remains unpromoted.
-The current framing revision replaces the rounded enclosure with side rails,
-keeps passage ticks visible while preview prose is faint, and aligns surrounding
-prose to the same column. Ticks share caption motion; this remains local discovery.
+The current compact revision uses thicker grey side rails, removes passage ticks,
+reduces prose/math sizes and aligns surrounding prose to the same column.
+Approaching prose is readable only during held equations. Thin native sliders
+track and scrub each operation's own interval without a new clock. This remains
+local discovery; the prose font family stays the existing Inter/system stack.
 
 October 27 planning focus: [multi-step algebra derivation trail](../reviews/2026-10-27-next-step-review.md).
 The user selects retained historical equations and a moving continuation as the

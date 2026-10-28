@@ -1,11 +1,13 @@
 import { createFractionalRisingScroll, fractionalCaptionFrame } from "./fractional-rising-scroll.ts";
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from "../runtime/continuous-scroll-clock.ts";
+import { mountFractionalPassageSliders } from './fractional-passage-sliders.ts';
 
 /** One local layout experiment around the existing reader clock and renderer. */
 export function mountFractionalRisingPassages(input: {
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
   readonly onFind: () => void;
+  readonly onSeek: (progress: number, position: number) => void;
 }) {
   const document = input.story.ownerDocument;
   const window = document.defaultView!;
@@ -60,8 +62,12 @@ export function mountFractionalRisingPassages(input: {
   let previewIndex: number | undefined;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let documentReturnIndex = 0;
+  let renderedProgress = 0;
+  const sliders = mountFractionalPassageSliders({ beats: input.beats, passages, geometry: () => geometry, seek: input.onSeek });
   const ease = (t: number) => t * t * (3 - 2 * t);
-  const render = () => {
+  const render = (progress = renderedProgress) => {
+    renderedProgress = progress;
+    sliders.render(progress);
     document.body.dataset["kpCaptionMode"] = readAll ? "document" : "captions";
     const sample = fractionalCaptionFrame(positions, window.scrollY + anchor(), window.innerHeight - headerHeight);
     const exchange = sample?.exchange ?? 0;
@@ -71,8 +77,8 @@ export function mountFractionalRisingPassages(input: {
     // Their spacing is layout-owned; departure is clipping, never an opacity fade.
     const offset = readAll || reducedMotion.matches ? "0px"
       : `calc((var(--kp-caption-card-height) - var(--kp-caption-text-height) - 44px) * ${-travel})`;
-    // Stay barely visible while crossing the mathematical area; become
-    // readable only near the caption's final position.
+    // Passage travel happens only during a held equation, so the approaching
+    // explanation can be legible without competing with mathematical motion.
     const arriving = ease(Math.max(0, (travel - .92) / .08));
     frame.hidden = readAll;
     if (previewIndex !== sample?.nextIndex) {
@@ -81,12 +87,17 @@ export function mountFractionalRisingPassages(input: {
       if (previewIndex !== undefined) {
         preview.append(passages[previewIndex]!.firstElementChild!.cloneNode(true));
         for (const element of preview.querySelectorAll("[id]")) element.removeAttribute("id");
+        for (const range of preview.querySelectorAll<HTMLInputElement>('input[type="range"]')) {
+          range.disabled = true;
+          range.value = '0';
+          range.style.setProperty('--kp-operation-progress', '0%');
+        }
       }
     }
     const previewVisible = !readAll && !reducedMotion.matches && approaching > 0 && previewIndex !== undefined;
     preview.hidden = !previewVisible;
     preview.dataset["kpCaptionActive"] = String(previewVisible);
-    preview.style.setProperty("--kp-caption-opacity", String(.035 * approaching + .965 * arriving));
+    preview.style.setProperty("--kp-caption-opacity", String(.5 + .5 * arriving));
     preview.style.setProperty("--kp-caption-offset", offset);
     passages.forEach((passage, index) => {
       let opacity = index === sample?.index ? 1 : 0;
@@ -186,6 +197,7 @@ export function mountFractionalRisingPassages(input: {
     },
     render,
     dispose() {
+      sliders.dispose();
       frame.remove();
       preview.remove();
       readingMode.removeEventListener("click", toggleReading);
