@@ -2,7 +2,8 @@
   "id": "run-contract.kp-prepared-reader-20261028",
   "kind": "run-contract",
   "title": "Prepared reader performance",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: six approved outcomes delivered with measured production gains and preserved reader behavior. Baseline cross-host typography assertion remains disclosed outside unchanged-visual scope. No new renderer or product treatment.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -51,6 +52,18 @@
       "status": "passed",
       "scope": "17 reader cases, all 12 route budgets, six supported-browser compositor/lifecycle cases. Navigation and cancellation canaries corrected. Existing cross-host font parity assertion remains failing and documented.",
       "checkedAt": "2026-10-28T22:05:57.574Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --production-performance --label=integrated --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "Eight isolated production cohorts: normal CPU p95 about 17.6ms, scripting 45.8 to 64.1 percent lower, bounded retained preparation. Cold worst frames still up to 200.2ms under slowdown; complete costs recorded.",
+      "checkedAt": "2026-10-28T22:16:24.914Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --compare-themes --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "34 theme samples with exact current non-color paint and geometry; all inactive prepared glyphs have zero effective opacity. Final 41-point smoke, six cross-browser native preparation cases, node types and production exclusion also passed.",
+      "checkedAt": "2026-10-28T22:16:25.694Z"
     }
   ],
   "allowedWork": [
@@ -95,7 +108,8 @@
     {
       "id": "integration",
       "title": "Integration-and-evidence",
-      "status": "planned"
+      "summary": "Final production and preservation evidence integrated; roadmap and thread updated. Static experiment rejected honestly, measured gains and remaining cold preparation and broad invalidation recorded. Owned changes ready for final feature-branch backup.",
+      "status": "complete"
     }
   ]
 }

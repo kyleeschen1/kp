@@ -24,7 +24,7 @@ html:has(> body[data-kp-reader-palette="nocturne"]) {
 export async function compareFractionalReaderThemes(page: Page, baseUrl: string, outputRoot: string) {
   let theme: "nocturne" | "paper" = "nocturne";
   // Vite inlines CSS @imports into the linked page sheet.
-  const routePattern = "**/src/reader/app/exemplar.css*";
+  const routePattern = "**/src/reader/app/fractional-exemplar.css*";
   await page.route(routePattern, async (route) => {
     const response = await route.fetch();
     await route.fulfill({ response,
@@ -49,6 +49,9 @@ export async function compareFractionalReaderThemes(page: Page, baseUrl: string,
           await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
         });
         const sample = await inspectPaint(page);
+        if (sample.glyphs.some((glyph) => glyph.transitionActive === "false" && glyph.opacity > 0)) {
+          throw new Error("An inactive prepared transition leaked visible paint.");
+        }
         assertEvaluationPaint(sample);
         const expectedBackground = theme === "paper" ? "rgb(247, 245, 238)" : "rgb(18, 24, 38)";
         if (sample.background !== expectedBackground) {
@@ -65,7 +68,11 @@ export async function compareFractionalReaderThemes(page: Page, baseUrl: string,
   }
   const differences = samples.filter((sample) => sample.theme === "nocturne").flatMap((dark) => {
     const light = samples.find((sample) => sample.theme === "paper" && sample.progress === dark.progress)!;
-    const paintSignature = (sample: typeof dark) => sample.glyphs.map(({ color: _color, ...glyph }) => glyph);
+    // Idle capacity can change which hidden neighbors have been prepared.
+    // Compare the current presentation, after proving inactive owners cannot paint.
+    const paintSignature = (sample: typeof dark) => sample.glyphs
+      .filter((glyph) => glyph.transitionActive !== "false")
+      .map(({ color: _color, ...glyph }) => glyph);
     return JSON.stringify(paintSignature(dark)) === JSON.stringify(paintSignature(light))
       ? [] : [{ progress: dark.progress, reason: "Non-color paint or geometry differs between themes" }];
   });

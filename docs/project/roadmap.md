@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-10-21
+Last Updated: 2026-10-28
 Status: active
 Active Thread: `threads/relational-reader.md`
 Supporting Threads:
@@ -25,15 +25,17 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-October 28 performance delivery: [measured reader improvements](reviews/2026-10-28-reader-performance-delivery.md)
-preserve the fractional reader's current appearance, semantic clock and real
-document prose. Session-local paint reuse, batched native text measurement,
-unchanged-frame reuse and narrower phase-metadata loading reduce work without a
-new renderer. Long-document passage lookup and emphasis now avoid full scans on
-ordinary scroll frames. The next performance boundary is separating stable
-geometry from genuine focus-paint changes, with native handoff evidence; do not
-blindly enable cross-session geometry caching. The review records measurements,
-preservation checks and independently reproduced pre-existing browser failures.
+October 28 performance continuation: [prepared-reader evidence](reviews/2026-10-28-prepared-reader-delivery.md)
+supersedes the earlier next-step recommendation to separate focus and geometry.
+Declared native-color focus now preserves measured preparation; bounded reuse
+reduces four-cycle builds from 53 to four. Conservative idle preparation and
+route-owned CSS complete the [approved delivery](2026-10-28-prepared-reader-delivery.md).
+Production frame p95 improves from about 33ms to 17.6ms at normal CPU, while rare
+cold stalls still reach 200ms under slowdown. The next measured bottleneck is
+first-use material/typography preparation. Preserve the current visuals and real
+document reading; the rejected asset-only static experiment does not justify a
+new renderer. The review records resource costs, explicit budget amendments,
+preservation evidence and the remaining pre-existing cross-host typography issue.
 
 October 28 latest local revision: [theater focus and performance audit](reviews/2026-10-28-theater-focus-and-performance.md)
 retains real document paragraphs and adds complementary focus as incoming text

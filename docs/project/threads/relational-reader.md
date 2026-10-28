@@ -1,19 +1,22 @@
 # Relational reader delivery
 
 Status: active direction; focused mechanics argument approved through first review
-Last Updated: 2026-10-21
+Last Updated: 2026-10-28
 
 ## Canonical direction
 
-October 28 performance continuation: [delivery evidence](../reviews/2026-10-28-reader-performance-delivery.md)
-records session-local paint reuse, batched native text measurement, exact-frame
-reuse, smaller metadata loading and bounded passage updates. Appearance, real
-document prose, direct jumps and the semantic clock remain the baseline. Genuine
-focus changes still require expensive preparation; separating stable geometry
-from paint is the next measured boundary, subject to native ownership and reverse
-geometry proof. No worker rewrite or cross-session geometry cache was justified.
-The [approved delivery](../2026-10-28-reader-performance-delivery.md) and Theseus
-contract own scope and execution; this paragraph records the durable conclusion.
+October 28 prepared-reader continuation: [delivery evidence](../reviews/2026-10-28-prepared-reader-delivery.md)
+records explicit color-only focus, four bounded retained transitions and one
+conservative idle neighbor. Repeat traversal now avoids rebuilding measured
+geometry; normal-CPU production p95 improves from about 33ms to 17.6ms. Cold
+preparation still causes occasional long frames, including roughly 200ms under
+CPU slowdown, so it is the next measured boundary. Appearance, real prose,
+direct jumps and semantic time remain the baseline. Asset-only static publication
+added bytes without a traversal gain and was removed. The review preserves
+cross-browser ownership evidence, resource costs, explicit budget amendments and
+the unresolved baseline editor/reader font-size parity assertion. The
+[approved delivery](../2026-10-28-prepared-reader-delivery.md) and Theseus contract
+own scope and execution; the earlier focus/geometry recommendation is completed.
 
 Latest October 28 candidate: [theater focus and performance audit](../reviews/2026-10-28-theater-focus-and-performance.md)
 adds scroll-derived complementary paragraph focus at the stage boundary and one

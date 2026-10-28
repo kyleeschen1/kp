@@ -144,3 +144,98 @@ minifying source or deleting behavior. The normal 5% headroom remains; all other
 baseline values and forbidden-asset checks remain unchanged. These are policy
 amendments, not optimization claims. Complete observed reader assets are also
 measured below because the static entry-closure gate alone excludes lazy loads.
+
+## Integrated production comparison
+
+Commands: `npm run build:bundle`, then
+`npm run visual:fractional-linear-equation -- --production-performance --label=integrated --base-url=http://127.0.0.1:8011`.
+Same eight cohorts as `prepared-baseline`: fresh Chromium contexts, 1280×900 and
+390×844, 1×/4× CPU, two repeats each, cold/warm navigation and two forward/reverse
+traversals. Compiler/browser test jobs had finished before measurement. No CPU
+profiler or forced GC during traversal. These are local diagnostic comparisons,
+not device certification or a statistical loading-time guarantee.
+
+| View / CPU | Baseline p95 ms | Final p95 ms | Final scripting seconds | Scripting reduction | Final layouts |
+| --- | --- | --- | --- | --- | --- |
+| Desktop / 1× | 33.3 / 33.3 | 17.6 / 17.6 | 0.540 / 0.546 | 52.8% | 993 / 993 |
+| Desktop / 4× | 149.6 / 149.9 | 17.6 / 17.7 | 1.720 / 1.791 | 58.4% | 993 / 993 |
+| Phone / 1× | 33.3 / 33.4 | 17.6 / 17.6 | 0.665 / 0.696 | 45.8% | 606 / 606 |
+| Phone / 4× | 133.3 / 133.6 | 17.6 / 17.7 | 1.614 / 1.464 | 64.1% | 666 / 654 |
+
+Scripting percentages compare means of both repeats. Baseline layouts were
+3,950/3,944 desktop and 3,437/3,431 phone. Frames over 50.1ms fall from 33–35 to
+9 under 4× slowdown. **Worst frames still reach 166.5–200.2ms under slowdown**;
+unthrottled maxima are 33.3–50ms. Thus the common path is substantially smoother,
+but first-use preparation is still a long synchronous task and p95 alone would
+overstate its elimination. Preparing a new transition remains the next bottleneck.
+
+The complete requested asset union remains 95 files: 917,247 raw / 303,843 gzip
+bytes, versus 912,567 / 302,165 baseline (+4,680 / +1,678). This includes lazy
+JavaScript, CSS and actually requested fonts; gzip is measured per local file,
+not the preview server's wire encoding. Published HTML is accounted separately
+above. Retained JS heap after GC is 5.57–5.64MB and 2,469 DOM nodes, versus about
+5.36–5.69MB and 2,334 nodes. The usual roughly 0.2MB/135-node increase buys bounded
+prepared replay. Native/GPU memory and an unreproduced crash remain outside that
+measurement. No loading-latency percentage is claimed from these short local runs.
+
+Validated integration includes full types and Svelte checks; architecture;
+equation-surface preservation (11), reader runtime hardening (25), native glyph
+compositor units (82), compiler/budget units (9), reader conformance (17),
+cross-browser clone/color projection (18), native compositor release (6),
+cross-browser native preparation (6), the 41-point fractional smoke,
+production closure and all 12 route budgets, and dev-review exclusion. The
+canonical desktop/phone document-flow check preserves search, real prose, slider
+association, reversal, font reflow, Read all, static reading and print. The
+remaining baseline cross-host typography assertion is disclosed above.
+
+The final `--compare-themes` check passes all 34 dark/paper samples. Its stylesheet
+override follows the newly scoped fractional sheet. Idle preparation can produce
+different hidden-neighbor populations between runs, so the comparator now first
+asserts zero effective opacity for every inactive transition, then compares all
+current-presentation glyphs (including invisible current owners). Non-color
+paint and geometry comparisons remain exact. This corrects a cache-population
+comparison, not a visual mismatch; script type checking also passes.
+
+## Remaining invalidation categories
+
+The user asks whether preparation is still invalidated needlessly. Confirmed
+unnecessary focus and revisit rebuilds are removed for the declared color-only
+readers. Ordinary progress, reversal and direct jumps apply prepared frames;
+plan/content and motion-policy changes select a different preparation key.
+Capacity eviction and page disposal deliberately release resources rather than
+claiming those preparations became stale.
+
+Layout invalidation remains conservative. `exemplar-entry.ts` observes both the
+viewport and story; after the first notification, either resize requests layout
+refresh. `measureLayout` retires all active and retained sessions before publishing
+new measurements. A prose-only story resize can therefore discard equation
+preparation even if its metrics did not change. `equation-font-readiness.ts`
+publishes every document font-loading completion, without filtering by the fonts
+used in the equation. The scheduler coalesces notifications before a frame, but
+does not prove a geometry change before advancing the measurement revision.
+
+These are source-confirmed broad invalidation paths, not measured attribution
+of the remaining cold stalls. A next investigation should separate document
+scroll geometry from equation geometry and record actual invalidation causes.
+Preserve full retirement when mathematical metrics or layout ownership change;
+matching outer width/height alone does not prove unchanged internal glyph layout.
+Reducing unnecessary invalidation prevents repeated cold work; it does not make
+the first preparation cheaper. No new invalidation policy is implemented here.
+
+## Inspection and next boundary
+
+Open `http://localhost:8000/reader/solve-fractional-linear/`. Scroll through the
+solve, reverse through multiplication and cancellation, then repeat that section.
+The existing equations, colors, passage timing and choreography should remain;
+focus changes and repeat traversal should avoid preparation pauses. Jump through
+Steps, resize once, and try Cmd+F/Read all to check preserved reading behavior.
+The division reader is the second color-only caller; unrelated families retain
+their own preparation policy.
+
+The next performance investigation should target the four cold builds: batched
+material-clone capture and typography preparation, or a verified publication
+boundary for geometry-independent instructions. Asset-only static substitution
+was rejected here. Do not activate the old measured-scene cache, replace native
+KaTeX, or promote this capability to arbitrary salience/layout mutations without
+new ownership and geometry evidence. This delivery does not implement the
+historical derivation trail or settle the separate cross-host typography policy.
