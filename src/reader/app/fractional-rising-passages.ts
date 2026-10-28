@@ -10,30 +10,16 @@ export function mountFractionalRisingPassages(input: {
   const document = input.story.ownerDocument;
   const window = document.defaultView!;
   const article = input.story.closest<HTMLElement>(".kp-lesson")!;
-  const intro = document.createElement("div");
-  intro.className = "kp-rising-intro kp-rising-passage";
-  const introSlot = document.createElement("div");
-  introSlot.className = "kp-caption-intro-slot";
-  introSlot.append(intro);
-  article.prepend(introSlot);
-  for (const child of [...article.children]) {
-    if (child !== introSlot && child !== input.story && !child.contains(input.story)) intro.append(child);
-  }
-  const passages: HTMLElement[] = [intro, ...input.beats.map((beat) => {
-    const passage = document.createElement("div");
-    passage.className = "kp-rising-passage";
-    passage.dataset["kpRisingBeat"] = beat.dataset["kpBeat"];
-    passage.id = `caption.${beat.dataset["kpBeat"]}`;
-    passage.append(...beat.childNodes);
-    beat.append(passage);
-    return passage;
-  })];
-  for (const passage of passages) {
-    const copy = document.createElement("div");
-    copy.className = "kp-caption-copy";
-    copy.append(...passage.childNodes);
-    passage.append(copy);
-  }
+  // The compiler owns structural markup so slow imports never expose the old
+  // article layout. Enhancement binds the original nodes instead of moving them.
+  const required = (root: ParentNode, selector: string): HTMLElement => {
+    const node = root.querySelector<HTMLElement>(selector);
+    if (node === null) throw new Error(`Missing compiled caption shell: ${selector}`);
+    return node;
+  };
+  const introSlot = required(article, '.kp-caption-intro-slot');
+  const intro = required(introSlot, '.kp-rising-intro');
+  const passages = [intro, ...input.beats.map((beat) => required(beat, '.kp-rising-passage'))];
   const toc = document.querySelector<HTMLElement>(".kp-lesson-toc")!;
   const tocHome = document.createComment("rising passage navigation home");
   toc.before(tocHome);
@@ -64,9 +50,7 @@ export function mountFractionalRisingPassages(input: {
   readingMode.disabled = !supportsFind;
   masthead.insertBefore(readingMode, navigation);
   const slots = [introSlot, ...input.beats];
-  const frame = document.createElement("div");
-  frame.className = "kp-caption-frame";
-  document.body.append(frame);
+  const frame = required(document, '.kp-caption-frame');
   // A clipped preview must not become a second searchable match, or prevent
   // native find from revealing the full, original instruction via beforematch.
   const preview = document.createElement("div");
@@ -81,7 +65,8 @@ export function mountFractionalRisingPassages(input: {
     document.body.dataset["kpCaptionMode"] = readAll ? "document" : "captions";
     const sample = fractionalCaptionFrame(positions, window.scrollY + anchor(), window.innerHeight - headerHeight);
     const exchange = sample?.exchange ?? 0;
-    const departing = ease(Math.min(1, exchange / .6));
+    const dimming = ease(Math.min(1, exchange / .08));
+    const departing = ease(Math.max(0, (exchange - .08) / .92));
     const approaching = ease(sample?.preview ?? 0);
     const travel = .12 * approaching + .88 * ease(exchange);
     // Stay barely visible while crossing the mathematical area; become
@@ -102,14 +87,15 @@ export function mountFractionalRisingPassages(input: {
     preview.style.setProperty("--kp-caption-opacity", String(.035 * approaching + .965 * arriving));
     preview.style.setProperty("--kp-caption-offset", `calc((var(--kp-caption-card-height) - var(--kp-caption-text-height) - 44px) * ${-travel})`);
     passages.forEach((passage, index) => {
-      let opacity = index === sample?.index ? 1 - departing : 0;
+      // Match the preview's faintness before the outgoing text starts moving.
+      let opacity = index === sample?.index ? .035 + .965 * (1 - dimming) : 0;
       if (reducedMotion.matches) opacity = index === (exchange < .5 ? sample?.index : sample?.nextIndex) ? 1 : 0;
       const visible = readAll || opacity > 0;
       const activeValue = String(!readAll && visible);
       if (passage.dataset["kpCaptionActive"] !== activeValue) passage.dataset["kpCaptionActive"] = activeValue;
       passage.style.setProperty("--kp-caption-opacity", String(readAll ? 1 : opacity));
-      const offset = readAll || reducedMotion.matches ? 0 : -24 * departing;
-      passage.style.setProperty("--kp-caption-offset", `${offset}px`);
+      const offset = readAll || reducedMotion.matches ? "0px" : `calc((var(--kp-caption-text-height) - 24px) * ${-departing})`;
+      passage.style.setProperty("--kp-caption-offset", offset);
       if (visible && passage.hasAttribute("hidden")) passage.removeAttribute("hidden");
       else if (!visible && passage.getAttribute("hidden") !== "until-found") passage.setAttribute("hidden", "until-found");
     });

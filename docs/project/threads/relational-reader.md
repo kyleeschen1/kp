@@ -9,7 +9,12 @@ October 28: the fractional reader's latest approved-to-build, pending-review
 candidate uses [document-backed captions](../reviews/2026-10-28-fractional-caption-reader.md).
 The user accepted the narrow charcoal card and confirmed Cmd+F works. The latest
 candidate bottom-aligns prose, top-aligns the math workspace and replaces the
-rejected rail with a faint approaching caption during the result hold.
+rejected rail with a faint approaching caption during the result hold. The next
+revision restores the spec's Nocturne blue and moves outgoing text at the same
+faint opacity. Compiler-owned initial markup prevents the old article flash;
+persisted pagehide retains the runtime. The reported tab crash remains
+unexplained: bounded local stress found stable retained JS heap and idle layout,
+with substantial development startup and active-scroll work still measured.
 Native reveal, Read all, animations and semantic checkpoints remain. Review
 preview anticipation and closer alignment before generalization.
 

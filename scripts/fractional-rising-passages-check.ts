@@ -5,10 +5,43 @@ import { inspectPaint } from "./fractional-linear-theme-comparison.ts";
 
 /** One local caption candidate; preserve real document, clock and equation paint. */
 export async function checkFractionalRisingPassages(page: Page, baseUrl: string, outputRoot: string) {
+  // The first paint must already be the caption shell, even before hydration.
+  const startupContext = await page.context().browser()!.newContext();
+  try {
+    await startupContext.route('**/*', (route) => route.request().resourceType() === 'script' ? route.abort() : route.continue());
+    const startupPage = await startupContext.newPage();
+    await startupPage.goto(new URL('/reader/solve-fractional-linear/', baseUrl).toString(), { waitUntil: 'networkidle' });
+    assert.equal(await startupPage.locator('body').getAttribute('data-kp-caption-mode'), 'captions');
+    assert.equal(await startupPage.locator('body').getAttribute('data-kp-reader-hydrated'), null);
+    assert.ok(await startupPage.locator('.kp-rising-intro .kp-caption-copy').isVisible());
+    assert.ok(await startupPage.locator('.kp-animation-static .katex').first().isVisible());
+    assert.equal(await startupPage.locator('.kp-animation-static > [data-kp-static-state]:visible').count(), 1,
+      'Only the initial equation may paint before hydration');
+    const frame = await startupPage.locator('.kp-caption-frame').boundingBox();
+    assert.ok(frame && frame.width <= 440);
+    const staticState = await startupPage.locator('.kp-animation-static > [data-kp-static-state]:not([hidden])').evaluate((node) => ({
+      height: node.getBoundingClientRect().height,
+      border: getComputedStyle(node).borderTopWidth,
+      background: getComputedStyle(node).backgroundColor
+    }));
+    assert.deepEqual(staticState, { height: 96, border: '0px', background: 'rgba(0, 0, 0, 0)' },
+      'The initial equation must occupy the compact stage without painting an old nested card');
+    await startupPage.screenshot({ path: path.join(outputRoot, 'caption-before-hydration.png') });
+  } finally {
+    await startupContext.close();
+  }
   for (const size of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
     await page.setViewportSize(size);
     await page.goto(new URL("/reader/solve-fractional-linear/", baseUrl).toString(), { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.body.dataset["kpCaptionMode"] === "captions");
+    await page.waitForFunction(() => document.querySelector('.kp-caption-preview') !== null);
+    // A persisted pagehide must retain the live runtime for browser restoration.
+    await page.evaluate(() => {
+      window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
+      window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+    });
+    assert.equal(await page.locator('.kp-caption-frame').count(), 1);
+    assert.equal(await page.locator('.kp-caption-preview').count(), 1);
     await page.screenshot({ path: path.join(outputRoot, `caption-card-initial-${size.width}.png`) });
     const samples = [];
     for (const distance of [.01, .15, .35, .65, .8, .86, .94, 1.01, .94, .35, .01]) {
@@ -53,14 +86,14 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
         "Caption content must rest just above the mathematical region");
       if (sample.hidden === null) assert.ok(sample.top < sample.stageTop);
       assert.ok(sample.cardWidth <= 440 && sample.cardWidth <= size.width - 30);
-      assert.equal(sample.cardColor, "rgb(32, 34, 34)");
+      assert.equal(sample.cardColor, "rgb(27, 37, 53)");
       assert.ok(sample.overflow <= 1);
       const ink = (await inspectPaint(page)).glyphs.filter((glyph) => glyph.opacity > 0 && glyph.width > 0 && glyph.height > 0);
       const inkBottom = Math.max(...ink.map((glyph) => glyph.y + glyph.height));
       const inkTop = Math.min(...ink.map((glyph) => glyph.y));
       assert.ok(inkBottom <= sample.stageBottom + 1);
       assert.ok(inkTop >= sample.stageTop && inkTop - sample.stageTop < 64,
-        "Math must occupy the top of its region, close to the caption");
+        `Math must occupy the top of its region: ink=${inkTop}, stage=${sample.stageTop}, progress=${sample.progress}, width=${size.width}`);
       if (sample.previewTop < inkBottom && sample.previewBottom > inkTop) {
         assert.ok(Number(sample.nextOpacity) <= .035001,
           'The rising preview must remain extremely faint while crossing mathematical ink');
@@ -77,7 +110,8 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(await page.locator(".kp-caption-rule").count(), 0);
     assert.equal(await page.locator(".kp-caption-preview[inert][aria-hidden='true']").count(), 1);
     assert.equal(await page.locator(".kp-caption-preview [id]").count(), 0);
-    assert.ok(Number(samples[5]!.opacity) > 0 && Number(samples[5]!.opacity) < 1);
+    assert.ok(Math.abs(Number(samples[5]!.opacity) - .035) < .000001,
+      'The outgoing caption must travel with the same faintness as the incoming preview');
     assert.ok(Number(samples[6]!.nextOpacity) > 0 && Number(samples[6]!.nextOpacity) < 1);
     assert.deepEqual(samples[6], samples[8]);
     assert.deepEqual(samples[2], samples[9]);
@@ -192,7 +226,9 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
   try {
     const staticPage = await staticContext.newPage();
     await staticPage.goto(new URL("/reader/solve-fractional-linear/", baseUrl).toString());
-    assert.equal(await staticPage.locator("body").getAttribute("data-kp-reader-layout"), null);
+    assert.equal(await staticPage.locator("body").getAttribute("data-kp-reader-layout"), "rising-passages");
+    assert.ok(await staticPage.locator('.kp-rising-passage').evaluateAll((nodes) => nodes.every((node) =>
+      getComputedStyle(node).position === 'static' && getComputedStyle(node).contentVisibility === 'visible')));
     assert.ok(await staticPage.locator(".kp-animation-static .katex").first().isVisible());
   } finally {
     await staticContext.close();

@@ -516,7 +516,7 @@ const semanticLinkBindings = bindKpReaderSemanticLinks({
     renderCurrentSample();
   }
 });
-window.addEventListener("pagehide", dispose, { once: true });
+window.addEventListener("pagehide", onPageHide);
 reducedMotion.addEventListener("change", renderCurrentSample);
 printMedia.addEventListener("change", onPrintChange);
 motionSelect.addEventListener("change", onMotionPreferenceChange);
@@ -1662,7 +1662,16 @@ function setStyleIfChanged(
   if (style[key] !== value) style[key] = value;
 }
 
+function onPageHide(event: PageTransitionEvent): void {
+  // A bfcache document resumes its existing runtime; tearing down its layout
+  // would restore the obsolete article on Back without rerunning this module.
+  if (!event.persisted) dispose();
+}
+
 function dispose(): void {
+  window.removeEventListener("pagehide", onPageHide);
+  window.removeEventListener("scroll", onScroll);
+  window.removeEventListener("resize", onResize);
   risingPassages?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);

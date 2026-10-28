@@ -10,10 +10,11 @@ import {
   compileKpFractionalLinearEquationLessonModel
 } from "./fractional-linear-equation-lesson-model.ts";
 import { serializeKpReaderHydrationManifest } from "./hydration-manifest.ts";
+import { compileFractionalCaptionShell } from "./fractional-caption-shell.ts";
 
 export function compileKpFractionalLinearEquationLesson(markdown: string) {
   const model = compileKpFractionalLinearEquationLessonModel(markdown);
-  const html = compileKpEquationExemplarPage({
+  const html = compileFractionalCaptionShell(compileKpEquationExemplarPage({
     animation: model.animation,
     title: model.document.title,
     description: "See a fractional equation solve itself through searchable, reversible steps.",
@@ -31,7 +32,7 @@ export function compileKpFractionalLinearEquationLesson(markdown: string) {
     equationPresentation: requireEquationPresentation(model.hydration.blocks[0]),
     annotateState: (state) =>
       createKpFractionalLinearSelectorAnnotatedLatex(state)?.annotated
-  });
+  }), model.hydration.blocks[0]!.checkpoints.length);
 
   return createKpCompiledLessonArtifact({
     id: "compiled.lesson.solve-x.fractional-linear",

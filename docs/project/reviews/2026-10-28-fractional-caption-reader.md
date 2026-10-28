@@ -1,7 +1,7 @@
 # Document-backed captions for the fractional reader
 
-Status: user accepted the card and confirmed Cmd+F works; the latest bottom-entry
-preview, foreground prose and divider removal await visual review.
+Status: user accepted the card and confirmed Cmd+F works; the latest equal-faintness
+departure and restored Nocturne theme await visual review.
 
 The user prefers explanations that behave like closed captions. The latest
 revision addresses the missing anticipation: captions sit above the equation
@@ -29,9 +29,9 @@ mathematical programs or the broader reader architecture.
 
 ## Behavior
 
-The latest local candidate uses a centered card up to 440px wide. Its charcoal
-surface, `#202222`, comes from `src/experiments/matrix-theme.css`, with a darker
-neutral page (`#181a1a`) replacing the blue reader background. Mathematical ink
+The latest local candidate uses a centered card up to 440px wide. Per the user's
+correction it restores the spec's Nocturne palette: `#121826` page and `#1B2535`
+card, through the existing shared tutorial palette variables. Mathematical ink
 and typography remain unchanged. All caption text and card controls use the
 foreground color. The separator is removed; captions retain their bottom
 alignment just above the mathematical region. The native equation renderer uses a compact 96px workspace at the
@@ -43,8 +43,9 @@ for its unchanged mathematical program, then holds its result. The final 18%
 of available-height scrolling before the next instruction exchanges captions.
 During the preceding 8%, the next explanation appears at the bottom of the card
 and begins rising, at no more than 3.5% opacity, while the current caption stays
-fully legible. The outgoing text then rises up to 24px and fades as the incoming
-copy traverses the card. The preview remains extremely faint through the
+fully legible. The outgoing text dims to 3.5% during the first 8% of the exchange,
+then travels upward through its caption region at that same faintness as the
+incoming copy traverses the card. The preview remains extremely faint through the
 mathematical area and becomes readable only in the final 8% of its travel,
 near its settled caption position. The original caption remains clipped to
 its own region; the inert preview is clipped to the card interior.
@@ -74,7 +75,14 @@ and removed on disposal; original nodes retain their identity and bindings.
 **Read all** exposes every passage in flow, including for assistive-technology
 reading. Browsers without `beforematch` support default to that mode, preserving
 searchability rather than hiding unsupported content. Print exposes all prose;
-without JavaScript the original static document remains.
+without JavaScript a noscript stylesheet exposes all original text in normal flow.
+
+The compiler now emits the caption frame, intro and beat wrappers directly.
+Previously runtime imports completed before wrapping the old article, producing
+the reported startup flash. A local fail-closed adapter accepts only this
+compiler's flat beat structure; count/shape drift raises an error. Enhancement
+binds those existing nodes. The initial static equation uses the compact stage
+without its old nested card. This does not remove hydration or font-loading cost.
 
 References: [HTML native find and hidden-until-found contract](https://html.spec.whatwg.org/multipage/interaction.html#interaction-with-details-and-hidden=until-found),
 [hidden attribute behavior](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/hidden).
@@ -92,16 +100,22 @@ References: [HTML native find and hidden-until-found contract](https://html.spec
    suspends these updates during print, guards queued writes, and remeasures on
    return. The browser check enters and exits print and rejects page errors.
 
+3. A persisted `pagehide` must preserve the live runtime for browser restoration.
+   The old unconditional disposal unwrapped captions into an article, while a
+   bfcache return does not rerun module initialization. Disposal now occurs only
+   for nonpersisted navigation and also removes scroll/resize listeners.
+
 These are runtime lifecycle guards, not claims that types prove browser geometry
 or that every browser/search implementation behaves identically.
 
 ## Verification
 
 ```sh
-node --disable-warning=ExperimentalWarning --test tests/fractional-rising-scroll.test.ts
+node --disable-warning=ExperimentalWarning --test tests/fractional-rising-scroll.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts
 npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8000
 npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000
 npm run typecheck
+npm run build:bundle
 ```
 
 Pure geometry checks cover reading holds, motion intervals, result holds,
@@ -109,7 +123,7 @@ preview anticipation before departure, held math throughout caption exchanges, i
 invalid measurements. The scoped Chromium check covers 1280×900 and 390×844
 cards, foreground prose, absent divider, bottom-entry preview geometry, the
 3.5% opacity ceiling while crossing math, preserved caption alignment, math
-near the top of its region, the restored charcoal, exact reverse sampling
+near the top of its region, the restored Nocturne palette, exact reverse sampling
 during both halves of an exchange, held-position reload, menu navigation,
 native scrolling, keyboard scrolling, document mode, reduced motion, final
 completion, print return and static fallback. An unsupported-capability
@@ -120,9 +134,55 @@ The 41-sample equation smoke protects direct/forward/reverse paint and the
 previous duplicate-owner repairs. Full typecheck includes app, tools, tests,
 Svelte and domains. These checks passed for this candidate; screenshots were
 inspected at both viewport sizes. No cross-browser promotion is claimed.
-The previous smoke palette assertion was updated from Nocturne blue to the
-user-requested neutral page; all mathematical ink and paint-ownership assertions
-remain. This is an explicit presentation change, not a waived failure.
+The startup check blocks the runtime entry module and asserts that the caption
+frame, original intro and compact unbordered equation are already visible.
+Compiler tests reject incomplete/nested markup. A synthetic persisted
+pagehide/pageshow followed by the scroll checks guards against destructive
+teardown; this is not cross-browser certification of actual bfcache admission.
+The same scoped caption check passed against the production preview. The
+noscript fallback remains inline: a linked stylesheet was extracted by the
+bundler into unconditional CSS during development of this candidate, so the
+production build and no-JS check explicitly protect that boundary.
+Palette assertions match the requested Nocturne restoration; mathematical ink
+and paint-ownership assertions remain unchanged.
+
+## Tab-crash investigation and cost
+
+The user reported a crashed tab. No crash was reproduced, no browser crash log
+was available, and the cause remains unknown. The repeatable diagnostic is:
+
+```sh
+npm run visual:fractional-linear-equation -- --performance --base-url=http://127.0.0.1:8000
+```
+
+Measured in local Vite development, headless Chromium, with four complete
+forward/back scroll cycles and forced GC between samples:
+
+| Observation | Before | Candidate |
+| --- | ---: | ---: |
+| Ready including network-idle wait | 1,411 ms | 1,100 ms |
+| Resource entries | 250 | 250 |
+| Decoded resource bytes | 5,107,219 | 5,117,241 |
+| Initial retained JS heap | 9.30 MB | 9.30 MB |
+| Heap after four cycles | 11.50 MB | 11.50 MB |
+| Nodes after each warmed cycle | 2,350 | 2,352 |
+| Layout count after four cycles | 7,548 | 7,547 |
+| 95th-percentile frame interval | about 33 ms | about 33 ms |
+
+Candidate cycle heaps were 11.33, 11.57, 11.40 and 11.50 MB; node count stayed
+constant after warm-up. During the final three-second idle window heap and
+layout count remained unchanged, and measured script time increased by about
+one microsecond. These observations show no accumulating retained-heap pattern
+in this bounded run. They exclude GPU/native memory and are not a production
+payload measurement or evidence that the user's crash is fixed. Ready-time
+differences are single-run observations, not a demonstrated speed improvement.
+
+Active scrolling remains costly: 49 canonical session builds and roughly
+1,835 layouts per warmed full forward/back cycle. An experimental opt-in to
+the existing pure-plan cache broke reverse-scroll positioning. It was reverted;
+the existing cache eligibility remains unchanged. Any later optimization must
+preserve the scoped reverse-geometry checks. The immediate startup repair is
+structural first-paint correctness, not a claim of reduced animation cost.
 
 Search evidence is deliberately split: Chromium `window.find()` locates an
 inactive explanation, but does not invoke its native Find toolbar's reveal
@@ -138,8 +198,8 @@ regression above.
 Open `http://localhost:8000/reader/solve-fractional-linear/` and choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the
 multiplication, then keep scrolling: the equation holds and the next caption
-first appears very faintly near the bottom of the card. The old caption rises
-away while the new one travels upward, brightening only as it reaches the
+first appears very faintly near the bottom of the card. The old caption dims to
+that same faintness and rises away while the new one travels upward, brightening only as it reaches the
 caption region. The next
 operation waits until that new explanation settles. Reverse through the
 exchange and drag the scrollbar to check direct navigation.

@@ -33,7 +33,11 @@ try {
     reducedMotion: "no-preference"
   });
   page.on("pageerror", (error) => pageErrors.push(error.stack ?? error.message));
-  if (process.argv.includes("--rising")) {
+  if (process.argv.includes("--performance")) {
+    const { checkFractionalReaderPerformance } = await import("./fractional-reader-performance-check.ts");
+    await checkFractionalReaderPerformance(page, harness.baseUrl, outputRoot);
+    if (pageErrors.length > 0) throw new Error(pageErrors.join("\n"));
+  } else if (process.argv.includes("--rising")) {
     const { checkFractionalRisingPassages } = await import("./fractional-rising-passages-check.ts");
     await checkFractionalRisingPassages(page, harness.baseUrl, outputRoot);
     if (pageErrors.length > 0) throw new Error(pageErrors.join("\n"));
@@ -178,9 +182,9 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
     if (stage.dataset["kpReaderEquationDepthRecipe"] !== "flat-v1") {
       failures.push("the fractional exemplar re-enabled depth");
     }
-    if (getComputedStyle(document.body).backgroundColor !== "rgb(24, 26, 26)" ||
+    if (getComputedStyle(document.body).backgroundColor !== "rgb(18, 24, 38)" ||
         getComputedStyle(document.body).color !== "rgb(242, 240, 232)") {
-      failures.push("the tutorial does not use the requested charcoal surface with preserved mathematical ink");
+      failures.push("the tutorial does not use the specified Nocturne palette");
     }
     for (const fragment of stage.querySelectorAll<HTMLElement>(
       "[data-kp-reader-equation-semantic-depth]"

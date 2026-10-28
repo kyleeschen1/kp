@@ -26,10 +26,13 @@ nor its evidence. The ledger remains retrievable at
 ## Executive Direction
 
 October 28 latest visual candidate: [document-backed captions](reviews/2026-10-28-fractional-caption-reader.md)
-now sit bottom-aligned above the equation on a narrow charcoal card. The user
+now sit bottom-aligned above the equation on a narrow Nocturne blue card. The user
 accepted the card and confirmed Cmd+F works, but rejected the rail. A faint next
 caption now approaches while the equation holds; native reveal and Read all
-remain. Review preview anticipation and closer prose/math alignment before promotion; mathematics
+remain. Outgoing text now travels at the same faint opacity; the compiler emits
+the caption shell directly to prevent the old-layout startup flash. A bounded
+Chromium stress run found stable retained JS heap, but did not reproduce or
+explain the reported tab crash. Review caption exchange before promotion; mathematics
 remains unchanged and the historical derivation trail is still pending.
 
 October 27 prototype planning: the user selects multi-step algebra to test the

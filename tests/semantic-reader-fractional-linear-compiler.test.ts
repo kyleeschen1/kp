@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { compileFractionalCaptionShell } from "../src/reader/compiler/fractional-caption-shell.ts";
 
 import {
   compileKpFractionalLinearEquationLesson
@@ -11,6 +12,14 @@ const markdown = readFileSync(
   "utf8"
 );
 
+test("caption shell rejects partial or nested compiler output", () => {
+  const flat = '<html><head></head><body><main><article class="kp-lesson"><h1>Intro</h1><section class="story"><li data-kp-beat="one"><div class="kp-beat-copy">Text</div></li></section></article></main></body></html>';
+  assert.doesNotThrow(() => compileFractionalCaptionShell(flat, 1));
+  assert.throws(() => compileFractionalCaptionShell(flat, 2), /complete flat beat sequence/);
+  assert.throws(() => compileFractionalCaptionShell(flat.replace('Text', '<div data-kp-attention-phase="nested">Text</div>'), 1), /complete flat beat sequence/);
+  assert.throws(() => compileFractionalCaptionShell('<html></html>', 1), /compiled article and story/);
+});
+
 test("fractional lesson compiles into the shared searchable equation card", () => {
   const artifact = compileKpFractionalLinearEquationLesson(markdown);
 
@@ -19,6 +28,11 @@ test("fractional lesson compiles into the shared searchable equation card", () =
   assert.match(artifact.html, /^<!doctype html>/);
   assert.match(artifact.html, /data-kp-reader-lesson-variant="fractional-linear"/);
   assert.match(artifact.html, /data-kp-reader-palette="nocturne"/);
+  assert.match(artifact.html, /data-kp-reader-layout="rising-passages"/);
+  assert.match(artifact.html, /class="kp-caption-frame"/);
+  assert.match(artifact.html, /<noscript><style data-kp-static-document>/);
+  assert.equal((artifact.html.match(/data-kp-rising-beat=/g) ?? []).length, 7);
+  assert.equal((artifact.html.match(/class="kp-caption-copy"/g) ?? []).length, 8);
   assert.match(artifact.html, /data-kp-reader-equation-profile-default="standard"/);
   assert.match(artifact.html, /data-kp-reader-equation-profiles="explain,standard,fluent"/);
   assert.match(artifact.html, /data-kp-reader-exemplar-template/);

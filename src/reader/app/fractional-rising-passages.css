@@ -1,18 +1,29 @@
 /* Exemplar-only stacked projection. Static/print documents retain normal flow. */
 @media screen {
   body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] {
-    /* Restore the matrix card's neutral charcoal instead of the blue reader
-       palette. This is local visual discovery, not a shared theme change. */
-    --kp-paper: #181a1a;
-    --kp-surface: #202222;
-    --kp-line: #4c5050;
+    --kp-rising-header-height: var(--kp-reader-masthead-height);
+    --kp-paper: var(--kp-tutorial-background);
+    --kp-surface: var(--kp-tutorial-card);
+    --kp-line: var(--kp-tutorial-border);
     --kp-muted: var(--kp-ink);
     --kp-caption-width: min(440px, calc(100vw - 32px));
     --kp-caption-card-top: calc(var(--kp-rising-header-height) + clamp(20px, 6vh, 56px));
     --kp-caption-card-height: min(540px, calc(100svh - var(--kp-rising-header-height) - 136px));
     --kp-caption-text-height: clamp(180px, 25svh, 220px);
   }
-  html:has(> body[data-kp-reader-layout="rising-passages"]) { background: #181a1a; }
+  html:has(> body[data-kp-reader-layout="rising-passages"]) { background: #121826; }
+  body[data-kp-reader-layout="rising-passages"] .kp-reader-layout > .kp-lesson-toc { display: none; }
+  body[data-kp-reader-layout="rising-passages"]:not([data-kp-reader-hydrated]) .kp-animation-static > [data-kp-static-state][hidden] { display: none; }
+  body[data-kp-reader-layout="rising-passages"]:not([data-kp-reader-hydrated]) .kp-animation-static > [data-kp-static-state]:not([hidden]) {
+    display: grid;
+    place-items: center;
+    height: 96px;
+    min-height: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    font-size: var(--kp-equation-type-size);
+  }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-layout {
     display: block;
     width: min(100% - 40px, 46rem);
