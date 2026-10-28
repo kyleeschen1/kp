@@ -1,7 +1,7 @@
 # Document-backed captions for the fractional reader
 
-Status: user accepted the card and confirmed Cmd+F works; revised alignment and
-approaching-text preview await visual review.
+Status: user accepted the card and confirmed Cmd+F works; the latest bottom-entry
+preview, foreground prose and divider removal await visual review.
 
 The user prefers explanations that behave like closed captions. The latest
 revision addresses the missing anticipation: captions sit above the equation
@@ -32,19 +32,22 @@ mathematical programs or the broader reader architecture.
 The latest local candidate uses a centered card up to 440px wide. Its charcoal
 surface, `#202222`, comes from `src/experiments/matrix-theme.css`, with a darker
 neutral page (`#181a1a`) replacing the blue reader background. Mathematical ink
-and typography remain unchanged. The caption is bottom-aligned six pixels above
-a grey rule. The native equation renderer uses a compact 96px workspace at the
+and typography remain unchanged. All caption text and card controls use the
+foreground color. The separator is removed; captions retain their bottom
+alignment just above the mathematical region. The native equation renderer uses a compact 96px workspace at the
 top of its region, retaining its existing fit and motion clearance. The rail
 and its labels are removed. The final caption remains with the solved equation.
 
 Each operation gets 14% of available-height scroll distance for reading, 32%
 for its unchanged mathematical program, then holds its result. The final 18%
 of available-height scrolling before the next instruction exchanges captions.
-During the preceding 8%, the next heading peeks up to 18px into the text region,
-at up to 12% opacity, while the current caption stays fully legible. The outgoing
-text then rises up to 24px and fades as the incoming copy rises the remainder
-of its own height and becomes solid. The fixed text region clips both copies
-above the divider, preventing preview text from entering the mathematics.
+During the preceding 8%, the next explanation appears at the bottom of the card
+and begins rising, at no more than 3.5% opacity, while the current caption stays
+fully legible. The outgoing text then rises up to 24px and fades as the incoming
+copy traverses the card. The preview remains extremely faint through the
+mathematical area and becomes readable only in the final 8% of its travel,
+near its settled caption position. The original caption remains clipped to
+its own region; the inert preview is clipped to the card interior.
 Both captions are never at full reading contrast together. The equation holds
 throughout the preview and exchange; its
 next operation starts only after the new caption has settled and received its
@@ -104,7 +107,9 @@ npm run typecheck
 Pure geometry checks cover reading holds, motion intervals, result holds,
 preview anticipation before departure, held math throughout caption exchanges, inverse seeks and
 invalid measurements. The scoped Chromium check covers 1280×900 and 390×844
-cards, six-pixel caption alignment, math near the top of its region, the restored charcoal, exact reverse sampling
+cards, foreground prose, absent divider, bottom-entry preview geometry, the
+3.5% opacity ceiling while crossing math, preserved caption alignment, math
+near the top of its region, the restored charcoal, exact reverse sampling
 during both halves of an exchange, held-position reload, menu navigation,
 native scrolling, keyboard scrolling, document mode, reduced motion, final
 completion, print return and static fallback. An unsupported-capability
@@ -133,8 +138,9 @@ regression above.
 Open `http://localhost:8000/reader/solve-fractional-linear/` and choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the
 multiplication, then keep scrolling: the equation holds and the next caption
-first peeks faintly above the divider. The old caption rises away as the new
-one materializes, entirely inside the text region. The next
+first appears very faintly near the bottom of the card. The old caption rises
+away while the new one travels upward, brightening only as it reaches the
+caption region. The next
 operation waits until that new explanation settles. Reverse through the
 exchange and drag the scrollbar to check direct navigation.
 

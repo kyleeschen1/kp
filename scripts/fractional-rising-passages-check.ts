@@ -26,14 +26,16 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
         const passage = document.querySelector<HTMLElement>('[data-kp-rising-beat="beat.multiply"]')!;
         const stage = document.querySelector<HTMLElement>('[data-kp-reader-equation-stage]')!;
         const preview = document.querySelector<HTMLElement>('.kp-caption-preview')!;
-        const rule = document.querySelector('.kp-caption-rule')!.getBoundingClientRect();
         const card = document.querySelector<HTMLElement>('.kp-caption-frame')!;
         return {
           hidden: passage.getAttribute("hidden"), opacity: getComputedStyle(passage).opacity,
           top: passage.getBoundingClientRect().top,
           nextOpacity: getComputedStyle(preview).opacity,
           copyBottom: passage.firstElementChild!.getBoundingClientRect().bottom,
-          ruleTop: rule.top,
+          textColors: [...passage.querySelectorAll('h2, p')].map((node) => getComputedStyle(node).color),
+          foreground: getComputedStyle(document.body).color,
+          previewTop: preview.firstElementChild?.getBoundingClientRect().top ?? 0,
+          previewBottom: preview.firstElementChild?.getBoundingClientRect().bottom ?? 0,
           active: document.querySelectorAll('[data-kp-caption-active="true"]').length,
           progress: Number(document.body.dataset["kpReaderProgress"]),
           cardWidth: card.getBoundingClientRect().width,
@@ -46,8 +48,9 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       if (distance < .65) assert.equal(sample.opacity, "1", "Reading and mathematical action keep full-opacity captions");
       assert.ok(sample.active <= 2, "Only current text and its faint preview can paint");
       assert.ok(!(Number(sample.opacity) > .5 && Number(sample.nextOpacity) > .5), "Two captions must not compete at full reading contrast");
-      if (distance < .65) assert.ok(sample.ruleTop - sample.copyBottom >= 5 && sample.ruleTop - sample.copyBottom <= 8,
-        "Caption content must rest just above the divider");
+      assert.ok(sample.textColors.every((color) => color === sample.foreground));
+      if (distance < .65) assert.ok(sample.stageTop - sample.copyBottom >= 11 && sample.stageTop - sample.copyBottom <= 14,
+        "Caption content must rest just above the mathematical region");
       if (sample.hidden === null) assert.ok(sample.top < sample.stageTop);
       assert.ok(sample.cardWidth <= 440 && sample.cardWidth <= size.width - 30);
       assert.equal(sample.cardColor, "rgb(32, 34, 34)");
@@ -56,8 +59,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       const inkBottom = Math.max(...ink.map((glyph) => glyph.y + glyph.height));
       const inkTop = Math.min(...ink.map((glyph) => glyph.y));
       assert.ok(inkBottom <= sample.stageBottom + 1);
-      assert.ok(inkTop >= sample.ruleTop && inkTop - sample.ruleTop < 70,
+      assert.ok(inkTop >= sample.stageTop && inkTop - sample.stageTop < 64,
         "Math must occupy the top of its region, close to the caption");
+      if (sample.previewTop < inkBottom && sample.previewBottom > inkTop) {
+        assert.ok(Number(sample.nextOpacity) <= .035001,
+          'The rising preview must remain extremely faint while crossing mathematical ink');
+      }
       samples.push(sample);
       await page.screenshot({ path: path.join(outputRoot, `captions-${size.width}-${samples.length}.png`) });
     }
@@ -67,6 +74,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(samples[3]!.progress, 667);
     assert.ok(samples.slice(3, 8).every((sample) => sample.progress === 667), "Equation holds throughout caption exchange");
     assert.equal(await page.locator(".kp-caption-rail").count(), 0);
+    assert.equal(await page.locator(".kp-caption-rule").count(), 0);
     assert.equal(await page.locator(".kp-caption-preview[inert][aria-hidden='true']").count(), 1);
     assert.equal(await page.locator(".kp-caption-preview [id]").count(), 0);
     assert.ok(Number(samples[5]!.opacity) > 0 && Number(samples[5]!.opacity) < 1);
@@ -87,9 +95,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     });
     await settle(page);
     const hint = await page.locator('.kp-caption-preview').evaluate((node) => ({
-      opacity: Number(getComputedStyle(node).opacity), hidden: node.hasAttribute('hidden')
+      opacity: Number(getComputedStyle(node).opacity), hidden: node.hasAttribute('hidden'),
+      bottomGap: document.querySelector('.kp-caption-frame')!.getBoundingClientRect().bottom - node.firstElementChild!.getBoundingClientRect().bottom
     }));
-    assert.ok(!hint.hidden && hint.opacity > 0 && hint.opacity <= .12);
+    assert.ok(!hint.hidden && hint.opacity > 0 && hint.opacity <= .035);
+    assert.ok(hint.bottomGap >= 17 && hint.bottomGap < 60, 'The hint must enter from the bottom of the card');
+    await page.screenshot({ path: path.join(outputRoot, `caption-bottom-preview-${size.width}.png`) });
     assert.equal(await page.locator('[data-kp-rising-beat="beat.multiply"]').evaluate((node) => getComputedStyle(node).opacity), '1',
       'The next caption must approach before the current one starts leaving');
     const upcomingId = await page.evaluate(() => {

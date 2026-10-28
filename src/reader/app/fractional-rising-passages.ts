@@ -66,10 +66,6 @@ export function mountFractionalRisingPassages(input: {
   const slots = [introSlot, ...input.beats];
   const frame = document.createElement("div");
   frame.className = "kp-caption-frame";
-  const rule = document.createElement("div");
-  rule.className = "kp-caption-rule";
-  rule.setAttribute("aria-hidden", "true");
-  frame.append(rule);
   document.body.append(frame);
   // A clipped preview must not become a second searchable match, or prevent
   // native find from revealing the full, original instruction via beforematch.
@@ -86,8 +82,11 @@ export function mountFractionalRisingPassages(input: {
     const sample = fractionalCaptionFrame(positions, window.scrollY + anchor(), window.innerHeight - headerHeight);
     const exchange = sample?.exchange ?? 0;
     const departing = ease(Math.min(1, exchange / .6));
-    const arriving = ease(Math.max(0, (exchange - .25) / .75));
     const approaching = ease(sample?.preview ?? 0);
+    const travel = .12 * approaching + .88 * ease(exchange);
+    // Stay barely visible while crossing the mathematical area; become
+    // readable only near the caption's final position.
+    const arriving = ease(Math.max(0, (travel - .92) / .08));
     frame.hidden = readAll;
     if (previewIndex !== sample?.nextIndex) {
       previewIndex = sample?.nextIndex;
@@ -100,8 +99,8 @@ export function mountFractionalRisingPassages(input: {
     const previewVisible = !readAll && !reducedMotion.matches && approaching > 0 && previewIndex !== undefined;
     preview.hidden = !previewVisible;
     preview.dataset["kpCaptionActive"] = String(previewVisible);
-    preview.style.setProperty("--kp-caption-opacity", String(.12 * approaching + .88 * arriving));
-    preview.style.setProperty("--kp-caption-offset", `calc(${100 * (1 - arriving)}% - ${18 * approaching * (1 - arriving)}px)`);
+    preview.style.setProperty("--kp-caption-opacity", String(.035 * approaching + .965 * arriving));
+    preview.style.setProperty("--kp-caption-offset", `calc((var(--kp-caption-card-height) - var(--kp-caption-text-height) - 44px) * ${-travel})`);
     passages.forEach((passage, index) => {
       let opacity = index === sample?.index ? 1 - departing : 0;
       if (reducedMotion.matches) opacity = index === (exchange < .5 ? sample?.index : sample?.nextIndex) ? 1 : 0;

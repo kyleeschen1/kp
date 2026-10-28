@@ -6,7 +6,7 @@
     --kp-paper: #181a1a;
     --kp-surface: #202222;
     --kp-line: #4c5050;
-    --kp-muted: #aeb1b1;
+    --kp-muted: var(--kp-ink);
     --kp-caption-width: min(440px, calc(100vw - 32px));
     --kp-caption-card-top: calc(var(--kp-rising-header-height) + clamp(20px, 6vh, 56px));
     --kp-caption-card-height: min(540px, calc(100svh - var(--kp-rising-header-height) - 136px));
@@ -120,6 +120,11 @@
     overflow: auto;
     transform: translateY(var(--kp-caption-offset, 0px));
   }
+  body[data-kp-caption-mode="captions"] .kp-caption-preview[data-kp-caption-active="true"] {
+    /* Preview begins at the card's bottom and travels through its interior.
+       The original searchable caption keeps its smaller, stable region. */
+    height: calc(var(--kp-caption-card-height) - 68px);
+  }
   .kp-caption-frame {
     position: fixed;
     top: var(--kp-caption-card-top);
@@ -132,14 +137,6 @@
     background: var(--kp-surface);
     box-shadow: 0 12px 40px rgb(0 0 0 / 14%);
     pointer-events: none;
-  }
-  .kp-caption-rule {
-    position: absolute;
-    top: calc(var(--kp-caption-text-height) + 32px);
-    left: 24px;
-    right: 24px;
-    height: 1px;
-    background: var(--kp-line);
   }
   .kp-caption-reading-mode {
     font: inherit;
@@ -157,6 +154,7 @@
     background: var(--kp-surface);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-passage :is(h1, h2, p) {
+    color: var(--kp-ink);
     margin: 0 0 .5rem;
     font-family: inherit;
     font-size: 1.0625rem;
@@ -164,7 +162,7 @@
     line-height: 1.6;
   }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-caption-copy, .kp-beat-copy) > :last-child { margin-bottom: 0; }
-  body[data-kp-reader-layout="rising-passages"] .kp-rising-intro p { color: var(--kp-muted); }
+  body[data-kp-reader-layout="rising-passages"] .kp-rising-passage :is(a, button) { color: var(--kp-ink); }
   .kp-rising-navigation { position: relative; font-size: .78rem; }
   .kp-rising-navigation summary { cursor: pointer; }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-navigation .kp-lesson-toc {
