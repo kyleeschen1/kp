@@ -61,10 +61,22 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   const centers = await inversePaint.evaluateAll((owners) => owners.map(
     (owner) => {
       const rect = owner.getBoundingClientRect();
-      return rect.top + rect.height / 2;
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
     }
   ));
-  expect(Math.max(...centers) - Math.min(...centers)).toBeGreaterThan(8);
+  // The verified route may go above/below or around the sides. An absolute
+  // vertical spread at one sample incorrectly mandates one aesthetic path.
+  await page.locator('[data-kp-reader-attention-scrubber]').evaluate(node => {
+    if (!(node instanceof HTMLInputElement)) throw new Error('Expected semantic scrubber');
+    node.value = '450'; node.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await expect(page.locator('body')).toHaveAttribute('data-kp-reader-progress', '450');
+  const earlier = await inversePaint.evaluateAll(owners => owners.map(owner => {
+    const rect = owner.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  }));
+  expect(earlier).toHaveLength(centers.length);
+  expect(earlier.every((point, index) => Math.hypot(point.x - centers[index]!.x, point.y - centers[index]!.y) > 1)).toBe(true);
 
   await page.goto(
     "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=620"

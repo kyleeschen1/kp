@@ -26,6 +26,7 @@ test("fractional lesson compiles into the shared searchable equation card", () =
   assert.equal(artifact.kind, "compiled-lesson");
   assert.equal(artifact.document.id, "lesson.solve-x.fractional-linear");
   assert.match(artifact.html, /^<!doctype html>/);
+  assert.match(artifact.html, /href="\/src\/reader\/app\/fractional-exemplar\.css"/);
   assert.match(artifact.html, /data-kp-reader-lesson-variant="fractional-linear"/);
   assert.match(artifact.html, /data-kp-reader-palette="nocturne"/);
   assert.match(artifact.html, /data-kp-reader-layout="rising-passages"/);
@@ -73,6 +74,8 @@ test("shared page extraction preserves the canonical solve-x compiler", async ()
   );
   const artifact = compileKpXPlusThreeLesson(solveX);
   assert.match(artifact.html, /data-kp-reader-lesson-variant="streamlined"/);
+  assert.match(artifact.html, /href="\/src\/reader\/app\/exemplar\.css"/);
+  assert.doesNotMatch(artifact.html, /fractional-exemplar\.css/);
   assert.doesNotMatch(artifact.html, /data-kp-reader-palette=/);
   assert.match(artifact.html, /anchor\.equation\.linear-solve\.initial\.lhs\.x/);
 });

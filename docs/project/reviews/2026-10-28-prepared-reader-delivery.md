@@ -102,3 +102,45 @@ timeout, foreground activity, stale geometry and cancellation (8 passed).
 The 41-point cold/warm smoke, full types, architecture and production build pass.
 The direct-jump assertion now separates the one destination build from explicitly
 counted hidden-neighbor builds; it still forbids replay of skipped states.
+
+## Reliability, loading and explicit budget amendment
+
+The real-page pressure run covers 96 operation-interior revisits after warmup,
+bounded DOM, unchanged realized glyph identity/geometry, whole-pool resize/font
+retirement and pagehide disposal. The performance diagnostic separately proves
+no continuing layout or geometry reads after settling and no intermediate-state
+replay on TOC/URL jumps. This does not reproduce or explain the earlier tab crash;
+forced-GC JavaScript heap excludes browser-native and GPU allocations.
+
+Two stale baseline browser expectations were repaired without changing visuals:
+division navigation now resolves the Catalogue's registered canonical host,
+rather than a removed home-page review shortcut; cancellation checks actual
+motion through the verified cohort rather than requiring eight vertical pixels
+at one sample. The shared route planner explicitly supports above/below and
+left/right routes. The updated three-test navigation/motion/lifecycle canary passes.
+
+**Still open:** `equation-canonical-cross-surface-parity.browser.spec.ts` expects
+equal raw font sizes across editor and reader. Actual settled native glyphs are
+19.2px and 23.232px (ratio 1.21), unchanged from the independently reproduced
+baseline. That assertion remains intact and failing. Choosing the cross-host
+type policy would change presentation outside this preservation task; it is not
+hidden by a relaxed tolerance. All 17 shared reader conformance tests pass.
+
+The route-budget gate exposed older publication/style growth. Attribution found
+the fractional document-flow CSS in every shared reader closure. It now loads
+only through the fractional stylesheet; compiler regressions protect both that
+route and the ordinary solve-x route, and desktop/phone document behavior passes.
+Distribution-area entry closure drops from 16,953 to 15,597 gzip bytes; quadratic
+branching drops from 16,600 to 15,230 and needs no baseline amendment. Ordinary
+equation-reader entry closures save 1,377 gzip bytes. No content or consumer was
+removed to meet a budget.
+
+Under the standing engineering-budget authority, two explicit baselines change:
+fractional published HTML 64,003 raw / 5,836 gzip → 69,395 / 6,603, accounting for
+the already accepted real document prose and static theater shell; and
+distribution-area entry closure 14,823 → 15,597 gzip after removing the unrelated
+CSS. Its residual 32-byte breach of the old 15,565 ceiling is not addressed by
+minifying source or deleting behavior. The normal 5% headroom remains; all other
+baseline values and forbidden-asset checks remain unchanged. These are policy
+amendments, not optimization claims. Complete observed reader assets are also
+measured below because the static entry-closure gate alone excludes lazy loads.

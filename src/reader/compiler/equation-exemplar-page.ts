@@ -48,7 +48,8 @@ export function compileKpEquationExemplarPage(
   return compileKpReaderPageShell({
     title: input.title,
     description: input.description,
-    stylesheetHref: "/src/reader/app/exemplar.css",
+    stylesheetHref: input.lessonVariant === 'fractional-linear'
+      ? '/src/reader/app/fractional-exemplar.css' : '/src/reader/app/exemplar.css',
     bodyAttributes: [
       ...(input.palette === undefined ? [] : [{ name: "data-kp-reader-palette", value: input.palette }]),
       ...(input.equationSource === undefined ? [] : [{ name: "data-kp-reader-equation-source", value: JSON.stringify(input.equationSource) }]),

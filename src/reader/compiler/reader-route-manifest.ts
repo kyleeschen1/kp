@@ -322,7 +322,9 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Simplify the difference",
       progressPermille: 500
     }),
-    budget: routeBudget(64_003, 5_836, sharedEquationRuntimeGzipBaseline)
+    // Accepted real-document prose and static theater shell; the October 28
+    // performance review accounts for this explicit publication cost amendment.
+    budget: routeBudget(69_395, 6_603, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/divide-both-sides/",
@@ -561,7 +563,9 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         )
       )
     },
-    budget: routeBudget(18_729, 2_868, 14_823)
+    // October 28 attribution: local fractional CSS removed from this route;
+    // remaining shared presentation costs retain the ordinary 5% headroom.
+    budget: routeBudget(18_729, 2_868, 15_597)
   }),
   defineKpReaderRoute({
     route: "/reader/quadratic-branching/",

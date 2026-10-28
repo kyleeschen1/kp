@@ -1,14 +1,19 @@
 import { expect, test } from "@playwright/test";
+import { createKpAnimationLibraryDisplayCatalog } from '../src/editor/animation-library-display-catalog.ts';
 
 const route = "/reader/divide-both-sides/";
 
-test("semantic editor opens the divide-both-sides exemplar", async ({ page }) => {
+test("registered canonical division host hydrates its semantic reader", async ({ page }) => {
   const errors: Error[] = [];
   page.on("pageerror", (error) => errors.push(error));
-  await page.goto("/", { waitUntil: "networkidle" });
-  const link = page.getByRole("link", { name: "Review division animation" });
-  await expect(link).toHaveAttribute("href", route);
-  await link.click();
+  // The home page is now the Catalogue; the removed review shortcut is not
+  // canonical navigation. Resolve the published host registration instead.
+  const entry = createKpAnimationLibraryDisplayCatalog().find(entry =>
+    entry.animationId === 'animation.divide-both-sides.solve-3x-equals-12');
+  const host = entry?.representations.find(representation => representation.id === entry.primaryRepresentationId);
+  expect(host?.role).toBe('canonical-host');
+  expect(host?.href).toBe(route);
+  await page.goto(host!.href, { waitUntil: 'networkidle' });
 
   await expect(page).toHaveURL(/\/reader\/divide-both-sides\//);
   await expect(page.getByRole("heading", { name: "Divide both sides", exact: true })).toBeVisible();

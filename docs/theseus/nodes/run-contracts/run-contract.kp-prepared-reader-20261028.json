@@ -45,6 +45,12 @@
       "status": "passed",
       "scope": "Forced idle ownership, twelve reverse cycles, resize/font/disposal; full types; 41 cold/warm smoke; queue eight units; architecture and production build.",
       "checkedAt": "2026-10-28T22:01:27.068Z"
+    },
+    {
+      "command": "npm run test:browser:reader-conformance; npm run check:reader-budgets; npm run test:browser:native-katex-compositor-conformance:release",
+      "status": "passed",
+      "scope": "17 reader cases, all 12 route budgets, six supported-browser compositor/lifecycle cases. Navigation and cancellation canaries corrected. Existing cross-host font parity assertion remains failing and documented.",
+      "checkedAt": "2026-10-28T22:05:57.574Z"
     }
   ],
   "allowedWork": [
@@ -83,7 +89,8 @@
     {
       "id": "pressure",
       "title": "Reliability-and-loading",
-      "status": "planned"
+      "summary": "Repeated prepared paint, direct jumps, whole-layout invalidation, disposal and bounded resources checked. Local CSS leakage repaired; explicit publication cost amendments recorded. Existing typography parity issue remains outside unchanged-visual scope.",
+      "status": "complete"
     },
     {
       "id": "integration",
