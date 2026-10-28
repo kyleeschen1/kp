@@ -88,3 +88,22 @@ budget. The corrected test passes with and without the request guard: four
 builds remain four over twelve forward/reverse cycles; resize/font changes
 retire all retained layers, and disposal removes them. All 140 one-pixel
 continuity samples still change position and reverse exactly.
+
+## Integration
+
+Full typecheck, architecture, 25 runtime-hardening tests, 11 surface-preservation
+tests, 17 Chromium reader-conformance checks, the 41-sample fractional smoke,
+12 font/preparation checks and 18 computed-style/color checks across three
+engines pass. Production build, all twelve route closures/budgets and development
+review exclusion pass without budget amendments. The earlier cross-host font-size
+parity issue remains recorded in the previous delivery; this pass does not claim
+that separate assertion is repaired.
+
+The final unprofiled production operation probe uses the same motion-cost command
+with `--label=production --base-url=http://127.0.0.1:8011` and no `--profile`.
+The twelve moving sweeps at normal/4× CPU show no callback interval over 33.4 ms;
+p95 remains around 17–18 ms. These intervals deliberately exclude entry stalls:
+first-use denominator preparation still costs about 225 ms of scripting under
+4× slowdown. Real device input, high-refresh displays and presented-frame pacing
+remain unproven. Lower measured work and removal of rounded positions do not
+justify a promise of universally smooth playback.

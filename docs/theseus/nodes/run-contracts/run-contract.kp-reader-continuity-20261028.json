@@ -33,6 +33,12 @@
       "status": "passed",
       "scope": "12 checks across Chromium, Firefox and WebKit; two-reader invalidation probe and runtime hardening 25 pass. First WebKit harness constructor assumption repaired without changing runtime fallback.",
       "checkedAt": "2026-10-28T22:41:11.220Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full types, architecture, production build and closure/budgets, 17 reader conformance, 18 three-engine color/clone checks, 41-sample smoke, 25 hardening and 11 preservation tests pass. Production moving sweeps measured separately from cold entry.",
+      "checkedAt": "2026-10-28T22:55:56.132Z"
     }
   ],
   "allowedWork": [
@@ -65,13 +71,14 @@
     {
       "id": "integration",
       "title": "Performance-integration",
-      "summary": "Integrate types, architecture, reader preservation, production closure and complete-consumer budgets before local prose candidate.",
-      "status": "in-progress"
+      "summary": "Integrated objective preservation and production evidence; cold-entry and real-display limitations recorded.",
+      "status": "complete"
     },
     {
       "id": "prose",
       "title": "Quiet-prose-exemplar",
-      "status": "planned"
+      "summary": "Local line spacing and near-presentation annotation presence, preserving real prose, native search, keyboard, Read all, static and print.",
+      "status": "in-progress"
     }
   ]
 }
