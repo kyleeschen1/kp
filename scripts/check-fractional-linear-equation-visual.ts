@@ -5,6 +5,8 @@ import type { Page } from "playwright";
 
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 import { assertFractionalEvaluationPaint, inspectPaint } from "./fractional-linear-theme-comparison.ts";
+import { createFractionalRisingScroll } from "../src/reader/app/fractional-rising-scroll.ts";
+import { sampleKpReaderScrollPosition } from "../src/reader/runtime/continuous-scroll-clock.ts";
 
 const outputRoot = path.resolve(
   process.env["KP_FRACTIONAL_LINEAR_VISUAL_OUTPUT"]
@@ -378,7 +380,7 @@ async function settle(page: Page): Promise<void> {
 }
 
 async function scrollToSemanticProgress(page: Page, progress: number): Promise<void> {
-  await page.evaluate((requested) => {
+  const measured = await page.evaluate(() => {
     const stops = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")]
       .map((beat) => {
         const rects = [...beat.children].map((child) => child.getBoundingClientRect())
@@ -388,15 +390,18 @@ async function scrollToSemanticProgress(page: Page, progress: number): Promise<v
         const anchor = document.body.dataset["kpReaderLayout"] === "rising-passages" ? top : (top + bottom) / 2;
         return { progress: Number(beat.dataset["kpCheckpoint"]), y: scrollY + anchor };
       });
-    const rightIndex = stops.findIndex((stop) => stop.progress >= requested);
-    const right = stops[rightIndex]!;
-    const left = stops[Math.max(0, rightIndex - 1)]!;
-    const local = right.progress === left.progress ? 0
-      : (requested - left.progress) / (right.progress - left.progress);
     const anchor = Number(document.body.dataset["kpReaderViewportAnchor"]);
+    return { stops, anchorY: innerHeight * anchor,
+      rising: document.body.dataset["kpReaderLayout"] === "rising-passages",
+      availableHeight: innerHeight - document.querySelector(".kp-reader-masthead")!.getBoundingClientRect().height };
+  });
+  const narrative = { stops: measured.stops.map(({ y, progress }) => ({ positionPx: y, progressPermille: progress })) };
+  const geometry = measured.rising ? createFractionalRisingScroll(narrative, measured.availableHeight) : narrative;
+  const targetScrollY = sampleKpReaderScrollPosition(progress / 1000, geometry) - measured.anchorY;
+  await page.evaluate((y) => {
     window.dispatchEvent(new WheelEvent("wheel"));
-    window.scrollTo(0, left.y + local * (right.y - left.y) - innerHeight * anchor);
-  }, progress);
+    window.scrollTo(0, y);
+  }, targetScrollY);
   await page.waitForFunction((requested) =>
     Math.abs(Number(document.body.dataset["kpReaderProgress"]) - requested) <= 1,
   progress);

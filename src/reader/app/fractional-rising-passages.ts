@@ -1,3 +1,6 @@
+import { createFractionalRisingScroll } from "./fractional-rising-scroll.ts";
+import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from "../runtime/continuous-scroll-clock.ts";
+
 /** One local layout experiment around the existing reader clock and renderer. */
 export function mountFractionalRisingPassages(input: {
   readonly story: HTMLElement;
@@ -38,7 +41,48 @@ export function mountFractionalRisingPassages(input: {
   let headerHeight = masthead.getBoundingClientRect().height;
   document.body.style.setProperty("--kp-rising-header-height", `${headerHeight}px`);
   let positions: readonly number[] = [];
+  let geometry: KpReaderPiecewiseScrollGeometry | undefined;
+  const anchor = () => headerHeight + (window.innerHeight - headerHeight) / 2;
   return {
+    scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
+      geometry = createFractionalRisingScroll(narrative, window.innerHeight - headerHeight);
+      return geometry;
+    },
+    activeBeat() {
+      const position = window.scrollY + anchor();
+      return input.beats.reduce<HTMLElement | undefined>((closest, beat, index) => {
+        const candidate = positions[index + 1];
+        const previous = closest === undefined ? undefined : positions[input.beats.indexOf(closest) + 1];
+        return candidate !== undefined && (previous === undefined || Math.abs(candidate - position) < Math.abs(previous - position)) ? beat : closest;
+      }, undefined);
+    },
+    arrival(beat: HTMLElement) {
+      const index = input.beats.indexOf(beat);
+      const position = positions[index + 1];
+      if (index < 0 || position === undefined) return undefined;
+      return { position, progress: Number(input.beats[Math.max(0, index - 1)]!.dataset["kpCheckpoint"]) };
+    },
+    encodeHref(href: URL) {
+      if (geometry === undefined) return href;
+      const start = geometry.stops[0]!.positionPx;
+      const end = geometry.stops.at(-1)!.positionPx;
+      // Holds share mathematical progress. Preserve their distinct reading
+      // positions as a derived fraction, without adding another playback clock.
+      const position = Math.min(1, Math.max(0, (window.scrollY + anchor() - start) / (end - start)));
+      href.searchParams.set("kpReading", position.toFixed(6));
+      return href;
+    },
+    restoreReadingPosition(href: string, progress: number) {
+      const value = new URL(href).searchParams.get("kpReading");
+      if (value === null || value.trim() === "" || geometry === undefined) return;
+      const fraction = Number(value);
+      if (!Number.isFinite(fraction) || fraction < 0 || fraction > 1) return;
+      const start = geometry.stops[0]!.positionPx;
+      const position = start + fraction * (geometry.stops.at(-1)!.positionPx - start);
+      // Stale or hand-edited pairs must not override the semantic URL authority.
+      if (Math.abs(sampleKpReaderScrollProgress(position, geometry) * 1000 - progress) > 1) return;
+      window.scrollTo(0, position - anchor());
+    },
     viewportAnchorFraction() {
       return (headerHeight + (window.innerHeight - headerHeight) / 2) / window.innerHeight;
     },

@@ -608,7 +608,7 @@ function scrollGeometry(): KpReaderPiecewiseScrollGeometry {
   if (beats.length < 2) {
     throw new Error("The semantic reader exemplar requires explanation beats.");
   }
-  return {
+  const narrative = {
     // Semantic checkpoints belong at their authored narrative beats. A linear
     // first/last interpolation drifted unequal timelines away from their copy.
     stops: beats.map((beat) => ({
@@ -616,6 +616,7 @@ function scrollGeometry(): KpReaderPiecewiseScrollGeometry {
       progressPermille: Number(requiredData(beat, "kpCheckpoint"))
     }))
   };
+  return risingPassages?.scrollGeometry(narrative) ?? narrative;
 }
 
 function readerPosition(): number {
@@ -1319,7 +1320,7 @@ function updateActiveBeat(
   progressPermille: number,
   attentionProjection: KpReaderAttentionProjection | undefined
 ): void {
-  activeBeat = [...beats].sort((left, right) =>
+  activeBeat = risingPassages?.activeBeat() ?? [...beats].sort((left, right) =>
     Math.abs(Number(requiredData(left, "kpCheckpoint")) - progressPermille) -
     Math.abs(Number(requiredData(right, "kpCheckpoint")) - progressPermille)
   )[0];
@@ -1411,6 +1412,14 @@ function onTocNavigation(event: MouseEvent): void {
   );
   if (beat === undefined) return;
   event.preventDefault();
+  const arrival = risingPassages?.arrival(beat);
+  if (arrival !== undefined) {
+    setExplicitProgress(arrival.progress, "controls", false);
+    window.scrollTo(0, arrival.position - window.innerHeight * readerViewportAnchorFraction());
+    renderCurrentSample();
+    locationSettlement.settle();
+    return;
+  }
   const authoredProgress = Number(requiredData(beat, "kpCheckpoint"));
   const exactProgress =
     evaluationControls?.resolveCheckpointProgressPermille(
@@ -1468,7 +1477,7 @@ function readerHref(sample: KpReaderClockSample): string {
     motionPreference,
     equationPresentationProfileId: equationPresentationProfile.id
   }));
-  return evaluationControls?.encodeHref({
+  const result = evaluationControls?.encodeHref({
     baseUrl: sessionHref,
     checkpointId: activeBeat === undefined
       ? sample.checkpointId
@@ -1476,6 +1485,7 @@ function readerHref(sample: KpReaderClockSample): string {
     progressPermille: sample.progressPermille,
     direction: sample.direction
   }) ?? sessionHref;
+  return risingPassages?.encodeHref(new URL(result)).toString() ?? result;
 }
 
 function initialMotionPreference(): KpReaderMotionPreference {
@@ -1536,6 +1546,7 @@ function restoreUrlLocation(): void {
     // quantize an inverse piecewise mapping by a fraction of a pixel.
     setExplicitProgress(progress, "url", false);
   }
+  risingPassages?.restoreReadingPosition(window.location.href, progress);
 }
 
 function isFocusStepperProjection(): boolean {

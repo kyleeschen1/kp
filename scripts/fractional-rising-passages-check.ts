@@ -9,7 +9,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await page.goto(new URL("/reader/solve-fractional-linear/", baseUrl).toString(), { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.body.dataset["kpReaderLayout"] === "rising-passages");
     const samples = [];
-    for (const y of [0.75, 0.5, 0.475, 0.45, 0.5]) {
+    for (const y of [0.75, 0.5, 0.475, 0.45, 0.29, 0.13, 0.05, 0.5]) {
       await page.evaluate((fraction) => {
         const passage = document.querySelector<HTMLElement>('[data-kp-rising-beat="beat.multiply"]')!;
         const rect = passage.getBoundingClientRect();
@@ -51,16 +51,29 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.ok(samples[1]!.opacity > 0.999);
     assert.ok(samples[2]!.opacity < samples[1]!.opacity);
     assert.ok(samples[3]!.opacity < 0.001);
-    assert.ok(Math.abs(samples[1]!.progress - 667) <= 1);
-    assert.deepEqual(samples[1], samples[4], "Rewinding must restore the same layout and emphasis");
+    assert.ok(samples.slice(0, 4).every((sample) => Math.abs(sample.progress - 500) <= 1),
+      "Multiplication must hold its source during approach, arrival and text clearance");
+    assert.ok(samples[4]!.progress > 550 && samples[4]!.progress < 620);
+    assert.ok(samples.slice(5, 7).every((sample) => Math.abs(sample.progress - 667) <= 1));
+    assert.deepEqual(samples[1], samples[7], "Rewinding must restore the same layout and emphasis");
     await page.reload({ waitUntil: "networkidle" });
     await settle(page);
-    assert.ok(Math.abs(Number(await page.locator("body").getAttribute("data-kp-reader-progress")) - 667) <= 1);
+    assert.ok(Math.abs(Number(await page.locator("body").getAttribute("data-kp-reader-progress")) - 500) <= 1);
+    const restoredOffset = await page.locator('[data-kp-rising-beat="beat.multiply"]').evaluate((passage) => {
+      const header = document.querySelector(".kp-reader-masthead")!.getBoundingClientRect().height;
+      return passage.getBoundingClientRect().top - (header + (innerHeight - header) / 2);
+    });
+    assert.ok(Math.abs(restoredOffset) < 2, "A held equation must restore the reading position too");
     await page.locator(".kp-rising-navigation summary").click();
     await page.locator(".kp-lesson-toc a").first().click();
     await settle(page);
     assert.equal(await page.locator(".kp-rising-navigation").getAttribute("open"), null);
     assert.equal(await page.locator("body").getAttribute("data-kp-reader-progress"), "0");
+    await page.locator(".kp-rising-navigation summary").click();
+    await page.locator('.kp-lesson-toc a[href="#beat.multiply"]').click();
+    await settle(page);
+    assert.equal(await page.locator("body").getAttribute("data-kp-reader-progress"), "500",
+      "Steps navigation must open the instruction before its operation");
   }
   await page.emulateMedia({ media: "print" });
   assert.equal(await page.locator("[data-kp-reader-equation-stage]").evaluate((node) => getComputedStyle(node).display), "none");
