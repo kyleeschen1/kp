@@ -172,6 +172,11 @@ function replaceFragmentVisual(
 ): void {
   const visual = createMaterialVisual(frame.sourceElement);
   stripKpMaterialCloneAuthority(visual);
+  // Diagnostics describe the newly owned visual, never authority copied from
+  // its source. Keep revision/contract evidence on the actual painted child.
+  visual.dataset["kpReaderEquationMaterialVisualRevision"] = frame.visualRevision;
+  visual.dataset["kpReaderMaterialVisualKind"] =
+    resolveKpReaderEquationMaterialVisualContract(frame.sourceElement).kind;
   visual.classList.add("kp-reader-equation-material-visual");
   visual.style.visibility = "visible";
   visual.style.opacity = "1";

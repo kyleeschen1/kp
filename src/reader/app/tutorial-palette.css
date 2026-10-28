@@ -1,0 +1,63 @@
+/* Opt-in tutorial palette: native and moving math inherit the same paint before
+   measurement. Other reader exemplars retain their accepted palettes. */
+body[data-kp-reader-palette="nocturne"] {
+  color-scheme: dark;
+  --kp-tutorial-background: #121826;
+  --kp-tutorial-foreground: #f2f0e8;
+  --kp-tutorial-text-secondary: #aab4c2;
+  --kp-tutorial-text-muted: #8994a6;
+  --kp-tutorial-card: #1b2535;
+  --kp-tutorial-card-raised: #253247;
+  --kp-tutorial-border: #344054;
+  --kp-tutorial-coral: #ff7a78;
+  --kp-tutorial-orange: #ff9a54;
+  --kp-tutorial-gold: #f2c14e;
+  --kp-tutorial-lime: #b1d95e;
+  --kp-tutorial-green: #55cf8b;
+  --kp-tutorial-teal: #38d5bf;
+  --kp-tutorial-cyan: #55cae8;
+  --kp-tutorial-blue: #72a7ff;
+  --kp-tutorial-indigo: #a195ff;
+  --kp-tutorial-violet: #c99af8;
+  --kp-tutorial-magenta: #f08acc;
+  --kp-tutorial-rose: #ff8fa4;
+  --kp-paper: var(--kp-tutorial-background);
+  --kp-ink: var(--kp-tutorial-foreground);
+  --kp-muted: var(--kp-tutorial-text-secondary);
+  --kp-surface: var(--kp-tutorial-card);
+  --kp-line: var(--kp-tutorial-border);
+  --kp-accent: var(--kp-tutorial-gold);
+  --kp-relation: var(--kp-tutorial-blue);
+}
+
+/* Cover browser canvas/overscroll as well as the body, without changing the
+   default palette on unrelated routes. */
+html:has(> body[data-kp-reader-palette="nocturne"]) {
+  background: #121826;
+  color-scheme: dark;
+}
+
+/* The fractional trail exemplar uses flat focus, including its legacy paint
+   adapter's separate focus shadow. Do not change other readers' treatments. */
+body[data-kp-reader-lesson-variant="fractional-linear"]
+  .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual {
+  filter: none;
+}
+
+@media print {
+  /* Preserve the readable static transcript when printers omit backgrounds. */
+  body[data-kp-reader-palette="nocturne"] {
+    color-scheme: light;
+    --kp-paper: #f7f5ee;
+    --kp-ink: #222936;
+    --kp-muted: #465463;
+    --kp-surface: #fffefa;
+    --kp-line: #d8d7cf;
+    --kp-accent: #876000;
+    --kp-relation: #305db2;
+  }
+  html:has(> body[data-kp-reader-palette="nocturne"]) {
+    background: #f7f5ee;
+    color-scheme: light;
+  }
+}

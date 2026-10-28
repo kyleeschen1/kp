@@ -9,12 +9,15 @@ const outputRoot = path.resolve(
   process.env["KP_FRACTIONAL_LINEAR_VISUAL_OUTPUT"]
     ?? "tmp/codex/fractional-linear-equation-visual"
 );
-const explicitBaseUrl = process.env["KP_VISUAL_BASE_URL"];
+const explicitBaseUrl = process.argv.find((argument) => argument.startsWith("--base-url="))
+  ?.slice("--base-url=".length) ?? process.env["KP_VISUAL_BASE_URL"];
 const harness = createKpVisualReviewHarness(
   explicitBaseUrl === undefined ? {} : { baseUrl: explicitBaseUrl }
 );
 const checkpoints = new Set([0, 167, 333, 500, 667, 833, 1_000]);
-const progressSamples = uniqueSorted([
+const progressSamples = process.argv.includes("--smoke")
+  ? [0, 83, 167, 233, 333, 417, 500, 583, 667, 750, 833, 917, 1_000]
+  : uniqueSorted([
   ...Array.from({ length: 31 }, (_, index) => Math.round(index * 1_000 / 30)),
   ...checkpoints
 ]);
@@ -36,11 +39,24 @@ try {
     await page.goto(url.toString(), { waitUntil: "networkidle" });
     await settle(page);
     samples.push(await sampleVisualFrame(page, progress));
-    if (checkpoints.has(progress)) {
+    if (checkpoints.has(progress) || process.argv.includes("--smoke")) {
       await page.locator("[data-kp-reader-equation-stage]").screenshot({
         path: path.join(outputRoot, `checkpoint-${String(progress).padStart(4, "0")}.png`)
       });
     }
+  }
+  // Direct URL samples do not exercise cached geometry while the document moves.
+  // Traverse the same cancellation in both directions using real scroll input.
+  await page.goto(new URL("/reader/solve-fractional-linear/", harness.baseUrl).toString(), {
+    waitUntil: "networkidle"
+  });
+  await settle(page);
+  for (const [index, progress] of [233, 750, 1_000, 233].entries()) {
+    await scrollToSemanticProgress(page, progress);
+    samples.push(await sampleVisualFrame(page, progress));
+    await page.locator("[data-kp-reader-equation-stage]").screenshot({
+      path: path.join(outputRoot, `scroll-${index}-${progress}.png`)
+    });
   }
   const failures = [
     ...pageErrors.map((message) => `browser error: ${message}`),
@@ -108,6 +124,47 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
       opacity: Number(getComputedStyle(element).opacity)
     }));
     const failures: string[] = [];
+    if (progress === 1_000) {
+      const sourceAnchors = active.querySelectorAll<HTMLElement>(
+        '[data-kp-reader-native="source"] [data-kp-reader-equation-anchor-id]'
+      );
+      for (const anchor of sourceAnchors) {
+        let opacity = 1;
+        for (let node: HTMLElement | null = anchor; node !== null; node = node.parentElement) {
+          const style = getComputedStyle(node);
+          if (style.display === "none") opacity = 0;
+          opacity *= Number(style.opacity);
+        }
+        if (opacity > 0.01 && getComputedStyle(anchor).visibility !== "hidden") {
+          failures.push("an outgoing source term remains painted at the solution");
+        }
+      }
+    }
+    if (stage.dataset["kpReaderEquationDepthRecipe"] !== "flat-v1") {
+      failures.push("the fractional exemplar re-enabled depth");
+    }
+    if (getComputedStyle(document.body).backgroundColor !== "rgb(18, 24, 38)" ||
+        getComputedStyle(document.body).color !== "rgb(242, 240, 232)") {
+      failures.push("the tutorial does not use the specified Nocturne palette");
+    }
+    for (const fragment of stage.querySelectorAll<HTMLElement>(
+      "[data-kp-reader-equation-semantic-depth]"
+    )) {
+      if (Number(fragment.dataset["kpReaderEquationSemanticDepth"]) !== 0) {
+        failures.push("flat presentation retained an elevated material fragment");
+      }
+    }
+    for (const visual of stage.querySelectorAll<HTMLElement>(
+      ".kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual"
+    )) {
+      if (getComputedStyle(visual).filter !== "none") {
+        failures.push("flat focus retained a material shadow");
+      }
+    }
+    const renderedProgress = Number(document.body.dataset["kpReaderProgress"]);
+    if (!Number.isFinite(renderedProgress) || Math.abs(renderedProgress - progress) > 1) {
+      failures.push(`requested ${progress} but rendered ${renderedProgress}`);
+    }
     const tolerance = 1.5;
     for (const item of ink) {
       if (item.rect.left < viewportBox.left - tolerance ||
@@ -253,6 +310,9 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
     return {
       requestedProgress: progress,
       renderedProgress: Number(document.body.dataset["kpReaderProgress"]),
+      palette: document.body.dataset["kpReaderPalette"] ?? null,
+      background: getComputedStyle(document.body).backgroundColor,
+      foreground: getComputedStyle(document.body).color,
       transitionId: transitionId || null,
       viewport: viewportBox,
       stage: {
@@ -282,6 +342,31 @@ async function settle(page: Page): Promise<void> {
       requestAnimationFrame(() => resolve())
     ));
   });
+}
+
+async function scrollToSemanticProgress(page: Page, progress: number): Promise<void> {
+  await page.evaluate((requested) => {
+    const stops = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")]
+      .map((beat) => {
+        const rects = [...beat.children].map((child) => child.getBoundingClientRect())
+          .filter((rect) => rect.width > 0 && rect.height > 0);
+        const top = Math.min(...rects.map((rect) => rect.top));
+        const bottom = Math.max(...rects.map((rect) => rect.bottom));
+        return { progress: Number(beat.dataset["kpCheckpoint"]), y: scrollY + (top + bottom) / 2 };
+      });
+    const rightIndex = stops.findIndex((stop) => stop.progress >= requested);
+    const right = stops[rightIndex]!;
+    const left = stops[Math.max(0, rightIndex - 1)]!;
+    const local = right.progress === left.progress ? 0
+      : (requested - left.progress) / (right.progress - left.progress);
+    const anchor = Number(document.body.dataset["kpReaderViewportAnchor"]);
+    window.dispatchEvent(new WheelEvent("wheel"));
+    window.scrollTo(0, left.y + local * (right.y - left.y) - innerHeight * anchor);
+  }, progress);
+  await page.waitForFunction((requested) =>
+    Math.abs(Number(document.body.dataset["kpReaderProgress"]) - requested) <= 1,
+  progress);
+  await settle(page);
 }
 
 function uniqueSorted(values: readonly number[]): readonly number[] {

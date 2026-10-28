@@ -1,6 +1,7 @@
 @import "katex/dist/katex.min.css";
 @import "../../rendering/canonical-equation-stage.css";
 @import "./canonical-equation-surface.css";
+@import "./tutorial-palette.css";
 
 :root {
   color: #16231d;

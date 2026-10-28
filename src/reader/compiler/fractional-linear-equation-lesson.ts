@@ -20,6 +20,7 @@ export function compileKpFractionalLinearEquationLesson(markdown: string) {
     documentId: model.document.id,
     documentVersion: model.document.version,
     lessonVariant: "fractional-linear",
+    palette: "nocturne",
     modeLink: {
       href: "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpCheckpoint=beat.cancel&kpProgress=667",
       label: "Try the simpler equation"

@@ -21,6 +21,7 @@ export interface KpEquationExemplarPageInput {
   readonly documentId: string;
   readonly documentVersion: string;
   readonly lessonVariant: string;
+  readonly palette?: "nocturne";
   readonly readerControls?: KpReaderEvaluationControlsKind | undefined;
   readonly modeLink: { readonly href: string; readonly label: string };
   readonly tocHtml: string;
@@ -49,6 +50,7 @@ export function compileKpEquationExemplarPage(
     description: input.description,
     stylesheetHref: "/src/reader/app/exemplar.css",
     bodyAttributes: [
+      ...(input.palette === undefined ? [] : [{ name: "data-kp-reader-palette", value: input.palette }]),
       ...(input.equationSource === undefined ? [] : [{ name: "data-kp-reader-equation-source", value: JSON.stringify(input.equationSource) }]),
       { name: "data-kp-reader", value: "semantic-document" },
       { name: "data-kp-reader-document-id", value: input.documentId },

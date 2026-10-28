@@ -82,7 +82,9 @@ export function createFractionalLinearEquationAnimationAsset(): KpAnimationAsset
       nativeHandoff: "atomic-v1",
       cancellation: "counter-orbit-v1",
       successor: "counter-convergence-v1",
-      depth: "semantic-depth-v1",
+      // This derivation uses flat symbolic motion; elevation competes with
+      // reading the cancellation and the retained equation states.
+      depth: "flat-v1",
       continuants: "transit-then-reflow-v1"
     }),
     metadata: {

@@ -22,6 +22,7 @@ test("fractional equation composes into one renderer-neutral animation asset", (
   assert.equal(animation.renderTargets.length, 1);
   assert.equal(animation.renderTargets[0]?.kind, "equation");
   assert.equal(animation.presentationProfile?.payload.nativeHandoff, "atomic-v1");
+  assert.equal(animation.presentationProfile?.payload.depth, "flat-v1");
 });
 
 test("fractional subtraction reuses the accepted balanced-introduction engine", () => {
