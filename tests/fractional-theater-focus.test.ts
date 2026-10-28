@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { fractionalTheaterFocus, fractionalSliderPresence } from '../src/reader/app/fractional-theater-focus.ts';
+import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalSliderPresence } from '../src/reader/app/fractional-theater-focus.ts';
+import { fractionalPassageIndex } from '../src/reader/app/fractional-rising-scroll.ts';
 import { fractionalPassageOperations } from '../src/reader/compiler/fractional-passage-operations.ts';
 
 test('the measured stage crossing drives complementary emphasis with identical reverse and direct seeks', () => {
@@ -22,6 +23,37 @@ test('slider dissolves only after completion, including reverse traversal', () =
   for (const [position, expected] of [[90, 1], [100, 1], [112, .5], [124, 0], [200, 0], [112, .5], [100, 1]]) {
     assert.equal(fractionalSliderPresence(position!, 100), expected);
   }
+});
+
+test('sparse focus matches the complete law for long documents, jumps, reversals and overlapping spans', () => {
+  for (const input of [
+    { positions: Array.from({ length: 10000 }, (_, i) => 100 + i * 120),
+      heights: Array.from({ length: 10000 }, (_, i) => 24 + (i % 3) * 24), stageOffset: 14 },
+    { positions: [100, 115, 130], heights: [24, 24, 24], stageOffset: 14 }
+  ]) {
+    const focus = compileFractionalTheaterFocus(input);
+    for (const position of [-100, 0, 62, 70, 80, 86, 95, 210, 101200, 1199990, 2000000, 70]) {
+      const expected = fractionalTheaterFocus({ ...input, position });
+      const actual = focus(position);
+      assert.deepEqual(expected, expected.map((_, index) => actual.get(index) ?? .12));
+      if (input.positions.length === 10000) assert.ok(actual.size <= 2);
+    }
+  }
+});
+
+test('passage lookup reaches far destinations without walking intervening paragraphs', () => {
+  let reads = 0;
+  const positions = new Proxy(Array.from({ length: 100000 }, (_, i) => i * 100), {
+    get(target, key, receiver) {
+      if (typeof key === 'string' && /^\d+$/.test(key)) reads++;
+      return Reflect.get(target, key, receiver);
+    }
+  });
+  assert.equal(fractionalPassageIndex(positions, 9999901), 99999);
+  assert.ok(reads <= 17);
+  assert.equal(fractionalPassageIndex([], 100), 0);
+  assert.equal(fractionalPassageIndex([100, 200, 300], -1), 0);
+  assert.equal(fractionalPassageIndex([100, 200, 300], 200), 1);
 });
 
 test('only explicitly associated operations have controls; intervening comments retain the result', () => {

@@ -5,6 +5,16 @@ Last Updated: 2026-10-21
 
 ## Canonical direction
 
+October 28 performance continuation: [delivery evidence](../reviews/2026-10-28-reader-performance-delivery.md)
+records session-local paint reuse, batched native text measurement, exact-frame
+reuse, smaller metadata loading and bounded passage updates. Appearance, real
+document prose, direct jumps and the semantic clock remain the baseline. Genuine
+focus changes still require expensive preparation; separating stable geometry
+from paint is the next measured boundary, subject to native ownership and reverse
+geometry proof. No worker rewrite or cross-session geometry cache was justified.
+The [approved delivery](../2026-10-28-reader-performance-delivery.md) and Theseus
+contract own scope and execution; this paragraph records the durable conclusion.
+
 Latest October 28 candidate: [theater focus and performance audit](../reviews/2026-10-28-theater-focus-and-performance.md)
 adds scroll-derived complementary paragraph focus at the stage boundary and one
 below-stage slider owned only by explicit operation associations. Real document

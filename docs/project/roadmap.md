@@ -25,6 +25,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 28 performance delivery: [measured reader improvements](reviews/2026-10-28-reader-performance-delivery.md)
+preserve the fractional reader's current appearance, semantic clock and real
+document prose. Session-local paint reuse, batched native text measurement,
+unchanged-frame reuse and narrower phase-metadata loading reduce work without a
+new renderer. Long-document passage lookup and emphasis now avoid full scans on
+ordinary scroll frames. The next performance boundary is separating stable
+geometry from genuine focus-paint changes, with native handoff evidence; do not
+blindly enable cross-session geometry caching. The review records measurements,
+preservation checks and independently reproduced pre-existing browser failures.
+
 October 28 latest local revision: [theater focus and performance audit](reviews/2026-10-28-theater-focus-and-performance.md)
 retains real document paragraphs and adds complementary focus as incoming text
 crosses the stage boundary. One thin slider below the equation belongs only to

@@ -1,7 +1,7 @@
 import { createFractionalRisingScroll, fractionalPassageCadence, fractionalPassageIndex } from './fractional-rising-scroll.ts';
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { mountFractionalPassageSliders } from './fractional-passage-sliders.ts';
-import { fractionalSliderPresence, fractionalTheaterFocus } from './fractional-theater-focus.ts';
+import { fractionalSliderPresence, compileFractionalTheaterFocus } from './fractional-theater-focus.ts';
 
 /** Real article paragraphs, native sticky holds, and the existing semantic clock. */
 export function mountFractionalRisingPassages(input: {
@@ -42,6 +42,9 @@ export function mountFractionalRisingPassages(input: {
   let readingLine = 0;
   let positions: readonly number[] = [];
   let heights: readonly number[] = [];
+  let focusAt = compileFractionalTheaterFocus({ positions: [], heights: [], stageOffset: 14 });
+  let painted = new Set(passages.map((_, index) => index));
+  let selected = -1;
   let geometry: KpReaderPiecewiseScrollGeometry | undefined;
   let readAll = false;
   let returnIndex = 0;
@@ -63,14 +66,19 @@ export function mountFractionalRisingPassages(input: {
     const operation = sliders.operationAt(active);
     const presence = operation && geometry ? fractionalSliderPresence(position, operation.seek(geometry, 1).position) : 0;
     sliders.render(active, progress, readAll ? 0 : presence);
-    const opacity = fractionalTheaterFocus({ positions, heights, position, stageOffset: 14 });
-    passages.forEach((passage, index) => {
-      const selected = String(index === active);
-      const paint = String(opacity[index] ?? 1);
-      if (passage.dataset['kpCaptionActive'] !== selected) passage.dataset['kpCaptionActive'] = selected;
+    const opacity = focusAt(position);
+    const changed = new Set([...painted, ...opacity.keys(), selected, active]);
+    for (const index of changed) {
+      const passage = passages[index];
+      if (passage === undefined) continue;
+      const activeValue = String(index === active);
+      const paint = String(opacity.get(index) ?? .12);
+      if (passage.dataset['kpCaptionActive'] !== activeValue) passage.dataset['kpCaptionActive'] = activeValue;
       if (passage.style.getPropertyValue('--kp-passage-opacity') !== paint)
         passage.style.setProperty('--kp-passage-opacity', paint);
-    });
+    }
+    painted = new Set(opacity.keys());
+    selected = active;
   };
   const measure = () => {
     if (readAll) return;
@@ -103,6 +111,7 @@ export function mountFractionalRisingPassages(input: {
       input.beats[index]!.style.setProperty('--kp-flow-hold', `${sliders.operationAt(index) ? cadence.hold : cadence.read}px`);
     });
     positions = input.beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
+    focusAt = compileFractionalTheaterFocus({ positions, heights, stageOffset: 14 });
   };
   measure();
   const toggleReading = () => {

@@ -2,7 +2,8 @@
   "id": "run-contract.kp-reader-performance-20261028",
   "kind": "run-contract",
   "title": "Reader performance delivery",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: all five approved performance outcomes delivered with unchanged presentation, measured gains and durable verification. No speculative renderer or worker rewrite; no budget increases.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,6 +46,54 @@
       "status": "passed",
       "scope": "Loading: production build and eight cold/warm cohorts; actual JavaScript bytes reduced; architecture, surface preservation and motif units pass. Full type gate remains for integration.",
       "checkedAt": "2026-10-28T20:52:16.243Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Final integration: full app, tools, tests, Svelte and domains type checks; zero errors and zero Svelte warnings.",
+      "checkedAt": "2026-10-28T21:05:55.078Z"
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance:release",
+      "status": "passed",
+      "scope": "All six native/material/native continuity and lifecycle tests pass across Chromium, Firefox and WebKit; final fractional smoke also passes all 41 samples.",
+      "checkedAt": "2026-10-28T21:05:57.082Z"
+    },
+    {
+      "command": "npm run visual:cancellation",
+      "status": "failed",
+      "scope": "Six pass, three pre-existing failures. Isolated pre-change baseline at 53f579ec5 reproduces identical 1.21 typography ratio, 5.0625px inverse-center spread and missing editor home link. No thresholds weakened; see delivery evidence.",
+      "checkedAt": "2026-10-28T21:05:58.225Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Final integration: all architecture and budget checks pass; no ceilings increased.",
+      "checkedAt": "2026-10-28T21:08:42.466Z"
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "All 11 preservation tests pass; shared glyph compositor, runtime-hardening and new sparse-focus units also pass.",
+      "checkedAt": "2026-10-28T21:08:43.442Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --smoke --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "Exact final source: 41 samples, no failures. Desktop/phone rising prose, find, Read all, font reflow, controls and print/static preservation also pass.",
+      "checkedAt": "2026-10-28T21:08:44.110Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --production-performance --label=final --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "Eight fresh production cohorts after final build: local scripting reductions 8 to 25 percent, layouts 14 to 17 percent, gzip JS 5.7 percent. Variable readiness and remaining slow-CPU stalls recorded honestly.",
+      "checkedAt": "2026-10-28T21:08:44.750Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --performance --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "Final diagnostic: 196 applies instead of 332; 53 genuine preparations retained; unchanged idle and prose measurement counts; direct jumps do not replay and four cold URLs prepare only once.",
+      "checkedAt": "2026-10-28T21:08:45.370Z"
     }
   ],
   "allowedWork": [
@@ -83,7 +132,8 @@
     {
       "id": "integration",
       "title": "Scaling-and-integration",
-      "status": "planned"
+      "summary": "Long-document lookup and bounded focus updates, final eight production cohorts, full required checks and cross-browser native handoff validation complete. Existing wider-suite failures reproduced independently and retained; next performance boundary documented.",
+      "status": "complete"
     }
   ]
 }

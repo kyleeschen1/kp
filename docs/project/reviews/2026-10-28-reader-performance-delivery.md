@@ -111,5 +111,119 @@ assets decrease from 97 to 95 and 963,270 to 912,002 raw bytes. This is a modest
 payload gain, not a renderer-family split. Full build, architecture and equation
 surface preservation pass; 20 motif/choreography units pass. App/tools types
 pass. The full typecheck found a test fixture using `backward` instead of the
-clock's `rewind`; that spelling is corrected and the full gate will rerun during
-final integration. No type/bundle ceilings were raised.
+clock's `rewind`; that spelling is corrected and the full gate passes in final
+integration. No type/bundle ceilings were raised.
+
+## Long-document work and preservation
+
+Passage lookup now uses binary search. Measured focus geometry is compiled once
+per layout; ordinarily only the incoming and outgoing neighbors need emphasis
+updates. The painter updates the union of previous and current neighbors, so
+direct jumps and reversals also reset departed paragraphs. Closely overlapping
+crossings retain the original dense calculation exactly. Real paragraph DOM
+remains available to native search, accessibility, Read all and print.
+
+`tests/fractional-theater-focus.test.ts` checks the sparse result against the
+original dense law over 10,000 passages, reversals, far jumps and overlapping
+spans. A 100,000-position lookup uses at most 17 indexed reads. These are bounded
+algorithmic guarantees, not evidence that mounting 10,000 real paragraphs or
+animations is cheap. Initial layout and intrinsic-height observation still
+measure the actual prose. The final desktop/phone `--rising` check passes,
+including native reveal, font reflow, sliders, Read all and static/print.
+
+## Broader browser-suite failures
+
+`npm run visual:cancellation` has six passing tests and three failures on the
+candidate. A detached checkout at `53f579ec5` (diagnostics only, before runtime
+changes) reproduces the same three failures, with five tests passing; the sixth
+passing candidate test is the new preparation/lifecycle canary.
+
+| Existing assertion | Baseline and candidate |
+| --- | --- |
+| Reader/editor final font-size ratio below 1.01 | 1.21 |
+| Cancellation inverse centers spread greater than 8px | 5.0625px |
+| Editor home exposes “Review division animation” link | Link absent |
+
+The first baseline attempt had blocked fonts because its dependencies were
+symlinked outside Vite's serving root; those results were discarded. The valid
+rerun allowed only the checkout and shared dependency directory. No source,
+typography, choreography or assertion was changed. The isolated configuration
+and checkout were removed afterward. These older mismatches remain open; this
+delivery neither weakens their thresholds nor claims the whole suite is green.
+
+## Investigated alternatives and remaining boundary
+
+Finer selector-scoped focus keys did not reduce this exemplar's legitimate
+session invalidations and were removed. Material-clone normalization batching
+also showed no useful gain and was removed. No cross-session measured-scene or
+pure-plan cache was activated: reverse geometry and native ownership must remain
+correct, and the existing pure-plan route has prior reverse-geometry failures.
+
+Workers do not directly solve the remaining synchronous DOM geometry/style
+preparation. Moving pure compilation alone is not justified by these results;
+an asynchronous worker protocol would add complexity without removing the
+measured dominant browser work. GPU paint cost was not separately profiled, so
+this work makes no speculative shadow, opacity or compositing changes.
+
+The next measured performance boundary is separating stable prepared geometry
+from genuine focus-paint changes, with proof through the real native/material/
+native handoff. The retained 53 preparations in four traversal cycles remain
+expensive; skipping them blindly would risk stale geometry or duplicate paint.
+
+## Final production comparison
+
+Command: `npm run visual:fractional-linear-equation -- --production-performance --label=final --base-url=http://127.0.0.1:8011`.
+Same eight-cohort protocol as baseline, after the final production build and with
+other compiler/browser test jobs finished. Each scripting percentage compares
+the mean of two samples, rather than selecting the faster run.
+
+| View / CPU | Final scripting seconds | Reduction from baseline | Final layouts | Layout reduction | Final frame p95 ms |
+| --- | --- | --- | --- | --- | --- |
+| Desktop / 1× | 1.193 / 1.182 | 17.1% | 3950 / 3950 | 14.4% | 33.3 / 33.4 |
+| Desktop / 4× | 4.047 / 4.091 | 25.2% | 3944 / 3944 | 14.1% | 134.1 / 149.3 |
+| Phone / 1× | 1.145 / 1.235 | 12.1% | 3437 / 3437 | 16.9% | 33.2 / 33.4 |
+| Phone / 4× | 4.240 / 4.301 | 8.3% | 3431 / 3431 | 16.6% | 133.9 / 133.7 |
+
+Across the eight samples, total traversal scripting falls from 25.768 to 21.435
+seconds (16.8%). This is a local workload comparison, not a universal speedup.
+Unthrottled p95 is essentially unchanged, and throttled runs still have roughly
+200ms worst frames. Less work has not yet produced reliably smooth 60fps motion.
+
+Final observed JavaScript is 91 assets, 808,766 raw / 240,367 gzip bytes, versus
+93 assets, 859,469 / 254,956 before: 50,703 raw and 14,589 gzip bytes saved
+(5.9% and 5.7%). The complete requested asset union is 95 files,
+912,567 raw / 302,165 gzip bytes. The long-document optimization adds 565 raw /
+241 gzip bytes compared with the preceding loading-only candidate; that cost is
+included. CSS and font payloads remain unchanged.
+
+Final cold-ready milliseconds: desktop 1× 819/351, 4×506/470; phone 1×194/185,
+4×469/498. Warm: desktop 1×169/183, 4×274/268; phone 1×152/121, 4×299/262.
+There is no defensible single startup-latency gain from these short local runs.
+The separately asserted elimination of duplicate cold-URL preparation is a
+work-count improvement, not a promised loading-time percentage.
+
+After forced GC outside motion, final retained JS heap is 5.36–5.63MB and node
+count is 2,334 in every cohort; baseline was 5.41–5.48MB and 2,335. There is no
+claimed memory reduction. This bounded two-cycle check excludes native/GPU
+memory, long sessions and the user's unreproduced tab crash.
+
+## Final verification and inspection
+
+Passed: full `npm run typecheck`; `npm run check:architecture`;
+`npm run test:equation-surface-preservation` (11);
+`npm run test:reader-runtime-hardening` (24);
+`npm run test:real-katex-glyph-compositor` (82); phase/choreography units (20);
+focus/frame identity units; sparse/dense focus units (5); `npm run build:bundle`;
+fractional smoke (41) and desktop/phone `--rising` preservation;
+`npm run visual:native-preparation` (6 across three engines); and
+`npm run test:browser:native-katex-compositor-conformance:release`
+(6 across Chromium, Firefox and WebKit). The broader cancellation suite's three
+independently reproduced baseline failures remain as recorded above.
+
+Inspect `http://localhost:8000/reader/solve-fractional-linear/`: scroll forward,
+reverse around cancellation and multiplication by two, jump using Steps, then
+use native find and Read all. The same mathematics, passage timing and native
+handoffs should remain. Native-find automation exercises document reveal rather
+than the browser's full Cmd+F toolbar; the user previously confirmed Cmd+F.
+Production measurements are reproducible through the committed scoped command,
+not dependent on retained disposable reports or screenshots.

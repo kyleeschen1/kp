@@ -46,7 +46,11 @@ export function createFractionalRisingScroll(
 }
 
 export function fractionalPassageIndex(positions: readonly number[], position: number) {
-  let index = 0;
-  while (index + 1 < positions.length && positions[index + 1]! <= position) index++;
-  return index;
+  let low = 0, high = positions.length;
+  while (low < high) {
+    const middle = Math.floor((low + high) / 2);
+    if (positions[middle]! <= position) low = middle + 1;
+    else high = middle;
+  }
+  return Math.max(0, low - 1);
 }
