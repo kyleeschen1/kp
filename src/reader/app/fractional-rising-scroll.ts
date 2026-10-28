@@ -20,7 +20,7 @@ export function createFractionalRisingScroll(
     // Reserve the next caption's exchange plus a result hold. Text must never
     // compete with an unfinished mathematical operation.
     const end = Math.min(start + availableHeight * 0.32,
-      (narrative.stops[index + 1]?.positionPx ?? Infinity) - availableHeight * 0.26);
+      (narrative.stops[index + 1]?.positionPx ?? Infinity) - availableHeight * 0.28);
     if (end <= start) throw new Error("Captions need room to read before animation.");
     stops.push(
       { positionPx: passage.positionPx, progressPermille: previous.progressPermille },
@@ -43,7 +43,7 @@ export function fractionalCaptionFrame(positions: readonly number[], position: n
   return {
     index,
     nextIndex: next === undefined ? undefined : index + 1,
-    rail: clamp((position - start) / Math.max(1, exchangeStart - start)),
+    preview: next === undefined ? 0 : clamp((position - (next - height * .26)) / (height * .08)),
     exchange: next === undefined ? 0 : clamp((position - exchangeStart) / (next - exchangeStart))
   };
 }

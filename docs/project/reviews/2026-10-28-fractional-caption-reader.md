@@ -1,10 +1,12 @@
 # Document-backed captions for the fractional reader
 
-Status: implemented local candidate; human reading and native Cmd+F review pending.
+Status: user accepted the card and confirmed Cmd+F works; revised alignment and
+approaching-text preview await visual review.
 
 The user prefers explanations that behave like closed captions. The latest
 revision addresses the missing anticipation: captions sit above the equation
-on a phone-width card, with a right-hand rail announcing the next exchange.
+on a phone-width card. The user found the rail unhelpful; a faint approaching
+caption now supplies anticipation directly.
 Text remains still during its operation, then rises and evaporates as the next
 caption materializes. Native search and ordinary document scrolling remain
 explicit requirements. This supersedes the local rising/fading presentation in
@@ -30,22 +32,26 @@ mathematical programs or the broader reader architecture.
 The latest local candidate uses a centered card up to 440px wide. Its charcoal
 surface, `#202222`, comes from `src/experiments/matrix-theme.css`, with a darker
 neutral page (`#181a1a`) replacing the blue reader background. Mathematical ink
-and typography remain unchanged. The caption sits above a grey rule; the native
-equation renderer occupies a stable area below it. The right-hand rail has a
-moving indicator and a marked **Next** endpoint. The final interval says
-**Finish**, then **Done**, rather than promising another caption.
+and typography remain unchanged. The caption is bottom-aligned six pixels above
+a grey rule. The native equation renderer uses a compact 96px workspace at the
+top of its region, retaining its existing fit and motion clearance. The rail
+and its labels are removed. The final caption remains with the solved equation.
 
 Each operation gets 14% of available-height scroll distance for reading, 32%
 for its unchanged mathematical program, then holds its result. The final 18%
-of available-height scrolling before the next instruction exchanges captions:
-the outgoing text rises up to 24px and fades, then incoming text rises from a
-20px offset and becomes solid. Their readable paint does not overlap. The rail
-reaches its endpoint at exchange start. The equation holds throughout; its
+of available-height scrolling before the next instruction exchanges captions.
+During the preceding 8%, the next heading peeks up to 18px into the text region,
+at up to 12% opacity, while the current caption stays fully legible. The outgoing
+text then rises up to 24px and fades as the incoming copy rises the remainder
+of its own height and becomes solid. The fixed text region clips both copies
+above the divider, preventing preview text from entering the mathematics.
+Both captions are never at full reading contrast together. The equation holds
+throughout the preview and exchange; its
 next operation starts only after the new caption has settled and received its
 reading interval. Geometry reserves a result hold before exchange even for
 shorter measured slots. These are provisional local choices, not reusable
 timing policy. Reverse motion samples the same geometry. Reduced-motion users
-get a clean caption replacement without translation or fading.
+get a clean caption replacement without preview, translation or fading.
 
 All explanations remain their original HTML nodes, in document order. Stable
 in-flow step slots own scroll measurement; pinned caption rectangles cannot
@@ -56,6 +62,12 @@ instruction before its operation. Existing mathematical progress and local
 Inactive captions use `hidden="until-found"`; the native `beforematch` event
 reveals the actual authored node and aligns its slot with the corresponding
 source equation. No key is intercepted and no search UI is reimplemented.
+The approaching preview is a single reused visual copy marked `inert` and
+`aria-hidden`, with descendant IDs removed. It is not a second searchable or
+accessible transcript. Its original remains hidden-until-found until arrival,
+so searching during a clipped preview can reveal the complete instruction and
+seek its source equation. The preview is rebuilt only when its source changes,
+and removed on disposal; original nodes retain their identity and bindings.
 **Read all** exposes every passage in flow, including for assistive-technology
 reading. Browsers without `beforematch` support default to that mode, preserving
 searchability rather than hiding unsupported content. Print exposes all prose;
@@ -90,13 +102,15 @@ npm run typecheck
 ```
 
 Pure geometry checks cover reading holds, motion intervals, result holds,
-rail anticipation, held math throughout caption exchanges, inverse seeks and
+preview anticipation before departure, held math throughout caption exchanges, inverse seeks and
 invalid measurements. The scoped Chromium check covers 1280×900 and 390×844
-cards, caption/rail ordering, the restored charcoal, exact reverse sampling
+cards, six-pixel caption alignment, math near the top of its region, the restored charcoal, exact reverse sampling
 during both halves of an exchange, held-position reload, menu navigation,
 native scrolling, keyboard scrolling, document mode, reduced motion, final
 completion, print return and static fallback. An unsupported-capability
 simulation checks that prose stays exposed.
+The preview check also verifies inert/hidden accessibility, absence of copied
+IDs, and native reveal of the complete original while its faint copy is visible.
 The 41-sample equation smoke protects direct/forward/reverse paint and the
 previous duplicate-owner repairs. Full typecheck includes app, tools, tests,
 Svelte and domains. These checks passed for this candidate; screenshots were
@@ -109,20 +123,23 @@ Search evidence is deliberately split: Chromium `window.find()` locates an
 inactive explanation, but does not invoke its native Find toolbar's reveal
 algorithm. Actual fragment navigation exercises `beforematch`, reveals the
 matching original node and synchronizes the equation. This is not an automated
-end-to-end Cmd+F toolbar test. Native toolbar search, repeated matches and
-Safari/Firefox behavior remain manual review items; do not call them certified.
+end-to-end Cmd+F toolbar test. The user has confirmed native Cmd+F works in their
+browser on the preceding card version. That acceptance does not certify all
+browsers or every repeated-match case; the preview adds the targeted reveal
+regression above.
 
 ## What to inspect
 
 Open `http://localhost:8000/reader/solve-fractional-linear/` and choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the
-multiplication, then keep scrolling: the rail reaches **Next**, the equation
-holds, and the old caption rises away as the new one materializes. The next
+multiplication, then keep scrolling: the equation holds and the next caption
+first peeks faintly above the divider. The old caption rises away as the new
+one materializes, entirely inside the text region. The next
 operation waits until that new explanation settles. Reverse through the
 exchange and drag the scrollbar to check direct navigation.
 
 Use Cmd+F for **A factor of two enters on each side** from a different step.
 The actual passage should appear above the equation at its source state.
 Close Find and continue scrolling in either direction. Also try **Read all**.
-Judge whether the rail makes changes predictable without demanding attention of
-its own, and whether native search still feels like a normal document.
+Judge whether the faint text provides anticipation without distracting from
+the current explanation, and whether the closer prose/math alignment reads well.

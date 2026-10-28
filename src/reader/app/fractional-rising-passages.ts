@@ -28,6 +28,12 @@ export function mountFractionalRisingPassages(input: {
     beat.append(passage);
     return passage;
   })];
+  for (const passage of passages) {
+    const copy = document.createElement("div");
+    copy.className = "kp-caption-copy";
+    copy.append(...passage.childNodes);
+    passage.append(copy);
+  }
   const toc = document.querySelector<HTMLElement>(".kp-lesson-toc")!;
   const tocHome = document.createComment("rising passage navigation home");
   toc.before(tocHome);
@@ -63,41 +69,47 @@ export function mountFractionalRisingPassages(input: {
   const rule = document.createElement("div");
   rule.className = "kp-caption-rule";
   rule.setAttribute("aria-hidden", "true");
-  const rail = document.createElement("div");
-  rail.className = "kp-caption-rail";
-  rail.setAttribute("role", "progressbar");
-  rail.setAttribute("aria-valuemin", "0");
-  rail.setAttribute("aria-valuemax", "100");
-  const marker = document.createElement("span");
-  marker.className = "kp-caption-marker";
-  rail.append(marker);
-  const railLabel = document.createElement("span");
-  railLabel.className = "kp-caption-rail-label";
-  railLabel.setAttribute("aria-hidden", "true");
-  frame.append(rule, rail, railLabel);
+  frame.append(rule);
   document.body.append(frame);
+  // A clipped preview must not become a second searchable match, or prevent
+  // native find from revealing the full, original instruction via beforematch.
+  const preview = document.createElement("div");
+  preview.className = "kp-rising-passage kp-caption-preview";
+  preview.inert = true;
+  preview.setAttribute("aria-hidden", "true");
+  document.body.append(preview);
+  let previewIndex: number | undefined;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const ease = (t: number) => t * t * (3 - 2 * t);
   const render = () => {
     document.body.dataset["kpCaptionMode"] = readAll ? "document" : "captions";
     const sample = fractionalCaptionFrame(positions, window.scrollY + anchor(), window.innerHeight - headerHeight);
     const exchange = sample?.exchange ?? 0;
-    const departing = ease(Math.min(1, exchange * 2));
-    const arriving = ease(Math.max(0, exchange * 2 - 1));
+    const departing = ease(Math.min(1, exchange / .6));
+    const arriving = ease(Math.max(0, (exchange - .25) / .75));
+    const approaching = ease(sample?.preview ?? 0);
     frame.hidden = readAll;
-    rail.style.setProperty("--kp-caption-progress", String(sample?.rail ?? 0));
-    rail.setAttribute("aria-valuenow", String(Math.round((sample?.rail ?? 0) * 100)));
-    const final = sample?.nextIndex === undefined;
-    rail.setAttribute("aria-label", final ? "Scroll to finish this explanation" : "Scroll to the next caption");
-    railLabel.textContent = final ? ((sample?.rail ?? 0) === 1 ? "Done" : "Finish") : "Next";
+    if (previewIndex !== sample?.nextIndex) {
+      previewIndex = sample?.nextIndex;
+      preview.replaceChildren();
+      if (previewIndex !== undefined) {
+        preview.append(passages[previewIndex]!.firstElementChild!.cloneNode(true));
+        for (const element of preview.querySelectorAll("[id]")) element.removeAttribute("id");
+      }
+    }
+    const previewVisible = !readAll && !reducedMotion.matches && approaching > 0 && previewIndex !== undefined;
+    preview.hidden = !previewVisible;
+    preview.dataset["kpCaptionActive"] = String(previewVisible);
+    preview.style.setProperty("--kp-caption-opacity", String(.12 * approaching + .88 * arriving));
+    preview.style.setProperty("--kp-caption-offset", `calc(${100 * (1 - arriving)}% - ${18 * approaching * (1 - arriving)}px)`);
     passages.forEach((passage, index) => {
-      let opacity = index === sample?.index ? 1 - departing : index === sample?.nextIndex ? arriving : 0;
+      let opacity = index === sample?.index ? 1 - departing : 0;
       if (reducedMotion.matches) opacity = index === (exchange < .5 ? sample?.index : sample?.nextIndex) ? 1 : 0;
       const visible = readAll || opacity > 0;
       const activeValue = String(!readAll && visible);
       if (passage.dataset["kpCaptionActive"] !== activeValue) passage.dataset["kpCaptionActive"] = activeValue;
       passage.style.setProperty("--kp-caption-opacity", String(readAll ? 1 : opacity));
-      const offset = readAll || reducedMotion.matches ? 0 : index === sample?.index ? -24 * departing : 20 * (1 - arriving);
+      const offset = readAll || reducedMotion.matches ? 0 : -24 * departing;
       passage.style.setProperty("--kp-caption-offset", `${offset}px`);
       if (visible && passage.hasAttribute("hidden")) passage.removeAttribute("hidden");
       else if (!visible && passage.getAttribute("hidden") !== "until-found") passage.setAttribute("hidden", "until-found");
@@ -176,13 +188,14 @@ export function mountFractionalRisingPassages(input: {
     render,
     dispose() {
       frame.remove();
+      preview.remove();
       readingMode.removeEventListener("click", toggleReading);
       readingMode.remove();
       for (const passage of passages) passage.removeEventListener("beforematch", revealMatch);
       navigation.removeEventListener("click", closeNavigation);
       tocHome.replaceWith(toc);
       navigation.remove();
-      for (const passage of passages) passage.replaceWith(...passage.childNodes);
+      for (const passage of passages) passage.replaceWith(...passage.firstElementChild!.childNodes);
       introSlot.replaceWith(...introSlot.childNodes);
       delete document.body.dataset["kpReaderLayout"];
       delete document.body.dataset["kpCaptionMode"];

@@ -29,7 +29,7 @@
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-static {
     position: fixed;
     z-index: 1;
-    top: calc(var(--kp-caption-card-top) + var(--kp-caption-text-height) + 48px);
+    top: calc(var(--kp-caption-card-top) + var(--kp-caption-text-height) + 38px);
     left: 50%;
     transform: translateX(-50%);
     width: var(--kp-caption-width);
@@ -54,7 +54,7 @@
   }
   body[data-kp-caption-mode="captions"] .kp-reader-equation-stage-heading {
     position: absolute;
-    top: calc(-1 * var(--kp-caption-text-height) - 36px);
+    top: calc(-1 * var(--kp-caption-text-height) - 26px);
     right: 24px;
   }
   body[data-kp-reader-layout="rising-passages"] :is([data-kp-reader-stage-kicker], [data-kp-reader-stage-status], .kp-reader-equation-hint) { display: none; }
@@ -65,6 +65,11 @@
     margin: 0;
     width: 100%;
     min-height: 0;
+  }
+  html body[data-kp-caption-mode="captions"] .kp-reader-equation-viewport {
+    /* A compact workspace at the region's top preserves the shared fit and
+       its motion clearance without centering math in the entire card. */
+    flex: 0 0 96px;
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-progress {
     display: none;
@@ -100,10 +105,20 @@
     position: fixed;
     top: calc(var(--kp-caption-card-top) + 56px);
     left: 50%;
-    transform: translate(-50%, var(--kp-caption-offset, 0px));
-    width: calc(var(--kp-caption-width) - 80px);
-    max-height: calc(var(--kp-caption-text-height) - 32px);
+    transform: translateX(-50%);
+    width: calc(var(--kp-caption-width) - 48px);
+    height: calc(var(--kp-caption-text-height) - 24px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 6px;
+    overflow: clip;
+  }
+  body[data-kp-caption-mode="captions"] .kp-caption-copy {
+    flex: 0 0 auto;
+    max-height: 100%;
     overflow: auto;
+    transform: translateY(var(--kp-caption-offset, 0px));
   }
   .kp-caption-frame {
     position: fixed;
@@ -125,40 +140,6 @@
     right: 24px;
     height: 1px;
     background: var(--kp-line);
-  }
-  .kp-caption-rail {
-    position: absolute;
-    top: 56px;
-    bottom: calc(var(--kp-caption-card-height) - var(--kp-caption-text-height) - 8px);
-    right: 18px;
-    width: 2px;
-    background: var(--kp-line);
-  }
-  .kp-caption-rail::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: -3px;
-    width: 8px;
-    height: 2px;
-    background: var(--kp-muted);
-  }
-  .kp-caption-marker {
-    position: absolute;
-    top: calc(var(--kp-caption-progress, 0) * 100%);
-    left: 50%;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--kp-ink);
-    transform: translate(-50%, -50%);
-  }
-  .kp-caption-rail-label {
-    position: absolute;
-    top: calc(var(--kp-caption-text-height) + 12px);
-    right: 10px;
-    font-size: .625rem;
-    color: var(--kp-muted);
   }
   .kp-caption-reading-mode {
     font: inherit;
@@ -182,6 +163,7 @@
     font-weight: 400;
     line-height: 1.6;
   }
+  body[data-kp-reader-layout="rising-passages"] :is(.kp-caption-copy, .kp-beat-copy) > :last-child { margin-bottom: 0; }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-intro p { color: var(--kp-muted); }
   .kp-rising-navigation { position: relative; font-size: .78rem; }
   .kp-rising-navigation summary { cursor: pointer; }
@@ -203,6 +185,6 @@
   body[data-kp-reader-layout="rising-passages"] .kp-reader-mode { display: none; }
 }
 @media print {
-  .kp-caption-frame { display: none; }
+  .kp-caption-frame, .kp-caption-preview { display: none; }
   .kp-rising-passage { opacity: 1 !important; content-visibility: visible !important; }
 }

@@ -26,9 +26,10 @@ nor its evidence. The ledger remains retrievable at
 ## Executive Direction
 
 October 28 latest visual candidate: [document-backed captions](reviews/2026-10-28-fractional-caption-reader.md)
-now sit above the equation on a narrow charcoal card. A right-hand rail announces
-caption exchanges while the equation holds; native-search reveal and Read all
-remain. Review anticipation and actual Cmd+F behavior before promotion; mathematics
+now sit bottom-aligned above the equation on a narrow charcoal card. The user
+accepted the card and confirmed Cmd+F works, but rejected the rail. A faint next
+caption now approaches while the equation holds; native reveal and Read all
+remain. Review preview anticipation and closer prose/math alignment before promotion; mathematics
 remains unchanged and the historical derivation trail is still pending.
 
 October 27 prototype planning: the user selects multi-step algebra to test the

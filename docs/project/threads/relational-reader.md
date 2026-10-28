@@ -7,10 +7,11 @@ Last Updated: 2026-10-21
 
 October 28: the fractional reader's latest approved-to-build, pending-review
 candidate uses [document-backed captions](../reviews/2026-10-28-fractional-caption-reader.md).
-Explanations now sit above the equation on a narrow charcoal card. A right-hand
-rail announces the upward caption exchange while mathematical progress holds.
-Native-search reveal, Read all, animations and semantic checkpoints remain.
-Review anticipation and actual Cmd+F behavior before generalization.
+The user accepted the narrow charcoal card and confirmed Cmd+F works. The latest
+candidate bottom-aligns prose, top-aligns the math workspace and replaces the
+rejected rail with a faint approaching caption during the result hold.
+Native reveal, Read all, animations and semantic checkpoints remain. Review
+preview anticipation and closer alignment before generalization.
 
 October 27 planning focus: [multi-step algebra derivation trail](../reviews/2026-10-27-next-step-review.md).
 The user selects retained historical equations and a moving continuation as the
