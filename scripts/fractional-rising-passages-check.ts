@@ -50,6 +50,9 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       const target = parseFloat(getComputedStyle(pin).top);
       const paragraph = pin.querySelector('[data-kp-rising-beat="beat.read"] p')!;
       const link = paragraph.querySelector('.kp-semantic-link')!;
+      const frame = pin.querySelector('.kp-caption-frame')!;
+      const frameStyle = getComputedStyle(frame);
+      const documentParagraph = document.querySelector('.kp-caption-document-intro p')!;
       return {
         start: scrollY + section.top - target,
         end: scrollY + section.bottom - pin.getBoundingClientRect().height - target,
@@ -57,6 +60,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
         weight: getComputedStyle(paragraph).fontWeight,
         spacing: parseFloat(getComputedStyle(paragraph).letterSpacing),
         linkColor: getComputedStyle(link).color, textColor: getComputedStyle(paragraph).color,
+        documentTextLeft: documentParagraph.getBoundingClientRect().left,
+        captionTextLeft: paragraph.getBoundingClientRect().left,
+        documentTextWidth: documentParagraph.getBoundingClientRect().width,
+        captionTextWidth: paragraph.getBoundingClientRect().width,
+        frameBorders: [frameStyle.borderTopWidth, frameStyle.borderRightWidth, frameStyle.borderBottomWidth, frameStyle.borderLeftWidth],
+        frameRadius: frameStyle.borderRadius, frameShadow: frameStyle.boxShadow,
         headingsHidden: [...pin.querySelectorAll('h2')].every((heading) => getComputedStyle(heading).display === 'none')
       };
     });
@@ -65,6 +74,12 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(embedding.weight, '300');
     assert.ok(embedding.spacing > .2);
     assert.notEqual(embedding.linkColor, embedding.textColor, 'Semantic references must retain their palette color');
+    assert.ok(Math.abs(embedding.documentTextLeft - embedding.captionTextLeft) < 1
+      && Math.abs(embedding.documentTextWidth - embedding.captionTextWidth) < 1,
+      'Document prose and captions must share a column and text inset');
+    assert.deepEqual(embedding.frameBorders, ['0px', '1px', '0px', '1px']);
+    assert.equal(embedding.frameRadius, '0px');
+    assert.equal(embedding.frameShadow, 'none');
     for (const [name, y, expectedTop] of [
       ['approach', embedding.start / 2, embedding.initialTop - embedding.start / 2],
       ['pinned', embedding.start + 100, embedding.target],
@@ -99,9 +114,13 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
         const preview = document.querySelector<HTMLElement>('.kp-caption-preview')!;
         const card = document.querySelector<HTMLElement>('.kp-caption-frame')!;
         return {
-          hidden: passage.getAttribute("hidden"), opacity: getComputedStyle(passage).opacity,
+          hidden: passage.getAttribute("hidden"), opacity: getComputedStyle(passage.querySelector('.kp-beat-copy')!).opacity,
           top: passage.getBoundingClientRect().top,
-          nextOpacity: getComputedStyle(preview).opacity,
+          nextOpacity: preview.firstElementChild ? getComputedStyle(preview.querySelector('.kp-beat-copy')!).opacity : '0',
+          tickOpacity: preview.firstElementChild ? getComputedStyle(preview.firstElementChild, '::before').opacity : '0',
+          tickAncestorOpacity: [getComputedStyle(preview).opacity, preview.firstElementChild ? getComputedStyle(preview.firstElementChild).opacity : '1'],
+          tickLeft: preview.firstElementChild ? preview.firstElementChild.getBoundingClientRect().left
+            + parseFloat(getComputedStyle(preview.firstElementChild, '::before').left) : 0,
           copyBottom: passage.firstElementChild!.getBoundingClientRect().bottom,
           textColors: [...passage.querySelectorAll('p')].map((node) => getComputedStyle(node).color),
           foreground: getComputedStyle(document.body).color,
@@ -111,6 +130,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
           progress: Number(document.body.dataset["kpReaderProgress"]),
           cardWidth: card.getBoundingClientRect().width,
           cardTop: card.getBoundingClientRect().top,
+          cardLeft: card.getBoundingClientRect().left,
           cardColor: getComputedStyle(card).backgroundColor,
           stageTop: stage.getBoundingClientRect().top,
           stageBottom: stage.getBoundingClientRect().bottom,
@@ -151,6 +171,11 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(await page.locator(".kp-caption-preview [id]").count(), 0);
     assert.equal(samples[5]!.opacity, '1', 'The outgoing caption must leave without fading');
     const gaps = samples.slice(4, 7).map((sample) => sample.previewTop - sample.copyBottom);
+    for (const sample of samples.slice(4, 7)) {
+      assert.equal(sample.tickOpacity, '0.7');
+      assert.deepEqual(sample.tickAncestorOpacity, ['1', '1'], 'Preview fading must not dim its tick');
+      assert.ok(Math.abs(sample.tickLeft - sample.cardLeft) < 1, 'Passage ticks must start at the left rail');
+    }
     assert.ok(Math.max(...gaps) - Math.min(...gaps) < .1,
       'Incoming and outgoing captions must keep a constant distance throughout their shared travel');
     assert.ok(Math.abs(samples[5]!.top - samples[5]!.cardTop) < .1,
@@ -172,7 +197,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     });
     await settle(page);
     const hint = await page.locator('.kp-caption-preview').evaluate((node) => ({
-      opacity: Number(getComputedStyle(node).opacity), hidden: node.hasAttribute('hidden'),
+      opacity: Number(getComputedStyle(node.querySelector('.kp-beat-copy')!).opacity), hidden: node.hasAttribute('hidden'),
       bottomGap: document.querySelector('.kp-caption-frame')!.getBoundingClientRect().bottom - node.firstElementChild!.getBoundingClientRect().bottom,
       pairGap: node.firstElementChild!.getBoundingClientRect().top
         - document.querySelector('[data-kp-rising-beat="beat.multiply"] .kp-caption-copy')!.getBoundingClientRect().bottom
@@ -182,7 +207,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       'The pair spacing must already hold when the preview first enters the card');
     assert.ok(hint.bottomGap >= 17 && hint.bottomGap < 60, 'The hint must enter from the bottom of the card');
     await page.screenshot({ path: path.join(outputRoot, `caption-bottom-preview-${size.width}.png`) });
-    assert.equal(await page.locator('[data-kp-rising-beat="beat.multiply"]').evaluate((node) => getComputedStyle(node).opacity), '1',
+    assert.equal(await page.locator('[data-kp-rising-beat="beat.multiply"] .kp-beat-copy').evaluate((node) => getComputedStyle(node).opacity), '1',
       'The current caption must retain full opacity while the pair moves');
     const upcomingId = await page.evaluate(() => {
       const slot = document.querySelector('[data-kp-beat="beat.multiply"]')!;

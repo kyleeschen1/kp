@@ -27,15 +27,15 @@
   }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-layout {
     display: block;
-    width: min(100% - 40px, 46rem);
+    width: var(--kp-caption-width);
     margin-inline: auto;
   }
   body[data-kp-reader-layout="rising-passages"] .kp-lesson {
     padding: 3rem 0 5rem;
   }
-  .kp-caption-document-intro, .kp-caption-document-after { max-width: 38rem; margin: 0 auto; }
+  .kp-caption-document-intro, .kp-caption-document-after { width: 100%; padding-inline: 24px; margin: 0 auto; }
   .kp-caption-document-intro { margin-bottom: 4rem; }
-  .kp-caption-document-after { padding: 3rem 0; min-height: 65vh; }
+  .kp-caption-document-after { padding-block: 3rem; min-height: 65vh; }
   .kp-caption-sequence { display: grid; grid-template-columns: minmax(0, 1fr); }
   .kp-caption-pin {
     grid-area: 1 / 1;
@@ -127,8 +127,8 @@
     z-index: 2;
     width: min(100%, 38rem);
     margin-inline: auto;
-    opacity: var(--kp-caption-opacity, 1);
   }
+  body[data-kp-caption-mode="document"] .kp-rising-passage { padding-inline: 24px; }
   body[data-kp-caption-mode="document"] :is(.kp-caption-sequence, .kp-caption-pin) { display: block; position: static; height: auto; width: auto; }
   body[data-kp-caption-mode="document"] .kp-caption-scroll-slots { display: none; }
   html body[data-kp-caption-mode="document"] :is(.kp-animation-story, .kp-animation-beats, .kp-animation-beats > li) { display: block; }
@@ -146,7 +146,7 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: calc(var(--kp-caption-width) - 48px);
+    width: var(--kp-caption-width);
     height: calc(var(--kp-caption-text-height) + 32px);
     display: flex;
     flex-direction: column;
@@ -154,13 +154,34 @@
     /* Keep the resting baseline, but let departing ink reach the card edge. */
     padding-top: 56px;
     padding-bottom: 6px;
+    padding-inline: 24px;
     overflow: clip;
   }
   body[data-kp-caption-mode="captions"] .kp-caption-copy {
+    position: relative;
     flex: 0 0 auto;
+    width: calc(100% + 48px);
+    margin-inline: -24px;
+    padding-inline: 24px;
     max-height: 100%;
     overflow: auto;
     transform: translateY(var(--kp-caption-offset, 0px));
+  }
+  /* The passage owns both motion and its marker; only its prose fades.
+     Keep the gutter inside the clipped copy so ticks leave at the same edge. */
+  body[data-kp-caption-mode="captions"] .kp-caption-copy > .kp-beat-copy {
+    opacity: var(--kp-caption-opacity, 1);
+  }
+  body[data-kp-caption-mode="captions"] .kp-caption-copy::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .85rem;
+    width: 11px;
+    height: 1px;
+    background: var(--kp-ink);
+    opacity: .7;
+    pointer-events: none;
   }
   body[data-kp-caption-mode="captions"] .kp-caption-preview[data-kp-caption-active="true"] {
     /* Preview begins at the card's bottom and travels through its interior.
@@ -174,10 +195,11 @@
     transform: translateX(-50%);
     width: var(--kp-caption-width);
     height: var(--kp-caption-card-height);
-    border: 1px solid var(--kp-line);
-    border-radius: 12px;
+    border-block: 0;
+    border-inline: 1px solid var(--kp-line);
+    border-radius: 0;
     background: var(--kp-surface);
-    box-shadow: 0 12px 40px rgb(0 0 0 / 14%);
+    box-shadow: none;
     pointer-events: none;
   }
   .kp-caption-reading-mode {
@@ -192,7 +214,7 @@
   }
   .kp-caption-reading-mode[aria-pressed="true"] { background: var(--kp-line); }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-passage:focus-within {
-    opacity: 1 !important;
+    --kp-caption-opacity: 1 !important;
     background: var(--kp-surface);
   }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-rising-passage, .kp-caption-document-intro, .kp-caption-document-after) p {

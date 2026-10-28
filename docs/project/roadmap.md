@@ -27,7 +27,7 @@ nor its evidence. The ledger remains retrievable at
 
 October 28 latest visual candidate: [document-backed captions](reviews/2026-10-28-fractional-caption-reader.md)
 now sit bottom-aligned above the equation on a narrow Nocturne blue card. The user
-accepted the card and confirmed Cmd+F works, but rejected the rail. A faint next
+accepted the card and confirmed Cmd+F works, but rejected the earlier progress rail. A faint next
 caption now approaches while the equation holds; native reveal and Read all
 remain. Both captions now move together at fixed spacing, with no outgoing fade;
 departure is clipped at the card edge. The compiler emits
@@ -40,6 +40,9 @@ The latest local revision embeds that card in an ordinary document using native
 sticky entry/release. Caption headings remain only as metadata, references retain
 their color, and prose is lighter with slightly wider tracking. Review this
 single embedding before proposing a general multi-card authoring interface.
+The latest framing candidate uses only left/right borders, a visible left tick
+moving with each passage, and the same column/inset for document prose. The
+background and existing animation/scroll clocks remain unchanged.
 
 October 27 prototype planning: the user selects multi-step algebra to test the
 new document-anchored derivation trail. The [proposed implementation plan](reviews/2026-10-27-next-step-review.md)

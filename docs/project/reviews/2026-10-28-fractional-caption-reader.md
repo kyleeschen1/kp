@@ -1,13 +1,14 @@
 # Document-backed captions for the fractional reader
 
-Status: local candidate with document embedding, styled references, no visible
-step headings and lighter prose awaits visual review. Nocturne and paired,
-unfaded departure remain the requested treatments.
+Status: local candidate with side rails, passage ticks and one shared reading
+column awaits visual review. Document embedding, Nocturne, styled references,
+lighter prose and paired, unfaded departure remain the requested treatments.
 
 The user prefers explanations that behave like closed captions. The latest
 revision addresses the missing anticipation: captions sit above the equation
-on a phone-width card. The user found the rail unhelpful; a faint approaching
-caption now supplies anticipation directly.
+on a phone-width surface. The user found the earlier separate progress rail
+unhelpful. The new left/right framing rails and passage-bound ticks serve a
+different purpose: frame animation mode and make faint approaching prose trackable.
 Text remains still during its operation, then rises beyond the card edge as the next
 caption materializes. Native search and ordinary document scrolling remain
 explicit requirements. This supersedes the local rising/fading presentation in
@@ -30,7 +31,7 @@ mathematical programs or the broader reader architecture.
 
 ## Behavior
 
-The latest local candidate uses a centered card up to 440px wide. Per the user's
+The latest local candidate uses a centered surface up to 440px wide. Per the user's
 correction it restores the spec's Nocturne palette: `#121826` page and `#1B2535`
 card, through the existing shared tutorial palette variables. Mathematical ink
 and typography remain unchanged. Ordinary prose uses foreground ink, weight 300
@@ -38,8 +39,22 @@ and `.015em` tracking; semantic links retain the shared relation blue instead
 of being forced to foreground. Step headings stay hidden as metadata for IDs
 and navigation labels, not visible caption content. The separator is removed; captions retain their bottom
 alignment just above the mathematical region. The native equation renderer uses a compact 96px workspace at the
-top of its region, retaining its existing fit and motion clearance. The rail
-and its labels are removed. The final caption remains with the solved equation.
+top of its region, retaining its existing fit and motion clearance. The earlier
+progress indicator and labels remain removed. The final caption remains with the solved equation.
+
+Only the left and right borders remain: no horizontal borders, rounded corners
+or enclosing shadow. The background colors are unchanged. Opening prose,
+animation surface and closing prose share the same outer column; prose and
+captions have the same 24px text inset and wrapping width.
+
+Each caption copy owns a short decorative tick at its first line, extending
+inward from the left rail. The tick shares the copy's translation and clipping,
+so it cannot drift away from its passage. It stays at steady visible contrast
+while the approaching prose is faint. Opacity belongs to the inner prose rather
+than their common ancestor. Ticks leave at the same top edge as their text;
+they add neither semantic nodes nor an independent clock. Print, no-JS and
+Read all omit these motion cues. Dimensions and contrast remain local visual
+choices pending review.
 
 The card is now embedded between the authored opening and closing paragraphs.
 A single native CSS sticky surface contains the card, original captions and
@@ -162,6 +177,11 @@ departure and arrival curves from drifting apart; equation motion is unchanged.
 Embedding checks cover in-flow entry, pinning, release at the solved state and
 rewind on desktop and phone. They verify hidden step headings, prose weight and
 tracking, retained semantic reference color, and held progress during Read all.
+The side-rail revision checks matching prose/caption widths and left edges,
+vertical-only framing, constant tick contrast through faint preview travel,
+undimmed tick ancestors and alignment with the left rail. Desktop and phone
+screenshots were inspected; the existing native search, reverse, entry/release,
+static and print checks passed. No wider renderer promotion is claimed.
 The 41-sample equation smoke protects direct/forward/reverse paint and the
 previous duplicate-owner repairs. Full typecheck includes app, tools, tests,
 Svelte and domains. These checks passed for this candidate; screenshots were
@@ -232,6 +252,9 @@ The opening paragraphs precede the card. Scroll until the card reaches its pin
 position, follow it to `x = 8`, then continue into the closing paragraphs. Reverse
 to check re-entry. Inside the card, look for body text without headlines and a
 blue `x` reference in the first caption. Judge the lighter weight and tracking.
+Look for the left tick approaching before its faint passage becomes readable,
+and watch it move with the text through an exchange. Check whether the open
+side rails mark animation mode clearly while the prose keeps one reading column.
 
 Choose **Steps →
 Multiply both sides by two**. Read the caption over `x/2 = 4`, scroll through the

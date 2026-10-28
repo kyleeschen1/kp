@@ -9,7 +9,7 @@ October 28: the fractional reader's latest approved-to-build, pending-review
 candidate uses [document-backed captions](../reviews/2026-10-28-fractional-caption-reader.md).
 The user accepted the narrow charcoal card and confirmed Cmd+F works. The latest
 candidate bottom-aligns prose, top-aligns the math workspace and replaces the
-rejected rail with a faint approaching caption during the result hold. The next
+rejected progress rail with a faint approaching caption during the result hold. The next
 revision retains the spec's Nocturne blue. Outgoing text stays fully opaque and
 moves at fixed spacing ahead of the faint incoming copy, clipping at the card
 edge. Compiler-owned initial markup prevents the old article flash;
@@ -22,6 +22,9 @@ The latest candidate adds native sticky document entry/release, hidden caption
 headings, lighter/wider-spaced prose and preserved semantic reference styling.
 The original opening/closing prose stays in document flow; stable sibling slots
 drive the existing clock. General multi-card hosting remains unpromoted.
+The current framing revision replaces the rounded enclosure with side rails,
+keeps passage ticks visible while preview prose is faint, and aligns surrounding
+prose to the same column. Ticks share caption motion; this remains local discovery.
 
 October 27 planning focus: [multi-step algebra derivation trail](../reviews/2026-10-27-next-step-review.md).
 The user selects retained historical equations and a moving continuation as the
