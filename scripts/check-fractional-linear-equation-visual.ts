@@ -33,7 +33,11 @@ try {
     reducedMotion: "no-preference"
   });
   page.on("pageerror", (error) => pageErrors.push(error.stack ?? error.message));
-  if (process.argv.includes('--production-performance')) {
+  if (process.argv.includes('--preparation')) {
+    const { checkFractionalReaderPreparation } = await import('./fractional-reader-preparation-check.ts');
+    await checkFractionalReaderPreparation(page, harness.baseUrl, outputRoot);
+    if (pageErrors.length > 0) throw new Error(pageErrors.join('\n'));
+  } else if (process.argv.includes('--production-performance')) {
     if (explicitBaseUrl === undefined) throw new Error('Production measurement requires --base-url for the production preview.');
     const { checkFractionalReaderProduction } = await import('./fractional-reader-production-check.ts');
     await checkFractionalReaderProduction(page, harness.baseUrl, outputRoot,

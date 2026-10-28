@@ -33,6 +33,12 @@
       "status": "passed",
       "scope": "Color focus projection across three engines, focused division lifecycle canary, and architecture; diagnostic builds 53 to 25.",
       "checkedAt": "2026-10-28T21:43:14.961Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --preparation --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "Twelve bidirectional cycles preserve visible glyph geometry and identity with four builds; resize, font invalidation and pagehide retire all owned layers. Smoke 41 and architecture/types passed.",
+      "checkedAt": "2026-10-28T21:48:25.910Z"
     }
   ],
   "allowedWork": [
@@ -59,7 +65,8 @@
     {
       "id": "reuse",
       "title": "Prepared-replay",
-      "status": "planned"
+      "summary": "Bounded exact-key transition reuse eliminates warm preparation builds; native endpoint parking and global measurement invalidation preserve paint ownership.",
+      "status": "complete"
     },
     {
       "id": "ahead",

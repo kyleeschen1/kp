@@ -71,10 +71,12 @@ export interface KpReaderCanonicalEquationSessionInspection {
   readonly activeTransitionId?: string | undefined;
   readonly purePlanCacheSize: number;
   readonly adjacentPrewarmEnabled: boolean;
+  readonly retainedSessionCount: number;
 }
 
 // A replacement session on the same DOM must not inherit retired paint templates.
 let nextPaintGeneration = 0;
+type RetirementReason = 'scene-replaced' | 'surface-disposed' | 'measurement-invalidated';
 
 export function createKpReaderCanonicalEquationSession(input: {
   readonly transitionIds: readonly string[];
@@ -84,6 +86,8 @@ export function createKpReaderCanonicalEquationSession(input: {
   readonly requireAppliedStageLayout?: boolean | undefined;
   readonly enablePurePlanCache?: boolean | undefined;
   readonly enableAdjacentPrewarm?: boolean | undefined;
+  /** Includes the active transition. Only native-color callers opt in. */
+  readonly preparedCapacity?: number | undefined;
 }): KpReaderCanonicalEquationSession {
   if (
     input.transitionIds.length === 0 ||
@@ -94,6 +98,15 @@ export function createKpReaderCanonicalEquationSession(input: {
     );
   }
   const transitionIds = Object.freeze([...input.transitionIds]);
+  const preparedCapacity = input.preparedCapacity ?? 1;
+  if (!Number.isInteger(preparedCapacity) || preparedCapacity < 1 || preparedCapacity > 4) {
+    throw new Error('Prepared reader capacity must be an integer from one to four.');
+  }
+  const retained = new Map<string, {
+    readonly surface: HTMLElement;
+    readonly restore: () => void;
+    readonly retire: (reason?: RetirementReason) => void;
+  }>();
   let session:
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
   let sessionKey: string | undefined;
@@ -112,42 +125,57 @@ export function createKpReaderCanonicalEquationSession(input: {
   const sessionHandoff = createKpReaderLatestSessionHandoff();
   let prewarmQueue: KpReaderIdlePrewarmQueue | undefined;
   const releaseCurrentSession = (
-    reason:
-      | "scene-replaced"
-      | "surface-disposed"
-      | "measurement-invalidated",
-    preserveStructuralSuccession = false
+    reason: RetirementReason,
+    preserveStructuralSuccession = false,
+    keepPrepared = false
   ): void => {
     if (colorRefresh !== undefined) colorRefresh.window.cancelAnimationFrame(colorRefresh.id);
     colorRefresh = undefined;
-    session?.retire({
-      kind: "native-katex-paint-preserving-retirement",
-      reason,
-      structuralSuccession: preserveStructuralSuccession
-        ? "preserve"
-        : "retire-preserving-paint"
-    });
+    const savedSession = session;
+    const savedSurface = structuralFitSurface;
+    const savedLayer = materialLayer;
+    const savedKey = sessionKey;
+    const savedStructuralKey = structuralSessionKey;
+    const savedTransition = activeTransitionId;
+    const retire = (retirementReason = reason) => {
+      savedSession?.retire({
+        kind: 'native-katex-paint-preserving-retirement', reason: retirementReason,
+        structuralSuccession: preserveStructuralSuccession ? 'preserve' : 'retire-preserving-paint'
+      });
+      if (savedSurface !== undefined) {
+        for (const name of ['kpReaderCanonicalEquationSession', 'kpReaderCanonicalEquationSessionLifecycle',
+          'kpReaderCanonicalEquationSessionOwner', 'kpReaderCanonicalEquationSessionTrackCount',
+          'kpReaderCanonicalEquationPresentationMode']) delete savedSurface.dataset[name];
+      }
+      savedLayer?.remove();
+    };
+    if (keepPrepared && preparedCapacity > 1 && savedSession !== undefined
+      && savedKey !== undefined && savedSurface !== undefined) {
+      // Park at a native endpoint: no material owns visible paint or GPU leases.
+      // The host hides the whole transition; its exact measured session survives.
+      savedSession.apply(0);
+      savedSurface.dataset['kpReaderCanonicalEquationSession'] = 'prepared';
+      retained.set(savedKey, { surface: savedSurface, retire, restore: () => {
+        session = savedSession; sessionKey = savedKey;
+        structuralFitSurface = savedSurface; structuralSessionKey = savedStructuralKey;
+        materialLayer = savedLayer; activeTransitionId = savedTransition;
+      } });
+      while (retained.size >= preparedCapacity) {
+        const oldest = retained.keys().next().value!;
+        retained.get(oldest)!.retire(); retained.delete(oldest);
+      }
+    } else retire();
     session = undefined;
     sessionKey = undefined;
     colorRevision = undefined;
     structuralSessionKey = undefined;
-    if (structuralFitSurface !== undefined) {
-      delete structuralFitSurface.dataset["kpReaderCanonicalEquationSession"];
-      delete structuralFitSurface.dataset[
-        "kpReaderCanonicalEquationSessionLifecycle"
-      ];
-      delete structuralFitSurface.dataset["kpReaderCanonicalEquationSessionOwner"];
-      delete structuralFitSurface.dataset[
-        "kpReaderCanonicalEquationSessionTrackCount"
-      ];
-      delete structuralFitSurface.dataset[
-        "kpReaderCanonicalEquationPresentationMode"
-      ];
-    }
     structuralFitSurface = undefined;
     activeTransitionId = undefined;
-    materialLayer?.remove();
     materialLayer = undefined;
+  };
+  const retireRetained = (reason: RetirementReason) => {
+    for (const entry of retained.values()) entry.retire(reason);
+    retained.clear();
   };
   const geometryIdentityFor = (
     frame: KpReaderCanonicalEquationFrame,
@@ -226,6 +254,9 @@ export function createKpReaderCanonicalEquationSession(input: {
       if (disposed) {
         throw new Error("Reader canonical equation session is disposed.");
       }
+      if (preparedCapacity > 1 && frame.colorRevision === undefined) {
+        throw new Error('Retained preparation requires declared native-color focus.');
+      }
       const transitionId = frame.renderPlan.transitions[0]?.id;
       if (
         transitionId === undefined ||
@@ -247,9 +278,11 @@ export function createKpReaderCanonicalEquationSession(input: {
         frame.measurementIdentity.revision,
         frame.appliedStageLayout?.applicationId ?? "native",
         frame.fitSurface.offsetWidth,
-        frame.fitSurface.offsetHeight
+        frame.fitSurface.offsetHeight,
+        frame.typographyCacheKey,
+        frame.fitSurface.ownerDocument.defaultView?.devicePixelRatio ?? 1
       ];
-      const nextKey = nextParts.join(":");
+      const nextKey = JSON.stringify(nextParts);
       const nextStructuralSessionKey = [
         transitionId,
         frame.renderPlan.id,
@@ -274,8 +307,20 @@ export function createKpReaderCanonicalEquationSession(input: {
           "Reader canonical equation session"
         );
       }
-      if (session === undefined || sessionKey !== nextKey) {
-        const names = ['transition', 'render-plan', 'material-plan', 'presentation', 'motion', 'font', 'coordinate-space', 'measurement', 'stage-layout', 'width', 'height'];
+      if (preparedCapacity > 1 && (sessionKey !== nextKey || structuralFitSurface !== frame.fitSurface)) {
+        // Remove the requested entry before parking to avoid evicting the hit.
+        const ready = retained.get(nextKey);
+        retained.delete(nextKey);
+        releaseCurrentSession('scene-replaced', false, structuralFitSurface !== frame.fitSurface);
+        for (const [key, entry] of retained) {
+          if (entry.surface !== frame.fitSurface) continue;
+          entry.retire(); retained.delete(key);
+        }
+        if (ready?.surface === frame.fitSurface) ready.restore();
+        else ready?.retire();
+      }
+      if (session === undefined || sessionKey !== nextKey || structuralFitSurface !== frame.fitSurface) {
+        const names = ['transition', 'render-plan', 'material-plan', 'presentation', 'motion', 'font', 'coordinate-space', 'measurement', 'stage-layout', 'width', 'height', 'typography', 'pixel-ratio'];
         const reasons = lastBuildParts === undefined ? ['initial'] : names.filter((_name, index) => lastBuildParts![index] !== nextParts[index]);
         if (reasons.length === 0) reasons.push('invalidated');
         const handoffToken = sessionHandoff.issue();
@@ -454,6 +499,7 @@ export function createKpReaderCanonicalEquationSession(input: {
       sessionHandoff.invalidate();
       prewarmQueue?.cancel();
       measuredScenes.clear();
+      retireRetained('measurement-invalidated');
       paintGeneration = nextPaintGeneration++;
       releaseCurrentSession("measurement-invalidated");
     },
@@ -463,6 +509,7 @@ export function createKpReaderCanonicalEquationSession(input: {
       sessionHandoff.invalidate();
       prewarmQueue?.dispose();
       releaseCurrentSession("surface-disposed");
+      retireRetained('surface-disposed');
       purePlanCache.clear();
       measuredScenes.clear();
     },
@@ -472,6 +519,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         active: session !== undefined,
         ...(activeTransitionId === undefined ? {} : { activeTransitionId }),
         purePlanCacheSize: purePlanCache.size,
+        retainedSessionCount: retained.size,
         adjacentPrewarmEnabled: input.enableAdjacentPrewarm === true
       });
     }
@@ -535,9 +583,8 @@ function createMaterialLayer(fitSurface: HTMLElement): HTMLElement {
     "kp-reader-equation-material kp-reader-canonical-equation-session-material " +
     "kp-canonical-equation-content";
   layer.dataset["kpEditorEquationMaterialLayer"] = "true";
-  // This layer dies with its exact presentation/geometry session. Retain its
-  // source and target clones while scrubbing, without caching measured scenes
-  // or authorizing reuse across focus, font, resize or session replacement.
+  // Source/target paint belongs to this measured session. Declared color-only
+  // focus may refresh it; font, layout and content changes retire the session.
   layer.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
   layer.setAttribute("aria-hidden", "true");
   layer.setAttribute("inert", "");

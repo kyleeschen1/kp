@@ -55,3 +55,26 @@ WebKit (including nested SVG paint, no bounding reads, stable geometry/identity)
 The first color test exposed host stylesheet loading during its snapshot; it
 now waits for host readiness. Architecture rejected a renderer-local RAF; the
 reader host now owns the bounded scheduling. No authority gate was weakened.
+
+## Bounded prepared replay
+
+Native-color readers retain at most four prepared transitions including the
+active one. Parked sessions sit at a native endpoint inside their hidden host;
+exact keys include plan, presentation geometry, motion mode, font, typography,
+layout revision, dimensions and pixel ratio. Surface identity must also match.
+Eviction and disposal retire paint; layout remeasurement retires the whole pool.
+The pressure test caught missing whole-layout retirement on resize; the repair
+is at the host's measurement boundary, before any new observation is published.
+
+The diagnostic falls to four builds total across four full traversal cycles,
+with zero warm rebuilds, 3,120 bounds reads and 1,848 layouts. Instrumented warm
+p95 is approximately 17.5ms (individual maxima still about 33–34ms). Heap and
+DOM increase modestly because four preparations replace one; complete production
+resource accounting remains an integration gate.
+
+`npm run visual:fractional-linear-equation -- --preparation --base-url=http://127.0.0.1:8000`
+checks 12 forward/reverse cycles, exact visible glyph identity and geometry at
+four operation interiors, four-layer maximum, all-layer retirement on resize and
+font invalidation, and complete pagehide disposal. The 41-point smoke, app/test/
+script types and architecture also passed. This does not activate the older
+measured-scene/pure-plan cache for this family.

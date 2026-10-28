@@ -453,6 +453,7 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
           lessonDescriptor.id === "fraction-composition",
         enablePurePlanCache:
           lessonDescriptor.id === "fraction-composition",
+        preparedCapacity: lessonDescriptor.focusPaint === 'native-color' ? 4 : 1,
         requireAppliedStageLayout:
           lessonDescriptor.stageLayoutCompiler !== undefined
       });
@@ -766,6 +767,9 @@ function measureLayout(revision: number): LayoutState {
   if (stage.getClientRects().length === 0 && lastMeasuredLayout !== undefined) {
     return lastMeasuredLayout;
   }
+  // Measurement owns the entire mounted layout revision, including parked
+  // transitions. Retiring only the active surface leaves stale retained DOM.
+  readerCanonicalEquationSession?.invalidate();
   const stageLayoutIntent =
     evaluationControls?.readStageLayoutIntent() ??
     lessonDescriptor.createStageLayoutIntent?.({
