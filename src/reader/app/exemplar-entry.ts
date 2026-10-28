@@ -83,6 +83,7 @@ import {
 } from "./canonical-equation-frame-plan.ts";
 import {
   applyKpCanonicalEquationSemanticFocus,
+  canonicalEquationPaintRevision,
   projectKpCanonicalEquationSemanticFocus
 } from "./canonical-equation-semantic-focus.ts";
 import {
@@ -461,6 +462,7 @@ const materialLayer = createKpReaderEquationMaterialLayer(
   stageShell.materialLayer
 );
 let lastMeasuredLayout: LayoutState | undefined;
+let measuredViewportSize: { width: number; height: number } | undefined;
 let chromeFreeLayoutRevision = -1;
 
 const rendererRegistry = createKpReaderAdapterRegistry<
@@ -490,10 +492,17 @@ stage.dataset["kpReaderRendererAdapter"] = renderer.adapterId;
 const unsubscribeFocus = focus.subscribe(() => {
   locationSettlement.updateShare();
 });
+let initialResizeNotification = true;
 const resizeObserver = new ResizeObserver(() => {
   if (printMedia.matches) return;
+  const initial = initialResizeNotification;
+  initialResizeNotification = false;
   updateScrollGeometry();
-  renderer.refresh("resize");
+  // ResizeObserver delivers an initial notification even when nothing resized.
+  // A URL-selected frame may already have measured this exact viewport. Keep
+  // later notifications unconditional so content/layout changes still refresh.
+  if (!initial || measuredViewportSize?.width !== viewport.clientWidth ||
+      measuredViewportSize.height !== viewport.clientHeight) renderer.refresh("resize");
   scheduleScrollSample();
 });
 resizeObserver.observe(viewport);
@@ -738,6 +747,7 @@ function scheduleScrollSample(): void {
 }
 
 function measureLayout(revision: number): LayoutState {
+  measuredViewportSize = { width: viewport.clientWidth, height: viewport.clientHeight };
   if (chromeFreeCanonicalEquationSession !== undefined) {
     if (chromeFreeLayoutRevision !== revision) {
       chromeFreeCanonicalEquationSession.invalidate();
@@ -1040,12 +1050,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     );
   }
   applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
-  const presentationRevision = [
-    activeBeat === undefined ? "no-active-beat" : requiredData(activeBeat, "kpBeat"),
-    focusSnapshot.activeSource ?? "none",
-    ...focusedRefs,
-    semanticSaliencePresentationRevision
-  ].join(":");
+  const presentationRevision = canonicalEquationPaintRevision(
+    semanticFocus, semanticSaliencePresentationRevision
+  );
   const canonicalFrame = {
     renderPlan: context.renderPlan,
     materialPlan: context.materialPlan,

@@ -67,3 +67,38 @@ test("divide-both-sides remains searchable without JavaScript and contained on p
   expect(overflow).toBeLessThanOrEqual(1);
   await phone.close();
 });
+
+test("divide-both-sides preparation reuses bounded paint and retires it on focus, resize and disposal", async ({ page }) => {
+  await page.goto(`${route}?kpMotion=full`, { waitUntil: "networkidle" });
+  const scrubber = page.locator("[data-kp-reader-attention-scrubber]");
+  const seek = async (progress: number) => {
+    await scrubber.evaluate((node, value) => {
+      if (!(node instanceof HTMLInputElement)) throw new Error("Expected semantic scrubber");
+      node.value = String(value);
+      node.dispatchEvent(new Event("input", { bubbles: true }));
+    }, progress);
+    await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", String(progress));
+  };
+  await seek(600);
+  const layer = page.locator('.kp-reader-canonical-equation-session-material');
+  await expect(layer).toHaveCount(1);
+  const initial = await layer.elementHandle();
+  // Stay within one narrative focus interval as well as one transformation.
+  for (const progress of [560, 580, 620, 580, 560, 600]) await seek(progress);
+  expect(await initial!.evaluate(node => node.isConnected)).toBe(true);
+  const caches = await layer.locator('[data-kp-equation-material-owner-id]').evaluateAll(owners => owners.map(owner => ({
+    children: owner.childElementCount,
+    misses: Number(owner.getAttribute('data-kp-equation-material-visual-cache-miss-count')),
+    active: [...owner.children].filter(child => getComputedStyle(child).display !== 'none').length
+  })));
+  expect(caches.length).toBeGreaterThan(0);
+  expect(caches.every(cache => cache.children <= 2 && cache.misses <= 2 && cache.active === 1)).toBe(true);
+  await page.locator('.kp-semantic-link').first().dispatchEvent('pointerover');
+  await expect.poll(() => initial!.evaluate(node => node.isConnected)).toBe(false);
+  const focused = await layer.elementHandle();
+  await page.setViewportSize({ width: 600, height: 800 });
+  await expect.poll(() => focused!.evaluate(node => node.isConnected)).toBe(false);
+  await expect(layer).toHaveCount(1);
+  await page.evaluate(() => dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false })));
+  await expect(layer).toHaveCount(0);
+});

@@ -43,3 +43,33 @@ counts diagnose causes; their timings are not the production baseline.
 
 App and tools TypeScript checks pass. All instrumentation retains existing
 rendering behavior. Subsequent sections record candidate results and safeguards.
+
+## Preparation and startup
+
+Retained changes: a paint-derived presentation key; source/target clone reuse
+inside the existing session-owned material layer; synchronous batching of
+independent native text measurements during typography compilation; suppression
+of the initial ResizeObserver refresh only when its viewport was already measured
+at the same dimensions. All later notifications still invalidate, as do fonts.
+No pure-plan or cross-session measured-scene cache was enabled for this reader.
+
+The first hypothesis did not produce a gain: dropping narrative identity alone
+still gave 53 builds, because the passages actually change semantic focus.
+Those legitimate invalidations remain. After the retained preparation changes,
+four instrumented development traversals had 7,825 layout passes (baseline 9,167),
+25,102 bounds reads (25,657), and unchanged 53 builds. These are diagnostic counts;
+production timings are reserved for the final comparison. Four fresh semantic
+URLs now each build once instead of twice, with an executable assertion. The
+observer trace showed only initial delivery, not a real size change.
+
+Validation: 41-sample fractional smoke; desktop/phone rising-document preservation
+(reversal, font reflow, slider, find, Read all, print/static); native preparation
+checks on Chromium, Firefox and WebKit (6); native glyph compositor units (82);
+focus identity units (4); app/tools TypeScript; architecture gates. A new division
+reader test proves bounded per-owner source/target copies, reuse while scrubbing,
+and retirement on focus, resize and disposal via
+`npm run visual:cancellation -- --grep 'divide-both-sides preparation'`.
+Its initial test range crossed a genuine narrative-focus boundary; the test was
+corrected to stay inside one focus interval, with explicit invalidation tested
+separately. An initial TypeScript inference error was repaired without a cast;
+the subsequent app/tools checks passed.

@@ -2,11 +2,25 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   compileKpCanonicalEquationSemanticFocusLineage,
+  canonicalEquationPaintRevision,
   projectKpCanonicalEquationSemanticFocus
 } from "../src/reader/app/canonical-equation-semantic-focus.ts";
 import type {
   KpReaderEquationRenderPlan
 } from "../src/reader/renderers/equation-render-plan.ts";
+
+test('different narrative scopes share preparation only when projected mathematical paint is identical', () => {
+  const project = (objectRefs: readonly string[]) => projectKpCanonicalEquationSemanticFocus({
+    snapshot: { activeSource: 'story', objectRefs, revision: 1 },
+    equationObjectRefs: new Set(['equation.first', 'equation.second'])
+  });
+  const first = canonicalEquationPaintRevision(project(['equation.first', 'x']), 'none');
+  assert.equal(first, canonicalEquationPaintRevision(project(['equation.second', 'x']), 'none'));
+  assert.notEqual(first, canonicalEquationPaintRevision(project(['equation.second', 'y']), 'none'));
+  assert.notEqual(first, canonicalEquationPaintRevision({ activeSource: 'pointer', visualFocusRefs: ['x'] }, 'none'));
+  assert.notEqual(first, canonicalEquationPaintRevision(project(['x']), 'theme-changed'));
+  assert.equal(canonicalEquationPaintRevision(project(['x', 'y', 'x']), 'none'), canonicalEquationPaintRevision(project(['y', 'x']), 'none'));
+});
 
 test("story scope does not paint whole equations as visual focus", () => {
   const projection = projectKpCanonicalEquationSemanticFocus({

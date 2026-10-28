@@ -27,6 +27,12 @@
       "status": "passed",
       "scope": "baseline: eight production cohorts and actual asset requests; app/tools types and dev invalidation diagnostic also passed",
       "checkedAt": "2026-10-28T20:28:10.708Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --performance --base-url=http://127.0.0.1:8000",
+      "status": "passed",
+      "scope": "Preparation: four traversal diagnostic and single-build cold URL assertions, primary smoke/rising and division lifecycle preservation; app and tools types, architecture and native preparation cohort.",
+      "checkedAt": "2026-10-28T20:40:52.245Z"
     }
   ],
   "allowedWork": [
@@ -47,7 +53,8 @@
     {
       "id": "preparation",
       "title": "Preparation-reuse",
-      "status": "in-progress"
+      "summary": "Session-local clone reuse, batched typography measurement and one preparation per cold destination. Real focus invalidations retained; no stale geometry cache enabled.",
+      "status": "complete"
     },
     {
       "id": "frames",

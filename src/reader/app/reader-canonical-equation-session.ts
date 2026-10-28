@@ -514,6 +514,10 @@ function createMaterialLayer(fitSurface: HTMLElement): HTMLElement {
     "kp-reader-equation-material kp-reader-canonical-equation-session-material " +
     "kp-canonical-equation-content";
   layer.dataset["kpEditorEquationMaterialLayer"] = "true";
+  // This layer dies with its exact presentation/geometry session. Retain its
+  // source and target clones while scrubbing, without caching measured scenes
+  // or authorizing reuse across focus, font, resize or session replacement.
+  layer.dataset["kpEquationMaterialVisualCache"] = "dual-revision";
   layer.setAttribute("aria-hidden", "true");
   layer.setAttribute("inert", "");
   fitSurface.append(layer);

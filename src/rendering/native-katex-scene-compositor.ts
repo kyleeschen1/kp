@@ -29,6 +29,7 @@ import {
 import {
   attachKpNativeKatexTrackPaintGeometry,
   measureKpNativeKatexTextInkRect,
+  measureKpNativeKatexTextInkRects,
   measureKpNativeKatexSubtreePaintRect
 } from "./native-katex-paint-geometry.ts";
 import {
@@ -776,7 +777,18 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
   const correlationById = new Map(
     targetBound.map((correlation) => [correlation.id, correlation])
   );
-  const entries = handoffTelemetryGroups(input.telemetry).map(
+  const groups = handoffTelemetryGroups(input.telemetry);
+  // These native endpoints cannot change during synchronous compilation.
+  // Read their independent text baselines together, once per element, rather
+  // than inserting/removing a probe between every source/target pair.
+  const glyphs = [...new Set(groups.flatMap(({ source, native }) =>
+    native.paintKind === "glyph" && native.paintMeasurement !== "subtree"
+      ? [...(source === undefined ? [] : [source.element]), native.element].filter((element) =>
+          typeof element.ownerDocument.createRange === "function")
+      : []))];
+  const ink = measureKpNativeKatexTextInkRects(input.telemetry.stage, glyphs);
+  const paintRects = new Map(glyphs.map((element, index) => [element, ink[index]!]));
+  const entries = groups.map(
     ({ source, material, native }) => {
       const id = correlationId(material.id);
       const correlation = correlationById.get(id);
@@ -849,9 +861,9 @@ export function compileKpNativeKatexTypographyStylePlan(input: {
       }
       const glyphPaintFrame = source === undefined
         ? undefined
-        : createGlyphPaintFrame(input.telemetry.stage, source, native);
+        : createGlyphPaintFrame(input.telemetry.stage, source, native, paintRects);
       const targetGlyphPaintFrame = source === undefined
-        ? createTargetGlyphPaintFrame(input.telemetry.stage, native)
+        ? createTargetGlyphPaintFrame(input.telemetry.stage, native, paintRects.get(native.element))
         : undefined;
       const paintRealization = selectKpNativeKatexGlyphPaintRealization({
         source,
@@ -2195,10 +2207,11 @@ function stageRelativeRect(
 function createGlyphPaintFrame(
   stage: HTMLElement,
   source: KpNativeKatexHandoffTelemetry["observations"][number],
-  target: KpNativeKatexHandoffTelemetry["observations"][number]
+  target: KpNativeKatexHandoffTelemetry["observations"][number],
+  paintRects: ReadonlyMap<HTMLElement, KpStageRelativeRect>
 ): NonNullable<KpNativeKatexTypographyStylePlanEntry["glyphPaintFrame"]> {
-  const sourcePaint = measureKpNativeKatexTextInkRect(stage, source.element);
-  const targetPaint = measureKpNativeKatexTextInkRect(stage, target.element);
+  const sourcePaint = paintRects.get(source.element) ?? measureKpNativeKatexTextInkRect(stage, source.element);
+  const targetPaint = paintRects.get(target.element) ?? measureKpNativeKatexTextInkRect(stage, target.element);
   const scaleX = safeScale(sourcePaint.width, targetPaint.width);
   const scaleY = safeScale(sourcePaint.height, targetPaint.height);
   const maximumInkScaleAnisotropy = 1.025;
@@ -2298,7 +2311,8 @@ function glyphMetricStyleFingerprint(computed: CSSStyleDeclaration): string {
 
 function createTargetGlyphPaintFrame(
   stage: HTMLElement,
-  target: KpNativeKatexHandoffTelemetry["observations"][number]
+  target: KpNativeKatexHandoffTelemetry["observations"][number],
+  measuredPaint?: KpStageRelativeRect
 ): KpNativeKatexTargetGlyphPaintFrame | undefined {
   if (
     typeof target.element.ownerDocument.createRange !== "function" ||
@@ -2308,7 +2322,7 @@ function createTargetGlyphPaintFrame(
     // backend. A scaled runtime frame will still fail closed in the sampler.
     return undefined;
   }
-  const paint = measureKpNativeKatexTextInkRect(stage, target.element);
+  const paint = measuredPaint ?? measureKpNativeKatexTextInkRect(stage, target.element);
   return Object.freeze({
     targetInsetX: paint.left - target.rect.left,
     targetInsetY: paint.top - target.rect.top,

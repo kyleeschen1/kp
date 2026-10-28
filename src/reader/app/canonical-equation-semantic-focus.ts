@@ -10,6 +10,16 @@ export interface KpCanonicalEquationSemanticFocusLineage {
   readonly expand: (refs: readonly string[]) => readonly string[];
 }
 
+/** Narrative identity is not paint identity. Preserve actual focus/theme inputs
+ * while allowing two passages with identical mathematical paint to share it. */
+export function canonicalEquationPaintRevision(
+  projection: KpCanonicalEquationSemanticFocusProjection,
+  salienceRevision: string
+): string {
+  return JSON.stringify([projection.activeSource ?? null,
+    [...new Set(projection.visualFocusRefs)].sort(), salienceRevision]);
+}
+
 /** Focus follows canonical lineage so a link never points at hidden old paint. */
 export function compileKpCanonicalEquationSemanticFocusLineage(
   plans: readonly KpReaderEquationRenderPlan[]

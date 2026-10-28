@@ -8,6 +8,7 @@ declare global {
   interface Window {
     kpFractionalMeasurementProbe: { total: number; prose: number; beat: number };
     kpFractionalProgressProbe: number[];
+    kpFractionalResizeProbe: { progress: string | undefined; entries: { target: string; width: number; height: number }[] }[];
   }
 }
 
@@ -18,6 +19,20 @@ export async function checkFractionalReaderPerformance(page: Page, baseUrl: stri
   await page.addInitScript(() => {
     window.kpFractionalMeasurementProbe = { total: 0, prose: 0, beat: 0 };
     window.kpFractionalProgressProbe = [];
+    window.kpFractionalResizeProbe = [];
+    const NativeResizeObserver = window.ResizeObserver;
+    window.ResizeObserver = class extends NativeResizeObserver {
+      constructor(callback: ResizeObserverCallback) {
+        super((entries, observer) => {
+          if (window.kpFractionalResizeProbe.length < 24) window.kpFractionalResizeProbe.push({
+            progress: document.body?.dataset['kpReaderProgress'],
+            entries: entries.map(({ target, contentRect }) => ({ target: target.className,
+              width: contentRect.width, height: contentRect.height }))
+          });
+          callback(entries, observer);
+        });
+      }
+    };
     const progressObserver = new MutationObserver((records) => {
       for (const record of records) {
         if (record.target !== document.body) continue;

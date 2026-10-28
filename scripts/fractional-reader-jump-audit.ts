@@ -17,6 +17,7 @@ export async function checkFractionalReaderJumps(page: Page, baseUrl: string, ou
         const url = '/src/reader/runtime/reader-runtime-metrics.ts';
         const metrics = await import(/* @vite-ignore */ url);
         return { runtime: metrics.inspectKpReaderRuntimeMetrics(window),
+          resizeEvents: window.kpFractionalResizeProbe,
           boundsReads: { ...window.kpFractionalMeasurementProbe },
           progress: Number(document.body.dataset['kpReaderProgress']) };
       })
@@ -73,6 +74,8 @@ export async function checkFractionalReaderJumps(page: Page, baseUrl: string, ou
     await page.evaluate(() => document.fonts.ready);
     const state = await snapshot();
     assert.equal(state.progress, progress);
+    assert.equal(state.runtime.canonicalSessionBuilds, 1,
+      'A cold semantic destination prepares once; initial ResizeObserver delivery is not a resize');
     const observed = await page.evaluate(() => [...new Set(window.kpFractionalProgressProbe)]);
     assert.ok(observed.every((value) => value === 0 || value === progress),
       `URL ${progress} must not replay skipped states: ${observed.join(', ')}`);
