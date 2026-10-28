@@ -1,5 +1,14 @@
 # Fractional scene typography controls
 
+Status: retired at the user's request on October 28. The controls, Gill Sans
+override and optical thinning were removed, restoring the previous typography.
+The animation routing and inactive-paint fixes remain. The user is considering
+a full-page presentation; that is a discussion, not an implemented layout change.
+The material below records the concluded experiment, not current controls.
+Rollback verification: the entry module, stylesheet and visual-check command
+match their pre-experiment versions at `72abbf489`; the scoped 41-frame smoke
+passed again after removal.
+
 User request: add sliders for scene experiments, lighten KaTeX, and use Gill
 Sans for everything else. This is scoped to `/reader/solve-fractional-linear/`;
 it is not a new typography default for other readers.

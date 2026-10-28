@@ -479,21 +479,6 @@ const renderer = rendererRegistry.mount({
 });
 stage.dataset["kpReaderRendererAdapter"] = renderer.adapterId;
 
-const sceneControls = lessonVariant === "fractional-linear"
-  ? (await import("./fractional-scene-controls.ts")).mountFractionalSceneControls({
-      stage,
-      onGeometryChange: () => {
-        const progress = lastSample().progressPermille;
-        readerCanonicalEquationSession?.invalidate();
-        materialLayer.clear();
-        updateScrollGeometry();
-        scrollToProgress(progress);
-        renderer.refresh("fonts");
-        scheduleScrollSample();
-      }
-    })
-  : undefined;
-
 const unsubscribeFocus = focus.subscribe(() => {
   locationSettlement.updateShare();
 });
@@ -1634,7 +1619,6 @@ function setStyleIfChanged(
 }
 
 function dispose(): void {
-  sceneControls?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);
