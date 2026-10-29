@@ -1,9 +1,10 @@
 # Co-creative mathematical practice
 
 Status: active product direction; first implementation milestone proposed
-Last Updated: 2026-10-28
-Current Next Action: discuss the complete local practice-loop proposal in
-`../reviews/2026-10-28-next-step-review.md`; do not start a new run from this index.
+Last Updated: 2026-10-29
+Current Next Action: resolve the [experiment/conversion/retirement design](../decisions/2026-10-29-experiment-conversion-retirement-direction.md)
+through one complete architectural path. The October 28 workbench delivery
+proposal is deferred at the user's request; personal practice remains the goal.
 
 ## Direction and plan ownership
 

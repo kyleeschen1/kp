@@ -1,24 +1,24 @@
 # KP Next Actions
 
-Last Updated: 2026-10-28
+Last Updated: 2026-10-29
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-Follow the roadmap-selected `threads/co-creative-practice.md`. The user has
-selected spaced practice and the LLM collaboration loop as the current priority;
-`reviews/2026-10-28-next-step-review.md` owns the proposed first milestone and
-API/exemplar evolution policy. Discuss that recommendation before starting a new
-implementation run. Preserve accepted reader behavior and older proof-memory
-evidence; no historical contract resumes automatically. Theseus owns approved
-execution, not this human-readable index.
+The user defers workbench expansion to discuss architectural
+decoupling and a system for experiments, conversion and retirement. Use the
+[direction/design record](decisions/2026-10-29-experiment-conversion-retirement-direction.md)
+for the proposed first end-to-end audit. No retirement, rewrite or new run has
+started. Personal practice remains the product goal of the roadmap-selected
+`threads/co-creative-practice.md`.
 
-Next planning action: review the [first integrated workbench experiment](reviews/2026-10-28-next-step-review.md#workbench-extension-one-experiment-from-discussion-to-delayed-return),
-including exact references, measured iteration and an actual saved practice
-return. Use the [source/feedback baseline](reviews/2026-10-28-workbench-evidence.md)
-to choose what must be integrated before creating the bounded execution contract.
+The [first integrated workbench experiment](reviews/2026-10-28-next-step-review.md#workbench-extension-one-experiment-from-discussion-to-delayed-return)
+and its [source/feedback baseline](reviews/2026-10-28-workbench-evidence.md) remain
+retrievable as deferred planning. Preserve accepted reader behavior and older
+proof-memory evidence; no historical contract resumes automatically. Theseus
+owns approved execution, not this human-readable index.
 
 Keep `Apply a 2 × 2 matrix to a vector` tabled in
 `threads/animation-library-promotion.md`; this queue does not reactivate or

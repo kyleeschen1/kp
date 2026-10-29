@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-10-28
+Last Updated: 2026-10-29
 Status: active
 Active Thread: `threads/co-creative-practice.md`
 Supporting Threads:
@@ -25,6 +25,13 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+October 29 immediate focus: the user sets the workbench expansion aside and asks
+for [experimentation, conversion and retirement with demonstrable decoupling](decisions/2026-10-29-experiment-conversion-retirement-direction.md).
+Assess the whole authoring-to-reader path, beyond CSS. The lifecycle mechanism
+is proposed; no rewrite, retirement or new implementation run has begun. Personal
+practice remains the product direction, and the October 28 delivery proposal is
+deferred while this architectural question is resolved.
 
 October 28 workbench refinement: [accepted direction](decisions/2026-10-28-shared-workbench-direction.md)
 connects personal practice to experiment evidence, exact conversational references,
