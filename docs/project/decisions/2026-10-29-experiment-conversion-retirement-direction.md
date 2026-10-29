@@ -86,3 +86,14 @@ do not invent a universal framework. Demonstrate one completed replacement,
 including retirement, preservation and rollback. Record the actual coordination
 cost and dependencies removed. This is a proposed next investigation/conversion,
 not an approved implementation contract or a universal migration mandate.
+
+## Subsequent bounded approval and evidence
+
+The user's subsequent "go" authorizes the [algebra retirement pilot](../2026-10-29-algebra-api-retirement.md),
+not a universal lifecycle rollout. Its [evidence](../reviews/2026-10-29-algebra-api-retirement.md)
+traces the canonical path, migrates nine remaining test/type-fixture importers,
+removes the already-replaced v2 convenience facade and extends the existing
+retirement guard to build tools and executable type consumers. Saved formats,
+mathematical authority and presentation are preserved. Broader host/style
+ownership remains unresolved; the support-state proposal above is not globally
+enforced by this pilot.

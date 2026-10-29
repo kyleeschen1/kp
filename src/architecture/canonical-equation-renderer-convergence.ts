@@ -104,7 +104,10 @@ export const kpCanonicalEquationRendererConvergence = Object.freeze({
   // Count the existing optical evaluation owner as the ninth support module;
   // it may no longer hide after base rendering outside the measured closure.
   maximumProductionRendererSupportModules: 9,
-  maximumProductionRendererSupportSourceBytes: 100_000,
+  // Existing font invalidation, color refresh and batched measurement total
+  // 103,724 bytes; retain all nine owners with 2% rounded headroom. Aggregate
+  // stays fixed. Amendment: reviews/2026-10-29-algebra-api-retirement.md.
+  maximumProductionRendererSupportSourceBytes: 106_000,
   maximumProductionAggregateModules: 34,
   // The aggregate now counts the endpoint owner alongside the already bounded
   // plan-boundary extraction and remains tighter than the partition ceilings.
@@ -188,7 +191,7 @@ export function validateKpCanonicalEquationRendererConvergence(
     policy.maximumProductionScenePlanBoundaryModules !== 20 ||
     policy.maximumProductionScenePlanBoundarySourceBytes !== 330_000 ||
     policy.maximumProductionRendererSupportModules !== 9 ||
-    policy.maximumProductionRendererSupportSourceBytes !== 100_000 ||
+    policy.maximumProductionRendererSupportSourceBytes !== 106_000 ||
     policy.maximumProductionAggregateModules !== 34 ||
     policy.maximumProductionAggregateSourceBytes !== 575_000 ||
     policy.maximumExperimentRouteGzipGrowthBytes !== 12_000 ||

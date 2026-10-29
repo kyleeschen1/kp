@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.algebra-api-retirement-v1",
+  "kind": "run-contract",
+  "title": "Complete one algebra API retirement",
+  "status": "resolved",
+  "summary": "COMPLETE: all three approved packages verified. No adjacent migration admitted; commit and backup at the single recoverable retirement boundary.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.algebra-api-retirement.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-algebra-api-retirement.md",
+      "summary": "User-approved bounded retirement pilot; 60 minute ceiling with 20 minute verification reserve"
+    }
+  ],
+  "verification": [
+    "npm run check:authoring",
+    "npm run test:composed-algebra-authoring",
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle"
+  ],
+  "allowedWork": [
+    "Owned caller migrations, compatibility retirement guard, authoring guidance, bounded verification repairs and evidence"
+  ],
+  "disallowedWork": [
+    "Visual redesign, saved format removal, semantic expansion, unrelated dirty work, broad lifecycle framework"
+  ],
+  "goal": "Trace the algebra path and complete the existing facade conversion without changing semantics or visuals",
+  "target": "task.kp.algebra-api-retirement",
+  "slices": [
+    {
+      "id": "audit",
+      "title": "Audit path and preserve baseline",
+      "summary": "Canonical source-to-reader path mapped; nine direct test/type-fixture importers and two legacy-name aliases identified. Baseline 25 authoring and 105 composed tests passed; seven consumer budgets captured.",
+      "status": "complete"
+    },
+    {
+      "id": "convert",
+      "title": "Convert callers and retire facade",
+      "summary": "All nine importers use explicit-source APIs; removed facade and four aliases, updated guidance and retirement ledger. Focused preservation and retirement tests: 23 passed.",
+      "status": "complete"
+    },
+    {
+      "id": "closeout",
+      "title": "Verify retirement and integration",
+      "summary": "Final architecture and inference gates, 7436 tests, full types, build and generated inventory pass. Seven authoring consumer costs unchanged. Pre-existing accounting drift repaired explicitly; no visual changes.",
+      "status": "complete"
+    }
+  ]
+}

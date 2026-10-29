@@ -1,0 +1,93 @@
+{
+  "id": "task.kp.algebra-api-retirement",
+  "kind": "task",
+  "title": "Retire the completed algebra compatibility facade",
+  "status": "resolved",
+  "domain": "authoring",
+  "summary": "Completed the approved bounded retirement: all nine importers migrated, facade and obsolete aliases removed, preservation checks retained, retirement guard and guidance updated. Full integration passes; broader mounting/style ownership remains a separate next decision.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-algebra-api-retirement.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:authoring",
+      "status": "passed",
+      "scope": "baseline",
+      "checkedAt": "2026-10-29T08:15:07.147Z",
+      "notes": "25 tests and all seven complete consumer runtime/type budgets pass; legacy/new primary-output equality passes before removal."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "baseline",
+      "checkedAt": "2026-10-29T08:15:08.081Z",
+      "notes": "105 tests pass, including publication, negative authority, four/five-state projection and preview lifecycle preservation."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "integration",
+      "checkedAt": "2026-10-29T08:30:11.488Z",
+      "notes": "Initial integration run stopped before unit tests: pre-existing core inference cost 200009 exceeded 199900. Retirement files are absent from the core program. Rendering-owner counterfactual reproduced the prior 198906 baseline; explicit bounded amendment recorded in docs/project/reviews/2026-10-29-algebra-api-retirement.md."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "integration",
+      "checkedAt": "2026-10-29T08:35:15.701Z",
+      "notes": "After core budget repair, full suite reached completion with four failures: stale reader caller inventory, renderer-support source ceiling, generated reachability graph, and old fractional depth expectation. Each reproduced in focused checks; existing production changes traced and scoped repairs documented in the retirement review."
+    },
+    {
+      "command": "npm run check:authoring",
+      "status": "passed",
+      "scope": "complete-consumers",
+      "checkedAt": "2026-10-29T08:36:51.493Z",
+      "notes": "25 authoring tests passed before and after conversion; all seven consumer payload and type measurements unchanged, with no emitted example fixtures."
+    },
+    {
+      "command": "npm run test:composed-algebra-authoring",
+      "status": "passed",
+      "scope": "authoring-preservation",
+      "checkedAt": "2026-10-29T08:36:52.561Z",
+      "notes": "All 105 tests pass after caller migration: proof authority, repairs, preview lifecycle, exact source return and publication preserved."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-10-29T08:36:53.273Z",
+      "notes": "Final app, node, tests, Svelte and domain checks pass after accounting repairs; Svelte reports zero errors and warnings."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "production-build",
+      "checkedAt": "2026-10-29T08:36:53.938Z",
+      "notes": "Production build passed after API retirement: 1863 modules. Existing large-chunk warnings remain; subsequent edits affect policy accounting, tests and documentation only."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "generated-inventory",
+      "checkedAt": "2026-10-29T08:36:54.601Z",
+      "notes": "All 68 roots retained; exact derived inventory is current after reviewed caller additions and scanned-file update."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full-integration",
+      "checkedAt": "2026-10-29T08:41:06.649Z",
+      "notes": "Clean final rerun passes architecture, inference cohorts, catalogs and all 7436 tests; zero failures and skips. Earlier failures and explicit repairs are retained in evidence."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "final-production-build",
+      "checkedAt": "2026-10-29T08:41:07.569Z",
+      "notes": "Final build after all accounting changes passes; existing graph and workbench large-chunk warnings remain."
+    }
+  ]
+}

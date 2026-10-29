@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 5106,
+  "scannedFileCount": 5133,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -59,7 +59,8 @@
         "tests/composed-algebra-presentation.test.ts",
         "tests/composed-algebra-product-v2.test.ts",
         "tests/fraction-chain-reduction-presentation.test.ts",
-        "tests/operation-evaluation-exemplar.test.ts"
+        "tests/operation-evaluation-exemplar.test.ts",
+        "tests/semantic-reader-equation-lesson-descriptor.test.ts"
       ],
       "scriptCallers": [],
       "otherCallers": [],
@@ -1014,6 +1015,7 @@
         "tests/sampled-frame-envelope.test.ts",
         "tests/semantic-animation-projection-consumers.test.ts",
         "tests/semantic-reader-equation-layout-snapshot.test.ts",
+        "tests/semantic-reader-equation-lesson-descriptor.test.ts",
         "tests/semantic-reader-equation-material-plan.test.ts",
         "tests/semantic-reader-equation-perceptual-alignment.test.ts",
         "tests/semantic-reader-equation-render-plan.test.ts",
@@ -1665,6 +1667,7 @@
         "tests/sampled-frame-envelope.test.ts",
         "tests/semantic-animation-projection-consumers.test.ts",
         "tests/semantic-reader-equation-layout-snapshot.test.ts",
+        "tests/semantic-reader-equation-lesson-descriptor.test.ts",
         "tests/semantic-reader-equation-material-plan.test.ts",
         "tests/semantic-reader-equation-perceptual-alignment.test.ts",
         "tests/semantic-reader-equation-render-plan.test.ts",
@@ -2126,6 +2129,7 @@
         "tests/sampled-frame-envelope.test.ts",
         "tests/semantic-animation-projection-consumers.test.ts",
         "tests/semantic-reader-equation-layout-snapshot.test.ts",
+        "tests/semantic-reader-equation-lesson-descriptor.test.ts",
         "tests/semantic-reader-equation-material-plan.test.ts",
         "tests/semantic-reader-equation-perceptual-alignment.test.ts",
         "tests/semantic-reader-equation-render-plan.test.ts",
@@ -2914,6 +2918,10 @@
         "src/reader/app/canonical-equation-stage-layout.ts",
         "src/reader/app/canonical-equation-transition-continuity.ts",
         "src/reader/app/exemplar-entry.ts",
+        "src/reader/app/fractional-passage-progress.ts",
+        "src/reader/app/fractional-passage-sliders.ts",
+        "src/reader/app/fractional-rising-passages.ts",
+        "src/reader/app/fractional-rising-scroll.ts",
         "src/reader/renderers/equation-layout-snapshot.ts",
         "src/reader/renderers/equation-perceptual-alignment.ts",
         "src/reader/renderers/equation-responsive-fit.ts",

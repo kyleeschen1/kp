@@ -21,7 +21,7 @@ test("both approved cohorts retain exact fixture membership and active checking"
   assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/native-katex-scene-contribution.ts"));
   assert.ok(coreInferenceFixtures.includes("tests/type-fixtures/bayesian-authoring.ts"));
   assert.deepEqual(frontendInferenceFixtures, ["tests/type-fixtures/authoring-entrypoint-consumers.ts", "tests/type-fixtures/composed-algebra-consumers.ts"]);
-  assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 117700, instantiations: 199900 });
+  assert.deepEqual(typescriptInferenceBudget.ceilings, { types: 117700, instantiations: 201100 });
   assert.ok(typescriptInferenceBudget.ceilings.instantiations <= Math.ceil(typescriptInferenceBudget.measuredProject.instantiations * 1.005 / 100) * 100);
   const budget = combinedInferenceBudget;
   assert.deepEqual(budget.measuredProject, { types: 179268, instantiations: 303017 });
@@ -78,9 +78,9 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
 
 test("extended algebra cost coverage retains real consumers and negative authority checks", () => {
   const fixture = readFileSync("tests/type-fixtures/composed-algebra-consumers.ts", "utf8");
-  for (const call of ["createKpComposedAlgebraAuthoringSessionV2({", "mountComposedAlgebraCardV2(extendedHost, value)",
+  for (const call of ["algebra.compile(extendedSource)", "algebra.session({", "mountComposedAlgebraCardV2(extendedHost, value)",
     "renderAlgebraIntuitionPage(extended)", "projectComposedAlgebraReadingV2(extended,", "projectComposedAlgebraPromptsV2(extended, extendedReference)",
-    "prepareComposedAlgebraPublicationSource(exportKpComposedAlgebraSourceV2(extended))", "checkKpComposedAlgebraAuthorSourceV2(",
+    "prepareComposedAlgebraPublicationSource(algebra.serialize(extended))", "checkKpComposedAlgebraAuthorSourceV2(",
     "mountComposedAlgebraCardV2(extendedHost, extendedReport)", "projectComposedAlgebraReadingV2(draft," ])
     assert.ok(fixture.includes(call), call);
 });

@@ -223,6 +223,21 @@ export const kpSemanticAnimationCompatibilityLedger = [
 ] as const satisfies readonly KpSemanticAnimationCompatibilityLedgerEntry[];
 
 export const kpRetiredSemanticAnimationCompatibilityPaths = [
+  ...[
+    "composed-algebra-session-v2.ts",
+    "prepareKpComposedAlgebraDraftV2",
+    "checkKpComposedAlgebraDraftV2",
+    "exportKpComposedAlgebraSourceV2",
+    "createKpComposedAlgebraAuthoringSessionV2"
+  ].map((formerContractKey) => ({
+    id: `compatibility.algebra-authoring.${formerContractKey}`,
+    formerContractKey,
+    removedFrom: ["src/authoring/composed-algebra-session-v2.ts"],
+    retiredModule: "src/authoring/composed-algebra-session-v2.ts",
+    replacement:
+      "Typed explicit-source algebra/compile.ts and algebra/session.ts; saved source formats and canonical presentation remain unchanged.",
+    closureTest: "tests/algebra-authoring-boundaries.test.ts"
+  })),
   {
     id: "compatibility.prototype.saddle-denominator-tween",
     formerContractKey: "sampleSaddleDenominatorAnimationFrames",

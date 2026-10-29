@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import primary from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import transfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
-import { prepareKpComposedAlgebraDraftV2 } from "../src/authoring/composed-algebra-session-v2.ts";
+import { compile } from "../src/authoring/algebra/compile.ts";
 import { projectComposedAlgebraPromptsV2 } from "../src/experiments/composed-algebra/practice.ts";
 import { projectComposedAlgebraSubexplanations } from "../src/experiments/composed-algebra/subexplanations.ts";
 
 test("practice questions retain scoped evidence local answer steps and preserved-structure reasoning", () => {
   for (const source of [primary, transfer]) {
-    const draft = prepareKpComposedAlgebraDraftV2(source);
+    const draft = compile(source);
     for (const reference of [undefined, ...projectComposedAlgebraSubexplanations(draft)]) {
       const [start, end] = reference?.range ?? [0, source.states.length - 1];
       const prompts = projectComposedAlgebraPromptsV2(draft, reference);
@@ -22,6 +22,6 @@ test("practice questions retain scoped evidence local answer steps and preserved
       }
     }
     const reference = projectComposedAlgebraSubexplanations(draft)[0]!;
-    assert.throws(() => projectComposedAlgebraPromptsV2(prepareKpComposedAlgebraDraftV2(source), reference), /exact/);
+    assert.throws(() => projectComposedAlgebraPromptsV2(compile(source), reference), /exact/);
   }
 });

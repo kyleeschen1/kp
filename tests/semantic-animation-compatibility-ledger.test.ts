@@ -78,6 +78,11 @@ test("every compatibility path has one enforced disposition and owner", () => {
       ({ formerContractKey }) => formerContractKey
     ),
     [
+      "composed-algebra-session-v2.ts",
+      "prepareKpComposedAlgebraDraftV2",
+      "checkKpComposedAlgebraDraftV2",
+      "exportKpComposedAlgebraSourceV2",
+      "createKpComposedAlgebraAuthoringSessionV2",
       "sampleSaddleDenominatorAnimationFrames",
       "equationMotionPresentationRecipe",
       "equationNativeHandoffRecipe",
@@ -100,19 +105,24 @@ test("every compatibility path has one enforced disposition and owner", () => {
 });
 
 test("retired compatibility keys have complete production reference closure", () => {
-  const sourceFiles = typescriptFilesBeneath("src").filter(
+  // Build tools and executable type consumers can keep a compatibility path
+  // alive even after the browser has moved. Include all three owned surfaces.
+  const sourceFiles = ["src", "scripts", "tests/type-fixtures"]
+    .flatMap(typescriptFilesBeneath).filter(
     (path) => !path.endsWith("semantic-animation-compatibility-ledger.ts")
   );
+  const sources = sourceFiles.map(path => ({ path, source: readFileSync(join(projectRoot, path), "utf8") }));
 
   for (const retired of kpRetiredSemanticAnimationCompatibilityPaths) {
     assert.ok(retired.removedFrom.length > 0);
     assert.ok(retired.replacement.startsWith("Typed "));
-    assert.equal(
-      sourceFiles.some((sourcePath) =>
-        readFileSync(join(projectRoot, sourcePath), "utf8")
-          .includes(retired.formerContractKey)
-      ),
-      false,
+    if ("retiredModule" in retired) {
+      assert.equal(existsSync(join(projectRoot, retired.retiredModule)), false,
+        `retired module returned: ${retired.retiredModule}`);
+    }
+    assert.deepEqual(
+      sources.filter(({ source }) => source.includes(retired.formerContractKey)).map(({ path }) => path),
+      [],
       `retired compatibility key remains live: ${retired.formerContractKey}`
     );
   }

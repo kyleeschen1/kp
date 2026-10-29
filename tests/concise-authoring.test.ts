@@ -2,7 +2,6 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import * as M from "../src/math/authoring/matrices.ts";
 import * as algebra from "../src/authoring/algebra.ts";
-import { prepareKpComposedAlgebraDraftV2 } from "../src/authoring/composed-algebra-session-v2.ts";
 import { createKpScalarExpression, createKpTypedMatrixFromRows, type KpTypedMatrix } from "../src/math/typed-semantic-math.ts";
 import { constant } from "../src/math/expression.ts";
 import primary from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
@@ -35,10 +34,10 @@ test("numeric authoring rejects nonfinite entries and malformed runtime shapes",
 });
 
 test("algebra facade preserves checked source, animation and located repairs", () => {
-  const draft = algebra.compile(primary), previous = prepareKpComposedAlgebraDraftV2(primary);
-  assert.deepEqual(draft.animation, previous.animation);
-  assert.deepEqual(draft.checkpointProgress, previous.checkpointProgress);
-  assert.equal(draft.revisionId, previous.revisionId);
+  const draft = algebra.compile(primary);
+  assert.deepEqual(draft.checked.source, algebra.read(primary));
+  assert.equal(draft.animation.transformations.length, primary.states.length - 1);
+  assert.equal(draft.checkpointProgress.length, primary.states.length);
   assert.deepEqual(algebra.parse(algebra.serialize(draft)), algebra.read(primary));
   const changed = structuredClone(primary);
   changed.states[2]!.latex = "9(x+3)";

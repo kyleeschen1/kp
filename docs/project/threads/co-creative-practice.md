@@ -2,9 +2,12 @@
 
 Status: active product direction; first implementation milestone proposed
 Last Updated: 2026-10-29
-Current Next Action: resolve the [experiment/conversion/retirement design](../decisions/2026-10-29-experiment-conversion-retirement-direction.md)
-through one complete architectural path. The October 28 workbench delivery
-proposal is deferred at the user's request; personal practice remains the goal.
+Current Next Action: assess shared reader-mounting ownership under experiments,
+using the [bounded algebra retirement evidence](../reviews/2026-10-29-algebra-api-retirement.md).
+The first pilot closes an obsolete convenience path, not the broader
+[experiment/conversion/retirement design](../decisions/2026-10-29-experiment-conversion-retirement-direction.md).
+A host/style migration needs its own scope and preservation boundary. The
+October 28 workbench proposal remains deferred; personal practice is the goal.
 
 ## Direction and plan ownership
 

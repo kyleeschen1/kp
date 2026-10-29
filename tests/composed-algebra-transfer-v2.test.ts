@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import primary from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import source from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
-import { prepareKpComposedAlgebraDraftV2 } from "../src/authoring/composed-algebra-session-v2.ts";
+import { compile } from "../src/authoring/algebra/compile.ts";
 import { composedAlgebraSequenceV2, composedAlgebraWindowV2, sampleComposedAlgebraSequence } from "../src/experiments/composed-algebra/sequence.ts";
 import { projectComposedAlgebraSubexplanations } from "../src/experiments/composed-algebra/subexplanations.ts";
 
 test("two-symbol transfer uses the canonical four-state chain and two-stop distribution window", () => {
-  const draft = prepareKpComposedAlgebraDraftV2(source), sequence = composedAlgebraSequenceV2(draft);
+  const draft = compile(source), sequence = composedAlgebraSequenceV2(draft);
   assert.equal(draft.checked.chain.steps.length, 3);
   assert.equal(draft.animation.transformations.length, 3);
   assert.equal(sequence.beats.length, 4);
@@ -18,5 +19,5 @@ test("two-symbol transfer uses the canonical four-state chain and two-stop distr
   assert.equal(sampleComposedAlgebraSequence(distribution, 1, 0).fraction, "2 / 2");
   assert.match(references[1]!.setup, /x\+y/);
   assert.doesNotMatch(references[1]!.answer, /Evaluating a constant product/);
-  assert.match(projectComposedAlgebraSubexplanations(prepareKpComposedAlgebraDraftV2())[1]!.answer, /Evaluating a constant product/);
+  assert.match(projectComposedAlgebraSubexplanations(compile(primary))[1]!.answer, /Evaluating a constant product/);
 });

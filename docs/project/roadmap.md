@@ -29,9 +29,14 @@ nor its evidence. The ledger remains retrievable at
 October 29 immediate focus: the user sets the workbench expansion aside and asks
 for [experimentation, conversion and retirement with demonstrable decoupling](decisions/2026-10-29-experiment-conversion-retirement-direction.md).
 Assess the whole authoring-to-reader path, beyond CSS. The lifecycle mechanism
-is proposed; no rewrite, retirement or new implementation run has begun. Personal
-practice remains the product direction, and the October 28 delivery proposal is
-deferred while this architectural question is resolved.
+remains proposed for broader enforcement. The user-approved [bounded pilot](2026-10-29-algebra-api-retirement.md)
+traces that path and retires the obsolete v2 algebra convenience facade; its
+[evidence](reviews/2026-10-29-algebra-api-retirement.md) records preserved contracts,
+consumer costs, guards and explicit integration-accounting repairs. This is one
+small completed conversion, not proof of broad decoupling. The next boundary to
+assess is shared reader mounting owned under experiments, with style inheritance
+between exemplars; that migration is not yet authorized. Personal practice
+remains the product direction, and the October 28 delivery proposal stays deferred.
 
 October 28 workbench refinement: [accepted direction](decisions/2026-10-28-shared-workbench-direction.md)
 connects personal practice to experiment evidence, exact conversational references,

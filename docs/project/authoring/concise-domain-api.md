@@ -2,7 +2,8 @@
 
 These entrypoints reuse existing semantic and presentation authorities. They
 are scoped conveniences, not a universal animation language or broader support
-claim. Existing longer names remain compatible for internal and advanced use.
+claim. Lower-level domain constructors retain their own supported contracts;
+retired convenience aliases are not alternate authoring entrypoints.
 
 ## Matrices
 
@@ -53,8 +54,10 @@ if (result.status === "compiled") {
 `compile(source)` requires explicit source and returns the existing issued
 presentation, throwing `Repair` for supported diagnostics. `check(json)` returns
 the compiled/repair-gap union; `serialize(draft)` exports the checked source.
-The historical `prepareKpComposedAlgebraDraftV2()` still supplies its example for
-compatibility. The concise API no longer silently chooses teaching content.
+The former v2 session facade and its fixture-default preparation helper are
+retired. Select source explicitly at the caller; the compiler never chooses
+teaching content. Existing saved v1/v2 JSON and their version-specific checkers
+are unchanged. See the [retirement pilot](../2026-10-29-algebra-api-retirement.md).
 
 For source data alone, use `import * as source from ".../algebra/source.ts"`.
 `source.read(value)` and `source.parse(json)` validate shape and freeze data;

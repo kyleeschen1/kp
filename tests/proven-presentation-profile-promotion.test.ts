@@ -68,7 +68,7 @@ test("proven symbolic families author typed profiles without legacy authority", 
   ));
 });
 
-test("promoted profiles preserve exact prior recipe views", () => {
+test("promoted profiles preserve exact current recipe views", () => {
   assert.deepEqual(
     kpEquationPresentationProfile(
       createNumeratorSplitMergeEquationAnimationAsset()
@@ -93,7 +93,8 @@ test("promoted profiles preserve exact prior recipe views", () => {
       cancellation: "counter-orbit-v1",
       zeroWitness: "none",
       successor: "counter-convergence-v1",
-      depth: "semantic-depth-v1",
+      // User-directed flat focus is local to this asset (October 27 review).
+      depth: "flat-v1",
       continuants: "transit-then-reflow-v1"
     }
   );

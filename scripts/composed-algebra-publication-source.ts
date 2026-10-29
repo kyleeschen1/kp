@@ -1,5 +1,5 @@
 import { checkKpComposedAlgebraDraft } from "../src/authoring/composed-algebra-session.ts";
-import { check as checkKpComposedAlgebraDraftV2 } from "../src/authoring/algebra/compile.ts";
+import { check as checkAlgebra } from "../src/authoring/algebra/compile.ts";
 import { projectComposedAlgebraReading, projectComposedAlgebraReadingV2 } from "../src/experiments/composed-algebra/readings.ts";
 import { projectComposedAlgebraPrompts, projectComposedAlgebraPromptsV2 } from "../src/experiments/composed-algebra/practice.ts";
 import { projectComposedAlgebraSubexplanations } from "../src/experiments/composed-algebra/subexplanations.ts";
@@ -12,7 +12,7 @@ function v1(text: string) {
     prompts: projectComposedAlgebraPrompts(draft), questions: [], version: "1" };
 }
 function v2(text: string) {
-  const result = checkKpComposedAlgebraDraftV2(text);
+  const result = checkAlgebra(text);
   if (result.status !== "compiled") throw new Error(`${result.diagnostic.code} at ${result.diagnostic.path}: ${result.diagnostic.expected}`);
   const draft = result.draft;
   return { draft, full: projectComposedAlgebraReadingV2(draft, "full"), compact: projectComposedAlgebraReadingV2(draft, "compact"),

@@ -4,7 +4,6 @@ import { relative } from 'node:path';
 import * as source from '../src/authoring/algebra/source.ts';
 import * as compiler from '../src/authoring/algebra/compile.ts';
 import { session } from '../src/authoring/algebra/session.ts';
-import { prepareKpComposedAlgebraDraftV2 } from '../src/authoring/composed-algebra-session-v2.ts';
 import primary from '../src/authoring/examples/composed-algebra-intuition.json' with { type: 'json' };
 import { collectKpRuntimeImportClosure } from '../scripts/runtime-import-closure.ts';
 
@@ -19,12 +18,13 @@ test('source reading cannot accidentally acquire proof or presentation authority
   assert.throws(() => compiler.compile(), source.Repair);
 });
 
-test('explicit compilation preserves historical default output and repairs', async () => {
-  const current = compiler.compile(primary), legacy = prepareKpComposedAlgebraDraftV2();
-  assert.equal(current.revisionId, legacy.revisionId);
-  assert.deepEqual(current.animation, legacy.animation);
-  assert.deepEqual(current.checkpointProgress, legacy.checkpointProgress);
-  assert.equal(compiler.serialize(current), compiler.serialize(legacy));
+test('saved source rechecks preserve canonical output and issued authority', async () => {
+  const current = compiler.compile(primary);
+  const replay = compiler.compile(source.parse(compiler.serialize(current)));
+  assert.equal(current.revisionId, replay.revisionId);
+  assert.deepEqual(current.animation, replay.animation);
+  assert.deepEqual(current.checkpointProgress, replay.checkpointProgress);
+  assert.equal(compiler.serialize(current), compiler.serialize(replay));
   assert.throws(() => compiler.serialize({ ...current }), /issued/);
   const lifetime = session({ initial: current, prepare: async () => ({ dispose() {} }), commit() {} });
   lifetime.dispose();

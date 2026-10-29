@@ -153,7 +153,8 @@ void [missingTask, missingChecker];
 
 // V2's real author, host and publication consumers join this same frontend
 // cohort. Imported types alone would undercount the generic session calls.
-import { prepareKpComposedAlgebraDraftV2, createKpComposedAlgebraAuthoringSessionV2, exportKpComposedAlgebraSourceV2 } from "../../src/authoring/composed-algebra-session-v2.ts";
+import * as algebra from "../../src/authoring/algebra.ts";
+import extendedSource from "../../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import { renderAlgebraIntuitionPage } from "../../src/experiments/composed-algebra-intuition/page.ts";
 import { mountComposedAlgebraCardV2 } from "../../src/experiments/composed-algebra/card.ts";
 import { projectComposedAlgebraReadingV2 } from "../../src/experiments/composed-algebra/readings.ts";
@@ -161,15 +162,15 @@ import { projectComposedAlgebraPromptsV2 } from "../../src/experiments/composed-
 import { projectComposedAlgebraSubexplanations } from "../../src/experiments/composed-algebra/subexplanations.ts";
 import { prepareComposedAlgebraPublicationSource } from "../../scripts/composed-algebra-publication-source.ts";
 import { checkKpComposedAlgebraAuthorSourceV2 } from "../../src/authoring/composed-algebra-author-check-v2.ts";
-const extended = prepareKpComposedAlgebraDraftV2();
+const extended = algebra.compile(extendedSource);
 declare const extendedHost: HTMLElement;
-const extendedSession = createKpComposedAlgebraAuthoringSessionV2({ initial: extended,
+const extendedSession = algebra.session({ initial: extended,
   prepare: value => mountComposedAlgebraCardV2(extendedHost, value), commit: (surface, value) => { surface.clock.seek(value.checkpointProgress[0]!); } });
 const extendedReference = projectComposedAlgebraSubexplanations(extended)[0]!;
-const extendedReport = checkKpComposedAlgebraAuthorSourceV2(exportKpComposedAlgebraSourceV2(extended));
+const extendedReport = checkKpComposedAlgebraAuthorSourceV2(algebra.serialize(extended));
 void [renderAlgebraIntuitionPage(extended), projectComposedAlgebraReadingV2(extended, "compact"),
   projectComposedAlgebraPromptsV2(extended, extendedReference), extendedSession.current(),
-  prepareComposedAlgebraPublicationSource(exportKpComposedAlgebraSourceV2(extended))];
+  prepareComposedAlgebraPublicationSource(algebra.serialize(extended))];
 // @ts-expect-error a report cannot supply native presentation authority
 mountComposedAlgebraCardV2(extendedHost, extendedReport);
 // @ts-expect-error a v1 presentation cannot silently become an extended chain
