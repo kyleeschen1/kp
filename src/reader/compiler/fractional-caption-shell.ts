@@ -14,7 +14,8 @@ export function compileFractionalCaptionShell(html: string, beatCount: number,
   if (article < 0 || introStart <= article || storyStart < introStart || storyEnd <= storyStart || articleEnd < storyEnd) {
     throw new Error('Fractional caption shell requires its compiled article and story.');
   }
-  const intro = html.slice(introStart, storyStart).replace(/<h1\b/g, '<h1 hidden');
+  const intro = html.slice(introStart, storyStart)
+    .replace('</h1>', '</h1><p class="kp-document-byline">By Codex</p>');
   let wrapped = 0;
   const story = html.slice(storyStart, storyEnd).replace(/(<li\b[^>]*data-kp-beat="([^"]+)"[^>]*>)(<div class="kp-beat-copy">[\s\S]*?<\/div>)(<\/li>)/g,
     (_match, opening: string, id: string, copy: string, closing: string) => {
@@ -42,7 +43,11 @@ export function compileFractionalCaptionShell(html: string, beatCount: number,
     + `<div class="kp-caption-sequence">${flowStory}</div>`
     + `<div class="kp-caption-document-after">${html.slice(storyEnd, articleEnd)}</div>`
     + html.slice(articleEnd);
-  return result.replace('<body', '<body data-kp-reader-layout="rising-passages" data-kp-caption-mode="captions"')
+  // Keep chrome compact before hydration. The local reader moves its existing
+  // bound controls into these slots; it does not create second control owners.
+  const withOptions = result.replace(/(<header class="kp-reader-masthead">\s*<a class="kp-reader-wordmark"[^>]*>[\s\S]*?<\/a>)([\s\S]*?)(<\/header>)/,
+    '$1<details class="kp-rising-navigation"><summary>Options</summary><div class="kp-reader-options">$2<div data-kp-reader-options-reading></div><div data-kp-reader-options-development></div></div></details>$3');
+  return withOptions.replace('<body', '<body data-kp-reader-layout="rising-passages" data-kp-caption-mode="captions"')
     .replace('</head>', `<noscript><style data-kp-static-document>${staticDocumentStyles}</style></noscript></head>`);
 }
 

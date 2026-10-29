@@ -12,17 +12,41 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await page.setViewportSize(size);
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.waitForSelector('.kp-caption-operation-slider', { state: 'attached' });
+    await page.waitForSelector('.kp-reader-options [data-kp-dev-toolbar]', { state: 'attached' });
+    assert.equal(await page.locator('.kp-caption-document-intro h1').isVisible(), true);
+    assert.equal(await page.locator('.kp-document-byline').textContent(), 'By Codex');
+    assert.equal(await page.locator('.kp-reader-options [data-kp-dev-toolbar]').isVisible(), false);
+    assert.deepEqual(await page.locator('.kp-reader-masthead').evaluate(node => [...node.children].map(child => child.className)),
+      ['kp-reader-wordmark', 'kp-rising-navigation']);
+    const widths = await page.evaluate(() => {
+      const prose = document.querySelector('.kp-caption-document-intro > p:not(.kp-document-byline)')!.getBoundingClientRect();
+      const frame = document.querySelector('.kp-caption-frame')!.getBoundingClientRect();
+      return { prose: prose.width, frame: frame.width, leftDifference: prose.left - frame.left };
+    });
+    assert.ok(Math.abs(widths.prose - widths.frame) < 1 && Math.abs(widths.leftDifference) < 1,
+      'Ordinary prose occupies the full rail-to-rail width');
+    await page.screenshot({ path: path.join(outputRoot, `document-opening-${size.width}.png`) });
     assert.equal(await page.locator('[data-kp-beat="beat.read"]').getAttribute('data-kp-operation-id'), null);
     assert.equal(await page.locator('.kp-caption-operation-slider').isVisible(), false);
     assert.equal(await page.locator('.kp-caption-pin [data-kp-reader-motion-preference]').count(), 0);
     assert.equal(await page.locator('.kp-reader-masthead [data-kp-reader-motion-preference]').count(), 1);
-    await page.locator('.kp-rising-navigation summary').click();
+    await page.locator('.kp-rising-navigation > summary').click();
     await page.getByRole('combobox', { name: 'Motion preference' }).selectOption('reduced');
     await settle(page);
     assert.equal(await page.locator('body').getAttribute('data-kp-reader-motion-preference'), 'reduced');
     await page.getByRole('combobox', { name: 'Motion preference' }).selectOption('system');
     await page.screenshot({ path: path.join(outputRoot, `flow-preferences-${size.width}.png`) });
-    await page.locator('.kp-rising-navigation summary').click();
+    await page.locator('.kp-reader-options .kp-dev-toolbar__review').click();
+    assert.equal(await page.locator('.kp-rising-navigation').getAttribute('open'), null,
+      'Opening review releases the options menu');
+    const review = page.locator('[data-kp-dev-review-shell]');
+    assert.equal(await review.locator('.panel').isVisible(), true);
+    await review.locator('.close').click();
+    assert.equal(await page.locator('.kp-reader-options .kp-dev-toolbar__review').evaluate(node => document.activeElement === node), true,
+      'Closing review restores its accessible launcher inside Options');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('.kp-rising-navigation').getAttribute('open'), null);
+    assert.equal(await page.locator('.kp-rising-navigation > summary').evaluate(node => document.activeElement === node), true);
     assert.equal(await page.locator('.kp-rising-passage').count(), 7);
     assert.equal(await page.locator('.kp-caption-preview, .kp-caption-scroll-slot, .kp-rising-passage[hidden]').count(), 0);
     const accessiblePassage = page.locator('[data-kp-rising-beat="beat.cancel-denominator"]');
@@ -43,7 +67,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true }));
       dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
     });
-    await page.locator('.kp-rising-navigation summary').click();
+    await page.locator('.kp-rising-navigation > summary').click();
     await page.locator('.kp-lesson-toc a[href="#beat.multiply"]').click();
     await settle(page);
     const geometry = await page.evaluate(() => {
@@ -85,6 +109,11 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.deepEqual(frames[2], frames[10], 'Reversing reaches the same prose and math placement');
     assert.ok(Math.max(...frames.map((frame) => frame.stageTop)) - Math.min(...frames.map((frame) => frame.stageTop)) < 1,
       'Equation workspace must not move during paragraph travel');
+    for (const fraction of [1.35, 1.6]) {
+      await page.evaluate(y => { dispatchEvent(new WheelEvent('wheel')); scrollTo(0, y); }, geometry.arrival + geometry.hold * fraction);
+      await settle(page);
+      await page.screenshot({ path: path.join(outputRoot, `flow-depth-${size.width}-${fraction}.png`) });
+    }
     const nextArrival = await page.locator('[data-kp-beat="beat.cancel-denominator"]').evaluate(node =>
       scrollY + node.getBoundingClientRect().top + node.querySelector('.kp-rising-passage')!.getBoundingClientRect().height -
       parseFloat(document.body.style.getPropertyValue('--kp-flow-line')));
@@ -97,16 +126,19 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
         const next = document.querySelector('[data-kp-rising-beat="beat.cancel-denominator"]')!;
         return { previous: Number(getComputedStyle(previous).opacity), next: Number(getComputedStyle(next).opacity),
           gap: next.getBoundingClientRect().top - previous.getBoundingClientRect().bottom,
-          sliderHidden: (document.querySelector('.kp-caption-operation-slider') as HTMLInputElement).hidden };
+          sliderHidden: (document.querySelector('.kp-caption-operation-slider') as HTMLInputElement).hidden,
+          sliderAlpha: Number(getComputedStyle(document.querySelector('.kp-caption-operation-slider')!).opacity) * Number(getComputedStyle(next).opacity) };
       });
-      assert.equal(exchange.previous, 0, 'Departed prose has withdrawn instead of lingering over the scene');
+      assert.ok(exchange.previous <= .08, 'Departed prose remains only a faint context trace');
       assert.ok(Math.abs(exchange.gap - geometry.gap) < 1, 'Paragraphs preserve their separation while moving');
-      if (offset < 24) assert.ok(exchange.sliderHidden, 'Completed slider dissolves before the caption handoff');
+      if (offset === 0) assert.ok(exchange.sliderHidden || exchange.sliderAlpha < .01,
+        'An unarrived control remains visually absent despite fractional scroll rounding');
+      else assert.equal(exchange.sliderHidden, false, 'The next operation control arrives with its own paragraph');
       exchanges.push(exchange);
       if (offset === 12) await page.screenshot({ path: path.join(outputRoot, `flow-crossfade-${size.width}.png`) });
     }
     assert.deepEqual(exchanges[1], exchanges[3], 'Interrupted exchange reverses exactly');
-    assert.ok(exchanges[0]!.next < .01 && exchanges[2]!.next > .98, 'Incoming prose appears only in the last 24px before presentation');
+    assert.ok(exchanges[0]!.next <= .08 && exchanges[2]!.next > .98, 'Faint approaching context rises into readable foreground near presentation');
     const lineHeight = await page.locator('.kp-rising-passage p').first().evaluate(node => {
       const style = getComputedStyle(node); return parseFloat(style.lineHeight) / parseFloat(style.fontSize);
     });
@@ -120,7 +152,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     });
     await settle(page);
     assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), before);
-    await page.locator('.kp-rising-navigation summary').click();
+    await page.locator('.kp-rising-navigation > summary').click();
     await page.locator('.kp-lesson-toc a[href="#beat.multiply"]').click();
     await settle(page);
     assert.ok(await page.locator('[data-kp-rising-beat="beat.multiply"]').evaluate((node) =>
@@ -141,6 +173,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await page.evaluate(() => { window.getSelection()?.removeAllRanges(); location.hash = 'caption.beat.multiply'; });
     await settle(page);
     const returnBeat = await page.locator('[data-kp-caption-active="true"]').getAttribute('data-kp-rising-beat');
+    await page.locator('.kp-rising-navigation > summary').click();
     await page.getByRole('button', { name: 'Read all', exact: true }).click();
     await settle(page);
     assert.equal(await page.locator('body').getAttribute('data-kp-caption-mode'), 'document');
@@ -149,12 +182,13 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     await page.evaluate(() => scrollBy(0, 120));
     await settle(page);
     assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), held);
+    await page.locator('.kp-rising-navigation > summary').click();
     await page.getByRole('button', { name: 'Read all', exact: true }).click();
     await settle(page);
     assert.equal(await page.locator('body').getAttribute('data-kp-caption-mode'), 'captions');
     assert.equal(await page.locator('[data-kp-caption-active="true"]').getAttribute('data-kp-rising-beat'), returnBeat,
       'Returning from the transcript must retain the selected paragraph');
-    await page.locator('.kp-rising-navigation summary').click();
+    await page.locator('.kp-rising-navigation > summary').click();
     await page.locator('.kp-lesson-toc a[href="#beat.solve"]').click();
     await page.locator('.kp-caption-operation-slider').press('End');
     await settle(page);

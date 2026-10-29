@@ -1,7 +1,7 @@
 import { fractionalPassageOperation } from './fractional-passage-progress.ts';
 import type { KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 
-/** One theater control, bound only to an explicitly associated operation. */
+/** One reusable control travels with its operation's real paragraph. */
 export function mountFractionalPassageSliders(input: {
   beats: readonly HTMLElement[];
   host: HTMLElement;
@@ -39,15 +39,23 @@ export function mountFractionalPassageSliders(input: {
       if (binding !== active) {
         active = binding;
         if (binding !== undefined) {
+          const passage = binding.beat.querySelector('.kp-rising-passage');
+          if (!passage) throw new Error('An operation control requires its document passage.');
+          passage.append(range);
           range.setAttribute('aria-label', `${binding.beat.querySelector('h2')!.textContent}: animation progress`);
           range.setAttribute('aria-describedby', `caption.${binding.beat.dataset['kpBeat']}`);
           range.dataset['kpOperationBeat'] = binding.beat.dataset['kpBeat'];
-        } else delete range.dataset['kpOperationBeat'];
+        } else {
+          input.host.append(range);
+          delete range.dataset['kpOperationBeat'];
+        }
       }
       const hidden = active === undefined || opacity <= 0;
       if (range.hidden !== hidden) range.hidden = hidden;
       range.disabled = hidden;
-      const paint = String(opacity);
+      // The paragraph owns arrival/departure opacity. Applying it again here
+      // would make its control fade quadratically instead of travelling with it.
+      const paint = hidden ? '0' : '1';
       if (range.style.opacity !== paint) range.style.opacity = paint;
       if (active === undefined) return;
       const fraction = active.operation.fraction(progress);

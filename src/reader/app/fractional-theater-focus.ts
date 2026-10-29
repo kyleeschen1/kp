@@ -49,3 +49,16 @@ export function fractionalTheaterFocus(input: PassageWindows & { readonly positi
 export function fractionalSliderPresence(position: number, completedAt: number) {
   return 1 - ease(clamp((position - completedAt) / 24));
 }
+
+/** A neighboring paragraph stays faint behind the theater. Its natural sticky
+ * position determines the trace; no DOM measurement or extra clock is needed. */
+export function fractionalPassageTrace(input: {
+  position: number; arrival: number; hold: number; height: number;
+  frameTop: number; frameBottom: number;
+}) {
+  const travel = input.position - input.arrival;
+  const bottom = travel < 0 ? -travel : travel <= input.hold ? 0 : input.hold - travel;
+  const top = bottom - input.height;
+  const distance = Math.max(input.frameTop - bottom, top - input.frameBottom, 0);
+  return .08 * (1 - ease(clamp(distance / 96)));
+}

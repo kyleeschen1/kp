@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalSliderPresence } from '../src/reader/app/fractional-theater-focus.ts';
+import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalSliderPresence, fractionalPassageTrace } from '../src/reader/app/fractional-theater-focus.ts';
 import { fractionalPassageIndex } from '../src/reader/app/fractional-rising-scroll.ts';
 import { fractionalPassageOperations } from '../src/reader/compiler/fractional-passage-operations.ts';
 
@@ -28,6 +28,18 @@ test('slider dissolves only after completion, including reverse traversal', () =
   for (const [position, expected] of [[90, 1], [100, 1], [112, .5], [124, 0], [200, 0], [112, .5], [100, 1]]) {
     assert.equal(fractionalSliderPresence(position!, 100), expected);
   }
+});
+
+test('passage traces are bounded context, disappear far away and reverse without retained state', () => {
+  const sample = (position: number) => fractionalPassageTrace({ position, arrival: 400, hold: 300,
+    height: 60, frameTop: -160, frameBottom: 160 });
+  assert.equal(sample(0), 0);
+  assert.equal(sample(1100), 0);
+  const positions = [180, 230, 300, 400, 700, 850, 950];
+  const forward = positions.map(sample);
+  assert.ok(forward.every(value => value >= 0 && value < .1));
+  assert.ok(forward.some(value => value > 0));
+  assert.deepEqual([...positions].reverse().map(sample).reverse(), forward);
 });
 
 test('sparse focus matches the complete law for long documents, jumps, reversals and overlapping spans', () => {

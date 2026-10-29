@@ -1,7 +1,7 @@
 import { createFractionalRisingScroll, fractionalPassageCadence, fractionalPassageIndex } from './fractional-rising-scroll.ts';
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { mountFractionalPassageSliders } from './fractional-passage-sliders.ts';
-import { fractionalSliderPresence, compileFractionalTheaterFocus } from './fractional-theater-focus.ts';
+import { fractionalSliderPresence, fractionalPassageTrace, compileFractionalTheaterFocus } from './fractional-theater-focus.ts';
 
 /** Real article paragraphs, native sticky holds, and the existing semantic clock. */
 export function mountFractionalRisingPassages(input: {
@@ -21,11 +21,10 @@ export function mountFractionalRisingPassages(input: {
   const toc = document.querySelector<HTMLElement>('.kp-lesson-toc')!;
   const tocHome = document.createComment('document passage navigation home');
   toc.before(tocHome);
-  const navigation = document.createElement('details');
-  navigation.className = 'kp-rising-navigation';
-  const summary = document.createElement('summary');
-  summary.textContent = 'Steps';
-  navigation.append(summary, toc);
+  const navigation = masthead.querySelector<HTMLDetailsElement>('.kp-rising-navigation');
+  const options = navigation?.querySelector<HTMLElement>('[data-kp-reader-options-reading]');
+  if (!navigation || !options) throw new Error('Document reader requires its compiled options menu.');
+  options.append(toc);
   const motionControl = document.querySelector<HTMLElement>('.kp-reader-motion-control');
   if (motionControl === null) throw new Error('Document reader requires its motion preference control.');
   const motionHome = document.createComment('motion preference home');
@@ -33,15 +32,26 @@ export function mountFractionalRisingPassages(input: {
   // A reader-wide preference belongs in the toolbar menu, outside the scene.
   // Move the bound control rather than creating a second preference owner.
   toc.append(motionControl);
-  masthead.append(navigation);
   const closeNavigation = (event: Event) => {
     if (event.target instanceof Element && event.target.closest('a')) navigation.open = false;
   };
+  const dismissNavigation = (event: Event) => {
+    // A closed menu must not steal Escape from reading or review controls.
+    if (!navigation.open) return;
+    if (event instanceof KeyboardEvent && event.key === 'Escape') {
+      navigation.open = false;
+      navigation.querySelector('summary')?.focus();
+    } else if (event.type === 'pointerdown' && event.target instanceof Node && !navigation.contains(event.target)) navigation.open = false;
+  };
   navigation.addEventListener('click', closeNavigation);
+  document.addEventListener('keydown', dismissNavigation);
+  document.addEventListener('pointerdown', dismissNavigation);
   let headerHeight = masthead.getBoundingClientRect().height;
   let readingLine = 0;
   let positions: readonly number[] = [];
   let heights: readonly number[] = [];
+  let holds: readonly number[] = [];
+  let frameTop = 0, frameBottom = 0;
   let focusAt = compileFractionalTheaterFocus({ positions: [], holds: [] });
   let selectedPassages = new Set<number>();
   let painted = new Set(passages.map((_, index) => index));
@@ -56,7 +66,7 @@ export function mountFractionalRisingPassages(input: {
   readingMode.className = 'kp-caption-reading-mode';
   readingMode.textContent = 'Read all';
   readingMode.setAttribute('aria-pressed', 'false');
-  masthead.insertBefore(readingMode, navigation);
+  options.prepend(readingMode);
   const host = input.story.querySelector('.kp-caption-pin');
   if (!(host instanceof HTMLElement)) throw new Error('Theater control requires its stage host.');
   const sliders = mountFractionalPassageSliders({ beats: input.beats, host, geometry: () => geometry, seek: input.onSeek });
@@ -64,24 +74,35 @@ export function mountFractionalRisingPassages(input: {
     renderedProgress = progress;
     const active = readAll ? returnIndex : indexAtPosition();
     const position = window.scrollY + readingLine;
-    const operation = sliders.operationAt(active);
-    const presence = operation && geometry ? fractionalSliderPresence(position, operation.seek(geometry, 1).position) : 0;
-    sliders.render(active, progress, readAll ? 0 : presence);
     const opacity = focusAt(position);
-    const changed = new Set([...painted, ...opacity.keys(), ...selectedPassages, selected, active]);
+    const controlIndex = opacity.has(active + 1) ? active + 1 : active;
+    const operation = sliders.operationAt(controlIndex);
+    const presence = operation && geometry ? fractionalSliderPresence(position, operation.seek(geometry, 1).position) : 0;
+    sliders.render(controlIndex, progress, readAll ? 0 : Math.min(presence, opacity.get(controlIndex) ?? 0));
+    // Only adjacent traces can approach the theater. A distant seek clears the
+    // last painted set and samples the new neighborhood without replaying it.
+    const neighbors = [active - 1, active, active + 1];
+    const changed = new Set([...painted, ...opacity.keys(), ...selectedPassages, selected, ...neighbors]);
+    const nextPainted = new Set<number>();
     for (const index of changed) {
       const passage = passages[index];
       if (passage === undefined) continue;
       const activeValue = String(index === active);
-      const alpha = selectedPassages.has(index) ? 1 : opacity.get(index) ?? 0;
+      const focus = opacity.get(index) ?? 0;
+      const front = selectedPassages.has(index) || focus > 0;
+      const alpha = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
+        ? fractionalPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
       const paint = String(alpha);
-      const present = String(alpha > 0);
+      const present = String(front);
+      const layer = front ? 'front' : 'back';
+      if (passage.dataset['kpPassageLayer'] !== layer) passage.dataset['kpPassageLayer'] = layer;
       if (passage.dataset['kpCaptionPresent'] !== present) passage.dataset['kpCaptionPresent'] = present;
       if (passage.dataset['kpCaptionActive'] !== activeValue) passage.dataset['kpCaptionActive'] = activeValue;
       if (passage.style.getPropertyValue('--kp-passage-opacity') !== paint)
         passage.style.setProperty('--kp-passage-opacity', paint);
+      if (alpha > 0) nextPainted.add(index);
     }
-    painted = new Set([...opacity.keys(), ...selectedPassages]);
+    painted = nextPainted;
     selected = active;
   };
   const measure = () => {
@@ -96,6 +117,8 @@ export function mountFractionalRisingPassages(input: {
     const cardHeight = Math.max(320, groupHeight + 64);
     const cardTop = headerHeight + Math.max(16, (available - cardHeight) / 2);
     const lineWithinCard = (cardHeight - groupHeight) / 2 + maxHeight;
+    frameTop = -lineWithinCard;
+    frameBottom = cardHeight - lineWithinCard;
     readingLine = cardTop + lineWithinCard;
     const cadence = fractionalPassageCadence(available);
     const style = document.body.style;
@@ -110,7 +133,7 @@ export function mountFractionalRisingPassages(input: {
     // Release brings the next real paragraph into the theater immediately.
     // Both paragraphs then travel at the same native scroll velocity.
     style.setProperty('--kp-flow-gap', `${cardHeight - lineWithinCard + 4}px`);
-    const holds = passages.map((_, index) => sliders.operationAt(index) ? cadence.hold : cadence.read);
+    holds = passages.map((_, index) => sliders.operationAt(index) ? cadence.hold : cadence.read);
     passages.forEach((passage, index) => {
       passage.style.setProperty('--kp-passage-top', `${Math.max(headerHeight + 12, readingLine - heights[index]!)}px`);
       input.beats[index]!.style.setProperty('--kp-flow-hold', `${holds[index]}px`);
@@ -120,6 +143,7 @@ export function mountFractionalRisingPassages(input: {
   };
   measure();
   const toggleReading = () => {
+    navigation.open = false;
     if (!readAll) returnIndex = indexAtPosition();
     readAll = !readAll;
     readingMode.setAttribute('aria-pressed', String(readAll));
@@ -213,9 +237,10 @@ export function mountFractionalRisingPassages(input: {
       readingMode.removeEventListener('click', toggleReading);
       readingMode.remove();
       navigation.removeEventListener('click', closeNavigation);
+      document.removeEventListener('keydown', dismissNavigation);
+      document.removeEventListener('pointerdown', dismissNavigation);
       motionHome.replaceWith(motionControl);
       tocHome.replaceWith(toc);
-      navigation.remove();
     }
   };
 }

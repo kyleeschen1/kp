@@ -26,6 +26,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 29 local reader candidate: the user approves the UI-note discussion.
+The [document theater candidate](2026-10-29-document-theater-ui.md) simplifies the
+article shell and header, attaches operation controls to their passages, and
+tests prose passing behind the stable theater. Focused desktop/phone and native
+paint checks pass; visual acceptance is pending. Review this local treatment
+before any promotion. The broader host/style ownership investigation below
+remains a separate proposed scope; personal practice remains the product goal.
+
 October 29 immediate focus: the user sets the workbench expansion aside and asks
 for [experimentation, conversion and retirement with demonstrable decoupling](decisions/2026-10-29-experiment-conversion-retirement-direction.md).
 Assess the whole authoring-to-reader path, beyond CSS. The lifecycle mechanism

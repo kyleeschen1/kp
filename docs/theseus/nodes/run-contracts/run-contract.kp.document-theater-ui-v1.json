@@ -1,0 +1,50 @@
+{
+  "id": "run-contract.kp.document-theater-ui-v1",
+  "kind": "run-contract",
+  "title": "Document theater UI candidate",
+  "status": "resolved",
+  "summary": "HUMAN_CHECKPOINT: all three delivery packages complete; preserve local candidate and stop for aesthetic review. No catalogue rollout or shared-host migration authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.document-theater-ui.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-document-theater-ui.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:fractional-linear-equation -- --rising"
+  ],
+  "allowedWork": [
+    "Local reader shell and passage presentation, scoped checks, source note and durable evidence"
+  ],
+  "disallowedWork": [
+    "Math changes, renderer redesign, shared rollout, unrelated dirty work"
+  ],
+  "goal": "Make the fractional reader feel like an article with clear passage-owned animation controls",
+  "target": "task.kp.document-theater-ui",
+  "slices": [
+    {
+      "id": "shell",
+      "title": "Document-shell-and-typography",
+      "summary": "Visible article title and Codex byline, Gill Sans prose/wordmark, aligned prose, paragraph indentation and one Options menu with existing review controls.",
+      "status": "complete"
+    },
+    {
+      "id": "passages",
+      "title": "Passage-and-control-exchange",
+      "summary": "Real operation paragraphs own the reusable slider; existing scroll projection controls foreground presence and neighboring traces behind the theater. No renderer or mathematical changes.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Preservation-and-visual-review",
+      "summary": "Candidate review packet ready: local desktop/phone and 41 native paint samples pass, full types pass. HUMAN_CHECKPOINT for visual judgment before any further promotion.",
+      "status": "complete"
+    }
+  ]
+}

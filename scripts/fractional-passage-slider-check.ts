@@ -3,16 +3,18 @@ import path from 'node:path';
 import type { Page } from 'playwright';
 
 export async function checkFractionalPassageSlider(page: Page, outputRoot: string, width: number) {
-  assert.equal(await page.locator('.kp-caption-pin .kp-caption-operation-slider').count(), 1);
+  assert.equal(await page.locator('.kp-caption-operation-slider').count(), 1);
   assert.equal(await page.locator('.kp-animation-beats [data-kp-operation-id]').count(), 6);
   assert.equal(await page.locator('[data-kp-rising-beat="beat.read"] input').count(), 0);
-  await page.locator('.kp-rising-navigation summary').click();
+  await page.locator('.kp-rising-navigation > summary').click();
   await page.locator('.kp-lesson-toc a[href="#beat.multiply"]').click();
   const passage = page.locator('[data-kp-rising-beat="beat.multiply"]');
   const slider = page.locator('.kp-caption-operation-slider');
   const value = () => slider.evaluate((node: HTMLInputElement) => node.valueAsNumber);
   const settle = () => page.waitForTimeout(240);
   await settle();
+  assert.equal(await passage.locator('.kp-caption-operation-slider').count(), 1,
+    'The real operation paragraph owns its arriving control');
   assert.equal(await slider.getAttribute('data-kp-operation-beat'), 'beat.multiply');
   assert.equal(await slider.getAttribute('aria-describedby'), 'caption.beat.multiply');
   const box = await slider.boundingBox();
