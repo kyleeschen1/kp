@@ -46,8 +46,12 @@ export function fractionalTheaterFocus(input: PassageWindows & { readonly positi
   return input.positions.map((arrival, index) => presence(input.position, arrival, input.holds[index]!));
 }
 
-export function fractionalSliderPresence(position: number, completedAt: number) {
-  return 1 - ease(clamp((position - completedAt) / 24));
+/** A shorter symmetric window lets the control dissolve before its prose.
+ * Both directions sample document position; no transition can lag a seek. */
+export function fractionalSliderPresence(position: number, arrival: number, completedAt: number) {
+  const distance = 12;
+  return ease(clamp((position - arrival + distance) / distance)) *
+    (1 - ease(clamp((position - completedAt) / distance)));
 }
 
 /** A neighboring paragraph stays faint behind the theater. Its natural sticky

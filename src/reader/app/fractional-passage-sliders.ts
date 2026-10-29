@@ -18,6 +18,7 @@ export function mountFractionalPassageSliders(input: {
   });
   const range = input.host.ownerDocument.createElement('input');
   range.type = 'range';
+  range.setAttribute('aria-orientation', 'vertical');
   range.className = 'kp-caption-operation-slider';
   range.min = '0'; range.max = '1000'; range.step = '1'; range.value = '0';
   range.hidden = true;
@@ -53,9 +54,9 @@ export function mountFractionalPassageSliders(input: {
       const hidden = active === undefined || opacity <= 0;
       if (range.hidden !== hidden) range.hidden = hidden;
       range.disabled = hidden;
-      // The paragraph owns arrival/departure opacity. Applying it again here
-      // would make its control fade quadratically instead of travelling with it.
-      const paint = hidden ? '0' : '1';
+      // This is the control's shorter presence window, not a second copy of
+      // the paragraph fade. Together they make a quick, reversible dissolve.
+      const paint = hidden ? '0' : String(opacity);
       if (range.style.opacity !== paint) range.style.opacity = paint;
       if (active === undefined) return;
       const fraction = active.operation.fraction(progress);

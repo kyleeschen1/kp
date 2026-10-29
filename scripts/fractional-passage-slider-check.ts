@@ -17,10 +17,14 @@ export async function checkFractionalPassageSlider(page: Page, outputRoot: strin
     'The real operation paragraph owns its arriving control');
   assert.equal(await slider.getAttribute('data-kp-operation-beat'), 'beat.multiply');
   assert.equal(await slider.getAttribute('aria-describedby'), 'caption.beat.multiply');
+  assert.equal(await slider.getAttribute('aria-orientation'), 'vertical');
   const box = await slider.boundingBox();
-  assert.ok(box && box.height >= 24, 'The thin track must have a usable interaction area');
+  assert.ok(box && box.width >= 24 && box.height > box.width, 'The vertical track must retain a usable hit area');
   const stage = await page.locator('.kp-reader-equation-viewport').boundingBox();
-  assert.ok(stage && box.y >= stage.y + stage.height, 'Control belongs below the mathematical workspace');
+  const frame = await page.locator('.kp-caption-frame').boundingBox();
+  assert.ok(stage && frame && box.x >= frame.x && box.x + box.width <= stage.x + 1 &&
+    box.y < stage.y + stage.height && box.y + box.height > stage.y,
+    'Control belongs inside the left rail, alongside the mathematical workspace');
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();
   await page.mouse.up();
@@ -37,7 +41,7 @@ export async function checkFractionalPassageSlider(page: Page, outputRoot: strin
   assert.equal(await value(), 0);
   assert.equal(await passage.getAttribute('hidden'), null, 'Zero must retain this operation, not the previous result passage');
   assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), '500');
-  await slider.press('ArrowRight');
+  await slider.press('ArrowDown');
   await settle();
   assert.equal(await value(), 1, 'A native keyboard increment must not be lost to rounded URL progress');
   await slider.press('Home');
@@ -49,9 +53,9 @@ export async function checkFractionalPassageSlider(page: Page, outputRoot: strin
 
   const dragBox = await slider.boundingBox();
   assert.ok(dragBox);
-  await page.mouse.move(dragBox.x + 4, dragBox.y + dragBox.height / 2);
+  await page.mouse.move(dragBox.x + dragBox.width / 2, dragBox.y + 2);
   await page.mouse.down();
-  await page.mouse.move(dragBox.x + dragBox.width - 4, dragBox.y + dragBox.height / 2, { steps: 5 });
+  await page.mouse.move(dragBox.x + dragBox.width / 2, dragBox.y + dragBox.height - 2, { steps: 5 });
   await page.mouse.up();
   await settle();
   assert.ok(await value() > 980, 'Dragging must seek toward the operation result');

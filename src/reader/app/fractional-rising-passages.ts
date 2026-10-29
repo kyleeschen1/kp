@@ -77,8 +77,8 @@ export function mountFractionalRisingPassages(input: {
     const opacity = focusAt(position);
     const controlIndex = opacity.has(active + 1) ? active + 1 : active;
     const operation = sliders.operationAt(controlIndex);
-    const presence = operation && geometry ? fractionalSliderPresence(position, operation.seek(geometry, 1).position) : 0;
-    sliders.render(controlIndex, progress, readAll ? 0 : Math.min(presence, opacity.get(controlIndex) ?? 0));
+    const presence = operation && geometry ? fractionalSliderPresence(position, positions[controlIndex]!, operation.seek(geometry, 1).position) : 0;
+    sliders.render(controlIndex, progress, readAll ? 0 : presence);
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
     const neighbors = [active - 1, active, active + 1];
@@ -113,7 +113,7 @@ export function mountFractionalRisingPassages(input: {
     const maxHeight = Math.max(...heights);
     // Paragraph height affects layout once, not the equation's position on each
     // passage exchange. A short caption shares the same bottom reading line.
-    const groupHeight = maxHeight + 14 + 82 + 6 + 24;
+    const groupHeight = maxHeight + 14 + 82;
     const cardHeight = Math.max(320, groupHeight + 64);
     const cardTop = headerHeight + Math.max(16, (available - cardHeight) / 2);
     const lineWithinCard = (cardHeight - groupHeight) / 2 + maxHeight;

@@ -1,0 +1,39 @@
+{
+  "id": "run-contract.kp.theater-vertical-slider-v1",
+  "kind": "run-contract",
+  "title": "Vertical theater control candidate",
+  "status": "resolved",
+  "summary": "HUMAN_CHECKPOINT: 1/1 candidate package delivered. Judge left control dissolve and faint text through the theater surface.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.theater-vertical-slider.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-document-theater-ui.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "node --disable-warning=ExperimentalWarning --test tests/fractional-theater-focus.test.ts tests/fractional-passage-progress.test.ts tests/fractional-rising-scroll.test.ts",
+    "npm run visual:fractional-linear-equation -- --rising --base-url=http://localhost:8000"
+  ],
+  "allowedWork": [
+    "Local fractional passage presentation and focused preservation checks; one recoverable commit"
+  ],
+  "disallowedWork": [
+    "Semantic changes, shared promotion, new clock, new renderer, unrelated dirty work"
+  ],
+  "goal": "Make local operation progress vertical and quickly reversible with a translucent theater surface",
+  "target": "task.kp.theater-vertical-slider",
+  "slices": [
+    {
+      "id": "candidate",
+      "title": "Implement and verify local candidate",
+      "summary": "Local candidate and preservation evidence delivered; mandatory visual review before promotion.",
+      "status": "complete"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "task.kp.theater-vertical-slider",
+  "kind": "task",
+  "title": "Vertical theater operation control",
+  "status": "resolved",
+  "domain": "reader",
+  "summary": "User-requested local candidate implemented and checked. Visual acceptance remains pending; no shared promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-document-theater-ui.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fractional-theater-focus.test.ts tests/fractional-passage-progress.test.ts tests/fractional-rising-scroll.test.ts",
+      "status": "passed",
+      "scope": "Operation presence and scroll ownership",
+      "checkedAt": "2026-10-29T11:37:40.800Z",
+      "notes": "11 tests passed, including short symmetric control presence and composed prose opacity under reversal."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, node, tests, Svelte and domains",
+      "checkedAt": "2026-10-29T11:37:41.781Z",
+      "notes": "All type checks passed; Svelte reports zero warnings and errors."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://localhost:8000",
+      "status": "passed",
+      "scope": "Canonical fractional reader desktop and phone",
+      "checkedAt": "2026-10-29T11:37:42.389Z",
+      "notes": "Vertical geometry, native pointer and keyboard, quick arrival/reversal, centered stage, native find, reflow, Read all, reduced-motion, print and no-JS passed. Inspected local captures; surface text is intentionally very faint. Human aesthetic review pending."
+    }
+  ]
+}

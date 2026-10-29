@@ -24,9 +24,19 @@ test('prose is present only near arrival and through its hold, including reverse
   ]) assert.throws(() => compileFractionalTheaterFocus(invalid), /ordered finite/);
 });
 
-test('slider dissolves only after completion, including reverse traversal', () => {
-  for (const [position, expected] of [[90, 1], [100, 1], [112, .5], [124, 0], [200, 0], [112, .5], [100, 1]]) {
-    assert.equal(fractionalSliderPresence(position!, 100), expected);
+test('slider arrives and dissolves quickly outside the full operation, with symmetric reversal', () => {
+  const samples = [0, 88, 94, 100, 200, 400, 406, 412, 1000];
+  const sample = (position: number) => fractionalSliderPresence(position, 100, 400);
+  const forward = samples.map(sample);
+  assert.deepEqual(forward, [0, 0, .5, 1, 1, 1, .5, 0, 0]);
+  assert.deepEqual([...samples].reverse().map(sample).reverse(), forward);
+  // The parent prose has a longer fade. The realized product must remain
+  // symmetric too, including interruption partway through either boundary.
+  const composed = (position: number) => sample(position) * fractionalTheaterFocus({
+    position, positions: [100], holds: [300]
+  })[0]!;
+  for (const distance of [0, 3, 6, 9, 12, 24]) {
+    assert.equal(composed(100 - distance), composed(400 + distance));
   }
 });
 

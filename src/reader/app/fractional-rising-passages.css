@@ -89,7 +89,7 @@
   body[data-kp-reader-layout="rising-passages"] .kp-caption-copy { width: 100%; }
   .kp-caption-frame {
     position: absolute; inset: 0; border: 0;
-    background: var(--kp-surface); pointer-events: none;
+    background: color-mix(in srgb, var(--kp-surface) 80%, transparent); pointer-events: none;
   }
   .kp-caption-frame::before, .kp-caption-frame::after {
     content: ''; position: absolute; inset-block: 0; width: 10px;
@@ -116,11 +116,12 @@
   body[data-kp-reader-layout="rising-passages"] .kp-caption-document-intro .kp-document-byline { font-size: .8125rem; margin: -.35rem 0 1.5rem; }
   .kp-caption-operation-slider {
     appearance: none; display: block; position: absolute;
-    top: calc(100% + 14px + 82px + 6px);
-    left: 24px; width: calc(100% - 48px); height: 24px;
+    top: calc(100% + 14px);
+    left: 0; width: 24px; height: 82px;
+    writing-mode: vertical-lr; direction: ltr;
     padding: 0; margin: 0; border: 0; border-radius: 0;
-    background: linear-gradient(to right, var(--kp-relation) var(--kp-operation-progress, 0%), var(--kp-line) var(--kp-operation-progress, 0%)) center / 100% 1px no-repeat;
-    cursor: ew-resize;
+    background: linear-gradient(to bottom, var(--kp-relation) var(--kp-operation-progress, 0%), var(--kp-line) var(--kp-operation-progress, 0%)) center / 1px 100% no-repeat;
+    cursor: ns-resize;
   }
   .kp-caption-operation-slider[hidden] { display: none; }
   .kp-caption-operation-slider::-webkit-slider-thumb {

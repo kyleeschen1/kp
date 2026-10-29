@@ -72,3 +72,39 @@ and backward across its completion. Judge whether the control travels with its
 passage and the faint outgoing/approaching text clarifies sequence. Exact trace
 opacity and handoff timing remain provisional. Candidate delivery is complete;
 human visual acceptance and any shared promotion are pending.
+
+## Left-side control refinement
+
+The user's follow-up authorizes a vertical slider on the left, a quicker dissolve
+with the same arrival in reverse, and a slightly translucent theater surface.
+Keep this on the canonical fractional reader above: one local presentation commit
+is the rollback unit. The downward-filling native range follows document scroll;
+its shorter presence window uses the existing scroll position, with no new clock
+or geometry sampling. Only the surface becomes translucent, not mathematical paint.
+Preserve operation ownership, keyboard/drag seeking, reversal, native find and
+Read all. One package implements and checks this candidate on desktop and phone,
+then stops for visual review; no shared promotion. Allow 45 minutes with the final
+15 reserved for verification and backup. Use focused presence tests, typecheck and
+the existing rising-passage browser command; no mathematical behavior changes.
+
+Refinement delivered: the native range occupies a 24px-wide hit area inside the
+left rail alongside the equation and fills downward. Arrow Down advances; Home
+and End retain the operation's source/result. The control's 12px scroll-distance
+presence curve combines with its paragraph's existing 24px curve, symmetrically
+on arrival/departure. Layout no longer reserves space below for the old control.
+The surface is 80% opaque; existing background traces therefore show through very
+faintly. Active prose and equation paint retain their opacity. No new frame clock,
+geometry reads, dependencies or renderer path were added.
+
+Verification: 11 focused presence/operation/scroll tests, full `npm run typecheck`,
+and the desktop/phone rising-passage browser command passed. Browser checks cover
+left-side geometry, native vertical dragging/keyboard, intermediate arrival and
+reversal, plus the existing search, reflow, Read all, reduced-motion, print and
+no-JS checks. The unchanged native compositor's separate 41-sample smoke was not
+rerun for this refinement. `git diff --check` passed.
+
+Review the same URL via Options → “Multiply both sides by two”: drag the left
+control downward, then scroll past completion and reverse to inspect the quick
+dissolve/materialization. While the next paragraph approaches, judge whether the
+very faint text through the surface is enough. This remains a local candidate;
+human aesthetic acceptance and shared promotion are pending.

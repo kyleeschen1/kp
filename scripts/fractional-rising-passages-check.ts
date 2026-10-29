@@ -118,7 +118,7 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       scrollY + node.getBoundingClientRect().top + node.querySelector('.kp-rising-passage')!.getBoundingClientRect().height -
       parseFloat(document.body.style.getPropertyValue('--kp-flow-line')));
     const exchanges = [];
-    for (const offset of [0, 12, 24, 12, 0]) {
+    for (const offset of [0, 12, 18, 24, 18, 12, 0]) {
       await page.evaluate((y) => { dispatchEvent(new WheelEvent('wheel')); scrollTo(0, y); }, nextArrival - 24 + offset);
       await settle(page);
       const exchange = await page.evaluate(() => {
@@ -131,14 +131,16 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       });
       assert.ok(exchange.previous <= .08, 'Departed prose remains only a faint context trace');
       assert.ok(Math.abs(exchange.gap - geometry.gap) < 1, 'Paragraphs preserve their separation while moving');
-      if (offset === 0) assert.ok(exchange.sliderHidden || exchange.sliderAlpha < .01,
+      if (offset <= 12) assert.ok(exchange.sliderHidden || exchange.sliderAlpha < .01,
         'An unarrived control remains visually absent despite fractional scroll rounding');
       else assert.equal(exchange.sliderHidden, false, 'The next operation control arrives with its own paragraph');
       exchanges.push(exchange);
       if (offset === 12) await page.screenshot({ path: path.join(outputRoot, `flow-crossfade-${size.width}.png`) });
     }
-    assert.deepEqual(exchanges[1], exchanges[3], 'Interrupted exchange reverses exactly');
-    assert.ok(exchanges[0]!.next <= .08 && exchanges[2]!.next > .98, 'Faint approaching context rises into readable foreground near presentation');
+    assert.deepEqual(exchanges[2], exchanges[4], 'Interrupted exchange reverses exactly');
+    assert.ok(exchanges[2]!.sliderAlpha > .2 && exchanges[2]!.sliderAlpha < .7,
+      'The control materializes during its short arrival window');
+    assert.ok(exchanges[0]!.next <= .08 && exchanges[3]!.next > .98, 'Faint approaching context rises into readable foreground near presentation');
     const lineHeight = await page.locator('.kp-rising-passage p').first().evaluate(node => {
       const style = getComputedStyle(node); return parseFloat(style.lineHeight) / parseFloat(style.fontSize);
     });
