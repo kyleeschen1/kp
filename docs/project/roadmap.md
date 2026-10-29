@@ -2,8 +2,9 @@
 
 Last Updated: 2026-10-28
 Status: active
-Active Thread: `threads/relational-reader.md`
+Active Thread: `threads/co-creative-practice.md`
 Supporting Threads:
+- `threads/relational-reader.md`
 - `threads/typed-semantic-authoring-framework.md`
 - `threads/focus-deck.md`
 - `threads/animation-catalogue.md`
@@ -24,6 +25,22 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+October 28 product pivot: the user names **co-creative spaced practice and the
+LLM loop** as the most important current work. The [accepted direction](decisions/2026-10-28-co-creative-practice-priority.md)
+preserves rich context, mistake evidence, partial understanding and questions
+whose useful grain can change. The [next-step recommendation](reviews/2026-10-28-next-step-review.md)
+is a complete local question → attempt → feedback → revision → later-return loop,
+then a small varied exemplar set to discover ergonomic API changes. This is
+planning, not authorization for a new implementation run. The
+[active thread](threads/co-creative-practice.md) owns retrieval; reader and older
+proof-memory work are supporting evidence. Broad reader polish, speculative API
+redesign and new curriculum work are no longer the default successor priority.
+The user accepted the latest reader improvement as "Much better"; preserve it,
+without inferring acceptance of every historical candidate or learning efficacy.
+
+The dated entries below retain earlier delivery evidence and local acceptance
+boundaries. They do not override this priority or authorize resuming old runs.
 
 October 28 continuity continuation: [motion and prose evidence](reviews/2026-10-28-reader-motion-continuity.md)
 records continuous scroll progress, scoped font invalidation and fewer redundant
@@ -1350,6 +1367,11 @@ See
 
 ## One Active Lane
 
+Current lane: `threads/co-creative-practice.md`. The accepted priority and proposed
+milestone are linked at the top of this roadmap. No new run contract is approved
+by the strategy discussion. The sequence below is historical foundation and
+preservation context, not an independent current queue.
+
 Approved loops continue through routine nonvisual checkpoints and repairable
 verification failures across sessions until required visual approval. Preserve
 all fixed gates; repair failures instead of treating them as automatic handoffs.
@@ -2162,6 +2184,10 @@ Do not restart work already closed:
 
 ## Deferred Horizon
 
+The new spaced-practice direction reopens bounded local practice and delayed
+return as a product priority; implementation remains proposed. The broad learner
+models, accounts and curriculum systems below remain deferred.
+
 - complete curricula, learner models, accounts, classrooms, and assessment;
 - unrestricted public authoring or arbitrary source execution;
 - universal scene graphs or one renderer for unlike media;
@@ -2178,7 +2204,7 @@ Future sessions should read, in order:
 
 1. this roadmap;
 2. `strategy.md` when strategic rationale is needed;
-3. `threads/typed-semantic-authoring-framework.md` for the active work
+3. the `Active Thread` named at the top of this roadmap for the active work
    boundary;
 4. `principles/system-vocabulary.md` for terminology;
 5. the exact decision, review, principle, or source linked by the selected

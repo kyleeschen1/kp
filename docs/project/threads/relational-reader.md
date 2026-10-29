@@ -1,9 +1,16 @@
 # Relational reader delivery
 
-Status: active direction; focused mechanics argument approved through first review
+Status: supporting preservation thread; co-creative practice owns current priority
 Last Updated: 2026-10-28
 
 ## Canonical direction
+
+October 28 priority change: [co-creative practice](co-creative-practice.md) is the
+active direction. The user accepted the latest reader improvement as "Much
+better" and then selected spaced practice and LLM collaboration as most important.
+Preserve this reader and its measured limitations; the dated recommendations
+below do not automatically authorize further polish or resume historical runs.
+See the [decision](../decisions/2026-10-28-co-creative-practice-priority.md).
 
 October 28 continuity continuation: [evidence and local review](../reviews/2026-10-28-reader-motion-continuity.md)
 records removal of rounded scroll positions, irrelevant font retirement and

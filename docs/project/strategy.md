@@ -1,6 +1,6 @@
 # KP Strategy
 
-Last Updated: 2026-09-16
+Last Updated: 2026-10-28
 
 ## North Star
 
@@ -26,6 +26,18 @@ inspectable and executable; the compiler is core machinery, not the complete
 learner-facing product definition.
 
 ## Product Thesis
+
+October 28 priority: the user selects **co-creative spaced practice and the LLM
+loop** as the current leading product direction. Questions should be negotiated
+around the learner's purpose, misunderstandings and insights, preserve meaningful
+context, and support growing conceptual roles alongside explicit partial
+understanding. Mistake observations, learner explanations and model hypotheses
+must remain distinguishable. Short explanations and exemplars are experiments
+for developing reusable affordances, not a content-library production target.
+See the [accepted direction](decisions/2026-10-28-co-creative-practice-priority.md)
+and [proposed next step](reviews/2026-10-28-next-step-review.md). This supersedes
+older product-priority statements below; those remain rationale and provenance.
+It does not approve a scheduler, learner model, universal ontology or new run.
 
 October 13 learner-context clarification: explanations should be designed for a
 learner's starting knowledge and present question; there is no assumed universally
@@ -173,6 +185,14 @@ state, transformations, learner actions, correctness, and retrieval context.
 Chat discovers an explanation; KP crystallizes it; practice internalizes it.
 
 ## Current Strategic Stage
+
+Current steering is a proposed complete local co-creative practice loop over the
+existing semantic, authoring, reader and motion foundations. API ergonomics should
+be discovered through varied small callers, with versioned source and explicit
+migration of maintained exemplars. The older integration and paused-SRS statements
+below describe prior stages; they no longer exclude this user-selected priority.
+The roadmap and its active thread own the next work; implementation remains a
+proposal until authorized.
 
 KP is in **authoring-first architecture integration over the governed
 animation and publication foundation**. The immediate experience to improve

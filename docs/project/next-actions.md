@@ -1,18 +1,19 @@
 # KP Next Actions
 
-Last Updated: 2026-09-13
+Last Updated: 2026-10-28
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 ## Current Queue
 
-Follow the roadmap-selected `threads/relational-reader.md` and the approved
-`reviews/2026-09-15-reader-authoring-reuse-boundary.md` repair, controlled by
-`run-contract.kp.reader-scalar-reuse-v1` and `next-action.kp.relational-reader`.
-The scalar exemplar needs its named visual checkpoint before further promotion.
-The older relational-reader-v2 and mechanics motion loops remain deferred, not
-completed or automatically resumed. Theseus owns execution status.
+Follow the roadmap-selected `threads/co-creative-practice.md`. The user has
+selected spaced practice and the LLM collaboration loop as the current priority;
+`reviews/2026-10-28-next-step-review.md` owns the proposed first milestone and
+API/exemplar evolution policy. Discuss that recommendation before starting a new
+implementation run. Preserve accepted reader behavior and older proof-memory
+evidence; no historical contract resumes automatically. Theseus owns approved
+execution, not this human-readable index.
 
 Keep `Apply a 2 × 2 matrix to a vector` tabled in
 `threads/animation-library-promotion.md`; this queue does not reactivate or

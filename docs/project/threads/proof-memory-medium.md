@@ -1,11 +1,17 @@
 # Proof-Memory Medium
 
-Status: stabilize
-Last Updated: 2026-08-14
-Current Next Action: preserve the normal-matrix implementation as architecture
-and retrieval evidence, record its attentional checkpoint as unapproved, and
-do not execute s26-s27. Revisit proof-memory behavior only after one
-attentional-surface exemplar makes read/watch/predict ownership self-evident.
+Status: historical experiment and supporting evidence; presentation unaccepted
+Last Updated: 2026-10-28
+Current Next Action: preserve the normal-matrix implementation and unaccepted
+attentional checkpoint; use `co-creative-practice.md` for the current priority.
+Do not resume s26-s27 or infer acceptance of the old presentation.
+
+October 28: the user now selects spaced practice and the LLM loop as the leading
+product direction. That supersedes this thread's old recommendation to keep
+memory secondary, but not its evidence or unmet visual checkpoint. The
+[new decision](../decisions/2026-10-28-co-creative-practice-priority.md) and
+[proposal](../reviews/2026-10-28-next-step-review.md) govern current steering.
+The sections below record the earlier experiment, not current scope approval.
 
 ## Checkpoint Result
 

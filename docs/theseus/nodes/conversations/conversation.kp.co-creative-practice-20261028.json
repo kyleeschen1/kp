@@ -1,0 +1,80 @@
+{
+  "id": "conversation.kp.co-creative-practice-20261028",
+  "kind": "conversation",
+  "title": "Prioritize co-creative spaced practice and preserve partial understanding",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The user selects spaced practice and the LLM co-creation loop as the most important current work, with ergonomic APIs discovered through rapid iteration and a maintained exemplar library. Questions should be negotiated around useful insights and misunderstandings; mistake observations and model hypotheses stay distinct; partial understanding and purpose-relative cognitive debt remain legitimate. The assistant proposes a complete local practice loop followed by varied small examples. Implementation, shared API policy and a new run are not approved by this planning request.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/decisions/2026-10-28-co-creative-practice-priority.md",
+      "turnRange": "Priority declaration quoted exactly; preceding spaced-practice, mistake-metadata and partial-knowledge discussion summarized at capture time",
+      "digest": "sha256:7ea20943769259d4fa97e53cd9eb03541f2f3d4bd6ca58ffbd5c473a4ebd40ad",
+      "summary": "The user selects spaced practice and the LLM co-creation loop as the most important current work, with ergonomic APIs discovered through rapid iteration and a maintained exemplar library. Questions should be negotiated around useful insights and misunderstandings; mistake observations and model hypotheses stay distinct; partial understanding and purpose-relative cognitive debt remain legitimate. The assistant proposes a complete local practice loop followed by varied small examples. Implementation, shared API policy and a new run are not approved by this planning request."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-10-29T03:34:34.000Z",
+    "participants": [
+      {
+        "id": "user",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "assistant",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/decisions/2026-10-28-co-creative-practice-priority.md",
+        "turnRange": "Priority declaration quoted exactly; preceding spaced-practice, mistake-metadata and partial-knowledge discussion summarized at capture time",
+        "digest": "sha256:7ea20943769259d4fa97e53cd9eb03541f2f3d4bd6ca58ffbd5c473a4ebd40ad"
+      }
+    ],
+    "summary": "The user selects spaced practice and the LLM co-creation loop as the most important current work, with ergonomic APIs discovered through rapid iteration and a maintained exemplar library. Questions should be negotiated around useful insights and misunderstandings; mistake observations and model hypotheses stay distinct; partial understanding and purpose-relative cognitive debt remain legitimate. The assistant proposes a complete local practice loop followed by varied small examples. Implementation, shared API policy and a new run are not approved by this planning request.",
+    "proposals": [
+      {
+        "id": "co-creative-practice-priority",
+        "statement": "Make co-creative spaced practice and the LLM loop the current product priority, with existing reader, semantic and motion infrastructure supporting that experience.",
+        "proposedBy": "user",
+        "status": "accepted",
+        "linkedEntityIds": []
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "prioritize-co-creative-practice",
+        "statement": "Record the user-declared product priority and preserve prior reader/proof-memory evidence without automatically resuming an old run. The next-step review remains a proposal.",
+        "proposalId": "co-creative-practice-priority",
+        "decidedAt": "2026-10-29T03:34:34.000Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "user",
+          "basis": "Explicit statement that spaced repetition ambitions and the LLM loop are most important right now. Capture timestamp, not a reconstructed original turn time. No implementation approval inferred."
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "Assistant-recorded priority quote and discussion summary, with a hashed repository decision. No full provider transcript export is attached."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Retain direction and authority boundaries with project memory; no personal learner attempts are included."
+    },
+    "linkedEntityIds": []
+  }
+}
