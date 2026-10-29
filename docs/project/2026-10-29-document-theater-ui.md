@@ -157,3 +157,53 @@ Review the same reader URL. Scroll through an ordinary exchange, then past the
 final “solution” passage; rewind before the first passage. Text should retreat
 relative to a stationary theater at both ends. Judge the shortened cadence;
 the bug checks pass, while this local pacing candidate awaits visual acceptance.
+
+## Readable context across generous spacing
+
+The user rejects the compressed treatment and authorizes the recommendation to
+keep breathing room while bridging it with readable text. The previous numeric
+position/opacity checks did not establish the requested perceptual result.
+Restore generous native passage spacing. Retain outgoing text until the incoming
+explanation is readable, then withdraw it; the next mathematical operation still
+waits for its explanation's presentation/read interval. Preserve the retired
+slider, canonical fractional lesson/host/native compositor, semantic bindings,
+search, Read all, reversal, print and static reading. First/last handoffs should
+lead into readable surrounding document prose rather than a forced empty theater.
+
+One local presentation commit is the rollback unit. Use the existing measured
+layout and scroll clock; no per-frame measurement or general renderer seam.
+Check sampled full-passage visibility in the viewport during the entire exchange,
+not just a nonzero opacity, plus stable generous spacing, held math and both end
+handoffs. Use focused tests, typecheck and the canonical desktop/phone browser
+commands. Stop at the candidate review, with no shared promotion. Allow 60 minutes
+including 15 minutes reserved for verification and backup.
+
+Implemented candidate: restored the original generous positive gap, shared by
+the native prose strip. Internal passage withdrawal now waits for the next
+passage's arrival. Incoming prose materializes near its presentation line while
+the outgoing explanation stays fully readable; the latter fades only after its
+successor is fully present. It can remain readable above the theater as it rises.
+The equation holds its completed result through this exchange, and its next
+operation still waits through the incoming reading phase. First/last withdrawal
+retains the pin clearance and returns attention to the surrounding article.
+
+No mathematical, typography, background or renderer changes were needed. The
+normal presence projection samples at most two adjacent paragraphs with one
+binary lookup; unusual overlapping holds retain the complete projection. No
+independent clock, per-frame geometry read, new dependency or slider was added.
+
+Evidence: 14 focused compiler/operation/prose tests and full typecheck passed.
+The canonical `--rising` browser check passed on desktop and phone, including
+12px samples across the entire exchange that require a fully opaque foreground
+paragraph inside the viewport, held math, generous stable spacing, reverse,
+native find/selection, URL restoration, reflow, Read all, reduced-motion loading,
+print and no-JS. The `--passage-boundaries` check passed: endpoint equations stay
+fixed, the theater remains pinned during withdrawal, and a fully visible ordinary
+document paragraph is available as the first/last theater passage recedes.
+Captures show readable outgoing text above the frame while the next approaches;
+these checks still do not substitute for the user's judgment of pacing.
+
+Review via Options → “Multiply both sides by two”, continuing after the equation
+finishes and reversing across the handoff. The gap should feel generous again,
+with the outgoing explanation staying readable during that distance. This
+supersedes the rejected compact candidate; visual acceptance remains pending.

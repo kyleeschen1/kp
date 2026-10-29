@@ -22,11 +22,17 @@ export async function checkFractionalPassageBoundaries(page: Page, baseUrl: stri
       for (const distance of [0, 12, 24, 48, 24, 12, 0]) {
         await page.evaluate(y => { dispatchEvent(new WheelEvent('wheel')); scrollTo(0, y); }, boundary + direction * distance);
         await page.waitForTimeout(260);
-        frames.push(await page.locator(`[data-kp-rising-beat="${id}"]`).evaluate(node => {
+        frames.push(await page.locator(`[data-kp-rising-beat="${id}"]`).evaluate((node, direction) => {
           const frame = document.querySelector('.kp-caption-frame')!.getBoundingClientRect();
+          const header = document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().bottom;
+          const context = direction < 0 ? '.kp-caption-document-intro' : '.kp-caption-document-after';
+          const contextVisible = [...document.querySelectorAll(`${context} > p:not(.kp-document-byline)`)].some(paragraph => {
+            const rect = paragraph.getBoundingClientRect();
+            return rect.top >= header && rect.bottom <= innerHeight && getComputedStyle(paragraph).opacity === '1';
+          });
           return { alpha: Number(getComputedStyle(node).opacity), top: node.getBoundingClientRect().top,
-            frame: frame.top, progress: Number(document.body.dataset['kpReaderProgress']) };
-        }));
+            frame: frame.top, progress: Number(document.body.dataset['kpReaderProgress']), contextVisible };
+        }, direction));
         if (distance === 24) await page.screenshot({ path: path.join(outputRoot, `passage-boundary-${width}-${id}.png`) });
       }
       console.log(JSON.stringify({ width, id, frames }));
@@ -37,6 +43,8 @@ export async function checkFractionalPassageBoundaries(page: Page, baseUrl: stri
         'The theater must stay pinned until its endpoint passage has withdrawn');
       assert.ok(Math.abs(frames[0]!.top - frames[2]!.top) > 20, 'Endpoint passage must actually retreat');
       assert.ok(frames.every(frame => frame.progress === progress), 'Retreat must preserve the endpoint equation');
+      assert.ok(frames.filter(frame => frame.alpha < .98).every(frame => frame.contextVisible),
+        'Endpoint retreat hands reading back to a fully visible paragraph in the surrounding document');
       assert.deepEqual(frames[1], frames[5], 'Endpoint retreat must reverse deterministically');
     }
   }

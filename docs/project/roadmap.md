@@ -29,10 +29,11 @@ nor its evidence. The ledger remains retrievable at
 October 29 local reader candidate: the user approves the UI-note discussion.
 The [document theater candidate](2026-10-29-document-theater-ui.md) simplifies the
 article shell and header and tests prose passing behind the stable theater.
-The latest user correction removes the scrubber, closes the passage-handoff gap
-and fixes first/last retreat by extending the theater's pin interval. Focused
-desktop/phone preservation and endpoint regressions pass; pacing acceptance is
-pending. Review this local treatment
+The user rejects the compressed passage handoff. The latest candidate restores
+generous spacing and retains readable outgoing text until the incoming passage
+arrives. The scrubber stays removed; first/last retreat hands reading back to the
+surrounding article. Focused desktop/phone visibility and preservation checks pass;
+pacing acceptance is pending. Review this local treatment
 before any promotion. The broader host/style ownership investigation below
 remains a separate proposed scope; personal practice remains the product goal.
 

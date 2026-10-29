@@ -1,0 +1,44 @@
+{
+  "id": "task.kp.theater-readable-exchange",
+  "kind": "task",
+  "title": "Readable passage exchange with breathing room",
+  "status": "resolved",
+  "domain": "reader",
+  "summary": "Approved implementation delivered; perceptual pacing remains a local human review, not a test-certified design.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-document-theater-ui.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fractional-theater-focus.test.ts tests/fractional-passage-progress.test.ts tests/fractional-rising-scroll.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts",
+      "status": "passed",
+      "scope": "Paired passage readability and preserved semantic intervals",
+      "checkedAt": "2026-10-29T12:33:23.139Z",
+      "notes": "14 tests pass, including wide gaps with one fully opaque explanation throughout, reverse, sparse/full equivalence and checked operations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, node, tests, Svelte and domains",
+      "checkedAt": "2026-10-29T12:33:24.086Z",
+      "notes": "Full typecheck passes with zero Svelte warnings or errors."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://localhost:8000",
+      "status": "passed",
+      "scope": "Canonical desktop and phone passage handoff",
+      "checkedAt": "2026-10-29T12:33:24.671Z",
+      "notes": "Entire exchange sampled every 12px: one fully opaque foreground paragraph stays inside viewport, generous distance persists, math holds. Reverse, native find, selection, URL restoration, reflow, Read all, reduced-motion, print and no-JS pass. Inspected captures; aesthetic acceptance pending."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --passage-boundaries --base-url=http://localhost:8000",
+      "status": "passed",
+      "scope": "First and last article handoffs",
+      "checkedAt": "2026-10-29T12:33:25.316Z",
+      "notes": "First/last retreat preserves pinned frame and endpoint math. Fully visible surrounding document prose remains available as endpoint explanation withdraws; reversal passes on desktop and phone."
+    }
+  ]
+}

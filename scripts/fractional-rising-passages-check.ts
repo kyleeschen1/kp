@@ -117,8 +117,27 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     const nextArrival = await page.locator('[data-kp-beat="beat.cancel-denominator"]').evaluate(node =>
       scrollY + node.getBoundingClientRect().top + node.querySelector('.kp-rising-passage')!.getBoundingClientRect().height -
       parseFloat(document.body.style.getPropertyValue('--kp-flow-line')));
+    const completedAt = geometry.arrival + geometry.hold;
+    assert.ok(geometry.gap > 120 && nextArrival - completedAt > 160,
+      'The handoff must preserve generous physical spacing, not compress paragraphs to hide a blank interval');
+    for (let position = completedAt; position <= nextArrival + 24; position += 12) {
+      await page.evaluate(y => { dispatchEvent(new WheelEvent('wheel')); scrollTo(0, y); }, position);
+      await settle(page);
+      const readable = await page.locator('.kp-rising-passage').evaluateAll(nodes => {
+        const headerBottom = document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().bottom;
+        return nodes.some(node => {
+          const rect = node.getBoundingClientRect();
+          return Number(getComputedStyle(node).opacity) >= .98 &&
+            (node as HTMLElement).dataset['kpPassageLayer'] === 'front' &&
+            rect.top >= headerBottom && rect.bottom <= innerHeight;
+        });
+      });
+      assert.ok(readable, 'A fully opaque foreground explanation must fit in the visible viewport throughout the handoff');
+      assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), '667',
+        'The equation rests while its explanations exchange');
+    }
     const exchanges = [];
-    for (const offset of [0, 12, 18, 24, 18, 12, 0]) {
+    for (const offset of [0, 12, 24, 36, 48, 36, 24, 12, 0]) {
       await page.evaluate((y) => { dispatchEvent(new WheelEvent('wheel')); scrollTo(0, y); }, nextArrival - 24 + offset);
       await settle(page);
       const exchange = await page.evaluate(() => {
@@ -127,13 +146,17 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
         return { previous: Number(getComputedStyle(previous).opacity), next: Number(getComputedStyle(next).opacity),
           gap: next.getBoundingClientRect().top - previous.getBoundingClientRect().bottom };
       });
-      assert.ok(exchange.previous <= .08, 'Departed prose remains only a faint context trace');
-      assert.ok(Math.abs(exchange.gap - geometry.gap) < 1, 'Paragraphs preserve their separation while moving');
+      if (offset <= 24) {
+        assert.ok(exchange.previous >= .98, 'Outgoing prose stays readable until incoming prose has fully arrived');
+        assert.ok(Math.abs(exchange.gap - geometry.gap) < 1, 'Paragraphs preserve their separation while moving');
+      }
+      if (offset === 48) assert.ok(exchange.previous <= .081, 'Outgoing prose withdraws after the handoff');
+      assert.ok(Math.max(exchange.previous, exchange.next) >= .98, 'A handoff must not dim both explanations together');
       exchanges.push(exchange);
       if (offset === 12) await page.screenshot({ path: path.join(outputRoot, `flow-crossfade-${size.width}.png`) });
     }
-    assert.deepEqual(exchanges[2], exchanges[4], 'Interrupted exchange reverses exactly');
-    assert.ok(exchanges[0]!.next <= .08 && exchanges[3]!.next > .98, 'Faint approaching context rises into readable foreground near presentation');
+    assert.deepEqual(exchanges[3], exchanges[5], 'Interrupted exchange reverses exactly');
+    assert.ok(exchanges[0]!.next <= .08 && exchanges[2]!.next > .98, 'Faint approaching context rises into readable foreground near presentation');
     const lineHeight = await page.locator('.kp-rising-passage p').first().evaluate(node => {
       const style = getComputedStyle(node); return parseFloat(style.lineHeight) / parseFloat(style.fontSize);
     });
@@ -159,11 +182,15 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
     assert.equal(await page.locator('body').getAttribute('data-kp-reader-progress'), before);
     const spacing = await page.locator('.kp-animation-beats > li').evaluateAll(nodes => nodes.map(node => ({
       arrival: node.getBoundingClientRect().top + node.querySelector('.kp-rising-passage')!.getBoundingClientRect().height,
-      hold: parseFloat(getComputedStyle(node).getPropertyValue('--kp-flow-hold'))
+      height: node.querySelector('.kp-rising-passage')!.getBoundingClientRect().height,
+      hold: parseFloat(getComputedStyle(node).getPropertyValue('--kp-flow-hold')),
+      gap: parseFloat(getComputedStyle(node).getPropertyValue('--kp-flow-gap'))
     })));
-    for (let i = 1; i < spacing.length; i++) assert.ok(
-      Math.abs(spacing[i]!.arrival - spacing[i - 1]!.arrival - spacing[i - 1]!.hold - 48) < 1,
-      'Every passage must receive attention immediately after withdrawal, including after prose reflow');
+    for (let i = 1; i < spacing.length; i++) {
+      assert.ok(spacing[i - 1]!.gap > 120, 'Prose reflow must retain breathing room');
+      assert.ok(Math.abs(spacing[i]!.arrival - spacing[i - 1]!.arrival - spacing[i - 1]!.hold -
+        spacing[i]!.height - spacing[i - 1]!.gap) < 1, 'Passage spacing remains natural and stable after reflow');
+    }
     await page.locator('.kp-rising-navigation > summary').click();
     await page.locator('.kp-lesson-toc a[href="#beat.multiply"]').click();
     await settle(page);
@@ -235,5 +262,5 @@ export async function checkFractionalRisingPassages(page: Page, baseUrl: string,
       'No-JS prose must not retain empty animation hold distances');
     assert.ok(await staticPage.locator('.kp-animation-static .katex').first().isVisible());
   } finally { await context.close(); }
-  console.log('Document-flow passages: desktop/phone centering, real prose, compact exchange, holds, release, reversal, slider retirement, font reflow, native find, Read all and static/print passed.');
+  console.log('Document-flow passages: desktop/phone centering, readable generous exchange, held math, release, reversal, slider retirement, font reflow, native find, Read all and static/print passed.');
 }

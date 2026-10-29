@@ -1,0 +1,39 @@
+{
+  "id": "run-contract.kp.theater-readable-exchange-v1",
+  "kind": "run-contract",
+  "title": "Readable passage exchange candidate",
+  "status": "resolved",
+  "summary": "HUMAN_CHECKPOINT: 1/1 package delivered. Review readable outgoing text across restored generous spacing.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.theater-readable-exchange.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-document-theater-ui.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:fractional-linear-equation -- --rising --base-url=http://localhost:8000",
+    "npm run visual:fractional-linear-equation -- --passage-boundaries --base-url=http://localhost:8000"
+  ],
+  "allowedWork": [
+    "Local fractional passage spacing, paired presence and focused preservation checks"
+  ],
+  "disallowedWork": [
+    "New renderer, semantic changes, new clocks, shared promotion and unrelated edits"
+  ],
+  "goal": "Preserve passage distance while keeping explanatory text readable throughout handoffs",
+  "target": "task.kp.theater-readable-exchange",
+  "slices": [
+    {
+      "id": "candidate",
+      "title": "Implement and inspect continuous readable handoff",
+      "summary": "Local readable exchange candidate delivered with desktop/phone capture and preservation evidence.",
+      "status": "complete"
+    }
+  ]
+}

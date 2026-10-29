@@ -1,7 +1,7 @@
 import { createFractionalRisingScroll, fractionalPassageCadence, fractionalPassageIndex } from './fractional-rising-scroll.ts';
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { fractionalPassageOperation } from './fractional-passage-progress.ts';
-import { fractionalPassageExchange, fractionalPassageTrace, compileFractionalTheaterFocus } from './fractional-theater-focus.ts';
+import { fractionalPassageTrace, compileFractionalTheaterFocus } from './fractional-theater-focus.ts';
 
 /** Real article paragraphs, native sticky holds, and the existing semantic clock. */
 export function mountFractionalRisingPassages(input: {
@@ -128,17 +128,17 @@ export function mountFractionalRisingPassages(input: {
     style.setProperty('--kp-flow-line-in-card', `${lineWithinCard}px`);
     // Keep the theater pinned beyond both semantic endpoints so the first
     // and last paragraphs retreat relative to it, rather than riding with it.
-    style.setProperty('--kp-flow-leading', `${lineWithinCard - heights[0]! + fractionalPassageExchange}px`);
-    style.setProperty('--kp-flow-tail', `${cardHeight - lineWithinCard + fractionalPassageExchange}px`);
+    const edgeRoom = 48;
+    style.setProperty('--kp-flow-leading', `${lineWithinCard - heights[0]! + edgeRoom}px`);
+    style.setProperty('--kp-flow-tail', `${cardHeight - lineWithinCard + edgeRoom}px`);
     style.setProperty('--kp-flow-hold', `${cadence.hold}px`);
+    // Restore the generous strip spacing. Readability bridges this distance;
+    // paragraph height must not be subtracted to compress the handoff.
+    style.setProperty('--kp-flow-gap', `${cardHeight - lineWithinCard + 4}px`);
     holds = passages.map((_, index) => operations[index] ? cadence.hold : cadence.read);
     passages.forEach((passage, index) => {
       passage.style.setProperty('--kp-passage-top', `${Math.max(headerHeight + 12, readingLine - heights[index]!)}px`);
       input.beats[index]!.style.setProperty('--kp-flow-hold', `${holds[index]}px`);
-      // The next paragraph's height participates in its arrival distance.
-      // Compensate once on layout, so wrapping cannot insert a blank interval
-      // between withdrawal and reception. Native prose stays in document flow.
-      input.beats[index]!.style.setProperty('--kp-flow-gap', `${fractionalPassageExchange - (heights[index + 1] ?? 0)}px`);
     });
     positions = input.beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
     focusAt = compileFractionalTheaterFocus({ positions, holds });

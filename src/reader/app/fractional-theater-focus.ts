@@ -3,8 +3,6 @@ import { fractionalPassageIndex } from './fractional-rising-scroll.ts';
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 const ease = (value: number) => value * value * (3 - 2 * value);
 const revealDistance = 24; // Local exemplar: scroll distance, not elapsed time.
-// One withdrawal followed immediately by one arrival, regardless of wrapping.
-export const fractionalPassageExchange = revealDistance * 2;
 interface PassageWindows {
   readonly positions: readonly number[];
   readonly holds: readonly number[];
@@ -20,32 +18,43 @@ function validate(input: PassageWindows) {
   });
 }
 
-function presence(position: number, arrival: number, hold: number) {
-  return ease(clamp((position - arrival + revealDistance) / revealDistance)) *
-    (1 - ease(clamp((position - arrival - hold) / revealDistance)));
+function withdrawalAt(input: PassageWindows, index: number) {
+  // Completion releases physical motion, not readable context. Keep the old
+  // explanation until its successor has fully arrived at the reading line.
+  return Math.max(input.positions[index]! + input.holds[index]!, input.positions[index + 1] ?? -Infinity);
 }
 
-/** Compile measured holds once. Normal document spacing needs one lookup;
- * densely overlapping windows retain the same complete projection. */
+function presence(position: number, arrival: number, withdrawal: number) {
+  return ease(clamp((position - arrival + revealDistance) / revealDistance)) *
+    (1 - ease(clamp((position - withdrawal) / revealDistance)));
+}
+
+/** Compile once. The outgoing/incoming pair shares readability across a gap;
+ * unusually overlapping holds retain the complete projection. */
 export function compileFractionalTheaterFocus(input: PassageWindows): (position: number) => ReadonlyMap<number, number> {
   validate(input);
-  const dense = input.positions.some((position, index) => index > 0 &&
-    position - revealDistance < input.positions[index - 1]! + input.holds[index - 1]! + revealDistance);
+  const withdrawals = input.positions.map((_, index) => withdrawalAt(input, index));
+  const dense = input.positions.some((position, index) => index > 1 &&
+    position - revealDistance < withdrawals[index - 2]! + revealDistance);
   return position => {
     if (dense) return new Map(fractionalTheaterFocus({ ...input, position })
       .flatMap((opacity, index) => opacity === 0 ? [] : [[index, opacity] as const]));
     const index = fractionalPassageIndex(input.positions, position + revealDistance);
-    const arrival = input.positions[index];
-    const opacity = arrival === undefined ? 0 : presence(position, arrival, input.holds[index]!);
-    return new Map(opacity > 0 ? [[index, opacity]] : []);
+    const result = new Map<number, number>();
+    for (const candidate of [index - 1, index]) {
+      const arrival = input.positions[candidate];
+      const opacity = arrival === undefined ? 0 : presence(position, arrival, withdrawals[candidate]!);
+      if (opacity > 0) result.set(candidate, opacity);
+    }
+    return result;
   };
 }
 
-/** Reveal close to arrival, retain through the whole hold, withdraw on release.
- * Keeping presence separate from flow preserves native search and reversal. */
+/** Readability bridges motion between holds. Flow still owns actual positions,
+ * and the mathematical clock waits for the next explanation's reading phase. */
 export function fractionalTheaterFocus(input: PassageWindows & { readonly position: number }) {
   validate(input);
-  return input.positions.map((arrival, index) => presence(input.position, arrival, input.holds[index]!));
+  return input.positions.map((arrival, index) => presence(input.position, arrival, withdrawalAt(input, index)));
 }
 
 /** A neighboring paragraph stays faint behind the theater. Its natural sticky

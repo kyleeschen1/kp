@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalPassageExchange, fractionalPassageTrace } from '../src/reader/app/fractional-theater-focus.ts';
+import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalPassageTrace } from '../src/reader/app/fractional-theater-focus.ts';
 import { fractionalPassageIndex } from '../src/reader/app/fractional-rising-scroll.ts';
 import { fractionalPassageOperations } from '../src/reader/compiler/fractional-passage-operations.ts';
 
-test('prose is present only near arrival and through its hold, including reverse and direct seeks', () => {
+test('outgoing prose stays readable until its successor arrives, including reverse and direct seeks', () => {
   const input = { positions: [100, 600, 1100], holds: [300, 300, 100] };
   const focus = (position: number) => fractionalTheaterFocus({ ...input, position });
   assert.deepEqual(focus(75), [0, 0, 0]);
@@ -12,9 +12,13 @@ test('prose is present only near arrival and through its hold, including reverse
   assert.deepEqual(focus(100), [1, 0, 0]);
   assert.deepEqual(focus(300), [1, 0, 0]);
   assert.deepEqual(focus(400), [1, 0, 0]);
-  assert.deepEqual(focus(412), [.5, 0, 0]);
-  assert.deepEqual(focus(424), [0, 0, 0]);
-  assert.deepEqual(focus(588), [0, .5, 0]);
+  assert.deepEqual(focus(412), [1, 0, 0]);
+  assert.deepEqual(focus(500), [1, 0, 0]);
+  assert.deepEqual(focus(588), [1, .5, 0]);
+  assert.deepEqual(focus(600), [1, 1, 0]);
+  assert.deepEqual(focus(612), [.5, 1, 0]);
+  assert.deepEqual(focus(624), [0, 1, 0]);
+  assert.deepEqual(focus(1212), [0, 0, .5]);
   assert.deepEqual(focus(2000), [0, 0, 0]);
   assert.throws(() => fractionalTheaterFocus({ ...input, holds: [], position: 300 }), /one hold per passage/);
   for (const invalid of [
@@ -24,19 +28,18 @@ test('prose is present only near arrival and through its hold, including reverse
   ]) assert.throws(() => compileFractionalTheaterFocus(invalid), /ordered finite/);
 });
 
-test('adjacent passage windows hand off without a blank interval or simultaneous foreground', () => {
-  const firstEnd = 400;
-  const input = { positions: [100, firstEnd + fractionalPassageExchange], holds: [300, 300] };
-  const focus = compileFractionalTheaterFocus(input);
-  const forward = Array.from({ length: fractionalPassageExchange + 1 }, (_, distance) =>
-    [...focus(firstEnd + distance)]);
-  for (let distance = 0; distance <= fractionalPassageExchange; distance++) {
-    const values = forward[distance]!;
-    assert.ok(values.length <= 1, 'Only one paragraph can own foreground');
-    if (distance !== fractionalPassageExchange / 2) assert.equal(values.length, 1, 'No blank travel span');
+test('wide passage gaps retain one fully readable explanation through handoff in either direction', () => {
+  for (const gap of [120, 240, 400]) {
+    const next = 400 + gap;
+    const focus = compileFractionalTheaterFocus({ positions: [100, next], holds: [300, 300] });
+    const positions = Array.from({ length: gap + 25 }, (_, i) => 400 + i);
+    const forward = positions.map(position => [...focus(position)]);
+    for (const entries of forward) {
+      assert.ok(entries.length <= 2, 'Only adjacent explanations participate');
+      assert.equal(Math.max(...entries.map(([, alpha]) => alpha)), 1, 'Readability must bridge the entire physical gap');
+    }
+    assert.deepEqual([...positions].reverse().map(position => [...focus(position)]).reverse(), forward);
   }
-  for (let distance = fractionalPassageExchange; distance >= 0; distance--)
-    assert.deepEqual([...focus(firstEnd + distance)], forward[distance], 'Reversal must reach the same handoff');
 });
 
 test('passage traces are bounded context, disappear far away and reverse without retained state', () => {
@@ -62,7 +65,7 @@ test('sparse focus matches the complete law for long documents, jumps, reversals
       const expected = fractionalTheaterFocus({ ...input, position });
       const actual = focus(position);
       assert.deepEqual(expected, expected.map((_, index) => actual.get(index) ?? 0));
-      if (input.positions.length === 10000) assert.ok(actual.size <= 1);
+      if (input.positions.length === 10000) assert.ok(actual.size <= 2);
     }
   }
 });
