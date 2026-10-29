@@ -1,0 +1,76 @@
+{
+  "id": "run-contract.kp.project-vision-view-v1",
+  "kind": "run-contract",
+  "title": "Project vision view",
+  "status": "resolved",
+  "summary": "HUMAN_CHECKPOINT: the one-slice UI candidate is delivered with scoped verification; review the existing dashboard vision view.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.delivery.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-project-vision-ui.md",
+      "summary": "User-requested bounded vision view and preservation contract"
+    }
+  ],
+  "verification": [
+    "npm run test:project-vision",
+    "npm run visual:project-vision",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-29T13:46:53.449Z",
+      "notes": "67 vision and existing dashboard checks passed"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-10-29T13:46:54.362Z",
+      "notes": "Full types passed; test types rerun after contrast checks"
+    },
+    {
+      "command": "npm run visual:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-29T13:46:54.955Z",
+      "notes": "Desktop and phone, both themes, realized contrast, evidence, disclosures, search and editor return passed"
+    },
+    {
+      "command": "npm run check:dependency-direction",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-29T13:46:55.536Z"
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-29T13:46:56.113Z",
+      "notes": "Regenerated scanned file count only; all 68 roots unchanged; 12 caller tests also passed"
+    }
+  ],
+  "allowedWork": [
+    "One scoped vision component, source-backed records, focused validation, docs and browser smoke"
+  ],
+  "disallowedWork": [
+    "Architecture campaign, new scheduler, backend editing, lesson changes or broad dashboard rewrite"
+  ],
+  "goal": "Make longer direction, finite finish lines and evidence visible in the existing dashboard",
+  "target": "workflow.kp.delivery",
+  "slices": [
+    {
+      "id": "vision",
+      "title": "Source-backed vision view",
+      "summary": "Bounded view and process instructions implemented and checked. Ready for human review; no architecture campaign or broader promotion started.",
+      "status": "complete"
+    }
+  ]
+}

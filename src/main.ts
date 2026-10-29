@@ -207,7 +207,10 @@ const projectDashboardCapabilityLoader =
     ProjectDashboardRenderClient
   >({
     importData: () => import("./project-dashboard/data.ts"),
-    importSelectedRenderer: () => import("./project-dashboard/render.ts")
+    importSelectedRenderer: async () => {
+      await import("./project-dashboard/vision.css");
+      return import("./project-dashboard/render.ts");
+    }
   });
 let ftcTutorialSurfaceClientPromise: Promise<FtcTutorialSurfaceClient> | undefined;
 let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined;

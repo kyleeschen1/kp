@@ -2,9 +2,11 @@
 
 Status: active product direction; first implementation milestone proposed
 Last Updated: 2026-10-29
-Current Next Action: consider the proposed
-[architecture repair roadmap](../reviews/2026-10-29-next-step-review.md), starting
-with shared algebra mounting ownership under experiments. The user accepts the
+Current Next Action: review the bounded [vision UI](../2026-10-29-project-vision-ui.md)
+requested to keep direction, finish lines and changes visible. The proposed
+[architecture repair roadmap](../reviews/2026-10-29-next-step-review.md) still
+recommends shared algebra mounting ownership first; this UI does not start that
+campaign or reopen the broader workbench. The user accepts the
 latest [document theater treatment](../2026-10-29-document-theater-ui.md); preserve
 it while repairing the surrounding architecture. The
 [bounded algebra retirement evidence](../reviews/2026-10-29-algebra-api-retirement.md)

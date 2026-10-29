@@ -15,6 +15,14 @@ collaboration experiment, not a learner-facing editorial voice standard.
 - Start strategic or implementation work with `docs/project/roadmap.md` and the
   active thread it names. Read `strategy.md` for rationale, not as a live task
   queue.
+- Keep the source-linked vision view in `src/project-dashboard/vision-data.ts`
+  aligned when accepted direction, the recommended next outcome, or scoped
+  milestone closure changes. Follow `docs/project/2026-10-29-project-vision-ui.md`:
+  preserve previous commitments and reasons for pivots, keep finite finish lines
+  and exclusions, and add successor milestones instead of expanding a completed
+  one. Run `npm run test:project-vision` after changes. This view summarizes
+  strategic sources; Theseus still owns execution status. Do not mark a snapshot
+  reviewed without checking its sources or treat it as an automatic task monitor.
 - Use `docs/project/principles/system-vocabulary.md` for system terms and
   `docs/project/principles/motion-passage-vocabulary.md` for lesson-layout
   terms.

@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "test:project-vision": "node --disable-warning=ExperimentalWarning --test tests/project-vision.test.ts tests/project-dashboard.test.ts",
+    "visual:project-vision": "playwright test tests/project-vision.browser.spec.ts --project=chromium --workers=1",
     "author:calculus-publication": "node --disable-warning=ExperimentalWarning scripts/build-calculus-edition.ts",
     "check:reproducible-authoring": "node --disable-warning=ExperimentalWarning scripts/check-reproducible-authoring.ts",
     "measure:calculus-editions": "node --disable-warning=ExperimentalWarning scripts/measure-calculus-editions.ts",

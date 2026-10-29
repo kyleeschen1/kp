@@ -26,6 +26,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 29 continuity request: the user asks for a UI that keeps a longer vision
+visible while allowing disciplined changes. The bounded
+[vision view](2026-10-29-project-vision-ui.md) projects current sources into the
+existing dashboard: six areas, finite finish lines, one recommended next outcome,
+scoped completions and reasons for changes. Review this local UI; it does not
+start the architecture campaign or reopen the broader workbench proposal.
+`src/project-dashboard/vision-data.ts` summarizes the sources; Theseus retains
+execution authority. Update the view at milestone handoffs and pivots, preserving
+finished outcomes and the disposition of replaced commitments.
+
 October 29 next direction: the user accepts the latest
 [document theater treatment](2026-10-29-document-theater-ui.md) and requests an
 [architecture repair roadmap](reviews/2026-10-29-next-step-review.md). Preserve

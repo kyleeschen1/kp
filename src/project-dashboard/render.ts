@@ -69,6 +69,7 @@ import {
   dashboardSampleTargetSearchFields as sampleTargetSearchFields
 } from "./sample-target-preview.ts";
 import animationLibraryRunContract from "../../docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json" with { type: "json" };
+import { renderProjectVision } from "./vision-render.ts";
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
@@ -107,6 +108,7 @@ export function renderProjectDashboard(
         ${renderDataStatus(issues)}
         <button class="project-dashboard__back" type="button" data-action="show-editor">Back to Editor</button>
       </header>
+      ${hasQuery || tocOnly ? "" : renderProjectVision()}
       ${renderProjectDashboardSearch(query, agendaModel, tocOnly)}
       ${tocOnly ? "" : renderProjectAgendaPreview(selectedAgendaRow)}
       ${renderProjectAgenda(agendaModel.sections, titles, visibleIds, {

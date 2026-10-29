@@ -5,8 +5,9 @@ export const projectDashboardDataContract = {
   designDocHref:
     "docs/superpowers/specs/2026-07-08-project-dashboard-v1-design.md",
   completionRule:
-    "When Codex completes a phase, update the matching work card or child card, refresh blockers and report evidence, run dashboard verification, then commit the data change with the phase.",
+    "Theseus owns execution progress. At a milestone handoff or pivot, reconcile the roadmap and source-linked vision view, retain closure evidence and the reason for changed commitments, then verify and commit. Historical catalogue cards are not a live task queue.",
   notes: [
+    "Current direction and finite outcomes are summarized in vision-data.ts; use the roadmap and linked execution records for authority.",
     "Browser edits are not persisted in V1.",
     "Priority, status, blocker, report-card, and gallery changes are made in the typed source file.",
     "Persistent browser editing is deferred until the dashboard records move to structured docs or JSON with validation.",
