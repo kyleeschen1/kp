@@ -114,23 +114,6 @@
   }
   body[data-kp-reader-layout="rising-passages"] .kp-caption-document-intro h1 { font-size: 1.3rem; margin-top: 0; }
   body[data-kp-reader-layout="rising-passages"] .kp-caption-document-intro .kp-document-byline { font-size: .8125rem; margin: -.35rem 0 1.5rem; }
-  .kp-caption-operation-slider {
-    appearance: none; display: block; position: absolute;
-    top: calc(100% + 14px);
-    left: 0; width: 24px; height: 82px;
-    writing-mode: vertical-lr; direction: ltr;
-    padding: 0; margin: 0; border: 0; border-radius: 0;
-    background: linear-gradient(to bottom, var(--kp-relation) var(--kp-operation-progress, 0%), var(--kp-line) var(--kp-operation-progress, 0%)) center / 1px 100% no-repeat;
-    cursor: ns-resize;
-  }
-  .kp-caption-operation-slider[hidden] { display: none; }
-  .kp-caption-operation-slider::-webkit-slider-thumb {
-    appearance: none; width: 4px; height: 4px; border: 0; border-radius: 50%; background: var(--kp-relation);
-  }
-  .kp-caption-operation-slider::-moz-range-thumb {
-    width: 4px; height: 4px; border: 0; border-radius: 50%; background: var(--kp-relation);
-  }
-  .kp-caption-operation-slider::-moz-range-track { background: transparent; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-wordmark { font-family: inherit; font-weight: 500; letter-spacing: .01em; }
   .kp-rising-navigation { position: relative; font-size: .875rem; margin-left: auto; }
   .kp-rising-navigation summary { cursor: pointer; }
@@ -163,7 +146,7 @@
   html body[data-kp-caption-mode="document"] .kp-animation-beats { padding: 0; }
   html body[data-kp-caption-mode="document"] .kp-animation-beats > li { margin: 0; padding: 1rem 0; }
   html body[data-kp-caption-mode="document"] .kp-animation-static { position: relative; top: auto; }
-  body[data-kp-caption-mode="document"] :is(.kp-caption-frame, .kp-caption-operation-slider) { display: none; }
+  body[data-kp-caption-mode="document"] .kp-caption-frame { display: none; }
 }
 @media screen and (max-width: 880px) {
   body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] { --kp-equation-type-size: clamp(.8925rem, 3.57vw, 1.02rem); }
@@ -176,5 +159,5 @@
   body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-passage-layer="back"] { opacity: 0; }
 }
 @media print {
-  .kp-caption-frame, .kp-caption-operation-slider { display: none; }
+  .kp-caption-frame { display: none; }
 }

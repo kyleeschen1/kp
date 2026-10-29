@@ -1,0 +1,58 @@
+{
+  "id": "task.kp.theater-passage-retreat",
+  "kind": "task",
+  "title": "Immediate passage exchange and endpoint retreat",
+  "status": "resolved",
+  "domain": "reader",
+  "summary": "Requested local correction delivered and checked; subjective cadence awaits review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-document-theater-ui.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fractional-linear-equation -- --passage-boundaries --base-url=http://localhost:8000",
+      "status": "failed",
+      "scope": "Pre-fix endpoint reproduction",
+      "checkedAt": "2026-10-29T11:57:48.172Z",
+      "notes": "First passage and theater move together during reverse retreat: frame top moves 23px while paragraph moves 23px. Pin must include passage withdrawal beyond the first and last semantic holds."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fractional-theater-focus.test.ts tests/fractional-passage-progress.test.ts tests/fractional-rising-scroll.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts",
+      "status": "passed",
+      "scope": "Canonical compiler and passage flow",
+      "checkedAt": "2026-10-29T12:04:35.474Z",
+      "notes": "14 tests passed; compact exchange is exclusive and reversible while operation intervals retain their semantic truth."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, node, tests, Svelte and domains",
+      "checkedAt": "2026-10-29T12:04:36.356Z",
+      "notes": "All checks passed, zero Svelte errors or warnings."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "Retired control import boundary",
+      "checkedAt": "2026-10-29T12:04:36.974Z",
+      "notes": "12 reachability and caller tests passed; generated graph drops only the removed control source module."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --passage-boundaries --base-url=http://localhost:8000",
+      "status": "passed",
+      "scope": "First and last passage retreat on desktop and phone",
+      "checkedAt": "2026-10-29T12:04:37.594Z",
+      "notes": "Regression now passes: frame remains pinned through retreat, prose moves, endpoints remain 0 or 1000, interruption and reverse reproduce identical state."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://localhost:8000",
+      "status": "passed",
+      "scope": "Canonical desktop and phone document reader",
+      "checkedAt": "2026-10-29T12:04:38.188Z",
+      "notes": "No slider, compact exchange, all adjacent spacing after reflow, URL restoration, native search, Read all, reduced-motion, print and no-JS passed. Inspected handoff captures; pacing remains a local review candidate."
+    }
+  ]
+}

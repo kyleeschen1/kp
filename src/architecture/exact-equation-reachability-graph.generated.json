@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 5133,
+  "scannedFileCount": 5132,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -2919,7 +2919,6 @@
         "src/reader/app/canonical-equation-transition-continuity.ts",
         "src/reader/app/exemplar-entry.ts",
         "src/reader/app/fractional-passage-progress.ts",
-        "src/reader/app/fractional-passage-sliders.ts",
         "src/reader/app/fractional-rising-passages.ts",
         "src/reader/app/fractional-rising-scroll.ts",
         "src/reader/renderers/equation-layout-snapshot.ts",

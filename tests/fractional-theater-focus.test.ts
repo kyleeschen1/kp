@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalSliderPresence, fractionalPassageTrace } from '../src/reader/app/fractional-theater-focus.ts';
+import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalPassageExchange, fractionalPassageTrace } from '../src/reader/app/fractional-theater-focus.ts';
 import { fractionalPassageIndex } from '../src/reader/app/fractional-rising-scroll.ts';
 import { fractionalPassageOperations } from '../src/reader/compiler/fractional-passage-operations.ts';
 
@@ -24,20 +24,19 @@ test('prose is present only near arrival and through its hold, including reverse
   ]) assert.throws(() => compileFractionalTheaterFocus(invalid), /ordered finite/);
 });
 
-test('slider arrives and dissolves quickly outside the full operation, with symmetric reversal', () => {
-  const samples = [0, 88, 94, 100, 200, 400, 406, 412, 1000];
-  const sample = (position: number) => fractionalSliderPresence(position, 100, 400);
-  const forward = samples.map(sample);
-  assert.deepEqual(forward, [0, 0, .5, 1, 1, 1, .5, 0, 0]);
-  assert.deepEqual([...samples].reverse().map(sample).reverse(), forward);
-  // The parent prose has a longer fade. The realized product must remain
-  // symmetric too, including interruption partway through either boundary.
-  const composed = (position: number) => sample(position) * fractionalTheaterFocus({
-    position, positions: [100], holds: [300]
-  })[0]!;
-  for (const distance of [0, 3, 6, 9, 12, 24]) {
-    assert.equal(composed(100 - distance), composed(400 + distance));
+test('adjacent passage windows hand off without a blank interval or simultaneous foreground', () => {
+  const firstEnd = 400;
+  const input = { positions: [100, firstEnd + fractionalPassageExchange], holds: [300, 300] };
+  const focus = compileFractionalTheaterFocus(input);
+  const forward = Array.from({ length: fractionalPassageExchange + 1 }, (_, distance) =>
+    [...focus(firstEnd + distance)]);
+  for (let distance = 0; distance <= fractionalPassageExchange; distance++) {
+    const values = forward[distance]!;
+    assert.ok(values.length <= 1, 'Only one paragraph can own foreground');
+    if (distance !== fractionalPassageExchange / 2) assert.equal(values.length, 1, 'No blank travel span');
   }
+  for (let distance = fractionalPassageExchange; distance >= 0; distance--)
+    assert.deepEqual([...focus(firstEnd + distance)], forward[distance], 'Reversal must reach the same handoff');
 });
 
 test('passage traces are bounded context, disappear far away and reverse without retained state', () => {

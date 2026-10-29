@@ -1,0 +1,39 @@
+{
+  "id": "run-contract.kp.theater-passage-retreat-v1",
+  "kind": "run-contract",
+  "title": "Passage exchange correction",
+  "status": "resolved",
+  "summary": "HUMAN_CHECKPOINT: 1/1 package complete; review immediate handoff and first/last retreat on the canonical fractional reader.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.theater-passage-retreat.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-29-document-theater-ui.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run visual:fractional-linear-equation -- --rising --base-url=http://localhost:8000",
+    "npm run visual:fractional-linear-equation -- --passage-boundaries --base-url=http://localhost:8000"
+  ],
+  "allowedWork": [
+    "Local fractional prose flow, rejected control retirement and focused preservation checks"
+  ],
+  "disallowedWork": [
+    "Mathematical semantics, renderer replacement, shared visual promotion, unrelated dirty work"
+  ],
+  "goal": "Remove slider and make all passage exits and exchanges continuous in both directions",
+  "target": "task.kp.theater-passage-retreat",
+  "slices": [
+    {
+      "id": "candidate",
+      "title": "Repair and verify local passage flow",
+      "summary": "Slider retired; endpoint containment regression fixed; compact handoff verified on desktop and phone.",
+      "status": "complete"
+    }
+  ]
+}

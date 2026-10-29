@@ -108,3 +108,52 @@ control downward, then scroll past completion and reverse to inspect the quick
 dissolve/materialization. While the next paragraph approaches, judge whether the
 very faint text through the surface is enough. This remains a local candidate;
 human aesthetic acceptance and shared promotion are pending.
+
+## Immediate exchange and endpoint retreat
+
+The next user correction removes the operation slider and asks for the next
+passage immediately after the previous retreats, including the last passage
+forward and first passage in reverse. Canonical host, lesson, mathematical asset
+and native compositor remain those above. The existing document-flow owner must
+coordinate actual prose arrival/departure and theater entry/release at both ends;
+mathematical progress alone cannot describe that complete document interval.
+One local commit removes the rejected control, fixes the owning boundary and
+adds focused forward/reverse/direct-seek regression coverage. Preserve real
+searchable prose, Read all, print, reduced motion, URL state and math endpoints.
+Use existing scroll sampling without per-frame measurements. Stop after this
+candidate's focused checks and desktop/phone inspection; no shared promotion.
+Allow 60 minutes with 15 reserved for verification, evidence and backup.
+
+The reproduction found the same invariant violation at both ends: the theater
+unpins exactly at the first arrival/last completion. A 24px retreat therefore
+moved the frame and prose together, leaving their relative placement unchanged.
+On desktop the first arrival was also too close to document top to rewind fully.
+`npm run visual:fractional-linear-equation -- --passage-boundaries --base-url=http://localhost:8000`
+failed its pinned-frame assertion before the fix; baseline sampling confirmed
+both ends on desktop and phone. This was a document containment/spacing defect,
+not a mathematical renderer or progress-clock defect.
+
+The local layout now reserves withdrawal room at both ends. Every adjacent pair
+gets one 24px withdrawal immediately followed by one 24px arrival, with spacing
+compensated for the next paragraph's measured height. The margin may be negative:
+background prose can overlap in document geometry, while their foreground windows
+remain exclusive. It is measured on layout/reflow, not each frame. The theater
+stays fixed through endpoint withdrawal, then releases naturally into the doc.
+The slider mount, styling, presence curve and obsolete interaction harness are
+removed; operation bindings still own math intervals, reflow and URL restoration.
+The translucent surface and faint contextual text remain unchanged.
+
+Final evidence: 14 focused compiler/passage tests and 12 reachability/caller tests
+passed; full typecheck passed. The canonical `--rising` desktop/phone check passed
+with no slider, compact exchanges, direct/reverse scroll, native search/selection,
+URL restoration, font reflow, Read all, print, reduced-motion loading and no-JS.
+The `--passage-boundaries` check now passes at both ends and widths: the frame
+stays still through withdrawal, the paragraph moves, 0/1000 math endpoints remain
+fixed and reversal reproduces intermediate state. The generated caller graph
+records the removed source module; no engine path or per-frame measurement was
+added. No frame-rate improvement or broad visual approval is claimed.
+
+Review the same reader URL. Scroll through an ordinary exchange, then past the
+final “solution” passage; rewind before the first passage. Text should retreat
+relative to a stationary theater at both ends. Judge the shortened cadence;
+the bug checks pass, while this local pacing candidate awaits visual acceptance.

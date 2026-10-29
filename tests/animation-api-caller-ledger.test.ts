@@ -161,7 +161,6 @@ test("public-looking facades remain separated by authority", () => {
     "src/reader/app/canonical-equation-transition-continuity.ts",
     "src/reader/app/exemplar-entry.ts",
     "src/reader/app/fractional-passage-progress.ts",
-    "src/reader/app/fractional-passage-sliders.ts",
     "src/reader/app/fractional-rising-passages.ts",
     "src/reader/app/fractional-rising-scroll.ts",
     "src/reader/renderers/equation-layout-snapshot.ts",

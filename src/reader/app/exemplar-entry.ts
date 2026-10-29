@@ -258,9 +258,7 @@ const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
 const risingPassages = lessonVariant === "fractional-linear"
   ? (await import("./fractional-rising-passages.ts"))
-      .mountFractionalRisingPassages({ story, beats, onLayout: onResize,
-        onSeek: (progress, position) => setExplicitProgress(progress, 'controls', true,
-          position - window.innerHeight * readerViewportAnchorFraction()) })
+      .mountFractionalRisingPassages({ story, beats, onLayout: onResize })
   : undefined;
 const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
@@ -815,7 +813,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     ? projection.progress
     : attentionProjection.visualProgressPermille / 1_000;
   const visualProgressPermille = Math.round(visualProgress * 1_000);
-  risingPassages?.render(visualProgress * 1000);
+  risingPassages?.render();
   const visualSample = {
     ...sample,
     // Keep exact control-selected boundaries for renderer ownership. Permilles

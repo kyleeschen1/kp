@@ -3,6 +3,8 @@ import { fractionalPassageIndex } from './fractional-rising-scroll.ts';
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 const ease = (value: number) => value * value * (3 - 2 * value);
 const revealDistance = 24; // Local exemplar: scroll distance, not elapsed time.
+// One withdrawal followed immediately by one arrival, regardless of wrapping.
+export const fractionalPassageExchange = revealDistance * 2;
 interface PassageWindows {
   readonly positions: readonly number[];
   readonly holds: readonly number[];
@@ -44,14 +46,6 @@ export function compileFractionalTheaterFocus(input: PassageWindows): (position:
 export function fractionalTheaterFocus(input: PassageWindows & { readonly position: number }) {
   validate(input);
   return input.positions.map((arrival, index) => presence(input.position, arrival, input.holds[index]!));
-}
-
-/** A shorter symmetric window lets the control dissolve before its prose.
- * Both directions sample document position; no transition can lag a seek. */
-export function fractionalSliderPresence(position: number, arrival: number, completedAt: number) {
-  const distance = 12;
-  return ease(clamp((position - arrival + distance) / distance)) *
-    (1 - ease(clamp((position - completedAt) / distance)));
 }
 
 /** A neighboring paragraph stays faint behind the theater. Its natural sticky

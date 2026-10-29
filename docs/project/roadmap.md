@@ -28,9 +28,11 @@ nor its evidence. The ledger remains retrievable at
 
 October 29 local reader candidate: the user approves the UI-note discussion.
 The [document theater candidate](2026-10-29-document-theater-ui.md) simplifies the
-article shell and header, attaches operation controls to their passages, and
-tests prose passing behind the stable theater. Focused desktop/phone and native
-paint checks pass; visual acceptance is pending. Review this local treatment
+article shell and header and tests prose passing behind the stable theater.
+The latest user correction removes the scrubber, closes the passage-handoff gap
+and fixes first/last retreat by extending the theater's pin interval. Focused
+desktop/phone preservation and endpoint regressions pass; pacing acceptance is
+pending. Review this local treatment
 before any promotion. The broader host/style ownership investigation below
 remains a separate proposed scope; personal practice remains the product goal.
 

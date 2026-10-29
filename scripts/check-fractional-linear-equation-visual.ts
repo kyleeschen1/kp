@@ -59,6 +59,10 @@ try {
     const { checkFractionalReaderPerformance } = await import("./fractional-reader-performance-check.ts");
     await checkFractionalReaderPerformance(page, harness.baseUrl, outputRoot);
     if (pageErrors.length > 0) throw new Error(pageErrors.join("\n"));
+  } else if (process.argv.includes('--passage-boundaries')) {
+    const { checkFractionalPassageBoundaries } = await import('./fractional-passage-boundary-check.ts');
+    await checkFractionalPassageBoundaries(page, harness.baseUrl, outputRoot, process.argv.includes('--baseline'));
+    if (pageErrors.length > 0) throw new Error(pageErrors.join('\n'));
   } else if (process.argv.includes("--rising")) {
     const { checkFractionalRisingPassages } = await import("./fractional-rising-passages-check.ts");
     await checkFractionalRisingPassages(page, harness.baseUrl, outputRoot);
