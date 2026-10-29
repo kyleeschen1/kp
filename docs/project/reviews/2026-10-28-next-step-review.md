@@ -4,6 +4,11 @@ Date: 2026-10-28
 Status: recommendation; no new implementation run authorized
 Authority: [accepted priority](../decisions/2026-10-28-co-creative-practice-priority.md)
 
+Latest refinement: [shared-workbench direction](../decisions/2026-10-28-shared-workbench-direction.md),
+supported by the [integration and exposition evidence](2026-10-28-workbench-evidence.md).
+The workbench extension below serves the same personal-practice milestone; it is
+not a competing platform prerequisite or a newly approved autonomous run.
+
 ## Recommendation
 
 Make one complete, local co-creative practice loop the next milestone. Use the
@@ -182,10 +187,162 @@ source references; identify and repair those before creating a long run. The old
 waiting Lisp tranche remains unrelated. This is control-plane readiness debt,
 not a reason to resume older work or a failure of the practice proposal.
 
+## Workbench extension: one experiment from discussion to delayed return
+
+The first beneficiary is the project owner collaborating with an LLM to create
+and use a mathematical question. The outcome is one inspectable experiment,
+not a dashboard for every subsystem. Proposed delivery packages:
+
+1. **Identify and observe one experiment.** Bind a brief, exact source revision,
+   preview, candidate and decision to existing owners. Record actual authoring
+   intervals and gaps. Unknown historical time remains unknown.
+2. **Expose that experiment in the existing workbench.** Show preview, API source,
+   anchored discussion, revision comparison and a compact evidence/time record.
+   Review this representative interaction before generalizing its UI.
+3. **Complete personal practice and capture.** Retain the question, attempt,
+   assistance, uncertainty/correction and explicit return date across reloads.
+   Send unrelated ideas to the existing GTD capture owner. This is part of the
+   first delivery, not a later scheduler project.
+4. **Measure reuse.** Try a small speed trial and one structurally different
+   caller. Fix repeated authoring friction at its owner and migrate maintained
+   examples with API changes. Separate source-only variants from engine work.
+
+The candidate integration host is `/?view=animation-workbench`. The matrix
+comparison retains its canonical source, semantic authority and renderer from
+`../authoring/matrix-comparison-packet.md`; prove the adapter's exact route before
+changing a visible exemplar. A matching asset ID is insufficient. The source
+inspection did not establish that this comparison already mounts in that host.
+
+Done means the user can reference an exact mathematical object or code passage,
+see the change under discussion, inspect why an attempt took time, capture an
+unrelated thought, and recover a saved practice question after reload. Three
+useful supported variants in roughly fifteen minutes is an initial measurement
+target, not a promise or an existing benchmark. Report setup separately.
+
+Rollback unit: local experiment adapter, versioned records and workbench panel.
+Preserve the accepted comparison player, current routes, domain truth, native
+renderers, clocks and existing feedback ownership. Check identity/revision and
+persistence invariants, failed-draft/last-valid-preview behavior, focused adapter
+integration and one browser smoke. Human review selects the interaction before
+broader UI promotion. An executable run still needs its scoped resource ceiling
+and verification reserve; this proposal does not invent an elapsed-time budget.
+
+### Evidence that helps decisions
+
+Automate source/model/API revisions where observable, requests, tool/check spans,
+failures, edits, preview readiness and decisions. Separate active work, waiting
+and idle intervals; parallel worker totals are not critical-path elapsed time.
+Do not infer human effort, hidden model reasoning or cost from Git timestamps or
+wall-clock duration. Retain failed attempts and support lightweight corrections
+to inferred classifications. Capture should cost less than the work it explains.
+
+Qualitative records should include purpose, prerequisites, intended change in
+understanding, technique, observation, interpretation, proposed intervention and
+what would count as evidence. These stages must not collapse into one diagnosis.
+Use overlapping facets rather than forcing one label or a universal quality score:
+
+| Facet | Question |
+| --- | --- |
+| Semantic validity | Is the claim/transformation valid under stated assumptions? |
+| Representational fidelity | Does the view preserve the intended identities and relations? |
+| Perception and aesthetics | Can the relevant structure be seen; is the treatment satisfactory? |
+| Attention and motion | Is the important change findable and its continuity understandable? |
+| Interaction | Can the person inspect, compare, rewind, select and respond? |
+| Narrative | Is the question, progression and resolution intelligible? |
+| Pedagogy | For which prior knowledge and purpose might this help, and what evidence exists? |
+| Domain/representation fluency | Can the person reason about the system, decode the view and translate between views? |
+| Engineering/authorship | What blocks a valid preview, revision, reuse or reliable execution? |
+
+Reuse `../principles/animation-design-diagnostic-language.md` for motion facets.
+Historical review-note frequency is not severity or evidence of a current defect.
+Visual preference and immediate self-report do not demonstrate delayed transfer.
+The exposition study in the evidence review is a source analysis, not an executed
+learning experiment; original reconstruction and comparison are the next study.
+
+### Exact references and joint attention
+
+Use a small reference envelope: owning kind, stable ID, revision and optional
+selector. Domain-owned payloads retain their own types. Display readable labels
+and aliases; users should not need to type long identifiers. Give meaningful
+artifacts identities while selecting transient paint within its owning object.
+
+Math references select semantic objects/checkpoints; code references retain
+revision, symbol/range and quote context; conversation references retain message
+revision and span. Anchors that no longer match become explicitly stale rather
+than silently attaching to other content. A shared selection is joint attention
+only when both parties can recover the same revision and context.
+
+Implement selection/reply inside the KP-owned interface first. External ChatGPT
+or Codex host integration requires separately verified capabilities. A small
+copy/export packet is an honest initial bridge, not live bidirectional sync.
+
+### Search, ontology and conditional practice
+
+Federate existing capability, motif, exemplar, review and execution inventories.
+Preserve owner, scope, maturity, freshness and evidence: planned, implemented,
+executed, visually accepted and useful-to-a-learner are different claims. Begin
+with exact/fuzzy retrieval and explicit relations; evaluate embeddings against
+real missed queries before adding them.
+
+Keep concept, representation, occurrence, affordance, explanatory technique and
+observation distinct. A best practice is a conditional claim with supporting and
+contrary cases, not a mathematical law. Make this path inspectable:
+
+`object → representations → instructional intent → technique → experiment → evidence → qualified practice`
+
+Prioritize generative investments by named near-term consumers, distinct uses,
+prerequisites, uncertainty and maintenance burden. Graph centrality alone rewards
+what happened to be documented. Exact references are a plausible immediate
+cross-cutting investment; projection/linear measurement is a promising study
+family, not automatic approval of a new geometric renderer.
+
+### GTD, blockers and reviews
+
+Project Markdown remains the capture/prioritization owner; Theseus remains the
+execution owner. A workbench view must not introduce a competing task database.
+Blocker records should identify affected outcome, evidence, kind, responsible
+owner, next action, observable unblocking condition and review date. Distinguish
+hard dependency, uncertainty, subjective review gate, rejected design and work
+merely waiting its turn.
+
+Known readiness issues include the Theseus output-budget/source-reference debt
+above, missing end-to-end timing, unproved comparison/workbench integration and
+external chat-interface access. Their severity and affected work differ; none
+justifies declaring the entire project blocked.
+
+Proposed cadence: process capture at session close; inspect patterns after five
+experiments or weekly; review the strategic direction monthly or after a major
+finding. Each review should produce a decision, a bounded investigation or an
+explicitly retained uncertainty. These are proposed human/agent workflows; no
+timer, scheduled task or background process was created.
+
+### Engineering ownership and LLM roles
+
+Candidate separable owners are references/persistence, experiment telemetry,
+practice records, discovery/evidence, workbench UI and execution/GTD adapters.
+First integrate one end-to-end workflow; then parallelize independently testable
+work with disjoint ownership and an integration owner. Do not split everything
+into packages or services merely to enable parallel agents.
+
+A running-work monitor needs actual run owner, source revision, last activity,
+elapsed/wait state, blocker and next checkpoint. Label snapshots and stale data;
+manually maintained status cannot be presented as live telemetry.
+
+Author, critic, project steward and evidence librarian are useful roles, initially
+performed by the same assistant when appropriate. They should cite evidence,
+retain disagreement and propose reversible changes. The organizer proposes
+merges/splits/aliases with a diff; it does not rewrite raw observations or silently
+change mathematical authority, task priority or learner self-description. Inspect
+whether proposed normalization preserves the distinctions useful to each owner.
+
+Promote workbench affordances into shared KP infrastructure only after another
+real caller, such as personal practice, demonstrates the common boundary.
+
 ## Recording checks
 
 This review changes project memory and records the user's direction through
 `theseus record conversation`; it does not change runtime code or visuals.
 `npm run check:promotion-memory` passes and preserves the tabled matrix frontier.
-`theseus workspace validate` passes (1,253 nodes, 33,806 events), and
+After the workbench refinement, `theseus workspace validate` passes (1,254 nodes,
+33,807 events), and
 `git diff --check` passes. No browser or learning-outcome test is claimed.

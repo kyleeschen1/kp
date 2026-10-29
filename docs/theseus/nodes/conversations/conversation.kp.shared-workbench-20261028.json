@@ -1,0 +1,80 @@
+{
+  "id": "conversation.kp.shared-workbench-20261028",
+  "kind": "conversation",
+  "title": "Connect experiments, joint attention, GTD and personal practice in a shared workbench",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "The user requests a shared workbench connecting quantitative and qualitative experiment evidence, exposition study, exact references and joint attention, capability search, GTD, blockers, periodic review, personal spaced practice and evidence-informed LLM stewardship. Existing owners were inspected and the current practice proposal extended around one complete experiment. Direction is accepted; no new implementation run, UI, background agent or scheduled automation has started.",
+  "sourceRefs": [
+    {
+      "kind": "transcript",
+      "provider": "codex",
+      "localPath": "docs/project/decisions/2026-10-28-shared-workbench-direction.md",
+      "turnRange": "Current shared-workbench request summarized at capture time; full thematic intake in docs/project/capture.md, not a provider transcript export",
+      "digest": "sha256:d2b7ed893a116070783a73f3559b33d0077e815e856dc826e5aa2c0dc5e7918f",
+      "summary": "The user requests a shared workbench connecting quantitative and qualitative experiment evidence, exposition study, exact references and joint attention, capability search, GTD, blockers, periodic review, personal spaced practice and evidence-informed LLM stewardship. Existing owners were inspected and the current practice proposal extended around one complete experiment. Direction is accepted; no new implementation run, UI, background agent or scheduled automation has started."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Conversation captured with authority, trust, privacy, and transcript provenance."
+  },
+  "conversation": {
+    "schemaVersion": "theseus.conversation.v1",
+    "occurredAt": "2026-10-29T05:51:36.000Z",
+    "participants": [
+      {
+        "id": "user",
+        "role": "human",
+        "displayName": "Project owner"
+      },
+      {
+        "id": "assistant",
+        "role": "llm",
+        "provider": "codex"
+      }
+    ],
+    "transcriptRanges": [
+      {
+        "provider": "codex",
+        "localPath": "docs/project/decisions/2026-10-28-shared-workbench-direction.md",
+        "turnRange": "Current shared-workbench request summarized at capture time; full thematic intake in docs/project/capture.md, not a provider transcript export",
+        "digest": "sha256:d2b7ed893a116070783a73f3559b33d0077e815e856dc826e5aa2c0dc5e7918f"
+      }
+    ],
+    "summary": "The user requests a shared workbench connecting quantitative and qualitative experiment evidence, exposition study, exact references and joint attention, capability search, GTD, blockers, periodic review, personal spaced practice and evidence-informed LLM stewardship. Existing owners were inspected and the current practice proposal extended around one complete experiment. Direction is accepted; no new implementation run, UI, background agent or scheduled automation has started.",
+    "proposals": [
+      {
+        "id": "shared-workbench-direction",
+        "statement": "Develop a shared experimental workbench serving co-creative personal practice, with traceable evidence, exact conversational references and clear subsystem ownership.",
+        "proposedBy": "user",
+        "status": "accepted",
+        "linkedEntityIds": []
+      }
+    ],
+    "objections": [],
+    "decisions": [
+      {
+        "id": "record-shared-workbench-direction",
+        "statement": "Preserve the full request as intake and extend the existing co-creative practice proposal. Include personal practice in the first useful delivery rather than postponing it behind a broad platform. Keep existing semantic, renderer, review and task authorities.",
+        "proposalId": "shared-workbench-direction",
+        "decidedAt": "2026-10-29T05:51:36.000Z",
+        "authority": {
+          "kind": "user",
+          "actorId": "user",
+          "basis": "Explicit workbench direction. Capture timestamp, not reconstructed message time. No approval of a specific new autonomous run is inferred."
+        }
+      }
+    ],
+    "trust": {
+      "level": "self-reported",
+      "rationale": "Assistant-recorded summary linked to a hashed project decision and thematic intake; no full provider transcript export."
+    },
+    "privacy": {
+      "classification": "project",
+      "containsSensitiveData": false,
+      "retention": "Project direction and evidence only; no personal learner attempts."
+    },
+    "linkedEntityIds": []
+  }
+}

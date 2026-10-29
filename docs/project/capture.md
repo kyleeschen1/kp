@@ -1,9 +1,61 @@
 # Capture
 
-Last Updated: 2026-09-02
+Last Updated: 2026-10-28
 
 Use this file for raw future project thoughts that are not yet processed into
 roadmap items, decisions, or Theseus nodes.
+
+## 2026-10-28: Shared workbench, experimental judgment and personal practice
+
+Capture ID: `capture.kp.co-creative-workbench-20261028`
+Status: user-requested direction and intake; delivery sequence being assessed
+Active context: [co-creative practice](threads/co-creative-practice.md)
+
+Preserve the full breadth of the request without turning every idea into an
+active task. The user agrees with measuring and accelerating authoring iteration
+and wants the following connected capabilities:
+
+- Quantitative and qualitative experiment metadata: where time went, repeated
+  aesthetic/UI concerns and their distinctions, and the narrative/pedagogical
+  techniques or assumptions behind a design.
+- An exposition practice loop inspired by Benjamin Franklin: study Grant
+  Sanderson and textbook authors, analyze their choices, make original
+  explanations, compare and revise until judgment improves.
+- A sufficient dashboard for tutorial shortcomings, recurring patterns and
+  project evolution across several dimensions; repeated and periodic reviews.
+- Formal blockers whose impact and resolution can be revisited as work proceeds.
+- Frictionless idea capture and regular processing: GTD, including next actions,
+  waiting-for and someday material, without making every thought a commitment.
+- Search across affordances, motifs, capabilities, examples and project evidence.
+- Assess generative promise: central representations and investments that could
+  unlock other capabilities, with reasons and evidence.
+- Rapid modification of the LLM interface, KP object ontology, authoring
+  workbench, styling and task management, with separable engineering boundaries
+  that enable parallel work.
+- First-class references to every created object in conversations, including
+  exact versions, parts and occurrences where needed.
+- Highlight and respond to specific passages or wording in assistant responses.
+- View and mark up the API-using source code together: explicit agent/human joint
+  attention, linked to the corresponding rendered object.
+- Fast workbench UI iteration; useful information-processing affordances may
+  later become first-class KP capabilities rather than remaining internal tools.
+- Visibility into the relationship between the ontology and pedagogical/design
+  practices, including what is an object, a technique, a condition or evidence.
+- Rapid development of personally useful spaced practice, with atomic questions
+  that retain rich context, learner mistake metadata and partial understanding.
+- Visibility into running work, engineering boundaries and bottlenecks.
+- Co-develop mathematics and the systems it describes; track domain fluency and
+  representational fluency as distinct questions.
+- LLM assistance that maintains the north star and proposes local/global
+  reprioritization at appropriate cadences.
+- Allow parts and wholes to inform one another; the user invokes Indra's net
+  and hermeneutic reciprocity as inspirations.
+- A recurring LLM synthesis role that reads existing subsystem evidence and
+  proposes cleaner, less conflated organization.
+
+This is a direction/intake record, not evidence that these capabilities exist,
+an automatic schedule, a set of diagnosed learner traits, or authority to spawn
+background agents and silently reorganize the project's source of truth.
 
 ## 2026-09-02: First-Class Knowledge Objects, Procedures, And Formula Macros
 

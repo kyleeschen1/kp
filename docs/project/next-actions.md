@@ -15,6 +15,11 @@ implementation run. Preserve accepted reader behavior and older proof-memory
 evidence; no historical contract resumes automatically. Theseus owns approved
 execution, not this human-readable index.
 
+Next planning action: review the [first integrated workbench experiment](reviews/2026-10-28-next-step-review.md#workbench-extension-one-experiment-from-discussion-to-delayed-return),
+including exact references, measured iteration and an actual saved practice
+return. Use the [source/feedback baseline](reviews/2026-10-28-workbench-evidence.md)
+to choose what must be integrated before creating the bounded execution contract.
+
 Keep `Apply a 2 × 2 matrix to a vector` tabled in
 `threads/animation-library-promotion.md`; this queue does not reactivate or
 rerank that frontier.

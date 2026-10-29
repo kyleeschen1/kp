@@ -15,6 +15,13 @@ owns the proposed sequence and API/exemplar evolution approach. An approved
 Theseus contract must own execution if implementation follows; this thread does
 not duplicate a slice queue.
 
+The [shared-workbench refinement](../decisions/2026-10-28-shared-workbench-direction.md)
+adds experiment evidence, exact references, joint attention, GTD and deliberate
+exposition practice around that same milestone. The proposal owns the first
+integrated workflow; [source and feedback evidence](../reviews/2026-10-28-workbench-evidence.md)
+records what exists and what remains unproved. No dashboard UI, background agent
+or scheduled review was created by recording this direction.
+
 ## Existing evidence to reuse
 
 - `proof-memory-medium.md`: exact prompt-to-proof return and manual rehearsal,

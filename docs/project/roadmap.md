@@ -26,6 +26,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 28 workbench refinement: [accepted direction](decisions/2026-10-28-shared-workbench-direction.md)
+connects personal practice to experiment evidence, exact conversational references,
+joint attention, GTD and deliberate exposition study. Extend the existing
+[practice proposal](reviews/2026-10-28-next-step-review.md) with one complete
+experiment before building a broad platform. The [evidence review](reviews/2026-10-28-workbench-evidence.md)
+finds existing search, review and task owners to integrate. This preserves the
+priority below; no new autonomous run or periodic automation has started.
+
 October 28 product pivot: the user names **co-creative spaced practice and the
 LLM loop** as the most important current work. The [accepted direction](decisions/2026-10-28-co-creative-practice-priority.md)
 preserves rich context, mistake evidence, partial understanding and questions
