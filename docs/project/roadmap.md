@@ -26,16 +26,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-October 29 local reader candidate: the user approves the UI-note discussion.
-The [document theater candidate](2026-10-29-document-theater-ui.md) simplifies the
-article shell and header and tests prose passing behind the stable theater.
-The user rejects the compressed passage handoff. The latest candidate restores
-generous spacing and retains readable outgoing text until the incoming passage
-arrives. The scrubber stays removed; first/last retreat hands reading back to the
-surrounding article. Focused desktop/phone visibility and preservation checks pass;
-pacing acceptance is pending. Review this local treatment
-before any promotion. The broader host/style ownership investigation below
-remains a separate proposed scope; personal practice remains the product goal.
+October 29 next direction: the user accepts the latest
+[document theater treatment](2026-10-29-document-theater-ui.md) and requests an
+[architecture repair roadmap](reviews/2026-10-29-next-step-review.md). Preserve
+generous spacing, readable outgoing explanations, held math, endpoint retreat
+and the removed scrubber. This is local visual acceptance, not shared promotion.
+The proposed next implementation is a bounded shared-algebra-mount conversion,
+followed by explicit document projection and style ownership, completed
+retirement and a return to the durable personal-practice loop. The review owns
+the proposed sequence; no new implementation run is authorized. The broader
+workbench remains deferred and personal practice remains the product goal.
 
 October 29 immediate focus: the user sets the workbench expansion aside and asks
 for [experimentation, conversion and retirement with demonstrable decoupling](decisions/2026-10-29-experiment-conversion-retirement-direction.md).

@@ -2,13 +2,17 @@
 
 Status: active product direction; first implementation milestone proposed
 Last Updated: 2026-10-29
-Current Next Action: review the user-requested [document theater UI candidate](../2026-10-29-document-theater-ui.md).
-The next proposed architecture investigation remains shared reader-mounting
-ownership under experiments, informed by the [bounded algebra retirement evidence](../reviews/2026-10-29-algebra-api-retirement.md).
-The first pilot closes an obsolete convenience path, not the broader
+Current Next Action: consider the proposed
+[architecture repair roadmap](../reviews/2026-10-29-next-step-review.md), starting
+with shared algebra mounting ownership under experiments. The user accepts the
+latest [document theater treatment](../2026-10-29-document-theater-ui.md); preserve
+it while repairing the surrounding architecture. The
+[bounded algebra retirement evidence](../reviews/2026-10-29-algebra-api-retirement.md)
+closes one obsolete convenience path, not the broader
 [experiment/conversion/retirement design](../decisions/2026-10-29-experiment-conversion-retirement-direction.md).
-A host/style migration needs its own scope and preservation boundary. The
-October 28 workbench proposal remains deferred; personal practice is the goal.
+The repair review owns the proposed order and preservation boundaries; no new
+implementation run is authorized. Return to durable personal practice after
+the bounded repairs. The October 28 workbench proposal remains deferred.
 
 ## Direction and plan ownership
 

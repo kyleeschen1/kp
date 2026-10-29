@@ -207,3 +207,9 @@ Review via Options → “Multiply both sides by two”, continuing after the eq
 finishes and reversing across the handoff. The gap should feel generous again,
 with the outgoing explanation staying readable during that distance. This
 supersedes the rejected compact candidate; visual acceptance remains pending.
+
+User acceptance, 2026-10-29: “it's grrat!” accepts this latest generous-spacing,
+readable-exchange treatment. Preserve it as the local canonical reader reference.
+The user next requests an [architecture repair roadmap](reviews/2026-10-29-next-step-review.md);
+that request is planning, not permission for shared visual promotion or a new
+implementation run. Earlier rejected candidates remain historical evidence.
