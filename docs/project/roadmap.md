@@ -26,6 +26,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 30 native-session refinement: the user wants Codex chat inside the
+workbench, preserving native sessions/context management and intended existing
+plan usage; plain text is acceptable. The [accepted constraint](decisions/2026-10-30-native-codex-workbench.md)
+replaces the export-only first interaction. The [revised workbench proposal](2026-10-30-independent-workbench-v1.md)
+now starts with a bounded local session proof, followed by exact-reference
+collaboration and personal practice. It includes an approximate medium-term
+horizon with assumptions and re-estimation points, not a scheduled or authorized
+multiweek run. The separate KP engine lane retains its finite shared-mount
+outcome; the earlier proposal below remains provenance for this refinement.
+
 October 30 independent-workbench proposal: after exploring parallel development,
 rapid iteration and antifragility, the user asks how to proceed. Recommend the
 [first usable collaboration loop](2026-10-30-independent-workbench-v1.md): an

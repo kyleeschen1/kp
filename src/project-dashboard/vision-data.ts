@@ -75,8 +75,8 @@ export const projectVision: ProjectVision = {
       evidence: { label: "Workbench evidence and gaps", href: "docs/project/reviews/2026-10-28-workbench-evidence.md" },
       outcome: {
         id: "independent-workbench-v1", title: "Select, discuss, compare and return in an independent workspace",
-        finish: "Save anchored commentary and a question/attempt at exact source revisions, compare a candidate, export assistant context, and return after reload. One live KP adapter and isolated fixtures pass bounded failure/recovery checks; review the complete workflow before expansion.",
-        excludes: "A repository split, new renderer, full GTD platform, scheduler algorithm, embedded model service or autonomous background agents.",
+        finish: "Discuss selected context in a native Codex session, preserving session/context ownership and intended existing-plan usage. Save revision-bound commentary and a question/attempt, compare a candidate and return after reload. A live KP adapter and isolated fixtures pass bounded recovery checks; review before expansion.",
+        excludes: "A repository split, new renderer, full GTD platform, scheduler algorithm, separately billed model service or autonomous background agents.",
         source: { label: "Proposed workbench delivery", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
       }
     }
@@ -121,6 +121,13 @@ export const projectVision: ProjectVision = {
       after: "Propose an independent collaboration workspace with exact references, revision comparison and a durable practice return. Shared mounting retains its original finish line as the first KP engine repair; neither new run is approved.",
       reason: "The user wants parallel development, rapid improvement of the tools used to build UI, and recoverable experiments that produce lasting lessons. Test that value in one usable workflow before expanding the platform.",
       source: { label: "Bounded workbench proposal", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
+    },
+    {
+      id: "native-codex-workbench", on: "2026-10-30",
+      before: "The first workbench interaction exported context to an external assistant.",
+      after: "Prove a native Codex session inside the local UI first, then connect exact-reference collaboration and practice. Export remains a fallback; the forecast does not start a multiweek run.",
+      reason: "The user wants the assistant beside the artifact while retaining Codex session/context affordances and intended existing-plan usage. Plain text is enough to test that integration.",
+      source: { label: "Native Codex constraint", href: "docs/project/decisions/2026-10-30-native-codex-workbench.md" }
     }
   ]
 };

@@ -14,6 +14,13 @@ Neither proposal is an approved implementation run.
 
 ## First workbench slice after process setup
 
+Later refinement: the user now wants native Codex sessions/context management
+inside the UI without additional model cost. The
+[revised proposal](../2026-10-30-independent-workbench-v1.md) starts with that
+bounded session proof and owns the approximate medium-term forecast. The text
+annotation workflow below follows it; export is retained as a fallback. This
+supersedes the earlier first-step ordering, not the engine lane's finish line.
+
 After the Git cleanup and process skill, the user asks what to do first.
 Start within the existing workbench proposal with one complete workflow:
 **select a passage, save an anchored comment, reload and return to that exact

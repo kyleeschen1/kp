@@ -1,11 +1,15 @@
 # Co-creative mathematical practice
 
-Status: active product direction; first implementation milestone proposed
+Status: active product direction; native Codex constraint accepted; revised milestone proposed
 Last Updated: 2026-10-30
-Current Next Action: review the proposed
-[independent workbench delivery](../2026-10-30-independent-workbench-v1.md), with
-exact references, anchored discussion, comparison, bounded recovery and a durable
-personal-practice return. Implementation is not authorized yet. The
+Current Next Action: establish the bounded native Codex session proof described
+in the [revised independent workbench delivery](../2026-10-30-independent-workbench-v1.md),
+then build exact references, anchored discussion, comparison, bounded recovery
+and a durable personal-practice return. The user accepts native Codex sessions
+and context management inside the UI under the intended existing plan, with no
+separately billed model fallback; see the [constraint](../decisions/2026-10-30-native-codex-workbench.md).
+The approximate horizon is planning, and this update starts no implementation
+run. The
 [architecture repair roadmap](../reviews/2026-10-29-next-step-review.md) retains
 shared algebra mounting as the first KP engine repair, with its original finish
 line. The user accepts the
@@ -69,7 +73,9 @@ opened at its original mathematical context. A revision retains the previous
 attempt's exact question and assistance conditions. The user can dispute a model
 interpretation or park a gap without losing the useful question.
 
-The first author conversation can use the current coding assistant and a small
-context/export interface. An embedded chatbot is not a prerequisite. The first
-return mechanism should actually persist across reloads; scheduling optimization
-and broad learner modeling are later choices.
+The earlier export-only first interaction is superseded by a native Codex
+session inside the workbench, with context export retained as a fallback. Codex
+owns agent history and compaction; workbench records retain exact references,
+comments and attempts independently. The first return mechanism should actually
+persist across reloads; scheduling optimization and broad learner modeling are
+later choices.

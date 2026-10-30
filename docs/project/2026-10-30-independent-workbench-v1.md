@@ -1,15 +1,23 @@
 # Independent workbench: first usable collaboration loop
 
 Date: 2026-10-30
-Status: proposed scope; implementation and execution contract await approval
+Status: revised proposal; native Codex session constraint accepted; no workbench run started
 Mode: interactive; one integrated visual checkpoint
-Planning baseline: `f86579cfc897430bab915de15d0966a862fc8a27`
+Original planning baseline: `f86579cfc897430bab915de15d0966a862fc8a27`
+
+October 30 refinement: the user wants native Codex sessions inside the UI,
+including context management and existing subscription-backed usage. Plain text
+is sufficient. The [accepted constraint](decisions/2026-10-30-native-codex-workbench.md)
+supersedes the earlier export-only assistant integration. First prove the local
+session bridge; preserve this proposal's exact-reference, practice and recovery
+outcomes. Timeline ranges below are estimates, not run authority or measured
+throughput.
 
 ## Outcome and reason to build it
 
 The owner can select a specific passage or mathematical object, retain a comment
-at that revision, share precise context with the existing coding assistant,
-compare an original with a candidate revision, and reopen that context after
+at that revision, share precise context with a native Codex session inside the
+workbench, compare an original with a candidate revision, and reopen that context after
 reload. One question, attempt and uncertainty note can be retained with the same
 reference machinery. The workspace is useful before broader KP repair finishes.
 
@@ -78,9 +86,12 @@ a technical regression reference, not the content to polish for this milestone.
    mathematical adapter. Save a note with the artifact, revision and selection.
 3. Compare two supplied or deliberately edited revisions without changing the
    reference on the original comment. Missing/stale/ambiguous targets are visible.
-4. Export a bounded context packet for the existing assistant. A returned
-   candidate can be opened with its provenance. There is no embedded model call
-   or claim that an arbitrary external chat UI can be controlled.
+4. Discuss the selection in the embedded native Codex session: stream output,
+   interrupt/steer, handle approval requests and recover the same supported
+   session after reload. Codex retains session/context ownership. Verify the
+   effective authentication path uses the intended existing plan; do not silently
+   use an API key or add a paid service. A candidate retains its provenance;
+   bounded context export remains available as a fallback.
 5. Save one question version, an attempt, assistance/reveal state and a learner
    uncertainty note. Revise the question without overwriting the earlier attempt.
    Set an explicit later-return date and retrieve it from a simple return list.
@@ -116,6 +127,15 @@ No worker writes directly to another owner's database or log. KP development
 feedback, if exposed, goes through the existing dev-review API; do not mirror it
 as competing workbench truth. Theseus remains the execution authority.
 
+The local Codex bridge owns connection/session recovery and exposes runtime
+events to the UI. Its lifetime must be independent of the browser and workbench
+hot reload. Keep app-server protocol details inside the adapter, reuse native
+session IDs and compaction, and inspect pending work before retrying a request.
+Do not resubmit turns merely because a socket reconnects. Supply bounded,
+explicit selections as context; workbench record persistence is separate from
+Codex's own history. Exact parity with the current host, including its tools and
+approval behavior, remains a verification task.
+
 The live preview adapter may use a framed existing host and validated messages
 for capability discovery, semantic selection and exact return. Declare source
 and origin checks and capability gaps. Framing provides document/style separation,
@@ -130,10 +150,11 @@ the run contract binds these IDs and owns progress and evidence.
 | Package | Delivery and dependencies | Verification and rollback boundary |
 | --- | --- | --- |
 | `wb-foundation` | Reconcile relevant control metadata, establish the independent app, minimal contracts, persistence choice and representative fixtures. No KP-wide restructuring. | Focused source/import/style isolation checks, affected types, one launch smoke. One recoverable foundation commit. |
+| `wb-codex-session` | After minimal foundation, connect native Codex through one local adapter. Keep its context/session ownership and intended plan authentication; render ordinary text. | Send/stream, interrupt, approval handling, reconnect/resume, no duplicate turn on reload, effective settings and terminal handoff. Separate adapter commit; existing clients remain available. |
 | `wb-ui` | After foundation, implement selection, anchored discussion, revision comparison and return-list views against fixtures. | Focused interaction and keyboard checks, a single-exemplar browser smoke. Reversible feature-module commit. |
 | `wb-records` | After foundation, implement durable comments/decisions and the narrow question/attempt workflow, preserving revisions and assistance conditions. | Meaningful persistence/recovery tests: interrupted acknowledgement, retry reconciliation, stale write, source revision preservation and export/import. Separate reversible persistence commit. |
 | `wb-kp-bridge` | After foundation, integrate the existing algebra host and context-packet handoff without importing its runtime into the workbench shell. | Contract fixtures, real semantic selection/return smoke, unavailable-adapter behavior and relevant existing math/host checks. Separate adapter commit. |
-| `wb-integration` | Combine the preceding packages, exercise the complete workflow and one improvement to the workbench itself, then present the canonical review. | Required affected integration/types checks, production build for the new app, bounded failure drills and first browser cohort. Verify the combined revision; record costs, known limits and exact URL. |
+| `wb-integration` | Combine the preceding packages, exercise native chat with selected context, the complete practice workflow and one improvement to the workbench itself, then present the canonical review. | Required affected integration/types checks, production build for the new app, bounded failure drills and first browser cohort. Verify the combined revision; record costs, known limits and exact URL. |
 
 The UI, records and adapter packages are candidates for parallel execution only
 after the shared contracts and fixtures exist. Each worker gets one worktree,
@@ -156,6 +177,8 @@ Do not alter the Theseus package or sweep unrelated backlog as part of this work
 
 Proposed execution ceiling: six elapsed hours, reserving the final hour for
 verification, evidence and backup. This is a limit, not a completion estimate.
+For the revised scope, target the native-session proof in the initial cycle;
+the complete collaboration/practice milestone may require subsequent cycles.
 Stop earlier when the integrated review candidate is ready. On reaching the
 reserve, take no new implementation work; preserve a recoverable checkpoint and
 report unfinished acceptance explicitly. Broadening the product or engine scope
@@ -185,3 +208,29 @@ the stated hard invariants, not automatic visual approval or universal
 antifragility. Stop at that review; no post-review expansion is preauthorized.
 After feedback, select one concrete recurring friction to improve in the next
 bounded loop. Promote reusable behavior only when evidence supports it.
+
+## Approximate medium-term horizon
+
+Planning estimate from implementation start, not measured delivery velocity.
+Assume one primary workbench lane, a separate bounded engine lane, development
+sessions on most weekdays, short user reviews two or three times per week, and
+ordinary availability within the existing Codex plan. An active development day
+means several focused hours, not unattended 24-hour execution. Ranges are
+cumulative and overlap; only the first delivery's packages above define scope.
+
+| Approximate window | Usable result and evidence |
+| --- | --- |
+| First 1–3 active days | A minimal native Codex session in the independent app. Refresh/reconnect, interruption and approvals work; authentication and context ownership are verified. This is the highest-variance dependency and needs an early re-estimate. |
+| End of weeks 1–2 | A useful daily collaboration workspace: discuss selected text or code, retain revision-bound notes, compare a candidate and reopen the context. Begin using it on its own development. |
+| Weeks 2–4 | One supported mathematical host participates, and a question/attempt/uncertainty can be saved, revised and revisited at its original context. Use a simple return list before scheduler sophistication. |
+| Weeks 4–6 | Improvement and review become routine: isolated candidate previews, recoverable accepted state, basic idea/blocker capture and source-linked task status, with iteration-time and qualitative feedback records. Reuse existing task/review owners. |
+| Weeks 6–10 | Test repeatable explanation/practice authoring in a bounded algebra/LA family, searchable exemplars and explicit capability gaps. Judge reuse and iteration effort across different cases; do not infer a universal authoring system from one example. |
+
+The later rows are proposed successor horizons, not additions to the first
+milestone or authority for background agents. Parallel work removes independent
+dependencies; it does not halve sequential integration and review time. The
+schedule can slip with authentication/protocol mismatches, hidden host coupling,
+limited plan capacity, feedback delays or redesign. Re-estimate after the native
+session proof and the first complete mathematical practice return. A full applied
+math curriculum, mature adaptive SRS and reliable broad autonomous coordination
+need separate evidence before receiving a credible completion date.
