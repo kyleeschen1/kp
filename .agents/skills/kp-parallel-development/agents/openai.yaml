@@ -1,0 +1,4 @@
+interface:
+  display_name: "KP Parallel Development"
+  short_description: "Isolate agent work, integrate safely, and keep Git tidy"
+  default_prompt: "Use $kp-parallel-development to coordinate this KP work across separate worktrees and verify its Git handoff."

@@ -61,6 +61,17 @@ collaboration experiment, not a learner-facing editorial voice standard.
 
 ## Codex execution reliability
 
+### Parallel development and Git hygiene
+
+Use `.agents/skills/kp-parallel-development/SKILL.md` for parallel workbench/engine
+work, worker handoffs, and Git cleanup. Run the read-only `npm run git:hygiene`
+at session start, task switches and handoff; refresh and verify live remote
+state before treating its candidates as safe to retire. Use distinct worktrees
+for concurrent agents and give shared contracts/integration an explicit owner.
+The old global Git skill's `branch:*` helpers are absent here; do not assume a
+`dev` branch or switch another agent's checkout. This process adds no merge,
+force-push or remote-deletion authority and is not a background automation.
+
 ### Standing Git checkpoint and backup policy
 
 User-approved on 2026-10-05; applies to every workflow, including generic
