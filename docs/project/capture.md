@@ -5,6 +5,46 @@ Last Updated: 2026-10-30
 Use this file for raw future project thoughts that are not yet processed into
 roadmap items, decisions, or Theseus nodes.
 
+## 2026-10-30: Antifragility as a workbench design requirement
+
+Capture ID: `capture.kp.antifragile-workbench-20261030`
+Status: user-stated quality requirement; mechanisms proposed, implementation unselected
+Source: user asks for the system to be "remarkably anti-fragile"
+Context: [independent workbench](#2026-10-30-consider-an-independent-workbench)
+
+Interpret the requirement as contained failure, recoverable work, and durable
+learning from failure. These are design goals, not demonstrated properties of
+the present workbench. Rapid UI iteration and parallel development must coexist
+with preservation of user work, exact references and mathematical authority.
+
+Proposed implications to assess in the first bounded delivery:
+
+- Preserve comments, attempts, decisions and their source revisions independently
+  of experimental UI code. Distinguish pending changes from acknowledged saves;
+  provide a tested recovery/export route and explicit schema migrations.
+- Keep a working interface available while candidate versions are previewed.
+  Limit failure to the responsible panel, preview or adapter where practicable;
+  do not equate a UI error boundary with process or resource isolation.
+- Use isolated worktrees and test data for parallel changes. Detect stale writes
+  against an expected revision. Retry mutations only with an idempotency or
+  reconciliation contract; a timeout does not prove an operation failed.
+- Preserve old references when targets change. Report missing, stale or ambiguous
+  anchors instead of silently attaching commentary to a different object.
+- Capture bounded reproduction evidence: source revision, selection, action,
+  relevant state and failure. Separate observation from LLM diagnosis. Repair
+  the responsible boundary and retain an appropriate regression test or typed
+  constraint rather than accumulating caller-specific exceptions.
+- Exercise a few meaningful disruptions: unavailable adapter, interrupted save,
+  stale revision and failing preview. Confirm recovery and exact-context return.
+- Keep experiments reversible and promote only demonstrated reusable mechanisms.
+  Learning may justify retiring an implementation or declining a feature.
+
+Measure recovery effort, reproducibility, repeated failure classes and the number
+of unrelated components touched by changes. Do not promise automatic improvement,
+universal recovery, or a self-modifying agent with unrestricted authority. Avoid
+turning every visual experiment into a full certification campaign; protect hard
+invariants early and expand checks when a treatment earns promotion.
+
 ## 2026-10-30: Consider an independent workbench
 
 Capture ID: `capture.kp.independent-workbench-20261030`
