@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-10-29
+Last Updated: 2026-10-30
 Status: active
 Active Thread: `threads/co-creative-practice.md`
 Supporting Threads:
@@ -25,6 +25,19 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+October 30 architecture prioritization: the
+[updated recommendation](reviews/2026-10-30-next-step-review.md) retains the same
+finite shared-algebra-mount conversion first. Then repair the selected family's
+style and preparation boundaries, use anchored commentary as the next visible
+architecture test, and promote spatial treatments only after exemplar review
+and transfer evidence. Explicit document projection remains a valid repair but
+need not block an experiment outside that host. The user's
+[captured criticism](capture.md#2026-10-30-fraction-tutorial-criticism-and-anchored-commentary)
+rejects the fractional tutorial's content, not its previously accepted reader
+behavior. This is planning only; personal practice remains the product direction
+and no implementation run has started. The vision view's immediate next outcome
+is unchanged.
 
 October 29 continuity request: the user asks for a UI that keeps a longer vision
 visible while allowing disciplined changes. The bounded

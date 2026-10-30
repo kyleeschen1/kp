@@ -1,7 +1,7 @@
 # Co-creative mathematical practice
 
 Status: active product direction; first implementation milestone proposed
-Last Updated: 2026-10-29
+Last Updated: 2026-10-30
 Current Next Action: review the bounded [vision UI](../2026-10-29-project-vision-ui.md)
 requested to keep direction, finish lines and changes visible. The proposed
 [architecture repair roadmap](../reviews/2026-10-29-next-step-review.md) still
@@ -15,6 +15,14 @@ closes one obsolete convenience path, not the broader
 The repair review owns the proposed order and preservation boundaries; no new
 implementation run is authorized. Return to durable personal practice after
 the bounded repairs. The October 28 workbench proposal remains deferred.
+
+The [October 30 prioritization](../reviews/2026-10-30-next-step-review.md) keeps
+the same first mount conversion, then recommends bounded style/preparation repair
+and anchored commentary as the next visible architecture test. Spatial treatments
+remain experiments until reviewed and reused. The fractional tutorial's content
+is [criticized explicitly](../capture.md#2026-10-30-fraction-tutorial-criticism-and-anchored-commentary);
+its accepted reader behavior remains a regression reference. These are proposed
+successor priorities, not a new execution queue or implementation authorization.
 
 ## Direction and plan ownership
 
