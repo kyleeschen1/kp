@@ -1,9 +1,48 @@
 # Capture
 
-Last Updated: 2026-10-28
+Last Updated: 2026-10-30
 
 Use this file for raw future project thoughts that are not yet processed into
 roadmap items, decisions, or Theseus nodes.
+
+## 2026-10-30: Fraction tutorial criticism and anchored commentary
+
+Status: user-requested capture; no implementation or queue change
+Source: project conversation, 2026-10-30
+
+### Fraction tutorial: content and choreography are poorly connected
+
+Capture ID: `capture.kp.fraction-tutorial-content-20261030`
+Artifact: `animation.fractional-linear.solve-x-over-2`
+Reader route: `/reader/solve-fractional-linear/`
+
+The user's assessment is that the fraction-equation tutorial's content is
+"really bad" and "not interesting," and that its comments do not take advantage
+of the choreography. Preserve both criticisms: weak instructional content and
+weak coordination between commentary and the mathematical motion.
+
+Earlier acceptance of the reader's appearance or interaction does not establish
+approval of this tutorial's content or pedagogical value. Keep this criticism
+retrievable when selecting exemplars or revisiting the tutorial; this capture
+does not itself request a rewrite or undo accepted reader behavior.
+
+### Anchored text: a leading portfolio idea
+
+Capture ID: `capture.kp.anchored-commentary-immanence-20261030`
+
+The user describes "user anchored texts" as "one of the best ideas in the
+portfolio," followed by "a commentary of immenace."
+
+Working interpretation, based on the preceding discussion: text anchored to
+the objects or relationships it explains, with geometric proximity connecting
+the commentary to its referent. The message can change when the object returns
+in a new explanatory context. This is a strongly valued design direction, not
+yet demonstrated learning efficacy or a requirement that all prose be anchored.
+
+Provisional wording: **a commentary of immanence** — commentary situated with
+and arising from the objects, relationships, and transformations under attention.
+"Immanence" is the assistant's interpretation of "immenace"; retain the original
+wording until the user confirms or corrects it.
 
 ## 2026-10-28: Shared workbench, experimental judgment and personal practice
 
