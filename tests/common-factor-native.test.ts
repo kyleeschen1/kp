@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createKpCommonFactorExample } from "../src/authoring/common-factor-author-check.ts";
 import { prepareKpCommonFactorDraft } from "../src/authoring/common-factor-draft.ts";
-import { commonFactorEndpoints } from "../src/experiments/common-factor/endpoints.ts";
+import { commonFactorEndpoints } from "../src/reader/app/algebra-presentation-endpoints.ts";
 import { buildKpCommonFactorInitialPage, renderCommonFactorCard } from "../src/experiments/common-factor/page.ts";
-import { compileKpEquationExemplarTemplate } from "../src/reader/compiler/equation-exemplar-page.ts";
+import { compileKpEquationExemplarTemplate } from "../src/rendering/equation-stage-template.ts";
 
 test("native annotations preserve exact generated endpoints and every occurrence role", () => {
   const draft = prepareKpCommonFactorDraft(createKpCommonFactorExample()), endpoints = commonFactorEndpoints(draft);

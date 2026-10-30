@@ -11,13 +11,13 @@ export const projectVision: ProjectVision = {
     {
       id: "architecture", title: "Architecture & retirement", horizon: "later",
       destination: "Replace a part without rebuilding its neighbors. Finish migrations and remove obsolete paths.",
-      established: "One obsolete algebra facade has been retired. Shared mounting and cross-example style dependencies remain.",
-      evidence: { label: "Retirement evidence", href: "docs/project/reviews/2026-10-29-algebra-api-retirement.md" },
+      established: "The obsolete algebra facade and experiment-owned mounting paths are retired. Shared native mounting preserves checked authority and behavior; cross-example style dependencies remain.",
+      evidence: { label: "Shared mounting closeout", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" },
       outcome: {
-        id: "shared-algebra-mount", title: "Two examples share an independently owned mount",
-        finish: "Composed algebra and distribute/collect use the same validated mounting owner; superseded import paths are removed, and behavior and lifecycle checks remain stable.",
-        excludes: "A new renderer, a repository-wide migration, or visual redesign.",
-        source: { label: "Repair roadmap · outcome 1", href: "docs/project/reviews/2026-10-29-next-step-review.md" }
+        id: "owned-algebra-styles", title: "One algebra family owns its shared styles",
+        finish: "For the selected explanation, replace cross-example CSS imports with responsible shared and local owners, remove superseded rules, and preserve typography, native geometry and unrelated hosts.",
+        excludes: "Global visual redesign, a repository-wide stylesheet migration or a prerequisite to every workbench experiment.",
+        source: { label: "Bounded successor · style ownership", href: "docs/project/reviews/2026-10-30-next-step-review.md" }
       }
     },
     {
@@ -83,6 +83,11 @@ export const projectVision: ProjectVision = {
   ],
   completed: [
     {
+      title: "Shared algebra mounting converted",
+      scope: "Composed algebra and distribute/collect share a validated reader owner. Old experiment mount and endpoint paths are removed; native lifecycle checks and complete consumer costs are preserved. Style ownership remains a separate successor.",
+      source: { label: "Mount conversion evidence", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" }
+    },
+    {
       title: "Readable passage handoffs accepted",
       scope: "The fractional reader keeps generous spacing and readable explanations through exchange. Local acceptance; other layouts remain separate.",
       source: { label: "Acceptance and checks", href: "docs/project/2026-10-29-document-theater-ui.md" }
@@ -121,6 +126,13 @@ export const projectVision: ProjectVision = {
       after: "Propose an independent collaboration workspace with exact references, revision comparison and a durable practice return. Shared mounting retains its original finish line as the first KP engine repair; neither new run is approved.",
       reason: "The user wants parallel development, rapid improvement of the tools used to build UI, and recoverable experiments that produce lasting lessons. Test that value in one usable workflow before expanding the platform.",
       source: { label: "Bounded workbench proposal", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
+    },
+    {
+      id: "shared-mount-closure", on: "2026-10-30",
+      before: "Shared algebra mounting remained the first proposed KP engine repair.",
+      after: "The approved mount conversion is complete. Selected-family style ownership is a separate successor; anchored explanation remains the next KP product proposal.",
+      reason: "The original two-consumer finish line passed its preservation and integration checks. Retain that completion rather than expanding it into an indefinite architecture task; the workbench lane remains independent.",
+      source: { label: "Bounded engine closeout", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" }
     }
   ]
 };

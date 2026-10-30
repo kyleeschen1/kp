@@ -1,6 +1,6 @@
 import { checkKpComposedAlgebraProof } from "../../src/authoring/composed-algebra-proof.ts";
 import { resolveKpComposedAlgebraPresentation } from "../../src/authoring/composed-algebra-presentation.ts";
-import { mountCanonicalComposedAlgebraOperation, mountCanonicalComposedAlgebraPresentation } from "../../src/experiments/common-factor/native.ts";
+import { mountCanonicalComposedAlgebraOperation, mountCanonicalComposedAlgebraPresentation } from "../../src/reader/app/algebra-presentation-mount.ts";
 import { renderKpFocusDeckScaffold } from "../../src/tutorial/focus-deck-scaffold.ts";
 import { observeKpNativeKatexRenderedScene } from "../../src/rendering/native-katex-rendered-scene.ts";
 import { createKpEquationFontReadiness } from "../../src/rendering/equation-font-readiness.ts";
@@ -10,7 +10,7 @@ import type { KpNativeKatexSceneTrack } from "../../src/rendering/native-katex-b
 import { createKpNativeKatexSceneAssembly } from "../../src/rendering/native-katex-scene-assembly.ts";
 import { checkKpComposedAlgebraProofV2 } from "../../src/authoring/composed-algebra-proof-v2.ts";
 import { resolveKpComposedAlgebraPresentationV2 } from "../../src/authoring/composed-algebra-presentation-v2.ts";
-import { mountCanonicalComposedAlgebraPresentationV2 } from "../../src/experiments/common-factor/native.ts";
+import { mountCanonicalComposedAlgebraPresentationV2 } from "../../src/reader/app/algebra-presentation-mount.ts";
 import { observeKpNativeKatexPaintAtoms } from "../../src/rendering/native-katex-rendered-scene.ts";
 import { measureKpNativeKatexPaintAtomRect } from "../../src/rendering/native-katex-paint-geometry.ts";
 

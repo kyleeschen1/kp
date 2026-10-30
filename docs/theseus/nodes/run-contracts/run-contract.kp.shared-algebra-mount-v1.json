@@ -1,0 +1,56 @@
+{
+  "id": "run-contract.kp.shared-algebra-mount-v1",
+  "kind": "run-contract",
+  "title": "Shared algebra mount conversion",
+  "status": "resolved",
+  "summary": "COMPLETE: 2/2 approved slices verified. Stop at completed bounded outcome; no further scope or merge admitted.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.shared-algebra-mount.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-30-next-step-review.md",
+      "summary": "User go approves the first finite KP engine outcome and its existing preservation criteria"
+    }
+  ],
+  "verification": [
+    "npm run check:authoring",
+    "npm run typecheck",
+    "npm test",
+    "npm run build:bundle"
+  ],
+  "allowedWork": [
+    "The task boundary and directly blocking verification repairs only"
+  ],
+  "disallowedWork": [
+    "Later anchored explanation and practice integration require their own bounded selection; no new renderer or shared workbench edits"
+  ],
+  "goal": "Make checked algebra mounting reusable independently of experiments while preserving the existing native experience",
+  "target": "task.kp.shared-algebra-mount",
+  "runMode": "run",
+  "maxSlices": 2,
+  "commitCadence": "One coherent verified conversion and evidence commit; recoverable checkpoint and backup hourly if needed",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Both approved slices complete",
+    "A change to accepted visuals or semantics would be required",
+    "External blocker or scope expansion cannot be resolved within the approved conversion"
+  ],
+  "slices": [
+    {
+      "id": "convert",
+      "title": "Move the mount and close all consumer imports",
+      "summary": "Moved validated mount/endpoints, converted all imports, extracted existing stage template from page compilation and retired old paths. Boundary, authority, accessibility and retirement checks pass. Full final verification remains in verify.",
+      "status": "complete"
+    },
+    {
+      "id": "verify",
+      "title": "Verify native behavior complete consumers and retirement",
+      "summary": "All 7450 tests, full types, build, nine native browser checks, seven consumer budgets and vision closure checks pass. Source/evidence reviewed; standalone branch is ready for checkpoint and backup, no merge.",
+      "status": "complete"
+    }
+  ]
+}

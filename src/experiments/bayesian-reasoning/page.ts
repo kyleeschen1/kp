@@ -1,5 +1,5 @@
 import { annotateBayesQuotient } from "./notation.ts";
-import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
+import { compileKpEquationExemplarTemplate } from "../../rendering/equation-stage-template.ts";
 import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
 import { renderBayesTreeSvg, formatBayesMass } from "./tree-svg.ts";
 import { checkBayesDraft, createBayesDraft, requirePreparedBayesDraft, type PreparedBayesDraft } from "./draft.ts";

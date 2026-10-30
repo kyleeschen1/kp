@@ -30,7 +30,7 @@ const stages = [
     "scripts/gallery-graph-3d-saddle-parameter-frontend.ts",
     "src/authoring/common-factor-session.ts",
     "src/experiments/common-factor/page.ts",
-    "src/experiments/common-factor/native.ts"
+    "src/reader/app/algebra-presentation-mount.ts"
   ].map(entry => ({ name: entry, entries: [...baseline, resolve(root, entry)] })),
   { name: "complete fixed inference configuration", entries: parsed.fileNames }
 ];

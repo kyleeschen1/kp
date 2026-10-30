@@ -2,7 +2,7 @@ import katex from "katex";
 import { renderKpFocusDeckScaffold } from "../../tutorial/focus-deck-scaffold.ts";
 import { assertKpPreparedCommonFactorDraft, prepareKpCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
 import { createKpCommonFactorExample } from "../../authoring/common-factor-author-check.ts";
-import { commonFactorEndpoints } from "./endpoints.ts";
+import { commonFactorEndpoints } from "../../reader/app/algebra-presentation-endpoints.ts";
 import { projectCommonFactorReading } from "./readings.ts";
 
 export const escapeCommonFactorText = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");

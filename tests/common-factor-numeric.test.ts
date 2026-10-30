@@ -3,7 +3,7 @@ import test from "node:test";
 import numeric from "../src/authoring/examples/common-factor-numeric.json" with { type: "json" };
 import { prepareKpCommonFactorDraft, exportKpCommonFactorSource } from "../src/authoring/common-factor-draft.ts";
 import { createKpCommonFactorExample } from "../src/authoring/common-factor-author-check.ts";
-import { commonFactorEndpoints } from "../src/experiments/common-factor/endpoints.ts";
+import { commonFactorEndpoints } from "../src/reader/app/algebra-presentation-endpoints.ts";
 import { projectCommonFactorReading } from "../src/experiments/common-factor/readings.ts";
 import { projectCommonFactorPrompts } from "../src/experiments/common-factor/practice.ts";
 

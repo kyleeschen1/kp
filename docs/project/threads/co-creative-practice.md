@@ -27,6 +27,15 @@ is [criticized explicitly](../capture.md#2026-10-30-fraction-tutorial-criticism-
 its accepted reader behavior remains a regression reference. These are proposed
 successor priorities, not a new execution queue or implementation authorization.
 
+Later October 30 KP engine delivery: the user-approved first
+[shared-mount conversion](../reviews/2026-10-30-shared-algebra-mount.md) is complete.
+Composed algebra and distribute/collect now use an independent reader owner;
+all old mount/endpoint imports are retired, with native behavior and checked
+authority preserved. This closes that finite repair, not the style/projection
+campaign. The next KP proposal is one useful anchored explanation. Workbench
+application, discussion and durable practice records retain their separate owner;
+historical paused runs remain paused.
+
 ## Direction and plan ownership
 
 The user selects spaced practice and the LLM co-creation loop as the most

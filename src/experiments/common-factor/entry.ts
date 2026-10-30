@@ -6,7 +6,7 @@ import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPrepared
 import { createKpCommonFactorAuthoringSession } from "../../authoring/common-factor-session.ts";
 import { preparePreview } from "../../authoring/staged-preview.ts";
 import { renderCommonFactorCard, commonFactorBeats } from "./page.ts";
-import { mountCommonFactorNativeSurface } from "./native.ts";
+import { mountCommonFactorNativeSurface } from "../../reader/app/algebra-presentation-mount.ts";
 import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
 import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";

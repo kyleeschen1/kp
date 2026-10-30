@@ -4,7 +4,7 @@ import { compileKpArticleDocument } from "../../article/kp-article-document.ts";
 import { resolveKpArticleImports } from "../../article/kp-article-import-lock.ts";
 import { compileKpArticleStaticHtml } from "../../article/kp-article-static-html.ts";
 import { encodeKpArticleLiteralProse as literal } from "../../article/literal-prose.ts";
-import { commonFactorEndpoints } from "./endpoints.ts";
+import { commonFactorEndpoints } from "../../reader/app/algebra-presentation-endpoints.ts";
 
 export function projectCommonFactorReading(draft: KpPreparedCommonFactorDraft, mode: "full" | "compact") {
   assertKpPreparedCommonFactorDraft(draft);

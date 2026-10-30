@@ -37,6 +37,17 @@ shared-mount conversion remains the first KP engine repair with its unchanged
 finish line; broader workbench/platform ambitions stay deferred. The source-linked
 vision view reflects this recommendation and retains the previous reasoning.
 
+October 30 KP engine closeout: the user approved the bounded shared-algebra-mount
+conversion. Its [evidence](reviews/2026-10-30-shared-algebra-mount.md) records
+independent reader ownership, complete consumer migration, removed experiment
+paths, preserved native behavior and unchanged authoring consumer costs. The
+existing template rendering was separated from page compilation to respect the
+reader dependency boundary. This finite engine milestone is complete; style
+ownership and document projection remain separate unfinished outcomes. The next
+KP product proposal is one useful anchored explanation with only its demonstrated
+dependencies, followed by practice integration with the workbench owner. This
+does not start that visual experiment or replace the workbench direction.
+
 October 30 architecture prioritization: the
 [updated recommendation](reviews/2026-10-30-next-step-review.md) retains the same
 finite shared-algebra-mount conversion first. Then repair the selected family's

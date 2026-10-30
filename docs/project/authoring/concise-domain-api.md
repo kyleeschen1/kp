@@ -89,6 +89,17 @@ The source schema, declared symbols, explicit state IDs and narration stay intac
 See `reusable-algebra-intuition-packet.md`; this is not an arbitrary proof solver.
 The real page and editor callers are `src/experiments/composed-algebra-intuition/`.
 
+The native mounting owner is `src/reader/app/algebra-presentation-mount.ts`.
+It accepts the existing issued factoring, composed-algebra or distribute/collect
+presentation and an existing stage container. It retains canonical endpoint,
+clock, preparation and disposal authority; hosts own their controls and styles.
+Its endpoint projection lives beside it in `algebra-presentation-endpoints.ts`.
+Neither module imports an experiment. The former `common-factor/native.ts` and
+`common-factor/endpoints.ts` paths are retired without forwarding facades.
+This is the existing bounded native mounting contract, not a generic host API or
+a change to saved source versions. Use `npm run visual:algebra-mount` to exercise
+its real consumers on an isolated local server.
+
 ## Import and extension boundaries
 
 Use a namespace for a specific domain module, not one eager object assembling

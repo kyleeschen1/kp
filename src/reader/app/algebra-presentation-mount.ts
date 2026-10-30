@@ -1,5 +1,5 @@
 import { assertKpPreparedCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
-import { commonFactorPresentationEndpoints, composedAlgebraOperationEndpoints, composedAlgebraEndpointsV2 } from "./endpoints.ts";
+import { commonFactorPresentationEndpoints, composedAlgebraOperationEndpoints, composedAlgebraEndpointsV2 } from "./algebra-presentation-endpoints.ts";
 import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
 import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
 import type { KpVerifiedEquationEndpointHandoff } from "../../semantic/equation-endpoint-handoff.ts";
@@ -8,18 +8,21 @@ import type { KpStructuredEquationAnnotatedEndpoint } from "../../rendering/stru
 import type { KpVerifiedEquationEvaluationFamilyCertificateV2 } from "../../domain-ir/equation-evaluation-family-certificate-v2.ts";
 import { assertKpCommonFactorPresentation, type KpCommonFactorPresentation } from "../../authoring/common-factor-presentation.ts";
 import { findKpRegisteredOperationPresentationPlan } from "../../animation/operation-presentation-plan-types.ts";
-import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
-import { mountKpCanonicalEquationStageShell } from "../../reader/app/canonical-equation-stage-shell.ts";
-import { createKpChromeFreeCanonicalEquationSession } from "../../reader/app/chrome-free-canonical-equation-session.ts";
-import { defineKpCanonicalEquationLessonDescriptor, bindKpReaderEquationLessonStructuralAnchors } from "../../reader/app/equation-lesson-descriptor.ts";
+import { compileKpEquationExemplarTemplate } from "../../rendering/equation-stage-template.ts";
+import { mountKpCanonicalEquationStageShell } from "./canonical-equation-stage-shell.ts";
+import { createKpChromeFreeCanonicalEquationSession } from "./chrome-free-canonical-equation-session.ts";
+import { defineKpCanonicalEquationLessonDescriptor, bindKpReaderEquationLessonStructuralAnchors } from "./equation-lesson-descriptor.ts";
 import { bindKpStructuredEquationSemanticEnvelopes } from "../../rendering/structured-equation-semantic-envelopes.ts";
-import { applyKpSemanticEnvelopeEquationStageLayout } from "../../reader/app/semantic-envelope-stage-layout.ts";
-import { resolveKpReaderEquationPresentationProfile } from "../../reader/document/equation-presentation.ts";
-import { createKpReaderTimelinePlaybackClock } from "../../reader/runtime/timeline-playback-clock.ts";
-import type { KpReaderEquationLessonDescriptor } from "../../reader/app/equation-lesson-descriptor.ts";
+import { applyKpSemanticEnvelopeEquationStageLayout } from "./semantic-envelope-stage-layout.ts";
+import { resolveKpReaderEquationPresentationProfile } from "../document/public-api.ts";
+import { createKpReaderTimelinePlaybackClock } from "../runtime/learner-public-api.ts";
+import type { KpReaderEquationLessonDescriptor } from "./equation-lesson-descriptor.ts";
 import { createKpFocusDeckCheckpointMap } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { assertDistributeCollect, type DistributeCollectPresentation } from "../../authoring/distribute-collect-presentation.ts";
-import { distributeCollectEndpoints } from "./endpoints.ts";
+import { distributeCollectEndpoints } from "./algebra-presentation-endpoints.ts";
+
+// Hosts supply an existing stage container and an issued presentation. This
+// reader owner composes native paint and lifetime; example UI and CSS stay out.
 
 export function mountDistributeCollectNative(card: HTMLElement, presentation: DistributeCollectPresentation) {
   assertDistributeCollect(presentation);

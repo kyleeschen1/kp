@@ -156,6 +156,7 @@ test("public-looking facades remain separated by authority", () => {
     "src/reader/app/reader-canonical-equation-session.ts"
   ]);
   assert.deepEqual(record("facade.reader-runtime-learner").sourceCallers, [
+    "src/reader/app/algebra-presentation-mount.ts",
     "src/reader/app/canonical-equation-frame-plan.ts",
     "src/reader/app/canonical-equation-stage-layout.ts",
     "src/reader/app/canonical-equation-transition-continuity.ts",

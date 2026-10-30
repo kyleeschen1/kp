@@ -43,3 +43,12 @@ test('source-only imports stay small; compiler and editor never import teaching 
   assert.equal(closure('src/authoring/algebra/compile.ts').some(path => path.includes('fixture')), false,
     'Proof-driven construction must not load tutorial fixture builders or registries.');
 });
+
+test('shared native algebra mounting cannot depend on an experiment host or its styles', () => {
+  for (const entry of ['src/reader/app/algebra-presentation-mount.ts', 'src/reader/app/algebra-presentation-endpoints.ts']) {
+    const files = collectKpRuntimeImportClosure(entry).map(path => relative(process.cwd(), path));
+    assert.deepEqual(files.filter(path => path.startsWith('src/experiments/') || path.startsWith('src/reader/compiler/') || path.endsWith('.css')), [], entry);
+    assert.ok(files.includes('src/authoring/composed-algebra-presentation-v2.ts'), 'Issued presentation authority must remain upstream.');
+    assert.ok(files.includes('src/authoring/distribute-collect-presentation.ts'), 'Both real consumers must retain their checked owner.');
+  }
+});

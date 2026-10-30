@@ -6,7 +6,7 @@ import { prepareDistributeCollect, assertDistributeCollect } from "../src/author
 import { KpComposedAlgebraRepair } from "../src/authoring/composed-algebra-source.ts";
 import { normalizeKpScalarSumProductEndpoint } from "../src/authoring/common-factor-normalizer.ts";
 import { verifyKpDistributionBeforeCollection, projectKpDistributionBeforeCollection } from "../src/semantic/distribute-collect.ts";
-import { distributeCollectEndpoints } from "../src/experiments/common-factor/endpoints.ts";
+import { distributeCollectEndpoints } from "../src/reader/app/algebra-presentation-endpoints.ts";
 import { distributeCollectSequence } from "../src/experiments/composed-algebra/sequence.ts";
 import { projectKpReaderEquationRenderPlan } from "../src/reader/renderers/equation-render-plan.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";

@@ -5,7 +5,7 @@ import {
 } from "../fraction-composition-static-step-export.ts";
 import {
   compileKpEquationExemplarTemplate
-} from "../../reader/compiler/equation-exemplar-page.ts";
+} from "../../rendering/equation-stage-template.ts";
 import {
   compileKpArticleMarkdownFragmentHtml
 } from "../../article/kp-article-static-html.ts";

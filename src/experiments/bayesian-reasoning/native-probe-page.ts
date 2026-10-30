@@ -1,7 +1,7 @@
 import { createFlaggedTicketSource } from "../../../domains/probability/binary-joint-model.ts";
 import { bindBayesEvidence } from "./evidence.ts";
 import { annotateBayesQuotient, compileBayesNotation } from "./notation.ts";
-import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
+import { compileKpEquationExemplarTemplate } from "../../rendering/equation-stage-template.ts";
 
 export function buildBayesNativeProbe() {
   const notation = compileBayesNotation(bindBayesEvidence(createFlaggedTicketSource()).trace);

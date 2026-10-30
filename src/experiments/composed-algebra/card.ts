@@ -1,6 +1,6 @@
 import type { KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
 import type { KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
-import { mountCanonicalComposedAlgebraPresentation, mountCanonicalComposedAlgebraPresentationV2 } from "../common-factor/native.ts";
+import { mountCanonicalComposedAlgebraPresentation, mountCanonicalComposedAlgebraPresentationV2 } from "../../reader/app/algebra-presentation-mount.ts";
 import { createKpFocusDeckCheckpointPlayback } from "../../tutorial/focus-deck-checkpoint-playback.ts";
 import { mountKpFocusDeckNativeInput } from "../../tutorial/focus-deck-native-input.ts";
 import { bindKpFocusDeckKeyboard } from "../../tutorial/focus-deck-keyboard.ts";
@@ -10,7 +10,7 @@ import { composedAlgebraSequence, composedAlgebraSequenceV2, composedAlgebraWind
 import type { KpComposedAlgebraSubexplanation } from "./subexplanations.ts";
 import type { DistributeCollectPresentation } from "../../authoring/distribute-collect-presentation.ts";
 import { distributeCollectSequence } from "./sequence.ts";
-import { mountDistributeCollectNative } from "../common-factor/native.ts";
+import { mountDistributeCollectNative } from "../../reader/app/algebra-presentation-mount.ts";
 
 export function mountDistributeCollectCard(container: HTMLElement, draft: DistributeCollectPresentation) {
   return mountResolvedCard(container, distributeCollectSequence(draft), card => mountDistributeCollectNative(card, draft));

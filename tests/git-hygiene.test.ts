@@ -3,7 +3,19 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import test from "node:test";
-import { auditGit } from "../scripts/git-hygiene.ts";
+import { auditGit, parseGitRefRecord } from "../scripts/git-hygiene.ts";
+
+test("ref parsing requires complete fields and a full object id before ancestry checks", () => {
+  for (const width of [40, 64]) {
+    const tip = "a".repeat(width);
+    for (const extra of ["", "refs/remotes/origin/main"])
+      assert.deepEqual(parseGitRefRecord(`feature/example\0${tip}\0${extra}`), { name: "feature/example", tip, extra });
+  }
+  for (const row of ["", "feature/example", "feature/example\0abc\0", `\0${"a".repeat(40)}\0`,
+    `feature/example\0${"a".repeat(40)}`, `feature/example\0${"a".repeat(40)}\0\0`,
+    `feature/example\0${"z".repeat(40)}\0`])
+    assert.throws(() => parseGitRefRecord(row), /Malformed Git ref record/);
+});
 
 function fixture(t: test.TestContext) {
   const scratch = resolve("tmp/codex");

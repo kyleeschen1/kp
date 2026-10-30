@@ -1,5 +1,5 @@
 import { assertFractionAdditionPresentation, type FractionAdditionPresentation } from "../../authoring/fraction-addition-presentation.ts";
-import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
+import { compileKpEquationExemplarTemplate } from "../../rendering/equation-stage-template.ts";
 import { mountKpCanonicalEquationStageShell } from "../../reader/app/canonical-equation-stage-shell.ts";
 import { createKpChromeFreeCanonicalEquationSession } from "../../reader/app/chrome-free-canonical-equation-session.ts";
 import { applyKpSemanticEnvelopeEquationStageLayout } from "../../reader/app/semantic-envelope-stage-layout.ts";

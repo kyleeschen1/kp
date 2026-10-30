@@ -23,6 +23,14 @@ function ancestor(cwd: string, from: string, to: string): boolean {
 
 function lines(value: string): string[] { return value ? value.split("\n") : []; }
 
+/** Git's NUL-delimited ref rows must be complete before ancestry checks use them. */
+export function parseGitRefRecord(line: string) {
+  const fields = line.split("\0"), [name, tip, extra] = fields;
+  if (fields.length !== 3 || !name || !tip || extra === undefined || !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(tip))
+    throw new Error("Malformed Git ref record; cannot certify ancestry or backup.");
+  return { name, tip, extra };
+}
+
 export function auditGit(cwd: string) {
   const root = git(cwd, ["rev-parse", "--show-toplevel"]);
   const head = git(root, ["rev-parse", "HEAD"]);
@@ -47,13 +55,13 @@ export function auditGit(cwd: string) {
   // A tracking ref is only local evidence. Re-fetch and verify live remote tips before deletion.
   const backups = trustedOrigin ? lines(git(root, ["for-each-ref", "refs/remotes/origin/",
     "--format=%(refname)%00%(objectname)%00%(symref)"]))
-    .map(line => line.split("\0")).filter(([, , symbolic]) => !symbolic) : [];
+    .map(parseGitRefRecord).filter(record => !record.extra) : [];
   const branches = lines(git(root, ["for-each-ref", "refs/heads/",
     "--format=%(refname:short)%00%(objectname)%00%(upstream)"])).map(line => {
-    const [name, tip, upstreamRef] = line.split("\0");
+    const { name, tip, extra: upstreamRef } = parseGitRefRecord(line);
     const heldBy = worktrees.filter(tree => tree.branch === name).map(tree => tree.path);
     const contained = ancestor(root, tip, head);
-    const backup = backups.find(([, remoteTip]) => ancestor(root, tip, remoteTip))?.[0] ?? null;
+    const backup = backups.find(record => ancestor(root, tip, record.tip))?.name ?? null;
     const reasons: string[] = [];
     if (!/^(feature|spike|codex)\//.test(name)) reasons.push("protected or outside disposable branch namespaces");
     if (name === branch) reasons.push("current checkout");

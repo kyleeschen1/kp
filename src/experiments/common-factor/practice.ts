@@ -1,7 +1,7 @@
 import { assertKpPreparedCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
 import { createKpFlashcardSpec } from "../../semantic/asset-flashcard.ts";
 import { createKpAnimationClozeProjection, createKpAnimationPredictNextProjection } from "../../animation/flashcard-projection.ts";
-import { commonFactorEndpoints } from "./endpoints.ts";
+import { commonFactorEndpoints } from "../../reader/app/algebra-presentation-endpoints.ts";
 
 export function projectCommonFactorPrompts(draft: KpPreparedCommonFactorDraft) {
   assertKpPreparedCommonFactorDraft(draft);

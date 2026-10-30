@@ -78,6 +78,8 @@ test("every compatibility path has one enforced disposition and owner", () => {
       ({ formerContractKey }) => formerContractKey
     ),
     [
+      "common-factor/native.ts",
+      "common-factor/endpoints.ts",
       "composed-algebra-session-v2.ts",
       "prepareKpComposedAlgebraDraftV2",
       "checkKpComposedAlgebraDraftV2",

@@ -30,7 +30,7 @@ import { createKpEquationSeriesCommonFactorSemanticSource } from "../../src/auth
 import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPreparedCommonFactorDraft } from "../../src/authoring/common-factor-draft.ts";
 import { checkKpCommonFactorAuthorSource } from "../../src/authoring/common-factor-author-check.ts";
 import { createKpCommonFactorAuthoringSession } from "../../src/authoring/common-factor-session.ts";
-import { mountCommonFactorNativeSurface, mountCanonicalFactoringPresentation } from "../../src/experiments/common-factor/native.ts";
+import { mountCommonFactorNativeSurface, mountCanonicalFactoringPresentation } from "../../src/reader/app/algebra-presentation-mount.ts";
 import type { KpCommonFactorPresentation } from "../../src/authoring/common-factor-presentation.ts";
 import type { KpFactoringChoreographyPlan } from "../../src/animation/factoring-choreography.ts";
 import { renderCommonFactorCard } from "../../src/experiments/common-factor/page.ts";

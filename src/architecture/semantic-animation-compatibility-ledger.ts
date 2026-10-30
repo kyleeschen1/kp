@@ -223,6 +223,15 @@ export const kpSemanticAnimationCompatibilityLedger = [
 ] as const satisfies readonly KpSemanticAnimationCompatibilityLedgerEntry[];
 
 export const kpRetiredSemanticAnimationCompatibilityPaths = [
+  ...["native.ts", "endpoints.ts"].map((file) => ({
+    id: `compatibility.algebra-mount.${file}`,
+    formerContractKey: `common-factor/${file}`,
+    removedFrom: [`src/experiments/common-factor/${file}`],
+    retiredModule: `src/experiments/common-factor/${file}`,
+    replacement:
+      "Typed validated mount and exact endpoint projection now owned by reader/app/algebra-presentation-mount.ts and algebra-presentation-endpoints.ts; all hosts and cost fixtures converted.",
+    closureTest: "tests/algebra-authoring-boundaries.test.ts"
+  })),
   ...[
     "composed-algebra-session-v2.ts",
     "prepareKpComposedAlgebraDraftV2",

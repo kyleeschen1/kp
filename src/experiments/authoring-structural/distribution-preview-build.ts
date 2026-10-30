@@ -1,5 +1,5 @@
 import { createKpAuthoredDistributionProjection, requireKpAuthoredDistributionNativeAnimation } from "./distribution-projection.ts";
-import { compileKpEquationExemplarTemplate } from "../../reader/compiler/equation-exemplar-page.ts";
+import { compileKpEquationExemplarTemplate } from "../../rendering/equation-stage-template.ts";
 import { createKpFractionCompositionSelectorAnnotatedLatex } from "../../rendering/fraction-composition-selector-annotated-latex.ts";
 
 /** Trusted local preparation. No author callbacks or receipt capabilities cross

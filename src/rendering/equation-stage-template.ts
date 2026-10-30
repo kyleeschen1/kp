@@ -1,0 +1,301 @@
+import type { KpAnimationAsset } from "../animation/asset.ts";
+import type { KpSemanticAssetObject } from "../semantic/asset.ts";
+import {
+  renderLatexToHtml,
+  renderSelectorAnnotatedLatexToHtml
+} from "./katex-adapter.ts";
+import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
+import type { KpReaderEquationPresentationCapability } from "../reader/document/public-api.ts";
+import type { KpReaderEvaluationControlsKind } from "../reader/document/public-api.ts";
+import { resolveKpReaderEquationPresentationProfile } from "../reader/document/public-api.ts";
+import {
+  compileKpAnimationTransformationPhaseCohorts
+} from "../animation/transformation-phase-cohorts.ts";
+
+export type KpEquationStageAnnotation = (state: KpSemanticAssetObject) => KpSelectorAnnotatedLatex | undefined;
+
+// A page may already own static accessible math; standalone hosts always own it in the stage.
+export function renderKpEquationPageTemplate(
+  animation: KpAnimationAsset,
+  annotateState: KpEquationStageAnnotation,
+  options: Parameters<typeof compileKpEquationExemplarTemplate>[2]
+): string {
+  return compileEquationTemplate(animation, annotateState, options,
+    options?.readerControls === undefined ? "page-static" : "stage");
+}
+
+export function compileKpEquationExemplarTemplate(
+  animation: KpAnimationAsset,
+  annotateState: KpEquationStageAnnotation,
+  options?: {
+    readonly presentationAnimations?: readonly KpAnimationAsset[] | undefined;
+    readonly equationPresentation?: KpReaderEquationPresentationCapability | undefined;
+    readonly showEquationProfileControl?: boolean | undefined;
+    readonly readerControls?: KpReaderEvaluationControlsKind | undefined;
+  }
+): string {
+  // Standalone canonical hosts have no page-owned accessible projection.
+  // They cannot opt out based on whether family-specific controls are present.
+  return compileEquationTemplate(animation, annotateState, options, "stage");
+}
+
+function compileEquationTemplate(
+  animation: KpAnimationAsset,
+  annotateState: KpEquationStageAnnotation,
+  options: Parameters<typeof compileKpEquationExemplarTemplate>[2],
+  accessibilityOwner: "page-static" | "stage"
+): string {
+  const animations = [animation, ...(options?.presentationAnimations ?? [])];
+  const objects = new Map(animations.flatMap((candidate) =>
+    candidate.bundle.objects.map((object) => [object.id, object] as const)
+  ));
+  const states = new Map([...objects.values()].map((object) => [
+    object.id,
+    compileAnnotatedState(object, annotateState)
+  ]));
+  const cohorts = [...new Map(animations.flatMap((candidate) =>
+    compileKpAnimationTransformationPhaseCohorts(candidate).map((cohort) => [
+      cohort.id,
+      cohort
+    ] as const)
+  )).values()];
+  // Existing whole-page readers already own searchable static MathML. Only
+  // stage-owned accessibility belongs in this template, never a second copy
+  // of the page owner's states. Standalone callers always select stage above.
+  const accessibleStateIds = accessibilityOwner === "page-static" ? [] : compileKpAnimationTransformationPhaseCohorts(
+          animation
+        ).flatMap((cohort, index) => [
+          ...(index === 0 ? cohort.sourceObjectIds : []),
+          ...cohort.targetObjectIds
+        ]).filter((id, index, ids) => ids.indexOf(id) === index);
+  const accessibleStates = accessibleStateIds.map((objectId, index) => {
+    const object = objects.get(objectId);
+    if (object === undefined) {
+      throw new Error(`missing accessible equation state ${objectId}`);
+    }
+    if (options?.readerControls === "fraction-composition-v1") {
+      return [
+        `<div role="math" aria-label="${attribute(accessibleTextValue(object))}" data-kp-reader-accessible-equation-state="${attribute(objectId)}"${
+          index === 0 ? "" : " hidden"
+        } data-kp-reader-accessible-source="structured-expression"></div>`
+      ].join("");
+    }
+    return [
+      `<div data-kp-reader-accessible-equation-state="${attribute(objectId)}"${
+        index === 0 ? "" : " hidden"
+      }>`,
+      renderLatexToHtml(latexValue(object), {
+        displayMode: true,
+        output: "htmlAndMathml"
+      }),
+      `</div>`
+    ].join("");
+  });
+  const transitions = cohorts.map((cohort) => {
+    const source = cohort.sourceObjectIds.map((id) => {
+      if (!objects.has(id)) throw new Error(`missing equation source ${id}`);
+      return states.get(id)!;
+    }).join("\n");
+    const target = cohort.targetObjectIds.map((id) => {
+      if (!objects.has(id)) throw new Error(`missing equation target ${id}`);
+      return states.get(id)!;
+    }).join("\n");
+    return [
+      `<div class="kp-reader-equation-transition" data-kp-reader-transition="${attribute(cohort.id)}"${
+        cohort.transformationIds.length > 1
+          ? ` data-kp-reader-cohort-transformations="${attribute(cohort.transformationIds.join(","))}"`
+          : ""
+      }>`,
+      `<div class="kp-reader-equation-fit-surface" data-kp-reader-fit-surface>`,
+      `<div class="kp-reader-equation-measurement" data-kp-reader-equation-measurement="true" aria-hidden="true">`,
+      `<div class="kp-reader-equation-native" data-kp-reader-native="source">${source}</div>`,
+      `<div class="kp-reader-equation-native" data-kp-reader-native="target">${target}</div>`,
+      `</div>`,
+      `</div>`,
+      `</div>`
+    ].join("");
+  });
+  return [
+    `<template data-kp-reader-exemplar-template>`,
+    `<div class="kp-reader-equation-stage" data-kp-reader-equation-stage>`,
+    `<div class="kp-reader-equation-stage-heading">`,
+    `<span data-kp-reader-stage-kicker>Follow the symbols</span>`,
+    `<div class="kp-reader-equation-controls">`,
+    options?.showEquationProfileControl === true && options.equationPresentation !== undefined
+      ? profileControl(options.equationPresentation)
+      : "",
+    options?.readerControls !== undefined
+      ? evaluationControls(options.readerControls)
+      : "",
+    `<label class="kp-reader-motion-control">`,
+    `<span>Motion</span>`,
+    `<select data-kp-reader-motion-preference aria-label="Motion preference">`,
+    `<option value="system">System</option>`,
+    `<option value="reduced">Reduced</option>`,
+    `<option value="full">Full</option>`,
+    `<option value="static">Static</option>`,
+    `</select>`,
+    `</label>`,
+    `</div>`,
+    `<output data-kp-reader-stage-status aria-live="polite">Read the equality</output>`,
+    `</div>`,
+    `<nav class="kp-reader-focus-stepper" data-kp-reader-focus-stepper aria-label="Explanation controls">`,
+    `<div class="kp-reader-focus-stepper-row">`,
+    `<button type="button" data-kp-reader-attention-previous aria-label="Previous explanation step">Back</button>`,
+    `<output data-kp-reader-attention-status aria-live="polite">Read the equality</output>`,
+    `<button type="button" data-kp-reader-attention-next aria-label="Next explanation step">Next</button>`,
+    `</div>`,
+    `<label class="kp-reader-focus-scrubber">`,
+    `<input type="range" min="0" max="1000" step="1" value="0" data-kp-reader-attention-scrubber aria-label="Scrub explanation">`,
+    `<span data-kp-reader-attention-count aria-hidden="true">Step 1 of 1</span>`,
+    `</label>`,
+    `</nav>`,
+    `<div class="kp-reader-equation-viewport" data-kp-reader-equation-viewport>`,
+    transitions.join("\n"),
+    `<div class="kp-reader-equation-material-fit-surface" data-kp-reader-material-fit-surface>`,
+    `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
+    `<span class="kp-reader-equation-annihilation-witness" data-kp-reader-annihilation-witness aria-hidden="true">`,
+    `<span data-kp-reader-identity-value="0">${renderLatexToHtml("0", { displayMode: false })}</span>`,
+    `<span data-kp-reader-identity-value="1" hidden>${renderLatexToHtml("1", { displayMode: false })}</span>`,
+    `</span>`,
+    `<span class="kp-reader-equation-independent-zero-witness" data-kp-reader-independent-zero-witness aria-hidden="true">${renderLatexToHtml("+0", { displayMode: false })}</span>`,
+    `</div>`,
+    `</div>`,
+    ...(accessibleStates.length === 0
+      ? []
+      : [
+          `<div class="kp-reader-equation-accessible" data-kp-reader-accessible-equation aria-live="polite" aria-atomic="true">`,
+          accessibleStates.join(""),
+          `</div>`
+        ]),
+    `<div class="kp-reader-equation-progress" aria-hidden="true"><span data-kp-reader-progress-bar></span></div>`,
+    `<p class="kp-reader-equation-hint">Scroll to move the equation. Scroll back to rewind.</p>`,
+    `</div>`,
+    `</template>`
+  ].join("");
+}
+
+function evaluationControls(kind: KpReaderEvaluationControlsKind): string {
+  const buttons = kind === "foldable-distribution-v1"
+    ? [
+        {
+          nodeId: "evaluation.foldable-distribution.distribute",
+          label: "Distribution"
+        },
+        {
+          nodeId: "evaluation.foldable-distribution.evaluate-products",
+          label: "Products"
+        }
+      ]
+    : [
+        {
+          nodeId: "evaluation.fraction-composition.expand-fractions",
+          label: "Fractions"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.evaluate-constants",
+          label: "Constants"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.subtract-and-simplify",
+          label: "Subtract"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.multiply-and-simplify",
+          label: "Multiply"
+        },
+        {
+          nodeId: "evaluation.fraction-composition.divide-and-solve",
+          label: "Divide"
+        }
+      ];
+  return [
+    `<label class="kp-reader-fold-control">`,
+    `<span>Detail</span>`,
+    `<select data-kp-reader-fold-mode aria-label="Evaluation detail" aria-describedby="kp-reader-fold-status">`,
+    `<option value="automatic">Automatic</option>`,
+    `<option value="expanded">Expanded</option>`,
+    `<option value="collapsed">Collapsed</option>`,
+    `<option value="pinned">Pinned</option>`,
+    `</select>`,
+    `</label>`,
+    `<div class="kp-reader-fold-drills" role="group" aria-label="Pinned evaluation details">`,
+    ...buttons.map(({ nodeId, label }) =>
+      `<button type="button" data-kp-reader-fold-node="${attribute(nodeId)}" aria-pressed="false" aria-describedby="kp-reader-fold-status">${attribute(label)}</button>`
+    ),
+    `</div>`,
+    `<output id="kp-reader-fold-status" class="kp-reader-fold-status" data-kp-reader-fold-status aria-live="polite">Detail follows the available space</output>`
+  ].join("\n");
+}
+
+function profileControl(
+  capability: KpReaderEquationPresentationCapability
+): string {
+  return [
+    `<label class="kp-reader-profile-control">`,
+    `<span>View</span>`,
+    `<select data-kp-reader-equation-profile-control aria-label="Equation explanation view">`,
+    ...capability.profileIds.map((id) => {
+      const profile = resolveKpReaderEquationPresentationProfile(id);
+      return `<option value="${attribute(profile.id)}">${attribute(profile.label)}</option>`;
+    }),
+    `</select>`,
+    `</label>`
+  ].join("\n");
+}
+
+function compileAnnotatedState(
+  object: KpSemanticAssetObject,
+  annotateState: KpEquationStageAnnotation
+): string {
+  const annotated = annotateState(object);
+  if (annotated === undefined) {
+    throw new Error(`equation object ${object.id} has no annotated LaTeX`);
+  }
+  let html = renderSelectorAnnotatedLatexToHtml(annotated);
+  for (const annotation of annotated.annotations) {
+    html = html.replaceAll(
+      `data-kp-motion-id="${annotation.motionId}"`,
+      `data-kp-reader-equation-anchor-id="anchor.${annotation.selectorId}" data-kp-reader-selector-id="${annotation.selectorId}"`
+    );
+  }
+  return `<div class="kp-reader-equation-state" data-kp-reader-equation-state="${attribute(object.id)}">${html}</div>`;
+}
+
+function latexValue(object: KpSemanticAssetObject): string {
+  const value = object.value;
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    !("latex" in value) ||
+    typeof value.latex !== "string"
+  ) {
+    throw new Error(`equation object ${object.id} has no LaTeX`);
+  }
+  return value.latex;
+}
+
+function accessibleTextValue(object: KpSemanticAssetObject): string {
+  const value = object.value;
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    !("accessibleText" in value) ||
+    typeof value.accessibleText !== "string" ||
+    value.accessibleText.trim() === ""
+  ) {
+    throw new Error(
+      `equation object ${object.id} has no structured accessible text`
+    );
+  }
+  return value.accessibleText;
+}
+
+function attribute(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
