@@ -12,6 +12,44 @@ recommended next delivery. The engineering priorities below remain relevant;
 shared mounting is still the first KP engine repair with the same finish line.
 Neither proposal is an approved implementation run.
 
+## First workbench slice after process setup
+
+After the Git cleanup and process skill, the user asks what to do first.
+Start within the existing workbench proposal with one complete workflow:
+**select a passage, save an anchored comment, reload and return to that exact
+passage at its original revision**. This is the first implementation recommendation,
+not a replacement delivery plan or an additional human approval gate.
+
+The independently served `apps/workbench/` shell should immediately host that
+workflow against a small text artifact. Use immutable artifact revisions,
+explicit selection ranges and an owned persistence boundary. Keep the original
+snapshot; changing the current text must not silently move an old comment.
+Report a failed save honestly and retain the draft. Establish contracts and
+fixtures through this concrete use, rather than building a general plugin or
+ontology framework before there is a working interaction.
+
+Then exercise two supplied revisions and export a small assistant context
+packet containing the source, selected passage and discussion. This lets us use
+the workbench to discuss the workbench itself. The existing proposal still
+includes the live algebra adapter, durable practice return and recovery drills;
+a working text annotation alone does not complete it.
+
+For concurrent development, propose the verified process checkpoint
+`30769120dd39806d45bbe80da3b7329129302d0e` as the common starting commit. Give this
+conversation workbench ownership and a second conversation the bounded shared
+algebra mount conversion, each in its own worktree with distinct preview
+resources. Keep root configuration, shared contracts and integration under one
+explicit owner. The engine assignment preserves math and visual behavior,
+converts every actual consumer of the moved boundary, and removes superseded
+imports; it does not change the workbench or introduce new choreography.
+
+This ordering is useful because fixture-based workbench iteration does not
+depend on engine repair, while the repaired engine boundary later supplies a
+cleaner live integration. Reconcile the relevant Theseus control records before
+implementation; the earlier roadmap and historical pauses are not an execution
+queue for this new work. Current product priority and the broader proposal's
+finish line are unchanged by this first-slice clarification.
+
 ## Recommendation
 
 Prioritize boundaries that let us change an explanation, choreography, or host
