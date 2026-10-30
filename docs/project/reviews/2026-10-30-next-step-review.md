@@ -157,3 +157,62 @@ semantic authority, acceptance criteria and review checkpoint.
 No implementation, new Theseus run or changed acceptance of existing visuals
 is authorized by this review. It refines the proposed sequence without marking
 the earlier campaign complete or turning all horizons into active work.
+
+## KP product lane after the parallel-development split
+
+The user designates this conversation for improving the KP product and asks for
+next steps. Treat it as the KP lane beside the proposed independent workbench.
+This establishes conversational focus, not approval to execute either proposal.
+The overall roadmap recommendation and the finite engine finish line above are
+unchanged; the workbench proposal retains its own scope and practice-record owner.
+
+At `30769120dd39806d45bbe80da3b7329129302d0e`, targeted source inspection still
+finds `composed-algebra/card.ts` importing the validated native mounts from
+`common-factor/native.ts`. Composed-algebra intuition, edition reading and
+practice depend on that card. This confirms the ownership problem remains; it
+does not supply new performance or visual evidence.
+
+Recommended sequence for this lane:
+
+1. Before implementation, establish an isolated KP branch/worktree from an
+   explicit agreed integration commit. Propose this lane as owner of the bounded
+   shared-mount repair and its consumer checks. Give the workbench lane its app,
+   local styles, adapters and records. Assign shared contracts, root dependency
+   files and integration to one owner before concurrent edits. Agree on the
+   existing-host adapter fixture; workbench fixture work need not wait for the
+   mount conversion.
+2. Complete the shared-mount conversion described above. Composed algebra and
+   distribute/collect must use the responsible shared owner; close the old paths
+   across the complete consumer set. Preserve validated presentation authority,
+   native rendering, direct seeking, reversal and lifecycle behavior. This is
+   one independently reversible delivery, not the whole repair campaign.
+3. Select one useful anchored explanation as the next visible product test.
+   Reuse supported mathematics and target a meaningful object, group or relation
+   at an exact occurrence and beat. Repair only the demonstrated style or
+   preparation dependencies needed by that exemplar. Review whether the text
+   makes the mathematical relationship easier to follow before promoting the
+   treatment. The criticized fractional tutorial remains preservation evidence,
+   not the editorial starting point.
+4. Connect the checked explanation to the workbench's durable practice loop.
+   KP supplies exact mathematical context and supported return behavior;
+   workbench owns question versions, attempts, notes and later-return records.
+   Verify an attempt can reopen its original context after reload. Do not create
+   a competing practice store in this lane. Use one structurally different
+   caller to judge reuse before further API or visual expansion.
+
+The mount repair is the recommended first implementation outcome because it
+removes a demonstrated dependency with a finite preservation test. Anchored
+explanation is the next visible payoff; broad cleanup is not a prerequisite for
+testing personal practice. Existing proposed document-projection repairs remain
+available when their host is needed, and historical paused runs remain paused.
+
+Planning preflight: `npm run git:hygiene -- --json` found the current feature
+checkout, one older occupied worktree, one unrelated modified browser test and
+three untracked inbox documents. They were preserved. Fetch and live remote-tip
+inspection confirmed the baseline was backed up on its same-named origin branch.
+`theseus work resume` and its `--limit 1` variant both failed with
+`resume-delta token count 1645 exceeds budget 1200`. Before implementation,
+reconcile the relevant control context through the supported actor interface;
+do not infer run authority from old records or silently raise a failing budget.
+No product code, worktree, server, run contract or delegation was created by
+this review.
