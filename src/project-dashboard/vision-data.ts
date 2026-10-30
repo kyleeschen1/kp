@@ -3,13 +3,13 @@ import type { ProjectVision } from "./vision-model.ts";
 // Review with the roadmap at a milestone handoff or pivot; append the reason for
 // changes. Task progress belongs to Theseus, not this source-linked horizon map.
 export const projectVision: ProjectVision = {
-  reviewedOn: "2026-10-29",
+  reviewedOn: "2026-10-30",
   northStar: "Build and revisit mathematical understanding with an LLM.",
   productProof: "Revise a question, attempt it, record a mistake or uncertainty, and return later to its exact mathematical context.",
   productSource: { label: "Personal practice direction", href: "docs/project/decisions/2026-10-28-co-creative-practice-priority.md" },
   areas: [
     {
-      id: "architecture", title: "Architecture & retirement", horizon: "next",
+      id: "architecture", title: "Architecture & retirement", horizon: "later",
       destination: "Replace a part without rebuilding its neighbors. Finish migrations and remove obsolete paths.",
       established: "One obsolete algebra facade has been retired. Shared mounting and cross-example style dependencies remain.",
       evidence: { label: "Retirement evidence", href: "docs/project/reviews/2026-10-29-algebra-api-retirement.md" },
@@ -69,15 +69,15 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "learning", title: "Experiments & workbench", horizon: "later",
+      id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
       established: "Review logs, capability search and project records exist. Some dashboard statuses are historical and require reconciliation.",
       evidence: { label: "Workbench evidence and gaps", href: "docs/project/reviews/2026-10-28-workbench-evidence.md" },
       outcome: {
-        id: "one-complete-experiment", title: "Retain one complete experiment and its useful findings",
-        finish: "Connect a practice example to its intent, authoring effort, captured feedback, revisions and retained lesson. Distinguish a local aesthetic judgment from a reusable rule.",
-        excludes: "A new GTD platform, autonomous background agents or an exhaustive metrics dashboard.",
-        source: { label: "Workbench direction", href: "docs/project/decisions/2026-10-28-shared-workbench-direction.md" }
+        id: "independent-workbench-v1", title: "Select, discuss, compare and return in an independent workspace",
+        finish: "Save anchored commentary and a question/attempt at exact source revisions, compare a candidate, export assistant context, and return after reload. One live KP adapter and isolated fixtures pass bounded failure/recovery checks; review the complete workflow before expansion.",
+        excludes: "A repository split, new renderer, full GTD platform, scheduler algorithm, embedded model service or autonomous background agents.",
+        source: { label: "Proposed workbench delivery", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
       }
     }
   ],
@@ -114,6 +114,13 @@ export const projectVision: ProjectVision = {
       after: "Add this bounded vision view; retain the repair recommendation and deferred horizons.",
       reason: "Repeated starts need visible finish lines and an honest record of changed commitments.",
       source: { label: "Vision UI contract", href: "docs/project/2026-10-29-project-vision-ui.md" }
+    },
+    {
+      id: "independent-workbench-proposal", on: "2026-10-30",
+      before: "Shared mounting was the recommended next delivery; the workbench horizon was one complete experiment with retained findings.",
+      after: "Propose an independent collaboration workspace with exact references, revision comparison and a durable practice return. Shared mounting retains its original finish line as the first KP engine repair; neither new run is approved.",
+      reason: "The user wants parallel development, rapid improvement of the tools used to build UI, and recoverable experiments that produce lasting lessons. Test that value in one usable workflow before expanding the platform.",
+      source: { label: "Bounded workbench proposal", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
     }
   ]
 };

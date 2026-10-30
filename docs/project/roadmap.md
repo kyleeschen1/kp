@@ -26,6 +26,17 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 30 independent-workbench proposal: after exploring parallel development,
+rapid iteration and antifragility, the user asks how to proceed. Recommend the
+[first usable collaboration loop](2026-10-30-independent-workbench-v1.md): an
+independent application, exact references and anchored discussion, revision
+comparison, an assistant context packet, and one durable personal-practice
+return. It integrates an existing checked algebra host and tests bounded failure
+recovery. This is the proposed next delivery, not an approved run. The earlier
+shared-mount conversion remains the first KP engine repair with its unchanged
+finish line; broader workbench/platform ambitions stay deferred. The source-linked
+vision view reflects this recommendation and retains the previous reasoning.
+
 October 30 architecture prioritization: the
 [updated recommendation](reviews/2026-10-30-next-step-review.md) retains the same
 finite shared-algebra-mount conversion first. Then repair the selected family's

@@ -2,23 +2,26 @@
 
 Status: active product direction; first implementation milestone proposed
 Last Updated: 2026-10-30
-Current Next Action: review the bounded [vision UI](../2026-10-29-project-vision-ui.md)
-requested to keep direction, finish lines and changes visible. The proposed
-[architecture repair roadmap](../reviews/2026-10-29-next-step-review.md) still
-recommends shared algebra mounting ownership first; this UI does not start that
-campaign or reopen the broader workbench. The user accepts the
+Current Next Action: review the proposed
+[independent workbench delivery](../2026-10-30-independent-workbench-v1.md), with
+exact references, anchored discussion, comparison, bounded recovery and a durable
+personal-practice return. Implementation is not authorized yet. The
+[architecture repair roadmap](../reviews/2026-10-29-next-step-review.md) retains
+shared algebra mounting as the first KP engine repair, with its original finish
+line. The user accepts the
 latest [document theater treatment](../2026-10-29-document-theater-ui.md); preserve
 it while repairing the surrounding architecture. The
 [bounded algebra retirement evidence](../reviews/2026-10-29-algebra-api-retirement.md)
 closes one obsolete convenience path, not the broader
 [experiment/conversion/retirement design](../decisions/2026-10-29-experiment-conversion-retirement-direction.md).
-The repair review owns the proposed order and preservation boundaries; no new
-implementation run is authorized. Return to durable personal practice after
-the bounded repairs. The October 28 workbench proposal remains deferred.
+The new proposal owns this bounded workbench scope and its dependencies; the
+repair review retains the engine preservation boundaries. The broader October 28
+workbench portfolio remains deferred. The first delivery includes personal
+practice rather than waiting for a complete monitoring platform.
 
-The [October 30 prioritization](../reviews/2026-10-30-next-step-review.md) keeps
-the same first mount conversion, then recommends bounded style/preparation repair
-and anchored commentary as the next visible architecture test. Spatial treatments
+The earlier [October 30 prioritization](../reviews/2026-10-30-next-step-review.md)
+keeps the same mount conversion first within KP engine work, followed by bounded
+style/preparation repair and anchored commentary as an architecture test. Spatial treatments
 remain experiments until reviewed and reused. The fractional tutorial's content
 is [criticized explicitly](../capture.md#2026-10-30-fraction-tutorial-criticism-and-anchored-commentary);
 its accepted reader behavior remains a regression reference. These are proposed

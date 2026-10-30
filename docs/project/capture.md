@@ -51,6 +51,11 @@ Capture ID: `capture.kp.independent-workbench-20261030`
 Status: strategic exploration; scope and priority not yet selected
 Source: project conversation, 2026-10-30
 
+Follow-up: the user asks how to proceed after discussing parallel iteration and
+antifragility. The [bounded delivery proposal](2026-10-30-independent-workbench-v1.md)
+now records a recommended first outcome; implementation and broader product
+scope remain unselected.
+
 The user explicitly requests preserving the
 [architecture recommendations](reviews/2026-10-30-next-step-review.md), then asks
 to consider creating the workbench independently before proceeding. The reason

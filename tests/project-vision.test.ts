@@ -53,7 +53,8 @@ test("snapshot age is visible rather than silently claiming live status", () => 
   assert.equal(visionNeedsReview("2026-10-29", new Date("2026-11-04T23:00:00Z")), false);
   assert.equal(visionNeedsReview("2026-10-29", new Date("2026-11-05T00:00:00Z")), true);
   assert.equal(visionNeedsReview("2026-10-29", new Date("2026-10-28T23:00:00Z")), true);
-  const html = renderProjectVision(projectVision, new Date("2026-11-06T00:00:00Z"));
+  const eightDaysAfterReview = new Date(Date.parse(`${projectVision.reviewedOn}T00:00:00Z`) + 8 * 86_400_000);
+  const html = renderProjectVision(projectVision, eightDaysAfterReview);
   assert.match(html, /data-kp-vision-freshness="review-due"/);
   assert.match(html, /Review due/);
   assert.match(html, /not an active run/);

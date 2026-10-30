@@ -5,6 +5,13 @@ Status: recommendation only; no implementation run authorized
 Baseline: `43adb63b0c9247bf13e00ba78f749d9898542605`
 Active direction: [co-creative practice](../threads/co-creative-practice.md)
 
+Later October 30 refinement: the user explores an independent workbench, rapid
+parallel iteration and antifragility, then asks how to proceed. The
+[bounded workbench proposal](../2026-10-30-independent-workbench-v1.md) becomes the
+recommended next delivery. The engineering priorities below remain relevant;
+shared mounting is still the first KP engine repair with the same finish line.
+Neither proposal is an approved implementation run.
+
 ## Recommendation
 
 Prioritize boundaries that let us change an explanation, choreography, or host
