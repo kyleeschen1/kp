@@ -5,6 +5,43 @@ Last Updated: 2026-10-30
 Use this file for raw future project thoughts that are not yet processed into
 roadmap items, decisions, or Theseus nodes.
 
+## 2026-10-30: Consider an independent workbench
+
+Capture ID: `capture.kp.independent-workbench-20261030`
+Status: strategic exploration; scope and priority not yet selected
+Source: project conversation, 2026-10-30
+
+The user explicitly requests preserving the
+[architecture recommendations](reviews/2026-10-30-next-step-review.md), then asks
+to consider creating the workbench independently before proceeding. The reason
+is the expected compounding value of improving the UI and the tools used to
+create UI with LLMs. The workbench may be enabling infrastructure for the whole
+effort rather than a dashboard that must wait for KP architecture repair.
+
+Reconsider the earlier deferral explicitly; do not treat it as a permanent
+rejection. Equally, this discussion has not selected an independent application,
+a repository split, a new implementation run, or a replacement product priority.
+
+Questions to retain:
+
+- Is the workbench for KP authoring/practice or for projects and personal
+  thinking more generally? This scope is still open.
+- Can its UI, styles, development loop and data ownership evolve independently
+  while KP remains an integrated capability with a clear boundary?
+- Does a separate application in the existing repository provide enough
+  independence, or is a separate repository justified by broader use?
+- What is the first complete joint-attention loop: identify an exact object or
+  passage, discuss it with an LLM, inspect a proposed change, compare the result,
+  and retain the observation and decision?
+- How can existing artifact identity, review, GTD and Theseus authorities be
+  integrated without duplicating their records or building a universal ontology?
+- What observed reduction in authoring, context recovery or review effort would
+  justify continued investment in the workbench itself?
+
+The recursive improvement benefit is a product hypothesis to test through actual
+use. These questions preserve the possibility without turning the full October
+28 workbench intake into immediate implementation scope.
+
 ## 2026-10-30: Fraction tutorial criticism and anchored commentary
 
 Status: user-requested capture; no implementation or queue change
