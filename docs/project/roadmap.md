@@ -26,6 +26,14 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 30 first workbench review: the user visually accepts the editor-host
+reader/capture/preview interface. The [host record](decisions/2026-10-30-editor-workbench-host.md#first-review-and-proposed-successor)
+preserves that scoped completion and links the editor-owned successor review.
+Recommend one real native conversation with exact response capture and recovery,
+so the user can improve the workbench while using it. This successor is proposed;
+no new implementation run, native authority or editor remote push is approved.
+The vision view retains the accepted first milestone and the proposed next one.
+
 October 30 editor-host decision: the user selects `../editor` as the evolving
 programmable workbench and approves its first bounded reader/preview candidate.
 The [accepted host and scope](decisions/2026-10-30-editor-workbench-host.md)

@@ -71,17 +71,22 @@ export const projectVision: ProjectVision = {
     {
       id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "The editor supplies CLJS/SCI commands, keymaps and selection. A separate rich-reader and real-project-preview candidate is approved; joining native sessions and durable practice remains follow-up work.",
+      established: "The first editor-host rich reader, exact capture and real-project preview is visually accepted locally. It uses labeled fixtures; live session integration and durable practice remain follow-up work.",
       evidence: { label: "Accepted editor host and boundaries", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" },
       outcome: {
-        id: "editor-reader-preview", title: "Read, capture and preview through the editor's shared commands",
-        finish: "Review labeled rich-reading fixtures, capture an exact revision-bound passage with notes/tags, reload and return through search, redefine a shared command, and preview real KP plus unrelated local HTML at their own URLs. The editor repository owns candidate execution and evidence.",
-        excludes: "Daily-editor migration, new native-session orchestration, a full conversation archive, a completed practice loop, new native permissions or KP renderer changes.",
-        source: { label: "Approved host and first candidate", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
+        id: "workbench-live-conversation", title: "Use one real conversation while improving the workbench",
+        finish: "Start or resume one compatible native thread through the rich reader, send and interrupt with visible status and approvals, capture an exact completed response, and reopen with thread identity, unsent draft and capture intact. Reuse existing session ownership; verify durable storage instead of relying on the temporary candidate profile. Proposed, not an approved run.",
+        excludes: "A full conversation archive, multiple active agents, a complete GTD system, a completed practice loop, automatic resend or changes to KP rendering.",
+        source: { label: "First acceptance and proposed successor", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
       }
     }
   ],
   completed: [
+    {
+      title: "First workbench reader and preview accepted",
+      scope: "Rich fixture reading, exact captures, shared programmable commands and real local website previews accepted visually. Live conversations, archive search and durable native capture are not delivered by this milestone; editor backup remains pending authorization.",
+      source: { label: "Scoped workbench acceptance", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
+    },
     {
       title: "Readable passage handoffs accepted",
       scope: "The fractional reader keeps generous spacing and readable explanations through exchange. Local acceptance; other layouts remain separate.",
@@ -135,6 +140,13 @@ export const projectVision: ProjectVision = {
       after: "Evolve the existing editor instead. Start with one approved rich reader/capture/project-preview candidate over its shared SCI commands; preserve native-session integration and personal practice as successor outcomes.",
       reason: "Reuse the working programmable editor while allowing richer non-text views, rapid UI iteration and independent KP development. The earlier proposal's destination survives; its immediate host and sequence are superseded.",
       source: { label: "Editor-host decision", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
+    },
+    {
+      id: "workbench-first-acceptance", on: "2026-10-30",
+      before: "Review the first reader/capture/project-preview candidate over the editor's commands.",
+      after: "Preserve the user's local visual acceptance and propose one native conversation with durable capture as a separate successor.",
+      reason: "The next useful test is working in the interface while improving it. Existing native session machinery can be reused, but its editor assumptions and temporary candidate storage still need bounded integration work.",
+      source: { label: "Accepted first interface and next recommendation", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
     }
   ]
 };

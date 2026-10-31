@@ -45,3 +45,24 @@ the embedded KP page with the same URL opened in a browser. Browser captures
 persist at that origin and can be exported. Fixture reading is explicitly
 distinguished from live model output. Desktop persistence and a full searchable
 conversation archive are outside this candidate.
+
+## First review and proposed successor
+
+The user subsequently said “this looks great! What's next?”. This is local visual
+acceptance of the reader/capture/preview interface, not approval for a new run,
+merge, native effect or editor remote push. The editor's
+`docs/project/reviews/2026-10-30-workbench-next-step-review.md` owns the detailed
+successor recommendation: one real native Codex conversation in that reader,
+with explicit status/approval/interrupt behavior, exact completed-response capture,
+and thread/draft/capture recovery after reopening. Preserve the native session
+and transport owners; separate their editor-buffer assumptions instead of copying
+orchestration. The current browser entry cannot launch the native bridge, and the
+desktop candidate's temporary storage must be resolved before claiming durable
+personal capture. The older temporary output store is not a permanent archive.
+
+This makes it possible to use the workbench while discussing and improving it.
+The accepted first outcome is retained; the live-conversation outcome is a finite
+successor proposal. A unified inbox/next-action view, broader archive search and
+multiple active agents remain later work. KP engine and reader behavior are
+unchanged. The editor candidate remains locally checkpointed; automatic approval
+review rejected its backup push under this session's KP-only standing permission.
