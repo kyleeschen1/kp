@@ -71,13 +71,13 @@ export const projectVision: ProjectVision = {
     {
       id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "The first editor-host rich reader, exact capture and real-project preview is visually accepted locally. It uses labeled fixtures; live session integration and durable practice remain follow-up work.",
+      established: "The first editor-host reader/capture/preview is visually accepted. Its approved native-conversation successor is implemented and launched, with exact source capture and native draft recovery; integrated use and visual review remain pending.",
       evidence: { label: "Accepted editor host and boundaries", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" },
       outcome: {
         id: "workbench-live-conversation", title: "Use one real conversation while improving the workbench",
-        finish: "Start or resume one compatible native thread through the rich reader, send and interrupt with visible status and approvals, capture an exact completed response, and reopen with thread identity, unsent draft and capture intact. Reuse existing session ownership; verify durable storage instead of relying on the temporary candidate profile. Proposed, not an approved run.",
+        finish: "Review the launched native candidate: start or resume one compatible thread, send with visible status and approvals, capture an exact completed response, quote it in a follow-up, and reopen with thread identity, unsent draft and capture intact. Implementation and bounded tests are recorded; real inference and integrated visual acceptance remain human checks.",
         excludes: "A full conversation archive, multiple active agents, a complete GTD system, a completed practice loop, automatic resend or changes to KP rendering.",
-        source: { label: "First acceptance and proposed successor", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
+        source: { label: "Approved native candidate and review boundary", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
       }
     }
   ],
@@ -140,6 +140,13 @@ export const projectVision: ProjectVision = {
       after: "Evolve the existing editor instead. Start with one approved rich reader/capture/project-preview candidate over its shared SCI commands; preserve native-session integration and personal practice as successor outcomes.",
       reason: "Reuse the working programmable editor while allowing richer non-text views, rapid UI iteration and independent KP development. The earlier proposal's destination survives; its immediate host and sequence are superseded.",
       source: { label: "Editor-host decision", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
+    },
+    {
+      id: "workbench-live-candidate", on: "2026-10-30",
+      before: "The accepted fixture reader had a proposed native-conversation successor.",
+      after: "The user approved it; a separate native candidate now connects shared Codex session ownership to exact response captures and persistent draft intent. Review the real interaction before widening scope.",
+      reason: "Use the workspace while improving it, with bounded recovery and explicit source identity. Initialization evidence does not substitute for real-use acceptance.",
+      source: { label: "Approved native candidate", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
     },
     {
       id: "workbench-first-acceptance", on: "2026-10-30",

@@ -66,3 +66,31 @@ successor proposal. A unified inbox/next-action view, broader archive search and
 multiple active agents remain later work. KP engine and reader behavior are
 unchanged. The editor candidate remains locally checkpointed; automatic approval
 review rejected its backup push under this session's KP-only standing permission.
+
+## Approved live-conversation candidate
+
+The subsequent “go” approves that bounded successor. Implementation is in the same
+editor worktree on `feature/20261030-workbench-live-conversation`. Its plan is
+`docs/superpowers/plans/workbench-live-conversation/index.md`; its concrete review
+is `docs/project/reviews/2026-10-30-workbench-live-conversation.md` in that checkout.
+These editor-owned artifacts own phase status and detailed evidence.
+
+The separate Spindle Workbench native app is built and launched. It uses the
+existing native Codex transport and a shared session controller, with a new rich
+view adapter and native file records in `~/.spindle/workbench`. Completed response
+captures preserve their exact original source; an explicit action quotes them in
+an editable follow-up. Reopening restores draft/thread intent without auto-send.
+The daily editor and browser fixture entry remain separate preservation consumers.
+
+The original browser reader checks, new mocked-native conversation/recovery
+checks, model checks and actual installed CLI initialization provide bounded
+evidence. They do not claim a real inference/native GUI end-to-end review. The
+next action is the integrated human checkpoint: connect, send, capture a completed
+passage, quote it, and close/reopen with an unsent draft. Native normal window
+close flushes or asks before discard; abrupt exit can still lose unacknowledged
+keystrokes. One writer and bounded local records are the supported scope.
+
+This is an implemented candidate, not another visually accepted milestone or a
+complete personal-practice/knowledge-management system. The previous editor backup
+rejection remains; no permission to push its source/history was inferred from
+implementation approval. KP's origin backup authority remains unchanged.

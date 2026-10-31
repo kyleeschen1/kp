@@ -26,6 +26,17 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 30 live-conversation candidate: the user's subsequent “go” approves the
+bounded editor-owned successor. The separate native Workbench now joins the
+reader to the existing Codex session owner, exact completed-response capture and
+native file-backed draft/thread recovery. Its
+[host record](decisions/2026-10-30-editor-workbench-host.md#approved-live-conversation-candidate)
+links the candidate and its evidence. Review one real response → capture → quoted
+follow-up → reopen cycle in the launched app. Native initialization was checked
+without inference; integrated visual/use acceptance remains pending. The earlier
+fixture-reader completion is preserved. No archive/GTD expansion, KP renderer
+change or editor remote-push authority is implied.
+
 October 30 first workbench review: the user visually accepts the editor-host
 reader/capture/preview interface. The [host record](decisions/2026-10-30-editor-workbench-host.md#first-review-and-proposed-successor)
 preserves that scoped completion and links the editor-owned successor review.
