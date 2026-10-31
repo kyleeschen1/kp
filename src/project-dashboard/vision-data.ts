@@ -71,13 +71,13 @@ export const projectVision: ProjectVision = {
     {
       id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "Review logs, capability search and project records exist. Some dashboard statuses are historical and require reconciliation.",
-      evidence: { label: "Workbench evidence and gaps", href: "docs/project/reviews/2026-10-28-workbench-evidence.md" },
+      established: "The editor supplies CLJS/SCI commands, keymaps and selection. A separate rich-reader and real-project-preview candidate is approved; joining native sessions and durable practice remains follow-up work.",
+      evidence: { label: "Accepted editor host and boundaries", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" },
       outcome: {
-        id: "independent-workbench-v1", title: "Select, discuss, compare and return in an independent workspace",
-        finish: "Discuss selected context in a native Codex session, preserving session/context ownership and intended existing-plan usage. Save revision-bound commentary and a question/attempt, compare a candidate and return after reload. A live KP adapter and isolated fixtures pass bounded recovery checks; review before expansion.",
-        excludes: "A repository split, new renderer, full GTD platform, scheduler algorithm, separately billed model service or autonomous background agents.",
-        source: { label: "Proposed workbench delivery", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
+        id: "editor-reader-preview", title: "Read, capture and preview through the editor's shared commands",
+        finish: "Review labeled rich-reading fixtures, capture an exact revision-bound passage with notes/tags, reload and return through search, redefine a shared command, and preview real KP plus unrelated local HTML at their own URLs. The editor repository owns candidate execution and evidence.",
+        excludes: "Daily-editor migration, new native-session orchestration, a full conversation archive, a completed practice loop, new native permissions or KP renderer changes.",
+        source: { label: "Approved host and first candidate", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
       }
     }
   ],
@@ -128,6 +128,13 @@ export const projectVision: ProjectVision = {
       after: "Prove a native Codex session inside the local UI first, then connect exact-reference collaboration and practice. Export remains a fallback; the forecast does not start a multiweek run.",
       reason: "The user wants the assistant beside the artifact while retaining Codex session/context affordances and intended existing-plan usage. Plain text is enough to test that integration.",
       source: { label: "Native Codex constraint", href: "docs/project/decisions/2026-10-30-native-codex-workbench.md" }
+    },
+    {
+      id: "editor-workbench-host", on: "2026-10-30",
+      before: "Propose a new independent workspace from KP, beginning with a native-session proof and then exact-reference collaboration and practice.",
+      after: "Evolve the existing editor instead. Start with one approved rich reader/capture/project-preview candidate over its shared SCI commands; preserve native-session integration and personal practice as successor outcomes.",
+      reason: "Reuse the working programmable editor while allowing richer non-text views, rapid UI iteration and independent KP development. The earlier proposal's destination survives; its immediate host and sequence are superseded.",
+      source: { label: "Editor-host decision", href: "docs/project/decisions/2026-10-30-editor-workbench-host.md" }
     }
   ]
 };

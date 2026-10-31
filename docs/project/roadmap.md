@@ -26,6 +26,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 30 editor-host decision: the user selects `../editor` as the evolving
+programmable workbench and approves its first bounded reader/preview candidate.
+The [accepted host and scope](decisions/2026-10-30-editor-workbench-host.md)
+supersede the immediate KP-hosted proposal below. Reuse existing CLJS/SCI commands
+and selection, allow rich non-editor views, and preview KP at its actual URL.
+Implementation and its phase plan live in an isolated editor worktree; this
+roadmap links direction rather than duplicating execution status. Native session
+integration and durable personal practice remain successor outcomes. KP engine
+work stays independent; no mathematical or reader migration is implied.
+
 October 30 native-session refinement: the user wants Codex chat inside the
 workbench, preserving native sessions/context management and intended existing
 plan usage; plain text is acceptable. The [accepted constraint](decisions/2026-10-30-native-codex-workbench.md)

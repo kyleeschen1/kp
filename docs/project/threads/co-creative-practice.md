@@ -1,8 +1,15 @@
 # Co-creative mathematical practice
 
-Status: active product direction; native Codex constraint accepted; revised milestone proposed
+Status: active product direction; editor-host workbench candidate approved
 Last Updated: 2026-10-30
-Current Next Action: establish the bounded native Codex session proof described
+Current Next Action: review the bounded reader/capture/real-project preview in
+the editor-host workbench. The [accepted host decision](../decisions/2026-10-30-editor-workbench-host.md)
+names the isolated checkout and its authoritative plan. Preserve the native
+Codex constraint and personal-practice destination as follow-ups; the browser
+candidate uses labeled fixtures and does not yet unite native sessions with the
+rich reader. KP remains the mathematical host.
+
+Superseded immediate sequence (retained as provenance): establish the bounded native Codex session proof described
 in the [revised independent workbench delivery](../2026-10-30-independent-workbench-v1.md),
 then build exact references, anchored discussion, comparison, bounded recovery
 and a durable personal-practice return. The user accepts native Codex sessions
