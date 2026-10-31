@@ -1,0 +1,48 @@
+{
+  "id": "run-contract.kp.anchored-algebra-v1",
+  "kind": "run-contract",
+  "title": "Anchored algebra visual candidate",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1/1 candidate slices complete; mandatory exemplar judgment before reuse.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.anchored-algebra.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-30-anchored-algebra-exemplar.md",
+      "summary": "Approved by user go after shared-mount closeout."
+    }
+  ],
+  "verification": [
+    "npm run visual:anchored-algebra"
+  ],
+  "revisitWhen": [
+    "Canonical human review arrives; no broader promotion is approved."
+  ],
+  "allowedWork": [
+    "Bounded source, local host and commentary, focused verification and evidence."
+  ],
+  "disallowedWork": [
+    "Generalization before visual review; new math or native choreography."
+  ],
+  "goal": "Deliver one checked and backed-up exemplar for human judgment.",
+  "target": "task.kp.anchored-algebra",
+  "runMode": "run",
+  "maxSlices": 1,
+  "commitCadence": "Commit and back up checked candidate before review.",
+  "verificationLevel": "focused",
+  "stopConditions": [
+    "Human exemplar judgment of wording, proximity and attention before any promotion."
+  ],
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Build and verify the canonical candidate",
+      "summary": "Checked canonical candidate and review packet ready; human judgment remains, with no promotion authorized.",
+      "status": "complete"
+    }
+  ]
+}

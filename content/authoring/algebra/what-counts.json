@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "kp.composed-algebra-source.v2",
+  "id": "lesson.algebra.what-counts",
+  "domain": "real-scalars",
+  "symbols": ["x", "y"],
+  "states": [
+    {
+      "id": "state.what-counts.repeated",
+      "latex": "3(x+y)+2(x+y)",
+      "narration": "You do not need to know what x and y are to see the repeated quantity. Watch what moves together when you combine the two counts."
+    },
+    {
+      "id": "state.what-counts.collected",
+      "latex": "(3+2)(x+y)",
+      "narration": "The two copies of the expression have become one shared group. Three and two still count it; neither has been added to anything inside it."
+    },
+    {
+      "id": "state.what-counts.counted",
+      "latex": "5(x+y)",
+      "narration": "Now change your question. Instead of asking how many wholes there are, ask what those five wholes contribute. Predict the next expression before moving on."
+    },
+    {
+      "id": "state.what-counts.opened",
+      "latex": "5x+5y",
+      "narration": "Every copy contained both parts, so each part receives the full count. Reverse this move to see the five contributions of each kind become five copies of the whole."
+    }
+  ],
+  "editorial": {
+    "title": "What counts as one thing?",
+    "setup": "A whole expression can act as a single quantity. Changing what you count together can make its structure easier to see—without changing its value.",
+    "summary": "The parentheses let us treat x+y as one quantity, then look inside it when that becomes useful. The step requires the same whole in both terms: 3(x+y)+2(x+z) cannot generally become 5(x+y). No division was used, so the explanation still holds when x+y is zero."
+  }
+}

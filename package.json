@@ -110,6 +110,7 @@
     "visual:common-factor-authoring": "playwright test --config playwright.common-factor-review.config.ts --workers=1",
     "visual:composed-algebra": "playwright test --config playwright.composed-algebra-review.config.ts --project=chromium --workers=1",
     "visual:algebra-mount": "playwright test --config playwright.algebra-mount.config.ts --project=chromium --workers=1",
+    "visual:anchored-algebra": "playwright test --config playwright.anchored-algebra.config.ts --project=chromium --workers=1",
     "visual:composed-algebra:cohort": "playwright test --config playwright.composed-algebra-review.config.ts --workers=1",
     "visual:common-factor-authoring:cohort": "npm run visual:common-factor-authoring",
     "author:common-factor-publication": "node --disable-warning=ExperimentalWarning scripts/build-common-factor-edition.ts",

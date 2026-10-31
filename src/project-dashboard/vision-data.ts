@@ -47,13 +47,13 @@ export const projectVision: ProjectVision = {
     {
       id: "reader", title: "Reader & presentation", horizon: "later",
       destination: "Reading and mathematical inspection feel coherent in documents and smaller learning interactions.",
-      established: "The latest fractional theater pacing is accepted locally. This does not establish a shared layout for every lesson.",
-      evidence: { label: "Accepted reader treatment", href: "docs/project/2026-10-29-document-theater-ui.md" },
+      established: "The fractional theater treatment remains locally accepted. One anchored algebra explanation now has checked native behavior and awaits human judgment; it is not a shared annotation system.",
+      evidence: { label: "Anchored explanation review", href: "docs/project/reviews/2026-10-30-anchored-algebra.md" },
       outcome: {
-        id: "owned-document-theater", title: "Give the accepted theater its own layout and style owners",
-        finish: "The accepted document compiles directly through explicit projection inputs; its HTML rewrite and selected cross-example style inheritance are removed. Search, reverse, direct jumps and native math remain intact.",
-        excludes: "New choreography, global typography changes or migration of all reader families.",
-        source: { label: "Repair roadmap · outcomes 2–3", href: "docs/project/reviews/2026-10-29-next-step-review.md" }
+        id: "anchored-algebra-review", title: "Judge one explanation beside the mathematics it explains",
+        finish: "Review whether commentary at the repeated whole, combined count and opened parts clarifies the transformation. Record concrete editorial and visual findings before reuse.",
+        excludes: "A general annotation system, new native choreography, practice integration or replacement of the accepted document theater.",
+        source: { label: "Approved bounded exemplar", href: "docs/project/2026-10-30-anchored-algebra-exemplar.md" }
       }
     },
     {
@@ -133,6 +133,13 @@ export const projectVision: ProjectVision = {
       after: "The approved mount conversion is complete. Selected-family style ownership is a separate successor; anchored explanation remains the next KP product proposal.",
       reason: "The original two-consumer finish line passed its preservation and integration checks. Retain that completion rather than expanding it into an indefinite architecture task; the workbench lane remains independent.",
       source: { label: "Bounded engine closeout", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" }
+    },
+    {
+      id: "anchored-algebra-candidate", on: "2026-10-30",
+      before: "The next KP product proposal was anchored explanation; document projection and style ownership remained future repairs.",
+      after: "The user approved one bounded algebra candidate. Review its situated commentary before reuse; retain document theater ownership as a later repair, with its accepted behavior preserved.",
+      reason: "The repaired native mount can support a visible teaching experiment now. Test whether proximity makes the explanation useful before building shared annotation infrastructure; the independent workbench retains its separate direction.",
+      source: { label: "Canonical review packet", href: "docs/project/reviews/2026-10-30-anchored-algebra.md" }
     }
   ]
 };

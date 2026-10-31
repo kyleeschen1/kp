@@ -1,0 +1,43 @@
+@import "../../reader/app/exemplar.css";
+@import "../../tutorial/focus-deck-scaffold.css";
+
+/* This one projection owns its composition; native equation and annotation
+   typography retain their existing owners. No neighboring example CSS. */
+#authored-focus-card:has([data-anchored-algebra]) { max-width: 780px; margin: 2.5rem auto; padding: 0 1rem; }
+[data-anchored-algebra] {
+  --kp-st-paper: #fffdf8; --kp-st-header: #506779; --kp-st-header-ink: #fffdf8;
+  --kp-st-rule: #d4d5cf; --kp-st-strong: #20252b; --kp-st-muted: #59645e;
+  --kp-st-focus: #167a80; --kp-st-ink: #20252b;
+  color: var(--kp-st-ink); font-family: var(--kp-serif);
+}
+[data-anchored-algebra] h1 { margin: .3rem 0 .6rem; }
+[data-anchored-algebra] .source-label, [data-anchored-algebra] .review-help { color: var(--kp-st-muted); font: .9rem/1.6 var(--kp-sans); }
+[data-anchored-algebra] .anchored-introduction, [data-anchored-algebra] .anchored-conclusion { line-height: 1.7; }
+[data-anchored-algebra] .anchored-introduction { margin-bottom: 1.5rem; }
+[data-anchored-algebra] .kp-focus-deck__card { height: auto; grid-template-rows: minmax(8rem, auto) 25rem; }
+[data-anchored-algebra] .kp-focus-deck__narrative { order: -1; border-bottom: 1px solid var(--kp-st-rule); }
+[data-anchored-algebra] .kp-focus-deck__narrative > section { height: auto; display: flex; align-items: end; }
+[data-anchored-algebra] .kp-focus-deck__passage-page { min-height: 0; width: 100%; box-sizing: border-box; }
+[data-anchored-algebra] .kp-focus-deck__stage { padding: 0; box-sizing: border-box; border-bottom: 0; align-items: center; }
+[data-anchored-algebra] .kp-reader-equation-stage { min-height: 0; height: 100%; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
+[data-anchored-algebra] .kp-reader-equation-viewport { min-height: 0; height: 100%; }
+[data-anchored-algebra] :is(.kp-reader-equation-stage-heading, .kp-reader-focus-stepper, .kp-reader-equation-hint, .kp-reader-equation-progress) { display: none; }
+[data-anchored-algebra] .anchored-labels, [data-anchored-algebra] .anchored-leaders { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+[data-anchored-algebra] .anchored-labels[hidden] { display: none; }
+[data-anchored-algebra] .kp-focus-deck__annotation { width: min(22rem, calc(100% - 2rem)); text-align: center; color: var(--kp-st-strong); }
+[data-anchored-algebra] .kp-focus-deck__annotation > span { margin-top: .35rem; color: var(--kp-st-muted); }
+[data-anchored-algebra] .anchored-leaders path { fill: none; stroke: var(--kp-st-focus); stroke-width: 1.25; }
+[data-anchored-algebra] .anchored-stops { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; font: .9rem/1.5 var(--kp-sans); margin: 1.3rem 0; }
+[data-anchored-algebra] .anchored-stops a { color: var(--kp-st-focus); text-underline-offset: .2em; }
+[data-anchored-algebra] .anchored-reading { border-block: 1px solid var(--kp-st-rule); padding: 1rem 0; margin: 1.5rem 0; line-height: 1.65; }
+[data-anchored-algebra] .anchored-reading summary { cursor: pointer; }
+[data-anchored-algebra] .anchored-reading section { margin: 2rem 0; }
+[data-anchored-algebra] .anchored-reading h2 { font-size: 1.3rem; }
+[data-anchored-algebra] [data-anchored-error] { color: #922f25; }
+@media (max-width: 46rem) {
+  #authored-focus-card:has([data-anchored-algebra]) { margin: 1.5rem auto; padding: 0 .65rem; }
+  [data-anchored-algebra] .kp-focus-deck__card { grid-template-rows: minmax(10rem, auto) 27rem; }
+}
+@media (forced-colors: active) {
+  [data-anchored-algebra] .anchored-leaders path { stroke: CanvasText; }
+}

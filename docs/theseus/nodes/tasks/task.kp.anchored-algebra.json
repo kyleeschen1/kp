@@ -1,0 +1,104 @@
+{
+  "id": "task.kp.anchored-algebra",
+  "kind": "task",
+  "title": "One anchored algebra explanation",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: review wording, semantic proximity and transit withdrawal in the canonical exemplar.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-30-anchored-algebra-exemplar.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-10-30-anchored-algebra.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:anchored-algebra"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts",
+      "status": "failed",
+      "scope": "Initial discovery",
+      "checkedAt": "2026-10-31T00:30:44.458Z",
+      "notes": "Initial run rejected non-erasable parameter property; following run exposed an unsupported test mutation. Both repaired; clean focused rerun recorded separately."
+    },
+    {
+      "command": "npm run author:check -- --task equation.algebra-intuition --request content/authoring/algebra/what-counts.json",
+      "status": "passed",
+      "scope": "Exact source",
+      "checkedAt": "2026-10-31T00:30:46.163Z",
+      "notes": "Checked first attempt: four states, three existing operations, revision 7b2d98b4554f80a3456ee6891df12dfdf069f76c11af05471b727908e37f2c61."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/algebra-authoring-boundaries.test.ts tests/concise-authoring.test.ts tests/anchored-algebra.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-10-31T00:30:47.743Z",
+      "notes": "10 passed; semantic pin, endpoint selector closure, transit absence, source and shared-mount boundary preservation."
+    },
+    {
+      "command": "npm run visual:anchored-algebra",
+      "status": "passed",
+      "scope": "Canonical Chromium discovery",
+      "checkedAt": "2026-10-31T00:30:49.194Z",
+      "notes": "Final clean run: 3 passed. Desktop and phone captures, direct/reverse/native ownership, reduced motion, URL reload/back, no-JS content, stale link and missing/duplicate anchor rejection. Corrected static/enhanced grid coexistence; no aesthetic approval claimed."
+    },
+    {
+      "command": "npm run visual:algebra-mount -- --grep complete",
+      "status": "passed",
+      "scope": "Actual command used complete algebra native handoff grep",
+      "checkedAt": "2026-10-31T00:30:50.902Z",
+      "notes": "Both four-state and five-state native handoff canaries passed; actual narrow command recorded in review packet."
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "Affected TypeScript",
+      "checkedAt": "2026-10-31T00:30:52.418Z",
+      "notes": "Final app, node and test projects passed. Initial app pass rejected parameter property, fixed and rerun."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Source-linked direction",
+      "checkedAt": "2026-10-31T00:30:54.438Z",
+      "notes": "67 passed; previous direction and finite finish lines retained."
+    },
+    {
+      "command": "npm run visual:algebra-mount -- --grep complete",
+      "status": "not-run",
+      "scope": "Reporting correction",
+      "checkedAt": "2026-10-31T00:31:34.607Z",
+      "notes": "The earlier record abbreviated the grep argument; this literal command was not executed. Exact narrow execution is recorded separately."
+    },
+    {
+      "command": "npm run visual:algebra-mount -- --grep 'complete algebra native handoff'",
+      "status": "passed",
+      "scope": "Existing native callers",
+      "checkedAt": "2026-10-31T00:31:35.546Z",
+      "notes": "Exact command: two passed, four-state and five-state native handoff canaries. Supersedes the abbreviated command record."
+    }
+  ],
+  "revisitWhen": [
+    "User provides visual and editorial feedback on the anchored algebra candidate."
+  ],
+  "expectedLearning": [
+    "Whether situated commentary explains whole-count-part structure."
+  ],
+  "allowedWork": [
+    "One anchored algebra host, local commentary and demonstrated hosting dependencies."
+  ],
+  "disallowedWork": [
+    "Shared promotion, new renderer or math, workbench changes, practice integration."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-native-endpoints",
+      "weight": "high"
+    }
+  ]
+}

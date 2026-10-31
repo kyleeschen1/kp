@@ -26,6 +26,15 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 30 KP product candidate: after the mount closeout, the user approved one
+[anchored algebra explanation](2026-10-30-anchored-algebra-exemplar.md). Its
+[review packet](reviews/2026-10-30-anchored-algebra.md) asks what counts as one
+quantity, with commentary attached to exact whole/count/part selectors at native
+stops. The checked candidate awaits human judgment before reuse. Existing
+choreography, the fractional reader and the independent workbench direction are
+preserved. Document projection repair, other hosts' style migration, practice
+integration and shared annotation promotion remain separate future work.
+
 October 30 independent-workbench proposal: after exploring parallel development,
 rapid iteration and antifragility, the user asks how to proceed. Recommend the
 [first usable collaboration loop](2026-10-30-independent-workbench-v1.md): an

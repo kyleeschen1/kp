@@ -36,6 +36,14 @@ campaign. The next KP proposal is one useful anchored explanation. Workbench
 application, discussion and durable practice records retain their separate owner;
 historical paused runs remain paused.
 
+Current KP product handoff: the user then approved the
+[bounded anchored explanation](../2026-10-30-anchored-algebra-exemplar.md).
+Review [What counts as one thing?](../reviews/2026-10-30-anchored-algebra.md):
+commentary distinguishes the repeated whole, its count and its contributions
+through the existing native algebra path. This is a checked visual candidate,
+not pedagogical acceptance or shared promotion. The independent workbench keeps
+its own next action; this lane stops for judgment before any generalization.
+
 ## Direction and plan ownership
 
 The user selects spaced practice and the LLM co-creation loop as the most
