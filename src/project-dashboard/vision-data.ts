@@ -3,7 +3,7 @@ import type { ProjectVision } from "./vision-model.ts";
 // Review with the roadmap at a milestone handoff or pivot; append the reason for
 // changes. Task progress belongs to Theseus, not this source-linked horizon map.
 export const projectVision: ProjectVision = {
-  reviewedOn: "2026-10-30",
+  reviewedOn: "2026-10-31",
   northStar: "Build and revisit mathematical understanding with an LLM.",
   productProof: "Revise a question, attempt it, record a mistake or uncertainty, and return later to its exact mathematical context.",
   productSource: { label: "Personal practice direction", href: "docs/project/decisions/2026-10-28-co-creative-practice-priority.md" },
@@ -45,15 +45,15 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "reader", title: "Reader & presentation", horizon: "later",
+      id: "reader", title: "Reader & presentation", horizon: "next",
       destination: "Reading and mathematical inspection feel coherent in documents and smaller learning interactions.",
-      established: "The fractional theater treatment remains locally accepted. One anchored algebra explanation now has checked native behavior and awaits human judgment; it is not a shared annotation system.",
+      established: "The fractional theater and anchored annotation treatment are locally accepted. Annotations should have their own explanatory moment without competing with prose; reader integration remains unfinished.",
       evidence: { label: "Anchored explanation review", href: "docs/project/reviews/2026-10-30-anchored-algebra.md" },
       outcome: {
-        id: "anchored-algebra-review", title: "Judge one explanation beside the mathematics it explains",
-        finish: "Review whether commentary at the repeated whole, combined count and opened parts clarifies the transformation. Record concrete editorial and visual findings before reuse.",
-        excludes: "A general annotation system, new native choreography, practice integration or replacement of the accepted document theater.",
-        source: { label: "Approved bounded exemplar", href: "docs/project/2026-10-30-anchored-algebra-exemplar.md" }
+        id: "annotations-in-document-reader", title: "Give annotations their own moment in the accepted reader",
+        finish: "Host the same checked algebra explanation in the accepted document-reader experience. Review a clear handoff between narrative prose and situated annotations, preserve the fractional reader, and retire the replaced standalone shell.",
+        excludes: "A universal annotation system, several-target implementation, new native choreography, workbench changes or catalogue-wide layout migration.",
+        source: { label: "Accepted annotation and consolidation direction", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" }
       }
     },
     {
@@ -69,19 +69,24 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "learning", title: "Experiments & workbench", horizon: "next",
+      id: "learning", title: "Experiments & workbench", horizon: "later",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "Review logs, capability search and project records exist. Some dashboard statuses are historical and require reconciliation.",
-      evidence: { label: "Workbench evidence and gaps", href: "docs/project/reviews/2026-10-28-workbench-evidence.md" },
+      established: "The workbench now belongs to the separate editor lane. Its current host and execution records supersede this branch's older KP-hosted proposal; KP preserves independent mathematical and reader ownership.",
+      evidence: { label: "Parallel ownership and current source", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" },
       outcome: {
-        id: "independent-workbench-v1", title: "Select, discuss, compare and return in an independent workspace",
+        id: "independent-workbench-v1", title: "Preserve exact discussion and practice return in the independently owned workbench",
         finish: "Save anchored commentary and a question/attempt at exact source revisions, compare a candidate, export assistant context, and return after reload. One live KP adapter and isolated fixtures pass bounded failure/recovery checks; review the complete workflow before expansion.",
         excludes: "A repository split, new renderer, full GTD platform, scheduler algorithm, embedded model service or autonomous background agents.",
-        source: { label: "Proposed workbench delivery", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
+        source: { label: "Retained horizon; host and sequence superseded", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
       }
     }
   ],
   completed: [
+    {
+      title: "Anchored annotation treatment accepted",
+      scope: "The user accepts commentary beside the mathematical parts it explains. This closes the local visual experiment; prose coordination, document-reader integration and several-target comments remain separate work.",
+      source: { label: "Scoped acceptance and successor", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" }
+    },
     {
       title: "Shared algebra mounting converted",
       scope: "Composed algebra and distribute/collect share a validated reader owner. Old experiment mount and endpoint paths are removed; native lifecycle checks and complete consumer costs are preserved. Style ownership remains a separate successor.",
@@ -140,6 +145,13 @@ export const projectVision: ProjectVision = {
       after: "The user approved one bounded algebra candidate. Review its situated commentary before reuse; retain document theater ownership as a later repair, with its accepted behavior preserved.",
       reason: "The repaired native mount can support a visible teaching experiment now. Test whether proximity makes the explanation useful before building shared annotation infrastructure; the independent workbench retains its separate direction.",
       source: { label: "Canonical review packet", href: "docs/project/reviews/2026-10-30-anchored-algebra.md" }
+    },
+    {
+      id: "annotation-acceptance-and-consolidation", on: "2026-10-31",
+      before: "A separate card-hosted annotation candidate awaited review while document projection remained a later repair.",
+      after: "The annotation treatment is accepted. This KP lane next consolidates it into the accepted document reader, with its own moment of attention and retirement of the replaced shell. Several-target comments remain future work; no successor contract has started.",
+      reason: "The user values annotations as explanations but objects to format sprawl and competition with normal prose. Keep the useful treatment and complete its integration; the editor workbench remains separately owned.",
+      source: { label: "Accepted reader direction", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" }
     }
   ]
 };

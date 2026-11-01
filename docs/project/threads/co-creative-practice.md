@@ -1,8 +1,17 @@
 # Co-creative mathematical practice
 
-Status: active product direction; first implementation milestone proposed
-Last Updated: 2026-10-30
-Current Next Action: review the proposed
+Status: active product direction; KP annotation treatment accepted, reader consolidation next
+Last Updated: 2026-10-31
+Current Next Action (KP engine lane): consolidate the accepted anchored
+explanation into the accepted document reader. Give annotations their own
+explanatory moment, coordinate surrounding prose, and retire the standalone
+experiment shell when replaced. The [accepted direction](../decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
+preserves both local visual acceptances and names several-target comments as a
+future capability. A concrete successor contract has not been started. The
+editor workbench remains separately owned; its current execution is not this
+branch's queue.
+
+Historical workbench recommendation (superseded as the immediate host/sequence): review the proposed
 [independent workbench delivery](../2026-10-30-independent-workbench-v1.md), with
 exact references, anchored discussion, comparison, bounded recovery and a durable
 personal-practice return. Implementation is not authorized yet. The
@@ -36,13 +45,15 @@ campaign. The next KP proposal is one useful anchored explanation. Workbench
 application, discussion and durable practice records retain their separate owner;
 historical paused runs remain paused.
 
-Current KP product handoff: the user then approved the
+October 30 KP product handoff: the user then approved the
 [bounded anchored explanation](../2026-10-30-anchored-algebra-exemplar.md).
 Review [What counts as one thing?](../reviews/2026-10-30-anchored-algebra.md):
 commentary distinguishes the repeated whole, its count and its contributions
 through the existing native algebra path. This is a checked visual candidate,
 not pedagogical acceptance or shared promotion. The independent workbench keeps
-its own next action; this lane stops for judgment before any generalization.
+its own next action; this lane stopped for judgment before any generalization.
+The October 31 decision above records the subsequent local annotation acceptance
+and the consolidation successor; it does not claim shared promotion.
 
 ## Direction and plan ownership
 

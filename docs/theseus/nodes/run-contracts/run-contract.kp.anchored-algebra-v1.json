@@ -2,8 +2,8 @@
   "id": "run-contract.kp.anchored-algebra-v1",
   "kind": "run-contract",
   "title": "Anchored algebra visual candidate",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 1/1 candidate slices complete; mandatory exemplar judgment before reuse.",
+  "status": "resolved",
+  "summary": "COMPLETE: 1/1 candidate slices checked and backed up; local annotation treatment accepted on 2026-10-31. Preserve this finite completion. Document-reader consolidation and integrated attention require a successor contract; several-target comments remain future work.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,6 +14,10 @@
       "kind": "file",
       "path": "docs/project/2026-10-30-anchored-algebra-exemplar.md",
       "summary": "Approved by user go after shared-mount closeout."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md"
     }
   ],
   "verification": [
@@ -41,7 +45,7 @@
     {
       "id": "exemplar",
       "title": "Build and verify the canonical candidate",
-      "summary": "Checked canonical candidate and review packet ready; human judgment remains, with no promotion authorized.",
+      "summary": "Checked candidate and review packet delivered; user accepts the annotation treatment on 2026-10-31. Document-reader consolidation and noncompeting prose coordination remain successor work; no shared promotion or several-target capability is claimed.",
       "status": "complete"
     }
   ]

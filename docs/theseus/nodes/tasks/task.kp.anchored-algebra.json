@@ -2,9 +2,9 @@
   "id": "task.kp.anchored-algebra",
   "kind": "task",
   "title": "One anchored algebra explanation",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: review wording, semantic proximity and transit withdrawal in the canonical exemplar.",
+  "summary": "COMPLETE at candidate scope: user accepts the annotation treatment. Reader consolidation and a distinct annotation moment without competing prose are accepted successor direction; several-target comments remain future work. No integration or generalization is claimed.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-10-30-anchored-algebra.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md"
     }
   ],
   "verification": [
@@ -81,6 +85,13 @@
       "scope": "Existing native callers",
       "checkedAt": "2026-10-31T00:31:35.546Z",
       "notes": "Exact command: two passed, four-state and five-state native handoff canaries. Supersedes the abbreviated command record."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Acceptance and direction records",
+      "checkedAt": "2026-11-01T00:50:03.774Z",
+      "notes": "67 tests passed after recording scoped annotation acceptance and the reader consolidation successor. No runtime presentation changed."
     }
   ],
   "revisitWhen": [

@@ -70,3 +70,13 @@ Integration destination is the shared KP checkout; no merge authority is implied
 The workbench refinement at `b12ac7413` remains a separate integration dependency.
 
 Theseus owns execution under `run-contract.kp.anchored-algebra-v1`.
+
+## Scoped acceptance, 2026-10-31
+
+The user accepts the annotation treatment and asks that it have its own
+explanatory moment, without competing with normal prose. The
+[accepted follow-up direction](decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
+selects consolidation into the accepted document reader and later retirement of
+this candidate's standalone shell. Preserve the finite candidate completion;
+reader conversion and integrated attention are successor work. Several distinct
+targets for one comment remain a future capability, not an added slice here.

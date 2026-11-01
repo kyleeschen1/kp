@@ -1,7 +1,19 @@
 # Anchored algebra: canonical review candidate
 
-Status: HUMAN_CHECKPOINT — implementation checked; editorial and visual judgment pending.
+Status: annotation treatment accepted on 2026-10-31; reader consolidation and prose/annotation coordination remain successor work.
 Scope: [approved bounded exemplar](../2026-10-30-anchored-algebra-exemplar.md).
+
+## Subsequent human judgment
+
+The user accepts the annotation format, including its potential to carry an
+explanation more directly than the heading text passage. They reject continued
+format sprawl and require annotations to have their own moment without competing
+with ordinary prose. The [accepted direction](../decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
+preserves this local acceptance and selects integration into the accepted document
+reader as the next outcome. One comment pointing to several distinct things is a
+future capability. The card shell is not promoted; integrated choreography,
+several-target behavior and a general annotation system are not yet demonstrated.
+The original review packet below remains the evidence for the candidate reviewed.
 
 ## Inspect the explanation
 
@@ -82,7 +94,7 @@ checks above and affected type projects. No production build or full browser
 certification matrix is claimed. Native rendering itself is unchanged; no cost
 baseline was raised and no performance improvement is claimed.
 
-## Handoff and remaining decision
+## Original checkpoint handoff
 
 Branch: `spike/20261030-anchored-algebra`, based on the completed mount conversion
 `a4978530b9f47ce8ce1a64239c1aff42951f2f86`. This conversation owns the candidate;

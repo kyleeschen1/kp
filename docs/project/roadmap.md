@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-10-30
+Last Updated: 2026-10-31
 Status: active
 Active Thread: `threads/co-creative-practice.md`
 Supporting Threads:
@@ -25,6 +25,17 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+October 31 KP annotation acceptance: the user accepts the anchored annotation
+treatment and wants it to have its own explanatory moment, without competing
+with normal prose. The [accepted direction](decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
+selects consolidation into the accepted document reader as this lane's next
+outcome, with retirement of the standalone experiment shell after replacement.
+The candidate's local annotation acceptance is complete; integrated attention
+choreography and reader reuse remain unfinished. One comment addressing several
+distinct things is a future capability. No successor implementation contract is
+started here. The independent editor workbench retains its own owner and current
+direction; the older workbench proposal below is provenance, not its live queue.
 
 October 30 KP product candidate: after the mount closeout, the user approved one
 [anchored algebra explanation](2026-10-30-anchored-algebra-exemplar.md). Its
