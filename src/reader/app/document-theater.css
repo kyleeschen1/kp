@@ -22,7 +22,7 @@
   body[data-kp-reader-layout="rising-passages"] .kp-reader-layout > .kp-lesson-toc { display: none; }
   body[data-kp-reader-layout="rising-passages"]:not([data-kp-reader-hydrated]) .kp-animation-static > [data-kp-static-state][hidden] { display: none; }
   body[data-kp-reader-layout="rising-passages"]:not([data-kp-reader-hydrated]) .kp-animation-static > [data-kp-static-state]:not([hidden]) {
-    display: grid; place-items: center; height: 82px; min-height: 0;
+    display: grid; place-items: center; height: var(--kp-document-equation-height, 82px); min-height: 0;
     border: 0; border-radius: 0; background: transparent;
     font-size: var(--kp-equation-type-size);
   }
@@ -42,7 +42,7 @@
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-story { display: contents; }
   html body[data-kp-reader-layout="rising-passages"] .kp-animation-static {
     position: absolute; top: calc(var(--kp-flow-line-in-card) + 14px);
-    left: 0; width: 100%; height: 82px;
+    left: 0; width: 100%; height: var(--kp-document-equation-height, 82px);
   }
   html body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-stage {
     display: flex; flex-direction: column; height: 100%; min-height: 0;
@@ -55,7 +55,7 @@
   body[data-kp-reader-layout="rising-passages"] :is([data-kp-reader-stage-kicker], [data-kp-reader-stage-status], .kp-reader-equation-hint, .kp-reader-equation-progress) { display: none; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-controls { margin: 0; }
   html body[data-kp-reader-layout="rising-passages"] .kp-reader-equation-viewport {
-    flex: 0 0 82px; margin: 0; width: 100%; min-height: 0;
+    flex: 0 0 var(--kp-document-equation-height, 82px); margin: 0; width: 100%; min-height: 0;
   }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-reader-equation-fit-surface, .kp-reader-equation-material-fit-surface) {
     --kp-canonical-equation-type-size: clamp(1.275rem, 5.95cqi, 1.7rem);

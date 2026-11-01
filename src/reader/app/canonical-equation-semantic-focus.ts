@@ -1,5 +1,6 @@
 import type { KpReaderFocusSnapshot } from "../runtime/public-api.ts";
 import type { KpReaderEquationRenderPlan } from "../renderers/public-api.ts";
+import { isKpVerifiedEquationEndpointHandoff, type KpVerifiedEquationEndpointHandoff } from "../../semantic/equation-endpoint-handoff.ts";
 
 export interface KpCanonicalEquationSemanticFocusProjection {
   readonly activeSource?: string | undefined;
@@ -22,12 +23,20 @@ export function canonicalEquationPaintRevision(
 
 /** Focus follows canonical lineage so a link never points at hidden old paint. */
 export function compileKpCanonicalEquationSemanticFocusLineage(
-  plans: readonly KpReaderEquationRenderPlan[]
+  plans: readonly KpReaderEquationRenderPlan[],
+  handoffs: readonly KpVerifiedEquationEndpointHandoff[] = []
 ): KpCanonicalEquationSemanticFocusLineage {
+  if (!handoffs.every(isKpVerifiedEquationEndpointHandoff)) throw new TypeError("Focus lineage requires issued endpoint handoffs.");
   const neighbors = new Map<string, Set<string>>();
-  for (const relation of plans.flatMap(({ transitions }) =>
+  // A native view exchange retains semantic identity even when its selector
+  // partition changes. Both clones must inherit the same focus before paint.
+  const relations = plans.flatMap(({ transitions }) =>
     transitions.flatMap((transition) => transition.relations)
-  )) {
+  );
+  const exchanges = handoffs.flatMap(handoff => handoff.coverage.map(coverage => ({
+    sourceSelectorIds: [coverage.sourceSelectorId], targetSelectorIds: coverage.targetSelectorIds
+  })));
+  for (const relation of [...relations, ...exchanges]) {
     const selectors = [
       ...relation.sourceSelectorIds,
       ...relation.targetSelectorIds

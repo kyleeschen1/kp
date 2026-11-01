@@ -86,6 +86,8 @@ export function measureKpCanonicalEquationStageLayout(input: {
   readonly staticPlans: ReadonlyMap<string, KpCanonicalEquationStaticPlan>;
   readonly stageLayoutIntent?: KpEquationStageLayoutIntent | undefined;
   readonly stageLayoutCompiler?: KpReaderEquationStageLayoutCompiler | undefined;
+  /** A document host may reserve more block space; it cannot waive fit laws. */
+  readonly reserveViewportHeight?: ((minimumHeight: number) => boolean) | undefined;
 }): KpCanonicalEquationStageLayout {
   if (
     (input.stageLayoutIntent === undefined) !==
@@ -279,11 +281,21 @@ export function measureKpCanonicalEquationStageLayout(input: {
         minScale: 0.68
       });
   if (certifiedSequenceFit?.status === "overflow") {
+    const minimumWidth = Math.ceil(certifiedSequenceFit.contentBounds.width * certifiedSequenceFit.scale + certifiedSequenceFit.horizontalPadding * 2);
+    const minimumHeight = Math.ceil(certifiedSequenceFit.contentBounds.height * certifiedSequenceFit.scale + (certifiedSequenceFit.verticalPadding ?? 0) * 2);
+    if (minimumWidth <= input.viewport.clientWidth && minimumHeight > input.viewport.clientHeight
+      && input.reserveViewportHeight?.(minimumHeight)) {
+      // A resized viewport changes centered native coordinates. Reissue all
+      // measurements once; never reuse the old certificate or shrink the floor.
+      const { reserveViewportHeight: _reserve, ...resized } = input;
+      return measureKpCanonicalEquationStageLayout(resized);
+    }
     throw new Error(
       `Certified equation-stage sequence ${input.animationId} requires scale ` +
       `${certifiedSequenceFit.requiredScale.toFixed(3)}, below its readable ` +
       `${certifiedSequenceFit.scale.toFixed(3)} floor at ` +
-      `${input.viewport.clientWidth}x${input.viewport.clientHeight}.`
+      `${input.viewport.clientWidth}x${input.viewport.clientHeight}; ` +
+      `certified content ${certifiedSequenceFit.contentBounds.width.toFixed(2)}x${certifiedSequenceFit.contentBounds.height.toFixed(2)}.`
     );
   }
   const contexts = new Map(measured.map((context) => {

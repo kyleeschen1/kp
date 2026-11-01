@@ -4,12 +4,54 @@ import source from "../content/authoring/algebra/what-counts.json" with { type: 
 const route = "/reader/what-counts/";
 async function ready(page: Page) {
   await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', /ready|failed/, { timeout: 90_000 });
-  await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', 'ready', { timeout: 90_000 });
+  await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', 'ready');
 }
 async function jump(page: Page, id: string) {
   await page.locator('.kp-rising-navigation > summary').click();
   await page.locator(`.kp-lesson-toc a[href="#${id}"]`).click();
 }
+
+test("equation remains painted after initial load and reload", async ({ page }, info) => {
+  test.setTimeout(90_000);
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const hash of ['', '#state.what-counts.counted']) {
+      await page.goto(route + hash);
+      for (const load of ['initial', 'reload']) {
+        if (load === 'reload') await page.reload();
+        await ready(page);
+        const paintedText = () => page.locator('[data-kp-reader-equation-stage]').evaluate(stage => {
+          const side = stage.dataset['kpReaderNativeEndpoint'];
+          const native = stage.querySelector(`[data-kp-reader-transition-active="true"] [data-kp-reader-native="${side}"] .katex-html`);
+          if (!native) return '';
+          const walker = document.createTreeWalker(native, NodeFilter.SHOW_TEXT);
+          let painted = '';
+          for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            if (!node.textContent?.trim()) continue;
+            let alpha = 1;
+            for (let parent = node.parentElement; parent; parent = parent.parentElement) {
+              const css = getComputedStyle(parent);
+              if (css.display === 'none' || css.visibility !== 'visible') { alpha = 0; break; }
+              alpha *= Number(css.opacity);
+            }
+            const range = document.createRange(); range.selectNodeContents(node);
+            const rect = range.getBoundingClientRect();
+            if (alpha > .99 && rect.width > 0 && rect.height > 0) painted += node.textContent;
+          }
+          return painted.replaceAll(/\s/g, '');
+        });
+        const expected = hash ? '5(x+y)' : '3(x+y)+2(x+y)';
+        await expect.poll(paintedText).toBe(expected);
+        // The report was a delayed disappearance after initially readable ink.
+        await page.waitForTimeout(750);
+        expect(await paintedText()).toBe(expected);
+        await page.screenshot({ path: info.outputPath(`${width}-${hash ? 'direct' : 'opening'}-${load}.png`) });
+      }
+    }
+  }
+  expect(errors).toEqual([]);
+});
 test("reader gives native annotations their own moment, reversible and restorable", async ({ page }, info) => {
   test.setTimeout(180_000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));

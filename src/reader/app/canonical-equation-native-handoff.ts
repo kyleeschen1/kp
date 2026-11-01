@@ -50,7 +50,10 @@ export function measureKpCanonicalEquationNativeHandoff(input: {
       if (atom.paintKind !== target.atom.paintKind || atom.visualKey !== target.atom.visualKey || atom.styleFingerprint !== target.atom.styleFingerprint ||
           (atom.baselineY == null) !== (target.atom.baselineY == null) ||
           (atom.baselineY != null && target.atom.baselineY != null && Math.abs((atom.baselineY - atom.rect.top) - (target.atom.baselineY - target.atom.rect.top)) > .5))
-        throw new Error(`Native handoff changed leaf paint, style or baseline at ${coverage.occurrenceId}:${index}.`);
+        throw new Error(`Native handoff changed leaf paint, style or baseline at ${coverage.occurrenceId}:${index}: ` +
+          `paint ${atom.paintKind}/${atom.visualKey} -> ${target.atom.paintKind}/${target.atom.visualKey}; ` +
+          `style ${atom.styleFingerprint} -> ${target.atom.styleFingerprint}; ` +
+          `baseline ${atom.baselineY == null ? 'none' : atom.baselineY - atom.rect.top} -> ${target.atom.baselineY == null ? 'none' : target.atom.baselineY - target.atom.rect.top}.`);
       const key = `${coverage.occurrenceId}.leaf.${index}`;
       sourceAnchors.set(key, anchor(atom, authority.source.object.id, coverage.sourceSelectorId, index));
       targetAnchors.set(key, anchor(target.atom, authority.target.object.id, target.selectorId, index));

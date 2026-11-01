@@ -68,6 +68,8 @@ export function mountDocumentTheater(input: {
   let selected = -1;
   let geometry: KpReaderPiecewiseScrollGeometry | undefined;
   let readAll = false;
+  let disposed = false;
+  let equationHeight = 82;
   const annotationStates = input.beats.map(beat => beat.dataset['kpAnnotationState']);
   let annotationState: string | undefined;
   let returnIndex = 0;
@@ -118,15 +120,16 @@ export function mountDocumentTheater(input: {
     const maxHeight = Math.max(...heights);
     // Paragraph height affects layout once, not the equation's position on each
     // passage exchange. A short caption shares the same bottom reading line.
-    const groupHeight = maxHeight + 14 + 82;
+    const groupHeight = maxHeight + 14 + equationHeight;
     const cardHeight = Math.max(320, groupHeight + 64, annotationStates.some(Boolean) ? maxHeight * 2 + 210 : 0);
     const cardTop = headerHeight + Math.max(16, (available - cardHeight) / 2);
-    const lineWithinCard = annotationStates.some(Boolean) ? cardHeight / 2 - 55 : (cardHeight - groupHeight) / 2 + maxHeight;
+    const lineWithinCard = annotationStates.some(Boolean) ? cardHeight / 2 - 14 - equationHeight / 2 : (cardHeight - groupHeight) / 2 + maxHeight;
     frameTop = -lineWithinCard;
     frameBottom = cardHeight - lineWithinCard;
     readingLine = cardTop + lineWithinCard;
     const cadence = documentPassageCadence(available);
     const style = document.body.style;
+    style.setProperty('--kp-document-equation-height', `${equationHeight}px`);
     style.setProperty('--kp-rising-header-height', `${headerHeight}px`);
     style.setProperty('--kp-caption-card-height', `${cardHeight}px`);
     style.setProperty('--kp-caption-card-top', `${cardTop}px`);
@@ -189,6 +192,19 @@ export function mountDocumentTheater(input: {
   });
   passages.forEach((passage) => observer.observe(passage));
   return {
+    reserveEquationHeight(minimumHeight: number) {
+      if (disposed || readAll || !Number.isFinite(minimumHeight) || minimumHeight <= equationHeight
+        || minimumHeight > window.innerHeight - headerHeight - 64) return false;
+      // The certified compositor supplies the requirement. Retain the reserve
+      // across samples so font/resize notifications cannot oscillate the layout.
+      equationHeight = Math.ceil(minimumHeight);
+      document.body.style.setProperty('--kp-document-equation-height', `${equationHeight}px`);
+      // Native measurement must finish before restoring the document playhead;
+      // retain the old reading geometry until onLayout captures its active beat.
+      // A synchronous seek would reenter the compositor mid-certificate.
+      window.queueMicrotask(() => { if (!disposed) input.onLayout(); });
+      return true;
+    },
     annotationState: () => annotationState,
     readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
@@ -241,6 +257,7 @@ export function mountDocumentTheater(input: {
     measure,
     render,
     dispose() {
+      disposed = true;
       document.removeEventListener('selectionchange', onSelectionChange);
       observer.disconnect();
       readingMode.removeEventListener('click', toggleReading);

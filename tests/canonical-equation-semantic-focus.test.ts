@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { compile } from "../src/authoring/algebra/compile.ts";
+import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 import {
   compileKpCanonicalEquationSemanticFocusLineage,
   canonicalEquationPaintRevision,
@@ -71,4 +73,16 @@ test("semantic focus follows selector lineage across hidden endpoints", () => {
     "factor.copy.six",
     "numerator.x"
   ]));
+});
+
+test("focus crosses issued native view partitions in either direction without absorbing unrelated groups", () => {
+  const { handoffs } = compile(source);
+  const lineage = compileKpCanonicalEquationSemanticFocusLineage([], handoffs);
+  for (const coverage of handoffs[0].coverage) {
+    const expected = new Set([coverage.sourceSelectorId, ...coverage.targetSelectorIds]);
+    for (const selector of expected) assert.deepEqual(new Set(lineage.expand([selector])), expected);
+  }
+  assert.deepEqual(lineage.expand(["unrelated"]), ["unrelated"]);
+  assert.throws(() => Reflect.apply(compileKpCanonicalEquationSemanticFocusLineage, undefined,
+    [[], [{ coverage: handoffs[0].coverage }]]), /issued endpoint handoffs/);
 });

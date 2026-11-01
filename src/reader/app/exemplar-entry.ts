@@ -358,6 +358,7 @@ const chromeFreeCanonicalEquationSession:
       .then(({ createKpChromeFreeCanonicalEquationSession }) =>
         createKpChromeFreeCanonicalEquationSession({
           ...lessonDescriptor.canonicalSession,
+          reserveViewportHeight: risingPassages?.reserveEquationHeight,
           shell: stageShell,
           animation,
           descriptor: lessonDescriptor,
@@ -614,6 +615,9 @@ function onResize(): void {
   applyResponsiveProjection();
   evaluationControls?.refreshViewport();
   updateScrollGeometry();
+  // A resize can restore the playhead before ResizeObserver fires. Invalidate
+  // before that render so new native geometry never uses an old certificate.
+  renderer.refresh('resize');
   const passagePosition = risingPassages?.positionFor(readingBeat, progressPermille);
   if (passagePosition !== undefined) {
     setExplicitProgress(progressPermille, 'controls', false,

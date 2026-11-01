@@ -127,6 +127,48 @@
       "scope": "Shared native descriptor inventory",
       "checkedAt": "2026-11-01T02:06:35.167Z",
       "notes": "All 12 tests pass with the explicitly named new twentieth runtime consumer."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep 'equation remains'",
+      "status": "failed",
+      "scope": "Firefox startup, reload and viewport resize regression",
+      "checkedAt": "2026-11-01T02:24:11.517Z",
+      "notes": "Reproduced an 82px host below the 0.68 readable floor (certified 236.41x68.42px needs 83px height); later reload revealed unequal focus colors across an issued native handoff, and resize used stale row certificates before ResizeObserver invalidation. No fit, paint, baseline or transit guard was relaxed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Firefox repair",
+      "checkedAt": "2026-11-01T02:29:04.257Z",
+      "notes": "All application, Node, test, Svelte and domain projects passed. Final application check repeated after resize and reading-geometry ordering repairs."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Firefox repair",
+      "checkedAt": "2026-11-01T02:29:04.934Z",
+      "notes": "Architecture gates pass with the existing verifier-issued endpoint handoff seam; no new exception or budget change. Equation surface preservation also passes all 11 tests."
+    },
+    {
+      "command": "npm run visual:algebra-mount -- --grep 'complete algebra native handoff'",
+      "status": "passed",
+      "scope": "Firefox repair preservation",
+      "checkedAt": "2026-11-01T02:29:05.918Z",
+      "notes": "Both four-state and five-state native handoff canaries pass."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "Firefox repair preservation",
+      "checkedAt": "2026-11-01T02:29:06.929Z",
+      "notes": "Accepted fractional desktop/phone document behavior passes with shared resize invalidation; readable math, reversal, font reflow, native find, Read all and static/print retained."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox",
+      "status": "passed",
+      "scope": "Final Firefox repair cohort",
+      "checkedAt": "2026-11-01T02:29:50.990Z",
+      "notes": "All 8 tests pass: 4 Chromium and 4 Firefox, including native ink after initial load and reload at desktop/phone widths, direct and legacy links, resize, reverse, reduced motion, selection, Read all and explicit repair gaps. Final-state restoration retains its beat during viewport reservation. Focus/session/baseline unit regressions also pass all 10 tests."
     }
   ],
   "revisitWhen": [

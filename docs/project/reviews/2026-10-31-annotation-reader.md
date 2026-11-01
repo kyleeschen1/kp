@@ -125,3 +125,49 @@ Rollback units: the explicit projection conversion commit, then this integrated
 candidate commit. The mathematical source and independent workbench are preserved.
 Theseus owns the live contract state and verification receipts; this document is
 the review packet, not a duplicated slice queue.
+
+## Firefox disappearance follow-up
+
+The user reported equation ink appearing and vanishing, then recovering, in
+Firefox. Earlier integration evidence covered Chromium. The added real-reader
+startup/reload check reproduced a Firefox failure: the fixed 82px document
+viewport could not contain its measured 236.41×68.42px certified content at the
+existing 0.68 readable scale with 18px padding. It required 83px height.
+
+The canonical measurement boundary can now request a bounded height reserve
+from the document host and remeasure once. The host retains that reserve and
+preserves its previous reading geometry until the layout callback captures the
+active beat. Changing the reading line early had moved an exact final-state link
+back to its preceding prose passage. Neither minimum scale nor padding changed;
+insufficient width or a refused/ineffective reserve still fails the fit guard.
+
+Reload also exposed a focus identity gap: one native view of the counted
+coefficient was blue while the equivalent successor view was unhighlighted.
+Focus lineage now traverses the existing verifier-issued endpoint partitions in
+both directions. A unit regression checks complete group coverage, unrelated
+groups and rejection of fabricated handoffs. Paint/style/baseline comparison
+remains strict, with more useful mismatch diagnostics.
+
+Viewport changes could additionally render before ResizeObserver invalidated
+the previous row certificate. This reproduced in both Firefox and Chromium.
+The reader's resize handler now invalidates before restoring its playhead;
+native measurement and motion routing consume the same layout revision. The
+transit failure was stale geometry, not a reason to change the motif or relax
+its collision checks.
+
+Verification uses `npm run visual:anchored-algebra -- --project=firefox`, which
+runs both Chromium and Firefox. The new regression checks actual visible native
+ink on initial load and reload, opening and direct-state links, desktop and
+phone widths, and a delayed sample after readiness. Existing navigation,
+reversal, selection, Read all, static reading, repair gaps and legacy-link checks
+remain intact. Firefox desktop and phone reload captures were inspected.
+Focused focus/session/baseline suites pass 10 tests; the two native handoff
+canaries, fractional document preservation, full TypeScript, architecture and
+11 equation-surface preservation checks also pass. The final combined browser
+run passes all 8 tests (4 per browser); its receipt is recorded in Theseus.
+
+This repairs the existing candidate; its integration remains at the same visual
+checkpoint. To verify the bug fix, reload the reader and its direct annotation
+link above in Firefox: the equation should stay painted, and the selected
+annotation should survive restoration and resizing. No workbench, mathematical
+source, timing, annotation wording or production registration changes are made.
