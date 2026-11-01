@@ -2,8 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 import { compile } from "../src/authoring/algebra/compile.ts";
-import { AnchoredAlgebraGap, bindAnchoredCommentary } from "../src/experiments/anchored-algebra/commentary.ts";
-import { buildAnchoredAlgebraPage } from "../src/experiments/anchored-algebra/page.ts";
+import { AnchoredAlgebraGap, bindAnchoredCommentary } from "../src/reader/app/what-counts-commentary.ts";
+import { compileWhatCountsLesson } from "../scripts/what-counts-reader-page.ts";
 
 test("commentary resolves exact native views and only mathematical stops", () => {
   const draft = compile(source), commentary = bindAnchoredCommentary(draft);
@@ -28,10 +28,12 @@ test("valid but changed mathematics or wording cannot inherit an old commentary 
   ]) assert.throws(() => bindAnchoredCommentary(compile(changed)), AnchoredAlgebraGap);
 });
 test("static page contains every equation and commentary without enhancement", () => {
-  const html = buildAnchoredAlgebraPage(), commentary = bindAnchoredCommentary(compile(source));
+  const html = compileWhatCountsLesson(), commentary = bindAnchoredCommentary(compile(source));
   for (const state of source.states) assert.ok(html.includes(state.latex));
   for (const stop of commentary.stops) for (const note of stop.notes) {
     assert.ok(html.includes(note.text)); assert.ok(html.includes(note.detail));
   }
-  assert.ok(html.includes("Read the explanation without motion"));
+  assert.ok(html.includes('data-kp-reader-layout="rising-passages"'));
+  assert.ok(!html.includes('data-composed-card'));
+  assert.throws(() => compileWhatCountsLesson('/reader/what-counts/?revision=stale'), AnchoredAlgebraGap);
 });

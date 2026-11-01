@@ -6,6 +6,7 @@ import type { KpReaderEquationPresentationCapability, KpReaderEvaluationControls
 import { compileKpReaderPageShell } from "./reader-page-shell.ts";
 
 export interface KpEquationExemplarPageInput {
+  readonly accessibilityOwner?: "page-static" | "stage";
   readonly projection?: "document-theater";
   readonly equationSource?: unknown;
   readonly animation: KpAnimationAsset;
@@ -32,6 +33,7 @@ export function compileKpEquationExemplarPage(
   input: KpEquationExemplarPageInput
 ): string {
   const template = renderKpEquationPageTemplate(input.animation, input.annotateState, {
+      ...(input.accessibilityOwner ? { accessibilityOwner: input.accessibilityOwner } : {}),
       presentationAnimations: input.presentationAnimations,
       equationPresentation: input.equationPresentation,
       showEquationProfileControl: input.showEquationProfileControl

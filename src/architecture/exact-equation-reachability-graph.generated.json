@@ -1,7 +1,7 @@
 {
   "schemaVersion": "kp.exact-equation-reachability-graph.v1",
   "kind": "exact-equation-reachability-graph",
-  "scannedFileCount": 5146,
+  "scannedFileCount": 5150,
   "roots": [
     {
       "id": "reachability.compiler.compiler.generic-semantic-transition.src/domain-ir/semantic-equation-transition-compiler.ts",
@@ -1447,6 +1447,7 @@
         "src/experiments/reusable-reasoning/evaluation.ts",
         "src/experiments/reusable-reasoning/prompts.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
+        "src/reader/app/algebra-native-descriptor.ts",
         "src/reader/app/algebra-presentation-mount.ts",
         "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/authoring-simplification-preview.ts",
@@ -2361,6 +2362,7 @@
         "src/experiments/reusable-reasoning/evaluation.ts",
         "src/experiments/reusable-reasoning/prompts.ts",
         "src/project-dashboard/generated-algebra-catalog.ts",
+        "src/reader/app/algebra-native-descriptor.ts",
         "src/reader/app/algebra-presentation-mount.ts",
         "src/reader/app/authoring-distribution-preview.ts",
         "src/reader/app/authoring-simplification-preview.ts",
@@ -2866,6 +2868,7 @@
       "authorityId": "facade.reader-runtime",
       "sourceCallers": [
         "src/editor/operation-evaluation-surface-adapter.ts",
+        "src/reader/app/algebra-native-descriptor.ts",
         "src/reader/app/canonical-equation-semantic-focus.ts",
         "src/reader/app/canonical-equation-stage-layout.ts",
         "src/reader/app/chrome-free-canonical-equation-session.ts",

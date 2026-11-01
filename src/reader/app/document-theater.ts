@@ -2,12 +2,14 @@ import { createDocumentTheaterScroll, documentPassageCadence, documentPassageInd
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
+import { documentReadingAttention } from './document-theater-attention.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
   readonly onLayout: () => void;
+  readonly onReadingChange: () => void;
 }) {
   const document = input.story.ownerDocument;
   const window = document.defaultView!;
@@ -66,6 +68,8 @@ export function mountDocumentTheater(input: {
   let selected = -1;
   let geometry: KpReaderPiecewiseScrollGeometry | undefined;
   let readAll = false;
+  const annotationStates = input.beats.map(beat => beat.dataset['kpAnnotationState']);
+  let annotationState: string | undefined;
   let returnIndex = 0;
   const indexAtPosition = () => documentPassageIndex(positions, window.scrollY + readingLine);
   const readingMode = document.createElement('button');
@@ -78,6 +82,8 @@ export function mountDocumentTheater(input: {
     const active = readAll ? returnIndex : indexAtPosition();
     const position = window.scrollY + readingLine;
     const opacity = focusAt(position);
+    const attention = documentReadingAttention({ states: annotationStates, opacity, readingDocument: readAll, hasSelection: selectedPassages.size > 0 });
+    annotationState = attention.kind === 'annotation' ? attention.stateId : undefined;
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
     const neighbors = [active - 1, active, active + 1];
@@ -89,7 +95,7 @@ export function mountDocumentTheater(input: {
       const activeValue = String(index === active);
       const focus = opacity.get(index) ?? 0;
       const front = selectedPassages.has(index) || focus > 0;
-      const alpha = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
+      const alpha = annotationState || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
         ? documentPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
       const paint = String(alpha);
       const present = String(front);
@@ -113,9 +119,9 @@ export function mountDocumentTheater(input: {
     // Paragraph height affects layout once, not the equation's position on each
     // passage exchange. A short caption shares the same bottom reading line.
     const groupHeight = maxHeight + 14 + 82;
-    const cardHeight = Math.max(320, groupHeight + 64);
+    const cardHeight = Math.max(320, groupHeight + 64, annotationStates.some(Boolean) ? maxHeight * 2 + 210 : 0);
     const cardTop = headerHeight + Math.max(16, (available - cardHeight) / 2);
-    const lineWithinCard = (cardHeight - groupHeight) / 2 + maxHeight;
+    const lineWithinCard = annotationStates.some(Boolean) ? cardHeight / 2 - 55 : (cardHeight - groupHeight) / 2 + maxHeight;
     frameTop = -lineWithinCard;
     frameBottom = cardHeight - lineWithinCard;
     readingLine = cardTop + lineWithinCard;
@@ -168,6 +174,7 @@ export function mountDocumentTheater(input: {
     selectedPassages = new Set(passages.flatMap((passage, index) =>
       selection && !selection.isCollapsed && selection.containsNode(passage, true) ? [index] : []));
     render();
+    input.onReadingChange();
   };
   document.addEventListener('selectionchange', onSelectionChange);
   // Observe intrinsic prose metrics, not sticky locations or scroll progress.
@@ -182,6 +189,7 @@ export function mountDocumentTheater(input: {
   });
   passages.forEach((passage) => observer.observe(passage));
   return {
+    annotationState: () => annotationState,
     readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
       geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight);

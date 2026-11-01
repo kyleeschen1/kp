@@ -14,6 +14,7 @@ import {
 export const fractionCompositionDescriptor =
   defineKpCanonicalEquationLessonDescriptor({
     id: "fraction-composition",
+    canonicalSession: {},
     createAnimation: () =>
       createKpFractionCompositionEquationAnimationAsset(),
     bindStructuralAnchors: bindKpFractionCompositionStructuralAnchors,

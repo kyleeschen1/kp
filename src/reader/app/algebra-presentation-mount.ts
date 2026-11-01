@@ -1,3 +1,4 @@
+import { algebraNativeDescriptor } from "./algebra-native-descriptor.ts";
 import { assertKpPreparedCommonFactorDraft, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
 import { commonFactorPresentationEndpoints, composedAlgebraOperationEndpoints, composedAlgebraEndpointsV2 } from "./algebra-presentation-endpoints.ts";
 import { assertKpComposedAlgebraPresentation, type KpComposedAlgebraPresentation } from "../../authoring/composed-algebra-presentation.ts";
@@ -11,12 +12,9 @@ import { findKpRegisteredOperationPresentationPlan } from "../../animation/opera
 import { compileKpEquationExemplarTemplate } from "../../rendering/equation-stage-template.ts";
 import { mountKpCanonicalEquationStageShell } from "./canonical-equation-stage-shell.ts";
 import { createKpChromeFreeCanonicalEquationSession } from "./chrome-free-canonical-equation-session.ts";
-import { defineKpCanonicalEquationLessonDescriptor, bindKpReaderEquationLessonStructuralAnchors } from "./equation-lesson-descriptor.ts";
-import { bindKpStructuredEquationSemanticEnvelopes } from "../../rendering/structured-equation-semantic-envelopes.ts";
-import { applyKpSemanticEnvelopeEquationStageLayout } from "./semantic-envelope-stage-layout.ts";
+import { bindKpReaderEquationLessonStructuralAnchors } from "./equation-lesson-descriptor.ts";
 import { resolveKpReaderEquationPresentationProfile } from "../document/public-api.ts";
 import { createKpReaderTimelinePlaybackClock } from "../runtime/learner-public-api.ts";
-import type { KpReaderEquationLessonDescriptor } from "./equation-lesson-descriptor.ts";
 import { createKpFocusDeckCheckpointMap } from "../../tutorial/focus-deck-beat-navigation.ts";
 import { assertDistributeCollect, type DistributeCollectPresentation } from "../../authoring/distribute-collect-presentation.ts";
 import { distributeCollectEndpoints } from "./algebra-presentation-endpoints.ts";
@@ -76,17 +74,7 @@ async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: 
   card.dataset["canonicalPresentationOwner"] = presentation.owner;
   card.dataset["canonicalPresentationReference"] = presentation.canonicalReference;
   card.dataset["canonicalPresentationRevision"] = presentation.revisionId;
-  const descriptor = defineKpCanonicalEquationLessonDescriptor({ id: "authored-common-factor", createAnimation: () => animation,
-    compactTranscriptAvailable: true,
-    bindStructuralAnchors: ({ root, state }) => {
-      const endpoint = endpoints.find(e => e.stateId === state.id);
-      if (!endpoint) throw new Error("Unknown common-factor native endpoint.");
-      bindKpStructuredEquationSemanticEnvelopes({ root, endpoint, envelopeIds: endpoint.groupEnvelopes.map(e => e.id), realization: "virtual" });
-    },
-    stageLayoutCompiler: { apply: input => applyKpSemanticEnvelopeEquationStageLayout({ ...input,
-      endpoints: endpoints.map(e => ({ objectId: e.stateId, groupEnvelopes: e.groupEnvelopes })),
-      envelopeDataKey: "kpEquationStageEnvelopeId", memberDataKey: "kpEquationStageMemberId", envelopeObservation: "member-paint-union", diagnosticLabel: "Common factoring" }) }
-  } satisfies Omit<KpReaderEquationLessonDescriptor, "canonicalTransitionSelection">);
+  const descriptor = algebraNativeDescriptor(animation, endpoints);
   const container = document.createElement("div");
   container.innerHTML = compileKpEquationExemplarTemplate(animation, state => endpoints.find(e => e.stateId === state.id)?.annotated);
   const template = container.querySelector<HTMLTemplateElement>("template")!;
@@ -96,9 +84,7 @@ async function mountResolvedCanonicalOperation(card: HTMLElement, presentation: 
   const session = await createKpChromeFreeCanonicalEquationSession({ shell, animation, descriptor, prewarmAdjacentTransitions: false,
     evaluationCertificates, endpointHandoffs,
     equationPresentationProfile: resolveKpReaderEquationPresentationProfile("standard"), linkRoot: card,
-    createStageLayoutIntent: () => ({ executionState: "intent", geometryAuthority: "native-measurement", operationSpecificCoordinates: false,
-      phases: animation.transformations.map(operation => ({ nodeId: operation.id, policy: "single-row", rows: [{ id: "row.common-factor.expression", role: "expression",
-        envelopeIds: endpoints.filter(e => [...operation.sourceObjectIds, ...operation.targetObjectIds].includes(e.stateId)).flatMap(e => e.groupEnvelopes.map(g => g.id)) }] })) }) });
+    createStageLayoutIntent: descriptor.createStageLayoutIntent });
   const durationMs = animation.timeline?.durationMs;
   if (durationMs === undefined) { session.dispose(); throw new Error("Missing factoring timeline."); }
   const clock = createKpReaderTimelinePlaybackClock({ id: `reader.${animation.id}`, durationMs, ownerWindow: window });

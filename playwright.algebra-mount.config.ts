@@ -9,11 +9,11 @@ export default defineConfig({
   // The worktree itself has a .worktrees ancestor; discovery is already scoped.
   testIgnore: [],
   grep: /distribute-collect .*native stops|complete algebra native handoff|interrupted motion yields|composed authoring applies|composed remount|temporarily collapsed|both retained sources round-trip/,
-  use: { ...base.use, baseURL: "http://127.0.0.1:8011" },
+  use: { ...base.use, baseURL: "http://127.0.0.1:8013" },
   outputDir: "tmp/codex/algebra-mount",
   webServer: {
-    command: "npm run dev:client -- --host 127.0.0.1 --port 8011 --strictPort",
-    url: "http://127.0.0.1:8011",
+    command: "npm run dev:client -- --host 127.0.0.1 --port 8013 --strictPort",
+    url: "http://127.0.0.1:8013",
     reuseExistingServer: false,
     timeout: 120_000
   }

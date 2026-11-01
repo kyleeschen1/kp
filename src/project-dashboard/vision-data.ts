@@ -47,8 +47,8 @@ export const projectVision: ProjectVision = {
     {
       id: "reader", title: "Reader & presentation", horizon: "next",
       destination: "Reading and mathematical inspection feel coherent in documents and smaller learning interactions.",
-      established: "The fractional theater and anchored annotation treatment are locally accepted. Annotations should have their own explanatory moment without competing with prose; reader integration remains unfinished.",
-      evidence: { label: "Anchored explanation review", href: "docs/project/reviews/2026-10-30-anchored-algebra.md" },
+      established: "The fractional theater and anchored annotation treatment are locally accepted. Their integrated reader candidate now gives annotations separate reading moments and retires the card shell; integrated visual judgment remains open.",
+      evidence: { label: "Integrated reader review", href: "docs/project/reviews/2026-10-31-annotation-reader.md" },
       outcome: {
         id: "annotations-in-document-reader", title: "Give annotations their own moment in the accepted reader",
         finish: "Host the same checked algebra explanation in the accepted document-reader experience. Review a clear handoff between narrative prose and situated annotations, preserve the fractional reader, and retire the replaced standalone shell.",
@@ -152,6 +152,13 @@ export const projectVision: ProjectVision = {
       after: "The annotation treatment is accepted. This KP lane next consolidates it into the accepted document reader, with its own moment of attention and retirement of the replaced shell. Several-target comments remain future work; no successor contract has started.",
       reason: "The user values annotations as explanations but objects to format sprawl and competition with normal prose. Keep the useful treatment and complete its integration; the editor workbench remains separately owned.",
       source: { label: "Accepted reader direction", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" }
+    },
+    {
+      id: "annotation-reader-candidate", on: "2026-10-31",
+      before: "The annotation treatment was accepted and consolidation into the document reader was the proposed successor.",
+      after: "The user approved consolidation. Review the integrated reader's distinct annotation moments; the shared document projection replaces the separate card shell while preserving the fractional reference.",
+      reason: "Complete the accepted format rather than adding another host. The implementation is a visual candidate, not shared annotation promotion; several-target comments and the separate workbench retain their boundaries.",
+      source: { label: "Integrated candidate and preservation evidence", href: "docs/project/reviews/2026-10-31-annotation-reader.md" }
     }
   ]
 };

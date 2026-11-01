@@ -9,6 +9,7 @@ export interface DocumentPassageOperation {
 /** Layout consumes checked story bindings; it never infers mathematical moves. */
 export interface DocumentTheaterProjection {
   readonly operations: ReadonlyMap<string, DocumentPassageOperation>;
+  readonly annotations?: ReadonlyMap<string, string>;
 }
 
 export function assertDocumentTheaterProjection(document: KpLessonDocument, projection: DocumentTheaterProjection): number {
@@ -18,6 +19,10 @@ export function assertDocumentTheaterProjection(document: KpLessonDocument, proj
     throw new Error("Document theater requires one complete flat beat sequence.");
   let previous = 0;
   const ids = new Set(story.beats.map(beat => beat.id));
+  for (const [id, state] of projection.annotations ?? []) {
+    if (!ids.has(id) || !state || projection.operations.has(id))
+      throw new Error(`Document annotation ${id} requires a stationary declared passage.`);
+  }
   for (const id of projection.operations.keys()) {
     if (!ids.has(id)) throw new Error(`Document operation refers to missing passage ${id}.`);
   }

@@ -102,12 +102,14 @@ function storyHtml(
     `<ol class="kp-animation-beats" aria-label="Explanation steps">`,
     ...block.beats.map((beat) => {
       const operation = theater?.operations.get(beat.id);
+      const annotation = theater?.annotations?.get(beat.id);
       const operationAttributes = operation ? ` data-kp-operation-id="${attribute(operation.transformationId)}" data-kp-operation-start="${operation.start}" data-kp-operation-end="${operation.end}"` : '';
       return [
-      `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}" data-kp-focus="${attribute(beat.focusRefs.join(" "))}"${operationAttributes}>`,
+      `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}" data-kp-focus="${attribute(beat.focusRefs.join(" "))}"${operationAttributes}${annotation ? ` data-kp-annotation-state="${attribute(annotation)}"` : ''}>`,
       ...(theater ? [`<div class="kp-rising-passage" id="caption.${attribute(beat.id)}" data-kp-rising-beat="${attribute(beat.id)}"><div class="kp-caption-copy">`] : []),
       `<div class="kp-beat-copy">`,
       `<h2${theater ? " hidden" : ""}>${text(beat.title)}</h2>`,
+      ...(annotation ? [`<div class="kp-annotation-static-equation">${staticMath?.states.find(state => state.beatId === beat.id)?.html ?? ''}</div>`] : []),
       `<p>${inlineHtml(beat.content)}</p>`,
       `</div>`,
       ...(theater ? ["</div></div>"] : []),

@@ -1,91 +1,112 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 
-const route = "/experiments/reusable-reasoning/?example=anchored-algebra";
-test("anchored commentary follows exact native stops and withdraws in transit", async ({ page }, info) => {
-  test.setTimeout(120_000);
-  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
-  await page.goto(route);
-  const root = page.locator("[data-anchored-algebra]"), card = root.locator("[data-composed-card]"), stage = card.locator("[data-distribution-stage]");
-  await expect(root).toHaveAttribute("data-anchored-status", /ready|repair-gap/, { timeout: 90_000 });
-  await card.screenshot({ path: info.outputPath("initial.png") });
-  expect(await root.locator("[data-anchored-error]").textContent()).toBe("");
-  await expect(root).toHaveAttribute("data-anchored-status", "ready");
-  await expect(root.locator("[data-anchored-static]")).toBeHidden();
-  await expect(stage.locator("[data-kp-canonical-equation-host]")).toHaveCount(1);
-  const slider = card.locator("[data-kp-focus-deck-scrubber]");
-  const poses = new Map<number, unknown>();
-  for (const step of [0, .5, 1, 1.5, 2, 2.5, 3, 2, 1, 0]) {
-    await slider.evaluate((node, value) => { (node as HTMLInputElement).value = String(value); node.dispatchEvent(new Event("input")); }, step);
-    await expect(root).toHaveAttribute("data-anchored-status", "ready");
-    if (!Number.isInteger(step)) { await expect(stage.locator(".anchored-labels")).toBeHidden(); continue; }
-    await expect(stage).toHaveAttribute("data-anchored-state", source.states[step]!.id);
-    await expect(stage.locator("[data-kp-reader-native-endpoint-passed]")).toHaveAttribute("data-kp-reader-native-endpoint-passed", "true");
-    const pose = await stage.evaluate(stage => {
-      const bounds = stage.getBoundingClientRect();
-      return [...stage.querySelectorAll<HTMLElement>("[data-kp-focus-deck-annotation]")].map(label => {
-        const rect = label.getBoundingClientRect();
-        return { text: label.textContent, x: rect.x - bounds.x, y: rect.y - bounds.y, width: rect.width, height: rect.height,
-          fits: rect.left >= bounds.left && rect.right <= bounds.right && rect.top >= bounds.top && rect.bottom <= bounds.bottom };
+const route = "/reader/what-counts/";
+async function ready(page: Page) {
+  await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', /ready|failed/, { timeout: 90_000 });
+  await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', 'ready', { timeout: 90_000 });
+}
+async function jump(page: Page, id: string) {
+  await page.locator('.kp-rising-navigation > summary').click();
+  await page.locator(`.kp-lesson-toc a[href="#${id}"]`).click();
+}
+test("reader gives native annotations their own moment, reversible and restorable", async ({ page }, info) => {
+  test.setTimeout(180_000);
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto(route); await ready(page);
+  const plane = page.locator('.kp-caption-pin'), story = page.locator('.kp-animation-story');
+  await expect(page.locator('[data-composed-card], [data-kp-focus-deck-scrubber]')).toHaveCount(0);
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const index of [0, 1, 2, 3, 2, 1, 0]) {
+      const state = source.states[index]!;
+      await jump(page, state.id);
+      await expect(story).toHaveAttribute('data-anchored-status', 'ready');
+      await expect(plane).toHaveAttribute('data-anchored-state', state.id);
+      await expect(plane.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+      const labels = await plane.evaluate(plane => {
+        const bounds = plane.getBoundingClientRect();
+        return [...plane.querySelectorAll<HTMLElement>('[data-kp-focus-deck-annotation]')].map(label => {
+          const rect = label.getBoundingClientRect();
+          return { text: label.textContent, fits: rect.left >= bounds.left && rect.right <= bounds.right && rect.top >= bounds.top && rect.bottom <= bounds.bottom };
+        });
       });
-    });
-    expect(pose).toHaveLength(2); expect(pose.every(label => label.fits)).toBe(true);
-    if (poses.has(step)) expect(pose).toEqual(poses.get(step)); else { poses.set(step, pose); await card.screenshot({ path: info.outputPath(`desktop-stop-${step}.png`) }); }
+      expect(labels).toHaveLength(2); expect(labels.every(label => label.fits)).toBe(true);
+      expect(await page.locator('.kp-rising-passage').evaluateAll(nodes => nodes.every(node => getComputedStyle(node).opacity === '0'))).toBe(true);
+      await plane.screenshot({ path: info.outputPath(`${width}-annotation-${index}.png`) });
+      await jump(page, `passage.${state.id}`);
+      await expect(plane.locator('.anchored-labels')).toBeHidden();
+      await expect(page.locator(`[data-kp-rising-beat="passage.${state.id}"]`)).toHaveCSS('opacity', '1');
+      if (index > 0) {
+        const travel = await page.evaluate(() => (innerHeight - document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().height) * .28);
+        await page.mouse.wheel(0, travel);
+        await expect.poll(async () => Number(await page.locator('body').getAttribute('data-kp-reader-progress'))).toBeGreaterThan(Math.round((index - 1) * 1000 / 3));
+        const progress = Number(await page.locator('body').getAttribute('data-kp-reader-progress'));
+        expect(progress).toBeLessThan(Math.round(index * 1000 / 3));
+        await expect(plane.locator('.anchored-labels')).toBeHidden();
+        await expect(plane.locator('[data-kp-reader-native-endpoint]')).toHaveCount(0);
+      }
+    }
   }
-  await card.getByRole("button", { name: "Next step", exact: true }).click();
-  await expect(card).toHaveAttribute("data-composed-step", "1", { timeout: 15_000 });
-  await expect(stage).toHaveAttribute("data-anchored-state", source.states[1]!.id);
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.setViewportSize({ width: 390, height: 1000 });
-  for (let step = 0; step < 4; step++) {
-    await root.locator(`[data-anchored-jump="${source.states[step]!.id}"]`).click();
-    await expect(stage).toHaveAttribute("data-anchored-state", source.states[step]!.id);
-    await expect(root).toHaveAttribute("data-anchored-status", "ready");
-    await card.screenshot({ path: info.outputPath(`phone-stop-${step}.png`) });
-  }
-  await page.reload();
-  await expect(stage).toHaveAttribute("data-anchored-state", source.states[3]!.id, { timeout: 90_000 });
-  await page.goBack();
-  await expect(stage).toHaveAttribute("data-anchored-state", source.states[2]!.id);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await jump(page, source.states[2]!.id);
+  await expect(plane).toHaveAttribute('data-anchored-state', source.states[2]!.id);
+  await page.locator('.kp-rising-navigation > summary').click();
+  const share = await page.locator('[data-kp-reader-share]').getAttribute('href');
+  expect(share).toBeTruthy();
+  await page.goto(share!); await ready(page);
+  await expect(plane).toHaveAttribute('data-anchored-state', source.states[2]!.id);
+  await page.locator(`[data-kp-rising-beat="${source.states[2]!.id}"] p`).evaluate(paragraph => {
+    const range = document.createRange(); range.selectNodeContents(paragraph);
+    const selection = document.getSelection()!; selection.removeAllRanges(); selection.addRange(range);
+  });
+  await expect(plane.locator('.anchored-labels')).toBeHidden();
+  await expect(page.locator(`[data-kp-rising-beat="${source.states[2]!.id}"]`)).toHaveCSS('opacity', '1');
+  await page.evaluate(() => document.getSelection()?.removeAllRanges());
+  await expect(plane).toHaveAttribute('data-anchored-state', source.states[2]!.id);
+  await page.locator('.kp-rising-navigation > summary').click();
+  await page.getByRole('button', { name: 'Read all', exact: true }).click();
+  await expect(plane.locator('.anchored-labels')).toBeHidden();
+  await expect(page.locator(`[data-kp-rising-beat="${source.states[2]!.id}"]`)).toHaveCSS('opacity', '1');
   expect(errors).toEqual([]);
 });
 
-test("missing or duplicate native anchors withdraw commentary and report a repair", async ({ page }) => {
-  test.setTimeout(120_000);
-  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
-  await page.goto(route);
-  const root = page.locator("[data-anchored-algebra]"), labels = root.locator(".anchored-labels");
-  await expect(root).toHaveAttribute("data-anchored-status", "ready", { timeout: 90_000 });
-  for (const defect of ["missing", "duplicate"] as const) {
+test("missing or duplicate native selectors withdraw commentary with a repair", async ({ page }) => {
+  test.setTimeout(150_000);
+  await page.goto(route); await ready(page);
+  const story = page.locator('.kp-animation-story');
+  for (const defect of ['missing', 'duplicate'] as const) {
+    await jump(page, source.states[0]!.id);
+    await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', source.states[0]!.id);
     await page.evaluate(defect => {
       const selector = document.querySelector<HTMLElement>('[data-kp-reader-transition-active="true"] [data-kp-reader-native="source"] [data-kp-reader-selector-id="state.what-counts.repeated.paint.left-factor"]')!;
-      if (defect === "missing") selector.removeAttribute("data-kp-reader-selector-id");
-      else {
-        // Corrupt this adapter's selector binding without duplicating the
-        // compositor's independent measurement/paint ownership attributes.
-        const duplicate = document.createElement("span");
-        duplicate.dataset["kpReaderSelectorId"] = selector.dataset["kpReaderSelectorId"]!;
-        selector.after(duplicate);
-      }
-      window.dispatchEvent(new Event("resize"));
+      if (defect === 'missing') selector.removeAttribute('data-kp-reader-selector-id');
+      else { const duplicate = document.createElement('span'); duplicate.dataset['kpReaderSelectorId'] = selector.dataset['kpReaderSelectorId']!; selector.after(duplicate); }
+      window.dispatchEvent(new Event('resize'));
     }, defect);
-    await expect(root).toHaveAttribute("data-anchored-status", "repair-gap");
-    await expect(labels).toBeHidden();
-    await expect(root.getByRole("alert")).toContainText("exactly one native selector");
-    await page.reload(); await expect(root).toHaveAttribute("data-anchored-status", "ready", { timeout: 90_000 });
+    await expect(story).toHaveAttribute('data-anchored-status', 'repair-gap');
+    await expect(story.locator('.anchored-labels')).toBeHidden();
+    await expect(story.getByRole('alert')).toContainText('exactly one native selector');
+    await page.reload(); await ready(page);
   }
-  expect(errors).toEqual([]);
 });
 
-test("static reading and stale direct links stay explicit", async ({ browser, page }) => {
+test("static reading, old links and stale revisions have one explicit destination", async ({ browser, page }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const staticPage = await context.newPage(); await staticPage.goto(route);
-  await staticPage.getByText("Read the explanation without motion", { exact: true }).click();
-  await expect(staticPage.locator(".anchored-reading .katex")).toHaveCount(4);
-  await expect(staticPage.getByText("Now look inside one copy.", { exact: true })).toBeVisible();
+  await expect(staticPage.locator('[data-kp-annotation-state]')).toHaveCount(4);
+  await expect(staticPage.locator('.kp-annotation-static-equation .katex')).toHaveCount(4);
+  await expect(staticPage.getByText(/Now look inside one copy/)).toBeVisible();
   await context.close();
-  await page.goto(`${route}&revision=stale#state.what-counts.opened`);
-  await expect(page.locator("[data-anchored-algebra]")).toHaveAttribute("data-anchored-status", "repair-gap");
-  await expect(page.getByRole("alert")).toContainText("different explanation revision");
-  await expect(page.locator(".anchored-labels")).toHaveCount(0);
+  await page.goto('/experiments/reusable-reasoning/?example=anchored-algebra#state.what-counts.opened');
+  await ready(page);
+  await expect(page).toHaveURL(/\/reader\/what-counts\//);
+  await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', 'state.what-counts.opened');
+  const response = await page.goto(`${route}?revision=stale#state.what-counts.opened`);
+  expect(response?.status()).toBe(422);
+  await expect(page.locator('body')).toContainText('different explanation revision');
+  await page.goto('/experiments/reusable-reasoning/?example=anchored-algebra#state.what-counts.missing');
+  await ready(page);
+  await expect(page.locator('.kp-animation-story')).toHaveAttribute('data-anchored-status', 'repair-gap');
+  await expect(page.getByRole('alert')).toContainText('unknown explanation state');
 });

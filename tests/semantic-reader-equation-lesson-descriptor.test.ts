@@ -12,6 +12,7 @@ import {
 } from "../src/reader/runtime/public-api.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import { projectKpReaderEquationRenderPlan } from "../src/reader/renderers/equation-render-plan.ts";
+import algebraSource from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 
 type Equal<TLeft, TRight> =
   (<T>() => T extends TLeft ? 1 : 2) extends
@@ -19,6 +20,7 @@ type Equal<TLeft, TRight> =
 type Assert<TValue extends true> = TValue;
 type InferredVariants = Assert<Equal<
   KpReaderEquationLessonVariant,
+  | "authored-algebra"
   | "streamlined"
   | "teacher-zero"
   | "fractional-linear"
@@ -35,6 +37,7 @@ const inferredVariants: InferredVariants = true;
 test("equation lesson descriptors retain literal variants and runtime coverage", async () => {
   assert.equal(inferredVariants, true);
   assert.deepEqual(kpReaderEquationLessonVariants, [
+    "authored-algebra",
     "streamlined",
     "teacher-zero",
     "fractional-linear",
@@ -49,10 +52,23 @@ test("equation lesson descriptors retain literal variants and runtime coverage",
 
   const standard = resolveKpReaderEquationPresentationProfile("standard");
   for (const variant of kpReaderEquationLessonVariants) {
-    const descriptor = await resolveKpReaderEquationLessonDescriptor(variant);
+    const descriptor = await resolveKpReaderEquationLessonDescriptor(variant, variant === "authored-algebra" ? algebraSource : undefined);
     assert.equal(descriptor.id, variant);
     assert.equal(descriptor.createAnimation(standard).kind, "animation-asset");
   }
+});
+
+test("authored algebra requires checked source and preserves exact native phase endpoints", async () => {
+  const standard = resolveKpReaderEquationPresentationProfile("standard");
+  const unbound = await resolveKpReaderEquationLessonDescriptor("authored-algebra");
+  assert.throws(() => unbound.createAnimation(standard), /checked serialized source/);
+  const bound = await resolveKpReaderEquationLessonDescriptor("authored-algebra", algebraSource);
+  assert.equal(bound.canonicalTransitionSelection, "all");
+  assert.ok(bound.canonicalSession?.evaluationCertificates?.length);
+  assert.ok(bound.canonicalSession?.endpointHandoffs?.length);
+  for (let index = 0; index <= 3; index++) assert.equal(bound.projectAnimationProgress!(Math.round(index * 1000 / 3) / 1000), index / 3);
+  const samples = Array.from({ length: 1001 }, (_, i) => bound.projectAnimationProgress!(i / 1000));
+  assert.ok(samples.every((value, i) => value >= 0 && value <= 1 && (i === 0 || value > samples[i - 1]!)));
 });
 
 test("descriptor capabilities preserve lesson-specific runtime behavior", async () => {

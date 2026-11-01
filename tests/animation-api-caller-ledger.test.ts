@@ -138,7 +138,9 @@ test("public-looking facades remain separated by authority", () => {
   assert.deepEqual(record("facade.reader-compiler").sourceCallers, [
     "src/reader/compiler/reader-route-manifest.ts"
   ]);
-  assert.equal(record("facade.reader-runtime").sourceCallers.length, 19);
+  // Native algebra layout now has one shared descriptor owner used by both hosts.
+  assert.equal(record("facade.reader-runtime").sourceCallers.length, 20);
+  assert.ok(record("facade.reader-runtime").sourceCallers.includes("src/reader/app/algebra-native-descriptor.ts"));
   assert.ok(!record("facade.reader-runtime").sourceCallers.includes(
     "src/reader/app/canonical-equation-frame-plan.ts"
   ));

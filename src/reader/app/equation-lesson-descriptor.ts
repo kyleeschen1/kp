@@ -28,6 +28,9 @@ export interface KpReaderEquationStageLayoutCompiler {
 }
 
 export interface KpReaderEquationLessonDescriptor {
+  readonly canonicalSession?: Pick<Parameters<typeof import("./chrome-free-canonical-equation-session.ts").createKpChromeFreeCanonicalEquationSession>[0],
+    "evaluationCertificates" | "endpointHandoffs" | "prewarmAdjacentTransitions">;
+  readonly projectAnimationProgress?: (progress: number) => number;
   /** Only the registered domain owner can validate and bind serialized source. */
   readonly bindSource?: (source: unknown) => KpReaderEquationLessonDescriptor;
   readonly id: string;
@@ -95,6 +98,7 @@ export function defineKpCanonicalEquationLessonDescriptor<
 }
 
 const kpReaderEquationLessonDescriptorLoaders = {
+  "authored-algebra": () => import("./equation-lesson-descriptors/authored-algebra.ts").then(({ authoredAlgebraDescriptor }) => authoredAlgebraDescriptor),
   streamlined: () => import("./equation-lesson-descriptors/linear.ts")
     .then(({ streamlinedDescriptor }) => streamlinedDescriptor),
   "teacher-zero": () => import("./equation-lesson-descriptors/linear.ts")

@@ -21,13 +21,14 @@ export function renderKpEquationPageTemplate(
   options: Parameters<typeof compileKpEquationExemplarTemplate>[2]
 ): string {
   return compileEquationTemplate(animation, annotateState, options,
-    options?.readerControls === undefined ? "page-static" : "stage");
+    options?.accessibilityOwner ?? (options?.readerControls === undefined ? "page-static" : "stage"));
 }
 
 export function compileKpEquationExemplarTemplate(
   animation: KpAnimationAsset,
   annotateState: KpEquationStageAnnotation,
   options?: {
+    readonly accessibilityOwner?: "page-static" | "stage";
     readonly presentationAnimations?: readonly KpAnimationAsset[] | undefined;
     readonly equationPresentation?: KpReaderEquationPresentationCapability | undefined;
     readonly showEquationProfileControl?: boolean | undefined;

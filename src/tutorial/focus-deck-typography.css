@@ -7,19 +7,19 @@
 .kp-focus-deck :where(button, input, select) {
   font-family: var(--kp-focus-card-ui-font, ui-sans-serif, system-ui, sans-serif);
 }
-.kp-focus-deck [data-kp-focus-deck-type] {
+:is(.kp-focus-deck, .kp-annotation-plane) [data-kp-focus-deck-type] {
   font-family: var(--kp-focus-card-passage-font, Georgia, "Times New Roman", serif);
   line-height: 1.3;
 }
-.kp-focus-deck [data-kp-focus-deck-type="label"] {
+:is(.kp-focus-deck, .kp-annotation-plane) [data-kp-focus-deck-type="label"] {
   font-size: var(--kp-focus-card-label-size, 1.125rem);
   font-weight: 600;
 }
-.kp-focus-deck [data-kp-focus-deck-type="support"] {
+:is(.kp-focus-deck, .kp-annotation-plane) [data-kp-focus-deck-type="support"] {
   font-size: var(--kp-focus-card-support-size, 1rem);
   font-weight: 400;
 }
-.kp-focus-deck [data-kp-focus-deck-type="meta"] {
+:is(.kp-focus-deck, .kp-annotation-plane) [data-kp-focus-deck-type="meta"] {
   font-size: var(--kp-focus-card-meta-size, .875rem);
   font-weight: 400;
 }

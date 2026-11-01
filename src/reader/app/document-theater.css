@@ -81,6 +81,7 @@
     z-index: 0; margin: 0; padding-inline: 24px; pointer-events: auto;
   }
   body[data-kp-caption-mode="captions"] .kp-rising-passage { opacity: var(--kp-passage-opacity, 1); }
+  body[data-kp-reader-hydrated="true"][data-kp-caption-mode="captions"] .kp-annotation-static-equation { display: none; }
   body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-passage-layer="front"] { z-index: 2; }
   body[data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-caption-present="false"] { pointer-events: none; }
   body[data-kp-reader-motion-preference="reduced"][data-kp-caption-mode="captions"] .kp-rising-passage[data-kp-passage-layer="back"] { opacity: 0; }

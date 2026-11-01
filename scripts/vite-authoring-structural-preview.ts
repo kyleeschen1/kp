@@ -4,7 +4,6 @@ import type { buildKpAuthoredDistributionPreview } from "../src/experiments/auth
 
 // Only registered local pages can choose a module; URL input is never imported.
 const algebraPages = new Map([
-  ["anchored-algebra", { directory: "anchored-algebra", builder: "buildAnchoredAlgebraPage", title: "What counts as one thing?" }],
   ["distribute-collect", { directory: "distribute-collect", builder: "buildDistributeCollectPage", title: "Distribute, then collect" }],
   ["common-factor", { directory: "common-factor", builder: "buildKpCommonFactorInitialPage", title: "Common factoring" }],
   ["algebra-intuition", { directory: "composed-algebra-intuition", builder: "buildKpAlgebraIntuitionInitialPage", title: "Regroup without losing contributions" }],
@@ -17,6 +16,21 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
     configureServer(server) {
       server.middlewares.use((request, response, next) => {
         const path = request.url?.split("?")[0];
+        if (path === "/experiments/reusable-reasoning/" && new URL(request.url!, "http://localhost").searchParams.get("example") === "anchored-algebra") {
+          const nextUrl = new URL(request.url!, "http://localhost");
+          nextUrl.pathname = "/reader/what-counts/"; nextUrl.searchParams.delete("example");
+          response.writeHead(307, { location: nextUrl.pathname + nextUrl.search, "cache-control": "no-store" }).end(); return;
+        }
+        if (path === "/reader/what-counts/") {
+          if (request.method !== "GET") { response.writeHead(405).end(); return; }
+          void (async () => {
+            try {
+              const module = await server.ssrLoadModule("/scripts/what-counts-reader-page.ts") as { compileWhatCountsLesson: (url: string) => string };
+              const html = await server.transformIndexHtml(request.url!, module.compileWhatCountsLesson(request.url!));
+              response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
+            } catch (error) { response.writeHead(422, { "content-type": "text/plain", "cache-control": "no-store" }).end(error instanceof Error ? error.message : String(error)); }
+          })(); return;
+        }
         if (path === "/reader/foldable-distribution/" && new URL(request.url!, "http://localhost").searchParams.get("example") === "transfer") {
           if (request.method !== "GET") { response.writeHead(405).end(); return; }
           void (async () => {
@@ -35,8 +49,7 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
           void (async () => {
             try {
               const module = await server.ssrLoadModule(`/src/experiments/${algebraPage.directory}/page.ts`) as Record<string, (url?: string) => string>;
-              const styles = algebraPage.directory === "anchored-algebra" ? ["anchored-algebra/style.css"]
-                : ["authoring-distribution-focus-card/style.css", "reusable-reasoning/style.css", "common-factor/style.css"];
+              const styles = ["authoring-distribution-focus-card/style.css", "reusable-reasoning/style.css", "common-factor/style.css"];
               const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${algebraPage.title} · Kinetic Press</title>${styles.map(style => `<link rel="stylesheet" href="/src/experiments/${style}">`).join("")}<link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module[algebraPage.builder]!(request.url)}</main><script type="module" src="/src/experiments/${algebraPage.directory}/entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
             } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }

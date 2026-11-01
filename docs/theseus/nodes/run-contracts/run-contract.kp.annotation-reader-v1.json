@@ -2,7 +2,8 @@
   "id": "run-contract.kp.annotation-reader-v1",
   "kind": "run-contract",
   "title": "Annotation reader consolidation",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: both implementation packages checked; integrated visual acceptance is pending.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +18,9 @@
   ],
   "verification": [
     "npm run visual:anchored-algebra"
+  ],
+  "revisitWhen": [
+    "User judges the canonical reader at localhost:8011/reader/what-counts/."
   ],
   "allowedWork": [
     "The two named readers, shared document projection, annotation coordination, focused tests, preservation and evidence."
@@ -36,7 +40,8 @@
     {
       "id": "integration",
       "title": "Integrate annotations and retire the separate shell",
-      "status": "planned"
+      "summary": "Integrated reader candidate checked; old shell retired, exact links preserved and review packet ready. Stop for human visual judgment.",
+      "status": "complete"
     }
   ]
 }

@@ -26,6 +26,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+October 31 reader integration candidate: the user's "go" approved the
+[bounded consolidation](2026-10-31-annotation-reader-delivery.md). The same
+checked algebra now uses `/reader/what-counts/` and the shared document theater;
+ordinary prose yields to dedicated native-anchored annotation moments. The
+standalone card shell is retired and its links redirect with revision/state
+preserved or explicit repair feedback. The [integrated review packet](reviews/2026-10-31-annotation-reader.md)
+is the next KP action: judge the reading handoff and spacing before promotion.
+This is a candidate awaiting human acceptance; the fractional reader remains
+the preservation reference and the workbench remains independently owned.
+
 October 31 KP annotation acceptance: the user accepts the anchored annotation
 treatment and wants it to have its own explanatory moment, without competing
 with normal prose. The [accepted direction](decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
@@ -33,8 +43,8 @@ selects consolidation into the accepted document reader as this lane's next
 outcome, with retirement of the standalone experiment shell after replacement.
 The candidate's local annotation acceptance is complete; integrated attention
 choreography and reader reuse remain unfinished. One comment addressing several
-distinct things is a future capability. No successor implementation contract is
-started here. The independent editor workbench retains its own owner and current
+distinct things is a future capability. This decision preceded the now-approved
+integration contract above. The independent editor workbench retains its own owner and current
 direction; the older workbench proposal below is provenance, not its live queue.
 
 October 30 KP product candidate: after the mount closeout, the user approved one

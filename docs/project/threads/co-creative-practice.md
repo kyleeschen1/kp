@@ -1,15 +1,15 @@
 # Co-creative mathematical practice
 
-Status: active product direction; KP annotation treatment accepted, reader consolidation next
+Status: active product direction; integrated KP annotation reader awaits visual judgment
 Last Updated: 2026-10-31
-Current Next Action (KP engine lane): consolidate the accepted anchored
-explanation into the accepted document reader. Give annotations their own
-explanatory moment, coordinate surrounding prose, and retire the standalone
-experiment shell when replaced. The [accepted direction](../decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
-preserves both local visual acceptances and names several-target comments as a
-future capability. A concrete successor contract has not been started. The
-editor workbench remains separately owned; its current execution is not this
-branch's queue.
+Current Next Action (KP engine lane): review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
+at `/reader/what-counts/`. The user approved the [bounded consolidation](../2026-10-31-annotation-reader-delivery.md);
+the candidate reuses the document theater, gives annotations a separate reading
+moment, preserves the fractional reader and retires the standalone card shell.
+Judge the handoff and spacing before promotion. The [accepted direction](../decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
+still keeps several-target comments as future work. Theseus owns execution in
+`run-contract.kp.annotation-reader-v1`. The editor workbench remains separately
+owned; its current execution is not this branch's queue.
 
 Historical workbench recommendation (superseded as the immediate host/sequence): review the proposed
 [independent workbench delivery](../2026-10-30-independent-workbench-v1.md), with

@@ -258,7 +258,10 @@ const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
 const risingPassages = document.body.dataset["kpReaderLayout"] === "rising-passages"
   ? (await import("./document-theater.ts"))
-      .mountDocumentTheater({ story, beats, onLayout: onResize })
+      .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample })
+  : undefined;
+const whatCountsAnnotations = documentId === "lesson.algebra.what-counts"
+  ? (await import("./what-counts-annotations.ts")).mountWhatCountsAnnotations(story, equationSource === undefined ? undefined : JSON.parse(equationSource))
   : undefined;
 const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
@@ -349,11 +352,12 @@ const evaluationControls =
       : undefined;
 const chromeFreeCanonicalEquationSession:
   KpChromeFreeCanonicalEquationSession | undefined =
-  lessonDescriptor.id !== "fraction-composition"
+  lessonDescriptor.canonicalSession === undefined
     ? undefined
     : await import("./chrome-free-canonical-equation-session.ts")
       .then(({ createKpChromeFreeCanonicalEquationSession }) =>
         createKpChromeFreeCanonicalEquationSession({
+          ...lessonDescriptor.canonicalSession,
           shell: stageShell,
           animation,
           descriptor: lessonDescriptor,
@@ -364,7 +368,7 @@ const chromeFreeCanonicalEquationSession:
               lessonDescriptor.createStageLayoutIntent?.({ viewport });
             if (intent === undefined) {
               throw new Error(
-                "Canonical fraction host requires semantic stage layout intent."
+                "Canonical host requires semantic stage layout intent."
               );
             }
             return intent;
@@ -598,6 +602,7 @@ function updateScrollGeometry(): void {
 
 function onResize(): void {
   if (printMedia.matches) return;
+  whatCountsAnnotations?.invalidate();
   if (risingPassages?.readingDocument()) {
     updateScrollGeometry();
     renderer.refresh('resize');
@@ -612,7 +617,7 @@ function onResize(): void {
   const passagePosition = risingPassages?.positionFor(readingBeat, progressPermille);
   if (passagePosition !== undefined) {
     setExplicitProgress(progressPermille, 'controls', false,
-      passagePosition - window.innerHeight * readerViewportAnchorFraction());
+      Math.ceil(passagePosition - window.innerHeight * readerViewportAnchorFraction()));
     return;
   }
   // A breakpoint changes the document's geometry. Re-anchor the semantic
@@ -829,7 +834,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   const animationProgress =
     evaluationControls?.projectAnimationProgress(
       visualSample.progress
-    ) ?? visualSample.progress;
+    ) ?? lessonDescriptor.projectAnimationProgress?.(visualSample.progress) ?? visualSample.progress;
   updateActiveBeat(projection.progressPermille, attentionProjection);
   const frameKey = equationFrameKey({
     animationProgress, progressPermille: projection.progressPermille, visualProgress,
@@ -858,6 +863,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
         focusSnapshot.activeSource ?? "none"
       ].join(":")
     });
+    whatCountsAnnotations?.render(risingPassages?.annotationState(), chromeFreeLayoutRevision);
     document.body.dataset["kpReaderReviewFrame"] = JSON.stringify([
       snapshot.animationProgressPermille,
       snapshot.phaseProgressPermille,
@@ -1487,17 +1493,7 @@ function onTocNavigation(event: MouseEvent): void {
   );
   if (beat === undefined) return;
   event.preventDefault();
-  const arrival = risingPassages?.arrival(beat);
-  if (arrival !== undefined) {
-    setExplicitProgress(arrival.progress, "controls", false);
-    // Browser scroll offsets round to pixels. Land inside the selected caption
-    // rather than just before its boundary on fractional mobile geometry.
-    window.scrollTo(0, Math.ceil(arrival.position - window.innerHeight * readerViewportAnchorFraction()));
-    controlScrollPosition = window.scrollY;
-    renderCurrentSample();
-    locationSettlement.settle();
-    return;
-  }
+  if (seekDocumentBeat(beat)) { locationSettlement.settle(); return; }
   const authoredProgress = Number(requiredData(beat, "kpCheckpoint"));
   const exactProgress =
     evaluationControls?.resolveCheckpointProgressPermille(
@@ -1507,6 +1503,20 @@ function onTocNavigation(event: MouseEvent): void {
   // Outline navigation selects a semantic checkpoint. Only the scrubber and
   // scrolling controls are allowed to request intermediate material states.
   setControlProgress(exactProgress);
+}
+
+function seekDocumentBeat(beat: HTMLElement): boolean {
+  const arrival = risingPassages?.arrival(beat);
+  if (arrival !== undefined) {
+    setExplicitProgress(arrival.progress, "controls", false);
+    // Browser scroll offsets round to pixels. Land inside the selected caption
+    // rather than just before its boundary on fractional mobile geometry.
+    window.scrollTo(0, Math.ceil(arrival.position - window.innerHeight * readerViewportAnchorFraction()));
+    controlScrollPosition = window.scrollY;
+    renderCurrentSample();
+    return true;
+  }
+  return false;
 }
 
 function setExplicitProgress(
@@ -1615,7 +1625,14 @@ function restoreUrlLocation(): void {
     documentId,
     documentVersion
   });
-  if (session === undefined) return;
+  if (session === undefined) {
+    let hash: string;
+    try { hash = decodeURIComponent(window.location.hash.slice(1)); }
+    catch { return; } // An unrelated malformed fragment cannot break reading.
+    const beat = beats.find(candidate => candidate.dataset['kpBeat'] === hash);
+    if (beat) seekDocumentBeat(beat);
+    return;
+  }
   if (session.location.focusRefs.length > 0) {
     focus.set("url", session.location.focusRefs);
   }
@@ -1732,6 +1749,7 @@ function dispose(): void {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", onResize);
   risingPassages?.dispose();
+  whatCountsAnnotations?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   printMedia.removeEventListener("change", onPrintChange);

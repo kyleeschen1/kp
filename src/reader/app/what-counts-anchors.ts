@@ -1,11 +1,11 @@
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
-import { AnchoredAlgebraGap, type CommentaryStop } from "./commentary.ts";
+import { AnchoredAlgebraGap, type CommentaryStop } from "./what-counts-commentary.ts";
 
 /** Endpoint-only projection. Material transit has its own paint authority;
  * this adapter never measures its hidden native source as a moving anchor. */
 export function mountAnchoredLabels(stage: HTMLElement) {
   const overlay = document.createElement("div");
-  overlay.className = "anchored-labels"; overlay.setAttribute("aria-hidden", "true");
+  overlay.className = "anchored-labels kp-annotation-plane"; overlay.setAttribute("aria-hidden", "true");
   stage.append(overlay);
   let renderedKey: string | undefined;
   const clear = () => { overlay.hidden = true; renderedKey = undefined; delete stage.dataset["anchoredState"]; };

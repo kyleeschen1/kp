@@ -2,8 +2,9 @@
   "id": "task.kp.annotation-reader",
   "kind": "task",
   "title": "Annotations in the accepted document reader",
-  "status": "ready",
+  "status": "deferred",
   "domain": "reader",
+  "summary": "HUMAN_CHECKPOINT: integrated reader candidate ready for visual judgment; implementation and focused preservation complete.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -49,7 +50,87 @@
       "scope": "Document projection",
       "checkedAt": "2026-11-01T01:07:38.259Z",
       "notes": "All architecture gates passed; application, Node and test TypeScript projects also passed separately."
+    },
+    {
+      "command": "npm run visual:anchored-algebra",
+      "status": "failed",
+      "scope": "Initial integration",
+      "checkedAt": "2026-11-01T02:06:28.228Z",
+      "notes": "Missing accessible stage ownership, competing arrival and resize rounding; fixed and full command rerun passed."
+    },
+    {
+      "command": "npm run visual:anchored-algebra",
+      "status": "passed",
+      "scope": "Integrated document reader",
+      "checkedAt": "2026-11-01T02:06:29.044Z",
+      "notes": "All three desktop/phone tests passed, including selection, native transit, legacy restoration and failure guards."
+    },
+    {
+      "command": "npm run visual:algebra-mount -- --grep 'complete algebra native handoff'",
+      "status": "passed",
+      "scope": "Native mount preservation",
+      "checkedAt": "2026-11-01T02:06:29.655Z",
+      "notes": "Both four-state and five-state compositor handoff canaries passed on isolated port 8013."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "Final integrated reader",
+      "checkedAt": "2026-11-01T02:06:30.263Z",
+      "notes": "Desktop/phone document behavior passed after annotation integration and shared seek changes."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --passage-boundaries --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "Endpoint retreat",
+      "checkedAt": "2026-11-01T02:06:30.874Z",
+      "notes": "Desktop/phone first and last passage retreat/reversal passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Integrated reader",
+      "checkedAt": "2026-11-01T02:06:31.477Z",
+      "notes": "Application, Node, tests, Svelte and domains passed; final reading-callback app check repeated separately."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "Initial page composition",
+      "checkedAt": "2026-11-01T02:06:32.084Z",
+      "notes": "Compiler then browser page placement violated direction. Build composition moved to scripts; no exceptions added."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Final composition boundary",
+      "checkedAt": "2026-11-01T02:06:32.907Z",
+      "notes": "All architecture gates and cross-domain checks passed."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "Semantic preservation",
+      "checkedAt": "2026-11-01T02:06:33.784Z",
+      "notes": "All 11 tests passed."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Review handoff sources",
+      "checkedAt": "2026-11-01T02:06:34.472Z",
+      "notes": "All 67 tests passed."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "Shared native descriptor inventory",
+      "checkedAt": "2026-11-01T02:06:35.167Z",
+      "notes": "All 12 tests pass with the explicitly named new twentieth runtime consumer."
     }
+  ],
+  "revisitWhen": [
+    "User reviews the integrated document-reader annotation handoff."
   ],
   "expectedLearning": [
     "Whether annotations can carry a distinct moment inside the accepted reader without competing prose."
