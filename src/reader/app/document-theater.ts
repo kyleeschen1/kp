@@ -1,10 +1,10 @@
-import { createFractionalRisingScroll, fractionalPassageCadence, fractionalPassageIndex } from './fractional-rising-scroll.ts';
+import { createDocumentTheaterScroll, documentPassageCadence, documentPassageIndex } from './document-theater-scroll.ts';
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
-import { fractionalPassageOperation } from './fractional-passage-progress.ts';
-import { fractionalPassageTrace, compileFractionalTheaterFocus } from './fractional-theater-focus.ts';
+import { documentPassageOperation } from './document-passage-progress.ts';
+import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 
-/** Real article paragraphs, native sticky holds, and the existing semantic clock. */
-export function mountFractionalRisingPassages(input: {
+/** The document projection owns real prose, sticky holds and reading geometry. */
+export function mountDocumentTheater(input: {
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
   readonly onLayout: () => void;
@@ -23,7 +23,7 @@ export function mountFractionalRisingPassages(input: {
     if (id === undefined) return undefined;
     if (!id || beat.dataset['kpOperationStart'] === undefined || beat.dataset['kpOperationEnd'] === undefined)
       throw new Error('An operation passage requires its checked source and result.');
-    return fractionalPassageOperation(Number(beat.dataset['kpOperationStart']), Number(beat.dataset['kpOperationEnd']));
+    return documentPassageOperation(Number(beat.dataset['kpOperationStart']), Number(beat.dataset['kpOperationEnd']));
   });
   const masthead = document.querySelector<HTMLElement>('.kp-reader-masthead')!;
   const toc = document.querySelector<HTMLElement>('.kp-lesson-toc')!;
@@ -60,14 +60,14 @@ export function mountFractionalRisingPassages(input: {
   let heights: readonly number[] = [];
   let holds: readonly number[] = [];
   let frameTop = 0, frameBottom = 0;
-  let focusAt = compileFractionalTheaterFocus({ positions: [], holds: [] });
+  let focusAt = compileDocumentTheaterFocus({ positions: [], holds: [] });
   let selectedPassages = new Set<number>();
   let painted = new Set(passages.map((_, index) => index));
   let selected = -1;
   let geometry: KpReaderPiecewiseScrollGeometry | undefined;
   let readAll = false;
   let returnIndex = 0;
-  const indexAtPosition = () => fractionalPassageIndex(positions, window.scrollY + readingLine);
+  const indexAtPosition = () => documentPassageIndex(positions, window.scrollY + readingLine);
   const readingMode = document.createElement('button');
   readingMode.type = 'button';
   readingMode.className = 'kp-caption-reading-mode';
@@ -90,7 +90,7 @@ export function mountFractionalRisingPassages(input: {
       const focus = opacity.get(index) ?? 0;
       const front = selectedPassages.has(index) || focus > 0;
       const alpha = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
-        ? fractionalPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
+        ? documentPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
       const paint = String(alpha);
       const present = String(front);
       const layer = front ? 'front' : 'back';
@@ -119,7 +119,7 @@ export function mountFractionalRisingPassages(input: {
     frameTop = -lineWithinCard;
     frameBottom = cardHeight - lineWithinCard;
     readingLine = cardTop + lineWithinCard;
-    const cadence = fractionalPassageCadence(available);
+    const cadence = documentPassageCadence(available);
     const style = document.body.style;
     style.setProperty('--kp-rising-header-height', `${headerHeight}px`);
     style.setProperty('--kp-caption-card-height', `${cardHeight}px`);
@@ -141,7 +141,7 @@ export function mountFractionalRisingPassages(input: {
       input.beats[index]!.style.setProperty('--kp-flow-hold', `${holds[index]}px`);
     });
     positions = input.beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
-    focusAt = compileFractionalTheaterFocus({ positions, holds });
+    focusAt = compileDocumentTheaterFocus({ positions, holds });
   };
   measure();
   const toggleReading = () => {
@@ -184,7 +184,7 @@ export function mountFractionalRisingPassages(input: {
   return {
     readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
-      geometry = createFractionalRisingScroll(narrative, window.innerHeight - headerHeight);
+      geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight);
       return geometry;
     },
     activeBeat: () => input.beats[readAll ? returnIndex : indexAtPosition()],

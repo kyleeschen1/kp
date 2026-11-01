@@ -1,8 +1,8 @@
-import { fractionalPassageIndex } from './fractional-rising-scroll.ts';
+import { documentPassageIndex } from './document-theater-scroll.ts';
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 const ease = (value: number) => value * value * (3 - 2 * value);
-const revealDistance = 24; // Local exemplar: scroll distance, not elapsed time.
+const revealDistance = 24; // Accepted passage handoff: scroll distance, not time.
 interface PassageWindows {
   readonly positions: readonly number[];
   readonly holds: readonly number[];
@@ -31,15 +31,15 @@ function presence(position: number, arrival: number, withdrawal: number) {
 
 /** Compile once. The outgoing/incoming pair shares readability across a gap;
  * unusually overlapping holds retain the complete projection. */
-export function compileFractionalTheaterFocus(input: PassageWindows): (position: number) => ReadonlyMap<number, number> {
+export function compileDocumentTheaterFocus(input: PassageWindows): (position: number) => ReadonlyMap<number, number> {
   validate(input);
   const withdrawals = input.positions.map((_, index) => withdrawalAt(input, index));
   const dense = input.positions.some((position, index) => index > 1 &&
     position - revealDistance < withdrawals[index - 2]! + revealDistance);
   return position => {
-    if (dense) return new Map(fractionalTheaterFocus({ ...input, position })
+    if (dense) return new Map(documentTheaterFocus({ ...input, position })
       .flatMap((opacity, index) => opacity === 0 ? [] : [[index, opacity] as const]));
-    const index = fractionalPassageIndex(input.positions, position + revealDistance);
+    const index = documentPassageIndex(input.positions, position + revealDistance);
     const result = new Map<number, number>();
     for (const candidate of [index - 1, index]) {
       const arrival = input.positions[candidate];
@@ -52,14 +52,14 @@ export function compileFractionalTheaterFocus(input: PassageWindows): (position:
 
 /** Readability bridges motion between holds. Flow still owns actual positions,
  * and the mathematical clock waits for the next explanation's reading phase. */
-export function fractionalTheaterFocus(input: PassageWindows & { readonly position: number }) {
+export function documentTheaterFocus(input: PassageWindows & { readonly position: number }) {
   validate(input);
   return input.positions.map((arrival, index) => presence(input.position, arrival, withdrawalAt(input, index)));
 }
 
 /** A neighboring paragraph stays faint behind the theater. Its natural sticky
  * position determines the trace; no DOM measurement or extra clock is needed. */
-export function fractionalPassageTrace(input: {
+export function documentPassageTrace(input: {
   position: number; arrival: number; hold: number; height: number;
   frameTop: number; frameBottom: number;
 }) {

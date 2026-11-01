@@ -1,0 +1,42 @@
+{
+  "id": "run-contract.kp.annotation-reader-v1",
+  "kind": "run-contract",
+  "title": "Annotation reader consolidation",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.annotation-reader.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-31-annotation-reader-delivery.md",
+      "summary": "User go approves the bounded document-reader consolidation."
+    }
+  ],
+  "verification": [
+    "npm run visual:anchored-algebra"
+  ],
+  "allowedWork": [
+    "The two named readers, shared document projection, annotation coordination, focused tests, preservation and evidence."
+  ],
+  "disallowedWork": [
+    "New mathematical choreography, source schemas, clocks, global stores, multiple-target comments, workbench changes or catalogue rollout."
+  ],
+  "goal": "Integrate the accepted annotation explanation into the accepted document reader and retire its separate card shell; stop at integrated visual review.",
+  "target": "task.kp.annotation-reader",
+  "slices": [
+    {
+      "id": "projection",
+      "title": "Own the shared document projection",
+      "summary": "Structured compilation and shared document layout verified; original reader checks pass.",
+      "status": "complete"
+    },
+    {
+      "id": "integration",
+      "title": "Integrate annotations and retire the separate shell",
+      "status": "planned"
+    }
+  ]
+}

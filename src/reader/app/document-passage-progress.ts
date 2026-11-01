@@ -1,7 +1,7 @@
 import type { KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 
-/** Local operation ownership: equal equation states can occur in several holds. */
-export function fractionalPassageOperation(start: number, end: number) {
+/** Operation ownership: equal equation states can occur in several document holds. */
+export function documentPassageOperation(start: number, end: number) {
   if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end > 1000 || end <= start) {
     throw new Error('A passage operation requires increasing checkpoints within 0–1000.');
   }

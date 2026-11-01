@@ -5,7 +5,7 @@ import type { Page } from "playwright";
 
 import { createKpVisualReviewHarness } from "./visual-review-harness.ts";
 import { assertFractionalEvaluationPaint, inspectPaint } from "./fractional-linear-theme-comparison.ts";
-import { createFractionalRisingScroll } from "../src/reader/app/fractional-rising-scroll.ts";
+import { createDocumentTheaterScroll } from "../src/reader/app/document-theater-scroll.ts";
 import { sampleKpReaderScrollPosition, sampleKpReaderScrollProgress } from "../src/reader/runtime/continuous-scroll-clock.ts";
 
 const outputRoot = path.resolve(
@@ -438,7 +438,7 @@ async function scrollToSemanticProgress(page: Page, progress: number): Promise<n
       availableHeight: innerHeight - document.querySelector(".kp-reader-masthead")!.getBoundingClientRect().height };
   });
   const narrative = { stops: measured.stops.map(({ y, progress }) => ({ positionPx: y, progressPermille: progress })) };
-  const geometry = measured.rising ? createFractionalRisingScroll(narrative, measured.availableHeight) : narrative;
+  const geometry = measured.rising ? createDocumentTheaterScroll(narrative, measured.availableHeight) : narrative;
   const targetScrollY = sampleKpReaderScrollPosition(progress / 1000, geometry) - measured.anchorY;
   await page.evaluate((y) => {
     window.dispatchEvent(new WheelEvent("wheel"));

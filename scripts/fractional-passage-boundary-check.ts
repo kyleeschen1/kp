@@ -8,6 +8,9 @@ export async function checkFractionalPassageBoundaries(page: Page, baseUrl: stri
     await page.setViewportSize({ width, height: 900 });
     await page.goto(new URL('/reader/solve-fractional-linear/', baseUrl).toString(), { waitUntil: 'networkidle' });
     await page.waitForSelector('body[data-kp-reader-hydrated="true"]');
+    // Hydration installs the shell before font-stable URL restoration. Measuring
+    // during that interval can mistake the initial restore for a retreat.
+    await page.waitForSelector('body[data-kp-animation-host-status="ready"][data-kp-reader-progress]');
     for (const [id, direction, progress] of [['beat.read', -1, 0], ['beat.solve', 1, 1000]] as const) {
       await page.locator('.kp-rising-navigation > summary').click();
       await page.locator(`.kp-lesson-toc a[href="#${id}"]`).click();

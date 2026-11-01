@@ -10,12 +10,17 @@ import {
   compileKpFractionalLinearEquationLessonModel
 } from "./fractional-linear-equation-lesson-model.ts";
 import { serializeKpReaderHydrationManifest } from "./hydration-manifest.ts";
-import { compileFractionalCaptionShell } from "./fractional-caption-shell.ts";
+import { compileKpStaticLessonProse } from "./static-prose-compiler.ts";
 import { fractionalPassageOperations } from './fractional-passage-operations.ts';
 
 export function compileKpFractionalLinearEquationLesson(markdown: string) {
   const model = compileKpFractionalLinearEquationLessonModel(markdown);
-  const html = compileFractionalCaptionShell(compileKpEquationExemplarPage({
+  const prose = compileKpStaticLessonProse(model.document, {
+    staticMath: model.staticMath,
+    documentTheater: { operations: fractionalPassageOperations(model.hydration.blocks[0]!.checkpoints, model.animation.transformations) }
+  });
+  const html = compileKpEquationExemplarPage({
+    projection: "document-theater",
     animation: model.animation,
     title: model.document.title,
     description: "See a fractional equation solve itself through searchable, reversible steps.",
@@ -27,14 +32,13 @@ export function compileKpFractionalLinearEquationLesson(markdown: string) {
       href: "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpCheckpoint=beat.cancel&kpProgress=667",
       label: "Try the simpler equation"
     },
-    tocHtml: model.prose.tocHtml,
-    articleHtml: model.prose.articleHtml,
+    tocHtml: prose.tocHtml,
+    articleHtml: prose.articleHtml,
     hydrationJson: serializeKpReaderHydrationManifest(model.hydration),
     equationPresentation: requireEquationPresentation(model.hydration.blocks[0]),
     annotateState: (state) =>
       createKpFractionalLinearSelectorAnnotatedLatex(state)?.annotated
-  }), model.hydration.blocks[0]!.checkpoints.length,
-    fractionalPassageOperations(model.hydration.blocks[0]!.checkpoints, model.animation.transformations));
+  });
 
   return createKpCompiledLessonArtifact({
     id: "compiled.lesson.solve-x.fractional-linear",

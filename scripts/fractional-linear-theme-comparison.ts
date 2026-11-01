@@ -24,7 +24,7 @@ html:has(> body[data-kp-reader-palette="nocturne"]) {
 export async function compareFractionalReaderThemes(page: Page, baseUrl: string, outputRoot: string) {
   let theme: "nocturne" | "paper" = "nocturne";
   // Vite inlines CSS @imports into the linked page sheet.
-  const routePattern = "**/src/reader/app/fractional-exemplar.css*";
+  const routePattern = "**/src/reader/app/document-reader.css*";
   await page.route(routePattern, async (route) => {
     const response = await route.fetch();
     await route.fulfill({ response,

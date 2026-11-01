@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import test from "node:test";
-import { compileFractionalCaptionShell } from "../src/reader/compiler/fractional-caption-shell.ts";
+import { assertDocumentTheaterProjection } from "../src/reader/compiler/document-theater-projection.ts";
+import { compileKpFractionalLinearEquationLessonModel } from "../src/reader/compiler/fractional-linear-equation-lesson-model.ts";
+import { fractionalPassageOperations } from "../src/reader/compiler/fractional-passage-operations.ts";
 
 import {
   compileKpFractionalLinearEquationLesson
@@ -12,12 +14,23 @@ const markdown = readFileSync(
   "utf8"
 );
 
-test("caption shell rejects partial or nested compiler output", () => {
-  const flat = '<html><head></head><body><main><article class="kp-lesson"><h1>Intro</h1><section class="story"><div class="kp-animation-static">Equation</div><ol class="kp-animation-beats"><li data-kp-beat="one"><div class="kp-beat-copy">Text</div></li></ol></section></article></main></body></html>';
-  assert.doesNotThrow(() => compileFractionalCaptionShell(flat, 1));
-  assert.throws(() => compileFractionalCaptionShell(flat, 2), /complete flat beat sequence/);
-  assert.throws(() => compileFractionalCaptionShell(flat.replace('Text', '<div data-kp-attention-phase="nested">Text</div>'), 1), /complete flat beat sequence/);
-  assert.throws(() => compileFractionalCaptionShell('<html></html>', 1), /compiled article and story/);
+test("explicit document projection rejects missing stories and unowned mathematical progress", () => {
+  const model = compileKpFractionalLinearEquationLessonModel(markdown);
+  const operations = fractionalPassageOperations(model.hydration.blocks[0]!.checkpoints, model.animation.transformations);
+  assert.doesNotThrow(() => assertDocumentTheaterProjection(model.document, { operations }));
+  assert.throws(() => assertDocumentTheaterProjection({ ...model.document, blocks: [] }, { operations }), /complete flat beat sequence/);
+  const story = model.document.blocks.find(block => block.kind === "animation-story")!;
+  assert.throws(() => assertDocumentTheaterProjection({ ...model.document, blocks: [
+    { ...story, attention: { kind: "phased-attention-v1", phases: [] } }
+  ] }, { operations }), /complete flat beat sequence/);
+  assert.throws(() => assertDocumentTheaterProjection({ ...model.document, blocks: [story, story] }, { operations }), /complete flat beat sequence/);
+  assert.throws(() => assertDocumentTheaterProjection(model.document, { operations: new Map() }), /cannot advance/);
+  const invalid = new Map(operations);
+  invalid.set("absent", { transformationId: "missing", start: 0, end: 1 });
+  assert.throws(() => assertDocumentTheaterProjection(model.document, { operations: invalid }), /missing passage/);
+  invalid.delete("absent"); invalid.set("beat.subtract", { transformationId: "wrong", start: 10, end: 167 });
+  assert.throws(() => assertDocumentTheaterProjection(model.document, { operations: invalid }), /source and result/);
+  assert.equal(existsSync(new URL("../src/reader/compiler/fractional-caption-shell.ts", import.meta.url)), false);
 });
 
 test("fractional lesson compiles into the shared searchable equation card", () => {
@@ -26,7 +39,7 @@ test("fractional lesson compiles into the shared searchable equation card", () =
   assert.equal(artifact.kind, "compiled-lesson");
   assert.equal(artifact.document.id, "lesson.solve-x.fractional-linear");
   assert.match(artifact.html, /^<!doctype html>/);
-  assert.match(artifact.html, /href="\/src\/reader\/app\/fractional-exemplar\.css"/);
+  assert.match(artifact.html, /href="\/src\/reader\/app\/document-reader\.css"/);
   assert.match(artifact.html, /data-kp-reader-lesson-variant="fractional-linear"/);
   assert.match(artifact.html, /data-kp-reader-palette="nocturne"/);
   assert.match(artifact.html, /data-kp-reader-layout="rising-passages"/);

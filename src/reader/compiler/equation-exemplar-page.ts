@@ -6,6 +6,7 @@ import type { KpReaderEquationPresentationCapability, KpReaderEvaluationControls
 import { compileKpReaderPageShell } from "./reader-page-shell.ts";
 
 export interface KpEquationExemplarPageInput {
+  readonly projection?: "document-theater";
   readonly equationSource?: unknown;
   readonly animation: KpAnimationAsset;
   readonly title: string;
@@ -38,11 +39,16 @@ export function compileKpEquationExemplarPage(
       readerControls: input.readerControls
   });
   return compileKpReaderPageShell({
+    ...(input.projection ? { projection: input.projection } : {}),
     title: input.title,
     description: input.description,
-    stylesheetHref: input.lessonVariant === 'fractional-linear'
-      ? '/src/reader/app/fractional-exemplar.css' : '/src/reader/app/exemplar.css',
+    stylesheetHref: input.projection === 'document-theater'
+      ? '/src/reader/app/document-reader.css' : '/src/reader/app/exemplar.css',
     bodyAttributes: [
+      ...(input.projection ? [
+        { name: "data-kp-reader-layout", value: "rising-passages" },
+        { name: "data-kp-caption-mode", value: "captions" }
+      ] : []),
       ...(input.palette === undefined ? [] : [{ name: "data-kp-reader-palette", value: input.palette }]),
       ...(input.equationSource === undefined ? [] : [{ name: "data-kp-reader-equation-source", value: JSON.stringify(input.equationSource) }]),
       { name: "data-kp-reader", value: "semantic-document" },

@@ -1,4 +1,4 @@
-/* Local document-flow exemplar. Paragraphs retain their native reading order. */
+/* Document theater projection. Paragraphs retain their native reading order. */
 @media screen {
   body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] {
     --kp-rising-header-height: var(--kp-reader-masthead-height);

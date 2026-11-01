@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { compileFractionalTheaterFocus, fractionalTheaterFocus, fractionalPassageTrace } from '../src/reader/app/fractional-theater-focus.ts';
-import { fractionalPassageIndex } from '../src/reader/app/fractional-rising-scroll.ts';
+import { compileDocumentTheaterFocus, documentTheaterFocus, documentPassageTrace } from '../src/reader/app/document-theater-focus.ts';
+import { documentPassageIndex } from '../src/reader/app/document-theater-scroll.ts';
 import { fractionalPassageOperations } from '../src/reader/compiler/fractional-passage-operations.ts';
 
 test('outgoing prose stays readable until its successor arrives, including reverse and direct seeks', () => {
   const input = { positions: [100, 600, 1100], holds: [300, 300, 100] };
-  const focus = (position: number) => fractionalTheaterFocus({ ...input, position });
+  const focus = (position: number) => documentTheaterFocus({ ...input, position });
   assert.deepEqual(focus(75), [0, 0, 0]);
   assert.deepEqual(focus(88), [.5, 0, 0]);
   assert.deepEqual(focus(100), [1, 0, 0]);
@@ -20,18 +20,18 @@ test('outgoing prose stays readable until its successor arrives, including rever
   assert.deepEqual(focus(624), [0, 1, 0]);
   assert.deepEqual(focus(1212), [0, 0, .5]);
   assert.deepEqual(focus(2000), [0, 0, 0]);
-  assert.throws(() => fractionalTheaterFocus({ ...input, holds: [], position: 300 }), /one hold per passage/);
+  assert.throws(() => documentTheaterFocus({ ...input, holds: [], position: 300 }), /one hold per passage/);
   for (const invalid of [
     { positions: [100, 90], holds: [0, 0] },
     { positions: [NaN], holds: [0] },
     { positions: [100], holds: [-1] }
-  ]) assert.throws(() => compileFractionalTheaterFocus(invalid), /ordered finite/);
+  ]) assert.throws(() => compileDocumentTheaterFocus(invalid), /ordered finite/);
 });
 
 test('wide passage gaps retain one fully readable explanation through handoff in either direction', () => {
   for (const gap of [120, 240, 400]) {
     const next = 400 + gap;
-    const focus = compileFractionalTheaterFocus({ positions: [100, next], holds: [300, 300] });
+    const focus = compileDocumentTheaterFocus({ positions: [100, next], holds: [300, 300] });
     const positions = Array.from({ length: gap + 25 }, (_, i) => 400 + i);
     const forward = positions.map(position => [...focus(position)]);
     for (const entries of forward) {
@@ -43,7 +43,7 @@ test('wide passage gaps retain one fully readable explanation through handoff in
 });
 
 test('passage traces are bounded context, disappear far away and reverse without retained state', () => {
-  const sample = (position: number) => fractionalPassageTrace({ position, arrival: 400, hold: 300,
+  const sample = (position: number) => documentPassageTrace({ position, arrival: 400, hold: 300,
     height: 60, frameTop: -160, frameBottom: 160 });
   assert.equal(sample(0), 0);
   assert.equal(sample(1100), 0);
@@ -60,9 +60,9 @@ test('sparse focus matches the complete law for long documents, jumps, reversals
       holds: Array.from({ length: 10000 }, () => 60) },
     { positions: [100, 115, 130], holds: [24, 24, 24] }
   ]) {
-    const focus = compileFractionalTheaterFocus(input);
+    const focus = compileDocumentTheaterFocus(input);
     for (const position of [-100, 0, 62, 70, 80, 86, 95, 210, 101200, 1199990, 2000000, 70]) {
-      const expected = fractionalTheaterFocus({ ...input, position });
+      const expected = documentTheaterFocus({ ...input, position });
       const actual = focus(position);
       assert.deepEqual(expected, expected.map((_, index) => actual.get(index) ?? 0));
       if (input.positions.length === 10000) assert.ok(actual.size <= 2);
@@ -78,11 +78,11 @@ test('passage lookup reaches far destinations without walking intervening paragr
       return Reflect.get(target, key, receiver);
     }
   });
-  assert.equal(fractionalPassageIndex(positions, 9999901), 99999);
+  assert.equal(documentPassageIndex(positions, 9999901), 99999);
   assert.ok(reads <= 17);
-  assert.equal(fractionalPassageIndex([], 100), 0);
-  assert.equal(fractionalPassageIndex([100, 200, 300], -1), 0);
-  assert.equal(fractionalPassageIndex([100, 200, 300], 200), 1);
+  assert.equal(documentPassageIndex([], 100), 0);
+  assert.equal(documentPassageIndex([100, 200, 300], -1), 0);
+  assert.equal(documentPassageIndex([100, 200, 300], 200), 1);
 });
 
 test('only explicitly associated operations have controls; intervening comments retain the result', () => {

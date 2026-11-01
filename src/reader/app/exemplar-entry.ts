@@ -256,9 +256,9 @@ if (equationProfileSelect !== null) {
 }
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
-const risingPassages = lessonVariant === "fractional-linear"
-  ? (await import("./fractional-rising-passages.ts"))
-      .mountFractionalRisingPassages({ story, beats, onLayout: onResize })
+const risingPassages = document.body.dataset["kpReaderLayout"] === "rising-passages"
+  ? (await import("./document-theater.ts"))
+      .mountDocumentTheater({ story, beats, onLayout: onResize })
   : undefined;
 const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")

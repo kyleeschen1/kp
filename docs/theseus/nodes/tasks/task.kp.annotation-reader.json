@@ -1,0 +1,77 @@
+{
+  "id": "task.kp.annotation-reader",
+  "kind": "task",
+  "title": "Annotations in the accepted document reader",
+  "status": "ready",
+  "domain": "reader",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-10-31-annotation-reader-delivery.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:anchored-algebra",
+    "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8011"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-fractional-linear-compiler.test.ts tests/fractional-rising-scroll.test.ts tests/fractional-passage-progress.test.ts tests/fractional-theater-focus.test.ts",
+      "status": "passed",
+      "scope": "Document projection",
+      "checkedAt": "2026-11-01T01:07:35.619Z",
+      "notes": "14 tests passed; additional nested-attention rejection passed in the compiler-suite rerun."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "Document projection baseline and conversion",
+      "checkedAt": "2026-11-01T01:07:36.367Z",
+      "notes": "Both baseline and converted desktop/phone preservation runs passed."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "failed",
+      "scope": "Initial renamed-caller check",
+      "checkedAt": "2026-11-01T01:07:37.015Z",
+      "notes": "Exact inventory retained old alphabetical order after rename; corrected ordering and clean full 12-test rerun passed."
+    },
+    {
+      "command": "npm run test:equation-reachability",
+      "status": "passed",
+      "scope": "Document projection",
+      "checkedAt": "2026-11-01T01:07:37.644Z",
+      "notes": "All 12 tests passed after correcting the exact renamed caller order."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Document projection",
+      "checkedAt": "2026-11-01T01:07:38.259Z",
+      "notes": "All architecture gates passed; application, Node and test TypeScript projects also passed separately."
+    }
+  ],
+  "expectedLearning": [
+    "Whether annotations can carry a distinct moment inside the accepted reader without competing prose."
+  ],
+  "allowedWork": [
+    "Approved two-reader document projection conversion, annotation integration, explicit retirement and focused preservation."
+  ],
+  "disallowedWork": [
+    "New math or choreography, several-target comments, workbench changes and broad promotion."
+  ],
+  "criteria": [
+    {
+      "id": "native-endpoints",
+      "weight": "high"
+    },
+    {
+      "id": "reader-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "exclusive-reading-attention",
+      "weight": "high"
+    }
+  ]
+}

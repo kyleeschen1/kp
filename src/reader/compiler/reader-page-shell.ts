@@ -1,4 +1,7 @@
+import { documentTheaterStaticStyles } from "./document-theater-projection.ts";
+
 export interface KpReaderPageShellInput {
+  readonly projection?: "document-theater";
   readonly title: string;
   readonly description: string;
   readonly stylesheetHref: string;
@@ -36,13 +39,16 @@ export function compileKpReaderPageShell(input: KpReaderPageShellInput): string 
     `<title>${kpReaderHtmlAttribute(input.title)}</title>`,
     `<meta name="description" content="${kpReaderHtmlAttribute(input.description)}">`,
     `<link rel="stylesheet" href="${kpReaderHtmlAttribute(input.stylesheetHref)}">`,
+    ...(input.projection ? [`<noscript><style data-kp-static-document>${documentTheaterStaticStyles}</style></noscript>`] : []),
     "</head>",
     `<body${compileAttributes(input.bodyAttributes)}>`,
     '<header class="kp-reader-masthead">',
     '<a class="kp-reader-wordmark" href="/">Kinetic Press</a>',
+    ...(input.projection ? ['<details class="kp-rising-navigation"><summary>Options</summary><div class="kp-reader-options">'] : []),
     '<span class="kp-reader-tagline">See concepts move</span>',
     `<a class="kp-reader-mode" href="${kpReaderHtmlAttribute(input.modeLink.href)}">${kpReaderHtmlAttribute(input.modeLink.label)}</a>`,
     `<a class="kp-reader-share" href="${kpReaderHtmlAttribute(input.shareLink.href)}" ${attributeName(input.shareLink.dataAttribute)}>${kpReaderHtmlAttribute(input.shareLink.label)}</a>`,
+    ...(input.projection ? ['<div data-kp-reader-options-reading></div><div data-kp-reader-options-development></div></div></details>'] : []),
     "</header>",
     '<main class="kp-reader-layout">',
     input.tocHtml,

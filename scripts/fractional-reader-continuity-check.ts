@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { Page } from 'playwright';
-import { createFractionalRisingScroll } from '../src/reader/app/fractional-rising-scroll.ts';
+import { createDocumentTheaterScroll } from '../src/reader/app/document-theater-scroll.ts';
 import { sampleKpReaderScrollPosition } from '../src/reader/runtime/continuous-scroll-clock.ts';
 
 /** Actual one-pixel scroll changes must reach material geometry. Callback
@@ -61,5 +61,5 @@ export async function measureFractionalScroll(page: Page) {
     anchor: innerHeight * Number(document.body.dataset['kpReaderViewportAnchor']),
     available: innerHeight - document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().height
   }));
-  return { geometry: createFractionalRisingScroll({ stops: measured.stops }, measured.available), anchor: measured.anchor };
+  return { geometry: createDocumentTheaterScroll({ stops: measured.stops }, measured.available), anchor: measured.anchor };
 }

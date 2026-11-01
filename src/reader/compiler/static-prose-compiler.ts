@@ -4,6 +4,7 @@ import type {
   KpLessonInline
 } from "../document/public-api.ts";
 import type { KpStaticMathBlock } from "./static-math-compiler.ts";
+import { assertDocumentTheaterProjection, type DocumentTheaterProjection } from "./document-theater-projection.ts";
 
 export interface KpStaticLessonHtml {
   readonly articleHtml: string;
@@ -16,6 +17,7 @@ export interface KpStaticAnimationStorySlot {
 }
 
 export interface KpStaticLessonProseOptions {
+  readonly documentTheater?: DocumentTheaterProjection;
   readonly staticMath?: readonly KpStaticMathBlock[] | undefined;
   readonly renderAnimationStorySlot?: (
     slot: KpStaticAnimationStorySlot
@@ -27,15 +29,23 @@ export function compileKpStaticLessonProse(
   options: KpStaticLessonProseOptions = {}
 ): KpStaticLessonHtml {
   const staticMath = new Map((options.staticMath ?? []).map((block) => [block.blockId, block]));
-  const article = document.blocks.map((block) => {
+  const theater = options.documentTheater;
+  const storyIndex = theater ? assertDocumentTheaterProjection(document, theater) : -1;
+  const parts = document.blocks.map((block) => {
     if (block.kind === "heading") {
-      return `<h${block.level} id="${attribute(block.id)}" data-kp-block="${attribute(block.id)}">${inlineHtml(block.content)}</h${block.level}>`;
+      return `<h${block.level} id="${attribute(block.id)}" data-kp-block="${attribute(block.id)}">${inlineHtml(block.content)}</h${block.level}>`
+        + (theater && block.level === 1 ? '<p class="kp-document-byline">By Codex</p>' : '');
     }
     if (block.kind === "paragraph") {
       return `<p id="${attribute(block.id)}" data-kp-block="${attribute(block.id)}">${inlineHtml(block.content)}</p>`;
     }
-    return storyHtml(block, staticMath.get(block.id), options.renderAnimationStorySlot);
-  }).join("\n");
+    return storyHtml(block, staticMath.get(block.id), options.renderAnimationStorySlot, theater);
+  });
+  const article = theater
+    ? `<div class="kp-caption-document-intro">${parts.slice(0, storyIndex).join("\n")}</div>`
+      + `<div class="kp-caption-sequence">${parts[storyIndex]}</div>`
+      + `<div class="kp-caption-document-after">${parts.slice(storyIndex + 1).join("\n")}</div>`
+    : parts.join("\n");
   const tocItems = document.blocks.flatMap((block) => {
     if (block.kind === "heading") {
       return [{
@@ -72,7 +82,8 @@ export function compileKpStaticLessonProse(
 function storyHtml(
   block: KpLessonAnimationStoryBlock,
   staticMath: KpStaticMathBlock | undefined,
-  renderSlot: KpStaticLessonProseOptions["renderAnimationStorySlot"]
+  renderSlot: KpStaticLessonProseOptions["renderAnimationStorySlot"],
+  theater: DocumentTheaterProjection | undefined
 ): string {
   const staticStates = staticMath === undefined
     ? `<p class="kp-animation-static-label">See this concept move</p>`
@@ -83,19 +94,26 @@ function storyHtml(
     ?? staticStates;
   return [
     `<section id="${attribute(block.id)}" class="kp-animation-story" data-kp-block="${attribute(block.id)}" data-kp-asset="${attribute(block.asset.id)}" data-kp-asset-version="${attribute(block.asset.version)}"${block.attention === undefined ? "" : ` data-kp-attention="${block.attention.kind}"`}>`,
+    ...(theater ? ['<div class="kp-caption-pin"><div class="kp-caption-frame"></div>'] : []),
     `<div class="kp-animation-static" data-kp-animation-static aria-label="Interactive explanation">`,
     renderedStory,
     "</div>",
+    ...(theater ? ["</div>"] : []),
     `<ol class="kp-animation-beats" aria-label="Explanation steps">`,
-    ...block.beats.map((beat) => [
-      `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}" data-kp-focus="${attribute(beat.focusRefs.join(" "))}">`,
+    ...block.beats.map((beat) => {
+      const operation = theater?.operations.get(beat.id);
+      const operationAttributes = operation ? ` data-kp-operation-id="${attribute(operation.transformationId)}" data-kp-operation-start="${operation.start}" data-kp-operation-end="${operation.end}"` : '';
+      return [
+      `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}" data-kp-focus="${attribute(beat.focusRefs.join(" "))}"${operationAttributes}>`,
+      ...(theater ? [`<div class="kp-rising-passage" id="caption.${attribute(beat.id)}" data-kp-rising-beat="${attribute(beat.id)}"><div class="kp-caption-copy">`] : []),
       `<div class="kp-beat-copy">`,
-      `<h2>${text(beat.title)}</h2>`,
+      `<h2${theater ? " hidden" : ""}>${text(beat.title)}</h2>`,
       `<p>${inlineHtml(beat.content)}</p>`,
       `</div>`,
+      ...(theater ? ["</div></div>"] : []),
       attentionPhasesHtml(block, beat.id),
       "</li>"
-    ].join("")),
+    ].join(""); }),
     "</ol>",
     "</section>"
   ].join("\n");

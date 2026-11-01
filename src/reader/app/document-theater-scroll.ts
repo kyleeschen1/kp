@@ -3,8 +3,8 @@ import {
   type KpReaderPiecewiseScrollGeometry
 } from "../runtime/learner-public-api.ts";
 
-/** Scroll distance allocated while the real paragraph is held in place. */
-export function fractionalPassageCadence(availableHeight: number) {
+/** Document scroll distance allocated while the real paragraph is held. */
+export function documentPassageCadence(availableHeight: number) {
   if (!Number.isFinite(availableHeight) || availableHeight <= 0) {
     throw new Error('Document passages require positive available height.');
   }
@@ -17,11 +17,11 @@ export function fractionalPassageCadence(availableHeight: number) {
 }
 
 /** Narrative anchors are natural bottoms of the actual paragraph blocks. */
-export function createFractionalRisingScroll(
+export function createDocumentTheaterScroll(
   narrative: KpReaderPiecewiseScrollGeometry,
   availableHeight: number
 ): KpReaderPiecewiseScrollGeometry {
-  const cadence = fractionalPassageCadence(availableHeight);
+  const cadence = documentPassageCadence(availableHeight);
   sampleKpReaderScrollProgress(0, narrative);
   const stops = [narrative.stops[0]!];
   for (let index = 1; index < narrative.stops.length; index++) {
@@ -45,7 +45,7 @@ export function createFractionalRisingScroll(
   return { stops };
 }
 
-export function fractionalPassageIndex(positions: readonly number[], position: number) {
+export function documentPassageIndex(positions: readonly number[], position: number) {
   let low = 0, high = positions.length;
   while (low < high) {
     const middle = Math.floor((low + high) / 2);
