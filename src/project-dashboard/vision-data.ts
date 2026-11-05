@@ -3,10 +3,10 @@ import type { ProjectVision } from "./vision-model.ts";
 // Review with the roadmap at a milestone handoff or pivot; append the reason for
 // changes. Task progress belongs to Theseus, not this source-linked horizon map.
 export const projectVision: ProjectVision = {
-  reviewedOn: "2026-10-31",
-  northStar: "Build and revisit mathematical understanding with an LLM.",
-  productProof: "Revise a question, attempt it, record a mistake or uncertainty, and return later to its exact mathematical context.",
-  productSource: { label: "Personal practice direction", href: "docs/project/decisions/2026-10-28-co-creative-practice-priority.md" },
+  reviewedOn: "2026-11-04",
+  northStar: "Develop an eye for what matters through rich explanations and precise shared attention across symbolic domains.",
+  productProof: "A human or LLM authors an explanation; a learner points to an exact part, asks a question, receives a situated revision, and tries the idea with less guidance. Mathematical practice is the first proving ground; the complete interaction remains unproved.",
+  productSource: { label: "Goal clarification and capability progression", href: "docs/project/reviews/2026-11-04-next-step-review.md" },
   areas: [
     {
       id: "architecture", title: "Architecture & retirement", horizon: "later",
@@ -33,8 +33,8 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "representations", title: "Mathematical representations", horizon: "later",
-      destination: "Reuse fine-grained mathematical objects across explanations, transformations and questions.",
+      id: "representations", title: "Domain representations", horizon: "later",
+      destination: "Refer precisely to domain objects and relationships across explanations, transformations and questions. Each domain retains its own meaning and validity rules.",
       established: "Matrix selections retain entry identity and product provenance. Mathematical coverage and presentation coverage remain distinct.",
       evidence: { label: "Matrix identity and scope", href: "docs/project/authoring/concise-domain-api.md" },
       outcome: {
@@ -46,7 +46,7 @@ export const projectVision: ProjectVision = {
     },
     {
       id: "reader", title: "Reader & presentation", horizon: "next",
-      destination: "Reading and mathematical inspection feel coherent in documents and smaller learning interactions.",
+      destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
       established: "The fractional theater and anchored annotation treatment are locally accepted. Their integrated reader candidate now gives annotations separate reading moments and retires the card shell; integrated visual judgment remains open.",
       evidence: { label: "Integrated reader review", href: "docs/project/reviews/2026-10-31-annotation-reader.md" },
       outcome: {
@@ -159,6 +159,13 @@ export const projectVision: ProjectVision = {
       after: "The user approved consolidation. Review the integrated reader's distinct annotation moments; the shared document projection replaces the separate card shell while preserving the fractional reference.",
       reason: "Complete the accepted format rather than adding another host. The implementation is a visual candidate, not shared annotation promotion; several-target comments and the separate workbench retain their boundaries.",
       source: { label: "Integrated candidate and preservation evidence", href: "docs/project/reviews/2026-10-31-annotation-reader.md" }
+    },
+    {
+      id: "joint-attention-goal-clarification", on: "2026-11-04",
+      before: "The visible north star described mathematical practice; recent work foregrounded local reader and algebra repairs.",
+      after: "Restore the broader goal of human/LLM-authored explanations and precise joint attention across symbolic domains. Retain mathematical practice as the first proving ground, the reader checkpoint and all existing finite finish lines.",
+      reason: "The user asks how local work leads to developing an eye for what matters. The proposed successor tests one complete explanation, situated follow-up and revision; it is not a new implementation commitment or a claim of general domain support.",
+      source: { label: "Capability progression and proposed successor", href: "docs/project/reviews/2026-11-04-next-step-review.md" }
     }
   ]
 };

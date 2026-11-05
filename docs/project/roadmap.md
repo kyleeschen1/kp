@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-10-31
+Last Updated: 2026-11-04
 Status: active
 Active Thread: `threads/co-creative-practice.md`
 Supporting Threads:
@@ -25,6 +25,18 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+November 4 goal clarification: the user wants human/LLM-authored salience
+animations inside rich explanations, supporting precise joint attention and
+developing an eye for what matters across symbolic domains. Mathematical
+practice is a retained proving ground within that broader goal. The
+[orientation review](reviews/2026-11-04-next-step-review.md) maps the existing
+pieces to the missing complete teaching interaction: explanation, purposeful
+attention, situated follow-up and revision. It recommends an explanation-first
+successor experiment after the retained reader checkpoint, without authorizing
+a new run, declaring broad domain support or changing earlier finish lines.
+Current examples are experiments in content and system capability, not a public
+asset queue. The source-linked vision view reflects this clarified destination.
 
 October 31 reader integration candidate: the user's "go" approved the
 [bounded consolidation](2026-10-31-annotation-reader-delivery.md). The same

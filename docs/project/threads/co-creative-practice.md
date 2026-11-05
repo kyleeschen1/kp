@@ -1,7 +1,7 @@
 # Co-creative mathematical practice
 
 Status: active product direction; integrated KP annotation reader awaits visual judgment
-Last Updated: 2026-10-31
+Last Updated: 2026-11-04
 Current Next Action (KP engine lane): review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
 at `/reader/what-counts/`. The user approved the [bounded consolidation](../2026-10-31-annotation-reader-delivery.md);
 the candidate reuses the document theater, gives annotations a separate reading
@@ -10,6 +10,15 @@ Judge the handoff and spacing before promotion. The [accepted direction](../deci
 still keeps several-target comments as future work. Theseus owns execution in
 `run-contract.kp.annotation-reader-v1`. The editor workbench remains separately
 owned; its current execution is not this branch's queue.
+
+November 4 orientation: mathematical practice is the retained first proving
+ground within the user's broader goal of rich explanations with precise joint
+attention across symbolic domains. The [progression review](../reviews/2026-11-04-next-step-review.md)
+distinguishes existing components from an unproved complete teaching interaction.
+It proposes explanation-first translation, then one situated follow-up and
+revision, as a successor experiment. This does not authorize a new run or close
+the integrated reader's pending visual judgment. Earlier practice commitments
+and finite engineering outcomes remain intact.
 
 Historical workbench recommendation (superseded as the immediate host/sequence): review the proposed
 [independent workbench delivery](../2026-10-30-independent-workbench-v1.md), with
