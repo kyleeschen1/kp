@@ -1,5 +1,5 @@
 import { mkdir, writeFile } from 'node:fs/promises';
-import { relative, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { build } from 'vite';
 import { collectKpRuntimeImportClosure } from './runtime-import-closure.ts';
@@ -8,9 +8,10 @@ import budgets from './authoring-boundary-budgets.json' with { type: 'json' };
 
 const consumers = ['matrices', 'algebra-source', 'algebra-compile', 'algebra-editor', 'matrix-source', 'matrix-compile', 'matrix-editor'] as const;
 const reports = [];
-const config = ts.readConfigFile('tsconfig.test.json', ts.sys.readFile);
+const configPath = resolve('config/typescript/tsconfig.test.json');
+const config = ts.readConfigFile(configPath, ts.sys.readFile);
 if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, '\n'));
-const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, process.cwd());
+const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(configPath));
 if (parsed.errors.length) throw new Error('Cannot read authoring measurement TypeScript configuration');
 for (const consumer of consumers) {
   const entry = `tests/fixtures/authoring-cost/${consumer}.ts`;

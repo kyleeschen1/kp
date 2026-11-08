@@ -66,8 +66,8 @@ export const combinedInferenceBudget = Object.freeze({
   ceilings: { types: 182_100, instantiations: 309_100 }
 } as const);
 export const inferenceCohorts = [
-  { name: "core", config: "tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },
-  { name: "combined", config: "tsconfig.inference.json", fixtures: [...coreInferenceFixtures, ...frontendInferenceFixtures], budget: combinedInferenceBudget }
+  { name: "core", config: "config/typescript/tsconfig.inference-core.json", fixtures: coreInferenceFixtures, budget: typescriptInferenceBudget },
+  { name: "combined", config: "config/typescript/tsconfig.inference.json", fixtures: [...coreInferenceFixtures, ...frontendInferenceFixtures], budget: combinedInferenceBudget }
 ] as const;
 
 export function assertInferenceMembership(actual: readonly string[], expected: readonly string[]): void {

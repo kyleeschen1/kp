@@ -1,13 +1,13 @@
 import ts from "typescript";
-import { resolve, relative } from "node:path";
+import { dirname, resolve, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { typescriptInferenceBudget } from "../src/architecture/typescript-inference-budget.ts";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
-const configPath = resolve(root, "tsconfig.inference.json");
+const configPath = resolve(root, "config/typescript/tsconfig.inference.json");
 const config = ts.readConfigFile(configPath, ts.sys.readFile);
 if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, "\n"));
-const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root);
+const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(configPath));
 if (parsed.errors.length) throw new Error(ts.formatDiagnosticsWithColorAndContext(parsed.errors, {
   getCanonicalFileName: path => path, getCurrentDirectory: () => root, getNewLine: () => "\n"
 }));

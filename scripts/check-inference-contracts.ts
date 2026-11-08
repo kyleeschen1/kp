@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { join, relative } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import ts from "typescript";
 import { assertInferenceMembership, inferenceCohorts } from "../src/architecture/typescript-inference-cohorts.ts";
 
@@ -11,7 +11,7 @@ assertInferenceMembership(
 for (const cohort of inferenceCohorts) {
   const config = ts.readConfigFile(cohort.config, ts.sys.readFile);
   if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, "\n"));
-  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, process.cwd());
+  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(resolve(cohort.config)));
   if (parsed.errors.length || parsed.options.skipLibCheck || parsed.options.noCheck)
     throw new Error(`Invalid or weakened ${cohort.name} inference configuration`);
   assertInferenceMembership(parsed.fileNames.map(path => relative(process.cwd(), path)), cohort.fixtures);

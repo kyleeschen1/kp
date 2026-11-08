@@ -1,7 +1,7 @@
 export const kpTypedMathAuthoringInferenceBudget = Object.freeze({
   schemaVersion: "kp.typed-math-authoring-inference-budget.v1",
   measuredAt: "2026-09-02",
-  measuredProject: "tsconfig.typed-math-authoring-inference.json",
+  measuredProject: "config/typescript/tsconfig.typed-math-authoring-inference.json",
   fixtureCount: 7,
   measured: Object.freeze({
     types: 34_350,

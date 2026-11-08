@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { typescriptInferenceBudget } from "../src/architecture/typescript-inference-budget.ts";
 import ts from "typescript";
-import { relative } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import { assertInferenceMembership, inferenceCohorts, coreInferenceFixtures, frontendInferenceFixtures, combinedInferenceBudget } from "../src/architecture/typescript-inference-cohorts.ts";
 
 test("both approved cohorts retain exact fixture membership and active checking", () => {
@@ -11,7 +11,7 @@ test("both approved cohorts retain exact fixture membership and active checking"
   for (const cohort of inferenceCohorts) {
     const config = ts.readConfigFile(cohort.config, ts.sys.readFile);
     assert.equal(config.error, undefined);
-    const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, process.cwd());
+    const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(resolve(cohort.config)));
     assert.deepEqual(parsed.errors, []);
     assert.notEqual(parsed.options.skipLibCheck, true);
     assert.notEqual(parsed.options.noCheck, true);
@@ -70,7 +70,7 @@ test("inference ceilings retain measured, narrow structural headroom", () => {
   assert.ok(ceilings.instantiations <= ceilHundred(measuredProject.instantiations * 1.005));
   assert.equal(typescriptInferenceBudget.fixtureCount, coreInferenceFixtures.length);
 
-  const config = JSON.parse(readFileSync("tsconfig.inference.json", "utf8")) as {
+  const config = JSON.parse(readFileSync("config/typescript/tsconfig.inference.json", "utf8")) as {
     readonly compilerOptions?: { readonly skipLibCheck?: boolean };
   };
   assert.notEqual(config.compilerOptions?.skipLibCheck, true);

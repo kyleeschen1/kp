@@ -22,6 +22,13 @@ refresh. Run the affected real browser checks separately.
 build modes and verifies their declared input paths. Plugin declarations are
 checked, but hook behavior still needs the representative actual builds.
 
+`npm run check:typescript-configs` parses every root/specialized compiler config
+and checks explicit inputs and project references. During relocation its
+`--capture`/`--compare` options compare complete inputs and no-emit options before
+and after; that temporary snapshot does not freeze ordinary future source-file
+additions. Shared `tsconfig.base.json` stays at root for domain/protocol consumers.
+Tools that parse a config must resolve paths relative to that config's directory.
+
 The editor/workbench session owns its application checkout. KP configuration
 changes are integrated in the KP maintenance worktree; keep its preview URL and
 normal command interface stable and coordinate any shared-contract changes.

@@ -296,7 +296,7 @@ test("public TypeScript paths select the bounded route gate", () => {
     "content/lessons/typescript-free-shipping.kp.md",
     "scripts/check-public-typescript-budgets.ts",
     "config/vite/vite.public-typescript.config.ts",
-    "tsconfig.public-typescript.json"
+    "config/typescript/tsconfig.public-typescript.json"
   ]) {
     const result = selectKpVerificationImpact([path]);
     assert.deepEqual(ids(result), ["public-typescript"]);
@@ -309,7 +309,7 @@ test("public symbolic paths select the bounded route gate", () => {
     "src/public-web/fraction-composition-public-entry.ts",
     "learn/math/fraction-composition/index.html",
     "config/vite/vite.public-fraction-composition.config.ts",
-    "tsconfig.public-fraction-composition.json"
+    "config/typescript/tsconfig.public-fraction-composition.json"
   ]) {
     const result = selectKpVerificationImpact([path]);
     assert.deepEqual(ids(result), ["public-fraction-composition"]);

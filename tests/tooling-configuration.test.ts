@@ -31,3 +31,14 @@ test("specialized Vite configs have one owner and retain every build entry", () 
     .filter(name => /^vite.*\.config\.ts$/.test(name))].sort();
   assert.deepEqual(configs, Object.keys(baseline).sort());
 });
+
+test("TypeScript root retains only solution and shared policy; all command projects exist", () => {
+  assert.deepEqual(readdirSync(root).filter(name => /^tsconfig.*\.json$/.test(name)).sort(),
+    ["tsconfig.base.json", "tsconfig.json"]);
+  const pkg: { scripts: Record<string, string> } = JSON.parse(readFileSync(resolve(root, "package.json"), "utf8"));
+  for (const [name, command] of Object.entries(pkg.scripts)) {
+    for (const match of command.matchAll(/(?:[\w.-]+\/)*tsconfig(?:\.[\w.-]+)?\.json/g)) {
+      assert.ok(existsSync(resolve(root, match[0])), `${name}: missing ${match[0]}`);
+    }
+  }
+});

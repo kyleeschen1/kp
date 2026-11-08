@@ -47,3 +47,28 @@ test assertion tied to the old public-config prefix. Its ownership expectation
 was migrated to `config/vite/vite.public-`; the full 42-test command then passed.
 Node tooling typechecking and `git diff --check` passed. No application or
 editor-interface implementation changed.
+
+## TypeScript configuration ownership
+
+Moved 11 specialized compiler configs into `config/typescript/`. Root
+`tsconfig.json` remains the solution entrypoint and `tsconfig.base.json` remains
+shared policy for protocols/domains/providers. Migrated package commands,
+measurement tools, cohort metadata and active fixtures without changing any
+cost ceiling or fixture membership. Custom TypeScript API callers now parse
+relative to the selected configuration's directory instead of assuming the
+current working directory owns every config.
+
+The complete-input preflight caught an explicit eigenvector compiler reference
+to a moved Playwright file that the first migration missed. It was corrected
+before capturing the TypeScript baseline; the eigenvector typecheck passed.
+The new configuration guard checks every explicit input/reference for existence,
+so that consumer class cannot silently disappear from future moves.
+
+All 13 config documents parsed successfully; the before/after comparison
+matched complete no-emit options, compiler inputs and project references.
+The full application/Node/test/Svelte/domain typecheck passed, with zero Svelte
+errors or warnings. A cohort test initially exposed another CWD-based parser;
+all remaining measurement/cohort callers were repaired and the full focused
+44-test command passed. `check:inference` passed unchanged ceilings: core
+116,885 types / 200,009 instantiations; combined 180,374 / 305,022.
+Measurement JSON changes only rename project paths; measured costs are preserved.

@@ -94,7 +94,7 @@ export function measureKpUnitScalarAuthoringBurden(
 export function measureKpUnitScalarInference(
   repositoryRoot = process.cwd()
 ): KpUnitScalarHelperBaseline["inference"] {
-  const project = "tsconfig.unit-scalar-map-helper-inference.json";
+  const project = "config/typescript/tsconfig.unit-scalar-map-helper-inference.json";
   const result = spawnSync(process.execPath, [
     join(repositoryRoot, "node_modules/typescript/bin/tsc"),
     "--project",

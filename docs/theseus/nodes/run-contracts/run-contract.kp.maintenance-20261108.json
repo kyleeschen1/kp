@@ -44,7 +44,8 @@
     {
       "id": "typescript",
       "title": "Relocate TypeScript configurations",
-      "status": "planned"
+      "summary": "11 specialized projects moved; full input/reference/option equivalence, full types and inference budgets preserved; root solution/shared base retained.",
+      "status": "complete"
     },
     {
       "id": "setup",

@@ -39,9 +39,9 @@ test("pre-expansion health has focused and explicit release commands", () => {
 
 test("root TypeScript checks keep their caches in ignored scratch space", () => {
   for (const path of [
-    "tsconfig.app.json",
-    "tsconfig.node.json",
-    "tsconfig.test.json",
+    "config/typescript/tsconfig.app.json",
+    "config/typescript/tsconfig.node.json",
+    "config/typescript/tsconfig.test.json",
     "domains/tsconfig.json"
   ]) {
     const config = JSON.parse(readFileSync(path, "utf8")) as {

@@ -24,6 +24,13 @@
       "scope": "standard",
       "checkedAt": "2026-11-08T17:51:07.356Z",
       "notes": "Vite relocation: 13 configurations preserved, 42 tests and two builds pass. One old-prefix assertion repaired and full focused suite rerun."
+    },
+    {
+      "command": "npm run check:typescript-configs; npm run typecheck; npm run check:inference; npm run test:tooling-configs; node --test tests/tooling-configuration.test.ts scripts/verification-impact.test.ts tests/pre-expansion-health-commands.test.ts tests/typescript-inference-budget.test.ts tests/typed-math-authoring-inference-budget.test.ts; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T17:56:49.742Z",
+      "notes": "TypeScript relocation: all 13 configs parsed, complete pre/post inputs and no-emit options matched, 44 focused checks and full typecheck passed. Original cohort parser failure repaired and suite rerun. No cost ceilings changed."
     }
   ]
 }

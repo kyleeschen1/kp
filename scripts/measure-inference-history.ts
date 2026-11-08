@@ -1,6 +1,6 @@
 import ts from "typescript";
 import { execFileSync } from "node:child_process";
-import { relative } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import { assertInferenceMembership, inferenceCohorts } from "../src/architecture/typescript-inference-cohorts.ts";
 
 // Read-only compiler-host counterfactual: retain all present-day consumers and
@@ -11,7 +11,7 @@ if (index < 0 || !baseline || !/^[a-f0-9]{7,40}$/.test(baseline)) throw new Erro
 const cohort = inferenceCohorts[1];
 const config = ts.readConfigFile(cohort.config, ts.sys.readFile);
 if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, " "));
-const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, process.cwd());
+const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(resolve(cohort.config)));
 if (parsed.errors.length || parsed.options.skipLibCheck || parsed.options.noCheck) throw new Error("Invalid inference configuration");
 assertInferenceMembership(parsed.fileNames.map(p => relative(process.cwd(), p)), cohort.fixtures);
 const changed = execFileSync("git", ["diff", baseline, "--name-only", "--diff-filter=M", "--", "src", "domains", "protocols", "scripts"], { encoding: "utf8" })

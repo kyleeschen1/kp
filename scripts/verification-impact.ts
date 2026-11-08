@@ -147,7 +147,7 @@ const checks = {
     "typecheck-app",
     [
       "node", "node_modules/typescript/bin/tsc", "--project",
-      "tsconfig.app.json", "--noEmit"
+      "config/typescript/tsconfig.app.json", "--noEmit"
     ],
     "medium",
     "Type-check framework-neutral application TypeScript without invoking Svelte analysis."
@@ -156,7 +156,7 @@ const checks = {
     "typecheck-node",
     [
       "node", "node_modules/typescript/bin/tsc", "--project",
-      "tsconfig.node.json", "--noEmit"
+      "config/typescript/tsconfig.node.json", "--noEmit"
     ],
     "medium",
     "Type-check Node tooling without invoking application or Svelte analysis."
@@ -739,7 +739,7 @@ const rules: readonly KpVerificationRule[] = [
       path === "package.json" ||
       path === "package-lock.json" ||
       (path.startsWith("vite.config") && !isFocusedPublicPath(path)) ||
-      (path.startsWith("tsconfig") && !isFocusedPublicPath(path)),
+      ((path.startsWith("tsconfig") || path.startsWith("config/typescript/")) && !isFocusedPublicPath(path)),
     checks: [checks.typecheck, checks.test, checks.build],
     reason: "A package, compiler, or build surface changed."
   }
@@ -800,7 +800,7 @@ function isPublicTypeScriptPath(path: string): boolean {
     path === "scripts/check-public-typescript-budgets.ts" ||
     path === "config/vite/vite.public-typescript.config.ts" ||
     path === "config/playwright/playwright.public-typescript.config.ts" ||
-    path === "tsconfig.public-typescript.json";
+    path === "config/typescript/tsconfig.public-typescript.json";
 }
 
 function isPublicFractionCompositionPath(path: string): boolean {
@@ -810,7 +810,7 @@ function isPublicFractionCompositionPath(path: string): boolean {
     path === "tests/fraction-composition-public.browser.spec.ts" ||
     path === "config/vite/vite.public-fraction-composition.config.ts" ||
     path === "config/playwright/playwright.public-fraction-composition.config.ts" ||
-    path === "tsconfig.public-fraction-composition.json";
+    path === "config/typescript/tsconfig.public-fraction-composition.json";
 }
 
 function isFocusedPublicPath(path: string): boolean {
@@ -851,7 +851,7 @@ function isInferenceContractPath(path: string): boolean {
     path === "src/rendering/native-katex-scene-track-contract.ts" ||
     path === "scripts/check-inference-contracts.ts" ||
     path === "tests/typescript-inference-budget.test.ts" ||
-    path === "tsconfig.inference.json" ||
+    path === "config/typescript/tsconfig.inference.json" ||
     path.startsWith("tests/type-fixtures/");
 }
 

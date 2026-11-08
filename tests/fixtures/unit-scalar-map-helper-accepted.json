@@ -44,7 +44,7 @@
     }
   },
   "inference": {
-    "project": "tsconfig.unit-scalar-map-helper-inference.json",
+    "project": "config/typescript/tsconfig.unit-scalar-map-helper-inference.json",
     "fixtureCount": 2,
     "types": 33845,
     "instantiations": 40058

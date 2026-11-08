@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
-import { basename, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 
 interface DiagnosticSample {
   readonly files: number;
@@ -37,10 +37,10 @@ const compilerPath = join(
 
 if (process.argv.includes("--implementation")) {
   const ts = await import("typescript");
-  const configPath = join(projectRoot, "tsconfig.inference.json");
+  const configPath = join(projectRoot, "config/typescript/tsconfig.inference.json");
   const config = ts.readConfigFile(configPath, ts.sys.readFile);
   if (config.error) throw new Error(ts.flattenDiagnosticMessageText(config.error.messageText, "\n"));
-  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, projectRoot);
+  const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, dirname(configPath));
   const program = ts.createProgram(parsed.fileNames, parsed.options);
   const diagnostics = [...parsed.errors, ...program.getOptionsDiagnostics(),
     ...program.getGlobalDiagnostics(), ...program.getSyntacticDiagnostics()];
@@ -59,7 +59,7 @@ if (process.argv.includes("--implementation")) {
     getCanonicalFileName: path => path, getCurrentDirectory: () => projectRoot,
     getNewLine: () => "\n"
   }));
-  console.log(JSON.stringify({ measuredProject: "tsconfig.inference.json",
+  console.log(JSON.stringify({ measuredProject: "config/typescript/tsconfig.inference.json",
     types: program.getTypeCount(), instantiations: program.getInstantiationCount(),
     files: samples.length,
     largestFirstCheckCosts: samples.sort((a, b) => b.instantiations - a.instantiations).slice(0,30) }, null, 2));
@@ -71,7 +71,7 @@ await mkdir(scratchRoot, { recursive: true });
 const emptyFixture = join(scratchRoot, "empty.ts");
 await writeFile(emptyFixture, "export {};\n", "utf8");
 const libraryBaseline = compileFiles("library-baseline", [emptyFixture]);
-const overall = compileProject("tsconfig.inference.json");
+const overall = compileProject("config/typescript/tsconfig.inference.json");
 const fixtureNames = (await readdir(fixtureRoot))
   .filter((name) => name.endsWith(".ts"))
   .sort();
@@ -90,7 +90,7 @@ if (process.argv.includes("--structural")) {
     samples.push({ kind, ...sample, incrementalTypes: sample.types - baseline.types,
       incrementalInstantiations: sample.instantiations - baseline.instantiations });
   }
-  console.log(JSON.stringify({ measuredProject: "tsconfig.inference.json", baseline, overall, samples }, null, 2));
+  console.log(JSON.stringify({ measuredProject: "config/typescript/tsconfig.inference.json", baseline, overall, samples }, null, 2));
   await Promise.all(["empty.ts", "library-baseline.json", "structural-baseline.json",
     "structural-distribution.ts", "structural-distribution.json",
     "structural-simplification.ts", "structural-simplification.json"]
@@ -142,7 +142,7 @@ const directComparisons = await Promise.all([
 
 const report = Object.freeze({
   schemaVersion: "kp.typescript-inference-attribution.v1" as const,
-  measuredProject: "tsconfig.inference.json",
+  measuredProject: "config/typescript/tsconfig.inference.json",
   fixtureCount: fixtures.length,
   libraryBaseline,
   overall,

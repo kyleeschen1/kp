@@ -16,7 +16,7 @@ export const kpAnimationGovernanceEpochV2Baseline = Object.freeze({
   capturedAt: "2026-08-23T05:07:37.356Z",
   sourceCommit: "49ae387c",
   inference: Object.freeze({
-    measuredProject: "tsconfig.inference.json",
+    measuredProject: "config/typescript/tsconfig.inference.json",
     observed: Object.freeze({
       types: 93_651,
       instantiations: 150_979
