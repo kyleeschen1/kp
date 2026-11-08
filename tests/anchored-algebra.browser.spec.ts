@@ -68,12 +68,15 @@ test("reader gives native annotations their own moment, reversible and restorabl
       await expect(plane.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
       const labels = await plane.evaluate(plane => {
         const bounds = plane.getBoundingClientRect();
+        const proseFamily = getComputedStyle(document.querySelector('.kp-rising-passage p')!).fontFamily;
         return [...plane.querySelectorAll<HTMLElement>('[data-kp-focus-deck-annotation]')].map(label => {
           const rect = label.getBoundingClientRect();
-          return { text: label.textContent, fits: rect.left >= bounds.left && rect.right <= bounds.right && rect.top >= bounds.top && rect.bottom <= bounds.bottom };
+          return { text: label.textContent, fits: rect.left >= bounds.left && rect.right <= bounds.right && rect.top >= bounds.top && rect.bottom <= bounds.bottom,
+            proseFamily: [label, ...label.querySelectorAll('[data-kp-focus-deck-type]')].every(node => getComputedStyle(node).fontFamily === proseFamily) };
         });
       });
       expect(labels).toHaveLength(2); expect(labels.every(label => label.fits)).toBe(true);
+      expect(labels.every(label => label.proseFamily)).toBe(true);
       expect(await page.locator('.kp-rising-passage').evaluateAll(nodes => nodes.every(node => getComputedStyle(node).opacity === '0'))).toBe(true);
       await plane.screenshot({ path: info.outputPath(`${width}-annotation-${index}.png`) });
       await jump(page, `passage.${state.id}`);

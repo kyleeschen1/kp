@@ -23,7 +23,7 @@ export function mountAnchoredLabels(stage: HTMLElement) {
       const key = `${stop.stateId}:${objectId}`;
       if (!invalidate && key === renderedKey) return;
       clear();
-      overlay.innerHTML = `<svg class="anchored-leaders" aria-hidden="true"></svg>${stop.notes.map(note => renderKpFocusDeckAnnotation({ entityId: note.id, text: note.text, detail: note.detail })).join("")}`;
+      overlay.innerHTML = `<svg class="anchored-leaders" aria-hidden="true"></svg>${stop.notes.map(note => renderKpFocusDeckAnnotation({ entityId: note.id, role: "support", text: note.text, detail: note.detail })).join("")}`;
       overlay.hidden = false; overlay.style.visibility = "hidden";
       const viewport = stage.getBoundingClientRect(), svg = overlay.querySelector("svg")!;
       try {

@@ -171,3 +171,32 @@ checkpoint. To verify the bug fix, reload the reader and its direct annotation
 link above in Firefox: the equation should stay painted, and the selected
 annotation should survive restoration and resizing. No workbench, mathematical
 source, timing, annotation wording or production registration changes are made.
+
+## November 8 typography refinement
+
+The user says the reader looks good and asks for absent or more modest headlines,
+with annotations in the prose font. The candidate now uses a modest opening title;
+passage headings remain hidden. Annotation sentences use the shared supporting
+text role and inherit the actual reader prose family, replacing the bold serif
+label treatment. The change is local to this exemplar and preserves source,
+wording, native mathematics, semantic anchors and attention timing.
+
+An initial custom-property inheritance attempt still selected the serif fallback
+in the browser. Direct family inheritance fixes that cascade boundary. The
+existing annotation browser check now compares both annotation lines' computed
+family with actual prose at every stop and both widths, alongside its fit and
+reading-ownership checks. This checks the user's requested relationship rather
+than freezing a particular font name or size as a global policy.
+
+Review the opening title, then
+[the counted-whole annotation](http://localhost:8011/reader/what-counts/#state.what-counts.counted).
+Both lines should read as prose, without a bold headline above each comment.
+This is a refinement of the current candidate, not shared annotation promotion.
+
+Final verification: `npm run visual:anchored-algebra -- --project=firefox` passes
+all eight Chromium/Firefox checks, including computed font parity, desktop/phone
+fit, native paint after reload, reversal, selection, Read all and static reading.
+Final desktop and phone captures were inspected. The five focused tests in
+`tests/anchored-algebra.test.ts` and `tests/focus-deck-annotation.test.ts` also pass.
+The optional development-review API on port 8001 remains unavailable; its existing
+proxy diagnostics do not prevent the reader or these checks from working.

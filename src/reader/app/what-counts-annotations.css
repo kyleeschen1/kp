@@ -1,5 +1,8 @@
 @import "../../tutorial/focus-deck-typography.css";
 
+/* This reader's commentary is prose, so inherit its host's reading family. */
+.anchored-labels [data-kp-focus-deck-type] { font-family: inherit; }
+body[data-kp-reader-document-id="lesson.algebra.what-counts"] .kp-caption-document-intro h1 { font-size: 1rem; font-weight: 400; }
 .anchored-labels, .anchored-leaders { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .anchored-labels[hidden] { display: none; }
 .anchored-labels .kp-focus-deck__annotation { width: min(22rem, calc(100% - 2rem)); text-align: center; color: var(--kp-ink); }

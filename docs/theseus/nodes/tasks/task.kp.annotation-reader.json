@@ -169,8 +169,26 @@
       "scope": "Final Firefox repair cohort",
       "checkedAt": "2026-11-01T02:29:50.990Z",
       "notes": "All 8 tests pass: 4 Chromium and 4 Firefox, including native ink after initial load and reload at desktop/phone widths, direct and legacy links, resize, reverse, reduced motion, selection, Read all and explicit repair gaps. Final-state restoration retains its beat during viewport reservation. Focus/session/baseline unit regressions also pass all 10 tests."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts tests/focus-deck-annotation.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T19:02:40.484Z",
+      "notes": "Five source/commentary/helper checks pass after the user-requested typography refinement. No source, wording, native renderer or timing changes."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T19:03:00.733Z",
+      "notes": "Eight final Chromium/Firefox checks pass. Annotation and detail computed families match actual prose at every stop and both widths; native paint, fit, reversal, selection, static reading and links preserved."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "User says the reader looks good; requested modest headlines and prose-font annotations are implemented and checked on November 8. Updated candidate at the same review URL; broad promotion remains excluded."
+  },
   "revisitWhen": [
     "User reviews the integrated document-reader annotation handoff."
   ],
