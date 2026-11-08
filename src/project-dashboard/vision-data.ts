@@ -21,7 +21,7 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "authoring", title: "Authoring & the LLM loop", horizon: "later",
+      id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
       established: "Concise matrix and algebra entrypoints exist. Supported generation tasks are bounded; broad rapid authoring is not established.",
       evidence: { label: "Current authoring API", href: "docs/project/authoring/concise-domain-api.md" },
@@ -45,15 +45,15 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "reader", title: "Reader & presentation", horizon: "next",
+      id: "reader", title: "Reader & presentation", horizon: "later",
       destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
-      established: "The user accepts the integrated document reader and its refined annotation/focus treatment. Both named readers share responsible attention and presentation owners with Chromium/Firefox preservation checks. Rich explanation quality, rapid authoring and conversational revision still need complete product proofs.",
-      evidence: { label: "Reader acceptance and preservation evidence", href: "docs/project/reviews/2026-11-08-reader-attention.md" },
+      established: "The user accepts a complete explanation in the shared reader. Its independent Article preserves every reasoning paragraph, with desktop/phone checks and unchanged math, runtime and CSS. Rapid authoring, learner transfer and conversational revision remain unproved.",
+      evidence: { label: "Accepted explanation and preservation evidence", href: "docs/project/reviews/2026-11-08-explanation-first.md" },
       outcome: {
-        id: "explanation-first-reader-proof", title: "Preserve one full explanation through KP",
-        finish: "For one real learner question in a supported domain, write a rich baseline, bind a few purposeful attention moments in the accepted reader, compare for lost reasoning, try a changed-case prediction and record authoring time and engine interventions. This is a proposed experiment.",
+        id: "situated-reader-revision", title: "Follow an exact question into a revision and back",
+        finish: "After the authoring reuse proof, anchor one follow-up to a precise referent, produce a situated revision and recover the original reading. A file-based exchange can establish this bounded interaction without a model service or editor redesign.",
         excludes: "A universal authoring schema, a new visual format, embedded chat service, editor-interface changes, catalogue rollout or claims of general learning efficacy.",
-        source: { label: "Proposed medium-term progression", href: "docs/project/reviews/2026-11-08-medium-term-progression.md" }
+        source: { label: "Approved bounded progression", href: "docs/project/2026-11-08-explanation-first-delivery.md" }
       }
     },
     {
@@ -82,6 +82,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "One complete explanation preserved and accepted",
+      scope: "The first explanation-first reader proof retains thirteen baseline paragraphs, separates six prose units from four mathematical states, and preserves the accepted attention treatment. The user accepts the explanation. No novice outcome, universal authoring support or general speedup is claimed.",
+      source: { label: "Explanation acceptance and measured limits", href: "docs/project/reviews/2026-11-08-explanation-first.md" }
+    },
     {
       title: "Annotations integrated into the accepted document reader",
       scope: "The same checked algebra explanation uses the accepted reader; prose and annotations have distinct reading moments, the fractional reader is preserved and the standalone shell is retired. The user accepts the integrated candidate after its typography and attention refinements. Wider promotion remains separate.",
@@ -228,6 +233,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves the current two-reader treatment. Close those finite checkpoints and recommend one rich explanation translated into the same host, followed by repeatable authoring and precise revision. No new implementation run is approved.",
       reason: "The immediate ownership repairs make the next product proof viable, while example-specific assembly and unmeasured authoring costs remain. Let useful explanations identify the next abstraction instead of continuing broad CSS cleanup by default.",
       source: { label: "Approval and medium-term assessment", href: "docs/project/reviews/2026-11-08-medium-term-progression.md" }
+    },
+    {
+      id: "explanation-accepted-reuse-next", on: "2026-11-08",
+      before: "The reader treatment was accepted, but preserving a rich explanation through it remained a proposal.",
+      after: "The user approves the progression and accepts its first complete explanation. Close that finite proof and pressure repeatable authoring next, with situated revision as the reader successor.",
+      reason: "The accepted manuscript preserves the argument with no shared runtime or CSS change. A second question can now reveal actual assembly friction before a broader abstraction is promoted.",
+      source: { label: "Accepted explanation and next boundary", href: "docs/project/reviews/2026-11-08-explanation-first.md" }
     }
   ]
 };

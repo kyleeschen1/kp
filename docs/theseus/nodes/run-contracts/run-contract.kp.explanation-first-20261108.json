@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.explanation-first-20261108",
+  "kind": "run-contract",
+  "title": "Explanation first, reuse, situated revision and transfer",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.explanation-first-20261108.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-explanation-first-delivery.md",
+      "summary": "User-approved progression; first human checkpoint after complete explanation candidate."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts",
+    "npm run visual:anchored-algebra",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Approved medium-term progression in the KP product lane; proportional observed binding and reader repairs."
+  ],
+  "disallowedWork": [
+    "No new reader format, universal schema, catalogue rollout, independent editor changes, paid calls or publication; stop at required subjective review."
+  ],
+  "goal": "Preserve a full explanation in the accepted reader and progress through reuse, exact follow-up and a different caller after required review gates.",
+  "target": "task.kp.explanation-first-20261108",
+  "slices": [
+    {
+      "id": "explanation",
+      "title": "Preserve one rich explanation",
+      "summary": "User accepted the complete explanation and attention handoff. Full baseline retained, types and browser preservation pass; proceed to reuse.",
+      "status": "complete"
+    },
+    {
+      "id": "reuse",
+      "title": "Pressure source-only reuse after review",
+      "status": "planned"
+    },
+    {
+      "id": "follow-up",
+      "title": "Exercise one situated revision",
+      "status": "planned"
+    },
+    {
+      "id": "transfer",
+      "title": "Pressure a structurally different caller",
+      "status": "planned"
+    }
+  ]
+}

@@ -67,8 +67,8 @@ test('both readers release restored focus and share one replaceable paint policy
     document.body.style.setProperty('--kp-reader-focus-direct-color', 'rgb(90, 45, 120)');
   }));
   const cases = [
-    { route, lesson: 'lesson.algebra.what-counts', ref: 'state.what-counts.repeated.paint.left-factor', beat: 'passage.state.what-counts.repeated' },
-    { route: '/reader/solve-fractional-linear/', lesson: 'lesson.solve-x.fractional-linear', ref: 'equation.fractional-linear.initial.fraction.numerator.x', beat: 'beat.read' }
+    { route, lesson: 'lesson.algebra.what-counts', version: '2', ref: 'state.what-counts.repeated.paint.left-factor', beat: 'passage.state.what-counts.repeated' },
+    { route: '/reader/solve-fractional-linear/', lesson: 'lesson.solve-x.fractional-linear', version: '1', ref: 'equation.fractional-linear.initial.fraction.numerator.x', beat: 'beat.read' }
   ];
   for (const width of [1100, 390]) for (const example of cases) {
     await page.setViewportSize({ width, height: 1000 });
@@ -76,7 +76,7 @@ test('both readers release restored focus and share one replaceable paint policy
     await jump(page, example.beat);
     const neutral = await nativeColor(page, example.ref);
     expect(neutral).toBeTruthy();
-    const focused = `${example.route}?kpLesson=${example.lesson}&kpVersion=1&kpProgress=0&kpFocus=${example.ref}`;
+    const focused = `${example.route}?kpLesson=${example.lesson}&kpVersion=${example.version}&kpProgress=0&kpFocus=${example.ref}`;
     for (const navigation of ['scroll', 'toc'] as const) {
       await page.goto(focused); await ready(page);
       const stage = page.locator('[data-kp-reader-equation-stage]');
@@ -253,6 +253,9 @@ test("static reading, old links and stale revisions have one explicit destinatio
   await expect(staticPage.locator('[data-kp-annotation-state]')).toHaveCount(4);
   await expect(staticPage.locator('.kp-annotation-static-equation .katex')).toHaveCount(4);
   await expect(staticPage.getByText(/Now look inside one copy/)).toBeVisible();
+  await expect(staticPage.getByText(/Regrouping those additions gives five copies/)).toBeVisible();
+  await expect(staticPage.getByText(/This check catches the missing contributions/)).toBeVisible();
+  await expect(staticPage.getByText(/Try a changed case/)).toBeVisible();
   await context.close();
   await page.goto('/experiments/reusable-reasoning/?example=anchored-algebra#state.what-counts.opened');
   await ready(page);
@@ -261,8 +264,43 @@ test("static reading, old links and stale revisions have one explicit destinatio
   const response = await page.goto(`${route}?revision=stale#state.what-counts.opened`);
   expect(response?.status()).toBe(422);
   await expect(page.locator('body')).toContainText('different explanation revision');
+  const staleReading = await page.goto(`${route}?kpLesson=lesson.algebra.what-counts&kpVersion=1&kpProgress=500`);
+  expect(staleReading?.status()).toBe(422);
+  await expect(page.locator('body')).toContainText('location.document');
+  await expect(page.locator('body')).toContainText('Open /reader/what-counts/');
   await page.goto('/experiments/reusable-reasoning/?example=anchored-algebra#state.what-counts.missing');
   await ready(page);
   await expect(page.locator('.kp-animation-story')).toHaveAttribute('data-anchored-status', 'repair-gap');
   await expect(page.getByRole('alert')).toContainText('unknown explanation state');
+});
+
+test("full reasoning passages fit without shortening or competing annotations", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  await page.goto(route); await ready(page);
+  const ids = await page.locator('[data-kp-beat]:not([data-kp-annotation-state])').evaluateAll(nodes => nodes.map(node => node.id));
+  expect(ids).toHaveLength(6);
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const id of ids) {
+      await jump(page, id);
+      const passage = page.locator(`[data-kp-rising-beat="${id}"]`);
+      await expect(passage).toHaveCSS('opacity', '1');
+      await expect(page.locator('.anchored-labels')).toBeHidden();
+      const fits = await passage.locator('p').evaluate(paragraph => {
+        const rect = paragraph.getBoundingClientRect();
+        const header = document.querySelector('.kp-reader-masthead')!.getBoundingClientRect();
+        return rect.top >= header.bottom && rect.bottom <= innerHeight && rect.left >= 0 && rect.right <= innerWidth
+          && paragraph.scrollHeight <= paragraph.clientHeight + 1;
+      });
+      expect(fits, `${width}px: ${id}`).toBe(true);
+      await page.screenshot({ path: info.outputPath(`${width}-${id}.png`) });
+    }
+  }
+  await page.locator('.kp-rising-navigation > summary').click();
+  await page.getByRole('button', { name: 'Read all', exact: true }).click();
+  await expect(page.getByText(/Regrouping those additions gives five copies/)).toBeVisible();
+  await expect(page.getByText(/This check catches the missing contributions/)).toBeVisible();
+  await expect(page.getByText(/Try a changed case/)).toBeVisible();
+  const share = await page.locator('[data-kp-reader-share]').getAttribute('href');
+  expect(new URL(share!, page.url()).searchParams.get('kpVersion')).toBe('2');
 });

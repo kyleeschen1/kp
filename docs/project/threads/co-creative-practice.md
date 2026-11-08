@@ -1,7 +1,16 @@
 # Co-creative mathematical practice
 
-Status: active product direction; reader accepted, explanation-first experiment proposed
+Status: active product direction; first rich explanation accepted, authoring reuse next
 Last Updated: 2026-11-08
+
+November 8 explanation-first delivery: the user approves the
+[progression](../2026-11-08-explanation-first-delivery.md), then accepts the
+[complete explanation](../reviews/2026-11-08-explanation-first.md) in the same
+reader. Its Article preserves thirteen reasoning paragraphs independently of
+the unchanged mathematical source. Proceed to source-only reuse and then the
+retained situated-revision/transfer outcomes. Theseus contract
+`run-contract.kp.explanation-first-20261108` owns status and review gates. This
+acceptance does not establish learner transfer or broad rapid authoring.
 
 November 8 reader attention successor: the user approved the
 [two-reader delivery](../2026-11-08-reader-attention-delivery.md). The

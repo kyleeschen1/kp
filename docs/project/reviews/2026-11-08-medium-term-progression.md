@@ -1,6 +1,9 @@
 # After reader acceptance: explanation quality and repeatable authoring
 
-Status: strategic recommendation for discussion, not a new implementation run.
+Status at discussion: strategic recommendation, not a new implementation run.
+Subsequent user approval starts the [bounded progression](../2026-11-08-explanation-first-delivery.md);
+the [first explanation](2026-11-08-explanation-first.md) has now passed its user
+review. The assessment below records the rationale that led to that approval.
 The user approves the two-reader candidate at `28efc1894` and asks about the
 medium term and the sufficiency of architecture/CSS work. This closes the local
 reader visual checkpoint; it does not authorize catalogue promotion or editor

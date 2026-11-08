@@ -1,0 +1,44 @@
+{
+  "id": "task.kp.explanation-first-20261108",
+  "kind": "task",
+  "title": "Preserve a rich explanation and prove repeatable authoring",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-explanation-first-delivery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-explanation-first.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T20:59:44.677Z",
+      "notes": "Four checks preserve the whole baseline, checked pin and stale-location rejection."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-08T20:59:45.267Z",
+      "notes": "All 16 desktop/phone Chromium/Firefox cases passed. Four final prose/static cases passed again after wording and URL guard changes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T20:59:45.886Z",
+      "notes": "Full types passed; Node and test cohorts passed again after final source changes. Architecture and all 67 project-vision checks also passed."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "First explanation accepted. Reuse, situated revision and transfer remain approved dependent outcomes."
+  }
+}

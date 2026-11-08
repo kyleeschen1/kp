@@ -1,0 +1,91 @@
+# A complete explanation in the accepted reader
+
+Status: the user accepts the explanation and asks to continue to the reuse
+experiment. This closes the first reading checkpoint in
+`run-contract.kp.explanation-first-20261108`; Theseus owns remaining execution.
+Authority and exclusions: [delivery proposal](../2026-11-08-explanation-first-delivery.md).
+
+## What the reader and author can now do
+
+Read [What counts as one thing?](http://localhost:8011/reader/what-counts/) as a
+connected explanation with reasons, a numerical check, a non-example, the zero
+case and a changed-case prediction. Use Options → Read all to compare the
+uninterrupted argument. Its roughly 800-word
+[baseline](2026-11-08-explanation-first-baseline.md) has thirteen paragraphs;
+every paragraph survives, in order, in the generated reader. Six prose passages
+share four mathematical states and the existing four annotation moments.
+
+The [Article](../../../content/authoring/algebra/what-counts.article.md) owns the
+expanded prose. Authors can edit it and reload the existing development route.
+The mathematical JSON, operation sequence, commentary source pin, native KaTeX
+compositor, focus policy, typography and CSS are unchanged. This is local
+development material, absent from the production publication manifest.
+
+The lesson document advances to version 2; math retains revision
+`sha256:7b2d98b4554f80a3456ee6891df12dfdf069f76c11af05471b727908e37f2c61`.
+The page compiler now uses the existing URL decoder before hydration, rejecting
+an incompatible lesson/version or invalid progress as a located repair instead
+of starting a partly mounted reader. Hash-only semantic links remain valid.
+
+## Editorial reasoning and limits
+
+Audience: a learner familiar with addition and whole-number multiplication but
+unsure what parentheses let them treat as a unit. Prior understanding is an
+assumption, not measured evidence. The new ability is to explain why counts
+combine only for the same whole, and why distributing preserves both parts.
+
+The manuscript introduces copying a whole before naming factoring; repeated
+addition supplies the bridge to combining counts. Regrouping real addition
+supplies the bridge to distributing. The numerical example checks the result
+without pretending to prove the identity. The non-example separates “same
+letters appear” from “same whole is counted”; the zero case avoids an unstated
+nonzero assumption. The transfer prompt asks for the reasoning in a changed case.
+
+Visual jobs: identify the repeated whole; distinguish count from counted
+quantity; inspect the contents of one copy; track both contributions on opening.
+Existing reversible motion makes identity across those reorganizations visible.
+The complete prose remains a useful static baseline. No novice response or
+learning gain is measured; acceptance is the user's judgment of the explanation.
+
+Screenshot review found two editorial issues before acceptance: “above” named
+the wrong spatial relationship, and result-oriented wording preceded the actual
+operation. The working baseline and Article now use spatially neutral and
+prospective language. No reasoning was dropped to repair the timing.
+
+## Evidence and authoring friction
+
+- `author:check` validates the exact unchanged algebra bytes and four checkpoints.
+- Four `anchored-algebra.test.ts` checks pass, including full baseline paragraph
+  retention/order, exact commentary pin, static math/notes and stale-location
+  rejection. These are preservation guards, not automated pedagogy assessment.
+- `npm run visual:anchored-algebra -- --project=firefox`: sixteen checks pass
+  across Chromium/Firefox and desktop/phone. The six longer prose units fit at
+  390×844 without clipping or simultaneous annotations. Existing reversal,
+  restoration, initial/reload paint, focus release, native-anchor repair,
+  reduced-motion and static/Read all checks pass.
+- After final wording and stale-location changes, the same command with
+  `--grep "full reasoning|static reading"` passes all four relevant browser
+  cases. Full typecheck and architecture checks pass; final source checks are
+  recorded in Theseus alongside this candidate.
+- The impact selector has no focused rule for this local build script and falls
+  back to repository-wide tests. The proposal's focused preservation suite,
+  complete types and architecture gate are used for this unpromoted content
+  change. No compositor/runtime/style changed; production rebuilding is not
+  evidence needed to judge its explanation.
+
+One local page assembler changed; zero shared runtime or CSS files changed.
+The Article adds 7,553 source bytes at initial measurement; no shipping payload
+or speedup is claimed. The unchanged optional dev-review API on port 8001 is
+unavailable; its proxy warnings are separate from the passing reader checks.
+
+Observed UTC milestones: tracked work started 20:48; the baseline was written
+by 20:49:33; the first complete browser cohort ran 20:51–20:53; the final focused
+cohort finished 20:54. Context inspection and earlier reasoning are not isolated
+in these timings. This is not a controlled generation-latency benchmark.
+
+Remaining friction is concrete: the Article still declares its story IDs,
+progress and asset pin; operation-to-passage bindings remain in the local
+assembler; annotation fallback prose mirrors the runtime notes and is protected
+by a parity check. A second question should demonstrate which of those
+responsibilities to share. Do not infer a universal authoring schema from this
+one manuscript or treat word retention as proof of an effective explanation.

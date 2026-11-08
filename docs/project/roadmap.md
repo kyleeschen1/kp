@@ -26,6 +26,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+November 8 explanation-first progression: the user's “go as long as possible”
+approves the [bounded delivery](2026-11-08-explanation-first-delivery.md). The
+[first explanation](reviews/2026-11-08-explanation-first.md) preserves a complete
+argument in its own Article through the accepted reader, with unchanged checked
+math, runtime and CSS. The user accepts that explanation and asks to continue.
+Next, pressure the same authoring path with another question or revision, then
+exercise situated revision and a different caller under the retained gates.
+`run-contract.kp.explanation-first-20261108` owns live execution; editor ownership
+and earlier finite completions remain unchanged.
+
 November 8 reader attention delivery: the user approved implementing annotation
 fades, bounded focus and a centrally replaceable focus treatment through both
 named readers. The [candidate and evidence](reviews/2026-11-08-reader-attention.md)
@@ -37,7 +47,8 @@ and closes the retained integration checkpoint. The
 [medium-term review](reviews/2026-11-08-medium-term-progression.md) recommends
 one explanation-first comparison in the same host, then repeatable authoring,
 precise follow-up/revision and a structurally different caller. This is a proposed
-progression, not a new implementation run, editor scope or catalogue promotion.
+progression at that discussion; the subsequent approval above starts its bounded
+run without adding editor scope or catalogue promotion.
 
 November 8 maintenance delivery: the user approved the
 [root/CSS proposal](reviews/2026-11-08-next-step-review.md) for sustained work with
