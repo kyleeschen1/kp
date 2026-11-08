@@ -68,3 +68,19 @@ Adding another registered reading of these same four states is a content edit.
 Changing the mathematics, creating a new choreography or moving this path to a
 different domain remains outside this packet. Registration itself does not
 approve new autonomous scope.
+
+## One situated follow-up
+
+Keep the original focused Share address with the question. A response reading
+can receive `returnTo`, containing the percent-encoded relative original address
+(pathname, search and fragment). Retain its lesson/version, progress, `kpReading`
+and at least one known `kpFocus`; do not guess a pixel position or remove pins.
+The local compiler validates these against the original Article and checked
+algebra. Unknown anchors, stale versions, missing focus/position, nested returns
+and unrelated paths fail with `location.returnTo`.
+
+The existing Options menu then offers Return to your question. No editor or model
+service is involved. The [authored exchange](../reviews/2026-11-08-explanation-first.md#situated-question-and-recovery)
+has complete working links and clearly distinguishes this scripted context test
+from an actual learner conversation. `visual:anchored-algebra` exercises actual
+captured share addresses and their return in both browsers and viewport sizes.

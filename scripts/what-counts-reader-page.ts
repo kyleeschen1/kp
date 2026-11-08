@@ -23,6 +23,46 @@ export function registerWhatCountsReadings(input: Readonly<Record<string, (typeo
 }
 const readingRegistry = registerWhatCountsReadings(readings);
 
+function readingModel(registration: (typeof readings)[keyof typeof readings], draft: ReturnType<typeof compile>) {
+  return compileKpEquationExemplarLessonModel({ animation: draft.animation, sourceId: registration.articlePath,
+    documentId: source.id, version: registration.version, title: registration.title, language: "en",
+    markdown: readFileSync(new URL(`../${registration.articlePath}`, import.meta.url), "utf8"), diagnosticLabel: "What counts" });
+}
+
+/** A response can return to a checked address; it cannot invent its referent. */
+function followUpReturn(location: URL, reading: string, draft: ReturnType<typeof compile>) {
+  const requested = location.searchParams.get("returnTo");
+  if (requested === null) return undefined;
+  const gap = (reason: string) => new AnchoredAlgebraGap("location.returnTo", reason);
+  if (reading === "whole" || !requested.startsWith("/reader/what-counts/"))
+    throw gap("A follow-up reading requires the original reader's relative shared address.");
+  const target = new URL(requested, "http://localhost");
+  if (target.pathname !== "/reader/what-counts/" || target.searchParams.has("returnTo")
+    || (target.searchParams.get("reading") ?? "whole") !== "whole")
+    throw gap("Return directly to the original explanation, without nested responses.");
+  let session;
+  try { session = decodeKpReaderSessionUrl(target, { documentId: source.id, documentVersion: readings.whole.version }); }
+  catch (error) { throw gap(error instanceof Error ? error.message : String(error)); }
+  const refs = new Set(draft.animation.bundle.objects.flatMap(object => [object.id, ...object.selectors.map(selector => selector.id)]));
+  const readingPosition = target.searchParams.get("kpReading");
+  const revision = target.searchParams.get("revision");
+  if (!session || session.location.progressPermille === undefined || session.location.focusRefs.length === 0
+    || session.location.focusRefs.some(ref => !refs.has(ref))
+    || readingPosition === null || readingPosition.trim() === "" || !Number.isFinite(Number(readingPosition))
+    || Number(readingPosition) < 0 || Number(readingPosition) > 1 || (revision !== null && revision !== draft.revisionId))
+    throw gap("Retain the original reading position, checked source revision and a known focused referent.");
+  const original = readingModel(readings.whole, draft);
+  const beats = original.document.blocks.flatMap(block => block.kind === "animation-story" ? block.beats : []);
+  const anchors = new Set([...original.document.blocks.map(block => block.id), ...beats.map(beat => beat.id)]);
+  const checkpoints = new Set(beats.flatMap(beat => [beat.id, beat.checkpoint.id]));
+  let anchor: string;
+  try { anchor = decodeURIComponent(target.hash.slice(1)); }
+  catch { throw gap("Use an intact original reading anchor."); }
+  if ((anchor && !anchors.has(anchor)) || (session.location.checkpointId !== undefined && !checkpoints.has(session.location.checkpointId)))
+    throw gap("Resolve the original beat and checkpoint before returning.");
+  return target.pathname + target.search + target.hash;
+}
+
 /** Explanation copy has its own Article; checked algebra still owns every move. */
 export function compileWhatCountsLesson(url = "http://localhost/reader/what-counts/") {
   const draft = compile(source), commentary = bindAnchoredCommentary(draft);
@@ -30,7 +70,7 @@ export function compileWhatCountsLesson(url = "http://localhost/reader/what-coun
   const reading = location.searchParams.get("reading") ?? "whole";
   const registration = readingRegistry.get(reading);
   if (!registration) throw new AnchoredAlgebraGap("location.reading", "Choose a registered reading from what-counts-readings.json.");
-  const { articlePath, version: documentVersion, title, description } = registration;
+  const { version: documentVersion, description } = registration;
   const currentHref = `/reader/what-counts/${reading === "whole" ? "" : `?reading=${encodeURIComponent(reading)}`}`;
   const revision = location.searchParams.get("revision");
   if (revision !== null && revision !== draft.revisionId)
@@ -40,9 +80,8 @@ export function compileWhatCountsLesson(url = "http://localhost/reader/what-coun
   catch (error) {
     throw new AnchoredAlgebraGap("location.document", `${error instanceof Error ? error.message : String(error)}. Open ${currentHref} for the current explanation.`);
   }
-  const markdown = readFileSync(new URL(`../${articlePath}`, import.meta.url), "utf8");
-  const model = compileKpEquationExemplarLessonModel({ animation: draft.animation, sourceId: articlePath,
-    documentId: source.id, version: documentVersion, title, language: "en", markdown, diagnosticLabel: "What counts" });
+  const returnHref = followUpReturn(location, reading, draft);
+  const model = readingModel(registration, draft);
   const story = model.document.blocks.find(block => block.kind === "animation-story");
   if (!story) throw new AnchoredAlgebraGap("reader.story", "Require the checked algebra story.");
   const beatIds = new Set(story.beats.map(beat => beat.id));
@@ -55,7 +94,9 @@ export function compileWhatCountsLesson(url = "http://localhost/reader/what-coun
   if (!presentation) throw new AnchoredAlgebraGap("reader.presentation", "Require the equation presentation capability.");
   return compileKpEquationExemplarPage({ projection: "document-theater", accessibilityOwner: "stage", animation: draft.animation, equationSource: draft.checked.source,
     title: model.document.title, description, documentId: model.document.id, documentVersion,
-    lessonVariant: "authored-algebra", palette: "nocturne", modeLink: reading !== "whole"
+    lessonVariant: "authored-algebra", palette: "nocturne", modeLink: returnHref
+      ? { href: returnHref, label: "Return to your question" }
+      : reading !== "whole"
       ? { href: "/reader/what-counts/", label: "Return to the original explanation" }
       : { href: "/reader/solve-fractional-linear/", label: "Read the fractional equation" },
     tocHtml: prose.tocHtml, articleHtml: prose.articleHtml, hydrationJson: serializeKpReaderHydrationManifest(model.hydration),

@@ -131,3 +131,36 @@ Observed milestones: reuse tracked context began 21:00 UTC; the second baseline
 was written 21:02; the first selected-source browser run passed at 21:04; final
 registry, preservation and packet work continued through 21:10. These are
 session milestones, not isolated model-generation durations.
+
+## Situated question and recovery
+
+This is an authored trial exchange, not an observed learner conversation or an
+on-demand model generation benchmark. The question is: “If this whole is zero,
+why can we still combine its counts? Could I cancel that group from both sides
+of an equality?” It points specifically to the first repeated whole, rather
+than the equation in general.
+
+- [Open the focused original question](http://localhost:8011/reader/what-counts/?kpLesson=lesson.algebra.what-counts&kpVersion=2&kpProgress=0&kpReading=0&kpFocus=state.what-counts.repeated.paint.left-factor#passage.state.what-counts.repeated).
+- [Read the situated response](http://localhost:8011/reader/what-counts/?reading=zero&returnTo=%2Freader%2Fwhat-counts%2F%3FkpLesson%3Dlesson.algebra.what-counts%26kpVersion%3D2%26kpProgress%3D0%26kpReading%3D0%26kpFocus%3Dstate.what-counts.repeated.paint.left-factor%23passage.state.what-counts.repeated).
+- In the response, use Options → Return to your question. The original Article,
+  version, mathematical progress, reading coordinate and exact focus are retained.
+
+The source is the same checked algebra and the response is the independent zero
+reading above. The bounded `returnTo` input accepts the original reader's
+relative shared address. It validates the document/version through the existing
+URL codec, source revision when supplied, finite reading position, focus refs,
+beat/checkpoint identity and direct-return scope before emitting a link. Stale,
+missing, unknown, nested or unrelated addresses produce `location.returnTo`.
+There is no new browser state store, conversation service or editor interface.
+
+Seven focused cases include the invalid return classes. The `focused.follow-up`
+browser cohort passes in Chromium and Firefox at desktop and phone widths:
+capture an actual focused share address, traverse the response, return through
+the normal link, and recover native focus color, annotation state and scroll
+position within two pixels. The trial preserves each viewport's captured
+context; arbitrary cross-device layout equivalence is not established.
+
+This enables a human/LLM exchange using a copied focused URL and a separately
+authored response. It does not yet supply an in-reader question composer,
+automatic response generation, learner model or general conversation history.
+Those are distinct product work, and editor ownership remains unchanged.

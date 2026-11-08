@@ -347,3 +347,37 @@ test("a different question reuses the same reader and preserves its own reading 
   await expect(staticPage.getByText(/Multiplication by zero cannot be reversed/)).toBeVisible();
   await context.close(); expect(errors).toEqual([]);
 });
+
+test("a focused follow-up returns to the exact original question context", async ({ page }, info) => {
+  test.setTimeout(120_000);
+  const ref = 'state.what-counts.repeated.paint.left-factor';
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto(route); await ready(page);
+    await jump(page, source.states[0]!.id);
+    await page.evaluate(() => dispatchEvent(new Event('scrollend')));
+    const original = new URL((await page.locator('[data-kp-reader-share]').getAttribute('href'))!, page.url());
+    original.searchParams.set('kpFocus', ref);
+    await page.goto('about:blank'); await page.goto(original.href); await ready(page);
+    await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', source.states[0]!.id);
+    const position = await page.evaluate(() => scrollY), color = await nativeColor(page, ref);
+    const originalAddress = original.pathname + original.search + original.hash;
+    const response = await page.goto(`${route}?reading=zero&returnTo=${encodeURIComponent(originalAddress)}`);
+    expect(response?.status(), await response?.text()).toBe(200); await ready(page);
+    await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', 'zero.1');
+    await jump(page, source.states[3]!.id);
+    await page.screenshot({ path: info.outputPath(`${width}-situated-response.png`) });
+    await page.locator('.kp-rising-navigation > summary').click();
+    const link = page.getByRole('link', { name: 'Return to your question' });
+    await expect(link).toHaveAttribute('href', originalAddress);
+    await link.click(); await ready(page);
+    await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', '2');
+    await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', source.states[0]!.id);
+    await expect(page.locator('[data-kp-reader-equation-stage]')).toHaveAttribute('data-kp-reader-focus-source', 'url');
+    expect(await nativeColor(page, ref)).toBe(color);
+    expect(Math.abs(await page.evaluate(() => scrollY) - position)).toBeLessThanOrEqual(2);
+    await page.screenshot({ path: info.outputPath(`${width}-situated-return.png`) });
+  }
+  expect(errors).toEqual([]);
+});

@@ -44,7 +44,8 @@
     {
       "id": "follow-up",
       "title": "Exercise one situated revision",
-      "status": "planned"
+      "summary": "Bounded scripted exchange validates exact source/reading/ref and returns native focus plus reading context. Working authored links and honest product limits recorded.",
+      "status": "complete"
     },
     {
       "id": "transfer",

@@ -63,6 +63,20 @@
       "scope": "standard",
       "checkedAt": "2026-11-08T21:13:08.856Z",
       "notes": "Exact broader command passed four Chromium/Firefox cases before the separately recorded two-case run."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T21:23:33.763Z",
+      "notes": "Seven cases retain both baselines and reject stale, missing, unknown, nested and unrelated situated-return addresses."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-08T21:23:35.098Z",
+      "notes": "All 20 final combined cases pass in Chromium/Firefox desktop/phone. Focused follow-up returns actual native focus and annotation/scroll context; full typecheck passes."
     }
   ],
   "progress": {

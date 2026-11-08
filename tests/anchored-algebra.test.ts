@@ -97,3 +97,22 @@ test("readings cannot silently substitute for each other or select arbitrary fil
     }
   }
 });
+
+test("a situated response preserves only a complete checked original address", () => {
+  const original = '/reader/what-counts/?kpLesson=lesson.algebra.what-counts&kpVersion=2&kpProgress=0&kpReading=0.1&kpFocus=state.what-counts.repeated.paint.left-factor#state.what-counts.repeated';
+  const response = (returnTo: string) => `/reader/what-counts/?reading=zero&returnTo=${encodeURIComponent(returnTo)}`;
+  const html = compileWhatCountsLesson(response(original));
+  assert.ok(html.includes(`href="${original.replaceAll('&', '&amp;')}"`));
+  assert.ok(html.includes('Return to your question'));
+  for (const invalid of [
+    '/reader/what-counts/', 'https://example.com/', '//example.com/reader/what-counts/',
+    original.replace('/reader/what-counts/', '/reader/solve-fractional-linear/'),
+    original.replace('kpVersion=2', 'kpVersion=1'), original.replace('kpReading=0.1', 'kpReading=NaN'),
+    original.replace('kpReading=0.1', 'kpReading=2'), original.replace('kpFocus=', 'ignoredFocus='),
+    original.replace('left-factor', 'missing'), original.replace('#state.what-counts.repeated', '#missing'),
+    original.replace('&kpProgress=0', '&kpCheckpoint=missing&kpProgress=0'),
+    original.replace('&kpProgress=0', '&returnTo=nested&kpProgress=0'),
+    original.replace('&kpProgress=0', '&revision=stale&kpProgress=0')
+  ]) assert.throws(() => compileWhatCountsLesson(response(invalid)),
+    (error: unknown) => error instanceof AnchoredAlgebraGap && error.path === 'location.returnTo');
+});
