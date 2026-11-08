@@ -9,15 +9,15 @@ export const projectVision: ProjectVision = {
   productSource: { label: "Goal clarification and capability progression", href: "docs/project/reviews/2026-11-04-next-step-review.md" },
   areas: [
     {
-      id: "architecture", title: "Architecture & retirement", horizon: "next",
+      id: "architecture", title: "Architecture & retirement", horizon: "later",
       destination: "Replace a part without rebuilding its neighbors. Finish migrations and remove obsolete paths.",
-      established: "Specialized configs have one home outside the root. The selected algebra family now consumes rendering/presentation styles directly, including previews and editions. Full CSS ownership evidence is available; broader consolidation remains separate.",
-      evidence: { label: "Root and style ownership evidence", href: "docs/project/reviews/2026-11-08-maintenance.md" },
+      established: "Specialized configs and selected algebra styles have explicit owners. The shared algebra card now releases browser callbacks before disposing its clock; native and edition lifecycle checks pass. Broader consolidation remains separate.",
+      evidence: { label: "Teardown repair and preservation evidence", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" },
       outcome: {
-        id: "algebra-teardown-ownership", title: "Release algebra readers before their clocks are disposed",
-        finish: "Reproduce the Firefox teardown diagnostic and repair its owning lifecycle boundary. Closing or replacing a reader leaves no visibility callback using a disposed clock; tests pressure both event orders while preserving source, playhead and native paint.",
-        excludes: "A new renderer, broad lifecycle framework, visual changes, editor-interface work or further CSS rollout. This is a proposed successor, not an active run.",
-        source: { label: "Observed baseline diagnostic and next bounded repair", href: "docs/project/reviews/2026-11-08-maintenance.md" }
+        id: "planning-command-navigation", title: "Find current direction and the right command without reconstructing history",
+        finish: "A short roadmap entrypoint and compact guide expose current direction and existing command families; historical evidence and tool entrypoints remain reachable. This retained follow-up is proposed, not an active run.",
+        excludes: "A second task queue, deletion of historical evidence, command renaming, editor-interface work or further CSS rollout.",
+        source: { label: "Retained planning and command navigation proposal", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
       }
     },
     {
@@ -45,7 +45,7 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "reader", title: "Reader & presentation", horizon: "later",
+      id: "reader", title: "Reader & presentation", horizon: "next",
       destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
       established: "The fractional theater and anchored annotation treatment are locally accepted. Their integrated reader candidate now gives annotations separate reading moments and retires the card shell; integrated visual judgment remains open.",
       evidence: { label: "Integrated reader review", href: "docs/project/reviews/2026-10-31-annotation-reader.md" },
@@ -82,6 +82,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Algebra card teardown releases callbacks before the clock",
+      scope: "The Firefox disposed-clock diagnostic is reproduced and the shared owner repaired. Three native card hosts and both production edition sources pass lifecycle checks, including visibility ordering and retained-page restoration. No visual redesign or broader lifecycle framework.",
+      source: { label: "Lifecycle regression and integration evidence", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" }
+    },
     {
       title: "Root tooling and selected algebra styles organized",
       scope: "87 specialized configs moved; tracked root entries fall from 120 to 34. All 124 CSS files are inventoried and four private algebra style paths are retired with complete consumers and automatic preservation evidence. Broader CSS cleanup, editor work and the reader's visual judgment remain separate.",
@@ -192,6 +197,13 @@ export const projectVision: ProjectVision = {
       after: "The user approved sustained maintenance. Root organization and the bounded algebra style conversion now have preservation evidence and finite closure. A pre-existing Firefox teardown diagnostic supplies the next nonvisual repair candidate; the reader checkpoint and explanation-first product direction remain.",
       reason: "Reduce accidental coupling while human review is scarce. Preserve distinct static/initial CSS consumers instead of broadening their styles to reduce file count; record measured costs and the independent editor boundary.",
       source: { label: "Maintenance evidence and retained limitations", href: "docs/project/reviews/2026-11-08-maintenance.md" }
+    },
+    {
+      id: "algebra-teardown-closure", on: "2026-11-08",
+      before: "A pre-existing Firefox teardown diagnostic was the next bounded nonvisual repair candidate after maintenance.",
+      after: "The user approved that successor and its shared-owner repair now has native and production-edition evidence. Return the next product action to the pending integrated reader review; retain the explanation-first successor and separately proposed navigation cleanup.",
+      reason: "Close the observed reliability failure without letting maintenance indefinitely replace the teaching interaction. The completed repair retains its finite boundary and unchanged visual behavior.",
+      source: { label: "Bounded repair closeout", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" }
     }
   ]
 };

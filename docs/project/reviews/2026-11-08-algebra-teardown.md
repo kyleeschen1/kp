@@ -78,3 +78,17 @@ preservation. The integrated annotation reader's earlier visual checkpoint
 remains separate and pending. The next product step is that retained review,
 then the already proposed explanation-first authoring experiment; this repair
 does not authorize another maintenance campaign.
+
+`npm run test:project-vision` passed 67 checks after reconciling roadmap, active
+thread and the source-linked milestone view. The implementation checkpoint is
+`e498c7b76`; final closeout follows separately. Theseus records `COMPLETE`, two
+of two packages, with no remaining work in this repair contract.
+
+For a local check, open
+`http://localhost:8011/experiments/reusable-reasoning/?example=distribute-collect`,
+start motion, navigate away and return in Firefox. Playback should remain usable
+and the disposed-clock error should not appear. The automated equivalent is
+`npm run visual:algebra-mount -- --project=firefox`. The preview process remains
+detached (PID 33543, parent 1, no terminal); both that route and
+`http://localhost:8011/reader/what-counts/` returned HTTP 200 at handoff. It is a
+detached development server, not an automatically restarting service.

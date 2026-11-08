@@ -11,11 +11,14 @@ the complete selected algebra style consumer set. The
 checkout and interface were not changed. These are finite ownership repairs,
 not a source-tree redesign or completion of broader CSS consolidation.
 
-Next nonvisual candidate: reproduce and repair the pre-existing Firefox algebra
-teardown callback that reaches a disposed clock. Preserve source, semantic
-playhead and native paint while testing lifecycle ordering. This recommendation
-does not extend the maintenance contract. The explanation-first product
-successor remains the broader direction.
+November 8 bounded successor: the user approved the Firefox algebra teardown
+repair. The [evidence](../reviews/2026-11-08-algebra-teardown.md) records a shared
+card lifetime fix, six deterministic red-to-green ordering probes and preserved
+native/edition behavior. `run-contract.kp.algebra-teardown-20261108` owns closure.
+The finished repair does not reopen maintenance or authorize a lifecycle framework.
+The next product action is the retained reader review below, then the proposed
+explanation-first authoring experiment. Planning/command-navigation and wider
+CSS cleanup remain separate follow-ups, not an automatically continuing queue.
 
 Pending visual checkpoint: review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
 at `/reader/what-counts/`. The user approved the [bounded consolidation](../2026-10-31-annotation-reader-delivery.md);

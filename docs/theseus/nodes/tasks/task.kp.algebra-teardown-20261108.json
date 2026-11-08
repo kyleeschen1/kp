@@ -2,8 +2,9 @@
   "id": "task.kp.algebra-teardown-20261108",
   "kind": "task",
   "title": "Release algebra reader listeners before their clocks",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "COMPLETE: shared card teardown repair and complete-consumer verification finished; exact evidence linked; no new visual approval required",
   "sourceRefs": [
     {
       "kind": "file",
@@ -56,6 +57,13 @@
       "scope": "integration",
       "checkedAt": "2026-11-08T18:51:21.919Z",
       "notes": "All complete-consumer and edition budgets unchanged and passed. Edition JS gzip 374347, authoring JS 406572: plus 1 and 4 bytes respectively versus maintenance. CSS unchanged."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T18:53:29.909Z",
+      "notes": "67 dashboard and vision checks passed after source-linked milestone closure; reader review restored as next product action without extending maintenance."
     }
   ]
 }

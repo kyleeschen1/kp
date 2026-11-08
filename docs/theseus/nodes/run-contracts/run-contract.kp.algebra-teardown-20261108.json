@@ -2,7 +2,8 @@
   "id": "run-contract.kp.algebra-teardown-20261108",
   "kind": "run-contract",
   "title": "Algebra teardown repair",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: 2 of 2 packages; deterministic teardown invariant repaired, required checks pass, pending reader review remains a separate contract",
   "sourceRefs": [
     {
       "kind": "file",
@@ -39,8 +40,8 @@
     {
       "id": "integration",
       "title": "Verify-complete-consumers-and-close",
-      "summary": "Verify final production editions, payload budgets and source-linked closeout",
-      "status": "in-progress"
+      "summary": "COMPLETE: native and production consumers verified, payload budgets preserved, strategic sources reconciled and verified implementation backed up as e498c7b76",
+      "status": "complete"
     }
   ]
 }

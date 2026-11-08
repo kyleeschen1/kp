@@ -38,14 +38,16 @@ it does not declare all repeated values redundant or claim payload savings.
 behavior, test-discovery repairs, costs and the explicit manifest-budget amendment.
 Theseus contract `run-contract.kp.maintenance-20261108` owns execution closure.
 
-The next nonvisual candidate is a bounded algebra teardown-ownership repair:
-Firefox exposed a visibility callback reaching a disposed clock before and after
-maintenance. Reproduce both lifecycle event orders and repair the owning boundary;
-do not turn it into a new renderer or broad lifecycle framework. This is a
-recommendation, not an extension of the completed maintenance scope. Wider CSS and
-navigation work remain scoped follow-ups. The integrated annotation reader's
-visual judgment remains pending, and the explanation-first product successor
-and independent editor ownership are retained.
+The user then approved the bounded algebra teardown successor. Its
+[evidence](reviews/2026-11-08-algebra-teardown.md) reproduces the Firefox diagnostic
+and repairs the shared card's callback lifetime before clock disposal. Native
+and production-edition checks preserve source, playhead and paint, including both
+visibility/departure orders; `run-contract.kp.algebra-teardown-20261108` owns the
+finite closeout. This completes that repair, not a broader lifecycle campaign.
+The next product action returns to the integrated annotation reader's pending
+visual judgment, followed by the proposed explanation-first experiment. Wider
+CSS and planning/command-navigation cleanup remain separately scoped proposals;
+independent editor ownership is unchanged.
 
 November 4 goal clarification: the user wants human/LLM-authored salience
 animations inside rich explanations, supporting precise joint attention and
