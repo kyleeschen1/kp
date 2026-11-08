@@ -14,10 +14,10 @@ export const projectVision: ProjectVision = {
       established: "The obsolete algebra facade and experiment-owned mounting paths are retired. Shared native mounting preserves checked authority and behavior; cross-example style dependencies remain.",
       evidence: { label: "Shared mounting closeout", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" },
       outcome: {
-        id: "owned-algebra-styles", title: "One algebra family owns its shared styles",
-        finish: "For the selected explanation, replace cross-example CSS imports with responsible shared and local owners, remove superseded rules, and preserve typography, native geometry and unrelated hosts.",
-        excludes: "Global visual redesign, a repository-wide stylesheet migration or a prerequisite to every workbench experiment.",
-        source: { label: "Style ownership · current consumer evidence", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
+        id: "root-tooling-organization", title: "Give specialized tooling configs a home outside the project root",
+        finish: "Group specialized Playwright, Vite and TypeScript configs; preserve conventional root entrypoints, npm commands, discovery, outputs and reader URLs. Update all active consumers and prevent renewed root-config sprawl. Keep the editor lane independently runnable.",
+        excludes: "Editor-interface changes, a source-tree redesign, changed lesson visuals or automatic merges. Full CSS inventory and the retained algebra style-ownership conversion follow separately.",
+        source: { label: "Root clarification · inventory and parallel ownership", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
       }
     },
     {
@@ -173,6 +173,13 @@ export const projectVision: ProjectVision = {
       after: "Recommend the existing bounded algebra style-ownership conversion while human-review availability is limited. The reader checkpoint stays pending, and the explanation-first successor remains the product direction; no new run has started.",
       reason: "Current sources show cross-example CSS imports and preview/edition dependencies. Complete one ownership repair with automatic preservation checks, retaining the original finish line and deferring new visual decisions.",
       source: { label: "Consolidation scope and evidence", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
+    },
+    {
+      id: "root-scope-and-parallel-editor-clarification", on: "2026-11-08",
+      before: "Algebra style ownership was the proposed first maintenance outcome, with directory cleanup described mainly through source ownership.",
+      after: "First group specialized root tooling configs. Inventory the full CSS set, then retain the algebra ownership conversion with its original finish line. Coordinate explicit KP/editor ownership before implementation; no new run has started.",
+      reason: "The user clarifies that the clutter is in the project root and confirms a parallel editor session. Source inspection finds 91 root configs and 124 tracked CSS files in this checkout; the earlier 96-file count has no recovered counting scope.",
+      source: { label: "Clarified scope and handoff", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
     }
   ]
 };

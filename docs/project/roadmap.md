@@ -27,11 +27,13 @@ nor its evidence. The ledger remains retrievable at
 ## Executive Direction
 
 Current maintenance recommendation (November 8): with limited human-review
-availability, first complete the existing bounded algebra style-ownership
-conversion. The [source assessment](reviews/2026-11-08-next-step-review.md)
-identifies cross-example CSS dependencies and preview/edition consumers, with
-behavior-preserving checks and a finite retirement boundary. Directory ownership
-and a shorter current-state entrypoint are supporting cleanup candidates.
+availability, first consolidate specialized tooling configs out of the project
+root, preserving command behavior and discovery. The user's root-directory and
+parallel-editor clarification refines the earlier CSS-first recommendation. The
+[source assessment](reviews/2026-11-08-next-step-review.md) counts 91 root configs
+and 124 tracked CSS files in the product checkout, proposes explicit ownership
+with the editor lane, and retains the bounded algebra style conversion after
+the full CSS inventory. Navigation cleanup remains a supporting candidate.
 This is a proposal, not a new run. The integrated annotation reader's visual
 judgment remains pending, and the broader explanation-first successor is retained.
 

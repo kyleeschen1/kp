@@ -2,11 +2,14 @@
 
 Status: active product direction; integrated KP annotation reader awaits visual judgment
 Last Updated: 2026-11-08
-Current maintenance proposal (KP engine lane): complete the bounded algebra
-style-ownership conversion while preserving current visual behavior. The
-[November 8 review](../reviews/2026-11-08-next-step-review.md) names the complete
-consumer boundary and low-interruption verification approach. No new run has
-started; the explanation-first product successor remains the broader direction.
+Current maintenance proposal (KP engine lane): consolidate specialized root
+tooling configurations, then use a full CSS inventory to guide the bounded
+algebra style-ownership conversion. The user's root-directory clarification and
+parallel editor session refine the earlier CSS-first recommendation. The
+[November 8 review](../reviews/2026-11-08-next-step-review.md) names the proposed
+ownership split, complete consumer boundaries and low-interruption verification
+approach. No new run has started; the explanation-first product successor remains
+the broader direction.
 
 Pending visual checkpoint: review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
 at `/reader/what-counts/`. The user approved the [bounded consolidation](../2026-10-31-annotation-reader-delivery.md);
