@@ -4,7 +4,7 @@
   "title": "Give reader attention an arrival, hold and release",
   "status": "resolved",
   "domain": "reader",
-  "summary": "COMPLETE: two-reader attention lifecycle and integration checks complete; exact fade feel remains reviewable without a new format or catalogue rollout",
+  "summary": "COMPLETE: two-reader implementation, preservation checks and user visual approval recorded at 28efc1894; medium-term recommendations remain proposals",
   "sourceRefs": [
     {
       "kind": "file",
@@ -13,6 +13,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-11-08-reader-attention.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-medium-term-progression.md"
     }
   ],
   "verificationRecords": [
@@ -57,6 +61,13 @@
       "scope": "focused",
       "checkedAt": "2026-11-08T20:13:07.620Z",
       "notes": "67 dashboard and source-linked vision checks pass; finite reader attention outcome recorded without expanding prior milestones"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T20:28:00.112Z",
+      "notes": "67 checks pass after recording user acceptance, preserving completed milestones and recommending the next explanation-first proof without starting it"
     }
   ],
   "progress": {

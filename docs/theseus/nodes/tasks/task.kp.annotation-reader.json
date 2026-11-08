@@ -2,13 +2,17 @@
   "id": "task.kp.annotation-reader",
   "kind": "task",
   "title": "Annotations in the accepted document reader",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "reader",
-  "summary": "HUMAN_CHECKPOINT: integrated reader candidate ready for visual judgment; implementation and focused preservation complete.",
+  "summary": "COMPLETE: user approved the integrated reader at 28efc1894 after typography and attention refinements; no wider promotion or new implementation scope",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-10-31-annotation-reader-delivery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-reader-attention.md"
     }
   ],
   "verification": [

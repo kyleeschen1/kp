@@ -2,8 +2,8 @@
   "id": "run-contract.kp.annotation-reader-v1",
   "kind": "run-contract",
   "title": "Annotation reader consolidation",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: both implementation packages checked; integrated visual acceptance is pending.",
+  "status": "resolved",
+  "summary": "COMPLETE: both checked implementation slices and retained integrated visual checkpoint are accepted by the user on November 8",
   "sourceRefs": [
     {
       "kind": "file",

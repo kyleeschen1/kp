@@ -31,10 +31,13 @@ fades, bounded focus and a centrally replaceable focus treatment through both
 named readers. The [candidate and evidence](reviews/2026-11-08-reader-attention.md)
 preserve the document host and checked mathematics, release URL/story emphasis,
 and retain partially restored attention through Firefox layout measurement.
-`run-contract.kp.reader-attention-20261108` owns this finite successor. The next
-product action is to judge the fade feel in the existing reader, then consider
-the retained explanation-first experiment. No new format, editor work or
-catalogue-wide promotion is implied.
+`run-contract.kp.reader-attention-20261108` owns this finite successor. The user's
+subsequent “i approve” accepts the current two-reader candidate at `28efc1894`
+and closes the retained integration checkpoint. The
+[medium-term review](reviews/2026-11-08-medium-term-progression.md) recommends
+one explanation-first comparison in the same host, then repeatable authoring,
+precise follow-up/revision and a structurally different caller. This is a proposed
+progression, not a new implementation run, editor scope or catalogue promotion.
 
 November 8 maintenance delivery: the user approved the
 [root/CSS proposal](reviews/2026-11-08-next-step-review.md) for sustained work with
@@ -54,8 +57,8 @@ and repairs the shared card's callback lifetime before clock disposal. Native
 and production-edition checks preserve source, playhead and paint, including both
 visibility/departure orders; `run-contract.kp.algebra-teardown-20261108` owns the
 finite closeout. This completes that repair, not a broader lifecycle campaign.
-The next product action returns to the integrated annotation reader's pending
-visual judgment, followed by the proposed explanation-first experiment. Wider
+At that handoff the next product action returned to the integrated reader review,
+now accepted above, followed by the proposed explanation-first experiment. Wider
 CSS and planning/command-navigation cleanup remain separately scoped proposals;
 independent editor ownership is unchanged.
 
@@ -77,8 +80,8 @@ checked algebra now uses `/reader/what-counts/` and the shared document theater;
 ordinary prose yields to dedicated native-anchored annotation moments. The
 standalone card shell is retired and its links redirect with revision/state
 preserved or explicit repair feedback. The [integrated review packet](reviews/2026-10-31-annotation-reader.md)
-is the next KP action: judge the reading handoff and spacing before promotion.
-This is a candidate awaiting human acceptance; the fractional reader remains
+supplied its reading-handoff checkpoint, subsequently accepted on November 8
+after the typography and attention refinements. The fractional reader remains
 the preservation reference and the workbench remains independently owned.
 
 October 31 KP annotation acceptance: the user accepts the anchored annotation

@@ -47,13 +47,13 @@ export const projectVision: ProjectVision = {
     {
       id: "reader", title: "Reader & presentation", horizon: "next",
       destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
-      established: "The accepted theater and annotation treatment now share reversible annotation presence and bounded focus across both named readers. Their appearance has one reader policy; Chromium and Firefox checks preserve the native paths. Exact fade feel and integrated visual judgment remain open.",
-      evidence: { label: "Reader attention candidate and preservation evidence", href: "docs/project/reviews/2026-11-08-reader-attention.md" },
+      established: "The user accepts the integrated document reader and its refined annotation/focus treatment. Both named readers share responsible attention and presentation owners with Chromium/Firefox preservation checks. Rich explanation quality, rapid authoring and conversational revision still need complete product proofs.",
+      evidence: { label: "Reader acceptance and preservation evidence", href: "docs/project/reviews/2026-11-08-reader-attention.md" },
       outcome: {
-        id: "annotations-in-document-reader", title: "Give annotations their own moment in the accepted reader",
-        finish: "Host the same checked algebra explanation in the accepted document-reader experience. Review a clear handoff between narrative prose and situated annotations, preserve the fractional reader, and retire the replaced standalone shell.",
-        excludes: "A universal annotation system, several-target implementation, new native choreography, workbench changes or catalogue-wide layout migration.",
-        source: { label: "Accepted annotation and consolidation direction", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" }
+        id: "explanation-first-reader-proof", title: "Preserve one full explanation through KP",
+        finish: "For one real learner question in a supported domain, write a rich baseline, bind a few purposeful attention moments in the accepted reader, compare for lost reasoning, try a changed-case prediction and record authoring time and engine interventions. This is a proposed experiment.",
+        excludes: "A universal authoring schema, a new visual format, embedded chat service, editor-interface changes, catalogue rollout or claims of general learning efficacy.",
+        source: { label: "Proposed medium-term progression", href: "docs/project/reviews/2026-11-08-medium-term-progression.md" }
       }
     },
     {
@@ -83,8 +83,13 @@ export const projectVision: ProjectVision = {
   ],
   completed: [
     {
-      title: "Two-reader attention lifecycle implemented",
-      scope: "Annotation presence follows reading position; story and restored focus release to neutral through one presentation owner. Both readers pass desktop/phone Chromium and Firefox checks. This closes bounded implementation, not exact fade judgment, several-target comments or catalogue promotion.",
+      title: "Annotations integrated into the accepted document reader",
+      scope: "The same checked algebra explanation uses the accepted reader; prose and annotations have distinct reading moments, the fractional reader is preserved and the standalone shell is retired. The user accepts the integrated candidate after its typography and attention refinements. Wider promotion remains separate.",
+      source: { label: "Integration and subsequent visual acceptance", href: "docs/project/reviews/2026-10-31-annotation-reader.md" }
+    },
+    {
+      title: "Two-reader attention lifecycle accepted",
+      scope: "Annotation presence follows reading position; story and restored focus release to neutral through one presentation owner. Both readers pass desktop/phone Chromium and Firefox checks, and the user accepts the treatment. Several-target comments and catalogue promotion remain separate.",
       source: { label: "Attention behavior, safeguards and costs", href: "docs/project/reviews/2026-11-08-reader-attention.md" }
     },
     {
@@ -216,6 +221,13 @@ export const projectVision: ProjectVision = {
       after: "The user approved the full two-reader attention successor: reversible note fades, bounded story and URL focus, and one replaceable presentation policy. Review the candidate in the existing reader; retain the explanation-first experiment afterward.",
       reason: "Improve shared attention without creating another format or content-specific styling path. Preserve semantic sources, native paint and the earlier integration finish line; keep exact visual judgment and broader promotion distinct.",
       source: { label: "Approved scope and implemented evidence", href: "docs/project/reviews/2026-11-08-reader-attention.md" }
+    },
+    {
+      id: "reader-accepted-explanation-proof-next", on: "2026-11-08",
+      before: "The integrated reader and attention-lifecycle candidate awaited human visual judgment; explanation-first translation remained a retained successor proposal.",
+      after: "The user approves the current two-reader treatment. Close those finite checkpoints and recommend one rich explanation translated into the same host, followed by repeatable authoring and precise revision. No new implementation run is approved.",
+      reason: "The immediate ownership repairs make the next product proof viable, while example-specific assembly and unmeasured authoring costs remain. Let useful explanations identify the next abstraction instead of continuing broad CSS cleanup by default.",
+      source: { label: "Approval and medium-term assessment", href: "docs/project/reviews/2026-11-08-medium-term-progression.md" }
     }
   ]
 };

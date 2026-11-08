@@ -1,6 +1,6 @@
 # Co-creative mathematical practice
 
-Status: active product direction; integrated KP annotation reader awaits visual judgment
+Status: active product direction; reader accepted, explanation-first experiment proposed
 Last Updated: 2026-11-08
 
 November 8 reader attention successor: the user approved the
@@ -9,10 +9,13 @@ November 8 reader attention successor: the user approved the
 reversible fade with an exclusive reading interval, bounds story/URL focus and
 centralizes its appearance. Chromium/Firefox desktop and phone checks preserve
 the native reader, including a repaired late-layout restoration edge case.
-`run-contract.kp.reader-attention-20261108` owns this finite work; the earlier
-integration milestone is not expanded. Review fade feel in the same reader,
-then retain the explanation-first experiment as the proposed product successor.
-No several-target implementation or editor scope was added.
+`run-contract.kp.reader-attention-20261108` owns this finite work. The user's
+subsequent “i approve” accepts the candidate at `28efc1894`, closing both its
+visual judgment and the earlier integration checkpoint without expanding either
+milestone. The [medium-term review](../reviews/2026-11-08-medium-term-progression.md)
+recommends an explanation-first comparison, source-only reuse, one situated
+follow-up/revision and a different-domain pressure case. These remain proposals;
+no new run, several-target implementation or editor scope was added.
 
 November 8 maintenance delivery (KP engine lane): the approved
 [proposal](../reviews/2026-11-08-next-step-review.md) organized specialized root
@@ -28,15 +31,15 @@ repair. The [evidence](../reviews/2026-11-08-algebra-teardown.md) records a shar
 card lifetime fix, six deterministic red-to-green ordering probes and preserved
 native/edition behavior. `run-contract.kp.algebra-teardown-20261108` owns closure.
 The finished repair does not reopen maintenance or authorize a lifecycle framework.
-The next product action is the retained reader review below, then the proposed
+That handoff returned to the reader review below, now accepted, then the proposed
 explanation-first authoring experiment. Planning/command-navigation and wider
 CSS cleanup remain separate follow-ups, not an automatically continuing queue.
 
-Pending visual checkpoint: review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
+Accepted visual checkpoint (November 8): the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
 at `/reader/what-counts/`. The user approved the [bounded consolidation](../2026-10-31-annotation-reader-delivery.md);
 the candidate reuses the document theater, gives annotations a separate reading
 moment, preserves the fractional reader and retires the standalone card shell.
-Judge the handoff and spacing before promotion. The [accepted direction](../decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
+The user accepts the refined handoff and attention treatment. The [accepted direction](../decisions/2026-10-31-annotation-attention-and-reader-consolidation.md)
 still keeps several-target comments as future work. Theseus owns execution in
 `run-contract.kp.annotation-reader-v1`. The editor workbench remains separately
 owned; its current execution is not this branch's queue.

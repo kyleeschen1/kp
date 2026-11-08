@@ -3,6 +3,13 @@
 Scope: [approved delivery](../2026-10-31-annotation-reader-delivery.md).
 Execution: `run-contract.kp.annotation-reader-v1`.
 
+November 8 acceptance: after the typography and attention-lifecycle refinements,
+the user approves the integrated candidate at `28efc1894`. The
+[latest evidence](2026-11-08-reader-attention.md) closes this reader's visual
+checkpoint. Earlier review requests below describe the original handoff, not a
+remaining approval gate. Several-target commentary and wider promotion remain
+separate work.
+
 ## Shared document projection conversion
 
 The fractional reader now selects the document theater explicitly. The static

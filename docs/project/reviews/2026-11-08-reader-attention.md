@@ -1,9 +1,13 @@
 # Reader attention: arrival, hold and release
 
 The user approved the [two-reader delivery](../2026-11-08-reader-attention-delivery.md)
-after design feedback. Both consumers are implemented and verified. Theseus owns
-execution in `run-contract.kp.reader-attention-20261108`; exact fade feel remains
-a human judgment, without authorizing a catalogue rollout.
+after design feedback. Both consumers are implemented and verified. The user's
+subsequent November 8 “i approve” accepts this candidate at `28efc1894`, including
+the reader handoff and attention treatment. Theseus owns execution in
+`run-contract.kp.reader-attention-20261108`. This closes the local visual checkpoint,
+without authorizing a catalogue rollout. The
+[medium-term assessment](2026-11-08-medium-term-progression.md) recommends the
+next product experiment; it is not an approved implementation run.
 
 ## Behavior and ownership
 
