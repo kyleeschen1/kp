@@ -128,16 +128,6 @@
   body[data-kp-reader-layout="rising-passages"] .kp-rising-navigation .kp-lesson-toc {
     display: block; position: static; width: auto; padding: .8rem 0 0; border: 0;
   }
-  body[data-kp-reader-layout="rising-passages"] .kp-reader-options [data-kp-dev-toolbar] {
-    position: static; display: flex; flex-wrap: wrap; justify-content: start;
-    width: auto; min-height: 0; max-width: none; margin: 0; padding: .8rem 0 0;
-    border: 0; border-top: 1px solid var(--kp-line); border-radius: 0;
-    background: transparent; box-shadow: none; font-family: inherit;
-  }
-  body[data-kp-reader-layout="rising-passages"] .kp-reader-options .kp-dev-toolbar__pages > nav {
-    position: static; width: 100%; max-height: none; transform: none;
-    grid-template-columns: 1fr; padding: .5rem; box-shadow: none; border-radius: 0;
-  }
   body[data-kp-reader-layout="rising-passages"] .kp-lesson-toc ol { display: block; }
   body[data-kp-reader-layout="rising-passages"] .kp-rising-navigation .kp-reader-motion-control {
     display: flex; justify-content: space-between; margin-top: .8rem; padding-top: .8rem;

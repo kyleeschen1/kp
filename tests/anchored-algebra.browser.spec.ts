@@ -11,6 +11,117 @@ async function jump(page: Page, id: string) {
   await page.locator(`.kp-lesson-toc a[href="#${id}"]`).click();
 }
 
+async function nativeColor(page: Page, ref: string) {
+  return page.locator('[data-kp-reader-equation-stage]').evaluate((stage, ref) => {
+    const side = stage.dataset['kpReaderNativeEndpoint'];
+    const target = stage.querySelector(`[data-kp-reader-transition-active="true"] [data-kp-reader-native="${side}"] [data-kp-reader-selector-id="${ref}"]`);
+    return target ? getComputedStyle(target).color : undefined;
+  }, ref);
+}
+
+test('annotation fades own their reading interval through reversal and restoration', async ({ page }, info) => {
+  test.setTimeout(90_000);
+  await page.goto(route); await ready(page);
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await jump(page, 'passage.state.what-counts.collected');
+    const next = await page.evaluate(() => scrollY);
+    await jump(page, source.states[0]!.id);
+    const arrival = await page.evaluate(() => scrollY);
+    const labels = page.locator('.anchored-labels');
+    // Browser scroll quantization may land a fraction of a pixel before arrival.
+    await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeGreaterThan(.995);
+    for (const [name, position] of [['enter', arrival - 16], ['leave', next - 48], ['reverse', arrival - 16]] as const) {
+      await page.evaluate(top => scrollTo(0, top), position);
+      await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeGreaterThan(.3);
+      await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeLessThan(.7);
+      expect(await page.locator('.kp-rising-passage').evaluateAll(nodes => nodes.every(node => getComputedStyle(node).opacity === '0'))).toBe(true);
+      await expect(page.locator('.kp-animation-story')).toHaveAttribute('data-anchored-status', 'ready');
+      await expect(page.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+      await page.screenshot({ path: info.outputPath(`${width}-annotation-${name}.png`) });
+    }
+    // Layout invalidation must preserve an in-progress reading handoff, even
+    // when the equation's mathematical progress is unchanged across the hold.
+    await page.evaluate(() => dispatchEvent(new Event('resize')));
+    await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeGreaterThan(.3);
+    await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeLessThan(.7);
+    // Share is published when scrolling settles, not on every paint frame.
+    await page.evaluate(() => dispatchEvent(new Event('scrollend')));
+    const share = await page.locator('[data-kp-reader-share]').getAttribute('href');
+    // Open a fresh document. Navigating to the current identical fragment asks
+    // the browser to scroll its DOM anchor instead of booting URL restoration.
+    await page.goto('about:blank');
+    await page.goto(share!); await ready(page);
+    await expect(labels).toBeVisible();
+    await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeGreaterThan(.3);
+    await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeLessThan(.7);
+    await jump(page, source.states[0]!.id);
+    await page.waitForTimeout(250);
+    await expect.poll(async () => Number(await labels.evaluate(node => getComputedStyle(node).opacity))).toBeGreaterThan(.995);
+  }
+});
+
+test('both readers release restored focus and share one replaceable paint policy', async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.addInitScript(() => document.addEventListener('DOMContentLoaded', () => {
+    document.body.style.setProperty('--kp-reader-focus-direct-color', 'rgb(90, 45, 120)');
+  }));
+  const cases = [
+    { route, lesson: 'lesson.algebra.what-counts', ref: 'state.what-counts.repeated.paint.left-factor', beat: 'passage.state.what-counts.repeated' },
+    { route: '/reader/solve-fractional-linear/', lesson: 'lesson.solve-x.fractional-linear', ref: 'equation.fractional-linear.initial.fraction.numerator.x', beat: 'beat.read' }
+  ];
+  for (const width of [1100, 390]) for (const example of cases) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(example.route); await ready(page);
+    await jump(page, example.beat);
+    const neutral = await nativeColor(page, example.ref);
+    expect(neutral).toBeTruthy();
+    const focused = `${example.route}?kpLesson=${example.lesson}&kpVersion=1&kpProgress=0&kpFocus=${example.ref}`;
+    for (const navigation of ['scroll', 'toc'] as const) {
+      await page.goto(focused); await ready(page);
+      const stage = page.locator('[data-kp-reader-equation-stage]');
+      await expect(stage).toHaveAttribute('data-kp-reader-focus-source', 'url');
+      expect(await stage.locator('.kp-reader-semantic-focus').evaluateAll(nodes =>
+        nodes.every(node => getComputedStyle(node).transitionDuration === '0s'))).toBe(true);
+      // One central policy changes actual native paint in both hosts without
+      // editing source equations, selectors, beats or renderer treatments.
+      expect(await nativeColor(page, example.ref)).toBe('rgb(90, 45, 120)');
+      expect(await nativeColor(page, example.ref)).not.toBe(neutral);
+      if (navigation === 'scroll') await page.evaluate(() => scrollBy(0, 40));
+      else await jump(page, example.beat);
+      await expect(stage).not.toHaveAttribute('data-kp-reader-focus-source', 'url');
+      await expect.poll(() => nativeColor(page, example.ref)).toBe(neutral);
+    }
+  }
+});
+
+test('passage focus releases after its hold and pointer and keyboard focus return to prose', async ({ page }) => {
+  await page.goto('/reader/solve-fractional-linear/'); await ready(page);
+  const stage = page.locator('[data-kp-reader-equation-stage]');
+  const link = page.locator('[data-kp-rising-beat="beat.read"] .kp-semantic-link');
+  await jump(page, 'beat.read');
+  const prose = await link.evaluate(node => getComputedStyle(node.parentElement!).color);
+  await expect(link).toHaveCSS('color', prose);
+  await link.hover();
+  await expect(stage).toHaveAttribute('data-kp-reader-focus-source', 'pointer');
+  expect(await link.evaluate(node => getComputedStyle(node).color)).not.toBe(prose);
+  await page.mouse.move(2, 2);
+  await expect(link).toHaveCSS('color', prose);
+  await link.focus();
+  await expect(stage).toHaveAttribute('data-kp-reader-focus-source', 'keyboard');
+  await page.locator('.kp-rising-navigation > summary').focus();
+  await expect(link).toHaveCSS('color', prose);
+  await jump(page, 'beat.cancel-additive');
+  await expect(stage).toHaveAttribute('data-kp-reader-focus-source', 'story');
+  const arrival = await page.evaluate(() => scrollY);
+  const hold = await page.locator('[data-kp-beat="beat.cancel-additive"]').evaluate(node => Number.parseFloat(getComputedStyle(node).getPropertyValue('--kp-flow-hold')));
+  await page.evaluate(top => scrollTo(0, top), arrival + hold + 32);
+  await expect(stage).not.toHaveAttribute('data-kp-reader-focus-source', /.+/);
+  await expect(stage.locator('.kp-reader-semantic-focus')).toHaveCount(0);
+  await page.evaluate(top => scrollTo(0, top), arrival + 5);
+  await expect(stage).toHaveAttribute('data-kp-reader-focus-source', 'story');
+});
+
 test("equation remains painted after initial load and reload", async ({ page }, info) => {
   test.setTimeout(90_000);
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));

@@ -1,0 +1,44 @@
+{
+  "id": "run-contract.kp.reader-attention-20261108",
+  "kind": "run-contract",
+  "title": "Reader attention lifecycle",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.reader-attention-20261108.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-reader-attention-delivery.md",
+      "summary": "User approved full implementation across both readers after design discussion"
+    }
+  ],
+  "verification": [
+    "npm run visual:anchored-algebra -- --project=firefox",
+    "npm run typecheck",
+    "npm run check:architecture"
+  ],
+  "allowedWork": [
+    "Two named readers, shared attention lifetime and presentation, regression and preservation checks"
+  ],
+  "disallowedWork": [
+    "Editor changes, new mathematical choreography, new authoring schema or catalogue rollout"
+  ],
+  "goal": "Fade annotations and release temporary focus through a replaceable shared policy in both readers",
+  "target": "task.kp.reader-attention-20261108",
+  "slices": [
+    {
+      "id": "attention",
+      "title": "Shared-attention-and-two-readers",
+      "summary": "Shared lifetime and presentation implemented in both readers with 22 focused tests and 14 browser checks passing",
+      "status": "complete"
+    },
+    {
+      "id": "integration",
+      "title": "Preservation-and-closeout",
+      "status": "planned"
+    }
+  ]
+}

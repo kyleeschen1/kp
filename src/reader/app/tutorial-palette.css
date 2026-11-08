@@ -37,13 +37,6 @@ html:has(> body[data-kp-reader-palette="nocturne"]) {
   color-scheme: dark;
 }
 
-/* The fractional trail exemplar uses flat focus, including its legacy paint
-   adapter's separate focus shadow. Do not change other readers' treatments. */
-body[data-kp-reader-lesson-variant="fractional-linear"]
-  .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual {
-  filter: none;
-}
-
 @media print {
   /* Preserve the readable static transcript when printers omit backgrounds. */
   body[data-kp-reader-palette="nocturne"] {

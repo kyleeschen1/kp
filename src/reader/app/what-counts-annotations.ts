@@ -2,6 +2,7 @@ import { compile } from "../../authoring/algebra/compile.ts";
 import { bindAnchoredCommentary, AnchoredAlgebraGap } from "./what-counts-commentary.ts";
 import { mountAnchoredLabels } from "./what-counts-anchors.ts";
 import "./what-counts-annotations.css";
+import type { DocumentReadingAttention } from './document-theater-attention.ts';
 
 /** Local reviewed score; the reader supplies its sole current attention owner. */
 export function mountWhatCountsAnnotations(story: HTMLElement, source: unknown) {
@@ -17,12 +18,13 @@ export function mountWhatCountsAnnotations(story: HTMLElement, source: unknown) 
   let invalidated = true;
   return {
     invalidate() { invalidated = true; },
-    render(stateId: string | undefined, revision: number) {
+    render(attention: Extract<DocumentReadingAttention, { kind: 'annotation' }> | undefined, revision: number) {
       try {
+        const stateId = attention?.stateId;
         if (unknownState) throw new AnchoredAlgebraGap("location.state", "This link names an unknown explanation state. Open /reader/what-counts/ for the current explanation.");
         const stop = stateId === undefined ? undefined : commentary.stops.find(stop => stop.stateId === stateId);
         if (stateId && !stop) throw new AnchoredAlgebraGap(stateId, "Use a declared annotation stop.");
-        labels.render(stop, invalidated || layoutRevision !== revision); layoutRevision = revision; invalidated = false;
+        labels.render(stop, invalidated || layoutRevision !== revision, attention?.presence ?? 0); layoutRevision = revision; invalidated = false;
         alert.hidden = true; alert.textContent = ""; story.dataset["anchoredStatus"] = "ready";
       } catch (error) {
         labels.render(undefined);

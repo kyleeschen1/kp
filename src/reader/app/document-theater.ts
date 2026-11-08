@@ -2,7 +2,7 @@ import { createDocumentTheaterScroll, documentPassageCadence, documentPassageInd
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
-import { documentReadingAttention } from './document-theater-attention.ts';
+import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -71,7 +71,9 @@ export function mountDocumentTheater(input: {
   let disposed = false;
   let equationHeight = 82;
   const annotationStates = input.beats.map(beat => beat.dataset['kpAnnotationState']);
-  let annotationState: string | undefined;
+  let attentionAt = compileDocumentReadingAttention({ states: [], positions: [], holds: [] });
+  let annotation: Extract<DocumentReadingAttention, { kind: 'annotation' }> | undefined;
+  let motionMode: 'full' | 'essential' = 'full';
   let returnIndex = 0;
   const indexAtPosition = () => documentPassageIndex(positions, window.scrollY + readingLine);
   const readingMode = document.createElement('button');
@@ -80,12 +82,13 @@ export function mountDocumentTheater(input: {
   readingMode.textContent = 'Read all';
   readingMode.setAttribute('aria-pressed', 'false');
   options.prepend(readingMode);
-  const render = () => {
+  const render = (mode = motionMode) => {
+    motionMode = mode;
     const active = readAll ? returnIndex : indexAtPosition();
     const position = window.scrollY + readingLine;
     const opacity = focusAt(position);
-    const attention = documentReadingAttention({ states: annotationStates, opacity, readingDocument: readAll, hasSelection: selectedPassages.size > 0 });
-    annotationState = attention.kind === 'annotation' ? attention.stateId : undefined;
+    const attention = attentionAt({ position, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode });
+    annotation = attention.kind === 'annotation' ? attention : undefined;
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
     const neighbors = [active - 1, active, active + 1];
@@ -97,8 +100,9 @@ export function mountDocumentTheater(input: {
       const activeValue = String(index === active);
       const focus = opacity.get(index) ?? 0;
       const front = selectedPassages.has(index) || focus > 0;
-      const alpha = annotationState || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
+      const prose = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
         ? documentPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
+      const alpha = attention.kind === 'annotation' || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
       const paint = String(alpha);
       const present = String(front);
       const layer = front ? 'front' : 'back';
@@ -151,6 +155,7 @@ export function mountDocumentTheater(input: {
     });
     positions = input.beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
     focusAt = compileDocumentTheaterFocus({ positions, holds });
+    attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };
   measure();
   const toggleReading = () => {
@@ -205,13 +210,31 @@ export function mountDocumentTheater(input: {
       window.queueMicrotask(() => { if (!disposed) input.onLayout(); });
       return true;
     },
-    annotationState: () => annotationState,
+    annotation: () => annotation,
+    storyFocusActive: () => !readAll && documentStoryFocusActive(window.scrollY + readingLine,
+      positions[indexAtPosition()]!, holds[indexAtPosition()]!),
     readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
       geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight);
       return geometry;
     },
     activeBeat: () => input.beats[readAll ? returnIndex : indexAtPosition()],
+    readingLocation() {
+      if (readAll) return undefined;
+      const index = indexAtPosition();
+      const start = positions[index]!;
+      const end = positions[index + 1] ?? start + holds[index]!;
+      return end > start ? { index, fraction: (window.scrollY + readingLine - start) / (end - start) } : undefined;
+    },
+    positionForReading(location: { readonly index: number; readonly fraction: number } | undefined, progress: number) {
+      if (location === undefined || geometry === undefined) return undefined;
+      const start = positions[location.index]!;
+      const end = positions[location.index + 1] ?? start + holds[location.index]!;
+      const position = start + location.fraction * (end - start);
+      // Preserve a position inside a reading hold after layout changes. If it
+      // would change the mathematics, the operation's semantic seek wins.
+      return Math.abs(sampleKpReaderScrollProgress(position, geometry) * 1000 - progress) <= 1 ? position : undefined;
+    },
     positionFor(beat: HTMLElement | undefined, progress: number) {
       if (beat === undefined || geometry === undefined) return undefined;
       const index = input.beats.indexOf(beat);

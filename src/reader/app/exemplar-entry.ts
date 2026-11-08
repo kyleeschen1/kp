@@ -612,13 +612,15 @@ function onResize(): void {
   }
   const progressPermille = lastSample().progressPermille;
   const readingBeat = risingPassages?.activeBeat();
+  const readingLocation = risingPassages?.readingLocation();
   applyResponsiveProjection();
   evaluationControls?.refreshViewport();
   updateScrollGeometry();
   // A resize can restore the playhead before ResizeObserver fires. Invalidate
   // before that render so new native geometry never uses an old certificate.
   renderer.refresh('resize');
-  const passagePosition = risingPassages?.positionFor(readingBeat, progressPermille);
+  const passagePosition = risingPassages?.positionForReading(readingLocation, progressPermille)
+    ?? risingPassages?.positionFor(readingBeat, progressPermille);
   if (passagePosition !== undefined) {
     setExplicitProgress(progressPermille, 'controls', false,
       Math.ceil(passagePosition - window.innerHeight * readerViewportAnchorFraction()));
@@ -732,7 +734,7 @@ function onScroll(): void {
   if (printMedia.matches) return;
   // Native find and scrollbar drags do not emit wheel/key events. Preserve
   // exact controlled samples only while still at their commanded position.
-  if (risingPassages !== undefined && controlScrollPosition !== undefined &&
+  if (controlScrollPosition !== undefined &&
     Math.abs(window.scrollY - controlScrollPosition) > 1) releaseControlAuthority();
   scheduleScrollSample();
   locationSettlement.schedule(180);
@@ -748,6 +750,10 @@ function onReaderKeyDown(event: KeyboardEvent): void {
 function releaseControlAuthority(): void {
   controlSample = undefined;
   controlScrollPosition = undefined;
+  // A restored link supplies an initial attention request, not a permanent
+  // override of subsequent reading, pointer or keyboard navigation.
+  focus.clear("url");
+  scheduleScrollSample();
 }
 
 function scheduleScrollSample(): void {
@@ -822,7 +828,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     ? projection.progress
     : attentionProjection.visualProgressPermille / 1_000;
   const visualProgressPermille = Math.round(visualProgress * 1_000);
-  risingPassages?.render();
+  risingPassages?.render(projection.mode === 'continuous' ? 'full' : 'essential');
   const visualSample = {
     ...sample,
     // Keep exact control-selected boundaries for renderer ownership. Permilles
@@ -867,7 +873,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
         focusSnapshot.activeSource ?? "none"
       ].join(":")
     });
-    whatCountsAnnotations?.render(risingPassages?.annotationState(), chromeFreeLayoutRevision);
+    whatCountsAnnotations?.render(risingPassages?.annotation(), chromeFreeLayoutRevision);
     document.body.dataset["kpReaderReviewFrame"] = JSON.stringify([
       snapshot.animationProgressPermille,
       snapshot.phaseProgressPermille,
@@ -1414,7 +1420,8 @@ function updateActiveBeat(
     ?? "Follow the symbols";
   if (status.value !== cue) status.value = cue;
   syncActiveAttention(attentionProjection);
-  focus.set("story", attentionProjection?.focusRefs ?? dataRefs(activeBeat));
+  focus.set("story", risingPassages?.storyFocusActive() === false
+    ? [] : attentionProjection?.focusRefs ?? dataRefs(activeBeat));
 }
 
 function syncActiveAttention(
@@ -1480,6 +1487,7 @@ function onAttentionScrub(): void {
 }
 
 function setControlProgress(progressPermille: number): void {
+  focus.clear("url");
   setExplicitProgress(progressPermille, "controls", true);
 }
 
@@ -1497,6 +1505,7 @@ function onTocNavigation(event: MouseEvent): void {
   );
   if (beat === undefined) return;
   event.preventDefault();
+  focus.clear("url");
   if (seekDocumentBeat(beat)) { locationSettlement.settle(); return; }
   const authoredProgress = Number(requiredData(beat, "kpCheckpoint"));
   const exactProgress =
@@ -1625,6 +1634,7 @@ function onEquationProfileChange(): void {
 }
 
 function restoreUrlLocation(): void {
+  focus.clear("url");
   const session = decodeKpReaderSessionUrl(window.location.href, {
     documentId,
     documentVersion

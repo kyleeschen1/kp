@@ -60,6 +60,21 @@
   margin-inline: auto;
 }
 
+/* The reader hosts these development controls inside Options. Keep this
+   integration in the development-only closure, out of shipped reader CSS. */
+@media screen {
+  body[data-kp-reader-layout="rising-passages"] .kp-reader-options [data-kp-dev-toolbar] {
+    position: static; display: flex; flex-wrap: wrap; justify-content: start;
+    width: auto; min-height: 0; max-width: none; margin: 0; padding: .8rem 0 0;
+    border: 0; border-top: 1px solid var(--kp-line); border-radius: 0;
+    background: transparent; box-shadow: none; font-family: inherit;
+  }
+  body[data-kp-reader-layout="rising-passages"] .kp-reader-options .kp-dev-toolbar__pages > nav {
+    position: static; width: 100%; max-height: none; transform: none;
+    grid-template-columns: 1fr; padding: .5rem; box-shadow: none; border-radius: 0;
+  }
+}
+
 html[data-kp-dev-toolbar-active] {
   --kp-development-dock-clearance: 5.25rem;
 

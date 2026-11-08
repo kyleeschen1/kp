@@ -113,12 +113,11 @@ export function applyKpCanonicalEquationSemanticFocus(input: {
   for (const link of input.linkRoot.querySelectorAll<HTMLElement>(
     ".kp-semantic-link"
   )) {
-    link.classList.toggle(
-      "kp-reader-semantic-focus",
-      dataRefs(link).some((ref) =>
-        input.projection.visualFocusRefs.includes(ref)
-      )
-    );
+    const focused = dataRefs(link).some(ref => input.projection.visualFocusRefs.includes(ref));
+    link.classList.toggle("kp-reader-semantic-focus", focused);
+    if (focused && input.projection.activeSource !== undefined)
+      link.dataset["kpReaderFocusSource"] = input.projection.activeSource;
+    else delete link.dataset["kpReaderFocusSource"];
   }
 }
 

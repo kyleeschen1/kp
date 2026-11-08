@@ -1,0 +1,42 @@
+/* Reader focus presentation has one owner. Semantic refs and their lifetime
+   stay in the focus service/theater; changing this treatment needs no content
+   changes. Native and material paint must sample the same instantaneous style:
+   an independent CSS color transition would invalidate compositor continuity. */
+body {
+  --kp-reader-focus-story-color: var(--kp-accent);
+  --kp-reader-focus-direct-color: var(--kp-relation);
+}
+.kp-reader-equation-state [data-kp-reader-equation-anchor-id], .kp-semantic-link { transition: none; }
+.kp-reader-equation-stage, .kp-semantic-link {
+  --kp-reader-focus-color: var(--kp-reader-focus-story-color);
+}
+:is([data-kp-reader-focus-source="pointer"], [data-kp-reader-focus-source="keyboard"], [data-kp-reader-focus-source="url"]) {
+  --kp-reader-focus-color: var(--kp-reader-focus-direct-color);
+}
+.kp-reader-equation-material-owner--focused, .kp-reader-semantic-focus {
+  color: var(--kp-reader-focus-color, var(--kp-reader-focus-story-color)) !important;
+}
+.kp-semantic-link {
+  appearance: none;
+  padding: 0 .08em;
+  border: 0;
+  border-radius: .18rem;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--kp-relation) 42%, transparent);
+  text-underline-offset: .2em;
+  cursor: help;
+}
+.kp-semantic-link.kp-reader-semantic-focus {
+  background: color-mix(in srgb, var(--kp-reader-focus-color) 10%, transparent);
+  text-decoration-color: var(--kp-reader-focus-color);
+}
+.kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual {
+  filter: drop-shadow(0 .08em .16em color-mix(in srgb, var(--kp-reader-focus-color) 18%, transparent));
+}
+/* Preserve the fractional exemplar's accepted flat treatment. This policy
+   belongs with focus, independently of the reader's light/dark palette. */
+body:is([data-kp-reader-motion-mode="essential"], [data-kp-reader-lesson-variant="fractional-linear"])
+  .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: none; }

@@ -10,8 +10,13 @@ export function mountAnchoredLabels(stage: HTMLElement) {
   let renderedKey: string | undefined;
   const clear = () => { overlay.hidden = true; renderedKey = undefined; delete stage.dataset["anchoredState"]; };
   return {
-    render(stop: CommentaryStop | undefined, invalidate = false) {
-      if (!stop) { clear(); return; }
+    render(stop: CommentaryStop | undefined, invalidate = false, presence = 1) {
+      if (!Number.isFinite(presence) || presence < 0 || presence > 1)
+        throw new AnchoredAlgebraGap('reading.presence', 'Require a finite annotation presence between zero and one.');
+      if (!stop || presence === 0) { clear(); return; }
+      // Update even when anchors are unchanged. The reader's semantic playhead
+      // is the only clock; CSS transitions would lag reversal and direct seeks.
+      overlay.style.opacity = String(presence);
       const owner = stage.querySelector<HTMLElement>("[data-kp-reader-native-endpoint]");
       const side = owner?.dataset["kpReaderNativeEndpoint"];
       if (!owner || (side !== "source" && side !== "target") || owner.dataset["kpReaderNativeEndpointPassed"] !== "true")

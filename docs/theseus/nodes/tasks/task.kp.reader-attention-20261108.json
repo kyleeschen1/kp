@@ -1,0 +1,44 @@
+{
+  "id": "task.kp.reader-attention-20261108",
+  "kind": "task",
+  "title": "Give reader attention an arrival, hold and release",
+  "status": "ready",
+  "domain": "reader",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-reader-attention-delivery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-reader-attention.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T20:09:27.228Z",
+      "notes": "14 Chromium and Firefox checks pass; both hosts desktop and phone; actual focus paint, annotation reversal, restoration, layout interruption and preserved static reading"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T20:09:28.162Z",
+      "notes": "Application, Node, tests, Svelte and domains pass; final test typecheck also passes"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T20:09:28.809Z",
+      "notes": "Dependency, reader, semantic, compiler authority and conformance gates pass"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Implementation checked; finish integration evidence, source-linked context and backups"
+  }
+}
