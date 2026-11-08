@@ -23,3 +23,11 @@ test("npm config references resolve after tooling relocation", () => {
     }
   }
 });
+
+test("specialized Vite configs have one owner and retain every build entry", () => {
+  assert.deepEqual(readdirSync(root).filter(name => /^vite.*\.config\.ts$/.test(name)), ["vite.config.ts"]);
+  const baseline: Record<string, unknown> = JSON.parse(readFileSync(resolve(root, "tests/fixtures/vite-config-baseline.json"), "utf8"));
+  const configs = ["vite.config.ts", ...readdirSync(resolve(root, "config/vite"))
+    .filter(name => /^vite.*\.config\.ts$/.test(name))].sort();
+  assert.deepEqual(configs, Object.keys(baseline).sort());
+});

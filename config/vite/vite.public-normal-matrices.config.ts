@@ -5,23 +5,23 @@ import { defineConfig } from "vite";
 
 import {
   kpProductionDevelopmentErasurePlugin
-} from "./scripts/vite-production-development-erasure.ts";
+} from "../../scripts/vite-production-development-erasure.ts";
 import {
   kpViteDevelopmentServer,
   kpViteProductionBuild,
   kpViteProjectRoot,
   kpViteScopedRootRedirectPlugin
-} from "./scripts/kp-vite-config-helpers.ts";
+} from "../../scripts/kp-vite-config-helpers.ts";
 
 import type { KpArticleImportLock } from
-  "./src/article/kp-article-import-lock.ts";
+  "../../src/article/kp-article-import-lock.ts";
 import {
   compileKpNormalMatrixProofPublicLesson,
   renderKpNormalMatrixProofReviewIndex,
   renderKpNormalMatrixProofPublicLesson
-} from "./src/public-web/normal-matrix-proof-publication.ts";
+} from "../../src/public-web/normal-matrix-proof-publication.ts";
 
-const projectRoot = kpViteProjectRoot(import.meta.url);
+const projectRoot = kpViteProjectRoot(new URL("../../", import.meta.url).href);
 const routeFilename = resolve(
   projectRoot,
   "learn/math/normal-matrices/index.html"

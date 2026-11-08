@@ -798,7 +798,7 @@ function isPublicTypeScriptPath(path: string): boolean {
     path === "tests/typescript-free-shipping-publication.test.ts" ||
     path === "tests/typescript-free-shipping-public.browser.spec.ts" ||
     path === "scripts/check-public-typescript-budgets.ts" ||
-    path === "vite.public-typescript.config.ts" ||
+    path === "config/vite/vite.public-typescript.config.ts" ||
     path === "config/playwright/playwright.public-typescript.config.ts" ||
     path === "tsconfig.public-typescript.json";
 }
@@ -808,7 +808,7 @@ function isPublicFractionCompositionPath(path: string): boolean {
     path === "learn/math/fraction-composition/index.html" ||
     path === "tests/fraction-composition-publication.test.ts" ||
     path === "tests/fraction-composition-public.browser.spec.ts" ||
-    path === "vite.public-fraction-composition.config.ts" ||
+    path === "config/vite/vite.public-fraction-composition.config.ts" ||
     path === "config/playwright/playwright.public-fraction-composition.config.ts" ||
     path === "tsconfig.public-fraction-composition.json";
 }

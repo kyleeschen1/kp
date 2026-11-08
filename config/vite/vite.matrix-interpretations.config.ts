@@ -1,8 +1,8 @@
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
-import { kpViteProductionBuild, kpViteProjectRoot } from "./scripts/kp-vite-config-helpers.ts";
-import { semanticCostInventory } from "./scripts/semantic-cost-inventory.ts";
-const root = kpViteProjectRoot(import.meta.url);
+import { kpViteProductionBuild, kpViteProjectRoot } from "../../scripts/kp-vite-config-helpers.ts";
+import { semanticCostInventory } from "../../scripts/semantic-cost-inventory.ts";
+const root = kpViteProjectRoot(new URL("../../", import.meta.url).href);
 export default defineConfig({ plugins: [semanticCostInventory()], build: kpViteProductionBuild({ outDir: "dist/matrix-interpretations", entries: {
   matrixInterpretations: resolve(root, "experiments/matrix-column-combinations/index.html"),
   matrixExamples: resolve(root, "experiments/matrix-examples/index.html"),

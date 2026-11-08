@@ -14,6 +14,6 @@
     "src/public-web/fraction-composition-publication.ts",
     "src/public-web/fraction-composition-public-route.ts",
     "tests/fraction-composition-publication.test.ts",
-    "vite.public-fraction-composition.config.ts"
+    "config/vite/vite.public-fraction-composition.config.ts"
   ]
 }

@@ -73,8 +73,8 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
     requiredBoundary: "dedicated-production-graph",
     entryModules: ["src/internal-studio/internal-studio-entry.ts"],
     hostDocuments: ["studio/index.html"],
-    currentBuildConfigs: ["vite.internal-studio.config.ts"],
-    requiredBuildConfigs: ["vite.internal-studio.config.ts"],
+    currentBuildConfigs: ["config/vite/vite.internal-studio.config.ts"],
+    requiredBuildConfigs: ["config/vite/vite.internal-studio.config.ts"],
     rationale:
       "Internal Studio owns editor, catalogue, dashboard, and workbench composition."
   },
@@ -97,16 +97,16 @@ export const kpApplicationEntryOwners = defineKpApplicationEntryOwners([
       "learn/math/eigenvectors/index.html"
     ],
     currentBuildConfigs: [
-      "vite.public-typescript.config.ts",
-      "vite.public-fraction-composition.config.ts",
-      "vite.public-normal-matrices.config.ts",
-      "vite.public-eigenvectors.config.ts"
+      "config/vite/vite.public-typescript.config.ts",
+      "config/vite/vite.public-fraction-composition.config.ts",
+      "config/vite/vite.public-normal-matrices.config.ts",
+      "config/vite/vite.public-eigenvectors.config.ts"
     ],
     requiredBuildConfigs: [
-      "vite.public-typescript.config.ts",
-      "vite.public-fraction-composition.config.ts",
-      "vite.public-normal-matrices.config.ts",
-      "vite.public-eigenvectors.config.ts"
+      "config/vite/vite.public-typescript.config.ts",
+      "config/vite/vite.public-fraction-composition.config.ts",
+      "config/vite/vite.public-normal-matrices.config.ts",
+      "config/vite/vite.public-eigenvectors.config.ts"
     ],
     rationale:
       "Public lessons share neutral KP contracts but must not inherit Studio or development roots."

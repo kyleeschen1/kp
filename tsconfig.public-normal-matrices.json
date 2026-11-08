@@ -16,6 +16,6 @@
     "src/public-web/normal-matrix-proof-public-route.ts",
     "tests/normal-matrix-proof-publication.test.ts",
     "tests/normal-matrix-proof-public-evidence-mode.test.ts",
-    "vite.public-normal-matrices.config.ts"
+    "config/vite/vite.public-normal-matrices.config.ts"
   ]
 }

@@ -295,7 +295,7 @@ test("public TypeScript paths select the bounded route gate", () => {
     "src/public-web/typescript-free-shipping-entry.ts",
     "content/lessons/typescript-free-shipping.kp.md",
     "scripts/check-public-typescript-budgets.ts",
-    "vite.public-typescript.config.ts",
+    "config/vite/vite.public-typescript.config.ts",
     "tsconfig.public-typescript.json"
   ]) {
     const result = selectKpVerificationImpact([path]);
@@ -308,7 +308,7 @@ test("public symbolic paths select the bounded route gate", () => {
   for (const path of [
     "src/public-web/fraction-composition-public-entry.ts",
     "learn/math/fraction-composition/index.html",
-    "vite.public-fraction-composition.config.ts",
+    "config/vite/vite.public-fraction-composition.config.ts",
     "tsconfig.public-fraction-composition.json"
   ]) {
     const result = selectKpVerificationImpact([path]);

@@ -5,33 +5,32 @@ import { defineConfig } from "vite";
 
 import {
   kpProductionDevelopmentErasurePlugin
-} from "./scripts/vite-production-development-erasure.ts";
+} from "../../scripts/vite-production-development-erasure.ts";
 import {
   kpViteDevelopmentServer,
   kpViteLiveReviewBuildPlugin,
   kpViteProductionBuild,
   kpViteProjectRoot,
   readKpReviewBuildIdentity
-} from "./scripts/kp-vite-config-helpers.ts";
+} from "../../scripts/kp-vite-config-helpers.ts";
 
 import type { KpArticleImportLock } from
-  "./src/article/kp-article-import-lock.ts";
+  "../../src/article/kp-article-import-lock.ts";
 import {
-  compileKpTypeScriptFreeShippingPublicLesson,
-  renderKpTypeScriptFreeShippingPublicLesson
-} from "./src/public-web/typescript-free-shipping-publication.ts";
+  compileKpFractionCompositionPublicLesson,
+  renderKpFractionCompositionPublicLesson
+} from "../../src/public-web/fraction-composition-publication.ts";
 
-const projectRoot = kpViteProjectRoot(import.meta.url);
+const projectRoot = kpViteProjectRoot(new URL("../../", import.meta.url).href);
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const routeFilename = resolve(
   projectRoot,
-  "learn/code/free-shipping/index.html"
+  "learn/math/fraction-composition/index.html"
 );
 
 /**
- * The public TypeScript proof deliberately has its own build graph. Loading the
- * all-route config here would eagerly compile unrelated economics, algebra,
- * Scheme, Lisp, Svelte, and reader publications before Rollup sees this page.
+ * The symbolic product spike has a route-only build so its costs are not
+ * hidden inside the catalogue, economics, Svelte, or unrelated reader graph.
  */
 export default defineConfig({
   define: {
@@ -42,13 +41,13 @@ export default defineConfig({
   plugins: [
     kpProductionDevelopmentErasurePlugin({ projectRoot }),
     {
-      name: "kp-public-typescript-static-publication",
+      name: "kp-public-fraction-composition-static-publication",
       transformIndexHtml: {
         order: "pre",
         handler(html, context) {
           return context.filename === routeFilename
             ? html.replace(
-                "<!-- kp:typescript-free-shipping-publication -->",
+                "<!-- kp:fraction-composition-publication -->",
                 compilePublication()
               )
             : html;
@@ -56,18 +55,16 @@ export default defineConfig({
       }
     },
     kpViteLiveReviewBuildPlugin({
-      name: "kp-public-typescript-live-review-build",
+      name: "kp-public-fraction-composition-live-review-build",
       projectRoot
     })
   ],
   build: kpViteProductionBuild({
-    outDir: "dist/public-typescript",
-    entries: {
-      publicTypeScriptFreeShipping: routeFilename
-    }
+    outDir: "dist/public-fraction-composition",
+    entries: { publicFractionComposition: routeFilename }
   }),
   server: kpViteDevelopmentServer({
-    port: 4192,
+    port: 4193,
     apiTarget
   })
 });
@@ -75,13 +72,13 @@ export default defineConfig({
 function compilePublication(): string {
   const text = readFileSync(resolve(
     projectRoot,
-    "content/lessons/typescript-free-shipping.kp.md"
+    "content/lessons/algebra-fraction-composition.kp.md"
   ), "utf8");
   const lock = JSON.parse(readFileSync(resolve(
     projectRoot,
-    "content/lessons/typescript-free-shipping.kp.lock.json"
+    "content/lessons/algebra-fraction-composition.kp.lock.json"
   ), "utf8")) as KpArticleImportLock;
-  return renderKpTypeScriptFreeShippingPublicLesson(
-    compileKpTypeScriptFreeShippingPublicLesson({ text, lock })
+  return renderKpFractionCompositionPublicLesson(
+    compileKpFractionCompositionPublicLesson({ text, lock })
   );
 }

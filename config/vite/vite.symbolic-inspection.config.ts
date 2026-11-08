@@ -1,8 +1,8 @@
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
-import { kpViteProductionBuild, kpViteProjectRoot, readKpReviewBuildIdentity } from "./scripts/kp-vite-config-helpers.ts";
+import { kpViteProductionBuild, kpViteProjectRoot, readKpReviewBuildIdentity } from "../../scripts/kp-vite-config-helpers.ts";
 
-const projectRoot = kpViteProjectRoot(import.meta.url);
+const projectRoot = kpViteProjectRoot(new URL("../../", import.meta.url).href);
 // The real host is served by a dev middleware. This measures its client entry,
 // not a deployable page or the server-side preparation closure.
 export default defineConfig({

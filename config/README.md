@@ -18,6 +18,10 @@ the reviewed baseline. It starts no browser or server. A dependency upgrade or
 intended test/config change needs an explained baseline update, not automatic
 refresh. Run the affected real browser checks separately.
 
+`npm run check:vite-configs` compares all 13 Vite configurations in serve and
+build modes and verifies their declared input paths. Plugin declarations are
+checked, but hook behavior still needs the representative actual builds.
+
 The editor/workbench session owns its application checkout. KP configuration
 changes are integrated in the KP maintenance worktree; keep its preview URL and
 normal command interface stable and coordinate any shared-contract changes.

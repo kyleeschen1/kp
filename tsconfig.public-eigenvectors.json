@@ -18,6 +18,6 @@
     "tests/eigenvector-attentional-surface-public.browser.spec.ts",
     "tests/eigenvector-attentional-surface-publication.test.ts",
     "tests/eigenvector-attentional-surface-url.test.ts",
-    "vite.public-eigenvectors.config.ts"
+    "config/vite/vite.public-eigenvectors.config.ts"
   ]
 }

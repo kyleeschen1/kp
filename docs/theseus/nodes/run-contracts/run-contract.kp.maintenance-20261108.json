@@ -38,7 +38,8 @@
     {
       "id": "vite",
       "title": "Relocate Vite configurations",
-      "status": "planned"
+      "summary": "12 scoped configs moved; declared inputs/output/server modes and production build behavior preserved; full active consumer migration checked.",
+      "status": "complete"
     },
     {
       "id": "typescript",

@@ -5,7 +5,7 @@ import { defineConfig } from "vite";
 
 import {
   kpProductionDevelopmentErasurePlugin
-} from "./scripts/vite-production-development-erasure.ts";
+} from "../../scripts/vite-production-development-erasure.ts";
 import {
   kpViteDevelopmentServer,
   kpViteLiveReviewBuildPlugin,
@@ -13,9 +13,9 @@ import {
   kpViteProjectRoot,
   kpViteScopedRootRedirectPlugin,
   readKpReviewBuildIdentity
-} from "./scripts/kp-vite-config-helpers.ts";
+} from "../../scripts/kp-vite-config-helpers.ts";
 
-const projectRoot = kpViteProjectRoot(import.meta.url);
+const projectRoot = kpViteProjectRoot(new URL("../../", import.meta.url).href);
 const routeFilename = resolve(projectRoot, "studio/index.html");
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 

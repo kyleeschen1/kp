@@ -78,7 +78,7 @@ test("the shared production build does not compile or own Public Web routes", ()
 
   assert.deepEqual(publicWeb.currentBuildConfigs, publicWeb.requiredBuildConfigs);
   assert.ok(publicWeb.currentBuildConfigs.every((path) =>
-    path.startsWith("vite.public-")
+    path.startsWith("config/vite/vite.public-")
   ));
   for (const document of publicWeb.hostDocuments) {
     assert.doesNotMatch(developmentInputs, new RegExp(escapeRegExp(document)));
@@ -126,7 +126,7 @@ test("public and development entry roots cannot masquerade as kernel or Studio",
     path.startsWith("src/experiments/")
   ));
   assert.ok(publicWeb.requiredBuildConfigs.every((path) =>
-    path.startsWith("vite.public-")
+    path.startsWith("config/vite/vite.public-")
   ));
   assert.deepEqual(development.requiredBuildConfigs, []);
   assert.deepEqual(development.currentBuildConfigs, []);
@@ -135,7 +135,7 @@ test("public and development entry roots cannot masquerade as kernel or Studio",
 test("every production build inspects Rollup's rendered modules for development leaks", () => {
   const configs = [
     "vite.config.ts",
-    "vite.internal-studio.config.ts",
+    "config/vite/vite.internal-studio.config.ts",
     ...findKpApplicationEntryOwner("entry-owner.public-web").currentBuildConfigs
   ];
   for (const config of configs) {

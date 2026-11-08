@@ -27,3 +27,23 @@ across Chromium and Firefox, including initial/reloaded paint, reversible
 annotation handoff, missing-selector repair and old-link/static reading. The
 optional dev-review API on port 8001 was unavailable; its proxy warnings did not
 prevent the reader checks. No review-service availability is claimed.
+
+## Vite configuration ownership
+
+Moved 12 specialized configs into `config/vite/`, keeping `vite.config.ts` at
+root. Updated package commands, capture tools, impact selection, application
+entry ownership and compiler input references. Project-root derivation explicitly
+accounts for the new config directory; output and route paths are unchanged.
+
+`npm run check:vite-configs` passed all 13 configurations in serve and build
+modes against the pre-move declaration/input baseline. This checks declarations
+and existing input paths; it does not claim that serializing a plugin hook proves
+its execution. The real `build:matrix-column` and `build:public-normal-matrices`
+commands both passed, including the latter's generated reading and production
+erasure plugin. The complete Playwright configuration comparison still passed.
+
+The focused tooling/helper/entry-owner/impact suite initially found one remaining
+test assertion tied to the old public-config prefix. Its ownership expectation
+was migrated to `config/vite/vite.public-`; the full 42-test command then passed.
+Node tooling typechecking and `git diff --check` passed. No application or
+editor-interface implementation changed.

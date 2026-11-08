@@ -17,6 +17,13 @@
       "scope": "focused",
       "checkedAt": "2026-11-08T17:48:29.915Z",
       "notes": "Playwright relocation: 65 configs and 152 projects preserved, 8 browser checks, 2 ownership checks and 27 impact checks passed. Canonicalized property ordering after original hash comparison passed."
+    },
+    {
+      "command": "npm run check:vite-configs; npm run check:playwright-configs; node --test tests/tooling-configuration.test.ts tests/kp-application-entry-ownership.test.ts tests/internal-studio-entry.test.ts scripts/kp-vite-config-helpers.test.ts scripts/verification-impact.test.ts; npm run build:matrix-column; npm run build:public-normal-matrices; node node_modules/typescript/bin/tsc --project tsconfig.node.json --noEmit; git diff --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T17:51:07.356Z",
+      "notes": "Vite relocation: 13 configurations preserved, 42 tests and two builds pass. One old-prefix assertion repaired and full focused suite rerun."
     }
   ]
 }

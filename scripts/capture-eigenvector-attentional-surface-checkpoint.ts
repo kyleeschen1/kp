@@ -130,7 +130,7 @@ async function createHarness(): Promise<KpVisualReviewHarness> {
     adapters: {
       startServer: async () => {
         const vite = await createServer({
-          configFile: path.resolve("vite.public-eigenvectors.config.ts"),
+          configFile: path.resolve("config/vite/vite.public-eigenvectors.config.ts"),
           logLevel: "error"
         });
         await vite.listen();

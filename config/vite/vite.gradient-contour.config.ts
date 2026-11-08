@@ -1,9 +1,9 @@
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
-import { kpProductionDevelopmentErasurePlugin } from "./scripts/vite-production-development-erasure.ts";
-import { kpViteProductionBuild, kpViteProjectRoot, readKpReviewBuildIdentity } from "./scripts/kp-vite-config-helpers.ts";
+import { kpProductionDevelopmentErasurePlugin } from "../../scripts/vite-production-development-erasure.ts";
+import { kpViteProductionBuild, kpViteProjectRoot, readKpReviewBuildIdentity } from "../../scripts/kp-vite-config-helpers.ts";
 
-const projectRoot = kpViteProjectRoot(import.meta.url);
+const projectRoot = kpViteProjectRoot(new URL("../../", import.meta.url).href);
 // The opt-in host is absent from the public production entry list. Compile its
 // real entry independently; this config does not start or replace a server.
 export default defineConfig({

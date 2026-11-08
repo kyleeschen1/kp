@@ -1,0 +1,1738 @@
+{
+  "vite.config.ts": {
+    "serve": {
+      "build": {
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "rollupOptions": {
+          "input": {
+            "algebraFractionCompositionTutorial": "<repo>/tutorials/algebra/fraction-composition/index.html",
+            "authoredRails": "<repo>/experiments/authored-rails/index.html",
+            "canonicalSupplyTax": "<repo>/experiments/kinetic-figure/supply-tax/index.html",
+            "centroidReasoning": "<repo>/experiments/centroid-reasoning/index.html",
+            "changePropagation": "<repo>/experiments/change-propagation/index.html",
+            "codeReasoning": "<repo>/experiments/code-reasoning/index.html",
+            "economicsDemandShiftTutorial": "<repo>/tutorials/economics/demand-shift/index.html",
+            "forceWithoutWork": "<repo>/experiments/mechanics-relations/force-without-work/index.html",
+            "fractionChain": "<repo>/experiments/fraction-chain/index.html",
+            "fractionChainNumeric": "<repo>/experiments/fraction-chain/numeric/index.html",
+            "fractionChainSubtraction": "<repo>/experiments/fraction-chain/subtraction/index.html",
+            "fractionChainTwoSided": "<repo>/experiments/fraction-chain/two-sided/index.html",
+            "lispFunctionApplicationTutorial": "<repo>/tutorials/programming/lisp-function-application/index.html",
+            "main": "<repo>/index.html",
+            "mechanicsRelations": "<repo>/experiments/mechanics-relations/index.html",
+            "mechanicsRelationsStatic": "<repo>/experiments/mechanics-relations/static.html",
+            "reader-distribution-area": "<repo>/reader/distribution-area/index.html",
+            "reader-divide-both-sides": "<repo>/reader/divide-both-sides/index.html",
+            "reader-foldable-distribution": "<repo>/reader/foldable-distribution/index.html",
+            "reader-fraction-composition": "<repo>/reader/fraction-composition/index.html",
+            "reader-fractional-transfer": "<repo>/reader/fractional-transfer/index.html",
+            "reader-generated-solve-x": "<repo>/reader/generated-solve-x/index.html",
+            "reader-quadratic-branching": "<repo>/reader/quadratic-branching/index.html",
+            "reader-radical-succession": "<repo>/reader/radical-succession/index.html",
+            "reader-solve-fractional-linear": "<repo>/reader/solve-fractional-linear/index.html",
+            "reader-solve-x": "<repo>/reader/solve-x/index.html",
+            "reader-solve-x-teacher-zero": "<repo>/reader/solve-x/teacher-zero/index.html",
+            "reader-split-merge-fractions": "<repo>/reader/split-merge-fractions/index.html",
+            "repertoire": "<repo>/experiments/repertoire/index.html",
+            "scalarCancellation": "<repo>/experiments/scalar-cancellation/index.html",
+            "schemeFactorialTutorial": "<repo>/tutorials/programming/scheme-factorial/index.html"
+          },
+          "output": {
+            "manualChunks": "<hook>"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "configureServer": "<hook>",
+          "generateBundle": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-repertoire-dashboard",
+          "transformIndexHtml": "<hook>"
+        },
+        {
+          "configResolved": "<hook>",
+          "configureServer": "<hook>",
+          "generateBundle": "<hook>",
+          "name": "kp-mechanics-relations-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-change-propagation",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-fraction-chain-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-code-reasoning-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-canonical-tax-static-reading",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "apply": "serve",
+          "closeBundle": "<hook>",
+          "configureServer": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-authoring-market-local-preview"
+        },
+        {
+          "apply": "serve",
+          "configureServer": "<hook>",
+          "name": "kp-authoring-structural-preview"
+        },
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        [
+          {
+            "name": "vite-plugin-svelte"
+          },
+          {
+            "api": {},
+            "config": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configEnvironment": "<hook>",
+            "configResolved": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:config"
+          },
+          {
+            "apply": "serve",
+            "buildStart": "<hook>",
+            "configEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:setup-optimizer"
+          },
+          {
+            "configResolved": "<hook>",
+            "load": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-compiled-css",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-custom"
+          },
+          {
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:preprocess",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:compile",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "post",
+            "name": "vite-plugin-svelte:compile-module",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "applyToEnvironment": "<hook>",
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "post",
+            "hotUpdate": {
+              "handler": "<hook>",
+              "order": "post"
+            },
+            "name": "vite-plugin-svelte:hot-update",
+            "transform": {
+              "handler": "<hook>",
+              "order": "post"
+            }
+          },
+          {
+            "apply": "serve",
+            "applyToEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "filter": {
+                "id": {
+                  "exclude": [
+                    {
+                      "flags": "",
+                      "pattern": "style&lang\\.css$"
+                    }
+                  ],
+                  "include": [
+                    "<repo>/node_modules/@sveltejs/vite-plugin-svelte/src/plugins/inspector/runtime//**",
+                    {
+                      "flags": "",
+                      "pattern": "^virtual:svelte-inspector-options$"
+                    }
+                  ]
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte-inspector",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "^virtual:svelte-inspector-"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "transform": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "vite\\/dist\\/(?:vite\\/)?client\\/client\\.mjs(?:\\?|$)"
+                }
+              },
+              "handler": "<hook>"
+            }
+          }
+        ],
+        {
+          "apply": "serve",
+          "name": "kp-cross-build-development-publications",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-live-dev-review-build"
+        },
+        {
+          "configResolved": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-economics-authoring-save-boundary"
+        },
+        {
+          "configResolved": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-algebra-authoring-save-boundary"
+        },
+        {
+          "name": "kp-semantic-reader-route",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-reader-html-compaction",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "post"
+          }
+        },
+        {
+          "name": "kp-lisp-tutorial-static-fallback",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-scheme-factorial-static-fallback",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-economics-tutorial-static-narrative",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-algebra-fraction-composition-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 8000,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "rollupOptions": {
+          "input": {
+            "algebraFractionCompositionTutorial": "<repo>/tutorials/algebra/fraction-composition/index.html",
+            "authoredRails": "<repo>/experiments/authored-rails/index.html",
+            "canonicalSupplyTax": "<repo>/experiments/kinetic-figure/supply-tax/index.html",
+            "centroidReasoning": "<repo>/experiments/centroid-reasoning/index.html",
+            "changePropagation": "<repo>/experiments/change-propagation/index.html",
+            "codeReasoning": "<repo>/experiments/code-reasoning/index.html",
+            "economicsDemandShiftTutorial": "<repo>/tutorials/economics/demand-shift/index.html",
+            "forceWithoutWork": "<repo>/experiments/mechanics-relations/force-without-work/index.html",
+            "fractionChain": "<repo>/experiments/fraction-chain/index.html",
+            "fractionChainNumeric": "<repo>/experiments/fraction-chain/numeric/index.html",
+            "fractionChainSubtraction": "<repo>/experiments/fraction-chain/subtraction/index.html",
+            "fractionChainTwoSided": "<repo>/experiments/fraction-chain/two-sided/index.html",
+            "lispFunctionApplicationTutorial": "<repo>/tutorials/programming/lisp-function-application/index.html",
+            "main": "<repo>/index.html",
+            "mechanicsRelations": "<repo>/experiments/mechanics-relations/index.html",
+            "mechanicsRelationsStatic": "<repo>/experiments/mechanics-relations/static.html",
+            "reader-distribution-area": "<repo>/reader/distribution-area/index.html",
+            "reader-divide-both-sides": "<repo>/reader/divide-both-sides/index.html",
+            "reader-foldable-distribution": "<repo>/reader/foldable-distribution/index.html",
+            "reader-fraction-composition": "<repo>/reader/fraction-composition/index.html",
+            "reader-fractional-transfer": "<repo>/reader/fractional-transfer/index.html",
+            "reader-generated-solve-x": "<repo>/reader/generated-solve-x/index.html",
+            "reader-quadratic-branching": "<repo>/reader/quadratic-branching/index.html",
+            "reader-radical-succession": "<repo>/reader/radical-succession/index.html",
+            "reader-solve-fractional-linear": "<repo>/reader/solve-fractional-linear/index.html",
+            "reader-solve-x": "<repo>/reader/solve-x/index.html",
+            "reader-solve-x-teacher-zero": "<repo>/reader/solve-x/teacher-zero/index.html",
+            "reader-split-merge-fractions": "<repo>/reader/split-merge-fractions/index.html",
+            "repertoire": "<repo>/experiments/repertoire/index.html",
+            "scalarCancellation": "<repo>/experiments/scalar-cancellation/index.html",
+            "schemeFactorialTutorial": "<repo>/tutorials/programming/scheme-factorial/index.html"
+          },
+          "output": {
+            "manualChunks": "<hook>"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "configureServer": "<hook>",
+          "generateBundle": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-repertoire-dashboard",
+          "transformIndexHtml": "<hook>"
+        },
+        {
+          "configResolved": "<hook>",
+          "configureServer": "<hook>",
+          "generateBundle": "<hook>",
+          "name": "kp-mechanics-relations-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-change-propagation",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-fraction-chain-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-code-reasoning-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-canonical-tax-static-reading",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "apply": "serve",
+          "closeBundle": "<hook>",
+          "configureServer": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-authoring-market-local-preview"
+        },
+        {
+          "apply": "serve",
+          "configureServer": "<hook>",
+          "name": "kp-authoring-structural-preview"
+        },
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        [
+          {
+            "name": "vite-plugin-svelte"
+          },
+          {
+            "api": {},
+            "config": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configEnvironment": "<hook>",
+            "configResolved": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:config"
+          },
+          {
+            "apply": "serve",
+            "buildStart": "<hook>",
+            "configEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:setup-optimizer"
+          },
+          {
+            "configResolved": "<hook>",
+            "load": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-compiled-css",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-custom"
+          },
+          {
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:preprocess",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:compile",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "post",
+            "name": "vite-plugin-svelte:compile-module",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "applyToEnvironment": "<hook>",
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "post",
+            "hotUpdate": {
+              "handler": "<hook>",
+              "order": "post"
+            },
+            "name": "vite-plugin-svelte:hot-update",
+            "transform": {
+              "handler": "<hook>",
+              "order": "post"
+            }
+          },
+          {
+            "apply": "serve",
+            "applyToEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "filter": {
+                "id": {
+                  "exclude": [
+                    {
+                      "flags": "",
+                      "pattern": "style&lang\\.css$"
+                    }
+                  ],
+                  "include": [
+                    "<repo>/node_modules/@sveltejs/vite-plugin-svelte/src/plugins/inspector/runtime//**",
+                    {
+                      "flags": "",
+                      "pattern": "^virtual:svelte-inspector-options$"
+                    }
+                  ]
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte-inspector",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "^virtual:svelte-inspector-"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "transform": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "vite\\/dist\\/(?:vite\\/)?client\\/client\\.mjs(?:\\?|$)"
+                }
+              },
+              "handler": "<hook>"
+            }
+          }
+        ],
+        {
+          "apply": "serve",
+          "name": "kp-cross-build-development-publications",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-live-dev-review-build"
+        },
+        {
+          "configResolved": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-economics-authoring-save-boundary"
+        },
+        {
+          "configResolved": "<hook>",
+          "handleHotUpdate": "<hook>",
+          "name": "kp-algebra-authoring-save-boundary"
+        },
+        {
+          "name": "kp-semantic-reader-route",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-reader-html-compaction",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "post"
+          }
+        },
+        {
+          "name": "kp-lisp-tutorial-static-fallback",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-scheme-factorial-static-fallback",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-economics-tutorial-static-narrative",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "name": "kp-algebra-fraction-composition-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 8000,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    }
+  },
+  "vite.discourse-scrolltelling.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/discourse-scrolltelling",
+        "rollupOptions": {
+          "input": {
+            "discourse": "<repo>/experiments/discourse-scrolltelling/index.html"
+          }
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/discourse-scrolltelling",
+        "rollupOptions": {
+          "input": {
+            "discourse": "<repo>/experiments/discourse-scrolltelling/index.html"
+          }
+        }
+      }
+    }
+  },
+  "vite.gradient-contour.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/gradient-contour",
+        "rollupOptions": {
+          "input": {
+            "gradientContour": "<repo>/experiments/kinetic-figure/gradient-contour/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        }
+      ]
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/gradient-contour",
+        "rollupOptions": {
+          "input": {
+            "gradientContour": "<repo>/experiments/kinetic-figure/gradient-contour/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        }
+      ]
+    }
+  },
+  "vite.internal-studio.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/internal-studio",
+        "rollupOptions": {
+          "input": {
+            "internalStudio": "<repo>/studio/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        [
+          {
+            "name": "vite-plugin-svelte"
+          },
+          {
+            "api": {},
+            "config": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configEnvironment": "<hook>",
+            "configResolved": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:config"
+          },
+          {
+            "apply": "serve",
+            "buildStart": "<hook>",
+            "configEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:setup-optimizer"
+          },
+          {
+            "configResolved": "<hook>",
+            "load": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-compiled-css",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-custom"
+          },
+          {
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:preprocess",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:compile",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "post",
+            "name": "vite-plugin-svelte:compile-module",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "applyToEnvironment": "<hook>",
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "post",
+            "hotUpdate": {
+              "handler": "<hook>",
+              "order": "post"
+            },
+            "name": "vite-plugin-svelte:hot-update",
+            "transform": {
+              "handler": "<hook>",
+              "order": "post"
+            }
+          },
+          {
+            "apply": "serve",
+            "applyToEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "filter": {
+                "id": {
+                  "exclude": [
+                    {
+                      "flags": "",
+                      "pattern": "style&lang\\.css$"
+                    }
+                  ],
+                  "include": [
+                    "<repo>/node_modules/@sveltejs/vite-plugin-svelte/src/plugins/inspector/runtime//**",
+                    {
+                      "flags": "",
+                      "pattern": "^virtual:svelte-inspector-options$"
+                    }
+                  ]
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte-inspector",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "^virtual:svelte-inspector-"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "transform": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "vite\\/dist\\/(?:vite\\/)?client\\/client\\.mjs(?:\\?|$)"
+                }
+              },
+              "handler": "<hook>"
+            }
+          }
+        ],
+        {
+          "configureServer": "<hook>",
+          "name": "kp-internal-studio-scoped-root"
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-internal-studio-live-review-build"
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4191,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/internal-studio",
+        "rollupOptions": {
+          "input": {
+            "internalStudio": "<repo>/studio/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        [
+          {
+            "name": "vite-plugin-svelte"
+          },
+          {
+            "api": {},
+            "config": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configEnvironment": "<hook>",
+            "configResolved": {
+              "handler": "<hook>",
+              "order": "pre"
+            },
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:config"
+          },
+          {
+            "apply": "serve",
+            "buildStart": "<hook>",
+            "configEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:setup-optimizer"
+          },
+          {
+            "configResolved": "<hook>",
+            "load": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-compiled-css",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "[?&]svelte&type=style&lang.css$"
+                }
+              },
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte:load-custom"
+          },
+          {
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "pre",
+            "name": "vite-plugin-svelte:preprocess",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "name": "vite-plugin-svelte:compile",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "configResolved": "<hook>",
+            "enforce": "post",
+            "name": "vite-plugin-svelte:compile-module",
+            "transform": {
+              "handler": "<hook>"
+            }
+          },
+          {
+            "applyToEnvironment": "<hook>",
+            "buildStart": "<hook>",
+            "configResolved": "<hook>",
+            "configureServer": "<hook>",
+            "enforce": "post",
+            "hotUpdate": {
+              "handler": "<hook>",
+              "order": "post"
+            },
+            "name": "vite-plugin-svelte:hot-update",
+            "transform": {
+              "handler": "<hook>",
+              "order": "post"
+            }
+          },
+          {
+            "apply": "serve",
+            "applyToEnvironment": "<hook>",
+            "configResolved": "<hook>",
+            "enforce": "pre",
+            "load": {
+              "filter": {
+                "id": {
+                  "exclude": [
+                    {
+                      "flags": "",
+                      "pattern": "style&lang\\.css$"
+                    }
+                  ],
+                  "include": [
+                    "<repo>/node_modules/@sveltejs/vite-plugin-svelte/src/plugins/inspector/runtime//**",
+                    {
+                      "flags": "",
+                      "pattern": "^virtual:svelte-inspector-options$"
+                    }
+                  ]
+                }
+              },
+              "handler": "<hook>"
+            },
+            "name": "vite-plugin-svelte-inspector",
+            "resolveId": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "^virtual:svelte-inspector-"
+                }
+              },
+              "handler": "<hook>"
+            },
+            "transform": {
+              "filter": {
+                "id": {
+                  "flags": "",
+                  "pattern": "vite\\/dist\\/(?:vite\\/)?client\\/client\\.mjs(?:\\?|$)"
+                }
+              },
+              "handler": "<hook>"
+            }
+          }
+        ],
+        {
+          "configureServer": "<hook>",
+          "name": "kp-internal-studio-scoped-root"
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-internal-studio-live-review-build"
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4191,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    }
+  },
+  "vite.la-graph.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/la-graph",
+        "rollupOptions": {
+          "input": {
+            "laGraph": "<repo>/experiments/la-knowledge-graph/index.html"
+          }
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/la-graph",
+        "rollupOptions": {
+          "input": {
+            "laGraph": "<repo>/experiments/la-knowledge-graph/index.html"
+          }
+        }
+      }
+    }
+  },
+  "vite.matrix-column.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/matrix-column",
+        "rollupOptions": {
+          "input": {
+            "matrixColumn": "<repo>/experiments/matrix-column-product/index.html"
+          }
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/matrix-column",
+        "rollupOptions": {
+          "input": {
+            "matrixColumn": "<repo>/experiments/matrix-column-product/index.html"
+          }
+        }
+      }
+    }
+  },
+  "vite.matrix-interpretations.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/matrix-interpretations",
+        "rollupOptions": {
+          "input": {
+            "discourseScrolltelling": "<repo>/experiments/discourse-scrolltelling/index.html",
+            "dotPassage": "<repo>/experiments/dot-product-passage/index.html",
+            "matrixDotProduct": "<repo>/experiments/matrix-column-product/index.html",
+            "matrixExamples": "<repo>/experiments/matrix-examples/index.html",
+            "matrixInterpretations": "<repo>/experiments/matrix-column-combinations/index.html",
+            "rectangularProduct": "<repo>/experiments/rectangular-product/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "generateBundle": "<hook>",
+          "name": "semantic-cost-inventory"
+        }
+      ]
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/matrix-interpretations",
+        "rollupOptions": {
+          "input": {
+            "discourseScrolltelling": "<repo>/experiments/discourse-scrolltelling/index.html",
+            "dotPassage": "<repo>/experiments/dot-product-passage/index.html",
+            "matrixDotProduct": "<repo>/experiments/matrix-column-product/index.html",
+            "matrixExamples": "<repo>/experiments/matrix-examples/index.html",
+            "matrixInterpretations": "<repo>/experiments/matrix-column-combinations/index.html",
+            "rectangularProduct": "<repo>/experiments/rectangular-product/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "generateBundle": "<hook>",
+          "name": "semantic-cost-inventory"
+        }
+      ]
+    }
+  },
+  "vite.public-eigenvectors.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-eigenvectors",
+        "rollupOptions": {
+          "input": {
+            "publicEigenvectors": "<repo>/learn/math/eigenvectors/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-eigenvectors-scoped-root"
+        },
+        {
+          "name": "kp-public-eigenvectors-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4195,
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-eigenvectors",
+        "rollupOptions": {
+          "input": {
+            "publicEigenvectors": "<repo>/learn/math/eigenvectors/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-eigenvectors-scoped-root"
+        },
+        {
+          "name": "kp-public-eigenvectors-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4195,
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    }
+  },
+  "vite.public-fraction-composition.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-fraction-composition",
+        "rollupOptions": {
+          "input": {
+            "publicFractionComposition": "<repo>/learn/math/fraction-composition/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "name": "kp-public-fraction-composition-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-fraction-composition-live-review-build"
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4193,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-fraction-composition",
+        "rollupOptions": {
+          "input": {
+            "publicFractionComposition": "<repo>/learn/math/fraction-composition/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "name": "kp-public-fraction-composition-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-fraction-composition-live-review-build"
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4193,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    }
+  },
+  "vite.public-normal-matrices.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-normal-matrices",
+        "rollupOptions": {
+          "input": {
+            "publicNormalMatrices": "<repo>/learn/math/normal-matrices/index.html",
+            "publicNormalMatricesReview": "<repo>/learn/math/normal-matrices/review/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-normal-matrices-scoped-root"
+        },
+        {
+          "name": "kp-public-normal-matrices-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4194,
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-normal-matrices",
+        "rollupOptions": {
+          "input": {
+            "publicNormalMatrices": "<repo>/learn/math/normal-matrices/index.html",
+            "publicNormalMatricesReview": "<repo>/learn/math/normal-matrices/review/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-normal-matrices-scoped-root"
+        },
+        {
+          "name": "kp-public-normal-matrices-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4194,
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    }
+  },
+  "vite.public-typescript.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-typescript",
+        "rollupOptions": {
+          "input": {
+            "publicTypeScriptFreeShipping": "<repo>/learn/code/free-shipping/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "name": "kp-public-typescript-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-typescript-live-review-build"
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4192,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/public-typescript",
+        "rollupOptions": {
+          "input": {
+            "publicTypeScriptFreeShipping": "<repo>/learn/code/free-shipping/index.html"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      },
+      "plugins": [
+        {
+          "apply": "build",
+          "generateBundle": "<hook>",
+          "name": "kp-production-development-erasure"
+        },
+        {
+          "name": "kp-public-typescript-static-publication",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "pre"
+          }
+        },
+        {
+          "configureServer": "<hook>",
+          "name": "kp-public-typescript-live-review-build"
+        }
+      ],
+      "server": {
+        "host": "127.0.0.1",
+        "port": 4192,
+        "proxy": {
+          "/api": {
+            "changeOrigin": true,
+            "target": "http://127.0.0.1:8001"
+          }
+        },
+        "strictPort": true,
+        "watch": {
+          "ignored": [
+            "**/tmp/codex/**"
+          ]
+        }
+      }
+    }
+  },
+  "vite.semantic-cost.config.ts": {
+    "serve": {
+      "base": "/cost/",
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/semantic-cost",
+        "rollupOptions": {
+          "input": {
+            "cost": "<repo>/experiments/semantic-cost/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "generateBundle": "<hook>",
+          "name": "semantic-cost-inventory"
+        }
+      ]
+    },
+    "build": {
+      "base": "/cost/",
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/semantic-cost",
+        "rollupOptions": {
+          "input": {
+            "cost": "<repo>/experiments/semantic-cost/index.html"
+          }
+        }
+      },
+      "plugins": [
+        {
+          "generateBundle": "<hook>",
+          "name": "semantic-cost-inventory"
+        }
+      ]
+    }
+  },
+  "vite.symbolic-inspection.config.ts": {
+    "serve": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/symbolic-inspection",
+        "rollupOptions": {
+          "input": {
+            "symbolicInspection": "<repo>/src/experiments/authoring-distribution-focus-card/entry.ts"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      }
+    },
+    "build": {
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": {
+          "polyfill": false
+        },
+        "outDir": "dist/symbolic-inspection",
+        "rollupOptions": {
+          "input": {
+            "symbolicInspection": "<repo>/src/experiments/authoring-distribution-focus-card/entry.ts"
+          }
+        }
+      },
+      "define": {
+        "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
+      }
+    }
+  }
+}

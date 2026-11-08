@@ -4,18 +4,18 @@ import { defineConfig } from "vite";
 
 import {
   kpProductionDevelopmentErasurePlugin
-} from "./scripts/vite-production-development-erasure.ts";
+} from "../../scripts/vite-production-development-erasure.ts";
 import {
   kpViteDevelopmentServer,
   kpViteProductionBuild,
   kpViteProjectRoot,
   kpViteScopedRootRedirectPlugin
-} from "./scripts/kp-vite-config-helpers.ts";
+} from "../../scripts/kp-vite-config-helpers.ts";
 
 import { renderKpEigenvectorPublicLesson } from
-  "./src/public-web/eigenvector-attentional-surface-publication.ts";
+  "../../src/public-web/eigenvector-attentional-surface-publication.ts";
 
-const projectRoot = kpViteProjectRoot(import.meta.url);
+const projectRoot = kpViteProjectRoot(new URL("../../", import.meta.url).href);
 const routeFilename = resolve(projectRoot, "learn/math/eigenvectors/index.html");
 
 /** Keep the attentional exemplar independent from the catalogue runtime. */
