@@ -2,7 +2,8 @@
   "id": "run-contract.kp.maintenance-20261108",
   "kind": "run-contract",
   "title": "Root organization and CSS ownership maintenance",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: all seven approved slices verified. Reader visual judgment remains on its separate deferred contract; broader cleanup and runtime follow-up are not added scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -68,7 +69,8 @@
     {
       "id": "integration",
       "title": "Verify complete maintenance integration",
-      "status": "planned"
+      "summary": "Full type/build, architecture, config, production edition and retained reader gates passed; source-linked closure and proposed successor updated; maintenance captures cleaned.",
+      "status": "complete"
     }
   ]
 }

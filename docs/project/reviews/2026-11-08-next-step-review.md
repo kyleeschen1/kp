@@ -4,6 +4,10 @@ Date: 2026-11-08
 Status: approved maintenance delivery; execution belongs to Theseus
 Baseline: `54a85708cd42520645fd39db6c0d769fea6943c4`
 
+Outcome evidence: [November 8 maintenance](2026-11-08-maintenance.md).
+The finite root/config and selected CSS conversion is delivered; wider cleanup
+and the integrated reader's human judgment retain their separate boundaries.
+
 ## Outcome and current direction
 
 The user wants to use a day with little availability for human checks to improve

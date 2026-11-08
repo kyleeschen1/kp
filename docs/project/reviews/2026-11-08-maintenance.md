@@ -4,6 +4,11 @@ Approved scope: [maintenance proposal](2026-11-08-next-step-review.md).
 Execution status and remaining work: `run-contract.kp.maintenance-20261108`.
 This file records evidence, not a second execution queue.
 
+Delivery result: the approved root/config and selected algebra style conversion
+is complete in the KP product worktree, on `feature/20261031-annotation-reader`.
+The root checkout and separate editor checkout were not modified by this run.
+The integrated annotation reader remains a separate pending human judgment.
+
 ## Playwright configuration ownership
 
 Moved 64 specialized configs into `config/playwright/`; the conventional root
@@ -172,8 +177,8 @@ also passed, including a new negative assertion for oversized manifest metadata.
 | Interactive edition manifest bytes | 14,001 | 13,999 |
 
 `npm run audit:css` and `npm run measure:algebra-editions` reproduce these cohorts.
-Gzip sums are estimates, not measured network transfer. Longer explicit owner
-paths/comments and selector grouping add 120 source/CSS bytes; this is an
+Gzip sums are estimates, not measured network transfer. The host-ownership
+comment and selector grouping add 120 source/CSS bytes; this is an
 ownership repair, not a performance optimization. The static and interactive
 editions retain respectively 72 and 116 files, including every font and asset.
 The editor bundle's source-module count changes 459→460 because the existing
@@ -198,3 +203,38 @@ states and existing lifecycle checks passed; that does not clear this late
 teardown error. Runtime lifecycle repair is outside this style/config conversion
 and remains a source-linked follow-up, with an ordering regression needed before
 claiming it fixed. No exception was hidden or converted into a passing assertion.
+
+## Integration and handoff
+
+The full `npm run build` passed application, Node, test, Svelte and domain type
+checks, source-publication checks and the production bundle. Svelte reported
+zero errors/warnings. Vite retained its existing large-chunk advisories; this
+maintenance does not claim to reduce those chunks. `check:architecture` passed
+every dependency, semantic/renderer and compiler-authority gate plus eight
+cross-domain registration tests. `check:tooling-configs` passed every ownership,
+configuration and discovery guard. The final cohort is 66 Playwright configs /
+155 projects, 13 Vite configs in both modes and 13 compiler config documents.
+
+`visual:algebra-editions -- --project=chromium --project=firefox` initially found
+two failures in the existing preview-route test: it bypassed configuration and
+hardcoded unavailable port 8000. The config now explicitly owns the isolated
+algebra verification server on 8013, and the test uses its configured base URL.
+This intentional test-host repair changes only that config's policy hash; no
+product URL or browser selection changes. The complete suite then passed 17
+checks, with its existing Firefox-only performance-probe skip retained. Real
+static/no-script, production asset closure, reload, reverse and lifecycle checks
+all ran. Every font/style remains in the edition closure.
+
+`visual:anchored-algebra -- --project=firefox` passed all eight retained-reader
+checks after integration. The optional review API on 8001 remains unavailable;
+the preview reader itself responds on 8011. The roadmap, active thread and
+source-linked vision map record finite maintenance closure and propose the
+separate teardown repair; all 67 project-vision/dashboard tests passed.
+
+To inspect the result, open `config/README.md` and run
+`npm run check:tooling-configs`; use `npm run audit:css` for the complete current
+inventory. Open `http://localhost:8011/?view=dashboard#project-vision` to see the
+completed scope and proposed successor. The lesson at
+`http://localhost:8011/experiments/reusable-reasoning/?example=distribute-collect`
+should retain its existing prose, math, controls and reversible motion. These
+are verification instructions, not a new aesthetic approval request.

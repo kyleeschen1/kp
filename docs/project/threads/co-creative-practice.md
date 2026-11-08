@@ -2,14 +2,20 @@
 
 Status: active product direction; integrated KP annotation reader awaits visual judgment
 Last Updated: 2026-11-08
-Current maintenance proposal (KP engine lane): consolidate specialized root
-tooling configurations, then use a full CSS inventory to guide the bounded
-algebra style-ownership conversion. The user's root-directory clarification and
-parallel editor session refine the earlier CSS-first recommendation. The
-[November 8 review](../reviews/2026-11-08-next-step-review.md) names the proposed
-ownership split, complete consumer boundaries and low-interruption verification
-approach. No new run has started; the explanation-first product successor remains
-the broader direction.
+November 8 maintenance delivery (KP engine lane): the approved
+[proposal](../reviews/2026-11-08-next-step-review.md) organized specialized root
+configs, consolidated browser setup, inventoried all 124 CSS files and converted
+the complete selected algebra style consumer set. The
+[evidence](../reviews/2026-11-08-maintenance.md) records preservation and costs;
+`run-contract.kp.maintenance-20261108` owns execution closure. The separate editor
+checkout and interface were not changed. These are finite ownership repairs,
+not a source-tree redesign or completion of broader CSS consolidation.
+
+Next nonvisual candidate: reproduce and repair the pre-existing Firefox algebra
+teardown callback that reaches a disposed clock. Preserve source, semantic
+playhead and native paint while testing lifecycle ordering. This recommendation
+does not extend the maintenance contract. The explanation-first product
+successor remains the broader direction.
 
 Pending visual checkpoint: review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
 at `/reader/what-counts/`. The user approved the [bounded consolidation](../2026-10-31-annotation-reader-delivery.md);

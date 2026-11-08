@@ -41,6 +41,14 @@ Tools that parse a config must resolve paths relative to that config's directory
 Run `npm run check:tooling-configs` for all three configuration guards plus
 the ownership/command tests.
 
+For a deliberate algebra style migration, run
+`npm run visual:algebra-styles -- --update-snapshots=all` before editing and
+`npm run visual:algebra-styles` afterward. It compares disposable computed-style
+and geometry captures; it does not create approved screenshot goldens. Ordinary
+`visual:algebra-mount` preservation needs no saved baseline. Algebra mount,
+style and edition checks share isolated port 8013 and should run sequentially.
+The retained reader checks own port 8012; the product preview stays on 8011.
+
 The editor/workbench session owns its application checkout. KP configuration
 changes are integrated in the KP maintenance worktree; keep its preview URL and
 normal command interface stable and coordinate any shared-contract changes.

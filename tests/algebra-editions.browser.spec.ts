@@ -221,9 +221,9 @@ test("cost: cold and warm complete local reader navigation", async ({ browser, b
   await info.attach("navigation-costs.json", { body: JSON.stringify(report), contentType: "application/json" });
 });
 
-test("shared development server opens the exact generated edition", async ({ page }) => {
+test("configured development server opens the exact generated edition", async ({ page }) => {
   const edition = await buildInteractiveAlgebraEdition("content/authoring/algebra/whole-and-parts.json");
-  await page.goto(`http://localhost:8000/${relative(process.cwd(), edition.directory)}/index.html`);
+  await page.goto(`/${relative(process.cwd(), edition.directory)}/index.html`);
   await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-status", "ready");
   await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-revision", edition.revisionId);
   await seek(page, 1.5);

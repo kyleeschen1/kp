@@ -26,16 +26,26 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
-Current maintenance recommendation (November 8): with limited human-review
-availability, first consolidate specialized tooling configs out of the project
-root, preserving command behavior and discovery. The user's root-directory and
-parallel-editor clarification refines the earlier CSS-first recommendation. The
-[source assessment](reviews/2026-11-08-next-step-review.md) counts 91 root configs
-and 124 tracked CSS files in the product checkout, proposes explicit ownership
-with the editor lane, and retains the bounded algebra style conversion after
-the full CSS inventory. Navigation cleanup remains a supporting candidate.
-This is a proposal, not a new run. The integrated annotation reader's visual
-judgment remains pending, and the broader explanation-first successor is retained.
+November 8 maintenance delivery: the user approved the
+[root/CSS proposal](reviews/2026-11-08-next-step-review.md) for sustained work with
+limited human-review availability. Specialized tooling now lives under `config/`;
+tracked root entries fall from 120 to 34. All four selected algebra-private
+stylesheets are retired in favor of explicit rendering/presentation owners,
+including preview and edition consumers. The
+[complete CSS inventory](reviews/2026-11-08-css-ownership.md) covers all 124 files;
+it does not declare all repeated values redundant or claim payload savings.
+[Maintenance evidence](reviews/2026-11-08-maintenance.md) records preserved
+behavior, test-discovery repairs, costs and the explicit manifest-budget amendment.
+Theseus contract `run-contract.kp.maintenance-20261108` owns execution closure.
+
+The next nonvisual candidate is a bounded algebra teardown-ownership repair:
+Firefox exposed a visibility callback reaching a disposed clock before and after
+maintenance. Reproduce both lifecycle event orders and repair the owning boundary;
+do not turn it into a new renderer or broad lifecycle framework. This is a
+recommendation, not an extension of the completed maintenance scope. Wider CSS and
+navigation work remain scoped follow-ups. The integrated annotation reader's
+visual judgment remains pending, and the explanation-first product successor
+and independent editor ownership are retained.
 
 November 4 goal clarification: the user wants human/LLM-authored salience
 animations inside rich explanations, supporting precise joint attention and

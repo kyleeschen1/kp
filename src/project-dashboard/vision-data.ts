@@ -11,13 +11,13 @@ export const projectVision: ProjectVision = {
     {
       id: "architecture", title: "Architecture & retirement", horizon: "next",
       destination: "Replace a part without rebuilding its neighbors. Finish migrations and remove obsolete paths.",
-      established: "The obsolete algebra facade and experiment-owned mounting paths are retired. Shared native mounting preserves checked authority and behavior; cross-example style dependencies remain.",
-      evidence: { label: "Shared mounting closeout", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" },
+      established: "Specialized configs have one home outside the root. The selected algebra family now consumes rendering/presentation styles directly, including previews and editions. Full CSS ownership evidence is available; broader consolidation remains separate.",
+      evidence: { label: "Root and style ownership evidence", href: "docs/project/reviews/2026-11-08-maintenance.md" },
       outcome: {
-        id: "root-tooling-organization", title: "Give specialized tooling configs a home outside the project root",
-        finish: "Group specialized Playwright, Vite and TypeScript configs; preserve conventional root entrypoints, npm commands, discovery, outputs and reader URLs. Update all active consumers and prevent renewed root-config sprawl. Keep the editor lane independently runnable.",
-        excludes: "Editor-interface changes, a source-tree redesign, changed lesson visuals or automatic merges. Full CSS inventory and the retained algebra style-ownership conversion follow separately.",
-        source: { label: "Root clarification · inventory and parallel ownership", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
+        id: "algebra-teardown-ownership", title: "Release algebra readers before their clocks are disposed",
+        finish: "Reproduce the Firefox teardown diagnostic and repair its owning lifecycle boundary. Closing or replacing a reader leaves no visibility callback using a disposed clock; tests pressure both event orders while preserving source, playhead and native paint.",
+        excludes: "A new renderer, broad lifecycle framework, visual changes, editor-interface work or further CSS rollout. This is a proposed successor, not an active run.",
+        source: { label: "Observed baseline diagnostic and next bounded repair", href: "docs/project/reviews/2026-11-08-maintenance.md" }
       }
     },
     {
@@ -83,13 +83,18 @@ export const projectVision: ProjectVision = {
   ],
   completed: [
     {
+      title: "Root tooling and selected algebra styles organized",
+      scope: "87 specialized configs moved; tracked root entries fall from 120 to 34. All 124 CSS files are inventoried and four private algebra style paths are retired with complete consumers and automatic preservation evidence. Broader CSS cleanup, editor work and the reader's visual judgment remain separate.",
+      source: { label: "Maintenance scope, verification and costs", href: "docs/project/reviews/2026-11-08-maintenance.md" }
+    },
+    {
       title: "Anchored annotation treatment accepted",
       scope: "The user accepts commentary beside the mathematical parts it explains. This closes the local visual experiment; prose coordination, document-reader integration and several-target comments remain separate work.",
       source: { label: "Scoped acceptance and successor", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" }
     },
     {
       title: "Shared algebra mounting converted",
-      scope: "Composed algebra and distribute/collect share a validated reader owner. Old experiment mount and endpoint paths are removed; native lifecycle checks and complete consumer costs are preserved. Style ownership remains a separate successor.",
+      scope: "Composed algebra and distribute/collect share a validated reader owner. Old experiment mount and endpoint paths are removed; native lifecycle checks and complete consumer costs are preserved. Style ownership was deliberately left to a separate successor.",
       source: { label: "Mount conversion evidence", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" }
     },
     {
@@ -180,6 +185,13 @@ export const projectVision: ProjectVision = {
       after: "First group specialized root tooling configs. Inventory the full CSS set, then retain the algebra ownership conversion with its original finish line. Coordinate explicit KP/editor ownership before implementation; no new run has started.",
       reason: "The user clarifies that the clutter is in the project root and confirms a parallel editor session. Source inspection finds 91 root configs and 124 tracked CSS files in this checkout; the earlier 96-file count has no recovered counting scope.",
       source: { label: "Clarified scope and handoff", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
+    },
+    {
+      id: "maintenance-delivery-and-lifecycle-follow-up", on: "2026-11-08",
+      before: "Root configuration ownership and a complete CSS inventory preceded the proposed algebra style conversion; implementation had not begun.",
+      after: "The user approved sustained maintenance. Root organization and the bounded algebra style conversion now have preservation evidence and finite closure. A pre-existing Firefox teardown diagnostic supplies the next nonvisual repair candidate; the reader checkpoint and explanation-first product direction remain.",
+      reason: "Reduce accidental coupling while human review is scarce. Preserve distinct static/initial CSS consumers instead of broadening their styles to reduce file count; record measured costs and the independent editor boundary.",
+      source: { label: "Maintenance evidence and retained limitations", href: "docs/project/reviews/2026-11-08-maintenance.md" }
     }
   ]
 };
