@@ -165,7 +165,7 @@ authored response. It does not yet supply an in-reader question composer,
 automatic response generation, learner model or general conversation history.
 Those are distinct product work, and editor ownership remains unchanged.
 
-## Physics pressure case: recoverable checkpoint
+## Physics pressure case: accepted content, limited engineering gain
 
 Canonical source: `examples/physics/momentum-scaling.article.md`, based on the
 existing checked `physics.energy-from-momentum@1` derivation and three pinned
@@ -177,10 +177,14 @@ All twelve baseline paragraphs remain in source and static HTML. No new physics
 operation, renderer, clock or CSS is introduced. The rollback unit is this source
 and its focused checks; shared algebra readings remain unchanged.
 
-This checkpoint is unfinished: the broader rail cohort, local candidate Apply,
-human reading judgment and final architecture comparison remain. The 36 focused
-semantic/publication tests pass. The final two-case Chromium/Firefox candidate
-smoke passes after repairing two test assumptions: full-motion keyboard targets
+The user accepts the content (“It's fine”) but questions spending an hour on
+capability that already existed. That criticism is warranted: the physics
+compiler, selected-source workflow, rail and native animation were pre-existing.
+This package added explanatory content and preservation evidence, not new physics
+authoring or animation capability. Its effort was disproportionate to that result.
+The 36 semantic/publication tests and complete five-case Chromium rail cohort
+pass. The two-case Chromium/Firefox candidate smoke passes after repairing two
+test assumptions: full-motion keyboard targets
 are animated, and navigating to the identical fragment can retain the old
 document at its final dock. A diagnostic phone run measured the first equation
 above the viewport and a negative pointer target, explaining the edge scroll.
@@ -189,4 +193,38 @@ keyboard endpoints; no assertion or reader capability was removed.
 
 The isolated browser server uses port 8014, leaving the independent checkout's
 port 8000 untouched. The selected-source fixture snapshots/restores its prior
-local selection; the candidate has not yet been applied for human review.
+local selection. The candidate was subsequently applied with
+`npm run author:rail -- --source examples/physics/momentum-scaling.article.md --apply`.
+The [shared host](http://localhost:8011/experiments/authored-rails/) serves the
+exact selected revision
+`sha256:d9c1b83c645875dea3d84b3c3b5b21b6aa08d3f76b271409f9c05df159eb92ef`.
+The local selection is ignored state under `.kp/authoring/`; the committed source
+and Apply command reproduce it. The CLI prints its historical port-8000 default;
+this run's verified product server is port 8011. Nothing was publicly published.
+
+## What was new, and what remains
+
+The new work in the accepted algebra reader is an independent longer manuscript,
+a bounded registration for two readings, and a checked return link for one
+scripted follow-up. Related authoring and exact-return capabilities already
+existed elsewhere in KP; this is integration into this host, not invention of
+those capabilities or delivery of a conversational generation system.
+
+The physics case confirms an existing path. Additional planning, documentation
+and repair of browser-probe assumptions consumed effort without comparable new
+user capability. The useful boundary was visible earlier: physics still uses
+its own rail host, with narrow side-column prose on phones, rather than the
+accepted document theater. Broad CSS cleanup alone does not resolve that.
+
+Historical recommendation, subsequently deferred by the
+[authoring-first direction](../decisions/2026-11-08-authoring-expert-attention.md):
+one physics explanation in the accepted reader presentation, preserving its
+mechanics validation, native compositor, complete reasoning and refinement
+authority. Keep the domain owners separate; prove the required host adapter with
+one exemplar before sharing an interface or retiring an old path. No universal
+semantic schema, new global salience store or editor work is implied.
+
+The finite progression is complete after the user's content acceptance. It does
+not establish general generation latency, live conversational authoring or
+learner transfer. Future work admission should identify the missing user
+capability before spending another package validating an already working path.

@@ -15,6 +15,20 @@ collaboration experiment, not a learner-facing editorial voice standard.
 - Start strategic or implementation work with `docs/project/roadmap.md` and the
   active thread it names. Read `strategy.md` for rationale, not as a live task
   queue.
+- Run `npm run project:orientation` before selecting substantial work. It checks
+  the short entrypoints and shows the explicitly selected Theseus record; it
+  neither chooses nor authorizes tasks. Keep the roadmap, charter and active
+  thread within their checked reading budgets. Put dated history in linked
+  historical records rather than prepending another status narrative.
+- Distinguish accepted direction, approved implementation and exploration.
+  Every substantial delivery must explain its beneficiary, observable capability
+  gain and connection to the current milestone. At handoff report new capability
+  versus revalidation, remaining uncertainty and any direction change. A pivot
+  records the displaced commitment's disposition and retained results.
+- Keep one editor for strategic records. The parallel task owner maintains
+  Theseus execution; do not duplicate its slice statuses in roadmap prose or
+  dashboard data. Reconcile the source-linked orientation at milestone handoffs
+  and accepted pivots. Brainstorming alone does not elect a new commitment.
 - Keep the source-linked vision view in `src/project-dashboard/vision-data.ts`
   aligned when accepted direction, the recommended next outcome, or scoped
   milestone closure changes. Follow `docs/project/2026-10-29-project-vision-ui.md`:
