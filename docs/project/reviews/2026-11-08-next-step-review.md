@@ -1,7 +1,7 @@
 # Consolidation with limited human-review availability
 
 Date: 2026-11-08
-Status: scoped recommendation; implementation has not started
+Status: approved maintenance delivery; execution belongs to Theseus
 Baseline: `54a85708cd42520645fd39db6c0d769fea6943c4`
 
 ## Outcome and current direction
@@ -17,8 +17,34 @@ broader explanation/joint-attention goal remains unchanged.
 
 The integrated annotation reader retains its pending visual judgment and current
 implementation. Maintenance can preserve that candidate without promoting it.
-No new execution contract, new visual treatment, renderer migration, workbench
-change, branch cleanup or file migration has started in this discussion.
+The subsequent user direction, "excellent. go as long as possible", approves
+the described maintenance scope. Preserve the independent annotation-reader
+contract and its visual checkpoint. No new visual treatment, renderer migration,
+workbench change, branch cleanup or merge is included.
+
+## Approved execution boundary
+
+Execute in the existing product worktree from `d619aecff7bcdac7f8e9449830427dcb88d401c2`.
+Use a six-hour ceiling with the final 45 minutes reserved for verification,
+repairs and closeout; finish earlier when the approved outcomes are complete.
+The required outcomes are root-config relocation (one reversible family per
+checkpoint), evidence-backed setup consolidation, a full CSS ownership/duplication
+inventory, and the bounded algebra style conversion below. No optional reserve
+projects are admitted. Theseus contract `run-contract.kp.maintenance-20261108`
+owns slice order, status, verification and stop state.
+
+Objective acceptance is unchanged test/config discovery, commands, output paths,
+reader URLs, domain truth and visual behavior. Capture baselines before moving
+configuration or styles. Use focused tests routinely and full type/build plus
+representative Chromium/Firefox preservation at the integration boundary. Add
+guards at the responsible boundaries so root configs and cross-example CSS do
+not silently accumulate again. Do not disable or weaken existing checks.
+
+Do not wait for routine nonvisual approvals. If a proposed repair requires a
+new visual/semantic decision, retain the previous behavior and continue only
+independent approved work. Stop for completion, the ceiling, exhausted eligible
+scope, or a genuine authority/external blocker. Preserve partial work as an
+explicit checkpoint; never label unexecuted checks or deferred outcomes complete.
 
 ## Root clarification and proposed first outcome
 
@@ -196,8 +222,8 @@ each checkpoint. Repair unexpected diffs against the baseline. If a discovery
 requires choosing a different visible behavior or changing semantics, retain
 the existing behavior and park that decision for later review; independently
 approved maintenance can continue. Existing subjective checkpoints remain open.
-The user is choosing what this work should look like, not yet starting an
-unattended implementation run.
+The subsequent go authorizes this maintenance run; it does not accept the
+integrated reader candidate's aesthetic treatment or expand editor ownership.
 
 ## Server recovery
 

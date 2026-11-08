@@ -1,0 +1,22 @@
+{
+  "id": "task.kp.maintenance-20261108",
+  "kind": "task",
+  "title": "Organize root tooling and consolidate algebra styles",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-next-step-review.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:playwright-configs; npm run test:tooling-configs; npm run visual:anchored-algebra -- --project=firefox; node --test scripts/verification-impact.test.ts; node node_modules/typescript/bin/tsc --project tsconfig.node.json --noEmit; git diff --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T17:48:29.915Z",
+      "notes": "Playwright relocation: 65 configs and 152 projects preserved, 8 browser checks, 2 ownership checks and 27 impact checks passed. Canonicalized property ordering after original hash comparison passed."
+    }
+  ]
+}

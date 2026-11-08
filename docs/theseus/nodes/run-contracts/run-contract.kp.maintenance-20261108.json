@@ -1,0 +1,69 @@
+{
+  "id": "run-contract.kp.maintenance-20261108",
+  "kind": "run-contract",
+  "title": "Root organization and CSS ownership maintenance",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.maintenance-20261108.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-next-step-review.md",
+      "summary": "User approved the maintenance proposal and extended autonomous continuation on November 8."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run check:architecture",
+    "npm run test:project-vision"
+  ],
+  "allowedWork": [
+    "The approved proposal: root configuration families and complete active consumers; existing helpers; full CSS inventory; bounded non-editor algebra style conversion; focused guards, preservation and evidence. Six-hour ceiling with 45-minute verification reserve."
+  ],
+  "disallowedWork": [
+    "Editor interface or checkout edits; new visual treatments or semantics; changing reader URLs; dependency upgrades; services; publication; merges; branch cleanup; unrelated refactors."
+  ],
+  "goal": "Reduce root configuration clutter and cross-example style coupling while preserving complete consumers and existing behavior.",
+  "target": "task.kp.maintenance-20261108",
+  "slices": [
+    {
+      "id": "playwright",
+      "title": "Relocate Playwright configurations",
+      "summary": "64 specialized configs moved, complete command consumers converted, resolved discovery/behavior and Chromium/Firefox reader preserved.",
+      "status": "complete"
+    },
+    {
+      "id": "vite",
+      "title": "Relocate Vite configurations",
+      "status": "planned"
+    },
+    {
+      "id": "typescript",
+      "title": "Relocate TypeScript configurations",
+      "status": "planned"
+    },
+    {
+      "id": "setup",
+      "title": "Consolidate repeated configuration setup",
+      "status": "planned"
+    },
+    {
+      "id": "css-inventory",
+      "title": "Inventory complete stylesheet ownership and duplication",
+      "status": "planned"
+    },
+    {
+      "id": "algebra-css",
+      "title": "Convert shared algebra styles and retire private imports",
+      "status": "planned"
+    },
+    {
+      "id": "integration",
+      "title": "Verify complete maintenance integration",
+      "status": "planned"
+    }
+  ]
+}
