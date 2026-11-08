@@ -31,6 +31,13 @@
       "scope": "standard",
       "checkedAt": "2026-11-08T17:56:49.742Z",
       "notes": "TypeScript relocation: all 13 configs parsed, complete pre/post inputs and no-emit options matched, 44 focused checks and full typecheck passed. Original cohort parser failure repaired and suite rerun. No cost ceilings changed."
+    },
+    {
+      "command": "npm run check:playwright-configs; npm run test:tooling-configs; npm run visual:tooling-configs -- --project=firefox; npm run typecheck:public-eigenvectors",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T18:03:51.136Z",
+      "notes": "Policy extraction exact; anchored worktree exclusion restores 122 project discoveries; all 152 nonempty; Chromium and Firefox route checks 12 passed."
     }
   ]
 }

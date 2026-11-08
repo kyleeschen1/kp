@@ -1,4 +1,5 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
+import { desktopProjects } from "./shared.ts";
 
 export default defineConfig({
   testDir: "../..",
@@ -9,10 +10,7 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:4177",
     trace: "retain-on-failure"
   },
-  projects: [{
-    name: "chromium",
-    use: { ...devices["Desktop Chrome"] }
-  }],
+  projects: desktopProjects("chromium"),
   webServer: { cwd: "../..",
     command: "npm run preview:botanical-lisp-performance",
     url: "http://127.0.0.1:4177",

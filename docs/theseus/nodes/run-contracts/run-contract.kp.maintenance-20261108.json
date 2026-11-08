@@ -50,7 +50,8 @@
     {
       "id": "setup",
       "title": "Consolidate repeated configuration setup",
-      "status": "planned"
+      "summary": "Shared desktop setup in 24 configs; repaired worktree exclusion with real-matcher regression guard; all browser selections and server policies retained.",
+      "status": "complete"
     },
     {
       "id": "css-inventory",

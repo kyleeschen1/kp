@@ -1,544 +1,262 @@
 {
   "playwright.affine-collection-review.config.ts": {
-    "sha256": "8475e60ee81a892eeefc4e53caf210d9189b6b56a4cb2761864d8796028d2332",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "5af63e261890d151e57a34ac95452849523858f6c6c2b889a431f100b9183849",
+    "projects": 3
   },
   "playwright.algebra-convergence.config.ts": {
-    "sha256": "1f23f42312ee3458747969403bc205b01b70ec4845abbdd4e379d6807369016d",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "2f21e1c9decc057a07a3a77b295497ad297f8ba94b73b394ed765011253d1011",
+    "projects": 3
   },
   "playwright.algebra-editions.config.ts": {
-    "sha256": "68d34028fc4670e8fbaf5b553b6b79735f1f22552f840147122d195a57a3cd5f",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "22f35abbe7f5509c834902ae151d968b249c379cfb1df7c9ec97b328fd2aa7b9",
+    "projects": 3
   },
   "playwright.algebra-mount.config.ts": {
-    "sha256": "b37cafd4af673b81712cc7097333d9b651f16ae3e268accd05842e15dd3a9005",
-    "projects": 3,
-    "files": [
-      1,
-      1,
-      1
-    ]
+    "sha256": "e53fb6e65b1c584aa8a8b938147fe0907345028a92943e955d8f0abaeebe9f70",
+    "projects": 3
   },
   "playwright.algebra-whole-and-parts.config.ts": {
-    "sha256": "e6b5a0b5e0998c7996dd7d55116eeb4065fe0fd431e16b69a1fc2ea58579d51c",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "66e004c990ed9c74b455f34d23b9b70ba2eef52e31530d2e26ae80fc2e74f952",
+    "projects": 3
   },
   "playwright.anchored-algebra.config.ts": {
-    "sha256": "59ea2ede3d2b7100962271a92b5427f112da35855b8b6e475fda5df4641f706d",
-    "projects": 3,
-    "files": [
-      1,
-      1,
-      1
-    ]
+    "sha256": "6c3b1d701a076ec04033927c0ea79d6621d164de0e849b42095f892f19599f72",
+    "projects": 3
   },
   "playwright.animation-library-live.config.ts": {
-    "sha256": "e570843f82e5d64d9bfbfb40712ae33880f4a4d2ecbd6a8d74a8eca40ad2612a",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "10a3bb53e99ed5e14045067152a53bdc3304a3e96103212026433a879fe26506",
+    "projects": 1
   },
   "playwright.authoring-entrypoints.config.ts": {
-    "sha256": "dfd5d545dfec0920da6da5b6b336b3bd55265e74c180422af8aa3099a7d82c19",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "03aeadae10b5e3c5fba47eccd888573434f1866f161609591c228fdd8788f4e8",
+    "projects": 3
   },
   "playwright.authoring-repeatability.config.ts": {
-    "sha256": "45c125ec8e4a15236c62814100f40034d422419928cf76bfd25f231fe6f529be",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "f445c2dc00d747b02fd2a5cc1815a1732fa710b3a9c21d3cd3a65411cd7bea43",
+    "projects": 3
   },
   "playwright.basis-composition.config.ts": {
-    "sha256": "57460a16526aee3efc79aa95ca173aa0a5096a532cfcf0d61c6c19c184315d10",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "47a2880038bc9f4103eb822eab34da8ced430a01996b0c57ae5f71ae8de76eaf",
+    "projects": 3
   },
   "playwright.bayesian-reasoning-review.config.ts": {
-    "sha256": "b7d1b817f775528631daacf3a987ef76b969305cc469122f479557e24f2d363f",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "6d0d2471780c2925258fa04519e5d77373d3112da9e7e53e7bbbd5811155ae0c",
+    "projects": 3
   },
   "playwright.botanical-lisp-performance.config.ts": {
-    "sha256": "8964ab6e73f2cdbc1a0213999cf62c29901f6c1e6ae9e65cd2473ae533d067b3",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "5f5f5e82d209299fe74c29df3085f0b6c116a476d519fe63b31f1dfff61fd98d",
+    "projects": 1
   },
   "playwright.calculus-editions.config.ts": {
-    "sha256": "ef029ee34ecdaacf260c2c5c730b58b2dc61405b9b5f744b2407667316c9504b",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "a7cdaaa04fcb02068fc0e94c00577c8aa4d0cd9b3aa59a17e2efe36a82f93176",
+    "projects": 3
   },
   "playwright.canonical-animation-review-packaged.config.ts": {
-    "sha256": "cec10353614fd58df0b99f07ea8464fa74b6d09b36f10ffc161bee6f07404c9f",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "77369b722845608ce1ba4c8b745a681dd79244c19804bc5da87ce9609fc33f2b",
+    "projects": 1
   },
   "playwright.canonical-tax-production.config.ts": {
-    "sha256": "5f52e1f1c48d78783667ea735ee4c477c0f71b10e42d0ad412edd4fcc34ff499",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "655561016e1d716d999889ec4d7275b141315625261e40f2723e6ee24709dc8b",
+    "projects": 3
   },
   "playwright.change-propagation.config.ts": {
-    "sha256": "25aa310ec0d1b1187a1851a3f38158ef1ffddd5aa540d2e9b13aa51febca4f7d",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "d5fe79134be79e49ff4038f674bbbaaaad2140b29c1ff891b8cbe1668d36dbc7",
+    "projects": 3
   },
   "playwright.code-reasoning-review.config.ts": {
-    "sha256": "1755d9039cfbf5b837ad9c380b2bc0a98fd97e70519079896dbbee7c7bfd38d2",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "1130dc66f81cf75bb84ea9b06fd51b7d9434957bd11b4972754fc2b9335a5e3e",
+    "projects": 3
   },
   "playwright.code-theme.config.ts": {
-    "sha256": "cb9b0503064604f1927771ea77e72533d60b58b4be110c2817049bf5c53bcf6d",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "19860fe9e797eb41c0b1f7196822a8fc038b077a3477eb2fe4e5a206d46cd3f6",
+    "projects": 1
   },
   "playwright.common-factor-review.config.ts": {
-    "sha256": "c32cd1cc746de88ad8bced3a5c4eedcaa0546c3ff64d1300bf4d812b8502e52c",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "b6adb3b49a96796096e127e499adc12ab65eccbba4cb0beab4f5736a9840e5dc",
+    "projects": 3
   },
   "playwright.composed-algebra-review.config.ts": {
-    "sha256": "329093d15188de30630873d68744625808d44e791862d942b23494027e5a43b8",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "0e86c49d47ab9a700b06eaeb25f01ffcc6848bbfe21ace0011352d6e56578ab8",
+    "projects": 3
   },
   "playwright.config.ts": {
-    "sha256": "94cfec7144cec931d9d703e6c5209fafdc56f76c2d4154d73e64cced26edccd4",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "f66d04ed40a33b1b003f16d7c0cf77cfc114c84d9c264c746dc19b2f56652bd4",
+    "projects": 3
   },
   "playwright.cross-domain-gallery.config.ts": {
-    "sha256": "fa0a6624bc302de8b3f2545a13f8af2a3b35aeeeed1f907d25958cdb07b271f0",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "ac718d12bb9a20d1af72f9f16d799a8469f2463272b5c764359228c3834fe556",
+    "projects": 1
   },
   "playwright.cross-language-code-theme.config.ts": {
-    "sha256": "ed18818e6abf8ee4825f4a393f44e33817e8b501741ab54f1670d20ea4c2ca89",
-    "projects": 3,
-    "files": [
-      1,
-      1,
-      1
-    ]
+    "sha256": "d6543a52e1514a4bb7d0e2a4554acaf5bcb2bd320f0f36934f20f04b2d5884e3",
+    "projects": 3
   },
   "playwright.discourse-scrolltelling.config.ts": {
-    "sha256": "c7c8f727d2699b11000afec41d8e62d259bc8068c5e91515551322121dfcf436",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "ebd0f132703a658e4e5d52b9d54db8721e49b6d111285d3d43c6f22a3ff4391d",
+    "projects": 3
   },
   "playwright.dot-passage.config.ts": {
-    "sha256": "6f63366e5107bf2adb5117fad003ba1e97296af82e88300ca2e702d91df12ae9",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "738f2d82c6682a57a3204242bd0748b0a4b16a826f9c4c0fb927f9c2d6b6bfb0",
+    "projects": 3
   },
   "playwright.economics-authoring-save.config.ts": {
-    "sha256": "b119f2d9d4d6daca968d2e9cc620727f55eb18241940ab2f47aa731f335ee47b",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "9929dd2b4f626c5dc5390537e843faba07c2d303a20217c402cbb92c9caa37f4",
+    "projects": 1
   },
   "playwright.economics-demand-shift-performance.config.ts": {
-    "sha256": "3a885207e60a31dcaadfda85ff815333516c43277427c8762fcbbecd53a34ae0",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "030fc08136bcadf7abf1445746fa41a5b9ebeade83692b9f42ac9e08018d95ea",
+    "projects": 1
   },
   "playwright.economics-dev-toolbar.config.ts": {
-    "sha256": "9919ded48db67b69a40f50c5d46634a864598849e5618b2baf809b5f1e95acbc",
-    "projects": 1,
-    "files": [
-      7
-    ]
+    "sha256": "bcc6f1d8591298c003b272299cbe6daca9967bb09f23e62964e5be11e9662206",
+    "projects": 1
   },
   "playwright.economics-lesson-editor.config.ts": {
-    "sha256": "03ff923073b0f245f37e8c6e8b14754d7d80161c711cf908918081533530e301",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "72b67732a3361ebf8bfce48a30e87c1285d63b8a056c905253fac9787755ddb8",
+    "projects": 1
   },
   "playwright.focus-deck-review.config.ts": {
-    "sha256": "c5739ae359c630d4fb534aa7cdd8b439a1517df4afbb66af6e5e39bc82b3003c",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "c7ae11f742694d84e271bf22401d0af9004afe2abb868f37aa7d7e2f6b74bea5",
+    "projects": 3
   },
   "playwright.fraction-chain.config.ts": {
-    "sha256": "9476dd140531744100e395c9d5703715900b60b105b318229fc459a351f56cbc",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "ed440ecbf831bfd7ef02254b94764d8e512a45450968b96db02c7ef9822e3921",
+    "projects": 3
   },
   "playwright.gradient-contour-production.config.ts": {
-    "sha256": "2249b7b9afd58f61354101d102351fe07266f6fe76393085d3c1b11675604236",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "d51cbb26949e75baa3070c4f686668e118c71d161d06801c960f46fbd8541579",
+    "projects": 3
   },
   "playwright.gradient-contour-review.config.ts": {
-    "sha256": "8d402698353a6c240d40941b050f13e992e73db4b638cfe65f6f095fa630ca7b",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "09831a84269e95b02b2e26b92774db02deb9a126c4b57fcc2c72fc411c595607",
+    "projects": 3
   },
   "playwright.graph-2d-translation.config.ts": {
-    "sha256": "66fe9d09ec7ece35ca9c5b8d1b4b723dbb2240406619a4aba36183ae934399bf",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "c330044378013118d0233bbd035a4d4669c4e25fa4a13c34db5d140f9774e5cf",
+    "projects": 1
   },
   "playwright.graph-3d-saddle.config.ts": {
-    "sha256": "40624913c44b87c882d1d4155053ac713799d7ae5e1f017147b15d0e32f843e8",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "fc16a8021facef1210d7b671ac6c9dc835b6bdf939354880e7bbc7c13bae5580",
+    "projects": 1
   },
   "playwright.internal-studio.config.ts": {
-    "sha256": "09bc3863a2bf23f30e9bff6d926f612f69f119c2374613053c0806cf1bc30225",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "dd4b0981b4e079756e5428a2152dd7bf4fc8f3df10e2293329c4ee07d7989e1a",
+    "projects": 1
   },
   "playwright.la-graph.config.ts": {
-    "sha256": "f044358254dd1137a7de08fc001d80e076dddf978846eba93586e1e300b12244",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "3b64cf8cc868f34f37bab2a21694c631189152ce1fdbfa7920962467d05a53c2",
+    "projects": 3
   },
   "playwright.matrix-argument.config.ts": {
-    "sha256": "f2b4c74826869b9027adabb272b125c36b037eb89247421823494eb2c517d2f1",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "c1b9ec5f8fae1a9fa69407b399b1be198d3434b223cfb06ca47cf5c7796b2d80",
+    "projects": 3
   },
   "playwright.matrix-authoring.config.ts": {
-    "sha256": "7cb52d587346ef48ca0407fc34c5ed04ee34d250ae25f3a52dd80bd66b4ae5e4",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "398bc5c0de74acea61284c3765886522263591ad666a654c954cbbd5b17f3c46",
+    "projects": 3
   },
   "playwright.matrix-column.config.ts": {
-    "sha256": "a4112ce6ac4ddb498204ec3450531adfab69f3a896dfdb04e57fb3bf9740cbe4",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "64b6fb2e66e460acd93a110de96084c4e284ebef6ab4c60938d9acb6020f16a8",
+    "projects": 3
   },
   "playwright.matrix-comparison.config.ts": {
-    "sha256": "8a708694f372bb806065726ebac3385b54f5e328d9c46a186f6c34f0dd9bbc18",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "e1704c8403b38b1b6003c1ad537b239bfc5a099cf14b17ee3ee076e5fde6c000",
+    "projects": 3
   },
   "playwright.matrix-editions.config.ts": {
-    "sha256": "dd3affdefed3a25924abbc2c2d62e76bd4c691b6335051a9c32f0d104ba9a75f",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "d59f91c83241caad04820620f2ca343513b95a04f591c679eb087d724d16c1c5",
+    "projects": 3
   },
   "playwright.matrix-interpretations.config.ts": {
-    "sha256": "4d250b0d4d954fa14d306b9442de828c7600009abcda5de91383154fbc65d1da",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "e077baec028574005c7bcbbff92261a75229b01208b5378833f8a14a8fdd04ec",
+    "projects": 3
   },
   "playwright.matrix-pouring.config.ts": {
-    "sha256": "313e120fc905ac173693d447cfc6618cbb8fbd4ec20bdd5e34b486fd85cd98a8",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "38e9a6c81c70ed7e55b902f9733bddd3572dd4bf0b07c4312a5e3345528ad5b3",
+    "projects": 3
   },
   "playwright.matrix-walk.config.ts": {
-    "sha256": "33eb5168f5416530689395e33c4a80641a1ff104db14e20b0f0070afd7a5be8e",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "caa6aa8df2390a08259b44ffd17452e36c95840e9072542871b49e7e2ac0f804",
+    "projects": 3
   },
   "playwright.mechanics-motion-review.config.ts": {
-    "sha256": "3d0ad2f18f338f6005b4cf99c13408625a8104445f21788e1e1d6bf8e50ff7d0",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "a5a8f1a57bbdf304b7d1e40cc1cdfdfca29efac2e2b78a08708f3b5e2d2216e7",
+    "projects": 3
   },
   "playwright.mechanics-relations-review.config.ts": {
-    "sha256": "f06695e43e80c6929806c9fb5f95103cb110a073a6eda25a2b8956481b17b244",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "875ba403e31d4c039c89328d8e67e22e2b9c81f52ab1eba12d93b12a494c5b9c",
+    "projects": 3
   },
   "playwright.page-directory.config.ts": {
-    "sha256": "47b3fc0b13e591bb03de28b0eed4247ec4dd0dbec0f105f33d606f6fb23b26b8",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "24ac35139b7e5e83f2b8592f09364d212560adcb74af50cb9af7d5ea429331d8",
+    "projects": 1
   },
   "playwright.place-value-addition.config.ts": {
-    "sha256": "3e8c3886dd59839b6f0c1063fcb18ccab5f52c06a0fa178672e09057ea0b93ee",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "dee1276f16b7a3c8fc2a77871e77890a52c7846993685b972757aaa037139122",
+    "projects": 3
   },
   "playwright.public-eigenvectors.config.ts": {
-    "sha256": "84669980fee69345fe648f0b508d846f6e04aa349fc918f050b0c5b7c7d58fd3",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "1d1d1f1862ce14fa845f824ad3cc23ff19bcb2189b68769146df0e7d433b121e",
+    "projects": 1
   },
   "playwright.public-fraction-composition.config.ts": {
-    "sha256": "e2ca9a90a780dcd3c01d25a6107505d76015b5e6ff0024da5fb3e3f0075afa1c",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "c80ab85d4aa5f6d3594d37538e4975e8fba9187c2d199abb377b82e780d41e22",
+    "projects": 1
   },
   "playwright.public-normal-matrices.config.ts": {
-    "sha256": "5a9f3d4c03f37db23116dacc1c414abb175f9a401e1cae2c73f31c5080956173",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "a646cd855a89810f572326bafc385f407a8c3da689c55b18a7cae565f30d4e23",
+    "projects": 1
   },
   "playwright.public-typescript.config.ts": {
-    "sha256": "9bc54045ff95421379e758e2743955c4e166ac7835cf74c795e5f18661115c9e",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "a8aef674785955f14a0cc649718f3a5b774cb64441b87f0dc348339d1e8e3dec",
+    "projects": 1
   },
   "playwright.python-code-theme.config.ts": {
-    "sha256": "ed5fa238b8f5aa6197771a2ff88aa9081a8f19017de571f70ebac26cd8f7b8fd",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "3762715aaaaa76e50480e93d704c06e7cf1de468c53ab4ccee7d3910e0a4e7b3",
+    "projects": 1
   },
   "playwright.python-refactor.config.ts": {
-    "sha256": "20f1a9aa33eaa8c9a7c51c1f3ec0a86be1ed1137a5787a98bae8fb3ef06b80f0",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "4d67f03f156977043b7d533aa2e944f1da6ca388af73e33e22de8845cbd5fb29",
+    "projects": 1
   },
   "playwright.radical-reader.config.ts": {
-    "sha256": "480e9f96c66afae8ab90a3791dd16cc71e2348d15649608ac8a685efdcd054de",
-    "projects": 2,
-    "files": [
-      0,
-      0
-    ]
+    "sha256": "5787510a03ec44a2ad6f3b2e399d6dc91906544c5a7e941c73b2543bcd47c3f6",
+    "projects": 2
   },
   "playwright.rail-authoring.config.ts": {
-    "sha256": "cb0eee188aec6a5cfb711660987a2b311c2d6165e9d550835594c845eee075e0",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "b7ef307c0d5a91fbd42fb109685478ab83f0067c7dad3e99a7361747ba3cddd5",
+    "projects": 3
   },
   "playwright.reader-production.config.ts": {
-    "sha256": "3b94e0d662453e12907ccad2599d2bf1fdbef526ee7268ea2739a98007b5ea51",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "5e69b60dc76f261b5f25392a77fc886c32acb69506f3a0f704e12755c3bffc51",
+    "projects": 3
   },
   "playwright.rectangular-product.config.ts": {
-    "sha256": "06c3d24336d4fdcd3540692eb0f3bf2a86c1aba31184f0952cb5ff2fb9abce5e",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "3b3d41245196b1f132ebf6bfabb0450ae866826c101a16ac72a957acca1c74df",
+    "projects": 3
   },
   "playwright.repertoire.config.ts": {
-    "sha256": "3d39a2d3531545424dd86441b8d12a3bb51e1c4c3938a416b4c3f6a5719685c7",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "68d6077aab23fd7cc72c0759593bf63978b2d10c730af7d7cf80b7dc5d4c37e7",
+    "projects": 3
   },
   "playwright.reusable-reasoning-review.config.ts": {
-    "sha256": "3b542939dc20e434800b7ee228995ba9f74fa12838292b2219811101cc70f52f",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "7ad8e7e9e4ae20f1617026b9bafa8131b5cc6fb73d0e818c3e28f726d57eda63",
+    "projects": 3
   },
   "playwright.row-operation.config.ts": {
-    "sha256": "9a22b49c92aeee66bdabac35ac29bb4dcc9744cc66e4e11805723c5c216c70d7",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "43c3dcd6c5ee16485d531d40fe0b4da0bfc1d501c25d886d40e5ec3716977257",
+    "projects": 3
   },
   "playwright.semantic-cost.config.ts": {
-    "sha256": "baadbfe6c9464f24082a959bbcc2968db27e273dfb431c6c94511b432b153363",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "31a0677c18369b2009c0aff3ab2f0cfc47ba3c4e9f28c95d62ed0d6b48c69842",
+    "projects": 1
   },
   "playwright.symbolic-inspection.config.ts": {
-    "sha256": "497fab2be2e44447c72eb4d995e79ad6198f47793dd5a3d8e45a33cf666ce403",
-    "projects": 3,
-    "files": [
-      0,
-      0,
-      0
-    ]
+    "sha256": "6d187b7948366fb1c30daa6d6db707d50b9b89318230cc614bf1d6fb4176a27b",
+    "projects": 3
   },
   "playwright.typescript-refactor.config.ts": {
-    "sha256": "1c154e1d2a79d17e50dc0eeb020d4c357203171798259fb5cfe41ee20e5a35dd",
-    "projects": 1,
-    "files": [
-      1
-    ]
+    "sha256": "15255aeae9d2c702cfd829b47bae8ffa8a815ed3c597fd67b68d522af2990595",
+    "projects": 1
   }
 }

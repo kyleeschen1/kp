@@ -25,25 +25,47 @@ const normalize = value => JSON.parse(JSON.stringify(value, (_key, item) => {
 }));
 const snapshots = {};
 const cache = new Map();
+const args = process.argv.slice(2);
 for (const filename of configs) {
   const full = await configLoader.loadConfigFromFile(filename);
   const projects = [];
   for (const project of full.projects) {
-    projects.push({ ...project.project, expect: project.expect,
-      files: (await projectUtils.collectFilesForProject(project, cache)).sort() });
+    const files = (await projectUtils.collectFilesForProject(project, cache)).sort();
+    assert.ok(files.length, `${basename(filename)} / ${project.project.name}: no test files discovered`);
+    projects.push({ ...project.project, expect: project.expect, files });
+    if (basename(filename) === "playwright.config.ts") {
+      // Exercise the runner's real matcher without creating a nested worktree.
+      // A broad ancestor glob must fail even when this check runs at repo root.
+      for (const testDir of [root, resolve(root, ".worktrees/discovery-probe")]) {
+        const own = resolve(testDir, "tests/own.browser.spec.ts");
+        const nested = resolve(testDir, ".worktrees/child/tests/other.browser.spec.ts");
+        assert.equal(typeof project.project.testIgnore, "string");
+        const probe = { ...project, project: { ...project.project, testDir,
+          testIgnore: project.project.testIgnore.replace(root, testDir) } };
+        assert.deepEqual(await projectUtils.collectFilesForProject(probe,
+          new Map([[`${testDir}:${project.respectGitIgnore}`, [own, nested]]])), [own],
+        "Discover this checkout's tests while excluding nested worktrees");
+      }
+    }
   }
   const servers = full.webServers.map(({ cwd, ...server }) => ({ ...server,
     cwd: resolve(full.configDir, cwd ?? ".") }));
   const behavior = normalize({ projects, servers, globalTimeout: full.config.globalTimeout,
     forbidOnly: full.config.forbidOnly, fullyParallel: full.config.fullyParallel,
     globalSetups: full.globalSetups, globalTeardowns: full.globalTeardowns });
+  // Ordinary test additions must not require a baseline refresh. Discovery is
+  // checked above and retained in detailed migration captures; hash policy only.
+  const policy = { ...behavior, projects: behavior.projects.map(({ files, ...project }) => project) };
   snapshots[basename(filename)] = { behavior,
-    sha256: createHash("sha256").update(JSON.stringify(behavior)).digest("hex") };
+    sha256: createHash("sha256").update(JSON.stringify(policy)).digest("hex") };
 }
 const summary = Object.fromEntries(Object.entries(snapshots).map(([name, entry]) =>
-  [name, { sha256: entry.sha256, projects: entry.behavior.projects.length,
-    files: entry.behavior.projects.map(project => project.files.length) }]));
-const args = process.argv.slice(2);
+  [name, { sha256: entry.sha256, projects: entry.behavior.projects.length }]));
+if (args[0] === "--capture-details" && args[1]) {
+  writeFileSync(args[1], JSON.stringify(snapshots, null, 2) + "\n");
+  console.log("Resolved configuration and discovery details captured.");
+  process.exit(0);
+}
 if (args[0] === "--capture" && args[1]) {
   mkdirSync(dirname(args[1]), { recursive: true });
   writeFileSync(args[1], JSON.stringify(summary, null, 2) + "\n");

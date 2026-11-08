@@ -72,3 +72,34 @@ all remaining measurement/cohort callers were repaired and the full focused
 44-test command passed. `check:inference` passed unchanged ceilings: core
 116,885 types / 200,009 instantiations; combined 180,374 / 305,022.
 Measurement JSON changes only rename project paths; measured costs are preserved.
+
+## Repeated configuration setup and worktree discovery
+
+Twenty-four configurations now use one typed desktop-device helper, retaining
+explicit browser selections at every suite. The original resolved policy and
+discovery hashes passed after this extraction, before the discovery repair.
+Suite ports, trace settings, timeouts, server ownership and output paths remain
+local; the existing Vite helpers already own their useful shared setup.
+
+The baseline exposed a pre-existing bug: `**/.worktrees/**` ignored the current
+checkout's ancestor as well as nested checkouts. Three declarations affected
+41 inherited/standalone configurations; 122 of 152 project configurations had
+zero discovered files here. Anchoring the exclusion to this checkout restores
+those projects; the base discovers 258 browser-spec files. A before/after
+comparison of complete resolved objects proved the only policy difference was
+this exclusion. Every project now discovers files. No omitted test is counted
+as an executed browser pass.
+
+The durable guard exercises Playwright's real file matcher with current and
+nested-worktree paths, including a simulated checkout with a `.worktrees`
+ancestor. It rejects an empty project. The baseline now hashes configuration
+policy only: ordinary test additions must not require approval or refresh.
+Detailed discovery remains available for future migration comparisons. This
+is an explicit correction of the initial migration-only snapshot, not a waiver
+of missing coverage.
+
+`check:playwright-configs`, all four tooling ownership tests and the eigenvector
+compiler cohort passed. `visual:tooling-configs -- --project=firefox` passed
+12 real route-mount tests across Chromium and Firefox. The maintenance work
+has moved 87 specialized root configs and added the `config/` owner: 120 tracked
+root entries become 34, with four conventional config entrypoints retained.

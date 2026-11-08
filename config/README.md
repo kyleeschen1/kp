@@ -2,8 +2,8 @@
 
 Keep conventional discovery entrypoints (`playwright.config.ts`, `vite.config.ts`
 and `tsconfig.json`) at the repository root. Specialized configurations belong
-under `config/playwright/`, `config/vite/` and `config/typescript/`; migrations
-arrive one family at a time. Their basenames and normal npm command names stay
+under `config/playwright/`, `config/vite/` and `config/typescript/`.
+Their basenames and normal npm command names stay
 stable. Use package scripts to avoid coupling a caller to configuration paths.
 
 Configuration-relative paths are behavior: test discovery, server working
@@ -14,9 +14,18 @@ preserve suite-specific ports, browsers and lifecycle policies.
 `npm run test:tooling-configs` guards ownership and command references.
 `npm run check:playwright-configs` resolves all Playwright configurations using
 the installed runner, checks actual file discovery, and compares behavior with
-the reviewed baseline. It starts no browser or server. A dependency upgrade or
-intended test/config change needs an explained baseline update, not automatic
-refresh. Run the affected real browser checks separately.
+the reviewed configuration-policy baseline. It starts no browser or server.
+Ordinary test additions do not change that baseline: every project must discover
+files, and a synthetic nested-worktree probe exercises the real runner matcher.
+`--capture-details <path>` captures complete discovery for before/after moves.
+A dependency upgrade or intended configuration change needs an explained baseline
+update, not automatic refresh. Run affected real browser checks separately.
+
+`config/playwright/shared.ts` owns desktop device definitions and the anchored
+nested-worktree exclusion. Each suite still chooses its browsers explicitly.
+Never use `**/.worktrees/**` as a test exclusion: it also matches the checkout's
+ancestors when running inside a worktree. `visual:tooling-configs` checks actual
+root, concept and tutorial routes; append `-- --project=firefox` for both browsers.
 
 `npm run check:vite-configs` compares all 13 Vite configurations in serve and
 build modes and verifies their declared input paths. Plugin declarations are
@@ -28,6 +37,9 @@ and checks explicit inputs and project references. During relocation its
 and after; that temporary snapshot does not freeze ordinary future source-file
 additions. Shared `tsconfig.base.json` stays at root for domain/protocol consumers.
 Tools that parse a config must resolve paths relative to that config's directory.
+
+Run `npm run check:tooling-configs` for all three configuration guards plus
+the ownership/command tests.
 
 The editor/workbench session owns its application checkout. KP configuration
 changes are integrated in the KP maintenance worktree; keep its preview URL and
