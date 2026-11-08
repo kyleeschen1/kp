@@ -117,20 +117,44 @@ test("no script and rejected source retain complete static meaning", async ({ br
   await expect(page.locator('[aria-label="Complete verified reading"]')).toBeVisible();
 });
 
-test("page lifecycle pauses retained readers and releases final ownership", async ({ page }) => {
-  await page.goto(`${origin}/whole/`);
+for (const c of cases) for (const visibilityFirst of [true, false]) test(`${c.key}: page lifecycle pauses retained readers and releases final ownership (visibility first: ${visibilityFirst})`, async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto(`${origin}/${c.key}/`);
   await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-status", "ready");
   await seek(page, 1.5);
-  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true })));
+  await page.evaluate(first => {
+    document.querySelector<HTMLButtonElement>("[data-kp-focus-deck-next]")!.click();
+    Object.defineProperty(document, "hidden", { configurable: true, value: true });
+    if (first) document.dispatchEvent(new Event("visibilitychange"));
+    window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: true }));
+    if (!first) document.dispatchEvent(new Event("visibilitychange"));
+  }, visibilityFirst);
+  // Drain two frame opportunities: a retained reader must be paused, still at
+  // the exact semantic position, and usable when the page becomes visible.
+  await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
   await expect(page.locator("[data-composed-card]")).toHaveAttribute("data-composed-step", "1.5");
+  await page.evaluate(() => {
+    Reflect.deleteProperty(document, "hidden");
+    document.dispatchEvent(new Event("visibilitychange"));
+    window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+  });
   await seek(page, 2);
-  await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false })));
+  await page.evaluate(first => {
+    Object.defineProperty(document, "hidden", { configurable: true, value: true });
+    if (first) document.dispatchEvent(new Event("visibilitychange"));
+    window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+    if (!first) document.dispatchEvent(new Event("visibilitychange"));
+    window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+  }, visibilityFirst);
   await expect(page.locator("[data-algebra-edition]")).toHaveAttribute("data-composed-status", "disposed");
   const previous = page.url();
   await page.locator("[data-kp-focus-deck-scrubber]").evaluate(node => { (node as HTMLInputElement).value = "0"; node.dispatchEvent(new Event("input")); });
   expect(page.url()).toBe(previous);
   await page.evaluate(() => { location.hash = ""; window.dispatchEvent(new Event("resize")); });
   await expect(page.locator("[data-composed-card]")).toHaveAttribute("data-composed-step", "2");
+  await page.goto("about:blank");
+  expect(errors).toEqual([]);
 });
 
 test("departure during native preparation cannot resurrect a reader", async ({ page }) => {

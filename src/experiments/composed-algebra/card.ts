@@ -75,11 +75,14 @@ async function mountResolvedCard(container: HTMLElement, sequence: KpComposedAlg
   input = mountKpFocusDeckNativeInput({ viewport, region: card, enabled: () => !disposed && !practicing,
     position: playback.position, begin: playback.begin, reduced: () => reduced.matches, interrupt: cancel });
   const resize = () => { if (!disposed) { cancel(); clock.pause(); surface.resize(); render(); } };
-  const visibility = () => { if (document.hidden) { cancel(); clock.pause(); } };
-  const dispose = () => { if (disposed) return; disposed = true; input?.dispose(); playback.dispose(); unsubscribe(); unbindKeyboard(); surface.dispose();
+  const visibility = () => { if (!disposed && document.hidden) { cancel(); clock.pause(); } };
+  const dispose = () => { if (disposed) return; disposed = true;
+    // Release browser callbacks before scheduler/native teardown. Late or
+    // reentrant visibility events must not command a disposed clock.
+    window.removeEventListener("resize", resize); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize);
     previous.onclick = null; next.onclick = null; replay.onclick = null;
     slider.oninput = null; slider.onchange = null; slider.onpointerup = null; slider.onpointercancel = null;
-    window.removeEventListener("resize", resize); document.removeEventListener("visibilitychange", visibility); reduced.removeEventListener("change", resize); };
+    input?.dispose(); playback.dispose(); unsubscribe(); unbindKeyboard(); surface.dispose(); };
   window.addEventListener("resize", resize); document.addEventListener("visibilitychange", visibility); reduced.addEventListener("change", resize);
   render(); card.dataset["kpFocusCardEnhancement"] = "ready";
   return { card, clock, dispose, cancel, reveal: navigate,

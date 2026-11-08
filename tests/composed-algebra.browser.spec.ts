@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test as base, expect } from "@playwright/test";
 import source from "../src/authoring/examples/composed-algebra-primary.json" with { type: "json" };
 import product from "../src/authoring/examples/composed-algebra-product.json" with { type: "json" };
 import { composedAlgebraPressureCases } from "./fixtures/composed-algebra-pressure.ts";
@@ -8,6 +8,18 @@ import { fileURLToPath } from "node:url";
 import { unfamiliarAuthoringCases, unfamiliarAuthoringRejections } from "./fixtures/unfamiliar-authoring-trial.ts";
 import intuition from "../src/authoring/examples/composed-algebra-intuition.json" with { type: "json" };
 import intuitionTransfer from "../src/authoring/examples/composed-algebra-intuition-transfer.json" with { type: "json" };
+
+// Keep navigation errors inside the assertion window. Browser target closure
+// can drop protocol events, so the deterministic lifecycle probe is also needed.
+const test = base.extend<{ departureErrors: void }>({
+  departureErrors: [async ({ page }, use) => {
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.stack ?? error.message));
+    await use();
+    if (!page.isClosed()) { await page.goto("about:blank"); await page.close(); }
+    expect(errors).toEqual([]);
+  }, { auto: true }]
+});
 
 for (const variant of ["primary", "transfer"]) test(`distribute-collect ${variant}: native stops and reversible canonical motion`, async ({ page }, info) => {
   test.setTimeout(120_000);
@@ -672,6 +684,47 @@ test("composed authoring applies one coherent prepared revision and preserves it
   let json = ""; for await (const chunk of stream!) json += chunk.toString();
   expect(JSON.parse(json)).toEqual(edited);
 });
+
+for (const example of ["composed-algebra", "algebra-intuition", "distribute-collect"]) {
+  test(`composed remount lifecycle: ${example} releases callbacks on final departure`, async ({ page }) => {
+    test.setTimeout(120_000);
+    const errors: string[] = [];
+    page.on("pageerror", error => errors.push(error.message));
+    await page.goto(`/experiments/reusable-reasoning/?example=${example}`);
+    const root = page.locator("#authored-focus-card");
+    await expect(root).toHaveAttribute("data-composed-status", "ready", { timeout: 90_000 });
+    await page.evaluate(() => {
+      document.querySelector<HTMLButtonElement>("[data-kp-focus-deck-next]")!.click();
+      // Pressure the disposal boundary with a hiding callback during scheduler
+      // cancellation, before the native session has finished releasing paint.
+      const cancelFrame = window.cancelAnimationFrame.bind(window);
+      let notified = false;
+      window.cancelAnimationFrame = handle => {
+        cancelFrame(handle);
+        if (notified) return;
+        notified = true;
+        document.dispatchEvent(new Event("visibilitychange"));
+      };
+      Object.defineProperty(document, "hidden", { configurable: true, value: true });
+      window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+      window.cancelAnimationFrame = cancelFrame;
+      if (!notified) throw new Error("Lifecycle probe did not cancel a playing clock.");
+      document.dispatchEvent(new Event("visibilitychange"));
+      window.dispatchEvent(new Event("resize"));
+      document.fonts.dispatchEvent(new Event("loadingdone"));
+      window.dispatchEvent(new PageTransitionEvent("pagehide", { persisted: false }));
+    });
+    const finalStep = await root.locator("[data-composed-card]").first().getAttribute("data-composed-step");
+    await root.locator("[data-kp-focus-deck-scrubber]").first().evaluate(node => {
+      (node as HTMLInputElement).value = "2"; node.dispatchEvent(new Event("input"));
+      node.dispatchEvent(new Event("change"));
+    });
+    await expect(root.locator("[data-composed-card]").first()).toHaveAttribute("data-composed-step", finalStep!);
+    // Include actual navigation: Firefox may deliver hiding after pagehide.
+    await page.goto("about:blank");
+    expect(errors).toEqual([]);
+  });
+}
 
 test("composed remount releases stale owners and resize preserves the current contribution", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });

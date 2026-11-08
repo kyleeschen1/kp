@@ -1,0 +1,61 @@
+{
+  "id": "task.kp.algebra-teardown-20261108",
+  "kind": "task",
+  "title": "Release algebra reader listeners before their clocks",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-algebra-teardown-delivery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-algebra-teardown.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:algebra-mount -- --project=firefox",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T18:49:43.524Z",
+      "notes": "24 passed after the repair; original Firefox closure diagnostic did not recur. Deterministic reentrant teardown probe previously failed all six browser/host combinations."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-timeline-playback-clock.test.ts tests/focus-deck-travel-playback.test.ts tests/composed-algebra-owner-paths.test.ts tests/composed-algebra-extension-architecture.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T18:49:44.692Z",
+      "notes": "15 passed, including strict pause-after-disposal rejection."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-08T18:49:45.345Z",
+      "notes": "Full app/node/test/Svelte/domain typechecks and production build passed; Svelte zero errors/warnings; existing large chunk costs unchanged in scope."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T18:49:46.034Z",
+      "notes": "All architecture gates and eight cross-domain registration checks passed."
+    },
+    {
+      "command": "npm run visual:algebra-editions -- --project=chromium --project=firefox",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-08T18:50:46.363Z",
+      "notes": "23 passed and the existing Firefox performance-only probe remained skipped. Both production sources pass retained/final lifetime checks in both visibility orders, native motion, revision reload, local closure and no-script reading."
+    },
+    {
+      "command": "npm run measure:algebra-editions",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-08T18:51:21.919Z",
+      "notes": "All complete-consumer and edition budgets unchanged and passed. Edition JS gzip 374347, authoring JS 406572: plus 1 and 4 bytes respectively versus maintenance. CSS unchanged."
+    }
+  ]
+}

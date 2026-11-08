@@ -1,0 +1,46 @@
+{
+  "id": "run-contract.kp.algebra-teardown-20261108",
+  "kind": "run-contract",
+  "title": "Algebra teardown repair",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.algebra-teardown-20261108.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-algebra-teardown-delivery.md",
+      "summary": "User-approved bounded continuation after maintenance; six-hour ceiling with verification reserve"
+    }
+  ],
+  "verification": [
+    "npm run visual:algebra-mount -- --project=firefox",
+    "npm run visual:algebra-editions -- --project=chromium --project=firefox",
+    "npm run build",
+    "npm run check:architecture"
+  ],
+  "allowedWork": [
+    "Bounded algebra lifecycle repair and regression coverage"
+  ],
+  "disallowedWork": [
+    "Editor changes, new renderer, visual redesign, merge or publication"
+  ],
+  "goal": "Depart and replace native algebra cards without callbacks using disposed clocks",
+  "target": "task.kp.algebra-teardown-20261108",
+  "slices": [
+    {
+      "id": "repair",
+      "title": "Reproduce-and-repair-ownership",
+      "summary": "Shared owner releases browser callbacks before timeline/native resources; strict clock invariant preserved; six red-to-green regressions and 24-case integration canary pass",
+      "status": "complete"
+    },
+    {
+      "id": "integration",
+      "title": "Verify-complete-consumers-and-close",
+      "summary": "Verify final production editions, payload budgets and source-linked closeout",
+      "status": "in-progress"
+    }
+  ]
+}

@@ -121,6 +121,7 @@ test("invalid stops and use after disposal fail closed", () => {
   );
   clock.dispose();
   assert.throws(() => clock.seek(0), /disposed/u);
+  assert.throws(() => clock.pause(), /disposed/u);
 });
 
 test("direct URL seeks publish once without replaying intermediate frames", () => {
