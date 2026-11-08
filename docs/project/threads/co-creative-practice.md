@@ -1,8 +1,14 @@
 # Co-creative mathematical practice
 
 Status: active product direction; integrated KP annotation reader awaits visual judgment
-Last Updated: 2026-11-04
-Current Next Action (KP engine lane): review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
+Last Updated: 2026-11-08
+Current maintenance proposal (KP engine lane): complete the bounded algebra
+style-ownership conversion while preserving current visual behavior. The
+[November 8 review](../reviews/2026-11-08-next-step-review.md) names the complete
+consumer boundary and low-interruption verification approach. No new run has
+started; the explanation-first product successor remains the broader direction.
+
+Pending visual checkpoint: review the [integrated annotation reader](../reviews/2026-10-31-annotation-reader.md)
 at `/reader/what-counts/`. The user approved the [bounded consolidation](../2026-10-31-annotation-reader-delivery.md);
 the candidate reuses the document theater, gives annotations a separate reading
 moment, preserves the fractional reader and retires the standalone card shell.

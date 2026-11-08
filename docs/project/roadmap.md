@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-11-04
+Last Updated: 2026-11-08
 Status: active
 Active Thread: `threads/co-creative-practice.md`
 Supporting Threads:
@@ -25,6 +25,15 @@ nor its evidence. The ledger remains retrievable at
 `threads/animation-library-promotion.md` without becoming the active thread.
 
 ## Executive Direction
+
+Current maintenance recommendation (November 8): with limited human-review
+availability, first complete the existing bounded algebra style-ownership
+conversion. The [source assessment](reviews/2026-11-08-next-step-review.md)
+identifies cross-example CSS dependencies and preview/edition consumers, with
+behavior-preserving checks and a finite retirement boundary. Directory ownership
+and a shorter current-state entrypoint are supporting cleanup candidates.
+This is a proposal, not a new run. The integrated annotation reader's visual
+judgment remains pending, and the broader explanation-first successor is retained.
 
 November 4 goal clarification: the user wants human/LLM-authored salience
 animations inside rich explanations, supporting precise joint attention and

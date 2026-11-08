@@ -3,13 +3,13 @@ import type { ProjectVision } from "./vision-model.ts";
 // Review with the roadmap at a milestone handoff or pivot; append the reason for
 // changes. Task progress belongs to Theseus, not this source-linked horizon map.
 export const projectVision: ProjectVision = {
-  reviewedOn: "2026-11-04",
+  reviewedOn: "2026-11-08",
   northStar: "Develop an eye for what matters through rich explanations and precise shared attention across symbolic domains.",
   productProof: "A human or LLM authors an explanation; a learner points to an exact part, asks a question, receives a situated revision, and tries the idea with less guidance. Mathematical practice is the first proving ground; the complete interaction remains unproved.",
   productSource: { label: "Goal clarification and capability progression", href: "docs/project/reviews/2026-11-04-next-step-review.md" },
   areas: [
     {
-      id: "architecture", title: "Architecture & retirement", horizon: "later",
+      id: "architecture", title: "Architecture & retirement", horizon: "next",
       destination: "Replace a part without rebuilding its neighbors. Finish migrations and remove obsolete paths.",
       established: "The obsolete algebra facade and experiment-owned mounting paths are retired. Shared native mounting preserves checked authority and behavior; cross-example style dependencies remain.",
       evidence: { label: "Shared mounting closeout", href: "docs/project/reviews/2026-10-30-shared-algebra-mount.md" },
@@ -17,7 +17,7 @@ export const projectVision: ProjectVision = {
         id: "owned-algebra-styles", title: "One algebra family owns its shared styles",
         finish: "For the selected explanation, replace cross-example CSS imports with responsible shared and local owners, remove superseded rules, and preserve typography, native geometry and unrelated hosts.",
         excludes: "Global visual redesign, a repository-wide stylesheet migration or a prerequisite to every workbench experiment.",
-        source: { label: "Bounded successor · style ownership", href: "docs/project/reviews/2026-10-30-next-step-review.md" }
+        source: { label: "Style ownership · current consumer evidence", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
       }
     },
     {
@@ -45,7 +45,7 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "reader", title: "Reader & presentation", horizon: "next",
+      id: "reader", title: "Reader & presentation", horizon: "later",
       destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
       established: "The fractional theater and anchored annotation treatment are locally accepted. Their integrated reader candidate now gives annotations separate reading moments and retires the card shell; integrated visual judgment remains open.",
       evidence: { label: "Integrated reader review", href: "docs/project/reviews/2026-10-31-annotation-reader.md" },
@@ -166,6 +166,13 @@ export const projectVision: ProjectVision = {
       after: "Restore the broader goal of human/LLM-authored explanations and precise joint attention across symbolic domains. Retain mathematical practice as the first proving ground, the reader checkpoint and all existing finite finish lines.",
       reason: "The user asks how local work leads to developing an eye for what matters. The proposed successor tests one complete explanation, situated follow-up and revision; it is not a new implementation commitment or a claim of general domain support.",
       source: { label: "Capability progression and proposed successor", href: "docs/project/reviews/2026-11-04-next-step-review.md" }
+    },
+    {
+      id: "maintenance-with-limited-human-review", on: "2026-11-08",
+      before: "The integrated annotation reader's visual judgment was the recommended next action.",
+      after: "Recommend the existing bounded algebra style-ownership conversion while human-review availability is limited. The reader checkpoint stays pending, and the explanation-first successor remains the product direction; no new run has started.",
+      reason: "Current sources show cross-example CSS imports and preview/edition dependencies. Complete one ownership repair with automatic preservation checks, retaining the original finish line and deferring new visual decisions.",
+      source: { label: "Consolidation scope and evidence", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
     }
   ]
 };
