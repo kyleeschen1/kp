@@ -77,6 +77,13 @@
       "scope": "integration",
       "checkedAt": "2026-11-08T21:23:35.098Z",
       "notes": "All 20 final combined cases pass in Chromium/Firefox desktop/phone. Focused follow-up returns actual native focus and annotation/scroll context; full typecheck passes."
+    },
+    {
+      "command": "npm run visual:rail-authoring -- --grep momentum.scaling",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T22:24:27.053Z",
+      "notes": "Initial probe wrongly required instantaneous full-motion keyboard endpoints; a subsequent phone probe reused the final-dock document and targeted above the viewport. Both diagnosed as test setup assumptions; final two-browser focused rerun passed."
     }
   ],
   "progress": {

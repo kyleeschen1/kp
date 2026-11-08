@@ -106,6 +106,53 @@ test("phone preview retains readable equations and keyboard docking", async ({ p
   await page.screenshot({ path: info.outputPath("authored-phone.png") });
 });
 
+test("momentum scaling reaches the existing native host from source alone", async ({ page, browser }, info) => {
+  test.setTimeout(120_000);
+  const path = "examples/physics/momentum-scaling.article.md";
+  const article = readFileSync(path, "utf8");
+  const selected = selectAuthoredRail(process.cwd(), path, article);
+  expect(selected.status).toBe("checked"); if (selected.status !== "checked") return;
+  const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
+  try {
+    for (const width of [1100, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+      // Reopening the identical fragment can retain the previous document at
+      // its final dock. This cohort needs a fresh source mount at each width.
+      await page.goto('about:blank');
+      await page.goto(route + "#energy-from-momentum");
+      await expect(page.locator('[data-authored-rail-revision]')).toHaveAttribute("data-authored-rail-revision", selected.sourceRevision);
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Why does doubling momentum quadruple energy?');
+      await expect(page.locator('[data-derivation-namespace="power"]')).toHaveCount(0);
+      const energy = page.locator('[data-derivation-namespace="energy"]');
+      const handle = energy.getByRole('slider', { name: 'Derivation lens', exact: true });
+      await expect(handle).toBeEnabled({ timeout: 30000 });
+      await expect(energy).toHaveAttribute('data-derivation-progress', '0');
+      await expect(energy.locator('[data-derivation-stage]')).toHaveAttribute('data-derivation-renderer', 'canonical-native-katex-scene-session');
+      await dragTo(page, energy, .55);
+      await expect.poll(async () => Number(await energy.getAttribute('data-derivation-progress'))).toBeCloseTo(.55, 1);
+      // Full-motion keyboard navigation animates to its target. Use the existing
+      // reduced-motion endpoint policy when asserting instantaneous docks.
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      for (const key of ['End', 'Home', 'End']) {
+        await handle.focus(); await handle.press(key);
+        await expect(energy).toHaveAttribute('data-derivation-progress', key === 'Home' ? '0' : '3');
+      }
+      await expect(energy).toHaveAttribute('data-derivation-progress', '3');
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+      await page.screenshot({ path: info.outputPath(`${width}-momentum-scaling.png`) });
+    }
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    try {
+      const staticPage = await context.newPage(); await staticPage.goto(route);
+      await expect(staticPage.getByText(/The phrase “at fixed mass” is doing real work/)).toBeVisible();
+      await expect(staticPage.getByText(/Try a changed case without using the rail/)).toBeVisible();
+      await expect(staticPage.locator('.energy-derivation-history > li > .energy-derivation-equation math')).toHaveCount(4);
+    } finally { await context.close(); }
+    expect(errors).toEqual([]);
+  } finally { selectAuthoredRail(process.cwd(), authoredRailExample, source); }
+});
+
 async function dragTo(page: Page, root: Locator, position: number) {
   const handle = root.getByRole("slider", { name: "Derivation lens", exact: true });
   await handle.scrollIntoViewIfNeeded();

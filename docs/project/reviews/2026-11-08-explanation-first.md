@@ -164,3 +164,29 @@ This enables a human/LLM exchange using a copied focused URL and a separately
 authored response. It does not yet supply an in-reader question composer,
 automatic response generation, learner model or general conversation history.
 Those are distinct product work, and editor ownership remains unchanged.
+
+## Physics pressure case: recoverable checkpoint
+
+Canonical source: `examples/physics/momentum-scaling.article.md`, based on the
+existing checked `physics.energy-from-momentum@1` derivation and three pinned
+momentum concept includes. Canonical host: `/experiments/authored-rails/`; native
+renderer: the existing mechanics equation rail and canonical KaTeX scene session.
+The [baseline](2026-11-08-momentum-scaling-baseline.md) explains the factor of four,
+the fixed-mass condition, direction loss and a changed momentum/mass comparison.
+All twelve baseline paragraphs remain in source and static HTML. No new physics
+operation, renderer, clock or CSS is introduced. The rollback unit is this source
+and its focused checks; shared algebra readings remain unchanged.
+
+This checkpoint is unfinished: the broader rail cohort, local candidate Apply,
+human reading judgment and final architecture comparison remain. The 36 focused
+semantic/publication tests pass. The final two-case Chromium/Firefox candidate
+smoke passes after repairing two test assumptions: full-motion keyboard targets
+are animated, and navigating to the identical fragment can retain the old
+document at its final dock. A diagnostic phone run measured the first equation
+above the viewport and a negative pointer target, explaining the edge scroll.
+The corrected probe checks a fresh zero dock, real drag, then reduced-motion
+keyboard endpoints; no assertion or reader capability was removed.
+
+The isolated browser server uses port 8014, leaving the independent checkout's
+port 8000 untouched. The selected-source fixture snapshots/restores its prior
+local selection; the candidate has not yet been applied for human review.

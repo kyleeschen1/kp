@@ -6,6 +6,24 @@ import { authoredRailExample, compileAuthoredRailPublication } from "../src/tuto
 import { loadAuthoredRail, railSelectionPath, selectAuthoredRail } from "../scripts/rail-authoring-selection.ts";
 
 const source = readFileSync(authoredRailExample, "utf8");
+test("the momentum-scaling explanation preserves its baseline through one checked rail", () => {
+  const path = "examples/physics/momentum-scaling.article.md";
+  const article = readFileSync(path, "utf8");
+  const baseline = readFileSync("docs/project/reviews/2026-11-08-momentum-scaling-baseline.md", "utf8");
+  const result = compileAuthoredRailPublication(article, path);
+  assert.equal(result.status, "checked"); if (result.status !== "checked") return;
+  assert.deepEqual(result.railIds, ["energy-from-momentum"]);
+  assert.equal(result.editorialAuthority, "author-supplied-not-proof");
+  // This baseline uses ordinary prose; every complete paragraph must remain
+  // in both the authored source and its static reader, beyond the native rail.
+  for (const paragraph of baseline.trim().split(/\n\n/).slice(1)) {
+    assert.ok(article.includes(paragraph), paragraph);
+    assert.ok(result.html.includes(paragraph), paragraph);
+  }
+  assert.ok(!result.html.includes("data-derivation-namespace=\"power\""));
+  assert.equal(compileAuthoredRailPublication(article.replace("physics.energy-from-momentum@1", "physics.two-particle-energy@1"), path).status, "repair");
+});
+
 test("one Article supplies the title, prose, rail selection and exact checked mathematics", () => {
   const result = compileAuthoredRailPublication(source, authoredRailExample);
   assert.equal(result.status, "checked"); if (result.status !== "checked") return;
