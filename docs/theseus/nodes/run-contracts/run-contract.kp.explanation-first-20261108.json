@@ -38,7 +38,8 @@
     {
       "id": "reuse",
       "title": "Pressure source-only reuse after review",
-      "status": "planned"
+      "summary": "Two independent questions demonstrate a bounded content registration and annotation-subset seam; original accepted reading retained. Source, browser and affected type checks pass.",
+      "status": "complete"
     },
     {
       "id": "follow-up",

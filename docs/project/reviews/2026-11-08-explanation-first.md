@@ -89,3 +89,45 @@ assembler; annotation fallback prose mirrors the runtime notes and is protected
 by a parity check. A second question should demonstrate which of those
 responsibilities to share. Do not infer a universal authoring schema from this
 one manuscript or treat word retention as proof of an effective explanation.
+
+## Reuse pressure: what if the whole is zero?
+
+The second [reading](http://localhost:8011/reader/what-counts/?reading=zero)
+asks a different conceptual question: why regrouping still works for a zero
+whole, while division-based cancellation does not. Its approximately 600-word,
+eleven-paragraph [baseline](2026-11-08-zero-whole-baseline.md) is fully retained.
+The same four checked mathematical states support four prose passages and two
+existing annotation moments. No new operation, numerical substitution animation,
+renderer, style or clock is claimed. Numerical examples and the division
+argument are editorial mathematics, not additional compiler-certified steps.
+
+Both readings now use one bounded content registration in
+`content/authoring/algebra/what-counts-readings.json`. Each has a distinct document
+version; unknown reading keys, empty/duplicate versions and cross-reading
+locations fail explicitly. The local assembler selects only registered files
+and includes only annotation moments actually authored in the selected Article.
+Future readings of these same states can change Article and registration files
+without browser/runtime or CSS edits. This is a local proven seam, not promotion
+of a general authoring schema or support for a new mathematical chain.
+
+The [authoring packet](../authoring/what-counts-reader-packet.md) documents the
+complete edit/check/reload path and its limits. One page-assembler repair was
+needed to establish this reuse; zero shared reader runtime/CSS files changed.
+The second Article adds 5,389 source bytes at measurement. Remaining manual
+work includes checked operation passage IDs, asset pins, document version
+updates and annotation fallback parity. These costs are visible rather than
+being hidden behind a claim of general source-only generation.
+
+Checks: six focused unit cases compile both registered readings, retain both
+baselines and reject substitution/invalid registration. The stable browser
+command's `different question|static reading` cohort passes both browsers,
+desktop/phone fitting, native annotations, reverse traversal, share/reload,
+static content and return to the original reading. Node/test type cohorts pass.
+Final reruns and source state are recorded through Theseus. The original
+explanation remains user-accepted; the zero reading is a checked second caller,
+not a measured learner outcome or a separately accepted aesthetic treatment.
+
+Observed milestones: reuse tracked context began 21:00 UTC; the second baseline
+was written 21:02; the first selected-source browser run passed at 21:04; final
+registry, preservation and packet work continued through 21:10. These are
+session milestones, not isolated model-generation durations.

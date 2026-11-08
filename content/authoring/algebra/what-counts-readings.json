@@ -1,0 +1,14 @@
+{
+  "whole": {
+    "articlePath": "content/authoring/algebra/what-counts.article.md",
+    "version": "2",
+    "title": "What counts as one thing?",
+    "description": "A whole expression can act as a single quantity. Changing what you count together can make its structure easier to see—without changing its value."
+  },
+  "zero": {
+    "articlePath": "content/authoring/algebra/what-counts-zero.article.md",
+    "version": "zero.1",
+    "title": "What if the whole is zero?",
+    "description": "Why regrouping can preserve a zero-valued whole, while cancellation by division requires a nonzero factor."
+  }
+}

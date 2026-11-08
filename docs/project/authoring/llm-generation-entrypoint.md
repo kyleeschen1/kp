@@ -154,6 +154,10 @@ For the accepted four/five-state question-oriented composition, use
 `reusable-algebra-intuition-packet.md` and `equation.algebra-intuition` discovery.
 It adds checked distribution and optional constant-product evaluation through
 the same canonical owners, plus contextual subquestions and static publication.
+For independent prose readings of the pinned four-state What counts source in
+the accepted document theater, use `what-counts-reader-packet.md`. Its Article
+and reading registration are separate from the algebra checker; changing the
+mathematics or inventing a new host is not a supported prose-only edit.
 Explicit `author:composed-algebra-publication --source <v2.json> --interactive`
 packages the existing native card with revision-pinned playback and complete
 static reading. Use the accepted whole-and-parts source as the text-above

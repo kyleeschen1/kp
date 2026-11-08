@@ -2,9 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
+import readings from "../content/authoring/algebra/what-counts-readings.json" with { type: "json" };
 import { compile } from "../src/authoring/algebra/compile.ts";
 import { AnchoredAlgebraGap, bindAnchoredCommentary } from "../src/reader/app/what-counts-commentary.ts";
-import { compileWhatCountsLesson } from "../scripts/what-counts-reader-page.ts";
+import { compileWhatCountsLesson, registerWhatCountsReadings } from "../scripts/what-counts-reader-page.ts";
 import { parseKpLessonMarkdown } from "../src/reader/compiler/lesson-markdown-parser.ts";
 
 test("commentary resolves exact native views and only mathematical stops", () => {
@@ -47,12 +48,15 @@ test("static page contains every equation and commentary without enhancement", (
   assert.doesNotThrow(() => compileWhatCountsLesson('/reader/what-counts/?kpLesson=lesson.algebra.what-counts&kpVersion=2&kpProgress=500'));
 });
 
-test("the complete baseline survives reader translation in its original order", () => {
+for (const reading of [
+  { query: '', baseline: 'explanation-first', version: '2', beats: 10, annotations: 4 },
+  { query: '?reading=zero', baseline: 'zero-whole', version: 'zero.1', beats: 6, annotations: 2 }
+]) test(`the complete ${reading.baseline} baseline survives translation in order`, () => {
   const baseline = parseKpLessonMarkdown({
     sourceId: "explanation-first-baseline", id: "lesson.baseline", version: "1", title: "Baseline",
-    markdown: readFileSync(new URL("../docs/project/reviews/2026-11-08-explanation-first-baseline.md", import.meta.url), "utf8")
+    markdown: readFileSync(new URL(`../docs/project/reviews/2026-11-08-${reading.baseline}-baseline.md`, import.meta.url), "utf8")
   });
-  const html = compileWhatCountsLesson();
+  const html = compileWhatCountsLesson(`/reader/what-counts/${reading.query}`);
   let previous = -1;
   for (const block of baseline.blocks) {
     if (block.kind !== "paragraph") continue;
@@ -64,7 +68,32 @@ test("the complete baseline survives reader translation in its original order", 
     assert.ok(located > previous, `Missing or reordered reasoning: ${words}`);
     previous = located;
   }
-  assert.match(html, /data-kp-version="2"/);
-  assert.equal((html.match(/data-kp-rising-beat=/g) ?? []).length, 10);
+  assert.ok(html.includes(`data-kp-version="${reading.version}"`));
+  assert.equal((html.match(/data-kp-rising-beat=/g) ?? []).length, reading.beats);
+  assert.equal((html.match(/data-kp-annotation-state=/g) ?? []).length, reading.annotations);
   assert.equal((html.match(/data-kp-operation-id=/g) ?? []).length, 3);
+});
+
+test("readings cannot silently substitute for each other or select arbitrary files", () => {
+  for (const query of [
+    '?reading=missing', '?reading=../what-counts',
+    '?reading=zero&kpLesson=lesson.algebra.what-counts&kpVersion=2&kpProgress=0',
+    '?kpLesson=lesson.algebra.what-counts&kpVersion=zero.1&kpProgress=0'
+  ]) assert.throws(() => compileWhatCountsLesson(`/reader/what-counts/${query}`), AnchoredAlgebraGap);
+  const original = compileWhatCountsLesson(), zero = compileWhatCountsLesson('/reader/what-counts/?reading=zero');
+  const sourceAttribute = (html: string) => html.match(/data-kp-reader-equation-source="([^"]+)"/)?.[1];
+  assert.ok(sourceAttribute(original));
+  assert.equal(sourceAttribute(zero), sourceAttribute(original));
+  for (const version of [readings.whole.version, ''])
+    assert.throws(() => registerWhatCountsReadings({ ...readings, zero: { ...readings.zero, version } }), AnchoredAlgebraGap);
+  for (const [id, reading] of Object.entries(readings)) {
+    const html = compileWhatCountsLesson(`/reader/what-counts/?reading=${encodeURIComponent(id)}`);
+    assert.ok(html.includes(`data-kp-version="${reading.version}"`));
+    for (const stop of bindAnchoredCommentary(compile(source)).stops) {
+      if (!html.includes(`data-kp-annotation-state="${stop.stateId}"`)) continue;
+      for (const note of stop.notes) {
+        assert.ok(html.includes(note.text)); assert.ok(html.includes(note.detail));
+      }
+    }
+  }
 });

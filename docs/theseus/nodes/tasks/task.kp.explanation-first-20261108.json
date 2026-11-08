@@ -35,6 +35,34 @@
       "scope": "standard",
       "checkedAt": "2026-11-08T20:59:45.886Z",
       "notes": "Full types passed; Node and test cohorts passed again after final source changes. Architecture and all 67 project-vision checks also passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T21:11:16.131Z",
+      "notes": "Six cases retain both complete baselines, compile every registered Article, preserve the identical checked source and reject cross-reading or duplicate-version bindings."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep different.question",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T21:11:17.047Z",
+      "notes": "The executed command selected different question and static reading together: all four cases passed in Chromium/Firefox after final registry and copy integration. Node/test types also passed."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep different.question",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T21:13:07.998Z",
+      "notes": "Exact standalone command now executed: two second-question browser cases pass. This corrects the earlier record which described the broader four-case cohort."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep \"different question|static reading\"",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T21:13:08.856Z",
+      "notes": "Exact broader command passed four Chromium/Firefox cases before the separately recorded two-case run."
     }
   ],
   "progress": {

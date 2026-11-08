@@ -304,3 +304,46 @@ test("full reasoning passages fit without shortening or competing annotations", 
   const share = await page.locator('[data-kp-reader-share]').getAttribute('href');
   expect(new URL(share!, page.url()).searchParams.get('kpVersion')).toBe('2');
 });
+
+test("a different question reuses the same reader and preserves its own reading link", async ({ page, browser }, info) => {
+  test.setTimeout(120_000);
+  const zeroRoute = `${route}?reading=zero`;
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto(zeroRoute); await ready(page);
+  await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', 'zero.1');
+  await expect(page.locator('[data-kp-annotation-state]')).toHaveCount(2);
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    for (const index of [0, 1, 2, 3, 2, 0]) {
+      await jump(page, `passage.${source.states[index]!.id}`);
+      const paragraph = page.locator(`[data-kp-rising-beat="passage.${source.states[index]!.id}"] p`);
+      expect(await paragraph.evaluate(node => {
+        const rect = node.getBoundingClientRect();
+        return rect.top >= document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().bottom
+          && rect.bottom <= innerHeight && rect.left >= 0 && rect.right <= innerWidth;
+      })).toBe(true);
+      await expect(page.locator('.anchored-labels')).toBeHidden();
+    }
+    for (const index of [0, 3]) {
+      await jump(page, source.states[index]!.id);
+      await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', source.states[index]!.id);
+      await expect(page.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+      await page.screenshot({ path: info.outputPath(`${width}-zero-${index}.png`) });
+    }
+    await page.evaluate(() => dispatchEvent(new Event('scrollend')));
+    const share = await page.locator('[data-kp-reader-share]').getAttribute('href');
+    const url = new URL(share!, page.url());
+    expect(url.searchParams.get('reading')).toBe('zero');
+    expect(url.searchParams.get('kpVersion')).toBe('zero.1');
+    await page.goto('about:blank'); await page.goto(url.href); await ready(page);
+    await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', source.states[3]!.id);
+  }
+  await page.locator('.kp-rising-navigation > summary').click();
+  await page.getByRole('link', { name: 'Return to the original explanation' }).click(); await ready(page);
+  await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', '2');
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const staticPage = await context.newPage(); await staticPage.goto(zeroRoute);
+  await expect(staticPage.getByText(/does not need an assumption that the group is nonzero/)).toBeVisible();
+  await expect(staticPage.getByText(/Multiplication by zero cannot be reversed/)).toBeVisible();
+  await context.close(); expect(errors).toEqual([]);
+});
