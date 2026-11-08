@@ -47,8 +47,8 @@ export const projectVision: ProjectVision = {
     {
       id: "reader", title: "Reader & presentation", horizon: "next",
       destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
-      established: "The fractional theater and anchored annotation treatment are locally accepted. Their integrated reader candidate now gives annotations separate reading moments and retires the card shell; integrated visual judgment remains open.",
-      evidence: { label: "Integrated reader review", href: "docs/project/reviews/2026-10-31-annotation-reader.md" },
+      established: "The accepted theater and annotation treatment now share reversible annotation presence and bounded focus across both named readers. Their appearance has one reader policy; Chromium and Firefox checks preserve the native paths. Exact fade feel and integrated visual judgment remain open.",
+      evidence: { label: "Reader attention candidate and preservation evidence", href: "docs/project/reviews/2026-11-08-reader-attention.md" },
       outcome: {
         id: "annotations-in-document-reader", title: "Give annotations their own moment in the accepted reader",
         finish: "Host the same checked algebra explanation in the accepted document-reader experience. Review a clear handoff between narrative prose and situated annotations, preserve the fractional reader, and retire the replaced standalone shell.",
@@ -82,6 +82,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Two-reader attention lifecycle implemented",
+      scope: "Annotation presence follows reading position; story and restored focus release to neutral through one presentation owner. Both readers pass desktop/phone Chromium and Firefox checks. This closes bounded implementation, not exact fade judgment, several-target comments or catalogue promotion.",
+      source: { label: "Attention behavior, safeguards and costs", href: "docs/project/reviews/2026-11-08-reader-attention.md" }
+    },
     {
       title: "Algebra card teardown releases callbacks before the clock",
       scope: "The Firefox disposed-clock diagnostic is reproduced and the shared owner repaired. Three native card hosts and both production edition sources pass lifecycle checks, including visibility ordering and retained-page restoration. No visual redesign or broader lifecycle framework.",
@@ -204,6 +209,13 @@ export const projectVision: ProjectVision = {
       after: "The user approved that successor and its shared-owner repair now has native and production-edition evidence. Return the next product action to the pending integrated reader review; retain the explanation-first successor and separately proposed navigation cleanup.",
       reason: "Close the observed reliability failure without letting maintenance indefinitely replace the teaching interaction. The completed repair retains its finite boundary and unchanged visual behavior.",
       source: { label: "Bounded repair closeout", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" }
+    },
+    {
+      id: "reader-attention-lifecycle", on: "2026-11-08",
+      before: "The integrated reader had separate annotation moments, but presence was binary and restored focus could outlive its purpose.",
+      after: "The user approved the full two-reader attention successor: reversible note fades, bounded story and URL focus, and one replaceable presentation policy. Review the candidate in the existing reader; retain the explanation-first experiment afterward.",
+      reason: "Improve shared attention without creating another format or content-specific styling path. Preserve semantic sources, native paint and the earlier integration finish line; keep exact visual judgment and broader promotion distinct.",
+      source: { label: "Approved scope and implemented evidence", href: "docs/project/reviews/2026-11-08-reader-attention.md" }
     }
   ]
 };

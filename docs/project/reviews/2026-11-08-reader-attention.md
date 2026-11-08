@@ -78,6 +78,9 @@ salience store, authoring schema or universal renderer contract.
   The production check covers all 12 manifest routes; the dev-only closure
   rejects 12 markers across 627 built files. Existing large-chunk build warnings
   remain; no budget or gate was relaxed.
+- `npm run test:project-vision`: all 67 dashboard/source-linked vision checks
+  pass after reconciling the roadmap and active thread. Earlier milestone finish
+  lines and the proposed explanation-first successor remain intact.
 
 The five affected existing stylesheets plus the new focus owner total 44,101
 source bytes versus 43,364 before this change (+737); the shared owner is 2,046

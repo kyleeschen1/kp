@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader-attention-20261108",
   "kind": "run-contract",
   "title": "Reader attention lifecycle",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -38,7 +39,8 @@
     {
       "id": "integration",
       "title": "Preservation-and-closeout",
-      "status": "planned"
+      "summary": "COMPLETE: reader preservation, browser cohorts, production closure and budgets pass; sources reconciled and implementation backed up",
+      "status": "complete"
     }
   ]
 }

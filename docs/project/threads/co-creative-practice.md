@@ -2,6 +2,18 @@
 
 Status: active product direction; integrated KP annotation reader awaits visual judgment
 Last Updated: 2026-11-08
+
+November 8 reader attention successor: the user approved the
+[two-reader delivery](../2026-11-08-reader-attention-delivery.md). The
+[implemented candidate](../reviews/2026-11-08-reader-attention.md) gives notes a
+reversible fade with an exclusive reading interval, bounds story/URL focus and
+centralizes its appearance. Chromium/Firefox desktop and phone checks preserve
+the native reader, including a repaired late-layout restoration edge case.
+`run-contract.kp.reader-attention-20261108` owns this finite work; the earlier
+integration milestone is not expanded. Review fade feel in the same reader,
+then retain the explanation-first experiment as the proposed product successor.
+No several-target implementation or editor scope was added.
+
 November 8 maintenance delivery (KP engine lane): the approved
 [proposal](../reviews/2026-11-08-next-step-review.md) organized specialized root
 configs, consolidated browser setup, inventoried all 124 CSS files and converted

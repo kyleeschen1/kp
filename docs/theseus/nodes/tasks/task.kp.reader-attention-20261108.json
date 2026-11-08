@@ -2,8 +2,9 @@
   "id": "task.kp.reader-attention-20261108",
   "kind": "task",
   "title": "Give reader attention an arrival, hold and release",
-  "status": "ready",
+  "status": "resolved",
   "domain": "reader",
+  "summary": "COMPLETE: two-reader attention lifecycle and integration checks complete; exact fade feel remains reviewable without a new format or catalogue rollout",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,10 +36,31 @@
       "scope": "standard",
       "checkedAt": "2026-11-08T20:09:28.809Z",
       "notes": "Dependency, reader, semantic, compiler authority and conformance gates pass"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --rising --base-url=http://127.0.0.1:8011",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-08T20:13:06.086Z",
+      "notes": "Desktop and phone reading, layout, held math, reversal, find, Read all, print and Options keyboard return preserved; passage-boundaries variant also passes"
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-08T20:13:06.972Z",
+      "notes": "Production build passes; reader closure covers all 12 routes; dev-review closure passes 627 files and 12 markers; existing reader budgets pass, fractional runtime 148648 gzip bytes"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T20:13:07.620Z",
+      "notes": "67 dashboard and source-linked vision checks pass; finite reader attention outcome recorded without expanding prior milestones"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Implementation checked; finish integration evidence, source-linked context and backups"
+    "state": "complete",
+    "summary": "Both readers implemented and verified; evidence and strategic sources reconciled; implementation backed up, closeout checkpoint follows"
   }
 }

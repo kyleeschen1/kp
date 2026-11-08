@@ -26,6 +26,16 @@ nor its evidence. The ledger remains retrievable at
 
 ## Executive Direction
 
+November 8 reader attention delivery: the user approved implementing annotation
+fades, bounded focus and a centrally replaceable focus treatment through both
+named readers. The [candidate and evidence](reviews/2026-11-08-reader-attention.md)
+preserve the document host and checked mathematics, release URL/story emphasis,
+and retain partially restored attention through Firefox layout measurement.
+`run-contract.kp.reader-attention-20261108` owns this finite successor. The next
+product action is to judge the fade feel in the existing reader, then consider
+the retained explanation-first experiment. No new format, editor work or
+catalogue-wide promotion is implied.
+
 November 8 maintenance delivery: the user approved the
 [root/CSS proposal](reviews/2026-11-08-next-step-review.md) for sustained work with
 limited human-review availability. Specialized tooling now lives under `config/`;
