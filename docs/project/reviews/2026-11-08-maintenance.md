@@ -103,3 +103,18 @@ compiler cohort passed. `visual:tooling-configs -- --project=firefox` passed
 12 real route-mount tests across Chromium and Firefox. The maintenance work
 has moved 87 specialized root configs and added the `config/` owner: 120 tracked
 root entries become 34, with four conventional config entrypoints retained.
+
+## Full CSS inventory
+
+`npm run audit:css` inventories every working-tree stylesheet and literal
+source/HTML/build consumer, retaining CSS import edges and conditional context.
+The baseline is 124 files, 691,424 source bytes and 142 repeated multi-declaration
+candidates. The [inventory review](2026-11-08-css-ownership.md) records complete
+owner totals, selected consumers, limits and follow-up candidates. Editor files
+were inspected read-only. No unused-file or shipped-payload claim is inferred.
+
+The first audit invocation exceeded Node's default Git-output buffer because it
+enumerated historical event files. The enumeration now requests active source
+roots plus every CSS path directly, keeping the complete stylesheet cohort
+without loading the historical corpus. The audit, parser boundary tests and
+Node tooling typecheck passed.

@@ -38,6 +38,13 @@
       "scope": "standard",
       "checkedAt": "2026-11-08T18:03:51.136Z",
       "notes": "Policy extraction exact; anchored worktree exclusion restores 122 project discoveries; all 152 nonempty; Chromium and Firefox route checks 12 passed."
+    },
+    {
+      "command": "npm run audit:css; node --disable-warning=ExperimentalWarning --test tests/stylesheet-ownership-audit.test.ts; npx tsc -p config/typescript/tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T18:17:57.788Z",
+      "notes": "124 source CSS files, 691424 bytes, 142 conditional ordered multi-declaration candidates; no reachability or payload savings claim."
     }
   ]
 }

@@ -56,7 +56,8 @@
     {
       "id": "css-inventory",
       "title": "Inventory complete stylesheet ownership and duplication",
-      "status": "planned"
+      "summary": "Reproducible full inventory, source-linked owner findings and complete selected runtime/preview/edition consumers recorded.",
+      "status": "complete"
     },
     {
       "id": "algebra-css",
