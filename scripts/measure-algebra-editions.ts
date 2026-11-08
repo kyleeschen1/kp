@@ -53,6 +53,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   console.log(JSON.stringify({ qualification: report.qualification,
     consumers: report.consumers.map(({ modules, chunks, ...rest }) => ({ ...rest, moduleCount: modules.length,
       chunkCount: chunks.length, largestChunks: [...chunks].sort((a, b) => b.gzip - a.gzip).slice(0, 5) })),
-    editions: report.editions.map(({ files, ...rest }) => ({ ...rest, fileCount: files.length })) }, null, 2));
+    editions: report.editions.map(({ files, ...rest }) => ({ ...rest, fileCount: files.length,
+      css: { files: files.filter(file => file.path.endsWith(".css")).length,
+        raw: files.filter(file => file.path.endsWith(".css")).reduce((sum, file) => sum + file.raw, 0),
+        gzip: files.filter(file => file.path.endsWith(".css")).reduce((sum, file) => sum + file.gzip, 0) } })) }, null, 2));
   checkAlgebraEditionCosts(report);
 }

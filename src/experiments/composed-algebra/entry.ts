@@ -1,7 +1,8 @@
-import "../authoring-distribution-focus-card/style.css";
-import "../reusable-reasoning/style.css";
-import "../common-factor/style.css";
-import "./style.css";
+import "../authored-focus-card.css";
+import "../../rendering/authored-algebra-card.css";
+import "../../reader/presentation/reasoning-card.css";
+import "../../reader/presentation/common-factor-reading.css";
+import "../../reader/presentation/composed-algebra-reading.css";
 import { prepareKpComposedAlgebraDraft, exportKpComposedAlgebraSource, createKpComposedAlgebraAuthoringSession } from "../../authoring/composed-algebra-session.ts";
 import { renderComposedAlgebraCard } from "./page.ts";
 import { mountComposedAlgebraCard as mountCard } from "./card.ts";

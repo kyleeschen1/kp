@@ -1,6 +1,7 @@
-import "../authoring-distribution-focus-card/style.css";
-import "../reusable-reasoning/style.css";
-import "./style.css";
+import "../authored-focus-card.css";
+import "../../rendering/authored-algebra-card.css";
+import "../../reader/presentation/reasoning-card.css";
+import "../../reader/presentation/common-factor-reading.css";
 import { createKpCommonFactorExample } from "../../authoring/common-factor-author-check.ts";
 import { prepareKpCommonFactorDraft, exportKpCommonFactorSource, type KpPreparedCommonFactorDraft } from "../../authoring/common-factor-draft.ts";
 import { createKpCommonFactorAuthoringSession } from "../../authoring/common-factor-session.ts";

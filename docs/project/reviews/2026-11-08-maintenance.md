@@ -118,3 +118,83 @@ enumerated historical event files. The enumeration now requests active source
 roots plus every CSS path directly, keeping the complete stylesheet cohort
 without loading the historical corpus. The audit, parser boundary tests and
 Node tooling typecheck passed.
+
+## Algebra style ownership conversion
+
+Canonical preservation reference: the existing distribute/collect lesson at
+`/experiments/reusable-reasoning/?example=distribute-collect`, authored by
+`src/authoring/examples/distribute-collect.json` and projected through the current
+composed-card/native-equation pipeline. Seven existing callers, their previews
+and static/interactive editions participate. No source, clock, semantic contract,
+renderer, typography or layout treatment is replaced. Rollback unit: this owner
+extraction, every consumer migration and its preservation guards together.
+
+Retired all four private `style.css` paths. Native equation-card projection now
+belongs to `src/rendering/authored-algebra-card.css`; reasoning presentation and
+common-factor/composed reading styles belong to `src/reader/presentation/`.
+The existing authored page/scaffold CSS is loaded explicitly before them.
+`scripts/algebra-styles.ts` owns the ordered preview/edition lists; tests compare
+all seven browser entries with those lists and reject retired-path consumers.
+
+Common-factor and composed reading files remain separate because their initial
+preview and standalone edition consumers differ. Combining their seven similar
+rules would broaden the CSS loaded before enhancement or in static exports.
+The composed text-first treatment stays scoped to its existing opt-in. Four
+repeated gesture declarations in the reasoning/card-code owner were combined,
+preserving each selector's specificity and complete declaration order.
+
+`visual:algebra-styles -- --update-snapshots=all` captured the unchanged baseline;
+`visual:algebra-styles` then compared 112 states: seven pages, two browsers, two
+widths and four direct/reverse seeks. All 14 tests matched computed styles and
+native geometry exactly. Captures are disposable, not reviewed pixel goldens.
+The new explicit maintenance config adds one suite; the other 65 configuration
+policy hashes remain unchanged. Its first harness attempts exposed a selection
+intersection and the runner's default update mode; explicit scoped selection and
+`=all` corrected the harness before any stylesheet edit.
+
+`visual:algebra-mount -- --project=firefox` passed 18 existing checks across both
+browsers, including reverse/interruption, native endpoints, remount, Apply/practice
+and collapsed-layout recovery. Twenty focused ownership, packaging, CLI and
+publication tests passed; Node/test typechecking passed. The edition cost test
+also passed, including a new negative assertion for oversized manifest metadata.
+
+### Costs and explicit budget amendment
+
+| Measured cost | Before | After |
+| --- | ---: | ---: |
+| CSS source files | 124 | 124 |
+| Selected CSS declarations | 112 | 108 |
+| Complete CSS source bytes | 691,424 | 691,544 |
+| Static edition CSS raw / per-file gzip | 58,371 / 13,878 | 58,371 / 13,878 |
+| Interactive edition CSS raw / per-file gzip | 62,721 / 15,629 | 62,841 / 15,655 |
+| Edition JS gzip, complete lazy closure | 374,346 | 374,346 |
+| Authoring JS gzip, complete lazy closure | 406,568 | 406,568 |
+| Interactive edition manifest bytes | 14,001 | 13,999 |
+
+`npm run audit:css` and `npm run measure:algebra-editions` reproduce these cohorts.
+Gzip sums are estimates, not measured network transfer. Longer explicit owner
+paths/comments and selector grouping add 120 source/CSS bytes; this is an
+ownership repair, not a performance optimization. The static and interactive
+editions retain respectively 72 and 116 files, including every font and asset.
+The editor bundle's source-module count changes 459→460 because the existing
+authored base is now an explicit CSS import; emitted JS bytes are identical.
+
+The **pre-conversion** cost run failed because a 14,001-byte manifest exceeded
+the 14,000-byte ceiling. Relocation brought it to 13,999, leaving only one byte
+of headroom. Under standing engineering-budget repair authority, only
+`manifestRaw` is amended **14,000→14,500**: 501 bytes of current headroom, about
+3.6%. All JS and complete-edition payload ceilings stay unchanged. Removing
+assets, shortening meaningful owner paths or changing immutable manifest format
+solely to fit this metadata limit would hide cost or widen the change. Both
+complete source variants and both edition modes remain measured; oversized
+manifest rejection remains executable. This is a policy amendment, not savings.
+
+### Existing diagnostic retained for follow-up
+
+Firefox emitted `Reader timeline clock is disposed` during page teardown both
+before and after this conversion. The stack points to the `visibilitychange`
+callback in `src/experiments/composed-algebra/card.ts`. Assertions for the sampled
+states and existing lifecycle checks passed; that does not clear this late
+teardown error. Runtime lifecycle repair is outside this style/config conversion
+and remains a source-linked follow-up, with an ordering regression needed before
+claiming it fixed. No exception was hidden or converted into a passing assertion.

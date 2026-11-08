@@ -8,6 +8,7 @@ import { buildAlgebraReader } from "./algebra-reader-build.ts";
 import { compileComposedAlgebraPublication, composedAlgebraEditionRoot } from "./composed-algebra-publication.ts";
 import { collectLocalStylesheetClosure } from "./local-stylesheet-closure.ts";
 import { writeKpImmutableLocalEditionReceipt } from "./immutable-local-edition.ts";
+import { composedAlgebraCardStyles } from "./algebra-styles.ts";
 
 const repo = fileURLToPath(new URL("..", import.meta.url));
 
@@ -32,8 +33,7 @@ export async function buildInteractiveAlgebraEdition(sourcePath: string, check =
   const selected = resolve(sourcePath);
   if (selected.startsWith(`${composedAlgebraEditionRoot}/`)) throw new Error("Keep authored source outside generated editions.");
   const sourceText = readAuthorSource(selected), { artifact, html } = renderInteractiveAlgebraEdition(sourceText, selected);
-  const styles = ["experiments/authoring-distribution-focus-card/style.css", "experiments/reusable-reasoning/style.css",
-    "experiments/common-factor/style.css", "experiments/composed-algebra/style.css"];
+  const styles = composedAlgebraCardStyles;
   const files = new Map<string, string | Buffer>([
     ["source.json", sourceText], ["publication.json", JSON.stringify(artifact, null, 2) + "\n"],
     ...collectLocalStylesheetClosure({ entries: styles.map(path => ({ root: join(repo, "src"), path, output: `styles/${path}` })),

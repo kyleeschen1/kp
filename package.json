@@ -13,6 +13,7 @@
     "test:tooling-configs": "node --disable-warning=ExperimentalWarning --test tests/tooling-configuration.test.ts",
     "check:tooling-configs": "npm run test:tooling-configs && npm run check:playwright-configs && npm run check:vite-configs && npm run check:typescript-configs",
     "audit:css": "node --disable-warning=ExperimentalWarning scripts/audit-stylesheet-ownership.ts",
+    "visual:algebra-styles": "playwright test --config config/playwright/playwright.algebra-styles.config.ts --project=chromium --project=firefox --workers=1",
     "visual:tooling-configs": "playwright test tests/legacy-root-route.browser.spec.ts --project=chromium --workers=1",
     "git:hygiene": "node --disable-warning=ExperimentalWarning scripts/git-hygiene.ts",
     "test:git-hygiene": "node --disable-warning=ExperimentalWarning --test tests/git-hygiene.test.ts",

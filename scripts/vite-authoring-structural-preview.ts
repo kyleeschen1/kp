@@ -1,4 +1,5 @@
 import type { Plugin } from "vite";
+import { authoredEquationCardStyles, commonFactorCardStyles, reasoningCardStyle } from "./algebra-styles.ts";
 import { readFile } from "node:fs/promises";
 import type { buildKpAuthoredDistributionPreview } from "../src/experiments/authoring-structural/distribution-preview-build.ts";
 
@@ -49,8 +50,8 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
           void (async () => {
             try {
               const module = await server.ssrLoadModule(`/src/experiments/${algebraPage.directory}/page.ts`) as Record<string, (url?: string) => string>;
-              const styles = ["authoring-distribution-focus-card/style.css", "reusable-reasoning/style.css", "common-factor/style.css"];
-              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${algebraPage.title} · Kinetic Press</title>${styles.map(style => `<link rel="stylesheet" href="/src/experiments/${style}">`).join("")}<link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module[algebraPage.builder]!(request.url)}</main><script type="module" src="/src/experiments/${algebraPage.directory}/entry.ts"></script></body></html>`);
+              const styles = commonFactorCardStyles;
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${algebraPage.title} · Kinetic Press</title>${styles.map(style => `<link rel="stylesheet" href="/src/${style}">`).join("")}<link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module[algebraPage.builder]!(request.url)}</main><script type="module" src="/src/experiments/${algebraPage.directory}/entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
             } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
           })();
@@ -83,7 +84,7 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
           void (async () => {
             try {
               const module = await server.ssrLoadModule("/src/experiments/reusable-reasoning/code-page.ts") as { buildCodeReasoningPage: () => string };
-              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Code reasoning · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authored-focus-card.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/src/rendering/typescript-refactor.css"><link rel="stylesheet" href="/src/tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css"></head><body><main id="authored-focus-card">${module.buildCodeReasoningPage()}</main><script type="module" src="/src/experiments/reusable-reasoning/code-entry.ts"></script></body></html>`);
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Code reasoning · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authored-focus-card.css"><link rel="stylesheet" href="/src/${reasoningCardStyle}"><link rel="stylesheet" href="/src/rendering/typescript-refactor.css"><link rel="stylesheet" href="/src/tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css"></head><body><main id="authored-focus-card">${module.buildCodeReasoningPage()}</main><script type="module" src="/src/experiments/reusable-reasoning/code-entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
             } catch (error) { response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error)); }
           })();
@@ -94,7 +95,7 @@ export function kpViteAuthoringStructuralPreview(): Plugin {
           void (async () => {
             try {
               const module = await server.ssrLoadModule("/src/experiments/reusable-reasoning/page-build.ts") as { buildKpReasoningInitialPage: () => string };
-              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reusable reasoning · Kinetic Press</title><link rel="stylesheet" href="/src/experiments/authoring-distribution-focus-card/style.css"><link rel="stylesheet" href="/src/experiments/reusable-reasoning/style.css"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module.buildKpReasoningInitialPage()}</main><script type="module" src="/src/experiments/reusable-reasoning/entry.ts"></script></body></html>`);
+              const html = await server.transformIndexHtml(request.url!, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reusable reasoning · Kinetic Press</title>${authoredEquationCardStyles.map(style => `<link rel="stylesheet" href="/src/${style}">`).join("")}<link rel="stylesheet" href="/src/${reasoningCardStyle}"><link rel="stylesheet" href="/node_modules/katex/dist/katex.min.css"></head><body><main id="authored-focus-card">${module.buildKpReasoningInitialPage()}</main><script type="module" src="/src/experiments/reusable-reasoning/entry.ts"></script></body></html>`);
               response.writeHead(200, { "content-type": "text/html", "cache-control": "no-store" }).end(html);
             } catch (error) {
               response.writeHead(422, { "content-type": "text/plain" }).end(error instanceof Error ? error.message : String(error));

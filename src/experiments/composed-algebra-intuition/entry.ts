@@ -1,7 +1,8 @@
-import "../authoring-distribution-focus-card/style.css";
-import "../reusable-reasoning/style.css";
-import "../common-factor/style.css";
-import "../composed-algebra/style.css";
+import "../authored-focus-card.css";
+import "../../rendering/authored-algebra-card.css";
+import "../../reader/presentation/reasoning-card.css";
+import "../../reader/presentation/common-factor-reading.css";
+import "../../reader/presentation/composed-algebra-reading.css";
 import * as algebra from "../../authoring/algebra.ts";
 import { mountComposedAlgebraCardV2 } from "../composed-algebra/card.ts";
 import { algebraIntuitionVariant, renderAlgebraIntuitionCard, renderAlgebraIntuitionLinks } from "./page.ts";

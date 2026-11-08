@@ -62,7 +62,8 @@
     {
       "id": "algebra-css",
       "title": "Convert shared algebra styles and retire private imports",
-      "status": "planned"
+      "summary": "All runtime/preview/edition callers use rendering and presentation owners; four old paths retired, four duplicate gesture declarations removed, independent initial/static cascades preserved.",
+      "status": "complete"
     },
     {
       "id": "integration",

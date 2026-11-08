@@ -1,5 +1,5 @@
 import "../authored-focus-card.css";
-import "./style.css";
+import "../../reader/presentation/reasoning-card.css";
 import "../../rendering/typescript-refactor.css";
 import "../../tutorial/kinetic-figure-typescript-focus-card/kinetic-figure-typescript-focus-card.css";
 import { bindCodeReasoningEvidence } from "./code-evidence.ts";

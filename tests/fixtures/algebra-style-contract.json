@@ -1,0 +1,743 @@
+{
+  "sourceCommit": "11dfb20a8",
+  "purpose": "Existing per-selector declaration order before ownership conversion; not a new visual standard.",
+  "selectors": {
+    ".common-factor-staging": [
+      [
+        "position",
+        "fixed",
+        false
+      ],
+      [
+        "top",
+        "0",
+        false
+      ],
+      [
+        "left",
+        "0",
+        false
+      ],
+      [
+        "opacity",
+        "0",
+        false
+      ],
+      [
+        "pointer-events",
+        "none",
+        false
+      ],
+      [
+        "z-index",
+        "-1",
+        false
+      ]
+    ],
+    ".reasoning-toolbar": [
+      [
+        "display",
+        "flex",
+        false
+      ],
+      [
+        "flex-wrap",
+        "wrap",
+        false
+      ],
+      [
+        "align-items",
+        "center",
+        false
+      ],
+      [
+        "gap",
+        ".65rem",
+        false
+      ],
+      [
+        "margin",
+        "1.2rem 0",
+        false
+      ]
+    ],
+    ".reasoning-toolbar [hidden]": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    ".reasoning-toolbar button": [
+      [
+        "border",
+        "1px solid var(--kp-st-rule)",
+        false
+      ],
+      [
+        "border-radius",
+        ".35rem",
+        false
+      ],
+      [
+        "background",
+        "var(--kp-st-paper)",
+        false
+      ],
+      [
+        "color",
+        "var(--kp-st-strong)",
+        false
+      ],
+      [
+        "padding",
+        ".65rem .85rem",
+        false
+      ],
+      [
+        "font",
+        "inherit",
+        false
+      ],
+      [
+        "cursor",
+        "pointer",
+        false
+      ]
+    ],
+    ".reasoning-toolbar span": [
+      [
+        "color",
+        "var(--kp-st-muted)",
+        false
+      ],
+      [
+        "font-size",
+        ".85rem",
+        false
+      ]
+    ],
+    ".reasoning-toolbar[hidden]": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-code-reasoning-card] .kp-focus-deck__stage": [
+      [
+        "touch-action",
+        "pan-y pinch-zoom",
+        false
+      ]
+    ],
+    "[data-code-reasoning-card] [data-kp-focus-deck-viewport]": [
+      [
+        "overflow-x",
+        "auto",
+        false
+      ],
+      [
+        "touch-action",
+        "auto",
+        false
+      ],
+      [
+        "overscroll-behavior-x",
+        "none",
+        false
+      ]
+    ],
+    "[data-common-factor-error]": [
+      [
+        "color",
+        "#922f25",
+        false
+      ],
+      [
+        "white-space",
+        "pre-wrap",
+        false
+      ]
+    ],
+    "[data-common-factor-practice-panel][hidden]": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-common-factor-publication-revision]": [
+      [
+        "font-family",
+        "var(--kp-st-serif, Georgia, serif)",
+        false
+      ],
+      [
+        "line-height",
+        "1.65",
+        false
+      ]
+    ],
+    "[data-common-factor-publication-revision] code": [
+      [
+        "overflow-wrap",
+        "anywhere",
+        false
+      ]
+    ],
+    "[data-common-factor-reading-output]": [
+      [
+        "font-family",
+        "var(--kp-st-serif, Georgia, serif)",
+        false
+      ],
+      [
+        "line-height",
+        "1.65",
+        false
+      ]
+    ],
+    "[data-common-factor-reading-output] h2": [
+      [
+        "font-size",
+        "1.35rem",
+        false
+      ]
+    ],
+    "[data-common-factor-reading-output] h3": [
+      [
+        "font-size",
+        "1.1rem",
+        false
+      ]
+    ],
+    "[data-common-factor-reading-toolbar][hidden]": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-common-factor-working]": [
+      [
+        "display",
+        "block",
+        false
+      ],
+      [
+        "width",
+        "100%",
+        false
+      ],
+      [
+        "box-sizing",
+        "border-box",
+        false
+      ],
+      [
+        "margin-top",
+        ".5rem",
+        false
+      ],
+      [
+        "font",
+        "inherit",
+        false
+      ]
+    ],
+    "[data-composed-error]": [
+      [
+        "color",
+        "#922f25",
+        false
+      ],
+      [
+        "white-space",
+        "pre-wrap",
+        false
+      ]
+    ],
+    "[data-composed-practice-panel][hidden]": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-composed-publication-revision]": [
+      [
+        "font-family",
+        "var(--kp-st-serif, Georgia, serif)",
+        false
+      ],
+      [
+        "line-height",
+        "1.65",
+        false
+      ]
+    ],
+    "[data-composed-publication-revision] code": [
+      [
+        "overflow-wrap",
+        "anywhere",
+        false
+      ]
+    ],
+    "[data-composed-reading-output]": [
+      [
+        "font-family",
+        "var(--kp-st-serif, Georgia, serif)",
+        false
+      ],
+      [
+        "line-height",
+        "1.65",
+        false
+      ]
+    ],
+    "[data-composed-reading-output] h2": [
+      [
+        "font-size",
+        "1.35rem",
+        false
+      ]
+    ],
+    "[data-composed-reading-output] h3": [
+      [
+        "font-size",
+        "1.1rem",
+        false
+      ]
+    ],
+    "[data-composed-reading-toolbar][hidden]": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-composed-text-first] .kp-focus-deck__card": [
+      [
+        "height",
+        "auto",
+        false
+      ],
+      [
+        "grid-template-rows",
+        "minmax(11rem, auto) 16rem",
+        false
+      ]
+    ],
+    "[data-composed-text-first] .kp-focus-deck__narrative": [
+      [
+        "order",
+        "-1",
+        false
+      ],
+      [
+        "border-bottom",
+        "1px solid var(--kp-st-rule)",
+        false
+      ]
+    ],
+    "[data-composed-text-first] .kp-focus-deck__narrative > section": [
+      [
+        "height",
+        "auto",
+        false
+      ],
+      [
+        "display",
+        "flex",
+        false
+      ],
+      [
+        "align-items",
+        "end",
+        false
+      ]
+    ],
+    "[data-composed-text-first] .kp-focus-deck__passage-page": [
+      [
+        "min-height",
+        "0",
+        false
+      ],
+      [
+        "width",
+        "100%",
+        false
+      ],
+      [
+        "box-sizing",
+        "border-box",
+        false
+      ]
+    ],
+    "[data-composed-working]": [
+      [
+        "display",
+        "block",
+        false
+      ],
+      [
+        "width",
+        "100%",
+        false
+      ],
+      [
+        "box-sizing",
+        "border-box",
+        false
+      ],
+      [
+        "margin-top",
+        ".5rem",
+        false
+      ],
+      [
+        "font",
+        "inherit",
+        false
+      ]
+    ],
+    "[data-distribution-stage] .kp-reader-equation-hint": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-distribution-stage] .kp-reader-equation-progress": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-distribution-stage] .kp-reader-equation-stage": [
+      [
+        "min-height",
+        "0",
+        false
+      ],
+      [
+        "height",
+        "100%",
+        false
+      ],
+      [
+        "padding",
+        "0",
+        false
+      ],
+      [
+        "border",
+        "0",
+        false
+      ],
+      [
+        "border-radius",
+        "0",
+        false
+      ],
+      [
+        "box-shadow",
+        "none",
+        false
+      ],
+      [
+        "background",
+        "transparent",
+        false
+      ]
+    ],
+    "[data-distribution-stage] .kp-reader-equation-stage-heading": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-distribution-stage] .kp-reader-equation-viewport": [
+      [
+        "min-height",
+        "0",
+        false
+      ],
+      [
+        "height",
+        "100%",
+        false
+      ]
+    ],
+    "[data-distribution-stage] .kp-reader-focus-stepper": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-kp-inspection-hit-endpoint] [data-kp-reader-selector-id]": [
+      [
+        "pointer-events",
+        "auto",
+        false
+      ],
+      [
+        "cursor",
+        "pointer",
+        false
+      ]
+    ],
+    "[data-kp-reasoning-card] .kp-focus-deck__stage": [
+      [
+        "touch-action",
+        "pan-y pinch-zoom",
+        false
+      ]
+    ],
+    "[data-kp-reasoning-card] [data-kp-focus-deck-viewport]": [
+      [
+        "overflow-x",
+        "auto",
+        false
+      ],
+      [
+        "touch-action",
+        "auto",
+        false
+      ],
+      [
+        "scroll-snap-type",
+        "none",
+        false
+      ],
+      [
+        "overscroll-behavior-x",
+        "none",
+        false
+      ]
+    ],
+    "[data-kp-reasoning-card] [data-kp-focus-deck-viewport] > section": [
+      [
+        "overscroll-behavior-block",
+        "auto",
+        false
+      ]
+    ],
+    "[data-kp-symbolic-inspection] [data-kp-reader-equation-measurement]": [
+      [
+        "pointer-events",
+        "none",
+        false
+      ]
+    ],
+    "[data-kp-symbolic-inspection] [data-kp-reader-fit-surface]": [
+      [
+        "pointer-events",
+        "none",
+        false
+      ]
+    ],
+    "[data-kp-symbolic-inspection] [data-kp-reader-material-fit-surface]": [
+      [
+        "pointer-events",
+        "none",
+        false
+      ]
+    ],
+    "[data-kp-symbolic-inspection] [data-kp-reader-native]": [
+      [
+        "pointer-events",
+        "none",
+        false
+      ]
+    ],
+    "[data-reasoning-answer]": [
+      [
+        "overflow-wrap",
+        "anywhere",
+        false
+      ],
+      [
+        "line-height",
+        "1.6",
+        false
+      ]
+    ],
+    "[data-reasoning-context]": [
+      [
+        "margin-block",
+        "1.4rem",
+        false
+      ],
+      [
+        "padding",
+        "1rem 1.2rem",
+        false
+      ],
+      [
+        "border-left",
+        "3px solid var(--kp-st-rule)",
+        false
+      ],
+      [
+        "font-family",
+        "Georgia, \"Times New Roman\", serif",
+        false
+      ],
+      [
+        "line-height",
+        "1.6",
+        false
+      ]
+    ],
+    "[data-reasoning-context] code": [
+      [
+        "overflow-wrap",
+        "anywhere",
+        false
+      ],
+      [
+        "font-size",
+        ".8rem",
+        false
+      ]
+    ],
+    "[data-reasoning-context] h2": [
+      [
+        "font-size",
+        "1.1rem",
+        false
+      ],
+      [
+        "margin-top",
+        "0",
+        false
+      ]
+    ],
+    "[data-reasoning-draft-status][data-status=\"repair-gap\"]": [
+      [
+        "border-left",
+        "3px solid #922f25",
+        false
+      ],
+      [
+        "padding-left",
+        ".8rem",
+        false
+      ]
+    ],
+    "[data-reasoning-editor]": [
+      [
+        "margin-block",
+        "2rem",
+        false
+      ],
+      [
+        "line-height",
+        "1.5",
+        false
+      ]
+    ],
+    "[data-reasoning-error]": [
+      [
+        "color",
+        "#922f25",
+        false
+      ],
+      [
+        "white-space",
+        "pre-wrap",
+        false
+      ]
+    ],
+    "[data-reasoning-json]": [
+      [
+        "display",
+        "block",
+        false
+      ],
+      [
+        "width",
+        "100%",
+        false
+      ],
+      [
+        "box-sizing",
+        "border-box",
+        false
+      ],
+      [
+        "margin-block",
+        ".7rem",
+        false
+      ],
+      [
+        "padding",
+        ".8rem",
+        false
+      ],
+      [
+        "font",
+        ".8rem/1.5 monospace",
+        false
+      ]
+    ],
+    "[data-reasoning-practice-panel]": [
+      [
+        "margin-block",
+        "1.2rem",
+        false
+      ]
+    ],
+    "[data-reasoning-practice-panel] textarea": [
+      [
+        "display",
+        "block",
+        false
+      ],
+      [
+        "box-sizing",
+        "border-box",
+        false
+      ],
+      [
+        "width",
+        "100%",
+        false
+      ],
+      [
+        "margin-top",
+        ".5rem",
+        false
+      ],
+      [
+        "font",
+        "inherit",
+        false
+      ]
+    ],
+    "[data-reasoning-practice-panel][hidden]": [
+      [
+        "display",
+        "none",
+        false
+      ]
+    ],
+    "[data-reasoning-revision]": [
+      [
+        "overflow-wrap",
+        "anywhere",
+        false
+      ],
+      [
+        "font-size",
+        ".75rem",
+        false
+      ]
+    ]
+  }
+}

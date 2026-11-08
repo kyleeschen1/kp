@@ -45,6 +45,13 @@
       "scope": "standard",
       "checkedAt": "2026-11-08T18:17:57.788Z",
       "notes": "124 source CSS files, 691424 bytes, 142 conditional ordered multi-declaration candidates; no reachability or payload savings claim."
+    },
+    {
+      "command": "npm run visual:algebra-styles; npm run visual:algebra-mount -- --project=firefox; npm run measure:algebra-editions; npm run typecheck:tests",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T18:30:20.423Z",
+      "notes": "14 exact style/geometry comparisons plus 18 native preservation checks; 21 focused tests; complete edition cohort retained. Manifest-only budget amendment 14000 to 14500 explicitly documented; pre-existing teardown error remains open."
     }
   ]
 }

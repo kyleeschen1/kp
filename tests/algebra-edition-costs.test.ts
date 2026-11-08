@@ -14,4 +14,6 @@ test("complete algebra edition and editor closures retain cost and authority lim
   assert.throws(() => checkAlgebraEditionCosts(editor), /editor or fixture/);
   const assets = structuredClone(report); assets.editions[0]!.raw = Infinity;
   assert.throws(() => checkAlgebraEditionCosts(assets), /complete edition exceeds/);
+  const manifest = structuredClone(report); manifest.editions[1]!.manifestBytes = Infinity;
+  assert.throws(() => checkAlgebraEditionCosts(manifest), /complete edition exceeds/);
 });

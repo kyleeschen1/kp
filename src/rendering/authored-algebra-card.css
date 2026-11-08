@@ -1,4 +1,4 @@
-@import "../authored-focus-card.css";
+/* Native-card projection; each host explicitly loads its page/scaffold styles first. */
 [data-distribution-stage] .kp-reader-equation-stage { min-height: 0; height: 100%; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
 [data-distribution-stage] .kp-reader-equation-viewport { min-height: 0; height: 100%; }
 [data-distribution-stage] .kp-reader-equation-stage-heading,

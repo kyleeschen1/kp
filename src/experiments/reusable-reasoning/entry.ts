@@ -1,5 +1,6 @@
-import "../authoring-distribution-focus-card/style.css";
-import "./style.css";
+import "../authored-focus-card.css";
+import "../../rendering/authored-algebra-card.css";
+import "../../reader/presentation/reasoning-card.css";
 import { createKpReasoningSource } from "./source.ts";
 import { bindKpReasoningEvidence } from "./evidence.ts";
 import { createKpReasoningNavigator, type KpReasoningScrub } from "./navigation.ts";

@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import { collectFocusCardEditionStyles } from "./local-stylesheet-closure.ts";
+import { composedAlgebraReadingStyle } from "./algebra-styles.ts";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { writeKpImmutableLocalEditionReceipt } from "./immutable-local-edition.ts";
@@ -15,8 +16,8 @@ export function buildComposedAlgebraEdition(sourcePath: string, check = false) {
   const sourceText = readAuthorSource(selected), artifact = compileComposedAlgebraPublication(sourceText, selected);
   const files = new Map<string, string | Buffer>([
     ["source.json", sourceText], ["publication.json", JSON.stringify(artifact, null, 2) + "\n"],
-    ...collectFocusCardEditionStyles(repo, "experiments/composed-algebra/style.css"),
-    ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artifact.payload.source.editorial.title)}</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/experiments/composed-algebra/style.css"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
+    ...collectFocusCardEditionStyles(repo, composedAlgebraReadingStyle),
+    ["index.html", `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escape(artifact.payload.source.editorial.title)}</title><link rel="stylesheet" href="./styles/experiments/authored-focus-card.css"><link rel="stylesheet" href="./styles/${composedAlgebraReadingStyle}"></head><body><main id="authored-focus-card">${artifact.payload.reading.html}</main></body></html>`]
   ]);
   // Copy the current shared form into a new content-addressed edition. Existing
   // editions remain byte-stable; the writer never edits an old publication.

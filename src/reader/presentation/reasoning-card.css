@@ -1,11 +1,16 @@
 .reasoning-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin: 1.2rem 0; }
 /* Passage pan/inertia stays native. Only the non-scrollable stage proxies
    horizontal drag. Settlement belongs to the semantic clock, not CSS snap. */
-[data-kp-reasoning-card] .kp-focus-deck__stage { touch-action: pan-y pinch-zoom; }
-[data-kp-reasoning-card] [data-kp-focus-deck-viewport] {
+[data-kp-reasoning-card] .kp-focus-deck__stage,
+[data-code-reasoning-card] .kp-focus-deck__stage { touch-action: pan-y pinch-zoom; }
+[data-kp-reasoning-card] [data-kp-focus-deck-viewport],
+[data-code-reasoning-card] [data-kp-focus-deck-viewport] {
   overflow-x: auto;
   touch-action: auto;
-  scroll-snap-type: none;
+}
+[data-kp-reasoning-card] [data-kp-focus-deck-viewport] { scroll-snap-type: none; }
+[data-kp-reasoning-card] [data-kp-focus-deck-viewport],
+[data-code-reasoning-card] [data-kp-focus-deck-viewport] {
   overscroll-behavior-x: none;
 }
 /* Long passages may scroll internally, but their boundaries must release
@@ -28,5 +33,3 @@
 [data-reasoning-json] { display: block; width: 100%; box-sizing: border-box; margin-block: .7rem; padding: .8rem; font: .8rem/1.5 monospace; }
 [data-reasoning-revision] { overflow-wrap: anywhere; font-size: .75rem; }
 [data-reasoning-draft-status][data-status="repair-gap"] { border-left: 3px solid #922f25; padding-left: .8rem; }
-[data-code-reasoning-card] [data-kp-focus-deck-viewport] { overflow-x: auto; touch-action: auto; overscroll-behavior-x: none; }
-[data-code-reasoning-card] .kp-focus-deck__stage { touch-action: pan-y pinch-zoom; }

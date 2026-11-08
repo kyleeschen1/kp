@@ -1,4 +1,5 @@
-import "./style.css";
+import "../authored-focus-card.css";
+import "../../rendering/authored-algebra-card.css";
 import type { KpInspectionSelection } from "./inspection-selection.ts";
 import { bindKpFocusDeckRangeController } from "../focus-deck-range-controller.ts";
 import { renderKpAuthoredFocusCard, kpAuthoredDistributionBeats as beats } from "../authored-focus-card-content.ts";

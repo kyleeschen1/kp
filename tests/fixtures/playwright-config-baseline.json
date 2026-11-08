@@ -15,6 +15,10 @@
     "sha256": "e53fb6e65b1c584aa8a8b938147fe0907345028a92943e955d8f0abaeebe9f70",
     "projects": 3
   },
+  "playwright.algebra-styles.config.ts": {
+    "sha256": "e4b2923f6f187fb3b7bb8d219b7c1a0b16d652de3c3b88de26bbf5903d19f6e0",
+    "projects": 3
+  },
   "playwright.algebra-whole-and-parts.config.ts": {
     "sha256": "66e004c990ed9c74b455f34d23b9b70ba2eef52e31530d2e26ae80fc2e74f952",
     "projects": 3
