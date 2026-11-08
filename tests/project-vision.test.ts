@@ -8,7 +8,7 @@ import { projectDashboardDataContract } from "../src/project-dashboard/data.ts";
 
 test("vision retains scoped evidence and exactly one recommended outcome", () => {
   assert.deepEqual(validateProjectVision(projectVision), []);
-  const sources = [projectVision.productSource,
+  const sources = [projectVision.productSource, projectVision.commitment.source,
     ...projectVision.areas.flatMap(area => [area.evidence, area.outcome.source]),
     ...projectVision.completed.map(outcome => outcome.source),
     ...projectVision.changes.map(change => change.source)];

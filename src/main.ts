@@ -2057,6 +2057,7 @@ async function renderProjectDashboardView(
       selectedKatexFixtureId: projectDashboardSelectedKatexFixtureId
     }
   );
+  void client.render.updateProjectVisionProgress(appRoot);
 }
 
 function loadProjectDashboardClient(): Promise<{

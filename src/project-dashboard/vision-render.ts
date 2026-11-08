@@ -10,25 +10,41 @@ export function renderProjectVision(vision: ProjectVision = projectVision, now =
   const stale = visionNeedsReview(vision.reviewedOn, now);
   return `<section class="project-vision" id="project-vision" aria-labelledby="project-vision-title" data-kp-project-vision>
     <header class="project-vision__heading">
-      <div><p class="project-vision__eyebrow">A direction we can keep</p><h2 id="project-vision-title">Vision &amp; finish lines</h2></div>
+      <div><p class="project-vision__eyebrow">Kinetic Press · project orientation</p><h2 id="project-vision-title">Where we are going</h2></div>
       <a href="#project-discovery">Explore the existing catalogue ↓</a>
     </header>
     <div class="project-vision__north">
       <h3>${escape(vision.northStar)}</h3>
-      <p><strong>First product proof.</strong> ${escape(vision.productProof)} ${link(vision.productSource)}</p>
-      <p class="project-vision__freshness" data-kp-vision-freshness="${stale ? "review-due" : "reviewed"}">Reviewed ${escape(vision.reviewedOn)}${stale ? " · Review due" : ""}. Source-linked planning snapshot; execution stays in Theseus.</p>
+      <p>${escape(vision.productProof)} ${link(vision.productSource)}</p>
+      <p class="project-vision__freshness" data-kp-vision-freshness="${stale ? "review-due" : "reviewed"}">Direction reviewed ${escape(vision.reviewedOn)}${stale ? " · Review due" : ""}. This source-linked snapshot is separate from execution status below.</p>
     </div>
+    <section class="project-vision__next" aria-labelledby="project-vision-current-title" data-kp-vision-commitment>
+      <div><span class="project-vision__badge">Approved scope</span><h3 id="project-vision-current-title">${escape(vision.commitment.title)}</h3>
+        <p><strong>Finish line.</strong> ${escape(vision.commitment.finish)}</p></div>
+      ${link(vision.commitment.source)}
+      <p class="project-vision__note" data-kp-vision-execution="loading" role="status">Execution status has not been loaded. Direction remains readable independently.</p>
+    </section>
+    <div class="project-vision__section-heading"><h3>The product progression</h3><p>Accepted direction · horizons are not delivery approvals</p></div>
+    <ol class="project-vision__progression">${vision.progression.map(stage => `<li><h4>${escape(stage.title)}</h4><p>${escape(stage.outcome)}</p></li>`).join("")}</ol>
     <section class="project-vision__next" aria-labelledby="project-vision-next-title">
-      <div><span class="project-vision__badge">Recommended next · proposed</span><h3 id="project-vision-next-title">${escape(next.outcome.title)}</h3>
+      <div><span class="project-vision__badge">Next product proof · proposed</span><h3 id="project-vision-next-title">${escape(next.outcome.title)}</h3>
         <p><strong>Finish line.</strong> ${escape(next.outcome.finish)}</p></div>
       <a href="#${escape(next.id)}">See scope &amp; evidence →</a>
-      <p class="project-vision__note">This recommendation is not an active run. Starting it requires selecting the bounded outcome; the rest remain horizons.</p>
+      <p class="project-vision__note">This recommendation is not an active run. Inspect existing editor capabilities with their owner, then select the bounded missing connection. The parallel agent retains task tracking.</p>
     </section>
-    <div class="project-vision__section-heading"><h3>The longer view</h3><p>Six areas of one project. One next recommendation.</p></div>
-    <div class="project-vision__areas">${vision.areas.map(renderArea).join("")}</div>
+    <section class="project-vision__questions" aria-label="Uncertainty and next judgment">
+      <div><h3>What remains unproved</h3><p>${escape(vision.uncertainty)}</p></div>
+      <div><h3>Your next judgment</h3><p>${escape(vision.nextJudgment)}</p></div>
+    </section>
+    <details class="project-vision__support"><summary>Supporting capabilities and their boundaries</summary>
+      <div class="project-vision__areas">${vision.areas.map(renderArea).join("")}</div>
+    </details>
     <section class="project-vision__closed" aria-labelledby="project-vision-closed-title">
-      <h3 id="project-vision-closed-title">Finished, at their actual scope</h3>
-      <div>${vision.completed.map(item => `<article><h4>${escape(item.title)}</h4><p>${escape(item.scope)}</p>${link(item.source)}</article>`).join("")}</div>
+      <h3 id="project-vision-closed-title">Progress you can inspect</h3>
+      <div>${vision.completed.slice(0, 2).map(renderCompletion).join("")}</div>
+      <details><summary>Earlier finished work, at its actual scope</summary>
+        <div class="project-vision__earlier">${vision.completed.slice(2).map(renderCompletion).join("")}</div>
+      </details>
     </section>
     <div class="project-vision__records">
       <details><summary>How we keep commitments</summary>
@@ -37,7 +53,7 @@ export function renderProjectVision(vision: ProjectVision = projectVision, now =
           <li>If direction changes, record the old commitment and whether it was completed, paused, replaced or dropped.</li>
           <li>Preserve accepted milestones. Bigger ambitions get successor milestones.</li>
           <li>Review this map at a milestone handoff or pivot, and weekly during active work.</li></ol>
-        <p>Repository edits maintain this view. Browser editing and automatic upkeep are not enabled. ${link({label: "Operating rules", href: "docs/project/2026-10-29-project-vision-ui.md"})}</p>
+        <p>One owner reconciles strategic sources. The parallel agent maintains tasks through Theseus. This page reads execution once when opened; reload for another read. No scheduled upkeep is enabled. ${link({label: "Current roadmap and operating rules", href: "docs/project/roadmap.md"})}</p>
       </details>
       <details><summary>What changed, and why <span>(${vision.changes.length})</span></summary>
         <ol class="project-vision__history">${[...vision.changes].reverse().map(change => `<li id="${escape(change.id)}"><time>${escape(change.on)}</time>
@@ -50,6 +66,10 @@ export function renderProjectVision(vision: ProjectVision = projectVision, now =
       ${link({label: "Current roadmap", href: "docs/project/roadmap.md"})}
     </aside>
   </section>`;
+}
+
+function renderCompletion(item: ProjectVision["completed"][number]): string {
+  return `<article><h4>${escape(item.title)}</h4><p>${escape(item.scope)}</p>${link(item.source)}</article>`;
 }
 
 function renderArea(area: VisionArea): string {

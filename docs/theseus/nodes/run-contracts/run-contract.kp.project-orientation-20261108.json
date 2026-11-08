@@ -1,0 +1,52 @@
+{
+  "id": "run-contract.kp.project-orientation-20261108",
+  "kind": "run-contract",
+  "title": "Durable project orientation",
+  "status": "blocked",
+  "summary": "HUMAN_CHECKPOINT: two packages complete, final orientation candidate awaits subjective review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.project-orientation-20261108.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-project-orientation-delivery.md",
+      "summary": "User-approved orientation infrastructure; finite outcome and subjective review boundary."
+    }
+  ],
+  "verification": [
+    "npm run test:project-vision",
+    "npm run visual:project-vision",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Approved orientation delivery: documentation, existing dashboard, focused validation and bounded setup repairs; four-hour ceiling with forty-minute closeout reserve."
+  ],
+  "disallowedWork": [
+    "No reader, editor, model-service, product-generation or publication work. Human dashboard review required before broader promotion."
+  ],
+  "goal": "Keep destination, approved commitment, evidence and next judgment visible without reconstructing history.",
+  "target": "task.kp.project-orientation-20261108",
+  "slices": [
+    {
+      "id": "direction",
+      "title": "Reconcile concise direction and preserve history",
+      "summary": "Accepted charter, concise roadmap and retrieval index reconciled; exact prior narratives retained with historical labels. Approval and deferred physics recommendation recorded.",
+      "status": "complete"
+    },
+    {
+      "id": "safeguards",
+      "title": "Check authority and context drift",
+      "summary": "Repeatable project:orientation command and regression checks pass. Execution derives from the selected Theseus record, not a second queue; source review still owns semantic truth.",
+      "status": "complete"
+    },
+    {
+      "id": "orientation",
+      "title": "Make the existing dashboard an orientation surface",
+      "summary": "HUMAN_CHECKPOINT: checked dashboard candidate is ready. Judge whether destination, approved work and proposed successor are clear without chat history; acceptance does not start the authoring milestone.",
+      "status": "in-progress"
+    }
+  ]
+}

@@ -1733,3 +1733,4 @@ function escapeHtml(value: string): string {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 }
+export { updateProjectVisionProgress } from "./vision-progress.ts";

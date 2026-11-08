@@ -3,10 +3,27 @@ import type { ProjectVision } from "./vision-model.ts";
 // Review with the roadmap at a milestone handoff or pivot; append the reason for
 // changes. Task progress belongs to Theseus, not this source-linked horizon map.
 export const projectVision: ProjectVision = {
+  directionId: "authoring-expert-attention-v1",
+  commitment: {
+    id: "project-orientation",
+    title: "Keep direction, commitments and progress easy to recover",
+    approval: "approved",
+    contractId: "run-contract.kp.project-orientation-20261108",
+    finish: "A short charter and roadmap, preserved history, checked agreement with this view, a fresh execution lookup, and one understandable orientation surface.",
+    source: { label: "Approved orientation delivery", href: "docs/project/2026-11-08-project-orientation-delivery.md" }
+  },
+  uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
+  nextJudgment: "Review whether this page makes the destination, approved work and proposed next proof clear. That review accepts this orientation surface; it does not start the authoring milestone.",
+  progression: [
+    { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
+    { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
+    { title: "Practice and retrieve", outcome: "Connected problems, feedback and flashcards develop the same instructional distinctions." },
+    { title: "Grow the library", outcome: "Curated adaptive material becomes easier to reuse, embed and maintain across domains." }
+  ],
   reviewedOn: "2026-11-08",
-  northStar: "Develop an eye for what matters through rich explanations and precise shared attention across symbolic domains.",
-  productProof: "A human or LLM authors an explanation; a learner points to an exact part, asks a question, receives a situated revision, and tries the idea with less guidance. Mathematical practice is the first proving ground; the complete interaction remains unproved.",
-  productSource: { label: "Goal clarification and capability progression", href: "docs/project/reviews/2026-11-04-next-step-review.md" },
+  northStar: "Help authors create extraordinary explanations that teach people what to notice.",
+  productProof: "Learners can question, adapt, practice and revisit that material while preserving its important reasoning and relationships. Exceptional featured content demonstrates the medium; authoring is the first product center.",
+  productSource: { label: "Product charter", href: "docs/project/strategy.md" },
   areas: [
     {
       id: "architecture", title: "Architecture & retirement", horizon: "later",
@@ -14,22 +31,22 @@ export const projectVision: ProjectVision = {
       established: "Specialized configs and selected algebra styles have explicit owners. The shared algebra card now releases browser callbacks before disposing its clock; native and edition lifecycle checks pass. Broader consolidation remains separate.",
       evidence: { label: "Teardown repair and preservation evidence", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" },
       outcome: {
-        id: "planning-command-navigation", title: "Find current direction and the right command without reconstructing history",
-        finish: "A short roadmap entrypoint and compact guide expose current direction and existing command families; historical evidence and tool entrypoints remain reachable. This retained follow-up is proposed, not an active run.",
-        excludes: "A second task queue, deletion of historical evidence, command renaming, editor-interface work or further CSS rollout.",
-        source: { label: "Retained planning and command navigation proposal", href: "docs/project/reviews/2026-11-08-next-step-review.md" }
+        id: "remove-authoring-blocker", title: "Remove a demonstrated obstacle to authoring",
+        finish: "The selected authoring proof identifies a concrete boundary or cost; a bounded repair removes it and preserves complete existing consumers.",
+        excludes: "A speculative architecture campaign, new task queue or unrelated CSS rollout.",
+        source: { label: "Infrastructure admission criteria", href: "docs/project/strategy.md" }
       }
     },
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Concise matrix and algebra entrypoints exist. Supported generation tasks are bounded; broad rapid authoring is not established.",
+      established: "Two independent readings now share one checked algebra source in the accepted reader. Existing physics source authoring was rechecked, not newly created. General rapid or conversational generation remains unproved.",
       evidence: { label: "Current authoring API", href: "docs/project/authoring/concise-domain-api.md" },
       outcome: {
-        id: "one-authoring-path", title: "One clear authoring path for the repaired algebra family",
-        finish: "An author can find the supported entrypoint, revise an example, receive a located repair for an unsupported change, and use the checked result in the selected hosts. Record the time and engine intervention required.",
-        excludes: "A universal authoring language or a large catalogue of new examples.",
-        source: { label: "Repair roadmap · outcome 4", href: "docs/project/reviews/2026-10-29-next-step-review.md" }
+        id: "authoring-revision", title: "Revise one exceptional explanation through the product",
+        finish: "An author substantively changes reasoning and attention choreography, gets useful feedback promptly, and preserves a reusable result without custom engineering for each revision. Inspect existing editor capabilities first; measure latency and remaining intervention.",
+        excludes: "Automatic approval of a live-model service, a universal language, a large catalogue or a new editor implementation.",
+        source: { label: "Proposed next product proof", href: "docs/project/roadmap.md" }
       }
     },
     {
@@ -47,13 +64,13 @@ export const projectVision: ProjectVision = {
     {
       id: "reader", title: "Reader & presentation", horizon: "later",
       destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
-      established: "The user accepts a complete explanation in the shared reader. Its independent Article preserves every reasoning paragraph, with desktop/phone checks and unchanged math, runtime and CSS. Rapid authoring, learner transfer and conversational revision remain unproved.",
+      established: "The accepted algebra reader preserves a full explanation, independent readings and a scripted focused return. Physics still uses its separate rail host. Existing authoring and return foundations were integrated or rechecked, not newly invented; live conversation and learning outcomes remain unproved.",
       evidence: { label: "Accepted explanation and preservation evidence", href: "docs/project/reviews/2026-11-08-explanation-first.md" },
       outcome: {
-        id: "situated-reader-revision", title: "Follow an exact question into a revision and back",
-        finish: "After the authoring reuse proof, anchor one follow-up to a precise referent, produce a situated revision and recover the original reading. A file-based exchange can establish this bounded interaction without a model service or editor redesign.",
-        excludes: "A universal authoring schema, a new visual format, embedded chat service, editor-interface changes, catalogue rollout or claims of general learning efficacy.",
-        source: { label: "Approved bounded progression", href: "docs/project/2026-11-08-explanation-first-delivery.md" }
+        id: "situated-adaptation", title: "Adapt material while preserving its reasoning and referents",
+        finish: "One learner-requested variation retains important authored relationships and a precise return to context. Physics-host consolidation is deferred unless this proof needs it.",
+        excludes: "A universal schema, automatic host migration, catalogue rollout or claims of learning efficacy.",
+        source: { label: "Accepted direction and deferred host proposal", href: "docs/project/decisions/2026-11-08-authoring-expert-attention.md" }
       }
     },
     {
@@ -82,6 +99,21 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Current direction fits in a short reading",
+      scope: "The roadmap, charter and active thread total 1,544 words, down from 22,754. Earlier commitments remain in labeled historical snapshots. Authoring is the first product center; the proposed physics migration is deferred.",
+      source: { label: "Orientation scope and preservation evidence", href: "docs/project/reviews/2026-11-08-project-orientation.md" }
+    },
+    {
+      title: "A repeatable briefing checks direction and reads actual progress",
+      scope: "The orientation command checks source agreement, approval boundaries and reading budgets, then reads the selected Theseus contract. It reports unavailable data explicitly. Human judgment still owns the dashboard's clarity and strategic interpretation.",
+      source: { label: "Workflow, checks and remaining judgment", href: "docs/project/reviews/2026-11-08-project-orientation.md" }
+    },
+    {
+      title: "Independent readings and focused return in the accepted reader",
+      scope: "Two questions share one checked algebra source with distinct reading versions; a scripted follow-up returns to the original referent and reading position. This integrates existing foundations into this host. It is not a live conversational generation system; the physics content reused an already-existing authoring path.",
+      source: { label: "Bounded result and effort critique", href: "docs/project/reviews/2026-11-08-explanation-first.md" }
+    },
     {
       title: "One complete explanation preserved and accepted",
       scope: "The first explanation-first reader proof retains thirteen baseline paragraphs, separates six prose units from four mathematical states, and preserves the accepted attention treatment. The user accepts the explanation. No novice outcome, universal authoring support or general speedup is claimed.",
@@ -240,6 +272,20 @@ export const projectVision: ProjectVision = {
       after: "The user approves the progression and accepts its first complete explanation. Close that finite proof and pressure repeatable authoring next, with situated revision as the reader successor.",
       reason: "The accepted manuscript preserves the argument with no shared runtime or CSS change. A second question can now reveal actual assembly friction before a broader abstraction is promoted.",
       source: { label: "Accepted explanation and next boundary", href: "docs/project/reviews/2026-11-08-explanation-first.md" }
+    },
+    {
+      id: "existing-capability-versus-missing-host", on: "2026-11-08",
+      before: "The approved progression sought explanation preservation, reuse, situated return and a structurally different caller.",
+      after: "Those bounded experiments are closed. The user accepts the physics content but challenges the cost of demonstrating an already-existing workflow. Recommend the concrete missing host integration instead of more confirmation of existing capability.",
+      reason: "The algebra work adds local wiring; the physics compiler and rail already worked. Source reuse does not establish shared reader presentation, conversational generation or learner transfer. Preserve the completed finite scope and require a new bounded proposal for host convergence.",
+      source: { label: "User critique and remaining boundary", href: "docs/project/reviews/2026-11-08-explanation-first.md" }
+    },
+    {
+      id: "authoring-direction-and-orientation", on: "2026-11-08",
+      before: "Co-creative practice was the leading product priority. A physics-reader migration was recommended after the explanation experiment.",
+      after: "Authoring exceptional reusable material becomes the first product center; adaptation, practice and the library remain the horizon. Orientation infrastructure is approved now. A live authoring/revision proof is proposed next; physics migration is deferred.",
+      reason: "The user wants responsive customization and exceptional featured content, and names getting lost as the main blocker. Preserve completed work while making approval boundaries and the product progression explicit.",
+      source: { label: "Accepted direction and disposition of prior commitments", href: "docs/project/decisions/2026-11-08-authoring-expert-attention.md" }
     }
   ]
 };

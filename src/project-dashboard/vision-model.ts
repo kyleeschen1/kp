@@ -31,6 +31,18 @@ export interface VisionChange {
 }
 
 export interface ProjectVision {
+  readonly directionId: string;
+  readonly commitment: {
+    readonly id: string;
+    readonly title: string;
+    readonly approval: "approved";
+    readonly contractId: `run-contract.${string}`;
+    readonly finish: string;
+    readonly source: VisionSource;
+  };
+  readonly uncertainty: string;
+  readonly nextJudgment: string;
+  readonly progression: readonly { readonly title: string; readonly outcome: string }[];
   readonly reviewedOn: string;
   readonly northStar: string;
   readonly productProof: string;
@@ -63,6 +75,20 @@ export function validateProjectVision(vision: ProjectVision): readonly string[] 
     if (!/^docs\/project\/[a-zA-Z0-9/_-]+\.md$/.test(value.href)) issues.push(`Invalid source: ${value.href}`);
   };
   if (!date(vision.reviewedOn)) issues.push("Invalid review date");
+  identity(vision.directionId);
+  identity(vision.commitment.id);
+  text("approved commitment", vision.commitment.title);
+  text("commitment finish", vision.commitment.finish);
+  source(vision.commitment.source);
+  if (vision.commitment.approval !== "approved") issues.push("Commitment requires explicit approval");
+  if (!/^run-contract\.[a-zA-Z0-9.-]+$/.test(vision.commitment.contractId)) issues.push("Invalid execution contract");
+  text("uncertainty", vision.uncertainty);
+  text("next human judgment", vision.nextJudgment);
+  if (vision.progression.length === 0) issues.push("Missing product progression");
+  for (const stage of vision.progression) {
+    text("progression title", stage.title);
+    text("progression outcome", stage.outcome);
+  }
   text("north star", vision.northStar);
   text("product proof", vision.productProof);
   source(vision.productSource);

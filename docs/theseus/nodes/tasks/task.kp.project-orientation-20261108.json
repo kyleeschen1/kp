@@ -1,0 +1,80 @@
+{
+  "id": "task.kp.project-orientation-20261108",
+  "kind": "task",
+  "title": "Keep product direction and approvals understandable",
+  "status": "blocked",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: await dashboard clarity judgment; no remaining implementation blocker.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-project-orientation-delivery.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-08-project-orientation.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:46:42.430Z",
+      "notes": "73 tests pass. Short entrypoints agree with dashboard identities and approval boundary; selected execution source and malformed-state guards are checked."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-08T23:46:43.176Z",
+      "notes": "Application, Node, tests, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run visual:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:51:19.886Z",
+      "notes": "Initial run: 3 passed, delayed-response probe failed because filtering intentionally removes orientation. Corrected probe clears the filter before checking its replacement. Subsequent full Chromium and Firefox cohort passed."
+    },
+    {
+      "command": "npm run visual:project-vision -- --project=firefox",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:51:20.506Z",
+      "notes": "All 8 Chromium/Firefox tests pass: desktop/phone, both themes, source/disclosure/navigation preservation, unavailable and mismatched execution, delayed replacement. Human clarity judgment remains."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:51:21.108Z",
+      "notes": "74 checks pass after adding safe future-thread selection; final source identities and entrypoint links checked through project:orientation."
+    },
+    {
+      "command": "npm run project:orientation -- --check",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:51:21.718Z",
+      "notes": "1544 total entrypoint words; approval, roadmap, dashboard, selected contract and all linked entrypoint sources agree."
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:51:22.320Z",
+      "notes": "67 configs / 158 projects; two inspected baseline changes only: new managed vision server 8015 and prior rail server isolation 8014. Initial mismatch and rationale retained in review."
+    },
+    {
+      "command": "npm run check:equation-reachability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:51:22.923Z",
+      "notes": "Generated scanned-file inventory repaired; 68 roots unchanged. Dependency-direction check also passes."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: implementation and verification complete for the orientation candidate; final package awaits user clarity judgment at localhost:8011/?view=dashboard#project-vision. Authoring successor remains proposed."
+  }
+}

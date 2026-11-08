@@ -60,11 +60,22 @@
 .project-vision__history time { color: var(--vision-muted); font-size: 0.79rem; }
 .project-vision__legacy { padding: 1.1rem 1.3rem; border: 1px dashed var(--vision-line); border-radius: 8px; font-size: 0.83rem; }
 .project-vision__legacy p { color: var(--vision-muted); margin-bottom: 0.4rem; }
+.project-vision__progression { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.4rem; padding-left: 1.3rem; margin: 1rem 0 2rem; }
+.project-vision__progression li { padding-left: 0.25rem; }
+.project-vision__progression p { font-size: 0.85rem; color: var(--vision-muted); }
+.project-vision__questions { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; margin: 1.8rem 0; }
+.project-vision__questions p { font-size: 0.88rem; }
+.project-vision__support { border-block: 1px solid var(--vision-line); padding: 1rem 0; }
+.project-vision__support .project-vision__areas { margin-top: 1rem; }
+.project-vision__closed > details { margin-top: 1rem; }
+.project-vision__earlier { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
 @media (max-width: 950px) {
+  .project-vision__progression { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .project-vision__areas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .project-vision__next { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
+  .project-vision__questions, .project-vision__earlier { grid-template-columns: 1fr; }
   .project-vision { margin-top: 1.5rem; }
   .project-vision__heading, .project-vision__section-heading { display: block; }
   .project-vision__heading > a { display: inline-block; margin-top: 0.8rem; }

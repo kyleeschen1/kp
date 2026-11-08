@@ -2,8 +2,9 @@
   "id": "task.kp.explanation-first-20261108",
   "kind": "task",
   "title": "Preserve a rich explanation and prove repeatable authoring",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Finite explanation-first progression closed; no remaining implementation within this contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -84,10 +85,17 @@
       "scope": "focused",
       "checkedAt": "2026-11-08T22:24:27.053Z",
       "notes": "Initial probe wrongly required instantaneous full-motion keyboard endpoints; a subsequent phone probe reused the final-dock document and targeted above the viewport. Both diagnosed as test setup assumptions; final two-browser focused rerun passed."
+    },
+    {
+      "command": "npm run visual:rail-authoring",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-08T23:35:16.169Z",
+      "notes": "Closeout reconciliation: prior full Chromium cohort passed 5 tests; corrected focused Firefox cohort passed 2; rail unit suite passed 36. Existing physics workflow revalidated, not new capability. See explanation-first review."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "First explanation accepted. Reuse, situated revision and transfer remain approved dependent outcomes."
+    "state": "complete",
+    "summary": "Four finite outcomes complete and accepted at their actual scope; existing physics workflow was revalidation. New orientation infrastructure separately authorized."
   }
 }

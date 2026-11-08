@@ -199,6 +199,10 @@
     "sha256": "dee1276f16b7a3c8fc2a77871e77890a52c7846993685b972757aaa037139122",
     "projects": 3
   },
+  "playwright.project-vision.config.ts": {
+    "sha256": "1f83528822a05f6c3939e384675056382e45966dc45ac749ccf26557e90306f9",
+    "projects": 3
+  },
   "playwright.public-eigenvectors.config.ts": {
     "sha256": "1d1d1f1862ce14fa845f824ad3cc23ff19bcb2189b68769146df0e7d433b121e",
     "projects": 1
@@ -228,7 +232,7 @@
     "projects": 2
   },
   "playwright.rail-authoring.config.ts": {
-    "sha256": "b7ef307c0d5a91fbd42fb109685478ab83f0067c7dad3e99a7361747ba3cddd5",
+    "sha256": "206eae5e5c76d63501267cf342e0bfb05e08f9842540691bedc46ee430433399",
     "projects": 3
   },
   "playwright.reader-production.config.ts": {

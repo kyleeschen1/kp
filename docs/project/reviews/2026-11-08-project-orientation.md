@@ -85,6 +85,12 @@ record the disposition of old commitments. Brainstorming stays exploratory.
 Integrate these committed changes deliberately into the parallel lane; this
 handoff grants no automatic merge or queue-rewrite authority.
 
+The generic Theseus handoff currently reports a thin queue and two unrelated
+missing-source references; it omits this blocked human-checkpoint contract.
+Use the roadmap's explicit contract or `project:orientation` to resume this
+delivery. That global queue repair belongs to the task owner and is not evidence
+that the orientation candidate is absent or that another frontier is authorized.
+
 The previous explanation-first contract is closed through supported Theseus
 commands, including its previously open receipt and accepted physics content.
 The new authoring proof remains proposed; this work does not rebuild editor

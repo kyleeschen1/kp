@@ -2,7 +2,8 @@
   "id": "run-contract.kp.explanation-first-20261108",
   "kind": "run-contract",
   "title": "Explanation first, reuse, situated revision and transfer",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "All four slices complete; user now authorizes separate orientation infrastructure.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -50,8 +51,8 @@
     {
       "id": "transfer",
       "title": "Pressure a structurally different caller",
-      "summary": "Pressure source-only explanation authoring through the existing physics rail compiler and native host, recording the remaining host boundary.",
-      "status": "in-progress"
+      "summary": "Accepted physics content and bounded source-only pressure evidence close the finite experiment; no live conversational generation or host convergence claimed.",
+      "status": "complete"
     }
   ]
 }

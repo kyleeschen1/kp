@@ -29,6 +29,9 @@ collaboration experiment, not a learner-facing editorial voice standard.
   Theseus execution; do not duplicate its slice statuses in roadmap prose or
   dashboard data. Reconcile the source-linked orientation at milestone handoffs
   and accepted pivots. Brainstorming alone does not elect a new commitment.
+- If a generic Theseus summary omits the roadmap's selected blocked contract,
+  inspect that named record with `project:orientation` or explicit `loop:status`.
+  An omitted human checkpoint is not permission to elect another frontier.
 - Keep the source-linked vision view in `src/project-dashboard/vision-data.ts`
   aligned when accepted direction, the recommended next outcome, or scoped
   milestone closure changes. Follow `docs/project/2026-10-29-project-vision-ui.md`:
