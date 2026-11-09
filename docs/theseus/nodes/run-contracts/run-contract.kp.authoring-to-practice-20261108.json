@@ -43,6 +43,12 @@
       "status": "complete"
     },
     {
+      "id": "cold-preparation",
+      "title": "Reduce shared cold preparation cost",
+      "summary": "Batched shared material measurement and removed duplicate standalone planning for retained native-color scenes. Firefox rotating comparison: initial 84 to 65 ms, two cold builds 69 to 60 ms; actual paint preserved. Three readers retain zero warm reversal builds. Scoped browser, geometry, type and preservation checks pass. Historical generic linear capture unavailable; frame hitches remain a measured limit.",
+      "status": "complete"
+    },
+    {
       "id": "real-revision",
       "title": "Make one substantive authoring revision",
       "summary": "Substantive candidate explains why count and quantity multiply; existing accepted reader, source and choreography retained. Manuscript and registry only; human editorial judgment remains pending.",

@@ -87,6 +87,41 @@
       "scope": "standard",
       "checkedAt": "2026-11-09T03:55:22.898Z",
       "notes": "11 preservation tests passed; 28 focused runtime/reading/startup tests, app/Node/test type checks and 75 project vision/orientation tests also passed. See source-linked motion review for commands and limits."
+    },
+    {
+      "command": "npm run visual:reader-preparation -- --project=chromium --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T04:34:08.898Z",
+      "notes": "Three readers preserve actual paint, bounded warm reuse, idle ownership, motion/font/layout invalidation and disposal: 8 passed, 2 intentional diagnostic skips. Cold preparation uses one certified scene construction."
+    },
+    {
+      "command": "npm run visual:native-preparation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T04:34:10.464Z",
+      "notes": "All 15 cases pass across Chromium, Firefox and WebKit; independent legacy paint measurement agrees with batched subtree probes, including compound and overlapping roots and error cleanup."
+    },
+    {
+      "command": "npm run profile:reader-preparation -- --baseline=74c56acba --browser=firefox --entry=opening",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T04:34:11.318Z",
+      "notes": "Rotating three-context comparison after excluded warmup: opening initial median 84 to 65 ms; two subsequent cold builds 69 to 60 ms. Actual paint parity checked. Saved entry one-build median 35 to 33 ms. Small local diagnostics, not universal latency."
+    },
+    {
+      "command": "npm run test:browser:native-katex-compositor-conformance",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T04:34:12.216Z",
+      "notes": "Two Chromium actual-paint seam/lifecycle canaries pass. Scoped anchored reader cohort 9 passed, 1 intentional skip; startup CLS zero in all Chromium samples. App/Node/test types, 28 focused reader tests, 11 preservation tests and 75 vision checks pass."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T04:35:57.710Z",
+      "notes": "Generic discovery capture cannot reach default server 8000; explicit 8011 retry times out on historical coordinated-stage selector. No legacy-host repair retained. Current native compositor canary and three-reader preservation cohorts pass; do not describe this legacy capture as passed."
     }
   ],
   "progress": {

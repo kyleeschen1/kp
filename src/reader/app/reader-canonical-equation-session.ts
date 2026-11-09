@@ -27,6 +27,7 @@ import {
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
   recordKpReaderCanonicalSessionReuse,
+  recordKpReaderPreparationPhase,
   recordKpReaderPurePlanCacheHit,
   recordKpReaderPurePlanCompilation,
   recordKpReaderProtectedTransitCertificateReuse,
@@ -266,6 +267,13 @@ export function createKpReaderCanonicalEquationSession(input: {
     const layer = createMaterialLayer(frame.fitSurface);
     try {
       const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
+      let phaseStartedAt = ownerWindow?.performance.now() ?? 0;
+      const finishPhase = (phase: 'observe' | 'plan' | 'mount') => {
+        if (ownerWindow === null) return;
+        const now = ownerWindow.performance.now();
+        recordKpReaderPreparationPhase(ownerWindow, phase, now - phaseStartedAt);
+        phaseStartedAt = now;
+      };
       const geometryIdentity = geometryIdentityFor(frame, transitionId);
       const cachePaint = frame.fitSurface.dataset['kpEquationMaterialVisualCache'] === 'dual-revision';
       if (cachePaint) frame.fitSurface.dataset['kpEquationMaterialPaintRevision'] = JSON.stringify([paintGeneration, geometryIdentity.key]);
@@ -277,6 +285,16 @@ export function createKpReaderCanonicalEquationSession(input: {
           measuredScenes.set(geometryIdentity.key, sceneInput);
           if (measuredScenes.size > 4) measuredScenes.delete(measuredScenes.keys().next().value!);
         }
+      }
+      finishPhase('observe');
+      if (input.focusPaint === 'native-color') {
+        // Retain the complete validated scene. Its cold factory already plans
+        // and certifies transit; compiling a separate reusable pure plan first
+        // repeats reconciliation/measurement without helping retained frames.
+        const renderer = input.createSession(sceneInput);
+        if (ownerWindow !== null) recordKpReaderProtectedTransitCompilation(ownerWindow);
+        finishPhase('mount');
+        return { layer, renderer };
       }
       // A mounted renderer refreshes colors independently; a pure plan still
       // contains exact observed paint. Geometry identity alone cannot authorize
@@ -299,7 +317,10 @@ export function createKpReaderCanonicalEquationSession(input: {
         recordKpReaderPurePlanCacheHit(ownerWindow);
         recordKpReaderProtectedTransitCertificateReuse(ownerWindow);
       }
-      return { layer, renderer: input.createSession({ ...sceneInput, purePlan }) };
+      finishPhase('plan');
+      const renderer = input.createSession({ ...sceneInput, purePlan });
+      finishPhase('mount');
+      return { layer, renderer };
     } catch (error) { layer.remove(); throw error; }
   };
 

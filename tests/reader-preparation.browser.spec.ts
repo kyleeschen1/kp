@@ -7,6 +7,34 @@ const examples = [
   { slug: 'divide-both-sides', points: [420, 500, 580], capacity: 1 }
 ] as const;
 
+test('cold preparation profile identifies work in the actual compositor', async ({ page, browserName }, info) => {
+  test.skip(browserName !== 'chromium', 'CPU sampling is a Chromium diagnostic; other tests use real Firefox timings.');
+  await page.goto('/reader/what-counts/?kpMotion=full');
+  await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', 'ready', { timeout: 60_000 });
+  const profiler = await page.context().newCDPSession(page);
+  await profiler.send('Performance.enable');
+  const before = await profiler.send('Performance.getMetrics');
+  await profiler.send('Profiler.enable');
+  await profiler.send('Profiler.setSamplingInterval', { interval: 250 });
+  await profiler.send('Profiler.start');
+  for (const progress of [500, 833]) { await seek(page, progress); await paint(page); }
+  const { profile } = await profiler.send('Profiler.stop');
+  const after = await profiler.send('Performance.getMetrics');
+  await profiler.detach();
+  const nodes = new Map(profile.nodes.map(node => [node.id, node]));
+  const costs = new Map<string, number>();
+  for (let index = 0; index < (profile.samples?.length ?? 0); index++) {
+    const node = nodes.get(profile.samples![index]!);
+    if (!node?.callFrame.url.includes('/src/')) continue;
+    const key = `${node.callFrame.functionName}:${node.callFrame.url.split('/src/')[1]?.split('?')[0]}:${node.callFrame.lineNumber + 1}`;
+    costs.set(key, (costs.get(key) ?? 0) + (profile.timeDeltas?.[index] ?? 0) / 1000);
+  }
+  const browserWork = Object.fromEntries(after.metrics.filter(metric => /^(LayoutCount|RecalcStyleCount|LayoutDuration|RecalcStyleDuration)$/.test(metric.name))
+    .map(metric => [metric.name, metric.value - (before.metrics.find(entry => entry.name === metric.name)?.value ?? 0)]));
+  console.log(JSON.stringify({ browserWork, coldProfile: [...costs].sort((a, b) => b[1] - a[1]).slice(0, 20) }));
+  await info.attach('cold-preparation.cpuprofile', { body: JSON.stringify(profile), contentType: 'application/json' });
+});
+
 test('idle preparation is invisible and the reusable host consumes its exact prepared scene', async ({ page, browserName }) => {
   test.skip(browserName !== 'chromium', 'One actual compositor canary; real timing is measured separately.');
   // Control eligibility, not paint or semantic progress. This ownership test
@@ -63,6 +91,8 @@ for (const example of examples) test(`${example.slug}: automatic reuse preserves
   const references = new Map<number, Awaited<ReturnType<typeof paint>>>();
   for (const point of example.points) { await seek(page, point); references.set(point, await paint(page)); }
   const firstVisit = await metrics(page);
+  expect(firstVisit.purePlanCompilations, 'Retained readers use one validated scene construction, without a separate pure-plan pass').toBe(0);
+  expect(firstVisit.protectedTransitCompilations).toBeGreaterThan(0);
   for (let cycle = 0; cycle < 3; cycle++) for (const point of [...example.points].reverse().concat([...example.points])) {
     await seek(page, point);
     const actual = await paint(page), expected = references.get(point)!;
@@ -80,6 +110,7 @@ for (const example of examples) test(`${example.slug}: automatic reuse preserves
     firstVisitBuilds: firstVisit.canonicalSessionBuilds,
     firstVisitBuildMs: Math.round(firstVisit.canonicalSessionBuildDurationMs),
     idleBuilds: firstVisit.adjacentPrewarmCompilations,
+    preparationPhases: firstVisit.preparationPhases,
     reversalBuilds: repeated.canonicalSessionBuilds - firstVisit.canonicalSessionBuilds }));
   await info.attach('preparation-cost', { body: JSON.stringify({ initial, firstVisit, repeated }, null, 2), contentType: 'application/json' });
   expect(repeated.canonicalSessionBuilds, 'Returning to prepared scenes must not rebuild geometry').toBe(firstVisit.canonicalSessionBuilds);

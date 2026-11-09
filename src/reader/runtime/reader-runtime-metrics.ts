@@ -1,3 +1,10 @@
+export type KpReaderPreparationPhase = 'observe' | 'plan' | 'mount';
+interface PreparationPhaseCost {
+  readonly calls: number;
+  readonly durationMs: number;
+  readonly maximumMs: number;
+}
+
 export interface KpReaderRuntimeMetricsSnapshot {
   readonly scrollGeometryReads: number;
   readonly scrollAnchorReads: number;
@@ -11,6 +18,7 @@ export interface KpReaderRuntimeMetricsSnapshot {
   readonly protectedTransitCompilations: number;
   readonly protectedTransitCertificateReuses: number;
   readonly adjacentPrewarmCompilations: number;
+  readonly preparationPhases: Readonly<Record<KpReaderPreparationPhase, PreparationPhaseCost>>;
 }
 
 interface MutableKpReaderRuntimeMetrics {
@@ -26,6 +34,7 @@ interface MutableKpReaderRuntimeMetrics {
   protectedTransitCompilations: number;
   protectedTransitCertificateReuses: number;
   adjacentPrewarmCompilations: number;
+  preparationPhases: Record<KpReaderPreparationPhase, PreparationPhaseCost>;
 }
 
 const metricsByWindow = new WeakMap<Window, MutableKpReaderRuntimeMetrics>();
@@ -34,7 +43,18 @@ export function inspectKpReaderRuntimeMetrics(
   ownerWindow: Window
 ): KpReaderRuntimeMetricsSnapshot {
   const metrics = metricsFor(ownerWindow);
-  return Object.freeze({ ...metrics, canonicalSessionBuildReasons: Object.freeze({ ...metrics.canonicalSessionBuildReasons }) });
+  return Object.freeze({ ...metrics,
+    preparationPhases: Object.freeze({ ...metrics.preparationPhases }),
+    canonicalSessionBuildReasons: Object.freeze({ ...metrics.canonicalSessionBuildReasons }) });
+}
+
+/** Build-only diagnostics; timings never change renderer behavior or budgets. */
+export function recordKpReaderPreparationPhase(ownerWindow: Window, phase: KpReaderPreparationPhase, durationMs: number): void {
+  const phases = metricsFor(ownerWindow).preparationPhases;
+  const previous = phases[phase];
+  const duration = Math.max(0, durationMs);
+  phases[phase] = Object.freeze({ calls: previous.calls + 1,
+    durationMs: previous.durationMs + duration, maximumMs: Math.max(previous.maximumMs, duration) });
 }
 
 export function resetKpReaderRuntimeMetrics(ownerWindow: Window): void {
@@ -119,6 +139,11 @@ function createMetrics(): MutableKpReaderRuntimeMetrics {
     purePlanCacheHits: 0,
     protectedTransitCompilations: 0,
     protectedTransitCertificateReuses: 0,
-    adjacentPrewarmCompilations: 0
+    adjacentPrewarmCompilations: 0,
+    preparationPhases: {
+      observe: Object.freeze({ calls: 0, durationMs: 0, maximumMs: 0 }),
+      plan: Object.freeze({ calls: 0, durationMs: 0, maximumMs: 0 }),
+      mount: Object.freeze({ calls: 0, durationMs: 0, maximumMs: 0 })
+    }
   };
 }

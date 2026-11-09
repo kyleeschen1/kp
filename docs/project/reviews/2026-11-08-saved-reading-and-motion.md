@@ -322,3 +322,75 @@ retain their motion/paint without recompilation; first encounters can still hitc
 For automated evidence run the preparation command above. No new visual treatment
 or human reapproval is required for this bounded repair. Theseus owns live counts;
 the broader authoring-to-practice programme is not complete.
+
+## Cold preparation: fewer layout flushes and one construction pass
+
+The user approves continued shared optimization after automatic reuse. The
+canonical source, three-reader cohort, motion, prose, annotation treatment and
+authoring inputs above remain unchanged. Initial instrumentation separated
+observation, the optional standalone plan pass, and scene mounting. Mounting
+includes the factory's own planning/certification; a zero standalone-plan count
+does not mean planning or validation was removed.
+
+Two responsible-boundary repairs reduce actual work:
+
+- Material alignment now sets up all new owners, measures them together, then
+  commits corrections. Its synchronous native-ink helper deduplicates overlapping
+  roots and batches independent leaf probes; compound text retains sequential
+  measurement. Existing paint-size guards remain, and failed probes restore
+  transforms and remove temporary markers.
+- Native-color readers retain complete validated scenes. Their cold factory now
+  performs its existing planning/certification once, without first compiling a
+  separate reusable pure plan. Conservative callers retain that pure-plan path
+  and its exact-paint cache guard. Idle eligibility and cost ceilings are unchanged.
+
+In the same Chromium two-seek diagnostic, browser work fell from 278 layouts /
+395 style recalculations to 123 / 175. These are browser-work counts, not frame
+rates. A rotating Firefox comparison against `74c56acba` used three fresh contexts
+per arm after an excluded warmup, disabled speculation consistently, and compared
+actual glyph identity, position, dimensions and opacity across all arms:
+
+| Opening v1 | Previous implementation | Batched alignment only | Final shared path |
+| --- | ---: | ---: | ---: |
+| Initial preparation, median | 84 ms | 81 ms | 65 ms |
+| Two later cold builds, median total | 69 ms | 64 ms | 60 ms |
+
+Later-build samples were 67/69/70, 64/64/64 and 60/60/62 ms respectively.
+The saved-v1 entry has only one remaining cold build in this traversal; its
+medians were 35, 34 and 33 ms. Gains depend on entry state. The stable diagnostic
+is `npm run profile:reader-preparation -- --baseline=74c56acba --browser=firefox
+--entry=opening` (or `--entry=saved`). It intercepts only the three historical
+modules inside its own browser contexts, leaving the server and checkout alone.
+Supporting modules are current, historical TypeScript is stripped with Node,
+and samples are small local development measurements, not production CWV or
+general latency guarantees. Earlier noisy single-run improvements are not used
+as the comparative result. Computed-style copying remains unchanged: the prior
+October investigation already found no reliable gain from bulk cssText writes.
+
+The three-reader Chromium/Firefox reuse, actual paint, motion/font/viewport
+invalidation, idle ownership and disposal cohort passes (8 passed, 2 intentional
+diagnostic skips). Warm reversal still builds zero scenes. Independent subtree
+geometry comparisons cover fractions, scripts, radicals, matrices, compound and
+duplicate roots at three font/transform settings; the native preparation suite
+passes all 15 cases across Chromium, Firefox and WebKit. No persistent geometry
+cache or author tuning was added. First construction can still exceed a frame;
+this repair does not promise hitch-free cold playback.
+
+Final preservation: the scoped anchored-algebra cohort passes 9 cases with one
+intentional Chromium skip, retaining startup, saved v1, annotation fades and focus
+release. Chromium reports zero startup CLS in all eight sampled entry/viewport
+cases. The final Firefox exact-link trace measured one 40ms cold build and a 50ms
+maximum callback interval; a prepared sweep still had one 72ms interval despite
+zero builds. Browser scheduling/other frame costs remain, so the result does not
+establish universal smoothness. App, Node and test types, 28 focused reader tests
+and 11 equation-surface preservation checks pass. An initial unused-destructure
+type error was removed before rerunning successfully.
+
+The Chromium canonical compositor canary also passes both realized-paint seam
+and lifecycle cases (`npm run test:browser:native-katex-compositor-conformance`).
+The generic impact planner additionally suggested the historical
+`visual:linear-equation` capture. Its default server 8000 was unavailable; an
+explicit 8011 retry then timed out on the old coordinated-stage selector. That
+capture is **not passed**. No legacy-host changes were kept to make it run; the
+actual changed native compositor and three current reader paths supply this
+repair's bounded browser evidence. Project vision checks pass (75 tests).

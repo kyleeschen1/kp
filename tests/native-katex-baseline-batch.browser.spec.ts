@@ -1,5 +1,48 @@
 import { expect, test } from "@playwright/test";
 
+test('batched subtree paint preserves independent, overlapping and compound native roots', async ({ page }) => {
+  await page.goto('/reader/what-counts/');
+  await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', 'ready', { timeout: 60_000 });
+  const result = await page.evaluate(async () => {
+    const path = '/src/rendering/native-katex-paint-geometry.ts';
+    const katexPath = '/node_modules/katex/dist/katex.mjs';
+    const { measureKpNativeKatexSubtreePaintRect: single, measureKpNativeKatexSubtreePaintRects: batch } = await import(path);
+    const { default: katex } = await import(katexPath);
+    const stage = document.createElement('div');
+    stage.style.cssText = 'position:relative;width:600px;font-size:24px;transform-origin:top left';
+    document.body.append(stage);
+    const residuals: number[] = [];
+    let unchanged = true, undefinedMatches = true, count = 0;
+    try {
+      for (const tex of [String.raw`a^2+\frac{x_1}{y}+\sqrt{z}`, String.raw`\begin{pmatrix}1&-2\\x&3\end{pmatrix}`]) {
+        katex.render(tex, stage);
+        const mixed = document.createElement('span');
+        mixed.innerHTML = 'a<em>b</em>c';
+        stage.append(mixed);
+        await document.fonts.ready;
+        const roots = [stage, mixed, ...stage.querySelectorAll<HTMLElement>('.katex-html span'), mixed];
+        for (const [font, transform] of [['24px', 'none'], ['31px', 'scale(.7)'], ['19px', 'translateY(17px) scale(1.2)']]) {
+          stage.style.fontSize = font!; stage.style.transform = transform!;
+          const before = stage.innerHTML;
+          const expected = roots.map(root => single(stage, root));
+          const actual = batch(stage, roots);
+          actual.forEach((rect: { left: number; top: number; width: number; height: number } | undefined, index: number) => {
+            if (!rect || !expected[index]) { undefinedMatches &&= rect === expected[index]; return; }
+            for (const key of ['left', 'top', 'width', 'height'] as const)
+              residuals.push(Math.abs(rect[key] - expected[index][key]));
+          });
+          unchanged &&= before === stage.innerHTML;
+          count += actual.length;
+        }
+      }
+      return { maximumResidual: Math.max(...residuals), unchanged, undefinedMatches, count };
+    } finally { stage.remove(); }
+  });
+  expect(result.count).toBeGreaterThan(100);
+  expect(result).toMatchObject({ unchanged: true, undefinedMatches: true });
+  expect(result.maximumResidual).toBeLessThan(.1);
+});
+
 test("batched native baselines preserve nested, scaled and changed typography", async ({ page }) => {
   await page.goto("/experiments/kinetic-figure/supply-tax/#beat.log-exponent.locate-the-unknown");
   await expect(page.locator("[data-kp-log-exponent-focus-card] [data-kp-editor-animation-player]"))
@@ -55,7 +98,7 @@ test("ink probe failures clean up and fan-out endpoints share only one observati
   await page.goto("/");
   const result = await page.evaluate(async () => {
     const path = "/src/rendering/native-katex-paint-geometry.ts";
-    const { measureKpNativeKatexTextInkRects, measureKpNativeKatexTextInkRect,
+    const { measureKpNativeKatexTextInkRects, measureKpNativeKatexTextInkRect, measureKpNativeKatexSubtreePaintRects,
       attachKpNativeKatexTrackPaintGeometry } = await import(path);
     const stage = document.createElement("div");
     stage.style.cssText = "position:relative;font:24px serif";
@@ -63,14 +106,16 @@ test("ink probe failures clean up and fan-out endpoints share only one observati
     document.body.append(stage);
     const leaves = [...stage.querySelectorAll("span")], before = stage.innerHTML;
     const original = HTMLElement.prototype.getBoundingClientRect;
-    let failed = false, probes = 0;
+    let failed = 0, probes = 0;
     try {
       HTMLElement.prototype.getBoundingClientRect = function () {
         if (this.getAttribute("aria-hidden") === "true" && stage.contains(this)) throw new Error("probe failure");
         return original.call(this);
       };
-      try { measureKpNativeKatexTextInkRects(stage, leaves); }
-      catch (error) { failed = error instanceof Error && error.message === "probe failure"; }
+      for (const measure of [measureKpNativeKatexTextInkRects, measureKpNativeKatexSubtreePaintRects]) {
+        try { measure(stage, leaves); }
+        catch (error) { if (error instanceof Error && error.message === "probe failure") failed++; }
+      }
     } finally { HTMLElement.prototype.getBoundingClientRect = original; }
     const cleaned = stage.innerHTML === before;
     try {
@@ -99,6 +144,6 @@ test("ink probe failures clean up and fan-out endpoints share only one observati
         unchanged: stage.innerHTML === before };
     } finally { HTMLElement.prototype.getBoundingClientRect = original; stage.remove(); }
   });
-  expect(result).toMatchObject({ failed: true, cleaned: true, firstProbes: 2, shared: true, fresh: true, authored: true, unchanged: true });
+  expect(result).toMatchObject({ failed: 2, cleaned: true, firstProbes: 2, shared: true, fresh: true, authored: true, unchanged: true });
   expect(result.residual).toBeLessThan(0.1);
 });

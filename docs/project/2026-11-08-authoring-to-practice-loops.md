@@ -46,6 +46,19 @@ policy, its two host integrations and regression tests. First-visit costs must
 be measured separately; cache reuse does not establish universal smoothness or
 ChatGPT-level generation latency.
 
+Continuation approved on 2026-11-08 after automatic reuse acceptance: diagnose
+and reduce the remaining cold preparation hitch through the existing shared
+runtime. Canonical source/host/renderer and the three-reader cohort above remain
+unchanged. Measure observation, planning and mounting separately; prefer reducing
+duplicate work and layout flushes before introducing asynchronous ownership.
+Acceptance is a measured reduction at the responsible boundary with unchanged
+realized paint, endpoints, focus, saved-location handoff, reversal and revision
+invalidation. Retain real idle/cost guards and bounded resources; do not mask cost
+with a raised threshold, weaken compositor checks or require author tuning.
+Each independently verified mechanism repair plus its evidence is a rollback
+unit. Continue eligible approved work within the existing six-hour ceiling and
+closeout reserve; a new aesthetic still requires its existing exemplar review.
+
 The separate editor lane owns native conversation, captures and its application.
 Inspect/reuse it; do not mutate its checkout, send native requests or introduce
 a separately billed service without its applicable authority. A real revision

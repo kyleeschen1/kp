@@ -121,6 +121,7 @@
     "visual:algebra-mount": "playwright test --config config/playwright/playwright.algebra-mount.config.ts --project=chromium --workers=1",
     "visual:anchored-algebra": "playwright test --config config/playwright/playwright.anchored-algebra.config.ts --project=chromium --workers=1",
     "visual:reader-preparation": "playwright test --config config/playwright/playwright.reader-preparation.config.ts --workers=1",
+    "profile:reader-preparation": "node --disable-warning=ExperimentalWarning scripts/profile-reader-preparation.ts",
     "visual:composed-algebra:cohort": "playwright test --config config/playwright/playwright.composed-algebra-review.config.ts --workers=1",
     "visual:common-factor-authoring:cohort": "npm run visual:common-factor-authoring",
     "author:common-factor-publication": "node --disable-warning=ExperimentalWarning scripts/build-common-factor-edition.ts",

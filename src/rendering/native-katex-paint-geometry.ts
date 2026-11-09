@@ -225,12 +225,38 @@ export function measureKpNativeKatexSubtreePaintRect(
   stage: HTMLElement,
   root: HTMLElement
 ): KpStageRelativeRect | undefined {
-  const elements = [root, ...root.querySelectorAll<HTMLElement>("*")]
-    .filter((element) => element.closest(".katex-mathml") === null);
-  const rects = [
-    ...measureKpNativeKatexTextInkRects(stage, elements.filter(element => visibleDirectText(element) !== "")),
+  const elements = [root, ...root.querySelectorAll<HTMLElement>('*')]
+    .filter(element => element.closest('.katex-mathml') === null);
+  return unionPaintRects([
+    ...measureKpNativeKatexTextInkRects(stage, elements.filter(element => visibleDirectText(element) !== '')),
     ...elements.flatMap(element => measureBorderPaintRects(stage, element))
-  ];
+  ]);
+}
+
+/** One synchronous paint observation across independent owners. Leaf baseline
+ * probes share a transaction; compound text retains its sequential measurement.
+ * No DOM measurements or mutable paint survive beyond this call. */
+export function measureKpNativeKatexSubtreePaintRects(
+  stage: HTMLElement,
+  roots: readonly HTMLElement[]
+): readonly (KpStageRelativeRect | undefined)[] {
+  const trees = roots.map(root => [root, ...root.querySelectorAll<HTMLElement>('*')]
+    .filter(element => element.closest('.katex-mathml') === null));
+  const elements = [...new Set(trees.flat())];
+  const text = elements.filter(element => visibleDirectText(element) !== '');
+  const leaves = text.filter(element => element.childElementCount === 0);
+  const ink = measureKpNativeKatexTextInkRects(stage, leaves);
+  const textRects = new Map(leaves.map((element, index) => [element, ink[index]!]));
+  for (const element of text) if (!textRects.has(element))
+    textRects.set(element, measureKpNativeKatexTextInkRect(stage, element));
+  const borders = new Map(elements.map(element => [element, measureBorderPaintRects(stage, element)]));
+  return trees.map(tree => unionPaintRects(tree.flatMap(element => {
+    const textRect = textRects.get(element);
+    return [...(textRect === undefined ? [] : [textRect]), ...borders.get(element)!];
+  })));
+}
+
+function unionPaintRects(rects: readonly KpStageRelativeRect[]): KpStageRelativeRect | undefined {
   if (rects.length === 0) return undefined;
   const left = Math.min(...rects.map((rect) => rect.left));
   const top = Math.min(...rects.map((rect) => rect.top));

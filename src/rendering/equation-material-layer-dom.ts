@@ -4,7 +4,7 @@ import {
   stripKpMaterialCloneAuthority
 } from "./computed-style-clone.ts";
 import {
-  measureKpNativeKatexSubtreePaintRect
+  measureKpNativeKatexSubtreePaintRects
 } from "./native-katex-paint-geometry.ts";
 import type {
   KpEquationMaterialLayerOwnerFrame
@@ -16,6 +16,13 @@ export type {
 
 interface KpEquationMaterialLayerState {
   readonly owners: Map<string, HTMLElement>;
+}
+
+interface MaterialPaintAlignment {
+  readonly owner: HTMLElement;
+  readonly visual: HTMLElement;
+  readonly frame: KpEquationMaterialLayerOwnerFrame;
+  readonly paintAlignmentRect: NonNullable<KpEquationMaterialLayerOwnerFrame['paintAlignmentRect']>;
 }
 
 const materialLayerStates =
@@ -96,6 +103,7 @@ export function syncKpEquationMaterialLayer(input: {
     throw new Error("Equation stage is missing its persistent material layer.");
   }
   const state = materialLayerState(layer);
+  const alignments: MaterialPaintAlignment[] = [];
   const activeOwnerIds = new Set(input.owners.map((owner) => owner.ownerId));
   for (const [ownerId, owner] of state.owners) {
     if (activeOwnerIds.has(ownerId)) continue;
@@ -236,105 +244,95 @@ export function syncKpEquationMaterialLayer(input: {
         "kpEquationMaterialExpectedPaintInsetBottom"
       ]) setOptionalDataset(owner, key, undefined);
     } else {
-      const alignmentKey = [
-        owner.dataset["kpEquationMaterialVisualRevision"],
-        frame.rect.width,
-        frame.rect.height,
-        paintAlignmentRect.width,
-        paintAlignmentRect.height
-      ].join(":");
-      if (
-        owner.dataset["kpEquationMaterialPaintAlignmentKey"] !== alignmentKey
-      ) {
-        // Motion transforms can begin at scale(0). Measure the clone in its
-        // stable owner box so endpoint alignment does not cache a collapsed
-        // first-frame rectangle as the clone's intrinsic paint inset.
-        const motionTransform = owner.style.transform;
-        setStyle(owner.style, "transform", "none");
-        let measured;
-        let nativePaint;
-        try {
-          measured = measureKpNativeKatexSubtreePaintRect(
-            input.stage,
-            visual
-          );
-          // Text clone fidelity follows native source ink; owner-sized rules
-          // are checked against their moving expected geometry below.
-          nativePaint = measureKpNativeKatexSubtreePaintRect(
-            input.stage,
-            frame.sourceElement
-          );
-        } finally {
-          setStyle(owner.style, "transform", motionTransform || "none");
-        }
-        if (measured === undefined || nativePaint === undefined) {
-          throw new Error(
-            `Material owner ${frame.ownerId} has no measurable native clone.`
-          );
-        }
-        const paintReference = frame.fragmentRole?.startsWith("rule:") === true
-          ? paintAlignmentRect
-          : nativePaint;
-        const widthResidual = Math.abs(
-          measured.width - paintReference.width
-        );
-        const heightResidual = Math.abs(
-          measured.height - paintReference.height
-        );
-        if (widthResidual > 0.75 || heightResidual > 0.75) {
-          throw new Error(
-            `Material owner ${frame.ownerId} changed cloned paint size ` +
-            `(${widthResidual.toFixed(2)}px × ${heightResidual.toFixed(2)}px; ` +
-            `visual=${visual.style.transform}; owner=${frame.rect.width}; ` +
-            `expected=${paintReference.width}; measured=${measured.width}).`
-          );
-        }
-        setDataset(owner, "kpEquationMaterialPaintAlignmentKey", alignmentKey);
-        setDataset(
-          owner,
-          "kpEquationMaterialPaintInsetX",
-          String(measured.left - frame.rect.left)
-        );
-        setDataset(
-          owner,
-          "kpEquationMaterialPaintInsetY",
-          String(measured.top - frame.rect.top)
+      alignments.push({ owner, visual, frame, paintAlignmentRect });
+    }
+  }
+  alignMaterialPaint(input.stage, alignments);
+}
+
+function alignMaterialPaint(stage: HTMLElement, alignments: readonly MaterialPaintAlignment[]): void {
+  const pending = alignments.flatMap(alignment => {
+    const { owner, frame, paintAlignmentRect } = alignment;
+    const alignmentKey = [
+      owner.dataset["kpEquationMaterialVisualRevision"],
+      frame.rect.width,
+      frame.rect.height,
+      paintAlignmentRect.width,
+      paintAlignmentRect.height
+    ].join(":");
+    return owner.dataset["kpEquationMaterialPaintAlignmentKey"] === alignmentKey ? [] :
+      [{ ...alignment, alignmentKey, motionTransform: owner.style.transform }];
+  });
+  // Clones can start at scale(0). Put every new owner in its stable box before
+  // measuring any of them, then finish all reads before committing corrections.
+  // Per-owner write/read alternation forces layout once for every glyph.
+  for (const { owner } of pending) setStyle(owner.style, "transform", "none");
+  try {
+    const paintRects = measureKpNativeKatexSubtreePaintRects(stage,
+      pending.flatMap(({ visual, frame }) => [visual, frame.sourceElement]));
+    const measuredAlignments = pending.map((alignment, index) => {
+      const { visual, frame, paintAlignmentRect } = alignment;
+      const measured = paintRects[index * 2];
+      const nativePaint = paintRects[index * 2 + 1];
+      if (measured === undefined || nativePaint === undefined) {
+        throw new Error(
+          `Material owner ${frame.ownerId} has no measurable native clone.`
         );
       }
-      // Register the unscaled clone before applying its material transform.
-      // Post-scale collision geometry is a different authority and must never
-      // translate the owner as it contracts.
-      const correctionX =
-        paintAlignmentRect.left -
-        frame.rect.left -
-        Number(owner.dataset["kpEquationMaterialPaintInsetX"]);
-      const correctionY =
-        paintAlignmentRect.top -
-        frame.rect.top -
-        Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
-      const ownerLeft = frame.rect.left + correctionX;
-      const ownerTop = frame.rect.top + correctionY;
-      setStyle(owner.style, "left", `${ownerLeft}px`);
-      setStyle(owner.style, "top", `${ownerTop}px`);
-      // KaTeX wrapper centers are not reliable ink centers. Scaling around the
-      // measured paint pivot prevents asymmetric glyphs from drifting.
-      setStyle(
-        owner.style,
-        "transformOrigin",
-        `${paintAlignmentRect.left + paintAlignmentRect.width / 2 - ownerLeft}px ` +
-        `${paintAlignmentRect.top + paintAlignmentRect.height / 2 - ownerTop}px`
-      );
-      const expected = frame.expectedPaintRect ?? paintAlignmentRect;
-      for (const [key, value] of [
-        ["kpEquationMaterialExpectedPaintInsetX", expected.left - frame.rect.left],
-        ["kpEquationMaterialExpectedPaintInsetY", expected.top - frame.rect.top],
-        ["kpEquationMaterialExpectedPaintInsetRight",
-          frame.rect.left + frame.rect.width - expected.left - expected.width],
-        ["kpEquationMaterialExpectedPaintInsetBottom",
-          frame.rect.top + frame.rect.height - expected.top - expected.height],
-        ["kpEquationMaterialPaintAlignment", "measured-ink"]
-      ] as const) setDataset(owner, key, String(value));
+      const paintReference = frame.fragmentRole?.startsWith("rule:") === true
+        ? paintAlignmentRect
+        : nativePaint;
+      const widthResidual = Math.abs(measured.width - paintReference.width);
+      const heightResidual = Math.abs(measured.height - paintReference.height);
+      if (widthResidual > 0.75 || heightResidual > 0.75) {
+        throw new Error(
+          `Material owner ${frame.ownerId} changed cloned paint size ` +
+          `(${widthResidual.toFixed(2)}px × ${heightResidual.toFixed(2)}px; ` +
+          `visual=${visual.style.transform}; owner=${frame.rect.width}; ` +
+          `expected=${paintReference.width}; measured=${measured.width}).`
+        );
+      }
+      return { ...alignment, measured };
+    });
+    for (const { owner, frame, alignmentKey, measured } of measuredAlignments) {
+      setDataset(owner, "kpEquationMaterialPaintAlignmentKey", alignmentKey);
+      setDataset(owner, "kpEquationMaterialPaintInsetX", String(measured.left - frame.rect.left));
+      setDataset(owner, "kpEquationMaterialPaintInsetY", String(measured.top - frame.rect.top));
     }
+  } finally {
+    for (const { owner, motionTransform } of pending) {
+      setStyle(owner.style, "transform", motionTransform || "none");
+    }
+  }
+  for (const { owner, frame, paintAlignmentRect } of alignments) {
+    // Register the unscaled clone before applying its material transform.
+    // Post-scale collision geometry must never translate the owner as it contracts.
+    const correctionX = paintAlignmentRect.left - frame.rect.left -
+      Number(owner.dataset["kpEquationMaterialPaintInsetX"]);
+    const correctionY = paintAlignmentRect.top - frame.rect.top -
+      Number(owner.dataset["kpEquationMaterialPaintInsetY"]);
+    const ownerLeft = frame.rect.left + correctionX;
+    const ownerTop = frame.rect.top + correctionY;
+    setStyle(owner.style, "left", `${ownerLeft}px`);
+    setStyle(owner.style, "top", `${ownerTop}px`);
+    // KaTeX wrapper centers are not reliable ink centers. Scaling around the
+    // measured paint pivot prevents asymmetric glyphs from drifting.
+    setStyle(
+      owner.style,
+      "transformOrigin",
+      `${paintAlignmentRect.left + paintAlignmentRect.width / 2 - ownerLeft}px ` +
+      `${paintAlignmentRect.top + paintAlignmentRect.height / 2 - ownerTop}px`
+    );
+    const expected = frame.expectedPaintRect ?? paintAlignmentRect;
+    for (const [key, value] of [
+      ["kpEquationMaterialExpectedPaintInsetX", expected.left - frame.rect.left],
+      ["kpEquationMaterialExpectedPaintInsetY", expected.top - frame.rect.top],
+      ["kpEquationMaterialExpectedPaintInsetRight",
+        frame.rect.left + frame.rect.width - expected.left - expected.width],
+      ["kpEquationMaterialExpectedPaintInsetBottom",
+        frame.rect.top + frame.rect.height - expected.top - expected.height],
+      ["kpEquationMaterialPaintAlignment", "measured-ink"]
+    ] as const) setDataset(owner, key, String(value));
   }
 }
 

@@ -25,6 +25,7 @@ export {
   recordKpReaderCanonicalSessionApply,
   recordKpReaderCanonicalSessionBuild,
   recordKpReaderCanonicalSessionReuse,
+  recordKpReaderPreparationPhase,
   recordKpReaderPurePlanCacheHit,
   recordKpReaderPurePlanCompilation,
   recordKpReaderProtectedTransitCertificateReuse,
