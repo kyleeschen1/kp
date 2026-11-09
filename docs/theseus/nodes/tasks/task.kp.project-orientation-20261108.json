@@ -2,9 +2,9 @@
   "id": "task.kp.project-orientation-20261108",
   "kind": "task",
   "title": "Keep product direction and approvals understandable",
-  "status": "blocked",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: await dashboard clarity judgment; no remaining implementation blocker.",
+  "summary": "User acceptance closes the orientation delivery.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -71,10 +71,17 @@
       "scope": "focused",
       "checkedAt": "2026-11-08T23:51:22.923Z",
       "notes": "Generated scanned-file inventory repaired; 68 roots unchanged. Dependency-direction check also passes."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T01:44:46.287Z",
+      "notes": "Acceptance reconciliation: 74 tests pass; current direction, approved completion and retained authoring proposal agree. No unchanged visual reapproval requested."
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "HUMAN_CHECKPOINT: implementation and verification complete for the orientation candidate; final package awaits user clarity judgment at localhost:8011/?view=dashboard#project-vision. Authoring successor remains proposed."
+    "state": "complete",
+    "summary": "COMPLETE: concise direction, checked briefing and dashboard accepted by the user. Continue with bounded inspection of existing authoring/editor capabilities before selecting a missing connection."
   }
 }

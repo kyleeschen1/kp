@@ -96,7 +96,11 @@ commands, including its previously open receipt and accepted physics content.
 The new authoring proof remains proposed; this work does not rebuild editor
 capabilities, create a model service or start a content-production programme.
 
-## Human checkpoint
+## Human checkpoint — accepted
+
+The user responds “excellent,” explicitly approves, and asks to continue.
+All three orientation packages are complete. This acceptance closes the
+clarity checkpoint; it does not require another unchanged-visual review.
 
 Open http://localhost:8011/?view=dashboard#project-vision.
 Read the destination, approved scope, product progression and proposed next proof.
@@ -106,3 +110,40 @@ and why.” Can you recover where we are and what you approved without this chat
 This judges the clarity of one orientation surface. It does not approve the
 next product implementation. The terminal briefing provides a second access
 path if the development server is unavailable.
+
+## Continuation: existing capabilities and checkout freshness
+
+The briefing itself is about 400 tokens in the observed tool output. The full
+three-document orientation is approximately 2,000–3,000 tokens, depending on the
+tokenizer; word counts are measured, token counts are estimates. Read the charter
+for rationale and historical sources for named questions, not on every task.
+This does not account for other agent instructions, skills or implementation context.
+
+Source inspection after approval found that the separate KP root checkout still
+has its October 30 roadmap. This product branch is current; its direction has not
+been merged into that other lane. The parallel owner should reconcile the
+orientation commits and preserve its editor-owned decisions, rather than blindly
+overwrite either checkout or duplicate task status.
+
+The existing editor worktree is
+`/Users/kyleeschen/Code/.worktrees/editor-workbench-20261030`.
+Its `docs/project/threads/programmable-workbench.md` and
+`docs/project/reviews/2026-10-30-workbench-live-conversation.md` describe an
+implemented native-conversation, exact capture/quoted-follow-up and durable
+draft candidate. `src/spindle/workbench/app.cljs` exposes an editable website
+preview URL and explicit Reload; `live.cljs` retains native-session ownership.
+Its recorded human end-to-end inference/capture/reopen trial remains pending.
+This was read-only source inspection, not a fresh native application test.
+
+On the KP side, `scripts/what-counts-reader-page.ts` rereads a registered
+manuscript for each request, and `scripts/vite-authoring-structural-preview.ts`
+serves the accepted reader with no-store responses. The existing authoring packet
+already supports prose and bounded attention-beat changes without engine edits.
+It still requires explicit reading versions and pinned semantic references.
+
+The next useful proof is to point that existing workbench at this product
+checkout and `http://localhost:8011/reader/what-counts/`, make one substantive
+supported revision, check it and reload the actual preview. Record real author
+effort, response/preview latency and any missing handoff. Do not invent a new
+chat service, schema, generic preview API or physics migration before that trial
+demonstrates a need. The editor's owner retains session actions and native review.

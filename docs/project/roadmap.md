@@ -17,17 +17,17 @@ and progression: authoring → learner adaptation → practice/retrieval → lib
 [The accepted decision](decisions/2026-11-08-authoring-expert-attention.md) records
 why this becomes the organizing direction and what it supersedes.
 
-## What is approved now
+## Latest approved commitment — complete
 
 **Make direction, commitments and progress easy to recover.** The user identifies
 getting lost as the main blocker and approves the [orientation delivery](2026-11-08-project-orientation-delivery.md).
-Its finish line is short authoritative entrypoints, preserved history, checked
-agreement with the existing dashboard, fresh execution lookup and one reviewable
-orientation surface. Theseus owns live status and the human review stop.
+The user accepts the orientation surface. All three work packages are complete:
+short authoritative entrypoints, preserved history, checked agreement with the
+dashboard and a fresh execution lookup. Theseus records the acceptance.
 
-This is an enabling delivery. It does not approve the next authoring product
-milestone. The parallel agent retains task tracking and editor ownership;
-strategic records have one designated editor at a time.
+Continuation now inspects the existing authoring/editor path before selecting
+new implementation. The parallel agent retains task tracking and editor
+ownership; strategic records have one designated editor at a time.
 
 ## Next product proof — proposed
 
@@ -37,8 +37,10 @@ promptly, and preserves a reusable result without custom repository engineering
 for each revision. Then pressure one learner-requested adaptation that retains
 the important reasoning and exact context.
 
-Before selecting implementation, inspect existing authoring/editor capabilities
-with their owner, identify the missing connection and define the smallest proof.
+Source inspection finds an existing native-conversation/website-preview candidate
+in the editor lane; KP already rereads registered manuscripts on each request.
+Use those owners for the first real revision trial; identify its missing connection
+before building another workflow. See [inspection and handoff](reviews/2026-11-08-project-orientation.md).
 Measure time to useful preview/revision and actual engineering intervention.
 Live generation and fast iteration remain unproved; a scripted response is not
 that proof. Several domains and a large library are not the first finish line.
@@ -60,6 +62,8 @@ blocker. Prior completed architecture and maintenance work stays complete.
   recent evidence, proposed successor and the next human judgment.
 - Run `npm run project:orientation` for the same briefing plus a fresh read of
   the explicitly named Theseus contract. A source snapshot is not a live monitor.
+- These sources are current in `.worktrees/kp-product`. The parallel checkout
+  still has older direction; integration belongs to its owner, not an implicit merge.
 - Read this page, [the active thread](threads/co-creative-practice.md), and the
   charter for rationale. Retrieve only the selected task's sources afterward.
 - At handoff, state the capability gained, remaining uncertainty and any direction

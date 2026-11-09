@@ -5,17 +5,21 @@ Last Updated: 2026-11-08
 
 ## Current boundary
 
-The [roadmap](../roadmap.md) selects orientation infrastructure now and proposes
+The [roadmap](../roadmap.md) records accepted orientation infrastructure and proposes
 the authoring/revision product proof next. The [charter](../strategy.md) describes
 the accepted author-first direction and its learner/practice/library horizon.
 The [decision](../decisions/2026-11-08-authoring-expert-attention.md) preserves
 earlier practice ambitions while changing their ordering.
 
-Current approved scope: [orientation delivery](../2026-11-08-project-orientation-delivery.md).
+Latest approved scope, now complete: [orientation delivery](../2026-11-08-project-orientation-delivery.md).
 Theseus contract: `run-contract.kp.project-orientation-20261108`.
 Read its live state; this index does not copy slice progress. The parallel agent
 retains todo tracking and independent editor ownership. Do not assume this
 checkout's old workbench proposal represents that agent's current implementation.
+Source inspection found its existing native-conversation/website-preview candidate.
+The [handoff](../reviews/2026-11-08-project-orientation.md) names its exact source
+checkout and remaining evidence limits. The first continuation is to use that
+path for a real revision, not reconstruct conversation or preview infrastructure.
 
 ## Retrieve for a named question
 

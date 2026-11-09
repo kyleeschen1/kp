@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved orientation delivery", href: "docs/project/2026-11-08-project-orientation-delivery.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review whether this page makes the destination, approved work and proposed next proof clear. That review accepts this orientation surface; it does not start the authoring milestone.",
+  nextJudgment: "Orientation is accepted. Next, use the existing workbench conversation and KP preview for one real authoring revision, then select only the missing connection revealed by that trial. No repeat orientation review is pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -44,7 +44,7 @@ export const projectVision: ProjectVision = {
       evidence: { label: "Current authoring API", href: "docs/project/authoring/concise-domain-api.md" },
       outcome: {
         id: "authoring-revision", title: "Revise one exceptional explanation through the product",
-        finish: "An author substantively changes reasoning and attention choreography, gets useful feedback promptly, and preserves a reusable result without custom engineering for each revision. Inspect existing editor capabilities first; measure latency and remaining intervention.",
+        finish: "An author substantively changes reasoning and attention choreography, gets useful feedback promptly, and preserves a reusable result. Use the existing native workbench conversation and KP preview first; measure latency and remaining intervention before adding infrastructure.",
         excludes: "Automatic approval of a live-model service, a universal language, a large catalogue or a new editor implementation.",
         source: { label: "Proposed next product proof", href: "docs/project/roadmap.md" }
       }
@@ -88,8 +88,8 @@ export const projectVision: ProjectVision = {
     {
       id: "learning", title: "Experiments & workbench", horizon: "later",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "The workbench now belongs to the separate editor lane. Its current host and execution records supersede this branch's older KP-hosted proposal; KP preserves independent mathematical and reader ownership.",
-      evidence: { label: "Parallel ownership and current source", href: "docs/project/decisions/2026-10-31-annotation-attention-and-reader-consolidation.md" },
+      established: "Source inspection finds an editor-owned native-conversation, exact-response capture, quoted follow-up and website-preview candidate. Its recorded end-to-end human acceptance remains pending; no live inference was run by this inspection. KP retains its independent source/compiler/reader.",
+      evidence: { label: "Source inspection and handoff", href: "docs/project/reviews/2026-11-08-project-orientation.md" },
       outcome: {
         id: "independent-workbench-v1", title: "Preserve exact discussion and practice return in the independently owned workbench",
         finish: "Save anchored commentary and a question/attempt at exact source revisions, compare a candidate, export assistant context, and return after reload. One live KP adapter and isolated fixtures pass bounded failure/recovery checks; review the complete workflow before expansion.",
@@ -100,8 +100,8 @@ export const projectVision: ProjectVision = {
   ],
   completed: [
     {
-      title: "Current direction fits in a short reading",
-      scope: "The roadmap, charter and active thread total 1,544 words, down from 22,754. Earlier commitments remain in labeled historical snapshots. Authoring is the first product center; the proposed physics migration is deferred.",
+      title: "A short orientation surface is accepted",
+      scope: "The user accepts the dashboard and continuity workflow. Initial reconciliation reduced the three entrypoints from 22,754 to 1,544 words; checked budgets keep them short as direction changes. Earlier commitments remain in labeled history.",
       source: { label: "Orientation scope and preservation evidence", href: "docs/project/reviews/2026-11-08-project-orientation.md" }
     },
     {

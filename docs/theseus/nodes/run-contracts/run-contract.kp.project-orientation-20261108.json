@@ -2,8 +2,8 @@
   "id": "run-contract.kp.project-orientation-20261108",
   "kind": "run-contract",
   "title": "Durable project orientation",
-  "status": "blocked",
-  "summary": "HUMAN_CHECKPOINT: two packages complete, final orientation candidate awaits subjective review.",
+  "status": "resolved",
+  "summary": "All three packages complete; user accepts the dashboard clarity checkpoint.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -45,8 +45,8 @@
     {
       "id": "orientation",
       "title": "Make the existing dashboard an orientation surface",
-      "summary": "HUMAN_CHECKPOINT: checked dashboard candidate is ready. Judge whether destination, approved work and proposed successor are clear without chat history; acceptance does not start the authoring milestone.",
-      "status": "in-progress"
+      "summary": "User explicitly approves the orientation surface and asks to continue. Clarity checkpoint accepted; no repeated visual review needed.",
+      "status": "complete"
     }
   ]
 }
