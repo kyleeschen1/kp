@@ -52,10 +52,17 @@
       "scope": "focused",
       "checkedAt": "2026-11-09T02:21:07.541Z",
       "notes": "Exact final post-repair command; ten cases passed across Chromium and Firefox."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep startup.diagnostic",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T02:31:14.873Z",
+      "notes": "Diagnostic completed six Firefox startup traces; reproduced a 55px equation jump and fallback-to-measured card growth. This is evidence of a remaining defect, not a stability pass. No production change in this follow-up."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Saved-link restoration is implemented; Firefox motion regression pressure now demonstrates zero focus-caused compositor builds. The user reports background-load reduction helped but did not remove hitches before this repair. Authoring candidate is separate and unreviewed; later loops have not executed."
+    "summary": "Saved URL opens and focus-caused rebuilds are repaired. Follow-up diagnosis reproduces visible startup reflow: fallback card dimensions, early hydrated marker and late location restoration expose intermediate frames. Geometry rules predate latest repair. Current user asked for diagnosis; startup remediation and authoring trials remain unfinished."
   }
 }

@@ -2,6 +2,57 @@ import { test, expect, type Page } from "@playwright/test";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 
 const route = "/reader/what-counts/";
+test('startup diagnostic records layout before and after reader readiness', async ({ page, browserName }, info) => {
+  test.skip(browserName !== 'firefox', 'The reported startup shift is in Firefox.');
+  test.setTimeout(120_000);
+  await page.addInitScript(() => {
+    const frames: unknown[] = [];
+    const probe = { frames, running: true };
+    Reflect.set(window, '__kpStartupTrace', probe);
+    let previous = '';
+    function sample() {
+      if (!probe.running) return;
+      const body = document.body;
+      if (body) {
+        const rect = (selector: string) => {
+          const element = document.querySelector(selector);
+          if (!element) return null;
+          const bounds = element.getBoundingClientRect();
+          return [Math.round(bounds.top), Math.round(bounds.height)];
+        };
+        const frame = { y: scrollY, hydrated: body.dataset['kpReaderHydrated'] ?? null,
+          host: body.dataset['kpAnimationHostStatus'] ?? null,
+          card: rect('.kp-caption-pin'), equation: rect('.kp-reader-equation-viewport'),
+          reserve: body.style.getPropertyValue('--kp-document-equation-height'),
+          progress: body.dataset['kpReaderProgress'] ?? null };
+        const key = JSON.stringify(frame);
+        if (key !== previous) frames.push({ ms: Math.round(performance.now()), ...frame });
+        previous = key;
+      }
+      requestAnimationFrame(sample);
+    }
+    requestAnimationFrame(sample);
+  });
+  const cases = [
+    { name: 'saved-v1', suffix: '?kpCheckpoint=state.what-counts.collected&kpLesson=lesson.algebra.what-counts&kpMotion=system&kpProfile=standard&kpProgress=333&kpProjection=equation.symbolic&kpReading=0.454622&kpVersion=1#state.what-counts.collected' },
+    { name: 'opening-v1', suffix: '?kpVersion=1' },
+    { name: 'opening-v2', suffix: '' }
+  ];
+  for (const width of [1100, 390]) for (const item of cases) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('about:blank');
+    await page.goto(route + item.suffix);
+    await ready(page);
+    await page.waitForTimeout(750);
+    const frames = await page.evaluate(() => {
+      const probe = Reflect.get(window, '__kpStartupTrace');
+      probe.running = false;
+      return probe.frames;
+    });
+    console.log(JSON.stringify({ name: item.name, width, frames }));
+    await info.attach(`${item.name}-${width}.json`, { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
+  }
+});
 test('transition diagnostic compares retained and current reading in Firefox', async ({ page, browserName }, info) => {
   test.skip(browserName !== 'firefox', 'The reported regression is in Firefox.');
   test.setTimeout(180_000);

@@ -92,3 +92,63 @@ The full unit command initially found a missing promotion-ledger retrieval link
 after the earlier roadmap trim. The link and tabled matrix status are restored;
 that gate passed on rerun before the later deliberate cancellation. Do not
 interpret that cancellation or focused results as a clean full-suite result.
+
+## Follow-up: visible startup geometry shift
+
+The user reports that motion is improved but still feels glitchier, with a
+noticeable initial layout shift. This follow-up is diagnosis; production behavior
+was not changed. Added a pre-readiness Firefox trace to the existing scoped test:
+
+`npm run visual:anchored-algebra -- --project=firefox --grep startup.diagnostic`
+
+Six navigations cover the exact saved v1 URL and the v1/v2 openings at 1100px
+and 390px widths, each 900px high. The test records geometry from the first
+document frames through 750ms after ready. Passing means the trace completed,
+not that layout stability passed: it reproducibly exposes the defect.
+
+| Reading / width | Initial card height | Settled card height |
+| --- | --- | --- |
+| v1 / 1100 | 320px | 372px |
+| v1 / 390 | 320px | 426px |
+| v2 / 1100 | 320px | 642px |
+| v2 / 390 | 320px | 750px |
+
+For the saved desktop link, the first interactive equation viewport starts at
+493px and settles at 438px: a visible 55px upward move. The browser initially
+lands on the HTML fragment at scrollY approximately 3522, then reader restoration
+settles at approximately 1811 after document spacing changes. Those scroll
+coordinates are not a 1711px equation displacement; the document itself changed
+geometry. The final equation-height reserve changes only 82→83px, so that
+particular late reserve is not the main jump in this sample.
+
+Responsible boundary: static document → interactive reader startup. CSS supplies
+a 320px fallback and provisional holds/gaps. `exemplar-entry.ts` marks the document
+hydrated before `mountDocumentTheater` measures prose, before the canonical
+session is ready, and before `restoreUrlLocation` runs. The initial fragment
+landing, changed prose/card geometry and later semantic position restoration
+therefore become separately visible. Font readiness protects final measurements,
+but does not make the entire startup handoff atomic.
+
+History checked with `git blame` and the relevant commits: fallback sizing dates
+to `105a0fbc2f` (October 28); annotation-dependent sizing to `c8e4c85b8e`
+(October 31); dynamic equation-height reservation to `f9052805b9` (October 31).
+The richer v2 manuscript was accepted in `945a667ed` (November 8). The focus-rebuild
+repair `05c0ae0de` did not change document sizing, CSS or stage-layout code.
+This establishes that the geometry mismatch predates that repair, but does not
+prove identical subjective smoothness across all historical application versions.
+
+Why now: the saved-link repair makes the previously rejected v1 page reachable
+again. Its old manuscript runs in the current reader; `kpVersion` pins reading
+content, not the complete CSS/runtime release. A mid-reading fragment exposes
+initial reflow directly in the visible theater. Longer prose also changes the
+maximum-height layout calculation. Recent focus-release work increased occasions
+for the separately diagnosed paint-rebuild defect. Timing/load can amplify both.
+
+Verification gap: prior browser checks primarily called `ready(page)` before
+inspecting stable endpoints. They established correct settled state and later
+presence, not continuity from the first visible paint. The new startup trace
+retains evidence of that distinction. Recommended next repair is a coherent
+static-to-interactive handoff: settle sizing and saved location before exposing
+the interactive stage, preserving readable static content and native ownership.
+Do not disguise incorrect initialization with additional easing or a blanket
+page-hiding rule. No new treatment or broad reader rewrite is justified yet.
