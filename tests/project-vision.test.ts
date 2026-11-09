@@ -57,8 +57,16 @@ test("snapshot age is visible rather than silently claiming live status", () => 
   const html = renderProjectVision(projectVision, eightDaysAfterReview);
   assert.match(html, /data-kp-vision-freshness="review-due"/);
   assert.match(html, /Review due/);
-  assert.match(html, /not an active run/);
+  assert.match(html, /approved programme/);
   assert.match(html, /not the current commitment queue/);
+});
+
+test("approval is explicit rather than inferred from being the next outcome", () => {
+  const proposed = { ...projectVision, areas: projectVision.areas.map(area => ({
+    ...area, outcome: { ...area.outcome, authority: "proposed" as const }
+  })) };
+  assert.match(renderProjectVision(proposed), /not an active run/);
+  assert.match(renderProjectVision(projectVision), /Next product proof · approved/);
 });
 
 test("source-derived prose is escaped without preventing native disclosures and links", () => {

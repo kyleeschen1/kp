@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "project-orientation",
-    title: "Keep direction, commitments and progress easy to recover",
+    id: "authoring-to-practice",
+    title: "Make exceptional explanations repeatable and adaptable",
     approval: "approved",
-    contractId: "run-contract.kp.project-orientation-20261108",
-    finish: "A short charter and roadmap, preserved history, checked agreement with this view, a fresh execution lookup, and one understandable orientation surface.",
-    source: { label: "Approved orientation delivery", href: "docs/project/2026-11-08-project-orientation-delivery.md" }
+    contractId: "run-contract.kp.authoring-to-practice-20261108",
+    finish: "Restore saved reading links, then demonstrate real revision, measured iteration and precise attention authoring. Continue through the approved adaptation/practice sequence as prerequisites and human checkpoints are satisfied.",
+    source: { label: "Approved authoring-to-practice programme", href: "docs/project/2026-11-08-authoring-to-practice-loops.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Orientation is accepted. Next, use the existing workbench conversation and KP preview for one real authoring revision, then select only the missing connection revealed by that trial. No repeat orientation review is pending.",
+  nextJudgment: "The programme is approved. Repair the reported bookmark first, then review the first substantive revision and any new attention treatment. Orientation remains accepted.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -31,6 +31,7 @@ export const projectVision: ProjectVision = {
       established: "Specialized configs and selected algebra styles have explicit owners. The shared algebra card now releases browser callbacks before disposing its clock; native and edition lifecycle checks pass. Broader consolidation remains separate.",
       evidence: { label: "Teardown repair and preservation evidence", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" },
       outcome: {
+        authority: "proposed",
         id: "remove-authoring-blocker", title: "Remove a demonstrated obstacle to authoring",
         finish: "The selected authoring proof identifies a concrete boundary or cost; a bounded repair removes it and preserves complete existing consumers.",
         excludes: "A speculative architecture campaign, new task queue or unrelated CSS rollout.",
@@ -43,10 +44,11 @@ export const projectVision: ProjectVision = {
       established: "Two independent readings now share one checked algebra source in the accepted reader. Existing physics source authoring was rechecked, not newly created. General rapid or conversational generation remains unproved.",
       evidence: { label: "Current authoring API", href: "docs/project/authoring/concise-domain-api.md" },
       outcome: {
+        authority: "approved",
         id: "authoring-revision", title: "Revise one exceptional explanation through the product",
         finish: "An author substantively changes reasoning and attention choreography, gets useful feedback promptly, and preserves a reusable result. Use the existing native workbench conversation and KP preview first; measure latency and remaining intervention before adding infrastructure.",
         excludes: "Automatic approval of a live-model service, a universal language, a large catalogue or a new editor implementation.",
-        source: { label: "Proposed next product proof", href: "docs/project/roadmap.md" }
+        source: { label: "Approved first authoring proof", href: "docs/project/2026-11-08-authoring-to-practice-loops.md" }
       }
     },
     {
@@ -55,6 +57,7 @@ export const projectVision: ProjectVision = {
       established: "Matrix selections retain entry identity and product provenance. Mathematical coverage and presentation coverage remain distinct.",
       evidence: { label: "Matrix identity and scope", href: "docs/project/authoring/concise-domain-api.md" },
       outcome: {
+        authority: "proposed",
         id: "reuse-math-in-practice", title: "Reuse one checked presentation in explanation and practice",
         finish: "Both uses refer to the same mathematical source and checked presentation, with exact return to its context and no copied mathematical or animation implementation.",
         excludes: "A universal knowledge graph or automatic coverage of every mathematical domain.",
@@ -67,6 +70,7 @@ export const projectVision: ProjectVision = {
       established: "The accepted algebra reader preserves a full explanation, independent readings and a scripted focused return. Physics still uses its separate rail host. Existing authoring and return foundations were integrated or rechecked, not newly invented; live conversation and learning outcomes remain unproved.",
       evidence: { label: "Accepted explanation and preservation evidence", href: "docs/project/reviews/2026-11-08-explanation-first.md" },
       outcome: {
+        authority: "proposed",
         id: "situated-adaptation", title: "Adapt material while preserving its reasoning and referents",
         finish: "One learner-requested variation retains important authored relationships and a precise return to context. Physics-host consolidation is deferred unless this proof needs it.",
         excludes: "A universal schema, automatic host migration, catalogue rollout or claims of learning efficacy.",
@@ -79,6 +83,7 @@ export const projectVision: ProjectVision = {
       established: "Question projections and rehearsal experiments provide ingredients. The durable co-creative practice loop is still a product milestone.",
       evidence: { label: "Practice milestone", href: "docs/project/threads/co-creative-practice.md" },
       outcome: {
+        authority: "proposed",
         id: "durable-practice-loop", title: "One question survives an attempt, revision and later return",
         finish: "After a reload, retrieve the exact question version, assistance conditions and mistake or uncertainty note from an attempt, then reopen the mathematical context. Preserve the old attempt when revising the question.",
         excludes: "A scheduling algorithm, automatic learner model or embedded chatbot.",
@@ -91,6 +96,7 @@ export const projectVision: ProjectVision = {
       established: "Source inspection finds an editor-owned native-conversation, exact-response capture, quoted follow-up and website-preview candidate. Its recorded end-to-end human acceptance remains pending; no live inference was run by this inspection. KP retains its independent source/compiler/reader.",
       evidence: { label: "Source inspection and handoff", href: "docs/project/reviews/2026-11-08-project-orientation.md" },
       outcome: {
+        authority: "proposed",
         id: "independent-workbench-v1", title: "Preserve exact discussion and practice return in the independently owned workbench",
         finish: "Save anchored commentary and a question/attempt at exact source revisions, compare a candidate, export assistant context, and return after reload. One live KP adapter and isolated fixtures pass bounded failure/recovery checks; review the complete workflow before expansion.",
         excludes: "A repository split, new renderer, full GTD platform, scheduler algorithm, embedded model service or autonomous background agents.",

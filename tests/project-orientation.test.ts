@@ -21,7 +21,7 @@ test("short entrypoints, dashboard and selected execution retain one approval bo
 
 test("a stale proposal, competing metadata or implicit approval cannot redirect the next session", () => {
   for (const roadmap of [
-    docs.roadmap.replace("Milestone Authority: proposed", "Milestone Authority: approved"),
+    docs.roadmap.replace(/^Milestone Authority: .+$/m, "Milestone Authority: implicit"),
     docs.roadmap.replace("authoring-revision", "physics-reader-convergence"),
     docs.roadmap + "\nCurrent Commitment: another-run\n",
     docs.roadmap.replace(projectVision.commitment.contractId, "run-contract.unrelated")

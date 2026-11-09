@@ -3,7 +3,22 @@
     "articlePath": "content/authoring/algebra/what-counts.article.md",
     "version": "2",
     "title": "What counts as one thing?",
-    "description": "A whole expression can act as a single quantity. Changing what you count together can make its structure easier to see—without changing its value."
+    "description": "A whole expression can act as a single quantity. Changing what you count together can make its structure easier to see—without changing its value.",
+    "previous": [
+      {
+        "articlePath": "content/authoring/algebra/what-counts-v1.article.md",
+        "version": "1",
+        "title": "What counts as one thing?",
+        "description": "A whole expression can act as a single quantity. Changing what you count together can make its structure easier to see—without changing its value.",
+        "sha256": "4042f9e7cadce39bde6af5621517279176ae5ca7cbf45a91919dac950e847d2e"
+      }
+    ]
+  },
+  "product": {
+    "articlePath": "content/authoring/algebra/what-counts-product.article.md",
+    "version": "product.1",
+    "title": "Why do these groups multiply?",
+    "description": "Distinguish the number of copies from the quantity in each copy, and test why the two groups multiply."
   },
   "zero": {
     "articlePath": "content/authoring/algebra/what-counts-zero.article.md",

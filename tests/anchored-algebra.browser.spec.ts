@@ -2,6 +2,78 @@ import { test, expect, type Page } from "@playwright/test";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 
 const route = "/reader/what-counts/";
+test('transition diagnostic compares retained and current reading in Firefox', async ({ page, browserName }, info) => {
+  test.skip(browserName !== 'firefox', 'The reported regression is in Firefox.');
+  test.setTimeout(180_000);
+  const report = [];
+  const saved = route + '?kpCheckpoint=state.what-counts.collected&kpLesson=lesson.algebra.what-counts&kpMotion=system&kpProfile=standard&kpProgress=333&kpProjection=equation.symbolic&kpReading=0.454622&kpVersion=1#state.what-counts.collected';
+  await page.goto(saved); await ready(page);
+  await page.mouse.wheel(0, 1);
+  const restored = await page.evaluate(async () => {
+    const metricsPath = '/src/reader/runtime/reader-runtime-metrics.ts';
+    const metrics = await import(metricsPath);
+    metrics.resetKpReaderRuntimeMetrics(window);
+    const start = scrollY;
+    const beat = document.querySelector('[data-kp-beat="state.what-counts.counted"]')!;
+    const passage = beat.querySelector('.kp-rising-passage')!;
+    const end = start + beat.getBoundingClientRect().top + passage.getBoundingClientRect().height
+      - parseFloat(document.body.style.getPropertyValue('--kp-flow-line'));
+    const frames = [];
+    let previous = performance.now();
+    for (let step = 0; step <= 180; step++) {
+      scrollTo(0, start + (end - start) * step / 180);
+      await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+      const now = performance.now();
+      frames.push({ ms: now - previous, progress: Number(document.body.dataset['kpReaderProgress']), y: scrollY });
+      previous = now;
+    }
+    return { frames, runtime: metrics.inspectKpReaderRuntimeMetrics(window),
+      host: document.body.dataset['kpAnimationHostStatus'] };
+  });
+  report.push({ version: 'exact-saved', state: 'first-scroll', ...restored });
+  expect(restored.host).toBe('ready');
+  expect(restored.frames[0]!.progress).toBeCloseTo(333, 0);
+  expect(restored.frames.at(-1)!.progress).toBeCloseTo(667, 0);
+  for (const version of ['1', '2']) {
+    await page.goto(`${route}?kpLesson=lesson.algebra.what-counts&kpVersion=${version}&kpProgress=0`);
+    await ready(page);
+    for (const state of source.states.slice(1)) {
+      await jump(page, `passage.${state.id}`);
+      const arrival = await page.evaluate(() => scrollY);
+      const result = await page.evaluate(async arrival => {
+        const metricsPath = '/src/reader/runtime/reader-runtime-metrics.ts';
+        const metrics = await import(metricsPath);
+        metrics.resetKpReaderRuntimeMetrics(window);
+        const available = innerHeight - document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().height;
+        const frames: { ms: number; progress: number; y: number }[] = [];
+        let previous = performance.now();
+        for (let step = 0; step <= 90; step++) {
+          scrollTo(0, arrival + available * (.12 + .32 * step / 90));
+          await new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+          const now = performance.now();
+          frames.push({ ms: now - previous, progress: Number(document.body.dataset['kpReaderProgress']), y: scrollY });
+          previous = now;
+        }
+        return { frames, runtime: metrics.inspectKpReaderRuntimeMetrics(window),
+          host: document.body.dataset['kpAnimationHostStatus'] };
+      }, arrival);
+      report.push({ version, state: state.id, ...result });
+      expect(result.host).toBe('ready');
+      expect(result.runtime.canonicalSessionBuildReasons.presentation ?? 0,
+        'Focus release must refresh native color without rebuilding equation geometry').toBe(0);
+      const available = await page.evaluate(() => innerHeight - document.querySelector('.kp-reader-masthead')!.getBoundingClientRect().height);
+      for (const fraction of [.1, .3, .5, .7, .9]) {
+        await page.evaluate(top => scrollTo(0, top), arrival + available * (.12 + .32 * fraction));
+        await page.waitForTimeout(100);
+        await page.locator('.kp-caption-pin').screenshot({ path: info.outputPath(`v${version}-${state.id}-${fraction}.png`) });
+      }
+    }
+  }
+  await info.attach('transition-frames.json', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });
+  console.log(JSON.stringify(report.map(({ frames, ...entry }) => ({ ...entry,
+    frameCount: frames.length, over50ms: frames.filter(frame => frame.ms > 50).length,
+    maxMs: Math.max(...frames.map(frame => frame.ms)), distinctProgress: new Set(frames.map(frame => frame.progress)).size }))));
+});
 async function ready(page: Page) {
   await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', /ready|failed/, { timeout: 90_000 });
   await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', 'ready');
@@ -18,6 +90,36 @@ async function nativeColor(page: Page, ref: string) {
     return target ? getComputedStyle(target).color : undefined;
   }, ref);
 }
+
+test("saved version-1 link retains its original reading and native equation", async ({ page }) => {
+  test.setTimeout(120_000);
+  const saved = route + '?kpCheckpoint=state.what-counts.collected&kpLesson=lesson.algebra.what-counts&kpMotion=system&kpProfile=standard&kpProgress=333&kpProjection=equation.symbolic&kpReading=0.454622&kpVersion=1#state.what-counts.collected';
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('about:blank');
+    const response = await page.goto(saved);
+    expect(response?.status()).toBe(200);
+    for (const load of ['open', 'reload']) {
+      if (load === 'reload') await page.reload();
+      await ready(page);
+      await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', '1');
+      await expect(page.locator('[data-kp-rising-beat]')).toHaveCount(8);
+      await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', 'state.what-counts.collected');
+      await expect(page.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+      const native = page.locator('[data-kp-reader-transition-active="true"] [data-kp-reader-native] .katex-html:visible').first();
+      await expect(native).toBeVisible();
+      await page.evaluate(() => dispatchEvent(new Event('scrollend')));
+      const share = new URL((await page.locator('[data-kp-reader-share]').getAttribute('href'))!, page.url());
+      expect(share.searchParams.get('kpVersion')).toBe('1');
+      expect(Number(share.searchParams.get('kpReading'))).toBeCloseTo(.454622, 2);
+    }
+    await jump(page, 'state.what-counts.opened');
+    await jump(page, 'state.what-counts.collected');
+    await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', 'state.what-counts.collected');
+  }
+  expect(errors).toEqual([]);
+});
 
 test('annotation fades own their reading interval through reversal and restoration', async ({ page }, info) => {
   test.setTimeout(90_000);
@@ -264,7 +366,7 @@ test("static reading, old links and stale revisions have one explicit destinatio
   const response = await page.goto(`${route}?revision=stale#state.what-counts.opened`);
   expect(response?.status()).toBe(422);
   await expect(page.locator('body')).toContainText('different explanation revision');
-  const staleReading = await page.goto(`${route}?kpLesson=lesson.algebra.what-counts&kpVersion=1&kpProgress=500`);
+  const staleReading = await page.goto(`${route}?kpLesson=lesson.algebra.what-counts&kpVersion=unknown&kpProgress=500`);
   expect(staleReading?.status()).toBe(422);
   await expect(page.locator('body')).toContainText('location.document');
   await expect(page.locator('body')).toContainText('Open /reader/what-counts/');

@@ -865,13 +865,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       clock: visualSample,
       animationProgress,
       motionMode: projection.mode,
-      focus: focusSnapshot,
-      presentationRevision: [
-        activeBeat === undefined
-          ? "no-active-beat"
-          : requiredData(activeBeat, "kpBeat"),
-        focusSnapshot.activeSource ?? "none"
-      ].join(":")
+      // Passage identity is narrative state. The session already receives the
+      // actual focus and must not rebuild equation paint when prose advances.
+      focus: focusSnapshot
     });
     whatCountsAnnotations?.render(risingPassages?.annotation(), chromeFreeLayoutRevision);
     document.body.dataset["kpReaderReviewFrame"] = JSON.stringify([

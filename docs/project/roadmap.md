@@ -3,10 +3,10 @@
 Last Updated: 2026-11-08
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `project-orientation`
-Execution Contract: `run-contract.kp.project-orientation-20261108`
+Current Commitment: `authoring-to-practice`
+Execution Contract: `run-contract.kp.authoring-to-practice-20261108`
 Next Product Milestone: `authoring-revision`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -17,19 +17,20 @@ and progression: authoring → learner adaptation → practice/retrieval → lib
 [The accepted decision](decisions/2026-11-08-authoring-expert-attention.md) records
 why this becomes the organizing direction and what it supersedes.
 
-## Latest approved commitment — complete
+## Current approved commitment
 
-**Make direction, commitments and progress easy to recover.** The user identifies
-getting lost as the main blocker and approves the [orientation delivery](2026-11-08-project-orientation-delivery.md).
-The user accepts the orientation surface. All three work packages are complete:
-short authoritative entrypoints, preserved history, checked agreement with the
-dashboard and a fresh execution lookup. Theseus records the acceptance.
+**Make exceptional explanations repeatable and adaptable.** The user approves
+the [twelve-loop progression](2026-11-08-authoring-to-practice-loops.md), starting
+with faithful restoration of a saved What counts link. The programme preserves
+dependencies and human checkpoints; later scopes sharpen from earlier evidence.
+The prior [orientation delivery](2026-11-08-project-orientation-delivery.md) is
+accepted and complete, with its history and evidence retained.
 
-Continuation now inspects the existing authoring/editor path before selecting
-new implementation. The parallel agent retains task tracking and editor
+Use the inspected existing authoring/editor path for the first real revision.
+The parallel agent retains task tracking and editor
 ownership; strategic records have one designated editor at a time.
 
-## Next product proof — proposed
+## First product proof — approved
 
 **One excellent explanation can be substantively revised through the product.**
 An author changes reasoning and attention choreography, gets useful feedback
@@ -80,3 +81,5 @@ is implied. New ideas stay exploratory until selected.
 The [historical roadmap](roadmap.history-2026-11-08.md) preserves earlier
 commitments, pauses, foundations and supporting-thread links. It is provenance,
 not another queue. [Agent instructions](../../AGENTS.md) retain execution rules.
+The [promotion ledger](threads/animation-library-promotion.md) still tables
+`Apply a 2 × 2 matrix to a vector`; its rank and evidence remain preserved.

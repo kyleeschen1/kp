@@ -59,7 +59,7 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 
     await expect(view.locator("[data-kp-vision-execution]")).toContainText("Read from Theseus");
     await expect(view.locator(".project-vision__progression li")).toHaveCount(4);
     await expect(view.locator("[data-kp-vision-area]")).toHaveCount(6);
-    await expect(view.locator(".project-vision__next").last()).toContainText("not an active run");
+    await expect(view.locator(".project-vision__next").last()).toContainText("approved programme");
     await view.getByText("Supporting capabilities and their boundaries", { exact: true }).click();
     const architecture = view.locator('[data-kp-vision-area="architecture"]');
     await architecture.locator("summary").focus();

@@ -64,6 +64,7 @@ test("authored algebra requires checked source and preserves exact native phase 
   assert.throws(() => unbound.createAnimation(standard), /checked serialized source/);
   const bound = await resolveKpReaderEquationLessonDescriptor("authored-algebra", algebraSource);
   assert.equal(bound.canonicalTransitionSelection, "all");
+  assert.equal(bound.focusPaint, "native-color");
   assert.ok(bound.canonicalSession?.evaluationCertificates?.length);
   assert.ok(bound.canonicalSession?.endpointHandoffs?.length);
   for (let index = 0; index <= 3; index++) assert.equal(bound.projectAnimationProgress!(Math.round(index * 1000 / 3) / 1000), index / 3);

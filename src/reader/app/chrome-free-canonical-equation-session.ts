@@ -481,6 +481,8 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       alignment: context.alignment,
       phaseProgress: framePlan.phaseProgress
     });
+    const colorOnlyFocus = input.descriptor.focusPaint === 'native-color';
+    const focusRevision = JSON.stringify([focus.activeSource ?? "none", focusProjection.visualFocusRefs]);
     const canonicalPaintOwner = compositor.apply({
       renderPlan: context.renderPlan,
       materialPlan: context.materialPlan,
@@ -491,10 +493,11 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       typographyCacheKey: `legacy:${input.equationPresentationProfile.id}`,
       presentationRevision: [
         sampleInput.presentationRevision ?? "host",
-        focus.activeSource ?? "none",
-        ...focusProjection.visualFocusRefs,
+        // Only explicitly declared native-color focus can reuse geometry.
+        ...(colorOnlyFocus ? [] : [focusRevision]),
         salienceRevision
       ].join(":"),
+      ...(colorOnlyFocus ? { colorRevision: focusRevision } : {}),
       measurementIdentity: context.fit.measurementIdentity,
       appliedStageLayout: context.appliedStageLayout
     });

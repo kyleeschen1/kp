@@ -5,21 +5,21 @@ Last Updated: 2026-11-08
 
 ## Current boundary
 
-The [roadmap](../roadmap.md) records accepted orientation infrastructure and proposes
-the authoring/revision product proof next. The [charter](../strategy.md) describes
+The [roadmap](../roadmap.md) records accepted orientation infrastructure and the
+approved authoring-to-practice programme. The [charter](../strategy.md) describes
 the accepted author-first direction and its learner/practice/library horizon.
 The [decision](../decisions/2026-11-08-authoring-expert-attention.md) preserves
 earlier practice ambitions while changing their ordering.
 
-Latest approved scope, now complete: [orientation delivery](../2026-11-08-project-orientation-delivery.md).
-Theseus contract: `run-contract.kp.project-orientation-20261108`.
+Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
+Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
 Read its live state; this index does not copy slice progress. The parallel agent
 retains todo tracking and independent editor ownership. Do not assume this
 checkout's old workbench proposal represents that agent's current implementation.
 Source inspection found its existing native-conversation/website-preview candidate.
 The [handoff](../reviews/2026-11-08-project-orientation.md) names its exact source
-checkout and remaining evidence limits. The first continuation is to use that
-path for a real revision, not reconstruct conversation or preview infrastructure.
+checkout and remaining evidence limits. Restore the reported saved link, then
+use that path for a real revision. Orientation remains accepted and complete.
 
 ## Retrieve for a named question
 

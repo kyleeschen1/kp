@@ -1,0 +1,101 @@
+{
+  "id": "run-contract.kp.authoring-to-practice-20261108",
+  "kind": "run-contract",
+  "title": "Authoring to connected practice",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.authoring-to-practice-20261108.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-authoring-to-practice-loops.md",
+      "summary": "User approves the sequence and requests saved version-1 link repair first."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts",
+    "npm run visual:anchored-algebra",
+    "npm run test:project-vision",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "User-approved twelve-loop progression with saved-link repair first; bounded KP work, six-hour ceiling and forty-five-minute closeout reserve. Preserve independent editor ownership."
+  ],
+  "disallowedWork": [
+    "No waived visual gates, inferred learning outcomes, paid service calls, new global renderer or publication. Later work requires demonstrated prerequisites."
+  ],
+  "goal": "Repair saved reading context, then establish real responsive authoring and progress through reviewed adaptation/practice proofs.",
+  "target": "task.kp.authoring-to-practice-20261108",
+  "slices": [
+    {
+      "id": "saved-link",
+      "title": "Restore the reported saved reading",
+      "summary": "Exact version-1 URL restored from retained eight-beat prose; source hash and cross-reading boundaries enforced; Firefox and Chromium desktop/phone load, reload, navigation and reading-position checks pass; shared server returns 200.",
+      "status": "complete"
+    },
+    {
+      "id": "real-revision",
+      "title": "Make one substantive authoring revision",
+      "summary": "Substantive candidate explains why count and quantity multiply; existing accepted reader, source and choreography retained. Manuscript and registry only; human editorial judgment remains pending.",
+      "status": "in-progress"
+    },
+    {
+      "id": "responsive",
+      "title": "Remove measured iteration friction",
+      "status": "planned"
+    },
+    {
+      "id": "attention",
+      "title": "Author precise attention",
+      "status": "planned"
+    },
+    {
+      "id": "featured",
+      "title": "Develop one featured-quality passage",
+      "status": "planned"
+    },
+    {
+      "id": "second",
+      "title": "Demonstrate cheaper second explanation",
+      "status": "planned"
+    },
+    {
+      "id": "domain",
+      "title": "Pressure a supported domain boundary",
+      "status": "planned"
+    },
+    {
+      "id": "question",
+      "title": "Answer a situated learner question",
+      "status": "planned"
+    },
+    {
+      "id": "adaptation",
+      "title": "Preserve intent through adaptation",
+      "status": "planned"
+    },
+    {
+      "id": "interpretation",
+      "title": "Observe learner interpretation",
+      "status": "planned"
+    },
+    {
+      "id": "problems",
+      "title": "Develop a checked problem family",
+      "status": "planned"
+    },
+    {
+      "id": "retrieval",
+      "title": "Connect retrieval to explanation",
+      "status": "planned"
+    },
+    {
+      "id": "collection",
+      "title": "Assemble one coherent small collection",
+      "status": "planned"
+    }
+  ]
+}

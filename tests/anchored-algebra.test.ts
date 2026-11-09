@@ -5,7 +5,7 @@ import source from "../content/authoring/algebra/what-counts.json" with { type: 
 import readings from "../content/authoring/algebra/what-counts-readings.json" with { type: "json" };
 import { compile } from "../src/authoring/algebra/compile.ts";
 import { AnchoredAlgebraGap, bindAnchoredCommentary } from "../src/reader/app/what-counts-commentary.ts";
-import { compileWhatCountsLesson, registerWhatCountsReadings } from "../scripts/what-counts-reader-page.ts";
+import { compileWhatCountsLesson, readWhatCountsArticle, registerWhatCountsReadings } from "../scripts/what-counts-reader-page.ts";
 import { parseKpLessonMarkdown } from "../src/reader/compiler/lesson-markdown-parser.ts";
 
 test("commentary resolves exact native views and only mathematical stops", () => {
@@ -40,7 +40,7 @@ test("static page contains every equation and commentary without enhancement", (
   assert.ok(!html.includes('data-composed-card'));
   assert.throws(() => compileWhatCountsLesson('/reader/what-counts/?revision=stale'), AnchoredAlgebraGap);
   for (const params of [
-    'kpLesson=lesson.algebra.what-counts&kpVersion=1&kpProgress=500',
+    'kpLesson=lesson.algebra.what-counts&kpVersion=unknown&kpProgress=500',
     'kpLesson=lesson.other&kpVersion=2&kpProgress=500',
     'kpLesson=lesson.algebra.what-counts&kpVersion=2&kpProgress=NaN'
   ]) assert.throws(() => compileWhatCountsLesson(`/reader/what-counts/?${params}`),
@@ -107,7 +107,7 @@ test("a situated response preserves only a complete checked original address", (
   for (const invalid of [
     '/reader/what-counts/', 'https://example.com/', '//example.com/reader/what-counts/',
     original.replace('/reader/what-counts/', '/reader/solve-fractional-linear/'),
-    original.replace('kpVersion=2', 'kpVersion=1'), original.replace('kpReading=0.1', 'kpReading=NaN'),
+    original.replace('kpVersion=2', 'kpVersion=unknown'), original.replace('kpReading=0.1', 'kpReading=NaN'),
     original.replace('kpReading=0.1', 'kpReading=2'), original.replace('kpFocus=', 'ignoredFocus='),
     original.replace('left-factor', 'missing'), original.replace('#state.what-counts.repeated', '#missing'),
     original.replace('&kpProgress=0', '&kpCheckpoint=missing&kpProgress=0'),
@@ -115,4 +115,31 @@ test("a situated response preserves only a complete checked original address", (
     original.replace('&kpProgress=0', '&revision=stale&kpProgress=0')
   ]) assert.throws(() => compileWhatCountsLesson(response(invalid)),
     (error: unknown) => error instanceof AnchoredAlgebraGap && error.path === 'location.returnTo');
+});
+
+test("saved version-1 coordinates select retained prose rather than the current manuscript", () => {
+  const saved = '/reader/what-counts/?kpCheckpoint=state.what-counts.collected&kpLesson=lesson.algebra.what-counts&kpMotion=system&kpProfile=standard&kpProgress=333&kpProjection=equation.symbolic&kpReading=0.454622&kpVersion=1#state.what-counts.collected';
+  const html = compileWhatCountsLesson(saved);
+  assert.ok(html.includes('data-kp-version="1"'));
+  assert.equal((html.match(/data-kp-rising-beat=/g) ?? []).length, 8);
+  for (const state of source.states) assert.ok(html.includes(state.narration));
+  assert.ok(!html.includes('passage.what-counts.same-unit'));
+  assert.ok(html.includes('Read the latest explanation'));
+  const alteredArchive = { ...readings.whole.previous[0]!, sha256: '0'.repeat(64) };
+  assert.throws(() => readWhatCountsArticle(alteredArchive),
+    (error: unknown) => error instanceof AnchoredAlgebraGap && error.path === 'reader.archive');
+  assert.ok(compileWhatCountsLesson().includes('data-kp-version="2"'));
+  assert.throws(() => compileWhatCountsLesson(saved.replace('?kpCheckpoint', '?reading=zero&kpCheckpoint')), AnchoredAlgebraGap);
+  assert.throws(() => registerWhatCountsReadings({ ...readings, whole: {
+    ...readings.whole, previous: readings.whole.previous.map(item => ({ ...item, sha256: "" }))
+  } }), AnchoredAlgebraGap);
+  assert.throws(() => registerWhatCountsReadings({ ...readings, whole: {
+    ...readings.whole, previous: readings.whole.previous.map(item => ({ ...item, version: readings.zero.version }))
+  } }), AnchoredAlgebraGap);
+});
+
+test("a situated follow-up returns to the exact retained original revision", () => {
+  const original = '/reader/what-counts/?kpLesson=lesson.algebra.what-counts&kpVersion=1&kpProgress=0&kpReading=0.1&kpFocus=state.what-counts.repeated.paint.left-factor#state.what-counts.repeated';
+  const html = compileWhatCountsLesson('/reader/what-counts/?reading=zero&returnTo=' + encodeURIComponent(original));
+  assert.ok(html.includes('href="' + original.replaceAll('&', '&amp;') + '"'));
 });

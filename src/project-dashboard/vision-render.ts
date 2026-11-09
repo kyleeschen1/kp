@@ -27,10 +27,12 @@ export function renderProjectVision(vision: ProjectVision = projectVision, now =
     <div class="project-vision__section-heading"><h3>The product progression</h3><p>Accepted direction · horizons are not delivery approvals</p></div>
     <ol class="project-vision__progression">${vision.progression.map(stage => `<li><h4>${escape(stage.title)}</h4><p>${escape(stage.outcome)}</p></li>`).join("")}</ol>
     <section class="project-vision__next" aria-labelledby="project-vision-next-title">
-      <div><span class="project-vision__badge">Next product proof · proposed</span><h3 id="project-vision-next-title">${escape(next.outcome.title)}</h3>
+      <div><span class="project-vision__badge">Next product proof · ${escape(next.outcome.authority)}</span><h3 id="project-vision-next-title">${escape(next.outcome.title)}</h3>
         <p><strong>Finish line.</strong> ${escape(next.outcome.finish)}</p></div>
       <a href="#${escape(next.id)}">See scope &amp; evidence →</a>
-      <p class="project-vision__note">This recommendation is not an active run. Inspect existing editor capabilities with their owner, then select the bounded missing connection. The parallel agent retains task tracking.</p>
+      <p class="project-vision__note">${next.outcome.authority === "approved"
+        ? "This proof belongs to the approved programme. Follow its dependency and review boundaries; execution stays in the named contract."
+        : "This recommendation is not an active run. Select its bounded scope before implementation."} The parallel agent retains broader task tracking.</p>
     </section>
     <section class="project-vision__questions" aria-label="Uncertainty and next judgment">
       <div><h3>What remains unproved</h3><p>${escape(vision.uncertainty)}</p></div>
@@ -74,7 +76,7 @@ function renderCompletion(item: ProjectVision["completed"][number]): string {
 
 function renderArea(area: VisionArea): string {
   return `<article class="project-vision__area" id="${escape(area.id)}" data-kp-vision-area="${escape(area.id)}">
-    <div class="project-vision__area-title"><h3>${escape(area.title)}</h3><span>${area.horizon === "next" ? "Next proposal" : "Horizon"}</span></div>
+    <div class="project-vision__area-title"><h3>${escape(area.title)}</h3><span>${area.horizon === "next" ? (area.outcome.authority === "approved" ? "Selected proof" : "Next proposal") : "Horizon"}</span></div>
     <p>${escape(area.destination)}</p>
     <details><summary>${escape(area.outcome.title)}</summary><div class="project-vision__area-detail">
       <h4>What exists</h4><p>${escape(area.established)} ${link(area.evidence)}</p>

@@ -1,0 +1,61 @@
+{
+  "id": "task.kp.authoring-to-practice-20261108",
+  "kind": "task",
+  "title": "Make exceptional explanations repeatable and adaptable",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-08-authoring-to-practice-loops.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T02:03:51.463Z",
+      "notes": "Complete app, Node, test, Svelte and domain type checks passed for saved-link restoration and explicit programme approval."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep saved.version-1",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T02:03:53.137Z",
+      "notes": "Exact user URL: Chromium and Firefox, 1100 and 390 widths, load/reload, eight original beats, native endpoint, saved reading position and TOC reversal. Shared review server also returns HTTP200."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep transition.diagnostic",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T02:20:30.287Z",
+      "notes": "Exact saved-link first scroll and six versioned transitions; focus-caused compositor builds drop to zero. One first-entry preparation hitch remains; no general frame-rate guarantee."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep saved.version",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T02:20:31.656Z",
+      "notes": "Final preservation cohort used saved version, annotation fades, both readers, reader gives, and focused follow-up selection: ten Chromium/Firefox cases passed after the compositor repair."
+    },
+    {
+      "command": "npm test",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T02:20:32.484Z",
+      "notes": "Initial run found a missing roadmap promotion-ledger link; repaired and promotion gate passed on rerun. Broad suite then deliberately terminated to remove CPU load during user-reported motion diagnosis; no clean full-suite claim."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep \"saved version|annotation fades|both readers|reader gives|focused follow-up\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T02:21:07.541Z",
+      "notes": "Exact final post-repair command; ten cases passed across Chromium and Firefox."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Saved-link restoration is implemented; Firefox motion regression pressure now demonstrates zero focus-caused compositor builds. The user reports background-load reduction helped but did not remove hitches before this repair. Authoring candidate is separate and unreviewed; later loops have not executed."
+  }
+}

@@ -10,6 +10,9 @@ export const authoredAlgebraDescriptor: KpReaderEquationLessonDescriptor = {
     const draft = compile(source), count = draft.animation.transformations.length;
     const descriptor = algebraNativeDescriptor(draft.animation, composedAlgebraEndpointsV2(draft));
     return { ...descriptor, id: "authored-algebra",
+      // Reader focus changes native ink color, never geometry. Reuse captured
+      // paint through focus release instead of rebuilding during a scroll.
+      focusPaint: 'native-color',
       canonicalSession: { evaluationCertificates: draft.steps.flatMap(step => step.evaluationCertificates), endpointHandoffs: draft.handoffs, prewarmAdjacentTransitions: false },
       // Serialized integer checkpoints map exactly to semantic phase boundaries;
       // linear interpolation preserves every interior position without an epsilon.

@@ -38,7 +38,7 @@ export function checkOrientationDocuments(vision: ProjectVision, docs: Orientati
   field(docs.roadmap, "Execution Contract", vision.commitment.contractId);
   const next = vision.areas.find(area => area.horizon === "next");
   if (next) field(docs.roadmap, "Next Product Milestone", next.outcome.id);
-  field(docs.roadmap, "Milestone Authority", "proposed");
+  if (next) field(docs.roadmap, "Milestone Authority", next.outcome.authority);
   const limits = { roadmap: 650, strategy: 900, thread: 450 };
   for (const key of Object.keys(limits) as (keyof OrientationDocuments)[]) {
     const words = countWords(docs[key]);

@@ -5,6 +5,7 @@ export interface VisionSource {
 
 export interface VisionOutcome {
   readonly id: string;
+  readonly authority: "proposed" | "approved";
   readonly title: string;
   readonly finish: string;
   readonly excludes: string;
@@ -98,6 +99,7 @@ export function validateProjectVision(vision: ProjectVision): readonly string[] 
   for (const area of vision.areas) {
     identity(area.id);
     identity(area.outcome.id);
+    if (!["proposed", "approved"].includes(area.outcome.authority)) issues.push("Missing outcome authority");
     for (const [label, value] of Object.entries({ title: area.title, destination: area.destination,
       established: area.established, outcome: area.outcome.title,
       finish: area.outcome.finish, exclusions: area.outcome.excludes })) text(label, value);
