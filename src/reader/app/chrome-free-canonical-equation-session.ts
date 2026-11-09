@@ -235,8 +235,10 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
     },
     compilePurePlan: adapter.compileKpReaderEquationPureScenePlan,
     observeScene: adapter.observeKpNativeKatexRenderedScene,
-    enableAdjacentPrewarm: input.prewarmAdjacentTransitions !== false,
-    enablePurePlanCache: true,
+    focusPaint: input.descriptor.focusPaint,
+    // A salience hook can change geometry in an inactive scene. Without a
+    // pure projection of that revision, only prepare when it becomes active.
+    allowAdjacentPreparation: input.prewarmAdjacentTransitions !== false && input.renderSalience === undefined,
     requireAppliedStageLayout: input.descriptor.stageLayoutCompiler !== undefined
   });
   stage.dataset["kpReaderCanonicalEquationSession"] =
@@ -316,6 +318,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   let sequence = 0;
   let previousProgress = 0;
   let disposed = false;
+  let lastPrewarm: { readonly layout: KpCanonicalEquationStageLayout; readonly key: string } | undefined;
 
   const invalidate = (): void => {
     if (disposed) return;
@@ -483,7 +486,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
     });
     const colorOnlyFocus = input.descriptor.focusPaint === 'native-color';
     const focusRevision = JSON.stringify([focus.activeSource ?? "none", focusProjection.visualFocusRefs]);
-    const canonicalPaintOwner = compositor.apply({
+    const canonicalFrame = {
       renderPlan: context.renderPlan,
       materialPlan: context.materialPlan,
       fitSurface: context.fitSurface,
@@ -500,7 +503,8 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       ...(colorOnlyFocus ? { colorRevision: focusRevision } : {}),
       measurementIdentity: context.fit.measurementIdentity,
       appliedStageLayout: context.appliedStageLayout
-    });
+    };
+    const canonicalPaintOwner = compositor.apply(canonicalFrame);
     if (!canonicalPaintOwner) {
       throw new Error(
         `Canonical compositor rejected ${framePlan.transitionId}.`
@@ -509,27 +513,27 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
     const activeIndex = transitionPolicy.transitionIds.indexOf(
       framePlan.transitionId
     );
-    compositor.prewarm([activeIndex - 1, activeIndex + 1].flatMap((index) => {
-      const adjacentId = transitionPolicy.transitionIds[index];
-      const adjacent = adjacentId === undefined
-        ? undefined
-        : measured.contexts.get(adjacentId);
-      return adjacent === undefined ? [] : [{
-        renderPlan: adjacent.renderPlan,
-        materialPlan: adjacent.materialPlan,
-        fitSurface: adjacent.fitSurface,
-        progress: 0,
-        motionMode,
-        fontReadiness,
-        typographyCacheKey: `legacy:${input.equationPresentationProfile.id}`,
-        presentationRevision: "adjacent-prewarm",
-        measurementIdentity: adjacent.fit.measurementIdentity,
-        appliedStageLayout: adjacent.appliedStageLayout
-      }];
-    }), () => !layoutInvalidated && layout === measured &&
-      viewport.clientWidth === context.fit.viewportWidth &&
-      viewport.clientHeight === context.fit.viewportHeight
-    );
+    const prewarmKey = JSON.stringify([framePlan.transitionId, motionMode,
+      fontReadiness.revision, canonicalFrame.presentationRevision]);
+    if (lastPrewarm?.layout !== measured || lastPrewarm.key !== prewarmKey) {
+      lastPrewarm = { layout: measured, key: prewarmKey };
+      compositor.prewarm([activeIndex - 1, activeIndex + 1].flatMap((index) => {
+        const adjacentId = transitionPolicy.transitionIds[index];
+        const adjacent = adjacentId === undefined ? undefined : measured.contexts.get(adjacentId);
+        return adjacent === undefined ? [] : [{
+          ...canonicalFrame,
+          renderPlan: adjacent.renderPlan,
+          materialPlan: adjacent.materialPlan,
+          fitSurface: adjacent.fitSurface,
+          progress: 0,
+          measurementIdentity: adjacent.fit.measurementIdentity,
+          appliedStageLayout: adjacent.appliedStageLayout
+        }];
+      }), () => !layoutInvalidated && layout === measured &&
+        viewport.clientWidth === context.fit.viewportWidth &&
+        viewport.clientHeight === context.fit.viewportHeight
+      );
+    }
     syncAnnihilationWitness({
       stage,
       witness: annihilationWitness,

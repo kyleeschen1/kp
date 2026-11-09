@@ -66,10 +66,31 @@
       "scope": "focused",
       "checkedAt": "2026-11-09T03:18:17.479Z",
       "notes": "Navigation-time assertions pass for saved v1, both openings, and fractional reader at desktop and phone widths in Chromium and Firefox. Native ink is stable after first paint. Failure/delay and standard-reader canaries also pass; see saved-reading-and-motion review for commands, limitations, unit and type evidence."
+    },
+    {
+      "command": "npm run visual:reader-preparation -- --project=chromium --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T03:55:20.745Z",
+      "notes": "Final run: 7 passed, one intentional Chromium-only ownership-canary skip in Firefox. Three readers preserve paint through reversal, held frames, motion revision, resize, fonts and disposal. Stale pure-plan color reuse repaired at shared cache boundary."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep \"startup keeps|saved version-1|both readers release|annotation fades|transition diagnostic\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T03:55:22.096Z",
+      "notes": "9 passed, one intentional Firefox-only diagnostic skip in Chromium. Startup, saved v1, focus and fades preserved. Cold saved-link transition still measured 51ms; no universal smoothness claim."
+    },
+    {
+      "command": "npm run test:equation-surface-preservation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T03:55:22.898Z",
+      "notes": "11 preservation tests passed; 28 focused runtime/reading/startup tests, app/Node/test type checks and 75 project vision/orientation tests also passed. See source-linked motion review for commands and limits."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Startup repair is checked: stable measured theater, correctly restored first native paint, and static failure/no-JS recovery. Fractional reader comparison identifies different prepared-scene retention and idle-preparation policies; motion parity remains unproved and that policy is unchanged. Authoring programme remains 1 of 13 complete."
+    "summary": "Automatic preparation amendment complete and verified. Broader programme remains open; real-revision editorial judgment is next. Cold preparation is still measurable; avoid repeating accepted typography/startup work or claiming live fast generation."
   }
 }

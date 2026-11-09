@@ -249,3 +249,76 @@ to appear, then scroll forward and reverse. The theater and equation should no
 longer jump during initialization. Distinguish that startup correction from the
 remaining cold transition preparation. The broader authoring programme remains
 1/13 complete; this is a bounded repair within its saved-reading prerequisite.
+
+## Automatic preparation and reuse — approved amendment
+
+The user approved implementing the shared policy after discussing automatic
+optimization for rapid authoring. Both host adapters now derive preparation
+from the renderer's native-color capability. Authors supply no cache capacities,
+prewarm flags or lesson-specific optimization code. The session retains at most
+four prepared transitions including the active one, or fewer for a smaller
+cohort. Unknown/geometry-sensitive paint keeps one active scene and does not
+speculate. Embedding hosts can still prohibit speculative work during playback.
+
+The reusable host now passes the same presentation/color identity to preparation
+and activation, and schedules neighbors only when that request changes. Held
+mathematical frames skip redundant renderer applies while native color refresh
+and host annotation/prose work continue. Idle preparation requires a real idle
+budget, at least 120ms without foreground samples, and a previously observed
+preparation cost no greater than 45ms. No timeout forces a monolithic build.
+
+The violated invariant was that equal supported renderer capabilities should
+receive the same reuse policy. Its owner is the shared canonical session, not
+each lesson descriptor. The third caller also exposed a distinct invalid state:
+geometry identity alone cannot authorize a cached pure plan containing exact
+paint styles. A reduced/full-motion round trip on divide-both-sides reused an
+old colored plan against neutral measured ink. The final cache entry requires
+an exact fingerprint of already-observed endpoint paint and geometry; the
+compositor's strict signature validation remains intact. Font/layout invalidation
+clears measured and pure caches and retires prepared sessions. New source sessions
+own separate caches; stale reading/source hashes remain rejected by existing tests.
+
+Measured result: before this change, three forward/reverse passes through What
+counts created **12 additional geometry sessions**. The final same test creates
+**zero**, as do fractional-linear and divide-both-sides. Revisited glyph identities
+match, positions/dimensions remain within 0.25px, and opacity is compared too;
+hidden transitions paint no visible glyphs. Resize, font changes, motion-mode revision,
+held frames and disposal are exercised in both Chromium and Firefox.
+
+Cold cost remains separate. Final local first-traversal preparation totals
+(including startup; not one frame) were 117/180ms for What counts, 140/164ms for
+fractional-linear and 33/40ms for divide-both-sides, Chromium/Firefox respectively.
+These single development-server runs used actual idle deadlines; no speculative
+build ran in that final timing cohort. A separate Chromium ownership canary uses
+a controlled clock/budget to execute actual hidden preparation, prove unchanged
+visible paint, and consume the prepared neighbor without rebuilding. Its timing
+is deliberately excluded from performance evidence.
+
+The exact saved-link Firefox diagnostic still encountered a 51ms cold build and
+a 58ms callback interval. Warm v1/v2 sweeps built no geometry, but one interval
+still reached 51ms. The policy removes repeated work; it does not yet bound an
+uninterruptible cold build or prove universal smoothness, production CWV, or
+ChatGPT-level content-generation latency. The next runtime optimization, if
+prioritized, is reducing/splitting measured cold preparation at its existing owner.
+
+Verification for this amendment:
+
+- `npm run visual:reader-preparation -- --project=chromium --project=firefox`:
+  final run 7 passed, 1 intentional skip (the controlled ownership canary runs
+  once in Chromium). This is the repeatable three-reader regression command.
+- `npm run visual:anchored-algebra -- --project=firefox --grep 'startup keeps|saved version-1|both readers release|annotation fades|transition diagnostic'`:
+  9 passed, 1 intentional skip; includes both engines, desktop/phone startup and
+  the exact saved link. Chromium startup CLS remained zero in all eight cases.
+- 28 focused reading, startup, host and idle-queue tests; 11 equation preservation
+  tests; app, Node and test type checks; project vision checks and Theseus validation.
+- Initial tests deliberately reproduced the 12 extra builds. Test setup repairs
+  selected the third reader's canonical phase and its actual motion select;
+  a TypeScript narrowing error was repaired. The newly exposed stale-color
+  runtime failure was fixed at the shared cache boundary before the final pass.
+
+Inspect on the existing 8011 server: open the same saved What counts link, scroll
+through the equations and reverse across them twice. Revisited scenes should
+retain their motion/paint without recompilation; first encounters can still hitch.
+For automated evidence run the preparation command above. No new visual treatment
+or human reapproval is required for this bounded repair. Theseus owns live counts;
+the broader authoring-to-practice programme is not complete.

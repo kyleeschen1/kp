@@ -72,6 +72,7 @@ export interface KpReaderCanonicalEquationSessionInspection {
   readonly purePlanCacheSize: number;
   readonly adjacentPrewarmEnabled: boolean;
   readonly retainedSessionCount: number;
+  readonly preparedCapacity: number;
 }
 
 // A replacement session on the same DOM must not inherit retired paint templates.
@@ -84,10 +85,10 @@ export function createKpReaderCanonicalEquationSession(input: {
   readonly compilePurePlan: KpReaderEquationPureScenePlanCompiler;
   readonly observeScene: KpObserveNativeKatexScene;
   readonly requireAppliedStageLayout?: boolean | undefined;
-  readonly enablePurePlanCache?: boolean | undefined;
-  readonly enableAdjacentPrewarm?: boolean | undefined;
-  /** Includes the active transition. Only native-color callers opt in. */
-  readonly preparedCapacity?: number | undefined;
+  /** A renderer capability, never an author-selected cache size. */
+  readonly focusPaint?: "native-color" | undefined;
+  /** Embedding hosts may prohibit speculative work while they own playback. */
+  readonly allowAdjacentPreparation?: boolean | undefined;
 }): KpReaderCanonicalEquationSession {
   if (
     input.transitionIds.length === 0 ||
@@ -98,10 +99,11 @@ export function createKpReaderCanonicalEquationSession(input: {
     );
   }
   const transitionIds = Object.freeze([...input.transitionIds]);
-  const preparedCapacity = input.preparedCapacity ?? 1;
-  if (!Number.isInteger(preparedCapacity) || preparedCapacity < 1 || preparedCapacity > 4) {
-    throw new Error('Prepared reader capacity must be an integer from one to four.');
-  }
+  // Only color-independent geometry can safely retain mounted native paint.
+  // Bound the whole session, including its active transition, centrally.
+  const preparedCapacity = input.focusPaint === 'native-color'
+    ? Math.min(4, transitionIds.length) : 1;
+  const adjacentPrewarmEnabled = preparedCapacity > 1 && input.allowAdjacentPreparation !== false;
   const retained = new Map<string, {
     readonly surface: HTMLElement;
     readonly restore: () => void;
@@ -109,6 +111,11 @@ export function createKpReaderCanonicalEquationSession(input: {
   }>();
   let session:
     ReturnType<KpReaderEquationSceneCompositorFactory> | undefined;
+  let appliedFrame: {
+    readonly renderer: ReturnType<KpReaderEquationSceneCompositorFactory>;
+    readonly progress: number;
+    readonly ownership: ReturnType<ReturnType<KpReaderEquationSceneCompositorFactory>["apply"]>;
+  } | undefined;
   let sessionKey: string | undefined;
   let colorRevision: string | undefined;
   let colorRefresh: { window: Window; id: number } | undefined;
@@ -119,9 +126,10 @@ export function createKpReaderCanonicalEquationSession(input: {
   let activeTransitionId: string | undefined;
   let disposed = false;
   let paintGeneration = nextPaintGeneration++;
-  const purePlanCache = createKpReaderCompositorPurePlanCache<
-    ReturnType<KpReaderEquationPureScenePlanCompiler>
-  >();
+  const purePlanCache = createKpReaderCompositorPurePlanCache<{
+    readonly observedPaintKey: string;
+    readonly plan: ReturnType<KpReaderEquationPureScenePlanCompiler>;
+  }>();
   const sessionHandoff = createKpReaderLatestSessionHandoff();
   let prewarmQueue: KpReaderIdlePrewarmQueue | undefined;
   let lastForegroundAt = 0;
@@ -133,6 +141,7 @@ export function createKpReaderCanonicalEquationSession(input: {
   ): void => {
     if (colorRefresh !== undefined) colorRefresh.window.cancelAnimationFrame(colorRefresh.id);
     colorRefresh = undefined;
+    appliedFrame = undefined;
     const savedSession = session;
     const savedSurface = structuralFitSurface;
     const savedLayer = materialLayer;
@@ -269,10 +278,22 @@ export function createKpReaderCanonicalEquationSession(input: {
           if (measuredScenes.size > 4) measuredScenes.delete(measuredScenes.keys().next().value!);
         }
       }
-      let purePlan = input.enablePurePlanCache === true ? purePlanCache.get(geometryIdentity) : undefined;
+      // A mounted renderer refreshes colors independently; a pure plan still
+      // contains exact observed paint. Geometry identity alone cannot authorize
+      // that plan after retirement, focus changes or a motion-mode round trip.
+      // Fingerprint existing observations here; this adds no DOM reads.
+      const observedPaintKey = JSON.stringify([sceneInput.source, sceneInput.target].map(scene => [
+        scene.fontRevision, scene.viewportKey,
+        scene.atoms.map(atom => [atom.id, atom.visualKey, atom.styleFingerprint,
+          atom.rect, atom.baselineY, atom.zOrder]),
+        scene.groups.map(group => [group.id, group.atomIds, group.styleFingerprint,
+          group.rect, group.baselineY])
+      ]));
+      const cached = purePlanCache.get(geometryIdentity);
+      let purePlan = cached?.observedPaintKey === observedPaintKey ? cached.plan : undefined;
       if (purePlan === undefined) {
         purePlan = input.compilePurePlan(sceneInput);
-        if (input.enablePurePlanCache === true) purePlanCache.set(geometryIdentity, purePlan);
+        purePlanCache.set(geometryIdentity, { observedPaintKey, plan: purePlan });
         recordPureCompilation(ownerWindow);
       } else if (ownerWindow !== null) {
         recordKpReaderPurePlanCacheHit(ownerWindow);
@@ -394,7 +415,13 @@ export function createKpReaderCanonicalEquationSession(input: {
           "Reader canonical equation session handoff committed no owner."
         );
       }
-      const ownership = activeSession.apply(frame.progress);
+      // Narrative scrolling can hold the exact same mathematical frame. Color
+      // refresh retains its own clock; unchanged paint needs no second apply.
+      const previousFrame = appliedFrame;
+      const reusePaint = previousFrame !== undefined && previousFrame.renderer === activeSession &&
+        previousFrame.progress === frame.progress && colorRevision === frame.colorRevision;
+      const ownership = reusePaint ? previousFrame.ownership : activeSession.apply(frame.progress);
+      appliedFrame = { renderer: activeSession, progress: frame.progress, ownership };
       if (frame.colorRevision !== undefined && frame.colorRevision !== colorRevision) {
         if (colorRefresh !== undefined) colorRefresh.window.cancelAnimationFrame(colorRefresh.id);
         const view = frame.fitSurface.ownerDocument.defaultView;
@@ -410,7 +437,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         colorRevision = frame.colorRevision;
       }
       const ownerWindow = frame.fitSurface.ownerDocument.defaultView;
-      if (ownerWindow !== null) {
+      if (ownerWindow !== null && !reusePaint) {
         recordKpReaderCanonicalSessionApply(ownerWindow);
       }
       frame.fitSurface.dataset["kpReaderCanonicalEquationSession"] = "active";
@@ -428,39 +455,24 @@ export function createKpReaderCanonicalEquationSession(input: {
       return true;
     },
     prewarm(frames, isMeasurementCurrent) {
-      // Prewarming is promoted exemplar-by-exemplar because presentation
-      // style is part of a pure plan. Unreviewed families retain safe
-      // synchronous cache misses rather than speculatively sharing styles.
-      if (disposed || input.enableAdjacentPrewarm !== true) return;
+      if (disposed || !adjacentPrewarmEnabled) return;
       const firstWindow =
         frames[0]?.fitSurface.ownerDocument.defaultView ?? null;
       if (firstWindow === null) return;
-      const prepareMounted = preparedCapacity > 1;
       // A full measured preparation is not interruptible. Skip it on browsers
       // without idle budgets and after a measured task exceeds a normal idle
       // window; never force that work onto a moving scroll frame by timeout.
-      if (prepareMounted && (typeof firstWindow.requestIdleCallback !== 'function' || longestPreparationMs > 45)) {
+      if (typeof firstWindow.requestIdleCallback !== 'function' || longestPreparationMs > 45) {
         prewarmQueue?.cancel(); return;
       }
       prewarmQueue ??= createKpReaderIdlePrewarmQueue({
-        maximumPending: prepareMounted ? 1 : 2,
-        ...(prepareMounted ? { minimumIdleMs: 45, allowTimeout: false,
-          isReady: () => firstWindow.performance.now() - lastForegroundAt >= 120 } : {}),
+        maximumPending: 1,
+        minimumIdleMs: 45,
+        allowTimeout: false,
+        isReady: () => firstWindow.performance.now() - lastForegroundAt >= 120,
         clock: {
-          request: (callback) =>
-            typeof firstWindow.requestIdleCallback === "function"
-              ? firstWindow.requestIdleCallback(callback, prepareMounted ? {} : { timeout: 250 })
-              : firstWindow.setTimeout(() => callback({
-                  didTimeout: true,
-                  timeRemaining: () => 0
-                }), 0),
-          cancel: (requestId) => {
-            if (typeof firstWindow.cancelIdleCallback === "function") {
-              firstWindow.cancelIdleCallback(requestId);
-            } else {
-              firstWindow.clearTimeout(requestId);
-            }
-          }
+          request: callback => firstWindow.requestIdleCallback(callback),
+          cancel: requestId => firstWindow.cancelIdleCallback(requestId)
         }
       });
       prewarmQueue.replace(frames.flatMap((frame) => {
@@ -473,7 +485,7 @@ export function createKpReaderCanonicalEquationSession(input: {
         }
         const geometryIdentity = geometryIdentityFor(frame, transitionId);
         const preparedKey = JSON.stringify(preparedFrameParts(frame, transitionId));
-        if (prepareMounted && (preparedKey === sessionKey || retained.has(preparedKey))) return [];
+        if (preparedKey === sessionKey || retained.has(preparedKey)) return [];
         return [{
           id: geometryIdentity.key,
           run: () => {
@@ -481,48 +493,37 @@ export function createKpReaderCanonicalEquationSession(input: {
             // Resize/font changes can precede observer-driven cancellation.
             // Never combine newly observed paint with a queued old certificate.
             if (geometryIdentityFor(frame, transitionId).key !== geometryIdentity.key) return;
-            if (prepareMounted) {
-              if (longestPreparationMs > 45) return;
-              if (frame.colorRevision === undefined || retained.size + (session === undefined ? 0 : 1) >= preparedCapacity) return;
-              const host = frame.fitSurface.closest<HTMLElement>('[data-kp-reader-transition]');
-              if (host?.dataset['kpReaderTransitionActive'] !== 'false'
-                || firstWindow.getComputedStyle(host).opacity !== '0'
-                || frame.fitSurface.querySelector('[data-kp-editor-equation-material-layer]') !== null) return;
-              const started = firstWindow.performance.now();
-              // The host's zero opacity still excludes all paint. Measure normal
-              // subtree visibility so clones do not freeze inherited hidden ink.
-              const previousVisibility = frame.fitSurface.style.visibility;
-              let prepared: ReturnType<typeof buildPrepared>;
-              try {
-                frame.fitSurface.style.visibility = 'visible';
-                prepared = buildPrepared(frame, transitionId, true);
-              } finally { frame.fitSurface.style.visibility = previousVisibility; }
-              prepared.renderer.apply(0);
-              const duration = firstWindow.performance.now() - started;
-              longestPreparationMs = Math.max(longestPreparationMs, duration);
-              retained.set(preparedKey, { surface: frame.fitSurface,
-                restore: () => {
-                  session = prepared.renderer; sessionKey = preparedKey;
-                  structuralFitSurface = frame.fitSurface; structuralSessionKey = undefined;
-                  materialLayer = prepared.layer; activeTransitionId = transitionId; colorRevision = undefined;
-                },
-                retire: (reason = 'scene-replaced') => {
-                  prepared.renderer.retire({ kind: 'native-katex-paint-preserving-retirement', reason,
-                    structuralSuccession: 'retire-preserving-paint' });
-                  prepared.layer.remove();
-                }
-              });
-              recordKpReaderCanonicalSessionBuild(firstWindow, duration, ['ahead']);
-              recordKpReaderAdjacentPrewarmCompilation(firstWindow);
-              return;
-            }
-            if (purePlanCache.get(geometryIdentity) !== undefined) return;
-            const sceneInput = purePlanInputFor(frame, transitionId, true);
-            purePlanCache.set(
-              geometryIdentity,
-              input.compilePurePlan(sceneInput)
-            );
-            recordPureCompilation(firstWindow);
+            if (longestPreparationMs > 45) return;
+            if (frame.colorRevision === undefined || retained.size + (session === undefined ? 0 : 1) >= preparedCapacity) return;
+            const host = frame.fitSurface.closest<HTMLElement>('[data-kp-reader-transition]');
+            if (host?.dataset['kpReaderTransitionActive'] !== 'false'
+              || firstWindow.getComputedStyle(host).opacity !== '0'
+              || frame.fitSurface.querySelector('[data-kp-editor-equation-material-layer]') !== null) return;
+            const started = firstWindow.performance.now();
+            // The host's zero opacity still excludes all paint. Measure normal
+            // subtree visibility so clones do not freeze inherited hidden ink.
+            const previousVisibility = frame.fitSurface.style.visibility;
+            let prepared: ReturnType<typeof buildPrepared>;
+            try {
+              frame.fitSurface.style.visibility = 'visible';
+              prepared = buildPrepared(frame, transitionId, true);
+            } finally { frame.fitSurface.style.visibility = previousVisibility; }
+            prepared.renderer.apply(0);
+            const duration = firstWindow.performance.now() - started;
+            longestPreparationMs = Math.max(longestPreparationMs, duration);
+            retained.set(preparedKey, { surface: frame.fitSurface,
+              restore: () => {
+                session = prepared.renderer; sessionKey = preparedKey;
+                structuralFitSurface = frame.fitSurface; structuralSessionKey = undefined;
+                materialLayer = prepared.layer; activeTransitionId = transitionId; colorRevision = undefined;
+              },
+              retire: (reason = 'scene-replaced') => {
+                prepared.renderer.retire({ kind: 'native-katex-paint-preserving-retirement', reason,
+                  structuralSuccession: 'retire-preserving-paint' });
+                prepared.layer.remove();
+              }
+            });
+            recordKpReaderCanonicalSessionBuild(firstWindow, duration, ['ahead']);
             recordKpReaderAdjacentPrewarmCompilation(firstWindow);
           }
         }];
@@ -533,6 +534,7 @@ export function createKpReaderCanonicalEquationSession(input: {
       sessionHandoff.invalidate();
       prewarmQueue?.cancel();
       measuredScenes.clear();
+      purePlanCache.clear();
       retireRetained('measurement-invalidated');
       paintGeneration = nextPaintGeneration++;
       releaseCurrentSession("measurement-invalidated");
@@ -554,7 +556,8 @@ export function createKpReaderCanonicalEquationSession(input: {
         ...(activeTransitionId === undefined ? {} : { activeTransitionId }),
         purePlanCacheSize: purePlanCache.size,
         retainedSessionCount: retained.size,
-        adjacentPrewarmEnabled: input.enableAdjacentPrewarm === true
+        preparedCapacity,
+        adjacentPrewarmEnabled
       });
     }
   };

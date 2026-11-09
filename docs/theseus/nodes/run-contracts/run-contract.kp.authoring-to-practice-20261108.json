@@ -37,6 +37,12 @@
       "status": "complete"
     },
     {
+      "id": "automatic-preparation",
+      "title": "Automatic reader preparation and bounded reuse",
+      "summary": "Shared capability-derived preparation and bounded reuse complete for What counts, fractional-linear and divide-both-sides. Warm reversal builds fell from 12 to zero on What counts. First-time synchronous preparation remains a measured limitation, not a claimed solved latency bound.",
+      "status": "complete"
+    },
+    {
       "id": "real-revision",
       "title": "Make one substantive authoring revision",
       "summary": "Substantive candidate explains why count and quantity multiply; existing accepted reader, source and choreography retained. Manuscript and registry only; human editorial judgment remains pending.",

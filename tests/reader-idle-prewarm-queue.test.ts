@@ -82,7 +82,7 @@ for (const mutation of ["width", "height", "font", "pixel-ratio"] as const) {
   });
 }
 
-test("fresh queued prewarm still enters native observation and propagates errors", () => {
+test("fresh queued prewarm still inspects hidden paint and propagates errors", () => {
   const fixture = queuedNativePrewarm();
   fixture.session.prewarm([fixture.frame]);
   assert.throws(fixture.flush, /native observation reached/);
@@ -99,10 +99,47 @@ test("prewarm cannot observe a host-invalidated layout even when queued dimensio
   fixture.session.dispose();
 });
 
+test('preparation bounds follow renderer capability and cohort size without author settings', () => {
+  const unexpected = (): never => { throw new Error('Unexpected compositor call'); };
+  for (const count of [1, 3, 9]) for (const focusPaint of [undefined, 'native-color'] as const) {
+    const session = createKpReaderCanonicalEquationSession({
+      transitionIds: Array.from({ length: count }, (_, index) => `transition-${index}`),
+      focusPaint, createSession: unexpected, compilePurePlan: unexpected, observeScene: unexpected
+    });
+    assert.equal(session.inspect().preparedCapacity, focusPaint === undefined ? 1 : Math.min(4, count));
+    assert.equal(session.inspect().adjacentPrewarmEnabled, focusPaint !== undefined && count > 1);
+    session.dispose();
+  }
+});
+
+for (const action of ['invalidate', 'dispose'] as const) test(`${action} cancels queued preparation`, () => {
+  const fixture = queuedNativePrewarm();
+  fixture.session.prewarm([fixture.frame]);
+  fixture.session[action]();
+  assert.equal(fixture.pending(), false);
+  fixture.session.dispose();
+});
+
+test('retained preparation rejects missing color capability on a frame before touching paint', () => {
+  const fixture = queuedNativePrewarm();
+  assert.throws(() => fixture.session.apply({ ...fixture.frame, colorRevision: undefined }), /declared native-color/);
+  fixture.session.dispose();
+});
+
+test('a browser without idle deadlines never receives speculative synchronous work', () => {
+  const fixture = queuedNativePrewarm();
+  Reflect.deleteProperty(fixture.ownerWindow, 'requestIdleCallback');
+  fixture.session.prewarm([fixture.frame]);
+  assert.equal(fixture.pending(), false);
+  fixture.session.dispose();
+});
+
 function queuedNativePrewarm() {
   let callback: ((deadline: KpReaderIdleDeadline) => void) | undefined;
   const ownerWindow = {
     devicePixelRatio: 1,
+    performance: { now: () => 200 },
+    getComputedStyle: () => ({ opacity: '0' }),
     requestIdleCallback(run: (deadline: KpReaderIdleDeadline) => void) {
       callback = run; return 1;
     },
@@ -111,7 +148,7 @@ function queuedNativePrewarm() {
   const surface = {
     offsetWidth: 640, offsetHeight: 240,
     ownerDocument: { defaultView: ownerWindow },
-    closest() { return { dataset: { kpReaderTransition: "transition" } }; },
+    closest() { return { dataset: { kpReaderTransition: "transition", kpReaderTransitionActive: 'false' } }; },
     querySelector() { throw new Error("native observation reached"); }
   };
   const font = { revision: 0 };
@@ -121,19 +158,20 @@ function queuedNativePrewarm() {
     materialPlan: { id: "material", transitions: [{ transitionId: "transition", anchors: [] }] },
     fitSurface: surface, fontReadiness: font,
     measurementIdentity: { revision: 0, coordinateSpaceId: "stage" },
-    typographyCacheKey: "type", presentationRevision: "revision",
+    typographyCacheKey: "type", presentationRevision: "revision", colorRevision: 'color',
     motionMode: "continuous", progress: 0
   } as unknown as KpReaderCanonicalEquationFrame;
   const unexpected = (): never => { throw new Error("Unexpected compositor call"); };
   const session = createKpReaderCanonicalEquationSession({
-    transitionIds: ["transition"], enableAdjacentPrewarm: true,
+    transitionIds: ["transition", "neighbor"], focusPaint: 'native-color',
     createSession: unexpected, compilePurePlan: unexpected, observeScene: unexpected
   });
   return {
     session, frame, surface, font, ownerWindow,
+    pending: () => callback !== undefined,
     flush: () => {
       assert.ok(callback);
-      callback({ didTimeout: true, timeRemaining: () => 0 });
+      callback({ didTimeout: false, timeRemaining: () => 50 });
     }
   };
 }

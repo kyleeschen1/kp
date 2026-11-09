@@ -470,11 +470,7 @@ const readerCanonicalEquationSession: KpReaderCanonicalEquationSession | undefin
         observeScene:
           readerCanonicalEquationSessionAdapter
             .observeKpNativeKatexRenderedScene,
-        enableAdjacentPrewarm:
-          lessonDescriptor.id === "fraction-composition" || lessonDescriptor.focusPaint === 'native-color',
-        enablePurePlanCache:
-          lessonDescriptor.id === "fraction-composition",
-        preparedCapacity: lessonDescriptor.focusPaint === 'native-color' ? 4 : 1,
+        focusPaint: lessonDescriptor.focusPaint,
         requireAppliedStageLayout:
           lessonDescriptor.stageLayoutCompiler !== undefined
       });

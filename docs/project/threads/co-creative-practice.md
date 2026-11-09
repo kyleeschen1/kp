@@ -18,8 +18,11 @@ retains todo tracking and independent editor ownership. Do not assume this
 checkout's old workbench proposal represents that agent's current implementation.
 Source inspection found its existing native-conversation/website-preview candidate.
 The [handoff](../reviews/2026-11-08-project-orientation.md) names its exact source
-checkout and remaining evidence limits. Restore the reported saved link, then
-use that path for a real revision. Orientation remains accepted and complete.
+checkout and remaining evidence limits. Saved reading and startup handoff are
+repaired; supported native-color readers now inherit bounded preparation/reuse.
+The [motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md) distinguishes
+that completed reuse repair from remaining cold preparation cost. Return to the
+real revision judgment next. Orientation remains accepted and complete.
 
 ## Retrieve for a named question
 

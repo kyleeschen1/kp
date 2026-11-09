@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved authoring-to-practice programme", href: "docs/project/2026-11-08-authoring-to-practice-loops.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "The programme is approved. Repair the reported bookmark first, then review the first substantive revision and any new attention treatment. Orientation remains accepted.",
+  nextJudgment: "Saved reading, startup handoff and automatic bounded scene reuse are repaired. Three readers pass reuse and invalidation checks; first-time preparation can still hitch. The next product judgment is the substantive authoring revision. Accepted typography, annotations and orientation remain accepted.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },

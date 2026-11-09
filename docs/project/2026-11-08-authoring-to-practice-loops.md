@@ -33,6 +33,19 @@ is the shared startup repair and its regression tests; no editor or catalogue
 migration is authorized by this amendment. Field CWV and universal smoothness
 are not established by a local browser test.
 
+User-approved performance amendment (2026-11-08): make preparation and reuse
+automatic for the supported native-color readers before continuing authoring.
+Use What counts, fractional-linear and divide-both-sides as the bounded cohort.
+Acceptance: repeat traversal/reversal reuses valid prepared paint, storage is
+bounded, deferred work respects actual idle time, and resize/font/presentation
+revisions and disposal retire stale preparation. Preserve checked mathematics,
+prose, timing, focus, accessible/native endpoints and startup handoff. Authors
+must not supply cache capacities or lesson-specific performance flags. Unknown
+paint capabilities retain conservative execution. Rollback unit: shared session
+policy, its two host integrations and regression tests. First-visit costs must
+be measured separately; cache reuse does not establish universal smoothness or
+ChatGPT-level generation latency.
+
 The separate editor lane owns native conversation, captures and its application.
 Inspect/reuse it; do not mutate its checkout, send native requests or introduce
 a separately billed service without its applicable authority. A real revision

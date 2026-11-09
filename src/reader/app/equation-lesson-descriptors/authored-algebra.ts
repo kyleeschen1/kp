@@ -13,7 +13,7 @@ export const authoredAlgebraDescriptor: KpReaderEquationLessonDescriptor = {
       // Reader focus changes native ink color, never geometry. Reuse captured
       // paint through focus release instead of rebuilding during a scroll.
       focusPaint: 'native-color',
-      canonicalSession: { evaluationCertificates: draft.steps.flatMap(step => step.evaluationCertificates), endpointHandoffs: draft.handoffs, prewarmAdjacentTransitions: false },
+      canonicalSession: { evaluationCertificates: draft.steps.flatMap(step => step.evaluationCertificates), endpointHandoffs: draft.handoffs },
       // Serialized integer checkpoints map exactly to semantic phase boundaries;
       // linear interpolation preserves every interior position without an epsilon.
       projectAnimationProgress(progress) {

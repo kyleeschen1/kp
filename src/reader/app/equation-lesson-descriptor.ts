@@ -29,7 +29,7 @@ export interface KpReaderEquationStageLayoutCompiler {
 
 export interface KpReaderEquationLessonDescriptor {
   readonly canonicalSession?: Pick<Parameters<typeof import("./chrome-free-canonical-equation-session.ts").createKpChromeFreeCanonicalEquationSession>[0],
-    "evaluationCertificates" | "endpointHandoffs" | "prewarmAdjacentTransitions">;
+    "evaluationCertificates" | "endpointHandoffs">;
   readonly projectAnimationProgress?: (progress: number) => number;
   /** Only the registered domain owner can validate and bind serialized source. */
   readonly bindSource?: (source: unknown) => KpReaderEquationLessonDescriptor;
