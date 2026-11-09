@@ -33,7 +33,7 @@ export function compileDocumentReadingAttention(input: {
     const leave = next === undefined ? fadeDistance : Math.min(fadeDistance, (next - arrival) / 3);
     if (!Number.isFinite(arrival) || !(enter > 0) || !(leave > 0) || !Number.isFinite(input.holds[index]) || input.holds[index]! < 0)
       throw new Error('Annotations require a native hold with room for an exclusive reading handoff.');
-    return { stateId, arrival, enter, leave,
+    return { stateId, arrival, enter, leave, opening: index === 0,
       withdrawal: next === undefined ? arrival + input.holds[index]! : next - 2 * leave };
   });
   return (sample: {
@@ -50,6 +50,10 @@ export function compileDocumentReadingAttention(input: {
       if (!window) continue;
       const { arrival, enter, withdrawal, leave } = window;
       const position = sample.position;
+      // An authored opening note orients the first native frame as it enters
+      // the viewport; it must not depend on scrolling past its reading line.
+      if (window.opening && position <= arrival)
+        return { kind: 'annotation', stateId: window.stateId, presence: 1 };
       if (sample.motionMode === 'essential') {
         if (position >= arrival && position < withdrawal + leave)
           return { kind: 'annotation', stateId: window.stateId, presence: 1 };

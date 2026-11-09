@@ -33,6 +33,26 @@ test('selection and Read all reclaim prose; essential motion uses stable endpoin
   assert.deepEqual(sample(500), { kind: 'annotation', stateId: 'state.example', presence: 1 });
 });
 
+test('an authored opening note orients entry immediately and restores without replay', () => {
+  const opening = compileDocumentReadingAttention({
+    states: ['opening', undefined, 'later'], positions: [500, 900, 1300], holds: [100, 100, 100]
+  });
+  for (const motionMode of ['full', 'essential'] as const) {
+    const at = (position: number) => opening({ position, motionMode, readingDocument: false, hasSelection: false });
+    for (const position of [-100, 0, 468, 500, 800, 500, 0])
+      assert.deepEqual(at(position), { kind: 'annotation', stateId: 'opening', presence: 1 });
+    assert.deepEqual(at(900), { kind: 'prose', presence: 1 });
+    assert.deepEqual(at(1300), { kind: 'annotation', stateId: 'later', presence: 1 });
+    for (const position of [0, 500]) for (const flags of [
+      { readingDocument: true, hasSelection: false }, { readingDocument: false, hasSelection: true }
+    ]) assert.deepEqual(opening({ position, motionMode, ...flags }), { kind: 'prose', presence: 1 });
+  }
+  assert.deepEqual(opening({ position: 852, motionMode: 'full', readingDocument: false, hasSelection: false }),
+    { kind: 'annotation', stateId: 'opening', presence: .5 });
+  // A prose-led reading still owns its opening; later annotations are not pulled forward.
+  assert.deepEqual(sample(0), { kind: 'prose', presence: 1 });
+});
+
 test('attention cannot attach before the preceding mathematical hold finishes', () => {
   const tight = compileDocumentReadingAttention({ states: [undefined, 'note'], positions: [0, 100], holds: [80, 20] });
   const at = (position: number) => tight({ position, motionMode: 'full', readingDocument: false, hasSelection: false });

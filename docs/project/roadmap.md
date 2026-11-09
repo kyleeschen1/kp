@@ -1,6 +1,6 @@
 # KP roadmap
 
-Last Updated: 2026-11-08
+Last Updated: 2026-11-09
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `authoring-to-practice`
@@ -26,7 +26,15 @@ dependencies and human checkpoints; later scopes sharpen from earlier evidence.
 The prior [orientation delivery](2026-11-08-project-orientation-delivery.md) is
 accepted and complete, with its history and evidence retained.
 
-Use the inspected existing authoring/editor path for the first real revision.
+What counts now serves as a technical authoring/runtime reference; the user
+judges its reasoning clear but its topic unsuitable as the main teaching exemplar.
+Review its bounded opening/short-beat refinement, then develop the existing
+fractional-equation source around choosing moves that preserve solutions.
+The [reading defaults](principles/document-theater-reading.md) preserve rich prose,
+give guided theaters an immediate orientation, and keep individual beats concise.
+This refines the programme's featured-quality outcome rather than replacing it.
+
+Use the inspected existing authoring/editor path for revisions.
 The parallel agent retains task tracking and editor
 ownership; strategic records have one designated editor at a time.
 

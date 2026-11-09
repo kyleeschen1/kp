@@ -11,7 +11,7 @@ test('checked manuscript snapshots and their old addresses reach the same native
     expect(response?.status()).toBe(200);
     await ready(page);
     await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', version);
-    await expect(page.locator('[data-kp-rising-beat="passage.what-counts.product-contrast"]'))
+    await expect(page.locator('.kp-lesson'))
       .toContainText('would instead give 11');
     await jump(page, 'state.what-counts.collected');
     await expect(page.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
@@ -82,6 +82,7 @@ test('startup keeps visible geometry stable through the static to interactive ha
     { name: 'saved-v1', suffix: '?kpCheckpoint=state.what-counts.collected&kpLesson=lesson.algebra.what-counts&kpMotion=system&kpProfile=standard&kpProgress=333&kpProjection=equation.symbolic&kpReading=0.454622&kpVersion=1#state.what-counts.collected' },
     { name: 'opening-v1', suffix: '?kpVersion=1' },
     { name: 'opening-v2', suffix: '' },
+    { name: 'opening-product', suffix: '?reading=product' },
     { name: 'fractional', suffix: '', path: '/reader/solve-fractional-linear/' }
   ];
   for (const width of [1100, 390]) for (const item of cases) {
@@ -251,6 +252,46 @@ async function nativeColor(page: Page, ref: string) {
     return target ? getComputedStyle(target).color : undefined;
   }, ref);
 }
+
+test('authored opening annotation accompanies the first frame and yields to concise prose', async ({ page }, info) => {
+  test.setTimeout(90_000);
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(route + '?reading=product'); await ready(page);
+    const plane = page.locator('.kp-caption-pin'), labels = plane.locator('.anchored-labels');
+    const entry = await plane.evaluate(node => scrollY + node.getBoundingClientRect().top - innerHeight / 3);
+    await page.evaluate(top => scrollTo(0, top), entry);
+    await expect(plane).toHaveAttribute('data-anchored-state', 'state.what-counts.repeated');
+    await expect(labels).toHaveCSS('opacity', '1');
+    await expect(plane.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+    expect(await page.locator('.kp-rising-passage').evaluateAll(nodes => nodes.every(node => getComputedStyle(node).opacity === '0'))).toBe(true);
+    const layout = await plane.evaluate(node => {
+      const bounds = node.getBoundingClientRect();
+      return [...node.querySelectorAll('[data-kp-focus-deck-annotation]')].map(label => {
+        const rect = label.getBoundingClientRect();
+        return { fits: rect.left >= bounds.left && rect.right <= bounds.right && rect.top >= bounds.top && rect.bottom <= bounds.bottom,
+          indent: getComputedStyle(label).textIndent };
+      });
+    });
+    expect(layout).toHaveLength(2);
+    expect(layout.every(label => label.fits && label.indent === '0px')).toBe(true);
+    await page.screenshot({ path: info.outputPath(`${width}-opening.png`) });
+    await jump(page, 'passage.state.what-counts.repeated');
+    await expect(labels).toBeHidden();
+    const prose = page.locator('[data-kp-rising-beat="passage.state.what-counts.repeated"]');
+    await expect(prose).toHaveCSS('opacity', '1');
+    expect(await prose.locator('p').evaluate(p => parseFloat(getComputedStyle(p).textIndent))).toBeGreaterThan(0);
+    await page.screenshot({ path: info.outputPath(`${width}-prose.png`) });
+    await page.evaluate(top => scrollTo(0, top), entry);
+    await expect(labels).toHaveCSS('opacity', '1');
+    await page.locator('.kp-rising-navigation > summary').click();
+    await page.locator('.kp-caption-reading-mode').click();
+    await expect(labels).toBeHidden();
+    await expect(page.locator('body')).toHaveAttribute('data-kp-caption-mode', 'document');
+    await expect(prose).toBeVisible();
+    await expect(page.locator('.kp-caption-document-intro')).toContainText('would instead give 11');
+  }
+});
 
 test("saved version-1 link retains its original reading and native equation", async ({ page }) => {
   test.setTimeout(120_000);

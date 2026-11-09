@@ -1,10 +1,10 @@
 {
   "whole": {
     "articlePath": "content/authoring/algebra/readings/whole/f238449e22741a3306fb7caa0b4451a5789db30fdf3261884b0497bc14d24cb4.article.md",
-    "sha256": "f238449e22741a3306fb7caa0b4451a5789db30fdf3261884b0497bc14d24cb4",
     "version": "2",
     "title": "What counts as one thing?",
     "description": "A whole expression can act as a single quantity. Changing what you count together can make its structure easier to see—without changing its value.",
+    "sha256": "f238449e22741a3306fb7caa0b4451a5789db30fdf3261884b0497bc14d24cb4",
     "previous": [
       {
         "articlePath": "content/authoring/algebra/what-counts-v1.article.md",
@@ -16,15 +16,22 @@
     ]
   },
   "product": {
-    "articlePath": "content/authoring/algebra/readings/product/d72df53ca3268e7f36e92e04393f5f484ab0f625048d76e419111f13558a6135.article.md",
-    "version": "product.b130949d00f38714205b2d60e694a03642a51e236a3ec377e176abcae85afa22",
+    "articlePath": "content/authoring/algebra/readings/product/d740103c8121862fb55c2d707ad861b4178f71d220b83ba44441b2f1bd2dcf03.article.md",
+    "version": "product.20e4bac959b5497fbdfa06841833c31b117c66a90f471989fdebd7e3c109bd61",
     "title": "Why do these groups multiply?",
     "description": "Distinguish the number of copies from the quantity in each copy, and test why the two groups multiply.",
-    "sha256": "d72df53ca3268e7f36e92e04393f5f484ab0f625048d76e419111f13558a6135",
+    "sha256": "d740103c8121862fb55c2d707ad861b4178f71d220b83ba44441b2f1bd2dcf03",
     "previous": [
       {
         "articlePath": "content/authoring/algebra/readings/product/d72df53ca3268e7f36e92e04393f5f484ab0f625048d76e419111f13558a6135.article.md",
         "version": "product.1",
+        "title": "Why do these groups multiply?",
+        "description": "Distinguish the number of copies from the quantity in each copy, and test why the two groups multiply.",
+        "sha256": "d72df53ca3268e7f36e92e04393f5f484ab0f625048d76e419111f13558a6135"
+      },
+      {
+        "articlePath": "content/authoring/algebra/readings/product/d72df53ca3268e7f36e92e04393f5f484ab0f625048d76e419111f13558a6135.article.md",
+        "version": "product.b130949d00f38714205b2d60e694a03642a51e236a3ec377e176abcae85afa22",
         "title": "Why do these groups multiply?",
         "description": "Distinguish the number of copies from the quantity in each copy, and test why the two groups multiply.",
         "sha256": "d72df53ca3268e7f36e92e04393f5f484ab0f625048d76e419111f13558a6135"
@@ -33,9 +40,9 @@
   },
   "zero": {
     "articlePath": "content/authoring/algebra/readings/zero/d09666de858aa566d4a46f5cc12dc360419f35338b0a3035f6ace0123e3f752b.article.md",
-    "sha256": "d09666de858aa566d4a46f5cc12dc360419f35338b0a3035f6ace0123e3f752b",
     "version": "zero.1",
     "title": "What if the whole is zero?",
-    "description": "Why regrouping can preserve a zero-valued whole, while cancellation by division requires a nonzero factor."
+    "description": "Why regrouping can preserve a zero-valued whole, while cancellation by division requires a nonzero factor.",
+    "sha256": "d09666de858aa566d4a46f5cc12dc360419f35338b0a3035f6ace0123e3f752b"
   }
 }

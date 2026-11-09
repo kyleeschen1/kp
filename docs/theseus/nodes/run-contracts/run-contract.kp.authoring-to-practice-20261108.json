@@ -51,19 +51,20 @@
     {
       "id": "real-revision",
       "title": "Make one substantive authoring revision",
-      "summary": "Substantive candidate explains why count and quantity multiply; existing accepted reader, source and choreography retained. Manuscript and registry only; human editorial judgment remains pending.",
-      "status": "in-progress"
+      "summary": "User judges the count-versus-quantity reasoning clear and accepts What counts as a technical reference. Original and revised readings remain separately addressable. This closes the substantive revision proof without claiming featured quality or learner transfer; the new opening and shorter-beat treatment awaits its own review.",
+      "status": "complete"
     },
     {
       "id": "responsive",
       "title": "Remove measured iteration friction",
-      "summary": "Checked revision workflow implemented and verified: automatic immutable snapshots/version identity, stale/invalid draft rejection, writer exclusion, old-address preservation and last-valid recovery. Existing candidate applied unchanged; 41 ms operation and 0.47 s initial CLI, with later loaded CLI up to 2.83 s. Another useful live revision and model/editor latency evidence remain after editorial judgment; no native-workbench integration claim.",
+      "summary": "A second substantive manuscript edit reached the actual reader through checked save with old addresses retained: 44 ms apply, about 0.53 s CLI, and 79 ms shared-server response. Mixed context-to-selection work took about 5m33s and included shared opening/style edits. Isolated drafting/editor latency and integrated native-workbench response remain unmeasured; preserve partial status rather than claiming fast end-to-end authoring.",
       "status": "in-progress"
     },
     {
       "id": "attention",
       "title": "Author precise attention",
-      "status": "planned"
+      "summary": "User-approved opening refinement implemented on the product reading: authored first annotation immediately accompanies native entry, shorter beats preserve fuller prose outside, and paragraph indentation uses shared CSS. Unit and scoped browser checks pass; aesthetic review precedes a fractional-reader second caller. No several-target note or universal annotation migration claimed.",
+      "status": "in-progress"
     },
     {
       "id": "featured",

@@ -59,6 +59,22 @@ Each independently verified mechanism repair plus its evidence is a rollback
 unit. Continue eligible approved work within the existing six-hour ceiling and
 closeout reserve; a new aesthetic still requires its existing exemplar review.
 
+User-approved editorial refinement (2026-11-09): retain What counts as a technical
+reference after its reasoning was judged clear; develop the existing fractional
+equation reader as the next teaching source around choosing moves that preserve
+solutions. Guided theaters should orient entry with an authored annotation,
+paragraphs use a modest shared indent, and theater beats carry one instructional
+job while fuller reasoning remains in ordinary prose. Follow the
+[reading defaults](principles/document-theater-reading.md). First apply this to
+the product reading, preserving checked math, native motion, earlier source
+versions and saved addresses. Acceptance: opening notes are present on entry,
+notes and prose retain exclusive moments, concise beats remain readable on a
+phone, and Read all retains the argument. Review this bounded candidate before
+generalizing attention to another caller. Rollback units: versioned manuscript
+selection, shared opening-attention repair with tests, shared paragraph style.
+Preparing the next teaching brief can proceed without assuming visual approval;
+do not silently rewrite the fractional reader's version-1 content.
+
 The separate editor lane owns native conversation, captures and its application.
 Inspect/reuse it; do not mutate its checkout, send native requests or introduce
 a separately billed service without its applicable authority. A real revision

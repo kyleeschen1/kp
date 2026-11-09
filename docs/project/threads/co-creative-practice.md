@@ -1,7 +1,7 @@
 # Authoring, adaptation and co-creative practice
 
 Status: active context index; execution lives in Theseus
-Last Updated: 2026-11-08
+Last Updated: 2026-11-09
 
 ## Current boundary
 
@@ -22,7 +22,12 @@ checkout and remaining evidence limits. Saved reading and startup handoff are
 repaired; supported native-color readers now inherit bounded preparation/reuse.
 The [motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md) distinguishes
 that completed reuse repair from remaining cold preparation cost. Return to the
-real revision judgment next. Orientation remains accepted and complete.
+bounded opening/short-beat judgment next. The user judged the product reading's
+reasoning clear, while selecting What counts as a technical reference rather than
+the main teaching exemplar. The [accepted reading defaults](../principles/document-theater-reading.md)
+and programme amendment capture that distinction. Develop the existing fractional
+equation reader's learner question next; preserve its version-1 source until a
+versioned revision is ready. Orientation remains accepted and complete.
 
 ## Retrieve for a named question
 
@@ -33,6 +38,8 @@ real revision judgment next. Orientation remains accepted and complete.
   an existing path. Live generation, broad responsiveness and learning remain unproved.
 - **Authoring a supported artifact:** [generation entrypoint](../authoring/llm-generation-entrypoint.md).
   Inspect the exact domain packet and existing owner before inventing a workflow.
+- **Next teaching source:** [fractional-equation brief](../authoring/fractional-equation-teaching-brief.md).
+  A draft argument and finite translation gaps; the current version-1 reader is preserved.
 - **Parallel ownership:** [parallel-development skill](../../../.agents/skills/kp-parallel-development/SKILL.md).
   Coordinate shared boundaries; do not edit another session's checkout or UI.
 - **Vocabulary:** [system terms](../principles/system-vocabulary.md) and

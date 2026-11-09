@@ -13,14 +13,14 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved authoring-to-practice programme", href: "docs/project/2026-11-08-authoring-to-practice-loops.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Saved reading, startup handoff and automatic bounded scene reuse are repaired. Shared cold preparation now avoids duplicate work; local Firefox comparisons improved, but first-time preparation and occasional frame hitches remain. The next product judgment is the separate count-versus-quantity authoring revision. Accepted typography, annotations and orientation remain accepted.",
+  nextJudgment: "Review the product reading's immediate opening annotation, indented paragraphs and shorter theater beats. Its fuller reasoning was judged clear; What counts remains a technical reference. Develop the fractional-equation explanation next around choosing moves that preserve solutions. Saved readings and accepted motion remain preserved.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
     { title: "Practice and retrieve", outcome: "Connected problems, feedback and flashcards develop the same instructional distinctions." },
     { title: "Grow the library", outcome: "Curated adaptive material becomes easier to reuse, embed and maintain across domains." }
   ],
-  reviewedOn: "2026-11-08",
+  reviewedOn: "2026-11-09",
   northStar: "Help authors create extraordinary explanations that teach people what to notice.",
   productProof: "Learners can question, adapt, practice and revisit that material while preserving its important reasoning and relationships. Exceptional featured content demonstrates the medium; authoring is the first product center.",
   productSource: { label: "Product charter", href: "docs/project/strategy.md" },
@@ -41,7 +41,7 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Independent readings share one checked algebra source. A checked local revision operation now saves immutable source, preserves old links and rejects invalid or stale drafts; the existing candidate reached the reader through it. Editorial acceptance, a second useful live revision and native-workbench conversation remain unproved.",
+      established: "The count-versus-quantity reasoning was judged clear. A second substantive revision now uses shorter beats and immediate orientation, retaining the full argument and old addresses through the checked save operation. What counts proves a bounded technical workflow; featured quality, fast end-to-end generation and native-workbench conversation remain unproved.",
       evidence: { label: "Checked revision trial and remaining proof", href: "docs/project/reviews/2026-11-08-authoring-revision.md" },
       outcome: {
         authority: "approved",
@@ -292,6 +292,13 @@ export const projectVision: ProjectVision = {
       after: "Authoring exceptional reusable material becomes the first product center; adaptation, practice and the library remain the horizon. Orientation infrastructure is approved now. A live authoring/revision proof is proposed next; physics migration is deferred.",
       reason: "The user wants responsive customization and exceptional featured content, and names getting lost as the main blocker. Preserve completed work while making approval boundaries and the product progression explicit.",
       source: { label: "Accepted direction and disposition of prior commitments", href: "docs/project/decisions/2026-11-08-authoring-expert-attention.md" }
+    },
+    {
+      id: "technical-reference-and-teaching-exemplar", on: "2026-11-09",
+      before: "What counts was the first real revision source and a possible main teaching exemplar.",
+      after: "Keep it as a technical reference; develop the fractional-equation reader around a more consequential learner question. Guided theaters orient entry immediately, paragraphs use shared indentation, and beats carry one small instructional job while ordinary prose preserves the argument.",
+      reason: "The user finds the reasoning clear but the topic contrived, and identifies unannotated entry and long beats as obstacles to reading. Technical reuse does not establish featured teaching quality.",
+      source: { label: "Accepted exemplar and reading refinement", href: "docs/project/principles/document-theater-reading.md" }
     }
   ]
 };

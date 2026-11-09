@@ -85,7 +85,7 @@ test('invalid drafts and unknown semantic references leave the last valid select
   for (const invalid of [
     '# No checked story\n',
     draft.replace('"beats": [', '"beats": broken ['),
-    draft.replace('"state.what-counts.repeated"', '"state.foreign"'),
+    draft.replace(/("focusRefs":\s*\[\s*)"state.what-counts.repeated"/, '$1"state.foreign"'),
     draft.replace('passage.state.what-counts.collected', 'passage.missing-operation'),
     draft.replace('"progressPermille": 333', '"progressPermille": 500'),
     draft.replace('animation.composed-algebra-v2.7b2d98b4554f80a3456ee6891df12dfdf069f76c11af05471b727908e37f2c61', 'animation.unknown'),

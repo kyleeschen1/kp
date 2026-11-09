@@ -112,3 +112,96 @@ after the editorial response, then continue the approved revision/iteration
 outcomes. Existing global Theseus autonomy-readiness metadata issues remain
 outside this bounded repair; graph validation does not certify that global
 dispatcher as ready. The parallel task owner retains that integration work.
+
+## 2026-11-09 continuation: clear reasoning, bounded reading refinement
+
+The user now judges the reasoning clear, but questions the topic as a main
+teaching exemplar. They accept keeping What counts as a technical reference,
+using a stronger learner question next, and orienting the theater immediately.
+They also request paragraph indentation and shorter prose per beat. This closes
+the earlier editorial question at its actual scope; it does not certify featured
+quality. The [reading defaults](../principles/document-theater-reading.md) and
+[fractional-equation draft](../authoring/fractional-equation-teaching-brief.md)
+record the accepted direction and the next argument without replacing its
+current version-1 reader.
+
+The second substantive manuscript revision is selected at:
+`http://localhost:8011/reader/what-counts/?reading=product&kpVersion=product.20e4bac959b5497fbdfa06841833c31b117c66a90f471989fdebd7e3c109bd61`.
+Its source hash is
+`d740103c8121862fb55c2d707ad861b4178f71d220b83ba44441b2f1bd2dcf03`.
+The prior product versions, default reading and saved version 1 still select
+their original bytes. The revision uses the checked save operation above,
+without manual archive/version edits. Ten beats now contain 17–27 words each,
+compared with eleven beats and a 93-word maximum before (whitespace-separated
+word counts). The count-versus-quantity example, distributive argument,
+qualifications and changed-case reasoning survive in ordinary prose. This makes
+the introduction longer; it is a bounded presentation candidate, not a claim
+that moving text outside a theater automatically improves pedagogy.
+
+The opening state-named annotation is now the first authored beat. The shared
+attention sampler previously required approaching its reading line before it
+could appear, leaving the entering native frame without orientation. It now
+gives an explicitly authored opening note full presence before that line, with
+the existing deterministic withdrawal afterward. No new timer or author setting
+was added. Prose-led historical versions keep their own openings; Read all and
+selection retain precedence. Unit tests cover entry, reversal, direct seek,
+essential motion, selection and withdrawal. Browser checks cover actual native
+ink, anchored fit, exclusive prose/note ownership and indented paragraphs. These
+guards prevent the reported opening class within this shared attention path;
+they do not make an unauthored annotation appear or implement new anchor topology.
+
+Paragraphs use the shared document stylesheet's 1.25em first-line indent;
+bylines and anchored labels keep their alignment. No lesson-local font, style,
+mathematics, compositor or motion timing changes were made. The browser capture
+was inspected at desktop and phone widths in Firefox. The existing annotation
+font and fade treatment remain; only opening presence changes.
+
+Measured costs: check took 60 ms; apply took 44 ms including 42 ms checking,
+and the apply CLI process took approximately 0.53 s. The exact shared-server
+URL returned HTTP 200 in 79 ms. Context receipt was issued at 17:12:02 UTC and
+the selected registry was written at 17:17:35: about 5m33s of mixed reading,
+drafting, shared opening/style edits and tool use. That is an upper envelope for
+this mixed implementation trial, not an isolated model generation measurement.
+Separate drafting/editor latency remains unmeasured, and the native workbench
+was not exercised. The revision operation is fast; the whole product loop is
+not yet demonstrated to be fast.
+
+Focused verification:
+
+- 23 reading/revision/attention tests pass. The invalid-reference fixture now
+  changes `focusRefs` explicitly; a new first annotation ID made the old
+  first-string replacement target a valid arbitrary beat name instead.
+- Ten Chromium/Firefox browser cases pass for opening, old/new snapshots,
+  saved-v1 restoration, fades and startup geometry, at desktop/phone widths.
+  The product reading was then added to the startup cohort for its own handoff;
+  both expanded browser tests pass. Chromium reports zero startup layout shift
+  in these local cases; this is not field Core Web Vitals evidence.
+- App and test TypeScript checks pass; all 75 project-vision checks pass.
+
+Commands:
+
+```sh
+node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts tests/what-counts-revision.test.ts tests/document-reading-attention.test.ts
+npm run visual:anchored-algebra -- --project=firefox --grep 'authored opening annotation|checked manuscript snapshots|saved version-1 link|annotation fades|startup keeps'
+npm run visual:anchored-algebra -- --project=firefox --grep 'startup keeps'
+node --max-old-space-size=3072 node_modules/typescript/bin/tsc --project config/typescript/tsconfig.app.json --noEmit
+npm run typecheck:tests
+npm run test:project-vision
+```
+
+Review the product URL from its introduction into the first annotation and then
+the first prose beat. Judge whether entry is self-explanatory and the shorter,
+indented prose has the right rhythm; Options → Read all retains the argument.
+The current candidate's aesthetic judgment remains pending before using this
+opening on the structurally different fractional caller. The fractional brief
+can be prepared independently; it identifies version preservation and native
+annotation binding as actual translation gaps. No catalogue rollout is underway.
+
+Current handoff: `HUMAN_CHECKPOINT`, 4/15 outcomes complete. The substantive
+revision is closed at technical-reference scope. Responsive iteration stays
+partial pending separated drafting/editor latency evidence; attention stays
+partial pending the bounded visual judgment. Theseus workspace validation passes
+(1283 nodes, 34236 events before final receipts), while the previously documented
+global autonomy-readiness metadata gaps remain outside this work. Continue the
+approved programme after review; do not repeat unchanged visual checks or treat
+this checkpoint as approval for a new campaign.

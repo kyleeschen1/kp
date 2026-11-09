@@ -13,7 +13,9 @@ universal reader schema. Begin with `llm-generation-entrypoint.md`.
   `what-counts-zero.article.md` asks a different question using exactly the same
   math. Selected bytes are pinned snapshots identified by the registry.
   `what-counts-product.article.md` is the editable count-versus-quantity candidate;
-  its explanatory quality is awaiting review.
+  its reasoning was judged clear on 2026-11-09. It remains a technical reference,
+  not the featured teaching exemplar. The shorter-beat, annotated-opening revision
+  is a new presentation candidate; see the [reading defaults](../principles/document-theater-reading.md).
 - `what-counts-readings.json` registers local Article paths, distinct document
   versions, titles and descriptions. The default key is `whole`; `?reading=zero`
   selects the second reading. Unknown keys produce a located repair.
@@ -70,8 +72,11 @@ Within the story, keep the pinned asset/version and the three operation passages
 share an existing checkpoint: prose count is independent of operation count.
 Every focus reference must resolve to the checked semantic source.
 
-Include a state-named beat when an existing annotation moment serves the
-explanation. Omit it when prose is sufficient; the zero reading demonstrates
+Start a new guided reading with its opening state-named annotation beat so the
+first native frame already has an orientation. An explicit unaided prediction
+can justify another opening. Include later state-named beats when an existing
+annotation moment serves the explanation. Omit them when prose is sufficient;
+the retained zero reading demonstrates
 two annotation moments instead of four. Keep its static fallback wording aligned
 with the notes in `what-counts-commentary.ts`. This remaining duplication has a
 parity/preservation check; several-target note design is not implemented here.

@@ -95,6 +95,12 @@ Types and tests protect facts, references, source coherence and deterministic
 behavior. Presence of a “why” field does not prove that it explains anything.
 Keep mathematical verification and pedagogical judgment separately reported.
 
+For document theaters, apply [the accepted reading defaults](../principles/document-theater-reading.md):
+orient entry with an authored annotation, give each beat one small instructional
+job, and preserve fuller reasoning in ordinary prose. The shared reader owns
+paragraph indentation and annotation typography. Beat length is an editorial
+guideline, never a reason to weaken an explanation or impose a compiler quota.
+
 ### Bounded review and worked critique
 
 Be strict about truth, references and preservation; explicit about explanatory
