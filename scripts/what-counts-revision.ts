@@ -16,11 +16,19 @@ interface RevisionInput {
 }
 export const whatCountsDraftLimit = 100_000;
 const gap = (path: string, message: string) => new AnchoredAlgebraGap(`revision.${path}`, message);
-const href = (reading: string, version: string) => '/reader/what-counts/?' + new URLSearchParams({ reading, kpVersion: version });
-const snapshotPath = (reading: string, sha256: string) => `content/authoring/algebra/readings/${reading}/${sha256}.article.md`;
+export interface AlgebraReadingRevisionOwner {
+  readonly registryPath: string;
+  readonly route: string;
+  readonly archiveDirectory: string;
+  readonly compile: (url: string, registrations: unknown, read: (revision: ReadingRevision) => string) => string;
+}
+const whatCountsOwner: AlgebraReadingRevisionOwner = {
+  registryPath: whatCountsReadingsPath, route: '/reader/what-counts/', archiveDirectory: 'content/authoring/algebra/readings',
+  compile: compileWhatCountsLesson
+};
 
-function readState(root: string) {
-  const raw = readFileSync(resolve(root, whatCountsReadingsPath), 'utf8');
+function readState(root: string, owner: AlgebraReadingRevisionOwner) {
+  const raw = readFileSync(resolve(root, owner.registryPath), 'utf8');
   const registry = registerWhatCountsReadings(JSON.parse(raw));
   const sources = new Map<string, string>();
   for (const current of registry.values()) for (const revision of [current, ...current.previous ?? []])
@@ -35,10 +43,22 @@ function readState(root: string) {
  * snapshots preserve saved coordinates; a failed draft never becomes selected.
  * This is local source revision, not publication or editorial approval. */
 export function reviseWhatCountsReading(input: RevisionInput, root = whatCountsRoot) {
+  return reviseAlgebraReading(input, whatCountsOwner, root);
+}
+
+/** The second reader reuses only the file transaction. Its own compiler still
+ * checks every source, semantic target, operation and archived address. */
+export function reviseAlgebraReading(input: RevisionInput, owner: AlgebraReadingRevisionOwner, root = whatCountsRoot) {
+  const bounded = (path: string) => /^content\/authoring\/algebra\/[a-zA-Z0-9./_-]+$/.test(path)
+    && path.split('/').every(part => part && part !== '.' && part !== '..');
+  if (!bounded(owner.registryPath) || !owner.registryPath.endsWith('.json') || !bounded(owner.archiveDirectory)
+    || !/^\/reader\/[a-z-]+\/$/.test(owner.route)) throw gap('owner', 'Use a bounded local algebra reading owner.');
+  const href = (reading: string, version: string) => owner.route + '?' + new URLSearchParams({ reading, kpVersion: version });
+  const snapshotPath = (reading: string, sha256: string) => `${owner.archiveDirectory}/${reading}/${sha256}.article.md`;
   if (Buffer.byteLength(input.markdown, 'utf8') > whatCountsDraftLimit)
     throw gap('draft', `Use an Article within ${whatCountsDraftLimit} UTF-8 bytes.`);
   const startedAt = performance.now();
-  const registryPath = resolve(root, whatCountsReadingsPath);
+  const registryPath = resolve(root, owner.registryPath);
   const lockPath = `${registryPath}.lock`;
   let lock: number | undefined;
   let temporary: string | undefined;
@@ -56,7 +76,7 @@ export function reviseWhatCountsReading(input: RevisionInput, root = whatCountsR
         throw error;
       }
     }
-    const state = readState(root);
+    const state = readState(root, owner);
     const current = state.registry.get(input.reading);
     if (!current) throw gap('reading', 'Choose an existing registered reading.');
     const oldText = state.sources.get(current.articlePath)!;
@@ -86,8 +106,8 @@ export function reviseWhatCountsReading(input: RevisionInput, root = whatCountsR
     // Both future selection and the old address traverse the existing compiler.
     // No new renderer, schema, preview server or fallback is introduced here.
     try {
-      compileWhatCountsLesson(previewPath, proposed, read);
-      if (!unchanged) compileWhatCountsLesson(previousPath, proposed, read);
+      owner.compile(previewPath, proposed, read);
+      if (!unchanged) owner.compile(previousPath, proposed, read);
     } catch (error) {
       if (error instanceof AnchoredAlgebraGap) throw error;
       throw gap('draft', error instanceof Error ? error.message : String(error));
@@ -111,7 +131,7 @@ export function reviseWhatCountsReading(input: RevisionInput, root = whatCountsR
       }
       temporary = `${registryPath}.${randomUUID()}.tmp`;
       writeFileSync(temporary, JSON.stringify(proposed, null, 2) + '\n', { flag: 'wx' });
-      if (readState(root).basis !== state.basis) throw gap('stale', 'A source changed during preparation. Check again before applying.');
+      if (readState(root, owner).basis !== state.basis) throw gap('stale', 'A source changed during preparation. Check again before applying.');
       // Cooperating writers are serialized. The old registry remains intact up
       // to this rename; all referenced snapshots already exist and were checked.
       renameSync(temporary, registryPath);

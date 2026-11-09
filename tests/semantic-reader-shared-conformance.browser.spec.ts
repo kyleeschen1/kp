@@ -53,6 +53,15 @@ test("solve-x preserves branch attention across wide and narrow projections", as
   await expect(page.getByRole("button", { name: "Previous explanation step" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Next explanation step" })).toBeVisible();
   expect(new URL(page.url()).searchParams.get("kpProgress")).toBe("200");
+  for (const width of [1100, 390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(body).toHaveAttribute('data-kp-reader-responsive-projection', width < 600 ? 'focus-stepper' : 'wide-scrollytelling');
+    await expect(body).toHaveAttribute('data-kp-reader-progress', '200');
+    expect(new URL(page.url()).searchParams.get('kpProgress')).toBe('200');
+  }
+  // Re-anchoring must not turn the restored location into a permanent lock.
+  await page.mouse.wheel(0, 700);
+  await expect(body).not.toHaveAttribute('data-kp-reader-progress', '200');
 });
 
 for (const subject of [

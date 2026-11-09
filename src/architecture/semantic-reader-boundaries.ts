@@ -1,5 +1,6 @@
 export type KpSemanticReaderLayerId =
   | "document"
+  | "preparation"
   | "compiler"
   | "runtime"
   | "renderers"
@@ -17,6 +18,12 @@ export interface KpSemanticReaderLayer {
 // static output, while the browser runtime and leaf renderers only hydrate it.
 export const kpSemanticReaderLayers = [
   {
+    id: "preparation",
+    root: "src/reader/preparation",
+    publicEntryPoint: "src/reader/preparation/public-api.ts",
+    mayImport: []
+  },
+  {
     id: "document",
     root: "src/reader/document",
     publicEntryPoint: "src/reader/document/public-api.ts",
@@ -26,7 +33,7 @@ export const kpSemanticReaderLayers = [
     id: "compiler",
     root: "src/reader/compiler",
     publicEntryPoint: "src/reader/compiler/public-api.ts",
-    mayImport: ["document"]
+    mayImport: ["document", "preparation"]
   },
   {
     id: "runtime",
@@ -50,7 +57,7 @@ export const kpSemanticReaderLayers = [
     id: "app",
     root: "src/reader/app",
     publicEntryPoint: "src/reader/app/public-api.ts",
-    mayImport: ["document", "runtime", "renderers"]
+    mayImport: ["document", "preparation", "runtime", "renderers"]
   }
 ] as const satisfies readonly KpSemanticReaderLayer[];
 

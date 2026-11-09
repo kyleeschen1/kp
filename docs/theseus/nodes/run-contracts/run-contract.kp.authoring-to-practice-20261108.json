@@ -51,25 +51,26 @@
     {
       "id": "real-revision",
       "title": "Make one substantive authoring revision",
-      "summary": "User judges the count-versus-quantity reasoning clear and accepts What counts as a technical reference. Original and revised readings remain separately addressable. This closes the substantive revision proof without claiming featured quality or learner transfer; the new opening and shorter-beat treatment awaits its own review.",
+      "summary": "User accepted the count-versus-quantity reasoning and then its opening, indentation and shorter beats. What counts remains the technical reference, with old addresses retained; this is not featured-quality or learner-transfer evidence.",
       "status": "complete"
     },
     {
       "id": "responsive",
       "title": "Remove measured iteration friction",
-      "summary": "A second substantive manuscript edit reached the actual reader through checked save with old addresses retained: 44 ms apply, about 0.53 s CLI, and 79 ms shared-server response. Mixed context-to-selection work took about 5m33s and included shared opening/style edits. Isolated drafting/editor latency and integrated native-workbench response remain unmeasured; preserve partial status rather than claiming fast end-to-end authoring.",
-      "status": "in-progress"
+      "summary": "A separate source-only note wording and target revision completed in about 21 seconds after roughly 15 minutes of second-reader drafting/support work. Check 25.4 ms, save 30.2 ms, CLI 0.627/0.804 s, subsequent HTTP 150 ms. Existing checked transaction now supports both owners; invalid/stale writes preserve last valid selection. This closes bounded iteration-friction proof, not fresh-generation or integrated-workbench latency.",
+      "status": "complete"
     },
     {
       "id": "attention",
       "title": "Author precise attention",
-      "summary": "User-approved opening refinement implemented on the product reading: authored first annotation immediately accompanies native entry, shorter beats preserve fuller prose outside, and paragraph indentation uses shared CSS. Unit and scoped browser checks pass; aesthetic review precedes a fractional-reader second caller. No several-target note or universal annotation migration claimed.",
-      "status": "in-progress"
+      "summary": "Accepted opening/concise-beat motif now serves the fractional reader with manuscript-owned note text and exact native-state selectors. Shared labels follow both existing paint host paths, unchanged-equation attention and geometry invalidation. Original v1 source and six operations preserved; unit and Firefox/Chromium desktop/phone, reversal, fade, resize, share and previous-note-version checks pass. Several-target note topology remains unimplemented.",
+      "status": "complete"
     },
     {
       "id": "featured",
       "title": "Develop one featured-quality passage",
-      "status": "planned"
+      "summary": "Fractional reasoning candidate explains reversible moves, legal versus useful choices, a wrong partial-side doubling move and a changed case. Shared server reasoning URL is ready for editorial judgment; accepted annotation style is reused. Do not declare exceptional featured content or learner transfer from render tests.",
+      "status": "in-progress"
     },
     {
       "id": "second",

@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved authoring-to-practice programme", href: "docs/project/2026-11-08-authoring-to-practice-loops.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review the product reading's immediate opening annotation, indented paragraphs and shorter theater beats. Its fuller reasoning was judged clear; What counts remains a technical reference. Develop the fractional-equation explanation next around choosing moves that preserve solutions. Saved readings and accepted motion remain preserved.",
+  nextJudgment: "The opening annotation, indentation and shorter beats are accepted. Read /reader/solve-fractional-linear/?reading=reasoning through its alternative route and changed-case question: does it make choosing and justifying a move clearer? Original version-1 links remain preserved. What counts stays a technical reference.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,8 +41,8 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The count-versus-quantity reasoning was judged clear. A second substantive revision now uses shorter beats and immediate orientation, retaining the full argument and old addresses through the checked save operation. What counts proves a bounded technical workflow; featured quality, fast end-to-end generation and native-workbench conversation remain unproved.",
-      evidence: { label: "Checked revision trial and remaining proof", href: "docs/project/reviews/2026-11-08-authoring-revision.md" },
+      established: "Two algebra readers reuse checked saving and the accepted annotation renderer. Fractional note wording and exact targets now come from its manuscript. A subsequent source-only note/target revision took about 21 seconds to edit, check and save after support engineering. Featured quality, fresh-generation speed, integrated workbench conversation and learning remain unproved.",
+      evidence: { label: "Second caller, source-only timing and remaining judgment", href: "docs/project/reviews/2026-11-09-fractional-reading.md" },
       outcome: {
         authority: "approved",
         id: "authoring-revision", title: "Revise one exceptional explanation through the product",

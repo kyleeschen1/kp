@@ -75,6 +75,11 @@ selection, shared opening-attention repair with tests, shared paragraph style.
 Preparing the next teaching brief can proceed without assuming visual approval;
 do not silently rewrite the fractional reader's version-1 content.
 
+Acceptance on 2026-11-09: “much better! resume” closes that bounded opening,
+indentation and concise-beat review. Continue to the fractional second caller
+and the measured source-only revision. The new explanation has its own editorial
+judgment; accepting the treatment does not certify featured quality or learning.
+
 The separate editor lane owns native conversation, captures and its application.
 Inspect/reuse it; do not mutate its checkout, send native requests or introduce
 a separately billed service without its applicable authority. A real revision

@@ -3,18 +3,8 @@ import {
   type KpReaderPiecewiseScrollGeometry
 } from "../runtime/learner-public-api.ts";
 
-/** Document scroll distance allocated while the real paragraph is held. */
-export function documentPassageCadence(availableHeight: number) {
-  if (!Number.isFinite(availableHeight) || availableHeight <= 0) {
-    throw new Error('Document passages require positive available height.');
-  }
-  const read = availableHeight * .12;
-  const act = availableHeight * .32;
-  // The exchange itself is the result-inspection interval. Release immediately
-  // at completion instead of adding another blank scroll hold.
-  const inspect = 0;
-  return { read, act, inspect, hold: read + act + inspect };
-}
+import { documentPassageCadence } from '../preparation/public-api.ts';
+export { documentPassageCadence } from '../preparation/public-api.ts';
 
 /** Narrative anchors are natural bottoms of the actual paragraph blocks. */
 export function createDocumentTheaterScroll(

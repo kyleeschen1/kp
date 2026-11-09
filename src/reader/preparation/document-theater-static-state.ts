@@ -1,6 +1,6 @@
 /** Select only a compiled static endpoint. URL validation and in-between
  * animation frames still belong to the reader's session/clock, not this preview.
- * Self-contained so the compiler can include it in the inline layout pass. */
+ * Self-contained so compilation needs no browser application imports. */
 export function prepareDocumentTheaterStaticState(document: Document) {
   const window = document.defaultView!;
   const params = new URL(window.location.href).searchParams;

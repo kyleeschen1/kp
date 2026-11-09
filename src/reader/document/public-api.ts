@@ -58,3 +58,9 @@ export {
 export {
   type KpReaderEvaluationControlsKind
 } from "./evaluation-controls.ts";
+export {
+  AnchoredAlgebraGap,
+  readEndpointCommentary,
+  type CommentaryNote,
+  type CommentaryStop
+} from "./endpoint-commentary.ts";

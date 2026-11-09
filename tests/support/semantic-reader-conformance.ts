@@ -77,6 +77,11 @@ export async function assertKpSemanticReaderConformance(input: {
     const reviewShell = page.locator("[data-kp-dev-review-shell]");
     await expect(reviewShell).toHaveCount(1);
     await expect(reviewShell.locator("button.launcher")).toBeHidden();
+    // Document theaters place the existing toolbar inside the accepted Options
+    // disclosure. Exercise that real access path instead of requiring old chrome.
+    const options = page.locator('.kp-rising-navigation > summary');
+    const hasOptions = await options.count() > 0;
+    if (hasOptions) await options.click();
     const toolbar = page.getByRole("complementary", {
       name: "Development tools"
     });
@@ -86,6 +91,7 @@ export async function assertKpSemanticReaderConformance(input: {
       "data-kp-dev-review-placement",
       /^(left-prose-rail|captured-moment-sheet)$/
     );
+    if (hasOptions) await options.click();
   }
   await expectProgress(page, descriptor.progressEvidence, expectedProgress);
 

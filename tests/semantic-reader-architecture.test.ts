@@ -61,6 +61,20 @@ test("semantic reader permits governed learner-core public entry points", () => 
   ]), []);
 });
 
+test("first-paint preparation is shared without a compiler dependency on the browser app", () => {
+  assert.deepEqual(checkKpSemanticReaderImports([
+    { path: 'src/reader/compiler/page.ts', source: 'import { prepare } from "../preparation/public-api.ts";' },
+    { path: 'src/reader/app/hydrate.ts', source: 'import { prepare } from "../preparation/public-api.ts";' }
+  ]), []);
+  const violations = checkKpSemanticReaderImports([
+    { path: 'src/reader/compiler/page.ts', source: 'import { prepare } from "../app/layout.ts";' },
+    { path: 'src/reader/preparation/layout.ts', source: 'import { hydrate } from "../runtime/public-api.ts";' },
+    { path: 'src/reader/compiler/page.ts', source: 'import { prepare } from "../preparation/layout.ts";' }
+  ]);
+  assert.equal(violations.length, 3);
+  assert.ok(violations.every(issue => issue.kind === 'dependency-direction' || issue.kind === 'cross-layer-deep-import'));
+});
+
 test("semantic reader rejects backward and cross-layer deep imports", () => {
   const violations = checkKpSemanticReaderImports([
     {

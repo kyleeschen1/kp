@@ -7,23 +7,27 @@ import {
 } from "../document/public-api.ts";
 import { compileKpEquationExemplarPage } from "./equation-exemplar-page.ts";
 import {
-  compileKpFractionalLinearEquationLessonModel
+  compileKpFractionalLinearEquationLessonModel, type FractionalReadingIdentity
 } from "./fractional-linear-equation-lesson-model.ts";
 import { serializeKpReaderHydrationManifest } from "./hydration-manifest.ts";
 import { compileKpStaticLessonProse } from "./static-prose-compiler.ts";
 import { fractionalPassageOperations } from './fractional-passage-operations.ts';
+import { fractionalReadingCommentary } from './fractional-reading-commentary.ts';
 
-export function compileKpFractionalLinearEquationLesson(markdown: string) {
-  const model = compileKpFractionalLinearEquationLessonModel(markdown);
+export function compileKpFractionalLinearEquationLesson(markdown: string, reading?: FractionalReadingIdentity) {
+  const model = compileKpFractionalLinearEquationLessonModel(markdown, reading);
+  const notes = fractionalReadingCommentary(model.document, model.animation);
   const prose = compileKpStaticLessonProse(model.document, {
     staticMath: model.staticMath,
-    documentTheater: { operations: fractionalPassageOperations(model.hydration.blocks[0]!.checkpoints, model.animation.transformations) }
+    documentTheater: { operations: fractionalPassageOperations(model.hydration.blocks[0]!.checkpoints, model.animation.transformations),
+      annotations: new Map(notes.map(stop => [stop.stateId, stop.stateId])) }
   });
   const html = compileKpEquationExemplarPage({
     projection: "document-theater",
+    ...(notes.length ? { endpointCommentary: notes } : {}),
     animation: model.animation,
     title: model.document.title,
-    description: "See a fractional equation solve itself through searchable, reversible steps.",
+    description: reading?.description ?? "See a fractional equation solve itself through searchable, reversible steps.",
     documentId: model.document.id,
     documentVersion: model.document.version,
     lessonVariant: "fractional-linear",
@@ -42,7 +46,7 @@ export function compileKpFractionalLinearEquationLesson(markdown: string) {
 
   return createKpCompiledLessonArtifact({
     id: "compiled.lesson.solve-x.fractional-linear",
-    version: "1",
+    version: model.document.version,
     document: {
       kind: "lesson-document",
       id: model.document.id,

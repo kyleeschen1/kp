@@ -278,7 +278,10 @@ const risingPassages = document.body.dataset["kpReaderLayout"] === "rising-passa
   ? (await import("./document-theater.ts"))
       .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample })
   : undefined;
-const whatCountsAnnotations = documentId === "lesson.algebra.what-counts"
+const endpointCommentary = document.body.dataset["kpReaderEndpointCommentary"];
+const readerAnnotations = endpointCommentary !== undefined
+  ? (await import("./document-annotations.ts")).mountDocumentAnnotations(story, JSON.parse(endpointCommentary))
+  : documentId === "lesson.algebra.what-counts"
   ? (await import("./what-counts-annotations.ts")).mountWhatCountsAnnotations(story, equationSource === undefined ? undefined : JSON.parse(equationSource))
   : undefined;
 const attentionElements = [
@@ -616,7 +619,7 @@ function updateScrollGeometry(): void {
 
 function onResize(): void {
   if (printMedia.matches) return;
-  whatCountsAnnotations?.invalidate();
+  readerAnnotations?.invalidate();
   if (risingPassages?.readingDocument()) {
     updateScrollGeometry();
     renderer.refresh('resize');
@@ -779,6 +782,7 @@ function scheduleScrollSample(): void {
 }
 
 function measureLayout(revision: number): LayoutState {
+  readerAnnotations?.invalidate();
   measuredViewportSize = { width: viewport.clientWidth, height: viewport.clientHeight };
   if (chromeFreeCanonicalEquationSession !== undefined) {
     if (chromeFreeLayoutRevision !== revision) {
@@ -869,6 +873,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   // its existing paint; any seek, focus, font, motion or layout change renders.
   if (chromeFreeCanonicalEquationSession === undefined &&
       lastEquationFrame?.layout === layout && lastEquationFrame.key === frameKey) {
+    // Reading attention can change while the native equation is unchanged.
+    readerAnnotations?.render(risingPassages?.annotation(), chromeFreeLayoutRevision);
     setDatasetIfChanged(document.body, "kpReaderFramePlans", String(rendererInspection().framePlanCount + 1));
     return;
   }
@@ -882,7 +888,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       // actual focus and must not rebuild equation paint when prose advances.
       focus: focusSnapshot
     });
-    whatCountsAnnotations?.render(risingPassages?.annotation(), chromeFreeLayoutRevision);
+    readerAnnotations?.render(risingPassages?.annotation(), chromeFreeLayoutRevision);
     document.body.dataset["kpReaderReviewFrame"] = JSON.stringify([
       snapshot.animationProgressPermille,
       snapshot.phaseProgressPermille,
@@ -1198,6 +1204,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     projection.mode !== "essential"
   );
   syncIndependentZeroWitness(motion.independentZeroWitness);
+  // Attach only after this host's native/material paint handoff is complete.
+  readerAnnotations?.render(risingPassages?.annotation(), chromeFreeLayoutRevision);
   setStyleIfChanged(
     progressBar.style,
     "transform",
@@ -1682,6 +1690,10 @@ function scrollFocusWorkspaceIntoView(): void {
   const top = window.scrollY + staticSurface.getBoundingClientRect().top -
     masthead.getBoundingClientRect().height - 12;
   window.scrollTo({ top: Math.max(0, top) });
+  // This scroll belongs to restoration/resizing, not a new reading gesture.
+  // Record its final position before the asynchronous scroll event can release
+  // the explicit semantic playhead we just restored.
+  controlScrollPosition = window.scrollY;
 }
 
 function scrollToProgress(progressPermille: number): void {
@@ -1773,7 +1785,7 @@ function dispose(): void {
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", onResize);
   risingPassages?.dispose();
-  whatCountsAnnotations?.dispose();
+  readerAnnotations?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   printMedia.removeEventListener("change", onPrintChange);

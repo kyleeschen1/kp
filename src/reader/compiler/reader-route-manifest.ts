@@ -322,9 +322,10 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       label: "Simplify the difference",
       progressPermille: 500
     }),
-    // Accepted real-document prose and static theater shell; the October 28
-    // performance review accounts for this explicit publication cost amendment.
-    budget: routeBudget(69_395, 6_603, sharedEquationRuntimeGzipBaseline)
+    // November 9 amendment accounts for the accepted first-paint preparation:
+    // 4,423 raw / 1,389 marginal gzip bytes. Preserve the 5% and runtime gates.
+    // See reviews/2026-11-09-fractional-reading.md for complete-route attribution.
+    budget: routeBudget(74_464, 8_174, sharedEquationRuntimeGzipBaseline)
   }),
   defineKpReaderRoute({
     route: "/reader/divide-both-sides/",

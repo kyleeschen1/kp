@@ -1,7 +1,5 @@
 import { documentTheaterStaticStyles } from "./document-theater-projection.ts";
-import { measureDocumentTheaterLayout } from "../app/document-theater-layout.ts";
-import { documentPassageCadence } from "../app/document-theater-scroll.ts";
-import { prepareDocumentTheaterStaticState } from "../app/document-theater-static-state.ts";
+import { measureDocumentTheaterLayout, documentPassageCadence, prepareDocumentTheaterStaticState } from "../preparation/public-api.ts";
 
 export interface KpReaderPageShellInput {
   readonly projection?: "document-theater";

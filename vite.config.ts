@@ -257,8 +257,14 @@ export default defineConfig({
       name: "kp-semantic-reader-route",
       transformIndexHtml: {
         order: "pre",
-        handler(html, context) {
+        async handler(html, context) {
           const route = readerBuildRouteByFilename.get(context.filename);
+          if (context.server && route?.descriptor.route === '/reader/solve-fractional-linear/') {
+            const module = await context.server.ssrLoadModule('/scripts/fractional-reading-page.ts') as {
+              compileFractionalReading: (url: string) => string
+            };
+            return module.compileFractionalReading(context.originalUrl ?? context.path);
+          }
           return route === undefined
             ? html
             : route.descriptor.compile(route.markdown).html;

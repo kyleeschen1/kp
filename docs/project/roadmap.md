@@ -28,15 +28,15 @@ accepted and complete, with its history and evidence retained.
 
 What counts now serves as a technical authoring/runtime reference; the user
 judges its reasoning clear but its topic unsuitable as the main teaching exemplar.
-Review its bounded opening/short-beat refinement, then develop the existing
-fractional-equation source around choosing moves that preserve solutions.
+Its opening/short-beat refinement is accepted. The existing fractional-equation
+source now has a separate reasoning reading about choosing moves that preserve
+solutions. Review its argument, alternative route and changed-case question next.
 The [reading defaults](principles/document-theater-reading.md) preserve rich prose,
 give guided theaters an immediate orientation, and keep individual beats concise.
 This refines the programme's featured-quality outcome rather than replacing it.
 
-Use the inspected existing authoring/editor path for revisions.
-The parallel agent retains task tracking and editor
-ownership; strategic records have one designated editor at a time.
+Use the existing authoring path. The parallel agent retains task/editor ownership;
+strategic records have one editor at a time.
 
 ## First product proof — approved
 
@@ -46,13 +46,14 @@ promptly, and preserves a reusable result without custom repository engineering
 for each revision. Then pressure one learner-requested adaptation that retains
 the important reasoning and exact context.
 
-Source inspection finds an existing native-conversation/website-preview candidate
-in the editor lane; KP already rereads registered manuscripts on each request.
-Use those owners for the first real revision trial; identify its missing connection
-before building another workflow. See [inspection and handoff](reviews/2026-11-08-project-orientation.md).
-Measure time to useful preview/revision and actual engineering intervention.
-Live generation and fast iteration remain unproved; a scripted response is not
-that proof. Several domains and a large library are not the first finish line.
+The editor lane has a native-conversation/website-preview candidate. Reuse it
+and KP's registered-manuscript preview; inspect their missing connection first.
+See [inspection and handoff](reviews/2026-11-08-project-orientation.md).
+A bounded source-only note-and-target revision took about 21 seconds including
+editing, checking and saving after the second reader's support was implemented.
+The [trial](reviews/2026-11-09-fractional-reading.md) separates that result from
+the initial engineering. Fresh explanation generation and integrated workbench
+latency remain unproved. Several domains and a large library are not the first finish line.
 
 ## What already exists
 

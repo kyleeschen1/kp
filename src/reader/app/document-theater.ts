@@ -3,7 +3,7 @@ import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } fr
 import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
-import { measureDocumentTheaterLayout } from './document-theater-layout.ts';
+import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {

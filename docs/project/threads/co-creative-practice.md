@@ -13,21 +13,21 @@ earlier practice ambitions while changing their ordering.
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
-Read its live state; this index does not copy slice progress. The parallel agent
-retains todo tracking and independent editor ownership. Do not assume this
-checkout's old workbench proposal represents that agent's current implementation.
-Source inspection found its existing native-conversation/website-preview candidate.
-The [handoff](../reviews/2026-11-08-project-orientation.md) names its exact source
-checkout and remaining evidence limits. Saved reading and startup handoff are
-repaired; supported native-color readers now inherit bounded preparation/reuse.
+Read live slice state there. The parallel agent retains task/editor ownership;
+this checkout's old workbench proposal is not its current implementation.
+The [handoff](../reviews/2026-11-08-project-orientation.md) identifies the existing
+native-conversation/website-preview candidate and evidence limits. Saved reading
+and startup are repaired; supported readers inherit bounded preparation/reuse.
 The [motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md) distinguishes
-that completed reuse repair from remaining cold preparation cost. Return to the
-bounded opening/short-beat judgment next. The user judged the product reading's
+that completed reuse repair from remaining cold preparation cost. The user accepted
+the bounded opening/short-beat treatment and judged the product reading's
 reasoning clear, while selecting What counts as a technical reference rather than
 the main teaching exemplar. The [accepted reading defaults](../principles/document-theater-reading.md)
-and programme amendment capture that distinction. Develop the existing fractional
-equation reader's learner question next; preserve its version-1 source until a
-versioned revision is ready. Orientation remains accepted and complete.
+and programme amendment capture that distinction. A versioned fractional reading
+now explains choosing moves that preserve solutions, while retaining version 1.
+Review its explanatory quality next. A subsequent source-only note/target revision
+used the shared checked-save transaction in about 21 seconds; fresh generation
+and integrated workbench latency remain open. Orientation stays accepted and complete.
 
 ## Retrieve for a named question
 
@@ -39,7 +39,9 @@ versioned revision is ready. Orientation remains accepted and complete.
 - **Authoring a supported artifact:** [generation entrypoint](../authoring/llm-generation-entrypoint.md).
   Inspect the exact domain packet and existing owner before inventing a workflow.
 - **Next teaching source:** [fractional-equation brief](../authoring/fractional-equation-teaching-brief.md).
-  A draft argument and finite translation gaps; the current version-1 reader is preserved.
+  Working manuscript, bounded revision command and preserved version-1 reader.
+  [Trial evidence](../reviews/2026-11-09-fractional-reading.md) separates support
+  engineering, source-only revision, automated preservation and editorial judgment.
 - **Parallel ownership:** [parallel-development skill](../../../.agents/skills/kp-parallel-development/SKILL.md).
   Coordinate shared boundaries; do not edit another session's checkout or UI.
 - **Vocabulary:** [system terms](../principles/system-vocabulary.md) and

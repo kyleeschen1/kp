@@ -1,8 +1,67 @@
 import { test, expect, type Page } from "@playwright/test";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 import readings from "../content/authoring/algebra/what-counts-readings.json" with { type: "json" };
+import fractionalReadings from "../content/authoring/algebra/fractional-linear-readings.json" with { type: "json" };
 
 const route = "/reader/what-counts/";
+test('fractional reasoning reuses native annotations without changing the saved version-1 reading', async ({ page }, info) => {
+  test.setTimeout(90_000);
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  for (const width of [1100, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/reader/solve-fractional-linear/?reading=reasoning'); await ready(page);
+    const plane = page.locator('.kp-caption-pin');
+    await plane.scrollIntoViewIfNeeded();
+    for (const id of ['equation.fractional-linear.initial', 'equation.fractional-linear.right-simplified', 'equation.fractional-linear.initial']) {
+      await jump(page, id);
+      await expect(plane).toHaveAttribute('data-anchored-state', id);
+      await expect(page.locator('.kp-animation-story')).toHaveAttribute('data-anchored-status', 'ready');
+      await expect(plane.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+      await expect(plane.locator('.anchored-labels')).toHaveCSS('opacity', '1');
+      const fits = await plane.evaluate(node => {
+        const bounds = node.getBoundingClientRect(), label = node.querySelector('[data-kp-focus-deck-annotation]')!.getBoundingClientRect();
+        return label.left >= bounds.left && label.right <= bounds.right && label.top >= bounds.top && label.bottom <= bounds.bottom;
+      });
+      expect(fits).toBe(true);
+      expect(await page.locator('.kp-rising-passage').evaluateAll(nodes => nodes.every(node => getComputedStyle(node).opacity === '0'))).toBe(true);
+      await page.screenshot({ path: info.outputPath(`${width}-${id}.png`) });
+    }
+    await jump(page, 'beat.multiply');
+    const next = await page.evaluate(() => scrollY);
+    await expect(plane.locator('.anchored-labels')).toBeHidden();
+    await expect(page.locator('[data-kp-rising-beat="beat.multiply"]')).toHaveCSS('opacity', '1');
+    await page.evaluate(top => scrollTo(0, top), next - 48);
+    await expect.poll(async () => Number(await plane.locator('.anchored-labels').evaluate(node => getComputedStyle(node).opacity))).toBeGreaterThan(.3);
+    await expect.poll(async () => Number(await plane.locator('.anchored-labels').evaluate(node => getComputedStyle(node).opacity))).toBeLessThan(.7);
+    await page.evaluate(() => dispatchEvent(new Event('resize')));
+    await expect.poll(async () => Number(await plane.locator('.anchored-labels').evaluate(node => getComputedStyle(node).opacity))).toBeGreaterThan(.3);
+    await expect.poll(async () => Number(await plane.locator('.anchored-labels').evaluate(node => getComputedStyle(node).opacity))).toBeLessThan(.7);
+    await jump(page, 'equation.fractional-linear.right-simplified');
+    await page.evaluate(() => dispatchEvent(new Event('scrollend')));
+    const share = await page.locator('[data-kp-reader-share]').getAttribute('href');
+    expect(share).toContain('reading=reasoning');
+    await page.goto('about:blank'); await page.goto(share!); await ready(page);
+    await expect(plane).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
+    await page.locator('.kp-rising-navigation > summary').click();
+    await page.locator('.kp-caption-reading-mode').click();
+    await expect(plane.locator('.anchored-labels')).toBeHidden();
+    await expect(page.locator('.kp-lesson')).toContainText('The tempting wrong move');
+    await page.goto('/reader/solve-fractional-linear/?reading=reasoning&kpVersion=' + fractionalReadings.reasoning.previous[0]!.version);
+    await ready(page); await jump(page, 'equation.fractional-linear.right-simplified');
+    await expect(plane.locator('.anchored-labels')).toContainText('This is half of x.');
+    await expect(plane.locator('[data-anchor-selectors]')).toHaveAttribute('data-anchor-selectors', /fraction\.numerator\.x/);
+    await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
+    await jump(page, 'equation.fractional-linear.initial');
+    await expect(plane.locator('.anchored-labels')).toHaveCSS('opacity', '1');
+    await expect(plane.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+    await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'none' });
+    await page.goto('/reader/solve-fractional-linear/?kpCheckpoint=beat.read&kpLesson=lesson.solve-x.fractional-linear&kpMotion=full&kpProfile=standard&kpProgress=0&kpProjection=equation.symbolic&kpReading=0.000000&kpVersion=1#beat.read'); await ready(page);
+    await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', '1');
+    await expect(page.locator('[data-kp-rising-beat]')).toHaveCount(7);
+    await expect(page.locator('.anchored-labels')).toHaveCount(0);
+  }
+  expect(errors).toEqual([]);
+});
 test('checked manuscript snapshots and their old addresses reach the same native reader', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -83,7 +142,8 @@ test('startup keeps visible geometry stable through the static to interactive ha
     { name: 'opening-v1', suffix: '?kpVersion=1' },
     { name: 'opening-v2', suffix: '' },
     { name: 'opening-product', suffix: '?reading=product' },
-    { name: 'fractional', suffix: '', path: '/reader/solve-fractional-linear/' }
+    { name: 'fractional', suffix: '', path: '/reader/solve-fractional-linear/' },
+    { name: 'fractional-reasoning', suffix: '?reading=reasoning', path: '/reader/solve-fractional-linear/' }
   ];
   for (const width of [1100, 390]) for (const item of cases) {
     await page.setViewportSize({ width, height: 900 });

@@ -1,5 +1,5 @@
 /**
- * The compiler also embeds this dependency-free function as a small classic
+ * The compiler embeds this dependency-free function as a small classic
  * script after the prose. It runs after CSS, before the animation module graph,
  * so static and interactive reading share geometry from the first paint.
  * Keep runtime dependencies in the arguments: the emitted script is tested.

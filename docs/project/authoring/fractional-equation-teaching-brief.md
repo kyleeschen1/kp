@@ -1,7 +1,7 @@
 # Choosing a move that preserves the solutions
 
-Status: next teaching draft, 2026-11-09; not a selected reader revision or evidence
-of learner transfer. Follows the explanation-first worksheet and the approved
+Status: implemented local teaching candidate, 2026-11-09; editorial review pending,
+not evidence of learner transfer. Follows the explanation-first worksheet and the approved
 authoring-to-practice programme. What counts remains the technical reference.
 
 ## Learner question and finite outcome
@@ -53,13 +53,16 @@ reasoning check, not a new animated operation request.
 
 ## Visual job and preservation boundary
 
-Canonical current artifact: `content/lessons/solve-fractional-linear.md`.
-Host: `/reader/solve-fractional-linear/` on the shared product server, port 8011.
+Canonical working manuscript: `content/authoring/algebra/fractional-linear-reasoning.article.md`.
+Host: `/reader/solve-fractional-linear/?reading=reasoning` on product server 8011.
+The reading registry selects an immutable snapshot. The unqualified route and
+version 1 retain `content/lessons/solve-fractional-linear.md` exactly.
 Asset: `animation.fractional-linear.solve-x-over-2`, version 1. The existing
 fractional-linear lesson model/compiler owns its checked equation and operations;
 the shared document theater and native KaTeX compositor own presentation.
 
-Use the existing seven beats and semantic focus references. Entry should orient
+Use the existing seven read/operation beats and semantic focus references, with
+two stationary annotation beats at checked states. Entry should orient
 the learner to the unknown being halved and then increased by three. Subtraction
 should make both changes inspectable, then show why the opposites disappear.
 Multiplication should connect the two sides before the denominator cancellation.
@@ -73,15 +76,30 @@ This remains a candidate advantage over a short static worked solution. Seeing
 the quantities move does not establish that a learner understands the invariant.
 Review the explanation and a changed-case response separately from visual polish.
 
-## Translation gaps to resolve narrowly
+## Supported local revision
 
-The current fractional host does not yet expose the authored opening-note path
-used by What counts, and its version-1 prose is not in that reading registry.
-Do not overwrite the old source under version 1, copy What counts commentary,
-or introduce a universal annotation system to hide those gaps. After the current
-opening review, pressure the existing attention seam with this second caller,
-using domain-owned semantic targets and a bounded version-preserving revision.
-Keep the accepted smooth mathematics and user-saved version-1 links intact.
+The two translation gaps are resolved: a separate pinned reading registry
+preserves version 1, and a shared annotation mount follows both native-paint host
+paths. Note wording and targets come from the Article, not a second commentary
+copy. A state-named beat becomes a stationary note only at that state's checked
+progress, with selectors owned by that state. Use plain-language note text;
+notation stays in native KaTeX. Unsupported states, targets, progress or inline
+notation return a repair gap. No new mathematical operations are inferred.
+
+Edit the working manuscript, then run:
+
+```sh
+npm run author:fractional-reading -- --reading reasoning --source content/authoring/algebra/fractional-linear-reasoning.article.md
+```
+
+The check returns a basis and proposed version URL. Repeat with `--apply --expect
+<basis>` to select it, then open the returned path on port 8011. Only apply makes
+the new URL available. Stale or invalid edits leave the selected reading intact;
+each previous version retains its own exact source, wording and coordinates.
+Do not edit archived snapshots or add arbitrary registry entries to revise prose.
+This is local development authoring, not production publication or an integrated
+workbench conversation. [Evidence and timings](../reviews/2026-11-09-fractional-reading.md)
+separate the initial engineering from a subsequent source-only revision.
 
 The rollback unit is a new pinned explanation and its bounded reader binding,
 not a replacement math model or compositor. The finish line is one reviewed,

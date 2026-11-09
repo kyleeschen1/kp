@@ -1,5 +1,5 @@
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
-import { AnchoredAlgebraGap, type CommentaryStop } from "./what-counts-commentary.ts";
+import { AnchoredAlgebraGap, type CommentaryStop } from "../document/public-api.ts";
 
 /** Endpoint-only projection. Material transit has its own paint authority;
  * this adapter never measures its hidden native source as a moving anchor. */

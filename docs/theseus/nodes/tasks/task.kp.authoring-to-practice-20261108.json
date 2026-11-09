@@ -157,10 +157,122 @@
       "scope": "focused",
       "checkedAt": "2026-11-09T17:25:28.959Z",
       "notes": "Test types and app TypeScript noEmit pass. All 75 project-vision checks pass; Theseus workspace validates. See authoring-revision evidence for exact commands and pending subjective review."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fractional-reading.test.ts tests/what-counts-revision.test.ts tests/semantic-reader-fractional-linear-compiler.test.ts tests/anchored-algebra.test.ts tests/document-reading-attention.test.ts tests/semantic-reader-architecture.test.ts tests/fractional-rising-scroll.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T17:59:35.522Z",
+      "notes": "41 passed after the preparation boundary extraction. Source-authored notes, exact old readings, unchanged math, invalid/stale save recovery, attention ownership and forbidden dependency directions."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T17:59:54.842Z",
+      "notes": "Initial run found three compiler-to-app imports introduced by the previous startup repair. Repaired by moving dependency-free emitted preparation into a governed public boundary; no exception added."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T17:59:56.965Z",
+      "notes": "Final full architecture run passed, including direction, framework-neutral surfaces, reader, compiler authority and cross-domain gates."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T17:59:59.092Z",
+      "notes": "Initial run found only original fractional HTML over old ceilings. Measured 74464 raw/8174 gzip; earlier inline startup script contributes 4423 raw/1389 marginal gzip. Explicit bounded policy amendment documented in 2026-11-09-fractional-reading review; other route/runtime gates preserved."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep 'fractional reasoning|authored opening annotation|annotation fades|startup keeps|saved version-1 link|reader gives native annotations'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:00:00.792Z",
+      "notes": "12 selected Chromium/Firefox tests passed at desktop and phone. Covers both annotation callers, saved originals, startup, fade/reversal/restoration, source-only retargeted note and previous note revision. Earlier new-caller failure exposed missing retained-host render path; fixed before this run."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox --grep 'fractional reasoning|startup keeps'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:00:02.295Z",
+      "notes": "Final four-test startup/annotation rerun passed after dependency-only preparation move, both engines and widths."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-09T18:00:03.950Z",
+      "notes": "74/75 passed; updated roadmap/thread exceeded startup word budgets by 14/13 words. Condensed existing entrypoint prose without raising limits."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:00:05.505Z",
+      "notes": "Final 75 passed after entrypoint condensation. Dashboard, roadmap and thread agree on accepted treatment, bounded revision evidence and pending fractional explanation judgment."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "failed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:00:07.146Z",
+      "notes": "Initial full run 15/17 passed. Fractional toolbar assertion expected old exposed chrome; conformance now opens accepted Options disclosure. Solve-x resize also incorrectly released explicit progress after its own scroll; repair records resulting scroll position and adds repeated breakpoint/user-scroll checks. Focused repair rerun passed; clean full run pending."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:01:48.358Z",
+      "notes": "17/17 passed on final full rerun, including repeated wide/narrow resize preserving progress and subsequent user wheel releasing it. Toolbar access uses accepted Options disclosure."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:01:49.662Z",
+      "notes": "Final full application, Node, tests, Svelte and domain checks passed."
+    },
+    {
+      "command": "npm run build:bundle",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:01:50.742Z",
+      "notes": "Final build passed; existing large-chunk warning retained. New reasoning reading remains dev-only; production still builds original."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:01:51.777Z",
+      "notes": "Final build exact closure passed for all 12 manifest routes."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:01:52.894Z",
+      "notes": "Final build erasure passed, 629 files and 12 forbidden markers."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:01:53.928Z",
+      "notes": "All 12 routes passed after explicit diagnosed HTML-only amendment. Final fractional HTML 74464 raw/8172 gzip; startup runtime 150297 gzip, below unchanged 160087 ceiling. Inline script 4423 raw/1386 marginal gzip."
+    },
+    {
+      "command": "npm run --silent theseus -- workspace validate",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T18:02:39.989Z",
+      "notes": "Valid 1283 nodes and 34264 events after slice completion, verification, progress and context-receipt closeout."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "4/15 complete. Accepted reasoning is retained as technical reference. New versioned product reading starts with immediate authored annotation and 17-27 word beats, with full prose and old addresses retained. Shared paragraph indentation applied. HUMAN_CHECKPOINT for opening and pacing before second caller. Fractional-equation teaching argument prepared independently; responsive drafting/editor timing remains partial."
+    "summary": "HUMAN_CHECKPOINT: six of fifteen approved outcomes complete. Prior opening/indentation/short beats accepted. New fractional reasoning reading and source-authored notes are reviewable at port 8011; isolated edit/check/save took about 21 seconds after support engineering. All final focused, browser, types, architecture, production and budget checks pass after recorded repairs. Editorial quality remains pending; no fresh-generation, integrated-workbench or learning claim. Continue featured judgment, then cheaper supported explanation; preserve independent editor ownership. See docs/project/reviews/2026-11-09-fractional-reading.md."
   }
 }

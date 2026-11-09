@@ -35,6 +35,10 @@ export interface KpReaderRouteBudgetMeasurement {
   readonly runtimeCodeGzipBytes: number;
   readonly runtimeFiles: readonly string[];
   readonly runtimeFileAttribution: readonly KpBundleFileAttribution[];
+  readonly firstPaintPreparation?: Readonly<{
+    rawBytes: number;
+    marginalGzipBytes: number;
+  }>;
 }
 
 export interface KpReaderRouteBudgetDeltas {
@@ -125,12 +129,21 @@ export async function measureKpReaderRouteBudget(input: {
     input.distRoot,
     runtimeFiles
   );
+  // Attribute inline preparation without pretending its removal is a valid page:
+  // the marginal gzip difference is diagnostic, not a second budget or baseline.
+  const source = html.toString("utf8");
+  const withoutPreparation = source.replace(/<script data-kp-document-layout>[\s\S]*?<\/script>/g, "");
+  const preparationBytes = html.byteLength - Buffer.byteLength(withoutPreparation);
   return {
     compiledHtmlRawBytes: html.byteLength,
     compiledHtmlGzipBytes: gzipSync(html).byteLength,
     runtimeCodeGzipBytes: runtime.gzipBytes,
     runtimeFiles: Object.freeze(runtime.files.map(({ file }) => file)),
-    runtimeFileAttribution: runtime.files
+    runtimeFileAttribution: runtime.files,
+    ...(preparationBytes === 0 ? {} : { firstPaintPreparation: {
+      rawBytes: preparationBytes,
+      marginalGzipBytes: gzipSync(html).byteLength - gzipSync(withoutPreparation).byteLength
+    } })
   };
 }
 
@@ -256,6 +269,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
       compiledHtmlRawBytes: measurement.compiledHtmlRawBytes,
       compiledHtmlGzipBytes: measurement.compiledHtmlGzipBytes,
       runtimeCodeGzipBytes: measurement.runtimeCodeGzipBytes,
+      ...(measurement.firstPaintPreparation ? { firstPaintPreparation: measurement.firstPaintPreparation } : {}),
       deltas,
       issues: routeIssues
     })),

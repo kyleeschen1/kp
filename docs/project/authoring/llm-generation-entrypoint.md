@@ -158,6 +158,10 @@ For independent prose readings of the pinned four-state What counts source in
 the accepted document theater, use `what-counts-reader-packet.md`. Its Article
 and reading registration are separate from the algebra checker; changing the
 mathematics or inventing a new host is not a supported prose-only edit.
+For the existing fractional-linear reader's alternative explanation and authored
+stationary notes, use `fractional-equation-teaching-brief.md`, especially its
+supported local revision section. Its checked save command preserves version 1;
+the fractional asset still owns operations, progress and selector identity.
 Explicit `author:composed-algebra-publication --source <v2.json> --interactive`
 packages the existing native card with revision-pinned playback and complete
 static reading. Use the accepted whole-and-parts source as the text-above

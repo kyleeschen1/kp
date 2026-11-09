@@ -1,0 +1,25 @@
+{
+  "original": {
+    "articlePath": "content/authoring/algebra/readings/fractional-linear/original/b248c3bc911507e913fbe3566bab246b7dc453dfedfd67dab2f883fffbc656d6.article.md",
+    "version": "1",
+    "title": "Solve x/2 + 3 = 7",
+    "description": "See a fractional equation solve itself through searchable, reversible steps.",
+    "sha256": "b248c3bc911507e913fbe3566bab246b7dc453dfedfd67dab2f883fffbc656d6"
+  },
+  "reasoning": {
+    "articlePath": "content/authoring/algebra/readings/fractional-linear/reasoning/c392f40ef02f549087c679708f6a9ca1f3b7d063acafb7730e3587b424056207.article.md",
+    "version": "reasoning.c04bc639f76c9e6df86559310bac3479e2b2fe738c351c29e0e6e448ecde7fad",
+    "title": "How do you choose the next move?",
+    "description": "Choose useful equation moves while preserving exactly the same solutions.",
+    "sha256": "c392f40ef02f549087c679708f6a9ca1f3b7d063acafb7730e3587b424056207",
+    "previous": [
+      {
+        "articlePath": "content/authoring/algebra/readings/fractional-linear/reasoning/b879f25e78c2dada10cbacbd8c44584737c17a15cdc41dbed9153f00731f56dd.article.md",
+        "version": "reasoning.361344aab8a6dbf6f40c9a55cfa715da97344399b4a24a4b81efbed1d7552bec",
+        "title": "How do you choose the next move?",
+        "description": "Choose useful equation moves while preserving exactly the same solutions.",
+        "sha256": "b879f25e78c2dada10cbacbd8c44584737c17a15cdc41dbed9153f00731f56dd"
+      }
+    ]
+  }
+}

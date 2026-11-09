@@ -53,9 +53,13 @@ not a declaration that its current explanation is exceptional.
 
 ## Bounded adoption
 
-The first candidate is the product reading at `/reader/what-counts/?reading=product`.
+The user accepted the product reading's opening, shorter beats and indentation
+on 2026-11-09 (“much better! resume”). The first candidate is
+`/reader/what-counts/?reading=product`.
 Its opening uses an existing checked state and existing notes; the reader owns
-early presence. Shared document paragraph indentation is approved. Broader
-attention rollout waits for this candidate's review and a different caller.
+early presence. Shared document paragraph indentation is approved. The fractional
+reasoning reading now pressures the same annotation renderer with its own
+semantic targets and retained native-paint host. Its new explanation still needs
+editorial judgment; this is bounded reuse across two callers, not a catalogue rollout.
 Old manuscript bytes and addresses remain pinned. No schema, universal note
 requirement or catalogue migration follows merely from recording these defaults.

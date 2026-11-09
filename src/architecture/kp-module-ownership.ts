@@ -126,6 +126,11 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     ),
     ownershipRule("src/reader/renderers/", "renderer"),
     ownershipRule(
+      "src/reader/preparation/",
+      "neutral-core",
+      "Dependency-free first-paint functions are compiled into the document and reused by hydration; they import no application or renderer."
+    ),
+    ownershipRule(
       "src/reader/document/",
       "neutral-core",
       "Document contracts are portable semantic data shared by compilers and hosts."

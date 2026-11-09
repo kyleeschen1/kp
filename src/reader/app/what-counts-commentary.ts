@@ -1,24 +1,10 @@
 import { assertKpComposedAlgebraPresentationV2, type KpComposedAlgebraPresentationV2 } from "../../authoring/composed-algebra-presentation-v2.ts";
+import { AnchoredAlgebraGap, type CommentaryStop } from '../document/public-api.ts';
+export { AnchoredAlgebraGap, type CommentaryNote, type CommentaryStop } from '../document/public-api.ts';
 
 // Editorial claims are valid for these exact source bytes, not every expression
 // with similarly named selectors. A source edit needs an explicit editorial review.
 export const commentaryRevision = "sha256:7b2d98b4554f80a3456ee6891df12dfdf069f76c11af05471b727908e37f2c61";
-export class AnchoredAlgebraGap extends Error {
-  readonly code = "kp.anchored-algebra.repair-gap";
-  readonly path: string;
-  constructor(path: string, expected: string) { super(`${path}: ${expected}`); this.path = path; }
-}
-export interface CommentaryNote {
-  readonly id: string;
-  readonly text: string;
-  readonly detail: string;
-  readonly side: "above" | "below";
-  readonly views: Readonly<Record<string, readonly string[]>>;
-}
-export interface CommentaryStop {
-  readonly stateId: string;
-  readonly notes: readonly CommentaryNote[];
-}
 const state = (name: string) => `state.what-counts.${name}`;
 const view = (name: string, roles: readonly string[]) => ({ [state(name)]: roles.map(role => `${state(name)}.paint.${role}`) });
 const stops: readonly CommentaryStop[] = [

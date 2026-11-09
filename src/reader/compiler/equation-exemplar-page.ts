@@ -4,11 +4,13 @@ import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotate
 import { renderKpEquationPageTemplate } from "../../rendering/equation-stage-template.ts";
 import type { KpReaderEquationPresentationCapability, KpReaderEvaluationControlsKind } from "../document/public-api.ts";
 import { compileKpReaderPageShell } from "./reader-page-shell.ts";
+import type { CommentaryStop } from '../document/public-api.ts';
 
 export interface KpEquationExemplarPageInput {
   readonly accessibilityOwner?: "page-static" | "stage";
   readonly projection?: "document-theater";
   readonly equationSource?: unknown;
+  readonly endpointCommentary?: readonly CommentaryStop[];
   readonly animation: KpAnimationAsset;
   readonly title: string;
   readonly description: string;
@@ -53,6 +55,7 @@ export function compileKpEquationExemplarPage(
       ] : []),
       ...(input.palette === undefined ? [] : [{ name: "data-kp-reader-palette", value: input.palette }]),
       ...(input.equationSource === undefined ? [] : [{ name: "data-kp-reader-equation-source", value: JSON.stringify(input.equationSource) }]),
+      ...(input.endpointCommentary === undefined ? [] : [{ name: "data-kp-reader-endpoint-commentary", value: JSON.stringify(input.endpointCommentary) }]),
       { name: "data-kp-reader", value: "semantic-document" },
       { name: "data-kp-reader-document-id", value: input.documentId },
       { name: "data-kp-reader-document-version", value: input.documentVersion },
