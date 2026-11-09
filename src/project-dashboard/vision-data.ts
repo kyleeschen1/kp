@@ -41,8 +41,8 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Two independent readings now share one checked algebra source in the accepted reader. Existing physics source authoring was rechecked, not newly created. General rapid or conversational generation remains unproved.",
-      evidence: { label: "Current authoring API", href: "docs/project/authoring/concise-domain-api.md" },
+      established: "Independent readings share one checked algebra source. A checked local revision operation now saves immutable source, preserves old links and rejects invalid or stale drafts; the existing candidate reached the reader through it. Editorial acceptance, a second useful live revision and native-workbench conversation remain unproved.",
+      evidence: { label: "Checked revision trial and remaining proof", href: "docs/project/reviews/2026-11-08-authoring-revision.md" },
       outcome: {
         authority: "approved",
         id: "authoring-revision", title: "Revise one exceptional explanation through the product",

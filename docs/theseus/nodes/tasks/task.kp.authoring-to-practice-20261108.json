@@ -122,10 +122,24 @@
       "scope": "focused",
       "checkedAt": "2026-11-09T04:35:57.710Z",
       "notes": "Generic discovery capture cannot reach default server 8000; explicit 8011 retry times out on historical coordinated-stage selector. No legacy-host repair retained. Current native compositor canary and three-reader preservation cohorts pass; do not describe this legacy capture as passed."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/what-counts-revision.test.ts tests/anchored-algebra.test.ts",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T04:56:23.810Z",
+      "notes": "18 tests pass: checked atomic source revisions, stale draft/source rejection, immutable snapshots, concurrent writers, partial preparation failure, earlier-version restoration, exact HTML preservation and existing reading contracts. Node and test types pass."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-09T04:56:25.394Z",
+      "notes": "Complete current reader cohort: 35 passed, one intentional diagnostic skip. Both browsers retain actual applied candidate versions, saved v1, startup/fallback geometry, focus, fades, static/phone reading and exact situated return. Shared 8011 URL serves the applied pinned version. Project vision 75 tests pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Automatic preparation amendment complete and verified. Broader programme remains open; real-revision editorial judgment is next. Cold preparation is still measurable; avoid repeating accepted typography/startup work or claiming live fast generation."
+    "summary": "HUMAN_CHECKPOINT: shared cold preparation repair complete; checked source revision workflow verified and candidate snapshot applied without prose changes. 3 of 15 outcomes complete. Review reading=product through 30 versus 11 before continuing dependent authoring outcomes. Automatic runtime tuning requires no author flags. Global autonomy metadata gaps and old generic capture remain documented; current reader checks pass."
   }
 }

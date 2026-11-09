@@ -1,7 +1,31 @@
 import { test, expect, type Page } from "@playwright/test";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
+import readings from "../content/authoring/algebra/what-counts-readings.json" with { type: "json" };
 
 const route = "/reader/what-counts/";
+test('checked manuscript snapshots and their old addresses reach the same native reader', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  for (const version of ['product.1', readings.product.version]) {
+    const response = await page.goto(route + '?' + new URLSearchParams({ reading: 'product', kpVersion: version }));
+    expect(response?.status()).toBe(200);
+    await ready(page);
+    await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', version);
+    await expect(page.locator('[data-kp-rising-beat="passage.what-counts.product-contrast"]'))
+      .toContainText('would instead give 11');
+    await jump(page, 'state.what-counts.collected');
+    await expect(page.locator('[data-kp-reader-native-endpoint-passed]')).toHaveAttribute('data-kp-reader-native-endpoint-passed', 'true');
+    await page.evaluate(() => dispatchEvent(new Event('scrollend')));
+    const share = new URL((await page.locator('[data-kp-reader-share]').getAttribute('href'))!, page.url());
+    expect(share.searchParams.get('reading')).toBe('product');
+    expect(share.searchParams.get('kpVersion')).toBe(version);
+    await page.goto(share.href);
+    await ready(page);
+    await expect(page.locator('.kp-lesson')).toHaveAttribute('data-kp-version', version);
+    await expect(page.locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', 'state.what-counts.collected');
+  }
+  expect(errors).toEqual([]);
+});
 test('shared readiness still completes for the standard equation reader', async ({ page }) => {
   await page.goto('/reader/solve-x/');
   await ready(page);

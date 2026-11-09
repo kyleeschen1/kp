@@ -57,7 +57,8 @@
     {
       "id": "responsive",
       "title": "Remove measured iteration friction",
-      "status": "planned"
+      "summary": "Checked revision workflow implemented and verified: automatic immutable snapshots/version identity, stale/invalid draft rejection, writer exclusion, old-address preservation and last-valid recovery. Existing candidate applied unchanged; 41 ms operation and 0.47 s initial CLI, with later loaded CLI up to 2.83 s. Another useful live revision and model/editor latency evidence remain after editorial judgment; no native-workbench integration claim.",
+      "status": "in-progress"
     },
     {
       "id": "attention",

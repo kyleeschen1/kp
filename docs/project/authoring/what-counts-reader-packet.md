@@ -9,20 +9,52 @@ universal reader schema. Begin with `llm-generation-entrypoint.md`.
 - `content/authoring/algebra/what-counts.json` owns the four checked states.
   Use `equation.algebra-intuition` discovery/checking for its exact mathematical
   scope. The commentary deliberately pins that source revision.
-- `what-counts.article.md` is the accepted explanation. `what-counts-zero.article.md`
-  asks a different question using exactly the same math. Both live beside it.
+- `what-counts.article.md` is the working copy of the accepted explanation.
+  `what-counts-zero.article.md` asks a different question using exactly the same
+  math. Selected bytes are pinned snapshots identified by the registry.
+  `what-counts-product.article.md` is the editable count-versus-quantity candidate;
+  its explanatory quality is awaiting review.
 - `what-counts-readings.json` registers local Article paths, distinct document
   versions, titles and descriptions. The default key is `whole`; `?reading=zero`
   selects the second reading. Unknown keys produce a located repair.
-- `scripts/what-counts-reader-page.ts` assembles both through the existing
+- `scripts/what-counts-reader-page.ts` assembles registered readings through the existing
   lesson Markdown, reference resolver, static prose and equation page owners.
   No alternate browser entrypoint, clock, native renderer or stylesheet exists.
 
-Edit an Article, update its registered document version when revising published
-reading coordinates, then reload the route. Here “version” distinguishes local
-readings; it does not imply public publication. The registry rejects duplicate
-or empty versions. Existing URLs identify the exact selected reading/version;
-they do not archive historical source bytes. Git retains the accepted checkpoint.
+Use the checked revision command below when changing a selected reading. It
+automates version identity and retains exact old bytes before replacing the
+registry entry. Here “version” distinguishes local readings, not public
+publication. The original version-1 reading is also explicitly archived. Unknown
+versions, cross-reading substitutions and changed snapshot bytes are repair gaps.
+
+## Check and save a revision
+
+Edit the working Article, then check it without changing the selected reading:
+
+```sh
+npm run author:what-counts -- --reading product --source content/authoring/algebra/what-counts-product.article.md
+```
+
+The result contains a `basis`, source digest, proposed version/URL and operation
+timings. A checked URL is not available until applied. Repeat the command with
+`--apply --expect <basis from the check>` to save it. Optional `--title` and
+`--description` participate in revision identity too. Use the returned URL on
+the existing server, or reload `?reading=product`. Selecting a candidate is not
+editorial acceptance and does not adopt it as the default explanation.
+
+The operation uses this reader's existing compiler. It stores immutable Article
+snapshots under `content/authoring/algebra/readings/<reading>/`, pins their hashes,
+and replaces the registry atomically after checking the candidate and old address.
+An invalid draft leaves the selected source intact. A changed registry, source or
+proposed draft invalidates an outstanding `basis`; check again. Cooperating writers use one
+registry lock. A process killed while owning that lock needs a verified stale-lock
+cleanup; the command does not guess whether another writer has stopped.
+
+The working draft can then change without altering the selected snapshot. Read
+the registry to identify selected bytes; do not edit snapshots or manually change
+versions. This is a bounded local source workflow, not a new editor, model service,
+publication format or proof of live conversational generation. See the
+[revision trial](../reviews/2026-11-08-authoring-revision.md) for measured limits.
 
 ## What can change without engine edits
 
@@ -50,7 +82,7 @@ presentation owner, not a generic fade or a cleared revision pin.
 
 ```sh
 npm run author:check -- --task equation.algebra-intuition --request content/authoring/algebra/what-counts.json
-node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts
+node --disable-warning=ExperimentalWarning --test tests/anchored-algebra.test.ts tests/what-counts-revision.test.ts
 npm run visual:anchored-algebra -- --project=firefox
 ```
 
@@ -61,8 +93,9 @@ phone fitting. Neither mechanical check proves explanatory quality or learning.
 
 Open `http://localhost:8011/reader/what-counts/` or
 `http://localhost:8011/reader/what-counts/?reading=zero`. The server reads the
-selected Article on each request; reloading applies its current bytes. A valid
-CLI math report alone does not prove that a particular Article reached a host.
+selected Article on each request; reloading an applied revision displays its
+pinned bytes. A valid CLI math report alone does not prove that a particular
+Article reached a host.
 
 Adding another registered reading of these same four states is a content edit.
 Changing the mathematics, creating a new choreography or moving this path to a
