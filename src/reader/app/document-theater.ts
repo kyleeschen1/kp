@@ -3,6 +3,7 @@ import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } fr
 import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
+import { measureDocumentTheaterLayout } from './document-theater-layout.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -118,42 +119,9 @@ export function mountDocumentTheater(input: {
   };
   const measure = () => {
     if (readAll) return;
-    headerHeight = masthead.getBoundingClientRect().height;
-    const available = window.innerHeight - headerHeight;
-    heights = passages.map((passage) => passage.getBoundingClientRect().height);
-    const maxHeight = Math.max(...heights);
-    // Paragraph height affects layout once, not the equation's position on each
-    // passage exchange. A short caption shares the same bottom reading line.
-    const groupHeight = maxHeight + 14 + equationHeight;
-    const cardHeight = Math.max(320, groupHeight + 64, annotationStates.some(Boolean) ? maxHeight * 2 + 210 : 0);
-    const cardTop = headerHeight + Math.max(16, (available - cardHeight) / 2);
-    const lineWithinCard = annotationStates.some(Boolean) ? cardHeight / 2 - 14 - equationHeight / 2 : (cardHeight - groupHeight) / 2 + maxHeight;
-    frameTop = -lineWithinCard;
-    frameBottom = cardHeight - lineWithinCard;
-    readingLine = cardTop + lineWithinCard;
-    const cadence = documentPassageCadence(available);
-    const style = document.body.style;
-    style.setProperty('--kp-document-equation-height', `${equationHeight}px`);
-    style.setProperty('--kp-rising-header-height', `${headerHeight}px`);
-    style.setProperty('--kp-caption-card-height', `${cardHeight}px`);
-    style.setProperty('--kp-caption-card-top', `${cardTop}px`);
-    style.setProperty('--kp-flow-line', `${readingLine}px`);
-    style.setProperty('--kp-flow-line-in-card', `${lineWithinCard}px`);
-    // Keep the theater pinned beyond both semantic endpoints so the first
-    // and last paragraphs retreat relative to it, rather than riding with it.
-    const edgeRoom = 48;
-    style.setProperty('--kp-flow-leading', `${lineWithinCard - heights[0]! + edgeRoom}px`);
-    style.setProperty('--kp-flow-tail', `${cardHeight - lineWithinCard + edgeRoom}px`);
-    style.setProperty('--kp-flow-hold', `${cadence.hold}px`);
-    // Restore the generous strip spacing. Readability bridges this distance;
-    // paragraph height must not be subtracted to compress the handoff.
-    style.setProperty('--kp-flow-gap', `${cardHeight - lineWithinCard + 4}px`);
-    holds = passages.map((_, index) => operations[index] ? cadence.hold : cadence.read);
-    passages.forEach((passage, index) => {
-      passage.style.setProperty('--kp-passage-top', `${Math.max(headerHeight + 12, readingLine - heights[index]!)}px`);
-      input.beats[index]!.style.setProperty('--kp-flow-hold', `${holds[index]}px`);
-    });
-    positions = input.beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
+    ({ headerHeight, heights, holds, positions, readingLine, frameTop, frameBottom } =
+      measureDocumentTheaterLayout(document, equationHeight,
+        documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };

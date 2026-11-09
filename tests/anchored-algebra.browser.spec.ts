@@ -2,13 +2,26 @@ import { test, expect, type Page } from "@playwright/test";
 import source from "../content/authoring/algebra/what-counts.json" with { type: "json" };
 
 const route = "/reader/what-counts/";
-test('startup diagnostic records layout before and after reader readiness', async ({ page, browserName }, info) => {
-  test.skip(browserName !== 'firefox', 'The reported startup shift is in Firefox.');
+test('shared readiness still completes for the standard equation reader', async ({ page }) => {
+  await page.goto('/reader/solve-x/');
+  await ready(page);
+  await expect(page.locator('body')).not.toHaveAttribute('data-kp-reader-layout', 'rising-passages');
+  await expect(page.locator('[data-kp-reader-equation-stage]')).toBeVisible();
+  await expect(page.locator('[data-kp-reader-equation-stage]')).not.toHaveAttribute('inert');
+});
+test('startup keeps visible geometry stable through the static to interactive handoff', async ({ page, browserName }, info) => {
   test.setTimeout(120_000);
   await page.addInitScript(() => {
     const frames: unknown[] = [];
     const probe = { frames, running: true };
     Reflect.set(window, '__kpStartupTrace', probe);
+    let layoutShift = 0;
+    if (PerformanceObserver.supportedEntryTypes.includes('layout-shift')) {
+      new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) if (!Reflect.get(entry, 'hadRecentInput'))
+          layoutShift += Number(Reflect.get(entry, 'value'));
+      }).observe({ type: 'layout-shift', buffered: true });
+    }
     let previous = '';
     function sample() {
       if (!probe.running) return;
@@ -24,7 +37,15 @@ test('startup diagnostic records layout before and after reader readiness', asyn
           host: body.dataset['kpAnimationHostStatus'] ?? null,
           card: rect('.kp-caption-pin'), equation: rect('.kp-reader-equation-viewport'),
           reserve: body.style.getPropertyValue('--kp-document-equation-height'),
-          progress: body.dataset['kpReaderProgress'] ?? null };
+          progress: body.dataset['kpReaderProgress'] ?? null,
+          visible: document.querySelector('.kp-caption-sequence') !== null &&
+            getComputedStyle(document.querySelector('.kp-caption-sequence')!).visibility === 'visible',
+          staticEquation: rect('.kp-animation-static > [data-kp-static-state]:not([hidden])'),
+          staticProgress: document.querySelector<HTMLElement>('.kp-animation-static > [data-kp-static-state]:not([hidden])')?.dataset['kpProgress'],
+          staticOpacity: document.querySelector('.kp-animation-static > [data-kp-static-state]:not([hidden])')
+            ? getComputedStyle(document.querySelector('.kp-animation-static > [data-kp-static-state]:not([hidden])')!).opacity : undefined,
+          ink: rect(`[data-kp-reader-transition-active="true"] [data-kp-reader-native="${document.querySelector<HTMLElement>('[data-kp-reader-equation-stage]')?.dataset['kpReaderNativeEndpoint']}"] .katex-html`),
+          layoutShift };
         const key = JSON.stringify(frame);
         if (key !== previous) frames.push({ ms: Math.round(performance.now()), ...frame });
         previous = key;
@@ -36,12 +57,13 @@ test('startup diagnostic records layout before and after reader readiness', asyn
   const cases = [
     { name: 'saved-v1', suffix: '?kpCheckpoint=state.what-counts.collected&kpLesson=lesson.algebra.what-counts&kpMotion=system&kpProfile=standard&kpProgress=333&kpProjection=equation.symbolic&kpReading=0.454622&kpVersion=1#state.what-counts.collected' },
     { name: 'opening-v1', suffix: '?kpVersion=1' },
-    { name: 'opening-v2', suffix: '' }
+    { name: 'opening-v2', suffix: '' },
+    { name: 'fractional', suffix: '', path: '/reader/solve-fractional-linear/' }
   ];
   for (const width of [1100, 390]) for (const item of cases) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('about:blank');
-    await page.goto(route + item.suffix);
+    await page.goto((item.path ?? route) + item.suffix);
     await ready(page);
     await page.waitForTimeout(750);
     const frames = await page.evaluate(() => {
@@ -49,9 +71,73 @@ test('startup diagnostic records layout before and after reader readiness', asyn
       probe.running = false;
       return probe.frames;
     });
-    console.log(JSON.stringify({ name: item.name, width, frames }));
     await info.attach(`${item.name}-${width}.json`, { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
+    const visible = frames.filter((frame: { visible: boolean; card: unknown }) => frame.visible && frame.card);
+    expect(visible.length).toBeGreaterThan(0);
+    const final = visible.at(-1);
+    for (const frame of visible) {
+      expect(Math.abs(frame.card[0] - final.card[0]), `${item.name}/${width}: card top`).toBeLessThanOrEqual(1);
+      expect(Math.abs(frame.card[1] - final.card[1]), `${item.name}/${width}: card height`).toBeLessThanOrEqual(1);
+      const equation = frame.hydrated ? frame.equation : frame.staticOpacity === '1' ? frame.staticEquation : undefined;
+      if (equation) expect(Math.abs(equation[0] + equation[1] / 2 - final.equation[0] - final.equation[1] / 2),
+        `${item.name}/${width}: visible equation center`).toBeLessThanOrEqual(1);
+      if (frame.hydrated) {
+        expect(frame.host).toBe('ready');
+        expect(frame.progress).toBe(item.name === 'saved-v1' ? '333' : '0');
+        expect(frame.ink).not.toBeNull();
+        expect(Math.abs(frame.ink[0] - final.ink[0]), `${item.name}/${width}: painted native ink`).toBeLessThanOrEqual(1);
+      }
+      if (item.name === 'saved-v1' && !frame.hydrated) expect(frame.staticProgress).toBe('333');
+    }
+    if (browserName === 'chromium') expect(final.layoutShift, `${item.name}/${width}: startup CLS`).toBeLessThan(0.01);
+    console.log(JSON.stringify({ name: item.name, width, first: visible[0], final,
+      layoutMs: await page.evaluate(() => performance.getEntriesByName('kp-document-layout')[0]?.duration) }));
   }
+});
+
+for (const failedModule of ['exemplar-entry', 'document-theater']) test(`static explanation survives unavailable animation code (${failedModule})`, async ({ page }) => {
+  await page.route(`**/src/reader/app/${failedModule}.ts`, request => request.abort());
+  await page.goto(route + '?kpVersion=1&kpProgress=333#state.what-counts.collected');
+  await expect(page.locator('.kp-animation-static > [data-kp-static-state]:not([hidden])')).toBeVisible();
+  await expect(page.locator('.kp-animation-static > [data-kp-static-state]:not([hidden])')).toHaveAttribute('data-kp-progress', '333');
+  await expect(page.locator('.kp-animation-static > [data-kp-static-state]:not([hidden])')).toHaveCSS('opacity', '1');
+  await expect(page.locator('body')).toHaveAttribute('data-kp-animation-host-status', 'failed');
+  await expect(page.locator('body')).toHaveAttribute('data-kp-caption-mode', 'document');
+  await expect(page.locator('.kp-caption-document-intro h1')).toBeVisible();
+  await expect(page.locator('.kp-rising-passage').first()).toBeVisible();
+  await expect(page.locator('body')).not.toHaveAttribute('data-kp-reader-hydrated');
+  await expect(page.locator('html')).not.toHaveAttribute('data-kp-document-preparing');
+});
+
+test('delayed enhancement keeps prose readable and exposes only a restored native frame', async ({ page }, info) => {
+  let release!: () => void;
+  const waiting = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/src/reader/app/exemplar-entry.ts', async request => { await waiting; await request.continue(); });
+  try {
+    await page.goto(route + '?kpVersion=1&kpProgress=333#state.what-counts.collected', { waitUntil: 'commit' });
+    const fallback = page.locator('.kp-animation-static > [data-kp-static-state]:not([hidden])');
+    await expect(fallback).toBeVisible();
+    await expect(fallback).toHaveAttribute('data-kp-progress', '333');
+    await expect(page.locator('html')).not.toHaveAttribute('data-kp-document-preparing');
+    await expect(page.locator('body')).not.toHaveAttribute('data-kp-reader-hydrated');
+    await expect(fallback).toHaveCSS('opacity', '0');
+    await expect(page.locator('.kp-rising-passage').first()).toHaveCSS('opacity', '1');
+    release(); await ready(page);
+    await expect(fallback).toBeHidden();
+    await expect(page.locator('body')).toHaveAttribute('data-kp-reader-progress', '333');
+    const nativeInk = await page.locator('[data-kp-reader-equation-stage]').evaluate(stage => {
+      const side = stage.dataset['kpReaderNativeEndpoint'];
+      const ink = stage.querySelector(`[data-kp-reader-transition-active="true"] [data-kp-reader-native="${side}"] .katex-html`)!;
+      const rect = ink.getBoundingClientRect();
+      return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    });
+    expect(nativeInk.width).toBeGreaterThan(0);
+    await page.locator('.kp-caption-pin').screenshot({ path: info.outputPath('interactive.png') });
+    await page.setViewportSize({ width: 390, height: 900 });
+    await expect(page.locator('body')).toHaveAttribute('data-kp-reader-progress', '333');
+    await expect(page.locator('[data-kp-reader-equation-stage]')).not.toHaveAttribute('inert');
+    await expect(page.locator('[data-kp-reader-equation-stage]')).not.toHaveAttribute('aria-hidden', 'true');
+  } finally { release(); }
 });
 test('transition diagnostic compares retained and current reading in Firefox', async ({ page, browserName }, info) => {
   test.skip(browserName !== 'firefox', 'The reported regression is in Firefox.');

@@ -19,6 +19,20 @@ focus, native KaTeX compositor and existing clock retain presentation authority.
 Archived reading coordinates belong to their archived prose, never a silently
 substituted newer version. The fractional reader and accepted defaults remain.
 
+User-approved repair amendment (2026-11-08): stabilize the first-paint / saved
+location handoff before continuing authoring. The reported startup shift and
+motion regression are infrastructure blockers, not a new visual treatment.
+The owning boundary is document geometry plus the static-to-interactive paint
+handoff. Acceptance: visible theater bounds and equation center remain stable
+through startup; saved v1 opens at its own state; unsuccessful enhancement leaves
+readable static content; resize, reverse, annotations and the fractional reader
+retain their accepted behavior. Test from navigation, including slow/unavailable
+enhancement, rather than only after host readiness. Preserve math, prose versions,
+semantic clocks, native compositor and no-script reading. The reversible unit
+is the shared startup repair and its regression tests; no editor or catalogue
+migration is authorized by this amendment. Field CWV and universal smoothness
+are not established by a local browser test.
+
 The separate editor lane owns native conversation, captures and its application.
 Inspect/reuse it; do not mutate its checkout, send native requests or introduce
 a separately billed service without its applicable authority. A real revision

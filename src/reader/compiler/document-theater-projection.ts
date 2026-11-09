@@ -51,6 +51,7 @@ body[data-kp-reader-layout] .kp-rising-passage {
 }
 body[data-kp-reader-layout] .kp-caption-copy { transform: none; max-height: none; width: auto; margin: 0; padding: 0; }
 body[data-kp-reader-layout] .kp-caption-frame { display: none; }
+body[data-kp-reader-layout] .kp-annotation-static-equation { display: block; }
 body[data-kp-reader-layout] .kp-reader-layout > .kp-lesson-toc { display: block; position: static; }
 html body[data-kp-reader-layout] .kp-animation-beats { padding: 0; }
 html body[data-kp-reader-layout] .kp-animation-beats > li { min-height: 0; padding-block: 1rem; margin: 0; }

@@ -152,3 +152,100 @@ static-to-interactive handoff: settle sizing and saved location before exposing
 the interactive stage, preserving readable static content and native ownership.
 Do not disguise incorrect initialization with additional easing or a blanket
 page-hiding rule. No new treatment or broad reader rewrite is justified yet.
+
+## Implemented startup repair and remaining motion difference
+
+User authorized the best-practice infrastructure repair after the CWV discussion.
+This section supersedes the unfixed startup status above. Math, choreography,
+reading versions, native compositor and editor ownership are unchanged.
+
+The compiler now embeds the same dependency-free geometry function used by the
+document runtime. Its 4,980-byte inline setup runs after initial CSS and the real
+prose, before the animation module graph. Only the unmeasured theater waits for
+that pass; the document intro remains readable. Native fragment navigation also
+runs before exposing that measured theater. Annotation CSS is now part of the
+initial stylesheet: its formerly late heading-size rule caused another ~7px
+document shift. Transcript-only equations no longer distort caption measurement.
+
+The interactive stage stays measurable but inert and unpainted until fonts,
+saved location and a successfully rendered frame agree. A layout invalidation
+cancels the pending handoff; disposal rejects late callbacks; repeated samples
+cannot starve readiness. Print does not falsely certify an interactive frame.
+One commit exposes native paint and transfers accessibility ownership.
+
+An intermediate candidate retained visible static math while preparing. Its boxes
+were stable, but comparing actual ink exposed a ~13px difference between static
+KaTeX centering and the canonical sequence fit. The final policy therefore exposes
+canonical math directly when ready, with its box reserved and prose readable
+during preparation. Static MathML remains the accessibility owner until handoff.
+No-JS reading retains visible static math. Entry-module and later runtime-module
+failures restore the full static document, including all prose and transcript math.
+This avoids a second approximate fit model or an equation-specific pixel offset;
+the tradeoff is that visual equation paint waits for canonical preparation.
+
+The former trace is now an assertion-bearing regression:
+
+`npm run visual:anchored-algebra -- --project=firefox --grep startup`
+
+It covers the saved v1 link, both opening versions and the fractional reader,
+at 1100px/390px widths and 900px height, from navigation through 750ms after ready.
+Visible card bounds remain stable (at most 1px tolerance); the first native frame
+has the requested progress, and its actual KaTeX ink stays stable afterward.
+The last Chromium run recorded startup layout-shift sums of zero in all eight
+cases. Earlier repaired runs included 0.000017. These local observations are not
+field p75 CWV, production LCP/INP, or a general frame-rate guarantee. The inline
+layout pass measured mostly 2–9ms warm, with cold observations up to 74ms; those
+costs include forced initial document layout and are not a claimed universal budget.
+
+Verification:
+
+- 16 focused startup/reading/font/page-shell unit tests pass, including embedded
+  code execution syntax, an 8KB bound, and preservation through production HTML
+  compaction. No full production build or field performance claim is made.
+- 11 equation surface/authority preservation tests pass. App, Node and test type
+  checks pass. `verify:impact` identified reader-system impact but selected no
+  commands; the actual reader/browser and preservation checks were run explicitly.
+- Startup, delayed enhancement, entry failure, later runtime failure, and a
+  standard non-theater reader canary pass in Chromium and Firefox. Existing saved
+  link, annotation fade/reversal, focus release, delayed paint, no-JS, and long
+  reasoning checks passed. An initial Firefox delayed-load screenshot timed out
+  while its entry module was deliberately held; the final test uses DOM/state
+  assertions during the hold and captures after readiness, and passes both engines.
+- The Firefox transition diagnostic still passes its zero presentation-rebuild
+  invariant. Latest exact-saved traversal: one transition preparation of 48ms,
+  a maximum callback interval of 51ms, and 179 session reuses. Warm v1/v2 sweeps
+  had no builds. This repair does not claim to remove the remaining cold-entry hitch.
+
+The user then supplied the smooth fractional-reader opening as a control. Source
+comparison found a concrete policy difference despite the shared compositor:
+
+| Policy | Fractional page path | Authored-algebra reusable path |
+| --- | --- | --- |
+| Prepared transition capacity | Up to 4 for native-color focus | Default 1 |
+| Neighbor preparation | Enabled, subject to idle/cost/ownership guards | Explicitly disabled by descriptor |
+| Unchanged equation frame | Page host can skip the unchanged math frame | Reusable session is still sampled |
+| Layout/motion | Existing fractional descriptor and selected canonical operations | Semantic-envelope layout, checked endpoint handoffs and evaluation certificates |
+
+Owners: `exemplar-entry.ts`, `equation-lesson-descriptors/fractional-linear.ts`,
+`equation-lesson-descriptors/authored-algebra.ts`,
+`chrome-free-canonical-equation-session.ts`, and `reader-canonical-equation-session.ts`.
+What counts does cache pure plans, but that is not retention of complete prepared
+native scenes. Its remaining synchronous preparation is consistent with the
+observed entry hitch. The fractional link also starts at the opening, allowing
+more idle preparation time than a mid-lesson saved link. No matched A/B has yet
+isolated the contribution of each difference, and annotations are not established
+as the main cause. This is shared-host policy drift, not evidence that Firefox,
+authored content, or JS animation is inherently unsuitable.
+
+Recommended next motion work: apply one bounded preparation/reuse policy through
+both host adapters, preserving font/resize/style invalidation, exclusive native
+paint, cancellation and disposal. Simply turning on prewarming is insufficient:
+the reusable host must provide compatible presentation/color identities too.
+Compare first/repeat/reverse traversal from equivalent starting locations before
+claiming parity. No caching or prewarming change is included in this startup slice.
+
+To inspect on 8011: reload the exact saved What counts URL, wait for the equation
+to appear, then scroll forward and reverse. The theater and equation should no
+longer jump during initialization. Distinguish that startup correction from the
+remaining cold transition preparation. The broader authoring programme remains
+1/13 complete; this is a bounded repair within its saved-reading prerequisite.

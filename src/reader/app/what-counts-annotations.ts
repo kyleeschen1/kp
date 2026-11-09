@@ -1,7 +1,6 @@
 import { compile } from "../../authoring/algebra/compile.ts";
 import { bindAnchoredCommentary, AnchoredAlgebraGap } from "./what-counts-commentary.ts";
 import { mountAnchoredLabels } from "./what-counts-anchors.ts";
-import "./what-counts-annotations.css";
 import type { DocumentReadingAttention } from './document-theater-attention.ts';
 
 /** Local reviewed score; the reader supplies its sole current attention owner. */

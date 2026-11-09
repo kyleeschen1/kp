@@ -61,6 +61,7 @@ import type {
 } from "../document/public-api.ts";
 import { createKpReaderArtifactRef } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
+import { createReaderStartupHandoff } from "./reader-startup-handoff.ts";
 import {
   mountKpCanonicalEquationStageShell
 } from "./canonical-equation-stage-shell.ts";
@@ -197,7 +198,24 @@ const stageShell = mountKpCanonicalEquationStageShell({
     });
   }
 });
-document.body.dataset["kpReaderHydrated"] = "true";
+const documentTheater = document.body.dataset["kpReaderLayout"] === "rising-passages";
+if (!documentTheater) document.body.dataset["kpReaderHydrated"] = "true";
+else {
+  stageShell.stage.inert = true;
+  stageShell.stage.setAttribute('aria-hidden', 'true');
+}
+const startupHandoff = createReaderStartupHandoff({
+  requestFrame: callback => window.requestAnimationFrame(callback),
+  cancelFrame: id => window.cancelAnimationFrame(id),
+  commit: () => {
+    document.body.dataset['kpReaderHydrated'] = 'true';
+    delete document.documentElement.dataset['kpDocumentEnhancing'];
+    stageShell.stage.inert = false;
+    stageShell.stage.removeAttribute('aria-hidden');
+    urlAuthorityReady = true;
+    markKpAnimationHostReady();
+  }
+});
 
 const stage = stageShell.stage;
 const stageKicker = requireElement<HTMLElement>("[data-kp-reader-stage-kicker]");
@@ -487,7 +505,11 @@ rendererRegistry.register(defineKpReaderScheduledRendererAdapter<KpReaderClockSa
 }));
 const renderer = rendererRegistry.mount({
   adapterId: "renderer.equation-dom",
-  host: { readLayout: measureLayout, writeFrame: renderSample },
+  host: { readLayout: measureLayout, writeFrame: (sample, layout) => {
+    if (printMedia.matches) return;
+    renderSample(sample, layout);
+    startupHandoff.rendered();
+  } },
   blockId: requiredData(story, "kpBlock"),
   asset: createKpReaderArtifactRef({
     kind: "animation-asset",
@@ -556,23 +578,17 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
   reviewMount: "immediate",
   renderReviewFrame: renderCurrentSample,
   onFontInvalidated: () => {
+    startupHandoff.invalidate();
     viewportAnchorCache.invalidate();
     renderer.refresh("fonts");
     scheduleScrollSample();
   },
   onReady: () => {
-    restoreUrlLocation();
     updateScrollGeometry();
+    restoreUrlLocation();
     renderer.refresh("fonts");
+    startupHandoff.arm();
     scheduleScrollSample();
-    // History writes must wait until the URL-selected scroll position has
-    // produced its first frame; otherwise an early scrollend can persist zero.
-    window.requestAnimationFrame(() => {
-      urlAuthorityReady = true;
-      // Readiness belongs to the first font-stable rendered frame, not the
-      // iframe load event consumed by the outer Animation Library.
-      markKpAnimationHostReady();
-    });
   }
 });
 void fontReviewLifecycle.ready;
@@ -591,6 +607,7 @@ function createScrollClock(): KpReaderContinuousScrollClock {
 }
 
 function updateScrollGeometry(): void {
+  startupHandoff.invalidate();
   viewportAnchorCache.invalidate();
   risingPassages?.measure();
   const geometry = scrollGeometry();
@@ -1755,6 +1772,7 @@ function onPageHide(event: PageTransitionEvent): void {
 }
 
 function dispose(): void {
+  startupHandoff.dispose();
   window.removeEventListener("pagehide", onPageHide);
   window.removeEventListener("scroll", onScroll);
   window.removeEventListener("resize", onResize);

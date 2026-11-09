@@ -19,6 +19,10 @@ export function installKpReaderAnimationHostStatus(
     const body = ownerWindow.document.body;
     if (body !== null) {
       body.dataset["kpAnimationHostStatus"] = status;
+      // Failed enhancement must leave the complete static explanation usable,
+      // including math and prose outside the current animated reading window.
+      if (status === 'failed' && body.dataset['kpReaderLayout'] === 'rising-passages'
+        && body.dataset['kpReaderHydrated'] !== 'true') body.dataset['kpCaptionMode'] = 'document';
       body.dataset["kpAnimationHostId"] = hostId;
       if (message === undefined) {
         delete body.dataset["kpAnimationHostError"];

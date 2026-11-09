@@ -1,4 +1,7 @@
 import { documentTheaterStaticStyles } from "./document-theater-projection.ts";
+import { measureDocumentTheaterLayout } from "../app/document-theater-layout.ts";
+import { documentPassageCadence } from "../app/document-theater-scroll.ts";
+import { prepareDocumentTheaterStaticState } from "../app/document-theater-static-state.ts";
 
 export interface KpReaderPageShellInput {
   readonly projection?: "document-theater";
@@ -40,6 +43,7 @@ export function compileKpReaderPageShell(input: KpReaderPageShellInput): string 
     `<meta name="description" content="${kpReaderHtmlAttribute(input.description)}">`,
     `<link rel="stylesheet" href="${kpReaderHtmlAttribute(input.stylesheetHref)}">`,
     ...(input.projection ? [`<noscript><style data-kp-static-document>${documentTheaterStaticStyles}</style></noscript>`] : []),
+    ...(input.projection ? ['<script>document.documentElement.dataset.kpDocumentPreparing="";document.documentElement.dataset.kpDocumentEnhancing="";</script>'] : []),
     "</head>",
     `<body${compileAttributes(input.bodyAttributes)}>`,
     '<header class="kp-reader-masthead">',
@@ -54,9 +58,13 @@ export function compileKpReaderPageShell(input: KpReaderPageShellInput): string 
     input.tocHtml,
     input.articleHtml,
     "</main>",
+    // This bounded, synchronous layout pass has no module/network dependencies.
+    // Serializing the self-contained functions keeps the runtime and first paint
+    // on the same geometry contract. Do not interpolate authored text as code.
+    ...(input.projection ? [`<script data-kp-document-layout>try{performance.mark('kp-document-layout-start');(${measureDocumentTheaterLayout.toString()})(document,82,(${documentPassageCadence.toString()})(innerHeight-document.querySelector('.kp-reader-masthead').getBoundingClientRect().height));(${prepareDocumentTheaterStaticState.toString()})(document);performance.measure('kp-document-layout','kp-document-layout-start');}finally{delete document.documentElement.dataset.kpDocumentPreparing;}</script>`] : []),
     ...(input.afterMainHtml ?? []),
     `<script type="application/json" ${attributeName(input.hydration.dataAttribute)}>${input.hydration.json}</script>`,
-    `<script type="module" src="${kpReaderHtmlAttribute(input.entryScriptSrc)}"></script>`,
+    `<script type="module" src="${kpReaderHtmlAttribute(input.entryScriptSrc)}"${input.projection ? ' onerror="document.body.dataset.kpAnimationHostStatus=\'failed\';document.body.dataset.kpCaptionMode=\'document\'"' : ''}></script>`,
     "</body>",
     "</html>"
   ].join("\n");
