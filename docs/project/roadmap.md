@@ -68,6 +68,9 @@ blocker. Prior completed architecture and maintenance work stays complete.
 
 ## How to stay oriented
 
+- **November 13 reboot handoff:** To resume the Codex latency/flow investigation,
+  read [the saved analysis and restart cue](reviews/2026-11-10-agent-flow-baseline.md#restart-handoff--november-13-2026).
+  This is a discussion handoff, not a product pivot or a new implementation run.
 - Open `/?view=dashboard#project-vision` for direction, approval boundaries,
   recent evidence, proposed successor and the next human judgment.
 - Run `npm run project:orientation` for the same briefing plus a fresh read of

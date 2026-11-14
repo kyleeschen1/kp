@@ -6,6 +6,39 @@ The user asks to optimize valuable integrated progress per available cognitive
 effort, including engagement and re-entry cost. ADHD and the reported cognitive
 profile supply hypotheses; this investigation makes no clinical causal claim.
 
+## Restart handoff — November 13, 2026
+
+The user is rebooting and explicitly asks to preserve this investigation for
+"restart/resume" in `/Users/kyleeschen/Code/kp`. Resume this discussion, not an
+older KP implementation loop. The empirical first pass is complete; the small
+experiments below remain proposals, not completed trials or a changed policy.
+
+- **Working location:** `/Users/kyleeschen/Code/kp/.worktrees/kp-product`, branch
+  `feature/20261031-annotation-reader`. The parent checkout belongs to the parallel
+  editor lane. Its roadmap contains a retrieval pointer, not integrated product
+  direction. Do not switch that checkout or absorb its unrelated changes.
+- **Return cue:** We are testing whether a much smaller, immediately useful
+  experiment preserves the user's active creative orientation. The unresolved
+  question is whether faster meaningful feedback, easier review, or a better
+  return cue makes the largest difference. Good conceptual recall does not prove
+  easy re-entry. Optimize useful integrated progress per cognitive effort.
+- **Next conversation:** Briefly restore the findings, then choose one real,
+  bounded exploratory edit for the first trial. Recommend one visible change
+  plus an agent-written hypothesis/next-action cue. Do not rerun the historical
+  audit or start a new infrastructure project merely to resume.
+- **Unanswered preferences:** Does the user want an immediately usable provisional
+  result while checks continue, or a fully checked result? Which work most often
+  loses momentum: visual experiments, content, or architectural decisions?
+  These questions were sent but no answers were recorded at this handoff.
+- **Preservation:** No model setting, hook, approval policy, verification gate or
+  Theseus contract was changed. The KP authoring programme remains intact, with
+  the fractional reading's editorial review outstanding. Saving this analysis
+  does not accept that reading or authorize the proposed model comparison.
+- **Recovery:** The original full baseline is backed up at commit `24229c77e`
+  on the product branch. The dates/settings below describe the November 10 audit;
+  recheck only the live state needed for the selected next action. No development
+  server is required to recover this discussion, and none is promised after reboot.
+
 ## Observed baseline
 
 Read-only sources: local Codex `state_5.sqlite`, `thread_history_1.sqlite`, the
