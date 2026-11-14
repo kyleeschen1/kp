@@ -1,5 +1,13 @@
 # KP Roadmap
 
+**November 13 reboot handoff:** When asked to restart/resume where this conversation
+left off after the computer restart, read the
+[Codex flow investigation and return cue](../../.worktrees/kp-product/docs/project/reviews/2026-11-10-agent-flow-baseline.md#restart-handoff--november-13-2026).
+Its working checkout is `.worktrees/kp-product`, branch
+`feature/20261031-annotation-reader`; the baseline is also recoverable from commit
+`24229c77e`. This pointer preserves a discussion and does not change this parallel
+lane's implementation queue or authorize a new run.
+
 Last Updated: 2026-10-30
 Status: active
 Active Thread: `threads/co-creative-practice.md`
