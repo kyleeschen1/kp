@@ -78,6 +78,15 @@ collaboration experiment, not a learner-facing editorial voice standard.
 
 ## Codex execution reliability
 
+### Persistent development server
+
+For a preview requested to stay available, use `npm run dev:service:start` in
+this checkout on macOS. Use `dev:service:status` to inspect it and
+`dev:service:stop` only when shutdown is requested. These launchd services own
+ports 8000/8001 independently of Codex and restart at login. Do not substitute
+an exec session, `nohup`, or a test-owned server for this persistent preview.
+See `docs/development-server.md` for recovery, checks, and lifecycle limits.
+
 ### Parallel development and Git hygiene
 
 Use `.agents/skills/kp-parallel-development/SKILL.md` for parallel workbench/engine
