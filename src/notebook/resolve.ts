@@ -1,10 +1,12 @@
 import * as M from '../math/authoring/matrices.ts';
+import { assertMatrixColumnNumerals } from '../authoring/matrix-columns/numeric-support.ts';
 import { columnExampleFromProduct, type ColumnExample } from '../experiments/matrix-column-combinations/model.ts';
 import { indexNotebook, NotebookGap, type Binding, type Node, type Notebook, type Reference, type UUID } from './model.ts';
 
 export interface ResolvedBlock {
   readonly key: string;
   readonly source: Reference;
+  readonly sourceRevision: number;
   readonly node: Node;
   readonly children: readonly ResolvedBlock[];
   readonly scene?: ColumnExample;
@@ -36,7 +38,7 @@ export function resolveNotebook(documents: readonly Notebook[], selected: UUID) 
   };
   const visit = (node: Node, owner: UUID, prefix: string, scope: ReadonlyMap<UUID, Reference>, trail: ReadonlySet<string>, overrides?: Readonly<Record<string, Reference>>): ResolvedBlock => {
     const source = { notebookId: owner, nodeId: node.id }, key = `${prefix}${node.id}`, identity = referenceKey(source);
-    const base = { key, source, node };
+    const base = { key, source, sourceRevision: docs.get(owner)!.doc.revision, node };
     dependency(source, key);
     try {
       if (++expanded > 4000 || trail.size >= 64) fail('expansion-limit', identity, 'Import expansion exceeds this notebook proof capacity.');
@@ -61,6 +63,7 @@ export function resolveNotebook(documents: readonly Notebook[], selected: UUID) 
         const bound = (binding: Binding) => binding.kind === 'resource' ? binding.source : scope.get(binding.inputId)
           ?? fail('unbound-input', binding.inputId, 'Scene input is outside its component scope.');
         const left = matrix(bound(node.left), key), right = matrix(bound(node.right), key);
+        assertMatrixColumnNumerals(left.rows, right.rows);
         const product = M.product({ id: `${identity}.product`, left: left.value, right: right.value });
         const scene = columnExampleFromProduct(product, node.column);
         // Source revisions are intentionally absent: unrelated prose/title edits

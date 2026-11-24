@@ -9,6 +9,8 @@
   "scripts": {
     "test:notebook": "node --disable-warning=ExperimentalWarning --test tests/notebook.test.ts tests/notebook-resolution.test.ts",
     "visual:notebook": "playwright test --config config/playwright/playwright.notebook.config.ts --project=chromium --workers=1",
+    "typecheck:notebook": "tsc --project config/typescript/tsconfig.notebook.json",
+    "build:notebook": "vite build --config config/vite/vite.notebook.config.ts",
     "check:playwright-configs": "node scripts/check-playwright-configs.mjs",
     "check:vite-configs": "node scripts/check-vite-configs.mjs",
     "check:typescript-configs": "node scripts/check-typescript-configs.mjs",

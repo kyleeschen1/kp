@@ -28,9 +28,13 @@ test('invalid multi-operation transactions, cycles, invalid parents and anchors 
   for (const op of [
     { type: 'move', id: id(24), parentId: id(26) },
     { type: 'move', id: id(26), parentId: id(22) },
-    { type: 'move', id: id(26), parentId: doc.id, beforeId: id(25) }
+    { type: 'move', id: id(26), parentId: doc.id, beforeId: id(25) },
+    { type: 'move', id: id(26), parentId: doc.id, beforeId: id(26) },
+    { type: 'move', id: id(26), parentId: id(999), beforeId: id(26) }
   ] as const) assert.throws(() => transact(doc, 0, [{ type: 'rename', id: id(24), title: 'Draft' }, op]));
   assert.equal(JSON.stringify(doc), before);
+  const unchanged = transact(doc, 0, [{ type: 'move', id: id(26), parentId: id(24), beforeId: id(26) }]);
+  assert.deepEqual(unchanged.children, doc.children);
 });
 test('duplicate remaps component input identities while preserving external object references', () => {
   const doc = fixtures()[0]!; let n = 100;
@@ -50,6 +54,11 @@ test('I/O rejects identity collisions, executable fields, unknown blocks and mal
   assert.throws(() => parseNotebook({ ...doc, children: [{ ...doc.children[0], type: 'untrusted-script', source: 'alert(1)' }] }), /Unsupported/);
   assert.throws(() => parseNotebook({ ...doc, children: [{ ...doc.children[1], rows: [[Infinity, 2], [3, 4]] }] }), /finite/);
   assert.throws(() => parseNotebook({ ...doc, children: [{ ...doc.children[1], metadata: { onclick: 'run' } }] }), /namespace/);
+  let invoked = false;
+  const accessor = { ...doc }; Object.defineProperty(accessor, 'title', { enumerable: true, get() { invoked = true; return 'Executable'; } });
+  assert.throws(() => parseNotebook(accessor), /accessors/); assert.equal(invoked, false);
+  const sparse = Array(2); sparse[1] = doc.children[0];
+  assert.throws(() => parseNotebook({ ...doc, children: sparse }), /Sparse/);
 });
 test('duplicate remaps internal resource references within a copied subtree', () => {
   const doc = fixtures()[0]!;

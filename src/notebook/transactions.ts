@@ -7,6 +7,7 @@ export type Operation =
   | { readonly type: 'matrix'; readonly id: UUID; readonly rows: Matrix2 }
   | { readonly type: 'metadata'; readonly id: UUID; readonly metadata: Metadata }
   | { readonly type: 'bind'; readonly id: UUID; readonly inputId: UUID; readonly source: Reference }
+  | { readonly type: 'unbind'; readonly id: UUID; readonly inputId: UUID }
   | { readonly type: 'move'; readonly id: UUID; readonly parentId: UUID; readonly beforeId?: UUID }
   | { readonly type: 'insert'; readonly parentId: UUID; readonly node: Node; readonly beforeId?: UUID }
   | { readonly type: 'delete'; readonly id: UUID }
@@ -41,7 +42,10 @@ export function transact(doc: Notebook, basis: number, operations: readonly Oper
       case 'move': {
         const descendants = new Set(indexNotebook({ ...doc, children: [node] }).nodes.keys());
         if (descendants.has(op.parentId)) gap(op.id, 'A block cannot contain itself.');
-        if (op.beforeId === op.id) break;
+        if (op.beforeId === op.id) {
+          if (parents.get(op.id) !== op.parentId) gap(op.parentId, 'Insertion anchor is not a child of the destination.');
+          break;
+        }
         children = remove(children, op.id); insert(op.parentId, node, op.beforeId); break;
       }
       case 'delete': children = remove(children, op.id); break;
@@ -52,6 +56,7 @@ export function transact(doc: Notebook, basis: number, operations: readonly Oper
         if (op.type === 'prose' && n.type === 'prose') return { ...n, text: op.text };
         if (op.type === 'matrix' && n.type === 'matrix') return { ...n, rows: op.rows };
         if (op.type === 'bind' && n.type === 'import') return { ...n, bindings: { ...n.bindings, [op.inputId]: op.source } };
+        if (op.type === 'unbind' && n.type === 'import') return { ...n, bindings: Object.fromEntries(Object.entries(n.bindings).filter(([key]) => key !== op.inputId)) };
         return gap(n.id, 'Operation does not match this block type.');
       });
     }

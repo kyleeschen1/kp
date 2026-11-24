@@ -53,7 +53,8 @@
     {
       "id": "exemplar",
       "title": "Two-notebook-editor-and-reader",
-      "status": "planned"
+      "summary": "Working two-notebook editor and reader with local and shared updates, fold/move/reload continuity, atomic saves, draft recovery and isolated production reader; human review pending.",
+      "status": "complete"
     },
     {
       "id": "verification",

@@ -3,7 +3,7 @@ import { parseNotebook, parseWorkspace } from './validation.ts';
 
 export function replaceNotebook(current: readonly Notebook[], basis: number | null, incoming: Notebook): readonly Notebook[] {
   const next = parseNotebook(incoming), previous = current.find(d => d.id === next.id);
-  if (basis === null ? previous !== undefined || next.revision !== 0 : !previous || previous.revision !== basis || next.revision !== basis + 1)
+  if (basis === null ? previous !== undefined : !previous || previous.revision !== basis || next.revision !== basis + 1)
     throw new NotebookGap('stale-revision', next.id, 'Saved content changed. Keep this draft and reload the latest notebook before retrying.');
   return parseWorkspace(previous ? current.map(d => d.id === next.id ? next : d) : [...current, next]);
 }

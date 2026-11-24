@@ -1,6 +1,15 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+test('notebook discovery includes real browser persistence and both numeric guard consumers', () => {
+  for (const path of ['src/notebook/resolve.ts', 'content/notebooks/shared-matrix.json', 'experiments/notebook/index.html', 'tests/notebook.browser.spec.ts']) {
+    assert.deepEqual(ids(selectKpVerificationImpact([path], { mode: 'discovery' })), ['notebook-unit', 'notebook-types', 'notebook-browser']);
+  }
+  assert.ok(ids(selectKpVerificationImpact(['src/authoring/matrix-columns/numeric-support.ts'])).includes('matrix-source'));
+  assert.ok(ids(selectKpVerificationImpact(['src/math/matrix-product.ts'])).includes('test'));
+  assert.ok(ids(selectKpVerificationImpact(['src/notebook/view.ts'], { mode: 'contract' })).includes('notebook-build'));
+});
+
 import {
   selectKpVerificationImpact,
   selectKpVerificationScope

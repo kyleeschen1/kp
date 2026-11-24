@@ -42,6 +42,27 @@
       "scope": "persistence",
       "checkedAt": "2026-11-24T13:21:09.504Z",
       "notes": "Two Chromium checks pass for actual IndexedDB concurrent writes, reopen, notifications and invalid-save preservation"
+    },
+    {
+      "command": "npm run verify:impact -- --mode contract --path src/notebook/view.ts --path src/authoring/matrix-columns/numeric-support.ts --run",
+      "status": "passed",
+      "scope": "notebook-exemplar",
+      "checkedAt": "2026-11-24T13:42:12.012Z",
+      "notes": "12 notebook and 15 existing matrix tests; strict complete consumer types; 10 Chromium browser tests including both production entries; two-entry build passed. Shared numeric admission rejects invalid paint while preserving drafts."
+    },
+    {
+      "command": "npm run verify:impact -- --mode contract --path src/notebook/transactions.ts --run",
+      "status": "passed",
+      "scope": "final-exemplar",
+      "checkedAt": "2026-11-24T13:42:25.736Z",
+      "notes": "12 unit tests, strict types, 10 real browser tests and production build pass after rejecting self-anchors in a different destination. Complete production JS closure: reader 368121 bytes, 108776 gzip; editor 378709 bytes, 112423 gzip."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test scripts/verification-impact.test.ts",
+      "status": "passed",
+      "scope": "verification-routing",
+      "checkedAt": "2026-11-24T13:42:26.725Z",
+      "notes": "28 checks pass; complete notebook consumers and both shared numeric guard paths are selected; unknown owners retain broad gates."
     }
   ],
   "expectedLearning": [

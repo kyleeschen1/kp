@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { uuid } from '../src/notebook/model.ts';
+import { uuid, type Notebook } from '../src/notebook/model.ts';
+import { numberOf } from '../src/experiments/matrix-column-combinations/model.ts';
 import { parseNotebook } from '../src/notebook/validation.ts';
 import { resolveNotebook, flattenBlocks } from '../src/notebook/resolve.ts';
 import { transact } from '../src/notebook/transactions.ts';
@@ -9,13 +10,13 @@ import { replaceNotebook } from '../src/notebook/persistence.ts';
 const load = (name: string) => parseNotebook(JSON.parse(readFileSync(new URL(`../content/notebooks/${name}.json`, import.meta.url), 'utf8')));
 const fixtures = () => [load('shared-matrix'), load('compare-inputs')];
 const id = (n: number) => uuid(`10000000-0000-4000-8000-${String(n).padStart(12, '0')}`);
-const blocks = (docs = fixtures()) => flattenBlocks(resolveNotebook(docs, id(20)).blocks);
+const blocks = (docs: readonly Notebook[] = fixtures()) => flattenBlocks(resolveNotebook(docs, id(20)).blocks);
 test('imports bind explicit resources and reuse the same canonical semantic object', () => {
   const scenes = blocks().filter(b => b.scene); assert.equal(scenes.length, 2);
   const [a, b] = scenes; assert.ok(a?.scene && b?.scene);
   assert.equal(a.scene.env.A, b.scene.env.A);
   assert.notEqual(a.key, b.key); assert.notEqual(a.scene.env.B, b.scene.env.B);
-  assert.deepEqual(a.scene.combination.result.entries.map(v => v.expression.value), [4, 10]);
+  assert.deepEqual(a.scene.combination.result.entries.map(numberOf), [4, 10]);
 });
 test('local input edits invalidate one scene; shared edits affect both; prose and reorder affect neither', () => {
   const docs = fixtures(), initial = blocks(docs).filter(b => b.scene);
@@ -50,4 +51,13 @@ test('workspace compare-and-swap rejects stale replacements and identity collisi
   assert.throws(() => replaceNotebook(saved, 0, edited), /changed/);
   assert.throws(() => replaceNotebook(saved, null, docs[1]!), /changed/);
   assert.deepEqual(blocks(JSON.parse(JSON.stringify(saved))).map(b => b.key), blocks(saved).map(b => b.key));
+});
+test('matrix imports reuse the existing numeric presentation admission boundary', () => {
+  const docs = fixtures();
+  for (const rows of [[[1e100,0],[1,1]], [[1e-8,0],[1,1]], [[1e308,1e308],[1,1]]] as const) {
+    const changed = transact(docs[1]!, 0, [{ type: 'matrix', id: id(22), rows }]);
+    const result = blocks([docs[0]!, changed]);
+    assert.ok(result.some(b => b.problem?.code === 'unsupported-scene'));
+    assert.equal(result.filter(b => b.scene).length, 1, 'the unrelated valid occurrence remains resolvable');
+  }
 });

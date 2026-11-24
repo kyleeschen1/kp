@@ -30,6 +30,11 @@ export interface KpVerificationSelectionOptions {
 }
 
 const checks = {
+  notebookUnit: check('notebook-unit', ['npm', 'run', 'test:notebook'], 'medium', 'Check persistent identity, scope, references and atomic revisions.', 'discovery'),
+  notebookTypes: check('notebook-types', ['npm', 'run', 'typecheck:notebook'], 'medium', 'Check the complete notebook consumer and shared numeric guard.', 'discovery'),
+  notebookBrowser: check('notebook-browser', ['npm', 'run', 'visual:notebook'], 'medium', 'Exercise local persistence, independent players, draft recovery and reader separation.', 'discovery'),
+  notebookBuild: check('notebook-build', ['npm', 'run', 'build:notebook'], 'medium', 'Build both actual notebook entrypoints.', 'contract'),
+  matrixSource: check('matrix-source', ['npm', 'run', 'test:matrix-source'], 'medium', 'Preserve matrix source validation, sessions and immutable editions.', 'discovery'),
   playbackVisibility: check(
     "playback-visibility-browser", ["npm", "run", "visual:semantic-cost", "--", "--grep", "visibility|failing pause"],
     "medium", "Exercise document ownership, initial-hidden pause, cancellation and callback isolation.", "discovery"
@@ -435,6 +440,20 @@ interface KpVerificationRule {
 }
 
 const rules: readonly KpVerificationRule[] = [
+  {
+    id: 'notebook-proof',
+    matches: path => path.startsWith('src/notebook/') || path.startsWith('content/notebooks/') || path.startsWith('experiments/notebook/') ||
+      /^tests\/notebook(?:-resolution)?(?:\.browser\.spec|\.test)\.ts$/.test(path) ||
+      ['config/playwright/playwright.notebook.config.ts', 'config/vite/vite.notebook.config.ts', 'config/typescript/tsconfig.notebook.json'].includes(path),
+    checks: [checks.notebookUnit, checks.notebookTypes, checks.notebookBrowser, checks.notebookBuild],
+    reason: 'The bounded two-notebook proof has a complete consumer and browser lane; unknown shared owners still retain broad gates.'
+  },
+  {
+    id: 'matrix-numeric-admission',
+    matches: path => ['src/authoring/matrix-columns/numeric-support.ts', 'src/authoring/matrix-columns/compile.ts'].includes(path),
+    checks: [checks.matrixSource, checks.notebookUnit, checks.notebookTypes, checks.notebookBrowser, checks.notebookBuild],
+    reason: 'Both file authoring and notebook bindings consume the same numeric-presentation guard.'
+  },
   {
     id: "playback-visibility",
     matches: path => path === "src/reader/runtime/playback-visibility.ts" || path === "tests/semantic-cost.browser.spec.ts",

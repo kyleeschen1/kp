@@ -2,8 +2,14 @@ import { NotebookGap, uuid, type Binding, type Json, type Matrix2, type Metadata
 
 function fail(path: string, message: string): never { throw new NotebookGap('invalid-document', path, message); }
 function object(value: unknown, path: string): Record<string, unknown> {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) fail(path, 'Expected an object.');
-  return Object.fromEntries(Object.entries(value));
+  if (!value || typeof value !== 'object' || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) fail(path, 'Expected a plain data object.');
+  const entries: [string, unknown][] = [];
+  for (const key of Reflect.ownKeys(value)) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key)!;
+    if (typeof key !== 'string' || !descriptor.enumerable || !('value' in descriptor)) fail(path, 'Executable accessors and hidden fields are not document data.');
+    entries.push([key, descriptor.value]);
+  }
+  return Object.fromEntries(entries);
 }
 function fields(value: Record<string, unknown>, allowed: readonly string[], path: string) {
   for (const key of Object.keys(value)) if (!allowed.includes(key)) fail(`${path}.${key}`, 'Unsupported field.');
@@ -12,7 +18,13 @@ function text(value: unknown, path: string): string {
   if (typeof value !== 'string' || value.length > 100_000) fail(path, 'Expected bounded text.'); return value;
 }
 function list(value: unknown, path: string): unknown[] {
-  if (!Array.isArray(value) || value.length > 2000) fail(path, 'Expected a bounded array.'); return value;
+  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype || value.length > 2000) fail(path, 'Expected a bounded plain array.');
+  for (const key of Reflect.ownKeys(value)) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key)!;
+    if (typeof key !== 'string' || !('value' in descriptor) || (key !== 'length' && (!/^(0|[1-9]\d*)$/.test(key) || !descriptor.enumerable))) fail(path, 'Expected data entries without accessors.');
+  }
+  for (let i = 0; i < value.length; i++) if (!Object.hasOwn(value, i)) fail(path, 'Sparse arrays are not supported.');
+  return value;
 }
 function json(value: unknown, path: string, depth = 0): Json {
   if (depth > 12) fail(path, 'Metadata is too deeply nested.');
@@ -21,7 +33,7 @@ function json(value: unknown, path: string, depth = 0): Json {
   if (Array.isArray(value)) return list(value, path).map(v => json(v, path, depth + 1));
   return Object.fromEntries(Object.entries(object(value, path)).map(([k, v]) => [k, json(v, `${path}.${k}`, depth + 1)]));
 }
-function metadata(value: unknown, path: string): Metadata {
+export function metadata(value: unknown, path = 'metadata'): Metadata {
   return Object.fromEntries(Object.entries(object(value, path)).map(([key, v]) => {
     if (!/^[a-z][a-z0-9.-]*:[a-zA-Z0-9._-]+$/.test(key)) fail(path, 'Metadata keys need a namespace, such as kp:goal.');
     return [key, json(v, `${path}.${key}`)];

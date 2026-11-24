@@ -1,4 +1,12 @@
 {
+  "playwright.notebook.config.ts": {
+    "sha256": "b7f86de99bdaaf4c1ed381b379a9cdc49192f6cd5adb13a680b6fb916df1a582",
+    "projects": 3
+  },
+  "playwright.reader-preparation.config.ts": {
+    "sha256": "0acd8318f53aed64e5ec279c6d322065f93442f505b69d365c57b7ebbdb8cb6b",
+    "projects": 3
+  },
   "playwright.affine-collection-review.config.ts": {
     "sha256": "5af63e261890d151e57a34ac95452849523858f6c6c2b889a431f100b9183849",
     "projects": 3

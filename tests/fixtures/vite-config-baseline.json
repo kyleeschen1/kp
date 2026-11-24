@@ -1,4 +1,32 @@
 {
+  "vite.notebook.config.ts": {
+    "serve": {
+      "base": "./",
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": { "polyfill": false },
+        "outDir": "dist/notebook",
+        "rollupOptions": { "input": {
+          "notebook": "<repo>/experiments/notebook/index.html",
+          "notebookReader": "<repo>/experiments/notebook/reader.html"
+        } }
+      }
+    },
+    "build": {
+      "base": "./",
+      "build": {
+        "emptyOutDir": true,
+        "manifest": true,
+        "modulePreload": { "polyfill": false },
+        "outDir": "dist/notebook",
+        "rollupOptions": { "input": {
+          "notebook": "<repo>/experiments/notebook/index.html",
+          "notebookReader": "<repo>/experiments/notebook/reader.html"
+        } }
+      }
+    }
+  },
   "vite.config.ts": {
     "serve": {
       "build": {
