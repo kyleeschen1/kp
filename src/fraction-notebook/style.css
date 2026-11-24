@@ -1,0 +1,46 @@
+:root { color-scheme: dark; font-family: Arial, sans-serif; background: #121826; color: #e2e2d9; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+button, input { font: inherit; }
+button, .fn-header-actions a { border: 1px solid #58615a; border-radius: 5px; padding: 6px 10px; color: inherit; background: transparent; cursor: pointer; text-decoration: none; font-size: 13px; }
+button:hover, button:focus-visible { background: #344139; }
+.fn-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px 8px; gap: 16px; }
+.fn-eyebrow, .fn-pane-title { font-size: 10px; letter-spacing: .13em; color: #b0b9b1; }
+.fn-header h1 { font: 23px Georgia, serif; margin: 5px 0; }
+.fn-header-actions, .fn-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.fn-status { font: 12px Arial, sans-serif; margin: 0; padding: 6px 24px 12px; min-height: 34px; color: #aebdb1; }
+.fn-status[data-state=invalid] { color: #f0c59c; }
+#app { display: flex; flex-direction: column; height: 100dvh; }
+.fn-workspace { --notebook-width: 50%; display: grid; grid-template-columns: minmax(0, var(--notebook-width)) 9px minmax(0, 1fr); min-height: 0; flex: 1; border-top: 1px solid #495149; }
+.fn-left, .fn-right { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.fn-left { background: #18212d; }
+.fn-tools { min-height: 48px; padding: 8px 16px; border-bottom: 1px solid #414a42; flex-shrink: 0; }
+.fn-pane-title { margin-right: auto; }
+.fn-follow { display: flex; align-items: center; font: 12px Arial, sans-serif; gap: 4px; }
+.fn-editor { overflow: auto; flex: 1; }
+.fn-editor .ProseMirror { padding: 34px clamp(18px, 4vw, 64px) 120px; min-height: 100%; outline: none; font: 18px/1.7 Georgia, 'Times New Roman', serif; color: #e2e2d9; }
+.fn-editor .ProseMirror > h1 { font: 600 34px/1.15 Georgia, serif; margin: 0 0 28px; }
+.fn-editor .ProseMirror > p { margin: 0 0 22px; }
+.fn-editor .ProseMirror > :focus { outline: none; }
+.fn-editor .ProseMirror ::selection { background: #53614d; }
+.fn-editor .ProseMirror code { font: .88em ui-monospace, monospace; background: #323a32; padding: 1px 3px; }
+.fn-story { border: 1px solid #647361; border-radius: 8px; padding: 16px; margin: 28px 0; font: 14px/1.5 Arial, sans-serif; }
+.fn-story h2 { font: 22px Georgia, serif; margin: 0 0 8px; }
+.fn-equation-label { font: 24px Georgia, serif; margin: 10px 0; }
+.fn-cell-context, .fn-code-help { font: 12px/1.5 Arial, sans-serif; color: #b0b9b1; }
+.fn-story summary { cursor: pointer; padding: 8px 0; color: #d0dbcc; }
+.fn-story.ProseMirror-selectednode { outline: 2px solid #a5b59a; }
+.fn-code { margin-inline: -8px; border-top: 1px solid #465346; }
+.fn-divider { width: 9px; height: 100%; background: #3d4940; cursor: col-resize; touch-action: none; display: grid; place-items: center; }
+.fn-divider::after { content: ''; width: 3px; height: 40px; border-radius: 3px; background: #a2b39f; }
+.fn-divider:focus-visible { outline: 2px solid #d1d8b2; outline-offset: -2px; }
+.fn-preview { display: block; border: none; width: 100%; min-height: 0; flex: 1; background: #202522; }
+.fn-cell-details { display: none; font: 11px/1.4 ui-monospace, monospace; padding: 8px 16px; overflow-wrap: anywhere; margin: 0; }
+.fn-details .fn-cell-details { display: block; }
+.fn-details .ProseMirror > [data-cell-id]::after { content: attr(data-cell-id); display: block; margin-top: 6px; font: 10px/1.3 ui-monospace, monospace; color: #9cad9c; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+ .fn-header { padding: 12px; align-items: start; } .fn-header h1 { font-size: 18px; } .fn-header-actions { justify-content: end; } .fn-header-actions a { display: none; }
+ .fn-workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+ .fn-divider { display: none; } .fn-tools { min-height: 40px; padding: 5px 8px; gap: 4px; } .fn-tools button { font-size: 11px; padding: 4px; }
+ .fn-editor .ProseMirror { padding: 20px; font-size: 17px; } .fn-editor .ProseMirror > h1 { font-size: 27px; }
+}

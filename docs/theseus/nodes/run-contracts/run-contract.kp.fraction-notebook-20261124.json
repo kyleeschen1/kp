@@ -1,0 +1,55 @@
+{
+  "id": "run-contract.kp.fraction-notebook-20261124",
+  "kind": "run-contract",
+  "title": "Fraction notebook split editor",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: both implementation packages complete; stop at the approved single-exemplar review before generalization.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.fraction-notebook-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-fraction-notebook-editor.md"
+    }
+  ],
+  "verification": [
+    "npm run test:fraction-notebook",
+    "npm run visual:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "Human feedback on the fraction split editor; retain the broader authoring programme and orientation grill as parked return paths."
+  ],
+  "allowedWork": [
+    "Approved bounded fraction split-editor exemplar"
+  ],
+  "disallowedWork": [
+    "No arbitrary execution, new mathematics, publication or broad migration"
+  ],
+  "goal": "Direct rich prose and supported story editing with preserved fractional reader context",
+  "target": "task.kp.fraction-notebook-20261124",
+  "runMode": "run",
+  "maxSlices": 2,
+  "commitCadence": "Verified packages and hourly backup",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human review of one fraction editor before generalization",
+    "Three-hour ceiling and thirty-minute closeout reserve"
+  ],
+  "slices": [
+    {
+      "id": "boundary",
+      "title": "Structured-editing-and-preview",
+      "summary": "Checked JSON projection, native preview bridge and atomic draft storage implemented with preserved existing reader and notebook consumers.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Split-editor-and-review",
+      "summary": "Working ProseMirror and CodeMirror fraction exemplar, browser-local recovery, preservation checks and human review packet prepared. Visual acceptance remains pending.",
+      "status": "complete"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import type { DocumentReadingAttention } from './document-theater-attention.ts';
 /** Both readers use the same native label adapter and sole reading playhead.
  * Their compilers retain responsibility for the meaning of each authored note. */
 export function mountDocumentAnnotations(story: HTMLElement, source: unknown, locationError?: string) {
-  const stops = readEndpointCommentary(source);
+  let stops = readEndpointCommentary(source);
   const plane = story.querySelector<HTMLElement>('.kp-caption-pin');
   if (!plane) throw new AnchoredAlgebraGap('reader.layout', 'Require the document annotation plane.');
   const labels = mountAnchoredLabels(plane), alert = document.createElement('p');
@@ -13,6 +13,10 @@ export function mountDocumentAnnotations(story: HTMLElement, source: unknown, lo
   story.append(alert);
   let layoutRevision = -1, invalidated = true;
   return {
+    replace(source: unknown) {
+      const next = readEndpointCommentary(source);
+      stops = next; invalidated = true;
+    },
     invalidate() { invalidated = true; },
     render(attention: Extract<DocumentReadingAttention, { kind: 'annotation' }> | undefined, revision: number) {
       try {

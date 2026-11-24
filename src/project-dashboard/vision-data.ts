@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "notebook-composition-detour",
-    title: "Compose two notebooks with scoped reusable animations",
+    id: "fraction-notebook-editing",
+    title: "Write directly beside the fraction reading",
     approval: "approved",
-    contractId: "run-contract.kp.notebook-proof-20261124.v1",
-    finish: "Prove persistent nested JSON, explicit scope, two live imports with independent playback, localized edits and folding. Stop for one exemplar review, retaining the authoring-to-practice programme as the return path.",
-    source: { label: "Approved notebook detour", href: "docs/project/reviews/2026-11-24-next-step-review.md" }
+    contractId: "run-contract.kp.fraction-notebook-20261124",
+    finish: "Edit rich prose and supported annotation specifications beside the existing fraction reader, retain local drafts and the last valid preview, then review directness and orientation before generalizing. The broader authoring programme remains the return path.",
+    source: { label: "Approved fraction editor exemplar", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Open /experiments/notebook/: scrub the two imports separately, edit First input, then change Shared transformation A in the other notebook. Fold and reload. Judge whether local versus shared consequences and your place in the nesting are clear. Fractional editorial review and the orientation discussion remain parked return paths.",
+  nextJudgment: "Open /experiments/fraction-notebook/: edit prose on the left, open the animation specification and revise annotation wording, then fold it, resize the split and reload. Judge whether editing feels direct and the corresponding reading remains easy to find. The matrix composition proof, fractional editorial review and orientation discussion retain their separate evidence and return paths.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The two-notebook candidate persists UUID-addressed nested JSON, explicit matrix inputs and two live uses of an existing animation with independent playback. Local edits, shared updates, folding and browser reopen pass automated checks. Interaction acceptance remains pending; storage is browser-local. Earlier algebra source-only revision evidence remains in the linked review history; general authoring speed and learning are unproved.",
-      evidence: { label: "Working notebook, review cues and measured limits", href: "docs/project/reviews/2026-11-24-notebook-proof.md" },
+      established: "The matrix proof retains persistent identity, scoped imports and localized reuse evidence. The fraction successor provides direct rich prose and checked annotation editing beside the existing native reader, with browser-local recovery and competing-save protection. Automated preservation passes; interaction acceptance, general authoring speed and learning remain unproved.",
+      evidence: { label: "Fraction editor, preservation and review cues", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" },
       outcome: {
         authority: "approved",
-        id: "notebook-composition-proof", title: "Compose two notebooks with scoped reusable animations",
-        finish: "Persist UUID-addressed nested JSON, import one component twice with explicit inputs and independent playback, revise locally, fold and reopen without losing identity. Review one exemplar before generalizing; return to the retained authoring programme afterward.",
-        excludes: "Broad lesson migration, arbitrary code execution, publication, a general plugin platform or changes to the external editor.",
-        source: { label: "Approved bounded notebook proof", href: "docs/project/reviews/2026-11-24-next-step-review.md" }
+        id: "fraction-notebook-exemplar", title: "Write directly beside the fraction reading",
+        finish: "Review one resizable split editor with direct rich prose, folded specifications, checked annotations and recoverable drafts while retaining the original fraction reader and its mathematical sequence.",
+        excludes: "Broad migration, arbitrary execution, new equation choreography, publication, cross-notebook fraction semantics or changes to the external editor.",
+        source: { label: "Approved bounded fraction editor", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" }
       }
     },
     {
@@ -306,6 +306,13 @@ export const projectVision: ProjectVision = {
       after: "The user clarifies persistent identity, nested scope and cross-notebook reuse, then approves sustained implementation of one two-notebook JSON proof. Retain the earlier programme and dashboard discussion as return paths.",
       reason: "An easier Markdown editor would not test the requested document ownership and scoped composition. Reuse the existing matrix scene and review one exemplar before generalization.",
       source: { label: "Clarified requirements and approved proof", href: "docs/project/reviews/2026-11-24-next-step-review.md" }
+    },
+    {
+      id: "direct-fraction-notebook", on: "2026-11-24",
+      before: "The matrix notebook proved identity, nesting and scoped reuse through an inspector-style composition surface; its writing experience was unaccepted.",
+      after: "The user chooses direct Jupyter-like editing, accepts ProseMirror with embedded CodeMirror and selective metadata, then approves one fraction split-editor exemplar. The earlier proof and broader programme remain preserved.",
+      reason: "The user prefers the fraction layout and wants to edit the notebook itself beside its rendered reading. This tests the interaction without replacing the semantic model or generalizing the editor across domains.",
+      source: { label: "Accepted interaction direction and bounded trial", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" }
     }
   ]
 };

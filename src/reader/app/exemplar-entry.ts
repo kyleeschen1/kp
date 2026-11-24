@@ -132,6 +132,8 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
   documentVersion: requiredData(document.body, "kpReaderDocumentVersion")
 });
 const { documentId, documentVersion } = readerRoute;
+let fractionNotebookPreview: { dispose(): void } | undefined;
+let fractionNotebookDisposed = false;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const equationSource = document.body.dataset["kpReaderEquationSource"];
 const lessonDescriptor = await resolveKpReaderEquationLessonDescriptor(lessonVariant,
@@ -591,6 +593,15 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
   }
 });
 void fontReviewLifecycle.ready;
+
+// The experimental editor can revise checked prose without remounting the
+// native reader. Production and ordinary reader routes never load this bridge.
+if (import.meta.env.DEV && document.body.dataset['kpFractionNotebookPreview'] === 'true' && readerAnnotations) {
+  const { mountFractionNotebookPreview } = await import('../../fraction-notebook/preview.ts');
+  if (!fractionNotebookDisposed) fractionNotebookPreview = mountFractionNotebookPreview({
+    replaceAnnotations: value => readerAnnotations.replace(value), refresh: onResize
+  });
+}
 
 function createScrollClock(): KpReaderContinuousScrollClock {
   const geometry = scrollGeometry();
@@ -1780,6 +1791,8 @@ function onPageHide(event: PageTransitionEvent): void {
 }
 
 function dispose(): void {
+  fractionNotebookDisposed = true;
+  fractionNotebookPreview?.dispose();
   startupHandoff.dispose();
   window.removeEventListener("pagehide", onPageHide);
   window.removeEventListener("scroll", onScroll);

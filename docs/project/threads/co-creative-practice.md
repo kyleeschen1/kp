@@ -15,12 +15,10 @@ Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loop
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
 Read live slice state there. The parallel agent retains task/editor ownership;
 this checkout's old workbench proposal is not its current implementation.
-The [handoff](../reviews/2026-11-08-project-orientation.md) identifies the existing
-native-conversation/website-preview candidate and evidence limits. Saved reading
-and startup are repaired; supported readers inherit bounded preparation/reuse.
-The [motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md) separates
-completed reuse from cold preparation cost. What counts remains the technical
-reference; fractional reasoning awaits editorial review. Preserve the
+The [handoff](../reviews/2026-11-08-project-orientation.md) bounds the conversation/preview
+candidate. [Saved reading and motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md)
+separates repaired startup and reuse from cold preparation cost. What counts
+remains the technical reference; fractional reasoning awaits editorial review. Preserve the
 [accepted reading defaults](../principles/document-theater-reading.md), original
 version links and completed orientation. Fresh generation and integrated
 workbench latency remain unproved. The approved notebook detour below is current.
@@ -30,10 +28,13 @@ workbench latency remain unproved. The approved notebook detour below is current
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Approved requirements: persistent UUIDs, custom metadata/blocks, nesting, scope,
   localized changes, reuse, imports and folding.
-  `run-contract.kp.notebook-proof-20261124.v1` owns the bounded implementation.
-  The [working proof and review cues](../reviews/2026-11-24-notebook-proof.md)
-  separate verified behavior from pending interaction judgment. The broader
-  programme remains the return path; the Markdown-first recommendation is superseded.
+  The [working matrix proof](../reviews/2026-11-24-notebook-proof.md) retains its
+  composition evidence. Its inspector UI is not an accepted writing experience.
+  The approved [fraction editor successor](../reviews/2026-11-24-fraction-notebook-editor.md)
+  tries direct ProseMirror/CodeMirror editing beside the preferred reader layout;
+  `run-contract.kp.fraction-notebook-20261124` owns this bounded exemplar.
+  Review directness and orientation before generalizing. The broader programme
+  remains the return path; the Markdown-first recommendation is superseded.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
 - **What was actually gained:** [explanation-first evidence](../reviews/2026-11-08-explanation-first.md).
@@ -56,10 +57,9 @@ workbench latency remain unproved. The approved notebook detour below is current
 
 ## Coordination and handoff
 
-Before substantial work, name the beneficiary, capability gained, demonstrated
-blocker and finite finish line. Explain how it advances the roadmap; distinguish
-new capability from revalidation. A fresh idea does not silently displace approved
-work. An accepted pivot records the old commitment's disposition.
+Before work, name the beneficiary, capability, blocker and finish line. Connect
+it to the roadmap; distinguish new capability from revalidation. An accepted
+pivot records the old commitment's disposition.
 
 At handoff, reconcile direction and approval boundaries with the dashboard, record
 actual execution through Theseus, and show a concrete artifact or workflow.

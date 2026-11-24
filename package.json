@@ -7,6 +7,9 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "test:fraction-notebook": "node --disable-warning=ExperimentalWarning --test tests/fraction-notebook.test.ts tests/fractional-reading.test.ts",
+    "typecheck:fraction-notebook": "tsc --project config/typescript/tsconfig.fraction-notebook.json",
+    "visual:fraction-notebook": "playwright test --config config/playwright/playwright.fraction-notebook.config.ts --project=chromium --workers=1",
     "test:notebook": "node --disable-warning=ExperimentalWarning --test tests/notebook.test.ts tests/notebook-resolution.test.ts",
     "visual:notebook": "playwright test --config config/playwright/playwright.notebook.config.ts --project=chromium --workers=1",
     "typecheck:notebook": "tsc --project config/typescript/tsconfig.notebook.json",
@@ -771,12 +774,20 @@
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",
     "@codemirror/commands": "^6.10.4",
+    "@codemirror/lang-json": "^6.0.2",
     "@codemirror/lang-markdown": "^6.5.2",
     "@codemirror/state": "^6.7.1",
     "@codemirror/view": "^6.43.8",
     "@fontsource/source-serif-4": "^5.3.0",
+    "@lezer/highlight": "^1.2.5",
     "@replit/codemirror-vim": "^6.4.0",
     "katex": "^0.17.0",
+    "prosemirror-commands": "^1.7.2",
+    "prosemirror-history": "^1.5.2",
+    "prosemirror-keymap": "^1.2.3",
+    "prosemirror-model": "^1.25.13",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-view": "^1.43.1",
     "three": "^0.185.1"
   }
 }

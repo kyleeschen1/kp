@@ -8,6 +8,7 @@ import { kpViteAuthoringStructuralPreview } from "./scripts/vite-authoring-struc
 import { kpViteMechanicsRelations } from "./scripts/vite-mechanics-relations.ts";
 import { kpViteChangePropagation } from "./scripts/vite-change-propagation.ts";
 import { kpViteFractionChain } from "./scripts/vite-fraction-chain.ts";
+import { kpViteFractionNotebook } from "./scripts/vite-fraction-notebook.ts";
 import { kpViteCodeReasoning } from "./scripts/vite-code-reasoning.ts";
 import { kpViteRepertoireDashboard } from "./scripts/vite-repertoire-dashboard.ts";
 
@@ -162,6 +163,7 @@ export default defineConfig({
     kpViteMechanicsRelations(projectRoot),
     kpViteChangePropagation(projectRoot),
     kpViteFractionChain(projectRoot),
+    kpViteFractionNotebook(),
     kpViteCodeReasoning(projectRoot),
     {
       name: "kp-canonical-tax-static-reading",

@@ -3,9 +3,9 @@
 Last Updated: 2026-11-24
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `notebook-composition-detour`
-Execution Contract: `run-contract.kp.notebook-proof-20261124.v1`
-Next Product Milestone: `notebook-composition-proof`
+Current Commitment: `fraction-notebook-editing`
+Execution Contract: `run-contract.kp.fraction-notebook-20261124`
+Next Product Milestone: `fraction-notebook-exemplar`
 Milestone Authority: approved
 
 ## Where we are going
@@ -19,14 +19,14 @@ why this becomes the organizing direction and what it supersedes.
 
 ## Current approved commitment
 
-**Current bounded detour:** the user approved sustained work on the
-[two-notebook composition proof](reviews/2026-11-24-next-step-review.md): canonical
-JSON, persistent UUIDs, nested blocks, explicit component scopes, reusable objects
-and animations, localized changes and folding. Review one working exemplar before
-generalizing. The [working exemplar](reviews/2026-11-24-notebook-proof.md) now awaits
-that interaction review. The existing authoring-to-practice contract and fractional editorial
-checkpoint remain preserved as the return path; their remaining slices are not
-silently reordered or completed. The ecosystem-orientation grill is parked too.
+**Current bounded detour:** the user approved a [direct fraction notebook
+editor](reviews/2026-11-24-fraction-notebook-editor.md): ProseMirror prose and folded
+CodeMirror specifications beside the existing reader in a resizable 50/50 split.
+Review this exemplar before generalizing. The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
+retains its identity, nesting, scope and reuse evidence; its inspector UI was not
+accepted as the writing experience. The existing authoring-to-practice contract
+and fractional editorial checkpoint remain return paths, without reordering or
+completing their remaining slices. The ecosystem-orientation grill is parked too.
 
 Return to the approved [authoring-to-practice programme](2026-11-08-authoring-to-practice-loops.md)
 after this bounded checkpoint. Its dependencies and human gates remain intact.

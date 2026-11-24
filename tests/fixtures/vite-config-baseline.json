@@ -109,6 +109,11 @@
           }
         },
         {
+          "apply": "serve",
+          "configureServer": "<hook>",
+          "name": "kp-fraction-notebook"
+        },
+        {
           "name": "kp-code-reasoning-publication",
           "transformIndexHtml": {
             "handler": "<hook>",
@@ -443,6 +448,11 @@
             "handler": "<hook>",
             "order": "pre"
           }
+        },
+        {
+          "apply": "serve",
+          "configureServer": "<hook>",
+          "name": "kp-fraction-notebook"
         },
         {
           "name": "kp-code-reasoning-publication",

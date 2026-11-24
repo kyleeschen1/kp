@@ -1,0 +1,47 @@
+{
+  "id": "task.kp.fraction-notebook-20261124",
+  "kind": "task",
+  "title": "Direct fraction notebook editing beside the existing reading",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: implemented and checked fraction editor awaits interaction judgment at /experiments/fraction-notebook/.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-fraction-notebook-editor.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:fraction-notebook; npm run typecheck; npm run typecheck:fraction-notebook; npm run check:architecture; npm run test:notebook; npm run visual:notebook",
+      "status": "passed",
+      "scope": "structured editing and shared persistence boundary",
+      "checkedAt": "2026-11-24T14:23:32.869Z",
+      "notes": "Seven fraction/projection tests and twelve notebook tests passed. Full application/tests/Svelte/domain types passed; scoped fraction types passed after final editing fix. Existing notebook Chromium suite passed all ten checks after shared atomic IndexedDB extraction. Architecture ownership and authority gates pass; no reader clocks added."
+    },
+    {
+      "command": "npm run visual:fraction-notebook; npm run check:tooling-configs; npm run test:project-vision",
+      "status": "failed",
+      "scope": "candidate discovery before repairs",
+      "checkedAt": "2026-11-24T14:29:12.547Z",
+      "notes": "Discovery found the unsupported preview URL, paragraph Enter default and a test using start instead of the canonical initial state. Fixed route, explicit paragraph splitting and expectation; browser reruns passed. Tooling required reviewed new config/plugin declarations. Thread initially exceeded its unchanged 450-word budget and was shortened. A later first page load raced the Vite config restart (connection reset/refused); service stayed supervised and a fresh full browser rerun follows."
+    },
+    {
+      "command": "npm run check:tooling-configs; npm run test:project-vision; npm run visual:anchored-algebra -- --grep fractional; npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "final integration and source-linked orientation",
+      "checkedAt": "2026-11-24T14:29:13.439Z",
+      "notes": "All tooling declarations and inputs pass: 70 Playwright configs, 14 Vite configs, 15 TypeScript projects. Project vision passes all 75 tests after shortening the thread without raising its budget. Existing canonical fractional browser preservation passes. Scoped editor, middleware and tests typecheck passes."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "final complete Chromium exemplar suite",
+      "checkedAt": "2026-11-24T14:29:36.036Z",
+      "notes": "All six checks pass on the final candidate after the supervised Vite restart settled. Direct edits, selection navigation, invalid-draft reload, competing saves, phone layout, exact-origin admission and production editor erasure are verified. Working URL returns HTTP 200; launchd API and web processes remain running."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews directness, pane balance and connection between editable cells and the existing fraction reading."
+  ]
+}

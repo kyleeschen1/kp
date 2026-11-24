@@ -135,6 +135,10 @@
     "sha256": "ed440ecbf831bfd7ef02254b94764d8e512a45450968b96db02c7ef9822e3921",
     "projects": 3
   },
+  "playwright.fraction-notebook.config.ts": {
+    "sha256": "7913ad76bbb66cb5c466a99e1d658471cfff00a9b07cee1ee19982f1f40a05e5",
+    "projects": 3
+  },
   "playwright.gradient-contour-production.config.ts": {
     "sha256": "d51cbb26949e75baa3070c4f686668e118c71d161d06801c960f46fbd8541579",
     "projects": 3

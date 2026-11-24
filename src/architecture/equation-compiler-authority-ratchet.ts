@@ -49,6 +49,9 @@ const rendererInferencePaths = paths([
 ]);
 
 const privateClockPaths = paths([
+  // The editor debounces compilation requests and revokes a download URL.
+  // It never samples animation time; the retained reader owns its playhead.
+  "src/fraction-notebook/app.ts",
   "src/app-adapters/linear-equation-story-animation-stage.ts",
   "src/app-adapters/linear-equation-story-progress-controller.ts",
   "src/editor/animation-catalogue-interaction-host.ts",
