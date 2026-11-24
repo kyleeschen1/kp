@@ -3,6 +3,13 @@
 Status: design assessment requested by the user; implementation and source-model
 migration are proposed, not approved. No active product commitment changes.
 
+**Recommendation superseded after requirements clarification:** the user needs
+custom blocks and metadata, true nesting and variable scope, persistent UUIDs,
+localized updates, object/animation reuse, cross-notebook imports, and folding.
+The Markdown-first recommendation below does not satisfy that objective. Read
+[the revised next-step review](2026-11-24-next-step-review.md) for the proposed
+structured-notebook proof. The implementation findings below remain evidence.
+
 ## Recommendation
 
 First test a bounded notebook-style authoring surface over the existing

@@ -1,7 +1,7 @@
 # Authoring, adaptation and co-creative practice
 
 Status: active context index; execution lives in Theseus
-Last Updated: 2026-11-09
+Last Updated: 2026-11-24
 
 ## Current boundary
 
@@ -31,6 +31,12 @@ and integrated workbench latency remain open. Orientation stays accepted and com
 
 ## Retrieve for a named question
 
+- **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
+  The user clarified persistent UUIDs, custom metadata/blocks, nesting, scope,
+  localized changes, reuse, imports and folding as requirements for the proposed
+  notebook. A two-notebook composition proof is recommended; implementation is
+  not approved and the current programme is not replaced. The earlier
+  Markdown-first recommendation is superseded, with its findings retained.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
 - **What was actually gained:** [explanation-first evidence](../reviews/2026-11-08-explanation-first.md).
