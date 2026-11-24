@@ -1,0 +1,63 @@
+{
+  "id": "run-contract.kp.notebook-proof-20261124.v1",
+  "kind": "run-contract",
+  "title": "Two-notebook composition proof",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.notebook-proof-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-next-step-review.md",
+      "summary": "User approved the recommended proof and sustained implementation"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook",
+    "npm run visual:notebook",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "User-approved two-notebook composition proof with existing matrix scene and minimal local editor"
+  ],
+  "disallowedWork": [
+    "No broad migration, new animation semantics, arbitrary code execution, publication or external editor work"
+  ],
+  "goal": "Persistent nested JSON notebooks with scoped shared objects, independent scene occurrences and localized revisions",
+  "target": "task.kp.notebook-proof-20261124",
+  "runMode": "run",
+  "maxSlices": 4,
+  "commitCadence": "Commit verified packages and back up at least hourly and at review",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human exemplar review before generalization",
+    "Six-hour ceiling with forty-five-minute verification reserve",
+    "Genuine unresolved scope or external blocker"
+  ],
+  "slices": [
+    {
+      "id": "foundation",
+      "title": "Identity-and-transactions",
+      "summary": "Canonical fixtures, typed model, atomic revision-based operations, UUID preservation and duplicate reference remapping verified",
+      "status": "complete"
+    },
+    {
+      "id": "reuse",
+      "title": "Scoped-resolution-and-persistence",
+      "status": "planned"
+    },
+    {
+      "id": "exemplar",
+      "title": "Two-notebook-editor-and-reader",
+      "status": "planned"
+    },
+    {
+      "id": "verification",
+      "title": "Preservation-and-review-packet",
+      "status": "planned"
+    }
+  ]
+}

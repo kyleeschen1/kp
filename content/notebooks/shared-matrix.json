@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "10000000-0000-4000-8000-000000000001",
+  "revision": 0,
+  "title": "Shared matrix workshop",
+  "children": [
+    {
+      "id": "10000000-0000-4000-8000-000000000002",
+      "type": "prose",
+      "title": "One definition, several explanations",
+      "metadata": {},
+      "text": "A matrix maps an input vector by weighting and adding its columns. This notebook owns the reusable matrix and component. Changes to the shared matrix reach its live uses."
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000003",
+      "type": "matrix",
+      "title": "Shared transformation A",
+      "metadata": {},
+      "rows": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000004",
+      "type": "matrix",
+      "title": "Default input columns",
+      "metadata": {},
+      "rows": [
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000005",
+      "type": "component",
+      "title": "Columns, weighted and added",
+      "metadata": {},
+      "inputs": [
+        {
+          "id": "10000000-0000-4000-8000-000000000006",
+          "name": "transformation",
+          "default": {
+            "notebookId": "10000000-0000-4000-8000-000000000001",
+            "nodeId": "10000000-0000-4000-8000-000000000003"
+          }
+        },
+        {
+          "id": "10000000-0000-4000-8000-000000000007",
+          "name": "inputs",
+          "default": {
+            "notebookId": "10000000-0000-4000-8000-000000000001",
+            "nodeId": "10000000-0000-4000-8000-000000000004"
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": "10000000-0000-4000-8000-000000000008",
+          "type": "section",
+          "title": "Inspect the combination",
+          "metadata": {},
+          "children": [
+            {
+              "id": "10000000-0000-4000-8000-000000000009",
+              "type": "scene",
+              "title": "Follow one output column",
+              "metadata": {},
+              "renderer": "matrix-columns",
+              "left": {
+                "kind": "input",
+                "inputId": "10000000-0000-4000-8000-000000000006"
+              },
+              "right": {
+                "kind": "input",
+                "inputId": "10000000-0000-4000-8000-000000000007"
+              },
+              "column": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

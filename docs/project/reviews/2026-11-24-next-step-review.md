@@ -1,9 +1,13 @@
 # Next step: prove a compositional notebook on two documents
 
 Date: 2026-11-24
-Status: recommendation, not implementation approval or an execution contract.
-Current approved programme remains authoring-to-practice. The ecosystem dashboard
-grill remains parked with its return point preserved in the earlier comparison.
+Status: user approved sustained implementation of this bounded proof on November
+24 ("go for as long as possible"). Execution is tracked by
+`run-contract.kp.notebook-proof-20261124.v1`, with four outcome packages, a six-hour
+ceiling and forty-five-minute verification reserve. Commit recoverable packages,
+back up at least hourly, and stop at the human exemplar checkpoint before rollout.
+The broader authoring-to-practice programme is retained as the return path.
+The ecosystem dashboard grill remains parked with its return point preserved.
 
 ## Why the recommendation changed
 
@@ -100,6 +104,17 @@ This is a proposed acceptance walk-through, not an implemented capability.
 
 ## Existing runtime integration is the first technical uncertainty
 
+Implementation selection: use the existing numerical 2x2 matrix column-combination
+player instead of extending the fixed fractional equation. Canonical reference:
+`/experiments/matrix-column-combinations/?input=dependent-columns`. Semantic owners
+are `src/math/authoring/matrices.ts` and `matrix-product.ts`; the existing
+`columnExampleFromProduct`, `columnCardHtml` and `mountColumnPlayer` own the checked
+projection, native KaTeX card and playback lifecycle. New notebook host:
+`/experiments/notebook/`; canonical sources are `content/notebooks/shared-matrix.json`
+and `compare-inputs.json`. No new choreography or mathematical operation is needed.
+The notebook proof uses existing generic milestone cues so input edits do not
+retain prose claiming a particular numeric answer.
+
 Use the current fractional reader as a preservation reference:
 [canonical reading](http://127.0.0.1:8000/reader/solve-fractional-linear/?reading=reasoning).
 Its source is `content/authoring/algebra/fractional-linear-reasoning.article.md`;
@@ -161,7 +176,7 @@ assessment does not require resuming or repairing an execution contract.
 ## Return path
 
 The notebook serves the approved authoring-first product purpose: compose and
-revise explanations with reusable semantic material. It is a proposed bounded
-detour, not an adopted replacement for the authoring-to-practice programme.
+revise explanations with reusable semantic material. It is an approved bounded
+detour, not a replacement for the authoring-to-practice programme.
 After selecting or declining it, return to the parked orientation/dashboard grill:
 one primary human focus versus several equally prominent active threads.

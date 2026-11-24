@@ -5,22 +5,22 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "authoring-to-practice",
-    title: "Make exceptional explanations repeatable and adaptable",
+    id: "notebook-composition-detour",
+    title: "Compose two notebooks with scoped reusable animations",
     approval: "approved",
-    contractId: "run-contract.kp.authoring-to-practice-20261108",
-    finish: "Restore saved reading links, then demonstrate real revision, measured iteration and precise attention authoring. Continue through the approved adaptation/practice sequence as prerequisites and human checkpoints are satisfied.",
-    source: { label: "Approved authoring-to-practice programme", href: "docs/project/2026-11-08-authoring-to-practice-loops.md" }
+    contractId: "run-contract.kp.notebook-proof-20261124.v1",
+    finish: "Prove persistent nested JSON, explicit scope, two live imports with independent playback, localized edits and folding. Stop for one exemplar review, retaining the authoring-to-practice programme as the return path.",
+    source: { label: "Approved notebook detour", href: "docs/project/reviews/2026-11-24-next-step-review.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "The opening annotation, indentation and shorter beats are accepted. Read /reader/solve-fractional-linear/?reading=reasoning through its alternative route and changed-case question: does it make choosing and justifying a move clearer? Original version-1 links remain preserved. What counts stays a technical reference.",
+  nextJudgment: "Review the approved two-notebook composition proof when ready: local edits, live imports, nested folding and persistent identity. The fractional reading's editorial checkpoint and the ecosystem-orientation discussion remain parked return paths.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
     { title: "Practice and retrieve", outcome: "Connected problems, feedback and flashcards develop the same instructional distinctions." },
     { title: "Grow the library", outcome: "Curated adaptive material becomes easier to reuse, embed and maintain across domains." }
   ],
-  reviewedOn: "2026-11-09",
+  reviewedOn: "2026-11-24",
   northStar: "Help authors create extraordinary explanations that teach people what to notice.",
   productProof: "Learners can question, adapt, practice and revisit that material while preserving its important reasoning and relationships. Exceptional featured content demonstrates the medium; authoring is the first product center.",
   productSource: { label: "Product charter", href: "docs/project/strategy.md" },
@@ -45,10 +45,10 @@ export const projectVision: ProjectVision = {
       evidence: { label: "Second caller, source-only timing and remaining judgment", href: "docs/project/reviews/2026-11-09-fractional-reading.md" },
       outcome: {
         authority: "approved",
-        id: "authoring-revision", title: "Revise one exceptional explanation through the product",
-        finish: "An author substantively changes reasoning and attention choreography, gets useful feedback promptly, and preserves a reusable result. Use the existing native workbench conversation and KP preview first; measure latency and remaining intervention before adding infrastructure.",
-        excludes: "Automatic approval of a live-model service, a universal language, a large catalogue or a new editor implementation.",
-        source: { label: "Approved first authoring proof", href: "docs/project/2026-11-08-authoring-to-practice-loops.md" }
+        id: "notebook-composition-proof", title: "Compose two notebooks with scoped reusable animations",
+        finish: "Persist UUID-addressed nested JSON, import one component twice with explicit inputs and independent playback, revise locally, fold and reopen without losing identity. Review one exemplar before generalizing; return to the retained authoring programme afterward.",
+        excludes: "Broad lesson migration, arbitrary code execution, publication, a general plugin platform or changes to the external editor.",
+        source: { label: "Approved bounded notebook proof", href: "docs/project/reviews/2026-11-24-next-step-review.md" }
       }
     },
     {
@@ -299,6 +299,13 @@ export const projectVision: ProjectVision = {
       after: "Keep it as a technical reference; develop the fractional-equation reader around a more consequential learner question. Guided theaters orient entry immediately, paragraphs use shared indentation, and beats carry one small instructional job while ordinary prose preserves the argument.",
       reason: "The user finds the reasoning clear but the topic contrived, and identifies unannotated entry and long beats as obstacles to reading. Technical reuse does not establish featured teaching quality.",
       source: { label: "Accepted exemplar and reading refinement", href: "docs/project/principles/document-theater-reading.md" }
+    },
+    {
+      id: "notebook-requirements-and-approval", on: "2026-11-24",
+      before: "Authoring-to-practice is approved; the fractional reasoning candidate awaits editorial review. A Markdown-backed authoring pilot was recommended during notebook exploration.",
+      after: "The user clarifies persistent identity, nested scope and cross-notebook reuse, then approves sustained implementation of one two-notebook JSON proof. Retain the earlier programme and dashboard discussion as return paths.",
+      reason: "An easier Markdown editor would not test the requested document ownership and scoped composition. Reuse the existing matrix scene and review one exemplar before generalization.",
+      source: { label: "Clarified requirements and approved proof", href: "docs/project/reviews/2026-11-24-next-step-review.md" }
     }
   ]
 };

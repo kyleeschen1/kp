@@ -18,24 +18,21 @@ this checkout's old workbench proposal is not its current implementation.
 The [handoff](../reviews/2026-11-08-project-orientation.md) identifies the existing
 native-conversation/website-preview candidate and evidence limits. Saved reading
 and startup are repaired; supported readers inherit bounded preparation/reuse.
-The [motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md) distinguishes
-that completed reuse repair from remaining cold preparation cost. The user accepted
-the bounded opening/short-beat treatment and judged the product reading's
-reasoning clear, while selecting What counts as a technical reference rather than
-the main teaching exemplar. The [accepted reading defaults](../principles/document-theater-reading.md)
-and programme amendment capture that distinction. A versioned fractional reading
-now explains choosing moves that preserve solutions, while retaining version 1.
-Review its explanatory quality next. A subsequent source-only note/target revision
-used the shared checked-save transaction in about 21 seconds; fresh generation
-and integrated workbench latency remain open. Orientation stays accepted and complete.
+The [motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md) separates
+completed reuse from cold preparation cost. What counts remains the technical
+reference; fractional reasoning awaits editorial review. Preserve the
+[accepted reading defaults](../principles/document-theater-reading.md), original
+version links and completed orientation. Fresh generation and integrated
+workbench latency remain unproved. The approved notebook detour below is current.
 
 ## Retrieve for a named question
 
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   The user clarified persistent UUIDs, custom metadata/blocks, nesting, scope,
-  localized changes, reuse, imports and folding as requirements for the proposed
-  notebook. A two-notebook composition proof is recommended; implementation is
-  not approved and the current programme is not replaced. The earlier
+  localized changes, reuse, imports and folding as requirements for the notebook.
+  The user approved sustained implementation of the bounded two-notebook proof;
+  `run-contract.kp.notebook-proof-20261124.v1` owns execution. The broader programme
+  is retained as the return path. The earlier
   Markdown-first recommendation is superseded, with its findings retained.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.

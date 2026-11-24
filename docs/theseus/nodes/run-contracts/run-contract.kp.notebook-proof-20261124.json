@@ -1,0 +1,55 @@
+{
+  "id": "run-contract.kp.notebook-proof-20261124",
+  "kind": "run-contract",
+  "title": "Two-notebook composition proof",
+  "status": "superseded",
+  "summary": "Replaced before implementation by fully typed v1 contract; creation help omitted required run fields",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.notebook-proof-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-next-step-review.md",
+      "summary": "User approved the recommended two-notebook proof and sustained implementation"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook",
+    "npm run visual:notebook",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Approved two-notebook proof; four packages; focused checks and integration; commit each recoverable package; six-hour ceiling with forty-five-minute closeout reserve; stop for canonical exemplar review"
+  ],
+  "disallowedWork": [
+    "No broad migration, new animation semantics, arbitrary code execution, publication or new external editor work"
+  ],
+  "goal": "Persistent nested JSON notebooks with scoped shared objects, independent scene occurrences and localized revisions",
+  "target": "task.kp.notebook-proof-20261124",
+  "slices": [
+    {
+      "id": "foundation",
+      "title": "Identity-and-transactions",
+      "summary": "User approved sustained execution of the two-notebook proof; preserve prior programme and stop at exemplar review",
+      "status": "in-progress"
+    },
+    {
+      "id": "reuse",
+      "title": "Scoped-resolution-and-persistence",
+      "status": "planned"
+    },
+    {
+      "id": "exemplar",
+      "title": "Two-notebook-editor-and-reader",
+      "status": "planned"
+    },
+    {
+      "id": "verification",
+      "title": "Preservation-and-review-packet",
+      "status": "planned"
+    }
+  ]
+}

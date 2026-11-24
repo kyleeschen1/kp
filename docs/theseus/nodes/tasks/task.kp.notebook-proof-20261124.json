@@ -1,0 +1,60 @@
+{
+  "id": "task.kp.notebook-proof-20261124",
+  "kind": "task",
+  "title": "Author nested notebooks with scoped reusable animations",
+  "status": "ready",
+  "domain": "authoring",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook",
+    "npm run visual:notebook"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:notebook",
+      "status": "passed",
+      "scope": "foundation",
+      "checkedAt": "2026-11-24T13:17:20.868Z",
+      "notes": "Six identity, transaction, validation and duplication tests pass; focused strict TypeScript check passes"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "orientation",
+      "checkedAt": "2026-11-24T13:17:21.762Z",
+      "notes": "75 tests pass after updating bounded orientation and removing a stale milestone literal from a negative test"
+    }
+  ],
+  "expectedLearning": [
+    "Whether explicit identity and scope permit useful local revisions and shared reuse"
+  ],
+  "allowedWork": [
+    "Two-notebook JSON composition proof through human review"
+  ],
+  "disallowedWork": [
+    "No catalogue migration or publication"
+  ],
+  "criteria": [
+    {
+      "id": "persistent-identity",
+      "weight": "high"
+    },
+    {
+      "id": "scoped-reuse",
+      "weight": "high"
+    },
+    {
+      "id": "local-updates",
+      "weight": "high"
+    },
+    {
+      "id": "reader-separation",
+      "weight": "high"
+    }
+  ]
+}

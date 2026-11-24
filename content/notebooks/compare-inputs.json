@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "id": "10000000-0000-4000-8000-000000000020",
+  "revision": 0,
+  "title": "Compare two inputs",
+  "children": [
+    {
+      "id": "10000000-0000-4000-8000-000000000021",
+      "type": "prose",
+      "title": "Same transformation, different inputs",
+      "metadata": {},
+      "text": "Both animations use the shared transformation from the workshop. Their input matrices and playback positions belong to separate occurrences. Change one input, then compare the resulting weighted columns."
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000022",
+      "type": "matrix",
+      "title": "First input",
+      "metadata": {},
+      "rows": [
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000023",
+      "type": "matrix",
+      "title": "Second input",
+      "metadata": {},
+      "rows": [
+        [
+          -1,
+          0
+        ],
+        [
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "id": "10000000-0000-4000-8000-000000000024",
+      "type": "section",
+      "title": "Compare the two explanations",
+      "metadata": {},
+      "children": [
+        {
+          "id": "10000000-0000-4000-8000-000000000025",
+          "type": "import",
+          "title": "First occurrence",
+          "metadata": {},
+          "source": {
+            "notebookId": "10000000-0000-4000-8000-000000000001",
+            "nodeId": "10000000-0000-4000-8000-000000000005"
+          },
+          "policy": "live",
+          "bindings": {
+            "10000000-0000-4000-8000-000000000007": {
+              "notebookId": "10000000-0000-4000-8000-000000000020",
+              "nodeId": "10000000-0000-4000-8000-000000000022"
+            }
+          }
+        },
+        {
+          "id": "10000000-0000-4000-8000-000000000026",
+          "type": "section",
+          "title": "A contrasting input",
+          "metadata": {},
+          "children": [
+            {
+              "id": "10000000-0000-4000-8000-000000000027",
+              "type": "import",
+              "title": "Second occurrence",
+              "metadata": {},
+              "source": {
+                "notebookId": "10000000-0000-4000-8000-000000000001",
+                "nodeId": "10000000-0000-4000-8000-000000000005"
+              },
+              "policy": "live",
+              "bindings": {
+                "10000000-0000-4000-8000-000000000007": {
+                  "notebookId": "10000000-0000-4000-8000-000000000020",
+                  "nodeId": "10000000-0000-4000-8000-000000000023"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

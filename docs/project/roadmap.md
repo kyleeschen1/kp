@@ -1,11 +1,11 @@
 # KP roadmap
 
-Last Updated: 2026-11-09
+Last Updated: 2026-11-24
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `authoring-to-practice`
-Execution Contract: `run-contract.kp.authoring-to-practice-20261108`
-Next Product Milestone: `authoring-revision`
+Current Commitment: `notebook-composition-detour`
+Execution Contract: `run-contract.kp.notebook-proof-20261124.v1`
+Next Product Milestone: `notebook-composition-proof`
 Milestone Authority: approved
 
 ## Where we are going
@@ -19,21 +19,21 @@ why this becomes the organizing direction and what it supersedes.
 
 ## Current approved commitment
 
-**Make exceptional explanations repeatable and adaptable.** The user approves
-the [twelve-loop progression](2026-11-08-authoring-to-practice-loops.md), starting
-with faithful restoration of a saved What counts link. The programme preserves
-dependencies and human checkpoints; later scopes sharpen from earlier evidence.
-The prior [orientation delivery](2026-11-08-project-orientation-delivery.md) is
-accepted and complete, with its history and evidence retained.
+**Current bounded detour:** the user approved sustained work on the
+[two-notebook composition proof](reviews/2026-11-24-next-step-review.md): canonical
+JSON, persistent UUIDs, nested blocks, explicit component scopes, reusable objects
+and animations, localized changes and folding. Review one working exemplar before
+generalizing. The existing authoring-to-practice contract and fractional editorial
+checkpoint remain preserved as the return path; their remaining slices are not
+silently reordered or completed. The ecosystem-orientation grill is parked too.
 
-What counts now serves as a technical authoring/runtime reference; the user
-judges its reasoning clear but its topic unsuitable as the main teaching exemplar.
-Its opening/short-beat refinement is accepted. The existing fractional-equation
-source now has a separate reasoning reading about choosing moves that preserve
-solutions. Review its argument, alternative route and changed-case question next.
-The [reading defaults](principles/document-theater-reading.md) preserve rich prose,
-give guided theaters an immediate orientation, and keep individual beats concise.
-This refines the programme's featured-quality outcome rather than replacing it.
+Return to the approved [authoring-to-practice programme](2026-11-08-authoring-to-practice-loops.md)
+after this bounded checkpoint. Its dependencies and human gates remain intact.
+[Orientation delivery](2026-11-08-project-orientation-delivery.md) stays complete.
+
+What counts remains the technical reference. Fractional reasoning awaits review
+of its argument, alternative route and changed-case question. Preserve the
+[accepted reading defaults](principles/document-theater-reading.md).
 
 Use the existing authoring path. The parallel agent retains task/editor ownership;
 strategic records have one editor at a time.
@@ -46,14 +46,11 @@ promptly, and preserves a reusable result without custom repository engineering
 for each revision. Then pressure one learner-requested adaptation that retains
 the important reasoning and exact context.
 
-The editor lane has a native-conversation/website-preview candidate. Reuse it
-and KP's registered-manuscript preview; inspect their missing connection first.
-See [inspection and handoff](reviews/2026-11-08-project-orientation.md).
-A bounded source-only note-and-target revision took about 21 seconds including
-editing, checking and saving after the second reader's support was implemented.
-The [trial](reviews/2026-11-09-fractional-reading.md) separates that result from
-the initial engineering. Fresh explanation generation and integrated workbench
-latency remain unproved. Several domains and a large library are not the first finish line.
+The independent editor's conversation/preview integration remains a separate
+[handoff](reviews/2026-11-08-project-orientation.md). The
+[fractional trial](reviews/2026-11-09-fractional-reading.md) measured about 21 seconds
+for a source-only revision after support engineering; fresh generation and
+integrated workbench latency remain unproved.
 
 ## What already exists
 
