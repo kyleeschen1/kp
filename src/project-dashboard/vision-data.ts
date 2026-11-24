@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved rich fraction editor", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "The richer fraction editor is approved for implementation at /experiments/fraction-notebook/. At its next review, judge typed title/byline editing, metadata, link/math source transitions, local caption changes and lighter serif typography. The earlier matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
+  nextJudgment: "Review the richer fraction editor at /experiments/fraction-notebook/: edit title/byline, inspect metadata, enter and leave link/math source, change the local caption and judge lighter serif typography. Preservation and recovery checks pass; writing feel and visual acceptance are pending. The earlier matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,8 +41,8 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The matrix proof retains persistent identity, scoped imports and localized reuse evidence. The fraction successor provides direct rich prose and checked annotation editing beside the existing native reader, with browser-local recovery and competing-save protection. Automated preservation passes; interaction acceptance, general authoring speed and learning remain unproved.",
-      evidence: { label: "Fraction editor, preservation and review cues", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" },
+      established: "The matrix proof retains identity, scoped imports and localized reuse evidence. The richer fraction candidate adds typed title/authors, block/object/phrase metadata, source-aware links and inline math, one local caption and lighter typography. Browser checks cover history, migration, invalid drafts and copy identities; native reader preservation passes. Human acceptance, general authoring speed and learning remain unproved.",
+      evidence: { label: "Rich fraction editor evidence and review cues", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" },
       outcome: {
         authority: "approved",
         id: "rich-fraction-article", title: "Edit typed article content and inline source",

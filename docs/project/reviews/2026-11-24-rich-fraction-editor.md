@@ -104,3 +104,42 @@ Bounded syntax: conversion handles plain, unmarked inline text. Code, formatted
 text and annotated phrases remain literal rather than dropping their marks.
 This is one inline source field, not a general Markdown parser or display-math
 editor. Object and phrase metadata are data; they grant no renderer authority.
+
+## Integrated review packet
+
+Open **http://127.0.0.1:8000/experiments/fraction-notebook/**. The existing launchd
+API and web services remain running; this session does not own their lifetime.
+The native fractional-reading preservation check also passes:
+`npm run visual:anchored-algebra -- --grep 'fractional reasoning'`.
+Desktop, phone, rendered inline and open-source views were inspected.
+Tooling configuration checks and all 75 project-vision tests pass. The latter
+initially caught overlong startup summaries; wording was shortened and existing
+budgets retained. Recoverable implementation checkpoints are `c4067bcae` (typed
+article) and `ebbe86d17` (inline editing), both backed up on the feature branch.
+
+1. Edit the title and byline directly. Use **Add author**, then **Show details**
+   to change that credit's role or JSON metadata. The preview should follow.
+2. In plain paragraph text, write `$x/2$` and `[original](/reader/solve-fractional-linear/)`.
+   Move the cursor away to render them; click or Backspace into an object to
+   reveal source. Try an edit, Undo/Redo and reload. IDs remain in **Show details**.
+3. Select ordinary text and choose **Annotate**. Add a JSON note and inspect it
+   again after editing nearby prose. Blocks and inline objects have their own
+   metadata targets; a phrase annotation does not replace the paragraph's ID.
+4. Edit **Opening caption · this occurrence**, then **Show selected passage**.
+   Its existing first animation moment uses the new wording. The folded
+   specification still exposes remaining wording and supported semantic targets.
+5. Judge the lighter serif text, restrained headlines, source-field transitions
+   and whether the editor still feels like writing the article itself.
+
+This is a review-ready candidate, not accepted typography or a promoted general
+editor. Automated checks establish preservation and recovery, not aesthetic
+quality or learning outcomes. Human review is the next gate before generalizing;
+the broader authoring programme and orientation discussion remain return paths.
+No new package dependencies were added. The experiment adds a v2 codec/migration,
+metadata inspector and source-object lifecycle; the existing renderer/compiler
+owners remain responsible for animation. Source Serif 4 and KaTeX assets load in
+the experiment, while ordinary reader dependency closure is unchanged.
+
+Resume context with `theseus work start task.kp.rich-fraction-editor-20261124 --mode brief`
+after the user's exemplar feedback, and use the supported transition commands to
+record acceptance or a bounded repair. Do not infer another implementation scope.

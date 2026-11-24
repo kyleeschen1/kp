@@ -31,11 +31,12 @@ workbench latency remain unproved. The approved notebook detour below is current
   The [working matrix proof](../reviews/2026-11-24-notebook-proof.md) retains its
   composition evidence. Its inspector UI is not an accepted writing experience.
   The [first fraction editor](../reviews/2026-11-24-fraction-notebook-editor.md) is checked.
-  The approved [richer successor](../reviews/2026-11-24-rich-fraction-editor.md) adds
-  typed fields, metadata, links/math and a local caption;
+  The [richer successor](../reviews/2026-11-24-rich-fraction-editor.md) adds
+  typed fields, metadata, links/math and a local caption. Its checked candidate
+  awaits interaction/typography review;
   `run-contract.kp.rich-fraction-editor-20261124` owns this exemplar.
-  Review directness and orientation before generalizing. The broader programme
-  remains the return path; the Markdown-first recommendation is superseded.
+  Review before generalizing. The programme remains the return path;
+  Markdown-first is superseded.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
 - **What was actually gained:** [explanation-first evidence](../reviews/2026-11-08-explanation-first.md).

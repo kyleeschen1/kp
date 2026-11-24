@@ -2,8 +2,9 @@
   "id": "task.kp.rich-fraction-editor-20261124",
   "kind": "task",
   "title": "Typed article and source-aware inline editing",
-  "status": "ready",
+  "status": "deferred",
   "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: six-part fraction exemplar implemented and checked; writing feel and typography await user judgment.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,6 +60,44 @@
       "scope": "integration",
       "checkedAt": "2026-11-24T20:50:08.939Z",
       "notes": "All architecture, compiler authority and cross-domain gates pass."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --grep fractional",
+      "status": "passed",
+      "scope": "canonical reader preservation",
+      "checkedAt": "2026-11-24T20:53:12.326Z",
+      "notes": "The fractional reasoning Chromium case passes, preserving the native annotations and saved version-1 reading."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-24T20:53:13.215Z",
+      "notes": "All four tooling tests, 70 Playwright configurations, 14 Vite configurations and 15 TypeScript projects pass."
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --grep 'fractional reasoning'",
+      "status": "passed",
+      "scope": "canonical reader preservation",
+      "checkedAt": "2026-11-24T20:53:40.327Z",
+      "notes": "Exact executed command for the one passing canonical preservation case; preceding record abbreviated the grep argument."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "handoff context",
+      "checkedAt": "2026-11-24T20:53:41.053Z",
+      "notes": "Review summary made roadmap and thread two words over their startup budgets. Compressed wording without changing limits; final full rerun passes."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "handoff context",
+      "checkedAt": "2026-11-24T20:53:41.666Z",
+      "notes": "All 75 tests pass after shortening entrypoint summaries. Source-linked horizon reflects review readiness and preserved return paths."
     }
+  ],
+  "revisitWhen": [
+    "User reviews the fraction notebook exemplar and accepts it or requests a bounded repair."
   ]
 }

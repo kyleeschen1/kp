@@ -2,7 +2,8 @@
   "id": "run-contract.kp.rich-fraction-editor-20261124",
   "kind": "run-contract",
   "title": "Rich fraction article editor",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: three implementation packages complete; exemplar acceptance pending before any generalization.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -17,6 +18,9 @@
   "verification": [
     "npm run test:fraction-notebook",
     "npm run visual:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "User provides interaction and typography feedback on the rich fraction editor."
   ],
   "allowedWork": [
     "Approved six-part fraction editor exemplar"
@@ -50,7 +54,8 @@
     {
       "id": "review",
       "title": "Caption and integrated review",
-      "status": "planned"
+      "summary": "Caption workflow, canonical preservation, desktop/phone layout, tooling and project context verified; human review packet ready.",
+      "status": "complete"
     }
   ]
 }

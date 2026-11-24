@@ -22,6 +22,8 @@ why this becomes the organizing direction and what it supersedes.
 **Current bounded detour:** the user approved the [rich fraction editor
 successor](reviews/2026-11-24-rich-fraction-editor.md): typed title/authors, metadata,
 source-aware links and inline math, one local caption, and lighter serif typography.
+The candidate awaits interaction/typography review at `/experiments/fraction-notebook/`.
+Recovery/preservation checks pass; human acceptance is pending.
 Retain the 50/50 split and [first editor](reviews/2026-11-24-fraction-notebook-editor.md)
 as a checked rollback point. Review one exemplar before generalizing.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
