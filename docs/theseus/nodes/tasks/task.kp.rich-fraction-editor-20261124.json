@@ -17,6 +17,48 @@
       "scope": "typed article, metadata, migration and typography candidate",
       "checkedAt": "2026-11-24T20:34:49.597Z",
       "notes": "Nine unit/preservation checks, eight Chromium checks and 75 orientation checks pass. Scoped types and architecture pass. Real browser v1 migration preserves original storage; header boundaries, authors/roles, metadata and local caption survive editing and reload. Typography remains a human-review candidate."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "failed",
+      "scope": "inline discovery",
+      "checkedAt": "2026-11-24T20:50:05.337Z",
+      "notes": "Initial passes exposed a KaTeX inline hit-area and stale blur during Redo. Both repaired at the NodeView boundary; final full ten-test run passes."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "inline",
+      "checkedAt": "2026-11-24T20:50:06.343Z",
+      "notes": "Twelve model and preservation tests pass, including conversion history and copy identities."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "inline",
+      "checkedAt": "2026-11-24T20:50:07.017Z",
+      "notes": "All ten Chromium checks pass: source entry, history, invalid recovery, metadata, composed input, copy IDs and reader closure."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "inline",
+      "checkedAt": "2026-11-24T20:50:07.692Z",
+      "notes": "Scoped source and tests type-check."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-24T20:50:08.316Z",
+      "notes": "Full app, node, tests, Svelte and domain checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "integration",
+      "checkedAt": "2026-11-24T20:50:08.939Z",
+      "notes": "All architecture, compiler authority and cross-domain gates pass."
     }
   ]
 }

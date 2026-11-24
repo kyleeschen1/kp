@@ -14,6 +14,9 @@ import { type FractionNotebook, type Mark } from './model.ts';
 export { schema, toProse, fromProse } from './schema.ts';
 import { schema, toProse } from './schema.ts';
 import { selectedObject } from './inspector.ts';
+import { createInlinePlugin, enterInline } from './inline-plugin.ts';
+import { InlineSourceView } from './inline-view.ts';
+import { preparePastedSlice } from './clipboard.ts';
 
 /** A split/paste keeps one original identity and gives new cells fresh UUIDs.
  * Positions are editor addresses, never persistent notebook identity. */
@@ -45,10 +48,15 @@ const enterField: Command = (state, dispatch) => {
 
 export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, onChange: (node: ProseNode) => void, onSelect: (id: string) => void) {
   const view = new EditorView(root, {
-    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), keymap({ 'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo,
-      'Mod-b': toggleMark(schema.marks['strong']!), 'Mod-i': toggleMark(schema.marks['em']!), Enter: enterField }), keymap(baseKeymap)] }),
+    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), createInlinePlugin(), keymap({ 'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo,
+      'Mod-b': toggleMark(schema.marks['strong']!), 'Mod-i': toggleMark(schema.marks['em']!), Enter: enterField,
+      ArrowLeft: enterInline(-1), ArrowRight: enterInline(1), Backspace: enterInline(-1) }), keymap(baseKeymap)] }),
     attributes: { 'aria-label': 'Fraction notebook', spellcheck: 'true' },
-    nodeViews: { specification: (node, outer, getPos) => new SpecificationView(node, outer, getPos) },
+    nodeViews: { specification: (node, outer, getPos) => new SpecificationView(node, outer, getPos),
+      link: (node, outer, getPos) => new InlineSourceView(node, outer, getPos), math: (node, outer, getPos) => new InlineSourceView(node, outer, getPos) },
+    handlePaste(view, _event, slice) {
+      view.dispatch(view.state.tr.replaceSelection(preparePastedSlice(view.state.doc, slice)).setMeta('paste', true).setMeta('uiEvent', 'paste').scrollIntoView()); return true;
+    },
     dispatchTransaction(transaction) {
       const next = view.state.applyTransaction(transaction); view.updateState(next.state);
       if (next.transactions.some(tr => tr.docChanged)) onChange(next.state.doc);

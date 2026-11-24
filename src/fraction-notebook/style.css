@@ -53,6 +53,15 @@ button:hover, button:focus-visible { background: #344139; }
 .fn-inspector-id { display: block; overflow-wrap: anywhere; color: #b0b9b1; margin-top: 5px; }
 .fn-inspector button { margin-right: 8px; }
 .fn-annotation { text-decoration: underline dotted #b0b9b1; text-underline-offset: .25em; }
+.fn-writing-hint { margin: 0; padding: 7px 16px; font: 11px/1.4 Arial, sans-serif; color: #b0b9b1; border-bottom: 1px solid #414a42; }
+.fn-inline-object { display: inline-block; max-width: 100%; vertical-align: baseline; }
+.fn-inline-display { display: inline-block; cursor: text; }
+.fn-inline-link { text-decoration: underline; text-decoration-color: #9ab8bd; text-underline-offset: .18em; color: #b9d8df; }
+.fn-inline-object .katex { font-size: 1.05em; }
+.fn-inline-source { font: 14px/1.5 ui-monospace, monospace; color: #e2e2d9; background: #121826; border: 1px solid #819d9e; border-radius: 3px; padding: 3px 5px; max-width: 100%; }
+.fn-inline-object [hidden] { display: none; }
+.fn-inline-object[data-invalid] .fn-inline-display { text-decoration: underline wavy #e5b789; }
+.fn-inline-error:not(:empty) { display: block; max-width: 30rem; font: 11px/1.4 Arial, sans-serif; color: #f0c59c; overflow-wrap: anywhere; }
 .fn-details .ProseMirror > [data-cell-id]::after { content: attr(data-cell-id); display: block; margin-top: 6px; font: 10px/1.3 ui-monospace, monospace; color: #9cad9c; overflow-wrap: anywhere; }
 @media (max-width: 760px) {
  .fn-header { padding: 12px; align-items: start; } .fn-header h1 { font-size: 18px; } .fn-header-actions { justify-content: end; } .fn-header-actions a { display: none; }

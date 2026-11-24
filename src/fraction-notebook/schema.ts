@@ -1,11 +1,12 @@
 import { Schema, type Node as ProseNode } from 'prosemirror-model';
 import { readNotebook, type FractionNotebook, type Inline } from './model.ts';
 import { metadata } from './json.ts';
+import { uuid } from '../notebook/model.ts';
 
 const identity = { id: { default: null }, metadata: { default: {} } };
 const attrs = (n: ProseNode) => ({ 'data-cell-id': n.attrs['id'], 'data-kp-meta': JSON.stringify(n.attrs['metadata']) });
 const parse = (el: HTMLElement) => {
-  try { return { id: el.dataset['cellId'] ?? null, metadata: metadata(JSON.parse(el.dataset['kpMeta'] ?? '{}')) }; }
+  try { return { id: el.dataset['cellId'] ? uuid(el.dataset['cellId']) : null, metadata: metadata(JSON.parse(el.dataset['kpMeta'] ?? '{}')) }; }
   catch { return false; }
 };
 export const schema = new Schema({
@@ -17,7 +18,10 @@ export const schema = new Schema({
       toDOM: n => ['h1', { ...attrs(n), 'aria-label': 'Article title' }, 0], parseDOM: [{ tag: 'h1', getAttrs: parse }] },
     authorCredit: { attrs: { ...identity, role: { default: 'author' } }, content: 'text*', marks: '', defining: true,
       toDOM: n => ['p', { ...attrs(n), class: 'fn-author', 'data-role': n.attrs['role'], 'aria-label': 'Author name' }, 0],
-      parseDOM: [{ tag: 'p.fn-author', getAttrs: el => { const a = parse(el); return a && { ...a, role: el.dataset['role'] ?? 'author' }; } }] },
+      parseDOM: [{ tag: 'p.fn-author', getAttrs: el => {
+        const a = parse(el), role = el.dataset['role'] ?? 'author';
+        return a && ['author', 'editor', 'translator'].includes(role) ? { ...a, role } : false;
+      } }] },
     paragraph: { attrs: identity, content: 'inline*', group: 'block',
       toDOM: n => ['p', attrs(n), 0], parseDOM: [{ tag: 'p', getAttrs: parse }] },
     story: { attrs: identity, content: 'caption specification', group: 'block', defining: true, isolating: true,
@@ -44,7 +48,7 @@ export const schema = new Schema({
     annotation: { attrs: identity, inclusive: false, excludes: '',
       toDOM: m => ['span', { 'data-annotation-id': m.attrs['id'], 'data-kp-meta': JSON.stringify(m.attrs['metadata']), class: 'fn-annotation' }, 0],
       parseDOM: [{ tag: 'span[data-annotation-id]', getAttrs: el => {
-        try { return { id: el.dataset['annotationId'], metadata: metadata(JSON.parse(el.dataset['kpMeta'] ?? '{}')) }; } catch { return false; }
+        try { return { id: uuid(el.dataset['annotationId']), metadata: metadata(JSON.parse(el.dataset['kpMeta'] ?? '{}')) }; } catch { return false; }
       } }] }
   }
 });

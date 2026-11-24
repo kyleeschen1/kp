@@ -7,6 +7,12 @@ import { compileKpFractionalLinearEquationLesson } from '../src/reader/compiler/
 import { toProse, fromProse, schema } from '../src/fraction-notebook/editor.ts';
 import { fractionV1Fixture } from './fraction-notebook-fixture.ts';
 import { metadata } from '../src/fraction-notebook/json.ts';
+import { presentInline } from '../src/fraction-notebook/inline-source.ts';
+import { createInlinePlugin } from '../src/fraction-notebook/inline-plugin.ts';
+import { preparePastedSlice } from '../src/fraction-notebook/clipboard.ts';
+import { EditorState, TextSelection } from 'prosemirror-state';
+import { history, undo } from 'prosemirror-history';
+import { Fragment, Slice } from 'prosemirror-model';
 
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 const seed = () => importFractionReading(canonical).notebook;
@@ -66,4 +72,41 @@ test('metadata and phrase annotations survive structured editing while ambiguous
   assert.throws(() => metadata({ get hidden() { throw new Error('Accessed'); } }), /accessors/);
   const header = original.cells[0]!;
   assert.throws(() => readNotebook({ ...original, cells: [{ ...header, authors: [] }, ...original.cells.slice(1)] }));
+});
+test('inline presentation is checked independently of persistent draft validity', () => {
+  const inlineId = '30000000-0000-4000-8000-000000000002', base = seed();
+  const make = (source: string) => readNotebook({ ...base, cells: base.cells.map((c, i) => i !== 1 ? c : { ...c,
+    content: [proseText('Half is '), { type: 'math', id: inlineId, metadata: { purpose: 'quantity' }, source }, proseText('.')] }) });
+  const doc = make('$\\frac{x}{2}$'); assert.deepEqual(fromProse(toProse(doc), doc), { ...doc, revision: 1 });
+  assert.doesNotThrow(() => compileFractionNotebook(doc, canonical));
+  const invalid = make('$\\frac{$'); assert.throws(() => compileFractionNotebook(invalid, canonical));
+  assert.deepEqual(readNotebook(JSON.parse(JSON.stringify(invalid))), invalid);
+  assert.equal(presentInline('link', '[Read](/reader/solve-fractional-linear/)').kind, 'link');
+  assert.throws(() => presentInline('link', '[Read](javascript:alert(1))'));
+  assert.throws(() => presentInline('link', '[Read](//foreign.example/path)'));
+  assert.throws(() => presentInline('math', '$$x$$'));
+});
+test('conversion waits for cursor departure and Undo is not immediately undone by conversion', () => {
+  const base = seed(), sentence = 'Half is $x/2$.';
+  const doc = toProse(readNotebook({ ...base, cells: base.cells.map((c, i) => i !== 1 ? c : { ...c, content: [proseText(sentence)] }) }));
+  let start = 0; doc.descendants((n, pos) => { if (n.isText && n.text === sentence) start = pos; });
+  let state = EditorState.create({ doc, selection: TextSelection.create(doc, start + 10), plugins: [history(), createInlinePlugin()] });
+  state = state.applyTransaction(state.tr.setSelection(TextSelection.create(state.doc, start + 11))).state;
+  assert.equal(state.doc.child(1).childCount, 1);
+  state = state.applyTransaction(state.tr.setSelection(TextSelection.create(state.doc, start + sentence.length))).state;
+  assert.equal(state.doc.child(1).child(1).type.name, 'math');
+  assert.ok(undo(state, tr => { state = state.applyTransaction(tr).state; }));
+  assert.equal(state.doc.child(1).childCount, 1);
+  state = state.applyTransaction(state.tr.setSelection(TextSelection.create(state.doc, start))).state;
+  assert.equal(state.doc.child(1).textContent, sentence); assert.equal(state.doc.child(1).childCount, 1);
+});
+test('clipboard copies allocate new object and phrase identities without changing originals', () => {
+  const base = seed(), id = '30000000-0000-4000-8000-000000000003', annotationId = '30000000-0000-4000-8000-000000000004';
+  const doc = toProse(readNotebook({ ...base, cells: base.cells.map((c, i) => i !== 1 ? c : { ...c,
+    content: [{ ...proseText('Compare '), annotations: [{ id: annotationId, metadata: { note: 'reference' } }] }, { type: 'math', id, metadata: { note: 'quantity' }, source: '$x$' }] }) }));
+  const original = doc.child(1), copy = preparePastedSlice(doc, new Slice(Fragment.from(original), 0, 0)).content.firstChild!;
+  assert.notEqual(copy.attrs['id'], original.attrs['id']); assert.notEqual(copy.child(1).attrs['id'], id);
+  assert.notEqual(copy.child(0).marks[0]!.attrs['id'], annotationId);
+  assert.deepEqual(copy.child(1).attrs['metadata'], { note: 'quantity' });
+  assert.equal(original.child(1).attrs['id'], id);
 });

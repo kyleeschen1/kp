@@ -7,13 +7,14 @@ export function renderLatexToHtml(
     readonly displayMode?: boolean;
     readonly trust?: boolean;
     readonly output?: "html" | "htmlAndMathml";
+    readonly throwOnError?: boolean;
   } = {}
 ): string {
   return katex.renderToString(latex, {
     displayMode: options.displayMode ?? true,
     output: options.output ?? "html",
     trust: options.trust ?? false,
-    throwOnError: false,
+    throwOnError: options.throwOnError ?? false,
     ...(options.trust === true ? { strict: "ignore" as const } : {})
   });
 }

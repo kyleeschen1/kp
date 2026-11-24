@@ -73,3 +73,34 @@ in the editable article, retaining a serif reading face while achieving lighter
 strokes. Title size/line-height/weight follow the reader's 1.3rem/1.4/500 treatment;
 the story heading uses its 1.125rem treatment. The existing reader is unchanged.
 Desktop and phone captures were inspected; human aesthetic acceptance is pending.
+
+## Inline editing evidence
+
+Links and inline math are identified JSON objects whose source stays editable.
+Complete `$...$` and `[label](destination)` syntax converts after cursor departure;
+clicking, arrowing in or Backspacing from the right opens a bounded source field.
+Enter/Escape or arrowing past a boundary returns to rendered text. Source entry
+does not add an undo step. Source edits retain object UUIDs and metadata.
+Undo/Redo, composed input, clipboard copies and reload are exercised in Chromium.
+Copies receive new identities; originals retain theirs. Invalid imported identity
+attributes are rejected at the DOM parser while readable pasted text survives.
+
+The first browser pass exposed an inline hit-area defect and a stale blur callback
+that closed source editing during Redo. An inline-block hit target and a focus
+epoch at the NodeView lifecycle boundary repair those classes of failure. The
+same browser regression now passes without forced clicks or fixed-time sleeps.
+Invalid LaTeX or unsupported link destinations remain saved drafts with the last
+valid preview; they can be repaired after reload. Links admit web/email/local
+paths, never executable protocols. Static KaTeX uses the existing adapter with
+opt-in throwing validation; its established callers keep their prior default.
+
+`npm run test:fraction-notebook` passes 12 checks;
+`npm run visual:fraction-notebook` passes all 10 Chromium checks, including the
+original preservation cases. Scoped and full type checks and architecture pass.
+The production reader remains 1,250,344 JS bytes / 308,778 gzip / 414 modules,
+with no fraction-editor, ProseMirror or CodeMirror modules in its closure.
+
+Bounded syntax: conversion handles plain, unmarked inline text. Code, formatted
+text and annotated phrases remain literal rather than dropping their marks.
+This is one inline source field, not a general Markdown parser or display-math
+editor. Object and phrase metadata are data; they grant no renderer authority.

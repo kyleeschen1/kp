@@ -1,6 +1,7 @@
 import { uuid, type UUID } from '../notebook/model.ts';
 import { array, exact, fail, metadata, object, text } from './json.ts';
 import { migrateV1 } from './migration.ts';
+import { projectionText } from './inline-source.ts';
 import type { Annotation, AuthorCredit, Cell, Definition, FractionNotebook, Inline, Mark, Step } from './types.ts';
 export * from './types.ts';
 export { FractionNotebookGap, object, exact } from './json.ts';
@@ -93,7 +94,7 @@ export function projectReading(doc: FractionNotebook, definition: Definition): s
       return '```kp-animation-story\n' + JSON.stringify(story, null, 2) + '\n```';
     }
     const content = cell.type === 'articleHeader' ? cell.title.content : cell.content;
-    const raw = content.map(t => t.type === 'text' ? t.text : t.source).join('');
+    const raw = projectionText(content);
     if (/\n|```|\[\[/.test(raw)) return fail('Use a new paragraph for line breaks; semantic directives belong in the animation cell.');
     if (cell.type === 'paragraph' && /^\s*#/.test(raw)) return fail('This paragraph cannot introduce another heading.');
     return (cell.type === 'articleHeader' ? '# ' : '') + (raw.trim() || '\u00a0');

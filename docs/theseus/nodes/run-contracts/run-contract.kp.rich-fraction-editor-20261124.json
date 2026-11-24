@@ -44,7 +44,8 @@
     {
       "id": "inline",
       "title": "Source-aware links and mathematics",
-      "status": "planned"
+      "summary": "Source entry, history, metadata, invalid recovery, composed input and clipboard identities verified.",
+      "status": "complete"
     },
     {
       "id": "review",

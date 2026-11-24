@@ -3,6 +3,7 @@ import '@fontsource/source-serif-4/latin-300.css';
 import '@fontsource/source-serif-4/latin-300-italic.css';
 import '@fontsource/source-serif-4/latin-500.css';
 import '@fontsource/source-serif-4/latin-600.css';
+import 'katex/dist/katex.min.css';
 import './style.css';
 import canonical from '../../content/authoring/algebra/fractional-linear-reasoning.article.md?raw';
 import { importFractionReading, readNotebook, object, type FractionNotebook } from './model.ts';
@@ -64,6 +65,8 @@ tools.append(button('Bold', () => editor.mark('strong')), button('Italic', () =>
   button('Undo', () => editor.undo()), button('Redo', () => editor.redo()), button('Add author', () => addAuthor(editor.view)),
   button('Annotate', () => { try { details(true, annotateSelection(editor.view)); } catch (error) { status.textContent = String(error); } }));
 inspector = mountInspector(left, editor.view);
+const hint = el('p', 'fn-writing-hint', 'Write $math$ or [label](link), then move out to render. Click or arrow back in to edit source.');
+left.insertBefore(hint, editorHost);
 const cellDetails = el('p', 'fn-cell-details'); left.append(cellDetails);
 function send(data: Record<string, unknown>) { frame.contentWindow?.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin); }
 function changed(doc: ProseNode) {

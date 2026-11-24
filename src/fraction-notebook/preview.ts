@@ -1,5 +1,6 @@
 import { readNotebook, object, type Cell, type Inline } from './model.ts';
 import { readEndpointCommentary } from '../reader/document/public-api.ts';
+import { renderInlineObject } from './inline-source.ts';
 
 /** Mounted only by the development preview host. Apply checked editorial data
  * without replacing the native equation, clock, story or passage containers. */
@@ -11,8 +12,11 @@ export function mountFractionNotebookPreview(input: {
   const send = (data: unknown) => window.parent.postMessage(data, window.location.origin);
   const append = (el: HTMLElement, content: readonly Inline[]) => {
     for (const inline of content) {
-      let node: Node = document.createTextNode(inline.type === 'text' ? inline.text : inline.source);
+      let node: Node = inline.type === 'text' ? document.createTextNode(inline.text) : renderInlineObject(inline);
       if (inline.type === 'text') for (const mark of inline.marks) { const wrapper = document.createElement(mark); wrapper.append(node); node = wrapper; }
+      if (inline.type === 'text') for (const annotation of inline.annotations) {
+        const wrapper = document.createElement('span'); wrapper.dataset['annotationId'] = annotation.id; wrapper.append(node); node = wrapper;
+      }
       el.append(node);
     }
   };
