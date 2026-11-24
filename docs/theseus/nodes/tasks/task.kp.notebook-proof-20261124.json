@@ -28,6 +28,20 @@
       "scope": "orientation",
       "checkedAt": "2026-11-24T13:17:21.762Z",
       "notes": "75 tests pass after updating bounded orientation and removing a stale milestone literal from a negative test"
+    },
+    {
+      "command": "npm run test:notebook",
+      "status": "passed",
+      "scope": "reuse",
+      "checkedAt": "2026-11-24T13:21:08.606Z",
+      "notes": "11 tests pass: scope closure, shared object identity, affected signatures, cycles and stale saves"
+    },
+    {
+      "command": "npm run visual:notebook",
+      "status": "passed",
+      "scope": "persistence",
+      "checkedAt": "2026-11-24T13:21:09.504Z",
+      "notes": "Two Chromium checks pass for actual IndexedDB concurrent writes, reopen, notifications and invalid-save preservation"
     }
   ],
   "expectedLearning": [

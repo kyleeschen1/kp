@@ -47,7 +47,8 @@
     {
       "id": "reuse",
       "title": "Scoped-resolution-and-persistence",
-      "status": "planned"
+      "summary": "Resolution and persistence verified in unit tests and real Chromium IndexedDB; UI playback integration remains next",
+      "status": "complete"
     },
     {
       "id": "exemplar",
