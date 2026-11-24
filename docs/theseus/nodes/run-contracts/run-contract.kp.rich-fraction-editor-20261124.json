@@ -1,0 +1,55 @@
+{
+  "id": "run-contract.kp.rich-fraction-editor-20261124",
+  "kind": "run-contract",
+  "title": "Rich fraction article editor",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.rich-fraction-editor-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-rich-fraction-editor.md"
+    }
+  ],
+  "verification": [
+    "npm run test:fraction-notebook",
+    "npm run visual:fraction-notebook"
+  ],
+  "allowedWork": [
+    "Approved six-part fraction editor exemplar"
+  ],
+  "disallowedWork": [
+    "No new animation semantics, shared imports, publication or broad rollout"
+  ],
+  "goal": "Edit typed article fields, metadata, links, inline math and a local caption with persistent identity and recoverable drafts",
+  "target": "task.kp.rich-fraction-editor-20261124",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Verified packages and hourly backup",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "One human exemplar review before generalization",
+    "Five-hour ceiling with thirty-minute closeout reserve"
+  ],
+  "slices": [
+    {
+      "id": "article",
+      "title": "Typed article and migration",
+      "summary": "Typed title/authors, contextual metadata, deterministic preserved migration and lighter typography are checked; local caption foundation also implemented.",
+      "status": "complete"
+    },
+    {
+      "id": "inline",
+      "title": "Source-aware links and mathematics",
+      "status": "planned"
+    },
+    {
+      "id": "review",
+      "title": "Caption and integrated review",
+      "status": "planned"
+    }
+  ]
+}

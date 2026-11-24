@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { importFractionReading } from '../src/fraction-notebook/model.ts';
 import { buildLocalReader } from '../scripts/local-reader-build.ts';
 import { gzipSync } from 'node:zlib';
+import { fractionV1Fixture } from './fraction-notebook-fixture.ts';
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 const seed = importFractionReading(canonical).notebook;
 const url = '/experiments/fraction-notebook/';
@@ -111,4 +112,60 @@ test('production reader erases the experiment and editor dependencies', async ()
   expect(modules.filter(path => /fraction-notebook|prosemirror|codemirror/.test(path))).toEqual([]);
   const script = Buffer.concat([...built.files].filter(([name]) => name.endsWith('.js')).map(([, bytes]) => bytes));
   console.log(`Canonical reader closure: ${script.length} JS bytes, ${gzipSync(script).length} gzip, ${modules.length} modules; no notebook editor.`);
+});
+test('typed header, author credits, metadata and caption edit the article without duplicating source', async ({ page }) => {
+  await ready(page);
+  const title = page.locator('.fn-article-header h1');
+  await title.click({ clickCount: 3 }); await page.keyboard.insertText('An editable fraction article');
+  await expect(preview(page).locator('.kp-caption-document-intro h1')).toHaveText('An editable fraction article');
+  await page.locator('.fn-author').first().click({ clickCount: 3 }); await page.keyboard.insertText('Kyle Eschen');
+  await expect(preview(page).locator('.kp-document-byline')).toHaveText('By Kyle Eschen');
+  await page.getByRole('button', { name: 'Add author', exact: true }).click(); await page.keyboard.insertText('A second author');
+  await expect(preview(page).locator('.kp-document-byline')).toHaveCount(2);
+  await page.getByRole('button', { name: 'Show details' }).click();
+  await page.getByRole('combobox', { name: 'Credit role' }).selectOption('editor');
+  await page.getByRole('textbox', { name: 'Metadata JSON' }).fill('{"contribution":"revision"}');
+  await page.getByRole('button', { name: 'Apply metadata' }).click();
+  await expect(preview(page).locator('.kp-document-byline').last()).toHaveText('Edited by A second author');
+  await page.getByRole('button', { name: 'Hide details' }).click();
+  const paragraph = page.locator('.ProseMirror > p').first(); await paragraph.click({ clickCount: 3 });
+  await page.getByRole('button', { name: 'Annotate', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Metadata JSON' }).fill('{"note":"Preserve the reasoning"}');
+  await page.getByRole('button', { name: 'Apply metadata' }).click();
+  await expect(paragraph.locator('[data-annotation-id]')).toHaveCount(1);
+  await page.getByRole('button', { name: 'Hide details' }).click();
+  const caption = page.locator('.fn-caption p'); await caption.click({ clickCount: 3 }); await page.keyboard.insertText('Start with the last operation.');
+  await page.getByRole('button', { name: 'Show selected passage' }).click();
+  await expect(preview(page).locator('.anchored-labels')).toContainText('Start with the last operation.');
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await expect(page.locator('.fn-caption p')).toHaveText('Start with the last operation.');
+  await expect(page.locator('.fn-author').last()).toHaveAttribute('data-kp-meta', '{"contribution":"revision"}');
+  await expect(page.locator('[data-annotation-id]')).toHaveAttribute('data-kp-meta', '{"note":"Preserve the reasoning"}');
+  await page.locator('.fn-article-header h1').click(); await page.keyboard.press('Home'); await page.keyboard.press('Backspace');
+  await expect(page.locator('.fn-article-header h1')).toHaveText('An editable fraction article');
+  await page.keyboard.press('End'); await page.keyboard.press('Enter');
+  expect(await page.evaluate(() => Boolean(window.getSelection()?.anchorNode?.parentElement?.closest('.fn-author')))).toBe(true);
+});
+test('saved v1 notebooks migrate into v2 without rewriting the original recovery copy', async ({ page }) => {
+  const old = fractionV1Fixture();
+  await page.route('**/__fraction-storage-fixture', route => route.fulfill({ contentType: 'text/html', body: '<html><body>Storage fixture</body></html>' }));
+  await page.goto('/__fraction-storage-fixture');
+  await page.evaluate(async old => {
+    await new Promise<void>((resolve, reject) => {
+      const request = indexedDB.open('kp-fraction-notebook-v1', 1);
+      request.onupgradeneeded = () => request.result.createObjectStore('workspace');
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => { const db = request.result, tx = db.transaction('workspace', 'readwrite'); tx.objectStore('workspace').put({ draft: old, lastValid: old }, 'documents'); tx.oncomplete = () => { db.close(); resolve(); }; };
+    });
+  }, old);
+  await ready(page);
+  await expect(page.locator('.fn-article-header h1')).toHaveAttribute('data-cell-id', old.cells[0]!.id);
+  await page.locator('.fn-author').first().click({ clickCount: 3 }); await page.keyboard.insertText('Migrated author');
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  const stored = await page.evaluate(async () => new Promise<unknown>((resolve, reject) => {
+    const request = indexedDB.open('kp-fraction-notebook-v1'); request.onerror = () => reject(request.error);
+    request.onsuccess = () => { const db = request.result, read = db.transaction('workspace').objectStore('workspace').get('documents'); read.onsuccess = () => { resolve(read.result); db.close(); }; };
+  }));
+  expect(stored).toEqual({ draft: old, lastValid: old });
 });

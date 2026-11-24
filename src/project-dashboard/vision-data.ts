@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "fraction-notebook-editing",
-    title: "Write directly beside the fraction reading",
+    id: "rich-fraction-editor",
+    title: "Edit typed article content and inline source",
     approval: "approved",
-    contractId: "run-contract.kp.fraction-notebook-20261124",
-    finish: "Edit rich prose and supported annotation specifications beside the existing fraction reader, retain local drafts and the last valid preview, then review directness and orientation before generalizing. The broader authoring programme remains the return path.",
-    source: { label: "Approved fraction editor exemplar", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" }
+    contractId: "run-contract.kp.rich-fraction-editor-20261124",
+    finish: "Edit title/authors, metadata, source-aware links and inline math plus one local caption, retain identity and recoverable drafts, then review one fraction exemplar. Preserve existing mathematical authority and the broader programme as a return path.",
+    source: { label: "Approved rich fraction editor", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Open /experiments/fraction-notebook/: edit prose on the left, open the animation specification and revise annotation wording, then fold it, resize the split and reload. Judge whether editing feels direct and the corresponding reading remains easy to find. The matrix composition proof, fractional editorial review and orientation discussion retain their separate evidence and return paths.",
+  nextJudgment: "The richer fraction editor is approved for implementation at /experiments/fraction-notebook/. At its next review, judge typed title/byline editing, metadata, link/math source transitions, local caption changes and lighter serif typography. The earlier matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -45,10 +45,10 @@ export const projectVision: ProjectVision = {
       evidence: { label: "Fraction editor, preservation and review cues", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" },
       outcome: {
         authority: "approved",
-        id: "fraction-notebook-exemplar", title: "Write directly beside the fraction reading",
-        finish: "Review one resizable split editor with direct rich prose, folded specifications, checked annotations and recoverable drafts while retaining the original fraction reader and its mathematical sequence.",
+        id: "rich-fraction-article", title: "Edit typed article content and inline source",
+        finish: "Review one fraction article with typed title/authors, contextual metadata, source-aware links and inline math, a local caption, lighter typography, persistent identities and recoverable migrated drafts.",
         excludes: "Broad migration, arbitrary execution, new equation choreography, publication, cross-notebook fraction semantics or changes to the external editor.",
-        source: { label: "Approved bounded fraction editor", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" }
+        source: { label: "Approved bounded rich editor", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" }
       }
     },
     {
@@ -313,6 +313,13 @@ export const projectVision: ProjectVision = {
       after: "The user chooses direct Jupyter-like editing, accepts ProseMirror with embedded CodeMirror and selective metadata, then approves one fraction split-editor exemplar. The earlier proof and broader programme remain preserved.",
       reason: "The user prefers the fraction layout and wants to edit the notebook itself beside its rendered reading. This tests the interaction without replacing the semantic model or generalizing the editor across domains.",
       source: { label: "Accepted interaction direction and bounded trial", href: "docs/project/reviews/2026-11-24-fraction-notebook-editor.md" }
+    },
+    {
+      id: "typed-article-and-inline-source", on: "2026-11-24",
+      before: "The first split editor proves direct prose, checked specifications, UUID persistence and browser recovery; the byline is fixed and inline links/math are not editable objects.",
+      after: "The user approves typed title/authors, contextual metadata, link-source reveal, inline KaTeX, one local caption and lighter serif typography in the same fraction exemplar, with frequent progress updates.",
+      reason: "The user wants rich article writing with selectively exposed structure. Preserve the earlier checkpoint and existing reader authority while testing the specific interactions before a general component system.",
+      source: { label: "Approved six-part successor scope", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" }
     }
   ]
 };

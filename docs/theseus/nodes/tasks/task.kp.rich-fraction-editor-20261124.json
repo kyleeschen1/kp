@@ -1,0 +1,22 @@
+{
+  "id": "task.kp.rich-fraction-editor-20261124",
+  "kind": "task",
+  "title": "Typed article and source-aware inline editing",
+  "status": "ready",
+  "domain": "authoring",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-rich-fraction-editor.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:fraction-notebook; npm run typecheck:fraction-notebook; npm run visual:fraction-notebook; npm run check:architecture; npm run test:project-vision",
+      "status": "passed",
+      "scope": "typed article, metadata, migration and typography candidate",
+      "checkedAt": "2026-11-24T20:34:49.597Z",
+      "notes": "Nine unit/preservation checks, eight Chromium checks and 75 orientation checks pass. Scoped types and architecture pass. Real browser v1 migration preserves original storage; header boundaries, authors/roles, metadata and local caption survive editing and reload. Typography remains a human-review candidate."
+    }
+  ]
+}

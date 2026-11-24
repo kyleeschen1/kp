@@ -30,9 +30,10 @@ workbench latency remain unproved. The approved notebook detour below is current
   localized changes, reuse, imports and folding.
   The [working matrix proof](../reviews/2026-11-24-notebook-proof.md) retains its
   composition evidence. Its inspector UI is not an accepted writing experience.
-  The approved [fraction editor successor](../reviews/2026-11-24-fraction-notebook-editor.md)
-  tries direct ProseMirror/CodeMirror editing beside the preferred reader layout;
-  `run-contract.kp.fraction-notebook-20261124` owns this bounded exemplar.
+  The [first fraction editor](../reviews/2026-11-24-fraction-notebook-editor.md) is checked.
+  The approved [richer successor](../reviews/2026-11-24-rich-fraction-editor.md) adds
+  typed fields, metadata, links/math and a local caption;
+  `run-contract.kp.rich-fraction-editor-20261124` owns this exemplar.
   Review directness and orientation before generalizing. The broader programme
   remains the return path; the Markdown-first recommendation is superseded.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).

@@ -3,9 +3,9 @@
 Last Updated: 2026-11-24
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `fraction-notebook-editing`
-Execution Contract: `run-contract.kp.fraction-notebook-20261124`
-Next Product Milestone: `fraction-notebook-exemplar`
+Current Commitment: `rich-fraction-editor`
+Execution Contract: `run-contract.kp.rich-fraction-editor-20261124`
+Next Product Milestone: `rich-fraction-article`
 Milestone Authority: approved
 
 ## Where we are going
@@ -19,10 +19,12 @@ why this becomes the organizing direction and what it supersedes.
 
 ## Current approved commitment
 
-**Current bounded detour:** the user approved a [direct fraction notebook
-editor](reviews/2026-11-24-fraction-notebook-editor.md): ProseMirror prose and folded
-CodeMirror specifications beside the existing reader in a resizable 50/50 split.
-Review this exemplar before generalizing. The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
+**Current bounded detour:** the user approved the [rich fraction editor
+successor](reviews/2026-11-24-rich-fraction-editor.md): typed title/authors, metadata,
+source-aware links and inline math, one local caption, and lighter serif typography.
+Retain the 50/50 split and [first editor](reviews/2026-11-24-fraction-notebook-editor.md)
+as a checked rollback point. Review one exemplar before generalizing.
+The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
 retains its identity, nesting, scope and reuse evidence; its inspector UI was not
 accepted as the writing experience. The existing authoring-to-practice contract
 and fractional editorial checkpoint remain return paths, without reordering or

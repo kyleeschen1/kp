@@ -1,15 +1,20 @@
 import 'prosemirror-view/style/prosemirror.css';
+import '@fontsource/source-serif-4/latin-300.css';
+import '@fontsource/source-serif-4/latin-300-italic.css';
+import '@fontsource/source-serif-4/latin-500.css';
+import '@fontsource/source-serif-4/latin-600.css';
 import './style.css';
 import canonical from '../../content/authoring/algebra/fractional-linear-reasoning.article.md?raw';
 import { importFractionReading, readNotebook, object, type FractionNotebook } from './model.ts';
 import { fromProse, mountFractionEditor } from './editor.ts';
 import { openFractionDraft } from './storage.ts';
+import { addAuthor, annotateSelection, mountInspector } from './inspector.ts';
 import type { Node as ProseNode } from 'prosemirror-model';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
 const button = (text: string, action: () => void) => { const node = el('button', '', text); node.type = 'button'; node.onclick = action; return node; };
-const storageKey = 'kp.fraction-notebook.v1';
+const storageKey = 'kp.fraction-notebook.v2';
 let notebook = importFractionReading(canonical).notebook;
 let lastValid = notebook;
 let store: Awaited<ReturnType<typeof openFractionDraft>> | undefined;
@@ -17,9 +22,10 @@ let storedError: string | undefined;
 try {
   store = await openFractionDraft(notebook);
   const saved = await store.read(); notebook = saved.draft; lastValid = saved.lastValid;
-  const recovery = sessionStorage.getItem(storageKey);
+  const recovery = sessionStorage.getItem(storageKey) ?? sessionStorage.getItem('kp.fraction-notebook.v1');
   if (recovery) {
     const draft = readNotebook(JSON.parse(recovery));
+    sessionStorage.setItem(storageKey, JSON.stringify(draft)); sessionStorage.removeItem('kp.fraction-notebook.v1');
     if (JSON.stringify(draft) !== JSON.stringify(notebook)) {
       notebook = draft; storedError = 'Recovered a separate unsaved draft. Download it before reloading to reconcile with saved content.';
     } else sessionStorage.removeItem(storageKey);
@@ -28,10 +34,12 @@ try {
 let saving = Promise.resolve();
 let generation = 0, disposed = false, frameReady = false, latest: { value: unknown; revision: number } | undefined, request: AbortController | undefined;
 let timer: ReturnType<typeof setTimeout> | undefined, selected: string | undefined;
+let inspector: ReturnType<typeof mountInspector> | undefined;
 const header = el('header', 'fn-header'), branding = el('div'); branding.append(el('span', 'fn-eyebrow', 'KINETIC PRESS · NOTEBOOK'), el('h1', '', 'Write beside the explanation'));
 const actions = el('div', 'fn-header-actions'), status = el('p', 'fn-status', storedError ?? 'Opening your local notebook…'); status.setAttribute('role', 'status');
 const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
-const metadata = button('Show details', () => { const show = !root.classList.contains('fn-details'); root.classList.toggle('fn-details', show); metadata.setAttribute('aria-pressed', String(show)); metadata.textContent = show ? 'Hide details' : 'Show details'; }); metadata.setAttribute('aria-pressed', 'false');
+const details = (show: boolean, id?: string) => { root.classList.toggle('fn-details', show); metadata.setAttribute('aria-pressed', String(show)); metadata.textContent = show ? 'Hide details' : 'Show details'; inspector?.show(show, id); };
+const metadata = button('Show details', () => details(!root.classList.contains('fn-details'))); metadata.setAttribute('aria-pressed', 'false');
 const reference = el('a', '', 'Original reading ↗'); reference.href = '/reader/solve-fractional-linear/?reading=reasoning'; reference.target = '_blank'; reference.rel = 'noopener';
 actions.append(metadata, download, reference); header.append(branding, actions);
 const workspace = el('div', 'fn-workspace'), left = el('section', 'fn-left'), right = el('section', 'fn-right');
@@ -51,9 +59,11 @@ split.onpointermove = event => { if (split.hasPointerCapture(event.pointerId)) {
 split.onpointerup = event => split.releasePointerCapture(event.pointerId);
 split.onkeydown = event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); resize(splitPercent + (event.key === 'ArrowLeft' ? -2 : 2)); } };
 left.append(tools, editorHost); right.append(previewTools, frame); workspace.append(left, split, right); root.append(header, status, workspace);
-const editor = mountFractionEditor(editorHost, notebook, changed, id => { selected = id; if (follow.checked) send({ kind: 'reveal', id }); });
+const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); });
 tools.append(button('Bold', () => editor.mark('strong')), button('Italic', () => editor.mark('em')), button('Code', () => editor.mark('code')),
-  button('Undo', () => editor.undo()), button('Redo', () => editor.redo()));
+  button('Undo', () => editor.undo()), button('Redo', () => editor.redo()), button('Add author', () => addAuthor(editor.view)),
+  button('Annotate', () => { try { details(true, annotateSelection(editor.view)); } catch (error) { status.textContent = String(error); } }));
+inspector = mountInspector(left, editor.view);
 const cellDetails = el('p', 'fn-cell-details'); left.append(cellDetails);
 function send(data: Record<string, unknown>) { frame.contentWindow?.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin); }
 function changed(doc: ProseNode) {
@@ -101,6 +111,6 @@ const onMessage = (event: MessageEvent) => {
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) await prepare(); })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); editor.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); inspector?.dispose(); editor.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

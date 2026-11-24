@@ -18,14 +18,23 @@ button:hover, button:focus-visible { background: #344139; }
 .fn-pane-title { margin-right: auto; }
 .fn-follow { display: flex; align-items: center; font: 12px Arial, sans-serif; gap: 4px; }
 .fn-editor { overflow: auto; flex: 1; }
-.fn-editor .ProseMirror { padding: 34px clamp(18px, 4vw, 64px) 120px; min-height: 100%; outline: none; font: 18px/1.7 Georgia, 'Times New Roman', serif; color: #e2e2d9; }
-.fn-editor .ProseMirror > h1 { font: 600 34px/1.15 Georgia, serif; margin: 0 0 28px; }
+.fn-editor .ProseMirror { padding: 34px clamp(18px, 4vw, 64px) 120px; min-height: 100%; outline: none; font: 300 18px/1.8 'Source Serif 4', Georgia, serif; color: #e2e2d9; }
+.fn-article-header h1 { font: 500 1.3rem/1.4 'Source Serif 4', Georgia, serif; margin: 0 0 .75rem; }
+.fn-article-header { margin-bottom: 1.5rem; }
+.fn-author { font-size: .875rem; margin: 0 0 .3rem; }
+.fn-author::before { content: 'By '; color: #aebdb1; }
+.fn-author[data-role=editor]::before { content: 'Edited by '; }
+.fn-author[data-role=translator]::before { content: 'Translated by '; }
+.fn-editor strong { font-weight: 600; }
 .fn-editor .ProseMirror > p { margin: 0 0 22px; }
 .fn-editor .ProseMirror > :focus { outline: none; }
 .fn-editor .ProseMirror ::selection { background: #53614d; }
 .fn-editor .ProseMirror code { font: .88em ui-monospace, monospace; background: #323a32; padding: 1px 3px; }
 .fn-story { border: 1px solid #647361; border-radius: 8px; padding: 16px; margin: 28px 0; font: 14px/1.5 Arial, sans-serif; }
-.fn-story h2 { font: 22px Georgia, serif; margin: 0 0 8px; }
+.fn-story h2 { font: 500 1.125rem/1.4 'Source Serif 4', Georgia, serif; margin: 0 0 8px; }
+.fn-caption { padding: 12px 0; }
+.fn-slot-label { display: block; font: 11px/1.4 Arial, sans-serif; color: #b0b9b1; margin-bottom: 8px; }
+.fn-caption p { font: 300 17px/1.7 'Source Serif 4', Georgia, serif; margin: 0; }
 .fn-equation-label { font: 24px Georgia, serif; margin: 10px 0; }
 .fn-cell-context, .fn-code-help { font: 12px/1.5 Arial, sans-serif; color: #b0b9b1; }
 .fn-story summary { cursor: pointer; padding: 8px 0; color: #d0dbcc; }
@@ -37,10 +46,17 @@ button:hover, button:focus-visible { background: #344139; }
 .fn-preview { display: block; border: none; width: 100%; min-height: 0; flex: 1; background: #202522; }
 .fn-cell-details { display: none; font: 11px/1.4 ui-monospace, monospace; padding: 8px 16px; overflow-wrap: anywhere; margin: 0; }
 .fn-details .fn-cell-details { display: block; }
+.fn-inspector { padding: 12px 16px; border-top: 1px solid #58615a; max-height: 260px; overflow: auto; flex-shrink: 0; font: 12px/1.4 Arial, sans-serif; }
+.fn-inspector[hidden], .fn-inspector [hidden] { display: none; }
+.fn-inspector select, .fn-inspector textarea { background: #121826; color: inherit; border: 1px solid #58615a; border-radius: 3px; padding: 5px; }
+.fn-inspector textarea { display: block; width: 100%; margin: 8px 0; font: 12px/1.5 ui-monospace, monospace; }
+.fn-inspector-id { display: block; overflow-wrap: anywhere; color: #b0b9b1; margin-top: 5px; }
+.fn-inspector button { margin-right: 8px; }
+.fn-annotation { text-decoration: underline dotted #b0b9b1; text-underline-offset: .25em; }
 .fn-details .ProseMirror > [data-cell-id]::after { content: attr(data-cell-id); display: block; margin-top: 6px; font: 10px/1.3 ui-monospace, monospace; color: #9cad9c; overflow-wrap: anywhere; }
 @media (max-width: 760px) {
  .fn-header { padding: 12px; align-items: start; } .fn-header h1 { font-size: 18px; } .fn-header-actions { justify-content: end; } .fn-header-actions a { display: none; }
  .fn-workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
  .fn-divider { display: none; } .fn-tools { min-height: 40px; padding: 5px 8px; gap: 4px; } .fn-tools button { font-size: 11px; padding: 4px; }
- .fn-editor .ProseMirror { padding: 20px; font-size: 17px; } .fn-editor .ProseMirror > h1 { font-size: 27px; }
+ .fn-editor .ProseMirror { padding: 20px; font-size: 17px; }
 }

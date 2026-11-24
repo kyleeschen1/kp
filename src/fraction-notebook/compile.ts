@@ -14,7 +14,7 @@ export function compileFractionNotebook(value: unknown, canonical: string) {
   compileKpFractionalLinearEquationLesson(markdown);
   const story = notebook.cells.find(c => c.type === 'story')!;
   if (story.type !== 'story') throw new Error('Missing story');
-  const steps = readSteps(story.source, definition.beats.length);
+  const steps = readSteps(story.source, definition.beats.length, story.caption.text);
   return { notebook, notes, beats: definition.beats.map((beat, index) => ({ ...beat, ...steps[index] })) };
 }
 export function fractionPreviewPage(canonical: string): string {
