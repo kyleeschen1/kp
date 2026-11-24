@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved notebook detour", href: "docs/project/reviews/2026-11-24-next-step-review.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review the approved two-notebook composition proof when ready: local edits, live imports, nested folding and persistent identity. The fractional reading's editorial checkpoint and the ecosystem-orientation discussion remain parked return paths.",
+  nextJudgment: "Open /experiments/notebook/: scrub the two imports separately, edit First input, then change Shared transformation A in the other notebook. Fold and reload. Judge whether local versus shared consequences and your place in the nesting are clear. Fractional editorial review and the orientation discussion remain parked return paths.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,8 +41,8 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Two algebra readers reuse checked saving and the accepted annotation renderer. Fractional note wording and exact targets now come from its manuscript. A subsequent source-only note/target revision took about 21 seconds to edit, check and save after support engineering. Featured quality, fresh-generation speed, integrated workbench conversation and learning remain unproved.",
-      evidence: { label: "Second caller, source-only timing and remaining judgment", href: "docs/project/reviews/2026-11-09-fractional-reading.md" },
+      established: "The two-notebook candidate persists UUID-addressed nested JSON, explicit matrix inputs and two live uses of an existing animation with independent playback. Local edits, shared updates, folding and browser reopen pass automated checks. Interaction acceptance remains pending; storage is browser-local. Earlier algebra source-only revision evidence remains in the linked review history; general authoring speed and learning are unproved.",
+      evidence: { label: "Working notebook, review cues and measured limits", href: "docs/project/reviews/2026-11-24-notebook-proof.md" },
       outcome: {
         authority: "approved",
         id: "notebook-composition-proof", title: "Compose two notebooks with scoped reusable animations",

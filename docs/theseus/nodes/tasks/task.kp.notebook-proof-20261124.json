@@ -2,12 +2,17 @@
   "id": "task.kp.notebook-proof-20261124",
   "kind": "task",
   "title": "Author nested notebooks with scoped reusable animations",
-  "status": "ready",
+  "status": "deferred",
   "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: implementation ready; awaiting authoring and interaction judgment before generalization.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-11-24-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-notebook-proof.md"
     }
   ],
   "verification": [
@@ -63,7 +68,35 @@
       "scope": "verification-routing",
       "checkedAt": "2026-11-24T13:42:26.725Z",
       "notes": "28 checks pass; complete notebook consumers and both shared numeric guard paths are selected; unknown owners retain broad gates."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "review-orientation",
+      "checkedAt": "2026-11-24T13:46:07.328Z",
+      "notes": "Initial review link expanded thread to 460 words against unchanged 450-word ceiling; repaired by shortening prose."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "review-orientation",
+      "checkedAt": "2026-11-24T13:46:08.202Z",
+      "notes": "Full rerun: 75 pass after trimming prose. Roadmap, thread and vision point to pending exemplar review while preserving prior programme."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "configuration-preservation",
+      "checkedAt": "2026-11-24T13:46:08.832Z",
+      "notes": "Four structural tests; 69 Playwright configs and 164 projects, 14 Vite configs and 14 TypeScript projects checked. New configs and a previously omitted unchanged reader-preparation baseline entry accounted explicitly."
     }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "HUMAN_CHECKPOINT: approved proof implemented and automatically verified. Review editor at http://127.0.0.1:8000/experiments/notebook/ for local versus shared editing and nesting clarity; no human acceptance or wider promotion claimed."
+  },
+  "revisitWhen": [
+    "User reviews the two-notebook exemplar and supplies interaction feedback or accepts its bounded behavior."
   ],
   "expectedLearning": [
     "Whether explicit identity and scope permit useful local revisions and shared reuse"

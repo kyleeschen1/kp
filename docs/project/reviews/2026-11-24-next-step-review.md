@@ -8,6 +8,9 @@ ceiling and forty-five-minute verification reserve. Commit recoverable packages,
 back up at least hourly, and stop at the human exemplar checkpoint before rollout.
 The broader authoring-to-practice programme is retained as the return path.
 The ecosystem dashboard grill remains parked with its return point preserved.
+Subsequent implementation and checks: [exemplar review packet](2026-11-24-notebook-proof.md).
+The design assessment below is preserved as the scope source; the review packet
+records what is now implemented and what still needs human judgment.
 
 ## Why the recommendation changed
 
@@ -166,8 +169,9 @@ migration is part of this proof.
   dependency-driven updates and invalidation cleanup. These motivate explicit
   dependencies and lifecycle ownership, not automatic animation restart.
 
-Reviewed roadmap, strategy, active thread, handoff and existing fractional compiler.
-No code changes, new usability result or new test run are claimed. The previous
+At the original design assessment, reviewed roadmap, strategy, active thread,
+handoff and existing fractional compiler. That assessment claimed no code changes,
+new usability result or new test run. The previous
 comparison records 26 existing passing tests. `theseus work resume`, including a
 retry with `--limit 1`, failed its output budget (1718 tokens versus 1200); live
 execution status was not refreshed and no run state was changed. This design
@@ -178,5 +182,5 @@ assessment does not require resuming or repairing an execution contract.
 The notebook serves the approved authoring-first product purpose: compose and
 revise explanations with reusable semantic material. It is an approved bounded
 detour, not a replacement for the authoring-to-practice programme.
-After selecting or declining it, return to the parked orientation/dashboard grill:
+After reviewing the bounded proof, return to the parked orientation/dashboard grill:
 one primary human focus versus several equally prominent active threads.

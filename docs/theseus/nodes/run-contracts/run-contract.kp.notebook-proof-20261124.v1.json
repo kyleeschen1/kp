@@ -2,7 +2,8 @@
   "id": "run-contract.kp.notebook-proof-20261124.v1",
   "kind": "run-contract",
   "title": "Two-notebook composition proof",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: all four implementation and review-preparation packages complete; required exemplar judgment remains.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -19,6 +20,9 @@
     "npm run test:notebook",
     "npm run visual:notebook",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "User reviews local and shared edits, independent playback and nesting at the canonical notebook URL."
   ],
   "allowedWork": [
     "User-approved two-notebook composition proof with existing matrix scene and minimal local editor"
@@ -59,7 +63,8 @@
     {
       "id": "verification",
       "title": "Preservation-and-review-packet",
-      "status": "planned"
+      "summary": "Review packet, persistent server URLs, production and scoped preservation evidence ready. Orientation reconciled; human exemplar acceptance remains the named stop condition.",
+      "status": "complete"
     }
   ]
 }

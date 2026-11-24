@@ -23,7 +23,8 @@ why this becomes the organizing direction and what it supersedes.
 [two-notebook composition proof](reviews/2026-11-24-next-step-review.md): canonical
 JSON, persistent UUIDs, nested blocks, explicit component scopes, reusable objects
 and animations, localized changes and folding. Review one working exemplar before
-generalizing. The existing authoring-to-practice contract and fractional editorial
+generalizing. The [working exemplar](reviews/2026-11-24-notebook-proof.md) now awaits
+that interaction review. The existing authoring-to-practice contract and fractional editorial
 checkpoint remain preserved as the return path; their remaining slices are not
 silently reordered or completed. The ecosystem-orientation grill is parked too.
 

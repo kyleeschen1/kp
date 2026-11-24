@@ -28,12 +28,12 @@ workbench latency remain unproved. The approved notebook detour below is current
 ## Retrieve for a named question
 
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
-  The user clarified persistent UUIDs, custom metadata/blocks, nesting, scope,
-  localized changes, reuse, imports and folding as requirements for the notebook.
-  The user approved sustained implementation of the bounded two-notebook proof;
-  `run-contract.kp.notebook-proof-20261124.v1` owns execution. The broader programme
-  is retained as the return path. The earlier
-  Markdown-first recommendation is superseded, with its findings retained.
+  Approved requirements: persistent UUIDs, custom metadata/blocks, nesting, scope,
+  localized changes, reuse, imports and folding.
+  `run-contract.kp.notebook-proof-20261124.v1` owns the bounded implementation.
+  The [working proof and review cues](../reviews/2026-11-24-notebook-proof.md)
+  separate verified behavior from pending interaction judgment. The broader
+  programme remains the return path; the Markdown-first recommendation is superseded.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
 - **What was actually gained:** [explanation-first evidence](../reviews/2026-11-08-explanation-first.md).
