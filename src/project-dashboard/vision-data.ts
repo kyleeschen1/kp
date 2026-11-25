@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved object boundary", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:1426/, choose Edit KP object. Change a step's wording, Preview draft and inspect the native animation. Try an invalid focus target, then Reconnect. Judge whether the separated workflow gives enough context and feedback. The accepted rich notebook remains available.",
+  nextJudgment: "The proposed next outcome is one real LLM-assisted fraction revision in the native workbench: attach exact object context, receive a proposed change, inspect its diff and checked preview, then follow up and reconnect. The browser adapter remains available at http://127.0.0.1:1426/; it cannot open a native session. This successor is not yet approved for implementation.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -44,11 +44,11 @@ export const projectVision: ProjectVision = {
       established: "The fraction notebook's structure, focused workflow and style refinement are accepted. The approved successor tests an independent workbench source buffer with KP-owned validation and preview. General authoring speed, extraction and learning remain unproved.",
       evidence: { label: "Accepted notebook and bounded successor", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" },
       outcome: {
-        authority: "approved",
-        id: "independent-object-preview", title: "Revise one KP object through the independent workbench",
-        finish: "A source draft previews through a revisioned boundary, preserves the mounted animation, rejects invalid/stale changes and survives reconnect without automatic sending. Review the actual workbench integration.",
-        excludes: "Canonical writes, new Codex services, rich-editor extraction, native-session migration or general adapter promotion.",
-        source: { label: "Workbench object review", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
+        authority: "proposed",
+        id: "contextual-llm-revision", title: "Make one real contextual revision with an LLM",
+        finish: "The existing native conversation receives exact object and draft context, returns a reviewable proposal, and reaches a checked KP preview. A real follow-up and reconnect retain context without replaying uncertain sends.",
+        excludes: "A new chat backend, broad rich-editor extraction, arbitrary new choreography, canonical publication or whole-book infrastructure.",
+        source: { label: "Proposed LLM authoring outcome", href: "docs/project/reviews/2026-11-25-llm-authoring-next-step.md" }
       }
     },
     {
@@ -370,6 +370,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves one workbench object adapter: general source drafts and commands remain independent; KP retains domain validation and native rendering. The accepted notebook remains available.",
       reason: "Test the ownership boundary through an actual useful edit before extracting the rich editor or building more conversation infrastructure. The authoring-to-practice programme remains the return path.",
       source: { label: "Approved bounded integration", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
+    },
+    {
+      id: "propose-real-llm-revision", on: "2026-11-25",
+      before: "The separate object adapter proves manual source editing and KP-owned preview; the existing native conversation has not been joined to object proposals.",
+      after: "Recommend one real contextual LLM revision next, using the existing session and domain owners. The user asks when LLMs enter the workflow; implementation approval is not inferred from that question.",
+      reason: "Test the actual authoring benefit now rather than extending manual editor infrastructure. Retain the bounded adapter, accepted notebook and broader programme as separate foundations and return paths.",
+      source: { label: "LLM authoring next-step review", href: "docs/project/reviews/2026-11-25-llm-authoring-next-step.md" }
     }
   ]
 };

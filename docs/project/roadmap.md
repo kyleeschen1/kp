@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `workbench-kp-object`
 Execution Contract: `run-contract.kp.workbench-object-20261125`
-Next Product Milestone: `independent-object-preview`
-Milestone Authority: approved
+Next Product Milestone: `contextual-llm-revision`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -25,8 +25,10 @@ why this becomes the organizing direction and what it supersedes.
 **Approved successor:** [one independent workbench → KP object integration](reviews/2026-11-25-workbench-kp-object-boundary.md).
 Workbench owns the source draft and commands; KP owns validation and the native
 animation preview. Review one bounded browser exemplar before extraction.
-Canonical publication, new Codex infrastructure and general editor promotion
-are excluded. Custom motions are parked; MathML declined. Transclusion and search
+The [recommended successor](reviews/2026-11-25-llm-authoring-next-step.md) is one
+real LLM-assisted revision through the existing native session owner; implementation
+remains proposed.
+Publication and general editor promotion are excluded. Custom motions are parked; MathML declined. Transclusion and search
 remain later. Preserve notebook identities, metadata and recovery.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
 retains identity, nesting, scope and reuse evidence; its inspector UI was unaccepted.
