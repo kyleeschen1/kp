@@ -10,10 +10,55 @@ import { CodexTransport, RpcRejection } from '../server/chat/transport.ts';
 import { emptyChat, readChatAction, readChatRecord } from '../src/editor-chat/protocol.ts';
 import { ChatPeer, MemoryChatStore, drain } from './fixtures/editor-chat.ts';
 import { passageTarget, resolvePassage } from '../src/editor-chat/annotation-target.ts';
-import { parseMarkdown, serializeMarkdown, textIndex, safeLink } from '../src/editor-chat/rich-document.ts';
+import { parseMarkdown, serializeMarkdown, textIndex, safeLink, messageDocument } from '../src/editor-chat/rich-document.ts';
+import { nativeMessage } from '../server/chat/items.ts';
 import { readAnnotationDraft, type AnnotationDraft } from '../src/editor-chat/annotations.ts';
 
 const setup = () => { const store = new MemoryChatStore(), peer = new ChatPeer(); return { store, peer, service: new ChatService(store, peer.factory, process.cwd()) }; };
+test('native tool output stays literal and bounded across streaming, completion and resume', async () => {
+  const { service, peer } = setup();
+  await service.action({ kind: 'connect' }); await service.action({ kind: 'draft', revision: 0, text: 'Inspect' });
+  const running = await service.action({ kind: 'send', revision: 1, id: 'tool-turn' });
+  const scope = { threadId: running.threadId, turnId: running.pending!.turnId };
+  const item = { type: 'commandExecution', id: 'cmd-1', command: 'example', aggregatedOutput: null };
+  peer.event('item/started', { ...scope, item });
+  peer.event('item/commandExecution/outputDelta', { ...scope, itemId: item.id, delta: '<script>literal</script>\n**not bold**' });
+  await drain();
+  const message = (await service.snapshot()).messages.find(message => message.id === item.id)!;
+  assert.equal(message.role, 'tool'); assert.equal(message.complete, false);
+  assert.equal(messageDocument(message).firstChild!.type.name, 'code_block');
+  assert.match(messageDocument(message).textContent, /<script>literal/);
+  peer.event('item/commandExecution/outputDelta', { ...scope, threadId: 'foreign', itemId: item.id, delta: 'foreign' });
+  const completed = { ...item, aggregatedOutput: 'authoritative output', status: 'completed' };
+  peer.turns.at(-1)!.items.push(completed);
+  peer.event('item/completed', { ...scope, item: completed });
+  peer.event('item/commandExecution/outputDelta', { ...scope, itemId: item.id, delta: 'late' });
+  peer.finish('Done'); await drain();
+  const final = (await service.snapshot()).messages.find(message => message.id === item.id)!;
+  assert.equal(final.text, '$ example\nauthoritative output'); assert.equal(final.complete, true);
+  await service.action({ kind: 'disconnect' }); const resumed = await service.action({ kind: 'connect' });
+  assert.deepEqual(resumed.messages.find(message => message.id === item.id), final);
+  assert.equal(peer.sends().length, 1); await service.close();
+});
+test('tool projections validate text, keep annotations in display coordinates and do not parse output as Markdown', () => {
+  const items = [
+    { type: 'mcpToolCall', id: 'mcp', server: 'files', tool: 'read', result: { content: [{ type: 'text', text: '**literal**' }] } },
+    { type: 'functionCallOutput', id: 'fn', name: 'inspect', output: '**literal**' },
+    { type: 'dynamicToolCall', id: 'dynamic', tool: 'inspect', contentItems: [{ type: 'inputText', text: '**literal**' }] },
+    { type: 'fileChange', id: 'file', changes: [{ path: 'example.ts', diff: '**literal**' }] }
+  ];
+  for (const item of items) {
+    const message = nativeMessage(item, true, 'turn-1')!;
+    const doc = messageDocument(message), quote = passageTarget('thread-1', message, 1, doc.content.size - 1);
+    assert.match(quote.quote, /\*\*literal\*\*/);
+    assert.equal(resolvePassage(quote, 'thread-1', message).status, 'attached');
+    assert.equal(readChatRecord({ ...emptyChat(), messages: [message] }).messages[0]!.role, 'tool');
+  }
+  const huge = nativeMessage({ type: 'functionCallOutput', id: 'huge', name: 'tool', output: 'x'.repeat(70000) }, true)!;
+  assert.equal(huge.text.length, 65536); assert.equal(huge.clipped, true);
+  assert.throws(() => readChatRecord({ ...emptyChat(), messages: [{ ...huge, tool: undefined }] }));
+  assert.throws(() => nativeMessage({ type: 'commandExecution', id: 'invalid', command: {}, aggregatedOutput: null }, false));
+});
 test('legacy conversations migrate without rewriting draft text or model history', () => {
   const { annotations: _notes, ...legacy } = emptyChat();
   const record = readChatRecord({ ...legacy, version: 1, draft: '**Keep** these bytes\n\n' });

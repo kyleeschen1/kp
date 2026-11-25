@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.joined-chat-composer-20261125",
+  "kind": "run-contract",
+  "title": "Joined Codex transcript and composer",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1/1 implementation package complete; no broader promotion before canonical visual review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.joined-chat-composer-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-joined-chat-composer.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run test:editor-chat",
+    "npm run visual:editor-chat",
+    "npm run test:project-vision"
+  ],
+  "revisitWhen": [
+    "The user reviews the joined transcript/composer layout and code/tool folding."
+  ],
+  "allowedWork": [
+    "Chat flex layout, bounded tool-result projection, resize and editor-state preservation, focused tests and source-linked direction"
+  ],
+  "disallowedWork": [
+    "Native inference, additional execution authority, automatic document edits, general editor promotion, window movement"
+  ],
+  "goal": "One bordered flex column with independent transcript and auto-growing persistent composer",
+  "target": "task.kp.joined-chat-composer-20261125",
+  "slices": [
+    {
+      "id": "joined",
+      "title": "Implement and verify the joined chat exemplar",
+      "summary": "One chat exemplar implemented and verified: 25 unit, 19 Chromium, 75 vision checks plus scoped types and orientation. Human visual acceptance remains a separate checkpoint before broader promotion.",
+      "status": "complete"
+    }
+  ]
+}

@@ -103,6 +103,7 @@ export function mountChatCommands(panel: HTMLElement, host: ChatCommandHost) {
     for (const [key, description] of [
       ['i · Esc', 'Focus the permanent draft · save and return to transcript navigation'], ['Ctrl/⌘ Enter', 'Send this message; save when editing a note'],
       ['h j k l · w b · 0 $ · gg G', 'Prose motions; v selects a passage'], ['[m · ]m · { · }', 'Previous/next message or paragraph'],
+      ['za · zo · zc', 'Toggle · open · close the current or next code/tool block. Search reveals folded matches.'],
       ['Ctrl-d · Ctrl-u', 'Half-page down/up in transcript Normal mode'], ['Ctrl-` · C-c W', 'Switch between KP and chat windows'], ['/ · n · N', 'Search loaded messages; repeat forward/backward'],
       ['C-c · Esc', 'Open commands · close commands and restore focus'], [':h · :w · :source', 'Help · save draft/note · toggle Markdown'],
       ['Markdown · notes', 'Separate editing buffers. Escape enters Normal; another Escape returns to reading.'],

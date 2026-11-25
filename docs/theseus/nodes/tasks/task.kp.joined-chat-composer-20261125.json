@@ -1,0 +1,75 @@
+{
+  "id": "task.kp.joined-chat-composer-20261125",
+  "kind": "task",
+  "title": "Join transcript and auto-growing composer in one Codex column",
+  "status": "deferred",
+  "domain": "product",
+  "summary": "HUMAN_CHECKPOINT: implementation and preservation checks complete. Review joined border, padding, labels, growing composer and folding at the canonical URL.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-joined-chat-composer.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:20.716Z",
+      "notes": "Initial checks found an unused service type import, then an un-narrowed test DOM click. Both repaired before final clean check."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:22.129Z",
+      "notes": "Final scoped check passes including service tool projection, editor plugins, navigation and browser tests."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:22.751Z",
+      "notes": "25 tests pass: native tool projection and literal annotation coordinates, bounded/stale/foreign output, session/branch drafts, recovery and transport."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:23.367Z",
+      "notes": "Initial full run: 18 pass, one older-reading failure. Explicit following alone did not fix two focused repeats; read-only focus needed native selection synchronization."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:23.993Z",
+      "notes": "Final full run: all 19 Chromium cases pass after native selection repair. Includes growing composer, streamed caret/undo, cap/scroll, folds/search/reload/per-branch preferences, tool literals, split, notes, draft recovery and native preview. No inference."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:24.616Z",
+      "notes": "Initial orientation exceeded unchanged roadmap/thread word budgets by 14 and 9 words. Shortened entrypoint prose; no budget amendment."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:25.241Z",
+      "notes": "All 75 checks pass with source-linked joined-chat successor and preserved completed split."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:48:25.943Z",
+      "notes": "Approved source, active thread and selected run align within existing startup budgets."
+    }
+  ],
+  "revisitWhen": [
+    "The user reviews the canonical joined chat exemplar or requests a bounded adjustment."
+  ]
+}

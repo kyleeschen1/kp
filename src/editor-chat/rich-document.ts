@@ -1,6 +1,7 @@
 import { Schema, type Node as ProseNode } from 'prosemirror-model';
 import { schema as commonmark, MarkdownParser, MarkdownSerializer, defaultMarkdownParser, defaultMarkdownSerializer } from 'prosemirror-markdown';
 import { chatMarkdown } from './markdown-math.ts';
+import type { ChatMessage } from './protocol.ts';
 
 export function safeLink(value: unknown): string | null {
   if (typeof value !== 'string' || /[\u0000-\u0020\u007f]/.test(value)) return null;
@@ -21,8 +22,9 @@ export const richSchema = new Schema({
       parseDOM: [{ tag: 'div[data-chat-math][data-display=true]', getAttrs: element => ({ source: element.getAttribute('data-chat-math') ?? '' }) }],
       toDOM: node => ['div', { class: 'kp-chat-math', 'data-chat-math': node.attrs['source'], 'data-display': 'true' }, String(node.attrs['source'])] },
     chat_message: { content: 'block+', group: 'block', defining: true, isolating: true,
-    attrs: { id: {}, role: {}, complete: { default: true }, clipped: { default: false } },
-    toDOM: node => ['article', { class: 'kp-chat-message', 'data-message-id': node.attrs['id'], 'data-role': node.attrs['role'], 'aria-label': node.attrs['role'] === 'user' ? 'Your message' : 'Codex response' },
+    attrs: { id: {}, role: {}, speaker: {}, complete: { default: true }, clipped: { default: false } },
+    toDOM: node => ['article', { class: 'kp-chat-message', 'data-message-id': node.attrs['id'], 'data-role': node.attrs['role'], 'aria-label': node.attrs['speaker'] },
+      ['div', { class: 'kp-chat-speaker', contenteditable: 'false' }, node.attrs['speaker']],
       ...(node.attrs['clipped'] ? [['div', { class: 'kp-chat-speaker', contenteditable: 'false' }, 'Display shortened']] : []),
       ['div', { class: 'kp-chat-text' }, 0]]
   } }),
@@ -43,6 +45,10 @@ const serializer = new MarkdownSerializer({ ...defaultMarkdownSerializer.nodes,
 }, defaultMarkdownSerializer.marks);
 export const parseMarkdown = (source: string): ProseNode => parser.parse(source);
 export const serializeMarkdown = (doc: ProseNode): string => serializer.serialize(doc);
+/** Tool bytes stay literal, including Markdown-looking output and HTML. */
+export const messageDocument = (message: ChatMessage): ProseNode => message.role === 'tool'
+  ? richSchema.node('doc', null, [richSchema.node('code_block', null, message.text ? richSchema.text(message.text) : undefined)])
+  : parseMarkdown(message.text);
 
 /** A plain-text index retains corresponding ProseMirror coordinates. It is
  * independent of Markdown delimiters and handles nested blocks and split marks. */

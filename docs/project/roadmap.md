@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-fixed-chat-split`
-Execution Contract: `run-contract.kp.fixed-chat-split-20261125`
-Next Product Milestone: `fixed-chat-split`
+Current Commitment: `kp-joined-chat-composer`
+Execution Contract: `run-contract.kp.joined-chat-composer-20261125`
+Next Product Milestone: `joined-chat-composer`
 Milestone Authority: approved
 
 ## Where we are going
@@ -23,10 +23,12 @@ why this becomes the organizing direction and what it supersedes.
 [focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
 **Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
-**Approved:** [fixed 50/50 split](reviews/2026-11-25-fixed-chat-split.md), Codex
-left and KP right, without window motion. The
+**Checked:** [fixed 50/50 split](reviews/2026-11-25-fixed-chat-split.md), Codex
+left and KP right, without window motion. **Approved:**
+[joined chat editors](reviews/2026-11-25-joined-chat-composer.md), filling the pane
+with internal padding, speaker labels, code/tool folds and a growing composer. The
 [recency stack](reviews/2026-11-25-recency-window-stack.md) is rejected.
-Retain restored 440px KP / 491px chat columns and persistent composition from
+Retain the 440px KP column and persistent composition from
 the [prior candidate](reviews/2026-11-25-windowed-chat.md).
 The [sliding overlay](reviews/2026-11-25-overlay-chat.md) remains rejected.
 Preserve data and native rendering.
@@ -35,17 +37,15 @@ remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-
 is deferred behind persistent conversation; automatic document edits remain excluded.
 Exclude publication and general editor promotion. Custom motions, transclusion
 and search remain parked; MathML declined.
-The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
-retains identity, nesting, scope and reuse evidence; its inspector UI was unaccepted.
-Authoring-to-practice and fractional editorial review remain unchanged return paths.
-The ecosystem grill and library extraction remain parked.
+The [two-notebook proof](reviews/2026-11-24-notebook-proof.md) retains composition
+evidence; its inspector UI was unaccepted. Fractional editorial review remains
+a return path; ecosystem discussion and library extraction stay parked.
 
 Return to the approved [authoring-to-practice programme](2026-11-08-authoring-to-practice-loops.md)
 after this bounded checkpoint. Its dependencies and human gates remain intact.
 [Orientation delivery](2026-11-08-project-orientation-delivery.md) stays complete.
 
-What counts remains the technical reference. Fractional reasoning awaits review
-of its argument, alternative route and changed-case question. Preserve the
+What counts remains the technical reference. Preserve the
 [accepted reading defaults](principles/document-theater-reading.md).
 
 ## First product proof — approved

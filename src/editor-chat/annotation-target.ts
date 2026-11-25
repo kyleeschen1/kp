@@ -1,9 +1,9 @@
 import type { Node as ProseNode } from 'prosemirror-model';
 import type { ChatMessage } from './protocol.ts';
 import { quoteLimit, type PassageTarget } from './annotations.ts';
-import { parseMarkdown, textIndex } from './rich-document.ts';
+import { messageDocument, textIndex } from './rich-document.ts';
 
-export function passageTarget(threadId: string, message: ChatMessage, from: number, to: number, doc = parseMarkdown(message.text)): PassageTarget {
+export function passageTarget(threadId: string, message: ChatMessage, from: number, to: number, doc = messageDocument(message)): PassageTarget {
   if (!message.complete || message.clipped) throw new Error('Wait for the full response before adding a passage comment.');
   if (!Number.isSafeInteger(from) || !Number.isSafeInteger(to) || from < 0 || to <= from || to > doc.content.size) throw new Error('Select text inside one message.');
   const index = textIndex(doc), start = index.positions.findIndex(pos => pos >= from);
@@ -16,7 +16,7 @@ export function passageTarget(threadId: string, message: ChatMessage, from: numb
 export type ResolvedPassage = { status: 'attached'; from: number; to: number } | { status: 'changed' | 'unavailable' };
 export function resolvePassage(target: PassageTarget, threadId: string | null, message: ChatMessage | undefined, doc?: ProseNode): ResolvedPassage {
   if (threadId !== target.threadId || !message || message.id !== target.messageId) return { status: 'unavailable' };
-  const index = textIndex(doc ?? parseMarkdown(message.text)), matches: number[] = [], contextual: number[] = [];
+  const index = textIndex(doc ?? messageDocument(message)), matches: number[] = [], contextual: number[] = [];
   let at = index.text.indexOf(target.quote);
   while (at >= 0) {
     matches.push(at);

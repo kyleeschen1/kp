@@ -3,7 +3,8 @@
 import { readAnnotations, readAnnotationDraft, noteRevision, type ChatAnnotation, type AnnotationDraft } from './annotations.ts';
 
 export const draftLimit = 32768, messageLimit = 65536, historyLimit = 80, branchLimit = 16;
-export type ChatMessage = { id: string; role: 'user' | 'assistant'; text: string; complete: boolean; clipped: boolean; turnId?: string };
+export type ChatMessage = { id: string; text: string; complete: boolean; clipped: boolean; turnId?: string } &
+  ({ role: 'user' | 'assistant' } | { role: 'tool'; tool: string });
 export type PendingSend = { id: string; text: string; draftRevision: number; turnId: string | null; accepted: boolean };
 export type ReadingPoint = { branchId: string; messageId: string; offset: number };
 export type ChatTopic = { id: string; title: string; point: ReadingPoint };
@@ -68,8 +69,9 @@ function readConversation(value: unknown, legacy = false): ChatConversation {
   const v = record(value);
   if (!Array.isArray(v['messages']) || v['messages'].length > historyLimit || !Array.isArray(v['sentIds']) || v['sentIds'].length > 128) throw new Error('Unsupported chat recovery record.');
   const messages: ChatMessage[] = v['messages'].map(raw => {
-    const m = record(raw); if (m['role'] !== 'user' && m['role'] !== 'assistant') throw new Error('Unknown message role.');
-    return { id: identity(m['id']), role: m['role'], text: text(m['text'], messageLimit), complete: flag(m['complete']), clipped: flag(m['clipped']),
+    const m = record(raw); if (m['role'] !== 'user' && m['role'] !== 'assistant' && m['role'] !== 'tool') throw new Error('Unknown message role.');
+    const author = m['role'] === 'tool' ? { role: m['role'], tool: text(m['tool'], 300) } as const : { role: m['role'] } as const;
+    return { id: identity(m['id']), ...author, text: text(m['text'], messageLimit), complete: flag(m['complete']), clipped: flag(m['clipped']),
       ...(m['turnId'] === undefined ? {} : { turnId: identity(m['turnId']) }) };
   });
   if (new Set(messages.map(m => m.id)).size !== messages.length) throw new Error('Duplicate chat message identity.');

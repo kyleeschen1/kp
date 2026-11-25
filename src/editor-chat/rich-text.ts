@@ -18,8 +18,10 @@ export type RichProfile = 'composer' | 'comment' | 'transcript';
 export interface RichOptions {
   profile: RichProfile; label: string; text?: string; limit?: number;
   onChange?: (text: string) => void; onSelection?: () => void;
+  onNavigate?: () => void;
   onSubmit?: () => void; onSave?: () => void;
   minimal?: boolean; onHelp?: () => void;
+  plugins?: readonly Plugin[];
 }
 export interface RichHighlight { from: number; to: number; id: string }
 export interface DraftCursor { anchor: number; head: number; source: boolean }
@@ -64,7 +66,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
     }
     return false;
   };
-  const plugins = [replacement, ...(readOnly ? [] : [history()]), keymap({
+  const plugins = [replacement, ...(options.plugins ?? []), ...(readOnly ? [] : [history()]), keymap({
     'Mod-Enter': () => { if (!readOnly && !disabled) options.onSubmit?.(); return true; },
     'Mod-b': toggleMark(richSchema.marks['strong']!), 'Mod-i': toggleMark(richSchema.marks['em']!),
     'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo
@@ -73,10 +75,20 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
     Tab: sinkListItem(richSchema.nodes['list_item']!), 'Shift-Tab': liftListItem(richSchema.nodes['list_item']!)
   }), keymap(baseKeymap)];
   const state = (doc: ProseNode) => EditorState.create({ doc, plugins });
+  function restoreNativeSelection(editor: EditorView) {
+    const { anchor, head } = editor.state.selection;
+    const from = editor.domAtPos(anchor), to = editor.domAtPos(head);
+    editor.dom.ownerDocument.getSelection()?.setBaseAndExtent(from.node, from.offset, to.node, to.offset);
+  }
   const view = new EditorView(body, {
     state: state(parseMarkdown(source)), editable: () => !readOnly && !disabled,
     attributes: { role: 'textbox', 'aria-label': options.label, 'aria-multiline': 'true', 'aria-readonly': String(readOnly), tabindex: '0', spellcheck: String(!readOnly) },
-    handleDOMEvents: { keydown: (editor, event) => {
+    handleDOMEvents: { focus: editor => {
+      // A read-only DOM can receive focus while the native range still belongs
+      // to the composer. Restore it on every focus path, including tab/click.
+      if (readOnly) restoreNativeSelection(editor);
+      return false;
+    }, keydown: (editor, event) => {
       // ProseMirror's normal keydown pipeline is gated on editable. Forward
       // read-only motions through the same plugins, retaining the write fence.
       if (!readOnly || event.isComposing) return false;
@@ -87,6 +99,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
     clipboardTextParser: text => new Slice(parseMarkdown(text).content, 0, 0),
     dispatchTransaction(transaction) {
       const next = view.state.applyTransaction(transaction); view.updateState(next.state);
+      if (transaction.selectionSet && transaction.scrolledIntoView && !transaction.docChanged) options.onNavigate?.();
       if (!readOnly && transaction.getMeta(replacement) !== 'source' && next.transactions.some(tr => tr.docChanged)) { source = serializeMarkdown(next.state.doc); options.onChange?.(source); }
       status.textContent = `${(vimKey.getState(next.state) ?? 'normal').toUpperCase()}${readOnly ? ' · select to annotate' : ' · :h for keys'}`;
       options.onSelection?.();
@@ -131,12 +144,10 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
       // ProseMirror focuses its DOM only when editable. A read-only transcript
       // still owns motions and must regain actual browser focus after a dialog.
       if (readOnly) {
-        const { anchor, head } = view.state.selection;
         view.dom.focus({ preventScroll: true });
         // A noneditable DOM does not acquire a native range merely by focus.
         // Restore that range explicitly before ProseMirror synchronizes it.
-        const from = view.domAtPos(anchor), to = view.domAtPos(head);
-        view.dom.ownerDocument.getSelection()?.setBaseAndExtent(from.node, from.offset, to.node, to.offset);
+        restoreNativeSelection(view);
       }
       view.focus();
     }

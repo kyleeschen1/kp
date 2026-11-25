@@ -55,7 +55,12 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   const views = chatViewState();
   const composer = mountRichText(draftHost, { profile: 'composer', label: 'Your message', limit: draftLimit, minimal: true,
     onChange: draftChanged, onSubmit: sendDraft, onSave: saveDraft, onHelp: () => commands.help() });
-  const transcript = mountTranscript(history, target => { selection = target; }, id => { showNotes(); notes.edit(id); });
+  const transcript = mountTranscript(history, target => { selection = target; }, id => { showNotes(); notes.edit(id); }, () => {
+    // Explicit navigation outranks a pending resize/restore. Scroll events can
+    // arrive a frame later, after an observer would otherwise follow output.
+    following = history.scrollHeight - history.scrollTop - history.clientHeight < 50;
+    if (following) unread.hidden = true;
+  });
   let notes = createNotes();
   const branchChanged = () => Boolean(current && remote && current.branchId !== remote.branchId);
   const commands = mountChatCommands(column, {
@@ -275,7 +280,8 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
       else dirty = true;
       adopt(snapshot, true); if (dirty) remember();
       if (!dirty && !snapshot.draft && mode === 'compose') {
-        mode = 'reading'; readingReturn = undefined; following = true; paint(); layout(); transcript.latest(); rememberView();
+        readingReturn = undefined; following = true; paint(); layout(); history.scrollTop = history.scrollHeight; rememberView();
+        if (draftHost.contains(document.activeElement)) composer.insert();
       }
     }).catch(() => {});
   }
@@ -322,6 +328,10 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     if (mode === 'compose') { composer.normal(); saveDraft(); }
     mode = 'reading'; readingReturn = undefined; paint();
   });
+  history.addEventListener('focusout', () => { pendingMotion = ''; });
+  for (const event of ['wheel', 'pointerdown', 'touchstart']) history.addEventListener(event, () => {
+    following = false; restoring = false;
+  }, { passive: true });
   history.addEventListener('scroll', () => {
     if (restoring || mode === 'notes') return;
     following = history.scrollHeight - history.scrollTop - history.clientHeight < 50;
@@ -329,12 +339,19 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     // Window resizing also fires scroll events; preserve the reading bookmark.
     clearTimeout(viewTimer); viewTimer = setTimeout(rememberView, 150);
   });
+  // Composer growth and status changes resize the reading viewport without a
+  // new message. Follow only if the reader was already following output.
+  const resize = new ResizeObserver(() => {
+    if (!disposed && !panel.hidden && mode !== 'notes' && following) preserve(() => { history.scrollTop = history.scrollHeight; });
+  });
+  resize.observe(history);
   panel.addEventListener('keydown', event => {
     if (event.isComposing || commands.dialog.contains(event.target as Node)) return;
     if (event.ctrlKey && !event.metaKey && event.key.toLowerCase() === 'c') {
-      event.preventDefault(); event.stopPropagation(); commands.main(); return;
+      event.preventDefault(); event.stopPropagation(); pendingMotion = ''; commands.main(); return;
     }
     if (event.key === 'Escape') {
+      pendingMotion = '';
       if (mode === 'compose' && (!composer.isSource() || !composer.isInsert())) {
         event.preventDefault(); event.stopPropagation(); read(); return;
       }
@@ -347,8 +364,9 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
       return;
     }
     let handled = true;
-    if (pendingMotion) { const previous = pendingMotion; pendingMotion = ''; if (key === 'm') transcript.message(previous === ']' ? 1 : -1); else handled = false; }
+    if (pendingMotion) { const previous = pendingMotion; pendingMotion = ''; if (previous !== 'z' && key === 'm') transcript.message(previous === ']' ? 1 : -1); else handled = false; }
     else if (key === '[' || key === ']') pendingMotion = key;
+    else if (key === 'z') { pendingMotion = 'z'; handled = false; }
     else if (key === 'i' || key === 'a' || key === 'I' || key === 'A') compose();
     else if (key === '/') commands.search();
     else if (key === ':') commands.ex();
@@ -368,6 +386,7 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   return { open() { setOpen(true); }, dispose() {
     rememberView(); disposed = true; clearTimeout(polling); clearTimeout(saveTimer); clearTimeout(viewTimer); refreshController?.abort();
     window.removeEventListener('beforeunload', beforeUnload); if (dirty) remember();
+    resize.disconnect();
     detachWindow(); commands.dispose(); notes.dispose(); transcript.dispose(); composer.dispose(); panel.remove(); toggle.remove();
   } };
 }

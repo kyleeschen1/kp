@@ -165,6 +165,7 @@ test('streaming preserves an older reading position and search dismissal restore
     const transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
     await transcript.press('g'); await transcript.press('g'); await transcript.press('Control+d');
     const history = page.locator('.kp-chat-history'), before = await history.evaluate(node => node.scrollTop);
+    expect(await history.evaluate(node => node.scrollHeight - node.scrollTop - node.clientHeight)).toBeGreaterThan(50);
     const geometry = () => history.evaluate(node => ({ top: node.scrollTop, height: node.scrollHeight, viewport: node.clientHeight,
       firstTop: node.querySelector('[data-message-id]')?.getBoundingClientRect().top, focused: document.activeElement?.getAttribute('aria-label'),
       caret: getSelection()?.rangeCount ? getSelection()!.getRangeAt(0).getBoundingClientRect().toJSON() : null }));
@@ -178,6 +179,115 @@ test('streaming preserves an older reading position and search dismissal restore
     await expect(transcript).toBeFocused(); expect(await page.evaluate(() => getSelection()?.toString())).toBe('Paragraph 30');
     f.peer.finish('New output below the older passage.'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     await transcript.press('G'); await expect(page.locator('.kp-chat-unread')).toBeHidden(); expect(f.peer.sends()).toHaveLength(1);
+  } finally { await f.close(); }
+});
+
+test('joined editors grow and cap the draft while streaming preserves focus, selection, undo and scroll intent', async ({ page, context }, info) => {
+  const f = await fixture(context);
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'older', text: Array.from({ length: 40 }, (_, i) => `Paragraph ${i}: keep this earlier context.`).join('\n\n') }] }];
+  try {
+    await page.setViewportSize({ width: 1440, height: 960 }); await open(page); await connect(page);
+    const column = page.locator('.kp-chat-column'), draft = page.locator('.kp-chat-draft'), history = page.locator('.kp-chat-history');
+    const transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
+    await expect(column).toHaveCSS('display', 'flex');
+    expect(await column.boundingBox()).toEqual(await page.locator('.kp-chat').boundingBox());
+    const emptyHeight = (await draft.boundingBox())!.height;
+    await write(page, 'First line'); await input(page).press('Enter'); await input(page).pressSequentially('Second line');
+    expect(f.peer.sends()).toHaveLength(0); await send(page);
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running'); await expect(input(page)).toBeFocused();
+    await expect(input(page)).toHaveAttribute('data-vim-mode', 'insert');
+    await expect(page.locator('[data-role=user] .kp-chat-speaker')).toHaveText('You');
+    await expect(page.locator('[data-role=assistant] .kp-chat-speaker').first()).toHaveText('Codex');
+    await input(page).pressSequentially('Keep my cursor'); await input(page).press('ArrowLeft');
+    const cursor = await input(page).evaluate(() => ({ anchor: getSelection()?.anchorOffset, head: getSelection()?.focusOffset }));
+    f.peer.delta('Streaming text'); await expect(history).toContainText('Streaming text');
+    await expect(input(page)).toBeFocused();
+    expect(await input(page).evaluate(() => ({ anchor: getSelection()?.anchorOffset, head: getSelection()?.focusOffset }))).toEqual(cursor);
+    await input(page).press('ControlOrMeta+z'); await expect(input(page)).toBeEmpty();
+    await input(page).press('ControlOrMeta+Shift+z'); await expect(input(page)).toHaveText('Keep my cursor');
+    await input(page).press('ControlOrMeta+End');
+    for (let n = 0; n < 6; n++) { await input(page).press('Enter'); await input(page).pressSequentially(`Draft line ${n}`); }
+    expect((await draft.boundingBox())!.height).toBeGreaterThan(emptyHeight + 40);
+    await page.evaluate(() => document.documentElement.style.setProperty('--kp-chat-composer-max-height', '180px'));
+    await expect.poll(async () => (await draft.boundingBox())!.height).toBe(180);
+    expect(await draft.evaluate(node => node.scrollHeight > node.clientHeight)).toBe(true);
+    const gap = () => history.evaluate(node => node.scrollHeight - node.scrollTop - node.clientHeight);
+    await expect.poll(gap).toBeLessThan(3);
+    f.peer.delta('\n\n' + 'More streamed content.\n\n'.repeat(20)); await expect.poll(gap).toBeLessThan(3);
+    await input(page).press('Escape'); await transcript.press('g'); await transcript.press('g'); await transcript.press('Control+d');
+    const before = await history.evaluate(node => node.scrollTop);
+    await transcript.press('i'); await input(page).press('Enter'); await input(page).pressSequentially('Continue without losing the passage');
+    f.peer.delta('\n\nLast output marker'); await expect(history).toContainText('Last output marker');
+    expect(Math.abs(await history.evaluate(node => node.scrollTop) - before)).toBeLessThan(3);
+    await expect(input(page)).toBeFocused(); await expect(page.locator('.kp-chat-unread')).toBeVisible();
+    const draftBox = (await draft.boundingBox())!, columnBox = (await column.boundingBox())!;
+    expect(Math.abs(draftBox.y + draftBox.height - columnBox.y - columnBox.height + 1)).toBeLessThan(1);
+    await page.screenshot({ path: info.outputPath('joined-growing-composer.png') });
+  } finally { await f.close(); }
+});
+
+test('code folds persist through streaming and reload, reveal search matches and preserve the visible block', async ({ page, context }, info) => {
+  const f = await fixture(context);
+  const original = 'Before the code.\n\n```js\n' + Array.from({ length: 25 }, (_, i) => `const value${i} = ${i};`).join('\n') + '\n```\n\n' + Array.from({ length: 40 }, (_, i) => `Following paragraph ${i}.`).join('\n\n');
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'fold-reply', text: original }] }];
+  try {
+    await open(page); await connect(page);
+    const history = page.locator('.kp-chat-history'), transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
+    const block = page.locator('[data-message-id=fold-reply] pre'), toggle = page.locator('[data-message-id=fold-reply] .kp-chat-fold-toggle');
+    await toggle.click(); await expect(block).toBeHidden(); await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await transcript.press('/'); const search = page.getByRole('searchbox', { name: 'Search loaded conversation' });
+    await search.fill('value12'); await search.press('Enter'); await expect(block).toBeVisible();
+    expect(await page.evaluate(() => getSelection()?.toString())).toBe('value12');
+    await transcript.press('z'); await transcript.press('c'); await expect(block).toBeHidden(); await expect(transcript).toBeFocused();
+    await transcript.press('z'); await transcript.press('o'); await expect(block).toBeVisible();
+    await transcript.press('z'); await transcript.press('a'); await expect(block).toBeHidden();
+    await transcript.press('z'); await transcript.press('a'); await expect(block).toBeVisible();
+    // Collapse code above the viewport inside the same long message.
+    const passage = page.locator('[data-message-id=fold-reply] p').filter({ hasText: 'Following paragraph 10.' });
+    await passage.evaluate(node => node.scrollIntoView({ block: 'start' }));
+    const top = (await passage.boundingBox())!.y;
+    await toggle.evaluate(button => { if (button instanceof HTMLButtonElement) button.click(); }); await expect(block).toBeHidden();
+    expect(Math.abs((await passage.boundingBox())!.y - top)).toBeLessThan(3);
+    await write(page, 'Continue'); await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    f.peer.delta('```ts\nconst streamed = 1;');
+    const live = page.locator('[data-message-id=turn-2-reply]'); await expect(live.locator('pre')).toBeVisible();
+    await live.getByRole('button', { name: 'Collapse code · ts' }).click();
+    f.peer.delta('\nconst next = 2;'); await expect(live.getByRole('button')).toContainText('2 lines'); await expect(live.locator('pre')).toBeHidden();
+    f.peer.finish('```ts\nconst streamed = 1;\nconst next = 2;\n```'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
+    const nativeHistory = JSON.stringify(f.store.data.messages);
+    await page.reload(); await expect(page.locator('[data-message-id=fold-reply] pre')).toBeHidden(); await expect(live.locator('pre')).toBeHidden();
+    expect(JSON.stringify(f.store.data.messages)).toBe(nativeHistory);
+    await history.evaluate(node => { node.scrollTop = 0; }); await page.screenshot({ path: info.outputPath('joined-folded-transcript.png') });
+    await selectPassage(page, 'Before the code.', 'fold-reply');
+    await command(page, 'Branch here'); await page.getByRole('textbox', { name: 'Branch name' }).fill('Fold detour');
+    await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.locator('.kp-chat')).not.toHaveAttribute('data-branch-id', 'main');
+    await expect(block).toBeVisible(); // The new session has its own view preferences.
+    await toggle.click(); await expect(block).toBeHidden();
+    await command(page, 'Branches'); await page.getByRole('button', { name: 'Main conversation', exact: true }).click();
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-branch-id', 'main'); await expect(block).toBeHidden();
+    await toggle.click(); await expect(block).toBeVisible();
+    await command(page, 'Branches'); await page.getByRole('button', { name: 'Fold detour', exact: true }).click();
+    await expect(page.locator('.kp-chat')).not.toHaveAttribute('data-branch-id', 'main'); await expect(block).toBeHidden();
+  } finally { await f.close(); }
+});
+
+test('tool output streams as literal foldable text with source labels', async ({ page, context }) => {
+  const f = await fixture(context);
+  try {
+    await open(page); await connect(page); await write(page, 'Inspect'); await send(page);
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    const scope = { threadId: 'thread-1', turnId: 'turn-1' };
+    f.peer.event('item/started', { ...scope, item: { type: 'commandExecution', id: 'command-1', command: 'example', aggregatedOutput: null } });
+    f.peer.event('item/commandExecution/outputDelta', { ...scope, itemId: 'command-1', delta: '<b>literal output</b>\n**no markdown**' });
+    const output = page.locator('[data-message-id=command-1]');
+    await expect(output.locator('.kp-chat-speaker')).toHaveText('Tool · Command');
+    await expect(output.locator('pre')).toContainText('<b>literal output</b>'); await expect(output.locator('b, strong')).toHaveCount(0);
+    await output.getByRole('button', { name: 'Collapse tool output' }).click(); await expect(output.locator('pre')).toBeHidden();
+    f.peer.event('item/commandExecution/outputDelta', { ...scope, itemId: 'command-1', delta: '\nmore output' });
+    await expect(output.getByRole('button')).toContainText('4 lines'); await expect(output.locator('pre')).toBeHidden();
+    await output.getByRole('button', { name: 'Expand tool output' }).click(); await expect(output.locator('pre')).toContainText('more output');
+    expect(f.peer.sends()).toHaveLength(1);
   } finally { await f.close(); }
 });
 
@@ -208,7 +318,8 @@ test('fixed split keeps Codex left and KP right through pointer, keyboard and re
     const chatBox = await chatWindow.boundingBox(), pageBox = await pageWindow.boundingBox(), columnBox = await column.boundingBox();
     expect(chatBox!.width).toBe(720); expect(pageBox!.width).toBe(720);
     expect(Math.abs(columnBox!.x + columnBox!.width / 2 - chatBox!.x - chatBox!.width / 2)).toBeLessThan(1);
-    expect((await draft.boundingBox())!.height / columnBox!.height).toBeCloseTo(1 / 3, 2);
+    expect(columnBox).toEqual(chatBox);
+    expect((await draft.boundingBox())!.height).toBeLessThan(columnBox!.height / 3);
     await page.getByRole('textbox', { name: 'Conversation transcript' }).press('i'); await input(page).pressSequentially('A continued thought');
     await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
     const editor = page.locator('.fn-editor .ProseMirror'), editorNode = await editor.elementHandle();
@@ -217,7 +328,7 @@ test('fixed split keeps Codex left and KP right through pointer, keyboard and re
     await focused('page');
     await expect(editor).toBeFocused();
     const editorWidth = (await editor.boundingBox())!.width;
-    expect(editorWidth).toBe(440); expect(columnBox!.width).toBe(491);
+    expect(editorWidth).toBe(440); expect(columnBox!.width).toBe(720);
     await page.keyboard.press('Control+Backquote'); await expect(input(page)).toBeFocused();
     await focused('chat');
     await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('A continued thougXht');

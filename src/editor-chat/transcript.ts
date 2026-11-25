@@ -3,15 +3,17 @@ import type { Node as ProseNode } from 'prosemirror-model';
 import type { ChatMessage, ChatSnapshot } from './protocol.ts';
 import type { PassageTarget } from './annotations.ts';
 import { passageTarget, resolvePassage } from './annotation-target.ts';
-import { parseMarkdown, richSchema } from './rich-document.ts';
+import { messageDocument, richSchema } from './rich-document.ts';
 import { mountRichText, type RichHighlight } from './rich-text.ts';
 import { transcriptNavigation } from './transcript-navigation.ts';
+import { transcriptFolding } from './folding.ts';
 
-export function mountTranscript(host: HTMLElement, selected: (target: PassageTarget | null) => void, openNote: (id: string) => void) {
+export function mountTranscript(host: HTMLElement, selected: (target: PassageTarget | null) => void, openNote: (id: string) => void, onNavigate: () => void) {
   let snapshot: ChatSnapshot | undefined;
   let cached = new Map<string, { message: ChatMessage; doc: ProseNode; node: ProseNode }>();
-  const surface = mountRichText(host, { profile: 'transcript', label: 'Conversation transcript', minimal: true, onSelection: selectionChanged });
-  const navigation = transcriptNavigation(surface, host, () => snapshot?.branchId);
+  const folding = transcriptFolding(host);
+  const surface = mountRichText(host, { profile: 'transcript', label: 'Conversation transcript', minimal: true, onSelection: selectionChanged, onNavigate, plugins: [folding.plugin] });
+  const navigation = transcriptNavigation(surface, host, () => snapshot?.branchId, onNavigate);
   function selectionChanged() {
     if (!snapshot?.threadId || surface.view.state.selection.empty) { selected(null); return; }
     const { $from, $to, from, to } = surface.view.state.selection;
@@ -43,16 +45,19 @@ export function mountTranscript(host: HTMLElement, selected: (target: PassageTar
       const before = navigation.capture(), sameBranch = snapshot?.branchId === value.branchId;
       let changed = !sameBranch || cached.size !== value.messages.length;
       snapshot = value;
+      folding.configure(value.project, value.branchId);
       const next = new Map<string, { message: ChatMessage; doc: ProseNode; node: ProseNode }>();
       const nodes = value.messages.map(message => {
         const previous = cached.get(message.id);
         if (previous && previous.message.text === message.text && previous.message.complete === message.complete
-          && previous.message.clipped === message.clipped && previous.message.role === message.role) {
+          && previous.message.clipped === message.clipped && previous.message.role === message.role
+          && (message.role !== 'tool' || (previous.message.role === 'tool' && previous.message.tool === message.tool))) {
           next.set(message.id, previous); return previous.node;
         }
         changed = true;
-        const doc = previous?.message.text === message.text ? previous.doc : parseMarkdown(message.text);
-        const node = richSchema.nodes['chat_message']!.create({ id: message.id, role: message.role, complete: message.complete, clipped: message.clipped }, doc.content);
+        const doc = previous?.message.text === message.text && previous.message.role === message.role ? previous.doc : messageDocument(message);
+        const speaker = message.role === 'user' ? 'You' : message.role === 'tool' ? 'Tool · ' + message.tool : 'Codex';
+        const node = richSchema.nodes['chat_message']!.create({ id: message.id, role: message.role, speaker, complete: message.complete, clipped: message.clipped }, doc.content);
         next.set(message.id, { message, doc, node }); return node;
       });
       cached = next;

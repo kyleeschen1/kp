@@ -1,11 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import { basename } from 'node:path';
-import { emptyChat, branchLimit, readChatRecord, readContext, historyLimit, identity, messageLimit, record, text, type ChatAction, type ChatMessage,
+import { emptyChat, branchLimit, readChatRecord, readContext, historyLimit, identity, messageLimit, record, text, type ChatAction,
   type ChatPhase, type ChatRecord, type ChatSnapshot } from '../../src/editor-chat/protocol.ts';
 import type { ChatStore } from './store.ts';
 import { RpcRejection, type ChatTransport, type TransportFactory } from './transport.ts';
 import { readAnnotations, type AnnotationDraft } from '../../src/editor-chat/annotations.ts';
 import { passageTarget } from '../../src/editor-chat/annotation-target.ts';
+import { nativeMessage } from './items.ts';
 
 export class ChatConflict extends Error {
   readonly code: 'draft-revision' | 'branch-changed' | 'state';
@@ -277,14 +278,8 @@ export class ChatService {
     }
   }
   private item(value: unknown, complete: boolean, turnId?: string) {
-    const item = record(value);
-    if (item['type'] !== 'agentMessage' && item['type'] !== 'userMessage') return;
-    const id = identity(item['id']);
-    const body = item['type'] === 'agentMessage' ? text(item['text'], 16 * 1024 * 1024)
-      : (Array.isArray(item['content']) ? item['content'].map(raw => { const part = record(raw); return part['type'] === 'text' ? text(part['text'], 16 * 1024 * 1024) : ''; }).join('\n') : '');
-    const message: ChatMessage = { id, role: item['type'] === 'agentMessage' ? 'assistant' : 'user',
-      text: body.slice(0, messageLimit), complete, clipped: body.length > messageLimit, ...(turnId ? { turnId } : {}) };
-    const index = this.data.messages.findIndex(m => m.id === id);
+    const message = nativeMessage(value, complete, turnId); if (!message) return;
+    const index = this.data.messages.findIndex(m => m.id === message.id);
     if (index < 0) this.data.messages.push(message); else this.data.messages[index] = message;
     this.trim();
   }
@@ -293,10 +288,12 @@ export class ChatService {
     if (params['threadId'] !== undefined && params['threadId'] !== this.data.threadId) return;
     if (params['turnId'] !== undefined && params['turnId'] !== this.data.pending?.turnId) return;
     if (method === 'item/started' || method === 'item/completed') this.item(params['item'], method === 'item/completed', params['turnId'] === undefined ? undefined : identity(params['turnId']));
-    if (method === 'item/agentMessage/delta') {
+    if (method === 'item/agentMessage/delta' || method === 'item/commandExecution/outputDelta') {
       const id = identity(params['itemId']), delta = text(params['delta'], 16 * 1024 * 1024);
+      const author = method === 'item/agentMessage/delta' ? { role: 'assistant' } as const : { role: 'tool', tool: 'Command' } as const;
       let message = this.data.messages.find(m => m.id === id);
-      if (!message) { message = { id, role: 'assistant', text: '', complete: false, clipped: false,
+      if (message && (message.complete || message.role !== author.role)) return;
+      if (!message) { message = { id, ...author, text: '', complete: false, clipped: false,
         ...(params['turnId'] === undefined ? {} : { turnId: identity(params['turnId']) }) }; this.data.messages.push(message); }
       const combined = message.text + delta; message.text = combined.slice(0, messageLimit); message.clipped ||= combined.length > messageLimit; this.trim();
     }

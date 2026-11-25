@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-fixed-chat-split",
-    title: "Use a simple fixed split with Codex left and KP right",
+    id: "kp-joined-chat-composer",
+    title: "Join a navigable Codex transcript and growing composer",
     approval: "approved",
-    contractId: "run-contract.kp.fixed-chat-split-20261125",
-    finish: "Use two stationary equal columns, Codex left and KP right, with no window animations. Center the lone KP pane. Preserve the global masthead, reading columns, permanent draft, mounted buffers, player and recovery.",
-    source: { label: "Clarified ordinary split", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
+    contractId: "run-contract.kp.joined-chat-composer-20261125",
+    finish: "Fill the chat pane with a bordered transcript and persistent growing composer, using independent ProseMirror states, internal padding, speaker labels and code/tool folding. Preserve streaming focus, reading position, draft recovery and the fixed KP split.",
+    source: { label: "Joined editors and approved folding refinement", href: "docs/project/reviews/2026-11-25-joined-chat-composer.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat: Codex occupies the left half and KP the right half. Clicking or keyboard-switching never moves either pane. Close Chat to center KP. Preserve the same draft, cursor, reading place and native animation.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat. Inspect the joined border, internal padding and You/Codex labels; type multiple lines to grow the composer. Toggle code/tool folds with za/zo/zc and search inside one. Judge the reading and writing space while the fixed KP pane stays in place.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The fraction notebook and persistent conversation are accepted. Permanent composition, notes, recovery and restored text widths remain foundations. The user rejected both the sliding overlay and recency stack, selecting a simple fixed split next. Independent object revision and Spindle/library extraction remain return paths.",
-      evidence: { label: "Windowed chat and preserved foundations", href: "docs/project/reviews/2026-11-25-windowed-chat.md" },
+      established: "The fraction notebook and persistent conversation are accepted. The fixed equal split is checked after rejecting the sliding overlay and recency stack. Notes, independent drafts, recovery and the KP column remain foundations; full-pane chat and folding are the approved refinement. Object revision and Spindle/library extraction remain return paths.",
+      evidence: { label: "Completed fixed split", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" },
       outcome: {
         authority: "approved",
-        id: "fixed-chat-split", title: "Keep Codex and KP in stable left and right columns",
-        finish: "One fixed 50/50 split keeps chat left and KP right beneath the global masthead with no window motion. Preserve reading columns, permanent composition, saved place and native animation; center the solitary KP pane. Tracker adoption remains separate.",
+        id: "joined-chat-composer", title: "Read, fold and compose inside one joined chat pane",
+        finish: "A full-pane transcript and growing composer share one border and internal padding. You/Codex labels and code/tool folding aid navigation. Stream output without disturbing the draft or older reading; retain native session authority and the fixed outer split.",
         excludes: "A general session workspace, automatic object patches, image-generation integration, publication, library extraction, desktop migration, paid test inference or whole-book infrastructure.",
-        source: { label: "Requested fixed split successor", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
+        source: { label: "Approved joined chat successor", href: "docs/project/reviews/2026-11-25-joined-chat-composer.md" }
       }
     },
     {
@@ -445,6 +445,13 @@ export const projectVision: ProjectVision = {
       after: "The user explicitly clarifies equal side-by-side 50% panes, no animations, and permission to center the solitary pane. Resume that bounded correction.",
       reason: "Remove the overcomplicated moving layout while keeping the existing writing and reading state. The Org discussion remains separate from repository execution ownership.",
       source: { label: "Clarified static split and preservation boundary", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
+    },
+    {
+      id: "select-joined-chat-editors", on: "2026-11-25",
+      before: "The fixed split passed preservation checks, with a centered chat column and fixed bottom-third draft.",
+      after: "The user approves two independent ProseMirror instances in one full-pane bordered flex column, with internal padding, a growing composer, speaker labels and code/tool folding.",
+      reason: "Keep navigation and folding while making the chat simpler to read and write. Native Codex remains authoritative; view preferences and draft state are independent. Preserve the completed static split instead of extending its finished scope.",
+      source: { label: "Joined chat discussion and approved refinement", href: "docs/project/reviews/2026-11-25-joined-chat-composer.md" }
     }
   ]
 };

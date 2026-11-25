@@ -1,4 +1,7 @@
+:root { --kp-chat-composer-max-height: 40vh; --kp-chat-pane-padding: 24px; --kp-chat-speaker-color: var(--fn-muted); }
 .kp-chat { --kp-chat-annotation: var(--fn-selection); color: var(--fn-text); font: var(--kp-document-body-weight) var(--kp-document-body-size)/var(--kp-document-body-leading) var(--fn-font); letter-spacing: var(--kp-document-letter-spacing); }
+.kp-chat-column { box-sizing: border-box; width: 100%; height: 100%; min-height: 0; display: flex; flex-direction: column; border: 1px solid var(--fn-border); }
+.kp-chat-output { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--fn-block-gap); padding: var(--kp-chat-pane-padding); overflow: hidden; }
 .kp-chat[hidden], .kp-chat [hidden] { display: none !important; }
 .kp-chat-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .kp-chat-heading strong { font-weight: var(--fn-object-weight); }
@@ -9,9 +12,14 @@
 .kp-chat-details p { white-space: pre-wrap; overflow-wrap: anywhere; }
 .kp-chat-history { flex: 1; min-height: 0; overflow: auto; overflow-wrap: anywhere; scrollbar-width: thin; overscroll-behavior: contain; overflow-anchor: none; }
 .kp-chat-message { margin: 0; }
-.kp-chat-message[data-role=user] { margin-left: 1.5em; }
+.kp-chat-speaker { display: block; margin-bottom: var(--fn-title-gap); color: var(--kp-chat-speaker-color); font-weight: var(--fn-object-weight); }
+.kp-chat-fold-toggle { display: block; width: 100%; padding: 5px 9px; text-align: left; font: inherit; font-size: .8rem; color: var(--fn-muted); background: var(--fn-surface); border: 1px solid var(--fn-border); cursor: pointer; }
+.kp-chat-folded { display: none !important; }
 .kp-chat-text { white-space: normal; }
-.kp-chat-draft { min-height: 3em; max-height: min(34vh, 45%); flex-shrink: 0; overflow: auto; width: 100%; padding: var(--fn-block-gap) 0 4px; background: var(--fn-background); color: var(--fn-text); border: 0; border-top: 1px solid var(--fn-border); font: inherit; caret-color: var(--kp-editor-cursor); overscroll-behavior: contain; }
+/* Content determines the composer height. The percentage cap leaves space for
+   reading even when a theme requests a height larger than the viewport. */
+.kp-chat-draft { box-sizing: border-box; min-height: min(5em, var(--kp-chat-composer-max-height), 50%); max-height: min(var(--kp-chat-composer-max-height), 50%); flex: 0 0 auto; overflow: auto; width: 100%; padding: var(--kp-chat-pane-padding); background: transparent; color: var(--fn-text); border: 0; border-top: 1px solid var(--fn-border); font: inherit; caret-color: var(--kp-editor-cursor); overscroll-behavior: contain; scrollbar-width: thin; }
+.kp-chat-draft .ProseMirror { min-height: 3em; }
 .kp-chat-controls { display: flex; flex-wrap: wrap; gap: 6px; }
 .kp-chat button { font-family: inherit; }
 .kp-chat button:disabled { opacity: .5; cursor: default; }
@@ -95,8 +103,8 @@
 .kp-chat-keys dt { color: var(--fn-link); margin-top: 8px; }
 .kp-chat-keys dd { margin-left: 0; }
 @media (max-width: 760px) {
+  :root { --kp-chat-pane-padding: 14px; }
   .kp-chat-context { display: none; }
   .kp-chat-status { min-height: 0; }
-  .kp-chat-draft { min-height: 3em; max-height: 25vh; }
   .kp-rich-mode { margin-left: 0; }
 }

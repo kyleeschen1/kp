@@ -7,7 +7,7 @@ export type ReadingBookmark = {
   anchor: ReadingPoint | null; head: ReadingPoint | null;
   scroll: { messageId: string | null; top: number; scrollTop: number };
 };
-export function transcriptNavigation(surface: RichSurface, host: HTMLElement, branchId: () => string | undefined) {
+export function transcriptNavigation(surface: RichSurface, host: HTMLElement, branchId: () => string | undefined, onNavigate: () => void) {
   function offsets() {
     const result: { id: string; start: number; size: number }[] = [];
     surface.view.state.doc.forEach((node, pos) => { if (node.type.name === 'chat_message') result.push({ id: String(node.attrs['id']), start: pos + 1, size: node.content.size }); });
@@ -74,6 +74,7 @@ export function transcriptNavigation(surface: RichSurface, host: HTMLElement, br
     host.scrollTop += direction * host.clientHeight / 2;
     const rect = host.getBoundingClientRect(), pos = surface.view.posAtCoords({ left: rect.left + rect.width / 2, top: rect.top + rect.height / 2 });
     if (pos) surface.view.dispatch(surface.view.state.tr.setSelection(Selection.near(surface.view.state.doc.resolve(pos.pos))));
+    onNavigate();
   }
   function latest() {
     const { view } = surface; view.dispatch(view.state.tr.setSelection(Selection.atEnd(view.state.doc)).scrollIntoView()); surface.focus(); host.scrollTop = host.scrollHeight;

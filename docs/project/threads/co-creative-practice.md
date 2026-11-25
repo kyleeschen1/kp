@@ -26,8 +26,8 @@ workbench latency remain unproved. The approved notebook detour below is current
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Approved requirements: persistent UUIDs, custom metadata/blocks, nesting, scope,
   localized changes, reuse, imports and folding.
-  The [working matrix proof](../reviews/2026-11-24-notebook-proof.md) retains its
-  composition evidence. Its inspector UI is not an accepted writing experience.
+  The [matrix proof](../reviews/2026-11-24-notebook-proof.md) retains composition
+  evidence; its inspector was unaccepted.
   The [structure editor](../reviews/2026-11-24-structure-editor.md) is accepted.
   The [unified surface](../reviews/2026-11-24-unified-notebook-surface.md) is accepted.
   [Focused animation editing](../reviews/2026-11-24-focused-buffer-next-step-review.md)
@@ -39,11 +39,12 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Rich chat and annotations](../reviews/2026-11-25-kp-rich-chat.md) are checked.
   [Keyboard chat](../reviews/2026-11-25-keyboard-chat.md) is checked; the
   [recency stack](../reviews/2026-11-25-recency-window-stack.md) was rejected.
-  Approved: [fixed 50/50 split](../reviews/2026-11-25-fixed-chat-split.md), without
-  window motion. Preserve composition and text widths; exclude automatic edits
-  and broader extraction.
+  The [fixed split](../reviews/2026-11-25-fixed-chat-split.md) is checked.
+  Approved: [joined chat editors](../reviews/2026-11-25-joined-chat-composer.md),
+  full-pane padding, labels, code/tool folds and growing composition. Preserve
+  KP and native history; exclude automatic edits and broader extraction.
   Motions/text objects remain parked; MathML declined.
-  Review before generalizing; the programme remains the return path.
+  Review before generalizing.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
 - **What was actually gained:** [explanation-first evidence](../reviews/2026-11-08-explanation-first.md).
