@@ -2,8 +2,8 @@
   "id": "run-contract.kp.persistent-chat-20261125",
   "kind": "run-contract",
   "title": "Persistent chat in the KP editor",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 2/2 implementation packages checked. Awaiting the single conversation exemplar judgment and explicit real Send before promotion.",
+  "status": "resolved",
+  "summary": "Original conversation exemplar accepted by the user; preserve its finish line and track rich editing in the successor contract.",
   "sourceRefs": [
     {
       "kind": "file",

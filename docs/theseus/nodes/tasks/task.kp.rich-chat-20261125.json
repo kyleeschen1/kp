@@ -1,0 +1,54 @@
+{
+  "id": "task.kp.rich-chat-20261125",
+  "kind": "task",
+  "title": "Write and annotate rich conversations in KP",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: both implementation packages are checked. User requests discussion of a single-column keyboard interface before changing the current candidate.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-kp-rich-chat.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "Initial rich-chat type and browser checks",
+      "status": "failed",
+      "scope": "Discovery failures repaired",
+      "checkedAt": "2026-11-25T13:11:15.081Z",
+      "notes": "Markdown-it 15 default-export declarations were incompatible with ProseMirror Markdown; use compatible 14 and proper types. Initial browser selectors, a premature fixture reply and dependency-optimizer reload were diagnosed. Vite refreshed after dependency migration; startup sources shortened to existing budgets. See linked review and passing reruns."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "Chat and annotation invariants",
+      "checkedAt": "2026-11-25T13:11:16.086Z",
+      "notes": "18 tests pass for delivery recovery, v1 migration, Markdown and math round trips, preserved math copy text, safe links, source-verified anchors, ambiguity, note CAS, archived identity and failed-storage rollback. Focused fraction-notebook TypeScript also passes with library checking enabled."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "Single Chromium chat exemplar",
+      "checkedAt": "2026-11-25T13:11:16.709Z",
+      "notes": "All nine cases pass with deterministic native peer and real HTTP/service. Rich composer, parsed replies and math, notes/comments/tags/search/reload, read-only transcript, Vim isolation, unsaved recovery, conflicts and prior Send lifecycle. Final rich-composer and live-private-storage cases pass after math clipboard repair. Desktop, light and phone captures inspected; no real model response claimed."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "Notebook and public reader preservation",
+      "checkedAt": "2026-11-25T13:11:17.329Z",
+      "notes": "All 21 notebook browser cases, 20 notebook unit tests and the canonical fractional reasoning browser case pass. Public reader remains 1250344 JS bytes, 308778 gzip and 414 modules with no editor/chat closure. Project vision: 75 pass; Theseus validates."
+    },
+    {
+      "command": "npm run check:editor-chat:codex",
+      "status": "passed",
+      "scope": "Installed native lifecycle without inference",
+      "checkedAt": "2026-11-25T13:11:18.054Z",
+      "notes": "Native connection, empty-thread restart and unsent draft recovery pass. No turn/start, editor recovery write or real model inference. The owned launchd web service was refreshed after dependency changes; live private-storage HTTP check passes."
+    }
+  ],
+  "revisitWhen": [
+    "After the keyboard-first chat sketch and implementation direction are agreed."
+  ]
+}

@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-persistent-chat`
-Execution Contract: `run-contract.kp.persistent-chat-20261125`
-Next Product Milestone: `persistent-editor-conversation`
+Current Commitment: `kp-rich-chat`
+Execution Contract: `run-contract.kp.rich-chat-20261125`
+Next Product Milestone: `annotated-editor-conversation`
 Milestone Authority: approved
 
 ## Where we are going
@@ -22,9 +22,10 @@ why this becomes the organizing direction and what it supersedes.
 **Accepted:** nested structure, [unified surface](reviews/2026-11-24-unified-notebook-surface.md),
 [focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
-**Approved successor:** [persistent general chat inside the KP editor](reviews/2026-11-25-kp-persistent-chat.md).
-Borrow Workbench's session/recovery rules through a local Codex bridge; keep chat
-separate from notebook JSON and native rendering. Review Send, follow-up and reload.
+**Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
+**Approved successor:** [rich chat, notes and passage annotations](reviews/2026-11-25-kp-rich-chat.md).
+Review a rich composer, formatted replies and saved comments/tags in one Chat
+panel. Preserve conversation recovery, notebook JSON and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
 is deferred behind persistent conversation; automatic document edits remain excluded.
@@ -33,7 +34,7 @@ remain later. Preserve notebook identities, metadata and recovery.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
 retains identity, nesting, scope and reuse evidence; its inspector UI was unaccepted.
 Authoring-to-practice and fractional editorial review remain unchanged return paths.
-The ecosystem-orientation grill is parked.
+The ecosystem grill and library extraction remain parked.
 
 Return to the approved [authoring-to-practice programme](2026-11-08-authoring-to-practice-loops.md)
 after this bounded checkpoint. Its dependencies and human gates remain intact.

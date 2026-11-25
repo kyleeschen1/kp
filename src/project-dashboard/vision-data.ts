@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-persistent-chat",
-    title: "Resume a persistent conversation inside the KP editor",
+    id: "kp-rich-chat",
+    title: "Write and annotate rich conversations inside KP",
     approval: "approved",
-    contractId: "run-contract.kp.persistent-chat-20261125",
-    finish: "Connect in the fraction editor, send and follow up in one saved Codex thread, interrupt, and return after reload or restart with conversation and draft retained. Review one exemplar before broader promotion.",
-    source: { label: "Approved persistent chat", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" }
+    contractId: "run-contract.kp.rich-chat-20261125",
+    finish: "Use a rich composer and formatted transcript, attach comments and tags to selected passages, and reopen saved notes with their original context. Preserve the accepted conversation and review one chat exemplar before generalization.",
+    source: { label: "Approved rich chat exemplar", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Open http://127.0.0.1:8000/experiments/fraction-notebook/ and choose Chat, then Connect. Send a question, follow up and reload; judge whether the saved conversation makes it easy to return to the work. This first discussion surface has read-only project access and no automatic notebook attachment or edits. Real inference starts only on explicit Send.",
+  nextJudgment: "Discuss the requested single-column chat sketch: output motions, a retained draft appearing in Insert mode, shared reader formatting and an on-demand Ctrl-C menu. The checked rich-chat candidate at http://127.0.0.1:8000/experiments/fraction-notebook/ preserves notes and recovery, but its toolbars are not accepted. Agree the interaction before revising the exemplar; topics and branches remain design questions.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The fraction notebook's structure, focused workflow and style refinement are accepted. The independent object adapter preserves KP validation and preview ownership. The user selects persistent conversation in KP before contextual object revision. General authoring speed, extraction and learning remain unproved.",
-      evidence: { label: "Notebook chat boundary and preserved foundations", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" },
+      established: "The fraction notebook and persistent conversation are accepted. The independent object adapter preserves KP validation and preview ownership. Rich chat and passage notes are the approved successor; broader Spindle/library extraction and contextual object revision remain separate return paths.",
+      evidence: { label: "Rich chat boundary and preserved foundations", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" },
       outcome: {
         authority: "approved",
-        id: "persistent-editor-conversation", title: "Keep a conversation while working in the KP editor",
-        finish: "One local Codex thread supports streaming, follow-up, interruption and explicit resume, with saved drafts and uncertain-delivery review. Closing chat preserves the notebook and native player.",
-        excludes: "Automatic object patches, publication, broad editor extraction, desktop profile migration, paid test inference or whole-book infrastructure.",
-        source: { label: "Approved editor conversation", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" }
+        id: "annotated-editor-conversation", title: "Keep notes and exact passage references alongside a rich conversation",
+        finish: "One Chat panel provides independent rich composer and comment editors, formatted replies, saved notes and passage tags, with clear recovery when a referenced passage changes. Existing send and resume rules remain intact.",
+        excludes: "New session management, automatic object patches, publication, general library extraction, desktop migration, paid test inference or whole-book infrastructure.",
+        source: { label: "Approved chat annotation successor", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Persistent conversation in the KP editor accepted",
+      scope: "The user confirmed the local Codex conversation works. Its saved thread, drafts, streaming and explicit recovery remain the foundation. Rich editing and passage notes are a separate successor milestone.",
+      source: { label: "Persistent chat and user acceptance", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" }
+    },
     {
       title: "Fraction notebook style comparison and rhythm accepted",
       scope: "Shared light Paper, named color swatches, object/property style comparison, masthead elevation and parent-owned spacing refine the focused notebook exemplar. This accepts its presentation, not general editor extraction.",
@@ -384,6 +389,13 @@ export const projectVision: ProjectVision = {
       after: "The user explicitly selects persistent general chat inside the KP editor and authorizes borrowing existing session/recovery behavior. One local bridge serves the fraction editor exemplar; notebook and rendering authority stay separate.",
       reason: "Establish a durable conversation where the user is already working before narrowing it to automatic object proposals. Preserve the independent adapter and broader authoring-to-practice return path.",
       source: { label: "Approved persistent chat implementation", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" }
+    },
+    {
+      id: "select-rich-kp-chat", on: "2026-11-25",
+      before: "Persistent chat is accepted. Exploration of Spindle, reusable interaction libraries and queryable records raises broader architecture options.",
+      after: "The user returns to the existing KP Chat window for one rich editor exemplar with small notes, passage comments and tags. Share local profiles while keeping storage and model history separate; broader extraction stays a later choice.",
+      reason: "Make the current conversation useful for writing and returning to exact context without waiting for a general workspace or library migration. Preserve the accepted chat milestone and wider authoring programme.",
+      source: { label: "Approved rich chat scope", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" }
     }
   ]
 };

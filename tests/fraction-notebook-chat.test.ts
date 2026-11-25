@@ -9,8 +9,88 @@ import { chatHttp } from '../server/chat/http.ts';
 import { CodexTransport, RpcRejection } from '../server/chat/transport.ts';
 import { emptyChat, readChatAction, readChatRecord } from '../src/editor-chat/protocol.ts';
 import { ChatPeer, MemoryChatStore, drain } from './fixtures/editor-chat.ts';
+import { passageTarget, resolvePassage } from '../src/editor-chat/annotation-target.ts';
+import { parseMarkdown, serializeMarkdown, textIndex, safeLink } from '../src/editor-chat/rich-document.ts';
+import { readAnnotationDraft, type AnnotationDraft } from '../src/editor-chat/annotations.ts';
 
 const setup = () => { const store = new MemoryChatStore(), peer = new ChatPeer(); return { store, peer, service: new ChatService(store, peer.factory, process.cwd()) }; };
+test('legacy conversations migrate without rewriting draft text or model history', () => {
+  const { annotations: _notes, ...legacy } = emptyChat();
+  const record = readChatRecord({ ...legacy, version: 1, draft: '**Keep** these bytes\n\n' });
+  assert.equal(record.version, 2); assert.equal(record.draft, '**Keep** these bytes\n\n'); assert.deepEqual(record.annotations, []);
+  assert.throws(() => readChatRecord({ ...legacy, version: 2 }), /saved notes/);
+});
+test('rich text round trips CommonMark structures and rejects active links', () => {
+  const source = '# A heading\n\nA **bold** and *gentle* [link](https://example.com).\n\n- first\n- second\n\n```js\nconst n = 2;\n```';
+  const doc = parseMarkdown(source);
+  assert.deepEqual(parseMarkdown(serializeMarkdown(doc)).toJSON(), doc.toJSON());
+  assert.equal(safeLink('javascript:alert(1)'), null); assert.equal(safeLink('data:text/html,hello'), null);
+  assert.equal(safeLink('java\nscript:alert(1)'), null); assert.equal(safeLink('//external.example/pixel'), null);
+  assert.equal(safeLink('https://example.com'), 'https://example.com');
+  assert.equal(parseMarkdown('<script>alert(1)</script>').textContent, '<script>alert(1)</script>');
+});
+test('math delimiters round trip while currency, incomplete output and code retain their text', () => {
+  for (const source of [String.raw`An inline $x^2$ or \(y+1\).`, String.raw`$$\frac{1}{2}$$`, '\\[\n\\sum_{i=1}^n i\n\\]']) {
+    const doc = parseMarkdown(source);
+    assert.deepEqual(parseMarkdown(serializeMarkdown(doc)).toJSON(), doc.toJSON());
+  }
+  for (const source of ['Costs $5 and $10.', 'An unfinished $x^2', String.raw`Unfinished \(x+1`, '`$x^2$`']) {
+    const types: string[] = []; parseMarkdown(source).descendants(node => { types.push(node.type.name); });
+    assert.equal(types.some(type => type.startsWith('math_')), false);
+  }
+  const fenced = parseMarkdown('```tex\n$x^2$\n```'); assert.equal(fenced.firstChild?.type.name, 'code_block'); assert.equal(fenced.textContent, '$x^2$');
+  const copied = parseMarkdown('An inline $x^2$.\n\n$$\\frac{1}{2}$$');
+  assert.match(copied.textBetween(0, copied.content.size, '\n'), /\\\(x\^2\\\)/);
+  assert.match(copied.textBetween(0, copied.content.size, '\n'), /\\\[\\frac\{1\}\{2\}\\\]/);
+});
+test('passage anchors survive formatting and unique moves; ambiguous, removed and clipped targets stay explicit', () => {
+  const message = { id: 'answer-1', role: 'assistant' as const, complete: true, clipped: false, text: 'A **stable phrase** here.' };
+  const doc = parseMarkdown(message.text), index = textIndex(doc), start = index.text.indexOf('stable phrase');
+  const target = passageTarget('thread-1', message, index.positions[start]!, index.positions[start + 12]! + 1);
+  assert.equal(target.quote, 'stable phrase');
+  for (const text of ['A *stable phrase* here.', 'New introduction.\n\nA stable phrase here.']) assert.equal(resolvePassage(target, 'thread-1', { ...message, text }).status, 'attached');
+  assert.equal(resolvePassage(target, 'thread-1', { ...message, text: 'stable phrase and stable phrase' }).status, 'changed');
+  assert.equal(resolvePassage(target, 'thread-1', { ...message, text: 'Completely different' }).status, 'changed');
+  assert.equal(resolvePassage(target, 'other-thread', message).status, 'unavailable');
+  assert.equal(resolvePassage(target, 'thread-1', undefined).status, 'unavailable');
+  assert.throws(() => passageTarget('thread-1', { ...message, clipped: true }, target.from, target.to), /full response/);
+  assert.throws(() => passageTarget('thread-1', { ...message, complete: false }, target.from, target.to), /full response/);
+});
+test('notes and tags persist independently; CAS and archived identities prevent stale overwrites and resurrection', async () => {
+  const { service, store, peer } = setup();
+  const draft: AnnotationDraft = { id: 'note-1', target: { kind: 'conversation' }, body: '**A thought**', tags: ['plan'] };
+  const saved = await service.action({ kind: 'annotation-save', revision: 0, annotation: draft });
+  assert.equal(saved.annotations[0]?.revision, 1); assert.equal(peer.calls.length, 0);
+  await assert.rejects(service.action({ kind: 'annotation-save', revision: 0, annotation: { ...draft, body: 'Stale' } }), /another tab/);
+  await service.close();
+  const resumed = new ChatService(store, peer.factory, process.cwd());
+  assert.equal((await resumed.snapshot()).annotations[0]?.body, '**A thought**');
+  await resumed.action({ kind: 'annotation-delete', id: draft.id, revision: 1 });
+  await assert.rejects(resumed.action({ kind: 'annotation-save', revision: 0, annotation: draft }), /another tab/);
+  assert.equal((await resumed.snapshot()).annotations[0]?.archived, true); assert.equal(peer.calls.length, 0);
+  await resumed.close();
+});
+test('comments verify exact source selection without changing or resending model messages', async () => {
+  const { service, store, peer } = setup();
+  const message = { id: 'answer-1', role: 'assistant' as const, complete: true, clipped: false, text: 'Remember the whole plan.' };
+  store.data = { ...emptyChat(), threadId: 'thread-1', messages: [message] };
+  const target = passageTarget('thread-1', message, 1, 9);
+  const annotation: AnnotationDraft = { id: 'comment-1', target, body: 'An attached comment', tags: ['orientation'] };
+  await assert.rejects(service.action({ kind: 'annotation-save', revision: 0, annotation: { ...annotation, target: { ...target, quote: 'Wrong quote' } } }), /passage changed/);
+  await service.action({ kind: 'annotation-save', revision: 0, annotation });
+  const snapshot = await service.snapshot(); assert.deepEqual(snapshot.messages, [message]); assert.equal(peer.calls.length, 0);
+  await assert.rejects(service.action({ kind: 'annotation-save', revision: 1, annotation: { ...annotation, target: { kind: 'conversation' } } }), /original passage/);
+  await service.close();
+});
+test('annotation validation bounds data and a failed storage write does not publish a phantom note', async () => {
+  assert.throws(() => readAnnotationDraft({ id: 'x', target: { kind: 'conversation' }, body: '', tags: ['x'.repeat(41)] }), /oversized/);
+  assert.throws(() => readChatAction({ kind: 'annotation-save', revision: -1, annotation: {} }), /revision/);
+  const { service, store } = setup(); await service.snapshot();
+  store.save = async () => { throw new Error('Disk full'); };
+  await assert.rejects(service.action({ kind: 'annotation-save', revision: 0,
+    annotation: { id: 'note-1', target: { kind: 'conversation' }, body: 'Keep local', tags: [] } }), /Disk full/);
+  assert.deepEqual((await service.snapshot()).annotations, []); await service.close();
+});
 test('saved thread resumes after server replacement; sends are idempotent and history stays native', async () => {
   const { store, peer, service } = setup();
   await service.action({ kind: 'connect' });

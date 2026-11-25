@@ -1,0 +1,48 @@
+{
+  "id": "run-contract.kp.rich-chat-20261125",
+  "kind": "run-contract",
+  "title": "Rich chat and passage notes",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: checked rich chat candidate retained for review. The proposed Insert-mode composer and Ctrl-C transient have not been implemented.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.rich-chat-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-kp-rich-chat.md"
+    }
+  ],
+  "verification": [
+    "npm run test:editor-chat",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:editor-chat"
+  ],
+  "revisitWhen": [
+    "After the requested interaction design discussion."
+  ],
+  "allowedWork": [
+    "Rich chat profiles, notes, annotations and focused verification"
+  ],
+  "disallowedWork": [
+    "Standalone workspace, session manager, automatic sends, notebook migration or publication"
+  ],
+  "goal": "Review one persistent rich chat with comments tags and notes",
+  "target": "task.kp.rich-chat-20261125",
+  "slices": [
+    {
+      "id": "foundation",
+      "title": "Rich editor and durable annotation boundary",
+      "summary": "Shared ProseMirror profiles, Markdown source and durable annotation boundary implemented; focused unit and TypeScript checks pass.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Integrated chat and visual review packet",
+      "summary": "Integrated rich chat candidate and focused preservation checks pass. Current presentation remains unaccepted; user requests a keyboard-first column and transient design discussion before further implementation.",
+      "status": "complete"
+    }
+  ]
+}

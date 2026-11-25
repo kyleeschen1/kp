@@ -2,9 +2,9 @@
   "id": "task.kp.persistent-chat-20261125",
   "kind": "task",
   "title": "Resume a persistent conversation inside the KP editor",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: persistent Chat candidate implemented and checked. Author should Send a real question, follow up, reload and judge returning to the conversation.",
+  "summary": "User confirmed the persistent chat works. The rich chat request is a separately bounded successor.",
   "sourceRefs": [
     {
       "kind": "file",

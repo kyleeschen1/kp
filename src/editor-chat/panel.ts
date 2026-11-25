@@ -1,4 +1,8 @@
 import { draftLimit, readChatSnapshot, type ChatAction, type ChatSnapshot } from './protocol.ts';
+import type { PassageTarget } from './annotations.ts';
+import { mountRichText } from './rich-text.ts';
+import { mountTranscript } from './transcript.ts';
+import { mountNotes } from './notes.ts';
 import './style.css';
 
 const recoveryKey = 'kp.editor-chat.unsaved.v1';
@@ -8,6 +12,16 @@ const node = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', tex
 /** One mount controls presentation only. The server owns the session, so closing
  * or disposing this panel never disconnects or resends a conversation. */
 export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () => void) {
+  // A closed, never-opened chat has no editor views or listeners to maintain.
+  const launcher = node('button', '', 'Chat'); launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false');
+  actions.append(launcher);
+  let panel: ReturnType<typeof mountChatPanel> | undefined;
+  const open = () => { launcher.remove(); panel ??= mountChatPanel(body, actions, layout); panel.open(); };
+  launcher.onclick = open;
+  try { if (sessionStorage.getItem('kp.editor-chat.open') === 'true') open(); } catch { /* Optional presentation preference. */ }
+  return { dispose() { panel?.dispose(); launcher.remove(); } };
+}
+function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => void) {
   const toggle = node('button', '', 'Chat'); toggle.type = 'button'; toggle.setAttribute('aria-expanded', 'false');
   const panel = node('aside', 'kp-chat'); panel.id = 'kp-chat'; panel.hidden = true; panel.setAttribute('aria-label', 'Persistent chat');
   toggle.setAttribute('aria-controls', panel.id);
@@ -19,10 +33,31 @@ export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () =>
   const history = node('div', 'kp-chat-history'); history.setAttribute('role', 'log'); history.setAttribute('aria-label', 'Conversation messages'); history.setAttribute('aria-live', 'off');
   const empty = node('p', 'kp-chat-empty', 'Start a conversation here, then return to the same thread later.');
   const clipped = node('p', 'kp-chat-context', 'Showing recent messages. Codex retains the saved thread history.'); clipped.hidden = true;
-  const draft = node('textarea', 'kp-chat-draft'); draft.setAttribute('aria-label', 'Your message'); draft.placeholder = 'Ask or continue the conversation…'; draft.maxLength = draftLimit;
+  const draftHost = node('div', 'kp-chat-draft');
+  const composer = mountRichText(draftHost, { profile: 'composer', label: 'Your message', limit: draftLimit,
+    onChange: draftChanged, onSubmit: sendDraft, onSave: saveDraft });
+  const draft = { get value() { return composer.value(); }, set value(text: string) { composer.setText(text); },
+    focus: composer.focus, set disabled(value: boolean) { composer.setDisabled(value); } };
   const saved = node('p', 'kp-chat-save', ''); saved.setAttribute('role', 'status');
   const controls = node('div', 'kp-chat-controls');
   const makeButton = (label: string, run: () => void) => { const button = node('button', '', label); button.type = 'button'; button.onclick = run; return button; };
+  let selection: PassageTarget | null = null, notesOpen = false;
+  const noteTools = node('div', 'kp-chat-note-tools'), selectionHint = node('p', 'kp-chat-selection'); selectionHint.hidden = true;
+  const notesToggle = makeButton('Notes (0)', () => showNotes(!notesOpen)); notesToggle.setAttribute('aria-expanded', 'false');
+  const addNote = makeButton('Add note', () => { showNotes(true); notes.create(); });
+  const comment = makeButton('Comment selection', () => { if (selection) { const target = selection; showNotes(true); notes.create(target); } });
+  const tag = makeButton('Tag selection', () => { if (selection) { const target = selection; showNotes(true); notes.create(target, true); } });
+  comment.disabled = true; tag.disabled = true; noteTools.append(notesToggle, addNote, comment, tag);
+  const notesHost = node('div', 'kp-chat-notes'); notesHost.hidden = true;
+  const transcript = mountTranscript(history, target => {
+    selection = target; comment.disabled = !target; tag.disabled = !target;
+    selectionHint.hidden = !target || notesOpen; selectionHint.textContent = target ? `Selected: “${target.quote.slice(0, 110)}${target.quote.length > 110 ? '…' : ''}”` : '';
+  }, id => { showNotes(true); notes.edit(id); });
+  const notes = mountNotes(notesHost, {
+    save: action => mutate(async () => { const snapshot = await post(action); adopt(snapshot); return snapshot; }),
+    resolve: transcript.resolve,
+    reveal: target => { showNotes(false); transcript.reveal(target); }
+  });
   const close = makeButton('Close chat', () => setOpen(false));
   const connect = makeButton('Connect', () => act({ kind: 'connect' }));
   const send = makeButton('Send', sendDraft);
@@ -36,14 +71,13 @@ export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () =>
     conflict = false; dirty = false; baseRevision = current.draftRevision; draft.value = current.draft; forget(); paint();
   }); loadSaved.hidden = true;
   heading.append(title, close); controls.append(connect, send, interrupt, disconnect, save);
-  panel.append(heading, context, status, thread, clipped, history, empty, draft, saved, controls, acknowledge, loadSaved);
+  panel.append(heading, context, status, thread, noteTools, selectionHint, clipped, history, notesHost, empty, draftHost, saved, controls, acknowledge, loadSaved);
   body.append(panel); actions.append(toggle);
   let current: ChatSnapshot | undefined, dirty = false, conflict = false, busy = false, disposed = false;
   let generation = 0, baseRevision = 0, mutation = 0, pollingGeneration = 0, localNotice = '', etag = '', hydrated = false;
   let polling: ReturnType<typeof setTimeout> | undefined, saveTimer: ReturnType<typeof setTimeout> | undefined;
   let queue: Promise<void> = Promise.resolve();
   let refreshController: AbortController | undefined;
-  const rows = new Map<string, { element: HTMLElement; content: HTMLElement; label: HTMLElement }>();
 
   function forget() { try { sessionStorage.removeItem(recoveryKey); } catch { /* Server already saved it. */ } }
 
@@ -89,22 +123,16 @@ export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () =>
     acknowledge.hidden = snapshot?.phase !== 'uncertain'; acknowledge.disabled = busy || !snapshot?.canAcknowledge;
     loadSaved.hidden = !conflict;
     if (!snapshot) return;
-    clipped.hidden = !snapshot.historyClipped; empty.hidden = snapshot.messages.length !== 0;
+    clipped.hidden = notesOpen || !snapshot.historyClipped; empty.hidden = notesOpen || snapshot.messages.length !== 0;
     const following = history.scrollHeight - history.scrollTop - history.clientHeight < 50;
-    const ids = new Set(snapshot.messages.map(m => m.id));
-    for (const [id, row] of rows) if (!ids.has(id)) { row.element.remove(); rows.delete(id); }
-    for (const message of snapshot.messages) {
-      let row = rows.get(message.id);
-      if (!row) {
-        const element = node('article', 'kp-chat-message'), label = node('div', 'kp-chat-speaker'), content = node('div', 'kp-chat-text');
-        element.dataset['messageId'] = message.id; element.append(label, content); history.append(element);
-        row = { element, label, content }; rows.set(message.id, row);
-      }
-      const label = `${message.role === 'user' ? 'You' : 'Codex'}${message.complete ? '' : ' · responding'}${message.clipped ? ' · display shortened' : ''}`;
-      if (row.label.textContent !== label) row.label.textContent = label;
-      if (row.content.textContent !== message.text) row.content.textContent = message.text;
-    }
+    transcript.update(snapshot); notes.update(snapshot);
+    notesToggle.textContent = notesOpen ? 'Conversation' : `Notes (${snapshot.annotations.filter(note => !note.archived).length})${notes.dirty() ? ' · draft' : ''}`;
     if (following) history.scrollTop = history.scrollHeight;
+  }
+  function showNotes(open: boolean) {
+    notesOpen = open; notesHost.hidden = !open; history.hidden = open; draftHost.hidden = open; saved.hidden = open; controls.hidden = open;
+    notesToggle.setAttribute('aria-expanded', String(open)); selectionHint.hidden = open || !selection;
+    paint(); layout();
   }
   async function post(action: ChatAction) {
     if (!current) throw new Error('Wait for the saved conversation to load.');
@@ -116,13 +144,17 @@ export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () =>
     }
     etag = ''; return readChatSnapshot(await response.json());
   }
-  function enqueue(operation: () => Promise<void>) {
-    queue = queue.then(async () => {
-      if (disposed) return; busy = true; mutation++; paint();
-      try { await operation(); }
-      catch (error) { localNotice = `${error instanceof Error ? error.message : String(error)} Your local text is retained.`; remember(); }
+  function mutate<T>(operation: () => Promise<T>): Promise<T> {
+    const next = queue.then(async () => {
+      if (disposed) throw new Error('Chat panel closed.'); busy = true; mutation++; paint();
+      try { return await operation(); }
       finally { busy = false; mutation++; paint(); }
     });
+    queue = next.then(() => {}, () => {}); return next;
+  }
+  function enqueue(operation: () => Promise<void>) {
+    void mutate(operation).catch(error => { if (disposed) return;
+      localNotice = `${error instanceof Error ? error.message : String(error)} Your local text is retained.`; remember(); paint(); });
   }
   function saveDraft() {
     enqueue(async () => {
@@ -185,14 +217,10 @@ export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () =>
     layout();
   }
   toggle.onclick = () => setOpen(Boolean(panel.hidden));
-  draft.oninput = () => { if (!dirty && current) baseRevision = current.draftRevision;
-    generation++; dirty = true; localNotice = ''; remember(); clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 200); paint(); };
-  draft.onkeydown = event => {
-    if ((event.metaKey || event.ctrlKey) && event.key === 'Enter' && !event.isComposing) { event.preventDefault(); event.stopPropagation(); sendDraft(); }
-  };
-  const beforeUnload = (event: BeforeUnloadEvent) => { if (dirty) { remember(); event.preventDefault(); event.returnValue = ''; } };
+  function draftChanged() { if (!dirty && current) baseRevision = current.draftRevision;
+    generation++; dirty = true; localNotice = ''; remember(); clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 200); paint(); }
+  const beforeUnload = (event: BeforeUnloadEvent) => { if (dirty || notes.dirty()) { remember(); notes.remember(); event.preventDefault(); event.returnValue = ''; } };
   window.addEventListener('beforeunload', beforeUnload);
-  try { if (sessionStorage.getItem('kp.editor-chat.open') === 'true') setOpen(true); } catch { /* Optional preference. */ }
-  return { dispose() { disposed = true; clearTimeout(polling); clearTimeout(saveTimer); refreshController?.abort();
-    window.removeEventListener('beforeunload', beforeUnload); if (dirty) remember(); panel.remove(); toggle.remove(); } };
+  return { open() { setOpen(true); }, dispose() { disposed = true; clearTimeout(polling); clearTimeout(saveTimer); refreshController?.abort();
+    window.removeEventListener('beforeunload', beforeUnload); if (dirty) remember(); notes.dispose(); transcript.dispose(); composer.dispose(); panel.remove(); toggle.remove(); } };
 }

@@ -10,7 +10,7 @@ export const vimKey = new PluginKey<Mode>('fraction-vim');
 export const setVimMode = (mode: Mode): Command => (state, dispatch) => {
   dispatch?.(state.tr.setMeta(vimKey, mode)); return true;
 };
-export function proseVim() {
+export function proseVim(options: { openBelow?: Command; readOnly?: boolean } = {}) {
   let pendingG = false;
   return new Plugin<Mode>({
     key: vimKey,
@@ -27,7 +27,8 @@ export function proseVim() {
         const { state } = view, mode = vimKey.getState(state), run = (command: Command) => command(state, view.dispatch, view);
         if (event.key === 'Escape') { pendingG = false; return run(setVimMode('normal')); }
         if (mode === 'insert' || event.metaKey || event.altKey) return false;
-        if (event.ctrlKey) return event.key === 'r' ? run(redo) : false;
+        if (event.ctrlKey) return event.key === 'r' ? options.readOnly || run(redo) : false;
+        if (options.readOnly && ['i', 'a', 'I', 'A', 'o', 'u', 'x', 'd'].includes(event.key)) return true;
         const { $head, anchor, head } = state.selection;
         const move = (pos: number) => {
           const near = Selection.near(state.doc.resolve(Math.max(0, Math.min(state.doc.content.size, pos))));
@@ -60,7 +61,7 @@ export function proseVim() {
             const before = $head.parent.textBetween(0, $head.parentOffset, ' ', ' ');
             return move(head - (before.match(/\S+\s*$/)?.[0].length ?? (before.length || 2)));
           }
-          case 'o': if (run(addBlock)) return setVimMode('insert')(view.state, view.dispatch); return true;
+          case 'o': if (run(options.openBelow ?? addBlock)) return setVimMode('insert')(view.state, view.dispatch); return true;
           case 'u': return run(undo);
           case 'x': case 'd':
             if (mode === 'visual' && !state.selection.empty) { view.dispatch(state.tr.deleteSelection().setMeta(vimKey, 'normal')); return true; }

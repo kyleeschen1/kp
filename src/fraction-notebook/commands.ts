@@ -24,7 +24,9 @@ export const bindings = [
   ['JSON', '/ / ? · n / N', 'CodeMirror Vim search forward/backward and repeat'],
   ['JSON', 'Shift-Enter', 'Run this animation source'], ['JSON', 'Cmd/Ctrl-Enter', 'Close buffer, retaining draft'],
   ['Inline source', 'Enter / Tab / Esc', 'Finish link/math source and return to prose; ordinary text-input keys apply'],
-  ['Chat', 'Cmd/Ctrl-Enter', 'Send the current message; ordinary text-input keys apply'],
+  ['Chat', 'i / Esc · v · h j k l · w b · u', 'Rich composer, transcript and notes use the prose Vim subset'],
+  ['Chat', 'Cmd/Ctrl-Enter', 'Send only from the composer; save from a note'],
+  ['Chat', ':h / :w / :source', 'Local help / save / Markdown source; CodeMirror Vim in source'],
   ...exCommands.map(command => ['Both', `:${command.names.join(' / :')}`, command.description]),
   ['Both', ':set number / :set nonumber', 'Show absolute line numbers / hide them'],
   ['Both', ':set relativenumber', 'Show relative line numbers around the cursor']
@@ -54,6 +56,8 @@ export function mountCommands(host: HTMLElement, view: EditorView, actions: {
   const help = () => { panel.hidden = false; scope.textContent = `Active buffer: ${source ? 'animation JSON' : 'rich document'}. Prose has a bounded Vim subset; JSON uses CodeMirror Vim. Listed Ex commands are workspace commands; other Ex commands are not enabled.`; draw(); search.focus(); };
   search.oninput = draw; close.onclick = () => { panel.hidden = true; restore(); };
   const onKey = (event: KeyboardEvent) => {
+    // Chat editors own their command scope, including embedded CodeMirror.
+    if (event.target instanceof Element && event.target.closest('.kp-chat')) return;
     if (event.key === 'Escape' && (!bar.hidden || !panel.hidden)) { event.preventDefault(); event.stopPropagation(); bar.hidden = true; panel.hidden = true; restore(); return; }
     if (event.key !== ':' || event.ctrlKey || event.metaKey || event.altKey || event.isComposing) return;
     const target = event.target instanceof HTMLElement ? event.target : null;

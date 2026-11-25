@@ -765,6 +765,7 @@
   "devDependencies": {
     "@playwright/test": "^1.61.1",
     "@sveltejs/vite-plugin-svelte": "7.2.0",
+    "@types/markdown-it": "^14.2.0",
     "@types/node": "^26.1.0",
     "@types/three": "^0.185.0",
     "mdast-util-from-markdown": "^2.0.3",
@@ -786,10 +787,13 @@
     "@lezer/highlight": "^1.2.5",
     "@replit/codemirror-vim": "^6.4.0",
     "katex": "^0.17.0",
+    "markdown-it": "^14.3.3",
     "prosemirror-commands": "^1.7.2",
     "prosemirror-history": "^1.5.2",
     "prosemirror-keymap": "^1.2.3",
+    "prosemirror-markdown": "^1.14.0",
     "prosemirror-model": "^1.25.13",
+    "prosemirror-schema-list": "^1.6.1",
     "prosemirror-state": "^1.4.4",
     "prosemirror-view": "^1.43.1",
     "three": "^0.185.1"

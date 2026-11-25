@@ -143,3 +143,11 @@ Candidate status: **HUMAN_CHECKPOINT** for this single conversation experience.
 Implementation evidence does not accept its presentation or authorize general
 promotion. The next action is the explicit model Send and return-to-chat trial
 at the URL above, followed by the user's judgment.
+
+## Subsequent acceptance
+
+The user confirmed “it works!” and then explored rich chat, the independent
+Spindle host, and possible reusable libraries. “Implement this for the chat
+window” now approves the [rich chat successor](2026-11-25-kp-rich-chat.md).
+The original persistent-conversation milestone is accepted at its bounded scope;
+its finish line is preserved rather than expanded to include the successor.

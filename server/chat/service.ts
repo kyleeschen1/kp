@@ -4,6 +4,8 @@ import { emptyChat, historyLimit, identity, messageLimit, record, text, type Cha
   type ChatPhase, type ChatRecord, type ChatSnapshot } from '../../src/editor-chat/protocol.ts';
 import type { ChatStore } from './store.ts';
 import { RpcRejection, type ChatTransport, type TransportFactory } from './transport.ts';
+import { readAnnotations, type AnnotationDraft } from '../../src/editor-chat/annotations.ts';
+import { passageTarget } from '../../src/editor-chat/annotation-target.ts';
 
 export class ChatConflict extends Error {}
 /** Adapted from spindle.workbench.live/recovery and codex-session: one session
@@ -57,6 +59,13 @@ export class ChatService {
           case 'draft':
             if (action.revision !== this.data.draftRevision) throw new ChatConflict('The saved draft changed in another tab. Your text is retained; copy it before loading the saved draft.');
             this.data.draft = action.text; this.data.draftRevision++; await this.persist(); break;
+          case 'annotation-save': await this.saveAnnotation(action.annotation, action.revision); break;
+          case 'annotation-delete': {
+            const note = this.data.annotations.find(note => note.id === action.id);
+            if (!note || note.archived || note.revision !== action.revision) throw new ChatConflict('This note changed in another tab. Your local text is retained.');
+            await this.saveAnnotations(this.data.annotations.map(value => value.id === note.id ? { ...value, revision: value.revision + 1, archived: true } : value));
+            break;
+          }
           case 'connect': await this.connect(); break;
           case 'send': await this.send(action.id, action.revision); break;
           case 'interrupt':
@@ -82,6 +91,26 @@ export class ChatService {
       this.sequence++;
       return this.snapshot();
     });
+  }
+  private async saveAnnotations(annotations: ChatRecord['annotations']) {
+    const before = this.data.annotations;
+    this.data.annotations = readAnnotations(annotations);
+    try { await this.persist(); } catch (error) { this.data.annotations = before; throw error; }
+  }
+  private async saveAnnotation(draft: AnnotationDraft, revision: number) {
+    const previous = this.data.annotations.find(note => note.id === draft.id);
+    if (previous ? previous.archived || previous.revision !== revision : revision !== 0)
+      throw new ChatConflict('This note changed in another tab. Your local text is retained.');
+    if (!draft.body.trim() && !draft.tags.length) throw new Error('Write a note or add a tag before saving.');
+    if (previous && JSON.stringify(previous.target) !== JSON.stringify(draft.target)) throw new Error('A saved comment keeps its original passage reference.');
+    if (!previous && draft.target.kind === 'passage') {
+      const target = draft.target, message = this.data.messages.find(message => message.id === target.messageId);
+      if (!message || target.threadId !== this.data.threadId) throw new ChatConflict('The selected message is no longer available. Your comment is retained.');
+      const current = passageTarget(target.threadId, message, target.from, target.to);
+      if (JSON.stringify(current) !== JSON.stringify(target)) throw new ChatConflict('The selected passage changed. Select it again; your comment is retained.');
+    }
+    const note = { ...draft, revision: revision + 1, archived: false };
+    await this.saveAnnotations(previous ? this.data.annotations.map(value => value.id === note.id ? note : value) : [...this.data.annotations, note]);
   }
   private async connect() {
     if (this.rpc && (this.phase === 'ready' || this.phase === 'running' || this.phase === 'sending')) return;

@@ -35,9 +35,10 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Style comparison and rhythm](../reviews/2026-11-24-notebook-style-comparison.md)
   is accepted. The [workbench object adapter](../reviews/2026-11-25-workbench-kp-object-boundary.md)
   keeps drafts/commands independent of KP validation/rendering.
-  The user now approves [persistent chat in the KP editor](../reviews/2026-11-25-kp-persistent-chat.md),
-  borrowing its session/recovery rules through a local bridge. Review one conversation,
-  follow-up and reload; automatic notebook edits and broader extraction remain excluded.
+  [Persistent chat](../reviews/2026-11-25-kp-persistent-chat.md) is accepted.
+  The user approves [rich chat with notes and passage comments/tags](../reviews/2026-11-25-kp-rich-chat.md).
+  Review rich chat and return to annotated text; preserve recovery.
+  Automatic notebook edits and broader extraction remain excluded.
   Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
