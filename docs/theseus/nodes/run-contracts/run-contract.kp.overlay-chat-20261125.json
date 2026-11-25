@@ -1,0 +1,42 @@
+{
+  "id": "run-contract.kp.overlay-chat-20261125",
+  "kind": "run-contract",
+  "title": "Full-width editor and sliding chat",
+  "status": "deferred",
+  "summary": "STOP_CONDITION: user rejected the visible candidate; do not continue or promote it. Preserve the failure and rollback context.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.overlay-chat-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-overlay-chat.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:editor-chat",
+    "npm run visual:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "Only explicit user selection of this rejected treatment."
+  ],
+  "allowedWork": [
+    "Global masthead, host geometry, visibility lifecycle and scoped preservation checks"
+  ],
+  "disallowedWork": [
+    "Semantic model changes, general window framework, native inference or publication"
+  ],
+  "goal": "Review one full-width KP canvas, global masthead and reversible translucent chat overlay",
+  "target": "task.kp.overlay-chat-20261125",
+  "slices": [
+    {
+      "id": "overlay",
+      "title": "Sliding overlay exemplar",
+      "summary": "Refining the existing host while preserving mounted buffers, native preview and persistence.",
+      "status": "in-progress"
+    }
+  ]
+}

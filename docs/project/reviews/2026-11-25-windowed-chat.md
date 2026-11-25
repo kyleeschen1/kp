@@ -2,6 +2,12 @@
 
 Status: HUMAN_CHECKPOINT — implemented and checked; visual acceptance is open.
 
+Rollback checkpoint: the subsequent [sliding overlay](2026-11-25-overlay-chat.md)
+was rejected and removed. This commit's presentation (`4850ae6fb`) is restored.
+The user's requested earlier, left-entry layout is not uniquely identified;
+clarification distinguishes this version from the pre-window editor/chat layout.
+The restored focus/reload and topic/branch browser cases both pass.
+
 Approved by “implement” after the window-layout discussion. This succeeds the
 checked keyboard-chat candidate: hiding the composer is explicitly superseded.
 Keep its session, annotation, context and branch recovery guarantees.

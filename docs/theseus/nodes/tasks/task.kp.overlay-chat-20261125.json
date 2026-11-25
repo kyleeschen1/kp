@@ -1,0 +1,33 @@
+{
+  "id": "task.kp.overlay-chat-20261125",
+  "kind": "task",
+  "title": "Keep KP full width beneath sliding translucent chat",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "STOP_CONDITION: user rejected the sliding transparent candidate and requested rollback. Source restored to the preceding checked window version pending clarification of the earlier target.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-overlay-chat.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "failed",
+      "scope": "Rejected sliding overlay candidate",
+      "checkedAt": "2026-11-25T15:42:44.967Z",
+      "notes": "15 of 16 cases passed. After reload, a transient opened during the slide retained an offscreen horizontal position, leaving Branches outside the viewport. The user rejected the visual treatment and requested rollback before further repair. Candidate source changes were restored to the last committed window version."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep \"layered windows|topics, explicit\"",
+      "status": "passed",
+      "scope": "Rollback to preceding checked presentation",
+      "checkedAt": "2026-11-25T15:45:02.166Z",
+      "notes": "Both restored cases pass: window focus and reload preserve buffers, and the topic/branch command flow is accessible. This verifies the rollback only, not the rejected sliding candidate."
+    }
+  ],
+  "revisitWhen": [
+    "Only explicit user selection of this treatment; the current request is rollback."
+  ]
+}

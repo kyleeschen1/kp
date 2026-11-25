@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Checked layered window exemplar", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat, write half a question, Escape and scroll output. Raise the KP page, inspect its animation, then return to the draft. Judge stable positions, column width, translucency and focus elevation. Reload a saved light theme to inspect startup.",
+  nextJudgment: "The right-sliding, transparent candidate was rejected and removed. The preceding window version is restored at http://127.0.0.1:8000/experiments/fraction-notebook/. Clarify whether the requested earlier layout means the pre-window editor/chat layout or this first overlapping-window version before changing presentation again.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -410,6 +410,13 @@ export const projectVision: ProjectVision = {
       after: "The user keeps the composer permanently visible, moves the masthead into the KP page window, and approves staggered translucent surfaces with stable phone-width columns and animated focus elevation.",
       reason: "Keep the writing place available while consulting output or the KP page. Repair the observed reload flash at theme startup and preserve the existing buffers, player and native sessions.",
       source: { label: "Approved persistent composition and windows", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
+    },
+    {
+      id: "reject-right-sliding-chat", on: "2026-11-25",
+      before: "The user requested a shared masthead, full-width KP and a more transparent chat sliding from the right.",
+      after: "The user rejected that visible candidate and requested an earlier layout. Its source changes were removed, restoring the preceding window version while clarifying the exact rollback target.",
+      reason: "The result did not match the desired experience. Retain draft, session and theme-startup guarantees; do not continue or promote the rejected presentation.",
+      source: { label: "Rejected overlay and rollback checkpoint", href: "docs/project/reviews/2026-11-25-overlay-chat.md" }
     }
   ]
 };

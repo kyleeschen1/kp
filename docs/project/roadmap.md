@@ -23,9 +23,9 @@ why this becomes the organizing direction and what it supersedes.
 [focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
 **Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
-**Checked:** [persistent composition and layered windows](reviews/2026-11-25-windowed-chat.md),
-building on checked [keyboard chat](reviews/2026-11-25-keyboard-chat.md).
-Review the persistent draft, focus, masthead placement and startup.
+**Restored:** [prior window candidate](reviews/2026-11-25-windowed-chat.md) after
+the [sliding overlay](reviews/2026-11-25-overlay-chat.md) was rejected.
+Clarify the earlier rollback target before further presentation changes.
 Preserve recovery, notebook JSON and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
