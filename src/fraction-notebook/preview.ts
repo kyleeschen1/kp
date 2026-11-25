@@ -14,6 +14,14 @@ export function mountFractionNotebookPreview(input: {
   let selected: string | undefined;
   let captionId: string | undefined;
   const send = (data: unknown) => window.parent.postMessage(data, window.location.origin);
+  const focusWindow = () => send({ protocol: 'kp.fraction-notebook.v1', kind: 'window-focus' });
+  const cycleWindow = (event: KeyboardEvent) => {
+    if (event.isComposing || !event.ctrlKey || event.altKey || event.metaKey || event.code !== 'Backquote') return;
+    event.preventDefault(); event.stopPropagation();
+    send({ protocol: 'kp.fraction-notebook.v1', kind: 'window-cycle', reverse: event.shiftKey });
+  };
+  document.addEventListener('pointerdown', focusWindow); document.addEventListener('focusin', focusWindow);
+  document.addEventListener('keydown', cycleWindow, true);
   const navigation = document.querySelector<HTMLDetailsElement>('.kp-rising-navigation');
   const moments = document.createElement('select'); moments.className = 'fn-preview-moments'; moments.setAttribute('aria-label', 'Animation moment');
   for (const beat of document.querySelectorAll<HTMLElement>('[data-kp-beat]')) {
@@ -143,5 +151,5 @@ export function mountFractionNotebookPreview(input: {
   };
   window.addEventListener('message', onMessage); document.addEventListener('click', onClick);
   send({ protocol: 'kp.fraction-notebook.v1', kind: 'ready' });
-  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); navigation?.removeEventListener('toggle', reportOptions); syncMoment.disconnect(); moments.remove(); } };
+  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); document.removeEventListener('pointerdown', focusWindow); document.removeEventListener('focusin', focusWindow); document.removeEventListener('keydown', cycleWindow, true); navigation?.removeEventListener('toggle', reportOptions); syncMoment.disconnect(); moments.remove(); } };
 }

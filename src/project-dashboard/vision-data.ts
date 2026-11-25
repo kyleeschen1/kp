@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-keyboard-chat",
-    title: "Read, compose and recover context in one conversation column",
+    id: "kp-windowed-chat",
+    title: "Keep the draft and reading place stable across layered windows",
     approval: "approved",
-    contractId: "run-contract.kp.keyboard-chat-20261125",
-    finish: "Navigate a quiet transcript, reveal the retained draft with Insert, and return to the same passage with Escape. Use transient commands, notes, explicit context, topics and native branches while preserving delivery and recovery. Review one chat exemplar before generalization.",
-    source: { label: "Approved keyboard chat exemplar", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" }
+    contractId: "run-contract.kp.windowed-chat-20261125",
+    finish: "Keep the draft visible in the bottom third of chat. Switch between layered KP and chat windows with stable centered columns, a page-owned masthead and theme-correct first paint. Preserve buffers, native player and conversation recovery; review one exemplar.",
+    source: { label: "Checked layered window exemplar", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, choose Chat and read an old passage. Press i, continue a draft, Escape, then i again. Judge preserved position and focus. Use C-c for notes, topics, branches and Where am I. Does the quiet column make it easier to resume an unfinished thought and recover the whole?",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat, write half a question, Escape and scroll output. Raise the KP page, inspect its animation, then return to the draft. Judge stable positions, column width, translucency and focus elevation. Reload a saved light theme to inspect startup.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The fraction notebook and persistent conversation are accepted. Rich editors and passage notes are checked, but their permanent toolbars were not accepted. The approved successor uses a quiet keyboard column and explicit context return. Independent object revision and Spindle/library extraction remain return paths.",
-      evidence: { label: "Keyboard chat boundary and preserved foundations", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" },
+      established: "The fraction notebook and persistent conversation are accepted. Keyboard chat, notes and context return are checked. The user replaces the hiding draft with permanent composition and layered windows; their visual treatment awaits review. Independent object revision and Spindle/library extraction remain return paths.",
+      evidence: { label: "Windowed chat and preserved foundations", href: "docs/project/reviews/2026-11-25-windowed-chat.md" },
       outcome: {
         authority: "approved",
-        id: "keyboard-editor-conversation", title: "Resume a thought without losing the passage or broader context",
-        finish: "One quiet Chat column retains independent reading and draft positions, exposes commands on demand, and supports explicit orientation, topics, notes and bounded native branch return. Existing send and resume guarantees remain intact.",
+        id: "persistent-composition-windows", title: "Keep writing and reading places visible and stable",
+        finish: "One two-window exemplar retains a permanent draft, independent positions and native animation while focus raises layered surfaces. Its masthead belongs to the KP page, columns stay centered and theme restoration precedes first paint.",
         excludes: "A general session workspace, automatic object patches, image-generation integration, publication, library extraction, desktop migration, paid test inference or whole-book infrastructure.",
-        source: { label: "Approved interaction successor", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" }
+        source: { label: "Approved window interaction successor", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
       }
     },
     {
@@ -403,6 +403,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves one scrolling column, a retained draft appearing in Insert mode, a Ctrl-C transient, and explicit topic, branch and orientation return paths.",
       reason: "Reduce repeated context reconstruction while preserving native conversation history, independent notes and safe draft recovery. This authorizes the bounded interaction exemplar, not a general workspace or editor-library promotion.",
       source: { label: "Approved keyboard conversation design", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" }
+    },
+    {
+      id: "select-persistent-composition-windows", on: "2026-11-25",
+      before: "The checked keyboard chat hides its composer on Escape and shares a global masthead with the notebook.",
+      after: "The user keeps the composer permanently visible, moves the masthead into the KP page window, and approves staggered translucent surfaces with stable phone-width columns and animated focus elevation.",
+      reason: "Keep the writing place available while consulting output or the KP page. Repair the observed reload flash at theme startup and preserve the existing buffers, player and native sessions.",
+      source: { label: "Approved persistent composition and windows", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
     }
   ]
 };

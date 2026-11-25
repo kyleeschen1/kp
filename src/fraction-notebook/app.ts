@@ -20,6 +20,8 @@ import { mountStyles } from './styles.ts';
 import { mountCommands } from './commands.ts';
 import { mountLineNumbers } from './numbers.ts';
 import { mountChat } from '../editor-chat/panel.ts';
+import { mountWindows } from './windows.ts';
+import './windows.css';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
@@ -76,7 +78,7 @@ mode.className = 'fn-vim-mode fn-edit-control'; mode.setAttribute('aria-label', 
 const previewTools = el('div', 'fn-tools');
 const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; const followLabel = el('label', 'fn-follow', 'Follow selection'); followLabel.prepend(follow);
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }); previewTools.append(reveal, followLabel);
-const frame = el('iframe', 'fn-preview'); frame.title = 'Fraction reading preview'; frame.src = '/reader/fraction-notebook-preview/';
+const frame = el('iframe', 'fn-preview'); frame.title = 'Fraction reading preview'; frame.src = '/reader/fraction-notebook-preview/?surface=window';
 const split = el('div', 'fn-divider'); split.tabIndex = 0; split.setAttribute('role', 'separator'); split.setAttribute('aria-orientation', 'vertical'); split.setAttribute('aria-label', 'Notebook width');
 split.setAttribute('aria-valuemin', '30'); split.setAttribute('aria-valuemax', '70'); split.setAttribute('aria-valuenow', '50');
 let splitPercent = 50;
@@ -87,14 +89,27 @@ split.onpointerup = event => split.releasePointerCapture(event.pointerId);
 split.onkeydown = event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); resize(splitPercent + (event.key === 'ArrowLeft' ? -2 : 2)); } };
 left.append(editorHost); right.append(resultStatus, frame); writingPanel.prepend(tools); writingPanel.append(previewTools);
 const editorBody = el('div', 'kp-editor-body');
-workspace.append(left, sourcePane, split, right); editorBody.append(workspace); root.append(header, editorBody);
+const pageWindow = el('section', 'kp-page-window'); pageWindow.setAttribute('aria-label', 'KP page');
+workspace.append(left, sourcePane, split, right); pageWindow.append(header, workspace); editorBody.append(pageWindow); root.append(editorBody);
 const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, name => { mode.textContent = name.toUpperCase(); }, {
   host: sourceHost, run: runSource,
   open() { root.classList.add('fn-focus'); split.inert = false; layout.refresh(); },
   close() { root.classList.remove('fn-focus'); split.inert = true; layout.refresh(); }
 });
 const layout = mountWorkspace(root, workspace, left, editorHost, right);
-const chat = mountChat(editorBody, actions, () => layout.refresh());
+const windows = mountWindows(editorBody);
+windows.register('page', pageWindow, () => {
+  if (editor.sourceOpen()) sourceHost.querySelector<HTMLElement>('.cm-content')?.focus({ preventScroll: true });
+  else if (root.classList.contains('fn-editing')) editor.view.focus();
+  // Until the iframe installs its keyboard bridge, keep shortcuts in the host.
+  else if (frameReady) frame.focus({ preventScroll: true });
+  else editToggle.focus({ preventScroll: true });
+});
+const chat = mountChat(editorBody, actions, () => layout.refresh(), {
+  attach: (element, focus) => windows.register('chat', element, focus),
+  active: () => windows.active('chat'),
+  activate: () => windows.raise('chat'), cycle: () => windows.cycle(), closed: () => windows.raise('page')
+});
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); });
 actions.append(button('Styles', () => styles.toggle()));
 const numbers = mountLineNumbers(editorHost, editor.view);
@@ -120,6 +135,9 @@ actions.querySelector('.fn-structure-controls')!.classList.add('fn-menu-panel');
 header.addEventListener('click', event => {
   if (event.target instanceof Element && event.target.closest('button')) event.target.closest<HTMLDetailsElement>('details.fn-menu')?.removeAttribute('open');
 });
+header.addEventListener('change', event => {
+  if (event.target instanceof HTMLSelectElement) event.target.closest<HTMLDetailsElement>('details.fn-menu')?.removeAttribute('open');
+});
 const dismissMenus = (event: Event) => {
   if (event instanceof KeyboardEvent && event.key !== 'Escape') return;
   for (const menu of header.querySelectorAll<HTMLDetailsElement>('.fn-menu[open]')) {
@@ -138,6 +156,7 @@ function setEditing(enabled: boolean) {
   send({ kind: 'presentation', animationOnly: enabled }); layout.refresh();
 }
 setEditing(sessionStorage.getItem('kp.fraction-editing') !== 'false');
+windows.restore();
 function send(data: Record<string, unknown>) { frame.contentWindow?.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin); }
 const sourceOf = (value: FractionNotebook) => value.cells.find(cell => cell.type === 'story')?.source;
 function pendingSource() { return sourceOf(notebook) !== sourceOf(lastValid); }
@@ -201,11 +220,13 @@ const onMessage = (event: MessageEvent) => {
   }
   if (data.kind === 'error') { status.textContent = String(data.message); status.dataset['state'] = 'invalid'; }
   if (data.kind === 'options-state') readingOptions.setAttribute('aria-expanded', String(data.open === true));
+  if (data.kind === 'window-focus') windows.raise('page');
+  if (data.kind === 'window-cycle') windows.cycle(data.reverse === true);
   if (data.kind === 'select' && typeof data.id === 'string') editor.reveal(data.id);
 };
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); chat.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); chat.dispose(); windows.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

@@ -1,5 +1,9 @@
 # A conversation column with a retained draft
 
+Successor: [persistent composition and layered windows](2026-11-25-windowed-chat.md).
+The user explicitly replaces the hiding composer; keep the checked navigation,
+annotations and recovery below. This presentation was not accepted unchanged.
+
 Approved by “implement this” after the single-column chat design discussion.
 This succeeds the checked rich-chat candidate; its permanent toolbars were not
 accepted. Preserve that candidate's formatting, annotations and recovery.

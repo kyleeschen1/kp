@@ -37,7 +37,8 @@ workbench latency remain unproved. The approved notebook detour below is current
   keeps drafts/commands independent of KP validation/rendering.
   [Persistent chat](../reviews/2026-11-25-kp-persistent-chat.md) is accepted.
   [Rich chat and annotations](../reviews/2026-11-25-kp-rich-chat.md) are checked.
-  Review the approved [keyboard column, retained draft and context return](../reviews/2026-11-25-keyboard-chat.md).
+  [Keyboard chat](../reviews/2026-11-25-keyboard-chat.md) is checked; the
+  [windowed successor](../reviews/2026-11-25-windowed-chat.md) awaits visual review.
   Automatic notebook edits and broader extraction remain excluded.
   Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.

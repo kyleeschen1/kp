@@ -2,11 +2,22 @@ import type { Plugin } from 'vite';
 import { readFile } from 'node:fs/promises';
 import type { compileFractionNotebook, fractionPreviewPage } from '../src/fraction-notebook/compile.ts';
 import type * as ObjectCompiler from '../src/fraction-notebook/object-compile.ts';
+import { notebookThemeBootstrap } from './notebook-theme-bootstrap.ts';
 
 /** Development-only, read-only compilation; no authored paths or modules are
  * accepted, and no request can publish or overwrite a lesson. */
 export function kpViteFractionNotebook(): Plugin {
-  return { name: 'kp-fraction-notebook', apply: 'serve', configureServer(server) {
+  const theme = notebookThemeBootstrap();
+  return { name: 'kp-fraction-notebook', apply: 'serve',
+    transformIndexHtml: { order: 'post', handler(html, context) {
+      const path = context.path.split('?')[0];
+      return path === '/experiments/fraction-notebook/' || path === '/experiments/fraction-notebook/index.html'
+        || path === '/reader/fraction-notebook-preview/' ? theme.inject(html) : html;
+    } },
+    handleHotUpdate(context) {
+      if (/\/fraction-notebook\/(styles|style-catalog|theme-startup|palette)\.(ts|css)$/.test(context.file)) theme.invalidate();
+    },
+    configureServer(server) {
     server.middlewares.use((request, response, next) => {
       const path = request.url?.split('?')[0];
       if (path !== '/api/dev/fraction-notebook' && path !== '/api/dev/fraction-object' && path !== '/reader/fraction-notebook-preview/') return next();

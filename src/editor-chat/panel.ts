@@ -9,19 +9,24 @@ import { chatViewState } from './reading-state.ts';
 import './style.css';
 
 const recoveryKey = 'kp.editor-chat.unsaved.v1';
+export interface ChatWindowHost {
+  attach(element: HTMLElement, focus: () => void): () => void;
+  active(): boolean;
+  activate(): void; cycle(): void; closed(): void;
+}
 const node = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => {
   const value = document.createElement(tag); value.className = className; if (text) value.textContent = text; return value;
 };
 /** Closing the presentation never disconnects, resends, or destroys native history. */
-export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () => void) {
+export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost) {
   const launcher = node('button', '', 'Chat'); launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false'); actions.append(launcher);
   let panel: ReturnType<typeof mountChatPanel> | undefined;
-  const open = () => { launcher.remove(); panel ??= mountChatPanel(body, actions, layout); panel.open(); };
+  const open = () => { launcher.remove(); panel ??= mountChatPanel(body, actions, layout, windowHost); panel.open(); };
   launcher.onclick = open;
   try { if (sessionStorage.getItem('kp.editor-chat.open') === 'true') open(); } catch { /* Optional preference. */ }
   return { dispose() { panel?.dispose(); launcher.remove(); } };
 }
-function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => void) {
+function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost) {
   const toggle = node('button', '', 'Chat'); toggle.type = 'button'; toggle.setAttribute('aria-expanded', 'false');
   const panel = node('aside', 'kp-chat'); panel.id = 'kp-chat'; panel.hidden = true; panel.setAttribute('aria-label', 'Persistent chat');
   toggle.setAttribute('aria-controls', panel.id);
@@ -30,10 +35,12 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   const empty = node('p', 'kp-chat-empty', 'i to write · C-c for commands');
   const clipped = node('p', 'kp-chat-context', 'Recent messages · the full conversation remains in Codex.'); clipped.hidden = true;
   const unread = node('button', 'kp-chat-unread', 'New output · G'); unread.type = 'button'; unread.hidden = true;
-  const draftHost = node('div', 'kp-chat-draft'); draftHost.hidden = true;
+  const draftHost = node('div', 'kp-chat-draft');
   const saved = node('p', 'kp-chat-save kp-chat-sr'); saved.setAttribute('role', 'status');
   const notesHost = node('div', 'kp-chat-notes'); notesHost.hidden = true;
-  panel.append(status, history, empty, clipped, unread, notesHost, draftHost, saved); body.append(panel); actions.append(toggle);
+  const column = node('div', 'kp-chat-column'), output = node('div', 'kp-chat-output');
+  output.append(status, history, empty, clipped, unread, notesHost);
+  column.append(output, draftHost, saved); panel.append(column); body.append(panel); actions.append(toggle);
 
   type Mode = 'reading' | 'compose' | 'notes';
   let mode: Mode = 'reading', current: ChatSnapshot | undefined, remote: ChatSnapshot | undefined;
@@ -51,7 +58,7 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   const transcript = mountTranscript(history, target => { selection = target; }, id => { showNotes(); notes.edit(id); });
   let notes = createNotes();
   const branchChanged = () => Boolean(current && remote && current.branchId !== remote.branchId);
-  const commands = mountChatCommands(panel, {
+  const commands = mountChatCommands(column, {
     snapshot: () => current && { ...current, branches: remote?.branches ?? current.branches },
     selection: () => selection, point: transcript.point, busy: () => operationCount > 0, conflict: () => conflict, branchChanged,
     isSource: () => (mode === 'notes' ? notes.editor() : composer)?.isSource() ?? false,
@@ -62,7 +69,7 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
       else if (origin.focus?.isConnected && !origin.focus.closest('[hidden]')) origin.focus.focus({ preventScroll: true });
       else if (origin.mode === 'compose') composer.focus(); else notes.focus();
     },
-    read, compose, close: () => setOpen(false), notes: showNotes,
+    read, compose, close: () => setOpen(false), notes: showNotes, window: windowHost.cycle,
     note(target, tags) { showNotes(); notes.create(target, tags); },
     source() {
       if (mode === 'notes' && notes.editor()) notes.editor()!.toggleSource();
@@ -128,8 +135,10 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     paint();
     if (switching) {
       const state = views.load(snapshot.project, snapshot.branchId);
-      if (state) preserve(() => { composer.restoreCursor(state.cursor); transcript.restore(state.reading, !commands.isOpen()); });
-      else if (!commands.isOpen() && !panel.hidden) transcript.surface.focus();
+      // A late snapshot may hydrate a covered window, but cannot take focus
+      // from the page the user has chosen in the meantime.
+      if (state) preserve(() => { composer.restoreCursor(state.cursor); transcript.restore(state.reading, !commands.isOpen() && windowHost.active()); });
+      else if (!commands.isOpen() && !panel.hidden && windowHost.active()) transcript.surface.focus();
       following = history.scrollHeight - history.scrollTop - history.clientHeight < 50;
     }
   }
@@ -138,7 +147,7 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     const snapshot = current;
     panel.dataset['phase'] = branchChanged() ? 'branch-changed' : snapshot?.phase ?? 'loading';
     panel.dataset['mode'] = mode; panel.dataset['branchId'] = snapshot?.branchId ?? '';
-    history.hidden = mode === 'notes'; notesHost.hidden = mode !== 'notes'; draftHost.hidden = mode !== 'compose';
+    history.hidden = mode === 'notes'; notesHost.hidden = mode !== 'notes';
     composer.setDisabled(!snapshot);
     saved.textContent = conflict ? 'Draft conflict · local text retained' : dirty ? 'Unsaved changes…' : snapshot ? 'Saved to this project' : '';
     let cue = localNotice;
@@ -292,7 +301,8 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     panel.hidden = !open; body.classList.toggle('kp-chat-open', open); toggle.setAttribute('aria-expanded', String(open));
     try { sessionStorage.setItem('kp.editor-chat.open', String(open)); } catch { /* Presentation preference only. */ }
     pollingGeneration++; clearTimeout(polling); refreshController?.abort();
-    if (open) { void refresh(); if (current) { mode = 'reading'; paint(); transcript.surface.focus(); } } else toggle.focus();
+    if (open) { windowHost.activate(); void refresh(); if (current) { mode = 'reading'; paint(); transcript.surface.focus(); } }
+    else { windowHost.closed(); toggle.focus(); }
     layout();
   }
   toggle.onclick = () => setOpen(Boolean(panel.hidden));
@@ -301,12 +311,22 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     generation++; dirty = true; localNotice = ''; remember(); clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 200); paint();
   }
   unread.onclick = () => { unread.hidden = true; following = true; transcript.latest(); rememberView(); };
+  draftHost.addEventListener('focusin', () => {
+    if (mode === 'compose') return;
+    if (mode === 'reading') readingReturn = transcript.capture();
+    if (mode === 'notes') notes.remember();
+    mode = 'compose'; paint();
+  });
+  history.addEventListener('focusin', () => {
+    if (mode === 'reading') return;
+    if (mode === 'compose') { composer.normal(); saveDraft(); }
+    mode = 'reading'; readingReturn = undefined; paint();
+  });
   history.addEventListener('scroll', () => {
     if (restoring || mode === 'notes') return;
     following = history.scrollHeight - history.scrollTop - history.clientHeight < 50;
     if (following) unread.hidden = true;
-    // Resizing the history when the composer opens also fires scroll events.
-    // The return bookmark belongs to the reading state, not that layout event.
+    // Window resizing also fires scroll events; preserve the reading bookmark.
     clearTimeout(viewTimer); viewTimer = setTimeout(rememberView, 150);
   });
   panel.addEventListener('keydown', event => {
@@ -342,9 +362,12 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     if (dirty || notes.dirty()) { remember(); notes.remember(); event.preventDefault(); event.returnValue = ''; }
   };
   window.addEventListener('beforeunload', beforeUnload);
+  const detachWindow = windowHost.attach(panel, () => {
+    if (mode === 'compose') composer.focus(); else if (mode === 'notes') notes.focus(); else transcript.surface.focus();
+  });
   return { open() { setOpen(true); }, dispose() {
     rememberView(); disposed = true; clearTimeout(polling); clearTimeout(saveTimer); clearTimeout(viewTimer); refreshController?.abort();
     window.removeEventListener('beforeunload', beforeUnload); if (dirty) remember();
-    commands.dispose(); notes.dispose(); transcript.dispose(); composer.dispose(); panel.remove(); toggle.remove();
+    detachWindow(); commands.dispose(); notes.dispose(); transcript.dispose(); composer.dispose(); panel.remove(); toggle.remove();
   } };
 }

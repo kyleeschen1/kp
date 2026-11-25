@@ -47,9 +47,9 @@ export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings
   const content = document.createElement('div'); content.className = 'fn-style-groups';
   panel.append(title, close, hint, theme, filters, count, content);
   const refreshers: (() => void)[] = [];
-  const publish = () => {
+  const publish = (persist = true) => {
     applyStyles(settings); changed(settings);
-    try { localStorage.setItem('kp.notebook.styles.v1', JSON.stringify(settings)); } catch { hint.textContent = 'Styles applied for this session; browser storage is unavailable.'; }
+    if (persist) try { localStorage.setItem('kp.notebook.styles.v1', JSON.stringify(settings)); } catch { hint.textContent = 'Styles applied for this session; browser storage is unavailable.'; }
     refreshers.forEach(refresh => refresh());
   };
   theme.onchange = () => { settings.theme = theme.value === 'light' ? 'light' : 'dark'; publish(); };
@@ -111,6 +111,8 @@ export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings
   };
   search.oninput = filter; object.onchange = property.onchange = grouping.onchange = filter;
   const reset = document.createElement('button'); reset.textContent = 'Reset overrides'; reset.onclick = () => { settings.values = {}; rows.forEach(({ row }) => row.querySelector('input')?.setCustomValidity('')); publish(); };
-  panel.append(reset); host.append(panel); filter(); publish();
+  // Mounting or falling back from unreadable preferences is not a user edit.
+  // Preserve the stored bytes until an explicit style change is made.
+  panel.append(reset); host.append(panel); filter(); publish(false);
   return { settings: () => settings, toggle() { panel.hidden = !panel.hidden; if (!panel.hidden) search.focus(); }, dispose() { panel.remove(); } };
 }

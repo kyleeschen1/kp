@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.windowed-chat-20261125",
+  "kind": "run-contract",
+  "title": "Persistent composition and layered windows",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: all three approved packages are complete. Review the canonical two-window exemplar before any generalization.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.windowed-chat-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-windowed-chat.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:editor-chat",
+    "npm run visual:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "The user reviews the persistent draft, page masthead, layered focus and light-theme reload at the canonical URL."
+  ],
+  "allowedWork": [
+    "Approved two-window host, focus and theme-startup repairs"
+  ],
+  "disallowedWork": [
+    "General desktop, automatic inference, publication or semantic renderer changes"
+  ],
+  "goal": "Review stable draft and passage return across two layered windows with theme-correct first paint",
+  "target": "task.kp.windowed-chat-20261125",
+  "slices": [
+    {
+      "id": "theme",
+      "title": "First-paint theme",
+      "summary": "Saved theme and named palette reach first paint with delayed notebook and preview modules; corrupt preference bytes survive fallback and full mount.",
+      "status": "complete"
+    },
+    {
+      "id": "windows",
+      "title": "Persistent composer and layered windows",
+      "summary": "Persistent lower-third composer, page-owned masthead, layered fixed columns and focus restoration pass the desktop, phone, reduced-motion, iframe-startup and reload exemplar. Background opacity accepts decimal and percentage values without dimming text.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Verified exemplar",
+      "summary": "Scoped types, 43 unit tests, 38 Chromium cases and 75 vision checks pass. Reviewed desktop dark/light, phone and notes captures. Evidence and inspection instructions are in the approved source. Await one human visual judgment; no broader promotion.",
+      "status": "complete"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "task.kp.windowed-chat-20261125",
+  "kind": "task",
+  "title": "Keep composition and reading stable across layered windows",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: persistent composer and layered window exemplar is implemented and checked. Human judgment of translucency, spacing and focus motion remains open.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-windowed-chat.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "Window host, editor, preview and development startup",
+      "checkedAt": "2026-11-25T15:24:39.370Z",
+      "notes": "Includes imported startup bundler, style validator and browser test types."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "Conversation semantics and recovery",
+      "checkedAt": "2026-11-25T15:24:40.353Z",
+      "notes": "23 tests passed; native protocol, notes, branch and delivery guarantees preserved."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "Notebook semantics and object boundaries",
+      "checkedAt": "2026-11-25T15:24:40.986Z",
+      "notes": "20 tests passed; no authored identity or semantic model change."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "Persistent composer and two-window exemplar",
+      "checkedAt": "2026-11-25T15:24:41.647Z",
+      "notes": "15 Chromium cases passed. Stable caret, DOM, columns and thirds; pointer, keyboard, iframe, reload, reduced motion and phone; existing recovery and privacy. Added send and notes visibility assertions also passed in their focused rerun. No native inference."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "First paint, styles and notebook preservation",
+      "checkedAt": "2026-11-25T15:24:42.271Z",
+      "notes": "23 Chromium cases passed. Delayed modules and corrupt storage, decimal and percentage background alpha, structure menu dismissal, inline and focused editing. Production reader unchanged: 1250344 JavaScript bytes, 308778 gzip, 414 modules; no editor dependencies."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Roadmap, active thread and vision alignment",
+      "checkedAt": "2026-11-25T15:25:19.299Z",
+      "notes": "75 tests passed. Prior commitments and the visual acceptance boundary remain explicit."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "Durable checkpoint and context receipt",
+      "checkedAt": "2026-11-25T15:26:09.723Z",
+      "notes": "1308 nodes and 34543 events validated after closing the context receipt and deferring the completed three-package candidate for visual review."
+    }
+  ],
+  "revisitWhen": [
+    "The user reviews the canonical fraction notebook and accepts or requests a bounded visual adjustment."
+  ]
+}

@@ -85,6 +85,7 @@ test('rich composer and transcript support passage comments, tags and notes acro
     expect(errors).toEqual([]);
     await expect.poll(() => f.store.data.draft).toContain('broader plan');
     await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    await expect(page.locator('.kp-chat-draft')).toBeVisible();
     f.peer.finish('## Where we are\n\nKeep the **broader plan** visible while exploring.\n\n```js\nconst next = "notes";\n```\n\n[Reference](https://example.com)\n\nAn inline $x^2$ and a fraction:\n\n$$\\frac{1}{2}$$');
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     await expect(page.locator('.kp-chat-message').last().locator('h2')).toHaveText('Where we are');
@@ -109,10 +110,12 @@ test('rich composer and transcript support passage comments, tags and notes acro
     await command(page, 'New note');
     await note.press('i'); await note.fill('A small independent conversation note.'); await note.press('ControlOrMeta+Enter');
     await expect(page.locator('.kp-note-card')).toHaveCount(3);
+    await expect(page.locator('.kp-chat-draft')).toBeVisible();
     await page.screenshot({ path: info.outputPath('rich-chat-notes.png') });
     expect(JSON.stringify(f.store.data.messages)).toBe(history); expect(f.peer.sends()).toHaveLength(1);
     await page.reload(); await command(page, 'Open notes');
     await expect(page.locator('.kp-note-card')).toHaveCount(3);
+    await expect(page.locator('.kp-chat-draft')).toBeVisible();
     await page.getByRole('searchbox', { name: 'Find notes and tags' }).fill('#orientation'); await expect(page.locator('.kp-note-card')).toHaveCount(1);
     await page.getByRole('button', { name: 'Show passage', exact: true }).click();
     await page.keyboard.press('Control+c'); await expect(page.getByRole('dialog').getByRole('button', { name: 'Comment selection', exact: true })).toBeEnabled(); await page.keyboard.press('Escape');
@@ -126,7 +129,7 @@ test('quiet reading retains the passage and independent draft caret through Inse
   try {
     await page.setViewportSize({ width: 1440, height: 960 }); await open(page); await connect(page);
     const transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
-    await expect(page.locator('.kp-chat-draft')).toBeHidden(); await expect(page.locator('.kp-chat-heading')).toHaveCount(0);
+    await expect(page.locator('.kp-chat-draft')).toBeVisible(); await expect(page.locator('.kp-chat-heading')).toHaveCount(0);
     await expect(page.locator('.kp-chat button:visible')).toHaveCount(0);
     await selectPassage(page, 'original passage', 'reply-1');
     const before = await page.locator('.kp-chat-history').evaluate(node => node.scrollTop);
@@ -137,9 +140,10 @@ test('quiet reading retains the passage and independent draft caret through Inse
     const beforeGeometry = await geometry();
     await transcript.press('i'); const insertGeometry = await geometry();
     await input(page).pressSequentially('before after'); await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
-    await input(page).press('Escape'); await expect(page.locator('.kp-chat-draft')).toBeHidden();
+    await input(page).press('Escape'); await expect(page.locator('.kp-chat-draft')).toBeVisible();
     await expect(transcript).toBeFocused(); expect(await page.evaluate(() => getSelection()?.toString())).toBe('original passage');
     expect(Math.abs(await page.locator('.kp-chat-history').evaluate(node => node.scrollTop) - before), JSON.stringify({ beforeGeometry, insertGeometry, afterGeometry: await geometry() })).toBeLessThan(3);
+    expect((await geometry()).viewport).toBe(beforeGeometry.viewport);
     await transcript.press('i'); await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('before aftXer');
     await page.keyboard.press('Control+c'); const menu = page.getByRole('dialog', { name: 'Chat commands' });
     await expect(menu).toBeVisible(); await page.keyboard.press('h'); await expect(menu).toContainText('Keybindings');
@@ -174,6 +178,66 @@ test('streaming preserves an older reading position and search dismissal restore
     await expect(transcript).toBeFocused(); expect(await page.evaluate(() => getSelection()?.toString())).toBe('Paragraph 30');
     f.peer.finish('New output below the older passage.'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     await transcript.press('G'); await expect(page.locator('.kp-chat-unread')).toBeHidden(); expect(f.peer.sends()).toHaveLength(1);
+  } finally { await f.close(); }
+});
+
+test('layered windows preserve columns, draft, scroll and native player through pointer and keyboard focus', async ({ page, context }, info) => {
+  const f = await fixture(context);
+  try {
+    await page.setViewportSize({ width: 1440, height: 960 }); await open(page);
+    const pageWindow = page.locator('[data-kp-window=page]'), chatWindow = page.locator('[data-kp-window=chat]');
+    const column = page.locator('.kp-chat-column'), draft = page.locator('.kp-chat-draft');
+    expect(await page.locator('.fn-header').evaluate(node => node.parentElement?.getAttribute('data-kp-window'))).toBe('page');
+    expect(await page.locator('#app > .fn-header').count()).toBe(0);
+    await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    const chatBox = await chatWindow.boundingBox(), pageBox = await pageWindow.boundingBox(), columnBox = await column.boundingBox();
+    expect(chatBox!.width).toBeCloseTo(1440 * .6, 0); expect(pageBox!.width).toBeCloseTo(1440 * .6, 0);
+    expect(Math.abs(columnBox!.x + columnBox!.width / 2 - chatBox!.x - chatBox!.width / 2)).toBeLessThan(1);
+    expect((await draft.boundingBox())!.height / columnBox!.height).toBeCloseTo(1 / 3, 2);
+    await page.getByRole('textbox', { name: 'Conversation transcript' }).press('i'); await input(page).pressSequentially('A continued thought');
+    await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
+    const editor = page.locator('.fn-editor .ProseMirror'), editorNode = await editor.elementHandle();
+    const frame = page.frameLocator('iframe'), stage = await frame.locator('.kp-reader-equation-stage').elementHandle();
+    await page.keyboard.press('Control+Backquote'); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    await expect(editor).toBeFocused();
+    const editorWidth = (await editor.boundingBox())!.width;
+    expect(editorWidth).toBe(columnBox!.width);
+    await page.keyboard.press('Control+Backquote'); await expect(input(page)).toBeFocused();
+    await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('A continued thougXht');
+    await input(page).press('Escape'); await expect(draft).toBeVisible();
+    // Click a visible page gutter, then exercise switching from inside the
+    // existing iframe: neither operation may replace its DOM or clock owner.
+    await pageWindow.click({ position: { x: 4, y: 200 } }); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    await page.getByRole('button', { name: 'Edit', exact: true }).click();
+    await frame.locator('body').click({ position: { x: 30, y: 140 } });
+    await page.keyboard.press('Control+Backquote'); await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    expect(await editorNode!.evaluate(node => node.isConnected)).toBe(true); expect(await stage!.evaluate(node => node.isConnected)).toBe(true);
+    expect((await column.boundingBox())!.width).toBe(columnBox!.width);
+    await expect(draft).toBeVisible(); await page.screenshot({ path: info.outputPath('layered-chat-desktop.png') });
+    await page.emulateMedia({ reducedMotion: 'reduce' }); await expect(chatWindow).toHaveCSS('transition-duration', '0s');
+    await page.keyboard.press('Control+Backquote'); await expect(pageWindow).toHaveCSS('transform', 'none');
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('[data-kp-window=chat]').click({ position: { x: 366, y: 250 } });
+    await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await expect(draft).toBeVisible(); await page.screenshot({ path: info.outputPath('layered-chat-phone.png') });
+    await pageWindow.click({ position: { x: 4, y: 250 } }); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    await expect.poll(() => f.store.data.draft).toBe('A continued thougXht');
+    let release!: () => void; const previewReady = new Promise<void>(resolve => { release = resolve; });
+    await page.route('**/src/reader/app/exemplar-entry.ts*', async route => { await previewReady; await route.continue(); });
+    try {
+      await page.reload({ waitUntil: 'commit' }); await expect(chatWindow).toHaveAttribute('data-phase', 'disconnected');
+      await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+      await expect(page.getByRole('button', { name: 'Edit', exact: true })).toBeFocused();
+      await page.keyboard.press('Control+Backquote'); await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    } finally { release(); await page.unrouteAll({ behavior: 'wait' }); }
+    await expect(input(page)).toHaveText('A continued thougXht');
+    await page.reload(); await expect(chatWindow).toHaveAttribute('data-phase', 'disconnected');
+    await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    await page.keyboard.press('Control+c'); await page.keyboard.press('W');
+    await expect(page.getByRole('dialog', { name: 'Chat commands' })).toBeHidden();
+    await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    expect(f.peer.sends()).toHaveLength(0);
   } finally { await f.close(); }
 });
 
@@ -304,11 +368,16 @@ test('conversation streams, survives panel close/reload/server restart, and pres
     await command(page, 'Resume conversation'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     expect(f.peer.sends()).toHaveLength(1); await expect(input(page)).toHaveText('A saved follow-up');
     await page.screenshot({ path: info.outputPath('chat-desktop.png') });
+    await page.keyboard.press('Control+Backquote');
     await page.getByRole('button', { name: 'Styles', exact: true }).click();
     await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
     await page.getByRole('button', { name: 'Close styles' }).click();
-    await expect(page.locator('.kp-chat')).toHaveCSS('background-color', await page.locator('.fn-editor .ProseMirror').evaluate(node => getComputedStyle(node.closest('.fn-left')!).backgroundColor));
+    await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+    await expect(page.locator('.kp-chat')).toHaveCSS('background-color', await page.locator('.kp-page-window').evaluate(node => getComputedStyle(node).backgroundColor));
+    expect(await page.locator('.kp-chat').evaluate(node => getComputedStyle(node, '::before').backgroundColor)).toBe('rgb(238, 239, 233)');
+    await expect(page.locator('.kp-chat')).toHaveCSS('opacity', '1');
     await expect(page.locator('.kp-chat')).toHaveCSS('font-family', await page.locator('.fn-editor .ProseMirror').evaluate(node => getComputedStyle(node).fontFamily));
+    await page.keyboard.press('Control+Backquote');
     await page.screenshot({ path: info.outputPath('chat-light.png') }); expect(errors).toEqual([]);
   } finally { await f.close(); }
 });

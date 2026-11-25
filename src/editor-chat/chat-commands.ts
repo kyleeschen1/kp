@@ -6,7 +6,7 @@ export interface ChatCommandHost {
   snapshot(): ChatSnapshot | undefined; selection(): PassageTarget | null; point(): ReadingPoint | null;
   busy(): boolean; conflict(): boolean; branchChanged(): boolean; isSource(): boolean;
   captureOrigin(): void; restoreOrigin(): void; read(restore?: boolean): void; compose(): void; close(): void;
-  note(target?: PassageTarget, tags?: boolean): void; notes(): void; source(): void;
+  note(target?: PassageTarget, tags?: boolean): void; notes(): void; source(): void; window(): void;
   save(): void; load(): void; act(action: ChatAction): Promise<void>;
   context(value: Omit<ChatContext, 'revision'>, revision: number): Promise<void>;
   branch(action: Extract<ChatAction, { kind: 'branch-create' | 'branch-switch' }>, point?: ReadingPoint): Promise<void>;
@@ -101,9 +101,9 @@ export function mountChatCommands(panel: HTMLElement, host: ChatCommandHost) {
   function help() {
     const body = element('dl'); body.className = 'kp-chat-keys';
     for (const [key, description] of [
-      ['i · Esc', 'Resume the draft · save it and return to reading'], ['Ctrl/⌘ Enter', 'Send this message; save when editing a note'],
+      ['i · Esc', 'Focus the permanent draft · save and return to transcript navigation'], ['Ctrl/⌘ Enter', 'Send this message; save when editing a note'],
       ['h j k l · w b · 0 $ · gg G', 'Prose motions; v selects a passage'], ['[m · ]m · { · }', 'Previous/next message or paragraph'],
-      ['Ctrl-d · Ctrl-u', 'Half-page down/up'], ['/ · n · N', 'Search loaded messages; repeat forward/backward'],
+      ['Ctrl-d · Ctrl-u', 'Half-page down/up in transcript Normal mode'], ['Ctrl-` · C-c W', 'Switch between KP and chat windows'], ['/ · n · N', 'Search loaded messages; repeat forward/backward'],
       ['C-c · Esc', 'Open commands · close commands and restore focus'], [':h · :w · :source', 'Help · save draft/note · toggle Markdown'],
       ['Markdown · notes', 'Separate editing buffers. Escape enters Normal; another Escape returns to reading.'],
       ['Ctrl/⌘ b · Ctrl/⌘ i · u · Ctrl-r', 'Bold · italic · undo · redo in editable prose'],
@@ -129,6 +129,7 @@ export function mountChatCommands(panel: HTMLElement, host: ChatCommandHost) {
       { key: 'p', label: 'Save return point', unavailable: waiting ?? (point ? undefined : 'Choose a passage first'), run: saveReturn },
       { key: 'r', label: 'Return to passage', close: true, unavailable: waiting ?? (s?.context.returnPoint ? undefined : 'No saved return point'), run: () => { if (s?.context.returnPoint) launch(host.jump(s.context.returnPoint)); } },
       { key: 'h', label: 'Keybindings', run: help },
+      { key: 'W', label: 'Switch window', close: true, run: host.window },
       { key: 'S', label: 'Save draft', unavailable: waiting ?? (host.conflict() ? 'Resolve the draft conflict first' : undefined), run: host.save },
       { key: 'R', label: s?.threadId ? 'Resume conversation' : 'Connect', unavailable: waiting ?? (s && ['ready', 'running', 'sending', 'connecting'].includes(s.phase) ? 'Already connected' : undefined), run: () => { launch(host.act({ kind: 'connect' })); } },
       { key: 'x', label: 'Interrupt response', unavailable: waiting ?? (s?.phase === 'running' && s.pending?.turnId ? undefined : 'No response is running'), run: () => { launch(host.act({ kind: 'interrupt' })); } },

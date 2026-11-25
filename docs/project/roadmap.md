@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-keyboard-chat`
-Execution Contract: `run-contract.kp.keyboard-chat-20261125`
-Next Product Milestone: `keyboard-editor-conversation`
+Current Commitment: `kp-windowed-chat`
+Execution Contract: `run-contract.kp.windowed-chat-20261125`
+Next Product Milestone: `persistent-composition-windows`
 Milestone Authority: approved
 
 ## Where we are going
@@ -23,9 +23,9 @@ why this becomes the organizing direction and what it supersedes.
 [focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
 **Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
-**Approved:** [keyboard conversation and context return](reviews/2026-11-25-keyboard-chat.md),
-building on checked [rich chat and annotations](reviews/2026-11-25-kp-rich-chat.md).
-Review retained drafts, transient commands, topics and branches.
+**Checked:** [persistent composition and layered windows](reviews/2026-11-25-windowed-chat.md),
+building on checked [keyboard chat](reviews/2026-11-25-keyboard-chat.md).
+Review the persistent draft, focus, masthead placement and startup.
 Preserve recovery, notebook JSON and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)

@@ -1,5 +1,4 @@
-.kp-editor-body { display: flex; flex: 1; min-height: 0; min-width: 0; }
-.kp-chat { --kp-chat-width: 540px; --kp-chat-annotation: var(--fn-selection); position: relative; width: min(var(--kp-chat-width), 48vw); flex: 0 0 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; gap: var(--fn-block-gap); padding: 24px; border-left: 1px solid var(--fn-border); background: var(--fn-background); color: var(--fn-text); font: var(--kp-document-body-weight) var(--kp-document-body-size)/var(--kp-document-body-leading) var(--fn-font); letter-spacing: var(--kp-document-letter-spacing); }
+.kp-chat { --kp-chat-annotation: var(--fn-selection); color: var(--fn-text); font: var(--kp-document-body-weight) var(--kp-document-body-size)/var(--kp-document-body-leading) var(--fn-font); letter-spacing: var(--kp-document-letter-spacing); }
 .kp-chat[hidden], .kp-chat [hidden] { display: none !important; }
 .kp-chat-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .kp-chat-heading strong { font-weight: var(--fn-object-weight); }
@@ -96,9 +95,6 @@
 .kp-chat-keys dt { color: var(--fn-link); margin-top: 8px; }
 .kp-chat-keys dd { margin-left: 0; }
 @media (max-width: 760px) {
-  .kp-editor-body.kp-chat-open { flex-direction: column; }
-  .kp-chat-open > .fn-workspace { flex: 0 0 28%; }
-  .kp-chat { width: 100%; flex: 1; border-left: 0; border-top: 1px solid var(--fn-border); gap: 6px; padding: 10px 14px; }
   .kp-chat-context { display: none; }
   .kp-chat-status { min-height: 0; }
   .kp-chat-draft { min-height: 3em; max-height: 25vh; }

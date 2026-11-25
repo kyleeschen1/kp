@@ -9,6 +9,36 @@ const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-
 const seed = importFractionReading(canonical).notebook;
 const url = '/experiments/fraction-notebook/';
 const preview = (page: Page) => page.frameLocator('iframe');
+test('saved theme and palette reach first paint before delayed notebook or preview modules', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('kp.notebook.styles.v1', JSON.stringify({ theme: 'light', values: { '--color-paper': '#f6f1e5', '--fn-background': 'var(--color-paper)' } }));
+    const paints: string[] = []; Object.defineProperty(window, 'notebookPaints', { value: paints });
+    const sample = () => { if (document.body) paints.push(getComputedStyle(document.documentElement).backgroundColor); requestAnimationFrame(sample); }; requestAnimationFrame(sample);
+  });
+  for (const [path, module] of [[url, '**/src/fraction-notebook/app.ts*'], ['/reader/fraction-notebook-preview/', '**/src/reader/app/exemplar-entry.ts*']]) {
+    let release!: () => void; const gate = new Promise<void>(resolve => { release = resolve; });
+    await page.route(module!, async route => { await gate; await route.continue(); });
+    try {
+      await page.goto(path!, { waitUntil: 'commit' });
+      await expect(page.locator('html')).toHaveAttribute('data-notebook-theme', 'light');
+      await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(246, 241, 229)');
+      if (path === url) await expect(page.locator('.fn-header')).toHaveCount(0);
+      else await expect(page.locator('body')).not.toHaveAttribute('data-kp-reader-hydrated', 'true');
+      await page.waitForTimeout(150);
+      const paints: string[] = await page.evaluate(() => Reflect.get(window, 'notebookPaints'));
+      expect(paints.length).toBeGreaterThan(0); expect(new Set(paints)).toEqual(new Set(['rgb(246, 241, 229)']));
+    } finally { release(); await page.unrouteAll({ behavior: 'wait' }); }
+  }
+});
+test('corrupt theme storage remains intact and has a valid first-paint fallback', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('kp.notebook.styles.v1', '{broken'));
+  await page.route('**/src/fraction-notebook/app.ts*', route => route.abort());
+  await page.goto(url); await expect(page.locator('html')).toHaveAttribute('data-notebook-theme', 'dark');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(18, 24, 38)');
+  expect(await page.evaluate(() => localStorage.getItem('kp.notebook.styles.v1'))).toBe('{broken');
+  await page.unrouteAll(); await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  expect(await page.evaluate(() => localStorage.getItem('kp.notebook.styles.v1'))).toBe('{broken');
+});
 async function ready(page: Page) {
   await page.goto(url);
   const edit = page.getByRole('button', { name: 'Edit', exact: true });
@@ -31,6 +61,7 @@ async function action(page: Page, name: string, group: 'writing' | 'structure' =
 }
 async function blockOption(page: Page, name: string, value: string) {
   await menu(page, 'structure'); await page.getByRole('combobox', { name }).selectOption(value);
+  await expect(page.locator('.fn-structure')).not.toHaveAttribute('open');
 }
 async function replaceSpec(page: Page, source: string, run = true) {
   const summary = page.getByText('Edit animation specification', { exact: true });
@@ -331,6 +362,7 @@ test('Edit opens in Normal mode; split, nest, titles and folding preserve the na
 
 test('block moves, outdent and merge preserve IDs and restore through undo', async ({ page }) => {
   await ready(page); await menu(page, 'structure');
+  await page.keyboard.press('Escape'); await expect(page.locator('.fn-structure')).not.toHaveAttribute('open');
   const blocks = page.locator('.ProseMirror > .fn-block'), firstId = await blocks.first().getAttribute('data-cell-id');
   const body = blocks.first().locator(':scope > .fn-block-content > p');
   await body.click({ clickCount: 3 }); await page.keyboard.insertText('First');
@@ -363,7 +395,7 @@ test('one document and focused source preserve the mounted player and current re
   await expect(plane).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
   await edit.click(); await expect(page.locator('.fn-left')).toBeHidden();
   await edit.click();
-  expect((await page.locator('.fn-left').boundingBox())!.width).toBe(1440);
+  expect((await page.locator('.fn-left').boundingBox())!.width).toBe((await page.locator('.fn-workspace').boundingBox())!.width);
   await edit.click({ force: true }); await edit.click({ force: true });
   await page.getByText('Edit animation specification', { exact: true }).click();
   await expect(page.locator('.fn-source-pane')).toBeVisible();
@@ -525,6 +557,15 @@ test('Styles compares properties across objects and preserves named references',
   await page.getByRole('button', { name: 'Styles', exact: true }).click();
   await page.getByRole('button', { name: 'Reset overrides' }).click();
   await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(36, 43, 53)');
+  await search.fill('window opacity');
+  const alpha = page.getByRole('textbox', { name: 'Window opacity', exact: true });
+  for (const value of ['0.8', '80%']) {
+    await alpha.fill(value); await alpha.press('Tab');
+    expect(await page.locator('.kp-page-window').evaluate(node => getComputedStyle(node, '::before').opacity)).toBe('0.8');
+    await expect(page.locator('.kp-page-window')).toHaveCSS('opacity', '1');
+  }
+  await alpha.fill(''); await alpha.press('Tab');
+  expect(await page.locator('.kp-page-window').evaluate(node => getComputedStyle(node, '::before').opacity)).toBe('0.96');
   await page.setViewportSize({ width: 390, height: 844 });
   await search.fill('weight');
   expect(await panel.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
@@ -536,8 +577,11 @@ test('light canvas and parent gaps unify prose and the animation entrance', asyn
   await page.getByRole('button', { name: 'Styles', exact: true }).click();
   await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
   await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
-  for (const selector of ['.fn-header', '.fn-left', '.fn-source-pane', '.fn-styles']) await expect(page.locator(selector)).toHaveCSS('background-color', 'rgb(238, 239, 233)');
-  await expect(preview(page).locator('body')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+  for (const selector of ['.fn-source-pane', '.fn-styles']) await expect(page.locator(selector)).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+  for (const selector of ['.fn-header', '.fn-left']) await expect(page.locator(selector)).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(preview(page).locator('body')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  expect(await page.locator('.kp-page-window').evaluate(node => getComputedStyle(node).getPropertyValue('--kp-window-background').trim())).toBe('#eeefe9');
+  await expect(page.locator('.kp-page-window')).toHaveCSS('opacity', '1');
   await page.getByRole('button', { name: 'Close styles' }).click();
   const geometry = await page.locator('.ProseMirror').evaluate(root => {
     const blocks = [...root.children], story = root.querySelector('.fn-story')!;

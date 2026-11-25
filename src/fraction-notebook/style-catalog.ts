@@ -12,6 +12,7 @@ export const styleFields: readonly StyleField[] = [
   ...fields('Body', [['Body color', '--fn-text', 'color', '--color-ink'], ['Body weight', '--kp-document-body-weight', 'font-weight'], ['Body size', '--kp-document-body-size', 'font-size'], ['Line height', '--kp-document-body-leading', 'line-height']]),
   ...fields('Document', [['Background', '--fn-background', 'color', '--color-paper'], ['Muted text', '--fn-muted', 'color', '--color-muted'], ['Borders', '--fn-border', 'color', '--color-border'], ['Block gap', '--fn-block-gap', 'gap'], ['Title group gap', '--fn-title-gap', 'gap'], ['Document width', '--kp-document-width', 'width']]),
   ...fields('Masthead', [['Masthead weight', '--fn-masthead-weight', 'font-weight'], ['Masthead size', '--fn-masthead-size', 'font-size'], ['Header shadow', '--fn-shadow', 'color', '--color-shadow']]),
+  ...fields('Windows', [['Window width', '--kp-window-width', 'width'], ['Window background', '--kp-window-background', 'color', '--fn-background'], ['Window opacity', '--kp-window-alpha', 'opacity'], ['Window shadow', '--kp-window-shadow', 'color', '--fn-shadow'], ['Focus transition', '--kp-window-focus-duration', 'transition-duration'], ['Focus lift', '--kp-window-focus-lift', 'height']]),
   ...fields('Document title', [['Document title weight', '--fn-title-weight', 'font-weight'], ['Title size', '--kp-document-title-size', 'font-size']]),
   ...fields('Section headings', [['Heading weight', '--kp-document-heading-weight', 'font-weight'], ['Heading size', '--kp-document-heading-size', 'font-size']]),
   ...fields('Animation', [['Animation surface', '--fn-surface', 'color', '--color-stage'], ['Animation emphasis', '--fn-focus', 'color', '--color-emphasis'], ['Object title weight', '--fn-object-weight', 'font-weight'], ['Object title size', '--fn-object-size', 'font-size', '--kp-document-heading-size']]),
@@ -21,7 +22,7 @@ export const styleFields: readonly StyleField[] = [
   ...fields('Code', [['Code strings', '--fn-code-string', 'color', '--color-yellow-light'], ['Code properties', '--fn-code-property', 'color', '--color-blue-light'], ['Code numbers', '--fn-code-number', 'color', '--color-green-light'], ['Code punctuation', '--fn-code-punctuation', 'color', '--fn-muted'], ['Code size', '--fn-code-size', 'font-size']]),
   ...fields('Palette', palette.map(([name, key]) => [`Palette ${name.toLowerCase()}`, key, 'color'] as const))
 ];
-export const propertyNames: Record<string, string> = { 'font-weight': 'Font weight', 'font-size': 'Font size', 'line-height': 'Line height', gap: 'Spacing', width: 'Width', color: 'Color' };
+export const propertyNames: Record<string, string> = { 'font-weight': 'Font weight', 'font-size': 'Font size', 'line-height': 'Line height', gap: 'Spacing', width: 'Width', color: 'Color', opacity: 'Opacity', 'transition-duration': 'Duration', height: 'Distance' };
 export function referenceName(key: string) { return palette.find(([, variable]) => variable === key)?.[0] ?? styleFields.find(field => field.key === key)?.label ?? key; }
 // CSS accepts cyclic var() expressions but silently invalidates their consumers.
 // Include default references when checking overrides before persistence.
