@@ -1,0 +1,17 @@
+{
+  "id": "task.kp.fixed-chat-split-20261125",
+  "kind": "task",
+  "title": "Use a fixed Codex-left, KP-right split after the Org discussion",
+  "status": "deferred",
+  "domain": "product",
+  "summary": "Discuss the user question about Org without Emacs before implementing this authorized UI replacement.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-fixed-chat-split.md"
+    }
+  ],
+  "revisitWhen": [
+    "Return to the authorized fixed split after the discussion."
+  ]
+}

@@ -14,17 +14,32 @@ export function mountTransient(host: HTMLElement, restore: () => void) {
   const content = document.createElement('div'), choices = document.createElement('div'); choices.className = 'kp-transient-choices';
   heading.append(title, close); dialog.append(heading, content, choices); host.append(dialog);
   let commands: readonly ChatCommand[] = [], disposeBody: (() => void) | undefined;
-  let page = 'commands', epoch = 0;
+  let page = 'commands', epoch = 0, frame = 0;
   const position = () => {
     const rect = host.getBoundingClientRect();
-    dialog.style.left = `${Math.max(8, rect.left + 12)}px`;
-    dialog.style.width = `${Math.min(rect.width - 24, innerWidth - 16)}px`;
+    const width = Math.max(0, Math.min(rect.width - 24, innerWidth - 16));
+    dialog.style.left = `${Math.max(8, Math.min(rect.left + 12, innerWidth - width - 8))}px`;
+    dialog.style.width = `${width}px`;
     dialog.style.bottom = `${Math.max(8, innerHeight - rect.bottom + 12)}px`;
   };
+  const ancestors: Element[] = [];
+  for (let node: Element | null = host; node; node = node.parentElement) ancestors.push(node);
+  const follow = () => {
+    cancelAnimationFrame(frame); frame = 0;
+    if (!dialog.open) return;
+    position();
+    // ResizeObserver does not see translation. Follow an animating ancestor
+    // only while it moves, including a reversal after the popup has opened.
+    if (ancestors.some(node => node.getAnimations().some(animation => animation.playState === 'running'))) frame = requestAnimationFrame(follow);
+  };
+  const motion = (event: TransitionEvent) => { if (event.target instanceof Element && ancestors.includes(event.target)) follow(); };
+  document.addEventListener('transitionrun', motion); document.addEventListener('transitionend', motion); document.addEventListener('transitioncancel', motion);
+  window.addEventListener('resize', follow);
   const resize = new ResizeObserver(position); resize.observe(host);
   function hide(returnFocus = true) {
     if (!dialog.open) return;
     epoch++;
+    cancelAnimationFrame(frame); frame = 0;
     dialog.close();
     disposeBody?.(); disposeBody = undefined;
     if (returnFocus) restore();
@@ -68,8 +83,13 @@ export function mountTransient(host: HTMLElement, restore: () => void) {
       // Native dialog focus is explicit, so a disabled first command cannot
       // leave a hidden editor receiving the next key.
       (choices.querySelector<HTMLButtonElement>('button:not(:disabled)') ?? close).focus({ preventScroll: true });
+      follow();
     },
     update(values: readonly ChatCommand[]) { if (dialog.open && page === 'Commands') render(values); },
-    dispose() { if (dialog.open) dialog.close(); disposeBody?.(); resize.disconnect(); dialog.remove(); }
+    dispose() {
+      cancelAnimationFrame(frame); if (dialog.open) dialog.close(); disposeBody?.(); resize.disconnect();
+      document.removeEventListener('transitionrun', motion); document.removeEventListener('transitionend', motion); document.removeEventListener('transitioncancel', motion);
+      window.removeEventListener('resize', follow); dialog.remove();
+    }
   };
 }

@@ -90,7 +90,7 @@ split.onkeydown = event => { if (event.key === 'ArrowLeft' || event.key === 'Arr
 left.append(editorHost); right.append(resultStatus, frame); writingPanel.prepend(tools); writingPanel.append(previewTools);
 const editorBody = el('div', 'kp-editor-body');
 const pageWindow = el('section', 'kp-page-window'); pageWindow.setAttribute('aria-label', 'KP page');
-workspace.append(left, sourcePane, split, right); pageWindow.append(header, workspace); editorBody.append(pageWindow); root.append(editorBody);
+workspace.append(left, sourcePane, split, right); pageWindow.append(workspace); editorBody.append(pageWindow); root.append(header, editorBody);
 const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, name => { mode.textContent = name.toUpperCase(); }, {
   host: sourceHost, run: runSource,
   open() { root.classList.add('fn-focus'); split.inert = false; layout.refresh(); },
@@ -133,6 +133,8 @@ actions.querySelector('.fn-structure-controls')!.classList.add('fn-menu-panel');
 // Tools belong to the single masthead. Their actions retain the editor's
 // selection, then dismiss so a popup cannot cover the passage being edited.
 header.addEventListener('click', event => {
+  const control = event.target instanceof Element ? event.target.closest('button,summary,select') : null;
+  if (control && control.getAttribute('aria-controls') !== 'kp-chat') windows.raise('page');
   if (event.target instanceof Element && event.target.closest('button')) event.target.closest<HTMLDetailsElement>('details.fn-menu')?.removeAttribute('open');
 });
 header.addEventListener('change', event => {

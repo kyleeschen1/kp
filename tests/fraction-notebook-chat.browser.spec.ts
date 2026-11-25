@@ -181,17 +181,29 @@ test('streaming preserves an older reading position and search dismissal restore
   } finally { await f.close(); }
 });
 
-test('layered windows preserve columns, draft, scroll and native player through pointer and keyboard focus', async ({ page, context }, info) => {
+test('layered windows reorder below a global masthead and preserve columns, draft, scroll and native player', async ({ page, context }, info) => {
   const f = await fixture(context);
   try {
     await page.setViewportSize({ width: 1440, height: 960 }); await open(page);
     const pageWindow = page.locator('[data-kp-window=page]'), chatWindow = page.locator('[data-kp-window=chat]');
     const column = page.locator('.kp-chat-column'), draft = page.locator('.kp-chat-draft');
-    expect(await page.locator('.fn-header').evaluate(node => node.parentElement?.getAttribute('data-kp-window'))).toBe('page');
-    expect(await page.locator('#app > .fn-header').count()).toBe(0);
+    await expect(page.locator('#app > .fn-header')).toHaveCount(1);
+    await expect(pageWindow.locator('.fn-header')).toHaveCount(0);
+    const headerBox = await page.locator('.fn-header').boundingBox();
+    const front = async (id: 'page' | 'chat', step = 24) => {
+      const active = id === 'page' ? pageWindow : chatWindow, back = id === 'page' ? chatWindow : pageWindow;
+      await expect(active).toHaveAttribute('data-window-active', 'true');
+      await expect.poll(async () => Math.round((await active.boundingBox())!.x)).toBe(0);
+      await expect.poll(async () => Math.round((await back.boundingBox())!.y - (await active.boundingBox())!.y)).toBe(step);
+      const a = (await active.boundingBox())!, b = (await back.boundingBox())!;
+      expect(b.x).toBeGreaterThan(a.x); expect(a.y).toBeGreaterThanOrEqual(headerBox!.height);
+      expect(b.x + b.width).toBeCloseTo(page.viewportSize()!.width, 0);
+      expect(await page.locator('.fn-header').boundingBox()).toEqual(headerBox);
+    };
     await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    await front('chat');
     const chatBox = await chatWindow.boundingBox(), pageBox = await pageWindow.boundingBox(), columnBox = await column.boundingBox();
-    expect(chatBox!.width).toBeCloseTo(1440 * .6, 0); expect(pageBox!.width).toBeCloseTo(1440 * .6, 0);
+    expect(chatBox!.width).toBeCloseTo(1440 * .55, 0); expect(pageBox!.width).toBeCloseTo(1440 * .55, 0);
     expect(Math.abs(columnBox!.x + columnBox!.width / 2 - chatBox!.x - chatBox!.width / 2)).toBeLessThan(1);
     expect((await draft.boundingBox())!.height / columnBox!.height).toBeCloseTo(1 / 3, 2);
     await page.getByRole('textbox', { name: 'Conversation transcript' }).press('i'); await input(page).pressSequentially('A continued thought');
@@ -199,29 +211,37 @@ test('layered windows preserve columns, draft, scroll and native player through 
     const editor = page.locator('.fn-editor .ProseMirror'), editorNode = await editor.elementHandle();
     const frame = page.frameLocator('iframe'), stage = await frame.locator('.kp-reader-equation-stage').elementHandle();
     await page.keyboard.press('Control+Backquote'); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    await front('page');
     await expect(editor).toBeFocused();
     const editorWidth = (await editor.boundingBox())!.width;
     expect(editorWidth).toBe(440); expect(columnBox!.width).toBe(491);
     await page.keyboard.press('Control+Backquote'); await expect(input(page)).toBeFocused();
+    await front('chat');
     await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('A continued thougXht');
     await input(page).press('Escape'); await expect(draft).toBeVisible();
     // Click a visible page gutter, then exercise switching from inside the
     // existing iframe: neither operation may replace its DOM or clock owner.
-    await pageWindow.click({ position: { x: 4, y: 200 } }); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    await pageWindow.click({ position: { x: pageBox!.width - 4, y: 200 } }); await front('page');
     await page.getByRole('button', { name: 'Edit', exact: true }).click();
     await frame.locator('body').click({ position: { x: 30, y: 140 } });
     await page.keyboard.press('Control+Backquote'); await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    await front('chat');
     expect(await editorNode!.evaluate(node => node.isConnected)).toBe(true); expect(await stage!.evaluate(node => node.isConnected)).toBe(true);
     expect((await column.boundingBox())!.width).toBe(columnBox!.width);
     await expect(draft).toBeVisible(); await page.screenshot({ path: info.outputPath('layered-chat-desktop.png') });
+    // Interrupt and reverse before the first transition reaches its endpoint.
+    await page.keyboard.press('Control+Backquote'); await page.keyboard.press('Control+Backquote'); await page.keyboard.press('Control+Backquote');
+    await front('page');
     await page.emulateMedia({ reducedMotion: 'reduce' }); await expect(chatWindow).toHaveCSS('transition-duration', '0s');
-    await page.keyboard.press('Control+Backquote'); await expect(pageWindow).toHaveCSS('transform', 'none');
+    await page.keyboard.press('Control+Backquote'); await front('chat');
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.locator('[data-kp-window=chat]').click({ position: { x: 366, y: 250 } });
+    await pageWindow.click({ position: { x: 370, y: 250 } });
+    await chatWindow.click({ position: { x: 370, y: 250 } });
     await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(Math.round((await pageWindow.boundingBox())!.y - (await chatWindow.boundingBox())!.y)).toBe(8);
     await expect(draft).toBeVisible(); await page.screenshot({ path: info.outputPath('layered-chat-phone.png') });
-    await pageWindow.click({ position: { x: 4, y: 250 } }); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    await pageWindow.click({ position: { x: 370, y: 250 } }); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
     await expect.poll(() => f.store.data.draft).toBe('A continued thougXht');
     let release!: () => void; const previewReady = new Promise<void>(resolve => { release = resolve; });
     await page.route('**/src/reader/app/exemplar-entry.ts*', async route => { await previewReady; await route.continue(); });
@@ -237,6 +257,69 @@ test('layered windows preserve columns, draft, scroll and native player through 
     await page.keyboard.press('Control+c'); await page.keyboard.press('W');
     await expect(page.getByRole('dialog', { name: 'Chat commands' })).toBeHidden();
     await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    expect(f.peer.sends()).toHaveLength(0);
+  } finally { await f.close(); }
+});
+
+test('window promotion completes pointer gestures and keeps moving chat commands, scroll and close/reopen reachable', async ({ page, context }, info) => {
+  const f = await fixture(context);
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: Array.from({ length: 60 }, (_, i) => `Paragraph ${i}: keep a stable reading place while changing windows.`).join('\n\n') }] }];
+  try {
+    await page.addInitScript(() => localStorage.setItem('kp.notebook.styles.v1', JSON.stringify({ theme: 'light', values: {} })));
+    await page.setViewportSize({ width: 1440, height: 960 }); await open(page); await connect(page);
+    const pageWindow = page.locator('[data-kp-window=page]'), chatWindow = page.locator('[data-kp-window=chat]');
+    const history = page.locator('.kp-chat-history'), column = page.locator('.kp-chat-column');
+    await write(page, 'Keep this continued thought and its selection.'); await input(page).press('Escape');
+    const editorNode = await input(page).elementHandle();
+    const headerBox = await page.locator('.fn-header').boundingBox();
+    await page.keyboard.press('Control+Backquote');
+    await expect.poll(async () => Math.round((await chatWindow.boundingBox())!.x)).toBe(648);
+    await history.evaluate(node => { node.scrollTop = 500; });
+    const scroll = await history.evaluate(node => node.scrollTop);
+    // Drag a selection on the exposed rear window. Geometry must remain fixed
+    // until release, including the focusin generated by the native pointerdown.
+    const line = (await input(page).locator('p').first().boundingBox())!;
+    await page.mouse.move(line.x + 20, line.y + 10); await page.mouse.down();
+    await page.mouse.move(line.x + 100, line.y + 10, { steps: 6 });
+    await page.waitForTimeout(100);
+    expect(Math.round((await chatWindow.boundingBox())!.x)).toBe(648);
+    await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    const selection = await page.evaluate(() => getSelection()?.toString()); expect(selection?.length).toBeGreaterThan(0);
+    await page.mouse.up();
+    await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    await expect.poll(async () => Math.round((await chatWindow.boundingBox())!.x)).toBe(0);
+    expect(await page.evaluate(() => getSelection()?.toString())).toBe(selection);
+    expect(await history.evaluate(node => node.scrollTop)).toBe(scroll);
+    // A cancelled touch/pointer gesture must not promote its original owner.
+    const back = (await pageWindow.boundingBox())!;
+    await page.mouse.move(back.x + back.width - 4, back.y + 200); await page.mouse.down();
+    await pageWindow.dispatchEvent('pointercancel', { pointerId: 1, isPrimary: true }); await page.mouse.up();
+    await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    // Header tools select their page even though the header lives outside it.
+    await page.getByRole('button', { name: 'Styles', exact: true }).click();
+    await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
+    await page.getByRole('button', { name: 'Close styles', exact: true }).click();
+    await expect.poll(async () => Math.round((await chatWindow.boundingBox())!.x)).toBe(648);
+    await page.screenshot({ path: info.outputPath('recency-stack-page-light.png') });
+    // Open the transient while its window is still crossing the workspace.
+    await page.getByRole('textbox', { name: 'Conversation transcript' }).focus();
+    await page.keyboard.press('Control+c');
+    const menu = page.getByRole('dialog', { name: 'Chat commands' }); await expect(menu).toBeVisible();
+    await expect.poll(() => chatWindow.evaluate(node => node.getAnimations().length)).toBe(0);
+    await expect.poll(async () => Math.round((await menu.boundingBox())!.x - (await column.boundingBox())!.x)).toBe(12);
+    const menuBox = (await menu.boundingBox())!;
+    expect(menuBox.x).toBeGreaterThanOrEqual(8); expect(menuBox.x + menuBox.width).toBeLessThanOrEqual(1432);
+    await menu.getByRole('button', { name: 'Branches', exact: true }).click(); await expect(menu).toContainText('Main');
+    await page.keyboard.press('Escape');
+    await page.screenshot({ path: info.outputPath('recency-stack-chat-light.png') });
+    const toggle = page.getByRole('button', { name: 'Chat', exact: true });
+    await toggle.click(); await expect(chatWindow).toBeHidden();
+    await expect.poll(async () => Math.round((await pageWindow.boundingBox())!.x)).toBe(324);
+    await toggle.click(); await expect(chatWindow).toHaveAttribute('data-window-active', 'true');
+    await expect(input(page)).toHaveText('Keep this continued thought and its selection.');
+    expect(await editorNode!.evaluate(node => node.isConnected)).toBe(true);
+    expect(await history.evaluate(node => node.scrollTop)).toBe(scroll);
+    expect(await page.locator('.fn-header').boundingBox()).toEqual(headerBox);
     expect(f.peer.sends()).toHaveLength(0);
   } finally { await f.close(); }
 });

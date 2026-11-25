@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-windowed-chat",
-    title: "Keep the draft and reading place stable across layered windows",
+    id: "kp-fixed-chat-split",
+    title: "Use a simple fixed split with Codex left and KP right",
     approval: "approved",
-    contractId: "run-contract.kp.windowed-chat-20261125",
-    finish: "Keep the draft visible in the bottom third of chat. Switch between layered KP and chat windows with stable centered columns, a page-owned masthead and theme-correct first paint. Preserve buffers, native player and conversation recovery; review one exemplar.",
-    source: { label: "Checked layered window exemplar", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
+    contractId: "run-contract.kp.fixed-chat-split-20261125",
+    finish: "Replace the rejected stack with a stationary chat-left, KP-right split. Preserve the global masthead, reading columns, permanent draft, mounted buffers, player and recovery. Discuss Org issue tracking before implementing the replacement.",
+    source: { label: "Requested fixed split and discussion boundary", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, verify the requested restoration of 440px KP prose and roughly 490px desktop chat text. The rejected sliding overlay stays removed. This corrects the narrow columns; a broader layout rollback remains unselected.",
+  nextJudgment: "Discuss whether Org files can provide a useful human overview without Emacs or a competing execution queue. The next authorized UI change is a fixed Codex-left, KP-right split at http://127.0.0.1:8000/experiments/fraction-notebook/. The rejected moving stack must not be resumed or promoted.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The fraction notebook and persistent conversation are accepted. Keyboard chat, notes and context return are checked. The user replaces the hiding draft with permanent composition and layered windows; their visual treatment awaits review. Independent object revision and Spindle/library extraction remain return paths.",
+      established: "The fraction notebook and persistent conversation are accepted. Permanent composition, notes, recovery and restored text widths remain foundations. The user rejected both the sliding overlay and recency stack, selecting a simple fixed split next. Independent object revision and Spindle/library extraction remain return paths.",
       evidence: { label: "Windowed chat and preserved foundations", href: "docs/project/reviews/2026-11-25-windowed-chat.md" },
       outcome: {
         authority: "approved",
-        id: "persistent-composition-windows", title: "Keep writing and reading places visible and stable",
-        finish: "One two-window exemplar retains a permanent draft, independent positions and native animation while focus raises layered surfaces. Its masthead belongs to the KP page, columns stay centered and theme restoration precedes first paint.",
+        id: "fixed-chat-split", title: "Keep Codex and KP in stable left and right columns",
+        finish: "One fixed split keeps chat left and KP right beneath the global masthead, preserving reading columns, permanent composition, saved place and native animation. Discuss Org issue tracking first; adopting a tracker is a separate decision.",
         excludes: "A general session workspace, automatic object patches, image-generation integration, publication, library extraction, desktop migration, paid test inference or whole-book infrastructure.",
-        source: { label: "Approved window interaction successor", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
+        source: { label: "Requested fixed split successor", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
       }
     },
     {
@@ -424,6 +424,20 @@ export const projectVision: ProjectVision = {
       after: "The user requests restoration of the earlier 440px KP prose and roughly 490px desktop chat text widths.",
       reason: "Restore the identified reading measure without changing the current window behavior, saved content or native conversation sessions.",
       source: { label: "Requested text-width correction", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
+    },
+    {
+      id: "select-recency-window-stack", on: "2026-11-25",
+      before: "The restored candidate uses fixed left/right window positions and a page-owned masthead, with corrected 440px KP and 491px chat text columns.",
+      after: "The user explicitly selects 55vw outer windows, recency ordering that moves active work to the upper left, and a stationary global masthead. Keep the restored reading columns centered inside each window.",
+      reason: "Give active work a consistent front position while retaining context, drafts and native animation. This replaces the earlier layout candidate without resuming the rejected sliding overlay or authorizing a general window framework.",
+      source: { label: "Approved recency stack and preservation boundary", href: "docs/project/reviews/2026-11-25-recency-window-stack.md" }
+    },
+    {
+      id: "reject-recency-stack", on: "2026-11-25",
+      before: "The approved 55vw recency stack moved active work to the upper left beneath a global masthead; functional preservation checks passed.",
+      after: "The user rejected the visible treatment and requested a fixed split, Codex left and KP right. Discuss Org-based issue tracking without Emacs before implementing that replacement.",
+      reason: "The moving window arrangement did not serve the desired experience. Retain data and editing guarantees, stop this visual candidate, and do not interpret an issue-tracking question as authorization to migrate trackers.",
+      source: { label: "Rejection and requested fixed split", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
     }
   ]
 };

@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-windowed-chat`
-Execution Contract: `run-contract.kp.windowed-chat-20261125`
-Next Product Milestone: `persistent-composition-windows`
+Current Commitment: `kp-fixed-chat-split`
+Execution Contract: `run-contract.kp.fixed-chat-split-20261125`
+Next Product Milestone: `fixed-chat-split`
 Milestone Authority: approved
 
 ## Where we are going
@@ -23,15 +23,18 @@ why this becomes the organizing direction and what it supersedes.
 [focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
 **Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
-**Restored:** [prior window candidate](reviews/2026-11-25-windowed-chat.md) after
-the [sliding overlay](reviews/2026-11-25-overlay-chat.md) was rejected.
-Restore prior text widths; broader layout rollback remains unselected.
-Preserve recovery, notebook JSON and native rendering.
+**Next:** [fixed split](reviews/2026-11-25-fixed-chat-split.md), Codex left and KP
+right, after discussing Org issue tracking. The
+[recency stack](reviews/2026-11-25-recency-window-stack.md) is rejected.
+Retain restored 440px KP / 491px chat columns and persistent composition from
+the [prior candidate](reviews/2026-11-25-windowed-chat.md).
+The [sliding overlay](reviews/2026-11-25-overlay-chat.md) remains rejected.
+Preserve data and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
 is deferred behind persistent conversation; automatic document edits remain excluded.
-Publication and general editor promotion are excluded. Custom motions are parked; MathML declined. Transclusion and search
-remain later. Preserve notebook identities, metadata and recovery.
+Exclude publication and general editor promotion. Custom motions, transclusion
+and search remain parked; MathML declined.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
 retains identity, nesting, scope and reuse evidence; its inspector UI was unaccepted.
 Authoring-to-practice and fractional editorial review remain unchanged return paths.
@@ -44,8 +47,6 @@ after this bounded checkpoint. Its dependencies and human gates remain intact.
 What counts remains the technical reference. Fractional reasoning awaits review
 of its argument, alternative route and changed-case question. Preserve the
 [accepted reading defaults](principles/document-theater-reading.md).
-
-Preserve authoring and parallel ownership.
 
 ## First product proof — approved
 

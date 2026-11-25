@@ -1,0 +1,61 @@
+{
+  "id": "task.kp.recency-window-stack-20261125",
+  "kind": "task",
+  "title": "Keep active authoring work at the front of a 55vw window stack",
+  "status": "deferred",
+  "domain": "product",
+  "summary": "Rejected visually despite preservation checks; fixed split is the successor and Org discussion comes first.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-recency-window-stack.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T16:44:51.611Z",
+      "notes": "Passed for the window host, shared activation boundary, popup and focused browser code."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T16:44:52.714Z",
+      "notes": "16 passed before the final phone CSS cascade adjustment and added 8px assertion; that added assertion is unrun. Candidate rejected visually."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T16:44:53.469Z",
+      "notes": "23 passed after the phone cascade adjustment; no visual acceptance inferred."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T16:44:54.273Z",
+      "notes": "23 passed; protocol fixture only."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T16:44:55.072Z",
+      "notes": "20 passed."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T16:46:14.562Z",
+      "notes": "75 passed after recording rejection, the fixed split successor, and the Org discussion boundary."
+    }
+  ],
+  "revisitWhen": [
+    "Only explicit user selection of the rejected treatment."
+  ]
+}

@@ -5,6 +5,7 @@ import './theme.css';
 import { readStyleSettings, applyStyles } from './styles.ts';
 import { readEndpointCommentary } from '../reader/document/public-api.ts';
 import { renderInlineObject } from './inline-source.ts';
+import { mountWindowActivation } from './window-activation.ts';
 
 /** Mounted only by the development preview host. Apply checked editorial data
  * without replacing the native equation, clock, story or passage containers. */
@@ -18,9 +19,10 @@ export function mountFractionNotebookPreview(input: {
   const cycleWindow = (event: KeyboardEvent) => {
     if (event.isComposing || !event.ctrlKey || event.altKey || event.metaKey || event.code !== 'Backquote') return;
     event.preventDefault(); event.stopPropagation();
+    activation.cancel();
     send({ protocol: 'kp.fraction-notebook.v1', kind: 'window-cycle', reverse: event.shiftKey });
   };
-  document.addEventListener('pointerdown', focusWindow); document.addEventListener('focusin', focusWindow);
+  const activation = mountWindowActivation(document.body, focusWindow);
   document.addEventListener('keydown', cycleWindow, true);
   const navigation = document.querySelector<HTMLDetailsElement>('.kp-rising-navigation');
   const moments = document.createElement('select'); moments.className = 'fn-preview-moments'; moments.setAttribute('aria-label', 'Animation moment');
@@ -151,5 +153,5 @@ export function mountFractionNotebookPreview(input: {
   };
   window.addEventListener('message', onMessage); document.addEventListener('click', onClick);
   send({ protocol: 'kp.fraction-notebook.v1', kind: 'ready' });
-  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); document.removeEventListener('pointerdown', focusWindow); document.removeEventListener('focusin', focusWindow); document.removeEventListener('keydown', cycleWindow, true); navigation?.removeEventListener('toggle', reportOptions); syncMoment.disconnect(); moments.remove(); } };
+  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); activation.dispose(); document.removeEventListener('keydown', cycleWindow, true); navigation?.removeEventListener('toggle', reportOptions); syncMoment.disconnect(); moments.remove(); } };
 }

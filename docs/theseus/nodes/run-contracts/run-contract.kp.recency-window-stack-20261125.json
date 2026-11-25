@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.recency-window-stack-20261125",
+  "kind": "run-contract",
+  "title": "Recency-ordered authoring windows",
+  "status": "deferred",
+  "summary": "STOP_CONDITION: user rejected the visible stack and requested a fixed Codex-left, KP-right split, after discussing Org issue tracking. Do not resume or promote the rejected candidate.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.recency-window-stack-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-recency-window-stack.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:editor-chat",
+    "npm run visual:fraction-notebook",
+    "npm run test:project-vision"
+  ],
+  "revisitWhen": [
+    "Only explicit user selection of this rejected treatment."
+  ],
+  "allowedWork": [
+    "Host layout, recency ordering, pointer and keyboard focus, popup placement, scoped preservation checks"
+  ],
+  "disallowedWork": [
+    "Semantic changes, general window framework, new window types, native inference, publication or broad promotion"
+  ],
+  "goal": "Review one 55vw stack with a stationary global masthead and preserved reading columns",
+  "target": "task.kp.recency-window-stack-20261125",
+  "slices": [
+    {
+      "id": "stack",
+      "title": "Window stack exemplar",
+      "summary": "Implement the explicitly approved 55vw recency stack in the existing window host; preserve reading columns, mounted buffers and native player.",
+      "status": "in-progress"
+    }
+  ]
+}

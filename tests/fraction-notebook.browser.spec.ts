@@ -578,7 +578,8 @@ test('light canvas and parent gaps unify prose and the animation entrance', asyn
   await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
   await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
   for (const selector of ['.fn-source-pane', '.fn-styles']) await expect(page.locator(selector)).toHaveCSS('background-color', 'rgb(238, 239, 233)');
-  for (const selector of ['.fn-header', '.fn-left']) await expect(page.locator(selector)).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(page.locator('.fn-left')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await expect(page.locator('.fn-header')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
   await expect(preview(page).locator('body')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
   expect(await page.locator('.kp-page-window').evaluate(node => getComputedStyle(node).getPropertyValue('--kp-window-background').trim())).toBe('#eeefe9');
   await expect(page.locator('.kp-page-window')).toHaveCSS('opacity', '1');

@@ -1,0 +1,41 @@
+{
+  "id": "run-contract.kp.fixed-chat-split-20261125",
+  "kind": "run-contract",
+  "title": "Fixed Codex and KP split",
+  "status": "deferred",
+  "summary": "The split is authorized; the user asks to discuss Org issue tracking before implementation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.fixed-chat-split-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-fixed-chat-split.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:editor-chat",
+    "npm run visual:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "Resume the already authorized fixed split after the Org discussion."
+  ],
+  "allowedWork": [
+    "Host layout and focused preservation checks"
+  ],
+  "disallowedWork": [
+    "Tracker migration, semantic changes, native inference, broader redesign or publication"
+  ],
+  "goal": "Replace the rejected stack with chat left and KP right after discussing Org tracking",
+  "target": "task.kp.fixed-chat-split-20261125",
+  "slices": [
+    {
+      "id": "split",
+      "title": "Fixed split exemplar",
+      "status": "planned"
+    }
+  ]
+}

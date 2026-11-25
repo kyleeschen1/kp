@@ -1,6 +1,9 @@
 # Persistent composition and layered authoring windows
 
-Status: HUMAN_CHECKPOINT — implemented and checked; visual acceptance is open.
+Status: SUPERSEDED as a layout candidate by the approved
+[55vw recency stack](2026-11-25-recency-window-stack.md). Retain the composition,
+recovery, theme and restored text-width guarantees documented here. The original
+visual treatment was checked but never accepted.
 
 Rollback checkpoint: the subsequent [sliding overlay](2026-11-25-overlay-chat.md)
 was rejected and removed. This commit's presentation (`4850ae6fb`) is restored.

@@ -19,7 +19,7 @@ const node = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', tex
 };
 /** Closing the presentation never disconnects, resends, or destroys native history. */
 export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost) {
-  const launcher = node('button', '', 'Chat'); launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false'); actions.append(launcher);
+  const launcher = node('button', '', 'Chat'); launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false'); launcher.setAttribute('aria-controls', 'kp-chat'); actions.append(launcher);
   let panel: ReturnType<typeof mountChatPanel> | undefined;
   const open = () => { launcher.remove(); panel ??= mountChatPanel(body, actions, layout, windowHost); panel.open(); };
   launcher.onclick = open;

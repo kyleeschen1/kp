@@ -5,14 +5,14 @@ Last Updated: 2026-11-25
 
 ## Current boundary
 
-The [roadmap](../roadmap.md) owns current direction; the [charter](../strategy.md)
+The [roadmap](../roadmap.md) owns direction; the [charter](../strategy.md)
 and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain
 author-first rationale and the learner/practice/library horizon.
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
-Read live slices there. Preserve parallel editor ownership; this checkout's old
-workbench proposal is historical.
+Theseus owns progress. Preserve parallel editor ownership; the old workbench
+proposal is historical.
 The [handoff](../reviews/2026-11-08-project-orientation.md) bounds the conversation/preview
 candidate. [Saved reading and motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md)
 separates repaired startup and reuse from cold preparation cost. What counts
@@ -38,9 +38,11 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Persistent chat](../reviews/2026-11-25-kp-persistent-chat.md) is accepted.
   [Rich chat and annotations](../reviews/2026-11-25-kp-rich-chat.md) are checked.
   [Keyboard chat](../reviews/2026-11-25-keyboard-chat.md) is checked; the
-  [windowed candidate](../reviews/2026-11-25-windowed-chat.md) has a requested width correction.
-  Automatic notebook edits and broader extraction remain excluded.
-  Custom motions/text objects are parked; MathML is declined.
+  [recency stack](../reviews/2026-11-25-recency-window-stack.md) was rejected.
+  Next: [fixed split](../reviews/2026-11-25-fixed-chat-split.md), after discussing
+  Org tracking. Preserve composition and text widths; exclude automatic edits
+  and broader extraction.
+  Motions/text objects remain parked; MathML declined.
   Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
