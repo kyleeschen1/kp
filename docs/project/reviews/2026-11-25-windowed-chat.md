@@ -8,6 +8,25 @@ The user's requested earlier, left-entry layout is not uniquely identified;
 clarification distinguishes this version from the pre-window editor/chat layout.
 The restored focus/reload and topic/branch browser cases both pass.
 
+Width correction COMPLETE: restored the pre-window defaults from
+`3e4a96445`: 440px KP prose and 491px desktop chat text (the old 540px panel minus
+48px padding and its 1px border). The 360px shared cap survived the first rollback.
+Use independent content-width variables while retaining the current windows,
+permanent composer, mounted editors/player and saved data. Narrow screens still
+constrain each column to its available space. This is an exact presentation
+correction, not approval of the rejected overlay or a general window redesign.
+Verify rendered widths and existing focus/reload/phone behavior in the canonical
+fraction notebook, plus scoped types and project-vision consistency. Commit this
+bounded correction with its evidence; no new visual gate is needed for restoring
+the identified sizes.
+
+Correction evidence: the existing layered-window browser case measures 440px
+KP and 491px chat, preserving focus, draft, native player, reload and phone
+containment. Four selected notebook browser cases pass for prose/undo, style
+comparison, light-theme spacing and phone source/result use. Scoped TypeScript
+and all 75 project-vision checks pass. The unmatched-path impact fallback remains
+a generic promotion plan; this exact CSS restoration uses these scoped checks.
+
 Approved by “implement” after the window-layout discussion. This succeeds the
 checked keyboard-chat candidate: hiding the composer is explicitly superseded.
 Keep its session, annotation, context and branch recovery guarantees.
@@ -70,11 +89,12 @@ transcript in Normal mode. Ctrl-backquote switches windows, including from the
 preview, and the chat transient offers `C-c W`. The last front window survives
 reload. On a phone, either exposed 16px edge raises its window by touch.
 
-Desktop windows are 60vw with a shared default 360px content column. The KP
+Desktop windows are 60vw; the original shared 360px content cap is superseded
+by the width correction above. The KP
 masthead lives inside the page window. Initial treatment: 96% background opacity,
 400ms shadow/lift transition and 2px lift; text stays fully opaque. Styles exposes
 window width, background, opacity, shadow, duration and lift. Document width
-controls the shared column. Reduced motion removes the transition and lift.
+controls KP prose; Chat text width controls chat. Reduced motion removes the transition and lift.
 
 The host owns stacking and actual focus. Window changes retain the existing
 ProseMirror views, draft selection and native iframe/player. Late chat hydration

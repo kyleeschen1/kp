@@ -201,7 +201,7 @@ test('layered windows preserve columns, draft, scroll and native player through 
     await page.keyboard.press('Control+Backquote'); await expect(pageWindow).toHaveAttribute('data-window-active', 'true');
     await expect(editor).toBeFocused();
     const editorWidth = (await editor.boundingBox())!.width;
-    expect(editorWidth).toBe(columnBox!.width);
+    expect(editorWidth).toBe(440); expect(columnBox!.width).toBe(491);
     await page.keyboard.press('Control+Backquote'); await expect(input(page)).toBeFocused();
     await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('A continued thougXht');
     await input(page).press('Escape'); await expect(draft).toBeVisible();

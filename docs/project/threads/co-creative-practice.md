@@ -38,7 +38,7 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Persistent chat](../reviews/2026-11-25-kp-persistent-chat.md) is accepted.
   [Rich chat and annotations](../reviews/2026-11-25-kp-rich-chat.md) are checked.
   [Keyboard chat](../reviews/2026-11-25-keyboard-chat.md) is checked; the
-  [windowed candidate](../reviews/2026-11-25-windowed-chat.md) is restored pending clarification.
+  [windowed candidate](../reviews/2026-11-25-windowed-chat.md) has a requested width correction.
   Automatic notebook edits and broader extraction remain excluded.
   Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.

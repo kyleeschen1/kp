@@ -1,5 +1,6 @@
 :root {
   --kp-window-width: 60vw;
+  --kp-chat-column-width: 491px;
   --kp-window-background: var(--fn-background);
   --kp-window-alpha: 96%;
   --kp-window-shadow: var(--fn-shadow);
@@ -23,9 +24,9 @@
 .kp-page-window .fn-header-actions { margin-left: auto; }
 .kp-page-window .fn-header .fn-branding { flex-shrink: 0; }
 .kp-page-window .fn-left, .kp-page-window .fn-right { background: transparent; }
-.kp-page-window .fn-editor .ProseMirror { width: min(var(--kp-window-column-width), calc(100% - 64px)); }
+.kp-page-window .fn-editor .ProseMirror { width: min(var(--kp-document-width), calc(100% - 64px)); }
 .kp-page-window .fn-workspace { container-type: size; }
-.kp-chat-column { width: min(var(--kp-window-column-width), 100%); height: 100%; min-height: 0; margin-inline: auto; display: grid; grid-template-rows: minmax(0, 2fr) minmax(0, 1fr); }
+.kp-chat-column { width: min(var(--kp-chat-column-width), 100%); height: 100%; min-height: 0; margin-inline: auto; display: grid; grid-template-rows: minmax(0, 2fr) minmax(0, 1fr); }
 .kp-chat-output { min-height: 0; display: flex; flex-direction: column; gap: var(--fn-block-gap); padding-bottom: var(--fn-block-gap); }
 .kp-chat-column > .kp-chat-draft { height: auto; min-height: 0; max-height: none; background: transparent; }
 .kp-chat-column > .kp-chat-draft > .kp-rich { min-height: 100%; }
@@ -40,7 +41,7 @@
   .kp-window { top: 2px; bottom: 0; }
   .kp-chat-open .kp-window { width: calc(100% - 16px); }
   .kp-window.kp-chat { padding: 14px; }
-  .kp-page-window .fn-editor .ProseMirror { width: min(var(--kp-window-column-width), calc(100% - 40px)); }
+  .kp-page-window .fn-editor .ProseMirror { width: min(var(--kp-document-width), calc(100% - 40px)); }
   .kp-page-window > .fn-header { padding: 8px 12px; }
 }
 @media (prefers-reduced-motion: reduce) {

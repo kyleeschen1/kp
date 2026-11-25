@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Checked layered window exemplar", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "The right-sliding, transparent candidate was rejected and removed. The preceding window version is restored at http://127.0.0.1:8000/experiments/fraction-notebook/. Clarify whether the requested earlier layout means the pre-window editor/chat layout or this first overlapping-window version before changing presentation again.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, verify the requested restoration of 440px KP prose and roughly 490px desktop chat text. The rejected sliding overlay stays removed. This corrects the narrow columns; a broader layout rollback remains unselected.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -417,6 +417,13 @@ export const projectVision: ProjectVision = {
       after: "The user rejected that visible candidate and requested an earlier layout. Its source changes were removed, restoring the preceding window version while clarifying the exact rollback target.",
       reason: "The result did not match the desired experience. Retain draft, session and theme-startup guarantees; do not continue or promote the rejected presentation.",
       source: { label: "Rejected overlay and rollback checkpoint", href: "docs/project/reviews/2026-11-25-overlay-chat.md" }
+    },
+    {
+      id: "restore-pre-window-text-widths", on: "2026-11-25",
+      before: "The first window candidate capped both text columns at 360px, and that narrowing survived removal of the rejected sliding overlay.",
+      after: "The user requests restoration of the earlier 440px KP prose and roughly 490px desktop chat text widths.",
+      reason: "Restore the identified reading measure without changing the current window behavior, saved content or native conversation sessions.",
+      source: { label: "Requested text-width correction", href: "docs/project/reviews/2026-11-25-windowed-chat.md" }
     }
   ]
 };

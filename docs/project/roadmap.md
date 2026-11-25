@@ -25,7 +25,7 @@ why this becomes the organizing direction and what it supersedes.
 **Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
 **Restored:** [prior window candidate](reviews/2026-11-25-windowed-chat.md) after
 the [sliding overlay](reviews/2026-11-25-overlay-chat.md) was rejected.
-Clarify the earlier rollback target before further presentation changes.
+Restore prior text widths; broader layout rollback remains unselected.
 Preserve recovery, notebook JSON and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)

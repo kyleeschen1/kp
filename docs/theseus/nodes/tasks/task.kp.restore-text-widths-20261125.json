@@ -1,0 +1,44 @@
+{
+  "id": "task.kp.restore-text-widths-20261125",
+  "kind": "task",
+  "title": "Restore pre-window KP and chat text widths",
+  "status": "resolved",
+  "domain": "authoring",
+  "summary": "COMPLETE: the requested earlier KP and chat text widths are restored and verified; saved data and existing window behavior are preserved.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-windowed-chat.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:editor-chat -- --grep \"layered windows\"",
+      "status": "passed",
+      "scope": "Restored widths and existing lifecycle",
+      "checkedAt": "2026-11-25T15:51:56.333Z",
+      "notes": "Measured 440px KP and 491px chat. Focus, caret, native player, reload and phone containment pass."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep \"direct prose|Styles compares|light canvas|phone focused\"",
+      "status": "passed",
+      "scope": "Affected notebook typography and layout",
+      "checkedAt": "2026-11-25T15:51:57.183Z",
+      "notes": "Four cases pass: prose and undo, style comparison, light spacing and phone source/result layout."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "Scoped authoring types",
+      "checkedAt": "2026-11-25T15:51:57.811Z",
+      "notes": "Passed with independent document and chat width fields."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Source-linked restoration context",
+      "checkedAt": "2026-11-25T15:51:58.430Z",
+      "notes": "75 passed; rejected overlay remains rejected and width restoration is explicitly selected."
+    }
+  ]
+}
