@@ -2,9 +2,9 @@
   "id": "task.kp.style-comparison-20261124",
   "kind": "task",
   "title": "Compare named notebook styles and unify document spacing",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: checked fraction style/rhythm candidate; all approved implementation complete, visual judgment pending.",
+  "summary": "User accepted the style/rhythm exemplar with looks great; preserved as the interaction reference for the separately approved workbench object successor.",
   "sourceRefs": [
     {
       "kind": "file",

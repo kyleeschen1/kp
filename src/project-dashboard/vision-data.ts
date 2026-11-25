@@ -5,22 +5,22 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "notebook-style-comparison",
-    title: "Compare notebook styles and unify document rhythm",
+    id: "workbench-kp-object",
+    title: "Edit one KP object from the independent workbench",
     approval: "approved",
-    contractId: "run-contract.kp.style-comparison-20261124",
-    finish: "Review shared light Paper, named color swatches, object/property style comparisons, masthead elevation and parent-owned block spacing in one fraction notebook. Preserve the focused source workflow and native animation.",
-    source: { label: "Approved style refinement", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" }
+    contractId: "run-contract.kp.workbench-object-20261125",
+    finish: "Open a revisioned fraction object in Workbench, preview an admitted annotation change in KP, retain the last result after rejection, and recover an unsent draft after reconnect. Review before broader extraction.",
+    source: { label: "Approved object boundary", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At /experiments/fraction-notebook/, open Styles, select Light and search weight to compare heading/title/body thickness. Try object/property filters and named color swatches. Close Styles and judge paragraph spacing, the stage entrance and masthead shadow. Custom motions and text objects remain parked.",
+  nextJudgment: "At http://127.0.0.1:1426/, choose Edit KP object. Change a step's wording, Preview draft and inspect the native animation. Try an invalid focus target, then Reconnect. Judge whether the separated workflow gives enough context and feedback. The accepted rich notebook remains available.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
     { title: "Practice and retrieve", outcome: "Connected problems, feedback and flashcards develop the same instructional distinctions." },
     { title: "Grow the library", outcome: "Curated adaptive material becomes easier to reuse, embed and maintain across domains." }
   ],
-  reviewedOn: "2026-11-24",
+  reviewedOn: "2026-11-25",
   northStar: "Help authors create extraordinary explanations that teach people what to notice.",
   productProof: "Learners can question, adapt, practice and revisit that material while preserving its important reasoning and relationships. Exceptional featured content demonstrates the medium; authoring is the first product center.",
   productSource: { label: "Product charter", href: "docs/project/strategy.md" },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Nested structure editing and the unified surface are accepted. The focused source candidate is checked; user feedback now selects shared beige, comparable styles and consistent spacing. Broader visual acceptance, general authoring speed and learning remain unproved.",
-      evidence: { label: "Focused candidate and refinement boundary", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" },
+      established: "The fraction notebook's structure, focused workflow and style refinement are accepted. The approved successor tests an independent workbench source buffer with KP-owned validation and preview. General authoring speed, extraction and learning remain unproved.",
+      evidence: { label: "Accepted notebook and bounded successor", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" },
       outcome: {
         authority: "approved",
-        id: "notebook-style-rhythm", title: "Compare styles in one coherent document surface",
-        finish: "Find styles by object and property, compare font weights together, select named palette colors and review shared light canvas, consistent paragraph/stage gaps and elevated masthead. Preserve focused editing and optional full Preview.",
-        excludes: "Custom motions/text objects, arbitrary code execution, public-reader redesign, transclusion UI, book search or general editor promotion.",
-        source: { label: "Style comparison review", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" }
+        id: "independent-object-preview", title: "Revise one KP object through the independent workbench",
+        finish: "A source draft previews through a revisioned boundary, preserves the mounted animation, rejects invalid/stale changes and survives reconnect without automatic sending. Review the actual workbench integration.",
+        excludes: "Canonical writes, new Codex services, rich-editor extraction, native-session migration or general adapter promotion.",
+        source: { label: "Workbench object review", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Fraction notebook style comparison and rhythm accepted",
+      scope: "Shared light Paper, named color swatches, object/property style comparison, masthead elevation and parent-owned spacing refine the focused notebook exemplar. This accepts its presentation, not general editor extraction.",
+      source: { label: "Accepted refinement and preserved scope", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
+    },
     {
       title: "Unified fraction notebook surface accepted",
       scope: "One masthead, matching prose fonts, reversible split motion and red modal cursors preserve the native player. Universal typography, exposed styles and a focused-buffer workflow remain successor work.",
@@ -358,6 +363,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves one presentation refinement: shared beige, named swatches, object/property search and grouping, masthead shadow and parent-owned gaps. The checked focused candidate remains recoverable.",
       reason: "Authors need to compare related styles and control document rhythm without deciphering hex values. This refines the exemplar; it does not accept broader promotion or change content and animation authority.",
       source: { label: "Approved style refinement", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" }
+    },
+    {
+      id: "separate-workbench-kp-object", on: "2026-11-25",
+      before: "The accepted notebook combines general editing with KP-specific authoring, and the conversation explores a broader Codex workbench.",
+      after: "The user approves one workbench object adapter: general source drafts and commands remain independent; KP retains domain validation and native rendering. The accepted notebook remains available.",
+      reason: "Test the ownership boundary through an actual useful edit before extracting the rich editor or building more conversation infrastructure. The authoring-to-practice programme remains the return path.",
+      source: { label: "Approved bounded integration", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
     }
   ]
 };

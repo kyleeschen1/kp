@@ -1,11 +1,11 @@
 # KP roadmap
 
-Last Updated: 2026-11-24
+Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `notebook-style-comparison`
-Execution Contract: `run-contract.kp.style-comparison-20261124`
-Next Product Milestone: `notebook-style-rhythm`
+Current Commitment: `workbench-kp-object`
+Execution Contract: `run-contract.kp.workbench-object-20261125`
+Next Product Milestone: `independent-object-preview`
 Milestone Authority: approved
 
 ## Where we are going
@@ -19,15 +19,15 @@ why this becomes the organizing direction and what it supersedes.
 
 ## Current approved commitment
 
-**Accepted detour:** [unified notebook surface](reviews/2026-11-24-unified-notebook-surface.md)
-and nested structure editor. Approved successor: [focused animation editing](reviews/2026-11-24-focused-buffer-next-step-review.md),
-one rich document with source beside its current animation and optional full Preview.
-The focused candidate is checked; user feedback selects [style comparison and
-document rhythm](reviews/2026-11-24-notebook-style-comparison.md): shared beige,
-searchable properties/objects, named colors and consistent gaps in one exemplar.
-Review this refinement before generalizing the focused workflow.
-Custom motions/text objects are parked; MathML declined. Transclusion and
-search remain later. Preserve nesting, UUIDs, metadata and recovery.
+**Accepted:** nested structure, [unified surface](reviews/2026-11-24-unified-notebook-surface.md),
+[focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
+[style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
+**Approved successor:** [one independent workbench → KP object integration](reviews/2026-11-25-workbench-kp-object-boundary.md).
+Workbench owns the source draft and commands; KP owns validation and the native
+animation preview. Review one bounded browser exemplar before extraction.
+Canonical publication, new Codex infrastructure and general editor promotion
+are excluded. Custom motions are parked; MathML declined. Transclusion and search
+remain later. Preserve notebook identities, metadata and recovery.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
 retains identity, nesting, scope and reuse evidence; its inspector UI was unaccepted.
 Authoring-to-practice and fractional editorial review remain unchanged return paths.

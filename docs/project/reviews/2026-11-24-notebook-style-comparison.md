@@ -1,5 +1,9 @@
 # Notebook style comparison and rhythm
 
+Accepted by the user's subsequent “looks great” (candidate `c7fca1a11`). The
+[separate workbench object proof](2026-11-25-workbench-kp-object-boundary.md) is
+the approved successor; the original review-stop wording below is historical.
+
 The user's "go" approves this refinement of the focused notebook candidate.
 One fraction exemplar should use the stage beige throughout light mode, make
 style comparisons searchable by object and property, show named color references

@@ -1,0 +1,79 @@
+{
+  "id": "task.kp.workbench-object-20261125",
+  "kind": "task",
+  "title": "Open and preview one KP object from the independent workbench",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: both bounded implementation packages checked. Review source-to-animation feedback and draft recovery at the isolated workbench; no broader extraction or native trial implied.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "20 tests: canonical object identity/revision, bounded wire and domain admission, plus existing notebook and reading invariants.",
+      "checkedAt": "2026-11-25T10:08:47.124Z"
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "Final object boundary and browser test types.",
+      "checkedAt": "2026-11-25T10:08:48.155Z"
+    },
+    {
+      "command": "npm run visual:workbench-object -- --project=chromium --project=webkit",
+      "status": "passed",
+      "scope": "Eight final actual workbench cases: annotation update, same native player, invalid/stale/foreign requests, unsent recovery, supersession, detach, timeout and isolated standalone site.",
+      "checkedAt": "2026-11-25T10:08:48.871Z"
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "failed",
+      "scope": "Initial 20/21: existing source disclosure click failed to reveal CodeMirror. Cause unproved; no notebook UI fix claimed. Three focused repetitions and subsequent full rerun passed.",
+      "checkedAt": "2026-11-25T10:08:49.590Z"
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "Clean full preservation rerun: 21/21. Canonical production closure unchanged and no authoring modules added.",
+      "checkedAt": "2026-11-25T10:08:50.269Z"
+    },
+    {
+      "command": "npm run visual:anchored-algebra",
+      "status": "passed",
+      "scope": "Filtered fractional reasoning case: canonical public reader preserved.",
+      "checkedAt": "2026-11-25T10:08:50.918Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "First reconciliation exceeded the active thread startup budget by 11 words; shortened history without changing budgets.",
+      "checkedAt": "2026-11-25T10:08:51.543Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Final 75 tests; accepted style milestone and separate approved object successor aligned within existing startup budgets.",
+      "checkedAt": "2026-11-25T10:08:52.190Z"
+    },
+    {
+      "command": "npm run test:tooling-configs",
+      "status": "passed",
+      "scope": "Five tooling tests; check:playwright-configs also passes. Exactly one new scoped suite, existing 70 hashes unchanged.",
+      "checkedAt": "2026-11-25T10:08:52.810Z"
+    },
+    {
+      "command": "npm run build:workbench",
+      "status": "passed",
+      "scope": "Independent workbench checkout 500ad8b: production build, 11 CLJS tests/67 assertions, owned format check and port boundary test pass. Native/Rust unchanged.",
+      "checkedAt": "2026-11-25T10:08:53.482Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews Edit KP object at http://127.0.0.1:1426/ and judges feedback/context."
+  ]
+}

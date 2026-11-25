@@ -1,7 +1,7 @@
 # Authoring, adaptation and co-creative practice
 
 Status: active context index; execution lives in Theseus
-Last Updated: 2026-11-24
+Last Updated: 2026-11-25
 
 ## Current boundary
 
@@ -30,15 +30,14 @@ workbench latency remain unproved. The approved notebook detour below is current
   localized changes, reuse, imports and folding.
   The [working matrix proof](../reviews/2026-11-24-notebook-proof.md) retains its
   composition evidence. Its inspector UI is not an accepted writing experience.
-  The [first fraction editor](../reviews/2026-11-24-fraction-notebook-editor.md) is checked.
-  The [rich editor](../reviews/2026-11-24-rich-fraction-editor.md) remains recoverable.
   The [structure editor](../reviews/2026-11-24-structure-editor.md) is accepted.
   The [unified surface](../reviews/2026-11-24-unified-notebook-surface.md) is accepted.
   [Focused animation editing](../reviews/2026-11-24-focused-buffer-next-step-review.md)
   is checked: one document, source beside its result and help/basic Ex commands.
-  User feedback approves [style comparison and rhythm](../reviews/2026-11-24-notebook-style-comparison.md)
-  under `run-contract.kp.style-comparison-20261124`; the focused candidate remains
-  recoverable while its presentation is refined.
+  [Style comparison and rhythm](../reviews/2026-11-24-notebook-style-comparison.md)
+  is accepted. The approved [workbench object successor](../reviews/2026-11-25-workbench-kp-object-boundary.md)
+  keeps drafts/commands in Workbench and validation/rendering in KP.
+  Review one preview-only adapter before extraction; no canonical writes or new Codex service.
   Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
@@ -63,7 +62,7 @@ workbench latency remain unproved. The approved notebook detour below is current
 
 ## Coordination and handoff
 
-Name the beneficiary, capability, finish line and displaced commitments.
+Name the capability, finish line and displaced commitments.
 
 At handoff, reconcile direction and approval boundaries with the dashboard, record
 actual execution through Theseus, and show a concrete artifact or workflow.

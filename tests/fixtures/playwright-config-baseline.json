@@ -278,5 +278,9 @@
   "playwright.typescript-refactor.config.ts": {
     "sha256": "15255aeae9d2c702cfd829b47bae8ffa8a815ed3c597fd67b68d522af2990595",
     "projects": 1
+  },
+  "playwright.workbench-object.config.ts": {
+    "sha256": "69a23f77087b4cd341223ec8e37b1ebcf9b8756f91279bc79c01328c5de04194",
+    "projects": 3
   }
 }

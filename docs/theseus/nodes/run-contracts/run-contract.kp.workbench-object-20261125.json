@@ -1,0 +1,46 @@
+{
+  "id": "run-contract.kp.workbench-object-20261125",
+  "kind": "run-contract",
+  "title": "Workbench KP object boundary",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 2/2 packages implemented and checked; awaiting the single integrated exemplar judgment before any promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.workbench-object-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md"
+    }
+  ],
+  "verification": [
+    "Focused types and boundary tests; actual cross-origin workbench browser example; preserve fraction notebook and reader"
+  ],
+  "revisitWhen": [
+    "User reviews the isolated workbench object workflow."
+  ],
+  "allowedWork": [
+    "One fraction object adapter and isolated workbench consumer with preservation checks"
+  ],
+  "disallowedWork": [
+    "Publication, canonical writes, new Codex infrastructure, generalized extraction, merges"
+  ],
+  "goal": "Open, edit and preview one KP object from the independent workbench",
+  "target": "task.kp.workbench-object-20261125",
+  "slices": [
+    {
+      "id": "boundary",
+      "title": "KP object descriptor and checked preview boundary",
+      "summary": "KP descriptor and read-only preview boundary implemented. Focused types, 20 model tests and initial actual workbench integration pass; existing native player retained.",
+      "status": "complete"
+    },
+    {
+      "id": "workbench",
+      "title": "Independent workbench source buffer and integrated review",
+      "summary": "Actual isolated workbench source buffer implemented and checked in Chromium/WebKit; rollback commit 500ad8b. One integrated human workflow review remains before broader extraction.",
+      "status": "complete"
+    }
+  ]
+}
