@@ -3,7 +3,7 @@ export const palette = [
   ['Border', '--color-border'], ['Stage', '--color-stage'], ['Selection wash', '--color-selection'],
   ['Warning', '--color-warning'], ['Red', '--color-red-light'], ['Green', '--color-green-light'],
   ['Blue', '--color-blue-light'], ['Yellow', '--color-yellow-light'], ['Emphasis', '--color-emphasis'],
-  ['Cursor ink', '--color-cursor-ink'], ['Shadow', '--color-shadow']
+  ['Cursor ink', '--color-cursor-ink'], ['Shadow', '--color-shadow'], ['Inactive veil', '--color-veil']
 ] as const;
 export interface StyleField { label: string; key: string; property: string; object: string; reference?: string }
 type Definition = readonly [string, string, string, string?];
@@ -12,8 +12,9 @@ export const styleFields: readonly StyleField[] = [
   ...fields('Body', [['Body color', '--fn-text', 'color', '--color-ink'], ['Body weight', '--kp-document-body-weight', 'font-weight'], ['Body size', '--kp-document-body-size', 'font-size'], ['Line height', '--kp-document-body-leading', 'line-height']]),
   ...fields('Document', [['Background', '--fn-background', 'color', '--color-paper'], ['Muted text', '--fn-muted', 'color', '--color-muted'], ['Borders', '--fn-border', 'color', '--color-border'], ['Block gap', '--fn-block-gap', 'gap'], ['Title group gap', '--fn-title-gap', 'gap'], ['Document width', '--kp-document-width', 'width']]),
   ...fields('Masthead', [['Masthead weight', '--fn-masthead-weight', 'font-weight'], ['Masthead size', '--fn-masthead-size', 'font-size'], ['Header shadow', '--fn-shadow', 'color', '--color-shadow']]),
-  ...fields('Chat', [['Composer maximum height', '--kp-chat-composer-max-height', 'max-height'], ['Chat pane padding', '--kp-chat-pane-padding', 'padding'], ['Speaker labels', '--kp-chat-speaker-color', 'color', '--fn-muted']]),
-  ...fields('Windows', [['Single pane width', '--kp-window-width', 'width'], ['Window background', '--kp-window-background', 'color', '--fn-background'], ['Window opacity', '--kp-window-alpha', 'opacity']]),
+  ...fields('Chat', [['Composer maximum height', '--kp-chat-composer-max-height', 'max-height'], ['Chat pane padding', '--kp-chat-pane-padding', 'padding'], ['Chat top padding', '--kp-chat-padding-top', 'padding'], ['Chat bottom padding', '--kp-chat-padding-bottom', 'padding'], ['Speaker labels', '--kp-chat-speaker-color', 'color', '--fn-muted']]),
+  ...fields('Windows', [['Single pane width', '--kp-window-width', 'width'], ['Window background', '--kp-window-background', 'color', '--fn-background'], ['Window opacity', '--kp-window-alpha', 'opacity'], ['Inactive overlay', '--kp-window-inactive-overlay', 'color', '--color-veil'], ['Inactive overlay opacity', '--kp-window-inactive-opacity', 'opacity']]),
+  ...fields('Modeline', [['Modeline background', '--kp-modeline-background', 'color', '--fn-background'], ['Modeline text', '--kp-modeline-color', 'color', '--fn-muted']]),
   ...fields('Document title', [['Document title weight', '--fn-title-weight', 'font-weight'], ['Title size', '--kp-document-title-size', 'font-size']]),
   ...fields('Section headings', [['Heading weight', '--kp-document-heading-weight', 'font-weight'], ['Heading size', '--kp-document-heading-size', 'font-size']]),
   ...fields('Animation', [['Animation surface', '--fn-surface', 'color', '--color-stage'], ['Animation emphasis', '--fn-focus', 'color', '--color-emphasis'], ['Object title weight', '--fn-object-weight', 'font-weight'], ['Object title size', '--fn-object-size', 'font-size', '--kp-document-heading-size']]),

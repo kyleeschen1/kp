@@ -72,6 +72,73 @@ async function selectPassage(page: Page, text: string, message?: string) {
   await page.keyboard.press('Escape');
 }
 
+test('workspace modeline follows actual editor modes, pane focus and reading spacing without covering the composer', async ({ page, context }, info) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'modeline-reply', text: '## Keep the whole in view\n\nA saved return point keeps the question connected to the broader plan.\n\n```js\nconst next = "inspect";\n```' }] }];
+  try {
+    await page.setViewportSize({ width: 1440, height: 960 }); await open(page); await connect(page);
+    const bar = page.locator('.kp-modeline'), mode = bar.locator('.kp-modeline-mode'), label = bar.locator('.kp-modeline-surface');
+    const transcript = page.getByRole('textbox', { name: 'Conversation transcript' }), prose = page.locator('.fn-editor .ProseMirror');
+    const chat = page.locator('[data-kp-window=chat]'), kp = page.locator('[data-kp-window=page]');
+    const overlay = (pane: typeof chat) => pane.evaluate(node => ({ opacity: Number(getComputedStyle(node, '::after').opacity), pointer: getComputedStyle(node, '::after').pointerEvents }));
+    await expect(bar).toHaveCount(1); await expect(mode).toHaveText('[N]'); await expect(label).toHaveText('Chat › transcript');
+    await expect(bar.locator('time')).toHaveText(/^[A-Z][a-z]{2}, [A-Z][a-z]{2} \d{1,2} \d{2}:\d{2}$/);
+    await expect(page.locator('.fn-line-gutter span, .cm-lineNumbers')).toHaveCount(0);
+    expect((await transcript.boundingBox())!.width).toBe(440); expect((await input(page).boundingBox())!.width).toBe(440);
+    expect((await overlay(kp)).opacity).toBeGreaterThan(0); expect((await overlay(chat)).opacity).toBe(0);
+    expect((await overlay(kp)).pointer).toBe('none');
+    await page.getByRole('button', { name: 'Focus KP pane' }).click(); await expect(prose).toBeFocused();
+    await expect(label).toHaveText('KP › document'); await prose.press('i'); await expect(mode).toHaveText('[I]');
+    await prose.press('Escape'); await prose.press('v'); await expect(mode).toHaveText('[V]'); await prose.press('Escape');
+    expect((await overlay(chat)).opacity).toBeGreaterThan(0); expect((await overlay(kp)).opacity).toBe(0);
+    await page.getByText('Edit animation specification', { exact: true }).click();
+    const source = page.locator('.fn-source-host .cm-content'); await expect(source).toBeFocused();
+    await expect(label).toHaveText('KP › animation source'); await expect(mode).toHaveText('[N]');
+    await source.press('i'); await expect(mode).toHaveText('[I]'); await source.press('Escape'); await expect(mode).toHaveText('[N]');
+    await page.getByRole('button', { name: 'Close buffer', exact: true }).click(); await expect(label).toHaveText('KP › document');
+    await page.getByRole('button', { name: 'Focus Chat pane' }).click(); await transcript.press('i');
+    await expect(label).toHaveText('Chat › draft'); await expect(mode).toHaveText('[I]');
+    await input(page).pressSequentially('Continue'); await send(page); await expect(chat).toHaveAttribute('data-phase', 'running');
+    await input(page).pressSequentially('Keep this draft'); f.peer.delta('A result arriving in the background.');
+    await expect(transcript).toContainText('result arriving'); await expect(mode).toHaveText('[I]'); await expect(input(page)).toBeFocused();
+    f.peer.finish('A result arriving in the background.'); await expect(chat).toHaveAttribute('data-phase', 'ready');
+    await command(page, 'Markdown source');
+    const markdown = page.getByRole('textbox', { name: 'Your message Markdown' });
+    await expect(label).toHaveText('Chat › draft source'); await markdown.press('i'); await expect(mode).toHaveText('[I]');
+    await markdown.press('Escape'); await expect(mode).toHaveText('[N]');
+    await expect(page.locator('.fn-line-gutter span, .cm-lineNumbers')).toHaveCount(0);
+    await command(page, 'Rich text');
+    await page.getByRole('button', { name: 'Edit', exact: true }).click();
+    const frame = page.frameLocator('iframe'), rendered = frame.locator('.kp-caption-document-intro');
+    await expect(rendered).toBeVisible(); expect((await rendered.boundingBox())!.width).toBe((await transcript.boundingBox())!.width);
+    const readingPad = await frame.locator('.kp-lesson').evaluate(node => ({ top: getComputedStyle(node).paddingTop, bottom: getComputedStyle(node).paddingBottom }));
+    for (const region of ['.kp-chat-output', '.kp-chat-draft']) {
+      await expect(page.locator(region)).toHaveCSS('padding-top', readingPad.top); await expect(page.locator(region)).toHaveCSS('padding-bottom', readingPad.bottom);
+    }
+    await rendered.click(); await expect(mode).toHaveText('[R]'); await expect(label).toHaveText('KP › reading');
+    await page.keyboard.press('Control+Backquote'); await expect(chat).toHaveAttribute('data-window-active', 'true');
+    await page.screenshot({ path: info.outputPath('workspace-modeline-dark.png') });
+    await page.getByRole('button', { name: 'Styles', exact: true }).click();
+    await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+    await page.getByRole('button', { name: 'Close styles', exact: true }).click();
+    await page.getByRole('button', { name: 'Focus Chat pane' }).click();
+    const lightOpacity = (await overlay(kp)).opacity; expect(lightOpacity).toBeGreaterThan(0); expect(lightOpacity).toBeLessThan(.24);
+    await page.screenshot({ path: info.outputPath('workspace-modeline-light.png') });
+    await page.emulateMedia({ forcedColors: 'active' }); expect((await overlay(kp)).opacity).toBe(0);
+    await expect(page.getByRole('button', { name: 'Focus Chat pane' })).toHaveAttribute('aria-pressed', 'true');
+    await page.emulateMedia({ forcedColors: 'none' });
+    for (const height of [844, 380]) {
+      await page.setViewportSize({ width: 390, height });
+      const box = (await bar.boundingBox())!, draft = (await page.locator('.kp-chat-draft').boundingBox())!;
+      expect(Math.abs(box.y + box.height - height)).toBeLessThan(1); expect(draft.y + draft.height).toBeLessThanOrEqual(box.y);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      expect((await page.locator('.kp-chat-history').boundingBox())!.height).toBeGreaterThan(0);
+    }
+    await page.setViewportSize({ width: 390, height: 844 }); await page.screenshot({ path: info.outputPath('workspace-modeline-phone.png') });
+    await page.reload(); await expect(bar).toHaveCount(1); expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
 test('rich composer and transcript support passage comments, tags and notes across reload without changing model history', async ({ page, context }, info) => {
   const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   try {

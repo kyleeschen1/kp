@@ -149,7 +149,7 @@ class SpecificationView implements NodeView {
       }
       reportMode();
     });
-    this.code = new CodeView({ doc: node.textContent, parent: host, extensions: [vim(), json(), this.gutter.of(lineNumbers()), drawSelection(), syntaxHighlighting(HighlightStyle.define([
+    this.code = new CodeView({ doc: node.textContent, parent: host, extensions: [vim(), json(), this.gutter.of([]), drawSelection(), syntaxHighlighting(HighlightStyle.define([
       { tag: tags.string, color: 'var(--fn-code-string)' }, { tag: tags.propertyName, color: 'var(--fn-code-property)' },
       { tag: tags.number, color: 'var(--fn-code-number)' }, { tag: tags.punctuation, color: 'var(--fn-code-punctuation)' }
     ])),
@@ -173,9 +173,12 @@ class SpecificationView implements NodeView {
     if (!codeVim) throw new Error('JSON Vim did not attach. Reload after the development server finishes rebuilding.');
     const reportMode = () => {
       const mode = getCM(this.code)?.state.vim;
-      if (this.code.hasFocus) onMode(mode?.insertMode ? 'insert' : mode?.visualMode ? 'visual' : 'normal');
+      const name = mode?.insertMode ? 'insert' : mode?.visualMode ? 'visual' : 'normal';
+      this.code.dom.dataset['vimMode'] = name;
+      if (this.code.hasFocus) onMode(name);
     };
     codeVim.on('vim-mode-change', reportMode);
+    reportMode();
     details.addEventListener('toggle', () => {
       if (this.disposed || this.active === details.open) return;
       if (details.open) {

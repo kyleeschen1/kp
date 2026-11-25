@@ -5,7 +5,7 @@ import { baseKeymap, toggleMark, setBlockType, chainCommands, newlineInCode, cre
 import { history, undo, redo } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
 import { splitListItem, sinkListItem, liftListItem } from 'prosemirror-schema-list';
-import { EditorView as CodeView, keymap as codeKeymap, lineNumbers, drawSelection } from '@codemirror/view';
+import { EditorView as CodeView, keymap as codeKeymap, drawSelection } from '@codemirror/view';
 import { EditorState as CodeState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { defaultKeymap } from '@codemirror/commands';
@@ -128,7 +128,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
       return;
     }
     body.hidden = true; sourceHost.hidden = false; if (sourceButton) sourceButton.textContent = 'Rich text';
-    code = new CodeView({ parent: sourceHost, doc: source, extensions: [vim(), markdown(), lineNumbers(), drawSelection(),
+    code = new CodeView({ parent: sourceHost, doc: source, extensions: [vim(), markdown(), drawSelection(),
       codeKeymap.of([{ key: 'Mod-Enter', run: () => { options.onSubmit?.(); return true; } }, ...defaultKeymap]),
       CodeState.transactionFilter.of(transaction => {
         if (transaction.newDoc.length <= limit) return transaction;
@@ -136,6 +136,12 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
       }), CodeView.updateListener.of(update => { if (update.docChanged && !adopting) { source = update.state.doc.toString(); options.onChange?.(source); } }),
       CodeView.contentAttributes.of({ 'aria-label': `${options.label} Markdown` }), CodeView.lineWrapping
     ] });
+    const sourceView = code, codeVim = getCM(sourceView);
+    const reportMode = () => {
+      const current = codeVim?.state.vim;
+      sourceView.dom.dataset['vimMode'] = current?.insertMode ? 'insert' : current?.visualMode ? 'visual' : 'normal';
+    };
+    codeVim?.on('vim-mode-change', reportMode); reportMode();
     status.textContent = 'MARKDOWN · Vim · :h for keys'; if (focusAfter) code.focus();
   }
   const focus = () => {

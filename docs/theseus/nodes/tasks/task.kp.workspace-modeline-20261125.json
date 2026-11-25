@@ -1,0 +1,68 @@
+{
+  "id": "task.kp.workspace-modeline-20261125",
+  "kind": "task",
+  "title": "Record the multiplexer vision and clarify workspace focus",
+  "status": "deferred",
+  "domain": "product",
+  "summary": "HUMAN_CHECKPOINT: requested presentation and full vision record complete; review padding, inactive veil and modeline at the working notebook URL.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workspace-modeline.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T19:14:31.642Z",
+      "notes": "Scoped types pass including modeline and browser assertions."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T19:14:32.711Z",
+      "notes": "All 25 pass; native session, draft, recovery and tool projection preserved."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T19:14:33.379Z",
+      "notes": "All 20 pass; canonical object, identities, admission and notebook semantics preserved."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T19:14:33.993Z",
+      "notes": "All 20 Chromium cases pass, including new mode/focus/spacing/veil/short-viewport case. Focused first run passed. No inference."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'cursor|focused source|styles|light canvas|phone focused'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T19:14:34.642Z",
+      "notes": "All seven affected cases pass. Cursor mode assertion now follows modeline; actual source, run, themes and native player preserved."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T19:14:35.287Z",
+      "notes": "All 75 pass; roadmap, active thread, preserved vision and finite successor align within existing budgets."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T19:14:35.922Z",
+      "notes": "Passes; explicitly selected workspace-modeline contract and reviewed source links align."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews workspace modeline exemplar or requests a bounded adjustment."
+  ]
+}

@@ -446,15 +446,15 @@ test('theme-variable modal cursors preserve text at graphemes, empty blocks and 
   await page.locator('.cm-content').click();
   await expect(page.locator('.fn-specification details')).toHaveAttribute('open', '');
   await expect(page.locator('.cm-content')).toBeFocused();
-  const mode = page.getByRole('button', { name: 'Vim mode' });
-  await expect(mode).toHaveText('NORMAL');
+  const mode = page.locator('.kp-modeline-mode');
+  await expect(mode).toHaveText('[N]');
   await page.keyboard.press('g'); await page.keyboard.press('g');
   await page.screenshot({ caret: 'initial', path: info.outputPath('json-normal-cursor.png') });
   await expect(page.locator('.cm-fat-cursor')).toHaveCSS('background-color', 'rgb(255, 68, 68)');
   await expect(page.locator('.cm-vimCursorLayer')).toHaveCSS('animation-name', 'none');
-  await page.keyboard.press('i'); await expect(mode).toHaveText('INSERT');
+  await page.keyboard.press('i'); await expect(mode).toHaveText('[I]');
   await expect(page.locator('.cm-cursor').first()).toHaveCSS('border-left-color', 'rgb(255, 68, 68)');
-  await mode.click(); await expect(mode).toHaveText('NORMAL');
+  await page.keyboard.press('Escape'); await expect(mode).toHaveText('[N]');
   expect(errors).toEqual([]);
 });
 

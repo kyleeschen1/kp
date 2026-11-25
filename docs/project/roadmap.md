@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-joined-chat-composer`
-Execution Contract: `run-contract.kp.joined-chat-composer-20261125`
-Next Product Milestone: `joined-chat-composer`
+Current Commitment: `kp-workspace-modeline`
+Execution Contract: `run-contract.kp.workspace-modeline-20261125`
+Next Product Milestone: `workspace-modeline`
 Milestone Authority: approved
 
 ## Where we are going
@@ -24,9 +24,10 @@ why this becomes the organizing direction and what it supersedes.
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
 **Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
 **Checked:** [fixed 50/50 split](reviews/2026-11-25-fixed-chat-split.md), Codex
-left and KP right, without window motion. **Approved:**
-[joined chat editors](reviews/2026-11-25-joined-chat-composer.md), filling the pane
-with internal padding, speaker labels, code/tool folds and a growing composer. The
+left and KP right. **Checked:** [joined chat editors](reviews/2026-11-25-joined-chat-composer.md).
+**Approved:** [workspace focus/modeline](reviews/2026-11-25-workspace-modeline.md):
+reading spacing, default gutters off, inactive-pane dimming and mode/pane/time cues.
+The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope. The
 [recency stack](reviews/2026-11-25-recency-window-stack.md) is rejected.
 Retain the 440px KP column and persistent composition from
 the [prior candidate](reviews/2026-11-25-windowed-chat.md).

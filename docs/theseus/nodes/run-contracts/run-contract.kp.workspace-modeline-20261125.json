@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.workspace-modeline-20261125",
+  "kind": "run-contract",
+  "title": "Workspace focus and bottom modeline",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1/1 implementation package complete. No broader multiplexer or Web Component rollout before separately selected scope.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.workspace-modeline-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workspace-modeline.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run test:editor-chat",
+    "npm run visual:editor-chat",
+    "npm run test:project-vision"
+  ],
+  "revisitWhen": [
+    "User reviews the canonical workspace presentation."
+  ],
+  "allowedWork": [
+    "Record the full vision; bounded notebook/chat spacing, gutters, focus, modeline and verification"
+  ],
+  "disallowedWork": [
+    "General multiplexer, MCP service, task storage migration, agent monitoring, live inference or window motion"
+  ],
+  "goal": "One stationary chat and KP exemplar with matching reading spacing, inactive-pane dimming and accurate mode and clock cues",
+  "target": "task.kp.workspace-modeline-20261125",
+  "slices": [
+    {
+      "id": "presentation",
+      "title": "Implement and verify the workspace presentation exemplar",
+      "summary": "Vision recorded and presentation exemplar implemented with relevant checks; human visual judgment remains separate before promotion.",
+      "status": "complete"
+    }
+  ]
+}

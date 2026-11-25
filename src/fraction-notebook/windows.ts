@@ -1,10 +1,11 @@
-type WindowId = 'page' | 'chat';
+export type WindowId = 'page' | 'chat';
 type WindowEntry = { element: HTMLElement; focus: () => void };
 
 /** Focus-only host. CSS owns fixed pane positions; switching keyboard targets
  * preserves the editors, selections, native player and saved conversation. */
 export function mountWindows(host: HTMLElement) {
   const entries = new Map<WindowId, WindowEntry>();
+  const listeners = new Set<() => void>();
   const preferenceKey = 'kp.workspace.active-window.v1';
   let saved: WindowId | undefined, initialized = false, active: WindowId = 'page';
   try { const value = sessionStorage.getItem(preferenceKey); if (value === 'page' || value === 'chat') saved = value; } catch { /* Optional presentation preference. */ }
@@ -12,6 +13,7 @@ export function mountWindows(host: HTMLElement) {
   function reflectFocus() {
     host.dataset['activeWindow'] = active;
     for (const [id, entry] of entries) entry.element.dataset['windowActive'] = String(id === active && !entry.element.hidden);
+    for (const listener of listeners) listener();
   }
   function activate(id: WindowId, focus = false) {
     const target = entries.get(id); if (!target || target.element.hidden) return;
@@ -41,6 +43,8 @@ export function mountWindows(host: HTMLElement) {
   document.addEventListener('keydown', onKey, true);
   return {
     activate, cycle,
+    snapshot: () => ({ active, windows: visible().map(([id, entry]) => ({ id, element: entry.element })) }),
+    subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener); }; },
     active: (id: WindowId) => active === id && entries.has(id) && !entries.get(id)?.element.hidden,
     restore() {
       // Mounting the document and chat can focus each in turn. Restore only
@@ -62,6 +66,6 @@ export function mountWindows(host: HTMLElement) {
         reflectFocus();
       };
     },
-    dispose() { host.removeEventListener('focusin', onFocus); host.removeEventListener('pointerdown', onPointer); document.removeEventListener('keydown', onKey, true); entries.clear(); }
+    dispose() { host.removeEventListener('focusin', onFocus); host.removeEventListener('pointerdown', onPointer); document.removeEventListener('keydown', onKey, true); entries.clear(); listeners.clear(); }
   };
 }

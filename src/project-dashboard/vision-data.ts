@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-joined-chat-composer",
-    title: "Join a navigable Codex transcript and growing composer",
+    id: "kp-workspace-modeline",
+    title: "Clarify workspace focus with a bottom modeline",
     approval: "approved",
-    contractId: "run-contract.kp.joined-chat-composer-20261125",
-    finish: "Fill the chat pane with a bordered transcript and persistent growing composer, using independent ProseMirror states, internal padding, speaker labels and code/tool folding. Preserve streaming focus, reading position, draft recovery and the fixed KP split.",
-    source: { label: "Joined editors and approved folding refinement", href: "docs/project/reviews/2026-11-25-joined-chat-composer.md" }
+    contractId: "run-contract.kp.workspace-modeline-20261125",
+    finish: "Match chat reading spacing to KP, start without line numbers, dim inactive panes and show the focused surface, actual Vim mode, pane switches and local time. Preserve the stationary split, drafts, native preview and independent editor states.",
+    source: { label: "Approved workspace presentation exemplar", href: "docs/project/reviews/2026-11-25-workspace-modeline.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat. Inspect the joined border, internal padding and You/Codex labels; type multiple lines to grow the composer. Toggle code/tool folds with za/zo/zc and search inside one. Judge the reading and writing space while the fixed KP pane stays in place.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat. Compare its text measure with KP, switch panes and inspect the inactive veil. Enter Insert in prose and source and check the bottom mode/surface label. Judge spacing, legibility and the stationary bottom bar in light mode and a narrow viewport.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The fraction notebook and persistent conversation are accepted. The fixed equal split is checked after rejecting the sliding overlay and recency stack. Notes, independent drafts, recovery and the KP column remain foundations; full-pane chat and folding are the approved refinement. Object revision and Spindle/library extraction remain return paths.",
-      evidence: { label: "Completed fixed split", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" },
+      established: "The notebook and persistent conversation are accepted; the equal split and joined chat/folding are checked. The moving stack remains rejected. The multiplexer vision is recorded; focused workspace presentation is the approved next exemplar. Native data, object revision and independent Spindle ownership remain foundations.",
+      evidence: { label: "Recorded multiplexer vision and boundaries", href: "docs/project/2026-11-25-multiplexer-vision.md" },
       outcome: {
         authority: "approved",
-        id: "joined-chat-composer", title: "Read, fold and compose inside one joined chat pane",
-        finish: "A full-pane transcript and growing composer share one border and internal padding. You/Codex labels and code/tool folding aid navigation. Stream output without disturbing the draft or older reading; retain native session authority and the fixed outer split.",
-        excludes: "A general session workspace, automatic object patches, image-generation integration, publication, library extraction, desktop migration, paid test inference or whole-book infrastructure.",
-        source: { label: "Approved joined chat successor", href: "docs/project/reviews/2026-11-25-joined-chat-composer.md" }
+        id: "workspace-modeline", title: "Know which pane and editor owns keyboard input",
+        finish: "A stationary modeline shows the focused surface, actual mode, pane switches and local time. Chat matches KP reading spacing, default gutters are off, and the inactive pane dims without blocking input. Preserve independent drafts, streaming and native rendering.",
+        excludes: "General workspace persistence, MCP services, task storage migration, agent monitoring, automatic patches, publication or library extraction.",
+        source: { label: "Approved modeline successor", href: "docs/project/reviews/2026-11-25-workspace-modeline.md" }
       }
     },
     {
@@ -452,6 +452,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves two independent ProseMirror instances in one full-pane bordered flex column, with internal padding, a growing composer, speaker labels and code/tool folding.",
       reason: "Keep navigation and folding while making the chat simpler to read and write. Native Codex remains authoritative; view preferences and draft state are independent. Preserve the completed static split instead of extending its finished scope.",
       source: { label: "Joined chat discussion and approved refinement", href: "docs/project/reviews/2026-11-25-joined-chat-composer.md" }
+    },
+    {
+      id: "record-multiplexer-and-select-modeline", on: "2026-11-25",
+      before: "The joined chat exemplar passed its scoped checks. Discussion expanded to contextual return, coordinated agents, common object operations, MCP and storage.",
+      after: "The user asks to preserve the full vision and implement a bounded cosmetic successor: no default line numbers, matching reading spacing, inactive-pane dimming and a bottom mode/pane/time bar.",
+      reason: "Make focus and context easier to perceive while preserving the future design without starting a general multiplexer or replacing domain data owners.",
+      source: { label: "Recorded vision and finite candidate proofs", href: "docs/project/2026-11-25-multiplexer-vision.md" }
     }
   ]
 };

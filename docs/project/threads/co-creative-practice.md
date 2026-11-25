@@ -40,9 +40,11 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Keyboard chat](../reviews/2026-11-25-keyboard-chat.md) is checked; the
   [recency stack](../reviews/2026-11-25-recency-window-stack.md) was rejected.
   The [fixed split](../reviews/2026-11-25-fixed-chat-split.md) is checked.
-  Approved: [joined chat editors](../reviews/2026-11-25-joined-chat-composer.md),
-  full-pane padding, labels, code/tool folds and growing composition. Preserve
-  KP and native history; exclude automatic edits and broader extraction.
+  Checked: [joined chat](../reviews/2026-11-25-joined-chat-composer.md).
+  Approved: [workspace modeline](../reviews/2026-11-25-workspace-modeline.md),
+  spacing, default gutters off and inactive-pane dimming. The
+  [multiplexer vision](../2026-11-25-multiplexer-vision.md) records later scope.
+  Preserve native history and domain ownership.
   Motions/text objects remain parked; MathML declined.
   Review before generalizing.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).

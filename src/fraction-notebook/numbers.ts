@@ -3,7 +3,7 @@ export type LineMode = 'off' | 'absolute' | 'relative';
 /** The gutter measures wrapped prose lines; it never inserts numbering into
  * document content or assigns persistent identity to layout coordinates. */
 export function mountLineNumbers(host: HTMLElement, view: EditorView) {
-  let mode: LineMode = 'absolute', pending = 0;
+  let mode: LineMode = 'off', pending = 0;
   const gutter = document.createElement('div'); gutter.className = 'fn-line-gutter'; gutter.setAttribute('aria-hidden', 'true'); host.append(gutter);
   const draw = () => {
     pending = 0; gutter.replaceChildren(); if (mode === 'off' || !view.dom.isConnected) return;

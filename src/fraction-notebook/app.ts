@@ -21,7 +21,9 @@ import { mountCommands } from './commands.ts';
 import { mountLineNumbers } from './numbers.ts';
 import { mountChat } from '../editor-chat/panel.ts';
 import { mountWindows } from './windows.ts';
+import { mountModeline } from './modeline.ts';
 import './windows.css';
+import './modeline.css';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
@@ -73,8 +75,6 @@ sourceTools.append(runButton, closeBuffer); sourcePane.append(sourceTools, sourc
 left.setAttribute('aria-label', 'Editable notebook'); right.setAttribute('aria-label', 'Reading preview');
 const tools = el('div', 'fn-tools');
 const editorHost = el('div', 'fn-editor');
-const mode = button('NORMAL', () => editor.toggleMode()); mode.onmousedown = event => event.preventDefault();
-mode.className = 'fn-vim-mode fn-edit-control'; mode.setAttribute('aria-label', 'Vim mode'); branding.append(mode);
 const previewTools = el('div', 'fn-tools');
 const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; const followLabel = el('label', 'fn-follow', 'Follow selection'); followLabel.prepend(follow);
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }); previewTools.append(reveal, followLabel);
@@ -91,7 +91,7 @@ left.append(editorHost); right.append(resultStatus, frame); writingPanel.prepend
 const editorBody = el('div', 'kp-editor-body');
 const pageWindow = el('section', 'kp-page-window'); pageWindow.setAttribute('aria-label', 'KP page');
 workspace.append(left, sourcePane, split, right); pageWindow.append(workspace); editorBody.append(pageWindow); root.append(header, editorBody);
-const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, name => { mode.textContent = name.toUpperCase(); }, {
+const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, undefined, {
   host: sourceHost, run: runSource,
   open() { root.classList.add('fn-focus'); split.inert = false; layout.refresh(); },
   close() { root.classList.remove('fn-focus'); split.inert = true; layout.refresh(); }
@@ -111,6 +111,7 @@ const chat = mountChat(editorBody, actions, () => layout.refresh(), {
   activate: () => windows.activate('chat'), cycle: () => windows.cycle(), closed: () => windows.activate('page')
 });
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); });
+const modeline = mountModeline(root, windows);
 actions.append(button('Styles', () => styles.toggle()));
 const numbers = mountLineNumbers(editorHost, editor.view);
 const commands = mountCommands(workspace, editor.view, {
@@ -229,6 +230,6 @@ const onMessage = (event: MessageEvent) => {
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); chat.dispose(); windows.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); modeline.dispose(); chat.dispose(); windows.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

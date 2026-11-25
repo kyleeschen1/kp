@@ -2,7 +2,12 @@
   --kp-window-width: 50vw;
   --kp-window-background: var(--fn-background);
   --kp-window-alpha: 96%;
+  --kp-window-inactive-overlay: var(--color-veil);
+  --kp-window-inactive-opacity: .24;
+  --kp-modeline-background: var(--fn-background);
+  --kp-modeline-color: var(--fn-muted);
 }
+:root[data-notebook-theme=light] { --kp-window-inactive-opacity: .12; }
 .kp-editor-body { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); flex: 1; min-width: 0; min-height: 0; isolation: isolate; }
 .kp-editor-body:not(.kp-chat-open) { grid-template-columns: minmax(0, min(var(--kp-window-width), 100%)); justify-content: center; }
 /* Fixed grid slots own geometry. Focus changes only the keyboard destination. */
@@ -10,6 +15,11 @@
 /* Alpha belongs to the paper alone; text remains opaque. The opacity property
    accepts both decimal and percentage values from the shared style editor. */
 .kp-window::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--kp-window-background); opacity: var(--kp-window-alpha); }
+/* Focus owns this paint-only veil. It never intercepts input or dims the
+   masthead/modeline, and cannot alter the native player's state or geometry. */
+.kp-window::after { content: ''; position: absolute; inset: 0; z-index: 50; pointer-events: none; background: var(--kp-window-inactive-overlay); opacity: 0; }
+.kp-window[data-window-active=false]::after { opacity: var(--kp-window-inactive-opacity); }
+@media (forced-colors: active) { .kp-window[data-window-active=false]::after { opacity: 0; } }
 .kp-page-window { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; }
 .kp-chat-open .kp-page-window { grid-column: 2; border-left: 1px solid var(--fn-border); }
 .kp-window.kp-chat { grid-column: 1; grid-row: 1; padding: 0; }
