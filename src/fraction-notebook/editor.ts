@@ -4,7 +4,7 @@ import { EditorView, type NodeView } from 'prosemirror-view';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { history, undo, redo } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
-import { EditorView as CodeView, keymap as codeKeymap, lineNumbers, drawSelection } from '@codemirror/view';
+import { EditorView as CodeView, keymap as codeKeymap, lineNumbers, drawSelection, highlightActiveLine } from '@codemirror/view';
 import { Compartment } from '@codemirror/state';
 import type { LineMode } from './numbers.ts';
 import { defaultKeymap } from '@codemirror/commands';
@@ -13,6 +13,7 @@ import { syntaxHighlighting, HighlightStyle } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
 import { vim, getCM, Vim } from '@replit/codemirror-vim';
 import { type FractionNotebook, type Mark } from './model.ts';
+import { activeLine } from './active-line.ts';
 
 export { schema, toProse, fromProse } from './schema.ts';
 import { schema, toProse } from './schema.ts';
@@ -68,7 +69,7 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
     close() { workspace.close(); if (bookmark) view.dispatch(view.state.tr.setSelection(bookmark.resolve(view.state.doc))); bookmark = undefined; view.focus(); root.scrollTop = scrollTop; }
   };
   const view = new EditorView(root, {
-    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), proseVim(), createInlinePlugin(), keymap({ 'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo,
+    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), proseVim(), activeLine(), createInlinePlugin(), keymap({ 'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo,
       'Mod-b': toggleMark(schema.marks['strong']!), 'Mod-i': toggleMark(schema.marks['em']!), Enter: enterField,
       Tab: nestBlock, 'Shift-Tab': outdentBlock, 'Alt-ArrowUp': moveBlock(-1), 'Alt-ArrowDown': moveBlock(1),
       ArrowLeft: enterInline(-1), ArrowRight: enterInline(1), Backspace: enterInline(-1) }), keymap(baseKeymap)] }),
@@ -149,7 +150,7 @@ class SpecificationView implements NodeView {
       }
       reportMode();
     });
-    this.code = new CodeView({ doc: node.textContent, parent: host, extensions: [vim(), json(), this.gutter.of([]), drawSelection(), syntaxHighlighting(HighlightStyle.define([
+    this.code = new CodeView({ doc: node.textContent, parent: host, extensions: [vim(), json(), this.gutter.of([]), drawSelection(), highlightActiveLine(), syntaxHighlighting(HighlightStyle.define([
       { tag: tags.string, color: 'var(--fn-code-string)' }, { tag: tags.propertyName, color: 'var(--fn-code-property)' },
       { tag: tags.number, color: 'var(--fn-code-number)' }, { tag: tags.punctuation, color: 'var(--fn-code-punctuation)' }
     ])),

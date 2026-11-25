@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-workspace-modeline",
-    title: "Clarify workspace focus with a bottom modeline",
+    id: "kp-workspace-focus-lines",
+    title: "Make the active pane and editing line easier to locate",
     approval: "approved",
-    contractId: "run-contract.kp.workspace-modeline-20261125",
-    finish: "Match chat reading spacing to KP, start without line numbers, dim inactive panes and show the focused surface, actual Vim mode, pane switches and local time. Preserve the stationary split, drafts, native preview and independent editor states.",
-    source: { label: "Approved workspace presentation exemplar", href: "docs/project/reviews/2026-11-25-workspace-modeline.md" }
+    contractId: "run-contract.kp.workspace-focus-lines-20261125",
+    finish: "Replace inactive dimming with an active-pane shadow, use single layout separators, enlarge the modeline and highlight the focused line in prose/custom blocks and source. Preserve stationary panes, fonts, native rendering and editor-owned selection/history.",
+    source: { label: "Approved focus refinement exemplar", href: "docs/project/reviews/2026-11-25-workspace-focus-lines.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat. Compare its text measure with KP, switch panes and inspect the inactive veil. Enter Insert in prose and source and check the bottom mode/surface label. Judge spacing, legibility and the stationary bottom bar in light mode and a narrow viewport.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat and switch panes. Judge active-pane shadow, single separators and the larger bar. Move through a wrapped paragraph and a KP custom title/body; open source or a command popup and check that line emphasis follows actual editor focus. Compare dark/light and narrow views.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook and persistent conversation are accepted; the equal split and joined chat/folding are checked. The moving stack remains rejected. The multiplexer vision is recorded; focused workspace presentation is the approved next exemplar. Native data, object revision and independent Spindle ownership remain foundations.",
+      established: "The notebook and persistent conversation are accepted; the equal split, joined chat/folding and modeline are checked. The moving stack remains rejected. The user replaces inactive dimming with a bounded focus refinement. The multiplexer vision, native data, object revision and independent Spindle ownership remain foundations.",
       evidence: { label: "Recorded multiplexer vision and boundaries", href: "docs/project/2026-11-25-multiplexer-vision.md" },
       outcome: {
         authority: "approved",
-        id: "workspace-modeline", title: "Know which pane and editor owns keyboard input",
-        finish: "A stationary modeline shows the focused surface, actual mode, pane switches and local time. Chat matches KP reading spacing, default gutters are off, and the inactive pane dims without blocking input. Preserve independent drafts, streaming and native rendering.",
-        excludes: "General workspace persistence, MCP services, task storage migration, agent monitoring, automatic patches, publication or library extraction.",
-        source: { label: "Approved modeline successor", href: "docs/project/reviews/2026-11-25-workspace-modeline.md" }
+        id: "workspace-focus-lines", title: "Locate the active pane and current line without dimming content",
+        finish: "Stationary panes use active shadow and single separators. The modeline accommodates default text size, and only the focused editor highlights its current line, including text inside existing custom blocks. Preserve selection, history, drafts, streaming and native rendering.",
+        excludes: "New text components, Lit integration, general workspace persistence, MCP services, task storage migration, agent monitoring, automatic patches, publication or library extraction.",
+        source: { label: "Approved focus successor", href: "docs/project/reviews/2026-11-25-workspace-focus-lines.md" }
       }
     },
     {
@@ -459,6 +459,13 @@ export const projectVision: ProjectVision = {
       after: "The user asks to preserve the full vision and implement a bounded cosmetic successor: no default line numbers, matching reading spacing, inactive-pane dimming and a bottom mode/pane/time bar.",
       reason: "Make focus and context easier to perceive while preserving the future design without starting a general multiplexer or replacing domain data owners.",
       source: { label: "Recorded vision and finite candidate proofs", href: "docs/project/2026-11-25-multiplexer-vision.md" }
+    },
+    {
+      id: "replace-veil-with-pane-and-line-focus", on: "2026-11-25",
+      before: "The checked modeline candidate dimmed inactive panes and retained adjacent chat wrapper borders. The user found cursor-only focus cues confusing.",
+      after: "The user approves active-pane shadow, single separators, a default-size modeline and current-line emphasis, explicitly including existing custom block text.",
+      reason: "Keep content legible and make the input location easier to find without moving the split or replacing editor state. Web Components and new reusable text components remain future proofs.",
+      source: { label: "Approved focus pass and preservation boundary", href: "docs/project/reviews/2026-11-25-workspace-focus-lines.md" }
     }
   ]
 };

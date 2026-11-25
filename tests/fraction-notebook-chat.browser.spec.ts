@@ -80,17 +80,24 @@ test('workspace modeline follows actual editor modes, pane focus and reading spa
     const bar = page.locator('.kp-modeline'), mode = bar.locator('.kp-modeline-mode'), label = bar.locator('.kp-modeline-surface');
     const transcript = page.getByRole('textbox', { name: 'Conversation transcript' }), prose = page.locator('.fn-editor .ProseMirror');
     const chat = page.locator('[data-kp-window=chat]'), kp = page.locator('[data-kp-window=page]');
-    const overlay = (pane: typeof chat) => pane.evaluate(node => ({ opacity: Number(getComputedStyle(node, '::after').opacity), pointer: getComputedStyle(node, '::after').pointerEvents }));
+    const shadow = (pane: typeof chat) => pane.evaluate(node => getComputedStyle(node).boxShadow);
+    const barSize = () => bar.evaluate(node => ({ size: parseFloat(getComputedStyle(node).fontSize), defaultSize: parseFloat(getComputedStyle(document.documentElement).fontSize) }));
     await expect(bar).toHaveCount(1); await expect(mode).toHaveText('[N]'); await expect(label).toHaveText('Chat › transcript');
     await expect(bar.locator('time')).toHaveText(/^[A-Z][a-z]{2}, [A-Z][a-z]{2} \d{1,2} \d{2}:\d{2}$/);
     await expect(page.locator('.fn-line-gutter span, .cm-lineNumbers')).toHaveCount(0);
     expect((await transcript.boundingBox())!.width).toBe(440); expect((await input(page).boundingBox())!.width).toBe(440);
-    expect((await overlay(kp)).opacity).toBeGreaterThan(0); expect((await overlay(chat)).opacity).toBe(0);
-    expect((await overlay(kp)).pointer).toBe('none');
+    expect(await shadow(chat)).not.toBe('none'); expect(await shadow(kp)).toBe('none');
+    for (const pane of [chat, kp]) expect(await pane.evaluate(node => getComputedStyle(node, '::after').content)).toBe('none');
+    for (const selector of ['.kp-chat-column', '.kp-chat-draft', '.kp-rich-body', '.kp-rich .ProseMirror', '.kp-page-window']) {
+      for (const node of await page.locator(selector).all()) await expect(node).toHaveCSS('border-width', '0px');
+    }
+    await expect(page.locator('.kp-chat-output')).toHaveCSS('border-bottom-width', '1px');
+    expect(await page.locator('.kp-editor-body').evaluate(node => ({ width: getComputedStyle(node, '::after').width, pointer: getComputedStyle(node, '::after').pointerEvents }))).toEqual({ width: '1px', pointer: 'none' });
+    expect((await barSize()).size).toBeGreaterThanOrEqual((await barSize()).defaultSize);
     await page.getByRole('button', { name: 'Focus KP pane' }).click(); await expect(prose).toBeFocused();
     await expect(label).toHaveText('KP › document'); await prose.press('i'); await expect(mode).toHaveText('[I]');
     await prose.press('Escape'); await prose.press('v'); await expect(mode).toHaveText('[V]'); await prose.press('Escape');
-    expect((await overlay(chat)).opacity).toBeGreaterThan(0); expect((await overlay(kp)).opacity).toBe(0);
+    expect(await shadow(kp)).not.toBe('none'); expect(await shadow(chat)).toBe('none');
     await page.getByText('Edit animation specification', { exact: true }).click();
     const source = page.locator('.fn-source-host .cm-content'); await expect(source).toBeFocused();
     await expect(label).toHaveText('KP › animation source'); await expect(mode).toHaveText('[N]');
@@ -122,9 +129,9 @@ test('workspace modeline follows actual editor modes, pane focus and reading spa
     await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
     await page.getByRole('button', { name: 'Close styles', exact: true }).click();
     await page.getByRole('button', { name: 'Focus Chat pane' }).click();
-    const lightOpacity = (await overlay(kp)).opacity; expect(lightOpacity).toBeGreaterThan(0); expect(lightOpacity).toBeLessThan(.24);
+    expect(await shadow(chat)).not.toBe('none'); expect(await shadow(kp)).toBe('none');
     await page.screenshot({ path: info.outputPath('workspace-modeline-light.png') });
-    await page.emulateMedia({ forcedColors: 'active' }); expect((await overlay(kp)).opacity).toBe(0);
+    await page.emulateMedia({ forcedColors: 'active' }); await expect(chat).toHaveCSS('outline-style', 'solid');
     await expect(page.getByRole('button', { name: 'Focus Chat pane' })).toHaveAttribute('aria-pressed', 'true');
     await page.emulateMedia({ forcedColors: 'none' });
     for (const height of [844, 380]) {
@@ -133,6 +140,7 @@ test('workspace modeline follows actual editor modes, pane focus and reading spa
       expect(Math.abs(box.y + box.height - height)).toBeLessThan(1); expect(draft.y + draft.height).toBeLessThanOrEqual(box.y);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       expect((await page.locator('.kp-chat-history').boundingBox())!.height).toBeGreaterThan(0);
+      expect((await barSize()).size).toBeGreaterThanOrEqual((await barSize()).defaultSize);
     }
     await page.setViewportSize({ width: 390, height: 844 }); await page.screenshot({ path: info.outputPath('workspace-modeline-phone.png') });
     await page.reload(); await expect(bar).toHaveCount(1); expect(errors).toEqual([]);
@@ -187,6 +195,92 @@ test('rich composer and transcript support passage comments, tags and notes acro
     await page.getByRole('button', { name: 'Show passage', exact: true }).click();
     await page.keyboard.press('Control+c'); await expect(page.getByRole('dialog').getByRole('button', { name: 'Comment selection', exact: true })).toBeEnabled(); await page.keyboard.press('Escape');
     expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
+test('current-line paint follows wrapped prose, source and real focus without entering content or history', async ({ page, context }, info) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'line-reply', text: 'A reading point in the transcript.\n\n```js\nconst first = 1;\nconst second = 2;\n```' }] }];
+  const visibleLines = page.locator('.ProseMirror[data-kp-line-visible=true]');
+  const line = (editor: ReturnType<typeof input>) => editor.evaluate(root => {
+    const block = root.querySelector('.kp-active-textblock');
+    if (!block) return null;
+    const rect = block.getBoundingClientRect(), css = getComputedStyle(root);
+    const top = rect.top + parseFloat(css.getPropertyValue('--kp-active-line-y'));
+    const height = parseFloat(css.getPropertyValue('--kp-active-line-height'));
+    const range = getSelection()?.rangeCount ? getSelection()!.getRangeAt(0).getBoundingClientRect() : undefined;
+    return { top, height, blockHeight: rect.height, caretTop: range?.top, caretBottom: range?.bottom, background: getComputedStyle(block).backgroundImage,
+      containsCaret: !!range && top <= range.top + 2 && top + height >= range.bottom - 2 };
+  });
+  try {
+    await page.setViewportSize({ width: 1440, height: 960 }); await open(page); await connect(page);
+    const transcript = page.getByRole('textbox', { name: 'Conversation transcript' }), composer = input(page);
+    await expect(transcript).toHaveAttribute('data-kp-line-visible', 'true'); await expect(visibleLines).toHaveCount(1);
+    await write(page, 'Continue'); await send(page);
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    await expect(composer).toHaveAttribute('data-kp-line-visible', 'true');
+    await expect.poll(async () => (await line(composer))?.height ?? 0).toBeGreaterThan(0);
+    const text = 'Keep this draft and its place while a result arrives. '.repeat(14);
+    await write(page, text); await expect.poll(async () => (await line(composer))?.containsCaret).toBe(true);
+    const lastLine = (await line(composer))!;
+    expect(lastLine.height).toBeLessThan(lastLine.blockHeight / 3); expect(lastLine.background).not.toBe('none');
+    f.peer.delta('A streamed result does not move the composer.');
+    await expect(transcript).toContainText('streamed result'); await expect(composer).toBeFocused();
+    await expect(visibleLines).toHaveCount(1); expect(await line(composer)).toEqual(lastLine);
+    await composer.press('ArrowUp'); await expect.poll(async () => {
+      const current = await line(composer); return current?.containsCaret ? 'aligned' : JSON.stringify(current);
+    }).toBe('aligned');
+    expect((await line(composer))!.top).toBeLessThan(lastLine.top);
+    // Viewport wrapping, scroll and a font-size change all invalidate geometry,
+    // but must not dispatch document edits or enter the user's undo history.
+    await page.setViewportSize({ width: 1100, height: 960 });
+    await expect.poll(async () => (await line(composer))?.containsCaret).toBe(true);
+    await page.locator('.kp-chat-draft').evaluate(node => { node.scrollTop -= 25; });
+    await expect.poll(async () => (await line(composer))?.containsCaret).toBe(true);
+    await composer.evaluate(node => { node.style.fontSize = '19px'; });
+    await expect.poll(async () => (await line(composer))?.height ?? 0).toBeGreaterThan(lastLine.height);
+    await expect.poll(async () => (await line(composer))?.containsCaret).toBe(true);
+    await composer.evaluate(node => { node.style.removeProperty('font-size'); });
+    await composer.press('Control+c'); await expect(page.getByRole('dialog', { name: 'Chat commands' })).toBeVisible();
+    await expect(visibleLines).toHaveCount(0); await page.keyboard.press('Escape');
+    await expect(composer).toBeFocused(); await expect(visibleLines).toHaveCount(1);
+    await composer.press('ControlOrMeta+z'); await expect(composer).toHaveText('');
+    await composer.press('ControlOrMeta+Shift+z'); await expect(composer).toHaveText(text.trim());
+    f.peer.finish('A streamed result does not move the composer.');
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
+    await command(page, 'Markdown source');
+    const source = page.getByRole('textbox', { name: 'Your message Markdown' });
+    await expect(source).toBeFocused(); await expect(visibleLines).toHaveCount(0);
+    await expect(page.locator('.kp-rich-source .cm-activeLine')).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await source.press('Control+c'); await expect(page.getByRole('dialog', { name: 'Chat commands' })).toBeVisible();
+    await expect(page.locator('.kp-rich-source .cm-activeLine')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await page.keyboard.press('Escape'); await command(page, 'Rich text');
+    const history = JSON.stringify(f.store.data.messages);
+    await composer.press('Escape'); await expect(transcript).toBeFocused();
+    await transcript.press('g'); await transcript.press('g'); await transcript.press('v'); await transcript.press('l');
+    await expect(transcript).toHaveAttribute('data-kp-line-visible', 'true'); await expect(visibleLines).toHaveCount(1);
+    const selected = await page.evaluate(() => getSelection()?.toString()); expect(selected?.length).toBeGreaterThan(0);
+    await page.keyboard.press('Control+c'); await expect(visibleLines).toHaveCount(0); await page.keyboard.press('Escape');
+    expect(await page.evaluate(() => getSelection()?.toString())).toBe(selected);
+    expect(JSON.stringify(f.store.data.messages)).toBe(history);
+    await page.setViewportSize({ width: 1440, height: 960 }); await page.screenshot({ path: info.outputPath('workspace-current-line.png') });
+    await page.getByRole('button', { name: 'Chat', exact: true }).click();
+    await expect(visibleLines).toHaveCount(0);
+    await page.getByRole('button', { name: 'Chat', exact: true }).click();
+    await expect(transcript).toBeVisible(); await transcript.focus(); await expect(visibleLines).toHaveCount(1);
+    await expect.poll(() => f.store.data.draft).toBe(text);
+    await page.getByRole('button', { name: 'Focus KP pane' }).click();
+    const prose = page.locator('.fn-editor .ProseMirror'), body = prose.locator('.fn-block-content > p').first();
+    const blockId = await body.locator('..').locator('..').getAttribute('data-cell-id');
+    await body.click({ position: { x: 70, y: 12 } }); await prose.press('0');
+    await expect(prose).toHaveAttribute('data-kp-line-visible', 'true'); await expect(visibleLines).toHaveCount(1);
+    const firstLine = (await line(prose))!; await prose.press('j');
+    await expect.poll(async () => (await line(prose))!.top).toBeGreaterThan(firstLine.top);
+    const band = (await line(prose))!, cursor = (await prose.locator('.fn-normal-cursor').boundingBox())!;
+    expect(cursor.y).toBeGreaterThanOrEqual(band.top - 2); expect(cursor.y + cursor.height).toBeLessThanOrEqual(band.top + band.height + 2);
+    await prose.press('k'); await expect.poll(async () => (await line(prose))!.top).toBe(firstLine.top);
+    expect(await body.locator('..').locator('..').getAttribute('data-cell-id')).toBe(blockId);
+    expect(JSON.stringify(f.store.data)).not.toContain('kp-active-line'); expect(errors).toEqual([]);
   } finally { await f.close(); }
 });
 
@@ -288,7 +382,7 @@ test('joined editors grow and cap the draft while streaming preserves focus, sel
     expect(Math.abs(await history.evaluate(node => node.scrollTop) - before)).toBeLessThan(3);
     await expect(input(page)).toBeFocused(); await expect(page.locator('.kp-chat-unread')).toBeVisible();
     const draftBox = (await draft.boundingBox())!, columnBox = (await column.boundingBox())!;
-    expect(Math.abs(draftBox.y + draftBox.height - columnBox.y - columnBox.height + 1)).toBeLessThan(1);
+    expect(Math.abs(draftBox.y + draftBox.height - columnBox.y - columnBox.height)).toBeLessThan(1);
     await page.screenshot({ path: info.outputPath('joined-growing-composer.png') });
   } finally { await f.close(); }
 });

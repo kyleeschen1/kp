@@ -321,6 +321,8 @@ test('Edit opens in Normal mode; split, nest, titles and folding preserve the na
   const first = page.locator('.ProseMirror > .fn-block').first(), body = first.locator(':scope > .fn-block-content > p');
   const originalId = await first.getAttribute('data-cell-id');
   await body.click({ clickCount: 3 }); const originalText = await body.textContent();
+  await expect(body).toHaveClass(/kp-active-textblock/);
+  await expect(page.locator('.fn-editor .ProseMirror')).toHaveAttribute('data-kp-line-visible', 'true');
   await page.keyboard.insertText('Blocked in Normal'); await expect(body).toHaveText(originalText!);
   await body.evaluate(el => {
     const data = new DataTransfer(); data.setData('text/plain', 'Blocked paste');
@@ -342,6 +344,9 @@ test('Edit opens in Normal mode; split, nest, titles and folding preserve the na
   await menu(page, 'structure');
   await action(page, 'Add title', 'structure'); await page.keyboard.insertText('A closer look');
   await expect(child.locator('h2')).toHaveText('A closer look');
+  await expect(child.locator('h2')).toHaveClass(/kp-active-textblock/);
+  await expect(child.locator('h2')).not.toHaveCSS('background-image', 'none');
+  await expect(body).not.toHaveClass(/kp-active-textblock/);
   await blockOption(page, 'Block type', 'note');
   await body.click(); await blockOption(page, 'Children display', 'outline');
   await expect(child).toHaveCSS('border-left-width', '1px');
@@ -352,6 +357,7 @@ test('Edit opens in Normal mode; split, nest, titles and folding preserve the na
   await expect(preview(page).locator('.fn-block-title')).toHaveText('A closer look');
   await first.getByRole('button', { name: 'Collapse 1 child blocks', exact: true }).click();
   await expect(child).toBeHidden();
+  await expect(body).toHaveClass(/kp-active-textblock/);
   await action(page, 'Undo'); await expect(child).toBeVisible();
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
   expect(await player!.evaluate(node => node.isConnected)).toBe(true);

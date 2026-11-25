@@ -5,12 +5,13 @@ import { baseKeymap, toggleMark, setBlockType, chainCommands, newlineInCode, cre
 import { history, undo, redo } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
 import { splitListItem, sinkListItem, liftListItem } from 'prosemirror-schema-list';
-import { EditorView as CodeView, keymap as codeKeymap, drawSelection } from '@codemirror/view';
+import { EditorView as CodeView, keymap as codeKeymap, drawSelection, highlightActiveLine } from '@codemirror/view';
 import { EditorState as CodeState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { defaultKeymap } from '@codemirror/commands';
 import { vim, getCM, Vim } from '@replit/codemirror-vim';
 import { proseVim, vimKey, setVimMode } from '../fraction-notebook/vim.ts';
+import { activeLine } from '../fraction-notebook/active-line.ts';
 import { parseMarkdown, serializeMarkdown, richSchema } from './rich-document.ts';
 import { mathView } from './math-view.ts';
 
@@ -70,7 +71,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
     'Mod-Enter': () => { if (!readOnly && !disabled) options.onSubmit?.(); return true; },
     'Mod-b': toggleMark(richSchema.marks['strong']!), 'Mod-i': toggleMark(richSchema.marks['em']!),
     'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo
-  }), proseVim({ openBelow, readOnly }), keymap({
+  }), proseVim({ openBelow, readOnly }), activeLine(), keymap({
     Enter: chainCommands(newlineInCode, splitListItem(richSchema.nodes['list_item']!), createParagraphNear, liftEmptyBlock, splitBlock),
     Tab: sinkListItem(richSchema.nodes['list_item']!), 'Shift-Tab': liftListItem(richSchema.nodes['list_item']!)
   }), keymap(baseKeymap)];
@@ -128,7 +129,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
       return;
     }
     body.hidden = true; sourceHost.hidden = false; if (sourceButton) sourceButton.textContent = 'Rich text';
-    code = new CodeView({ parent: sourceHost, doc: source, extensions: [vim(), markdown(), drawSelection(),
+    code = new CodeView({ parent: sourceHost, doc: source, extensions: [vim(), markdown(), drawSelection(), highlightActiveLine(),
       codeKeymap.of([{ key: 'Mod-Enter', run: () => { options.onSubmit?.(); return true; } }, ...defaultKeymap]),
       CodeState.transactionFilter.of(transaction => {
         if (transaction.newDoc.length <= limit) return transaction;

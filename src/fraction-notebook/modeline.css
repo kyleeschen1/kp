@@ -1,4 +1,4 @@
-.kp-modeline { flex: 0 0 auto; display: flex; align-items: center; gap: 12px; min-height: 32px; padding: 4px 12px calc(4px + env(safe-area-inset-bottom)); border-top: 1px solid var(--fn-border); background: var(--kp-modeline-background); color: var(--kp-modeline-color); font: 400 .8rem/1.4 var(--fn-font); }
+.kp-modeline { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 4px 12px calc(4px + env(safe-area-inset-bottom)); border-top: 1px solid var(--fn-border); background: var(--kp-modeline-background); color: var(--kp-modeline-color); font: 400 max(1rem, var(--kp-document-body-size), var(--kp-modeline-size))/1.4 var(--fn-font); }
 .kp-modeline-mode { flex: 0 0 auto; min-width: 3ch; color: var(--fn-focus); }
 .kp-modeline-surface { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .kp-modeline nav { display: flex; gap: 6px; margin-inline: auto; }
@@ -7,6 +7,6 @@
 .kp-modeline button[aria-pressed=true] { color: var(--fn-text); background: var(--fn-selection); text-decoration: underline; text-underline-offset: .2em; }
 .kp-modeline-time { flex: 0 0 auto; margin-left: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
 @media (max-width: 520px) {
-  .kp-modeline { gap: 8px; padding-inline: 8px; font-size: .72rem; }
+  .kp-modeline { gap: 6px 8px; padding-inline: 8px; }
   .kp-modeline-surface { display: none; }
 }

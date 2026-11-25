@@ -1,7 +1,7 @@
 :root { --kp-chat-composer-max-height: 40vh; --kp-chat-pane-padding: max(16px, calc((100% - var(--kp-document-width)) / 2)); --kp-chat-padding-top: 3rem; --kp-chat-padding-bottom: 5rem; --kp-chat-speaker-color: var(--fn-muted); }
 .kp-chat { --kp-chat-annotation: var(--fn-selection); color: var(--fn-text); font: var(--kp-document-body-weight) var(--kp-document-body-size)/var(--kp-document-body-leading) var(--fn-font); letter-spacing: var(--kp-document-letter-spacing); }
-.kp-chat-column { box-sizing: border-box; width: 100%; height: 100%; min-height: 0; display: flex; flex-direction: column; border: 1px solid var(--fn-border); }
-.kp-chat-output { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--fn-block-gap); padding: var(--kp-chat-padding-top) var(--kp-chat-pane-padding) var(--kp-chat-padding-bottom); overflow: hidden; }
+.kp-chat-column { box-sizing: border-box; width: 100%; height: 100%; min-height: 0; display: flex; flex-direction: column; }
+.kp-chat-output { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--fn-block-gap); padding: var(--kp-chat-padding-top) var(--kp-chat-pane-padding) var(--kp-chat-padding-bottom); border-bottom: 1px solid var(--fn-border); overflow: hidden; }
 .kp-chat[hidden], .kp-chat [hidden] { display: none !important; }
 .kp-chat-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .kp-chat-heading strong { font-weight: var(--fn-object-weight); }
@@ -18,7 +18,7 @@
 .kp-chat-text { white-space: normal; }
 /* Content determines the composer height. The percentage cap leaves space for
    reading even when a theme requests a height larger than the viewport. */
-.kp-chat-draft { box-sizing: border-box; min-height: min(5em, var(--kp-chat-composer-max-height), 50%); max-height: min(var(--kp-chat-composer-max-height), 50%); flex: 0 0 auto; overflow: auto; width: 100%; padding: var(--kp-chat-padding-top) var(--kp-chat-pane-padding) var(--kp-chat-padding-bottom); background: transparent; color: var(--fn-text); border: 0; border-top: 1px solid var(--fn-border); font: inherit; caret-color: var(--kp-editor-cursor); overscroll-behavior: contain; scrollbar-width: thin; }
+.kp-chat-draft { box-sizing: border-box; min-height: min(5em, var(--kp-chat-composer-max-height), 50%); max-height: min(var(--kp-chat-composer-max-height), 50%); flex: 0 0 auto; overflow: auto; width: 100%; padding: var(--kp-chat-padding-top) var(--kp-chat-pane-padding) var(--kp-chat-padding-bottom); background: transparent; color: var(--fn-text); border: 0; font: inherit; caret-color: var(--kp-editor-cursor); overscroll-behavior: contain; scrollbar-width: thin; }
 .kp-chat-draft .ProseMirror { min-height: 3em; }
 .kp-chat-controls { display: flex; flex-wrap: wrap; gap: 6px; }
 .kp-chat button { font-family: inherit; }

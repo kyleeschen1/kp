@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.workspace-focus-lines-20261125",
+  "kind": "run-contract",
+  "title": "Raised panes and current-line focus",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: one implementation package complete and checked. Stop before visual promotion or broader scope.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.workspace-focus-lines-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workspace-focus-lines.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run test:editor-chat",
+    "npm run visual:editor-chat",
+    "npm run test:project-vision"
+  ],
+  "revisitWhen": [
+    "User reviews the canonical focus exemplar."
+  ],
+  "allowedWork": [
+    "Workspace shadow and borders, modeline typography, existing prose/custom-block/source line focus, preservation tests and project direction"
+  ],
+  "disallowedWork": [
+    "New text components, Lit migration, moving panes, new persistence, native inference or domain rendering changes"
+  ],
+  "goal": "One stationary exemplar with active-pane elevation, single separators, readable modeline and focused text line",
+  "target": "task.kp.workspace-focus-lines-20261125",
+  "slices": [
+    {
+      "id": "focus",
+      "title": "Implement and verify the focus exemplar",
+      "summary": "Implemented and checked active-pane shadow, single separators, readable modeline and focused visual-line paint in existing editors/custom blocks. Types, units, 21 chat and eight affected notebook Chromium checks pass; dark/light/narrow captures inspected. Await visual judgment.",
+      "status": "complete"
+    }
+  ]
+}

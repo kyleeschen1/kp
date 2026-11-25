@@ -1,0 +1,16 @@
+:root { --kp-active-line-background: var(--color-active-line); }
+/* Background image preserves a code block's own surface color. No extra DOM,
+   layout, selection or pointer target is introduced into editable content. */
+.ProseMirror[data-kp-line-visible=true] .kp-active-textblock {
+  background-image: linear-gradient(var(--kp-active-line-background), var(--kp-active-line-background));
+  background-size: 100% var(--kp-active-line-height);
+  background-position: 0 var(--kp-active-line-y);
+  background-repeat: no-repeat;
+  background-origin: border-box;
+}
+:is(.fn-code, .kp-rich-source) .cm-editor .cm-activeLine { background-color: transparent; }
+:is(.fn-code, .kp-rich-source) .cm-editor.cm-focused .cm-activeLine { background-color: var(--kp-active-line-background); }
+@media (forced-colors: active) {
+  .ProseMirror[data-kp-line-visible=true] .kp-active-textblock,
+  :is(.fn-code, .kp-rich-source) .cm-editor.cm-focused .cm-activeLine { outline: 1px dotted Highlight; outline-offset: -1px; }
+}

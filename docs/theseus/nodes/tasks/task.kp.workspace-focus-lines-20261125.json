@@ -1,0 +1,96 @@
+{
+  "id": "task.kp.workspace-focus-lines-20261125",
+  "kind": "task",
+  "title": "Make pane and text focus legible without dimming content",
+  "status": "deferred",
+  "domain": "product",
+  "summary": "HUMAN_CHECKPOINT: bounded focus candidate checked; existing custom blocks included, no new component. Review shadow and line intensity at the canonical notebook URL.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workspace-focus-lines.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:editor-chat -- --grep 'current-line paint'",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:03:41.401Z",
+      "notes": "Discovery exposed a soft-wrap mismatch: coordsAtPos chose the following glyph line while the Insert caret remained on the previous line. Fixed in the shared paint owner by measuring the native range head only when it matches editor state; subsequent focused run passed. Later fixture-only trailing-space expectation corrected to preserve the actual draft."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:03:44.039Z",
+      "notes": "Discovery found a CSS side-effect import on the model-to-editor unit path. Moved stylesheet loading to the browser app entrypoint; all 20 notebook tests then passed."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:03:45.486Z",
+      "notes": "Adding the successor initially exceeded existing startup word budgets. Compressed duplicate summary prose while retaining source links and pivot history; no budget changed. All 75 vision/orientation/dashboard tests then passed."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:03:46.333Z",
+      "notes": "Notebook, source and chat editor boundary types pass with the shared current-line plugin."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:03:47.452Z",
+      "notes": "25 tests pass; native session history, recovery, draft CAS, annotations and protocol boundaries preserved."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:03:48.988Z",
+      "notes": "20 tests pass; UUID/metadata conversion, nested structure, reversible operations, draft and native object authority preserved."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:03:50.511Z",
+      "notes": "75 tests pass. Roadmap, active thread, source-linked vision and selected contract agree within unchanged startup budgets."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'current-line paint'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:05:11.457Z",
+      "notes": "Focused regression now passes with native wrap affinity, Normal j/k across KP custom text, source blur, transient restoration, streaming, Undo/Redo, geometry invalidation and exact draft preservation."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:05:12.529Z",
+      "notes": "21 Chromium checks pass, including fixed geometry, single separators, shadow, default-size modeline, focused line, notes, folding, drafts, branches, streaming, recovery and native reader preservation. Inspected regenerated dark/light/390px captures."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'cursor|focused source|styles|light canvas|phone focused|split, nest, titles'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:05:13.263Z",
+      "notes": "Eight affected Chromium cases pass, including current-line title/body decorations inside existing nested NodeViews, fold/undo, persistent IDs, native player, cursor, source lifecycle, named styles and phone source/result."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:05:14.036Z",
+      "notes": "Current roadmap, thread, vision and explicit focus contract agree; unrelated global Theseus election remains outside this approved scope."
+    }
+  ],
+  "revisitWhen": [
+    "User judges the active-pane shadow, separators, modeline and current-line treatment."
+  ]
+}

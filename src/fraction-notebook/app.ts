@@ -24,6 +24,7 @@ import { mountWindows } from './windows.ts';
 import { mountModeline } from './modeline.ts';
 import './windows.css';
 import './modeline.css';
+import './active-line.css';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };

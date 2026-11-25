@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-workspace-modeline`
-Execution Contract: `run-contract.kp.workspace-modeline-20261125`
-Next Product Milestone: `workspace-modeline`
+Current Commitment: `kp-workspace-focus-lines`
+Execution Contract: `run-contract.kp.workspace-focus-lines-20261125`
+Next Product Milestone: `workspace-focus-lines`
 Milestone Authority: approved
 
 ## Where we are going
@@ -19,28 +19,27 @@ why this becomes the organizing direction and what it supersedes.
 
 ## Current approved commitment
 
-**Accepted:** nested structure, [unified surface](reviews/2026-11-24-unified-notebook-surface.md),
-[focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
-[style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
-**Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
+**Accepted:** [unified notebook](reviews/2026-11-24-unified-notebook-surface.md),
+[focused editing/styles](reviews/2026-11-24-notebook-style-comparison.md) and
+[persistent chat](reviews/2026-11-25-kp-persistent-chat.md).
 **Checked:** [fixed 50/50 split](reviews/2026-11-25-fixed-chat-split.md), Codex
 left and KP right. **Checked:** [joined chat editors](reviews/2026-11-25-joined-chat-composer.md).
-**Approved:** [workspace focus/modeline](reviews/2026-11-25-workspace-modeline.md):
-reading spacing, default gutters off, inactive-pane dimming and mode/pane/time cues.
-The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope. The
-[recency stack](reviews/2026-11-25-recency-window-stack.md) is rejected.
-Retain the 440px KP column and persistent composition from
-the [prior candidate](reviews/2026-11-25-windowed-chat.md).
-The [sliding overlay](reviews/2026-11-25-overlay-chat.md) remains rejected.
-Preserve data and native rendering.
+**Checked:** [workspace modeline](reviews/2026-11-25-workspace-modeline.md):
+reading spacing, default gutters off and mode/pane/time cues.
+**Approved:** [raised panes and current-line focus](reviews/2026-11-25-workspace-focus-lines.md):
+shadow replaces dimming; single separators, a larger modeline and focused lines
+include existing custom text. Preserve the fixed split; no new component.
+The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope.
+[Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
+[sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
+Retain the 440px column, persistent composition, data and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
 is deferred behind persistent conversation; automatic document edits remain excluded.
 Exclude publication and general editor promotion. Custom motions, transclusion
 and search remain parked; MathML declined.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md) retains composition
-evidence; its inspector UI was unaccepted. Fractional editorial review remains
-a return path; ecosystem discussion and library extraction stay parked.
+evidence; its inspector was unaccepted. Fractional editorial review remains parked.
 
 Return to the approved [authoring-to-practice programme](2026-11-08-authoring-to-practice-loops.md)
 after this bounded checkpoint. Its dependencies and human gates remain intact.
@@ -87,9 +86,8 @@ blocker. Prior completed architecture and maintenance work stays complete.
   still has older direction; integration belongs to its owner, not an implicit merge.
 - Read this page, [the active thread](threads/co-creative-practice.md), and the
   charter for rationale. Retrieve only the selected task's sources afterward.
-- At handoff, state the capability gained, remaining uncertainty and any direction
-  change. Reconcile strategic records at milestones/pivots; update tasks through
-  Theseus. Do not append slice logs here.
+- At handoff, state capability, uncertainty and direction changes. Reconcile strategy
+  at milestones; update tasks through Theseus. No slice logs here.
 
 ## Preserved boundaries and history
 

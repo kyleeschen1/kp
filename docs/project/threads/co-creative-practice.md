@@ -24,12 +24,11 @@ workbench latency remain unproved. The approved notebook detour below is current
 ## Retrieve for a named question
 
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
-  Approved requirements: persistent UUIDs, custom metadata/blocks, nesting, scope,
-  localized changes, reuse, imports and folding.
-  The [matrix proof](../reviews/2026-11-24-notebook-proof.md) retains composition
-  evidence; its inspector was unaccepted.
-  The [structure editor](../reviews/2026-11-24-structure-editor.md) is accepted.
-  The [unified surface](../reviews/2026-11-24-unified-notebook-surface.md) is accepted.
+  Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
+  and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is
+  checked; its inspector was unaccepted. Accepted:
+  [structure](../reviews/2026-11-24-structure-editor.md) and
+  [unified surface](../reviews/2026-11-24-unified-notebook-surface.md).
   [Focused animation editing](../reviews/2026-11-24-focused-buffer-next-step-review.md)
   is checked: one document, source beside its result and help/basic Ex commands.
   [Style comparison and rhythm](../reviews/2026-11-24-notebook-style-comparison.md)
@@ -39,10 +38,12 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Rich chat and annotations](../reviews/2026-11-25-kp-rich-chat.md) are checked.
   [Keyboard chat](../reviews/2026-11-25-keyboard-chat.md) is checked; the
   [recency stack](../reviews/2026-11-25-recency-window-stack.md) was rejected.
-  The [fixed split](../reviews/2026-11-25-fixed-chat-split.md) is checked.
-  Checked: [joined chat](../reviews/2026-11-25-joined-chat-composer.md).
-  Approved: [workspace modeline](../reviews/2026-11-25-workspace-modeline.md),
-  spacing, default gutters off and inactive-pane dimming. The
+  Checked: [fixed split](../reviews/2026-11-25-fixed-chat-split.md) and
+  [joined chat](../reviews/2026-11-25-joined-chat-composer.md).
+  Checked: [workspace modeline](../reviews/2026-11-25-workspace-modeline.md),
+  spacing and default gutters off. Approved: [raised panes and current-line focus](../reviews/2026-11-25-workspace-focus-lines.md),
+  shadow replaces dimming; single separators, a larger bar and focused custom
+  text/source lines. No new component. The
   [multiplexer vision](../2026-11-25-multiplexer-vision.md) records later scope.
   Preserve native history and domain ownership.
   Motions/text objects remain parked; MathML declined.
@@ -71,7 +72,6 @@ workbench latency remain unproved. The approved notebook detour below is current
 
 Name the capability, finish line and displaced commitments.
 
-At handoff, reconcile direction and approval boundaries with the dashboard, record
-actual execution through Theseus, and show a concrete artifact or workflow.
-Report unknowns honestly. A human visual checkpoint accepts the named treatment;
-it does not approve a larger architecture or another delivery campaign.
+At handoff, reconcile dashboard direction, record execution through Theseus,
+show the artifact and name unknowns. Visual acceptance covers the named treatment,
+not a larger architecture or delivery campaign.
