@@ -57,7 +57,6 @@ test("snapshot age is visible rather than silently claiming live status", () => 
   const html = renderProjectVision(projectVision, eightDaysAfterReview);
   assert.match(html, /data-kp-vision-freshness="review-due"/);
   assert.match(html, /Review due/);
-  assert.match(html, /not an active run/);
   assert.match(html, /not the current commitment queue/);
 });
 

@@ -19,8 +19,8 @@ async function ready(page: Page) {
 }
 async function jump(page: Page, id: string) {
   const frame = preview(page);
-  await page.getByRole('button', { name: 'Reading options' }).click();
-  await frame.locator(`.kp-lesson-toc a[href="#${id}"]`).click();
+  await page.locator('iframe').scrollIntoViewIfNeeded();
+  await frame.getByRole('combobox', { name: 'Animation moment' }).selectOption(id);
 }
 async function menu(page: Page, name: 'writing' | 'structure') {
   const details = page.locator(`.fn-${name}`);
@@ -32,11 +32,12 @@ async function action(page: Page, name: string, group: 'writing' | 'structure' =
 async function blockOption(page: Page, name: string, value: string) {
   await menu(page, 'structure'); await page.getByRole('combobox', { name }).selectOption(value);
 }
-async function replaceSpec(page: Page, source: string) {
+async function replaceSpec(page: Page, source: string, run = true) {
   const summary = page.getByText('Edit animation specification', { exact: true });
   if (!(await page.locator('.fn-story details').getAttribute('open') !== null)) await summary.click();
   await page.locator('.cm-content').click(); await page.keyboard.press('Escape'); await page.keyboard.press('i');
   await page.keyboard.press('ControlOrMeta+a'); await page.keyboard.insertText(source);
+  if (run) await page.keyboard.press('Shift+Enter');
 }
 test('direct prose, formatting and undo update the native reader without remounting', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
@@ -57,8 +58,11 @@ test('direct prose, formatting and undo update the native reader without remount
   await expect(page.locator('.fn-cell-details')).toBeVisible();
   await action(page, 'Hide details');
   await expect(page.locator('.fn-cell-details')).toBeHidden();
+  await page.getByText('Edit animation specification', { exact: true }).click();
+  await expect(page.locator('.fn-source-pane')).toBeVisible();
   await page.getByRole('separator').focus(); await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('separator')).toHaveAttribute('aria-valuenow', '52');
+  await page.getByRole('button', { name: 'Close buffer', exact: true }).click();
   await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.ProseMirror').focus(); await page.keyboard.press('i');
   await expect(page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first()).toContainText('A changed opening');
   await page.screenshot({ caret: 'initial', path: info.outputPath('fraction-editor.png') }); expect(errors).toEqual([]);
@@ -78,7 +82,7 @@ test('annotation edits keep the native moment; invalid specification remains rec
   await replaceSpec(page, source.replace('equation.fractional-linear.right-simplified.rhs.4', 'missing.target'));
   await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'invalid');
   await expect(plane.locator('.anchored-labels')).toContainText('Four is one half.');
-  await page.reload(); await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'invalid');
+  await page.reload(); await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'pending');
   await jump(page, 'equation.fractional-linear.right-simplified');
   await expect(preview(page).locator('.anchored-labels')).toContainText('Four is one half.');
   await page.getByText('Edit animation specification', { exact: true }).click();
@@ -275,8 +279,8 @@ test('Edit opens in Normal mode; split, nest, titles and folding preserve the na
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url);
   const edit = page.getByRole('button', { name: 'Edit', exact: true });
-  await expect(edit).toHaveAttribute('aria-pressed', 'false');
-  await expect(page.locator('.fn-left')).toBeHidden(); await edit.click();
+  await expect(edit).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.fn-left')).toBeVisible();
   await expect(page.locator('.ProseMirror')).toHaveAttribute('data-vim-mode', 'normal');
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
   const first = page.locator('.ProseMirror > .fn-block').first(), body = first.locator(':scope > .fn-block-content > p');
@@ -339,7 +343,7 @@ test('block moves, outdent and merge preserve IDs and restore through undo', asy
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
 });
 
-test('one masthead, matching serif prose and reversible split preserve the current reading', async ({ page }, info) => {
+test('one document and focused source preserve the mounted player and current reading', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 960 }); await ready(page);
   const frame = preview(page), edit = page.getByRole('button', { name: 'Edit', exact: true });
@@ -355,16 +359,16 @@ test('one masthead, matching serif prose and reversible split preserve the curre
   const plane = frame.locator('.kp-caption-pin');
   await expect(plane).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
   await edit.click(); await expect(page.locator('.fn-left')).toBeHidden();
-  const leftBefore = (await page.locator('.fn-right').boundingBox())!.x;
   await edit.click();
-  const intermediate = await page.locator('.fn-right').evaluate(el => new Promise<number>(resolve => requestAnimationFrame(() => resolve(el.getBoundingClientRect().left))));
-  expect(intermediate).toBeGreaterThanOrEqual(leftBefore); expect(intermediate).toBeLessThan(729);
-  // Reverse during the opening transition; the latest requested state wins.
+  expect((await page.locator('.fn-left').boundingBox())!.width).toBe(1440);
   await edit.click({ force: true }); await edit.click({ force: true });
-  await expect(page.locator('.fn-left')).toHaveCSS('transform', 'matrix(1, 0, 0, 1, 0, 0)');
+  await page.getByText('Edit animation specification', { exact: true }).click();
+  await expect(page.locator('.fn-source-pane')).toBeVisible();
+  expect((await page.locator('.fn-right').boundingBox())!.x).toBeGreaterThan(700);
   await expect(plane).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
   expect(await stage!.evaluate(el => el.isConnected)).toBe(true);
-  await page.screenshot({ caret: 'initial', path: info.outputPath('unified-split.png') });
+  await page.screenshot({ caret: 'initial', path: info.outputPath('focused-source.png') });
+  await page.getByRole('button', { name: 'Close buffer', exact: true }).click();
   await page.emulateMedia({ reducedMotion: 'reduce' }); await edit.click();
   await expect(page.locator('.fn-right')).toHaveCSS('transition-duration', '0s');
   await expect(page.locator('.fn-left')).toBeHidden();
@@ -411,4 +415,112 @@ test('theme-variable modal cursors preserve text at graphemes, empty blocks and 
   await expect(page.locator('.cm-cursor').first()).toHaveCSS('border-left-color', 'rgb(255, 68, 68)');
   await mode.click(); await expect(mode).toHaveText('NORMAL');
   expect(errors).toEqual([]);
+});
+
+async function ex(page: Page, value: string) {
+  await page.keyboard.press('Escape'); await page.keyboard.type(':');
+  const input = page.getByRole('textbox', { name: 'Ex command' }); await expect(input).toBeFocused();
+  await input.fill(value); await input.press('Enter');
+}
+test('focused source separates save from run, survives reload, and returns to its document', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1440, height: 960 }); await ready(page);
+  const story = seed.cells.find(cell => cell.type === 'story'); if (story?.type !== 'story') throw new Error('Missing story');
+  await jump(page, 'equation.fractional-linear.right-simplified');
+  const old = 'Four is half of x. Predict the whole before revealing the next move.';
+  const source = story.source.replace(old, 'Inspect this saved draft before running.');
+  const stage = await preview(page).locator('.kp-reader-equation-stage').elementHandle();
+  await page.getByText('Edit animation specification', { exact: true }).scrollIntoViewIfNeeded();
+  const position = await page.locator('.fn-editor').evaluate(el => el.scrollTop);
+  await replaceSpec(page, source, false);
+  await expect(page.locator('.fn-result-status')).toContainText('have not run');
+  await expect(preview(page).locator('.anchored-labels')).toContainText(old);
+  await ex(page, 'w'); await expect(page.locator('.fn-status')).toContainText('Saved locally');
+  await expect(preview(page).locator('.anchored-labels')).toContainText(old);
+  await ex(page, 'run'); await expect(preview(page).locator('.anchored-labels')).toContainText('Inspect this saved draft');
+  await expect(preview(page).locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
+  await replaceSpec(page, '{broken', false); await ex(page, 'run');
+  await expect(page.locator('.fn-result-status')).toContainText('Previous result');
+  await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'invalid');
+  await expect(preview(page).locator('.anchored-labels')).toContainText('Inspect this saved draft');
+  await ex(page, 'q'); await expect(page.locator('.fn-source-pane')).toBeHidden();
+  expect(await page.locator('.fn-editor').evaluate(el => el.scrollTop)).toBeCloseTo(position, 0);
+  expect(await stage!.evaluate(el => el.isConnected)).toBe(true);
+  await page.reload(); await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'pending');
+  await replaceSpec(page, '{broken', false); await expect(page.locator('.cm-content')).toHaveText('{broken');
+  await replaceSpec(page, source); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await page.screenshot({ caret: 'initial', path: info.outputPath('focused-run.png') });
+  expect(errors).toEqual([]);
+});
+test('help, Ex line numbers and inherited styles work in document and JSON', async ({ page }, info) => {
+  await page.setViewportSize({ width: 1440, height: 960 }); await ready(page);
+  await ex(page, 'h'); await expect(page.getByRole('complementary', { name: 'Keyboard help' })).toBeVisible();
+  await page.getByRole('searchbox', { name: 'Search keybindings' }).fill('run');
+  await expect(page.locator('.fn-help')).toContainText('Shift-Enter');
+  await page.getByRole('button', { name: 'Close help' }).click();
+  await ex(page, 'set nonumber'); await expect(page.locator('.fn-line-gutter span')).toHaveCount(0);
+  await ex(page, 'set relativenumber'); await expect(page.locator('.fn-line-gutter span').first()).toBeVisible();
+  await jump(page, 'equation.fractional-linear.right-simplified');
+  await page.getByRole('button', { name: 'Styles', exact: true }).click();
+  await page.getByRole('textbox', { name: 'Body color', exact: true }).fill('var(--color-green-light)');
+  await page.getByRole('textbox', { name: 'Body color', exact: true }).press('Tab');
+  await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(182, 213, 163)');
+  await expect(preview(page).locator('body')).toHaveCSS('color', 'rgb(182, 213, 163)');
+  await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+  await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(56, 108, 54)');
+  expect(await preview(page).locator('body').evaluate(el => getComputedStyle(el).getPropertyValue('--kp-tutorial-card').trim())).toBe('#eeefe9');
+  await page.getByRole('textbox', { name: 'Document title weight', exact: true }).fill('300');
+  await page.getByRole('textbox', { name: 'Document title weight', exact: true }).press('Tab');
+  await expect(page.locator('.fn-article-header h1')).toHaveCSS('font-weight', '300');
+  await expect(preview(page).locator('.kp-caption-document-intro h1')).toHaveCSS('font-weight', '300');
+  await expect(preview(page).locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
+  await page.getByRole('button', { name: 'Close styles' }).click();
+  const font = await page.locator('.ProseMirror').evaluate(el => getComputedStyle(el).fontFamily);
+  await expect(page.locator('.fn-wordmark')).toHaveCSS('font-family', font);
+  await page.getByText('Edit animation specification', { exact: true }).click();
+  await page.locator('.cm-content').focus(); await ex(page, 'help');
+  await expect(page.locator('.fn-help')).toContainText('Active buffer: animation JSON');
+  await page.screenshot({ caret: 'initial', path: info.outputPath('focused-help-light.png') });
+  await page.getByRole('button', { name: 'Close help' }).click();
+  await ex(page, 'set nonumber'); await expect(page.locator('.cm-lineNumbers')).toHaveCount(0);
+  await ex(page, 'set number'); await expect(page.locator('.cm-lineNumbers')).toBeVisible();
+  await ex(page, 'wq'); await expect(page.locator('.fn-source-pane')).toBeHidden();
+  await page.reload(); await expect(page.locator('.fn-article-header h1')).toHaveCSS('font-weight', '300');
+});
+
+test('source typing makes no preview request and a superseded Run cannot replace the result', async ({ page }) => {
+  await ready(page);
+  const story = seed.cells.find(cell => cell.type === 'story'); if (story?.type !== 'story') throw new Error('Missing story');
+  await page.getByText('Edit animation specification', { exact: true }).click();
+  await expect(page.locator('.fn-source-pane')).toBeVisible();
+  let requests = 0; page.on('request', request => { if (request.url().endsWith('/api/dev/fraction-notebook')) requests++; });
+  await replaceSpec(page, story.source.replace('Notice the last operation', 'A delayed run'), false);
+  // Wait beyond the prose debounce to distinguish explicit Run from old live compilation.
+  await page.waitForTimeout(450); expect(requests).toBe(0);
+  let release: () => void = () => {}, reached: () => void = () => {};
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  const started = new Promise<void>(resolve => { reached = resolve; });
+  await page.route('**/api/dev/fraction-notebook', async route => {
+    const response = await route.fetch(); reached(); await gate;
+    await route.fulfill({ response });
+  });
+  await page.keyboard.press('Shift+Enter'); await started;
+  await replaceSpec(page, story.source.replace('Notice the last operation', 'A newer draft'), false);
+  release();
+  await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'pending');
+  await expect(preview(page).getByRole('combobox', { name: 'Animation moment' })).not.toContainText('A delayed run');
+  await page.unrouteAll({ behavior: 'wait' });
+  await page.keyboard.press('Shift+Enter');
+  await expect(preview(page).getByRole('combobox', { name: 'Animation moment' })).toContainText('A newer draft');
+});
+
+test('phone focused buffer keeps both source and result usable', async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 }); await ready(page);
+  await page.getByText('Edit animation specification', { exact: true }).click();
+  await expect(page.locator('.fn-source-pane')).toBeVisible();
+  const code = (await page.locator('.fn-source-pane').boundingBox())!, result = (await page.locator('.fn-right').boundingBox())!;
+  expect(code.height).toBeGreaterThan(250); expect(result.y).toBeGreaterThanOrEqual(code.y + code.height - 1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ caret: 'initial', path: info.outputPath('focused-phone.png') });
+  await page.getByRole('button', { name: 'Close buffer', exact: true }).click(); await expect(page.locator('.fn-source-pane')).toBeHidden();
 });

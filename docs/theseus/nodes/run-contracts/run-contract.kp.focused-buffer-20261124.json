@@ -1,0 +1,47 @@
+{
+  "id": "run-contract.kp.focused-buffer-20261124",
+  "kind": "run-contract",
+  "title": "Focused notebook editing",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 2/2 packages complete; one exemplar awaits visual acceptance before promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.focused-buffer-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-focused-buffer-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:fraction-notebook",
+    "npm run typecheck"
+  ],
+  "revisitWhen": [
+    "User reviews focused notebook candidate."
+  ],
+  "allowedWork": [
+    "Approved fraction exemplar shell, editor, preview and lifecycle repairs"
+  ],
+  "disallowedWork": [
+    "Custom motions, arbitrary execution, semantic animation expansion and general rollout"
+  ],
+  "goal": "One document, focused source/result, shared styles and help/basic Ex in the fraction exemplar",
+  "target": "task.kp.focused-buffer-20261124",
+  "slices": [
+    {
+      "id": "surface",
+      "title": "Focused editor and result",
+      "summary": "One mounted preview follows document/focused/reading layouts; explicit Run, stale result and restored semantic/document position verified.",
+      "status": "complete"
+    },
+    {
+      "id": "controls",
+      "title": "Styles and discoverable commands",
+      "summary": "Workspace themes and inherited style overrides, help/basic Ex and line-number controls verified in prose and focused JSON. Ready for exemplar review.",
+      "status": "complete"
+    }
+  ]
+}

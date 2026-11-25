@@ -3,10 +3,10 @@
 Last Updated: 2026-11-24
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `unified-notebook`
-Execution Contract: `run-contract.kp.unified-notebook-20261124`
+Current Commitment: `focused-notebook`
+Execution Contract: `run-contract.kp.focused-buffer-20261124`
 Next Product Milestone: `focused-animation-editing`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -20,10 +20,10 @@ why this becomes the organizing direction and what it supersedes.
 ## Current approved commitment
 
 **Accepted detour:** [unified notebook surface](reviews/2026-11-24-unified-notebook-surface.md)
-and nested structure editor. Recommended successor: [focused animation editing](reviews/2026-11-24-focused-buffer-next-step-review.md),
+and nested structure editor. Approved successor: [focused animation editing](reviews/2026-11-24-focused-buffer-next-step-review.md),
 one rich document with source beside its current animation and optional full Preview.
-Accepted direction; implementation has not started.
-Follow with exposed typography/styles and keybinding help/basic Ex commands.
+Implement the focused workflow, exposed styles and help/basic Ex controls in one
+fraction exemplar; review before generalizing.
 Custom motions/text objects are parked; MathML declined. Transclusion and
 search remain later. Preserve nesting, UUIDs, metadata and recovery.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)

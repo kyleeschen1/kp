@@ -1,18 +1,32 @@
 import { readNotebook, object, type Cell, type Inline } from './model.ts';
 import './blocks.css';
 import './preview.css';
+import './theme.css';
+import { readStyleSettings, applyStyles } from './styles.ts';
 import { readEndpointCommentary } from '../reader/document/public-api.ts';
 import { renderInlineObject } from './inline-source.ts';
 
 /** Mounted only by the development preview host. Apply checked editorial data
  * without replacing the native equation, clock, story or passage containers. */
 export function mountFractionNotebookPreview(input: {
-  replaceAnnotations: (value: unknown) => void; refresh: () => void;
+  replaceAnnotations: (value: unknown) => void; refresh: () => void; preserveLayout: (change: () => void) => void;
 }) {
   let selected: string | undefined;
   let captionId: string | undefined;
   const send = (data: unknown) => window.parent.postMessage(data, window.location.origin);
   const navigation = document.querySelector<HTMLDetailsElement>('.kp-rising-navigation');
+  const moments = document.createElement('select'); moments.className = 'fn-preview-moments'; moments.setAttribute('aria-label', 'Animation moment');
+  for (const beat of document.querySelectorAll<HTMLElement>('[data-kp-beat]')) {
+    const option = document.createElement('option'); option.value = beat.id; option.textContent = beat.querySelector('h2')?.textContent ?? beat.id; moments.append(option);
+  }
+  moments.onchange = () => [...document.querySelectorAll<HTMLAnchorElement>('.kp-lesson-toc a')].find(link => link.hash.slice(1) === moments.value)?.click();
+  document.body.append(moments);
+  const toc = document.querySelector('.kp-lesson-toc');
+  const syncMoment = new MutationObserver(() => {
+    const active = toc?.querySelector<HTMLAnchorElement>('a[data-kp-toc-active=true]')?.hash.slice(1);
+    if (active && [...moments.options].some(option => option.value === active)) moments.value = active;
+  });
+  if (toc) syncMoment.observe(toc, { attributes: true, attributeFilter: ['data-kp-toc-active'], subtree: true });
   const reportOptions = () => send({ protocol: 'kp.fraction-notebook.v1', kind: 'options-state', open: navigation?.open ?? false });
   navigation?.addEventListener('toggle', reportOptions);
   const append = (el: HTMLElement, content: readonly Inline[]) => {
@@ -58,6 +72,10 @@ export function mountFractionNotebookPreview(input: {
     try {
       const message = object(event.data);
       if (message['protocol'] !== 'kp.fraction-notebook.v1') return;
+      if (message['kind'] === 'styles') { input.preserveLayout(() => applyStyles(readStyleSettings(message['settings']))); return; }
+      if (message['kind'] === 'presentation' && typeof message['animationOnly'] === 'boolean') {
+        input.preserveLayout(() => { document.body.dataset['notebookAnimationOnly'] = String(message['animationOnly']); }); return;
+      }
       if (message['kind'] === 'options' && typeof message['open'] === 'boolean' && navigation) {
         navigation.open = message['open'];
         if (navigation.open) navigation.querySelector<HTMLElement>('button,a,input')?.focus({ preventScroll: true });
@@ -109,6 +127,7 @@ export function mountFractionNotebookPreview(input: {
         edit.title.textContent = edit.name; edit.text.textContent = edit.content; edit.beat.dataset['kpFocus'] = edit.refs;
         const link = [...document.querySelectorAll<HTMLAnchorElement>('.kp-lesson-toc a')].find(a => a.hash.slice(1) === edit.beat.id);
         if (link) link.textContent = edit.name;
+        const option = [...moments.options].find(item => item.value === edit.beat.id); if (option) option.textContent = edit.name;
       }
       const titleLink = document.querySelector<HTMLAnchorElement>('.kp-lesson-toc a');
       if (titleLink) { titleLink.href = `#${notebook.cells[0]!.id}`; titleLink.textContent = beforeNodes[0]?.querySelector('h1,h2')?.textContent ?? 'Fraction notebook'; }
@@ -124,5 +143,5 @@ export function mountFractionNotebookPreview(input: {
   };
   window.addEventListener('message', onMessage); document.addEventListener('click', onClick);
   send({ protocol: 'kp.fraction-notebook.v1', kind: 'ready' });
-  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); navigation?.removeEventListener('toggle', reportOptions); } };
+  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); navigation?.removeEventListener('toggle', reportOptions); syncMoment.disconnect(); moments.remove(); } };
 }

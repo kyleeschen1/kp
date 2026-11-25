@@ -1,10 +1,12 @@
 import { type Node as ProseNode } from 'prosemirror-model';
-import { EditorState, Plugin, TextSelection, NodeSelection, Selection, type Command } from 'prosemirror-state';
+import { EditorState, Plugin, TextSelection, NodeSelection, Selection, type Command, type SelectionBookmark } from 'prosemirror-state';
 import { EditorView, type NodeView } from 'prosemirror-view';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { history, undo, redo } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
 import { EditorView as CodeView, keymap as codeKeymap, lineNumbers, drawSelection } from '@codemirror/view';
+import { Compartment } from '@codemirror/state';
+import type { LineMode } from './numbers.ts';
 import { defaultKeymap } from '@codemirror/commands';
 import { json } from '@codemirror/lang-json';
 import { syntaxHighlighting, HighlightStyle } from '@codemirror/language';
@@ -52,14 +54,26 @@ const enterField: Command = (state, dispatch) => {
   return true;
 };
 
-export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, onChange: (node: ProseNode) => void, onSelect: (id: string) => void, onMode: (mode: string) => void = () => {}) {
+export interface SourceWorkspace {
+  host: HTMLElement;
+  open: () => void;
+  close: () => void;
+  run: () => void;
+}
+export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, onChange: (node: ProseNode) => void, onSelect: (id: string) => void, onMode: (mode: string) => void = () => {}, workspace?: SourceWorkspace) {
+  let source: SpecificationView | undefined, bookmark: SelectionBookmark | undefined, scrollTop = 0;
+  const closeSource = () => { source?.close(); };
+  const sourceWorkspace = workspace && { ...workspace,
+    open() { bookmark = view.state.selection.getBookmark(); scrollTop = root.scrollTop; workspace.open(); },
+    close() { workspace.close(); if (bookmark) view.dispatch(view.state.tr.setSelection(bookmark.resolve(view.state.doc))); bookmark = undefined; view.focus(); root.scrollTop = scrollTop; }
+  };
   const view = new EditorView(root, {
     state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), proseVim(), createInlinePlugin(), keymap({ 'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo,
       'Mod-b': toggleMark(schema.marks['strong']!), 'Mod-i': toggleMark(schema.marks['em']!), Enter: enterField,
       Tab: nestBlock, 'Shift-Tab': outdentBlock, 'Alt-ArrowUp': moveBlock(-1), 'Alt-ArrowDown': moveBlock(1),
       ArrowLeft: enterInline(-1), ArrowRight: enterInline(1), Backspace: enterInline(-1) }), keymap(baseKeymap)] }),
     attributes: { 'aria-label': 'Fraction notebook', spellcheck: 'true' },
-    nodeViews: { block: (node, outer, getPos) => new BlockView(node, outer, getPos), specification: (node, outer, getPos) => new SpecificationView(node, outer, getPos, onMode),
+    nodeViews: { block: (node, outer, getPos) => new BlockView(node, outer, getPos), specification: (node, outer, getPos) => (source = new SpecificationView(node, outer, getPos, onMode, sourceWorkspace)),
       link: (node, outer, getPos) => new InlineSourceView(node, outer, getPos), math: (node, outer, getPos) => new InlineSourceView(node, outer, getPos) },
     handlePaste(view, _event, slice) {
       if (vimKey.getState(view.state) !== 'insert') return true;
@@ -68,6 +82,7 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
     handleDOMEvents: { focus: view => { onMode(vimKey.getState(view.state) ?? 'normal'); return false; } },
     dispatchTransaction(transaction) {
       const next = view.state.applyTransaction(transaction); view.updateState(next.state);
+      for (const tr of next.transactions) bookmark = bookmark?.map(tr.mapping);
       onMode(vimKey.getState(next.state) ?? 'normal');
       if (next.transactions.some(tr => tr.docChanged)) onChange(next.state.doc);
       const node = selectedObject(view.state)?.node;
@@ -77,12 +92,15 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
   });
   return {
     view,
+    closeSource,
+    sourceOpen: () => source?.isOpen() ?? false,
+    numbers(mode: LineMode) { source?.numbers(mode); },
     run(command: Command) { const done = command(view.state, view.dispatch, view); view.focus(); return done; },
     normal() { setVimMode('normal')(view.state, view.dispatch); },
     toggleMode() {
       const code = document.activeElement instanceof HTMLElement ? CodeView.findFromDOM(document.activeElement) : null;
       const cm = code && getCM(code);
-      if (cm && root.contains(code.dom)) { Vim.handleKey(cm, cm.state.vim?.insertMode ? '<Esc>' : 'i', 'user'); code.focus(); }
+      if (cm && (root.contains(code.dom) || workspace?.host.contains(code.dom))) { Vim.handleKey(cm, cm.state.vim?.insertMode ? '<Esc>' : 'i', 'user'); code.focus(); }
       else { setVimMode(vimKey.getState(view.state) === 'insert' ? 'normal' : 'insert')(view.state, view.dispatch); view.focus(); }
     },
     mark(name: Mark) { toggleMark(schema.marks[name]!)(view.state, view.dispatch); view.focus(); },
@@ -110,35 +128,44 @@ class SpecificationView implements NodeView {
   private readonly code: CodeView;
   private updating = false;
   private node: ProseNode;
-  constructor(node: ProseNode, outer: EditorView, getPos: () => number | undefined, onMode: (mode: string) => void) {
+  private readonly details = document.createElement('details');
+  private readonly host = document.createElement('div');
+  private active = false;
+  private readonly gutter = new Compartment();
+  private disposed = false;
+  private readonly workspace: SourceWorkspace | undefined;
+  constructor(node: ProseNode, outer: EditorView, getPos: () => number | undefined, onMode: (mode: string) => void, workspace?: SourceWorkspace) {
+    this.workspace = workspace;
     this.node = node;
     this.dom.className = 'fn-specification'; this.dom.contentEditable = 'false';
-    const details = document.createElement('details'), summary = document.createElement('summary'); summary.textContent = 'Edit animation specification';
+    const details = this.details, summary = document.createElement('summary'); summary.textContent = 'Edit animation specification';
     const help = document.createElement('p'); help.className = 'fn-code-help'; help.textContent = 'The opening caption is edited above. Edit remaining wording and focusRefs here; the nine mathematical moments retain their order.';
-    const host = document.createElement('div'); host.className = 'fn-code';
-    details.append(summary, help, host); this.dom.append(details);
-    this.dom.addEventListener('focusin', () => {
+    const host = this.host; host.className = 'fn-code';
+    host.append(help); details.append(summary, host); this.dom.append(details);
+    const slot = document.createElement('div'); slot.className = 'fn-animation-slot'; slot.setAttribute('aria-label', 'Animation result'); this.dom.append(slot);
+    host.addEventListener('focusin', () => {
       const pos = getPos(); if (pos !== undefined && !(outer.state.selection instanceof NodeSelection && outer.state.selection.from === pos)) {
         outer.dispatch(outer.state.tr.setSelection(NodeSelection.create(outer.state.doc, pos)));
       }
       reportMode();
     });
-    this.code = new CodeView({ doc: node.textContent, parent: host, extensions: [vim(), json(), lineNumbers(), drawSelection(), syntaxHighlighting(HighlightStyle.define([
-      { tag: tags.string, color: '#d8c59b' }, { tag: tags.propertyName, color: '#b9cfdf' },
-      { tag: tags.number, color: '#bfd0a9' }, { tag: tags.punctuation, color: '#c1c7ce' }
+    this.code = new CodeView({ doc: node.textContent, parent: host, extensions: [vim(), json(), this.gutter.of(lineNumbers()), drawSelection(), syntaxHighlighting(HighlightStyle.define([
+      { tag: tags.string, color: 'var(--fn-code-string)' }, { tag: tags.propertyName, color: 'var(--fn-code-property)' },
+      { tag: tags.number, color: 'var(--fn-code-number)' }, { tag: tags.punctuation, color: 'var(--fn-code-punctuation)' }
     ])),
       codeKeymap.of([{ key: 'Mod-z', run: () => undo(outer.state, outer.dispatch) }, { key: 'Mod-Shift-z', run: () => redo(outer.state, outer.dispatch) },
         { key: 'Mod-y', run: () => redo(outer.state, outer.dispatch) },
         // Escape belongs to Vim; closing the panel must not steal its Normal
         // mode transition or redirect subsequent typing into the prose editor.
-        { key: 'Mod-Enter', run: () => { details.open = false; outer.focus(); return true; } }, ...defaultKeymap]),
+        { key: 'Mod-Enter', run: () => { this.close(); return true; } },
+        { key: 'Shift-Enter', run: () => { workspace?.run(); return true; } }, ...defaultKeymap]),
       CodeView.updateListener.of(update => {
         if (this.updating || !update.docChanged) return;
         const pos = getPos(); if (pos === undefined) return;
         const text = update.state.doc.toString(), tr = outer.state.tr.replaceWith(pos + 1, pos + this.node.nodeSize - 1, text ? schema.text(text) : []);
         tr.setSelection(TextSelection.create(tr.doc, pos + 1 + update.state.selection.main.anchor, pos + 1 + update.state.selection.main.head));
         outer.dispatch(tr); reportMode();
-      }), CodeView.theme({ '&': { backgroundColor: 'transparent', color: '#e0dfd4', fontSize: '13px' }, '.cm-content': { fontFamily: 'ui-monospace, monospace' }, '.cm-gutters': { backgroundColor: 'transparent', color: '#8f968f', border: 'none' }, '.cm-scroller': { overflow: 'auto', maxHeight: '540px' }, '&.cm-focused .cm-cursor': { borderLeftColor: 'var(--kp-editor-cursor)' }, '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': { backgroundColor: '#40534e' } })
+      }), CodeView.theme({ '&': { backgroundColor: 'transparent', color: 'var(--fn-text)', fontSize: 'var(--fn-code-size)' }, '.cm-content': { fontFamily: 'ui-monospace, monospace' }, '.cm-gutters': { backgroundColor: 'transparent', color: 'var(--fn-gutter)', border: 'none' }, '.cm-scroller': { overflow: 'auto', maxHeight: '540px' }, '&.cm-focused .cm-cursor': { borderLeftColor: 'var(--kp-editor-cursor)' }, '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': { backgroundColor: 'var(--fn-selection)' } })
     ] });
     // Extension facets must share the same CodeMirror instance. Fail visibly
     // if stale development chunks otherwise leave a silently nonmodal editor.
@@ -149,7 +176,24 @@ class SpecificationView implements NodeView {
       if (this.code.hasFocus) onMode(mode?.insertMode ? 'insert' : mode?.visualMode ? 'visual' : 'normal');
     };
     codeVim.on('vim-mode-change', reportMode);
-    details.addEventListener('toggle', () => { if (details.open) this.code.requestMeasure(); });
+    details.addEventListener('toggle', () => {
+      if (this.disposed || this.active === details.open) return;
+      if (details.open) {
+        this.active = true; workspace?.open(); workspace?.host.append(host);
+        this.code.requestMeasure(); this.code.focus();
+      } else this.close();
+    });
+  }
+  isOpen() { return this.active; }
+  numbers(mode: LineMode) {
+    this.code.dispatch({ effects: this.gutter.reconfigure(mode === 'off' ? [] : lineNumbers({ formatNumber: (number, state) => {
+      const active = state.doc.lineAt(state.selection.main.head).number;
+      return String(mode === 'relative' && number !== active ? Math.abs(number - active) : number);
+    } })) });
+  }
+  close() {
+    if (!this.active) return;
+    this.active = false; this.details.open = false; this.details.append(this.host); this.workspace?.close();
   }
   update(node: ProseNode) {
     if (node.type !== this.node.type) return false;
@@ -166,5 +210,5 @@ class SpecificationView implements NodeView {
   deselectNode() { this.dom.classList.remove('ProseMirror-selectednode'); }
   stopEvent() { return true; }
   ignoreMutation() { return true; }
-  destroy() { this.code.destroy(); }
+  destroy() { this.close(); this.disposed = true; this.code.destroy(); }
 }

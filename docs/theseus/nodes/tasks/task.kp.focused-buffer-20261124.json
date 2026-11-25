@@ -1,0 +1,55 @@
+{
+  "id": "task.kp.focused-buffer-20261124",
+  "kind": "task",
+  "title": "Edit animation source beside its result with shared styles and discoverable commands",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: two approved packages checked; judge focused animation editing, styles, help and return context at fraction notebook.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-focused-buffer-next-step-review.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "Final 19/19 Chromium checks including source/run races, recovery, shared history, styles, help, gutters and phone layout; production reader closure unchanged",
+      "checkedAt": "2026-11-25T02:26:55.408Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full app/node/tests/Svelte/domains; final scoped notebook typecheck passed after preview style restoration refinement",
+      "checkedAt": "2026-11-25T02:26:56.021Z"
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "17/17 model, compiler, identity and recovery tests",
+      "checkedAt": "2026-11-25T02:26:56.637Z"
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --grep 'fractional reasoning'",
+      "status": "passed",
+      "scope": "Independent canonical reader preservation",
+      "checkedAt": "2026-11-25T02:26:57.278Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Dependency, framework, reader, semantic animation and equation authority gates; explicit inventory of DOM-only RAF coalescers",
+      "checkedAt": "2026-11-25T02:26:57.904Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "75/75 source-linked direction and orientation checks",
+      "checkedAt": "2026-11-25T02:26:58.527Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews focused notebook candidate."
+  ]
+}

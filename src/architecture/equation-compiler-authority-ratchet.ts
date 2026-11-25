@@ -52,6 +52,10 @@ const privateClockPaths = paths([
   // The editor debounces compilation requests and revokes a download URL.
   // It never samples animation time; the retained reader owns its playhead.
   "src/fraction-notebook/app.ts",
+  // Single pending RAFs coalesce DOM measurements for the prose gutter and
+  // iframe slot. Both cancel on disposal; neither samples or advances time.
+  "src/fraction-notebook/numbers.ts",
+  "src/fraction-notebook/workspace.ts",
   "src/app-adapters/linear-equation-story-animation-stage.ts",
   "src/app-adapters/linear-equation-story-progress-controller.ts",
   "src/editor/animation-catalogue-interaction-host.ts",

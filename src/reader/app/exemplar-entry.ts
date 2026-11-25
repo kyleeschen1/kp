@@ -599,7 +599,17 @@ void fontReviewLifecycle.ready;
 if (import.meta.env.DEV && document.body.dataset['kpFractionNotebookPreview'] === 'true' && readerAnnotations) {
   const { mountFractionNotebookPreview } = await import('../../fraction-notebook/preview.ts');
   if (!fractionNotebookDisposed) fractionNotebookPreview = mountFractionNotebookPreview({
-    replaceAnnotations: value => readerAnnotations.replace(value), refresh: onResize
+    replaceAnnotations: value => readerAnnotations.replace(value), refresh: onResize,
+    preserveLayout(change) {
+      const progress = lastSample().progressPermille;
+      const beat = risingPassages?.activeBeat(), location = risingPassages?.readingLocation();
+      // Capture semantic position before the notebook changes prose visibility.
+      // Measuring the new layout first would reinterpret the old scroll offset.
+      change(); onResize();
+      const position = risingPassages?.positionForReading(location, progress) ?? risingPassages?.positionFor(beat, progress);
+      if (position !== undefined) setExplicitProgress(progress, 'controls', false,
+        Math.ceil(position - window.innerHeight * readerViewportAnchorFraction()));
+    }
   });
 }
 

@@ -1,0 +1,60 @@
+@import '@fontsource/source-serif-4/latin-400.css';
+:root {
+  --fn-font: 'Source Serif 4', Georgia, serif;
+  --color-red-light: #f07070; --color-green-light: #b6d5a3; --color-blue-light: #b9d8df; --color-yellow-light: #d8c59b;
+  --fn-text: #e2e2d9; --fn-background: #121826; --fn-muted: #b0b9b1; --fn-border: #58615a;
+  --fn-surface: #1b2535; --fn-focus: #f2c14e;
+  --fn-link: var(--color-blue-light); --fn-math: var(--fn-text); --fn-annotation: var(--fn-muted);
+  --fn-selection: #53614d; --fn-gutter: var(--fn-muted); --fn-warning: #f0c59c;
+  --fn-code-string: var(--color-yellow-light); --fn-code-property: var(--color-blue-light);
+  --fn-code-number: var(--color-green-light); --fn-code-punctuation: var(--fn-muted);
+  --fn-masthead-weight: 500; --fn-title-weight: 500; --fn-object-weight: 500; --fn-caption-weight: var(--kp-document-body-weight);
+  --fn-masthead-size: 1rem; --fn-object-size: var(--kp-document-heading-size); --fn-caption-size: var(--kp-document-body-size); --fn-code-size: .8125rem;
+  --kp-editor-cursor: var(--color-red-light); --kp-editor-cursor-ink: #121826;
+  --kp-focus-card-passage-font: var(--fn-font); --kp-focus-card-ui-font: var(--fn-font);
+}
+:root[data-notebook-theme=light] {
+  color-scheme: light; --fn-text: #242b35; --fn-background: #faf9f5; --fn-muted: #58616c; --fn-border: #a4aaa9;
+  --fn-selection: #c9ded1; --fn-warning: #8d4d13; --kp-document-body-weight: 400;
+  --fn-surface: #eeefe9; --fn-focus: var(--color-yellow-light);
+  --color-red-light: #b82436; --color-green-light: #386c36; --color-blue-light: #215f80; --color-yellow-light: #80600a;
+  --kp-editor-cursor-ink: #ffffff;
+}
+html, body { background: var(--fn-background); color: var(--fn-text); font-family: var(--fn-font); }
+.fn-header, .fn-wordmark, .fn-header button, .fn-header a, .fn-header summary, .fn-status, .fn-menu, .fn-structure,
+.fn-story, .fn-slot-label, .fn-cell-context, .fn-code-help, .fn-follow, .fn-inspector, .fn-source-tools {
+  font-family: var(--fn-font); color: var(--fn-text);
+}
+.fn-wordmark { font-weight: var(--fn-masthead-weight); font-size: var(--fn-masthead-size); }
+.fn-branding button[aria-pressed=true], button:hover, button:focus-visible { background: var(--fn-selection); }
+.fn-divider { background: var(--fn-border); }
+.fn-divider::after { background: var(--fn-muted); }
+.fn-editor .ProseMirror { font-family: var(--fn-font); color: var(--fn-text); }
+.fn-article-header h1 { font-family: var(--fn-font); font-size: var(--kp-document-title-size); font-weight: var(--fn-title-weight); }
+.fn-story h2 { font-family: var(--fn-font); font-weight: var(--fn-object-weight); font-size: var(--fn-object-size); }
+.fn-caption p { font-family: var(--fn-font); font-weight: var(--fn-caption-weight); font-size: var(--fn-caption-size); }
+.fn-left, .fn-menu-panel, .fn-structure-controls select, .fn-inspector select, .fn-inspector textarea, .fn-inline-source { background: var(--fn-background); color: var(--fn-text); }
+.fn-status, .fn-slot-label, .fn-cell-context, .fn-code-help, .fn-author::before, .fn-structure-location, .fn-inspector-id { color: var(--fn-muted); }
+.fn-header, .fn-story, .fn-code, .fn-menu-panel, button, input, select { border-color: var(--fn-border); }
+.fn-inline-link { color: var(--fn-link); text-decoration-color: currentColor; }
+.fn-inline-math, .fn-inline-object[data-inline-kind=math] .fn-inline-display { color: var(--fn-math); }
+.fn-annotation { text-decoration-color: var(--fn-annotation); }
+.fn-editor .ProseMirror ::selection { background: var(--fn-selection); }
+.fn-status[data-state=invalid], .fn-inline-error:not(:empty) { color: var(--fn-warning); }
+.fn-side-panel { position: absolute; right: 0; top: 0; bottom: 0; z-index: 8; width: min(370px, 100%); overflow: auto; padding: 20px; background: var(--fn-background); color: var(--fn-text); border-left: 1px solid var(--fn-border); box-shadow: -8px 0 24px #0003; }
+.fn-side-panel[hidden] { display: none; }
+.fn-side-panel h2 { font-weight: var(--kp-document-heading-weight); margin: 0 0 12px; }
+.fn-side-panel p { font-size: .85rem; line-height: 1.5; }
+.fn-side-panel label { display: block; margin: 12px 0; font-size: .85rem; }
+.fn-side-panel input, .fn-side-panel select { display: block; width: 100%; padding: 6px; color: inherit; background: inherit; border: 1px solid var(--fn-border); font: inherit; }
+body[data-kp-fraction-notebook-preview][data-kp-reader-layout] { background: var(--fn-background); color: var(--fn-text); font-family: var(--fn-font); --kp-ink: var(--fn-text); --kp-muted: var(--fn-muted); --kp-tutorial-background: var(--fn-background); }
+body[data-kp-fraction-notebook-preview] :is(.kp-caption-document-intro, .kp-caption-document-after, .kp-rising-passage, .kp-reader-options, .anchored-labels [data-kp-focus-deck-type]) { font-family: var(--fn-font); }
+body[data-kp-fraction-notebook-preview] .kp-caption-document-intro h1 { font-weight: var(--fn-title-weight); }
+body[data-kp-fraction-notebook-preview] a { color: var(--fn-link); }
+body[data-kp-fraction-notebook-preview] .kp-reader-options :is(button, input, select) { font-family: var(--fn-font); }
+body[data-kp-fraction-notebook-preview][data-kp-reader-layout] {
+  --kp-tutorial-card: var(--fn-surface); --kp-tutorial-border: var(--fn-border); --kp-tutorial-text-muted: var(--fn-muted);
+  --kp-tutorial-gold: var(--fn-focus); --kp-accent: var(--fn-focus);
+}
+body[data-kp-fraction-notebook-preview] .anchored-labels [data-kp-focus-deck-type] { font-weight: var(--fn-caption-weight); font-size: var(--fn-caption-size); }
+html[data-notebook-theme=light]:has(> body[data-kp-fraction-notebook-preview]), html[data-notebook-theme=light] > body[data-kp-fraction-notebook-preview] { color-scheme: light; background: var(--fn-background); }
