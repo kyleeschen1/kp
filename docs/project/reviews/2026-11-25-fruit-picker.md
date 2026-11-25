@@ -127,3 +127,10 @@ subject to visual judgment before a second resource kind or general picker API.
 
 Outcome: `HUMAN_CHECKPOINT` for this single fruit exemplar. Use the review cues
 above; Theseus owns the completed package and deferred review state.
+
+## Subsequent acceptance
+
+The user responded “Very nice,” explored Helm/Vertico/fzf customization, then
+approved [workspace commands](2026-11-25-workspace-commands.md) as the next use
+of this presentation, with both Alt-x and Ctrl-x Ctrl-x. The fruit exemplar's
+finite finish line is retained; the new command registry has its own contract.

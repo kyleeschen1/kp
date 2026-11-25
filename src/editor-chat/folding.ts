@@ -1,6 +1,7 @@
 import type { Node as ProseNode } from 'prosemirror-model';
 import { NodeSelection, Plugin, PluginKey, TextSelection } from 'prosemirror-state';
 import { Decoration, DecorationSet, type EditorView } from 'prosemirror-view';
+import { CommandRegistry, available, unavailable, target, type TargetedCommand } from '../editor-commands/registry.ts';
 
 type Fold = { id: string; from: number; to: number; message: string; label: string; lines: number };
 function blocks(doc: ProseNode): Fold[] {
@@ -25,6 +26,8 @@ function blocks(doc: ProseNode): Fold[] {
 export function transcriptFolding(host: HTMLElement) {
   const key = new PluginKey('chat-folding');
   let scope = '', closed = new Set<string>(), pendingZ = false;
+  type FoldTarget = { scope: string; id: string; mode: 'toggle' | 'open' | 'close' };
+  let command: TargetedCommand<FoldTarget> | undefined;
   const save = () => { try { localStorage.setItem(scope, JSON.stringify([...closed].slice(-500))); } catch { /* Optional view preference. */ } };
   function preserve(operation: () => void) {
     const top = host.getBoundingClientRect().top, before = host.scrollTop;
@@ -60,7 +63,9 @@ export function transcriptFolding(host: HTMLElement) {
             button.setAttribute('aria-label', `${collapsed ? 'Expand' : 'Collapse'} ${fold.label}`);
             button.textContent = `${collapsed ? '▸' : '▾'} ${fold.label} · ${fold.lines} ${fold.lines === 1 ? 'line' : 'lines'}`;
             button.onmousedown = event => event.preventDefault();
+            button.dataset['commandId'] = 'chat.transcript.fold';
             button.onclick = () => {
+              if (command) { void command.forTarget({ scope, id: fold.id, mode: 'toggle' }, { scope: 'chat', element: view.dom }).execute(); return; }
               const current = blocks(view.state.doc).find(block => block.id === fold.id);
               if (current) { change(view, current, !closed.has(fold.id)); view.dom.focus({ preventScroll: true }); }
             };
@@ -79,7 +84,10 @@ export function transcriptFolding(host: HTMLElement) {
         const { from, to } = view.state.selection, values = blocks(view.state.doc);
         const fold = values.find(block => from >= block.from && to <= block.to)
           ?? values.find(block => block.from >= from);
-        if (fold) change(view, fold, event.key === 'c' || (event.key === 'a' && !closed.has(fold.id)));
+        if (fold) {
+          if (command) void command.forTarget({ scope, id: fold.id, mode: event.key === 'c' ? 'close' : event.key === 'o' ? 'open' : 'toggle' }, { scope: 'chat', element: view.dom }).execute();
+          else change(view, fold, event.key === 'c' || (event.key === 'a' && !closed.has(fold.id)));
+        }
         return true;
       },
       handleDOMEvents: { blur: () => { pendingZ = false; return false; } }
@@ -96,7 +104,17 @@ export function transcriptFolding(host: HTMLElement) {
       save(); return state.tr.setMeta(key, true);
     }
   });
-  return { plugin, configure(project: string, branch: string) {
+  return { plugin, attach(view: EditorView, registry: CommandRegistry) {
+    command = registry.targeted({ id: 'chat.transcript.fold', title: 'Fold code or tool output', category: 'Chat transcript', scope: 'chat', keys: ['za', 'zo', 'zc'], keywords: ['collapse', 'expand'],
+      target: () => {
+        const { from, to } = view.state.selection, values = blocks(view.state.doc);
+        const fold = values.find(block => from >= block.from && to <= block.to) ?? values.find(block => block.from >= from);
+        return fold ? target<FoldTarget>({ scope, id: fold.id, mode: 'toggle' }) : { found: false, reason: 'Choose a message with code or tool output' };
+      }, state: (value, origin) => value.scope !== scope ? unavailable('Conversation changed') : origin.element && !host.contains(origin.element) ? unavailable('Use from the transcript')
+        : blocks(view.state.doc).some(block => block.id === value.id) ? available(closed.has(value.id)) : unavailable('This block is no longer loaded'),
+      run: value => { const fold = blocks(view.state.doc).find(block => block.id === value.id); if (fold) { change(view, fold, value.mode === 'close' || (value.mode === 'toggle' && !closed.has(value.id))); view.dom.focus({ preventScroll: true }); } }
+    });
+  }, dispose() { command?.dispose(); }, configure(project: string, branch: string) {
     const next = `kp.chat-folds.v1:${project}:${branch}`;
     if (next === scope) return;
     scope = next; closed = new Set(); pendingZ = false;

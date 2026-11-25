@@ -2,8 +2,8 @@
   "id": "run-contract.kp.fruit-picker-20261125",
   "kind": "run-contract",
   "title": "Floating fruit picker MVP",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: one checked package complete; stop before generalizing the picker.",
+  "status": "resolved",
+  "summary": "User accepted the fruit-picker presentation and approved the separate workspace-command successor with both launch bindings",
   "sourceRefs": [
     {
       "kind": "file",

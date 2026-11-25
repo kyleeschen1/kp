@@ -7,6 +7,7 @@ import { mountNotes } from './notes.ts';
 import { mountChatCommands } from './chat-commands.ts';
 import { chatViewState } from './reading-state.ts';
 import './style.css';
+import { CommandRegistry, available, unavailable } from '../editor-commands/registry.ts';
 
 const recoveryKey = 'kp.editor-chat.unsaved.v1';
 export interface ChatWindowHost {
@@ -18,15 +19,15 @@ const node = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', tex
   const value = document.createElement(tag); value.className = className; if (text) value.textContent = text; return value;
 };
 /** Closing the presentation never disconnects, resends, or destroys native history. */
-export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost) {
+export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost, registry: CommandRegistry) {
   const launcher = node('button', '', 'Chat'); launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false'); launcher.setAttribute('aria-controls', 'kp-chat'); actions.append(launcher);
   let panel: ReturnType<typeof mountChatPanel> | undefined;
-  const open = () => { launcher.remove(); panel ??= mountChatPanel(body, actions, layout, windowHost); panel.open(); };
-  launcher.onclick = open;
+  const open = () => { launcher.remove(); panel ??= mountChatPanel(body, actions, layout, windowHost, registry); panel.open(); };
+  const command = registry.add({ id: 'workspace.open-chat', title: 'Open chat', category: 'Workspace', scope: 'workspace', run: open }); command.bind(launcher);
   try { if (sessionStorage.getItem('kp.editor-chat.open') === 'true') open(); } catch { /* Optional preference. */ }
-  return { dispose() { panel?.dispose(); launcher.remove(); } };
+  return { capture: (element?: HTMLElement | null) => panel?.capture(element), dispose() { command.dispose(); panel?.dispose(); launcher.remove(); } };
 }
-function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost) {
+function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost, registry: CommandRegistry) {
   const toggle = node('button', '', 'Chat'); toggle.type = 'button'; toggle.setAttribute('aria-expanded', 'false');
   const panel = node('aside', 'kp-chat'); panel.id = 'kp-chat'; panel.hidden = true; panel.setAttribute('aria-label', 'Persistent chat');
   toggle.setAttribute('aria-controls', panel.id);
@@ -54,13 +55,13 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   let selection: PassageTarget | null = null;
   const views = chatViewState();
   const composer = mountRichText(draftHost, { profile: 'composer', label: 'Your message', limit: draftLimit, minimal: true,
-    onChange: draftChanged, onSubmit: sendDraft, onSave: saveDraft, onHelp: () => commands.help() });
+    onChange: draftChanged, onSubmit: () => { void registry.invoke('chat.send', { scope: 'chat' }); }, onSave: () => { void registry.invoke('chat.save-draft', { scope: 'chat' }); }, onHelp: () => commands.help(), commands: { registry, id: 'chat.composer', title: 'Chat composer' } });
   const transcript = mountTranscript(history, target => { selection = target; }, id => { showNotes(); notes.edit(id); }, () => {
     // Explicit navigation outranks a pending resize/restore. Scroll events can
     // arrive a frame later, after an observer would otherwise follow output.
     following = history.scrollHeight - history.scrollTop - history.clientHeight < 50;
     if (following) unread.hidden = true;
-  });
+  }, registry);
   let notes = createNotes();
   const branchChanged = () => Boolean(current && remote && current.branchId !== remote.branchId);
   const commands = mountChatCommands(column, {
@@ -82,13 +83,13 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     },
     save: saveDraft, load: loadSaved, act, context: saveContext, branch: changeBranch, jump,
     search: transcript.search
-  });
+  }, registry);
   function createNotes() {
     return mountNotes(notesHost, {
       save: action => perform(async () => { const snapshot = await post(action); adopt(snapshot); return snapshot; }),
       resolve: transcript.resolve, reveal: target => { read(false); transcript.reveal(target); rememberView(); },
       help: () => commands.help()
-    });
+    }, registry);
   }
   function preserve(operation: () => void) {
     restoring = true; operation(); requestAnimationFrame(() => { restoring = false; });
@@ -311,12 +312,14 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     else { windowHost.closed(); toggle.focus(); }
     layout();
   }
-  toggle.onclick = () => setOpen(Boolean(panel.hidden));
+  const toggleCommand = registry.add({ id: 'workspace.toggle-chat', title: 'Toggle chat', category: 'Workspace', scope: 'workspace', state: () => available(!panel.hidden), run: () => setOpen(Boolean(panel.hidden)) }); toggleCommand.bind(toggle);
   function draftChanged() {
     if (!dirty && current) baseRevision = current.draftRevision;
     generation++; dirty = true; localNotice = ''; remember(); clearTimeout(saveTimer); saveTimer = setTimeout(saveDraft, 200); paint();
   }
-  unread.onclick = () => { unread.hidden = true; following = true; transcript.latest(); rememberView(); };
+  const latestCommand = registry.add({ id: 'chat.latest', title: 'Show latest output', category: 'Chat', scope: 'chat', run: () => { unread.hidden = true; following = true; transcript.latest(); rememberView(); } }); latestCommand.bind(unread);
+  const sendCommand = registry.add({ id: 'chat.send', title: 'Send message', category: 'Chat composer', scope: 'chat', keys: ['Ctrl/⌘-Enter'],
+    state: () => branchChanged() ? unavailable('Return to this branch first') : conflict ? unavailable('Resolve the draft conflict first') : current?.phase !== 'ready' ? unavailable('Connect and finish the current response') : !composer.value().trim() ? unavailable('Write a message first') : available(), run: sendDraft });
   draftHost.addEventListener('focusin', () => {
     if (mode === 'compose') return;
     if (mode === 'reading') readingReturn = transcript.capture();
@@ -383,10 +386,20 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   const detachWindow = windowHost.attach(panel, () => {
     if (mode === 'compose') composer.focus(); else if (mode === 'notes') notes.focus(); else transcript.surface.focus();
   });
-  return { open() { setOpen(true); }, dispose() {
+  return { open() { setOpen(true); }, capture(element?: HTMLElement | null) {
+    const branch = current?.branchId, savedMode = mode, reading = transcript.capture();
+    const focus = element ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+    const valid = () => disposed || panel.hidden ? 'The chat pane has closed' : current?.branchId !== branch ? 'The conversation changed; reopen Commands' : undefined;
+    return { valid, restore() {
+      if (valid()) return;
+      if (savedMode === 'reading') preserve(() => transcript.restore(reading));
+      else if (focus?.isConnected && !focus.closest('[hidden]')) focus.focus({ preventScroll: true });
+      else if (savedMode === 'compose') composer.focus(); else notes.focus();
+    } };
+  }, dispose() {
     rememberView(); disposed = true; clearTimeout(polling); clearTimeout(saveTimer); clearTimeout(viewTimer); refreshController?.abort();
     window.removeEventListener('beforeunload', beforeUnload); if (dirty) remember();
     resize.disconnect();
-    detachWindow(); commands.dispose(); notes.dispose(); transcript.dispose(); composer.dispose(); panel.remove(); toggle.remove();
+    detachWindow(); toggleCommand.dispose(); latestCommand.dispose(); sendCommand.dispose(); commands.dispose(); notes.dispose(); transcript.dispose(); composer.dispose(); panel.remove(); toggle.remove();
   } };
 }

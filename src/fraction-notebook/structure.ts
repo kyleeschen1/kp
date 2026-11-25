@@ -107,3 +107,13 @@ export const toggleFold: Command = (state, dispatch) => {
   const selected = selectedBlock(state); if (!selected) return false;
   return changeBlock({ folded: !selected.node.attrs['folded'] })(state, dispatch);
 };
+export const toggleBlockFold = (id: string): Command => (state, dispatch) => {
+  let selected: { node: ProseNode; pos: number } | undefined;
+  state.doc.descendants((node, pos) => { if (node.type.name === 'block' && node.attrs['id'] === id) selected = { node, pos }; });
+  if (!selected) return false;
+  const { node, pos } = selected;
+  if (node.childCount <= bodyIndex(node) + 1) return false;
+  if (dispatch) { const tr = closeHistory(state.tr).setNodeMarkup(pos, undefined, { ...node.attrs, folded: !node.attrs['folded'] });
+    dispatch(tr.setSelection(Selection.near(tr.doc.resolve(pos + 1), 1))); }
+  return true;
+};

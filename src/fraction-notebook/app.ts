@@ -23,6 +23,8 @@ import { mountChat } from '../editor-chat/panel.ts';
 import { mountWindows } from './windows.ts';
 import { mountModeline } from './modeline.ts';
 import { mountFruitPicker } from './fruit-picker.ts';
+import { mountCommandPicker } from './command-picker.ts';
+import { CommandRegistry, available, unavailable, type Availability, type CommandScope } from '../editor-commands/registry.ts';
 import './windows.css';
 import './modeline.css';
 import './active-line.css';
@@ -30,7 +32,15 @@ import './fruit-picker.css';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
-const button = (text: string, action: () => void) => { const node = el('button', '', text); node.type = 'button'; node.onclick = action; return node; };
+const registry = new CommandRegistry(() => ({ scope: root.querySelector('.kp-editor-body')?.getAttribute('data-active-window') === 'chat' ? 'chat' : 'notebook',
+  element: document.activeElement instanceof HTMLElement ? document.activeElement : null }), message => { const status = root.querySelector('.fn-status'); if (status) status.textContent = message; });
+const commandKeys: Readonly<Record<string, string[]>> = { 'notebook.bold': ['Ctrl/⌘-b'], 'notebook.italic': ['Ctrl/⌘-i'], 'notebook.undo': ['Ctrl/⌘-z'], 'notebook.redo': ['Ctrl/⌘-Shift-z'], 'animation.run': ['Shift-Enter', ':run'], 'animation.close-source': ['Ctrl/⌘-Enter'], 'workspace.help': [':h'] };
+const button = (text: string, action: () => unknown, id: string, scope: CommandScope = 'notebook', state?: () => Availability) => {
+  const node = el('button', '', text); node.type = 'button';
+  registry.add({ id, title: text.replace(' · Shift-Enter', ''), category: scope === 'workspace' ? 'Workspace' : 'Notebook', scope,
+    keys: commandKeys[id] ?? [],
+    ...(state ? { state } : {}), run: action }).bind(node); return node;
+};
 const storageKey = 'kp.fraction-notebook.v3';
 let notebook = importFractionReading(canonical).notebook;
 let lastValid = notebook;
@@ -55,24 +65,24 @@ let inspector: ReturnType<typeof mountInspector> | undefined;
 let structure: ReturnType<typeof mountStructureControls> | undefined;
 const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
 const wordmark = el('a', 'fn-wordmark', 'Kinetic Press'); wordmark.href = '/'; branding.append(wordmark);
-const editToggle = button('Edit', () => setEditing(!root.classList.contains('fn-editing'))); editToggle.setAttribute('aria-pressed', 'false'); branding.append(editToggle);
+const editToggle = button('Edit', () => setEditing(!root.classList.contains('fn-editing')), 'notebook.toggle-editing', 'notebook', () => available(root.classList.contains('fn-editing'))); editToggle.setAttribute('aria-pressed', 'false'); branding.append(editToggle);
 const actions = el('div', 'fn-header-actions'), status = el('p', 'fn-status', storedError ?? 'Opening your local notebook…'); status.setAttribute('role', 'status');
 const writing = el('details', 'fn-menu fn-writing fn-edit-control'), writingSummary = el('summary', '', 'Writing');
 const writingPanel = el('div', 'fn-menu-panel'); writing.append(writingSummary, writingPanel);
 const readingOptions = button('Reading options', () => {
   if (root.classList.contains('fn-editing') && !editor.sourceOpen()) { editorHost.querySelector('.fn-animation-slot')?.scrollIntoView({ block: 'center' }); layout.refresh(); }
   send({ kind: 'options', open: readingOptions.getAttribute('aria-expanded') !== 'true' });
-});
+}, 'notebook.reading-options', 'notebook', () => frameReady ? available(readingOptions.getAttribute('aria-expanded') === 'true') : unavailable('Reading is loading'));
 readingOptions.setAttribute('aria-expanded', 'false'); readingOptions.disabled = true;
-const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
+const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }, 'notebook.export-json');
 const details = (show: boolean, id?: string) => { root.classList.toggle('fn-details', show); metadata.setAttribute('aria-pressed', String(show)); metadata.textContent = show ? 'Hide details' : 'Show details'; inspector?.show(show, id); };
-const metadata = button('Show details', () => details(!root.classList.contains('fn-details'))); metadata.setAttribute('aria-pressed', 'false');
+const metadata = button('Show details', () => details(!root.classList.contains('fn-details')), 'notebook.toggle-details', 'notebook', () => available(root.classList.contains('fn-details'))); metadata.setAttribute('aria-pressed', 'false');
 const reference = el('a', '', 'Original reading ↗'); reference.href = '/reader/solve-fractional-linear/?reading=reasoning'; reference.target = '_blank'; reference.rel = 'noopener';
 writingPanel.append(metadata, download, reference); actions.append(writing, readingOptions); header.append(branding, status, actions);
 const workspace = el('div', 'fn-workspace'), left = el('section', 'fn-left'), right = el('section', 'fn-right');
 const sourcePane = el('section', 'fn-source-pane'); sourcePane.setAttribute('aria-label', 'Animation source buffer');
 const sourceTools = el('div', 'fn-source-tools'), sourceHost = el('div', 'fn-source-host');
-const runButton = button('Run · Shift-Enter', () => runSource()), closeBuffer = button('Close buffer', () => editor.closeSource());
+const runButton = button('Run · Shift-Enter', () => runSource(), 'animation.run'), closeBuffer = button('Close buffer', () => editor.closeSource(), 'animation.close-source', 'notebook', () => root.classList.contains('fn-focus') ? available() : unavailable('Animation source is closed'));
 const resultStatus = el('p', 'fn-result-status'); resultStatus.setAttribute('role', 'status');
 sourceTools.append(runButton, closeBuffer); sourcePane.append(sourceTools, sourceHost);
 left.setAttribute('aria-label', 'Editable notebook'); right.setAttribute('aria-label', 'Reading preview');
@@ -80,7 +90,7 @@ const tools = el('div', 'fn-tools');
 const editorHost = el('div', 'fn-editor');
 const previewTools = el('div', 'fn-tools');
 const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; const followLabel = el('label', 'fn-follow', 'Follow selection'); followLabel.prepend(follow);
-const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }); previewTools.append(reveal, followLabel);
+const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }, 'notebook.reveal-selection', 'notebook', () => selected ? available() : unavailable('Select a passage')); previewTools.append(reveal, followLabel);
 const frame = el('iframe', 'fn-preview'); frame.title = 'Fraction reading preview'; frame.src = '/reader/fraction-notebook-preview/?surface=window';
 const split = el('div', 'fn-divider'); split.tabIndex = 0; split.setAttribute('role', 'separator'); split.setAttribute('aria-orientation', 'vertical'); split.setAttribute('aria-label', 'Notebook width');
 split.setAttribute('aria-valuemin', '30'); split.setAttribute('aria-valuemax', '70'); split.setAttribute('aria-valuenow', '50');
@@ -94,13 +104,17 @@ left.append(editorHost); right.append(resultStatus, frame); writingPanel.prepend
 const editorBody = el('div', 'kp-editor-body');
 const pageWindow = el('section', 'kp-page-window'); pageWindow.setAttribute('aria-label', 'KP page');
 workspace.append(left, sourcePane, split, right); pageWindow.append(workspace); editorBody.append(pageWindow); root.append(header, editorBody);
-const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, undefined, {
+const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); registry.notify(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, undefined, {
   host: sourceHost, run: runSource,
-  open() { root.classList.add('fn-focus'); split.inert = false; layout.refresh(); },
-  close() { root.classList.remove('fn-focus'); split.inert = true; layout.refresh(); }
-});
+  open() { root.classList.add('fn-focus'); split.inert = false; layout.refresh(); registry.notify(); },
+  close() { root.classList.remove('fn-focus'); split.inert = true; layout.refresh(); registry.notify(); }
+}, registry, id => structure?.fold(id));
+registry.add({ id: 'animation.toggle-source', title: 'Edit animation source', category: 'Notebook', scope: 'notebook', keywords: ['JSON', 'specification'], state: () => available(editor.sourceOpen()), run: () => { if (!root.classList.contains('fn-editing')) setEditing(true); editor.toggleSource(); } });
 const layout = mountWorkspace(root, workspace, left, editorHost, right);
-const windows = mountWindows(editorBody);
+const windows = mountWindows(editorBody, registry);
+const focused = new Map<string, HTMLElement>();
+const rememberFocus = (event: FocusEvent) => { if (event.target instanceof HTMLElement) { const pane = event.target.closest<HTMLElement>('[data-kp-window]'); if (pane?.dataset['kpWindow']) focused.set(pane.dataset['kpWindow'], event.target); } };
+document.addEventListener('focusin', rememberFocus);
 windows.register('page', pageWindow, () => {
   if (editor.sourceOpen()) sourceHost.querySelector<HTMLElement>('.cm-content')?.focus({ preventScroll: true });
   else if (root.classList.contains('fn-editing')) editor.view.focus();
@@ -112,19 +126,27 @@ const chat = mountChat(editorBody, actions, () => layout.refresh(), {
   attach: (element, focus) => windows.register('chat', element, focus),
   active: () => windows.active('chat'),
   activate: () => windows.activate('chat'), cycle: () => windows.cycle(), closed: () => windows.activate('page')
-});
-const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); });
-const modeline = mountModeline(root, windows);
-const picker = mountFruitPicker(root, actions, () => {
+}, registry);
+const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); }, registry);
+const modeline = mountModeline(root, windows, registry);
+const captureReturn = () => {
   const { active, windows: panes } = windows.snapshot(), pane = panes.find(entry => entry.id === active)?.element;
+  const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const previous = activeElement && header.contains(activeElement) ? focused.get(active) ?? null : activeElement;
+  const chatReturn = active === 'chat' ? chat.capture(previous) : undefined;
   const scroll = [...(pane?.querySelectorAll<HTMLElement>('.fn-editor, .cm-scroller, .kp-chat-history, .kp-chat-draft, .kp-chat-notes') ?? [])]
     .map(element => ({ element, top: element.scrollTop, left: element.scrollLeft }));
-  return () => {
+  return { origin: { scope: active === 'chat' ? 'chat' as const : 'notebook' as const, element: previous,
+    ...(chatReturn ? { valid: chatReturn.valid } : {}) }, restore: () => {
     windows.activate(active, true);
+    if (chatReturn) chatReturn.restore();
+    else if (previous?.isConnected && previous.closest('input, textarea, select, .cm-content, iframe') && !previous.closest('[hidden]')) previous.focus({ preventScroll: true });
     for (const { element, top, left } of scroll) if (element.isConnected) { element.scrollTop = top; element.scrollLeft = left; }
-  };
-});
-actions.append(button('Styles', () => styles.toggle()));
+  } };
+};
+const picker = mountFruitPicker(root, actions, () => captureReturn().restore, registry);
+const commandPicker = mountCommandPicker(root, actions, registry, captureReturn);
+actions.append(button('Styles', () => styles.toggle(), 'workspace.open-styles', 'workspace'));
 const numbers = mountLineNumbers(editorHost, editor.view);
 const commands = mountCommands(workspace, editor.view, {
   async save() {
@@ -134,13 +156,13 @@ const commands = mountCommands(workspace, editor.view, {
   },
   close() { if (editor.sourceOpen()) editor.closeSource(); else setEditing(false); }, run: runSource,
   numbers(value) { numbers.set(value); editor.numbers(value); }, message(text) { status.textContent = text; }
-});
-actions.append(button('Help', () => commands.help()));
-tools.append(button('Bold', () => editor.mark('strong')), button('Italic', () => editor.mark('em')), button('Code', () => editor.mark('code')),
-  button('Undo', () => editor.undo()), button('Redo', () => editor.redo()), button('Add author', () => { addAuthor(editor.view); editor.run(setVimMode('insert')); }),
-  button('Annotate', () => { try { details(true, annotateSelection(editor.view)); } catch (error) { status.textContent = String(error); } }));
-inspector = mountInspector(left, editor.view);
-structure = mountStructureControls(actions, editor.view, message => { status.textContent = message; });
+}, registry);
+actions.append(button('Help', () => commands.help(), 'workspace.help', 'workspace'));
+tools.append(button('Bold', () => editor.mark('strong'), 'notebook.bold', 'notebook', () => editor.canMark('strong') ? available() : unavailable('Select editable prose')), button('Italic', () => editor.mark('em'), 'notebook.italic', 'notebook', () => editor.canMark('em') ? available() : unavailable('Select editable prose')), button('Code', () => editor.mark('code'), 'notebook.code', 'notebook', () => editor.canMark('code') ? available() : unavailable('Select editable prose')),
+  button('Undo', () => editor.undo(), 'notebook.undo', 'notebook', () => editor.canUndo() ? available() : unavailable('Nothing to undo')), button('Redo', () => editor.redo(), 'notebook.redo', 'notebook', () => editor.canRedo() ? available() : unavailable('Nothing to redo')), button('Add author', () => { addAuthor(editor.view); editor.run(setVimMode('insert')); }, 'notebook.add-author'),
+  button('Annotate', () => { details(true, annotateSelection(editor.view)); }, 'notebook.annotate', 'notebook', () => editor.view.state.selection.empty ? unavailable('Select text to annotate') : available()));
+inspector = mountInspector(left, editor.view, registry);
+structure = mountStructureControls(actions, editor.view, message => { status.textContent = message; }, registry);
 actions.querySelector('.fn-structure')!.classList.add('fn-menu', 'fn-edit-control');
 actions.querySelector('.fn-structure-controls')!.classList.add('fn-menu-panel');
 // Tools belong to the single masthead. Their actions retain the editor's
@@ -182,6 +204,7 @@ function pendingMessage() {
   status.textContent = storedError ?? 'Draft retained · source changes need Run'; status.dataset['state'] = 'pending';
 }
 function changed(doc: ProseNode) {
+  registry.notify();
   generation++; request?.abort(); clearTimeout(timer);
   try {
     const basis = notebook.revision, previousSource = sourceOf(notebook); notebook = fromProse(doc, notebook); const draft = notebook;
@@ -229,7 +252,7 @@ const onMessage = (event: MessageEvent) => {
   const data = event.data;
   // A recovering draft can finish checking before the iframe mounts. Commands
   // become available only after its listener acknowledges readiness.
-  if (data.kind === 'ready') { frameReady = true; readingOptions.disabled = false; send({ kind: 'styles', settings: styles.settings() }); send({ kind: 'presentation', animationOnly: root.classList.contains('fn-editing') }); if (latest) send({ kind: 'apply', value: latest.value }); }
+  if (data.kind === 'ready') { frameReady = true; readingOptions.disabled = false; registry.notify(); send({ kind: 'styles', settings: styles.settings() }); send({ kind: 'presentation', animationOnly: root.classList.contains('fn-editing') }); if (latest) send({ kind: 'apply', value: latest.value }); }
   if (data.kind === 'applied' && latest?.revision === data.revision && notebook.revision === data.revision) {
     if (pendingSource()) pendingMessage();
     else { status.textContent = storedError ?? 'Saved in this browser · preview up to date'; status.dataset['state'] = 'valid'; resultStatus.textContent = ''; }
@@ -238,11 +261,12 @@ const onMessage = (event: MessageEvent) => {
   if (data.kind === 'options-state') readingOptions.setAttribute('aria-expanded', String(data.open === true));
   if (data.kind === 'window-focus') windows.activate('page');
   if (data.kind === 'window-cycle') windows.cycle(data.reverse === true);
+  if (data.kind === 'commands-open') { windows.activate('page'); commandPicker.open(); }
   if (data.kind === 'select' && typeof data.id === 'string') editor.reveal(data.id);
 };
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

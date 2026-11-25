@@ -8,12 +8,13 @@ import { splitListItem, sinkListItem, liftListItem } from 'prosemirror-schema-li
 import { EditorView as CodeView, keymap as codeKeymap, drawSelection, highlightActiveLine } from '@codemirror/view';
 import { EditorState as CodeState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
-import { defaultKeymap } from '@codemirror/commands';
+import { defaultKeymap, undo as codeUndo, redo as codeRedo, undoDepth, redoDepth } from '@codemirror/commands';
 import { vim, getCM, Vim } from '@replit/codemirror-vim';
 import { proseVim, vimKey, setVimMode } from '../fraction-notebook/vim.ts';
 import { activeLine } from '../fraction-notebook/active-line.ts';
 import { parseMarkdown, serializeMarkdown, richSchema } from './rich-document.ts';
 import { mathView } from './math-view.ts';
+import { CommandRegistry, available, unavailable, type CommandHandle, type CommandOrigin } from '../editor-commands/registry.ts';
 
 export type RichProfile = 'composer' | 'comment' | 'transcript';
 export interface RichOptions {
@@ -23,6 +24,7 @@ export interface RichOptions {
   onSubmit?: () => void; onSave?: () => void;
   minimal?: boolean; onHelp?: () => void;
   plugins?: readonly Plugin[];
+  commands?: { registry: CommandRegistry; id: string; title: string };
 }
 export interface RichHighlight { from: number; to: number; id: string }
 export interface DraftCursor { anchor: number; head: number; source: boolean }
@@ -44,6 +46,11 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
   root.append(toolbar, body, sourceHost, bar, help); host.append(root);
   let source = options.text ?? '', code: CodeView | undefined, disabled = false, disposed = false, adopting = false;
   let highlights: readonly RichHighlight[] = [];
+  const registered = new Map<string, CommandHandle>();
+  const invoke = (name: string, fallback: Command): Command => (state, dispatch, editor) => {
+    const command = registered.get(name); if (!command || !dispatch) return fallback(state, dispatch, editor);
+    void command.invoke({ scope: 'chat', element: view.dom }); return true;
+  };
   const replacement = new Plugin({
     // editable:false only disables browser input. Keyboard/plugin transactions
     // must also be fenced to keep the transcript authoritative.
@@ -69,8 +76,8 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
   };
   const plugins = [replacement, ...(options.plugins ?? []), ...(readOnly ? [] : [history()]), keymap({
     'Mod-Enter': () => { if (!readOnly && !disabled) options.onSubmit?.(); return true; },
-    'Mod-b': toggleMark(richSchema.marks['strong']!), 'Mod-i': toggleMark(richSchema.marks['em']!),
-    'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo
+    'Mod-b': invoke('bold', toggleMark(richSchema.marks['strong']!)), 'Mod-i': invoke('italic', toggleMark(richSchema.marks['em']!)),
+    'Mod-z': invoke('undo', undo), 'Mod-Shift-z': invoke('redo', redo), 'Mod-y': invoke('redo', redo)
   }), proseVim({ openBelow, readOnly }), activeLine(), keymap({
     Enter: chainCommands(newlineInCode, splitListItem(richSchema.nodes['list_item']!), createParagraphNear, liftEmptyBlock, splitBlock),
     Tab: sinkListItem(richSchema.nodes['list_item']!), 'Shift-Tab': liftListItem(richSchema.nodes['list_item']!)
@@ -104,22 +111,34 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
       if (!readOnly && transaction.getMeta(replacement) !== 'source' && next.transactions.some(tr => tr.docChanged)) { source = serializeMarkdown(next.state.doc); options.onChange?.(source); }
       status.textContent = `${(vimKey.getState(next.state) ?? 'normal').toUpperCase()}${readOnly ? ' · select to annotate' : ' · :h for keys'}`;
       options.onSelection?.();
+      options.commands?.registry.notify();
     }
   });
   status.textContent = readOnly ? 'NORMAL · select to annotate' : 'NORMAL · i to write · :h for keys';
-  const button = (label: string, run: () => void) => {
+  const button = (label: string, run: () => void, name: string, state?: (origin: CommandOrigin) => ReturnType<typeof available>) => {
     const value = document.createElement('button'); value.type = 'button'; value.textContent = label;
-    value.onmousedown = event => event.preventDefault(); value.onclick = run; toolbar.append(value); return value;
+    value.onmousedown = event => event.preventDefault(); value.onclick = run; toolbar.append(value);
+    if (options.commands) { const handle = options.commands.registry.add({ id: `${options.commands.id}.${name}`, title: label, category: options.commands.title, scope: 'chat', ...(state ? { state } : {}), run }); registered.set(name, handle); handle.bind(value); }
+    return value;
   };
+  const editable = (origin: CommandOrigin) => readOnly || disabled || code ? unavailable('Use editable rich text')
+    : origin.element && !root.contains(origin.element) ? unavailable(`Use from ${options.label}`) : available();
   const run = (action: Command) => { if (!disabled && !readOnly) action(view.state, view.dispatch, view); view.focus(); };
   if (!readOnly) {
-    button('Bold', () => run(toggleMark(richSchema.marks['strong']!)));
-    button('Italic', () => run(toggleMark(richSchema.marks['em']!)));
-    button('Code', () => run(setBlockType(richSchema.nodes['code_block']!)));
-    button('Text', () => run(setBlockType(richSchema.nodes['paragraph']!)));
+    button('Bold', () => run(toggleMark(richSchema.marks['strong']!)), 'bold', editable);
+    button('Italic', () => run(toggleMark(richSchema.marks['em']!)), 'italic', editable);
+    button('Code', () => run(setBlockType(richSchema.nodes['code_block']!)), 'code', editable);
+    button('Text', () => run(setBlockType(richSchema.nodes['paragraph']!)), 'text', editable);
+    for (const [name, action, keys] of [['undo', undo, ['Ctrl/⌘-z']], ['redo', redo, ['Ctrl/⌘-Shift-z']]] as const) {
+      if (options.commands) registered.set(name, options.commands.registry.add({ id: `${options.commands.id}.${name}`, title: name === 'undo' ? 'Undo' : 'Redo', category: options.commands.title, scope: 'chat', keys,
+        state: origin => {
+          if (disabled || readOnly || (origin.element && !root.contains(origin.element))) return unavailable(`Use from ${options.label}`);
+          return (code ? (name === 'undo' ? undoDepth(code.state) : redoDepth(code.state)) > 0 : action(view.state)) ? available() : unavailable(`Nothing to ${name}`);
+        }, run: () => { if (code) { (name === 'undo' ? codeUndo : codeRedo)(code); code.focus(); } else run(action); } }));
+    }
   }
-  const sourceButton = !readOnly ? button('Markdown', toggleSource) : null;
-  button('Keys', () => { help.hidden = !help.hidden; }); toolbar.append(status);
+  const sourceButton = !readOnly ? button('Markdown', toggleSource, 'source', origin => disabled ? unavailable('Editor unavailable') : origin.element && !root.contains(origin.element) ? unavailable(`Use from ${options.label}`) : available(Boolean(code))) : null;
+  button('Keys', () => { if (options.onHelp) options.onHelp(); else help.hidden = !help.hidden; }, 'help'); toolbar.append(status);
   function toggleSource(focusAfter = true) {
     if (readOnly || disabled) return;
     if (code) {
@@ -179,7 +198,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
     event.preventDefault(); const value = command.value.trim(); bar.hidden = true;
     if (value === 'h' || value === 'help') { if (options.onHelp) { options.onHelp(); return; } help.hidden = false; }
     else if (value === 'w' || value === 'write') options.onSave?.();
-    else if (value === 'source') toggleSource();
+    else if (value === 'source') { const handle = registered.get('source'); if (handle) void handle.invoke({ scope: 'chat', element: view.dom }); else toggleSource(); }
     else status.textContent = `Unknown command: ${value}. Use :h.`;
     focus();
   };
@@ -221,7 +240,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
       replaceDocument(doc, 'remote');
     },
     highlight(values: readonly RichHighlight[]) { highlights = values; view.updateState(view.state); },
-    dispose() { if (disposed) return; disposed = true; code?.destroy(); view.destroy(); root.remove(); }
+    dispose() { if (disposed) return; disposed = true; registered.forEach(handle => handle.dispose()); code?.destroy(); view.destroy(); root.remove(); }
   };
 }
 export type RichSurface = ReturnType<typeof mountRichText>;

@@ -1,4 +1,5 @@
 import { hasStyleCycle, palette, propertyNames, referenceName, styleFields } from './style-catalog.ts';
+import { CommandRegistry, available, unavailable } from '../editor-commands/registry.ts';
 export { styleFields } from './style-catalog.ts';
 export interface StyleSettings { theme: 'dark' | 'light'; values: Record<string, string> }
 const validValue = (property: string, value: string) => value.length < 160 && !/[;{}]|url\s*\(/i.test(value) && CSS.supports(property, value);
@@ -30,12 +31,12 @@ function select(name: string, options: readonly (readonly [string, string])[]) {
   for (const [value, label] of options) { const option = document.createElement('option'); option.value = value; option.textContent = label; element.append(option); }
   return element;
 }
-export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings) => void) {
+export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings) => void, registry: CommandRegistry) {
   let settings: StyleSettings = { theme: 'dark', values: {} };
   try { settings = readStyleSettings(JSON.parse(localStorage.getItem('kp.notebook.styles.v1') ?? 'null')); } catch { /* Invalid preferences do not block editing. */ }
   const panel = document.createElement('aside'); panel.className = 'fn-side-panel fn-styles'; panel.hidden = true; panel.setAttribute('aria-label', 'Styles');
   const title = document.createElement('h2'); title.textContent = 'Styles';
-  const close = document.createElement('button'); close.textContent = 'Close styles'; close.onclick = () => { panel.hidden = true; };
+  const close = document.createElement('button'); close.textContent = 'Close styles';
   const hint = document.createElement('p'); hint.textContent = 'Compare by property or object. Inherit follows the theme or parent style. Advanced exposes exact CSS values. Changes apply to this workspace and its preview.';
   const theme = select('Theme', [['dark', 'Dark'], ['light', 'Light']]); theme.value = settings.theme;
   const search = document.createElement('input'); search.type = 'search'; search.placeholder = 'Search styles, e.g. heading weight'; search.setAttribute('aria-label', 'Search styles');
@@ -52,7 +53,11 @@ export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings
     if (persist) try { localStorage.setItem('kp.notebook.styles.v1', JSON.stringify(settings)); } catch { hint.textContent = 'Styles applied for this session; browser storage is unavailable.'; }
     refreshers.forEach(refresh => refresh());
   };
-  theme.onchange = () => { settings.theme = theme.value === 'light' ? 'light' : 'dark'; publish(); };
+  const themeCommand = registry.targeted({ id: 'styles.apply-theme', title: 'Apply chosen theme', category: 'Styles', scope: 'workspace', keywords: ['light', 'dark', 'colors'],
+    target: () => ({ found: false, reason: 'Choose a theme in Styles' }),
+    run: (value: 'light' | 'dark') => { settings.theme = value; theme.value = value; publish(); } });
+  const chooseTheme = registry.add({ id: 'styles.set-theme', title: 'Set theme', category: 'Styles', scope: 'workspace', keywords: ['light', 'dark', 'colors'], run: () => { panel.hidden = false; theme.focus(); } });
+  theme.onchange = () => { void themeCommand.forTarget(theme.value === 'light' ? 'light' : 'dark').execute(); };
   const rows = styleFields.map(field => {
     const { label, key, property: cssProperty } = field;
     const row = document.createElement('div'); row.className = 'fn-style-row'; row.dataset['styleKey'] = key;
@@ -110,9 +115,13 @@ export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings
     count.textContent = matches ? `${matches} styles` : 'No matching styles. Clear the search or filters.';
   };
   search.oninput = filter; object.onchange = property.onchange = grouping.onchange = filter;
-  const reset = document.createElement('button'); reset.textContent = 'Reset overrides'; reset.onclick = () => { settings.values = {}; rows.forEach(({ row }) => row.querySelector('input')?.setCustomValidity('')); publish(); };
+  const reset = document.createElement('button'); reset.textContent = 'Reset overrides';
+  const resetCommand = registry.add({ id: 'styles.reset-overrides', title: 'Reset style overrides', category: 'Styles', scope: 'workspace',
+    state: () => Object.keys(settings.values).length ? available() : unavailable('No style overrides'),
+    run: () => { settings.values = {}; rows.forEach(({ row }) => row.querySelector('input')?.setCustomValidity('')); publish(); } }); resetCommand.bind(reset);
+  const closeCommand = registry.add({ id: 'styles.close', title: 'Close styles', category: 'Styles', scope: 'workspace', state: () => panel.hidden ? unavailable('Styles are closed') : available(), run: () => { panel.hidden = true; } }); closeCommand.bind(close);
   // Mounting or falling back from unreadable preferences is not a user edit.
   // Preserve the stored bytes until an explicit style change is made.
   panel.append(reset); host.append(panel); filter(); publish(false);
-  return { settings: () => settings, toggle() { panel.hidden = !panel.hidden; if (!panel.hidden) search.focus(); }, dispose() { panel.remove(); } };
+  return { settings: () => settings, toggle() { panel.hidden = !panel.hidden; if (!panel.hidden) search.focus(); registry.notify(); }, dispose() { themeCommand.dispose(); chooseTheme.dispose(); resetCommand.dispose(); closeCommand.dispose(); panel.remove(); } };
 }

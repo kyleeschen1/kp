@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-fruit-picker",
-    title: "Try a floating picker without losing the editing context",
+    id: "kp-workspace-commands",
+    title: "Find workspace actions without losing the editing context",
     approval: "approved",
-    contractId: "run-contract.kp.fruit-picker-20261125",
-    finish: "One floating ProseMirror query reveals up to five fuzzy fruit matches, narrows without moving the query line, and supports keyboard/pointer selection with exact return to the invoking editor. Preserve the fixed workspace and native data owners.",
-    source: { label: "Approved fruit picker MVP", href: "docs/project/reviews/2026-11-25-fruit-picker.md" }
+    contractId: "run-contract.kp.workspace-commands-20261125",
+    finish: "Existing workspace controls and a searchable M-x picker invoke shared command identities. Alt-x and Ctrl-x Ctrl-x open the same query; commands retain their originating target, availability checks and native history. Preserve fixed panes and data owners.",
+    source: { label: "Approved workspace commands", href: "docs/project/reviews/2026-11-25-workspace-commands.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Picker, type ap then apric, and erase back to empty. Judge the fixed query line, matching emphasis and shrinking rows. Navigate with Ctrl-n/p, choose with Enter or cancel with Escape, and check the previous editor position returns. Compare dark/light and narrow views.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, select notebook text, press Ctrl-x Ctrl-x, find Bold and execute it. Undo should affect only that editor. Repeat in the chat composer, try Alt-x and inspect disabled-command explanations. Judge the compact list and reliable context return.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook and persistent conversation are accepted; the equal split, joined chat/folding and modeline are checked. The pane/line focus refinement is checked and awaits visual judgment. The approved fruit picker is a finite successor; the multiplexer vision, native data and independent Spindle ownership remain foundations.",
+      established: "The notebook, persistent conversation and fruit-picker presentation are accepted; the equal split, joined chat/folding and modeline are checked. Pane/line focus and workspace commands have checked candidates awaiting judgment. Native data and independent Spindle ownership remain foundations.",
       evidence: { label: "Recorded multiplexer vision and boundaries", href: "docs/project/2026-11-25-multiplexer-vision.md" },
       outcome: {
         authority: "approved",
-        id: "fruit-picker", title: "Choose from a small floating list and return to the work",
-        finish: "A one-line query starts in Insert and filters preset fruit into at most five stable, highlighted results. Keyboard and pointer choice or Escape restore the prior pane, selection and scroll without changing chat or notebook content.",
-        excludes: "General picker service, file/session/object integration, persistence, Lit migration, full fzf compatibility, model calls or renderer changes.",
-        source: { label: "Approved fruit-only successor", href: "docs/project/reviews/2026-11-25-fruit-picker.md" }
+        id: "workspace-commands", title: "Invoke existing actions through a shared command registry",
+        finish: "M-x and Ctrl-x Ctrl-x discover current workspace actions, with five visible rows, availability reasons and shared button/transient/Ex dispatch. Execution preserves the originating editor or object and its native undo history.",
+        excludes: "Remote command APIs, plugin loaders, new session providers, layout redesign, full Emacs compatibility or renderer migration.",
+        source: { label: "Approved command registry and two launch bindings", href: "docs/project/reviews/2026-11-25-workspace-commands.md" }
       }
     },
     {
@@ -473,6 +473,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves a fruit-only floating picker with a small ProseMirror query, five suggestions, fuzzy matching and keyboard selection.",
       reason: "Try the interaction and reliable context return before binding it to files, sessions or other resources. Retain prior focus work without calling it visually accepted or expanding it into a framework.",
       source: { label: "Approved picker walkthrough and finite scope", href: "docs/project/reviews/2026-11-25-fruit-picker.md" }
+    },
+    {
+      id: "select-workspace-command-registry", on: "2026-11-25",
+      before: "The fruit picker has an accepted presentation. Toolbar callbacks, chat transients and Ex commands expose overlapping actions separately.",
+      after: "The user approves shared command identities and M-x, adding Ctrl-x Ctrl-x as an alternative launcher. Existing buttons remain connected to those commands.",
+      reason: "Make current actions discoverable while preserving the pane, selection and object they operate on. The fruit milestone stays finite; broader resource pickers and remote protocols remain separate.",
+      source: { label: "Approved workspace command proposal", href: "docs/project/reviews/2026-11-25-workspace-commands.md" }
     }
   ]
 };

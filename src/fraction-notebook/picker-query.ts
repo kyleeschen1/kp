@@ -14,7 +14,8 @@ export const querySchema = new Schema({ nodes: {
 } });
 export const singleLine = (text: string) => text.replace(/[\r\n\t\u2028\u2029]+/g, ' ');
 
-export function mountPickerQuery(host: HTMLElement, changed: (text: string) => void) {
+export function mountPickerQuery(host: HTMLElement, changed: (text: string) => void,
+  options = { label: 'Find a fruit', list: 'kp-fruit-results', surface: 'Picker › query' }) {
   const shape = new Plugin({ filterTransaction: tr => !tr.docChanged || (
     tr.doc.childCount === 1 && tr.doc.firstChild?.type === querySchema.nodes['paragraph']
     && tr.doc.textContent.length <= queryLimit && singleLine(tr.doc.textContent) === tr.doc.textContent
@@ -25,9 +26,9 @@ export function mountPickerQuery(host: HTMLElement, changed: (text: string) => v
       // A one-line prompt has no "open a paragraph below" operation.
       proseVim({ openBelow: () => false }), keymap(baseKeymap)
     ] }),
-    attributes: { role: 'combobox', 'aria-label': 'Find a fruit', 'aria-autocomplete': 'list',
-      'aria-expanded': 'false', 'aria-controls': 'kp-fruit-results', 'aria-haspopup': 'listbox',
-      'aria-multiline': 'false', 'data-editor-surface': 'Picker › query', spellcheck: 'false' },
+    attributes: { role: 'combobox', 'aria-label': options.label, 'aria-autocomplete': 'list',
+      'aria-expanded': 'false', 'aria-controls': options.list, 'aria-haspopup': 'listbox',
+      'aria-multiline': 'false', 'data-editor-surface': options.surface, spellcheck: 'false' },
     handlePaste(editor, event) {
       if (vimKey.getState(editor.state) !== 'insert') return true;
       const text = event.clipboardData?.getData('text/plain'); if (text === undefined) return false;

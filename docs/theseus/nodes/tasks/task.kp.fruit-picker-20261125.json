@@ -2,9 +2,9 @@
   "id": "task.kp.fruit-picker-20261125",
   "kind": "task",
   "title": "Try a floating fruit picker with a ProseMirror query",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "product",
-  "summary": "HUMAN_CHECKPOINT: approved fruit-only MVP is implemented and checked. Review fixed-top sizing, matching emphasis and context return at the notebook Picker command.",
+  "summary": "Fruit picker accepted; successor has its own approved contract",
   "sourceRefs": [
     {
       "kind": "file",

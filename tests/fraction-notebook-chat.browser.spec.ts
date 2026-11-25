@@ -72,6 +72,98 @@ async function selectPassage(page: Page, text: string, message?: string) {
   await page.keyboard.press('Escape');
 }
 
+test('M-x and C-x C-x dispatch notebook commands to the captured selection with five visible rows', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url);
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  const prose = page.locator('.fn-editor .ProseMirror'), paragraph = prose.locator('.fn-block-content > p').first();
+  const original = await prose.textContent();
+  const phrase = await paragraph.evaluate(node => {
+    node.closest<HTMLElement>('.ProseMirror')!.focus();
+    const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT), text = walker.nextNode()!;
+    const range = document.createRange(); range.setStart(text, 0); range.setEnd(text, Math.min(7, text.textContent!.length));
+    const selection = getSelection()!; selection.removeAllRanges(); selection.addRange(range); document.dispatchEvent(new Event('selectionchange')); return selection.toString();
+  });
+  await expect.poll(() => page.evaluate(() => getSelection()?.toString())).toBe(phrase);
+  await page.keyboard.press('Control+x'); await expect(page.locator('.kp-modeline-surface')).toContainText('C-x');
+  expect(await prose.textContent()).toBe(original);
+  await page.keyboard.press('Control+x');
+  const dialog = page.getByRole('dialog', { name: 'Commands', exact: true }), query = page.getByRole('combobox', { name: 'Search commands' });
+  await expect(query).toBeFocused(); await expect(query).toHaveAttribute('data-vim-mode', 'insert');
+  const options = dialog.getByRole('option'); expect(await options.count()).toBeGreaterThan(5);
+  const rows = dialog.locator('.kp-picker-results'), rowHeight = (await options.first().boundingBox())!.height;
+  expect((await rows.boundingBox())!.height).toBeLessThanOrEqual(rowHeight * 5 + 10);
+  await query.press('PageDown'); expect(await rows.evaluate(node => node.scrollTop)).toBeGreaterThan(0);
+  const editor = await query.elementHandle(); await query.fill('bold'); expect(await editor?.evaluate(node => node.isConnected)).toBe(true);
+  await expect(dialog.getByRole('option', { selected: true })).toHaveAttribute('data-command-id', 'notebook.bold');
+  await page.screenshot({ path: info.outputPath('workspace-commands-dark.png') });
+  await query.press('Enter'); await expect(prose).toBeFocused(); await expect(paragraph.locator('strong')).toContainText(phrase);
+  await prose.press('Alt+x'); await query.fill('undo'); await query.press('Enter'); await expect(paragraph.locator('strong')).toHaveCount(0);
+  expect(await prose.textContent()).toBe(original);
+  await prose.press('Alt+x'); await query.fill('nest'); await expect(dialog.getByRole('option', { selected: true })).toHaveAttribute('aria-disabled', 'true');
+  await query.press('Enter'); await expect(dialog).toBeVisible(); await query.press('Escape'); await expect(prose).toBeFocused();
+  await prose.press('Alt+x'); await query.fill('styles'); await dialog.getByRole('option', { name: 'Styles', exact: true }).click();
+  await expect(page.getByRole('searchbox', { name: 'Search styles', exact: true })).toBeFocused();
+  await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+  await page.getByRole('button', { name: 'Close styles', exact: true }).click();
+  await page.getByRole('button', { name: 'Commands', exact: true }).click(); await query.fill('block');
+  await page.screenshot({ path: info.outputPath('workspace-commands-light.png') }); await query.press('Escape');
+  await page.setViewportSize({ width: 390, height: 520 }); await page.getByRole('button', { name: 'Commands', exact: true }).click();
+  const box = (await dialog.boundingBox())!; expect(box.x).toBeGreaterThanOrEqual(0); expect(box.x + box.width).toBeLessThanOrEqual(390);
+  await page.screenshot({ path: info.outputPath('workspace-commands-phone.png') }); await query.press('Escape');
+  expect(errors).toEqual([]);
+});
+
+test('command picker keeps chat history separate, restores drafts during streaming and runs registered notes', async ({ page, context }) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  try {
+    await open(page); await connect(page); const prose = page.locator('.fn-editor .ProseMirror'), original = await prose.textContent();
+    await write(page, 'composer words'); await input(page).press('ControlOrMeta+a');
+    await input(page).press('Control+x'); await page.keyboard.press('Control+x');
+    const query = page.getByRole('combobox', { name: 'Search commands' }), dialog = page.getByRole('dialog', { name: 'Commands', exact: true });
+    await query.fill('bold'); await expect(dialog.getByRole('option', { selected: true })).toHaveAttribute('data-command-id', 'chat.composer.bold');
+    await query.press('Enter'); await expect(input(page).locator('strong')).toHaveText('composer words');
+    await input(page).press('Alt+x'); await query.fill('undo'); await query.press('Enter'); await expect(input(page).locator('strong')).toHaveCount(0);
+    expect(await prose.textContent()).toBe(original);
+    // A keyboard-focused masthead launcher still belongs to the last active editor.
+    await page.getByRole('button', { name: 'Commands', exact: true }).focus(); await page.keyboard.press('Enter');
+    await query.fill('bold'); await expect(dialog.getByRole('option', { selected: true })).toHaveAttribute('data-command-id', 'chat.composer.bold');
+    await query.press('Escape'); await expect(input(page)).toBeFocused();
+    await input(page).press('ArrowRight'); await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    await write(page, 'before after'); await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
+    await input(page).press('Alt+x'); await query.fill('interrupt'); f.peer.delta('Still streaming behind Commands.');
+    await expect(page.getByRole('textbox', { name: 'Conversation transcript' })).toContainText('Still streaming');
+    await expect(query).toBeFocused(); await expect(query).toHaveText('interrupt'); await query.press('Escape');
+    await expect(input(page)).toBeFocused(); await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('before aftXer');
+    f.peer.finish('Still streaming behind Commands.'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
+    await input(page).press('Alt+x'); await query.fill('new note'); await query.press('Enter');
+    const note = page.getByRole('textbox', { name: 'Note text', exact: true }); await expect(note).toBeFocused();
+    if (await note.getAttribute('data-vim-mode') !== 'insert') await note.press('i'); await note.fill('A registered note');
+    await note.press('Control+x'); await page.keyboard.press('Control+x'); await query.fill('save note'); await query.press('Enter');
+    await expect(page.locator('.kp-note-card')).toContainText('A registered note'); expect(f.peer.sends()).toHaveLength(1);
+    expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
+test('command prefix cancels on interruption and both shortcuts work from the animation source and reader', async ({ page }) => {
+  await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await page.getByText('Edit animation specification', { exact: true }).click();
+  const source = page.locator('.fn-source-host .cm-content'), query = page.getByRole('combobox', { name: 'Search commands' });
+  await source.press('g'); await source.press('g'); await source.press('0'); await source.press('i'); await source.press('ArrowRight');
+  const line = source.locator('.cm-line').first(), before = await line.textContent();
+  await source.press('Control+x'); await source.press('Control+x'); await expect(query).toBeFocused();
+  await query.press('Escape'); await expect(source).toBeFocused(); await page.keyboard.insertText(' '); await expect(line).toHaveText('{ ');
+  await source.press('ControlOrMeta+z'); await expect(line).toHaveText(before!);
+  await source.press('Alt+x'); await query.press('Control+x'); await query.pressSequentially('z'); await expect(query).toHaveText('z');
+  await query.press('Control+x'); await expect(page.locator('#app')).toHaveAttribute('data-command-prefix', 'C-x …');
+  await query.press('Escape'); await expect(source).toBeFocused();
+  await source.press('Alt+x'); await query.fill('close buffer'); await query.press('Enter');
+  await page.getByRole('button', { name: 'Edit', exact: true }).click();
+  const reading = page.frameLocator('iframe').locator('.kp-caption-document-intro'); await reading.click();
+  await page.keyboard.press('Control+x'); await page.keyboard.press('Control+x'); await expect(query).toBeFocused();
+  await query.press('Escape'); await reading.click(); await page.keyboard.press('Alt+x'); await expect(query).toBeFocused(); await query.press('Escape');
+});
+
 test('fruit picker keeps one query buffer while fuzzy rows narrow, reverse and accept by keyboard or pointer', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url);

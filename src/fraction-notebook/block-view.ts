@@ -1,22 +1,17 @@
 import type { Node as ProseNode } from 'prosemirror-model';
-import { Selection } from 'prosemirror-state';
-import { closeHistory } from 'prosemirror-history';
-import type { EditorView, NodeView } from 'prosemirror-view';
+import type { NodeView } from 'prosemirror-view';
 
 export class BlockView implements NodeView {
   readonly dom = document.createElement('section');
   readonly contentDOM = document.createElement('div');
   private readonly fold = document.createElement('button');
   private node: ProseNode;
-  constructor(node: ProseNode, outer: EditorView, getPos: () => number | undefined) {
+  constructor(node: ProseNode, fold: (id: string) => void) {
     this.node = node; this.dom.className = 'fn-block'; this.contentDOM.className = 'fn-block-content';
     this.fold.type = 'button'; this.fold.className = 'fn-block-fold'; this.fold.contentEditable = 'false';
     this.fold.onmousedown = event => event.preventDefault();
-    this.fold.onclick = () => {
-      const pos = getPos(); if (pos === undefined) return;
-      const tr = closeHistory(outer.state.tr).setNodeMarkup(pos, undefined, { ...this.node.attrs, folded: !this.node.attrs['folded'] });
-      outer.dispatch(tr.setSelection(Selection.near(tr.doc.resolve(pos + 1), 1))); outer.focus();
-    };
+    this.fold.dataset['commandId'] = 'notebook.block.fold';
+    this.fold.onclick = () => fold(String(this.node.attrs['id']));
     this.dom.append(this.fold, this.contentDOM); this.update(node);
   }
   update(node: ProseNode) {

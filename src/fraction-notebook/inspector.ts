@@ -32,7 +32,7 @@ export function annotateSelection(view: EditorView): string {
   return id;
 }
 interface Target { readonly id: string; readonly kind: 'node' | 'annotation'; readonly label: string; readonly value: unknown }
-export function mountInspector(parent: HTMLElement, view: EditorView) {
+export function mountInspector(parent: HTMLElement, view: EditorView, registry: import('../editor-commands/registry.ts').CommandRegistry) {
   const panel = document.createElement('section'); panel.className = 'fn-inspector'; panel.hidden = true; panel.setAttribute('aria-label', 'Content details');
   const label = document.createElement('label'); label.textContent = 'Inspect '; const picker = document.createElement('select'); picker.setAttribute('aria-label', 'Metadata target'); label.append(picker);
   const identity = document.createElement('code'); identity.className = 'fn-inspector-id';
@@ -70,7 +70,7 @@ export function mountInspector(parent: HTMLElement, view: EditorView) {
     input.disabled = apply.disabled = !next.length; if (next.length) choose(); else identity.textContent = 'Select content in the article.';
   };
   picker.onchange = choose;
-  apply.onclick = () => {
+  const applyMetadata = () => {
     if (!chosen) return;
     try {
       const value = metadata(JSON.parse(input.value)), tr = closeHistory(view.state.tr);
@@ -85,7 +85,7 @@ export function mountInspector(parent: HTMLElement, view: EditorView) {
       view.dispatch(tr); message.textContent = 'Metadata applied.';
     } catch (error) { message.textContent = String(error); }
   };
-  remove.onclick = () => {
+  const removeAnnotation = () => {
     if (chosen?.kind !== 'annotation') return;
     const tr = closeHistory(view.state.tr);
     view.state.doc.descendants((node, pos) => { for (const m of node.marks) if (m.type.name === 'annotation' && m.attrs['id'] === chosen!.id) tr.removeMark(pos, pos + node.nodeSize, m); });
@@ -95,5 +95,9 @@ export function mountInspector(parent: HTMLElement, view: EditorView) {
     if (!chosen) return; const found = findNode(chosen.id); if (found?.node.type.name !== 'authorCredit') return;
     view.dispatch(closeHistory(view.state.tr).setNodeMarkup(found.pos, undefined, { ...found.node.attrs, role: role.value }));
   };
-  return { refresh, show(visible: boolean, preferred?: string) { panel.hidden = !visible; if (visible) refresh(preferred); }, dispose() { panel.remove(); } };
+  const applyCommand = registry.add({ id: 'notebook.metadata.apply', title: 'Apply metadata', category: 'Content details', scope: 'notebook',
+    state: () => panel.hidden || !chosen ? { enabled: false, reason: 'Open details and select a target' } : { enabled: true }, run: applyMetadata }); applyCommand.bind(apply);
+  const removeCommand = registry.add({ id: 'notebook.annotation.remove', title: 'Remove annotation', category: 'Content details', scope: 'notebook',
+    state: () => panel.hidden || chosen?.kind !== 'annotation' ? { enabled: false, reason: 'Inspect an annotation first' } : { enabled: true }, run: removeAnnotation }); removeCommand.bind(remove);
+  return { refresh, show(visible: boolean, preferred?: string) { panel.hidden = !visible; if (visible) refresh(preferred); registry.notify(); }, dispose() { applyCommand.dispose(); removeCommand.dispose(); panel.remove(); } };
 }

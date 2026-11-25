@@ -3,6 +3,7 @@ import { getCM } from '@replit/codemirror-vim';
 import type { EditorView } from 'prosemirror-view';
 import { vimKey } from './vim.ts';
 import type { LineMode } from './numbers.ts';
+import { CommandRegistry, available, unavailable, target } from '../editor-commands/registry.ts';
 
 const exCommands = [
   { names: ['h', 'help'], description: 'Open searchable keyboard help', action: 'help' },
@@ -25,6 +26,7 @@ export const bindings = [
   ['JSON', 'Shift-Enter', 'Run this animation source'], ['JSON', 'Cmd/Ctrl-Enter', 'Close buffer, retaining draft'],
   ['Inline source', 'Enter / Tab / Esc', 'Finish link/math source and return to prose; ordinary text-input keys apply'],
   ['Windows', 'Ctrl-`', 'Switch KP and chat windows without losing either position'],
+  ['Workspace', 'Alt-x · Ctrl-x Ctrl-x', 'Search commands for the originating pane; Escape cancels'],
   ['Picker', '↑ / ↓ · Ctrl-p / Ctrl-n · Normal k / j', 'Previous / next fruit suggestion'],
   ['Picker', 'Enter / Esc · Ctrl-[ / i', 'Choose / cancel picker; Normal / Insert query editing'],
   ['Chat', 'i / Esc', 'Focus the permanent draft / save and return to transcript navigation'],
@@ -38,7 +40,7 @@ export const bindings = [
 ];
 export function mountCommands(host: HTMLElement, view: EditorView, actions: {
   save: () => Promise<void>; close: () => void; run: () => void; numbers: (mode: LineMode) => void; message: (text: string) => void;
-}) {
+}, registry: CommandRegistry) {
   const panel = document.createElement('aside'); panel.className = 'fn-side-panel fn-help'; panel.hidden = true; panel.setAttribute('aria-label', 'Keyboard help');
   const title = document.createElement('h2'); title.textContent = 'Keyboard help';
   const search = document.createElement('input'); search.type = 'search'; search.setAttribute('aria-label', 'Search keybindings');
@@ -57,9 +59,26 @@ export function mountCommands(host: HTMLElement, view: EditorView, actions: {
       const row = document.createElement('p'), key = document.createElement('code'); key.textContent = keys ?? '';
       row.append(key, document.createTextNode(` — ${description} (${where})`)); list.append(row);
     }
+    for (const command of registry.descriptions()) {
+      if (!`${command.title} ${command.category} ${command.id} ${command.keys?.join(' ') ?? ''}`.toLowerCase().includes(query)) continue;
+      const row = document.createElement('p'), name = document.createElement('code'); name.textContent = command.title;
+      row.append(name, ` — ${command.category}${command.keys?.length ? ` (${command.keys.join(' · ')})` : ' · M-x'}`); list.append(row);
+    }
   };
   const help = () => { panel.hidden = false; scope.textContent = `Active buffer: ${source ? 'animation JSON' : 'rich document'}. Prose has a bounded Vim subset; JSON uses CodeMirror Vim. Listed Ex commands are workspace commands; other Ex commands are not enabled.`; draw(); search.focus(); };
-  search.oninput = draw; close.onclick = () => { panel.hidden = true; restore(); };
+  search.oninput = draw;
+  const handles = [
+    registry.add({ id: 'notebook.save', title: 'Save notebook draft', category: 'Notebook', scope: 'notebook', keys: [':w'], run: actions.save }),
+    registry.add({ id: 'notebook.close-buffer', title: 'Close current notebook buffer', category: 'Notebook', scope: 'notebook', keys: [':q'], run: actions.close }),
+    registry.add({ id: 'notebook.save-close', title: 'Save and close notebook buffer', category: 'Notebook', scope: 'notebook', keys: [':wq'], run: async () => {
+      const saved = await registry.invoke('notebook.save', { scope: 'notebook' }); if (saved.ok) await registry.invoke('notebook.close-buffer', { scope: 'notebook' });
+    } }),
+    registry.add({ id: 'workspace.close-help', title: 'Close keyboard help', category: 'Workspace', scope: 'workspace',
+      state: () => panel.hidden ? unavailable('Help is closed') : available(), run: () => { panel.hidden = true; restore(); } })
+  ]; handles[3]!.bind(close);
+  let lineMode: LineMode = 'off';
+  const numbers = registry.targeted({ id: 'notebook.line-numbers', title: 'Toggle line numbers', category: 'Notebook', scope: 'notebook', keywords: ['number', 'nonumber', 'relativenumber'],
+    target: () => target<LineMode>(lineMode === 'off' ? 'absolute' : 'off'), state: () => available(lineMode !== 'off'), run: (mode: LineMode) => { lineMode = mode; actions.numbers(mode); } });
   const onKey = (event: KeyboardEvent) => {
     // Chat editors and open dialogs own their command scope.
     if (event.target instanceof Element && event.target.closest('.kp-chat, dialog[open]')) return;
@@ -76,17 +95,18 @@ export function mountCommands(host: HTMLElement, view: EditorView, actions: {
     bar.hidden = true; restore();
     void (async () => {
       try {
-        if (command?.action === 'help') return help();
-        if (command?.action === 'save' || command?.action === 'saveClose') await actions.save();
-        if (command?.action === 'close' || command?.action === 'saveClose') actions.close();
-        if (command?.action === 'run') actions.run();
-        if (value === 'set number') actions.numbers('absolute');
-        else if (value === 'set nonumber') actions.numbers('off');
-        else if (value === 'set relativenumber') actions.numbers('relative');
+        const origin = { scope: 'notebook' as const, element: previous };
+        if (command) {
+          const id = { help: 'workspace.help', save: 'notebook.save', close: 'notebook.close-buffer', saveClose: 'notebook.save-close', run: 'animation.run' }[command.action];
+          await registry.invoke(id, origin);
+        }
+        if (value === 'set number') await numbers.forTarget('absolute', origin).execute();
+        else if (value === 'set nonumber') await numbers.forTarget('off', origin).execute();
+        else if (value === 'set relativenumber') await numbers.forTarget('relative', origin).execute();
         else if (!command) throw new Error(`Unknown command: ${value}. Use :h for available commands.`);
       } catch (error) { actions.message(error instanceof Error ? error.message : String(error)); }
     })();
   };
   document.addEventListener('keydown', onKey, true);
-  return { help() { previous = document.activeElement instanceof HTMLElement ? document.activeElement : null; source = !!previous && !!CodeView.findFromDOM(previous); help(); }, dispose() { document.removeEventListener('keydown', onKey, true); panel.remove(); bar.remove(); } };
+  return { help() { previous = document.activeElement instanceof HTMLElement ? document.activeElement : null; source = !!previous && !!CodeView.findFromDOM(previous); help(); }, dispose() { handles.forEach(handle => handle.dispose()); numbers.dispose(); document.removeEventListener('keydown', onKey, true); panel.remove(); bar.remove(); } };
 }

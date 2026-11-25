@@ -2,10 +2,11 @@ import type { EditorView } from 'prosemirror-view';
 import { matchFruits, type FruitMatch } from './fruit-matches.ts';
 import { mountPickerQuery } from './picker-query.ts';
 import { setVimMode, vimKey } from './vim.ts';
+import type { CommandRegistry } from '../editor-commands/registry.ts';
 
 /** One reversible exemplar. The host restores its own editors; fruit selection
  * and DOM geometry never become notebook content or a Codex conversation. */
-export function mountFruitPicker(root: HTMLElement, actions: HTMLElement, captureReturn: () => () => void) {
+export function mountFruitPicker(root: HTMLElement, actions: HTMLElement, captureReturn: () => () => void, registry: CommandRegistry) {
   const launcher = document.createElement('button'); launcher.type = 'button'; launcher.textContent = 'Picker';
   launcher.setAttribute('aria-controls', 'kp-fruit-picker'); launcher.setAttribute('aria-haspopup', 'dialog');
   launcher.setAttribute('aria-expanded', 'false'); launcher.dataset['workspaceCommand'] = '';
@@ -74,7 +75,7 @@ export function mountFruitPicker(root: HTMLElement, actions: HTMLElement, captur
   }
   // Preserve the editor's focus on pointer invocation. Keyboard invocation uses
   // the active pane's own restoration callback, not a detached DOM range.
-  launcher.onmousedown = event => event.preventDefault(); launcher.onclick = open;
+  const command = registry.add({ id: 'workspace.fruit-picker', title: 'Fruit picker', category: 'Workspace', scope: 'workspace', run: open }); command.bind(launcher);
   dialog.addEventListener('cancel', event => { event.preventDefault(); if (!query?.composing) close(); });
   dialog.addEventListener('keydown', event => {
     if (event.isComposing || query?.composing) return;
@@ -89,5 +90,5 @@ export function mountFruitPicker(root: HTMLElement, actions: HTMLElement, captur
     else handled = false;
     if (handled) { event.preventDefault(); event.stopPropagation(); }
   }, true);
-  return { dispose() { disposed = true; close(false); dialog.remove(); launcher.remove(); chosen.remove(); } };
+  return { dispose() { disposed = true; command.dispose(); close(false); dialog.remove(); launcher.remove(); chosen.remove(); } };
 }

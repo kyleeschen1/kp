@@ -1,0 +1,75 @@
+{
+  "id": "task.kp.workspace-commands-20261125",
+  "kind": "task",
+  "title": "Find and invoke workspace actions without losing context",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: checked command-registry candidate is ready at the canonical notebook; original selection, draft and undo ownership preserved.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workspace-commands.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:26:34.725Z",
+      "notes": "Initial full run: 24 passed, two note cases timed out because repeated target-bound buttons retained the disabled saving state. Shared bindings now refresh availability after operation completion and release listeners for removed or abandoned rows. No acceptance assertion was removed."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:38:49.108Z",
+      "notes": "Complete notebook/chat dev-host TypeScript consumer passes."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:38:50.358Z",
+      "notes": "28 passing; includes command scope, captured typed targets, owner disposal/replacement, matching and interrupted shortcuts."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:38:51.024Z",
+      "notes": "25 passing; session ownership, persistence and draft invariants preserved."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:38:51.675Z",
+      "notes": "26 passing Chromium cases after shared button-binding repair; full existing cases and three command cases, no weakened assertions."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:38:52.324Z",
+      "notes": "23 passing Chromium cases; structure, metadata, source editing, Ex commands, styles and native player preserved."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:38:52.972Z",
+      "notes": "Selected workspace-command contract and source-linked review criteria align."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T21:39:05.307Z",
+      "notes": "75 passing; accepted fruit milestone, approved command scope, source-linked checked candidate and review remain aligned."
+    }
+  ],
+  "revisitWhen": [
+    "User judges command discovery, row annotations and reliable return with Alt-x and Ctrl-x Ctrl-x."
+  ]
+}

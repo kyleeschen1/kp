@@ -3,7 +3,7 @@ type WindowEntry = { element: HTMLElement; focus: () => void };
 
 /** Focus-only host. CSS owns fixed pane positions; switching keyboard targets
  * preserves the editors, selections, native player and saved conversation. */
-export function mountWindows(host: HTMLElement) {
+export function mountWindows(host: HTMLElement, registry: CommandRegistry) {
   const entries = new Map<WindowId, WindowEntry>();
   const listeners = new Set<() => void>();
   const preferenceKey = 'kp.workspace.active-window.v1';
@@ -37,8 +37,10 @@ export function mountWindows(host: HTMLElement) {
   const onKey = (event: KeyboardEvent) => {
     if (event.isComposing || !event.ctrlKey || event.metaKey || event.altKey || event.code !== 'Backquote') return;
     if (event.target instanceof Element && event.target.closest('dialog[open]')) return;
-    event.preventDefault(); event.stopPropagation(); cycle(event.shiftKey);
+    event.preventDefault(); event.stopPropagation(); void switchCommand.forTarget(event.shiftKey).execute();
   };
+  const switchCommand = registry.targeted({ id: 'workspace.switch-pane', title: 'Switch window', category: 'Workspace', scope: 'workspace', keys: ['Ctrl-`'],
+    target: () => target(false), state: () => visible().length > 1 ? available() : unavailable('Only one pane is open'), run: cycle });
   host.addEventListener('focusin', onFocus); host.addEventListener('pointerdown', onPointer);
   document.addEventListener('keydown', onKey, true);
   return {
@@ -57,7 +59,10 @@ export function mountWindows(host: HTMLElement) {
       if (entries.has(id)) throw new Error('A workspace window already owns this identity.');
       element.classList.add('kp-window'); element.dataset['kpWindow'] = id;
       entries.set(id, { element, focus }); reflectFocus();
+      const command = registry.add({ id: `workspace.focus-${id}`, title: `Focus ${id === 'chat' ? 'Chat' : 'KP'} pane`, category: 'Workspace', scope: 'workspace',
+        state: () => element.hidden ? unavailable('Pane is closed') : available(active === id), run: () => activate(id, true) });
       return () => {
+        command.dispose();
         entries.delete(id);
         element.classList.remove('kp-window'); delete element.dataset['kpWindow']; delete element.dataset['windowActive'];
         // Detaching during unload is not a user focus choice. Keep the saved
@@ -66,6 +71,7 @@ export function mountWindows(host: HTMLElement) {
         reflectFocus();
       };
     },
-    dispose() { host.removeEventListener('focusin', onFocus); host.removeEventListener('pointerdown', onPointer); document.removeEventListener('keydown', onKey, true); entries.clear(); listeners.clear(); }
+    dispose() { switchCommand.dispose(); host.removeEventListener('focusin', onFocus); host.removeEventListener('pointerdown', onPointer); document.removeEventListener('keydown', onKey, true); entries.clear(); listeners.clear(); }
   };
 }
+import { CommandRegistry, available, unavailable, target } from '../editor-commands/registry.ts';

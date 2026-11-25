@@ -1,11 +1,12 @@
 import type { mountWindows, WindowId } from './windows.ts';
+import type { CommandRegistry } from '../editor-commands/registry.ts';
 
 interface Surface { mode: string; name: string; description: string }
 const modes: Record<string, readonly [string, string]> = { normal: ['N', 'Normal'], insert: ['I', 'Insert'], visual: ['V', 'Visual'] };
 
 /** Observe the focused editor's own mode. Streaming into a different editor
  * must never turn the modeline into a report about that background surface. */
-export function mountModeline(root: HTMLElement, windows: ReturnType<typeof mountWindows>) {
+export function mountModeline(root: HTMLElement, windows: ReturnType<typeof mountWindows>, registry: CommandRegistry) {
   const bar = document.createElement('footer'); bar.className = 'kp-modeline'; bar.setAttribute('aria-label', 'Workspace modeline');
   const mode = document.createElement('span'); mode.className = 'kp-modeline-mode';
   const surface = document.createElement('span'); surface.className = 'kp-modeline-surface';
@@ -15,7 +16,8 @@ export function mountModeline(root: HTMLElement, windows: ReturnType<typeof moun
   for (const [id, label] of [['chat', 'Chat'], ['page', 'KP']] as const) {
     const button = document.createElement('button'); button.type = 'button'; button.textContent = label;
     button.setAttribute('aria-label', `Focus ${label} pane`); button.title = 'Switch pane · Ctrl-`';
-    button.onclick = () => windows.activate(id, true); navigation.append(button); buttons.set(id, button);
+    button.dataset['commandId'] = `workspace.focus-${id}`;
+    button.onclick = () => { void registry.invoke(`workspace.focus-${id}`); }; navigation.append(button); buttons.set(id, button);
   }
   bar.append(mode, surface, navigation, clock); root.append(bar);
   const remembered = new Map<WindowId, Surface>();
@@ -49,7 +51,7 @@ export function mountModeline(root: HTMLElement, windows: ReturnType<typeof moun
     const current = transient ? { mode: transientMode, description, name: transient.dataset['editorSurface']! }
       : remembered.get(active.id) ?? { mode: '—', name: active.id === 'page' ? 'KP' : 'Chat', description: 'Pane' };
     mode.textContent = `[${current.mode}]`; mode.setAttribute('aria-label', `${current.description} · ${current.name}`);
-    surface.textContent = current.name; bar.title = `${current.description} · ${current.name}`;
+    surface.textContent = root.dataset['commandPrefix'] ? `${root.dataset['commandPrefix']} · ${current.name}` : current.name; bar.title = `${current.description} · ${current.name}`;
     for (const [id, button] of buttons) {
       button.hidden = !snapshot.windows.some(entry => entry.id === id);
       button.setAttribute('aria-pressed', String(id === snapshot.active));
@@ -58,7 +60,7 @@ export function mountModeline(root: HTMLElement, windows: ReturnType<typeof moun
   const schedule = () => { if (!pending && !disposed) pending = requestAnimationFrame(render); };
   // Mode attributes are an editor-owned projection, not another Vim state.
   const observer = new MutationObserver(schedule);
-  observer.observe(root, { subtree: true, attributes: true, attributeFilter: ['data-vim-mode'] });
+  observer.observe(root, { subtree: true, attributes: true, attributeFilter: ['data-vim-mode', 'data-command-prefix'] });
   const unsubscribe = windows.subscribe(schedule);
   document.addEventListener('focusin', schedule);
   const format = new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });

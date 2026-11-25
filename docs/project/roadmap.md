@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-fruit-picker`
-Execution Contract: `run-contract.kp.fruit-picker-20261125`
-Next Product Milestone: `fruit-picker`
+Current Commitment: `kp-workspace-commands`
+Execution Contract: `run-contract.kp.workspace-commands-20261125`
+Next Product Milestone: `workspace-commands`
 Milestone Authority: approved
 
 ## Where we are going
@@ -27,9 +27,10 @@ left and KP right. **Checked:** [joined chat editors](reviews/2026-11-25-joined-
 **Checked:** [workspace modeline](reviews/2026-11-25-workspace-modeline.md):
 reading spacing, default gutters off and mode/pane/time cues.
 **Checked, awaiting visual judgment:** [pane/line focus](reviews/2026-11-25-workspace-focus-lines.md).
-**Approved:** [floating fruit picker](reviews/2026-11-25-fruit-picker.md): one query,
-five fuzzy suggestions, keyboard selection and exact editor return. Preserve the
-fixed split and current focus treatment; no general picker service.
+**Accepted:** [fruit picker](reviews/2026-11-25-fruit-picker.md) presentation.
+**Checked, awaiting visual judgment:** [workspace commands](reviews/2026-11-25-workspace-commands.md):
+shared action identities behind existing controls and M-x, also opened with
+Ctrl-x Ctrl-x. Preserve original targets, fixed panes and native histories.
 The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.

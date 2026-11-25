@@ -7,13 +7,15 @@ import { messageDocument, richSchema } from './rich-document.ts';
 import { mountRichText, type RichHighlight } from './rich-text.ts';
 import { transcriptNavigation } from './transcript-navigation.ts';
 import { transcriptFolding } from './folding.ts';
+import type { CommandRegistry } from '../editor-commands/registry.ts';
 
-export function mountTranscript(host: HTMLElement, selected: (target: PassageTarget | null) => void, openNote: (id: string) => void, onNavigate: () => void) {
+export function mountTranscript(host: HTMLElement, selected: (target: PassageTarget | null) => void, openNote: (id: string) => void, onNavigate: () => void, registry: CommandRegistry) {
   let snapshot: ChatSnapshot | undefined;
   let cached = new Map<string, { message: ChatMessage; doc: ProseNode; node: ProseNode }>();
   const folding = transcriptFolding(host);
   const surface = mountRichText(host, { profile: 'transcript', label: 'Conversation transcript', minimal: true, onSelection: selectionChanged, onNavigate, plugins: [folding.plugin] });
   const navigation = transcriptNavigation(surface, host, () => snapshot?.branchId, onNavigate);
+  folding.attach(surface.view, registry);
   function selectionChanged() {
     if (!snapshot?.threadId || surface.view.state.selection.empty) { selected(null); return; }
     const { $from, $to, from, to } = surface.view.state.selection;
@@ -79,6 +81,6 @@ export function mountTranscript(host: HTMLElement, selected: (target: PassageTar
       surface.view.dispatch(surface.view.state.tr.setSelection(TextSelection.create(surface.view.state.doc, offset + range.from, offset + range.to)).scrollIntoView());
       surface.focus(); return true;
     },
-    dispose() { surface.dispose(); cached.clear(); }
+    dispose() { folding.dispose(); surface.dispose(); cached.clear(); }
   };
 }

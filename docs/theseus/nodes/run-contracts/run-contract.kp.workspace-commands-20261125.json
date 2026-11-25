@@ -1,0 +1,44 @@
+{
+  "id": "run-contract.kp.workspace-commands-20261125",
+  "kind": "run-contract",
+  "title": "Workspace command registry and M-x",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: approved implementation package complete; stop for command-picker visual and interaction judgment before further scope.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.workspace-commands-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-workspace-commands.md",
+      "summary": "Approved M-x and Ctrl-x Ctrl-x command registry, bounded preservation and review criteria"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run test:fraction-notebook",
+    "npm run test:editor-chat",
+    "npm run visual:editor-chat"
+  ],
+  "revisitWhen": [
+    "User reviews the checked command-picker exemplar."
+  ],
+  "allowedWork": [
+    "Current notebook and chat command surfaces with focused verification and durable evidence"
+  ],
+  "disallowedWork": [
+    "New remote APIs, plugin loaders, renderer changes or session providers"
+  ],
+  "goal": "Search and invoke current workspace actions through shared commands with Alt-x and Ctrl-x Ctrl-x while preserving originating selections and native owners",
+  "target": "task.kp.workspace-commands-20261125",
+  "slices": [
+    {
+      "id": "commands",
+      "title": "Registry, command picker and existing action adapters",
+      "summary": "Shared registry, command picker and current control adapters checked: types, 28 notebook units, 25 chat units, 26 chat/command and 23 notebook Chromium cases, 75 vision checks and orientation pass. Captures inspected; ready for human judgment.",
+      "status": "complete"
+    }
+  ]
+}

@@ -22,7 +22,8 @@ import { createInlinePlugin, enterInline } from './inline-plugin.ts';
 import { InlineSourceView } from './inline-view.ts';
 import { preparePastedSlice } from './clipboard.ts';
 import { BlockView } from './block-view.ts';
-import { emptyBlock, splitContentBlock, nestBlock, outdentBlock, moveBlock, withinStructureLimits } from './structure.ts';
+import { emptyBlock, splitContentBlock, nestBlock, outdentBlock, moveBlock, withinStructureLimits, toggleBlockFold } from './structure.ts';
+import type { CommandRegistry } from '../editor-commands/registry.ts';
 import { proseVim, setVimMode, vimKey } from './vim.ts';
 
 /** A split/paste keeps one original identity and gives new cells fresh UUIDs.
@@ -61,20 +62,24 @@ export interface SourceWorkspace {
   close: () => void;
   run: () => void;
 }
-export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, onChange: (node: ProseNode) => void, onSelect: (id: string) => void, onMode: (mode: string) => void = () => {}, workspace?: SourceWorkspace) {
+export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, onChange: (node: ProseNode) => void, onSelect: (id: string) => void, onMode: (mode: string) => void = () => {}, workspace?: SourceWorkspace, registry?: CommandRegistry, fold?: (id: string) => void) {
   let source: SpecificationView | undefined, bookmark: SelectionBookmark | undefined, scrollTop = 0;
   const closeSource = () => { source?.close(); };
   const sourceWorkspace = workspace && { ...workspace,
     open() { bookmark = view.state.selection.getBookmark(); scrollTop = root.scrollTop; workspace.open(); },
     close() { workspace.close(); if (bookmark) view.dispatch(view.state.tr.setSelection(bookmark.resolve(view.state.doc))); bookmark = undefined; view.focus(); root.scrollTop = scrollTop; }
   };
+  const registered = (id: string, command: Command): Command => (state, dispatch, editor) => {
+    if (!registry || !dispatch) return command(state, dispatch, editor);
+    void registry.invoke(id, { scope: 'notebook', element: view.dom }); return true;
+  };
   const view = new EditorView(root, {
-    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), proseVim(), activeLine(), createInlinePlugin(), keymap({ 'Mod-z': undo, 'Mod-Shift-z': redo, 'Mod-y': redo,
-      'Mod-b': toggleMark(schema.marks['strong']!), 'Mod-i': toggleMark(schema.marks['em']!), Enter: enterField,
-      Tab: nestBlock, 'Shift-Tab': outdentBlock, 'Alt-ArrowUp': moveBlock(-1), 'Alt-ArrowDown': moveBlock(1),
+    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), proseVim(), activeLine(), createInlinePlugin(), keymap({ 'Mod-z': registered('notebook.undo', undo), 'Mod-Shift-z': registered('notebook.redo', redo), 'Mod-y': registered('notebook.redo', redo),
+      'Mod-b': registered('notebook.bold', toggleMark(schema.marks['strong']!)), 'Mod-i': registered('notebook.italic', toggleMark(schema.marks['em']!)), Enter: enterField,
+      Tab: registered('notebook.block.nest', nestBlock), 'Shift-Tab': registered('notebook.block.outdent', outdentBlock), 'Alt-ArrowUp': registered('notebook.block.move-up', moveBlock(-1)), 'Alt-ArrowDown': registered('notebook.block.move-down', moveBlock(1)),
       ArrowLeft: enterInline(-1), ArrowRight: enterInline(1), Backspace: enterInline(-1) }), keymap(baseKeymap)] }),
     attributes: { 'aria-label': 'Fraction notebook', spellcheck: 'true' },
-    nodeViews: { block: (node, outer, getPos) => new BlockView(node, outer, getPos), specification: (node, outer, getPos) => (source = new SpecificationView(node, outer, getPos, onMode, sourceWorkspace)),
+    nodeViews: { block: node => new BlockView(node, id => { if (fold) fold(id); else { toggleBlockFold(id)(view.state, view.dispatch); view.focus(); } }), specification: (node, outer, getPos) => (source = new SpecificationView(node, outer, getPos, onMode, sourceWorkspace, registry)),
       link: (node, outer, getPos) => new InlineSourceView(node, outer, getPos), math: (node, outer, getPos) => new InlineSourceView(node, outer, getPos) },
     handlePaste(view, _event, slice) {
       if (vimKey.getState(view.state) !== 'insert') return true;
@@ -94,6 +99,7 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
   return {
     view,
     closeSource,
+    toggleSource() { source?.toggle(); },
     sourceOpen: () => source?.isOpen() ?? false,
     numbers(mode: LineMode) { source?.numbers(mode); },
     run(command: Command) { const done = command(view.state, view.dispatch, view); view.focus(); return done; },
@@ -105,6 +111,8 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
       else { setVimMode(vimKey.getState(view.state) === 'insert' ? 'normal' : 'insert')(view.state, view.dispatch); view.focus(); }
     },
     mark(name: Mark) { toggleMark(schema.marks[name]!)(view.state, view.dispatch); view.focus(); },
+    canMark(name: Mark) { return !source?.isOpen() && toggleMark(schema.marks[name]!)(view.state); },
+    canUndo: () => undo(view.state), canRedo: () => redo(view.state),
     undo() { undo(view.state, view.dispatch); }, redo() { redo(view.state, view.dispatch); },
     reveal(id: string) {
       const tr = view.state.tr;
@@ -135,11 +143,12 @@ class SpecificationView implements NodeView {
   private readonly gutter = new Compartment();
   private disposed = false;
   private readonly workspace: SourceWorkspace | undefined;
-  constructor(node: ProseNode, outer: EditorView, getPos: () => number | undefined, onMode: (mode: string) => void, workspace?: SourceWorkspace) {
+  constructor(node: ProseNode, outer: EditorView, getPos: () => number | undefined, onMode: (mode: string) => void, workspace?: SourceWorkspace, registry?: CommandRegistry) {
     this.workspace = workspace;
     this.node = node;
     this.dom.className = 'fn-specification'; this.dom.contentEditable = 'false';
     const details = this.details, summary = document.createElement('summary'); summary.textContent = 'Edit animation specification';
+    if (registry) { summary.dataset['commandId'] = 'animation.toggle-source'; summary.onclick = event => { event.preventDefault(); void registry.invoke('animation.toggle-source', { scope: 'notebook', element: outer.dom }); }; }
     const help = document.createElement('p'); help.className = 'fn-code-help'; help.textContent = 'The opening caption is edited above. Edit remaining wording and focusRefs here; the nine mathematical moments retain their order.';
     const host = this.host; host.className = 'fn-code';
     host.append(help); details.append(summary, host); this.dom.append(details);
@@ -189,6 +198,7 @@ class SpecificationView implements NodeView {
     });
   }
   isOpen() { return this.active; }
+  toggle() { if (this.active) this.close(); else this.details.open = true; }
   numbers(mode: LineMode) {
     this.code.dispatch({ effects: this.gutter.reconfigure(mode === 'off' ? [] : lineNumbers({ formatNumber: (number, state) => {
       const active = state.doc.lineAt(state.selection.main.head).number;

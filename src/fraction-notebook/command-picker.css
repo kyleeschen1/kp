@@ -1,0 +1,9 @@
+.kp-fruit-picker.kp-command-picker { width: min(540px, calc(100vw - 32px)); }
+.kp-command-picker .kp-picker-query { position: relative; }
+.kp-command-picker .kp-picker-query[data-empty=true]::before { content: 'M-x'; position: absolute; inset: 10px auto auto 14px; color: var(--fn-muted); pointer-events: none; }
+.kp-command-picker .kp-picker-results { max-height: calc(5 * 3.6em + 8px); }
+.kp-command-picker .kp-picker-results li { height: 3.6em; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-content: center; column-gap: 12px; line-height: 1.45; }
+.kp-command-name, .kp-command-picker small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kp-command-picker small { grid-column: 1 / -1; color: var(--fn-muted); font-size: .8em; }
+.kp-command-picker kbd { font: inherit; font-size: .75em; color: var(--fn-muted); }
+.kp-command-picker [aria-disabled=true] .kp-command-name { color: var(--fn-muted); }
