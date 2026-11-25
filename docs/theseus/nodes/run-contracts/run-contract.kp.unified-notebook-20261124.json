@@ -1,0 +1,41 @@
+{
+  "id": "run-contract.kp.unified-notebook-20261124",
+  "kind": "run-contract",
+  "title": "Unified notebook surface",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1/1 package complete; no wider promotion before visual acceptance.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.unified-notebook-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-unified-notebook-surface.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:fraction-notebook",
+    "npm run typecheck:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "User reviews unified fraction notebook candidate."
+  ],
+  "allowedWork": [
+    "Approved experiment shell, preview styling and modal cursor presentation"
+  ],
+  "disallowedWork": [
+    "Model migration, public reader redesign, semantic animation changes, broader authoring agenda"
+  ],
+  "goal": "One masthead, matching serif prose, reversible split transition and theme-aware modal cursors in the fraction exemplar",
+  "target": "task.kp.unified-notebook-20261124",
+  "slices": [
+    {
+      "id": "surface",
+      "title": "Unified surface and cursor review",
+      "summary": "Checked candidate complete: one masthead, matching prose, reversible split and red modal cursors; ready for human visual judgment.",
+      "status": "complete"
+    }
+  ]
+}

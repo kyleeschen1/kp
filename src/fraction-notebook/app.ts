@@ -12,7 +12,7 @@ import { openFractionDraft } from './storage.ts';
 import { addAuthor, annotateSelection, mountInspector } from './inspector.ts';
 import type { Node as ProseNode } from 'prosemirror-model';
 import { mountStructureControls } from './structure-controls.ts';
-import { setVimMode, vimKey } from './vim.ts';
+import { setVimMode } from './vim.ts';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
@@ -43,18 +43,22 @@ const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
 const wordmark = el('a', 'fn-wordmark', 'Kinetic Press'); wordmark.href = '/'; branding.append(wordmark);
 const editToggle = button('Edit', () => setEditing(!root.classList.contains('fn-editing'))); editToggle.setAttribute('aria-pressed', 'false'); branding.append(editToggle);
 const actions = el('div', 'fn-header-actions'), status = el('p', 'fn-status', storedError ?? 'Opening your local notebook…'); status.setAttribute('role', 'status');
+const writing = el('details', 'fn-menu fn-writing fn-edit-control'), writingSummary = el('summary', '', 'Writing');
+const writingPanel = el('div', 'fn-menu-panel'); writing.append(writingSummary, writingPanel);
+const readingOptions = button('Reading options', () => send({ kind: 'options', open: readingOptions.getAttribute('aria-expanded') !== 'true' }));
+readingOptions.setAttribute('aria-expanded', 'false'); readingOptions.disabled = true;
 const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
 const details = (show: boolean, id?: string) => { root.classList.toggle('fn-details', show); metadata.setAttribute('aria-pressed', String(show)); metadata.textContent = show ? 'Hide details' : 'Show details'; inspector?.show(show, id); };
 const metadata = button('Show details', () => details(!root.classList.contains('fn-details'))); metadata.setAttribute('aria-pressed', 'false');
 const reference = el('a', '', 'Original reading ↗'); reference.href = '/reader/solve-fractional-linear/?reading=reasoning'; reference.target = '_blank'; reference.rel = 'noopener';
-actions.append(metadata, download, reference); header.append(branding, actions);
+writingPanel.append(metadata, download, reference); actions.append(writing, readingOptions); header.append(branding, status, actions);
 const workspace = el('div', 'fn-workspace'), left = el('section', 'fn-left'), right = el('section', 'fn-right');
 left.setAttribute('aria-label', 'Editable notebook'); right.setAttribute('aria-label', 'Reading preview');
-const tools = el('div', 'fn-tools'); tools.append(el('span', 'fn-pane-title', 'NOTEBOOK'));
+const tools = el('div', 'fn-tools');
 const editorHost = el('div', 'fn-editor');
-const mode = button('NORMAL', () => { const current = vimKey.getState(editor.view.state); editor.run(setVimMode(current === 'insert' ? 'normal' : 'insert')); });
-mode.className = 'fn-vim-mode'; mode.setAttribute('aria-label', 'Vim mode');
-const previewTools = el('div', 'fn-tools'); previewTools.append(el('span', 'fn-pane-title', 'READING'));
+const mode = button('NORMAL', () => editor.toggleMode()); mode.onmousedown = event => event.preventDefault();
+mode.className = 'fn-vim-mode fn-edit-control'; mode.setAttribute('aria-label', 'Vim mode'); branding.append(mode);
+const previewTools = el('div', 'fn-tools');
 const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; const followLabel = el('label', 'fn-follow', 'Follow selection'); followLabel.prepend(follow);
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }); previewTools.append(reveal, followLabel);
 const frame = el('iframe', 'fn-preview'); frame.title = 'Fraction reading preview'; frame.src = '/reader/fraction-notebook-preview/';
@@ -66,21 +70,35 @@ split.onpointerdown = event => { split.setPointerCapture(event.pointerId); };
 split.onpointermove = event => { if (split.hasPointerCapture(event.pointerId)) { const rect = workspace.getBoundingClientRect(); resize((event.clientX - rect.left) / rect.width * 100); } };
 split.onpointerup = event => split.releasePointerCapture(event.pointerId);
 split.onkeydown = event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); resize(splitPercent + (event.key === 'ArrowLeft' ? -2 : 2)); } };
-left.append(tools, editorHost); right.append(previewTools, frame); workspace.append(left, split, right); root.append(header, status, workspace);
+left.append(editorHost); right.append(frame); writingPanel.prepend(tools); writingPanel.append(previewTools);
+workspace.append(left, split, right); root.append(header, workspace);
 const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, name => { mode.textContent = name.toUpperCase(); });
 tools.append(button('Bold', () => editor.mark('strong')), button('Italic', () => editor.mark('em')), button('Code', () => editor.mark('code')),
-  button('Undo', () => editor.undo()), button('Redo', () => editor.redo()), button('Add author', () => { addAuthor(editor.view); editor.run(setVimMode('insert')); }), mode,
+  button('Undo', () => editor.undo()), button('Redo', () => editor.redo()), button('Add author', () => { addAuthor(editor.view); editor.run(setVimMode('insert')); }),
   button('Annotate', () => { try { details(true, annotateSelection(editor.view)); } catch (error) { status.textContent = String(error); } }));
 inspector = mountInspector(left, editor.view);
-structure = mountStructureControls(left, editor.view, message => { status.textContent = message; });
-left.insertBefore(left.querySelector('.fn-structure')!, editorHost);
-const hint = el('p', 'fn-writing-hint', 'i to write · Esc for Normal · h j k l / w b to move · v to select · u / Ctrl-r to undo/redo · Tab to nest · Alt-↑↓ to move.');
-left.insertBefore(hint, editorHost);
+structure = mountStructureControls(actions, editor.view, message => { status.textContent = message; });
+actions.querySelector('.fn-structure')!.classList.add('fn-menu', 'fn-edit-control');
+actions.querySelector('.fn-structure-controls')!.classList.add('fn-menu-panel');
+// Tools belong to the single masthead. Their actions retain the editor's
+// selection, then dismiss so a popup cannot cover the passage being edited.
+header.addEventListener('click', event => {
+  if (event.target instanceof Element && event.target.closest('button')) event.target.closest<HTMLDetailsElement>('details.fn-menu')?.removeAttribute('open');
+});
+const dismissMenus = (event: Event) => {
+  if (event instanceof KeyboardEvent && event.key !== 'Escape') return;
+  for (const menu of header.querySelectorAll<HTMLDetailsElement>('.fn-menu[open]')) {
+    if (event instanceof KeyboardEvent || (event.target instanceof Node && !menu.contains(event.target))) menu.open = false;
+  }
+};
+document.addEventListener('pointerdown', dismissMenus); document.addEventListener('keydown', dismissMenus);
 const cellDetails = el('p', 'fn-cell-details'); left.append(cellDetails);
 function setEditing(enabled: boolean) {
   root.classList.toggle('fn-editing', enabled); editToggle.setAttribute('aria-pressed', String(enabled));
+  left.inert = split.inert = !enabled; left.setAttribute('aria-hidden', String(!enabled));
   sessionStorage.setItem('kp.fraction-editing', String(enabled));
   if (enabled) { editor.normal(); editor.view.focus(); }
+  else { details(false); writing.open = false; actions.querySelector('details.fn-structure')?.removeAttribute('open'); editToggle.focus(); }
 }
 setEditing(sessionStorage.getItem('kp.fraction-editing') === 'true');
 function send(data: Record<string, unknown>) { frame.contentWindow?.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin); }
@@ -121,14 +139,17 @@ async function prepare(value: FractionNotebook = notebook, restoration = false) 
 const onMessage = (event: MessageEvent) => {
   if (event.origin !== location.origin || event.source !== frame.contentWindow || !event.data || event.data.protocol !== 'kp.fraction-notebook.v1') return;
   const data = event.data;
-  if (data.kind === 'ready') { frameReady = true; if (latest) send({ kind: 'apply', value: latest.value }); }
+  // A recovering draft can finish checking before the iframe mounts. Commands
+  // become available only after its listener acknowledges readiness.
+  if (data.kind === 'ready') { frameReady = true; readingOptions.disabled = false; if (latest) send({ kind: 'apply', value: latest.value }); }
   if (data.kind === 'applied' && latest?.revision === data.revision && notebook.revision === data.revision) { status.textContent = storedError ?? 'Saved in this browser · preview up to date'; status.dataset['state'] = 'valid'; }
   if (data.kind === 'error') { status.textContent = String(data.message); status.dataset['state'] = 'invalid'; }
+  if (data.kind === 'options-state') readingOptions.setAttribute('aria-expanded', String(data.open === true));
   if (data.kind === 'select' && typeof data.id === 'string') editor.reveal(data.id);
 };
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) await prepare(); })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); inspector?.dispose(); editor.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); inspector?.dispose(); editor.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

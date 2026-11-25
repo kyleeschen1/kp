@@ -159,6 +159,15 @@ export default defineConfig({
     __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
   },
   plugins: [
+    {
+      name: "kp-isolated-dev-cache",
+      apply: "serve",
+      config(config) {
+        // A test server must not rewrite optimized chunks still referenced by
+        // the persistent server's in-memory module graph (notably Vim facets).
+        return { cacheDir: resolve(projectRoot, "node_modules/.vite", `server-${config.server?.port ?? 8000}`) };
+      }
+    },
     kpViteRepertoireDashboard(projectRoot),
     kpViteMechanicsRelations(projectRoot),
     kpViteChangePropagation(projectRoot),

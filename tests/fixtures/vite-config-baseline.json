@@ -78,6 +78,11 @@
       },
       "plugins": [
         {
+          "apply": "serve",
+          "config": "<hook>",
+          "name": "kp-isolated-dev-cache"
+        },
+        {
           "configureServer": "<hook>",
           "generateBundle": "<hook>",
           "handleHotUpdate": "<hook>",
@@ -418,6 +423,11 @@
         "__KP_DEV_REVIEW_BUILD__": "<current-git-identity>"
       },
       "plugins": [
+        {
+          "apply": "serve",
+          "config": "<hook>",
+          "name": "kp-isolated-dev-cache"
+        },
         {
           "configureServer": "<hook>",
           "generateBundle": "<hook>",

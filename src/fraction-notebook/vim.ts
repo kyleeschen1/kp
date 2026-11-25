@@ -1,6 +1,7 @@
 import { Plugin, PluginKey, Selection, TextSelection, type Command } from 'prosemirror-state';
 import { undo, redo } from 'prosemirror-history';
 import { addBlock } from './structure.ts';
+import { normalCursor } from './cursor.ts';
 
 type Mode = 'normal' | 'insert' | 'visual';
 export const vimKey = new PluginKey<Mode>('fraction-vim');
@@ -16,6 +17,7 @@ export function proseVim() {
     state: { init: () => 'normal', apply: (tr, mode) => tr.getMeta(vimKey) ?? mode },
     props: {
       attributes: state => ({ 'data-vim-mode': vimKey.getState(state) ?? 'normal' }),
+      decorations: state => vimKey.getState(state) === 'normal' ? normalCursor(state) : null,
       handleTextInput: view => vimKey.getState(view.state) !== 'insert',
       handleDOMEvents: { beforeinput: (view, event) => {
         if (vimKey.getState(view.state) === 'insert') return false;

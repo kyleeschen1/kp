@@ -1,5 +1,9 @@
 # Reader-like structure editor
 
+Subsequent review: the user says “it looks good” and accepts this candidate.
+The [unified surface refinement](2026-11-24-unified-notebook-surface.md) is the
+approved successor; the evidence and original review packet below remain intact.
+
 Approved by “go” after the ordered agenda; the user selected the existing split
 view. This successor covers agenda items 1–3 in one fraction exemplar. The
 MathML/custom-typesetter exploration is not selected; KaTeX remains authoritative.

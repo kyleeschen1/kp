@@ -2,9 +2,9 @@
   "id": "task.kp.structure-editor-20261124",
   "kind": "task",
   "title": "Edit nested content in the fraction reading",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: review nested structure editing and reader-like split geometry in the fraction exemplar.",
+  "summary": "User accepts the structure editor: it looks good. Approved shell, typography, transition and cursor refinements proceed as a bounded successor.",
   "sourceRefs": [
     {
       "kind": "file",

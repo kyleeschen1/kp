@@ -2,8 +2,8 @@
   "id": "run-contract.kp.structure-editor-20261124",
   "kind": "run-contract",
   "title": "Reader-like structure editor",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: three implementation packages complete; preserve candidate until one exemplar interaction and typography review.",
+  "status": "resolved",
+  "summary": "Human structure-editor review accepted; successor presentation refinement has separate scope.",
   "sourceRefs": [
     {
       "kind": "file",

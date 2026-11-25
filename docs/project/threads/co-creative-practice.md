@@ -32,10 +32,11 @@ workbench latency remain unproved. The approved notebook detour below is current
   composition evidence. Its inspector UI is not an accepted writing experience.
   The [first fraction editor](../reviews/2026-11-24-fraction-notebook-editor.md) is checked.
   The [rich editor](../reviews/2026-11-24-rich-fraction-editor.md) remains recoverable.
-  The approved [structure editor](../reviews/2026-11-24-structure-editor.md) adds
-  nested blocks, titles, folding and bounded Vim in the chosen split view.
-  `run-contract.kp.structure-editor-20261124` owns this exemplar's interaction and
-  typography review. MathML is declined; later agenda items remain in the review.
+  The [structure editor](../reviews/2026-11-24-structure-editor.md) is accepted.
+  The [unified surface](../reviews/2026-11-24-unified-notebook-surface.md) refines
+  headers, typography, split motion and modal cursors under
+  `run-contract.kp.unified-notebook-20261124`. MathML is declined; later agenda
+  items remain in the review.
   Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.

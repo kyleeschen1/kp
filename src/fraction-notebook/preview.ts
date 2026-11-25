@@ -1,5 +1,6 @@
 import { readNotebook, object, type Cell, type Inline } from './model.ts';
 import './blocks.css';
+import './preview.css';
 import { readEndpointCommentary } from '../reader/document/public-api.ts';
 import { renderInlineObject } from './inline-source.ts';
 
@@ -11,6 +12,9 @@ export function mountFractionNotebookPreview(input: {
   let selected: string | undefined;
   let captionId: string | undefined;
   const send = (data: unknown) => window.parent.postMessage(data, window.location.origin);
+  const navigation = document.querySelector<HTMLDetailsElement>('.kp-rising-navigation');
+  const reportOptions = () => send({ protocol: 'kp.fraction-notebook.v1', kind: 'options-state', open: navigation?.open ?? false });
+  navigation?.addEventListener('toggle', reportOptions);
   const append = (el: HTMLElement, content: readonly Inline[]) => {
     for (const inline of content) {
       let node: Node = inline.type === 'text' ? document.createTextNode(inline.text) : renderInlineObject(inline);
@@ -54,6 +58,11 @@ export function mountFractionNotebookPreview(input: {
     try {
       const message = object(event.data);
       if (message['protocol'] !== 'kp.fraction-notebook.v1') return;
+      if (message['kind'] === 'options' && typeof message['open'] === 'boolean' && navigation) {
+        navigation.open = message['open'];
+        if (navigation.open) navigation.querySelector<HTMLElement>('button,a,input')?.focus({ preventScroll: true });
+        return;
+      }
       if (message['kind'] === 'reveal' && typeof message['id'] === 'string') {
         selected = message['id'];
         const target = [...document.querySelectorAll<HTMLElement>('[data-notebook-cell]')].find(el => el.dataset['notebookCell'] === selected);
@@ -115,5 +124,5 @@ export function mountFractionNotebookPreview(input: {
   };
   window.addEventListener('message', onMessage); document.addEventListener('click', onClick);
   send({ protocol: 'kp.fraction-notebook.v1', kind: 'ready' });
-  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); } };
+  return { dispose() { window.removeEventListener('message', onMessage); document.removeEventListener('click', onClick); navigation?.removeEventListener('toggle', reportOptions); } };
 }

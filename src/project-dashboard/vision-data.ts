@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "structure-editor",
-    title: "Write and rearrange nested content beside its reading",
+    id: "unified-notebook",
+    title: "Open one reading surface into a writing workspace",
     approval: "approved",
-    contractId: "run-contract.kp.structure-editor-20261124",
-    finish: "Review one split-view fraction exemplar with reader-like geometry, bounded Vim, nested blocks, optional titles, structural moves and folding. Preserve UUIDs, earlier recovery copies, rich inline editing and the existing mathematical authority.",
-    source: { label: "Approved structure editor", href: "docs/project/reviews/2026-11-24-structure-editor.md" }
+    contractId: "run-contract.kp.unified-notebook-20261124",
+    finish: "Review one masthead, matching serif prose, a reversible opening/closing split and red modal cursors. Preserve the accepted structure editor, document identities, recoverable drafts and native player.",
+    source: { label: "Approved unified notebook surface", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At /experiments/fraction-notebook/, turn on Edit, press i to write, split a block with Enter and nest it with Tab. Use Structure to add a title, move or fold children, then undo. Judge the split writing experience and reader-like geometry. The matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
+  nextJudgment: "At /experiments/fraction-notebook/, toggle Edit in both directions, compare the matching serif prose and try Normal/Insert cursors. Writing, Structure and Reading options now belong to the top masthead. Judge motion, cursor legibility and the uncluttered panes. The matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The matrix proof retains identity, scoped imports and localized reuse evidence. The rich fraction candidate preserves typed fields, metadata, source-aware links/math and a local caption. Its successor adds nested blocks and structural editing without replacing the native player. Human acceptance, general authoring speed and learning remain unproved.",
-      evidence: { label: "Structure editor evidence and review cues", href: "docs/project/reviews/2026-11-24-structure-editor.md" },
+      established: "The user accepts the nested fraction structure editor: optional titles, metadata, folding, reversible block operations and bounded Vim preserve the native player. The matrix proof retains scoped import and reuse evidence. General authoring speed and learning remain unproved; the shell/cursor refinement awaits review.",
+      evidence: { label: "Accepted structure editor", href: "docs/project/reviews/2026-11-24-structure-editor.md" },
       outcome: {
         authority: "approved",
-        id: "nested-fraction-content", title: "Compose content blocks without requiring an article",
-        finish: "Review reader-like split editing, optional block titles, nested main text, list/outline presentation, folding and reversible structural operations, with persistent identities and recoverable migrated drafts.",
-        excludes: "MathML, full themes, slash commands, transclusion UI, book search, nested animation scope, publication or a general editor rollout.",
-        source: { label: "Approved bounded structure editor", href: "docs/project/reviews/2026-11-24-structure-editor.md" }
+        id: "unified-fraction-surface", title: "Read and edit through one coherent surface",
+        finish: "Review a single masthead, shared serif prose, smooth split opening/closing and theme-variable red block/line cursors, preserving current reading context and the accepted structure editor.",
+        excludes: "Public-reader redesign, model migration, full themes, new Vim operators, transclusion, book search or a general editor rollout.",
+        source: { label: "Approved presentation refinement", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Nested fraction structure editing accepted",
+      scope: "One split-view exemplar supports optional titles, metadata, nested main text, list/outline presentation, folding and reversible block operations. V1/V2 drafts remain recoverable and the native player is preserved. This does not establish a general editor or whole-book performance.",
+      source: { label: "User acceptance and bounded evidence", href: "docs/project/reviews/2026-11-24-structure-editor.md" }
+    },
     {
       title: "A short orientation surface is accepted",
       scope: "The user accepts the dashboard and continuity workflow. Initial reconciliation reduced the three entrypoints from 22,754 to 1,544 words; checked budgets keep them short as direction changes. Earlier commitments remain in labeled history.",
@@ -327,6 +332,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves agenda items 1–3: reader-like editing, nested content blocks and direct structure operations, retaining the split view and starting in Vim Normal mode. The earlier candidate stays recoverable.",
       reason: "Content may be composed into articles or reused separately. Optional titles and child structure test that direction in one exemplar. MathML is declined; the wider style, search, transclusion and authoring agenda remains deferred.",
       source: { label: "Approved structure-editing successor", href: "docs/project/reviews/2026-11-24-structure-editor.md" }
+    },
+    {
+      id: "unified-notebook-presentation", on: "2026-11-24",
+      before: "The nested structure editor is accepted, but duplicate mastheads and pane toolbars divide the experience; the reader and editor use different fonts.",
+      after: "The user approves one masthead, editor serif typography in the preview, a sliding split transition and red block/line cursors. Structural editing remains accepted and preserved.",
+      reason: "The writing workspace should open around the reading without losing context or adding another layer of headers. This is a presentation refinement in one exemplar, not a model or public-reader migration.",
+      source: { label: "Approved unified-surface scope", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" }
     }
   ]
 };

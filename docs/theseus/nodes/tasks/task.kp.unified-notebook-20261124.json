@@ -1,0 +1,49 @@
+{
+  "id": "task.kp.unified-notebook-20261124",
+  "kind": "task",
+  "title": "Unify the fraction writing and reading surface",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: implementation and objective checks complete; inspect fraction notebook slide, typography and cursors.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-unified-notebook-surface.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "15 Chromium checks; unified masthead, split reversal, modal cursors, production erasure, previous authoring behavior",
+      "checkedAt": "2026-11-25T01:22:45.396Z"
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --grep 'fractional reasoning'",
+      "status": "passed",
+      "scope": "Canonical reader preservation; concurrent independent server pressure",
+      "checkedAt": "2026-11-25T01:22:46.815Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Full app, node, tests, Svelte and domains; scoped notebook typecheck also passed",
+      "checkedAt": "2026-11-25T01:22:47.445Z"
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "17 notebook model checks; project vision 75 checks also passed",
+      "checkedAt": "2026-11-25T01:22:48.071Z"
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "Five tooling tests including isolated Vite caches; all Playwright, Vite and TypeScript declarations; dependency-direction gate passed",
+      "checkedAt": "2026-11-25T01:22:48.699Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews unified fraction notebook candidate."
+  ]
+}

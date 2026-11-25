@@ -2,8 +2,18 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
+import { resolveConfig } from "vite";
 
 const root = resolve(import.meta.dirname, "..");
+
+test("independent dev servers cannot rewrite each other's optimized module graph", async () => {
+  const config = (port: number) => resolveConfig({ root, configFile: resolve(root, 'vite.config.ts'), server: { port } }, 'serve');
+  const shared = await config(8000), browserCheck = await config(8012), restart = await config(8000);
+  assert.notEqual(shared.cacheDir, browserCheck.cacheDir);
+  assert.equal(shared.cacheDir, restart.cacheDir);
+  assert.ok(shared.cacheDir.startsWith(root + '/'));
+  assert.ok(browserCheck.cacheDir.startsWith(root + '/'));
+});
 
 test("specialized Playwright configurations have one owner below config", () => {
   const rootConfigs = readdirSync(root).filter(name => /^playwright.*\.config\.ts$/.test(name));

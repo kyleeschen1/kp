@@ -19,5 +19,7 @@ export function compileFractionNotebook(value: unknown, canonical: string) {
   return { notebook, notes, beats: definition.beats.map((beat, index) => ({ ...beat, ...steps[index] })) };
 }
 export function fractionPreviewPage(canonical: string): string {
-  return compileKpFractionalLinearEquationLesson(canonical).html.replace('<body', '<body data-kp-fraction-notebook-preview="true"');
+  return compileKpFractionalLinearEquationLesson(canonical).html
+    .replace('</head>', '<link rel="stylesheet" href="/src/fraction-notebook/preview.css">\n</head>')
+    .replace('<body', '<body data-kp-fraction-notebook-preview="true"');
 }

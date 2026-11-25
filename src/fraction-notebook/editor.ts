@@ -9,7 +9,7 @@ import { defaultKeymap } from '@codemirror/commands';
 import { json } from '@codemirror/lang-json';
 import { syntaxHighlighting, HighlightStyle } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
-import { vim } from '@replit/codemirror-vim';
+import { vim, getCM, Vim } from '@replit/codemirror-vim';
 import { type FractionNotebook, type Mark } from './model.ts';
 
 export { schema, toProse, fromProse } from './schema.ts';
@@ -59,12 +59,13 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
       Tab: nestBlock, 'Shift-Tab': outdentBlock, 'Alt-ArrowUp': moveBlock(-1), 'Alt-ArrowDown': moveBlock(1),
       ArrowLeft: enterInline(-1), ArrowRight: enterInline(1), Backspace: enterInline(-1) }), keymap(baseKeymap)] }),
     attributes: { 'aria-label': 'Fraction notebook', spellcheck: 'true' },
-    nodeViews: { block: (node, outer, getPos) => new BlockView(node, outer, getPos), specification: (node, outer, getPos) => new SpecificationView(node, outer, getPos),
+    nodeViews: { block: (node, outer, getPos) => new BlockView(node, outer, getPos), specification: (node, outer, getPos) => new SpecificationView(node, outer, getPos, onMode),
       link: (node, outer, getPos) => new InlineSourceView(node, outer, getPos), math: (node, outer, getPos) => new InlineSourceView(node, outer, getPos) },
     handlePaste(view, _event, slice) {
       if (vimKey.getState(view.state) !== 'insert') return true;
       view.dispatch(view.state.tr.replaceSelection(preparePastedSlice(view.state.doc, slice)).setMeta('paste', true).setMeta('uiEvent', 'paste').scrollIntoView()); return true;
     },
+    handleDOMEvents: { focus: view => { onMode(vimKey.getState(view.state) ?? 'normal'); return false; } },
     dispatchTransaction(transaction) {
       const next = view.state.applyTransaction(transaction); view.updateState(next.state);
       onMode(vimKey.getState(next.state) ?? 'normal');
@@ -78,6 +79,12 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
     view,
     run(command: Command) { const done = command(view.state, view.dispatch, view); view.focus(); return done; },
     normal() { setVimMode('normal')(view.state, view.dispatch); },
+    toggleMode() {
+      const code = document.activeElement instanceof HTMLElement ? CodeView.findFromDOM(document.activeElement) : null;
+      const cm = code && getCM(code);
+      if (cm && root.contains(code.dom)) { Vim.handleKey(cm, cm.state.vim?.insertMode ? '<Esc>' : 'i', 'user'); code.focus(); }
+      else { setVimMode(vimKey.getState(view.state) === 'insert' ? 'normal' : 'insert')(view.state, view.dispatch); view.focus(); }
+    },
     mark(name: Mark) { toggleMark(schema.marks[name]!)(view.state, view.dispatch); view.focus(); },
     undo() { undo(view.state, view.dispatch); }, redo() { redo(view.state, view.dispatch); },
     reveal(id: string) {
@@ -103,7 +110,7 @@ class SpecificationView implements NodeView {
   private readonly code: CodeView;
   private updating = false;
   private node: ProseNode;
-  constructor(node: ProseNode, outer: EditorView, getPos: () => number | undefined) {
+  constructor(node: ProseNode, outer: EditorView, getPos: () => number | undefined, onMode: (mode: string) => void) {
     this.node = node;
     this.dom.className = 'fn-specification'; this.dom.contentEditable = 'false';
     const details = document.createElement('details'), summary = document.createElement('summary'); summary.textContent = 'Edit animation specification';
@@ -114,6 +121,7 @@ class SpecificationView implements NodeView {
       const pos = getPos(); if (pos !== undefined && !(outer.state.selection instanceof NodeSelection && outer.state.selection.from === pos)) {
         outer.dispatch(outer.state.tr.setSelection(NodeSelection.create(outer.state.doc, pos)));
       }
+      reportMode();
     });
     this.code = new CodeView({ doc: node.textContent, parent: host, extensions: [vim(), json(), lineNumbers(), drawSelection(), syntaxHighlighting(HighlightStyle.define([
       { tag: tags.string, color: '#d8c59b' }, { tag: tags.propertyName, color: '#b9cfdf' },
@@ -129,9 +137,18 @@ class SpecificationView implements NodeView {
         const pos = getPos(); if (pos === undefined) return;
         const text = update.state.doc.toString(), tr = outer.state.tr.replaceWith(pos + 1, pos + this.node.nodeSize - 1, text ? schema.text(text) : []);
         tr.setSelection(TextSelection.create(tr.doc, pos + 1 + update.state.selection.main.anchor, pos + 1 + update.state.selection.main.head));
-        outer.dispatch(tr);
-      }), CodeView.theme({ '&': { backgroundColor: 'transparent', color: '#e0dfd4', fontSize: '13px' }, '.cm-content': { fontFamily: 'ui-monospace, monospace' }, '.cm-gutters': { backgroundColor: 'transparent', color: '#8f968f', border: 'none' }, '.cm-scroller': { overflow: 'auto', maxHeight: '540px' }, '&.cm-focused .cm-cursor': { borderLeftColor: '#f4e9c9' }, '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': { backgroundColor: '#40534e' } })
+        outer.dispatch(tr); reportMode();
+      }), CodeView.theme({ '&': { backgroundColor: 'transparent', color: '#e0dfd4', fontSize: '13px' }, '.cm-content': { fontFamily: 'ui-monospace, monospace' }, '.cm-gutters': { backgroundColor: 'transparent', color: '#8f968f', border: 'none' }, '.cm-scroller': { overflow: 'auto', maxHeight: '540px' }, '&.cm-focused .cm-cursor': { borderLeftColor: 'var(--kp-editor-cursor)' }, '&.cm-focused .cm-selectionBackground, .cm-selectionBackground': { backgroundColor: '#40534e' } })
     ] });
+    // Extension facets must share the same CodeMirror instance. Fail visibly
+    // if stale development chunks otherwise leave a silently nonmodal editor.
+    const codeVim = getCM(this.code);
+    if (!codeVim) throw new Error('JSON Vim did not attach. Reload after the development server finishes rebuilding.');
+    const reportMode = () => {
+      const mode = getCM(this.code)?.state.vim;
+      if (this.code.hasFocus) onMode(mode?.insertMode ? 'insert' : mode?.visualMode ? 'visual' : 'normal');
+    };
+    codeVim.on('vim-mode-change', reportMode);
     details.addEventListener('toggle', () => { if (details.open) this.code.requestMeasure(); });
   }
   update(node: ProseNode) {
