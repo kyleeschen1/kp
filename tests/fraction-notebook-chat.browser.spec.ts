@@ -72,6 +72,110 @@ async function selectPassage(page: Page, text: string, message?: string) {
   await page.keyboard.press('Escape');
 }
 
+async function coverage(page: Page, chord = false) {
+  if (chord) { await page.keyboard.press('Control+x'); await page.keyboard.press('Control+x'); }
+  else await page.keyboard.press('Alt+x');
+  const query = page.getByRole('combobox', { name: 'Search commands' }); await query.fill('Vim binding coverage');
+  await expect(page.getByRole('dialog', { name: 'Commands', exact: true }).getByRole('option', { selected: true })).toHaveAttribute('data-command-id', 'workspace.vim-coverage');
+  await query.press('Enter');
+  return page.getByRole('dialog', { name: 'Vim binding coverage', exact: true });
+}
+
+test('Vim coverage searches every reference form, distinguishes support and restores notebook selection', async ({ page }, info) => {
+  const errors: string[] = [], referenceRequests: string[] = [];
+  page.on('pageerror', error => errors.push(error.message)); page.on('request', request => { if (request.url().includes('/vendor/vim-9.2.0000/')) referenceRequests.push(request.url()); });
+  await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  expect(referenceRequests).toHaveLength(0);
+  const prose = page.locator('.fn-editor .ProseMirror'), paragraph = prose.locator('.fn-block-content > p').first(), before = await prose.textContent();
+  const selection = await paragraph.evaluate(node => {
+    node.closest<HTMLElement>('.ProseMirror')!.focus(); const text = document.createTreeWalker(node, NodeFilter.SHOW_TEXT).nextNode()!;
+    const range = document.createRange(); range.setStart(text, 0); range.setEnd(text, 7); const selection = getSelection()!;
+    selection.removeAllRanges(); selection.addRange(range); document.dispatchEvent(new Event('selectionchange')); return selection.toString();
+  });
+  const panel = await coverage(page, true), search = panel.getByRole('searchbox', { name: 'Search Vim bindings' });
+  await expect(search).toBeFocused(); await expect(panel.getByLabel('Editor surface')).toHaveValue('notebook');
+  await expect(panel.getByRole('status', { name: 'Binding results' })).toContainText('1369 matching bindings');
+  await expect(panel.getByRole('listitem')).toHaveCount(80);
+  await panel.getByRole('button', { name: 'Show next 80' }).click(); await expect(panel.getByRole('listitem')).toHaveCount(160);
+  await search.fill('diw'); await panel.getByLabel('Support', { exact: true }).selectOption('missing');
+  await expect(panel.locator('[data-binding-tag="v_iw"]').first()).toHaveAttribute('data-support', 'missing');
+  await panel.getByLabel('Editor surface').selectOption('json'); await panel.getByLabel('Support', { exact: true }).selectOption('unverified');
+  await expect(panel.locator('[data-binding-tag="v_iw"]').first()).toHaveAttribute('data-support', 'unverified');
+  await panel.getByLabel('Editor surface').selectOption('notebook'); await panel.getByLabel('Support', { exact: true }).selectOption('implemented'); await search.fill('undo');
+  await expect(panel.locator('[data-binding-tag="u"]')).toHaveAttribute('data-support', 'implemented');
+  await panel.getByLabel('Support', { exact: true }).selectOption('all'); await search.fill('word');
+  await page.screenshot({ path: info.outputPath('vim-coverage-dark.png') });
+  await search.press('Escape'); await expect(panel).toBeHidden(); await expect(prose).toBeFocused();
+  expect(await page.evaluate(() => getSelection()?.toString())).toBe(selection); expect(await prose.textContent()).toBe(before);
+  // The read-only checklist must not have added a native undo step or changed marks.
+  await prose.press('Alt+x'); const query = page.getByRole('combobox', { name: 'Search commands' }); await query.fill('bold'); await query.press('Enter');
+  await expect(paragraph.locator('strong')).toHaveText(selection); await prose.press('ControlOrMeta+z'); await expect(paragraph.locator('strong')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Styles', exact: true }).click(); await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+  await page.getByRole('button', { name: 'Close styles', exact: true }).click(); await prose.focus(); await coverage(page);
+  await search.fill('delete'); await page.screenshot({ path: info.outputPath('vim-coverage-light.png') });
+  await page.setViewportSize({ width: 390, height: 650 });
+  const box = (await panel.boundingBox())!; expect(box.x).toBeGreaterThanOrEqual(0); expect(box.x + box.width).toBeLessThanOrEqual(390);
+  expect(await panel.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  await page.screenshot({ path: info.outputPath('vim-coverage-phone.png') });
+  await panel.getByRole('button', { name: 'Close Vim binding coverage' }).click(); await expect(prose).toBeFocused();
+  expect(referenceRequests.length).toBeGreaterThan(0); expect(errors).toEqual([]);
+});
+
+test('Vim coverage follows JSON and chat editors without disturbing source carets, drafts or streaming', async ({ page, context }) => {
+  const f = await fixture(context);
+  try {
+    await open(page); await connect(page);
+    await page.getByText('Edit animation specification', { exact: true }).click();
+    const source = page.locator('.fn-source-host .cm-content'); await source.press('g'); await source.press('g'); await source.press('0'); await source.press('i'); await source.press('ArrowRight');
+    let panel = await coverage(page); await expect(panel.getByLabel('Editor surface')).toHaveValue('json');
+    await panel.getByRole('searchbox', { name: 'Search Vim bindings' }).fill('substitute');
+    await expect(panel.locator('[data-binding-tag=":substitute"]')).toHaveAttribute('data-support', 'missing');
+    await page.keyboard.press('Escape'); await expect(source).toBeFocused(); await page.keyboard.insertText(' '); await expect(source.locator('.cm-line').first()).toHaveText('{ ');
+    await source.press('ControlOrMeta+z'); await page.getByRole('button', { name: 'Close buffer', exact: true }).click();
+    await write(page, 'request'); await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    await write(page, 'before after'); await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
+    panel = await coverage(page, true); await expect(panel.getByLabel('Editor surface')).toHaveValue('composer');
+    f.peer.delta('Output keeps arriving.'); await expect(page.getByRole('textbox', { name: 'Conversation transcript' })).toContainText('Output keeps arriving.');
+    await expect(panel.getByRole('searchbox', { name: 'Search Vim bindings' })).toBeFocused(); await page.keyboard.press('Escape');
+    await expect(input(page)).toBeFocused(); await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('before aftXer');
+    await input(page).press('Escape'); panel = await coverage(page); await expect(panel.getByLabel('Editor surface')).toHaveValue('transcript');
+    await panel.getByRole('searchbox', { name: 'Search Vim bindings' }).fill('undo');
+    await expect(panel.locator('[data-binding-tag="u"]')).toHaveAttribute('data-support', 'not-applicable');
+    await page.keyboard.press('Escape'); await expect(page.getByRole('textbox', { name: 'Conversation transcript' })).toBeFocused();
+    f.peer.finish('Output keeps arriving.'); expect(f.peer.sends()).toHaveLength(1);
+  } finally { await f.close(); }
+});
+
+test('Vim coverage can close while its lazy reference loads without reopening or taking focus later', async ({ page }) => {
+  let release = () => {}; const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/src/fraction-notebook/vim-coverage-content.ts*', async route => { await gate; await route.continue(); });
+  await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  const prose = page.locator('.fn-editor .ProseMirror'); await prose.focus();
+  const panel = await coverage(page); await expect(panel).toContainText('Loading Vim reference');
+  await page.keyboard.press('Escape'); await expect(panel).toBeHidden(); await expect(prose).toBeFocused();
+  const loaded = page.waitForResponse(response => response.url().includes('/vendor/vim-9.2.0000/index.txt'));
+  release(); await loaded; await page.waitForLoadState('networkidle');
+  await expect(panel).toBeHidden(); await expect(prose).toBeFocused();
+  await coverage(page, true); await expect(panel.getByRole('searchbox', { name: 'Search Vim bindings' })).toBeFocused();
+  await page.keyboard.press('Escape');
+});
+
+test('Vim coverage reports a load failure, offers explicit reload recovery, and keeps browsing inert', async ({ page }) => {
+  let failures = 1;
+  await page.route('**/src/fraction-notebook/vim-coverage-content.ts*', async route => { if (failures-- > 0) await route.abort(); else await route.continue(); });
+  await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.fn-editor .ProseMirror').focus();
+  const panel = await coverage(page); await expect(panel).toContainText('Reference could not load');
+  await expect(panel).toContainText('browser can cache a failed module import');
+  await panel.getByRole('button', { name: 'Reload workspace', exact: true }).click();
+  await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.fn-editor .ProseMirror').focus(); await coverage(page);
+  await expect(panel.getByRole('searchbox', { name: 'Search Vim bindings' })).toBeFocused();
+  await panel.getByLabel('Mode', { exact: true }).selectOption('ex'); await panel.getByRole('searchbox', { name: 'Search Vim bindings' }).fill(':write');
+  await expect(panel.locator('[data-binding-tag=":write"]')).toHaveAttribute('data-support', 'overridden');
+  await panel.locator('[data-binding-tag=":write"]').getByText('Support notes', { exact: true }).click();
+  await expect(panel.locator('[data-binding-tag=":write"]')).toContainText('no Vim filename/range writer');
+  await page.keyboard.press('Escape');
+});
+
 test('M-x and C-x C-x dispatch notebook commands to the captured selection with five visible rows', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url);

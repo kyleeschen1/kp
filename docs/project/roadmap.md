@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-workspace-commands`
-Execution Contract: `run-contract.kp.workspace-commands-20261125`
-Next Product Milestone: `workspace-commands`
+Current Commitment: `kp-vim-coverage`
+Execution Contract: `run-contract.kp.vim-coverage-20261125`
+Next Product Milestone: `vim-coverage`
 Milestone Authority: approved
 
 ## Where we are going
@@ -26,11 +26,13 @@ why this becomes the organizing direction and what it supersedes.
 left and KP right. **Checked:** [joined chat editors](reviews/2026-11-25-joined-chat-composer.md).
 **Checked:** [workspace modeline](reviews/2026-11-25-workspace-modeline.md):
 reading spacing, default gutters off and mode/pane/time cues.
-**Checked, awaiting visual judgment:** [pane/line focus](reviews/2026-11-25-workspace-focus-lines.md).
 **Accepted:** [fruit picker](reviews/2026-11-25-fruit-picker.md) presentation.
-**Checked, awaiting visual judgment:** [workspace commands](reviews/2026-11-25-workspace-commands.md):
-shared action identities behind existing controls and M-x, also opened with
-Ctrl-x Ctrl-x. Preserve original targets, fixed panes and native histories.
+**Checked, awaiting judgment:** [pane/line focus](reviews/2026-11-25-workspace-focus-lines.md)
+and [workspace commands](reviews/2026-11-25-workspace-commands.md). M-x and
+Ctrl-x Ctrl-x share registered actions, preserving targets and native histories.
+**Checked:** [Vim binding coverage](reviews/2026-11-25-vim-binding-coverage.md):
+a pinned reference searchable from M-x, with per-editor support. Existing behavior
+only; implementing missing bindings is separate.
 The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
@@ -82,8 +84,8 @@ blocker. Prior completed architecture and maintenance work stays complete.
   This is a discussion handoff, not a product pivot or a new implementation run.
 - Open `/?view=dashboard#project-vision` for direction, approval boundaries,
   recent evidence, proposed successor and the next human judgment.
-- Run `npm run project:orientation` for the same briefing plus a fresh read of
-  the explicitly named Theseus contract. A source snapshot is not a live monitor.
+- Run `npm run project:orientation` for this briefing and the named Theseus
+  contract. Source snapshots are not live monitors.
 - These sources are current in `.worktrees/kp-product`. The parallel checkout
   still has older direction; integration belongs to its owner, not an implicit merge.
 - Read this page, [the active thread](threads/co-creative-practice.md), and the

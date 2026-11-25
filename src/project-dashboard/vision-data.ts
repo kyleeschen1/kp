@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-workspace-commands",
-    title: "Find workspace actions without losing the editing context",
+    id: "kp-vim-coverage",
+    title: "See which Vim bindings work in each editor",
     approval: "approved",
-    contractId: "run-contract.kp.workspace-commands-20261125",
-    finish: "Existing workspace controls and a searchable M-x picker invoke shared command identities. Alt-x and Ctrl-x Ctrl-x open the same query; commands retain their originating target, availability checks and native history. Preserve fixed panes and data owners.",
-    source: { label: "Approved workspace commands", href: "docs/project/reviews/2026-11-25-workspace-commands.md" }
+    contractId: "run-contract.kp.vim-coverage-20261125",
+    finish: "M-x opens a searchable pinned Vim reference with implemented, missing, partial, overridden, unverified and not-applicable states per editor surface. Preserve native key behavior, selections and histories; implementing missing features remains separate.",
+    source: { label: "Approved Vim coverage checklist", href: "docs/project/reviews/2026-11-25-vim-binding-coverage.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, select notebook text, press Ctrl-x Ctrl-x, find Bold and execute it. Undo should affect only that editor. Repeat in the chat composer, try Alt-x and inspect disabled-command explanations. Judge the compact list and reliable context return.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open M-x or Ctrl-x Ctrl-x and choose Vim binding coverage. Search diw, delete or undo; compare prose, source and transcript support. Judge the checklist and support notes, then Escape back to the original selection.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook, persistent conversation and fruit-picker presentation are accepted; the equal split, joined chat/folding and modeline are checked. Pane/line focus and workspace commands have checked candidates awaiting judgment. Native data and independent Spindle ownership remain foundations.",
+      established: "The notebook, persistent conversation and fruit-picker presentation are accepted; the equal split, joined chat/folding and modeline are checked. Pane/line focus, workspace commands and Vim coverage have checked candidates awaiting judgment. Native data and independent Spindle ownership remain foundations.",
       evidence: { label: "Recorded multiplexer vision and boundaries", href: "docs/project/2026-11-25-multiplexer-vision.md" },
       outcome: {
         authority: "approved",
-        id: "workspace-commands", title: "Invoke existing actions through a shared command registry",
-        finish: "M-x and Ctrl-x Ctrl-x discover current workspace actions, with five visible rows, availability reasons and shared button/transient/Ex dispatch. Execution preserves the originating editor or object and its native undo history.",
-        excludes: "Remote command APIs, plugin loaders, new session providers, layout redesign, full Emacs compatibility or renderer migration.",
-        source: { label: "Approved command registry and two launch bindings", href: "docs/project/reviews/2026-11-25-workspace-commands.md" }
+        id: "vim-coverage", title: "Inspect Vim support and gaps from the workspace",
+        finish: "A complete pinned command index is searchable from M-x, with explicit per-surface support and evidence. The checklist distinguishes missing behavior from overrides, partial support and unverified library behavior without consulting temporary command availability.",
+        excludes: "New Vim behaviors, keymap migration, plugin loading, remote execution, layout redesign or renderer changes.",
+        source: { label: "Approved coverage reference and panel", href: "docs/project/reviews/2026-11-25-vim-binding-coverage.md" }
       }
     },
     {
@@ -480,6 +480,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves shared command identities and M-x, adding Ctrl-x Ctrl-x as an alternative launcher. Existing buttons remain connected to those commands.",
       reason: "Make current actions discoverable while preserving the pane, selection and object they operate on. The fruit milestone stays finite; broader resource pickers and remote protocols remain separate.",
       source: { label: "Approved workspace command proposal", href: "docs/project/reviews/2026-11-25-workspace-commands.md" }
+    },
+    {
+      id: "select-vim-binding-coverage", on: "2026-11-25",
+      before: "Workspace commands have a checked candidate. Prose, source editors and transcript navigation expose different Vim behavior without one complete support reference.",
+      after: "The user approves an M-x coverage checklist built from a pinned Vim command index, with explicit implementation states for each surface.",
+      reason: "Make missing and partial behavior visible before choosing more bindings to implement. The prior command and focus candidates retain their review status; this inventory does not authorize new Vim behavior.",
+      source: { label: "Approved Vim coverage scope", href: "docs/project/reviews/2026-11-25-vim-binding-coverage.md" }
     }
   ]
 };

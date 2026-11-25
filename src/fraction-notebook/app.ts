@@ -24,6 +24,7 @@ import { mountWindows } from './windows.ts';
 import { mountModeline } from './modeline.ts';
 import { mountFruitPicker } from './fruit-picker.ts';
 import { mountCommandPicker } from './command-picker.ts';
+import { mountVimCoverage } from './vim-coverage-panel.ts';
 import { CommandRegistry, available, unavailable, type Availability, type CommandScope } from '../editor-commands/registry.ts';
 import './windows.css';
 import './modeline.css';
@@ -146,6 +147,7 @@ const captureReturn = () => {
 };
 const picker = mountFruitPicker(root, actions, () => captureReturn().restore, registry);
 const commandPicker = mountCommandPicker(root, actions, registry, captureReturn);
+const vimCoverage = mountVimCoverage(root, registry, captureReturn);
 actions.append(button('Styles', () => styles.toggle(), 'workspace.open-styles', 'workspace'));
 const numbers = mountLineNumbers(editorHost, editor.view);
 const commands = mountCommands(workspace, editor.view, {
@@ -267,6 +269,6 @@ const onMessage = (event: MessageEvent) => {
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); vimCoverage.dispose(); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

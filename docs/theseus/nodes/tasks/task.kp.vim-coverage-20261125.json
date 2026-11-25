@@ -1,0 +1,75 @@
+{
+  "id": "task.kp.vim-coverage-20261125",
+  "kind": "task",
+  "title": "Inspect Vim support and missing bindings from the workspace",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: implementation and focused checks complete; inspect the searchable coverage panel and support notes in the canonical fraction notebook.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-vim-binding-coverage.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:vim-coverage",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:15:42.795Z",
+      "notes": "Initial run: one passed, three failed. Search fields consumed Escape before dialog cancel, so the panel now owns Escape dismissal in capture. A failed native module import remained cached; recovery now explicitly reloads the workspace rather than offering an ineffective same-URL retry. Cancellation regression passed initially."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:27:00.909Z",
+      "notes": "Complete notebook/chat TypeScript consumer passed."
+    },
+    {
+      "command": "npm run test:vim-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:27:02.072Z",
+      "notes": "Four tests passed: exact pinned reference extraction and hash, support/evidence boundaries, source-version audit and full-search examples."
+    },
+    {
+      "command": "npm run visual:vim-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:27:02.771Z",
+      "notes": "Four Chromium cases passed after the recorded Escape and cached-import repairs. Covers lazy loading, 80-row paging, profiles, filters, original selections, source caret, chat streaming, cancellation, failure recovery and light/dark/narrow layouts."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'M-x and C-x|command picker keeps|command prefix cancels|fruit picker restores|note and composer Vim|late form'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:27:03.507Z",
+      "notes": "Six existing command-picker, source, note/composer history and form ownership preservation cases passed."
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:27:04.187Z",
+      "notes": "73 configs and 176 projects checked. Added only the new scoped config to the baseline after auditing discovery; previous 72 hashes unchanged. The scoped npm command runs Chromium only."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:27:04.862Z",
+      "notes": "Roadmap, thread and source-linked dashboard agree on the approved coverage milestone and review cues."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:27:23.481Z",
+      "notes": "75 tests passed after final checked-candidate summary. Initial entrypoint word-budget failures were repaired by shortening existing roadmap/thread prose; no ceiling changed."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the Vim binding coverage panel or requests a scoped adjustment."
+  ]
+}

@@ -6,8 +6,7 @@ Last Updated: 2026-11-25
 ## Current boundary
 
 The [roadmap](../roadmap.md) owns direction; the [charter](../strategy.md)
-and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain
-author-first rationale and the learner/practice/library horizon.
+and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rationale.
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
@@ -44,7 +43,9 @@ workbench latency remain unproved. The approved notebook detour below is current
   spacing and default gutters off. [Pane/line focus](../reviews/2026-11-25-workspace-focus-lines.md)
   is checked, awaiting visual judgment. Accepted: [fruit picker](../reviews/2026-11-25-fruit-picker.md)
   presentation. Checked, awaiting judgment: [workspace commands](../reviews/2026-11-25-workspace-commands.md),
-  shared controls and M-x/Ctrl-x Ctrl-x with original targets and histories. The
+  shared controls and M-x/Ctrl-x Ctrl-x with original targets and histories.
+  Checked: [Vim coverage](../reviews/2026-11-25-vim-binding-coverage.md), a searchable
+  support audit; new behavior remains separate. The
   [multiplexer vision](../2026-11-25-multiplexer-vision.md) records later scope.
   Preserve native history and domain ownership.
   Motions/text objects remain parked; MathML declined.

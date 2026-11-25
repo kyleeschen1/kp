@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.vim-coverage-20261125",
+  "kind": "run-contract",
+  "title": "Vim binding coverage from M-x",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: one approved package complete. Candidate and evidence are ready; no further binding implementation or generalization is authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.vim-coverage-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-vim-binding-coverage.md",
+      "summary": "Approved checklist, per-surface coverage states and M-x entrypoint"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run test:vim-coverage",
+    "npm run visual:vim-coverage"
+  ],
+  "revisitWhen": [
+    "User judges the panel or selects a bounded follow-up."
+  ],
+  "allowedWork": [
+    "Read-only binding catalog and panel, command entrypoint, focused tests and durable evidence"
+  ],
+  "disallowedWork": [
+    "New Vim behaviors, keymap migration, plugin loader or remote execution"
+  ],
+  "goal": "Search the pinned Vim reference and distinguish support per editor without changing key behavior",
+  "target": "task.kp.vim-coverage-20261125",
+  "slices": [
+    {
+      "id": "coverage",
+      "title": "Reference inventory, support audit and searchable coverage panel",
+      "summary": "Checked candidate: 1358 reference forms plus 11 KP extensions, lazy read-only panel, eight surface profiles, evidence and full search. Four unit and four browser cases, six existing preservation cases, typecheck, vision, orientation and configuration checks passed. Ready for human judgment; no new Vim behavior.",
+      "status": "complete"
+    }
+  ]
+}

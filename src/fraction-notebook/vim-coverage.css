@@ -1,0 +1,24 @@
+.kp-vim-coverage { position: fixed; inset: 0 0 auto auto; margin: 0; box-sizing: border-box; width: min(680px, 100vw); max-width: 100vw; max-height: none; padding: 0 24px 24px; overflow: auto; background: var(--fn-background); color: var(--fn-text); border: 0; border-left: 1px solid var(--fn-border); box-shadow: -8px 0 24px var(--fn-shadow); font: var(--kp-document-body-weight) var(--kp-document-body-size)/var(--kp-document-body-leading) var(--fn-font); }
+.kp-vim-coverage::backdrop { background: transparent; }
+.kp-vim-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: 0; z-index: 1; background: var(--fn-background); padding-block: 16px; border-bottom: 1px solid var(--fn-border); }
+.kp-vim-heading h2 { margin: 0; font-size: 1.2em; font-weight: var(--kp-document-heading-weight); }
+.kp-vim-coverage button, .kp-vim-coverage input, .kp-vim-coverage select { font: inherit; color: inherit; background: var(--fn-background); border: 1px solid var(--fn-border); border-radius: 4px; padding: 6px 8px; }
+.kp-vim-coverage :focus-visible { outline-color: var(--fn-focus); }
+.kp-vim-coverage input { caret-color: var(--kp-editor-cursor); }
+.kp-vim-filters { display: flex; flex-wrap: wrap; gap: 12px; }
+.kp-vim-filters label { display: grid; gap: 4px; flex: 1; min-width: 140px; }
+.kp-vim-filters select { min-width: 0; width: 100%; }
+.kp-vim-content > input { display: block; width: 100%; box-sizing: border-box; margin-block: 16px; }
+.kp-vim-coverage p { line-height: var(--kp-document-body-leading); }
+.kp-vim-legend, .kp-vim-context, .kp-vim-row small, .kp-vim-row details { color: var(--fn-muted); font-size: .85em; }
+.kp-vim-row { border-top: 1px solid var(--fn-border); padding-block: 14px; }
+.kp-vim-row-heading { display: flex; gap: 10px; align-items: baseline; }
+.kp-vim-check { min-width: 3ch; font-family: ui-monospace, monospace; color: var(--fn-focus); }
+.kp-vim-coverage code { font-family: ui-monospace, monospace; color: var(--fn-text); overflow-wrap: anywhere; }
+.kp-vim-row p { margin-block: 6px; }
+.kp-vim-coverage summary { cursor: pointer; padding-block: 5px; }
+.kp-vim-row details { overflow-wrap: anywhere; }
+.kp-vim-content > details { margin-top: 20px; }
+.kp-vim-coverage pre { white-space: pre-wrap; font-size: .8em; overflow-wrap: anywhere; }
+.kp-vim-coverage a { color: var(--fn-link); }
+@media (max-width: 520px) { .kp-vim-coverage { padding-inline: 16px; } .kp-vim-filters { gap: 8px; } .kp-vim-filters label { min-width: 0; } }
