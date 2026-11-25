@@ -22,8 +22,8 @@ export const richSchema = new Schema({
       toDOM: node => ['div', { class: 'kp-chat-math', 'data-chat-math': node.attrs['source'], 'data-display': 'true' }, String(node.attrs['source'])] },
     chat_message: { content: 'block+', group: 'block', defining: true, isolating: true,
     attrs: { id: {}, role: {}, complete: { default: true }, clipped: { default: false } },
-    toDOM: node => ['article', { class: 'kp-chat-message', 'data-message-id': node.attrs['id'] },
-      ['div', { class: 'kp-chat-speaker', contenteditable: 'false' }, `${node.attrs['role'] === 'user' ? 'You' : 'Codex'}${node.attrs['complete'] ? '' : ' · responding'}${node.attrs['clipped'] ? ' · display shortened' : ''}`],
+    toDOM: node => ['article', { class: 'kp-chat-message', 'data-message-id': node.attrs['id'], 'data-role': node.attrs['role'], 'aria-label': node.attrs['role'] === 'user' ? 'Your message' : 'Codex response' },
+      ...(node.attrs['clipped'] ? [['div', { class: 'kp-chat-speaker', contenteditable: 'false' }, 'Display shortened']] : []),
       ['div', { class: 'kp-chat-text' }, 0]]
   } }),
   marks: commonmark.spec.marks.update('link', { ...commonmark.spec.marks.get('link'),

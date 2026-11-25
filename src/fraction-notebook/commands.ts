@@ -24,9 +24,11 @@ export const bindings = [
   ['JSON', '/ / ? · n / N', 'CodeMirror Vim search forward/backward and repeat'],
   ['JSON', 'Shift-Enter', 'Run this animation source'], ['JSON', 'Cmd/Ctrl-Enter', 'Close buffer, retaining draft'],
   ['Inline source', 'Enter / Tab / Esc', 'Finish link/math source and return to prose; ordinary text-input keys apply'],
-  ['Chat', 'i / Esc · v · h j k l · w b · u', 'Rich composer, transcript and notes use the prose Vim subset'],
+  ['Chat', 'i / Esc', 'Resume the retained draft / save and return to the reading point'],
+  ['Chat', 'C-c · :h', 'Commands / keybindings; Escape restores the invoking selection'],
+  ['Chat', '[m / ]m · { / } · / · n / N', 'Messages / paragraphs / search and repeat in loaded output'],
   ['Chat', 'Cmd/Ctrl-Enter', 'Send only from the composer; save from a note'],
-  ['Chat', ':h / :w / :source', 'Local help / save / Markdown source; CodeMirror Vim in source'],
+  ['Chat', ':w / :source', 'Save / Markdown source; CodeMirror Vim in source'],
   ...exCommands.map(command => ['Both', `:${command.names.join(' / :')}`, command.description]),
   ['Both', ':set number / :set nonumber', 'Show absolute line numbers / hide them'],
   ['Both', ':set relativenumber', 'Show relative line numbers around the cursor']

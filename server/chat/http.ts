@@ -23,6 +23,7 @@ export function chatHttp(service: ChatService) {
       for await (const chunk of request) { const buffer = Buffer.from(chunk); bytes += buffer.length; if (bytes > 262144) { json(413, { error: 'Chat request is too large.' }); return; } chunks.push(buffer); }
       const action = readChatAction(JSON.parse(Buffer.concat(chunks).toString('utf8')));
       json(200, await service.action(action));
-    } catch (error) { json(error instanceof ChatConflict ? 409 : 422, { error: error instanceof Error ? error.message : String(error) }); }
+    } catch (error) { json(error instanceof ChatConflict ? 409 : 422, { error: error instanceof Error ? error.message : String(error),
+      code: error instanceof ChatConflict ? error.code : 'invalid' }); }
   };
 }

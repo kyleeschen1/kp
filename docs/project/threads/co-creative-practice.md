@@ -36,8 +36,8 @@ workbench latency remain unproved. The approved notebook detour below is current
   is accepted. The [workbench object adapter](../reviews/2026-11-25-workbench-kp-object-boundary.md)
   keeps drafts/commands independent of KP validation/rendering.
   [Persistent chat](../reviews/2026-11-25-kp-persistent-chat.md) is accepted.
-  The user approves [rich chat with notes and passage comments/tags](../reviews/2026-11-25-kp-rich-chat.md).
-  Review rich chat and return to annotated text; preserve recovery.
+  [Rich chat and annotations](../reviews/2026-11-25-kp-rich-chat.md) are checked.
+  Review the approved [keyboard column, retained draft and context return](../reviews/2026-11-25-keyboard-chat.md).
   Automatic notebook edits and broader extraction remain excluded.
   Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.

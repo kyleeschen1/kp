@@ -46,6 +46,7 @@ export class FileChatStore implements ChatStore {
     if (!this.lock || await readFile(join(this.directory, 'owner.json'), 'utf8') !== this.lock) throw new Error('Chat storage ownership changed. Original preserved.');
     if (await this.raw() !== this.previous) throw new Error('Chat recovery changed outside this server. Original preserved; reload after reconciliation.');
     const next = JSON.stringify(readChatRecord(value));
+    if (Buffer.byteLength(next) > 8 * 1024 * 1024) throw new Error('Chat recovery is full. Original saved data retained.');
     const path = join(this.directory, `conversation.${randomUUID()}.tmp`);
     const handle = await open(path, 'wx', 0o600);
     try { await handle.writeFile(next); await handle.sync(); } finally { await handle.close(); }

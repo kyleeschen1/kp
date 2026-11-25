@@ -14,6 +14,7 @@ export function mountNotes(host: HTMLElement, actions: {
   save: (action: ChatAction) => Promise<ChatSnapshot>;
   reveal: (target: PassageTarget) => void;
   resolve: (target: PassageTarget) => ResolvedPassage;
+  help?: () => void;
 }) {
   const intro = element('p', 'kp-chat-context', 'Notes and tags stay with this conversation. They are included in a message only when you add them yourself.');
   const search = element('input', 'kp-notes-search'); search.type = 'search'; search.placeholder = 'Find a note or tag'; search.setAttribute('aria-label', 'Find notes and tags');
@@ -34,13 +35,18 @@ export function mountNotes(host: HTMLElement, actions: {
   let current: ChatSnapshot | undefined, draft: AnnotationDraft | undefined, revision = 0;
   let editor: RichSurface | undefined, dirty = false, generation = 0, saving = false, conflict = false, recovered = false, disposed = false;
   let rendered = '';
+  const key = () => `${recoveryKey}:${current?.branchId ?? 'main'}`;
   function remember() {
     if (!draft || !current) return;
-    try { sessionStorage.setItem(recoveryKey, JSON.stringify({ project: current.project, draft, revision })); }
+    try { sessionStorage.setItem(key(), JSON.stringify({ project: current.project, draft, revision })); }
     catch { state.textContent = 'Local recovery unavailable. Save this note before closing.'; }
   }
-  function forget() { try { sessionStorage.removeItem(recoveryKey); } catch { /* Saved project copy remains authoritative. */ } }
-  function finish() { editor?.dispose(); editor = undefined; draft = undefined; dirty = false; conflict = false; form.hidden = true; forget(); draw(); }
+  function forget() { try { sessionStorage.removeItem(key()); if (current?.branchId === 'main') sessionStorage.removeItem(recoveryKey); } catch { /* Saved project copy remains authoritative. */ } }
+  function finish() {
+    const ownedFocus = form.contains(document.activeElement);
+    editor?.dispose(); editor = undefined; draft = undefined; dirty = false; conflict = false; form.hidden = true; forget(); draw();
+    if (ownedFocus && !host.hidden) search.focus();
+  }
   function describe() {
     save.disabled = saving || conflict || !draft || (!draft.body.trim() && !draft.tags.length);
     cancel.disabled = saving;
@@ -48,7 +54,7 @@ export function mountNotes(host: HTMLElement, actions: {
     state.textContent = conflict ? 'Note conflict · your local text is retained' : saving ? 'Saving note…' : dirty ? 'Unsaved note · Save note or Cmd/Ctrl+Enter' : 'Saved to this project';
   }
   function changed() { dirty = true; generation++; remember(); describe(); }
-  function edit(note: AnnotationDraft & { revision?: number }, focusTags = false) {
+  function edit(note: AnnotationDraft & { revision?: number }, focusTags = false, takeFocus = true) {
     if (saving) return;
     if (draft?.id === note.id && editor && dirty) { if (focusTags) tags.focus(); else editor.focus(); return; }
     if (dirty && !confirm('Discard the unsaved note draft and open another note?')) return;
@@ -58,10 +64,10 @@ export function mountNotes(host: HTMLElement, actions: {
     caption.textContent = draft.target.kind === 'passage' ? 'Passage comment' : 'Conversation note';
     quote.hidden = draft.target.kind !== 'passage'; quote.textContent = draft.target.kind === 'passage' ? draft.target.quote : '';
     tags.value = draft.tags.join(', '); form.hidden = false;
-    editor = mountRichText(editorHost, { profile: 'comment', label: 'Note text', text: draft.body, limit: noteLimit,
+    editor = mountRichText(editorHost, { profile: 'comment', label: 'Note text', text: draft.body, limit: noteLimit, minimal: true, onHelp: () => actions.help?.(),
       onChange: body => { if (draft) { draft.body = body; changed(); } }, onSubmit: () => { void submit(); }, onSave: () => { void submit(); } });
     describe(); remember();
-    if (focusTags) tags.focus(); else editor.focus();
+    if (takeFocus) { if (focusTags) tags.focus(); else editor.focus(); }
   }
   tags.oninput = () => {
     if (!draft) return;
@@ -133,12 +139,12 @@ export function mountNotes(host: HTMLElement, actions: {
       if (!recovered) {
         recovered = true;
         try {
-          const raw = sessionStorage.getItem(recoveryKey);
+          const raw = sessionStorage.getItem(key()) ?? (snapshot.branchId === 'main' ? sessionStorage.getItem(recoveryKey) : null);
           if (raw) {
             const value: unknown = JSON.parse(raw);
             if (!value || typeof value !== 'object' || !('project' in value) || value.project !== snapshot.project || !('draft' in value) || !('revision' in value)) throw new Error('Saved note recovery belongs to another project or is unreadable.');
             const recoveredDraft = readAnnotationDraft(value.draft), savedRevision = noteRevision(value.revision);
-            edit({ ...recoveredDraft, revision: savedRevision }); dirty = true; notice.textContent = 'Recovered an unsaved note. Nothing was sent to Codex.';
+            edit({ ...recoveredDraft, revision: savedRevision }, false, false); dirty = true; notice.textContent = 'Recovered an unsaved note. Nothing was sent to Codex.';
           }
         } catch (error) { notice.textContent = `${String(error)} Original recovery bytes retained.`; }
       }
@@ -153,7 +159,8 @@ export function mountNotes(host: HTMLElement, actions: {
       edit({ id: crypto.randomUUID(), target, body: '', tags: [] }, focusTags);
     },
     edit(id: string) { const note = current?.annotations.find(note => note.id === id && !note.archived); if (note) edit(note); },
-    dirty: () => dirty, remember,
+    dirty: () => dirty, remember, editor: () => editor,
+    focus() { if (editor) editor.focus(); else search.focus(); },
     dispose() { disposed = true; if (dirty) remember(); editor?.dispose(); host.replaceChildren(); }
   };
 }

@@ -29,45 +29,62 @@ async function open(page: Page) {
   await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
   const toggle = page.getByRole('button', { name: 'Chat', exact: true });
   if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
-  await expect(page.getByRole('textbox', { name: 'Your message' })).toBeEnabled();
+  await expect(page.locator('.kp-chat')).not.toHaveAttribute('data-phase', 'loading');
+  await page.getByRole('textbox', { name: 'Conversation transcript' }).focus();
 }
-async function connect(page: Page) { await page.getByRole('button', { name: 'Connect', exact: true }).click(); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready'); }
-const input = (page: Page) => page.getByRole('textbox', { name: 'Your message' });
+async function command(page: Page, label: string) {
+  const menu = page.getByRole('dialog', { name: 'Chat commands' });
+  if (await menu.isVisible()) await page.keyboard.press('Escape');
+  if (!await page.locator('.kp-chat').evaluate(panel => panel.contains(document.activeElement))) await page.locator('.kp-chat input:visible, .kp-chat [role=textbox]:visible').first().focus();
+  await page.keyboard.press('Control+c');
+  await expect(menu).toBeVisible();
+  await menu.getByRole('button', { name: label, exact: true }).click();
+  // A form acknowledgement may close the dialog between these observations.
+  // Its DOM persists, so inspecting the title must not wait for visible role.
+  if (await menu.isVisible() && await page.locator('.kp-chat-transient .kp-transient-heading strong').textContent() === 'Commands') await page.keyboard.press('Escape');
+}
+async function connect(page: Page) { await command(page, 'Connect'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready'); }
+const input = (page: Page) => page.locator('.kp-rich-composer .ProseMirror');
 async function write(page: Page, text: string) {
-  const editor = input(page); await editor.focus();
+  const editor = input(page);
+  if (!await editor.isVisible()) await page.getByRole('textbox', { name: 'Conversation transcript' }).press('i');
+  await editor.focus();
   if (await editor.getAttribute('data-vim-mode') !== 'insert') await editor.press('i');
   await editor.fill(text);
 }
-const send = (page: Page) => page.getByRole('button', { name: 'Send', exact: true });
-async function selectPassage(page: Page, text: string) {
-  await page.locator('.kp-chat-message .kp-chat-text').last().evaluate((root, phrase) => {
+async function send(page: Page) { await input(page).press('ControlOrMeta+Enter'); }
+async function selectPassage(page: Page, text: string, message?: string) {
+  await (message ? page.locator(`[data-message-id="${message}"] .kp-chat-text`) : page.locator('.kp-chat-message .kp-chat-text').last()).evaluate((root, phrase) => {
     root.closest<HTMLElement>('[role=textbox]')!.focus();
     const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); let current: Node | null;
     while ((current = walk.nextNode())) {
       const offset = current.textContent?.indexOf(phrase) ?? -1;
       if (offset < 0) continue;
+      current.parentElement?.scrollIntoView({ block: 'center' });
       const range = document.createRange(); range.setStart(current, offset); range.setEnd(current, offset + phrase.length);
       const selection = getSelection()!; selection.removeAllRanges(); selection.addRange(range);
       document.dispatchEvent(new Event('selectionchange')); return;
     }
     throw new Error(`Passage not found: ${phrase}`);
   }, text);
-  await expect(page.getByRole('button', { name: 'Comment selection', exact: true })).toBeEnabled();
+  await page.keyboard.press('Control+c');
+  await expect(page.getByRole('dialog').getByRole('button', { name: 'Comment selection', exact: true })).toBeEnabled();
+  await page.keyboard.press('Escape');
 }
 
 test('rich composer and transcript support passage comments, tags and notes across reload without changing model history', async ({ page, context }, info) => {
   const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   try {
     await page.setViewportSize({ width: 1440, height: 1000 }); await open(page); await connect(page);
-    await expect(input(page)).toHaveAttribute('data-vim-mode', 'normal');
-    await page.locator('.kp-rich-composer').getByRole('button', { name: 'Markdown', exact: true }).click();
+    await expect(page.getByRole('textbox', { name: 'Conversation transcript' })).toHaveAttribute('data-vim-mode', 'normal');
+    await command(page, 'Markdown source');
     const source = page.getByRole('textbox', { name: 'Your message Markdown' });
     await source.press('i'); await source.fill('Please keep the **broader plan** visible.\n\n- Preserve context\n- Let me take notes');
-    await page.locator('.kp-rich-composer').getByRole('button', { name: 'Rich text', exact: true }).click();
+    await command(page, 'Rich text');
     await expect(input(page).locator('strong')).toHaveText('broader plan'); await expect(input(page).locator('li')).toHaveCount(2);
     expect(errors).toEqual([]);
     await expect.poll(() => f.store.data.draft).toContain('broader plan');
-    await send(page).click(); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
     f.peer.finish('## Where we are\n\nKeep the **broader plan** visible while exploring.\n\n```js\nconst next = "notes";\n```\n\n[Reference](https://example.com)\n\nAn inline $x^2$ and a fraction:\n\n$$\\frac{1}{2}$$');
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     await expect(page.locator('.kp-chat-message').last().locator('h2')).toHaveText('Where we are');
@@ -78,7 +95,7 @@ test('rich composer and transcript support passage comments, tags and notes acro
     const transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
     await transcript.press('ControlOrMeta+b'); await transcript.press('x');
     await expect(page.locator('.kp-chat-message').last().locator('strong')).toHaveText('broader plan');
-    await page.getByRole('button', { name: 'Comment selection', exact: true }).click();
+    await command(page, 'Comment selection');
     const note = page.getByRole('textbox', { name: 'Note text', exact: true });
     await note.press('i'); await note.fill('Return here after the detour.');
     await page.getByRole('textbox', { name: 'Note tags' }).fill('orientation, return-path');
@@ -87,33 +104,160 @@ test('rich composer and transcript support passage comments, tags and notes acro
     await page.getByRole('button', { name: 'Show passage', exact: true }).click();
     await expect(page.locator('.kp-chat-highlight')).toContainText('broader plan');
     await page.screenshot({ path: info.outputPath('rich-chat-annotated.png') });
-    await selectPassage(page, 'visible while exploring.'); await page.getByRole('button', { name: 'Tag selection', exact: true }).click();
+    await selectPassage(page, 'visible while exploring.'); await command(page, 'Tag selection');
     await page.getByRole('textbox', { name: 'Note tags' }).fill('exploration'); await page.getByRole('button', { name: 'Save note', exact: true }).click();
-    await page.getByRole('button', { name: 'Add note', exact: true }).click();
+    await command(page, 'New note');
     await note.press('i'); await note.fill('A small independent conversation note.'); await note.press('ControlOrMeta+Enter');
     await expect(page.locator('.kp-note-card')).toHaveCount(3);
     await page.screenshot({ path: info.outputPath('rich-chat-notes.png') });
     expect(JSON.stringify(f.store.data.messages)).toBe(history); expect(f.peer.sends()).toHaveLength(1);
-    await page.reload(); await page.getByRole('button', { name: 'Notes (3)', exact: true }).click();
+    await page.reload(); await command(page, 'Open notes');
     await expect(page.locator('.kp-note-card')).toHaveCount(3);
     await page.getByRole('searchbox', { name: 'Find notes and tags' }).fill('#orientation'); await expect(page.locator('.kp-note-card')).toHaveCount(1);
     await page.getByRole('button', { name: 'Show passage', exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Comment selection', exact: true })).toBeEnabled();
+    await page.keyboard.press('Control+c'); await expect(page.getByRole('dialog').getByRole('button', { name: 'Comment selection', exact: true })).toBeEnabled(); await page.keyboard.press('Escape');
     expect(errors).toEqual([]);
   } finally { await f.close(); }
+});
+
+test('quiet reading retains the passage and independent draft caret through Insert, Escape and a sticky transient', async ({ page, context }, info) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: '# An explanation\n\nThe original passage stays here.\n\n' + Array.from({ length: 20 }, (_, i) => `Paragraph ${i}: keep a place while reading.`).join('\n\n') }] }];
+  try {
+    await page.setViewportSize({ width: 1440, height: 960 }); await open(page); await connect(page);
+    const transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
+    await expect(page.locator('.kp-chat-draft')).toBeHidden(); await expect(page.locator('.kp-chat-heading')).toHaveCount(0);
+    await expect(page.locator('.kp-chat button:visible')).toHaveCount(0);
+    await selectPassage(page, 'original passage', 'reply-1');
+    const before = await page.locator('.kp-chat-history').evaluate(node => node.scrollTop);
+    const geometry = () => page.locator('.kp-chat-history').evaluate(node => ({ top: node.scrollTop, height: node.scrollHeight, viewport: node.clientHeight,
+      rectTop: node.getBoundingClientRect().top, firstTop: node.querySelector('[data-message-id]')?.getBoundingClientRect().top,
+      status: node.parentElement?.querySelector('.kp-chat-status')?.textContent,
+      view: localStorage.getItem('kp.chat-view.v1:kp-product:main') }));
+    const beforeGeometry = await geometry();
+    await transcript.press('i'); const insertGeometry = await geometry();
+    await input(page).pressSequentially('before after'); await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
+    await input(page).press('Escape'); await expect(page.locator('.kp-chat-draft')).toBeHidden();
+    await expect(transcript).toBeFocused(); expect(await page.evaluate(() => getSelection()?.toString())).toBe('original passage');
+    expect(Math.abs(await page.locator('.kp-chat-history').evaluate(node => node.scrollTop) - before), JSON.stringify({ beforeGeometry, insertGeometry, afterGeometry: await geometry() })).toBeLessThan(3);
+    await transcript.press('i'); await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('before aftXer');
+    await page.keyboard.press('Control+c'); const menu = page.getByRole('dialog', { name: 'Chat commands' });
+    await expect(menu).toBeVisible(); await page.keyboard.press('h'); await expect(menu).toContainText('Keybindings');
+    await page.keyboard.press('Backspace'); await expect(menu.locator('.kp-transient-heading strong')).toHaveText('Commands');
+    await page.keyboard.press('Escape'); await expect(input(page)).toBeFocused();
+    await input(page).press('Escape'); await page.screenshot({ path: info.outputPath('keyboard-chat-reading.png') });
+    await transcript.press('i'); await page.screenshot({ path: info.outputPath('keyboard-chat-draft.png') });
+    await page.keyboard.press('Control+c'); await page.screenshot({ path: info.outputPath('keyboard-chat-commands.png') });
+    expect(f.peer.sends()).toHaveLength(0); expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
+test('streaming preserves an older reading position and search dismissal restores context', async ({ page, context }) => {
+  const f = await fixture(context);
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: Array.from({ length: 36 }, (_, i) => `Paragraph ${i}. An older mathematical observation.`).join('\n\n') }] }];
+  try {
+    await open(page); await connect(page); await write(page, 'Continue'); await send(page);
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    const transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
+    await transcript.press('g'); await transcript.press('g'); await transcript.press('Control+d');
+    const history = page.locator('.kp-chat-history'), before = await history.evaluate(node => node.scrollTop);
+    const geometry = () => history.evaluate(node => ({ top: node.scrollTop, height: node.scrollHeight, viewport: node.clientHeight,
+      firstTop: node.querySelector('[data-message-id]')?.getBoundingClientRect().top, focused: document.activeElement?.getAttribute('aria-label'),
+      caret: getSelection()?.rangeCount ? getSelection()!.getRangeAt(0).getBoundingClientRect().toJSON() : null }));
+    const beforeGeometry = await geometry();
+    f.peer.delta('New output below the older passage.'); await expect(history).toContainText('New output below');
+    expect(Math.abs(await history.evaluate(node => node.scrollTop) - before), JSON.stringify({ beforeGeometry, afterGeometry: await geometry() })).toBeLessThan(3); await expect(page.locator('.kp-chat-unread')).toBeVisible();
+    await transcript.press('/'); const search = page.getByRole('searchbox', { name: 'Search loaded conversation' }); await search.fill('Paragraph 30');
+    await expect(page.getByRole('dialog')).toContainText('1 matches'); await search.press('Escape');
+    expect(Math.abs(await history.evaluate(node => node.scrollTop) - before)).toBeLessThan(3);
+    await transcript.press('/'); await search.fill('Paragraph 30'); await search.press('Enter');
+    await expect(transcript).toBeFocused(); expect(await page.evaluate(() => getSelection()?.toString())).toBe('Paragraph 30');
+    f.peer.finish('New output below the older passage.'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
+    await transcript.press('G'); await expect(page.locator('.kp-chat-unread')).toBeHidden(); expect(f.peer.sends()).toHaveLength(1);
+  } finally { await f.close(); }
+});
+
+test('topics, explicit orientation and branches retain drafts and return paths through reload', async ({ page, context }, info) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  f.peer.turns = [1, 2].map(n => ({ id: 'turn-' + n, status: 'completed', items: [{ type: 'agentMessage', id: 'reply-' + n, text: `Response ${n}: a stable passage.` }] }));
+  try {
+    await open(page); await connect(page); await write(page, 'Main unfinished question'); await input(page).press('Escape');
+    await selectPassage(page, 'stable passage', 'reply-1');
+    await command(page, 'Where am I?'); await page.getByRole('button', { name: 'Edit objective', exact: true }).click();
+    await page.getByRole('textbox', { name: 'What are we working toward?' }).fill('Understand how the parts support the whole.');
+    await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
+    await expect.poll(() => f.store.data.context.objective).toContain('parts support');
+    await command(page, 'Topics'); await page.getByRole('button', { name: 'Name this topic', exact: true }).click();
+    await page.getByRole('textbox', { name: 'Topic name' }).fill('Explore the first step');
+    await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click(); await expect.poll(() => f.store.data.context.topics.length).toBe(1);
+    await command(page, 'Save return point');
+    await command(page, 'Branch here'); await page.getByRole('textbox', { name: 'Branch name' }).fill('A bounded detour');
+    await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.locator('.kp-chat')).not.toHaveAttribute('data-branch-id', 'main');
+    await expect(page.locator('.kp-chat-message')).toHaveCount(1); expect(f.peer.calls.find(call => call.method === 'thread/fork')?.params['lastTurnId']).toBe('turn-1');
+    await write(page, 'Detour unfinished question'); await input(page).press('Escape');
+    await command(page, 'Where am I?'); await expect(page.getByRole('dialog')).toContainText('Understand how the parts support the whole.');
+    await page.screenshot({ path: info.outputPath('keyboard-chat-orientation.png') }); await page.keyboard.press('Escape');
+    await command(page, 'Return to passage'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-branch-id', 'main');
+    await expect(input(page)).toHaveText('Main unfinished question'); await expect(page.locator('.kp-chat-message')).toHaveCount(2);
+    await page.reload(); await expect(page.locator('.kp-chat')).toHaveAttribute('data-branch-id', 'main');
+    await command(page, 'Branches'); await page.getByRole('button', { name: 'A bounded detour', exact: true }).click();
+    await expect(page.locator('.kp-chat')).not.toHaveAttribute('data-branch-id', 'main'); await expect(input(page)).toHaveText('Detour unfinished question');
+    expect(f.peer.sends()).toHaveLength(0); expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
+test('a late form acknowledgement cannot dismiss a newer transient or steal its focus', async ({ page, context }) => {
+  const f = await fixture(context); let release: (() => void) | undefined, waiting = false;
+  const save = f.store.save.bind(f.store);
+  f.store.save = async value => {
+    if (value.context.revision === 1 && !waiting) { waiting = true; await new Promise<void>(resolve => { release = resolve; }); }
+    await save(value);
+  };
+  try {
+    await open(page); await command(page, 'Where am I?');
+    await page.getByRole('button', { name: 'Edit objective', exact: true }).click();
+    await page.getByRole('textbox', { name: 'What are we working toward?' }).fill('Keep the larger plan visible.');
+    await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
+    await expect.poll(() => waiting).toBe(true);
+    await page.keyboard.press('Escape'); await command(page, 'Keybindings'); release?.();
+    await expect.poll(() => f.store.data.context.objective).toContain('larger plan');
+    await expect(page.locator('.kp-chat-transient .kp-transient-heading strong')).toHaveText('Keybindings');
+    await expect.poll(() => page.getByRole('dialog').evaluate(node => node.contains(document.activeElement))).toBe(true);
+    await page.keyboard.press('Escape'); await expect(page.getByRole('textbox', { name: 'Conversation transcript' })).toBeFocused();
+    expect(f.peer.sends()).toHaveLength(0);
+  } finally { release?.(); await f.close(); }
+});
+test('another tab changing branches cannot redirect a local draft or steal the reading surface', async ({ page, context }) => {
+  const f = await fixture(context), second = await context.newPage();
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: 'A shared starting passage.' }] }];
+  try {
+    await open(page); await connect(page); await open(second); await write(page, 'Belongs to main'); await input(page).press('Escape');
+    await expect.poll(() => f.store.data.draft).toBe('Belongs to main');
+    await selectPassage(second, 'starting passage'); await command(second, 'Branch here');
+    await second.getByRole('textbox', { name: 'Branch name' }).fill('Other tab detour');
+    await second.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(second.locator('.kp-chat')).not.toHaveAttribute('data-branch-id', 'main');
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'branch-changed');
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-branch-id', 'main'); await expect(input(page)).toHaveText('Belongs to main');
+    await write(page, 'Keep the main edit'); await input(page).press('ControlOrMeta+Enter'); expect(f.peer.sends()).toHaveLength(0);
+    await command(page, 'Branches'); await page.getByRole('button', { name: '• Main conversation', exact: true }).click();
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready'); await expect(input(page)).toHaveText('Keep the main edit');
+    expect(f.store.data.branchId).toBe('main'); expect(f.store.data.parked[0]?.draft).toBe('');
+  } finally { await second.close(); await f.close(); }
 });
 test('note and composer Vim state stay independent and unsaved notes recover without sending', async ({ page, context }) => {
   const f = await fixture(context);
   try {
     await open(page); await write(page, 'Composer stays here');
     await expect(page.locator('.kp-chat-save')).toHaveText('Saved to this project');
-    await page.getByRole('button', { name: 'Add note', exact: true }).click();
+    await command(page, 'New note');
     const note = page.getByRole('textbox', { name: 'Note text', exact: true });
     await expect(note).toHaveAttribute('data-vim-mode', 'normal'); await note.press('i'); await note.fill('Unfinished observation'); await note.press('Escape');
     await expect(note).toHaveAttribute('data-vim-mode', 'normal'); await expect(page.locator('.kp-rich-composer .ProseMirror')).toHaveAttribute('data-vim-mode', 'insert');
     await note.press(':'); await page.getByRole('textbox', { name: 'Note text command' }).fill('h'); await page.getByRole('textbox', { name: 'Note text command' }).press('Enter');
-    await expect(page.locator('.kp-rich-comment .kp-rich-help')).toBeVisible(); await expect(page.locator('.fn-help')).toBeHidden();
-    await page.reload(); await page.getByRole('button', { name: /Notes \(0\)/ }).click();
+    await expect(page.getByRole('dialog')).toContainText('Keybindings'); await expect(page.locator('.fn-help')).toBeHidden();
+    await page.reload(); await command(page, 'Open notes');
     await expect(note).toHaveText('Unfinished observation'); await expect(page.locator('.kp-rich-composer .ProseMirror')).toHaveText('Composer stays here');
     await page.getByRole('button', { name: 'Save note', exact: true }).click(); await expect(page.locator('.kp-note-card')).toHaveCount(1);
     expect(f.peer.sends()).toHaveLength(0);
@@ -127,7 +271,7 @@ test('changed and unavailable comment targets retain their quotation; note confl
   try {
     await open(page); await open(second);
     for (const tab of [page, second]) {
-      await tab.getByRole('button', { name: 'Notes (1)', exact: true }).click();
+      await command(tab, 'Open notes');
       await expect(tab.locator('.kp-note-card')).toContainText('Passage changed');
       await expect(tab.locator('.kp-note-card .kp-note-quote')).toHaveText('Original');
       await tab.getByRole('button', { name: 'Edit note', exact: true }).click();
@@ -146,10 +290,10 @@ test('conversation streams, survives panel close/reload/server restart, and pres
     await page.setViewportSize({ width: 1440, height: 960 }); await open(page);
     const frame = page.frameLocator('iframe'); await expect(frame.locator('body')).toHaveAttribute('data-kp-reader-hydrated', 'true');
     const stage = await frame.locator('.kp-reader-equation-stage').elementHandle();
-    await connect(page); await write(page, 'Help me keep our broader plan in view.'); await send(page).click();
+    await connect(page); await write(page, 'Help me keep our broader plan in view.'); await send(page);
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
     f.peer.delta('We are working on persistent conversation.'); await expect(page.locator('.kp-chat-history')).toContainText('persistent conversation');
-    await page.getByRole('button', { name: 'Close chat' }).click(); expect(await stage?.evaluate(node => node.isConnected)).toBe(true);
+    await command(page, 'Close chat'); expect(await stage?.evaluate(node => node.isConnected)).toBe(true);
     f.peer.finish('We are working on persistent conversation. The notebook and animation remain separate.');
     await page.getByRole('button', { name: 'Chat', exact: true }).click();
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
@@ -157,7 +301,7 @@ test('conversation streams, survives panel close/reload/server restart, and pres
     await page.reload(); await expect(input(page)).toHaveText('A saved follow-up');
     await expect(page.locator('.kp-chat-history')).toContainText('The notebook and animation remain separate.');
     await f.restart(); await page.reload(); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'disconnected');
-    await page.getByRole('button', { name: 'Resume conversation' }).click(); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
+    await command(page, 'Resume conversation'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     expect(f.peer.sends()).toHaveLength(1); await expect(input(page)).toHaveText('A saved follow-up');
     await page.screenshot({ path: info.outputPath('chat-desktop.png') });
     await page.getByRole('button', { name: 'Styles', exact: true }).click();
@@ -172,13 +316,13 @@ test('typing while Send waits preserves the next draft and interrupt ends the cu
   const f = await fixture(context); let release!: () => void;
   try {
     await open(page); await connect(page); f.peer.nextSend = () => new Promise<void>(resolve => { release = resolve; });
-    await input(page).press('i'); await input(page).pressSequentially('First message'); await input(page).press('ControlOrMeta+Enter');
+    await page.getByRole('textbox', { name: 'Conversation transcript' }).press('i'); await input(page).pressSequentially('First message'); await input(page).press('ControlOrMeta+Enter');
     await expect.poll(() => f.peer.sends().length).toBe(1);
     await write(page, 'Next draft, typed before acknowledgement'); release();
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
     await expect(input(page)).toHaveText('Next draft, typed before acknowledgement');
     await expect(page.locator('.kp-chat-save')).toHaveText('Saved to this project');
-    await page.getByRole('button', { name: 'Interrupt', exact: true }).click();
+    await command(page, 'Interrupt response');
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     await page.reload(); await expect(input(page)).toHaveText('Next draft, typed before acknowledgement');
     expect(f.peer.sends()).toHaveLength(1);
@@ -189,14 +333,14 @@ test('uncertain delivery stays unsent across reconnect until the author explicit
   try {
     await open(page); await connect(page);
     f.peer.nextSend = async () => { throw new Error('Fixture connection dropped before acknowledgement'); };
-    await write(page, 'Keep this message'); await send(page).click();
+    await write(page, 'Keep this message'); await send(page);
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'uncertain');
-    await expect(input(page)).toHaveText('Keep this message'); await expect(send(page)).toBeDisabled();
-    await page.getByRole('button', { name: 'Disconnect', exact: true }).click();
-    await page.getByRole('button', { name: 'Resume conversation' }).click();
+    await expect(input(page)).toHaveText('Keep this message'); await input(page).press('ControlOrMeta+Enter'); expect(f.peer.sends()).toHaveLength(1);
+    await command(page, 'Disconnect');
+    await command(page, 'Resume conversation');
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'uncertain'); expect(f.peer.sends()).toHaveLength(1);
     await page.screenshot({ path: info.outputPath('chat-uncertain.png') });
-    await page.getByRole('button', { name: 'I checked; keep draft unsent' }).click(); await expect(send(page)).toBeEnabled();
+    await command(page, 'I checked; keep draft unsent'); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     expect(f.peer.sends()).toHaveLength(1);
   } finally { await f.close(); }
 });
@@ -210,7 +354,7 @@ test('two tabs retain competing drafts instead of overwriting; the author can lo
     const conflicted = (await page.locator('.kp-chat-save').textContent())?.includes('conflict') ? page : second;
     const retained = await input(conflicted).textContent(); await conflicted.waitForTimeout(800);
     await expect(input(conflicted)).toHaveText(retained!); expect(f.store.data.draft).not.toBe(retained);
-    conflicted.once('dialog', dialog => dialog.accept()); await conflicted.getByRole('button', { name: 'Load saved draft' }).click();
+    conflicted.once('dialog', dialog => dialog.accept()); await command(conflicted, 'Load saved draft');
     await expect(input(conflicted)).toHaveText(f.store.data.draft);
   } finally { await second.close(); await f.close(); }
 });
@@ -220,8 +364,9 @@ test('phone keeps chat controls usable and saved draft recovery never auto-sends
     await page.setViewportSize({ width: 390, height: 844 });
     await page.addInitScript(() => sessionStorage.setItem('kp.editor-chat.unsaved.v1', JSON.stringify({ text: 'Recovered local thought', revision: 0, threadId: null })));
     await open(page); await expect(input(page)).toHaveText('Recovered local thought');
-    await page.getByRole('button', { name: 'Save draft', exact: true }).click();
+    await command(page, 'Save draft');
     await expect(page.locator('.kp-chat-save')).toHaveText('Saved to this project'); expect(f.peer.sends()).toHaveLength(0);
+    await page.getByRole('textbox', { name: 'Conversation transcript' }).press('i');
     const bounds = await input(page).boundingBox(); expect(bounds).not.toBeNull(); expect(bounds!.y + bounds!.height).toBeLessThan(844);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: info.outputPath('chat-phone.png') });

@@ -1,0 +1,68 @@
+{
+  "id": "task.kp.keyboard-chat-20261125",
+  "kind": "task",
+  "title": "Read, compose and return through one keyboard chat column",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: checked keyboard conversation exemplar awaits author interaction review at the fraction notebook Chat panel.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-keyboard-chat.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "service and protocol",
+      "checkedAt": "2026-11-25T14:10:05.723Z",
+      "notes": "23 passed; migration, native prefix branches, delivery, storage, isolation and rollback"
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "chat and notebook types",
+      "checkedAt": "2026-11-25T14:10:06.947Z",
+      "notes": "Passed without relaxing types"
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "canonical chat exemplar",
+      "checkedAt": "2026-11-25T14:10:07.579Z",
+      "notes": "14 Chromium checks passed; independent positions, transient lifecycle, source, notes, context, branches, cross-tab recovery and live privacy"
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "notebook semantic preservation",
+      "checkedAt": "2026-11-25T14:10:08.285Z",
+      "notes": "20 passed"
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "notebook and reader preservation",
+      "checkedAt": "2026-11-25T14:10:09.104Z",
+      "notes": "21 passed; reader 1250344 JS bytes, 308778 gzip, 414 modules, no notebook editor"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "strategic source consistency",
+      "checkedAt": "2026-11-25T14:10:09.795Z",
+      "notes": "75 passed; roadmap reading budget preserved"
+    },
+    {
+      "command": "npm run check:editor-chat:codex",
+      "status": "passed",
+      "scope": "installed native lifecycle",
+      "checkedAt": "2026-11-25T14:10:10.506Z",
+      "notes": "Connected and restarted empty thread without inference; populated native branching remains unverified"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews retained draft and passage return, transient commands, explicit orientation and native branch experience."
+  ]
+}

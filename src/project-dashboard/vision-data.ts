@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-rich-chat",
-    title: "Write and annotate rich conversations inside KP",
+    id: "kp-keyboard-chat",
+    title: "Read, compose and recover context in one conversation column",
     approval: "approved",
-    contractId: "run-contract.kp.rich-chat-20261125",
-    finish: "Use a rich composer and formatted transcript, attach comments and tags to selected passages, and reopen saved notes with their original context. Preserve the accepted conversation and review one chat exemplar before generalization.",
-    source: { label: "Approved rich chat exemplar", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" }
+    contractId: "run-contract.kp.keyboard-chat-20261125",
+    finish: "Navigate a quiet transcript, reveal the retained draft with Insert, and return to the same passage with Escape. Use transient commands, notes, explicit context, topics and native branches while preserving delivery and recovery. Review one chat exemplar before generalization.",
+    source: { label: "Approved keyboard chat exemplar", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Discuss the requested single-column chat sketch: output motions, a retained draft appearing in Insert mode, shared reader formatting and an on-demand Ctrl-C menu. The checked rich-chat candidate at http://127.0.0.1:8000/experiments/fraction-notebook/ preserves notes and recovery, but its toolbars are not accepted. Agree the interaction before revising the exemplar; topics and branches remain design questions.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, choose Chat and read an old passage. Press i, continue a draft, Escape, then i again. Judge preserved position and focus. Use C-c for notes, topics, branches and Where am I. Does the quiet column make it easier to resume an unfinished thought and recover the whole?",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The fraction notebook and persistent conversation are accepted. The independent object adapter preserves KP validation and preview ownership. Rich chat and passage notes are the approved successor; broader Spindle/library extraction and contextual object revision remain separate return paths.",
-      evidence: { label: "Rich chat boundary and preserved foundations", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" },
+      established: "The fraction notebook and persistent conversation are accepted. Rich editors and passage notes are checked, but their permanent toolbars were not accepted. The approved successor uses a quiet keyboard column and explicit context return. Independent object revision and Spindle/library extraction remain return paths.",
+      evidence: { label: "Keyboard chat boundary and preserved foundations", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" },
       outcome: {
         authority: "approved",
-        id: "annotated-editor-conversation", title: "Keep notes and exact passage references alongside a rich conversation",
-        finish: "One Chat panel provides independent rich composer and comment editors, formatted replies, saved notes and passage tags, with clear recovery when a referenced passage changes. Existing send and resume rules remain intact.",
-        excludes: "New session management, automatic object patches, publication, general library extraction, desktop migration, paid test inference or whole-book infrastructure.",
-        source: { label: "Approved chat annotation successor", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" }
+        id: "keyboard-editor-conversation", title: "Resume a thought without losing the passage or broader context",
+        finish: "One quiet Chat column retains independent reading and draft positions, exposes commands on demand, and supports explicit orientation, topics, notes and bounded native branch return. Existing send and resume guarantees remain intact.",
+        excludes: "A general session workspace, automatic object patches, image-generation integration, publication, library extraction, desktop migration, paid test inference or whole-book infrastructure.",
+        source: { label: "Approved interaction successor", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" }
       }
     },
     {
@@ -396,6 +396,13 @@ export const projectVision: ProjectVision = {
       after: "The user returns to the existing KP Chat window for one rich editor exemplar with small notes, passage comments and tags. Share local profiles while keeping storage and model history separate; broader extraction stays a later choice.",
       reason: "Make the current conversation useful for writing and returning to exact context without waiting for a general workspace or library migration. Preserve the accepted chat milestone and wider authoring programme.",
       source: { label: "Approved rich chat scope", href: "docs/project/reviews/2026-11-25-kp-rich-chat.md" }
+    },
+    {
+      id: "select-keyboard-chat", on: "2026-11-25",
+      before: "The rich chat and annotation candidate is checked, with permanent controls and separate editor surfaces. Its presentation has not been accepted.",
+      after: "The user approves one scrolling column, a retained draft appearing in Insert mode, a Ctrl-C transient, and explicit topic, branch and orientation return paths.",
+      reason: "Reduce repeated context reconstruction while preserving native conversation history, independent notes and safe draft recovery. This authorizes the bounded interaction exemplar, not a general workspace or editor-library promotion.",
+      source: { label: "Approved keyboard conversation design", href: "docs/project/reviews/2026-11-25-keyboard-chat.md" }
     }
   ]
 };

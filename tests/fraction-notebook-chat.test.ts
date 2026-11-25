@@ -17,8 +17,87 @@ const setup = () => { const store = new MemoryChatStore(), peer = new ChatPeer()
 test('legacy conversations migrate without rewriting draft text or model history', () => {
   const { annotations: _notes, ...legacy } = emptyChat();
   const record = readChatRecord({ ...legacy, version: 1, draft: '**Keep** these bytes\n\n' });
-  assert.equal(record.version, 2); assert.equal(record.draft, '**Keep** these bytes\n\n'); assert.deepEqual(record.annotations, []);
+  assert.equal(record.version, 3); assert.equal(record.draft, '**Keep** these bytes\n\n'); assert.deepEqual(record.annotations, []);
+  assert.equal(record.branchId, 'main'); assert.deepEqual(record.parked, []);
   assert.throws(() => readChatRecord({ ...legacy, version: 2 }), /saved notes/);
+  const v2 = readChatRecord({ ...legacy, version: 2, annotations: [], threadId: 'original-thread' });
+  assert.equal(v2.threadId, 'original-thread'); assert.equal(v2.branchId, 'main'); assert.deepEqual(v2.context.topics, []);
+});
+
+test('explicit context is revision checked, persists across restart and never becomes hidden model input', async () => {
+  const { service, store, peer } = setup();
+  peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: 'An exact return place.' }] }];
+  let snapshot = await service.action({ kind: 'connect' });
+  const point = { branchId: 'main', messageId: 'reply-1', offset: 1 };
+  snapshot = await service.action({ kind: 'context-save', revision: 0, context: { objective: 'A durable objective', topics: [{ id: 'topic-1', title: 'Detour', point }], topicId: 'topic-1', returnPoint: point } });
+  assert.equal(snapshot.context.revision, 1); assert.equal(peer.sends().length, 0);
+  await assert.rejects(service.action({ kind: 'context-save', revision: 0, context: { ...snapshot.context, objective: 'Stale edit' } }), /another tab/);
+  await assert.rejects(service.action({ kind: 'context-save', revision: 1, context: { ...snapshot.context, returnPoint: { ...point, messageId: 'missing' } } }), /no longer loaded/);
+  assert.equal((await service.snapshot()).context.objective, 'A durable objective');
+  await service.close();
+  const resumed = new ChatService(store, peer.factory, process.cwd());
+  snapshot = await resumed.action({ kind: 'connect' }); assert.deepEqual(snapshot.context.returnPoint, point);
+  await resumed.action({ kind: 'draft', revision: 0, text: 'Only this message' }); await resumed.action({ kind: 'send', id: 'explicit-send', revision: 1 });
+  assert.deepEqual(peer.sends()[0]?.params['input'], [{ type: 'text', text: 'Only this message' }]); await resumed.close();
+});
+
+test('a branch shares only the selected prefix and retains separate drafts, notes, context and native identity', async () => {
+  const { service, store, peer } = setup();
+  peer.turns = [1, 2].map(n => ({ id: 'turn-' + n, status: 'completed', items: [{ type: 'agentMessage', id: 'reply-' + n, text: 'Response ' + n }] }));
+  await service.action({ kind: 'connect' }); await service.action({ kind: 'draft', revision: 0, text: 'Main draft' });
+  await service.action({ kind: 'annotation-save', revision: 0, annotation: { id: 'main-note', target: { kind: 'conversation' }, body: 'Main note', tags: [] } });
+  const point = { branchId: 'main', messageId: 'reply-1', offset: 1 };
+  let fork = await service.action({ kind: 'branch-create', branchId: 'main', id: 'branch-1', title: 'Explore', point });
+  assert.equal(fork.branchId, 'branch-1'); assert.notEqual(fork.threadId, 'thread-1'); assert.deepEqual(fork.messages.map(message => message.id), ['reply-1']);
+  assert.equal(fork.draft, ''); assert.deepEqual(fork.annotations, []); assert.deepEqual(fork.context.returnPoint, point);
+  assert.equal(peer.calls.find(call => call.method === 'thread/fork')?.params['lastTurnId'], 'turn-1');
+  assert.equal('parked' in fork, false); // Inactive message bodies are not resent to every browser poll.
+  await service.action({ kind: 'draft', branchId: 'branch-1', revision: 0, text: 'Branch draft' });
+  await assert.rejects(service.action({ kind: 'draft', branchId: 'main', revision: 1, text: 'Wrong branch' }), /active branch changed/);
+  await assert.rejects(service.action({ kind: 'draft', revision: 1, text: 'Unscoped old client' }), /active branch changed/);
+  const main = await service.action({ kind: 'branch-switch', branchId: 'branch-1', id: 'main' });
+  assert.equal(main.draft, 'Main draft'); assert.equal(main.annotations[0]?.body, 'Main note'); assert.equal(main.messages.length, 2);
+  await service.close();
+  const resumed = new ChatService(store, peer.factory, process.cwd());
+  fork = await resumed.action({ kind: 'branch-switch', branchId: 'main', id: 'branch-1' });
+  assert.equal(fork.draft, 'Branch draft'); assert.equal(fork.messages.length, 1); assert.equal(peer.sends().length, 0);
+  await resumed.close();
+});
+
+test('pending delivery prevents branch changes and stale source events cannot paint the selected branch', async () => {
+  const { service, peer } = setup();
+  peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: 'Start here.' }] }];
+  await service.action({ kind: 'connect' });
+  await service.action({ kind: 'branch-create', branchId: 'main', id: 'child', title: 'Child', point: { branchId: 'main', messageId: 'reply-1', offset: 1 } });
+  await service.action({ kind: 'draft', branchId: 'child', revision: 0, text: 'Pending child message' });
+  const pending = await service.action({ kind: 'send', branchId: 'child', revision: 1, id: 'child-send' });
+  await assert.rejects(service.action({ kind: 'branch-switch', branchId: 'child', id: 'main' }), /current response/);
+  peer.event('item/agentMessage/delta', { threadId: 'thread-1', turnId: pending.pending?.turnId, itemId: 'wrong-reply', delta: 'Foreign output' }); await drain();
+  assert.equal((await service.snapshot()).messages.some(message => message.id === 'wrong-reply'), false);
+  await service.action({ kind: 'interrupt', branchId: 'child' }); await drain();
+  const main = await service.action({ kind: 'branch-switch', branchId: 'child', id: 'main' }); assert.equal(main.threadId, 'thread-1');
+  await service.close();
+});
+
+test('a fork that cannot be saved leaves the original branch and draft recoverable without replay', async () => {
+  const { service, store, peer } = setup();
+  peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: 'Original.' }] }];
+  await service.action({ kind: 'connect' }); await service.action({ kind: 'draft', revision: 0, text: 'Keep my draft' });
+  const save = store.save.bind(store); store.save = async () => { throw new Error('Storage fixture failure'); };
+  await assert.rejects(service.action({ kind: 'branch-create', branchId: 'main', id: 'child', title: 'Child', point: { branchId: 'main', messageId: 'reply-1', offset: 1 } }), /Original conversation retained; no automatic retry/);
+  const original = await service.snapshot(); assert.equal(original.branchId, 'main'); assert.equal(original.draft, 'Keep my draft');
+  assert.equal(store.data.branchId, 'main'); assert.equal(store.data.parked.length, 0);
+  store.save = save; await service.action({ kind: 'connect', branchId: 'main' });
+  assert.equal(peer.calls.filter(call => call.method === 'thread/fork').length, 1); assert.equal(peer.sends().length, 0); await service.close();
+});
+
+test('branch recovery rejects duplicate ownership, cycles and parked pending sends', () => {
+  const root = emptyChat(), { version: _version, parked: _parked, ...child } = emptyChat();
+  assert.throws(() => readChatRecord({ ...root, parked: [child] }), /ownership/);
+  assert.throws(() => readChatRecord({ ...root, threadId: 'shared', parked: [{ ...child, branchId: 'child', threadId: 'shared' }] }), /independent native threads/);
+  assert.throws(() => readChatRecord({ ...root, parked: [{ ...child, branchId: 'child', pending: { id: 'send', text: 'unsure', draftRevision: 0, turnId: null, accepted: false } }] }), /parked delivery/);
+  const toMain = { branchId: 'main', messageId: 'm', offset: 1 }, toChild = { ...toMain, branchId: 'child' };
+  assert.throws(() => readChatRecord({ ...root, forkedFrom: toChild, parked: [{ ...child, branchId: 'child', forkedFrom: toMain }] }), /Cyclic/);
 });
 test('rich text round trips CommonMark structures and rejects active links', () => {
   const source = '# A heading\n\nA **bold** and *gentle* [link](https://example.com).\n\n- first\n- second\n\n```js\nconst n = 2;\n```';

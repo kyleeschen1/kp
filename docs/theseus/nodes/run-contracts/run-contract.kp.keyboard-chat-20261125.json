@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.keyboard-chat-20261125",
+  "kind": "run-contract",
+  "title": "Keyboard conversation and context return",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: all three implementation and verification packages complete; one exemplar awaits human interaction acceptance before promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.keyboard-chat-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-keyboard-chat.md"
+    }
+  ],
+  "verification": [
+    "npm run test:editor-chat",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:editor-chat"
+  ],
+  "revisitWhen": [
+    "User reviews the keyboard conversation column at the canonical shared-server URL."
+  ],
+  "allowedWork": [
+    "Approved chat interaction and bounded native branch navigation"
+  ],
+  "disallowedWork": [
+    "General workspace, model inference in tests, image generation, notebook edits or publication"
+  ],
+  "goal": "Review one quiet conversation column with retained draft, transient commands and explicit topic and branch return paths",
+  "target": "task.kp.keyboard-chat-20261125",
+  "slices": [
+    {
+      "id": "interaction",
+      "title": "Column-and-transient",
+      "summary": "Quiet transcript, retained draft and caret, scoped transient and read-only motions pass the chat browser suite; draft acknowledgements cannot scroll unchanged output.",
+      "status": "complete"
+    },
+    {
+      "id": "navigation",
+      "title": "Topics-and-branches",
+      "summary": "Revisioned context, topics, return points and native-prefix branches pass deterministic service and browser recovery checks; branch mutations cannot redirect another tab draft.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Verified-exemplar",
+      "summary": "Canonical desktop, light and phone captures inspected; 14 chat and 21 notebook browser cases, focused types, service tests and vision checks passed. Human interaction judgment remains before generalization.",
+      "status": "complete"
+    }
+  ]
+}

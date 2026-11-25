@@ -5,11 +5,13 @@ import type { PassageTarget } from './annotations.ts';
 import { passageTarget, resolvePassage } from './annotation-target.ts';
 import { parseMarkdown, richSchema } from './rich-document.ts';
 import { mountRichText, type RichHighlight } from './rich-text.ts';
+import { transcriptNavigation } from './transcript-navigation.ts';
 
 export function mountTranscript(host: HTMLElement, selected: (target: PassageTarget | null) => void, openNote: (id: string) => void) {
   let snapshot: ChatSnapshot | undefined;
   let cached = new Map<string, { message: ChatMessage; doc: ProseNode; node: ProseNode }>();
-  const surface = mountRichText(host, { profile: 'transcript', label: 'Conversation transcript', onSelection: selectionChanged });
+  const surface = mountRichText(host, { profile: 'transcript', label: 'Conversation transcript', minimal: true, onSelection: selectionChanged });
+  const navigation = transcriptNavigation(surface, host, () => snapshot?.branchId);
   function selectionChanged() {
     if (!snapshot?.threadId || surface.view.state.selection.empty) { selected(null); return; }
     const { $from, $to, from, to } = surface.view.state.selection;
@@ -36,8 +38,10 @@ export function mountTranscript(host: HTMLElement, selected: (target: PassageTar
     if (mark?.dataset['noteId']) openNote(mark.dataset['noteId']);
   });
   return {
-    surface, resolve,
-    update(value: ChatSnapshot) {
+    surface, resolve, ...navigation,
+    update(value: ChatSnapshot, following = false) {
+      const before = navigation.capture(), sameBranch = snapshot?.branchId === value.branchId;
+      let changed = !sameBranch || cached.size !== value.messages.length;
       snapshot = value;
       const next = new Map<string, { message: ChatMessage; doc: ProseNode; node: ProseNode }>();
       const nodes = value.messages.map(message => {
@@ -46,6 +50,7 @@ export function mountTranscript(host: HTMLElement, selected: (target: PassageTar
           && previous.message.clipped === message.clipped && previous.message.role === message.role) {
           next.set(message.id, previous); return previous.node;
         }
+        changed = true;
         const doc = previous?.message.text === message.text ? previous.doc : parseMarkdown(message.text);
         const node = richSchema.nodes['chat_message']!.create({ id: message.id, role: message.role, complete: message.complete, clipped: message.clipped }, doc.content);
         next.set(message.id, { message, doc, node }); return node;
@@ -59,6 +64,9 @@ export function mountTranscript(host: HTMLElement, selected: (target: PassageTar
         if (offset !== undefined && range.status === 'attached') marks.push({ from: offset + range.from, to: offset + range.to, id: note.id });
       }
       surface.highlight(marks); selectionChanged();
+      // Draft acknowledgements and mode changes must not move an unchanged transcript.
+      if (following && changed) host.scrollTop = host.scrollHeight;
+      else if (sameBranch) navigation.restoreScroll(before.scroll);
     },
     reveal(target: PassageTarget) {
       const range = resolve(target), offset = positions().get(target.messageId);

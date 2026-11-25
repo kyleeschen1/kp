@@ -139,3 +139,7 @@ reading surface's formatting. A persistent-until-dismissed Ctrl-C command popup
 would expose commands on demand. Topics and conversation branches are design
 questions, not authorization for a session manager. The checked candidate above
 is a recoverable foundation; its current toolbars have not been visually accepted.
+
+The user subsequently approved the [keyboard interface and context-return
+successor](2026-11-25-keyboard-chat.md). Its contract owns the new interaction;
+this review retains the original foundation's scope and verification.

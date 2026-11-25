@@ -1,13 +1,16 @@
 import { randomUUID } from 'node:crypto';
 import { basename } from 'node:path';
-import { emptyChat, historyLimit, identity, messageLimit, record, text, type ChatAction, type ChatMessage,
+import { emptyChat, branchLimit, readChatRecord, readContext, historyLimit, identity, messageLimit, record, text, type ChatAction, type ChatMessage,
   type ChatPhase, type ChatRecord, type ChatSnapshot } from '../../src/editor-chat/protocol.ts';
 import type { ChatStore } from './store.ts';
 import { RpcRejection, type ChatTransport, type TransportFactory } from './transport.ts';
 import { readAnnotations, type AnnotationDraft } from '../../src/editor-chat/annotations.ts';
 import { passageTarget } from '../../src/editor-chat/annotation-target.ts';
 
-export class ChatConflict extends Error {}
+export class ChatConflict extends Error {
+  readonly code: 'draft-revision' | 'branch-changed' | 'state';
+  constructor(message: string, code: ChatConflict['code'] = 'state') { super(message); this.code = code; }
+}
 /** Adapted from spindle.workbench.live/recovery and codex-session: one session
  * owner, exact submitted-draft clearing, explicit resume and no replay queue. */
 export class ChatService {
@@ -33,7 +36,9 @@ export class ChatService {
   }
   async snapshot(): Promise<ChatSnapshot> {
     await this.load();
-    return structuredClone({ ...this.data, phase: this.phase, notice: this.notice, model: this.model, token: this.token, project: basename(this.cwd),
+    const { parked, ...active } = this.data;
+    const branches = [active, ...parked].map(({ branchId, branchTitle, threadId, forkedFrom }) => ({ branchId, branchTitle, threadId, forkedFrom }));
+    return structuredClone({ ...active, branches, phase: this.phase, notice: this.notice, model: this.model, token: this.token, project: basename(this.cwd),
       canAcknowledge: this.phase === 'uncertain' && this.uncertaintyReviewed });
   }
   get etag() { return `"${this.token}:${this.sequence}"`; }
@@ -41,24 +46,47 @@ export class ChatService {
     const next = this.chain.then(operation); this.chain = next.catch(() => {}); return next;
   }
   private trim() {
-    while (this.data.messages.length > historyLimit || Buffer.byteLength(JSON.stringify(this.data.messages)) > 6 * 1024 * 1024) {
-      this.data.messages.shift(); this.data.historyClipped = true;
+    const branches = [...this.data.parked, this.data];
+    let bytes = branches.reduce((sum, branch) => sum + Buffer.byteLength(JSON.stringify(branch.messages)), 0);
+    for (const branch of branches) while (branch.messages.length && (branch.messages.length > historyLimit || bytes > 6 * 1024 * 1024)) {
+      bytes -= Buffer.byteLength(JSON.stringify(branch.messages.shift())) + 1; branch.historyClipped = true;
     }
   }
   private async persist() {
     this.trim();
-    try { await this.store.save(this.data); }
+    try { this.data = readChatRecord(this.data); await this.store.save(this.data); }
     catch (error) { this.phase = 'error'; throw error; }
   }
   async action(action: ChatAction): Promise<ChatSnapshot> {
     return this.enqueue(async () => {
       await this.load(); if (this.disposed) throw new Error('Chat server is closing.');
+      // Old single-conversation clients remain readable, but cannot mutate a
+      // workspace after branching. Equal draft revisions never imply identity.
+      if (action.branchId !== this.data.branchId && (action.branchId !== undefined || this.data.parked.length))
+        throw new ChatConflict('The active branch changed in another tab. Your local text is retained; return to its branch before saving.', 'branch-changed');
       this.sequence++;
       try {
         switch (action.kind) {
           case 'draft':
-            if (action.revision !== this.data.draftRevision) throw new ChatConflict('The saved draft changed in another tab. Your text is retained; copy it before loading the saved draft.');
-            this.data.draft = action.text; this.data.draftRevision++; await this.persist(); break;
+            if (action.revision !== this.data.draftRevision) throw new ChatConflict('The saved draft changed in another tab. Your text is retained; copy it before loading the saved draft.', 'draft-revision');
+            { const before = { text: this.data.draft, revision: this.data.draftRevision };
+              this.data.draft = action.text; this.data.draftRevision++;
+              try { await this.persist(); } catch (error) { this.data.draft = before.text; this.data.draftRevision = before.revision; throw error; } }
+            break;
+          case 'context-save': {
+            const before = this.data.context;
+            if (action.revision !== before.revision) throw new ChatConflict('Context changed in another tab. Your edit is retained; reopen the saved context before retrying.');
+            const previous = [before.returnPoint, ...before.topics.map(topic => topic.point)];
+            for (const point of [action.context.returnPoint, ...action.context.topics.map(topic => topic.point)]) {
+              if (!point || previous.some(saved => JSON.stringify(saved) === JSON.stringify(point))) continue;
+              const branch = [this.data, ...this.data.parked].find(branch => branch.branchId === point.branchId);
+              if (!branch?.messages.some(message => message.id === point.messageId)) throw new ChatConflict('The referenced passage is no longer loaded. Original context retained.');
+            }
+            this.data.context = readContext({ ...action.context, revision: action.revision + 1 });
+            try { await this.persist(); } catch (error) { this.data.context = before; throw error; } break;
+          }
+          case 'branch-create': await this.branch(action); break;
+          case 'branch-switch': await this.switchBranch(action.id); break;
           case 'annotation-save': await this.saveAnnotation(action.annotation, action.revision); break;
           case 'annotation-delete': {
             const note = this.data.annotations.find(note => note.id === action.id);
@@ -96,6 +124,46 @@ export class ChatService {
     const before = this.data.annotations;
     this.data.annotations = readAnnotations(annotations);
     try { await this.persist(); } catch (error) { this.data.annotations = before; throw error; }
+  }
+  private idleBranch() {
+    if (this.data.pending || this.phase === 'running' || this.phase === 'sending') throw new ChatConflict('Finish or interrupt the current response before changing branches.');
+  }
+  private async switchBranch(id: string) {
+    if (id === this.data.branchId) return;
+    this.idleBranch();
+    const target = this.data.parked.find(branch => branch.branchId === id);
+    if (!target) throw new Error('This branch is not part of the conversation.');
+    const before = structuredClone(this.data), { parked, version, ...active } = before;
+    this.generation++; this.rpc?.close(); this.rpc = undefined; this.model = '';
+    this.data = { ...target, version, parked: [...parked.filter(branch => branch.branchId !== id), active] };
+    try { await this.connect(); }
+    catch (error) { this.data = before; this.phase = 'disconnected'; throw error; }
+  }
+  private async branch(action: Extract<ChatAction, { kind: 'branch-create' }>) {
+    this.idleBranch();
+    if (action.id === this.data.branchId || this.data.parked.some(branch => branch.branchId === action.id)) return;
+    if (!this.rpc || this.phase !== 'ready' || !this.data.threadId) throw new ChatConflict('Connect before branching.');
+    if (this.data.parked.length >= branchLimit - 1) throw new Error(`This chat supports ${branchLimit} branches.`);
+    const message = this.data.messages.find(message => message.id === action.point.messageId);
+    if (action.point.branchId !== this.data.branchId || !message?.complete || message.role !== 'assistant' || !message.turnId)
+      throw new Error('Choose a completed reply with a native turn reference. Resume an older conversation to load its references.');
+    const before = structuredClone(this.data), { parked, version: _version, ...active } = before;
+    try {
+      const response = record(await this.rpc.request('thread/fork', { threadId: this.data.threadId, lastTurnId: message.turnId,
+        cwd: this.cwd, sandbox: 'read-only', approvalPolicy: 'never', ephemeral: false, excludeTurns: false }));
+      const thread = record(response['thread']), threadId = identity(thread['id']);
+      if ([active, ...parked].some(branch => branch.threadId === threadId)) throw new Error('Codex did not create an independent branch. Original retained.');
+      const turns = thread['turns'];
+      if (!Array.isArray(turns) || !turns.length || record(turns.at(-1))['id'] !== message.turnId)
+        throw new Error('Codex did not return the selected branch boundary. Original retained.');
+      this.data = { ...emptyChat(), branchId: action.id, branchTitle: action.title, threadId, forkedFrom: action.point,
+        context: { ...emptyChat().context, objective: before.context.objective, returnPoint: action.point }, parked: [...parked, active] };
+      this.hydrate(thread); this.model = typeof response['model'] === 'string' ? response['model'] : this.model;
+      await this.persist(); this.notice = 'Branch created at the selected response. Nothing has been sent.';
+    } catch (error) {
+      this.data = before; this.generation++; this.rpc?.close(); this.rpc = undefined; this.phase = 'disconnected';
+      throw new Error(`Branch could not be confirmed. Original conversation retained; no automatic retry. ${String(error)}`);
+    }
   }
   private async saveAnnotation(draft: AnnotationDraft, revision: number) {
     const previous = this.data.annotations.find(note => note.id === draft.id);
@@ -165,7 +233,7 @@ export class ChatService {
     for (const raw of thread['turns']) {
       const turn = record(raw), items = Array.isArray(turn['items']) ? turn['items'] : [];
       const matches = this.data.pending && (turn['id'] === this.data.pending.turnId || items.some(raw => record(raw)['id'] === this.data.pending?.id));
-      for (const item of items) this.item(item, turn['status'] !== 'inProgress');
+      for (const item of items) this.item(item, turn['status'] !== 'inProgress', identity(turn['id']));
       if (matches && this.data.pending) {
         pendingFound = true;
         this.clearAcceptedDraft();
@@ -182,7 +250,7 @@ export class ChatService {
     // Durable local identity makes HTTP retries idempotent; reconnect never replays.
     if (this.data.sentIds.includes(id)) return;
     if (this.phase !== 'ready' || !this.rpc || this.data.pending) throw new ChatConflict('Connect or resume and finish reviewing the current turn before sending.');
-    if (revision !== this.data.draftRevision) throw new ChatConflict('The draft changed before Send. Your message was not sent.');
+    if (revision !== this.data.draftRevision) throw new ChatConflict('The draft changed before Send. Your message was not sent.', 'draft-revision');
     const submitted = this.data.draft;
     if (!submitted.trim()) throw new Error('Write a message first.');
     this.uncertaintyReviewed = false;
@@ -208,14 +276,14 @@ export class ChatService {
       this.data.draft = ''; this.data.draftRevision++;
     }
   }
-  private item(value: unknown, complete: boolean) {
+  private item(value: unknown, complete: boolean, turnId?: string) {
     const item = record(value);
     if (item['type'] !== 'agentMessage' && item['type'] !== 'userMessage') return;
     const id = identity(item['id']);
     const body = item['type'] === 'agentMessage' ? text(item['text'], 16 * 1024 * 1024)
       : (Array.isArray(item['content']) ? item['content'].map(raw => { const part = record(raw); return part['type'] === 'text' ? text(part['text'], 16 * 1024 * 1024) : ''; }).join('\n') : '');
     const message: ChatMessage = { id, role: item['type'] === 'agentMessage' ? 'assistant' : 'user',
-      text: body.slice(0, messageLimit), complete, clipped: body.length > messageLimit };
+      text: body.slice(0, messageLimit), complete, clipped: body.length > messageLimit, ...(turnId ? { turnId } : {}) };
     const index = this.data.messages.findIndex(m => m.id === id);
     if (index < 0) this.data.messages.push(message); else this.data.messages[index] = message;
     this.trim();
@@ -224,11 +292,12 @@ export class ChatService {
     const params = record(value ?? {});
     if (params['threadId'] !== undefined && params['threadId'] !== this.data.threadId) return;
     if (params['turnId'] !== undefined && params['turnId'] !== this.data.pending?.turnId) return;
-    if (method === 'item/started' || method === 'item/completed') this.item(params['item'], method === 'item/completed');
+    if (method === 'item/started' || method === 'item/completed') this.item(params['item'], method === 'item/completed', params['turnId'] === undefined ? undefined : identity(params['turnId']));
     if (method === 'item/agentMessage/delta') {
       const id = identity(params['itemId']), delta = text(params['delta'], 16 * 1024 * 1024);
       let message = this.data.messages.find(m => m.id === id);
-      if (!message) { message = { id, role: 'assistant', text: '', complete: false, clipped: false }; this.data.messages.push(message); }
+      if (!message) { message = { id, role: 'assistant', text: '', complete: false, clipped: false,
+        ...(params['turnId'] === undefined ? {} : { turnId: identity(params['turnId']) }) }; this.data.messages.push(message); }
       const combined = message.text + delta; message.text = combined.slice(0, messageLimit); message.clipped ||= combined.length > messageLimit; this.trim();
     }
     if (method === 'turn/started') {

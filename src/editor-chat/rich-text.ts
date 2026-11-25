@@ -9,7 +9,7 @@ import { EditorView as CodeView, keymap as codeKeymap, lineNumbers, drawSelectio
 import { EditorState as CodeState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { defaultKeymap } from '@codemirror/commands';
-import { vim, getCM } from '@replit/codemirror-vim';
+import { vim, getCM, Vim } from '@replit/codemirror-vim';
 import { proseVim, vimKey, setVimMode } from '../fraction-notebook/vim.ts';
 import { parseMarkdown, serializeMarkdown, richSchema } from './rich-document.ts';
 import { mathView } from './math-view.ts';
@@ -19,8 +19,10 @@ export interface RichOptions {
   profile: RichProfile; label: string; text?: string; limit?: number;
   onChange?: (text: string) => void; onSelection?: () => void;
   onSubmit?: () => void; onSave?: () => void;
+  minimal?: boolean; onHelp?: () => void;
 }
 export interface RichHighlight { from: number; to: number; id: string }
+export interface DraftCursor { anchor: number; head: number; source: boolean }
 
 /** One editor state per mounted surface. Profile configuration is shared;
  * source handles, pending Vim keys, history and focus are never global. */
@@ -28,6 +30,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
   const readOnly = options.profile === 'transcript', limit = options.limit ?? 32768;
   const root = document.createElement('div'); root.className = `kp-rich kp-rich-${options.profile}`;
   const toolbar = document.createElement('div'); toolbar.className = 'kp-rich-tools';
+  toolbar.hidden = options.minimal ?? false;
   const body = document.createElement('div'); body.className = 'kp-rich-body';
   const sourceHost = document.createElement('div'); sourceHost.className = 'kp-rich-source'; sourceHost.hidden = true;
   const status = document.createElement('span'); status.className = 'kp-rich-mode'; status.setAttribute('aria-live', 'off');
@@ -73,6 +76,13 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
   const view = new EditorView(body, {
     state: state(parseMarkdown(source)), editable: () => !readOnly && !disabled,
     attributes: { role: 'textbox', 'aria-label': options.label, 'aria-multiline': 'true', 'aria-readonly': String(readOnly), tabindex: '0', spellcheck: String(!readOnly) },
+    handleDOMEvents: { keydown: (editor, event) => {
+      // ProseMirror's normal keydown pipeline is gated on editable. Forward
+      // read-only motions through the same plugins, retaining the write fence.
+      if (!readOnly || event.isComposing) return false;
+      const handled = editor.someProp('handleKeyDown', handler => handler(editor, event));
+      if (handled) event.preventDefault(); return Boolean(handled);
+    } },
     nodeViews: { math_inline: mathView, math_block: mathView },
     clipboardTextParser: text => new Slice(parseMarkdown(text).content, 0, 0),
     dispatchTransaction(transaction) {
@@ -96,12 +106,12 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
   }
   const sourceButton = !readOnly ? button('Markdown', toggleSource) : null;
   button('Keys', () => { help.hidden = !help.hidden; }); toolbar.append(status);
-  function toggleSource() {
+  function toggleSource(focusAfter = true) {
     if (readOnly || disabled) return;
     if (code) {
       const next = parseMarkdown(source); code.destroy(); code = undefined;
       body.hidden = false; sourceHost.hidden = true; if (sourceButton) sourceButton.textContent = 'Markdown';
-      replaceDocument(next, 'source'); setVimMode('normal')(view.state, view.dispatch); view.focus(); status.textContent = 'NORMAL · i to write · :h for keys';
+      replaceDocument(next, 'source'); setVimMode('normal')(view.state, view.dispatch); if (focusAfter) view.focus(); status.textContent = 'NORMAL · i to write · :h for keys';
       return;
     }
     body.hidden = true; sourceHost.hidden = false; if (sourceButton) sourceButton.textContent = 'Rich text';
@@ -113,9 +123,24 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
       }), CodeView.updateListener.of(update => { if (update.docChanged && !adopting) { source = update.state.doc.toString(); options.onChange?.(source); } }),
       CodeView.contentAttributes.of({ 'aria-label': `${options.label} Markdown` }), CodeView.lineWrapping
     ] });
-    status.textContent = 'MARKDOWN · Vim · :h for keys'; code.focus();
+    status.textContent = 'MARKDOWN · Vim · :h for keys'; if (focusAfter) code.focus();
   }
-  const focus = () => { if (code) code.focus(); else view.focus(); };
+  const focus = () => {
+    if (code) code.focus();
+    else {
+      // ProseMirror focuses its DOM only when editable. A read-only transcript
+      // still owns motions and must regain actual browser focus after a dialog.
+      if (readOnly) {
+        const { anchor, head } = view.state.selection;
+        view.dom.focus({ preventScroll: true });
+        // A noneditable DOM does not acquire a native range merely by focus.
+        // Restore that range explicitly before ProseMirror synchronizes it.
+        const from = view.domAtPos(anchor), to = view.domAtPos(head);
+        view.dom.ownerDocument.getSelection()?.setBaseAndExtent(from.node, from.offset, to.node, to.offset);
+      }
+      view.focus();
+    }
+  };
   function replaceDocument(doc: ProseNode, reason: 'source' | 'remote') {
     const before = view.state.doc, start = before.content.findDiffStart(doc.content);
     if (start === null) return;
@@ -134,7 +159,7 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
   command.onkeydown = event => { if (event.key === 'Escape') { event.preventDefault(); bar.hidden = true; focus(); } };
   bar.onsubmit = event => {
     event.preventDefault(); const value = command.value.trim(); bar.hidden = true;
-    if (value === 'h' || value === 'help') help.hidden = false;
+    if (value === 'h' || value === 'help') { if (options.onHelp) { options.onHelp(); return; } help.hidden = false; }
     else if (value === 'w' || value === 'write') options.onSave?.();
     else if (value === 'source') toggleSource();
     else status.textContent = `Unknown command: ${value}. Use :h.`;
@@ -143,14 +168,37 @@ export function mountRichText(host: HTMLElement, options: RichOptions) {
   // Stop a handled editor key from becoming a host/window command elsewhere.
   root.addEventListener('keydown', event => { if (event.defaultPrevented) event.stopPropagation(); });
   return {
-    view, root, focus, value: () => source,
+    view, root, focus, toggleSource, value: () => source,
+    isSource: () => Boolean(code),
+    isInsert: () => code ? Boolean(getCM(code)?.state.vim?.insertMode) : vimKey.getState(view.state) === 'insert',
+    insert() {
+      if (readOnly || disabled) return;
+      if (code) { const cm = getCM(code); if (cm && !cm.state.vim?.insertMode) Vim.handleKey(cm, 'i', 'api'); }
+      else setVimMode('insert')(view.state, view.dispatch);
+      focus();
+    },
+    cursor(): DraftCursor {
+      const selection = code ? code.state.selection.main : view.state.selection;
+      return { anchor: selection.anchor, head: selection.head, source: Boolean(code) };
+    },
+    restoreCursor(cursor: DraftCursor) {
+      if (readOnly) return;
+      if (cursor.source !== Boolean(code)) toggleSource(false);
+      if (code) {
+        const clamp = (n: number) => Math.max(0, Math.min(code!.state.doc.length, n));
+        code.dispatch({ selection: { anchor: clamp(cursor.anchor), head: clamp(cursor.head) } });
+      } else {
+        const clamp = (n: number) => view.state.doc.resolve(Math.max(0, Math.min(view.state.doc.content.size, n)));
+        view.dispatch(view.state.tr.setSelection(TextSelection.between(clamp(cursor.anchor), clamp(cursor.head))));
+      }
+    },
     setText(text: string) {
       if (text === source) return;
       source = text; view.updateState(state(parseMarkdown(text)));
       if (code) { adopting = true; try { code.dispatch({ changes: { from: 0, to: code.state.doc.length, insert: text } }); } finally { adopting = false; } }
     },
     setDisabled(value: boolean) { disabled = value; view.setProps({ editable: () => !readOnly && !disabled }); view.dom.setAttribute('aria-disabled', String(value)); },
-    normal() { setVimMode('normal')(view.state, view.dispatch); },
+    normal() { if (code) { const cm = getCM(code); if (cm) Vim.handleKey(cm, '<Esc>', 'api'); } else setVimMode('normal')(view.state, view.dispatch); },
     replaceDocument(doc: ProseNode) {
       replaceDocument(doc, 'remote');
     },
