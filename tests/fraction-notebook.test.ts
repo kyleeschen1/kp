@@ -13,6 +13,9 @@ import { preparePastedSlice } from '../src/fraction-notebook/clipboard.ts';
 import { EditorState, TextSelection } from 'prosemirror-state';
 import { history, undo } from 'prosemirror-history';
 import { Fragment, Slice } from 'prosemirror-model';
+import { migrateV1 } from '../src/fraction-notebook/migration.ts';
+import { addBlock, splitContentBlock, titleBlock, nestBlock, outdentBlock, moveBlock, mergeNext, toggleFold, withinStructureLimits } from '../src/fraction-notebook/structure.ts';
+import type { Command } from 'prosemirror-state';
 
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 const seed = () => importFractionReading(canonical).notebook;
@@ -48,7 +51,7 @@ test('unknown notebook authority, duplicate UUIDs and injected directives cannot
 });
 test('v1 migration preserves existing identities, edits and invalid source without mutating input', () => {
   const old = fractionV1Fixture(), original = JSON.stringify(old), migrated = readNotebook(old);
-  assert.equal(migrated.schemaVersion, 2); assert.equal(migrated.revision, old.revision);
+  assert.equal(migrated.schemaVersion, 3); assert.equal(migrated.revision, old.revision);
   assert.deepEqual(readNotebook(old), migrated); assert.equal(JSON.stringify(old), original);
   const header = migrated.cells[0]!; assert.equal(header.type, 'articleHeader');
   if (header.type !== 'articleHeader') throw new Error('Header missing');
@@ -92,21 +95,99 @@ test('conversion waits for cursor departure and Undo is not immediately undone b
   let start = 0; doc.descendants((n, pos) => { if (n.isText && n.text === sentence) start = pos; });
   let state = EditorState.create({ doc, selection: TextSelection.create(doc, start + 10), plugins: [history(), createInlinePlugin()] });
   state = state.applyTransaction(state.tr.setSelection(TextSelection.create(state.doc, start + 11))).state;
-  assert.equal(state.doc.child(1).childCount, 1);
+  assert.equal(state.doc.child(1).child(0).childCount, 1);
   state = state.applyTransaction(state.tr.setSelection(TextSelection.create(state.doc, start + sentence.length))).state;
-  assert.equal(state.doc.child(1).child(1).type.name, 'math');
+  assert.equal(state.doc.child(1).child(0).child(1).type.name, 'math');
   assert.ok(undo(state, tr => { state = state.applyTransaction(tr).state; }));
-  assert.equal(state.doc.child(1).childCount, 1);
+  assert.equal(state.doc.child(1).child(0).childCount, 1);
   state = state.applyTransaction(state.tr.setSelection(TextSelection.create(state.doc, start))).state;
-  assert.equal(state.doc.child(1).textContent, sentence); assert.equal(state.doc.child(1).childCount, 1);
+  assert.equal(state.doc.child(1).textContent, sentence); assert.equal(state.doc.child(1).child(0).childCount, 1);
 });
 test('clipboard copies allocate new object and phrase identities without changing originals', () => {
   const base = seed(), id = '30000000-0000-4000-8000-000000000003', annotationId = '30000000-0000-4000-8000-000000000004';
   const doc = toProse(readNotebook({ ...base, cells: base.cells.map((c, i) => i !== 1 ? c : { ...c,
     content: [{ ...proseText('Compare '), annotations: [{ id: annotationId, metadata: { note: 'reference' } }] }, { type: 'math', id, metadata: { note: 'quantity' }, source: '$x$' }] }) }));
   const original = doc.child(1), copy = preparePastedSlice(doc, new Slice(Fragment.from(original), 0, 0)).content.firstChild!;
-  assert.notEqual(copy.attrs['id'], original.attrs['id']); assert.notEqual(copy.child(1).attrs['id'], id);
-  assert.notEqual(copy.child(0).marks[0]!.attrs['id'], annotationId);
-  assert.deepEqual(copy.child(1).attrs['metadata'], { note: 'quantity' });
-  assert.equal(original.child(1).attrs['id'], id);
+  assert.notEqual(copy.attrs['id'], original.attrs['id']); assert.notEqual(copy.child(0).child(1).attrs['id'], id);
+  assert.notEqual(copy.child(0).child(0).marks[0]!.attrs['id'], annotationId);
+  assert.deepEqual(copy.child(0).child(1).attrs['metadata'], { note: 'quantity' });
+  assert.equal(original.child(0).child(1).attrs['id'], id);
+});
+
+test('v2 migration retains every identity and permits content-only documents without article fields', () => {
+  const legacy = migrateV1(fractionV1Fixture()), bytes = JSON.stringify(legacy), migrated = readNotebook(legacy);
+  assert.equal(JSON.stringify(legacy), bytes); assert.equal(migrated.schemaVersion, 3);
+  const block = migrated.cells.find(c => c.type === 'block')!;
+  const contentOnly = readNotebook({ ...migrated, cells: [block] });
+  assert.deepEqual(fromProse(toProse(contentOnly), contentOnly).cells, [block]);
+  assert.throws(() => compileFractionNotebook(contentOnly, canonical), /requires its animation/);
+});
+
+test('nested titles, metadata, inline objects and child presentation round trip without identity loss', () => {
+  const base = seed(), blocks = base.cells.filter(c => c.type === 'block');
+  const parent = { ...blocks[0]!, title: { id: crypto.randomUUID(), metadata: { purpose: 'heading' }, type: 'title', content: [proseText('A reusable section')] },
+    children: [blocks[1]], layout: 'numbered', folded: true };
+  const doc = readNotebook({ ...base, cells: [parent] });
+  assert.deepEqual(fromProse(toProse(doc), doc), { ...doc, revision: doc.revision + 1 });
+  assert.throws(() => readNotebook({ ...base, cells: [parent, blocks[1]] }), /UUID/);
+  let nested: unknown = blocks[0];
+  for (let depth = 0; depth < 9; depth++) nested = { ...blocks[0], id: crypto.randomUUID(), children: [nested] };
+  assert.throws(() => readNotebook({ ...base, cells: [nested] }), /eight nesting/);
+});
+
+test('nested copies reidentify the whole subtree; cut-paste retains identity and structural limits fail closed', () => {
+  const base = seed(), blocks = base.cells.filter(c => c.type === 'block');
+  const notebook = readNotebook({ ...base, cells: [{ ...blocks[0], children: [blocks[1]], title: {
+    id: crypto.randomUUID(), type: 'title', metadata: { purpose: 'section' }, content: [proseText('Section')]
+  } }] });
+  const doc = toProse(notebook), slice = new Slice(doc.content, 0, 0);
+  const ids = (node: typeof doc) => { const result: string[] = []; node.descendants(child => { if (child.attrs['id']) result.push(child.attrs['id']); }); return result; };
+  const copy = doc.copy(preparePastedSlice(doc, slice).content);
+  assert.equal(ids(copy).length, ids(doc).length);
+  assert.equal(ids(copy).some(id => ids(doc).includes(id)), false);
+  assert.equal(copy.textContent, doc.textContent);
+  assert.deepEqual(copy.firstChild!.firstChild!.attrs['metadata'], { purpose: 'section' });
+  assert.deepEqual(preparePastedSlice(schema.node('doc'), slice).toJSON(), slice.toJSON());
+  let child = schema.node('block', { id: crypto.randomUUID() }, [schema.node('paragraph')]);
+  for (let depth = 1; depth < 8; depth++) child = schema.node('block', { id: crypto.randomUUID() }, [schema.node('paragraph'), child]);
+  assert.equal(withinStructureLimits(schema.node('doc', null, [child])), true);
+  const excessive = schema.node('doc', null, [schema.node('block', null, [schema.node('paragraph'), child])]);
+  assert.equal(withinStructureLimits(excessive), false);
+  const flat = Array.from({ length: 200 }, () => schema.node('block', null, [schema.node('paragraph')]));
+  assert.equal(withinStructureLimits(schema.node('doc', null, flat)), true);
+  assert.equal(withinStructureLimits(schema.node('doc', null, [...flat, doc.firstChild!])), false);
+});
+
+test('structural moves, nesting and folding are reversible and retain subtree IDs', () => {
+  const base = seed(), blocks = base.cells.filter(c => c.type === 'block');
+  const notebook = readNotebook({ ...base, cells: blocks.slice(0, 3) });
+  const doc = toProse(notebook);
+  let state = EditorState.create({ doc, plugins: [history()], selection: TextSelection.create(doc, doc.child(0).nodeSize + 2) });
+  const run = (command: Command) => { assert.equal(command(state, tr => { state = state.applyTransaction(tr).state; }), true); state.doc.check(); fromProse(state.doc, notebook); };
+  const id = state.doc.child(1).attrs['id'];
+  run(nestBlock); assert.equal(state.doc.childCount, 2); assert.equal(state.doc.child(0).lastChild!.attrs['id'], id);
+  run(outdentBlock); assert.equal(state.doc.child(1).attrs['id'], id);
+  run(moveBlock(1)); assert.equal(state.doc.child(2).attrs['id'], id);
+  run(undo); assert.equal(state.doc.child(1).attrs['id'], id);
+  run(toggleFold); assert.equal(state.doc.child(1).attrs['folded'], true);
+  run(undo); assert.equal(state.doc.child(1).attrs['folded'], false);
+});
+
+test('split and merge preserve inline content and protect second titles and metadata', () => {
+  const base = seed(), first = base.cells.find(c => c.type === 'block')!;
+  const notebook = readNotebook({ ...base, cells: [{ ...first, content: [proseText('Left right')] }] });
+  const doc = toProse(notebook);
+  let state = EditorState.create({ doc, selection: TextSelection.create(doc, 6), plugins: [history()] });
+  const run = (command: Command) => command(state, tr => { state = state.applyTransaction(tr).state; });
+  assert.equal(run(splitContentBlock), true);
+  assert.equal(state.doc.child(0).attrs['id'], first.id); assert.notEqual(state.doc.child(1).attrs['id'], first.id);
+  assert.equal(state.doc.textContent, 'Left right');
+  run(titleBlock);
+  state = state.apply(state.tr.setSelection(TextSelection.create(state.doc, 2)));
+  assert.equal(run(mergeNext), false);
+  run(undo); state = state.apply(state.tr.setSelection(TextSelection.create(state.doc, 2)));
+  assert.equal(run(mergeNext), true); assert.equal(state.doc.childCount, 1);
+  assert.equal(state.doc.textContent, 'Left right');
+  assert.equal(state.doc.child(0).attrs['id'], first.id);
+  assert.equal(run(addBlock), true); assert.equal(state.doc.childCount, 2);
 });

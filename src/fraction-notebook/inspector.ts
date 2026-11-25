@@ -16,14 +16,14 @@ export function selectedObject(state: EditorState): { node: ProseNode; pos: numb
 }
 export function addAuthor(view: EditorView) {
   const header = view.state.doc.firstChild;
-  if (!header || header.childCount >= 9) return;
+  if (header?.type.name !== 'articleHeader' || header.childCount >= 9) return;
   const pos = header.nodeSize - 1, author = schema.node('authorCredit', { id: crypto.randomUUID(), metadata: {}, role: 'author' });
   const tr = closeHistory(view.state.tr).insert(pos, author);
   view.dispatch(tr.setSelection(TextSelection.create(tr.doc, pos + 1)).scrollIntoView()); view.focus();
 }
 export function annotateSelection(view: EditorView): string {
   const { from, to, $from, $to } = view.state.selection;
-  if (from === to || !$from.sameParent($to) || !['paragraph', 'title'].includes($from.parent.type.name)) throw new Error('Select a phrase in a paragraph or title first.');
+  if (from === to || !$from.sameParent($to) || !['paragraph', 'title', 'blockTitle'].includes($from.parent.type.name)) throw new Error('Select a phrase in a paragraph or title first.');
   let object = false;
   view.state.doc.nodesBetween(from, to, n => { if (n.isInline && !n.isText) object = true; });
   if (object) throw new Error('Inspect inline objects individually; select ordinary text for a phrase annotation.');

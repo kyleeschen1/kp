@@ -1,0 +1,14 @@
+/* Shared reader/editor geometry; each surface retains its chosen font family. */
+:root {
+  --kp-document-width: 440px;
+  --kp-document-body-size: .9375rem;
+  --kp-document-body-leading: 1.8;
+  --kp-document-body-weight: 300;
+  --kp-document-paragraph-gap: .5rem;
+  --kp-document-paragraph-indent: 1.25em;
+  --kp-document-letter-spacing: .015em;
+  --kp-document-title-size: 1.3rem;
+  --kp-document-heading-size: 1.125rem;
+  --kp-document-heading-leading: 1.4;
+  --kp-document-heading-weight: 500;
+}

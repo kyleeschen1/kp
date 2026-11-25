@@ -31,12 +31,12 @@ workbench latency remain unproved. The approved notebook detour below is current
   The [working matrix proof](../reviews/2026-11-24-notebook-proof.md) retains its
   composition evidence. Its inspector UI is not an accepted writing experience.
   The [first fraction editor](../reviews/2026-11-24-fraction-notebook-editor.md) is checked.
-  The [richer successor](../reviews/2026-11-24-rich-fraction-editor.md) adds
-  typed fields, metadata, links/math and a local caption. Its checked candidate
-  awaits interaction/typography review;
-  `run-contract.kp.rich-fraction-editor-20261124` owns this exemplar.
-  Review before generalizing. The programme remains the return path;
-  Markdown-first is superseded.
+  The [rich editor](../reviews/2026-11-24-rich-fraction-editor.md) remains recoverable.
+  The approved [structure editor](../reviews/2026-11-24-structure-editor.md) adds
+  nested blocks, titles, folding and bounded Vim in the chosen split view.
+  `run-contract.kp.structure-editor-20261124` owns this exemplar's interaction and
+  typography review. MathML is declined; later agenda items remain in the review.
+  Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
 - **What was actually gained:** [explanation-first evidence](../reviews/2026-11-08-explanation-first.md).
@@ -59,9 +59,8 @@ workbench latency remain unproved. The approved notebook detour below is current
 
 ## Coordination and handoff
 
-Before work, name the beneficiary, capability, blocker and finish line. Connect
-it to the roadmap; distinguish new capability from revalidation. An accepted
-pivot records the old commitment's disposition.
+Name the beneficiary, capability and finish line. Record displaced commitments
+when direction changes.
 
 At handoff, reconcile direction and approval boundaries with the dashboard, record
 actual execution through Theseus, and show a concrete artifact or workflow.

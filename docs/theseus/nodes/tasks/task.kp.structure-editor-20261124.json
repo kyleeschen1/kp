@@ -1,0 +1,61 @@
+{
+  "id": "task.kp.structure-editor-20261124",
+  "kind": "task",
+  "title": "Edit nested content in the fraction reading",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: review nested structure editing and reader-like split geometry in the fraction exemplar.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-structure-editor.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "17 focused migration, identity, nested clipboard, structural undo and reader compiler tests",
+      "checkedAt": "2026-11-25T00:51:37.659Z"
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "13 Chromium checks; geometry, modal input, nesting, folding, move/merge, legacy recovery, native player and production closure",
+      "checkedAt": "2026-11-25T00:51:38.672Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "All application, Node, test, Svelte and domain types; scoped editor and test types rerun after final edits",
+      "checkedAt": "2026-11-25T00:51:39.330Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "Dependency direction, framework-neutral and domain ownership gates; final dependency-direction rerun",
+      "checkedAt": "2026-11-25T00:51:39.991Z"
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "Playwright, Vite and TypeScript configuration ownership",
+      "checkedAt": "2026-11-25T00:51:40.643Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "75 tests; approved successor reconciled; startup summaries shortened after budget failure",
+      "checkedAt": "2026-11-25T00:51:41.333Z"
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --grep 'fractional reasoning'",
+      "status": "passed",
+      "scope": "Canonical native reading and version-1 preservation",
+      "checkedAt": "2026-11-25T00:51:42.010Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the fraction structure editor candidate."
+  ]
+}

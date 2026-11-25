@@ -1,0 +1,55 @@
+{
+  "id": "run-contract.kp.structure-editor-20261124",
+  "kind": "run-contract",
+  "title": "Reader-like structure editor",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: three implementation packages complete; preserve candidate until one exemplar interaction and typography review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.structure-editor-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-structure-editor.md",
+      "summary": "Approved bounded successor with split view and human exemplar stop"
+    }
+  ],
+  "verification": [
+    "npm run test:fraction-notebook",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "User reviews the fraction structure editor candidate."
+  ],
+  "allowedWork": [
+    "Approved agenda items one through three in the fraction exemplar"
+  ],
+  "disallowedWork": [
+    "MathML, general renderer changes, themes inspector, transclusion UI, publication"
+  ],
+  "goal": "Edit nested blocks in the reader-like fraction exemplar and stop for review",
+  "target": "task.kp.structure-editor-20261124",
+  "slices": [
+    {
+      "id": "model",
+      "title": "Nested content and migration",
+      "summary": "V3 nested content, legacy migration, scoped validation and identity round trips pass focused checks",
+      "status": "complete"
+    },
+    {
+      "id": "editing",
+      "title": "Structural transactions and Vim",
+      "summary": "Nested editing, bounded prose Vim and embedded source mode boundaries verified; UUID-preserving transactions and browser interactions pass.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Reader-like integration and preservation",
+      "summary": "Review packet and shared URL ready; 17 focused and 13 browser checks, canonical preservation, full types, architecture, tooling and 75 vision checks pass. Human writing-feel and typography acceptance pending.",
+      "status": "complete"
+    }
+  ]
+}

@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "rich-fraction-editor",
-    title: "Edit typed article content and inline source",
+    id: "structure-editor",
+    title: "Write and rearrange nested content beside its reading",
     approval: "approved",
-    contractId: "run-contract.kp.rich-fraction-editor-20261124",
-    finish: "Edit title/authors, metadata, source-aware links and inline math plus one local caption, retain identity and recoverable drafts, then review one fraction exemplar. Preserve existing mathematical authority and the broader programme as a return path.",
-    source: { label: "Approved rich fraction editor", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" }
+    contractId: "run-contract.kp.structure-editor-20261124",
+    finish: "Review one split-view fraction exemplar with reader-like geometry, bounded Vim, nested blocks, optional titles, structural moves and folding. Preserve UUIDs, earlier recovery copies, rich inline editing and the existing mathematical authority.",
+    source: { label: "Approved structure editor", href: "docs/project/reviews/2026-11-24-structure-editor.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review the richer fraction editor at /experiments/fraction-notebook/: edit title/byline, inspect metadata, enter and leave link/math source, change the local caption and judge lighter serif typography. Preservation and recovery checks pass; writing feel and visual acceptance are pending. The earlier matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
+  nextJudgment: "At /experiments/fraction-notebook/, turn on Edit, press i to write, split a block with Enter and nest it with Tab. Use Structure to add a title, move or fold children, then undo. Judge the split writing experience and reader-like geometry. The matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The matrix proof retains identity, scoped imports and localized reuse evidence. The richer fraction candidate adds typed title/authors, block/object/phrase metadata, source-aware links and inline math, one local caption and lighter typography. Browser checks cover history, migration, invalid drafts and copy identities; native reader preservation passes. Human acceptance, general authoring speed and learning remain unproved.",
-      evidence: { label: "Rich fraction editor evidence and review cues", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" },
+      established: "The matrix proof retains identity, scoped imports and localized reuse evidence. The rich fraction candidate preserves typed fields, metadata, source-aware links/math and a local caption. Its successor adds nested blocks and structural editing without replacing the native player. Human acceptance, general authoring speed and learning remain unproved.",
+      evidence: { label: "Structure editor evidence and review cues", href: "docs/project/reviews/2026-11-24-structure-editor.md" },
       outcome: {
         authority: "approved",
-        id: "rich-fraction-article", title: "Edit typed article content and inline source",
-        finish: "Review one fraction article with typed title/authors, contextual metadata, source-aware links and inline math, a local caption, lighter typography, persistent identities and recoverable migrated drafts.",
-        excludes: "Broad migration, arbitrary execution, new equation choreography, publication, cross-notebook fraction semantics or changes to the external editor.",
-        source: { label: "Approved bounded rich editor", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" }
+        id: "nested-fraction-content", title: "Compose content blocks without requiring an article",
+        finish: "Review reader-like split editing, optional block titles, nested main text, list/outline presentation, folding and reversible structural operations, with persistent identities and recoverable migrated drafts.",
+        excludes: "MathML, full themes, slash commands, transclusion UI, book search, nested animation scope, publication or a general editor rollout.",
+        source: { label: "Approved bounded structure editor", href: "docs/project/reviews/2026-11-24-structure-editor.md" }
       }
     },
     {
@@ -320,6 +320,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves typed title/authors, contextual metadata, link-source reveal, inline KaTeX, one local caption and lighter serif typography in the same fraction exemplar, with frequent progress updates.",
       reason: "The user wants rich article writing with selectively exposed structure. Preserve the earlier checkpoint and existing reader authority while testing the specific interactions before a general component system.",
       source: { label: "Approved six-part successor scope", href: "docs/project/reviews/2026-11-24-rich-fraction-editor.md" }
+    },
+    {
+      id: "nested-content-split-editor", on: "2026-11-24",
+      before: "The rich editor candidate supplies typed article fields and inline source editing; its typography remains unaccepted and ordinary blocks are flat.",
+      after: "The user approves agenda items 1–3: reader-like editing, nested content blocks and direct structure operations, retaining the split view and starting in Vim Normal mode. The earlier candidate stays recoverable.",
+      reason: "Content may be composed into articles or reused separately. Optional titles and child structure test that direction in one exemplar. MathML is declined; the wider style, search, transclusion and authoring agenda remains deferred.",
+      source: { label: "Approved structure-editing successor", href: "docs/project/reviews/2026-11-24-structure-editor.md" }
     }
   ]
 };

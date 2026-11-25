@@ -1,10 +1,15 @@
+@import '../reader/app/document-prose-tokens.css';
+@import './blocks.css';
 :root { color-scheme: dark; font-family: Arial, sans-serif; background: #121826; color: #e2e2d9; }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; overflow: hidden; }
 button, input { font: inherit; }
 button, .fn-header-actions a { border: 1px solid #58615a; border-radius: 5px; padding: 6px 10px; color: inherit; background: transparent; cursor: pointer; text-decoration: none; font-size: 13px; }
 button:hover, button:focus-visible { background: #344139; }
-.fn-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px 8px; gap: 16px; }
+.fn-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; border-bottom: 1px solid #414a42; }
+.fn-branding { display: flex; gap: 16px; align-items: center; }
+.fn-wordmark { font: 500 1rem 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif; color: inherit; text-decoration: none; white-space: nowrap; }
+.fn-branding button[aria-pressed=true] { background: #344139; }
 .fn-eyebrow, .fn-pane-title { font-size: 10px; letter-spacing: .13em; color: #b0b9b1; }
 .fn-header h1 { font: 23px Georgia, serif; margin: 5px 0; }
 .fn-header-actions, .fn-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -13,12 +18,12 @@ button:hover, button:focus-visible { background: #344139; }
 #app { display: flex; flex-direction: column; height: 100dvh; }
 .fn-workspace { --notebook-width: 50%; display: grid; grid-template-columns: minmax(0, var(--notebook-width)) 9px minmax(0, 1fr); min-height: 0; flex: 1; border-top: 1px solid #495149; }
 .fn-left, .fn-right { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
-.fn-left { background: #18212d; }
+.fn-left { background: #121826; }
 .fn-tools { min-height: 48px; padding: 8px 16px; border-bottom: 1px solid #414a42; flex-shrink: 0; }
 .fn-pane-title { margin-right: auto; }
 .fn-follow { display: flex; align-items: center; font: 12px Arial, sans-serif; gap: 4px; }
 .fn-editor { overflow: auto; flex: 1; }
-.fn-editor .ProseMirror { padding: 34px clamp(18px, 4vw, 64px) 120px; min-height: 100%; outline: none; font: 300 18px/1.8 'Source Serif 4', Georgia, serif; color: #e2e2d9; }
+.fn-editor .ProseMirror { width: min(var(--kp-document-width), calc(100% - 32px)); margin-inline: auto; padding: 3rem 0 5rem; min-height: 100%; outline: none; font: var(--kp-document-body-weight) var(--kp-document-body-size)/var(--kp-document-body-leading) 'Source Serif 4', Georgia, serif; letter-spacing: var(--kp-document-letter-spacing); color: #e2e2d9; }
 .fn-article-header h1 { font: 500 1.3rem/1.4 'Source Serif 4', Georgia, serif; margin: 0 0 .75rem; }
 .fn-article-header { margin-bottom: 1.5rem; }
 .fn-author { font-size: .875rem; margin: 0 0 .3rem; }
@@ -26,7 +31,18 @@ button:hover, button:focus-visible { background: #344139; }
 .fn-author[data-role=editor]::before { content: 'Edited by '; }
 .fn-author[data-role=translator]::before { content: 'Translated by '; }
 .fn-editor strong { font-weight: 600; }
-.fn-editor .ProseMirror > p { margin: 0 0 22px; }
+.fn-block-content > p { margin: 0 0 var(--kp-document-paragraph-gap); text-indent: var(--kp-document-paragraph-indent); min-height: 1.8em; }
+.fn-editor .fn-block-title { font-size: var(--kp-document-heading-size); line-height: var(--kp-document-heading-leading); font-weight: var(--kp-document-heading-weight); margin: 1.8rem 0 .75rem; }
+.fn-block-content > .fn-block-title:first-child { margin-top: 1.8rem; }
+.fn-structure { padding: 7px 16px; border-bottom: 1px solid #414a42; font: 12px/1.5 Arial, sans-serif; }
+.fn-structure summary { cursor: pointer; }
+.fn-structure-controls { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 8px; }
+.fn-structure-controls button, .fn-structure-controls select { font: inherit; }
+.fn-structure-controls select { color: inherit; background: #121826; padding: 4px; border: 1px solid #58615a; }
+.fn-structure-location { flex-basis: 100%; color: #b0b9b1; }
+.fn-tools button:disabled, .fn-structure-controls button:disabled { opacity: .4; cursor: default; }
+.fn-vim-mode { font: 11px ui-monospace, monospace; margin-left: auto; }
+.ProseMirror[data-vim-mode=normal] { caret-color: #d8c59b; }
 .fn-editor .ProseMirror > :focus { outline: none; }
 .fn-editor .ProseMirror ::selection { background: #53614d; }
 .fn-editor .ProseMirror code { font: .88em ui-monospace, monospace; background: #323a32; padding: 1px 3px; }
@@ -34,7 +50,7 @@ button:hover, button:focus-visible { background: #344139; }
 .fn-story h2 { font: 500 1.125rem/1.4 'Source Serif 4', Georgia, serif; margin: 0 0 8px; }
 .fn-caption { padding: 12px 0; }
 .fn-slot-label { display: block; font: 11px/1.4 Arial, sans-serif; color: #b0b9b1; margin-bottom: 8px; }
-.fn-caption p { font: 300 17px/1.7 'Source Serif 4', Georgia, serif; margin: 0; }
+.fn-caption p { font: 300 var(--kp-document-body-size)/var(--kp-document-body-leading) 'Source Serif 4', Georgia, serif; margin: 0; }
 .fn-equation-label { font: 24px Georgia, serif; margin: 10px 0; }
 .fn-cell-context, .fn-code-help { font: 12px/1.5 Arial, sans-serif; color: #b0b9b1; }
 .fn-story summary { cursor: pointer; padding: 8px 0; color: #d0dbcc; }
@@ -63,9 +79,12 @@ button:hover, button:focus-visible { background: #344139; }
 .fn-inline-object[data-invalid] .fn-inline-display { text-decoration: underline wavy #e5b789; }
 .fn-inline-error:not(:empty) { display: block; max-width: 30rem; font: 11px/1.4 Arial, sans-serif; color: #f0c59c; overflow-wrap: anywhere; }
 .fn-details .ProseMirror > [data-cell-id]::after { content: attr(data-cell-id); display: block; margin-top: 6px; font: 10px/1.3 ui-monospace, monospace; color: #9cad9c; overflow-wrap: anywhere; }
+#app:not(.fn-editing) .fn-workspace { display: flex; }
+#app:not(.fn-editing) .fn-right { flex: 1; }
+#app:not(.fn-editing) :is(.fn-left, .fn-divider, .fn-header-actions, .fn-status, .fn-right > .fn-tools) { display: none; }
 @media (max-width: 760px) {
  .fn-header { padding: 12px; align-items: start; } .fn-header h1 { font-size: 18px; } .fn-header-actions { justify-content: end; } .fn-header-actions a { display: none; }
  .fn-workspace { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
  .fn-divider { display: none; } .fn-tools { min-height: 40px; padding: 5px 8px; gap: 4px; } .fn-tools button { font-size: 11px; padding: 4px; }
- .fn-editor .ProseMirror { padding: 20px; font-size: 17px; }
+ .fn-editor .ProseMirror { padding-block: 2rem; }
 }

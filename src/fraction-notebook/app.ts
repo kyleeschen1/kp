@@ -11,11 +11,13 @@ import { fromProse, mountFractionEditor } from './editor.ts';
 import { openFractionDraft } from './storage.ts';
 import { addAuthor, annotateSelection, mountInspector } from './inspector.ts';
 import type { Node as ProseNode } from 'prosemirror-model';
+import { mountStructureControls } from './structure-controls.ts';
+import { setVimMode, vimKey } from './vim.ts';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
 const button = (text: string, action: () => void) => { const node = el('button', '', text); node.type = 'button'; node.onclick = action; return node; };
-const storageKey = 'kp.fraction-notebook.v2';
+const storageKey = 'kp.fraction-notebook.v3';
 let notebook = importFractionReading(canonical).notebook;
 let lastValid = notebook;
 let store: Awaited<ReturnType<typeof openFractionDraft>> | undefined;
@@ -23,10 +25,10 @@ let storedError: string | undefined;
 try {
   store = await openFractionDraft(notebook);
   const saved = await store.read(); notebook = saved.draft; lastValid = saved.lastValid;
-  const recovery = sessionStorage.getItem(storageKey) ?? sessionStorage.getItem('kp.fraction-notebook.v1');
+  const recovery = sessionStorage.getItem(storageKey) ?? sessionStorage.getItem('kp.fraction-notebook.v2') ?? sessionStorage.getItem('kp.fraction-notebook.v1');
   if (recovery) {
     const draft = readNotebook(JSON.parse(recovery));
-    sessionStorage.setItem(storageKey, JSON.stringify(draft)); sessionStorage.removeItem('kp.fraction-notebook.v1');
+    sessionStorage.setItem(storageKey, JSON.stringify(draft)); sessionStorage.removeItem('kp.fraction-notebook.v1'); sessionStorage.removeItem('kp.fraction-notebook.v2');
     if (JSON.stringify(draft) !== JSON.stringify(notebook)) {
       notebook = draft; storedError = 'Recovered a separate unsaved draft. Download it before reloading to reconcile with saved content.';
     } else sessionStorage.removeItem(storageKey);
@@ -36,7 +38,10 @@ let saving = Promise.resolve();
 let generation = 0, disposed = false, frameReady = false, latest: { value: unknown; revision: number } | undefined, request: AbortController | undefined;
 let timer: ReturnType<typeof setTimeout> | undefined, selected: string | undefined;
 let inspector: ReturnType<typeof mountInspector> | undefined;
-const header = el('header', 'fn-header'), branding = el('div'); branding.append(el('span', 'fn-eyebrow', 'KINETIC PRESS · NOTEBOOK'), el('h1', '', 'Write beside the explanation'));
+let structure: ReturnType<typeof mountStructureControls> | undefined;
+const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
+const wordmark = el('a', 'fn-wordmark', 'Kinetic Press'); wordmark.href = '/'; branding.append(wordmark);
+const editToggle = button('Edit', () => setEditing(!root.classList.contains('fn-editing'))); editToggle.setAttribute('aria-pressed', 'false'); branding.append(editToggle);
 const actions = el('div', 'fn-header-actions'), status = el('p', 'fn-status', storedError ?? 'Opening your local notebook…'); status.setAttribute('role', 'status');
 const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); });
 const details = (show: boolean, id?: string) => { root.classList.toggle('fn-details', show); metadata.setAttribute('aria-pressed', String(show)); metadata.textContent = show ? 'Hide details' : 'Show details'; inspector?.show(show, id); };
@@ -47,6 +52,8 @@ const workspace = el('div', 'fn-workspace'), left = el('section', 'fn-left'), ri
 left.setAttribute('aria-label', 'Editable notebook'); right.setAttribute('aria-label', 'Reading preview');
 const tools = el('div', 'fn-tools'); tools.append(el('span', 'fn-pane-title', 'NOTEBOOK'));
 const editorHost = el('div', 'fn-editor');
+const mode = button('NORMAL', () => { const current = vimKey.getState(editor.view.state); editor.run(setVimMode(current === 'insert' ? 'normal' : 'insert')); });
+mode.className = 'fn-vim-mode'; mode.setAttribute('aria-label', 'Vim mode');
 const previewTools = el('div', 'fn-tools'); previewTools.append(el('span', 'fn-pane-title', 'READING'));
 const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; const followLabel = el('label', 'fn-follow', 'Follow selection'); followLabel.prepend(follow);
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }); previewTools.append(reveal, followLabel);
@@ -60,14 +67,22 @@ split.onpointermove = event => { if (split.hasPointerCapture(event.pointerId)) {
 split.onpointerup = event => split.releasePointerCapture(event.pointerId);
 split.onkeydown = event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); resize(splitPercent + (event.key === 'ArrowLeft' ? -2 : 2)); } };
 left.append(tools, editorHost); right.append(previewTools, frame); workspace.append(left, split, right); root.append(header, status, workspace);
-const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); });
+const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, name => { mode.textContent = name.toUpperCase(); });
 tools.append(button('Bold', () => editor.mark('strong')), button('Italic', () => editor.mark('em')), button('Code', () => editor.mark('code')),
-  button('Undo', () => editor.undo()), button('Redo', () => editor.redo()), button('Add author', () => addAuthor(editor.view)),
+  button('Undo', () => editor.undo()), button('Redo', () => editor.redo()), button('Add author', () => { addAuthor(editor.view); editor.run(setVimMode('insert')); }), mode,
   button('Annotate', () => { try { details(true, annotateSelection(editor.view)); } catch (error) { status.textContent = String(error); } }));
 inspector = mountInspector(left, editor.view);
-const hint = el('p', 'fn-writing-hint', 'Write $math$ or [label](link), then move out to render. Click or arrow back in to edit source.');
+structure = mountStructureControls(left, editor.view, message => { status.textContent = message; });
+left.insertBefore(left.querySelector('.fn-structure')!, editorHost);
+const hint = el('p', 'fn-writing-hint', 'i to write · Esc for Normal · h j k l / w b to move · v to select · u / Ctrl-r to undo/redo · Tab to nest · Alt-↑↓ to move.');
 left.insertBefore(hint, editorHost);
 const cellDetails = el('p', 'fn-cell-details'); left.append(cellDetails);
+function setEditing(enabled: boolean) {
+  root.classList.toggle('fn-editing', enabled); editToggle.setAttribute('aria-pressed', String(enabled));
+  sessionStorage.setItem('kp.fraction-editing', String(enabled));
+  if (enabled) { editor.normal(); editor.view.focus(); }
+}
+setEditing(sessionStorage.getItem('kp.fraction-editing') === 'true');
 function send(data: Record<string, unknown>) { frame.contentWindow?.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin); }
 function changed(doc: ProseNode) {
   generation++; request?.abort(); clearTimeout(timer);

@@ -7,6 +7,7 @@ import { importFractionReading, projectReading, readNotebook, readSteps } from '
  * manufactures an animation from its own text or serialized renderer state. */
 export function compileFractionNotebook(value: unknown, canonical: string) {
   const notebook = readNotebook(value), { definition } = importFractionReading(canonical);
+  if (!notebook.cells.some(c => c.type === 'story')) throw new Error('This fraction preview requires its animation. The content-only draft remains editable.');
   const markdown = projectReading(notebook, definition);
   const model = compileKpFractionalLinearEquationLessonModel(markdown);
   const notes = fractionalReadingCommentary(model.document, model.animation);

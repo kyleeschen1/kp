@@ -1,0 +1,14 @@
+.fn-block { position: relative; }
+.fn-block-content { counter-reset: child-block; }
+.fn-block-content > .fn-block { counter-increment: child-block; }
+.fn-block[data-layout=flow] > .fn-block-content > .fn-block { margin-left: 0; }
+.fn-block:is([data-layout=bullets], [data-layout=numbered], [data-layout=outline]) > .fn-block-content > .fn-block { margin-left: 1.5em; }
+.fn-block[data-layout=bullets] > .fn-block-content > .fn-block::before { content: '•'; }
+.fn-block[data-layout=numbered] > .fn-block-content > .fn-block::before { content: counter(child-block) '.'; }
+.fn-block[data-layout=outline] > .fn-block-content > .fn-block { border-left: 1px solid var(--kp-line, #465346); padding-left: .75em; }
+.fn-block:is([data-layout=bullets], [data-layout=numbered]) > .fn-block-content > .fn-block::before { position: absolute; right: calc(100% + .4em); top: 0; }
+.fn-block[data-folded=true] > .fn-block-content > .fn-block { display: none; }
+.fn-block[data-kind=note] > .fn-block-content > p { font-style: italic; }
+.fn-block-fold { position: absolute; right: calc(100% + 3px); top: 0; padding: 0 3px; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; text-indent: 0; }
+.fn-block-fold[hidden] { display: none; }
+.fn-block-title { text-indent: 0; }

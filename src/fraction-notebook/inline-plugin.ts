@@ -48,7 +48,7 @@ export function createInlinePlugin() {
       const found: { from: number; to: number; kind: 'math' | 'link'; source: string }[] = [];
       state.doc.descendants((node, pos, parent) => {
         if (isInlineObject(node.type.name)) return false;
-        if (!node.isText || node.marks.length || !parent || !['paragraph', 'title'].includes(parent.type.name)) return true;
+        if (!node.isText || node.marks.length || !parent || !['paragraph', 'title', 'blockTitle'].includes(parent.type.name)) return true;
         // Inline syntax is intentionally bounded; code/annotated text stays literal.
         const pattern = /\[[^\]\n]+\]\([^()\n]+\)|(?<![\\$])\$[^$\n]+\$(?!\$)/g;
         for (const match of node.text!.matchAll(pattern)) {

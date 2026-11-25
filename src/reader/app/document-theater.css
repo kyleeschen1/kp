@@ -1,3 +1,4 @@
+@import './document-prose-tokens.css';
 /* Document theater projection. Paragraphs retain their native reading order. */
 @media screen {
   body[data-kp-reader-layout="rising-passages"][data-kp-reader-palette] {
@@ -6,7 +7,7 @@
     --kp-surface: var(--kp-tutorial-card);
     --kp-line: var(--kp-tutorial-border);
     --kp-muted: var(--kp-ink);
-    --kp-caption-width: min(440px, calc(100vw - 32px));
+    --kp-caption-width: min(var(--kp-document-width), calc(100vw - 32px));
     --kp-caption-card-height: 320px;
     --kp-caption-card-top: calc(var(--kp-rising-header-height) + (100svh - var(--kp-rising-header-height) - var(--kp-caption-card-height)) / 2);
     --kp-flow-line-in-card: 160px;
@@ -122,16 +123,16 @@
   }
   .kp-caption-reading-mode[aria-pressed="true"] { background: var(--kp-line); }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-rising-passage, .kp-caption-document-intro, .kp-caption-document-after) p {
-    color: var(--kp-ink); margin: 0 0 .5rem; font-family: inherit;
-    font-size: .9375rem; font-weight: 300; letter-spacing: .015em; line-height: 1.8;
-    text-indent: 1.25em;
+    color: var(--kp-ink); margin: 0 0 var(--kp-document-paragraph-gap); font-family: inherit;
+    font-size: var(--kp-document-body-size); font-weight: var(--kp-document-body-weight); letter-spacing: var(--kp-document-letter-spacing); line-height: var(--kp-document-body-leading);
+    text-indent: var(--kp-document-paragraph-indent);
   }
   body[data-kp-reader-layout="rising-passages"] .kp-beat-copy > :last-child { margin-bottom: 0; }
   body[data-kp-reader-layout="rising-passages"] .kp-document-byline { text-indent: 0; }
   body[data-kp-reader-layout="rising-passages"] :is(.kp-caption-document-intro, .kp-caption-document-after) :is(h1, h2, h3) {
-    font: inherit; font-size: 1.125rem; font-weight: 500; line-height: 1.4; margin: 1.8rem 0 .75rem;
+    font: inherit; font-size: var(--kp-document-heading-size); font-weight: var(--kp-document-heading-weight); line-height: var(--kp-document-heading-leading); margin: 1.8rem 0 .75rem;
   }
-  body[data-kp-reader-layout="rising-passages"] .kp-caption-document-intro h1 { font-size: 1.3rem; margin-top: 0; }
+  body[data-kp-reader-layout="rising-passages"] .kp-caption-document-intro h1 { font-size: var(--kp-document-title-size); margin-top: 0; }
   body[data-kp-reader-layout="rising-passages"] .kp-caption-document-intro .kp-document-byline { font-size: .8125rem; margin: -.35rem 0 1.5rem; }
   body[data-kp-reader-layout="rising-passages"] .kp-reader-wordmark { font-family: inherit; font-weight: 500; letter-spacing: .01em; }
   .kp-rising-navigation { position: relative; font-size: .875rem; margin-left: auto; }

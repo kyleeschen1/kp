@@ -4,6 +4,7 @@ import type { EditorView, NodeView } from 'prosemirror-view';
 import { closeHistory, undo, redo } from 'prosemirror-history';
 import { presentInline } from './inline-source.ts';
 import { inlineKey } from './inline-plugin.ts';
+import { vimKey } from './vim.ts';
 
 export class InlineSourceView implements NodeView {
   readonly dom = document.createElement('span');
@@ -27,7 +28,9 @@ export class InlineSourceView implements NodeView {
     this.dom.append(this.display, this.input, this.error); this.paint(); this.hide();
     this.display.onmousedown = event => {
       event.preventDefault(); const pos = this.getPos(); if (pos === undefined) return;
-      outer.dispatch(outer.state.tr.setSelection(NodeSelection.create(outer.state.doc, pos)).setMeta(inlineKey, 'end'));
+      // Clicking editable source explicitly enters text entry, including after
+      // recovery starts the surrounding document in Normal mode.
+      outer.dispatch(outer.state.tr.setSelection(NodeSelection.create(outer.state.doc, pos)).setMeta(inlineKey, 'end').setMeta(vimKey, 'insert'));
       this.open('end');
     };
     this.input.oninput = () => { if (!this.composing) this.write(); };

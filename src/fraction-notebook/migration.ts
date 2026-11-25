@@ -47,3 +47,14 @@ export function migrateV1(value: unknown): unknown {
   });
   return { ...data, schemaVersion: 2, cells: migrated };
 }
+
+/** V2 paragraph IDs now identify their containing block; inline IDs are retained.
+ * Do not rewrite the original stored document to make a migration reversible. */
+export function migrateV2(value: Record<string, unknown>): unknown {
+  return { ...value, schemaVersion: 3, cells: array(value['cells'], 200).map(raw => {
+    const cell = object(raw);
+    if (cell['type'] !== 'paragraph') return cell;
+    exact(cell, ['type', 'id', 'metadata', 'content']);
+    return { ...cell, type: 'block', kind: 'paragraph', title: null, children: [], layout: 'flow', folded: false };
+  }) };
+}

@@ -4,12 +4,16 @@ import { importFractionReading } from '../src/fraction-notebook/model.ts';
 import { buildLocalReader } from '../scripts/local-reader-build.ts';
 import { gzipSync } from 'node:zlib';
 import { fractionV1Fixture } from './fraction-notebook-fixture.ts';
+import { migrateV1 } from '../src/fraction-notebook/migration.ts';
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 const seed = importFractionReading(canonical).notebook;
 const url = '/experiments/fraction-notebook/';
 const preview = (page: Page) => page.frameLocator('iframe');
 async function ready(page: Page) {
   await page.goto(url);
+  const edit = page.getByRole('button', { name: 'Edit', exact: true });
+  if (await edit.getAttribute('aria-pressed') === 'false') await edit.click();
+  await page.locator('.ProseMirror').focus(); await page.keyboard.press('i');
   await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
   await expect(preview(page).locator('body')).toHaveAttribute('data-kp-reader-hydrated', 'true');
 }
@@ -21,7 +25,7 @@ async function jump(page: Page, id: string) {
 async function replaceSpec(page: Page, source: string) {
   const summary = page.getByText('Edit animation specification', { exact: true });
   if (!(await page.locator('.fn-story details').getAttribute('open') !== null)) await summary.click();
-  await page.locator('.cm-content').click();
+  await page.locator('.cm-content').click(); await page.keyboard.press('Escape'); await page.keyboard.press('i');
   await page.keyboard.press('ControlOrMeta+a'); await page.keyboard.insertText(source);
 }
 test('direct prose, formatting and undo update the native reader without remounting', async ({ page }, info) => {
@@ -29,7 +33,7 @@ test('direct prose, formatting and undo update the native reader without remount
   await page.setViewportSize({ width: 1440, height: 960 }); await ready(page);
   const frame = preview(page);
   const stage = await frame.locator('.kp-reader-equation-stage').elementHandle();
-  const first = page.locator('.ProseMirror > p').first();
+  const first = page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first();
   await first.click({ clickCount: 3 }); await page.keyboard.insertText('A changed opening makes the relationship clear.');
   await expect(first).toHaveText('A changed opening makes the relationship clear.');
   await expect(frame.locator('.kp-caption-document-intro')).toContainText('A changed opening');
@@ -45,8 +49,8 @@ test('direct prose, formatting and undo update the native reader without remount
   await expect(page.locator('.fn-cell-details')).toBeHidden();
   await page.getByRole('separator').focus(); await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('separator')).toHaveAttribute('aria-valuenow', '52');
-  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date');
-  await expect(page.locator('.ProseMirror > p').first()).toContainText('A changed opening');
+  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.ProseMirror').focus(); await page.keyboard.press('i');
+  await expect(page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first()).toContainText('A changed opening');
   await page.screenshot({ path: info.outputPath('fraction-editor.png') }); expect(errors).toEqual([]);
 });
 test('annotation edits keep the native moment; invalid specification remains recoverable', async ({ page }, info) => {
@@ -91,20 +95,20 @@ test('preview boundary rejects foreign requests and changed mathematical authori
 });
 test('new paragraphs get new UUIDs and concurrent tabs preserve the losing draft', async ({ page, context }) => {
   await ready(page);
-  const first = page.locator('.ProseMirror > p').first(), originalId = await first.getAttribute('data-cell-id');
+  const first = page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first(), originalId = await first.locator('..').locator('..').getAttribute('data-cell-id');
   await first.click({ clickCount: 3 }); await page.keyboard.insertText('First paragraph.'); await page.keyboard.press('Enter'); await page.keyboard.insertText('New paragraph.');
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
-  expect(await page.locator('.ProseMirror > p').first().getAttribute('data-cell-id')).toBe(originalId);
+  expect(await page.locator('.ProseMirror > .fn-block').first().getAttribute('data-cell-id')).toBe(originalId);
   const ids = await page.locator('.ProseMirror > [data-cell-id]').evaluateAll(nodes => nodes.map(n => n.getAttribute('data-cell-id')));
   expect(new Set(ids).size).toBe(ids.length); expect(ids.length).toBe(seed.cells.length + 1);
   const other = await context.newPage(); await ready(other);
-  await other.locator('.ProseMirror > p').first().click({ clickCount: 3 }); await other.keyboard.insertText('Saved by another tab.');
+  await other.locator('.ProseMirror > .fn-block > .fn-block-content > p').first().click({ clickCount: 3 }); await other.keyboard.insertText('Saved by another tab.');
   await expect(other.locator('.fn-status')).toContainText('preview up to date');
   await first.click({ clickCount: 3 }); await page.keyboard.insertText('Keep my separate draft.');
   await expect(page.locator('.fn-status')).toContainText('Another tab changed');
-  await page.reload(); await expect(page.locator('.ProseMirror > p').first()).toHaveText('Keep my separate draft.');
+  await page.reload(); await expect(page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first()).toHaveText('Keep my separate draft.');
   await expect(page.locator('.fn-status')).toContainText('Recovered a separate unsaved draft');
-  await other.reload(); await expect(other.locator('.ProseMirror > p').first()).toHaveText('Saved by another tab.');
+  await other.reload(); await expect(other.locator('.ProseMirror > .fn-block > .fn-block-content > p').first()).toHaveText('Saved by another tab.');
 });
 test('production reader erases the experiment and editor dependencies', async () => {
   const built = await buildLocalReader('src/reader/app/exemplar-entry.ts');
@@ -128,7 +132,7 @@ test('typed header, author credits, metadata and caption edit the article withou
   await page.getByRole('button', { name: 'Apply metadata' }).click();
   await expect(preview(page).locator('.kp-document-byline').last()).toHaveText('Edited by A second author');
   await page.getByRole('button', { name: 'Hide details' }).click();
-  const paragraph = page.locator('.ProseMirror > p').first(); await paragraph.click({ clickCount: 3 });
+  const paragraph = page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first(); await paragraph.click({ clickCount: 3 });
   await page.getByRole('button', { name: 'Annotate', exact: true }).click();
   await page.getByRole('textbox', { name: 'Metadata JSON' }).fill('{"note":"Preserve the reasoning"}');
   await page.getByRole('button', { name: 'Apply metadata' }).click();
@@ -138,7 +142,7 @@ test('typed header, author credits, metadata and caption edit the article withou
   await page.getByRole('button', { name: 'Show selected passage' }).click();
   await expect(preview(page).locator('.anchored-labels')).toContainText('Start with the last operation.');
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
-  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.ProseMirror').focus(); await page.keyboard.press('i');
   await expect(page.locator('.fn-caption p')).toHaveText('Start with the last operation.');
   await expect(page.locator('.fn-author').last()).toHaveAttribute('data-kp-meta', '{"contribution":"revision"}');
   await expect(page.locator('[data-annotation-id]')).toHaveAttribute('data-kp-meta', '{"note":"Preserve the reasoning"}');
@@ -147,34 +151,34 @@ test('typed header, author credits, metadata and caption edit the article withou
   await page.keyboard.press('End'); await page.keyboard.press('Enter');
   expect(await page.evaluate(() => Boolean(window.getSelection()?.anchorNode?.parentElement?.closest('.fn-author')))).toBe(true);
 });
-test('saved v1 notebooks migrate into v2 without rewriting the original recovery copy', async ({ page }) => {
-  const old = fractionV1Fixture();
+for (const version of [1, 2]) test(`saved v${version} notebooks migrate into v3 without rewriting the original recovery copy`, async ({ page }) => {
+  const original = fractionV1Fixture(), old = version === 1 ? original : migrateV1(original);
   await page.route('**/__fraction-storage-fixture', route => route.fulfill({ contentType: 'text/html', body: '<html><body>Storage fixture</body></html>' }));
   await page.goto('/__fraction-storage-fixture');
-  await page.evaluate(async old => {
+  await page.evaluate(async ({ old, version }) => {
     await new Promise<void>((resolve, reject) => {
-      const request = indexedDB.open('kp-fraction-notebook-v1', 1);
+      const request = indexedDB.open(`kp-fraction-notebook-v${version}`, 1);
       request.onupgradeneeded = () => request.result.createObjectStore('workspace');
       request.onerror = () => reject(request.error);
       request.onsuccess = () => { const db = request.result, tx = db.transaction('workspace', 'readwrite'); tx.objectStore('workspace').put({ draft: old, lastValid: old }, 'documents'); tx.oncomplete = () => { db.close(); resolve(); }; };
     });
-  }, old);
+  }, { old, version });
   await ready(page);
-  await expect(page.locator('.fn-article-header h1')).toHaveAttribute('data-cell-id', old.cells[0]!.id);
+  await expect(page.locator('.fn-article-header h1')).toHaveAttribute('data-cell-id', original.cells[0]!.id);
   await page.locator('.fn-author').first().click({ clickCount: 3 }); await page.keyboard.insertText('Migrated author');
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
-  const stored = await page.evaluate(async () => new Promise<unknown>((resolve, reject) => {
-    const request = indexedDB.open('kp-fraction-notebook-v1'); request.onerror = () => reject(request.error);
+  const stored = await page.evaluate(async version => new Promise<unknown>((resolve, reject) => {
+    const request = indexedDB.open(`kp-fraction-notebook-v${version}`); request.onerror = () => reject(request.error);
     request.onsuccess = () => { const db = request.result, read = db.transaction('workspace').objectStore('workspace').get('documents'); read.onsuccess = () => { resolve(read.result); db.close(); }; };
-  }));
+  }), version);
   expect(stored).toEqual({ draft: old, lastValid: old });
 });
 test('links and mathematics reveal source, preserve identity and recover invalid edits', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.setViewportSize({ width: 1440, height: 960 }); await ready(page);
-  const first = page.locator('.ProseMirror > p').first(); await first.click({ clickCount: 3 });
+  const first = page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first(); await first.click({ clickCount: 3 });
   await page.keyboard.insertText('Half is $\\frac{x}{2}$; see [the explanation](/reader/solve-fractional-linear/).');
-  await page.locator('.ProseMirror > p').nth(1).click();
+  await page.locator('.ProseMirror > .fn-block > .fn-block-content > p').nth(1).click();
   const math = page.locator('.fn-inline-object[data-inline-kind=math]'), link = page.locator('.fn-inline-object[data-inline-kind=link]');
   await expect(math.locator('.katex')).toHaveCount(1); await expect(link.locator('.fn-inline-display')).toHaveText('the explanation');
   await expect(preview(page).locator('.kp-caption-document-intro .katex')).toHaveCount(1);
@@ -214,8 +218,8 @@ test('links and mathematics reveal source, preserve identity and recover invalid
 });
 test('inline keyboard boundaries, composition and clipboard preserve complete objects', async ({ page }) => {
   await ready(page);
-  const first = page.locator('.ProseMirror > p').first(); await first.click({ clickCount: 3 });
-  await page.keyboard.insertText('Before $x$ after'); await page.locator('.ProseMirror > p').nth(1).click();
+  const first = page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first(); await first.click({ clickCount: 3 });
+  await page.keyboard.insertText('Before $x$ after'); await page.locator('.ProseMirror > .fn-block > .fn-block-content > p').nth(1).click();
   const object = page.locator('.fn-inline-object[data-inline-kind=math]');
   await object.locator('.fn-inline-display').click();
   const source = page.getByRole('textbox', { name: 'Math source', exact: true });
@@ -235,7 +239,7 @@ test('inline keyboard boundaries, composition and clipboard preserve complete ob
     return { html: data.getData('text/html'), text: data.getData('text/plain') };
   });
   expect(clipboard.html).toContain('data-inline-kind="math"');
-  const second = page.locator('.ProseMirror > p').nth(1); await second.click({ clickCount: 3 });
+  const second = page.locator('.ProseMirror > .fn-block > .fn-block-content > p').nth(1); await second.click({ clickCount: 3 });
   await second.evaluate((el, saved) => {
     const data = new DataTransfer(); data.setData('text/html', saved.html); data.setData('text/plain', saved.text);
     el.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: data }));
@@ -244,9 +248,9 @@ test('inline keyboard boundaries, composition and clipboard preserve complete ob
   const ids = await object.evaluateAll(nodes => nodes.map(node => node.getAttribute('data-cell-id')));
   expect(ids[0]).toBe(original); expect(ids[1]).not.toBe(original);
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
-  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.ProseMirror').focus(); await page.keyboard.press('i');
   expect(await object.evaluateAll(nodes => nodes.map(node => node.getAttribute('data-cell-id')))).toEqual(ids);
-  const third = page.locator('.ProseMirror > p').nth(2); await third.click({ clickCount: 3 });
+  const third = page.locator('.ProseMirror > .fn-block > .fn-block-content > p').nth(2); await third.click({ clickCount: 3 });
   await third.evaluate(el => {
     const data = new DataTransfer();
     data.setData('text/html', '<p data-cell-id="invalid"><span data-annotation-id="invalid">Readable pasted text.</span></p>');
@@ -255,4 +259,72 @@ test('inline keyboard boundaries, composition and clipboard preserve complete ob
   await expect(third).toHaveText('Readable pasted text.');
   await expect(page.locator('.fn-status')).toContainText('preview up to date');
   await expect(page.locator('[data-cell-id="invalid"], [data-annotation-id="invalid"]')).toHaveCount(0);
+});
+
+test('Edit opens in Normal mode; split, nest, titles and folding preserve the native player', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url);
+  const edit = page.getByRole('button', { name: 'Edit', exact: true });
+  await expect(edit).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('.fn-left')).toBeHidden(); await edit.click();
+  await expect(page.locator('.ProseMirror')).toHaveAttribute('data-vim-mode', 'normal');
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  const first = page.locator('.ProseMirror > .fn-block').first(), body = first.locator(':scope > .fn-block-content > p');
+  const originalId = await first.getAttribute('data-cell-id');
+  await body.click({ clickCount: 3 }); const originalText = await body.textContent();
+  await page.keyboard.insertText('Blocked in Normal'); await expect(body).toHaveText(originalText!);
+  await body.evaluate(el => {
+    const data = new DataTransfer(); data.setData('text/plain', 'Blocked paste');
+    el.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: data }));
+  });
+  await expect(body).toHaveText(originalText!);
+  const geometry = (el: Element) => { const css = getComputedStyle(el); return {
+    size: css.fontSize, weight: css.fontWeight, lineHeight: css.lineHeight, indent: css.textIndent, margin: css.marginBottom
+  }; };
+  expect(await body.evaluate(geometry)).toEqual(await preview(page).locator('.kp-caption-document-intro .fn-block p').first().evaluate(geometry));
+  await page.keyboard.press('i'); await page.keyboard.insertText('Part and whole');
+  await page.keyboard.press('End'); await page.keyboard.press('Enter'); await page.keyboard.insertText('Inspect this detail.');
+  const next = page.locator('.ProseMirror > .fn-block').nth(1), nextId = await next.getAttribute('data-cell-id');
+  await page.keyboard.press('Tab');
+  const child = first.locator(':scope > .fn-block-content > .fn-block');
+  await expect(child).toHaveAttribute('data-cell-id', nextId!);
+  await expect(first).toHaveAttribute('data-cell-id', originalId!);
+  await page.keyboard.press('Escape');
+  await page.locator('.fn-structure > summary').click();
+  await page.getByRole('button', { name: 'Add title', exact: true }).click(); await page.keyboard.insertText('A closer look');
+  await expect(child.locator('h2')).toHaveText('A closer look');
+  await page.getByRole('combobox', { name: 'Block type' }).selectOption('note');
+  await body.click(); await page.getByRole('combobox', { name: 'Children display' }).selectOption('bullets');
+  await expect(first).toHaveAttribute('data-layout', 'bullets');
+  const player = await preview(page).locator('.kp-reader-equation-stage').elementHandle();
+  await expect(preview(page).locator('.fn-block-title')).toHaveText('A closer look');
+  await first.getByRole('button', { name: 'Collapse 1 child blocks', exact: true }).click();
+  await expect(child).toBeHidden();
+  await page.getByRole('button', { name: 'Undo', exact: true }).click(); await expect(child).toBeVisible();
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  expect(await player!.evaluate(node => node.isConnected)).toBe(true);
+  await page.screenshot({ path: info.outputPath('nested-structure.png') });
+  await edit.click(); await expect(page.locator('.fn-left')).toBeHidden();
+  await edit.click(); await expect(page.locator('.ProseMirror')).toHaveAttribute('data-vim-mode', 'normal');
+  await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await expect(child).toHaveAttribute('data-cell-id', nextId!); await expect(child).toHaveAttribute('data-kind', 'note');
+  await expect(first).toHaveAttribute('data-layout', 'bullets');
+  expect(errors).toEqual([]);
+});
+
+test('block moves, outdent and merge preserve IDs and restore through undo', async ({ page }) => {
+  await ready(page); await page.locator('.fn-structure > summary').click();
+  const blocks = page.locator('.ProseMirror > .fn-block'), firstId = await blocks.first().getAttribute('data-cell-id');
+  const body = blocks.first().locator(':scope > .fn-block-content > p');
+  await body.click({ clickCount: 3 }); await page.keyboard.insertText('First');
+  await page.keyboard.press('End'); await page.keyboard.press('Enter'); await page.keyboard.insertText('Second');
+  const secondId = await blocks.nth(1).getAttribute('data-cell-id');
+  await page.getByRole('button', { name: 'Nest', exact: true }).click();
+  await page.getByRole('button', { name: 'Outdent', exact: true }).click(); await expect(blocks.nth(1)).toHaveAttribute('data-cell-id', secondId!);
+  await page.getByRole('button', { name: 'Move up', exact: true }).click(); await expect(blocks.first()).toHaveAttribute('data-cell-id', secondId!);
+  await page.getByRole('button', { name: 'Undo', exact: true }).click(); await expect(blocks.first()).toHaveAttribute('data-cell-id', firstId!);
+  await body.click(); await page.getByRole('button', { name: 'Merge next', exact: true }).click();
+  await expect(body).toHaveText('First Second'); await expect(blocks.first()).toHaveAttribute('data-cell-id', firstId!);
+  await page.getByRole('button', { name: 'Undo', exact: true }).click(); await expect(blocks.nth(1)).toHaveAttribute('data-cell-id', secondId!);
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
 });

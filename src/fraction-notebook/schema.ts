@@ -11,7 +11,7 @@ const parse = (el: HTMLElement) => {
 };
 export const schema = new Schema({
   nodes: {
-    doc: { content: 'articleHeader paragraph* story paragraph*' },
+    doc: { content: 'articleHeader? (block | story)*' },
     articleHeader: { attrs: identity, content: 'title authorCredit{1,8}', isolating: true, defining: true,
       toDOM: n => ['header', { ...attrs(n), class: 'fn-article-header' }, 0], parseDOM: [{ tag: 'header.fn-article-header', getAttrs: parse }] },
     title: { attrs: identity, content: 'inline*', defining: true,
@@ -22,8 +22,17 @@ export const schema = new Schema({
         const a = parse(el), role = el.dataset['role'] ?? 'author';
         return a && ['author', 'editor', 'translator'].includes(role) ? { ...a, role } : false;
       } }] },
-    paragraph: { attrs: identity, content: 'inline*', group: 'block',
-      toDOM: n => ['p', attrs(n), 0], parseDOM: [{ tag: 'p', getAttrs: parse }] },
+    block: { attrs: { ...identity, kind: { default: 'paragraph' }, layout: { default: 'flow' }, folded: { default: false } },
+      content: 'blockTitle? paragraph block*', defining: true,
+      toDOM: n => ['section', { ...attrs(n), class: 'fn-block', 'data-layout': n.attrs['layout'], 'data-kind': n.attrs['kind'], 'data-folded': String(n.attrs['folded']) }, 0],
+      parseDOM: [{ tag: 'section.fn-block', getAttrs: el => {
+        const a = parse(el), layout = el.dataset['layout'] ?? 'flow', kind = el.dataset['kind'] ?? 'paragraph';
+        return a && ['flow', 'bullets', 'numbered', 'outline'].includes(layout) && ['paragraph', 'note'].includes(kind)
+          ? { ...a, layout, kind, folded: el.dataset['folded'] === 'true' } : false;
+      } }] },
+    blockTitle: { attrs: identity, content: 'inline*', defining: true,
+      toDOM: n => ['h2', { ...attrs(n), class: 'fn-block-title', 'aria-label': 'Block title' }, 0], parseDOM: [{ tag: 'h2.fn-block-title', getAttrs: parse }] },
+    paragraph: { content: 'inline*', toDOM: () => ['p', 0], parseDOM: [{ tag: 'p' }] },
     story: { attrs: identity, content: 'caption specification', group: 'block', defining: true, isolating: true,
       toDOM: n => ['section', { ...attrs(n), class: 'fn-story' },
         ['h2', { contenteditable: 'false' }, 'Undo the last operation'],
@@ -58,6 +67,11 @@ const inlineNodes = (content: readonly Inline[]) => content.flatMap(item => {
   return item.text ? [schema.text(item.text, [...item.marks.map(mark => schema.mark(mark)), ...item.annotations.map(a => schema.mark('annotation', a))])] : [];
 });
 export function toProse(doc: FractionNotebook): ProseNode {
+  const block = (cell: import('./types.ts').ContentBlock): ProseNode => schema.node('block',
+    { id: cell.id, metadata: cell.metadata, kind: cell.kind, layout: cell.layout, folded: cell.folded }, [
+      ...(cell.title ? [schema.node('blockTitle', { id: cell.title.id, metadata: cell.title.metadata }, inlineNodes(cell.title.content))] : []),
+      schema.node('paragraph', null, inlineNodes(cell.content)), ...cell.children.map(block)
+    ]);
   return schema.node('doc', null, doc.cells.map(cell => {
     const attrs = { id: cell.id, metadata: cell.metadata };
     if (cell.type === 'articleHeader') return schema.node('articleHeader', attrs, [
@@ -68,7 +82,7 @@ export function toProse(doc: FractionNotebook): ProseNode {
       schema.node('caption', { id: cell.caption.id, metadata: cell.caption.metadata }, textNode(cell.caption.text)),
       schema.node('specification', null, textNode(cell.source))
     ]);
-    return schema.node('paragraph', attrs, inlineNodes(cell.content));
+    return block(cell);
   }));
 }
 export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNotebook {
@@ -82,13 +96,20 @@ export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNote
     }); return result;
   };
   const cells: unknown[] = [];
+  const block = (node: ProseNode): unknown => {
+    const titled = node.firstChild?.type.name === 'blockTitle', children: unknown[] = [];
+    node.forEach(child => { if (child.type.name === 'block') children.push(block(child)); });
+    return { ...identified(node), type: 'block', kind: node.attrs['kind'], layout: node.attrs['layout'], folded: node.attrs['folded'],
+      title: titled ? { ...identified(node.child(0)), type: 'title', content: content(node.child(0)) } : null,
+      content: content(node.child(titled ? 1 : 0)), children };
+  };
   doc.forEach(node => {
     if (node.type.name === 'articleHeader') {
       const authors: unknown[] = []; node.forEach((a, _pos, index) => { if (index) authors.push({ ...identified(a), type: 'authorCredit', name: a.textContent, role: a.attrs['role'] }); });
       cells.push({ ...identified(node), type: 'articleHeader', title: { ...identified(node.child(0)), type: 'title', content: content(node.child(0)) }, authors });
     } else if (node.type.name === 'story') cells.push({ ...identified(node), type: 'story', source: node.child(1).textContent,
       caption: { ...identified(node.child(0)), type: 'caption', text: node.child(0).textContent } });
-    else cells.push({ ...identified(node), type: 'paragraph', content: content(node) });
+    else cells.push(block(node));
   });
   return readNotebook({ ...basis, revision: basis.revision + 1, cells });
 }

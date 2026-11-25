@@ -3,9 +3,9 @@
 Last Updated: 2026-11-24
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `rich-fraction-editor`
-Execution Contract: `run-contract.kp.rich-fraction-editor-20261124`
-Next Product Milestone: `rich-fraction-article`
+Current Commitment: `structure-editor`
+Execution Contract: `run-contract.kp.structure-editor-20261124`
+Next Product Milestone: `nested-fraction-content`
 Milestone Authority: approved
 
 ## Where we are going
@@ -19,13 +19,12 @@ why this becomes the organizing direction and what it supersedes.
 
 ## Current approved commitment
 
-**Current bounded detour:** the user approved the [rich fraction editor
-successor](reviews/2026-11-24-rich-fraction-editor.md): typed title/authors, metadata,
-source-aware links and inline math, one local caption, and lighter serif typography.
-The candidate awaits interaction/typography review at `/experiments/fraction-notebook/`.
-Recovery/preservation checks pass; human acceptance is pending.
-Retain the 50/50 split and [first editor](reviews/2026-11-24-fraction-notebook-editor.md)
-as a checked rollback point. Review one exemplar before generalizing.
+**Approved detour:** [structure editor](reviews/2026-11-24-structure-editor.md):
+nested blocks, optional titles, structural operations, folding, bounded Vim and
+reader-like geometry. Retain the chosen split at `/experiments/fraction-notebook/`;
+review before generalizing. The [rich editor](reviews/2026-11-24-rich-fraction-editor.md)
+remains recoverable, with typed fields, metadata, links/math and captions preserved.
+MathML is declined; themes, slash commands, transclusion and book search remain later.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
 retains its identity, nesting, scope and reuse evidence; its inspector UI was not
 accepted as the writing experience. The existing authoring-to-practice contract

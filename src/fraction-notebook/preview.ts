@@ -1,4 +1,5 @@
 import { readNotebook, object, type Cell, type Inline } from './model.ts';
+import './blocks.css';
 import { readEndpointCommentary } from '../reader/document/public-api.ts';
 import { renderInlineObject } from './inline-source.ts';
 
@@ -21,7 +22,7 @@ export function mountFractionNotebookPreview(input: {
     }
   };
   const prose = (cell: Exclude<Cell, { type: 'story' }>): HTMLElement => {
-    const el = document.createElement(cell.type === 'articleHeader' ? 'header' : 'p');
+    const el = document.createElement(cell.type === 'articleHeader' ? 'header' : 'section');
     el.dataset['notebookCell'] = cell.id; el.id = cell.id;
     if (cell.type === 'articleHeader') {
       const title = document.createElement('h1'); title.id = cell.title.id; title.dataset['notebookCell'] = cell.title.id;
@@ -31,7 +32,21 @@ export function mountFractionNotebookPreview(input: {
         credit.textContent = `${author.role === 'author' ? 'By' : author.role === 'editor' ? 'Edited by' : 'Translated by'} ${author.name}`;
         el.append(credit);
       }
-    } else append(el, cell.content);
+    } else {
+      el.className = 'fn-block'; el.dataset['layout'] = cell.layout; el.dataset['kind'] = cell.kind; el.dataset['folded'] = String(cell.folded);
+      const content = document.createElement('div'); content.className = 'fn-block-content';
+      if (cell.title) { const title = document.createElement('h2'); title.id = cell.title.id; title.dataset['notebookCell'] = cell.title.id;
+        title.className = 'fn-block-title'; append(title, cell.title.content); content.append(title); }
+      const paragraph = document.createElement('p'); append(paragraph, cell.content); content.append(paragraph);
+      content.append(...cell.children.map(prose)); el.append(content);
+      if (cell.children.length) {
+        const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'fn-block-fold';
+        const refresh = () => { const folded = el.dataset['folded'] === 'true'; toggle.textContent = folded ? '▸' : '▾';
+          toggle.setAttribute('aria-expanded', String(!folded)); toggle.setAttribute('aria-label', `${folded ? 'Expand' : 'Collapse'} ${cell.children.length} child blocks`); };
+        toggle.onclick = () => { el.dataset['folded'] = String(el.dataset['folded'] !== 'true'); refresh(); input.refresh(); };
+        refresh(); el.prepend(toggle);
+      }
+    }
     return el;
   };
   const onMessage = (event: MessageEvent) => {
@@ -47,7 +62,14 @@ export function mountFractionNotebookPreview(input: {
           // own passage control so its semantic playhead follows the reveal.
           const first = document.querySelector<HTMLElement>('.kp-animation-story [data-kp-beat]');
           [...document.querySelectorAll<HTMLAnchorElement>('.kp-lesson-toc a')].find(link => link.hash.slice(1) === first?.id)?.click();
-        } else target?.scrollIntoView({ block: 'center', behavior: 'instant' });
+        } else if (target) {
+          // A selection reveal must make its folded ancestry visible before
+          // measuring scroll position; it does not rewrite the saved draft.
+          for (let parent = target.parentElement; parent; parent = parent.parentElement) {
+            if (parent.matches('.fn-block[data-folded=true]')) parent.querySelector<HTMLButtonElement>(':scope > .fn-block-fold')?.click();
+          }
+          target.scrollIntoView({ block: 'center', behavior: 'instant' });
+        }
         return;
       }
       if (message['kind'] !== 'apply') return;
@@ -80,7 +102,7 @@ export function mountFractionNotebookPreview(input: {
         if (link) link.textContent = edit.name;
       }
       const titleLink = document.querySelector<HTMLAnchorElement>('.kp-lesson-toc a');
-      if (titleLink) { titleLink.href = `#${notebook.cells[0]!.id}`; titleLink.textContent = beforeNodes[0]!.querySelector('h1')?.textContent ?? ''; }
+      if (titleLink) { titleLink.href = `#${notebook.cells[0]!.id}`; titleLink.textContent = beforeNodes[0]?.querySelector('h1,h2')?.textContent ?? 'Fraction notebook'; }
       input.refresh();
       document.body.dataset['notebookRevision'] = String(notebook.revision);
       send({ protocol: 'kp.fraction-notebook.v1', kind: 'applied', revision: notebook.revision });
