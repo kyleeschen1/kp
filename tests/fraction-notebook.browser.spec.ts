@@ -308,7 +308,10 @@ test('Edit opens in Normal mode; split, nest, titles and folding preserve the na
   await action(page, 'Add title', 'structure'); await page.keyboard.insertText('A closer look');
   await expect(child.locator('h2')).toHaveText('A closer look');
   await blockOption(page, 'Block type', 'note');
-  await body.click(); await blockOption(page, 'Children display', 'bullets');
+  await body.click(); await blockOption(page, 'Children display', 'outline');
+  await expect(child).toHaveCSS('border-left-width', '1px');
+  await expect(child).toHaveCSS('border-left-color', 'rgb(88, 97, 90)');
+  await blockOption(page, 'Children display', 'bullets');
   await expect(first).toHaveAttribute('data-layout', 'bullets');
   const player = await preview(page).locator('.kp-reader-equation-stage').elementHandle();
   await expect(preview(page).locator('.fn-block-title')).toHaveText('A closer look');
@@ -462,8 +465,7 @@ test('help, Ex line numbers and inherited styles work in document and JSON', asy
   await ex(page, 'set relativenumber'); await expect(page.locator('.fn-line-gutter span').first()).toBeVisible();
   await jump(page, 'equation.fractional-linear.right-simplified');
   await page.getByRole('button', { name: 'Styles', exact: true }).click();
-  await page.getByRole('textbox', { name: 'Body color', exact: true }).fill('var(--color-green-light)');
-  await page.getByRole('textbox', { name: 'Body color', exact: true }).press('Tab');
+  await page.getByRole('combobox', { name: 'Body color color', exact: true }).selectOption('var(--color-green-light)');
   await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(182, 213, 163)');
   await expect(preview(page).locator('body')).toHaveCSS('color', 'rgb(182, 213, 163)');
   await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
@@ -486,6 +488,80 @@ test('help, Ex line numbers and inherited styles work in document and JSON', asy
   await ex(page, 'set number'); await expect(page.locator('.cm-lineNumbers')).toBeVisible();
   await ex(page, 'wq'); await expect(page.locator('.fn-source-pane')).toBeHidden();
   await page.reload(); await expect(page.locator('.fn-article-header h1')).toHaveCSS('font-weight', '300');
+});
+
+test('Styles compares properties across objects and preserves named references', async ({ page }, info) => {
+  await page.setViewportSize({ width: 1440, height: 960 }); await ready(page);
+  await page.getByRole('button', { name: 'Styles', exact: true }).click();
+  const panel = page.locator('.fn-styles'), search = page.getByRole('searchbox', { name: 'Search styles' });
+  await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+  await search.fill('weight');
+  await expect(panel.locator('.fn-style-row')).toHaveCount(6);
+  await expect(panel.locator('legend')).toHaveText(['Font weight']);
+  await page.screenshot({ path: info.outputPath('styles-weight-comparison.png') });
+  await page.getByRole('combobox', { name: 'Style object', exact: true }).selectOption('Section headings');
+  await expect(panel.locator('.fn-style-row')).toHaveCount(1);
+  await search.fill('size'); await expect(panel.locator('.fn-style-row')).toHaveCount(1);
+  await page.getByRole('combobox', { name: 'Style property', exact: true }).selectOption('font-weight');
+  await expect(panel).toContainText('No matching styles');
+  await search.fill(''); await page.getByRole('combobox', { name: 'Style object', exact: true }).selectOption('');
+  await page.getByRole('combobox', { name: 'Group styles by', exact: true }).selectOption('object');
+  await expect(panel.locator('legend')).toHaveCount(6);
+  await page.getByRole('combobox', { name: 'Style property', exact: true }).selectOption('color');
+  await search.fill('body');
+  const choice = page.getByRole('combobox', { name: 'Body color color', exact: true });
+  await choice.selectOption('var(--color-green-light)');
+  await expect(panel.getByRole('img', { name: 'Body color: Green' })).toHaveCSS('background-color', 'rgb(56, 108, 54)');
+  await expect(panel.getByRole('textbox', { name: 'Body color', exact: true })).toBeHidden();
+  await choice.selectOption('custom');
+  const raw = panel.getByRole('textbox', { name: 'Body color', exact: true });
+  // Math defaults to body color, so pointing body back at math must be rejected.
+  await raw.fill('var(--fn-math)'); await raw.press('Tab');
+  await expect(raw).toHaveJSProperty('validationMessage', 'Use a valid CSS value without circular references.');
+  await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(56, 108, 54)');
+  await raw.fill('#345678'); await raw.press('Tab');
+  await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(52, 86, 120)');
+  await page.reload(); await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(52, 86, 120)');
+  await page.getByRole('button', { name: 'Styles', exact: true }).click();
+  await page.getByRole('button', { name: 'Reset overrides' }).click();
+  await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(36, 43, 53)');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await search.fill('weight');
+  expect(await panel.evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('styles-phone.png') });
+});
+
+test('light canvas and parent gaps unify prose and the animation entrance', async ({ page }, info) => {
+  await page.setViewportSize({ width: 1440, height: 960 }); await ready(page);
+  await page.getByRole('button', { name: 'Styles', exact: true }).click();
+  await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+  for (const selector of ['.fn-header', '.fn-left', '.fn-source-pane', '.fn-styles']) await expect(page.locator(selector)).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+  await expect(preview(page).locator('body')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+  await page.getByRole('button', { name: 'Close styles' }).click();
+  const geometry = await page.locator('.ProseMirror').evaluate(root => {
+    const blocks = [...root.children], story = root.querySelector('.fn-story')!;
+    const before = story.previousElementSibling!, first = blocks[1]!, second = blocks[2]!;
+    const gap = (a: Element, b: Element) => b.getBoundingClientRect().top - a.getBoundingClientRect().bottom;
+    return { paragraph: gap(first, second), stage: gap(before, story), outer: [getComputedStyle(story).marginTop, getComputedStyle(story).paddingTop], paragraphMargin: getComputedStyle(first.querySelector('p')!).marginBottom };
+  });
+  expect(geometry.paragraph).toBeGreaterThan(8); expect(geometry.paragraph).toBeLessThan(20);
+  expect(geometry.stage).toBeCloseTo(geometry.paragraph, 1);
+  expect(geometry.outer).toEqual(['0px', '0px']); expect(geometry.paragraphMargin).toBe('0px');
+  expect(await page.locator('.fn-header').evaluate(el => getComputedStyle(el).boxShadow)).not.toBe('none');
+  await menu(page, 'writing');
+  expect(await page.locator('.fn-writing .fn-menu-panel').evaluate(el => { const rect = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(rect.x + 15, rect.y + 15)); })).toBe(true);
+  await page.locator('.fn-writing > summary').click();
+  await page.locator('.fn-editor').evaluate(el => { el.scrollTop = 0; });
+  await page.screenshot({ path: info.outputPath('light-document-rhythm.png') });
+  await expect(preview(page).locator('.kp-caption-document-intro header')).toHaveCSS('row-gap', '6.4px');
+  await expect(preview(page).locator('.kp-caption-document-intro header h1')).toHaveCSS('margin-bottom', '0px');
+  await page.getByRole('button', { name: 'Styles', exact: true }).click();
+  await page.getByRole('searchbox', { name: 'Search styles' }).fill('block gap');
+  await page.getByRole('textbox', { name: 'Block gap', exact: true }).fill('1rem');
+  await page.getByRole('textbox', { name: 'Block gap', exact: true }).press('Tab');
+  await expect(page.locator('.ProseMirror')).toHaveCSS('row-gap', '16px');
+  await expect(preview(page).locator('.kp-caption-document-intro')).toHaveCSS('row-gap', '16px');
 });
 
 test('source typing makes no preview request and a superseded Run cannot replace the result', async ({ page }) => {

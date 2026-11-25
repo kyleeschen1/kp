@@ -1,25 +1,26 @@
 @import '@fontsource/source-serif-4/latin-400.css';
+@import './palette.css';
+@import './rhythm.css';
+@import './style-panel.css';
 :root {
   --fn-font: 'Source Serif 4', Georgia, serif;
-  --color-red-light: #f07070; --color-green-light: #b6d5a3; --color-blue-light: #b9d8df; --color-yellow-light: #d8c59b;
-  --fn-text: #e2e2d9; --fn-background: #121826; --fn-muted: #b0b9b1; --fn-border: #58615a;
-  --fn-surface: #1b2535; --fn-focus: #f2c14e;
+  --fn-text: var(--color-ink); --fn-background: var(--color-paper); --fn-muted: var(--color-muted); --fn-border: var(--color-border);
+  --fn-surface: var(--color-stage); --fn-focus: var(--color-emphasis); --fn-shadow: var(--color-shadow);
   --fn-link: var(--color-blue-light); --fn-math: var(--fn-text); --fn-annotation: var(--fn-muted);
-  --fn-selection: #53614d; --fn-gutter: var(--fn-muted); --fn-warning: #f0c59c;
+  --fn-selection: var(--color-selection); --fn-gutter: var(--fn-muted); --fn-warning: var(--color-warning);
   --fn-code-string: var(--color-yellow-light); --fn-code-property: var(--color-blue-light);
   --fn-code-number: var(--color-green-light); --fn-code-punctuation: var(--fn-muted);
   --fn-masthead-weight: 500; --fn-title-weight: 500; --fn-object-weight: 500; --fn-caption-weight: var(--kp-document-body-weight);
   --fn-masthead-size: 1rem; --fn-object-size: var(--kp-document-heading-size); --fn-caption-size: var(--kp-document-body-size); --fn-code-size: .8125rem;
-  --kp-editor-cursor: var(--color-red-light); --kp-editor-cursor-ink: #121826;
+  --kp-editor-cursor: var(--color-red-light); --kp-editor-cursor-ink: var(--color-cursor-ink);
   --kp-focus-card-passage-font: var(--fn-font); --kp-focus-card-ui-font: var(--fn-font);
 }
 :root[data-notebook-theme=light] {
-  color-scheme: light; --fn-text: #242b35; --fn-background: #faf9f5; --fn-muted: #58616c; --fn-border: #a4aaa9;
-  --fn-selection: #c9ded1; --fn-warning: #8d4d13; --kp-document-body-weight: 400;
-  --fn-surface: #eeefe9; --fn-focus: var(--color-yellow-light);
-  --color-red-light: #b82436; --color-green-light: #386c36; --color-blue-light: #215f80; --color-yellow-light: #80600a;
-  --kp-editor-cursor-ink: #ffffff;
+  color-scheme: light; --kp-document-body-weight: 400;
 }
+/* Keep all workspace overlays below the masthead and its menus. */
+.fn-workspace { isolation: isolate; z-index: 0; }
+.fn-header { background: var(--fn-background); box-shadow: 0 4px 14px var(--fn-shadow); }
 html, body { background: var(--fn-background); color: var(--fn-text); font-family: var(--fn-font); }
 .fn-header, .fn-wordmark, .fn-header button, .fn-header a, .fn-header summary, .fn-status, .fn-menu, .fn-structure,
 .fn-story, .fn-slot-label, .fn-cell-context, .fn-code-help, .fn-follow, .fn-inspector, .fn-source-tools {
@@ -41,7 +42,7 @@ html, body { background: var(--fn-background); color: var(--fn-text); font-famil
 .fn-annotation { text-decoration-color: var(--fn-annotation); }
 .fn-editor .ProseMirror ::selection { background: var(--fn-selection); }
 .fn-status[data-state=invalid], .fn-inline-error:not(:empty) { color: var(--fn-warning); }
-.fn-side-panel { position: absolute; right: 0; top: 0; bottom: 0; z-index: 8; width: min(370px, 100%); overflow: auto; padding: 20px; background: var(--fn-background); color: var(--fn-text); border-left: 1px solid var(--fn-border); box-shadow: -8px 0 24px #0003; }
+.fn-side-panel { position: absolute; right: 0; top: 0; bottom: 0; z-index: 8; width: min(370px, 100%); overflow: auto; padding: 20px; background: var(--fn-background); color: var(--fn-text); border-left: 1px solid var(--fn-border); box-shadow: -8px 0 24px var(--fn-shadow); }
 .fn-side-panel[hidden] { display: none; }
 .fn-side-panel h2 { font-weight: var(--kp-document-heading-weight); margin: 0 0 12px; }
 .fn-side-panel p { font-size: .85rem; line-height: 1.5; }

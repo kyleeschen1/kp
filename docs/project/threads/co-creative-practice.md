@@ -13,8 +13,8 @@ earlier practice ambitions while changing their ordering.
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
-Read live slice state there. The parallel agent retains task/editor ownership;
-this checkout's old workbench proposal is not its current implementation.
+Read live slices there. Preserve parallel editor ownership; this checkout's old
+workbench proposal is historical.
 The [handoff](../reviews/2026-11-08-project-orientation.md) bounds the conversation/preview
 candidate. [Saved reading and motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md)
 separates repaired startup and reuse from cold preparation cost. What counts
@@ -35,8 +35,10 @@ workbench latency remain unproved. The approved notebook detour below is current
   The [structure editor](../reviews/2026-11-24-structure-editor.md) is accepted.
   The [unified surface](../reviews/2026-11-24-unified-notebook-surface.md) is accepted.
   [Focused animation editing](../reviews/2026-11-24-focused-buffer-next-step-review.md)
-  is approved under `run-contract.kp.focused-buffer-20261124`: one document,
-  source beside its result, exposed styles and help/basic Ex commands.
+  is checked: one document, source beside its result and help/basic Ex commands.
+  User feedback approves [style comparison and rhythm](../reviews/2026-11-24-notebook-style-comparison.md)
+  under `run-contract.kp.style-comparison-20261124`; the focused candidate remains
+  recoverable while its presentation is refined.
   Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
@@ -61,8 +63,7 @@ workbench latency remain unproved. The approved notebook detour below is current
 
 ## Coordination and handoff
 
-Name the beneficiary, capability and finish line. Record displaced commitments
-when direction changes.
+Name the beneficiary, capability, finish line and displaced commitments.
 
 At handoff, reconcile direction and approval boundaries with the dashboard, record
 actual execution through Theseus, and show a concrete artifact or workflow.

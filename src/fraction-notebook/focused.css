@@ -3,18 +3,18 @@
 .fn-left { width: 100%; transform: none; visibility: visible; transition: none; }
 .fn-editing .fn-left { transform: none; }
 #app:not(.fn-editing) .fn-left { visibility: hidden; }
-.fn-right { right: auto; bottom: auto; transition: none; z-index: 2; background: var(--fn-background, #121826); }
+.fn-right { right: auto; bottom: auto; transition: none; z-index: 2; background: var(--fn-background); }
 .fn-animation-slot { height: 480px; margin-top: 16px; }
-.fn-source-pane { display: none; position: absolute; inset: 0 auto 0 0; width: var(--notebook-width); background: var(--fn-background, #121826); z-index: 3; flex-direction: column; }
+.fn-source-pane { display: none; position: absolute; inset: 0 auto 0 0; width: var(--notebook-width); background: var(--fn-background); z-index: 3; flex-direction: column; }
 .fn-focus .fn-source-pane { display: flex; }
-.fn-source-tools { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--fn-border, #465346); }
+.fn-source-tools { display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--fn-border); }
 .fn-source-host { min-height: 0; flex: 1; overflow: auto; padding: 0 16px 16px; }
 .fn-source-host .fn-code { margin: 0; border: 0; }
 .fn-source-host .cm-scroller { max-height: none !important; }
 .fn-source-host .fn-code-help { margin: 12px 0; }
 .fn-divider, .fn-editing .fn-divider { opacity: 0; pointer-events: none; z-index: 4; }
 .fn-focus .fn-divider { opacity: 1; pointer-events: auto; }
-.fn-result-status { margin: 0; padding: 8px 12px; color: var(--fn-warning, #f0c59c); font: inherit; font-size: .8rem; max-height: 100px; overflow: auto; }
+.fn-result-status { margin: 0; padding: 8px 12px; color: var(--fn-warning); font: inherit; font-size: .8rem; max-height: 100px; overflow: auto; }
 .fn-result-status:empty { display: none; }
 .fn-story { padding: 16px; }
 .fn-preview { flex: 1 1 0; }

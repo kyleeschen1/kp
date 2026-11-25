@@ -1,0 +1,19 @@
+:root { --fn-block-gap: .9rem; --fn-title-gap: .4rem; --kp-document-paragraph-gap: var(--fn-block-gap); }
+/* Parents own document rhythm. Native animation internals retain their geometry;
+ * viewport padding and control hit targets are deliberately outside this rule. */
+.fn-editor .ProseMirror, .fn-block-content { display: flex; flex-direction: column; gap: var(--fn-block-gap); }
+.fn-editor .ProseMirror > *, .fn-block .fn-block-content > *, .fn-editor .fn-block-title,
+.fn-block-content > .fn-block-title:first-child { margin-block: 0; padding-block: 0; }
+.fn-article-header { display: flex; flex-direction: column; gap: var(--fn-title-gap); }
+.fn-editor .fn-article-header > * { margin-block: 0; padding-block: 0; }
+.fn-story { display: flex; flex-direction: column; gap: var(--fn-block-gap); }
+.fn-editor .fn-story > *, .fn-editor .fn-caption > * { margin-block: 0; padding-block: 0; }
+.fn-caption { display: flex; flex-direction: column; gap: var(--fn-title-gap); }
+body[data-kp-fraction-notebook-preview] :is(.kp-caption-document-intro, .kp-caption-document-after) { display: flex; flex-direction: column; gap: var(--fn-block-gap); }
+body[data-kp-fraction-notebook-preview][data-kp-reader-layout] :is(.kp-caption-document-intro, .kp-caption-document-after) > *,
+body[data-kp-fraction-notebook-preview][data-kp-reader-layout] .fn-block-content > * { margin-block: 0; padding-block: 0; }
+body[data-kp-fraction-notebook-preview] :is(.kp-caption-document-intro, .kp-caption-document-after) > header { display: flex; flex-direction: column; gap: var(--fn-title-gap); }
+body[data-kp-fraction-notebook-preview][data-kp-reader-layout] :is(.kp-caption-document-intro, .kp-caption-document-after) > header > * { margin-block: 0; padding-block: 0; }
+body[data-kp-fraction-notebook-preview] .kp-caption-document-intro { margin-bottom: var(--fn-block-gap); }
+body[data-kp-fraction-notebook-preview] .kp-caption-document-after { padding-top: var(--fn-block-gap); }
+body[data-kp-fraction-notebook-preview][data-notebook-animation-only=true] :is(.kp-caption-document-intro, .kp-caption-document-after) { display: none; }

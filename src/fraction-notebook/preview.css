@@ -21,4 +21,4 @@ body[data-kp-fraction-notebook-preview][data-kp-reader-layout] :is(.kp-caption-d
 .fn-preview-moments { display: none; }
 body[data-notebook-animation-only=true] { --kp-reader-masthead-height: 44px; }
 body[data-notebook-animation-only=true] :is(.kp-caption-document-intro, .kp-caption-document-after) { display: none; }
-body[data-notebook-animation-only=true] .fn-preview-moments { display: block; position: fixed; top: 6px; left: 16px; width: calc(100% - 32px); z-index: 50; font: inherit; font-size: .8rem; padding: 6px; color: inherit; background: var(--fn-background, #121826); border: 1px solid var(--fn-border, #465346); }
+body[data-notebook-animation-only=true] .fn-preview-moments { display: block; position: fixed; top: 6px; left: 16px; width: calc(100% - 32px); z-index: 50; font: inherit; font-size: .8rem; padding: 6px; color: inherit; background: var(--fn-background); border: 1px solid var(--fn-border); }

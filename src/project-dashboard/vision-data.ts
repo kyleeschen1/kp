@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "focused-notebook",
-    title: "Edit source beside its running animation",
+    id: "notebook-style-comparison",
+    title: "Compare notebook styles and unify document rhythm",
     approval: "approved",
-    contractId: "run-contract.kp.focused-buffer-20261124",
-    finish: "Review one rich document with focused animation source/result, explicit Run, recoverable drafts, shared style controls and discoverable help/basic Ex commands. Preserve document identities, history and the native player.",
-    source: { label: "Approved focused notebook round", href: "docs/project/reviews/2026-11-24-focused-buffer-next-step-review.md" }
+    contractId: "run-contract.kp.style-comparison-20261124",
+    finish: "Review shared light Paper, named color swatches, object/property style comparisons, masthead elevation and parent-owned block spacing in one fraction notebook. Preserve the focused source workflow and native animation.",
+    source: { label: "Approved style refinement", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At /experiments/fraction-notebook/, open the animation specification, change its wording and Run beside the result. Close back to the same document position. Try Styles, :h and :set relativenumber. Judge focused editing, typography and discoverability. Custom motions and text objects remain parked.",
+  nextJudgment: "At /experiments/fraction-notebook/, open Styles, select Light and search weight to compare heading/title/body thickness. Try object/property filters and named color swatches. Close Styles and judge paragraph spacing, the stage entrance and masthead shadow. Custom motions and text objects remain parked.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The user accepts nested structure editing and the unified masthead, matching prose, split motion and modal cursors. Duplicate prose now motivates focused source editing beside the selected animation. General authoring speed and learning remain unproved.",
-      evidence: { label: "Accepted unified surface", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" },
+      established: "Nested structure editing and the unified surface are accepted. The focused source candidate is checked; user feedback now selects shared beige, comparable styles and consistent spacing. Broader visual acceptance, general authoring speed and learning remain unproved.",
+      evidence: { label: "Focused candidate and refinement boundary", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" },
       outcome: {
         authority: "approved",
-        id: "focused-animation-editing", title: "Tweak source while inspecting its animation",
-        finish: "Write in one rich document, open the fraction source beside its current result, run a supported change, recover from an invalid draft, and close back to the same document position. Full reading Preview remains optional.",
+        id: "notebook-style-rhythm", title: "Compare styles in one coherent document surface",
+        finish: "Find styles by object and property, compare font weights together, select named palette colors and review shared light canvas, consistent paragraph/stage gaps and elevated masthead. Preserve focused editing and optional full Preview.",
         excludes: "Custom motions/text objects, arbitrary code execution, public-reader redesign, transclusion UI, book search or general editor promotion.",
-        source: { label: "Focused-buffer next-step review", href: "docs/project/reviews/2026-11-24-focused-buffer-next-step-review.md" }
+        source: { label: "Style comparison review", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" }
       }
     },
     {
@@ -351,6 +351,13 @@ export const projectVision: ProjectVision = {
       after: "The accepted direction is one rich document with focused source beside the current animation, optional full Preview, and separate Save/Run semantics. Styles and help/basic Ex follow; custom motions and text objects are parked.",
       reason: "Spend screen space on feedback for the object being edited and preserve the return path. The subsequent go approves the focused workflow, styles and help/basic Ex in one exemplar.",
       source: { label: "Focused-buffer next-step review", href: "docs/project/reviews/2026-11-24-focused-buffer-next-step-review.md" }
+    },
+    {
+      id: "notebook-style-refinement", on: "2026-11-24",
+      before: "The focused notebook candidate exposes styles in a flat list, with differing light backgrounds and separate paragraph/stage spacing.",
+      after: "The user approves one presentation refinement: shared beige, named swatches, object/property search and grouping, masthead shadow and parent-owned gaps. The checked focused candidate remains recoverable.",
+      reason: "Authors need to compare related styles and control document rhythm without deciphering hex values. This refines the exemplar; it does not accept broader promotion or change content and animation authority.",
+      source: { label: "Approved style refinement", href: "docs/project/reviews/2026-11-24-notebook-style-comparison.md" }
     }
   ]
 };

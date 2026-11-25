@@ -1,0 +1,41 @@
+{
+  "id": "run-contract.kp.style-comparison-20261124",
+  "kind": "run-contract",
+  "title": "Notebook styles and rhythm",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1 of 1 implementation packages checked; stop at exemplar visual review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.style-comparison-20261124.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-notebook-style-comparison.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:fraction-notebook",
+    "npm run typecheck:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "User reviews the scoped style and spacing candidate."
+  ],
+  "allowedWork": [
+    "Approved experiment Styles and scoped CSS refinement"
+  ],
+  "disallowedWork": [
+    "Schema changes, public reader rollout, animation semantics and custom Vim extensions"
+  ],
+  "goal": "One light Paper canvas, searchable style comparisons, named colors and parent-owned spacing",
+  "target": "task.kp.style-comparison-20261124",
+  "slices": [
+    {
+      "id": "styles",
+      "title": "Style comparison and document rhythm",
+      "summary": "Style comparison, named palette, shared light canvas, masthead shadow and parent-owned gaps implemented and checked. Candidate awaits human visual review before promotion.",
+      "status": "complete"
+    }
+  ]
+}

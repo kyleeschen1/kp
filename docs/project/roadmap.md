@@ -3,9 +3,9 @@
 Last Updated: 2026-11-24
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `focused-notebook`
-Execution Contract: `run-contract.kp.focused-buffer-20261124`
-Next Product Milestone: `focused-animation-editing`
+Current Commitment: `notebook-style-comparison`
+Execution Contract: `run-contract.kp.style-comparison-20261124`
+Next Product Milestone: `notebook-style-rhythm`
 Milestone Authority: approved
 
 ## Where we are going
@@ -22,15 +22,16 @@ why this becomes the organizing direction and what it supersedes.
 **Accepted detour:** [unified notebook surface](reviews/2026-11-24-unified-notebook-surface.md)
 and nested structure editor. Approved successor: [focused animation editing](reviews/2026-11-24-focused-buffer-next-step-review.md),
 one rich document with source beside its current animation and optional full Preview.
-Implement the focused workflow, exposed styles and help/basic Ex controls in one
-fraction exemplar; review before generalizing.
+The focused candidate is checked; user feedback selects [style comparison and
+document rhythm](reviews/2026-11-24-notebook-style-comparison.md): shared beige,
+searchable properties/objects, named colors and consistent gaps in one exemplar.
+Review this refinement before generalizing the focused workflow.
 Custom motions/text objects are parked; MathML declined. Transclusion and
 search remain later. Preserve nesting, UUIDs, metadata and recovery.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
-retains its identity, nesting, scope and reuse evidence; its inspector UI was not
-accepted as the writing experience. The existing authoring-to-practice contract
-and fractional editorial checkpoint remain return paths, without reordering or
-completing their remaining slices. The ecosystem-orientation grill is parked too.
+retains identity, nesting, scope and reuse evidence; its inspector UI was unaccepted.
+Authoring-to-practice and fractional editorial review remain unchanged return paths.
+The ecosystem-orientation grill is parked.
 
 Return to the approved [authoring-to-practice programme](2026-11-08-authoring-to-practice-loops.md)
 after this bounded checkpoint. Its dependencies and human gates remain intact.
@@ -40,8 +41,7 @@ What counts remains the technical reference. Fractional reasoning awaits review
 of its argument, alternative route and changed-case question. Preserve the
 [accepted reading defaults](principles/document-theater-reading.md).
 
-Use the existing authoring path. The parallel agent retains task/editor ownership;
-strategic records have one editor at a time.
+Preserve the existing authoring path, parallel editor ownership and single strategic editor.
 
 ## First product proof — approved
 

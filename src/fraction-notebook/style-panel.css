@@ -1,0 +1,16 @@
+.fn-side-panel.fn-styles { width: min(440px, 100%); }
+.fn-style-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.fn-style-filters input, .fn-style-filters select:last-child { grid-column: 1 / -1; }
+.fn-style-groups fieldset { min-width: 0; margin: 16px 0; padding: 0; border: 0; }
+.fn-style-groups legend { width: 100%; border-bottom: 1px solid var(--fn-border); padding-bottom: 6px; font-weight: var(--kp-document-heading-weight); }
+.fn-style-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 12px; align-items: center; margin: 12px 0; font-size: .85rem; }
+.fn-style-label { display: flex; flex-direction: column; }
+.fn-style-label small, .fn-style-effective { color: var(--fn-muted); font-size: .75rem; }
+.fn-style-effective { grid-column: 2; overflow-wrap: anywhere; }
+.fn-color-choice { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.fn-color-choice select { min-width: 0; }
+.fn-color-swatch { width: 24px; height: 24px; flex: 0 0 24px; border: 1px solid var(--fn-border); border-radius: 3px; }
+.fn-style-advanced { grid-column: 1 / -1; font-size: .75rem; }
+.fn-style-advanced summary { cursor: pointer; color: var(--fn-muted); }
+.fn-style-advanced code { display: block; margin-block: 6px; overflow-wrap: anywhere; }
+.fn-style-row input:invalid { outline: 1px solid var(--fn-warning); }

@@ -1,0 +1,61 @@
+{
+  "id": "task.kp.style-comparison-20261124",
+  "kind": "task",
+  "title": "Compare named notebook styles and unify document spacing",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: checked fraction style/rhythm candidate; all approved implementation complete, visual judgment pending.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-24-notebook-style-comparison.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "failed",
+      "scope": "Initial discovery: 20 of 21 passed; preview retained a native paragraph margin. Repaired the notebook preview spacing boundary and reran the full suite.",
+      "checkedAt": "2026-11-25T05:29:37.180Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "Initial reconciliation caught duplicate snapshot identity, then startup prose budgets. Renamed the pivot and shortened entrypoints without changing budgets; full rerun passed 75 tests.",
+      "checkedAt": "2026-11-25T05:29:38.252Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "75 tests; roadmap, active thread, source-linked vision and approved run remain aligned within original startup budgets.",
+      "checkedAt": "2026-11-25T05:29:38.939Z"
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "17 model, identity, migration, metadata, nesting and independent reading tests.",
+      "checkedAt": "2026-11-25T05:29:39.663Z"
+    },
+    {
+      "command": "npm run visual:anchored-algebra -- --grep 'fractional reasoning'",
+      "status": "passed",
+      "scope": "One canonical public reader preservation check passed.",
+      "checkedAt": "2026-11-25T05:29:40.365Z"
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "Final notebook source and browser regression test types passed.",
+      "checkedAt": "2026-11-25T05:30:36.183Z"
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "Final full 21-test Chromium suite passed; desktop and phone captures inspected. Shared light canvas, property/object filtering, swatches, persistence, cycles, parent gaps, title groups, outline borders and prior editing/player behavior verified.",
+      "checkedAt": "2026-11-25T05:30:53.477Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews light canvas, Styles comparison and document rhythm at the fraction notebook URL."
+  ]
+}
