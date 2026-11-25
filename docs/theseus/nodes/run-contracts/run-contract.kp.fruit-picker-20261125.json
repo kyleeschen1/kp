@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.fruit-picker-20261125",
+  "kind": "run-contract",
+  "title": "Floating fruit picker MVP",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: one checked package complete; stop before generalizing the picker.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.fruit-picker-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-fruit-picker.md"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run test:fraction-notebook",
+    "npm run visual:editor-chat",
+    "npm run test:project-vision"
+  ],
+  "revisitWhen": [
+    "User reviews the fruit picker appearance and interaction."
+  ],
+  "allowedWork": [
+    "Fruit matcher, one-line query, floating dialog, workspace entrypoint and focused preservation checks"
+  ],
+  "disallowedWork": [
+    "General picker service, file/session integration, new persistence, live inference, renderer changes or moving panes"
+  ],
+  "goal": "One small ProseMirror query with up to five fuzzy fruit matches and reliable return to the invoking editor",
+  "target": "task.kp.fruit-picker-20261125",
+  "slices": [
+    {
+      "id": "picker",
+      "title": "Implement and verify the fruit picker exemplar",
+      "summary": "Fruit matcher, query, floating dialog and workspace entrypoint checked. Types, 23 notebook units, 23 chat/picker Chromium cases, five affected notebook browser cases and 75 vision checks pass. Candidate ready for visual review.",
+      "status": "complete"
+    }
+  ]
+}

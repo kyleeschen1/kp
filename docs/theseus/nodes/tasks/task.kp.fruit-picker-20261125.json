@@ -1,0 +1,68 @@
+{
+  "id": "task.kp.fruit-picker-20261125",
+  "kind": "task",
+  "title": "Try a floating fruit picker with a ProseMirror query",
+  "status": "deferred",
+  "domain": "product",
+  "summary": "HUMAN_CHECKPOINT: approved fruit-only MVP is implemented and checked. Review fixed-top sizing, matching emphasis and context return at the notebook Picker command.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-fruit-picker.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:editor-chat -- --grep 'fruit picker'",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:34:15.063Z",
+      "notes": "The interaction test passed. The restoration test reached successful source-caret insertion/undo but its final assertion compared an initial CodeMirror viewport snapshot with a later expanded rendered range. Corrected the new test to compare the edited first line, respecting CodeMirror virtualization; subsequent full-suite execution covers the repair."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:34:16.069Z",
+      "notes": "Notebook, picker, chat consumers and browser test types pass."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:34:16.693Z",
+      "notes": "23 tests pass. Added ranking, ordered match positions, stable identity, result cap and single-paragraph query tests; existing notebook/native object invariants remain checked."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'help, Ex|Styles compares|focused source|phone focused'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:34:17.327Z",
+      "notes": "Five affected Chromium checks pass: source/native-player preservation, save/run boundaries, keyboard help, inherited styles and phone source/result."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:34:17.976Z",
+      "notes": "75 tests pass; approved fruit successor and preserved focus checkpoint agree across roadmap, thread and dashboard within unchanged startup budgets."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:34:18.614Z",
+      "notes": "Explicit fruit contract and source-linked scope agree; unrelated global plan election was not resumed."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T20:35:23.190Z",
+      "notes": "All 23 Chromium checks pass, including both fruit scenarios and existing chat/notes/streaming/focus/reader preservation. Inspected dark/light/narrow captures. Earlier fixture-only CodeMirror viewport assertion corrected without changing application behavior."
+    }
+  ],
+  "revisitWhen": [
+    "User judges the fruit picker exemplar before any broader resource integration."
+  ]
+}

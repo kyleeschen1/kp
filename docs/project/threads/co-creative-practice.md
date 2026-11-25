@@ -41,9 +41,9 @@ workbench latency remain unproved. The approved notebook detour below is current
   Checked: [fixed split](../reviews/2026-11-25-fixed-chat-split.md) and
   [joined chat](../reviews/2026-11-25-joined-chat-composer.md).
   Checked: [workspace modeline](../reviews/2026-11-25-workspace-modeline.md),
-  spacing and default gutters off. Approved: [raised panes and current-line focus](../reviews/2026-11-25-workspace-focus-lines.md),
-  shadow replaces dimming; single separators, a larger bar and focused custom
-  text/source lines. No new component. The
+  spacing and default gutters off. [Pane/line focus](../reviews/2026-11-25-workspace-focus-lines.md)
+  is checked, awaiting visual judgment. Approved: [fruit picker](../reviews/2026-11-25-fruit-picker.md),
+  one query, five suggestions and editor return. No general picker service. The
   [multiplexer vision](../2026-11-25-multiplexer-vision.md) records later scope.
   Preserve native history and domain ownership.
   Motions/text objects remain parked; MathML declined.

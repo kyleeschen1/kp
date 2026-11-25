@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-workspace-focus-lines",
-    title: "Make the active pane and editing line easier to locate",
+    id: "kp-fruit-picker",
+    title: "Try a floating picker without losing the editing context",
     approval: "approved",
-    contractId: "run-contract.kp.workspace-focus-lines-20261125",
-    finish: "Replace inactive dimming with an active-pane shadow, use single layout separators, enlarge the modeline and highlight the focused line in prose/custom blocks and source. Preserve stationary panes, fonts, native rendering and editor-owned selection/history.",
-    source: { label: "Approved focus refinement exemplar", href: "docs/project/reviews/2026-11-25-workspace-focus-lines.md" }
+    contractId: "run-contract.kp.fruit-picker-20261125",
+    finish: "One floating ProseMirror query reveals up to five fuzzy fruit matches, narrows without moving the query line, and supports keyboard/pointer selection with exact return to the invoking editor. Preserve the fixed workspace and native data owners.",
+    source: { label: "Approved fruit picker MVP", href: "docs/project/reviews/2026-11-25-fruit-picker.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat and switch panes. Judge active-pane shadow, single separators and the larger bar. Move through a wrapped paragraph and a KP custom title/body; open source or a command popup and check that line emphasis follows actual editor focus. Compare dark/light and narrow views.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Picker, type ap then apric, and erase back to empty. Judge the fixed query line, matching emphasis and shrinking rows. Navigate with Ctrl-n/p, choose with Enter or cancel with Escape, and check the previous editor position returns. Compare dark/light and narrow views.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook and persistent conversation are accepted; the equal split, joined chat/folding and modeline are checked. The moving stack remains rejected. The user replaces inactive dimming with a bounded focus refinement. The multiplexer vision, native data, object revision and independent Spindle ownership remain foundations.",
+      established: "The notebook and persistent conversation are accepted; the equal split, joined chat/folding and modeline are checked. The pane/line focus refinement is checked and awaits visual judgment. The approved fruit picker is a finite successor; the multiplexer vision, native data and independent Spindle ownership remain foundations.",
       evidence: { label: "Recorded multiplexer vision and boundaries", href: "docs/project/2026-11-25-multiplexer-vision.md" },
       outcome: {
         authority: "approved",
-        id: "workspace-focus-lines", title: "Locate the active pane and current line without dimming content",
-        finish: "Stationary panes use active shadow and single separators. The modeline accommodates default text size, and only the focused editor highlights its current line, including text inside existing custom blocks. Preserve selection, history, drafts, streaming and native rendering.",
-        excludes: "New text components, Lit integration, general workspace persistence, MCP services, task storage migration, agent monitoring, automatic patches, publication or library extraction.",
-        source: { label: "Approved focus successor", href: "docs/project/reviews/2026-11-25-workspace-focus-lines.md" }
+        id: "fruit-picker", title: "Choose from a small floating list and return to the work",
+        finish: "A one-line query starts in Insert and filters preset fruit into at most five stable, highlighted results. Keyboard and pointer choice or Escape restore the prior pane, selection and scroll without changing chat or notebook content.",
+        excludes: "General picker service, file/session/object integration, persistence, Lit migration, full fzf compatibility, model calls or renderer changes.",
+        source: { label: "Approved fruit-only successor", href: "docs/project/reviews/2026-11-25-fruit-picker.md" }
       }
     },
     {
@@ -466,6 +466,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves active-pane shadow, single separators, a default-size modeline and current-line emphasis, explicitly including existing custom block text.",
       reason: "Keep content legible and make the input location easier to find without moving the split or replacing editor state. Web Components and new reusable text components remain future proofs.",
       source: { label: "Approved focus pass and preservation boundary", href: "docs/project/reviews/2026-11-25-workspace-focus-lines.md" }
+    },
+    {
+      id: "select-fruit-picker-exemplar", on: "2026-11-25",
+      before: "The focus pass has a checked candidate and remains available for visual judgment. The broader multiplexer design includes common pickers.",
+      after: "The user approves a fruit-only floating picker with a small ProseMirror query, five suggestions, fuzzy matching and keyboard selection.",
+      reason: "Try the interaction and reliable context return before binding it to files, sessions or other resources. Retain prior focus work without calling it visually accepted or expanding it into a framework.",
+      source: { label: "Approved picker walkthrough and finite scope", href: "docs/project/reviews/2026-11-25-fruit-picker.md" }
     }
   ]
 };

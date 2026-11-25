@@ -22,9 +22,11 @@ import { mountLineNumbers } from './numbers.ts';
 import { mountChat } from '../editor-chat/panel.ts';
 import { mountWindows } from './windows.ts';
 import { mountModeline } from './modeline.ts';
+import { mountFruitPicker } from './fruit-picker.ts';
 import './windows.css';
 import './modeline.css';
 import './active-line.css';
+import './fruit-picker.css';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
@@ -113,6 +115,15 @@ const chat = mountChat(editorBody, actions, () => layout.refresh(), {
 });
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); });
 const modeline = mountModeline(root, windows);
+const picker = mountFruitPicker(root, actions, () => {
+  const { active, windows: panes } = windows.snapshot(), pane = panes.find(entry => entry.id === active)?.element;
+  const scroll = [...(pane?.querySelectorAll<HTMLElement>('.fn-editor, .cm-scroller, .kp-chat-history, .kp-chat-draft, .kp-chat-notes') ?? [])]
+    .map(element => ({ element, top: element.scrollTop, left: element.scrollLeft }));
+  return () => {
+    windows.activate(active, true);
+    for (const { element, top, left } of scroll) if (element.isConnected) { element.scrollTop = top; element.scrollLeft = left; }
+  };
+});
 actions.append(button('Styles', () => styles.toggle()));
 const numbers = mountLineNumbers(editorHost, editor.view);
 const commands = mountCommands(workspace, editor.view, {
@@ -136,7 +147,8 @@ actions.querySelector('.fn-structure-controls')!.classList.add('fn-menu-panel');
 // selection, then dismiss so a popup cannot cover the passage being edited.
 header.addEventListener('click', event => {
   const control = event.target instanceof Element ? event.target.closest('button,summary,select') : null;
-  if (control && control.getAttribute('aria-controls') !== 'kp-chat') windows.activate('page');
+  // Workspace commands borrow focus without changing the active pane.
+  if (control && !control.hasAttribute('data-workspace-command') && control.getAttribute('aria-controls') !== 'kp-chat') windows.activate('page');
   if (event.target instanceof Element && event.target.closest('button')) event.target.closest<HTMLDetailsElement>('details.fn-menu')?.removeAttribute('open');
 });
 header.addEventListener('change', event => {
@@ -231,6 +243,6 @@ const onMessage = (event: MessageEvent) => {
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); modeline.dispose(); chat.dispose(); windows.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

@@ -72,6 +72,112 @@ async function selectPassage(page: Page, text: string, message?: string) {
   await page.keyboard.press('Escape');
 }
 
+test('fruit picker keeps one query buffer while fuzzy rows narrow, reverse and accept by keyboard or pointer', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url);
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  const prose = page.locator('.fn-editor .ProseMirror'), original = await prose.textContent();
+  const launcher = page.getByRole('button', { name: 'Picker', exact: true });
+  const dialog = page.getByRole('dialog', { name: 'Fruit picker' }), query = page.getByRole('combobox', { name: 'Find a fruit' });
+  const options = dialog.getByRole('option'), selected = dialog.getByRole('option', { selected: true });
+  const mode = page.locator('.kp-modeline-mode');
+  await launcher.click(); await expect(query).toBeFocused(); await expect(query).toHaveAttribute('data-vim-mode', 'insert');
+  await expect(mode).toHaveText('[I]'); await expect(page.locator('.kp-modeline-surface')).toHaveText('Picker › query');
+  await expect(options).toHaveCount(0); const emptyBox = (await dialog.boundingBox())!;
+  const editor = await query.elementHandle();
+  await query.fill('ap'); await expect(options).toHaveText(['Apple', 'Apricot', 'Grape', 'Grapefruit', 'Papaya']);
+  await expect(selected).toHaveText('Apple'); await expect(query).toHaveAttribute('aria-expanded', 'true');
+  for (const option of await options.all()) expect((await option.locator('mark').allTextContents()).join('').toLowerCase()).toBe('ap');
+  const fullBox = (await dialog.boundingBox())!; expect(fullBox.height).toBeGreaterThan(emptyBox.height);
+  await page.screenshot({ path: info.outputPath('fruit-picker-dark.png') });
+  await query.fill('apric'); await expect(options).toHaveText(['Apricot']);
+  const narrowBox = (await dialog.boundingBox())!; expect(narrowBox.height).toBeLessThan(fullBox.height);
+  expect(narrowBox.y).toBe(fullBox.y); expect(fullBox.y).toBe(emptyBox.y);
+  expect(await editor!.evaluate(node => node.isConnected && node === document.activeElement)).toBe(true);
+  await query.fill(''); await expect(options).toHaveCount(0); expect((await dialog.boundingBox())!.height).toBe(emptyBox.height);
+  await query.fill('no fruit'); await expect(dialog.locator('.kp-picker-empty')).toBeVisible();
+  await query.press('Enter'); await expect(dialog).toBeVisible();
+  await query.fill('ap'); await query.press('Control+n'); await expect(selected).toHaveText('Apricot');
+  await query.press('Control+p'); await expect(selected).toHaveText('Apple');
+  await query.press('Control+['); await expect(mode).toHaveText('[N]'); await query.press('j');
+  await expect(selected).toHaveText('Apricot'); await query.press('k'); await expect(selected).toHaveText('Apple');
+  await query.press('o'); await expect(query.locator('p')).toHaveCount(1);
+  await query.press('i'); await expect(mode).toHaveText('[I]'); await query.press('ArrowDown');
+  await query.evaluate(node => node.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', isComposing: true, bubbles: true, cancelable: true })));
+  await expect(dialog).toBeVisible(); await query.press('Enter');
+  await expect(dialog).toBeHidden(); await expect(page.getByRole('status', { name: 'Picker selection' })).toHaveText('Selected: Apricot');
+  await expect(prose).toBeFocused(); expect(await prose.textContent()).toBe(original);
+  await launcher.click(); await expect(query).toHaveText('');
+  await query.evaluate(node => {
+    const data = new DataTransfer(); data.setData('text/plain', 'Dragon\r\nfruit');
+    node.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: data }));
+  });
+  await expect(query).toHaveText('Dragon fruit'); await expect(query.locator('p')).toHaveCount(1);
+  await query.press('ControlOrMeta+z'); await expect(query).toHaveText('');
+  await query.press('ControlOrMeta+Shift+z'); await expect(query).toHaveText('Dragon fruit');
+  await options.first().click(); await expect(dialog).toBeHidden(); await expect(prose).toBeFocused();
+  await launcher.click(); await query.evaluate(node => {
+    const data = new DataTransfer(); data.setData('text/plain', 'a'.repeat(1000));
+    node.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: data }));
+  });
+  await expect(query).toHaveText('a'.repeat(256)); await query.press('Escape'); await expect(prose).toBeFocused();
+  expect(await editor!.evaluate(node => node.isConnected)).toBe(false);
+  await page.getByRole('button', { name: 'Styles', exact: true }).click();
+  await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+  await page.getByRole('button', { name: 'Close styles', exact: true }).click();
+  await launcher.click(); await query.fill('ap'); await page.screenshot({ path: info.outputPath('fruit-picker-light.png') });
+  await page.emulateMedia({ forcedColors: 'active' }); await expect(selected).toHaveCSS('outline-style', 'solid');
+  await page.emulateMedia({ forcedColors: 'none' });
+  await page.setViewportSize({ width: 390, height: 380 }); const phone = (await dialog.boundingBox())!;
+  expect(phone.x).toBeGreaterThanOrEqual(8); expect(phone.x + phone.width).toBeLessThanOrEqual(382);
+  expect(phone.y + phone.height).toBeLessThanOrEqual(380); await expect(query).toBeFocused();
+  await page.screenshot({ path: info.outputPath('fruit-picker-phone.png') });
+  await query.press('Escape'); await expect(page.locator('#kp-fruit-picker .ProseMirror')).toHaveCount(0);
+  await launcher.focus(); await launcher.press('Enter'); await expect(query).toBeFocused();
+  await query.press('Control+['); await query.press('Escape'); await expect(dialog).toBeHidden();
+  expect(await prose.textContent()).toBe(original); expect(errors).toEqual([]);
+});
+
+test('fruit picker restores chat selection and source caret while streaming cannot steal query focus', async ({ page, context }) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'picker-reply', text: Array.from({ length: 25 }, (_, i) => `Paragraph ${i}: keep this place while picking.`).join('\n\n') }] }];
+  try {
+    await page.setViewportSize({ width: 1440, height: 960 }); await open(page); await connect(page);
+    const launcher = page.getByRole('button', { name: 'Picker', exact: true }), query = page.getByRole('combobox', { name: 'Find a fruit' });
+    const transcript = page.getByRole('textbox', { name: 'Conversation transcript' });
+    await selectPassage(page, 'Paragraph 7', 'picker-reply');
+    const history = page.locator('.kp-chat-history'), scroll = await history.evaluate(node => node.scrollTop);
+    await launcher.click(); await query.fill('ap');
+    await expect(page.locator('[data-kp-window=chat]')).toHaveAttribute('data-window-active', 'true');
+    await query.press('Control+Backquote'); await expect(query).toBeFocused();
+    await query.press('Escape'); await expect(transcript).toBeFocused();
+    expect(await page.evaluate(() => getSelection()?.toString())).toBe('Paragraph 7');
+    expect(await history.evaluate(node => node.scrollTop)).toBe(scroll);
+    await write(page, 'Continue'); await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    await write(page, 'before after'); await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
+    await launcher.click(); await query.fill('apric'); f.peer.delta('Output arriving while the picker owns focus.');
+    await expect(transcript).toContainText('Output arriving'); await expect(query).toBeFocused(); await expect(query).toHaveText('apric');
+    await query.press('Enter'); await expect(input(page)).toBeFocused();
+    await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('before aftXer');
+    expect(f.peer.sends()).toHaveLength(1); f.peer.finish('Output arriving while the picker owns focus.');
+    await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
+    await page.getByRole('button', { name: 'Focus KP pane' }).click();
+    await page.getByText('Edit animation specification', { exact: true }).click();
+    const source = page.locator('.fn-source-host .cm-content'); await expect(source).toBeFocused();
+    await source.press('g'); await source.press('g'); await source.press('0');
+    // CodeMirror virtualizes its DOM. Compare the edited line, not an initial
+    // viewport snapshot against a later, differently sized rendered range.
+    const firstLine = source.locator('.cm-line').first(), original = await firstLine.textContent();
+    await source.press('i'); await source.press('ArrowRight');
+    const sourceScroll = await page.locator('.fn-source-host .cm-scroller').evaluate(node => node.scrollTop);
+    await launcher.click(); await query.fill('grapef'); await query.press('Escape'); await expect(source).toBeFocused();
+    expect(await page.locator('.fn-source-host .cm-scroller').evaluate(node => node.scrollTop)).toBe(sourceScroll);
+    await page.keyboard.insertText(' '); expect((await source.innerText()).slice(0, 2)).toBe('{ ');
+    await source.press('ControlOrMeta+z'); await expect(firstLine).toHaveText(original!);
+    expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
 test('workspace modeline follows actual editor modes, pane focus and reading spacing without covering the composer', async ({ page, context }, info) => {
   const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'modeline-reply', text: '## Keep the whole in view\n\nA saved return point keeps the question connected to the broader plan.\n\n```js\nconst next = "inspect";\n```' }] }];

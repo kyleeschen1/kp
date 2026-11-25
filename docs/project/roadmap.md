@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-workspace-focus-lines`
-Execution Contract: `run-contract.kp.workspace-focus-lines-20261125`
-Next Product Milestone: `workspace-focus-lines`
+Current Commitment: `kp-fruit-picker`
+Execution Contract: `run-contract.kp.fruit-picker-20261125`
+Next Product Milestone: `fruit-picker`
 Milestone Authority: approved
 
 ## Where we are going
@@ -26,9 +26,10 @@ why this becomes the organizing direction and what it supersedes.
 left and KP right. **Checked:** [joined chat editors](reviews/2026-11-25-joined-chat-composer.md).
 **Checked:** [workspace modeline](reviews/2026-11-25-workspace-modeline.md):
 reading spacing, default gutters off and mode/pane/time cues.
-**Approved:** [raised panes and current-line focus](reviews/2026-11-25-workspace-focus-lines.md):
-shadow replaces dimming; single separators, a larger modeline and focused lines
-include existing custom text. Preserve the fixed split; no new component.
+**Checked, awaiting visual judgment:** [pane/line focus](reviews/2026-11-25-workspace-focus-lines.md).
+**Approved:** [floating fruit picker](reviews/2026-11-25-fruit-picker.md): one query,
+five fuzzy suggestions, keyboard selection and exact editor return. Preserve the
+fixed split and current focus treatment; no general picker service.
 The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.

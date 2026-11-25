@@ -25,6 +25,8 @@ export const bindings = [
   ['JSON', 'Shift-Enter', 'Run this animation source'], ['JSON', 'Cmd/Ctrl-Enter', 'Close buffer, retaining draft'],
   ['Inline source', 'Enter / Tab / Esc', 'Finish link/math source and return to prose; ordinary text-input keys apply'],
   ['Windows', 'Ctrl-`', 'Switch KP and chat windows without losing either position'],
+  ['Picker', '↑ / ↓ · Ctrl-p / Ctrl-n · Normal k / j', 'Previous / next fruit suggestion'],
+  ['Picker', 'Enter / Esc · Ctrl-[ / i', 'Choose / cancel picker; Normal / Insert query editing'],
   ['Chat', 'i / Esc', 'Focus the permanent draft / save and return to transcript navigation'],
   ['Chat', 'C-c · :h', 'Commands / keybindings; Escape restores the invoking selection'],
   ['Chat', '[m / ]m · { / } · / · n / N', 'Messages / paragraphs / search and repeat in loaded output'],
@@ -59,8 +61,8 @@ export function mountCommands(host: HTMLElement, view: EditorView, actions: {
   const help = () => { panel.hidden = false; scope.textContent = `Active buffer: ${source ? 'animation JSON' : 'rich document'}. Prose has a bounded Vim subset; JSON uses CodeMirror Vim. Listed Ex commands are workspace commands; other Ex commands are not enabled.`; draw(); search.focus(); };
   search.oninput = draw; close.onclick = () => { panel.hidden = true; restore(); };
   const onKey = (event: KeyboardEvent) => {
-    // Chat editors own their command scope, including embedded CodeMirror.
-    if (event.target instanceof Element && event.target.closest('.kp-chat')) return;
+    // Chat editors and open dialogs own their command scope.
+    if (event.target instanceof Element && event.target.closest('.kp-chat, dialog[open]')) return;
     if (event.key === 'Escape' && (!bar.hidden || !panel.hidden)) { event.preventDefault(); event.stopPropagation(); bar.hidden = true; panel.hidden = true; restore(); return; }
     if (event.key !== ':' || event.ctrlKey || event.metaKey || event.altKey || event.isComposing) return;
     const target = event.target instanceof HTMLElement ? event.target : null;

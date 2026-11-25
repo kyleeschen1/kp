@@ -43,7 +43,11 @@ export function mountModeline(root: HTMLElement, windows: ReturnType<typeof moun
     if (!active) return;
     const target = document.activeElement;
     if (target && active.element.contains(target)) remembered.set(active.id, describe(target, active.id));
-    const current = remembered.get(active.id) ?? { mode: '—', name: active.id === 'page' ? 'KP' : 'Chat', description: 'Pane' };
+    // A modal borrows input focus without replacing the pane's return surface.
+    const transient = target?.closest<HTMLElement>('dialog[open] [data-editor-surface][data-vim-mode]');
+    const [transientMode, description] = modes[transient?.dataset['vimMode'] ?? ''] ?? ['—', 'Editor'];
+    const current = transient ? { mode: transientMode, description, name: transient.dataset['editorSurface']! }
+      : remembered.get(active.id) ?? { mode: '—', name: active.id === 'page' ? 'KP' : 'Chat', description: 'Pane' };
     mode.textContent = `[${current.mode}]`; mode.setAttribute('aria-label', `${current.description} · ${current.name}`);
     surface.textContent = current.name; bar.title = `${current.description} · ${current.name}`;
     for (const [id, button] of buttons) {
