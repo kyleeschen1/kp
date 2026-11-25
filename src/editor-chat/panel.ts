@@ -40,7 +40,7 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   const notesHost = node('div', 'kp-chat-notes'); notesHost.hidden = true;
   const column = node('div', 'kp-chat-column'), output = node('div', 'kp-chat-output');
   output.append(status, history, empty, clipped, unread, notesHost);
-  column.append(output, draftHost, saved); panel.append(column); body.append(panel); actions.append(toggle);
+  column.append(output, draftHost, saved); panel.append(column); body.prepend(panel); actions.append(toggle);
 
   type Mode = 'reading' | 'compose' | 'notes';
   let mode: Mode = 'reading', current: ChatSnapshot | undefined, remote: ChatSnapshot | undefined;

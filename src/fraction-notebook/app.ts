@@ -108,7 +108,7 @@ windows.register('page', pageWindow, () => {
 const chat = mountChat(editorBody, actions, () => layout.refresh(), {
   attach: (element, focus) => windows.register('chat', element, focus),
   active: () => windows.active('chat'),
-  activate: () => windows.raise('chat'), cycle: () => windows.cycle(), closed: () => windows.raise('page')
+  activate: () => windows.activate('chat'), cycle: () => windows.cycle(), closed: () => windows.activate('page')
 });
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); });
 actions.append(button('Styles', () => styles.toggle()));
@@ -134,7 +134,7 @@ actions.querySelector('.fn-structure-controls')!.classList.add('fn-menu-panel');
 // selection, then dismiss so a popup cannot cover the passage being edited.
 header.addEventListener('click', event => {
   const control = event.target instanceof Element ? event.target.closest('button,summary,select') : null;
-  if (control && control.getAttribute('aria-controls') !== 'kp-chat') windows.raise('page');
+  if (control && control.getAttribute('aria-controls') !== 'kp-chat') windows.activate('page');
   if (event.target instanceof Element && event.target.closest('button')) event.target.closest<HTMLDetailsElement>('details.fn-menu')?.removeAttribute('open');
 });
 header.addEventListener('change', event => {
@@ -222,7 +222,7 @@ const onMessage = (event: MessageEvent) => {
   }
   if (data.kind === 'error') { status.textContent = String(data.message); status.dataset['state'] = 'invalid'; }
   if (data.kind === 'options-state') readingOptions.setAttribute('aria-expanded', String(data.open === true));
-  if (data.kind === 'window-focus') windows.raise('page');
+  if (data.kind === 'window-focus') windows.activate('page');
   if (data.kind === 'window-cycle') windows.cycle(data.reverse === true);
   if (data.kind === 'select' && typeof data.id === 'string') editor.reveal(data.id);
 };

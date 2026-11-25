@@ -2,13 +2,64 @@
   "id": "task.kp.fixed-chat-split-20261125",
   "kind": "task",
   "title": "Use a fixed Codex-left, KP-right split after the Org discussion",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "product",
-  "summary": "Discuss the user question about Org without Emacs before implementing this authorized UI replacement.",
+  "summary": "COMPLETE: the explicitly clarified ordinary 50/50 split is implemented and verified. Transcript/composer refinement is a separate successor.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-11-25-fixed-chat-split.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:00:33.044Z",
+      "notes": "Passed after removing stack ordering, movement activation and animation-following code."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:00:34.099Z",
+      "notes": "16 passed: static equal columns, matching DOM order, no pane transitions, focus/caret/scroll/reload, centered lone KP, chat recovery and phone commands."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:00:35.381Z",
+      "notes": "75 passed with the clarified fixed-split direction."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:10:57.944Z",
+      "notes": "Initial full pass: 19 passed, 4 failed. Two checks assumed the old wider pane; two preview startup/update timeouts were also observed."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'direct prose|typed header|one document and focused|help, Ex'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:10:58.898Z",
+      "notes": "All 4 previously failing cases passed after correcting the two geometry assertions. The startup/update timeouts did not reproduce; no startup fix is claimed."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:12:48.179Z",
+      "notes": "Final clean full run: all 23 passed after pane-relative test corrections. Earlier startup/update timeouts did not reproduce; no startup fix is claimed."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T17:12:49.053Z",
+      "notes": "Passed again after final browser geometry assertions."
     }
   ],
   "revisitWhen": [

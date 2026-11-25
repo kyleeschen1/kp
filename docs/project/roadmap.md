@@ -23,8 +23,8 @@ why this becomes the organizing direction and what it supersedes.
 [focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
 **Accepted:** [persistent general chat](reviews/2026-11-25-kp-persistent-chat.md).
-**Next:** [fixed split](reviews/2026-11-25-fixed-chat-split.md), Codex left and KP
-right, after discussing Org issue tracking. The
+**Approved:** [fixed 50/50 split](reviews/2026-11-25-fixed-chat-split.md), Codex
+left and KP right, without window motion. The
 [recency stack](reviews/2026-11-25-recency-window-stack.md) is rejected.
 Retain restored 440px KP / 491px chat columns and persistent composition from
 the [prior candidate](reviews/2026-11-25-windowed-chat.md).

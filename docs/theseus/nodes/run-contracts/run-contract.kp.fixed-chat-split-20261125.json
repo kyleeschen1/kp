@@ -2,8 +2,8 @@
   "id": "run-contract.kp.fixed-chat-split-20261125",
   "kind": "run-contract",
   "title": "Fixed Codex and KP split",
-  "status": "deferred",
-  "summary": "The split is authorized; the user asks to discuss Org issue tracking before implementation.",
+  "status": "resolved",
+  "summary": "COMPLETE: 1 of 1 package finished. No split work remains; preserve it during the newly requested chat composition refinement.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,7 +35,8 @@
     {
       "id": "split",
       "title": "Fixed split exemplar",
-      "status": "planned"
+      "summary": "Static equal columns verified through pointer/keyboard focus, reload and close/reopen; preserve the native player and draft.",
+      "status": "complete"
     }
   ]
 }

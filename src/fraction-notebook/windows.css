@@ -1,28 +1,20 @@
 :root {
-  --kp-window-width: 55vw;
+  --kp-window-width: 50vw;
   --kp-chat-column-width: 491px;
   --kp-window-background: var(--fn-background);
   --kp-window-alpha: 96%;
-  --kp-window-shadow: var(--fn-shadow);
-  --kp-window-focus-duration: 400ms;
-  --kp-window-stack-step: 24px;
 }
-.kp-editor-body { position: relative; display: block; flex: 1; min-width: 0; min-height: 0; isolation: isolate; }
-.kp-window { --kp-window-size: min(var(--kp-window-width), 100%);
-  position: absolute; top: 6px; width: var(--kp-window-size); min-height: 0; min-width: 0;
-  height: calc(100% - 8px - var(--kp-window-stack-depth, 0) * var(--kp-window-stack-step));
-  left: calc((100% - var(--kp-window-size)) * var(--kp-window-position, .5));
-  border: 1px solid var(--fn-border); background: transparent;
-  z-index: var(--kp-window-layer, 1); box-shadow: 0 2px 8px var(--kp-window-shadow);
-  transform: translateY(calc(var(--kp-window-rank, 0) * var(--kp-window-stack-step)));
-  transition: left var(--kp-window-focus-duration) ease, box-shadow var(--kp-window-focus-duration) ease, transform var(--kp-window-focus-duration) ease; }
+.kp-editor-body { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); flex: 1; min-width: 0; min-height: 0; isolation: isolate; }
+.kp-editor-body:not(.kp-chat-open) { grid-template-columns: minmax(0, min(var(--kp-window-width), 100%)); justify-content: center; }
+/* Fixed grid slots own geometry. Focus changes only the keyboard destination. */
+.kp-window { position: relative; min-height: 0; min-width: 0; background: transparent; isolation: isolate; }
 /* Alpha belongs to the paper alone; text remains opaque. The opacity property
    accepts both decimal and percentage values from the shared style editor. */
 .kp-window::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--kp-window-background); opacity: var(--kp-window-alpha); }
-.kp-window[data-window-active=true] { box-shadow: 0 8px 32px 2px var(--kp-window-shadow); }
-.kp-page-window { display: flex; flex-direction: column; }
-.kp-window.kp-chat { padding: 24px 14px; }
-/* A sibling of the isolated window stack stays above every window layer. */
+.kp-page-window { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; }
+.kp-chat-open .kp-page-window { grid-column: 2; border-left: 1px solid var(--fn-border); }
+.kp-window.kp-chat { grid-column: 1; grid-row: 1; padding: 24px 14px; }
+/* The stationary masthead owns elevation above both panes. */
 #app > .fn-header { flex-shrink: 0; box-shadow: 0 6px 20px var(--fn-shadow); }
 .kp-page-window .fn-left, .kp-page-window .fn-right { background: transparent; }
 .kp-page-window .fn-editor .ProseMirror { width: min(var(--kp-document-width), calc(100% - 64px)); }
@@ -38,12 +30,7 @@
   .fn-focus .fn-divider { display: none; }
 }
 @media (max-width: 760px) {
-  :root { --kp-window-stack-step: 8px; }
-  .kp-window { --kp-window-size: 100%; top: 2px; height: calc(100% - 4px - var(--kp-window-stack-depth, 0) * var(--kp-window-stack-step)); }
-  .kp-chat-open .kp-window { --kp-window-size: calc(100% - 16px); }
+  .kp-editor-body:not(.kp-chat-open) { grid-template-columns: minmax(0, 1fr); }
   .kp-window.kp-chat { padding: 14px; }
   .kp-page-window .fn-editor .ProseMirror { width: min(var(--kp-document-width), calc(100% - 40px)); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .kp-window { transition: none; }
 }

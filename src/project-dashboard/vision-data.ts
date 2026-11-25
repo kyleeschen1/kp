@@ -9,11 +9,11 @@ export const projectVision: ProjectVision = {
     title: "Use a simple fixed split with Codex left and KP right",
     approval: "approved",
     contractId: "run-contract.kp.fixed-chat-split-20261125",
-    finish: "Replace the rejected stack with a stationary chat-left, KP-right split. Preserve the global masthead, reading columns, permanent draft, mounted buffers, player and recovery. Discuss Org issue tracking before implementing the replacement.",
-    source: { label: "Requested fixed split and discussion boundary", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
+    finish: "Use two stationary equal columns, Codex left and KP right, with no window animations. Center the lone KP pane. Preserve the global masthead, reading columns, permanent draft, mounted buffers, player and recovery.",
+    source: { label: "Clarified ordinary split", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Discuss whether Org files can provide a useful human overview without Emacs or a competing execution queue. The next authorized UI change is a fixed Codex-left, KP-right split at http://127.0.0.1:8000/experiments/fraction-notebook/. The rejected moving stack must not be resumed or promoted.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, open Chat: Codex occupies the left half and KP the right half. Clicking or keyboard-switching never moves either pane. Close Chat to center KP. Preserve the same draft, cursor, reading place and native animation.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -46,7 +46,7 @@ export const projectVision: ProjectVision = {
       outcome: {
         authority: "approved",
         id: "fixed-chat-split", title: "Keep Codex and KP in stable left and right columns",
-        finish: "One fixed split keeps chat left and KP right beneath the global masthead, preserving reading columns, permanent composition, saved place and native animation. Discuss Org issue tracking first; adopting a tracker is a separate decision.",
+        finish: "One fixed 50/50 split keeps chat left and KP right beneath the global masthead with no window motion. Preserve reading columns, permanent composition, saved place and native animation; center the solitary KP pane. Tracker adoption remains separate.",
         excludes: "A general session workspace, automatic object patches, image-generation integration, publication, library extraction, desktop migration, paid test inference or whole-book infrastructure.",
         source: { label: "Requested fixed split successor", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
       }
@@ -438,6 +438,13 @@ export const projectVision: ProjectVision = {
       after: "The user rejected the visible treatment and requested a fixed split, Codex left and KP right. Discuss Org-based issue tracking without Emacs before implementing that replacement.",
       reason: "The moving window arrangement did not serve the desired experience. Retain data and editing guarantees, stop this visual candidate, and do not interpret an issue-tracking question as authorization to migrate trackers.",
       source: { label: "Rejection and requested fixed split", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
+    },
+    {
+      id: "clarify-equal-static-split", on: "2026-11-25",
+      before: "The fixed split was selected after rejecting the moving stack, with implementation held for the Org discussion.",
+      after: "The user explicitly clarifies equal side-by-side 50% panes, no animations, and permission to center the solitary pane. Resume that bounded correction.",
+      reason: "Remove the overcomplicated moving layout while keeping the existing writing and reading state. The Org discussion remains separate from repository execution ownership.",
+      source: { label: "Clarified static split and preservation boundary", href: "docs/project/reviews/2026-11-25-fixed-chat-split.md" }
     }
   ]
 };

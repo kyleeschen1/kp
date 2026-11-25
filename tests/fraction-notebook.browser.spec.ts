@@ -89,11 +89,15 @@ test('direct prose, formatting and undo update the native reader without remount
   await expect(page.locator('.fn-cell-details')).toBeVisible();
   await action(page, 'Hide details');
   await expect(page.locator('.fn-cell-details')).toBeHidden();
+  // The ordinary 50vw pane uses the vertical source/result layout at 1440px.
+  // Exercise the existing horizontal divider at a genuinely wide pane size.
+  await page.setViewportSize({ width: 1800, height: 960 });
   await page.getByText('Edit animation specification', { exact: true }).click();
   await expect(page.locator('.fn-source-pane')).toBeVisible();
   await page.getByRole('separator').focus(); await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('separator')).toHaveAttribute('aria-valuenow', '52');
   await page.getByRole('button', { name: 'Close buffer', exact: true }).click();
+  await page.setViewportSize({ width: 1440, height: 960 });
   await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.ProseMirror').focus(); await page.keyboard.press('i');
   await expect(page.locator('.ProseMirror > .fn-block > .fn-block-content > p').first()).toContainText('A changed opening');
   await page.screenshot({ caret: 'initial', path: info.outputPath('fraction-editor.png') }); expect(errors).toEqual([]);
@@ -399,7 +403,9 @@ test('one document and focused source preserve the mounted player and current re
   await edit.click({ force: true }); await edit.click({ force: true });
   await page.getByText('Edit animation specification', { exact: true }).click();
   await expect(page.locator('.fn-source-pane')).toBeVisible();
-  expect((await page.locator('.fn-right').boundingBox())!.x).toBeGreaterThan(700);
+  const sourceBox = (await page.locator('.fn-source-pane').boundingBox())!, resultBox = (await page.locator('.fn-right').boundingBox())!;
+  expect(resultBox.x).toBe(sourceBox.x); expect(resultBox.width).toBe(sourceBox.width);
+  expect(resultBox.y).toBeCloseTo(sourceBox.y + sourceBox.height, 0);
   await expect(plane).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
   expect(await stage!.evaluate(el => el.isConnected)).toBe(true);
   await page.screenshot({ caret: 'initial', path: info.outputPath('focused-source.png') });

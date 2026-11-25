@@ -39,8 +39,8 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Rich chat and annotations](../reviews/2026-11-25-kp-rich-chat.md) are checked.
   [Keyboard chat](../reviews/2026-11-25-keyboard-chat.md) is checked; the
   [recency stack](../reviews/2026-11-25-recency-window-stack.md) was rejected.
-  Next: [fixed split](../reviews/2026-11-25-fixed-chat-split.md), after discussing
-  Org tracking. Preserve composition and text widths; exclude automatic edits
+  Approved: [fixed 50/50 split](../reviews/2026-11-25-fixed-chat-split.md), without
+  window motion. Preserve composition and text widths; exclude automatic edits
   and broader extraction.
   Motions/text objects remain parked; MathML declined.
   Review before generalizing; the programme remains the return path.
