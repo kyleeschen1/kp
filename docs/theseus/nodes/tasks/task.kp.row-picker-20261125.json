@@ -1,0 +1,75 @@
+{
+  "id": "task.kp.row-picker-20261125",
+  "kind": "task",
+  "title": "Browse annotated rows and filter tags without losing context",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: the approved floating row exemplar and verification are complete. Judge density, tag vocabulary and query continuity at the canonical notebook.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-row-picker.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:vim-coverage",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:50:31.917Z",
+      "notes": "Initial browser run: one passed, five failed. Test locators included native select options and one URL assertion used a relative path. Product issues: disabling an active registered toggle dropped transient keyboard ownership; explicit command names ranked below description mentions. Repairing focus at the transient boundary and exact-name match fields, with retained regression checks."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:59:34.179Z",
+      "notes": "Initial run passed 74/75. Roadmap/thread exceeded existing 650/450-word budgets by two/three words; the first trim left one extra thread word. Shortened redundant prose without changing budgets; the final complete rerun passed."
+    },
+    {
+      "command": "npm run test:vim-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:59:35.406Z",
+      "notes": "10 tests passed: row field matching and exact ranges, Unicode source offsets, OR/AND/empty facets, stable identity through sort/narrowing, full 1369-row/eight-surface preservation, reference movement metadata, context-specific taxonomy and exact-name ranking."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:59:36.103Z",
+      "notes": "Complete notebook/chat consumer passed after final integration."
+    },
+    {
+      "command": "npm run visual:vim-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:59:36.782Z",
+      "notes": "Six Chromium cases passed on final integration: five-row paging and narrow-screen selected-row visibility, filters/sorting, retained PM identity/caret/mode/history, alias highlights, source/chat selections, streaming, delayed import cancellation and explicit reload recovery. Light/dark/narrow captures inspected."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'M-x and C-x|command picker keeps|command prefix cancels|fruit picker restores|note and composer Vim|late form'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:59:37.497Z",
+      "notes": "Six existing command, source, fruit, note/composer history and late-form focus preservation cases passed. No original acceptance invariant was weakened."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T22:59:38.656Z",
+      "notes": "75 tests passed on final source-linked roadmap/thread/dashboard. Prior commitment and support evidence retained; first floating exemplar precedes second-consumer promotion."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-25T23:00:35.205Z",
+      "notes": "Final orientation passed and reports the selected row-picker contract at one of one complete, deferred for the named human checkpoint. Existing entrypoint budgets are unchanged."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the row picker or requests a bounded adjustment; M-x adoption follows the exemplar judgment."
+  ]
+}

@@ -81,6 +81,11 @@ async function coverage(page: Page, chord = false) {
   return page.getByRole('dialog', { name: 'Vim binding coverage', exact: true });
 }
 
+async function coverageTag(page: Page, key: string) {
+  await page.keyboard.press('Control+h'); await expect(page.getByRole('region', { name: 'Vim filters' })).toBeVisible();
+  await page.keyboard.press(key); await page.keyboard.press('q');
+}
+
 test('Vim coverage searches every reference form, distinguishes support and restores notebook selection', async ({ page }, info) => {
   const errors: string[] = [], referenceRequests: string[] = [];
   page.on('pageerror', error => errors.push(error.message)); page.on('request', request => { if (request.url().includes('/vendor/vim-9.2.0000/')) referenceRequests.push(request.url()); });
@@ -92,18 +97,20 @@ test('Vim coverage searches every reference form, distinguishes support and rest
     const range = document.createRange(); range.setStart(text, 0); range.setEnd(text, 7); const selection = getSelection()!;
     selection.removeAllRanges(); selection.addRange(range); document.dispatchEvent(new Event('selectionchange')); return selection.toString();
   });
-  const panel = await coverage(page, true), search = panel.getByRole('searchbox', { name: 'Search Vim bindings' });
+  const panel = await coverage(page, true), search = panel.getByRole('combobox', { name: 'Search Vim bindings' });
   await expect(search).toBeFocused(); await expect(panel.getByLabel('Editor surface')).toHaveValue('notebook');
   await expect(panel.getByRole('status', { name: 'Binding results' })).toContainText('1369 matching bindings');
-  await expect(panel.getByRole('listitem')).toHaveCount(80);
-  await panel.getByRole('button', { name: 'Show next 80' }).click(); await expect(panel.getByRole('listitem')).toHaveCount(160);
-  await search.fill('diw'); await panel.getByLabel('Support', { exact: true }).selectOption('missing');
+  await expect(panel.getByRole('listbox').getByRole('option')).toHaveCount(5);
+  await search.press('PageDown'); await expect(panel.getByRole('listbox').getByRole('option', { selected: true })).toHaveAttribute('aria-posinset', '6');
+  await panel.getByRole('button', { name: 'Next rows', exact: true }).click(); await expect(panel.getByRole('listbox').getByRole('option', { selected: true })).toHaveAttribute('aria-posinset', '11');
+  await search.fill('diw'); await coverageTag(page, 'Shift+f');
   await expect(panel.locator('[data-binding-tag="v_iw"]').first()).toHaveAttribute('data-support', 'missing');
-  await panel.getByLabel('Editor surface').selectOption('json'); await panel.getByLabel('Support', { exact: true }).selectOption('unverified');
+  await panel.getByLabel('Editor surface').selectOption('json'); await coverageTag(page, 'Shift+u');
   await expect(panel.locator('[data-binding-tag="v_iw"]').first()).toHaveAttribute('data-support', 'unverified');
-  await panel.getByLabel('Editor surface').selectOption('notebook'); await panel.getByLabel('Support', { exact: true }).selectOption('implemented'); await search.fill('undo');
+  await panel.getByLabel('Editor surface').selectOption('notebook'); await coverageTag(page, 'Shift+x'); await search.fill('undo');
   await expect(panel.locator('[data-binding-tag="u"]')).toHaveAttribute('data-support', 'implemented');
-  await panel.getByLabel('Support', { exact: true }).selectOption('all'); await search.fill('word');
+  await coverageTag(page, 'r'); await search.fill('word');
+  const floating = (await panel.boundingBox())!; expect(floating.width).toBeLessThan(1000); expect(floating.height).toBeLessThan(800); expect(floating.x).toBeGreaterThan(0);
   await page.screenshot({ path: info.outputPath('vim-coverage-dark.png') });
   await search.press('Escape'); await expect(panel).toBeHidden(); await expect(prose).toBeFocused();
   expect(await page.evaluate(() => getSelection()?.toString())).toBe(selection); expect(await prose.textContent()).toBe(before);
@@ -116,6 +123,9 @@ test('Vim coverage searches every reference form, distinguishes support and rest
   await page.setViewportSize({ width: 390, height: 650 });
   const box = (await panel.boundingBox())!; expect(box.x).toBeGreaterThanOrEqual(0); expect(box.x + box.width).toBeLessThanOrEqual(390);
   expect(await panel.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  await panel.getByRole('button', { name: 'Next rows', exact: true }).focus(); await page.keyboard.press('Enter'); await expect(search).toBeFocused();
+  const listBox = (await panel.getByRole('listbox').boundingBox())!, selectedBox = (await panel.getByRole('listbox').getByRole('option', { selected: true }).boundingBox())!;
+  expect(selectedBox.y).toBeGreaterThanOrEqual(listBox.y - 1); expect(selectedBox.y + selectedBox.height).toBeLessThanOrEqual(listBox.y + listBox.height + 1);
   await page.screenshot({ path: info.outputPath('vim-coverage-phone.png') });
   await panel.getByRole('button', { name: 'Close Vim binding coverage' }).click(); await expect(prose).toBeFocused();
   expect(referenceRequests.length).toBeGreaterThan(0); expect(errors).toEqual([]);
@@ -128,7 +138,7 @@ test('Vim coverage follows JSON and chat editors without disturbing source caret
     await page.getByText('Edit animation specification', { exact: true }).click();
     const source = page.locator('.fn-source-host .cm-content'); await source.press('g'); await source.press('g'); await source.press('0'); await source.press('i'); await source.press('ArrowRight');
     let panel = await coverage(page); await expect(panel.getByLabel('Editor surface')).toHaveValue('json');
-    await panel.getByRole('searchbox', { name: 'Search Vim bindings' }).fill('substitute');
+    await panel.getByRole('combobox', { name: 'Search Vim bindings' }).fill('substitute');
     await expect(panel.locator('[data-binding-tag=":substitute"]')).toHaveAttribute('data-support', 'missing');
     await page.keyboard.press('Escape'); await expect(source).toBeFocused(); await page.keyboard.insertText(' '); await expect(source.locator('.cm-line').first()).toHaveText('{ ');
     await source.press('ControlOrMeta+z'); await page.getByRole('button', { name: 'Close buffer', exact: true }).click();
@@ -136,10 +146,10 @@ test('Vim coverage follows JSON and chat editors without disturbing source caret
     await write(page, 'before after'); await input(page).press('ArrowLeft'); await input(page).press('ArrowLeft');
     panel = await coverage(page, true); await expect(panel.getByLabel('Editor surface')).toHaveValue('composer');
     f.peer.delta('Output keeps arriving.'); await expect(page.getByRole('textbox', { name: 'Conversation transcript' })).toContainText('Output keeps arriving.');
-    await expect(panel.getByRole('searchbox', { name: 'Search Vim bindings' })).toBeFocused(); await page.keyboard.press('Escape');
+    await expect(panel.getByRole('combobox', { name: 'Search Vim bindings' })).toBeFocused(); await page.keyboard.press('Escape');
     await expect(input(page)).toBeFocused(); await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('before aftXer');
     await input(page).press('Escape'); panel = await coverage(page); await expect(panel.getByLabel('Editor surface')).toHaveValue('transcript');
-    await panel.getByRole('searchbox', { name: 'Search Vim bindings' }).fill('undo');
+    await panel.getByRole('combobox', { name: 'Search Vim bindings' }).fill('undo');
     await expect(panel.locator('[data-binding-tag="u"]')).toHaveAttribute('data-support', 'not-applicable');
     await page.keyboard.press('Escape'); await expect(page.getByRole('textbox', { name: 'Conversation transcript' })).toBeFocused();
     f.peer.finish('Output keeps arriving.'); expect(f.peer.sends()).toHaveLength(1);
@@ -156,7 +166,7 @@ test('Vim coverage can close while its lazy reference loads without reopening or
   const loaded = page.waitForResponse(response => response.url().includes('/vendor/vim-9.2.0000/index.txt'));
   release(); await loaded; await page.waitForLoadState('networkidle');
   await expect(panel).toBeHidden(); await expect(prose).toBeFocused();
-  await coverage(page, true); await expect(panel.getByRole('searchbox', { name: 'Search Vim bindings' })).toBeFocused();
+  await coverage(page, true); await expect(panel.getByRole('combobox', { name: 'Search Vim bindings' })).toBeFocused();
   await page.keyboard.press('Escape');
 });
 
@@ -168,12 +178,51 @@ test('Vim coverage reports a load failure, offers explicit reload recovery, and 
   await expect(panel).toContainText('browser can cache a failed module import');
   await panel.getByRole('button', { name: 'Reload workspace', exact: true }).click();
   await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.fn-editor .ProseMirror').focus(); await coverage(page);
-  await expect(panel.getByRole('searchbox', { name: 'Search Vim bindings' })).toBeFocused();
-  await panel.getByLabel('Mode', { exact: true }).selectOption('ex'); await panel.getByRole('searchbox', { name: 'Search Vim bindings' }).fill(':write');
+  await expect(panel.getByRole('combobox', { name: 'Search Vim bindings' })).toBeFocused();
+  await coverageTag(page, 'Shift+e'); await panel.getByRole('combobox', { name: 'Search Vim bindings' }).fill(':write');
   await expect(panel.locator('[data-binding-tag=":write"]')).toHaveAttribute('data-support', 'overridden');
-  await panel.locator('[data-binding-tag=":write"]').getByText('Support notes', { exact: true }).click();
-  await expect(panel.locator('[data-binding-tag=":write"]')).toContainText('no Vim filename/range writer');
-  await page.keyboard.press('Escape');
+  await panel.locator('[data-binding-tag=":write"]').click();
+  await expect(panel.getByRole('region', { name: 'Binding details' })).toContainText('no Vim filename/range writer');
+  await page.keyboard.press('Escape'); await expect(panel).toBeVisible(); await page.keyboard.press('Escape');
+});
+
+test('Vim coverage transient retains the query editor, caret, mode and undo while filtering and recovering empty results', async ({ page }, info) => {
+  await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.fn-editor .ProseMirror').focus();
+  const panel = await coverage(page), query = panel.getByRole('combobox', { name: 'Search Vim bindings' });
+  const original = await query.elementHandle(); await query.pressSequentially('macro'); await query.press('ArrowLeft'); await query.press('ArrowLeft');
+  const caret = await page.evaluate(() => getSelection()?.anchorOffset);
+  await query.press('Control+h'); const filters = panel.getByRole('region', { name: 'Vim filters' }); await expect(filters).toBeVisible();
+  expect(new URL(page.url()).pathname).toBe(url); await page.keyboard.press('Shift+t'); await page.keyboard.press('Shift+e');
+  await expect(panel.getByRole('status', { name: 'Binding results' })).toContainText('0 matching');
+  await page.keyboard.press('q'); await expect(query).toBeFocused(); await expect(query).toHaveText('macro');
+  expect(await page.evaluate(() => getSelection()?.anchorOffset)).toBe(caret); expect(await original!.evaluate(node => node.isConnected)).toBe(true);
+  await expect(query).toHaveAttribute('data-vim-mode', 'insert'); await query.press('ControlOrMeta+z'); await expect(query).toHaveText('');
+  await query.press('Control+['); await expect(query).toHaveAttribute('data-vim-mode', 'normal'); await query.press('F2'); await expect(filters).toBeVisible();
+  await page.keyboard.press('r'); await expect(panel.getByRole('status', { name: 'Binding results' })).toContainText('1369 matching');
+  await page.keyboard.press('Shift+m'); await page.keyboard.press('Shift+f');
+  await page.screenshot({ path: info.outputPath('vim-row-filters-dark.png') });
+  await page.keyboard.press('q'); await expect(query).toHaveAttribute('data-vim-mode', 'normal');
+  await expect(panel.getByLabel('Active filters')).toContainText('Motions'); await expect(panel.getByLabel('Active filters')).toContainText('Missing');
+  await query.press('i'); await query.pressSequentially('q'); await expect(query).toHaveText('q'); await expect(panel).toBeVisible();
+  await query.press('F2'); await page.keyboard.press('r'); await page.keyboard.press('Escape'); await expect(query).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 650 }); await query.press('Control+h');
+  await page.screenshot({ path: info.outputPath('vim-row-filters-phone.png') });
+  expect(await panel.evaluate(node => node.scrollWidth <= node.clientWidth + 1)).toBe(true);
+  await page.keyboard.press('q'); await page.keyboard.press('Escape'); await expect(panel).toBeHidden();
+});
+
+test('Vim coverage reveals alias matches and retains the selected resource when tag sorting changes row order', async ({ page }) => {
+  await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date'); await page.locator('.fn-editor .ProseMirror').focus();
+  const panel = await coverage(page), query = panel.getByRole('combobox', { name: 'Search Vim bindings' });
+  await query.fill('diw'); await expect(panel.locator('[data-row-field=aliases] mark').first()).toHaveText('diw');
+  await query.fill('word'); await query.press('ArrowDown');
+  const id = await panel.getByRole('listbox').getByRole('option', { selected: true }).getAttribute('data-row-id');
+  await query.press('Control+h'); await panel.getByLabel('Sort bindings').selectOption('keys'); await page.keyboard.press('q');
+  await expect(panel.getByRole('listbox').getByRole('option', { selected: true })).toHaveAttribute('data-row-id', id!);
+  const active = await query.getAttribute('aria-activedescendant'); expect(await page.evaluate(id => Boolean(id && document.getElementById(id)), active)).toBe(true);
+  await query.press('Enter'); await expect(panel.getByRole('region', { name: 'Binding details' })).toBeVisible();
+  await page.keyboard.press('q'); await expect(query).toBeFocused(); await expect(panel.getByRole('listbox').getByRole('option', { selected: true })).toHaveAttribute('data-row-id', id!);
+  await query.press('Escape');
 });
 
 test('M-x and C-x C-x dispatch notebook commands to the captured selection with five visible rows', async ({ page }, info) => {

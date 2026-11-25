@@ -3,9 +3,9 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-vim-coverage`
-Execution Contract: `run-contract.kp.vim-coverage-20261125`
-Next Product Milestone: `vim-coverage`
+Current Commitment: `kp-row-picker`
+Execution Contract: `run-contract.kp.row-picker-20261125`
+Next Product Milestone: `row-picker`
 Milestone Authority: approved
 
 ## Where we are going
@@ -28,11 +28,12 @@ left and KP right. **Checked:** [joined chat editors](reviews/2026-11-25-joined-
 reading spacing, default gutters off and mode/pane/time cues.
 **Accepted:** [fruit picker](reviews/2026-11-25-fruit-picker.md) presentation.
 **Checked, awaiting judgment:** [pane/line focus](reviews/2026-11-25-workspace-focus-lines.md)
-and [workspace commands](reviews/2026-11-25-workspace-commands.md). M-x and
-Ctrl-x Ctrl-x share registered actions, preserving targets and native histories.
-**Checked:** [Vim binding coverage](reviews/2026-11-25-vim-binding-coverage.md):
-a pinned reference searchable from M-x, with per-editor support. Existing behavior
-only; implementing missing bindings is separate.
+and [workspace commands](reviews/2026-11-25-workspace-commands.md).
+**Checked:** [Vim coverage](reviews/2026-11-25-vim-binding-coverage.md), retaining
+the pinned reference and per-editor support.
+**Checked:** [floating row picker](reviews/2026-11-25-row-picker.md): annotated
+Vim rows, intentional matching and C-h tag filters with query/context return.
+Review this exemplar before M-x adoption. New Vim behavior remains separate.
 The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
@@ -91,7 +92,7 @@ blocker. Prior completed architecture and maintenance work stays complete.
 - Read this page, [the active thread](threads/co-creative-practice.md), and the
   charter for rationale. Retrieve only the selected task's sources afterward.
 - At handoff, state capability, uncertainty and direction changes. Reconcile strategy
-  at milestones; update tasks through Theseus. No slice logs here.
+  at milestones; Theseus owns execution.
 
 ## Preserved boundaries and history
 

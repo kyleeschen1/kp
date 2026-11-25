@@ -10,7 +10,7 @@ and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rat
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
-Theseus owns progress. Preserve parallel editor ownership; the old workbench
+Preserve parallel editor ownership; the old workbench
 proposal is historical.
 The [handoff](../reviews/2026-11-08-project-orientation.md) bounds the conversation/preview
 candidate. [Saved reading and motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md)
@@ -18,7 +18,7 @@ separates repaired startup and reuse from cold preparation cost. What counts
 remains the technical reference; fractional reasoning awaits editorial review. Preserve the
 [accepted reading defaults](../principles/document-theater-reading.md), original
 version links and completed orientation. Fresh generation and integrated
-workbench latency remain unproved. The approved notebook detour below is current.
+workbench latency remain unproved. The notebook detour is current.
 
 ## Retrieve for a named question
 
@@ -43,9 +43,9 @@ workbench latency remain unproved. The approved notebook detour below is current
   spacing and default gutters off. [Pane/line focus](../reviews/2026-11-25-workspace-focus-lines.md)
   is checked, awaiting visual judgment. Accepted: [fruit picker](../reviews/2026-11-25-fruit-picker.md)
   presentation. Checked, awaiting judgment: [workspace commands](../reviews/2026-11-25-workspace-commands.md),
-  shared controls and M-x/Ctrl-x Ctrl-x with original targets and histories.
-  Checked: [Vim coverage](../reviews/2026-11-25-vim-binding-coverage.md), a searchable
-  support audit; new behavior remains separate. The
+  retaining targets and histories. Checked: [Vim coverage](../reviews/2026-11-25-vim-binding-coverage.md).
+  Checked: [floating rows and C-h filters](../reviews/2026-11-25-row-picker.md),
+  with query continuity; review before M-x adoption. New Vim behavior is separate. The
   [multiplexer vision](../2026-11-25-multiplexer-vision.md) records later scope.
   Preserve native history and domain ownership.
   Motions/text objects remain parked; MathML declined.

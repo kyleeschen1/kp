@@ -18,7 +18,7 @@ const source = (status: SupportStatus, note: string, ...evidence: string[]): Sup
 const prose = (status: SupportStatus, note: string) => source(status, note, proseSource);
 const chat = (status: SupportStatus, note: string) => source(status, note, chatSource);
 const custom = (tag: string, keys: string, description: string, mode: VimMode = 'normal'): VimEntry => ({
-  id: `workspace:${tag}`, tag, keys, description, mode, group: 'KP extensions', line: 0, changes: false, origin: 'workspace', examples: []
+  id: `workspace:${tag}`, tag, keys, description, mode, group: 'KP extensions', line: 0, changes: false, moves: false, origin: 'workspace', examples: []
 });
 export const workspaceBindings: readonly VimEntry[] = [
   custom('commands', 'Alt-x / Ctrl-x Ctrl-x', 'Search workspace commands'),
@@ -86,6 +86,7 @@ export function bindingSupport(entry: VimEntry, surface: VimSurface, platform: '
     return source('unverified', 'CodeMirror Vim 6.4.0 owns this surface. This form has not been individually verified in KP; library presence is not a support claim.', 'node_modules/@replit/codemirror-vim/package.json');
   }
   if (surface === 'picker') {
+    if (['CTRL-H', 'i_CTRL-H', 'v_CTRL-H'].includes(tag)) return source('partial', 'The Vim coverage finder captures Ctrl-h for tag filters. Fruit and M-x queries have not adopted this transient; this is not a shared Vim Backspace implementation.', 'src/fraction-notebook/vim-coverage-content.ts');
     if (['j', 'k', 'CTRL-N', 'CTRL-P', 'i_CTRL-N', 'i_CTRL-P', '<Down>', '<Up>', 'i_<Down>', 'i_<Up>'].includes(tag))
       return source('overridden', 'Moves between suggestions instead of moving through query text.', 'src/fraction-notebook/command-picker.ts');
     if (['i_<Esc>', 'v_<Esc>'].includes(tag)) return source('overridden', 'Escape closes the picker. Use Ctrl-[ for Normal mode.', 'src/fraction-notebook/command-picker.ts');

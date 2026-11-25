@@ -8,7 +8,7 @@ export const vimReference = {
 export type VimMode = 'normal' | 'insert' | 'visual' | 'operator' | 'command-line' | 'terminal' | 'ex';
 export interface VimEntry {
   id: string; tag: string; keys: string; description: string; mode: VimMode; group: string;
-  line: number; changes: boolean; origin: 'vim' | 'workspace'; examples: readonly string[];
+  line: number; changes: boolean; moves: boolean; origin: 'vim' | 'workspace'; examples: readonly string[];
 }
 const sections: Readonly<Record<string, readonly [VimMode, string]>> = {
   '1': ['insert', 'Insert'], '2': ['normal', 'Normal'], '2.1': ['operator', 'Text objects'],
@@ -67,7 +67,7 @@ export function parseVimReference(source: string): VimEntry[] {
     if (ids.has(id)) throw new Error(`Duplicate Vim reference row: ${id}`);
     ids.add(id);
     current = { id, tag, keys, description: resolvedDescription, mode, group, line: index + 1,
-      changes: /^2\s|^1,2\s/.test(rawDescription), origin: 'vim', examples: examples[tag] ?? [] };
+      changes: /^2\s|^1,2\s/.test(rawDescription), moves: mode === 'normal' && /^1(?:,2)?\s/.test(rawDescription), origin: 'vim', examples: examples[tag] ?? [] };
     entries.push(current);
   }
   // Upstream prints one shared description after these two command-line forms.

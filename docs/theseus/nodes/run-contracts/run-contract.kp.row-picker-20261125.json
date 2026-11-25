@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.row-picker-20261125",
+  "kind": "run-contract",
+  "title": "Floating Vim rows and filter transient",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: one package complete, evidence retained. Stop before second-consumer M-x adoption or broader row promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.row-picker-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-row-picker.md",
+      "summary": "Approved exemplar with preserved semantics and post-review second consumer"
+    }
+  ],
+  "verification": [
+    "npm run test:vim-coverage",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:vim-coverage"
+  ],
+  "revisitWhen": [
+    "User judges the floating Vim rows and C-h transient."
+  ],
+  "allowedWork": [
+    "Typed row projection, matching and facets, Vim exemplar, focused checks and evidence"
+  ],
+  "disallowedWork": [
+    "New Vim behavior, full picker rollout, storage migration or production publication"
+  ],
+  "goal": "Find and inspect bindings through annotated rows and orthogonal tags while preserving query and editor context",
+  "target": "task.kp.row-picker-20261125",
+  "slices": [
+    {
+      "id": "row-picker",
+      "title": "Row model, Vim adapter and floating filter transient",
+      "summary": "Checked floating Vim row exemplar: explicit search fields and highlights, stable resources, orthogonal facets and sorting, C-h/F2 transient, q return, five-row paging and inert inspection. Ten unit, six browser, six preservation cases, full consumer types and 75 vision checks pass. Stop for visual judgment before M-x migration.",
+      "status": "complete"
+    }
+  ]
+}

@@ -22,6 +22,7 @@ test('the pinned index retains every tagged command and its untagged aliases wit
   assert.match(row('i_CTRL-V_digit', 'insert').description, /single byte/);
   assert.equal(row('c_CTRL-R_CTRL-R', 'command-line').description, row('c_CTRL-R_CTRL-O', 'command-line').description);
   assert.match(row(':redrawtabpanel', 'ex').description, /^force a redraw/);
+  assert.equal(row('<BS>').moves, true); assert.equal(row('i_<BS>', 'insert').moves, false);
   assert.ok(entries.filter(entry => entry.tag === 'count').every(entry => entry.description === row('count').description));
   assert.throws(() => parseVimReference(raw.replace('|dd|', '|removed|').replace(/^\|removed\|.*\n/m, '')), /incomplete/);
 });
@@ -42,6 +43,9 @@ test('support separates prose limitations, read-only behavior, overrides and unv
   assert.equal(support('za', 'transcript').status, 'partial');
   assert.equal(support('za', 'notebook').status, 'missing');
   assert.equal(support('j', 'picker').status, 'overridden');
+  assert.equal(support('i_CTRL-H', 'picker', 'insert').status, 'partial');
+  assert.match(support('i_CTRL-H', 'picker', 'insert').note, /Vim coverage finder captures Ctrl-h/);
+  assert.equal(support('i_CTRL-H', 'notebook', 'insert').status, 'missing');
   assert.equal(support(':', 'picker').status, 'not-applicable');
   assert.equal(support(':help', 'picker', 'ex').status, 'not-applicable');
   assert.equal(support('i_CTRL-[', 'picker', 'insert').status, 'implemented');
