@@ -1,5 +1,9 @@
 # Unified fraction notebook surface
 
+Subsequent review: the user says "It looks great!" and accepts this candidate.
+The [focused-buffer next-step review](2026-11-24-focused-buffer-next-step-review.md)
+records the successor direction and parked custom Vim extension work.
+
 The user accepts the structure-editor candidate, then approves this bounded
 presentation refinement: one masthead, editor typography in the reading pane,
 an animated opening/closing split, and red modal cursors. Preserve the accepted

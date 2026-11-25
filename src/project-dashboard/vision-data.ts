@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved unified notebook surface", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At /experiments/fraction-notebook/, toggle Edit in both directions, compare the matching serif prose and try Normal/Insert cursors. Writing, Structure and Reading options now belong to the top masthead. Judge motion, cursor legibility and the uncluttered panes. The matrix proof, fractional editorial review and orientation discussion remain separate return paths.",
+  nextJudgment: "The unified notebook surface is accepted. Next, scope one rich document with a focused source buffer beside the current fraction animation; preserve Run feedback and exact return to the document. Exposed styles and help/basic Ex follow. Custom motions and text objects are parked; this recommendation starts no implementation run.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The user accepts the nested fraction structure editor: optional titles, metadata, folding, reversible block operations and bounded Vim preserve the native player. The matrix proof retains scoped import and reuse evidence. General authoring speed and learning remain unproved; the shell/cursor refinement awaits review.",
-      evidence: { label: "Accepted structure editor", href: "docs/project/reviews/2026-11-24-structure-editor.md" },
+      established: "The user accepts nested structure editing and the unified masthead, matching prose, split motion and modal cursors. Duplicate prose now motivates focused source editing beside the selected animation. General authoring speed and learning remain unproved.",
+      evidence: { label: "Accepted unified surface", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" },
       outcome: {
-        authority: "approved",
-        id: "unified-fraction-surface", title: "Read and edit through one coherent surface",
-        finish: "Review a single masthead, shared serif prose, smooth split opening/closing and theme-variable red block/line cursors, preserving current reading context and the accepted structure editor.",
-        excludes: "Public-reader redesign, model migration, full themes, new Vim operators, transclusion, book search or a general editor rollout.",
-        source: { label: "Approved presentation refinement", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" }
+        authority: "proposed",
+        id: "focused-animation-editing", title: "Tweak source while inspecting its animation",
+        finish: "Write in one rich document, open the fraction source beside its current result, run a supported change, recover from an invalid draft, and close back to the same document position. Full reading Preview remains optional.",
+        excludes: "Custom motions/text objects, arbitrary code execution, public-reader redesign, transclusion UI, book search or general editor promotion. This next-step review starts no implementation run.",
+        source: { label: "Focused-buffer next-step review", href: "docs/project/reviews/2026-11-24-focused-buffer-next-step-review.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Unified fraction notebook surface accepted",
+      scope: "One masthead, matching prose fonts, reversible split motion and red modal cursors preserve the native player. Universal typography, exposed styles and a focused-buffer workflow remain successor work.",
+      source: { label: "User acceptance and checked candidate", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" }
+    },
     {
       title: "Nested fraction structure editing accepted",
       scope: "One split-view exemplar supports optional titles, metadata, nested main text, list/outline presentation, folding and reversible block operations. V1/V2 drafts remain recoverable and the native player is preserved. This does not establish a general editor or whole-book performance.",
@@ -339,6 +344,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves one masthead, editor serif typography in the preview, a sliding split transition and red block/line cursors. Structural editing remains accepted and preserved.",
       reason: "The writing workspace should open around the reading without losing context or adding another layer of headers. This is a presentation refinement in one exemplar, not a model or public-reader migration.",
       source: { label: "Approved unified-surface scope", href: "docs/project/reviews/2026-11-24-unified-notebook-surface.md" }
+    },
+    {
+      id: "focused-animation-buffer", on: "2026-11-24",
+      before: "The accepted split shows similar prose twice, while special-object editors have inconsistent keyboard behavior.",
+      after: "The accepted direction is one rich document with focused source beside the current animation, optional full Preview, and separate Save/Run semantics. Styles and help/basic Ex follow; custom motions and text objects are parked.",
+      reason: "Spend screen space on feedback for the object being edited and preserve the return path. The user asks for the next step, not an implementation run.",
+      source: { label: "Focused-buffer next-step review", href: "docs/project/reviews/2026-11-24-focused-buffer-next-step-review.md" }
     }
   ]
 };

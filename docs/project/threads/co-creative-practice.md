@@ -33,10 +33,11 @@ workbench latency remain unproved. The approved notebook detour below is current
   The [first fraction editor](../reviews/2026-11-24-fraction-notebook-editor.md) is checked.
   The [rich editor](../reviews/2026-11-24-rich-fraction-editor.md) remains recoverable.
   The [structure editor](../reviews/2026-11-24-structure-editor.md) is accepted.
-  The [unified surface](../reviews/2026-11-24-unified-notebook-surface.md) refines
-  headers, typography, split motion and modal cursors under
-  `run-contract.kp.unified-notebook-20261124`. MathML is declined; later agenda
-  items remain in the review.
+  The [unified surface](../reviews/2026-11-24-unified-notebook-surface.md) is accepted.
+  [Focused animation editing](../reviews/2026-11-24-focused-buffer-next-step-review.md)
+  is the recommended successor: one document, source beside its result, then
+  exposed styles and help/basic Ex commands. Implementation has not started.
+  Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.

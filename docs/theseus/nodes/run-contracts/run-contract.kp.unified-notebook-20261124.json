@@ -2,8 +2,8 @@
   "id": "run-contract.kp.unified-notebook-20261124",
   "kind": "run-contract",
   "title": "Unified notebook surface",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 1/1 package complete; no wider promotion before visual acceptance.",
+  "status": "resolved",
+  "summary": "User accepts the unified surface. Focused animation editing is the recommended successor; custom motions and text objects are parked. No new implementation run started.",
   "sourceRefs": [
     {
       "kind": "file",

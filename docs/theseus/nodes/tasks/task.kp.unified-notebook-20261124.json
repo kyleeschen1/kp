@@ -2,9 +2,9 @@
   "id": "task.kp.unified-notebook-20261124",
   "kind": "task",
   "title": "Unify the fraction writing and reading surface",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: implementation and objective checks complete; inspect fraction notebook slide, typography and cursors.",
+  "summary": "User accepts the unified surface. Focused animation editing is the recommended successor; custom motions and text objects are parked. No new implementation run started.",
   "sourceRefs": [
     {
       "kind": "file",

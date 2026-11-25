@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `unified-notebook`
 Execution Contract: `run-contract.kp.unified-notebook-20261124`
-Next Product Milestone: `unified-fraction-surface`
-Milestone Authority: approved
+Next Product Milestone: `focused-animation-editing`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -19,12 +19,13 @@ why this becomes the organizing direction and what it supersedes.
 
 ## Current approved commitment
 
-**Approved detour:** [unified notebook surface](reviews/2026-11-24-unified-notebook-surface.md):
-one masthead, matching serif prose, a reversible split transition and red modal
-cursors. The [structure editor](reviews/2026-11-24-structure-editor.md) is accepted;
-retain its nested blocks, metadata, inline editing and recovery. Review this
-presentation refinement at `/experiments/fraction-notebook/` before generalizing.
-MathML is declined; themes, slash commands, transclusion and book search remain later.
+**Accepted detour:** [unified notebook surface](reviews/2026-11-24-unified-notebook-surface.md)
+and nested structure editor. Recommended successor: [focused animation editing](reviews/2026-11-24-focused-buffer-next-step-review.md),
+one rich document with source beside its current animation and optional full Preview.
+Accepted direction; implementation has not started.
+Follow with exposed typography/styles and keybinding help/basic Ex commands.
+Custom motions/text objects are parked; MathML declined. Transclusion and
+search remain later. Preserve nesting, UUIDs, metadata and recovery.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
 retains its identity, nesting, scope and reuse evidence; its inspector UI was not
 accepted as the writing experience. The existing authoring-to-practice contract
