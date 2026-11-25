@@ -19,6 +19,7 @@ import { mountWorkspace } from './workspace.ts';
 import { mountStyles } from './styles.ts';
 import { mountCommands } from './commands.ts';
 import { mountLineNumbers } from './numbers.ts';
+import { mountChat } from '../editor-chat/panel.ts';
 
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
@@ -85,13 +86,15 @@ split.onpointermove = event => { if (split.hasPointerCapture(event.pointerId)) {
 split.onpointerup = event => split.releasePointerCapture(event.pointerId);
 split.onkeydown = event => { if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); resize(splitPercent + (event.key === 'ArrowLeft' ? -2 : 2)); } };
 left.append(editorHost); right.append(resultStatus, frame); writingPanel.prepend(tools); writingPanel.append(previewTools);
-workspace.append(left, sourcePane, split, right); root.append(header, workspace);
+const editorBody = el('div', 'kp-editor-body');
+workspace.append(left, sourcePane, split, right); editorBody.append(workspace); root.append(header, editorBody);
 const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, name => { mode.textContent = name.toUpperCase(); }, {
   host: sourceHost, run: runSource,
   open() { root.classList.add('fn-focus'); split.inert = false; layout.refresh(); },
   close() { root.classList.remove('fn-focus'); split.inert = true; layout.refresh(); }
 });
 const layout = mountWorkspace(root, workspace, left, editorHost, right);
+const chat = mountChat(editorBody, actions, () => layout.refresh());
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); });
 actions.append(button('Styles', () => styles.toggle()));
 const numbers = mountLineNumbers(editorHost, editor.view);
@@ -203,6 +206,6 @@ const onMessage = (event: MessageEvent) => {
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); chat.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

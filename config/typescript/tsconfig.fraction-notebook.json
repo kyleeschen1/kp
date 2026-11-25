@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "lib": ["ES2022", "DOM", "DOM.Iterable"], "module": "ESNext", "moduleResolution": "Bundler", "noEmit": true, "types": ["vite/client", "node"] },
-  "include": ["../../src/fraction-notebook", "../../scripts/vite-fraction-notebook.ts", "../../tests/fraction-notebook*.ts"]
+  "include": ["../../src/fraction-notebook", "../../scripts/vite-fraction-notebook.ts", "../../scripts/vite-chat.ts", "../../scripts/check-editor-chat-codex.ts", "../../tests/fraction-notebook*.ts"]
 }

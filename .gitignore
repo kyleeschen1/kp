@@ -36,6 +36,7 @@ coverage/
 
 # Explicit local authoring selections; source Articles remain versioned.
 /.kp/authoring/
+/.kp/chat/
 
 # Editor and OS files
 .DS_Store

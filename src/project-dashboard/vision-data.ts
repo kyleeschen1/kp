@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "workbench-kp-object",
-    title: "Edit one KP object from the independent workbench",
+    id: "kp-persistent-chat",
+    title: "Resume a persistent conversation inside the KP editor",
     approval: "approved",
-    contractId: "run-contract.kp.workbench-object-20261125",
-    finish: "Open a revisioned fraction object in Workbench, preview an admitted annotation change in KP, retain the last result after rejection, and recover an unsent draft after reconnect. Review before broader extraction.",
-    source: { label: "Approved object boundary", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" }
+    contractId: "run-contract.kp.persistent-chat-20261125",
+    finish: "Connect in the fraction editor, send and follow up in one saved Codex thread, interrupt, and return after reload or restart with conversation and draft retained. Review one exemplar before broader promotion.",
+    source: { label: "Approved persistent chat", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "The proposed next outcome is one real LLM-assisted fraction revision in the native workbench: attach exact object context, receive a proposed change, inspect its diff and checked preview, then follow up and reconnect. The browser adapter remains available at http://127.0.0.1:1426/; it cannot open a native session. This successor is not yet approved for implementation.",
+  nextJudgment: "Open http://127.0.0.1:8000/experiments/fraction-notebook/ and choose Chat, then Connect. Send a question, follow up and reload; judge whether the saved conversation makes it easy to return to the work. This first discussion surface has read-only project access and no automatic notebook attachment or edits. Real inference starts only on explicit Send.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The fraction notebook's structure, focused workflow and style refinement are accepted. The approved successor tests an independent workbench source buffer with KP-owned validation and preview. General authoring speed, extraction and learning remain unproved.",
-      evidence: { label: "Accepted notebook and bounded successor", href: "docs/project/reviews/2026-11-25-workbench-kp-object-boundary.md" },
+      established: "The fraction notebook's structure, focused workflow and style refinement are accepted. The independent object adapter preserves KP validation and preview ownership. The user selects persistent conversation in KP before contextual object revision. General authoring speed, extraction and learning remain unproved.",
+      evidence: { label: "Notebook chat boundary and preserved foundations", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" },
       outcome: {
-        authority: "proposed",
-        id: "contextual-llm-revision", title: "Make one real contextual revision with an LLM",
-        finish: "The existing native conversation receives exact object and draft context, returns a reviewable proposal, and reaches a checked KP preview. A real follow-up and reconnect retain context without replaying uncertain sends.",
-        excludes: "A new chat backend, broad rich-editor extraction, arbitrary new choreography, canonical publication or whole-book infrastructure.",
-        source: { label: "Proposed LLM authoring outcome", href: "docs/project/reviews/2026-11-25-llm-authoring-next-step.md" }
+        authority: "approved",
+        id: "persistent-editor-conversation", title: "Keep a conversation while working in the KP editor",
+        finish: "One local Codex thread supports streaming, follow-up, interruption and explicit resume, with saved drafts and uncertain-delivery review. Closing chat preserves the notebook and native player.",
+        excludes: "Automatic object patches, publication, broad editor extraction, desktop profile migration, paid test inference or whole-book infrastructure.",
+        source: { label: "Approved editor conversation", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" }
       }
     },
     {
@@ -377,6 +377,13 @@ export const projectVision: ProjectVision = {
       after: "Recommend one real contextual LLM revision next, using the existing session and domain owners. The user asks when LLMs enter the workflow; implementation approval is not inferred from that question.",
       reason: "Test the actual authoring benefit now rather than extending manual editor infrastructure. Retain the bounded adapter, accepted notebook and broader programme as separate foundations and return paths.",
       source: { label: "LLM authoring next-step review", href: "docs/project/reviews/2026-11-25-llm-authoring-next-step.md" }
+    },
+    {
+      id: "select-kp-persistent-chat", on: "2026-11-25",
+      before: "The proposed next step was a contextual object revision through the independent native workbench.",
+      after: "The user explicitly selects persistent general chat inside the KP editor and authorizes borrowing existing session/recovery behavior. One local bridge serves the fraction editor exemplar; notebook and rendering authority stay separate.",
+      reason: "Establish a durable conversation where the user is already working before narrowing it to automatic object proposals. Preserve the independent adapter and broader authoring-to-practice return path.",
+      source: { label: "Approved persistent chat implementation", href: "docs/project/reviews/2026-11-25-kp-persistent-chat.md" }
     }
   ]
 };

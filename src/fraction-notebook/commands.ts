@@ -24,6 +24,7 @@ export const bindings = [
   ['JSON', '/ / ? · n / N', 'CodeMirror Vim search forward/backward and repeat'],
   ['JSON', 'Shift-Enter', 'Run this animation source'], ['JSON', 'Cmd/Ctrl-Enter', 'Close buffer, retaining draft'],
   ['Inline source', 'Enter / Tab / Esc', 'Finish link/math source and return to prose; ordinary text-input keys apply'],
+  ['Chat', 'Cmd/Ctrl-Enter', 'Send the current message; ordinary text-input keys apply'],
   ...exCommands.map(command => ['Both', `:${command.names.join(' / :')}`, command.description]),
   ['Both', ':set number / :set nonumber', 'Show absolute line numbers / hide them'],
   ['Both', ':set relativenumber', 'Show relative line numbers around the cursor']

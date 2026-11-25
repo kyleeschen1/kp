@@ -3,10 +3,10 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `workbench-kp-object`
-Execution Contract: `run-contract.kp.workbench-object-20261125`
-Next Product Milestone: `contextual-llm-revision`
-Milestone Authority: proposed
+Current Commitment: `kp-persistent-chat`
+Execution Contract: `run-contract.kp.persistent-chat-20261125`
+Next Product Milestone: `persistent-editor-conversation`
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -22,12 +22,12 @@ why this becomes the organizing direction and what it supersedes.
 **Accepted:** nested structure, [unified surface](reviews/2026-11-24-unified-notebook-surface.md),
 [focused editing](reviews/2026-11-24-focused-buffer-next-step-review.md) and its
 [style/rhythm refinement](reviews/2026-11-24-notebook-style-comparison.md).
-**Approved successor:** [one independent workbench → KP object integration](reviews/2026-11-25-workbench-kp-object-boundary.md).
-Workbench owns the source draft and commands; KP owns validation and the native
-animation preview. Review one bounded browser exemplar before extraction.
-The [recommended successor](reviews/2026-11-25-llm-authoring-next-step.md) is one
-real LLM-assisted revision through the existing native session owner; implementation
-remains proposed.
+**Approved successor:** [persistent general chat inside the KP editor](reviews/2026-11-25-kp-persistent-chat.md).
+Borrow Workbench's session/recovery rules through a local Codex bridge; keep chat
+separate from notebook JSON and native rendering. Review Send, follow-up and reload.
+The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
+remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
+is deferred behind persistent conversation; automatic document edits remain excluded.
 Publication and general editor promotion are excluded. Custom motions are parked; MathML declined. Transclusion and search
 remain later. Preserve notebook identities, metadata and recovery.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md)
@@ -43,7 +43,7 @@ What counts remains the technical reference. Fractional reasoning awaits review
 of its argument, alternative route and changed-case question. Preserve the
 [accepted reading defaults](principles/document-theater-reading.md).
 
-Preserve the existing authoring path, parallel editor ownership and single strategic editor.
+Preserve authoring and parallel ownership.
 
 ## First product proof — approved
 

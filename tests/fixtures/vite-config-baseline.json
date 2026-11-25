@@ -119,6 +119,13 @@
           "name": "kp-fraction-notebook"
         },
         {
+          "apply": "serve",
+          "closeBundle": "<hook>",
+          "configResolved": "<hook>",
+          "configureServer": "<hook>",
+          "name": "kp-persistent-chat"
+        },
+        {
           "name": "kp-code-reasoning-publication",
           "transformIndexHtml": {
             "handler": "<hook>",
@@ -463,6 +470,13 @@
           "apply": "serve",
           "configureServer": "<hook>",
           "name": "kp-fraction-notebook"
+        },
+        {
+          "apply": "serve",
+          "closeBundle": "<hook>",
+          "configResolved": "<hook>",
+          "configureServer": "<hook>",
+          "name": "kp-persistent-chat"
         },
         {
           "name": "kp-code-reasoning-publication",

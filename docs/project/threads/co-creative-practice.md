@@ -5,11 +5,9 @@ Last Updated: 2026-11-25
 
 ## Current boundary
 
-The [roadmap](../roadmap.md) records accepted orientation infrastructure and the
-approved authoring-to-practice programme. The [charter](../strategy.md) describes
-the accepted author-first direction and its learner/practice/library horizon.
-The [decision](../decisions/2026-11-08-authoring-expert-attention.md) preserves
-earlier practice ambitions while changing their ordering.
+The [roadmap](../roadmap.md) owns current direction; the [charter](../strategy.md)
+and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain
+author-first rationale and the learner/practice/library horizon.
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
@@ -35,9 +33,11 @@ workbench latency remain unproved. The approved notebook detour below is current
   [Focused animation editing](../reviews/2026-11-24-focused-buffer-next-step-review.md)
   is checked: one document, source beside its result and help/basic Ex commands.
   [Style comparison and rhythm](../reviews/2026-11-24-notebook-style-comparison.md)
-  is accepted. The approved [workbench object successor](../reviews/2026-11-25-workbench-kp-object-boundary.md)
-  keeps drafts/commands in Workbench and validation/rendering in KP.
-  Review one preview-only adapter before extraction; no canonical writes or new Codex service.
+  is accepted. The [workbench object adapter](../reviews/2026-11-25-workbench-kp-object-boundary.md)
+  keeps drafts/commands independent of KP validation/rendering.
+  The user now approves [persistent chat in the KP editor](../reviews/2026-11-25-kp-persistent-chat.md),
+  borrowing its session/recovery rules through a local bridge. Review one conversation,
+  follow-up and reload; automatic notebook edits and broader extraction remain excluded.
   Custom motions/text objects are parked; MathML is declined.
   Review before generalizing; the programme remains the return path.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).

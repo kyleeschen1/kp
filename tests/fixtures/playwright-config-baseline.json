@@ -1,4 +1,8 @@
 {
+  "playwright.editor-chat.config.ts": {
+    "sha256": "93e65c17b711a3a052f6b82dac7b5a0f3a23bf5043339b32a9e1b6fcfd044bfd",
+    "projects": 3
+  },
   "playwright.notebook.config.ts": {
     "sha256": "b7f86de99bdaaf4c1ed381b379a9cdc49192f6cd5adb13a680b6fb916df1a582",
     "projects": 3

@@ -1,0 +1,54 @@
+{
+  "id": "task.kp.persistent-chat-20261125",
+  "kind": "task",
+  "title": "Resume a persistent conversation inside the KP editor",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: persistent Chat candidate implemented and checked. Author should Send a real question, follow up, reload and judge returning to the conversation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-kp-persistent-chat.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:editor-chat; npm run check:editor-chat:codex",
+      "status": "passed",
+      "scope": "Session boundary",
+      "checkedAt": "2026-11-25T10:42:54.467Z",
+      "notes": "11 deterministic tests pass. Installed Codex 0.169.0 initializes, starts, disconnects and reconnects an unsent session. Initial native probe found no persisted rollout before the first turn; recovery now replaces only a provably never-submitted empty shell and preserves its draft. No inference requested; populated native thread resume remains for explicit user Send."
+    },
+    {
+      "command": "Initial chat and configuration checks",
+      "status": "failed",
+      "scope": "Discovery and repaired failures",
+      "checkedAt": "2026-11-25T10:50:25.606Z",
+      "notes": "Initial HTTP test ignored a forged Host header; raw HTTP test now covers it. Initial private-path browser check missed encoded dot normalization; guard repaired. Installed native restart exposed absent empty rollout; only never-submitted shells can now restart. New tooling inventories initially rejected the added suite/plugin; exact additions reviewed, previous entries preserved. Roadmap/thread exceeded budgets by 15 words each; shortened without raising budgets. See linked evidence and passing reruns."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "Six Chromium exemplar cases and final focused live-server guard",
+      "checkedAt": "2026-11-25T10:50:26.874Z",
+      "notes": "Real service and HTTP with deterministic RPC peer: streaming, resume, delayed Send, interrupt, uncertain delivery, two tabs, keyboard Send, light and phone layout. Native player remains mounted. Final real dev endpoint returns a validated snapshot and private paths return 403. No model inference claimed."
+    },
+    {
+      "command": "npm run test:editor-chat; npm run typecheck:fraction-notebook; npm run test:fraction-notebook; npm run visual:fraction-notebook; npm run visual:anchored-algebra -- --grep fractional",
+      "status": "passed",
+      "scope": "Final boundary and preservation checks",
+      "checkedAt": "2026-11-25T10:50:27.701Z",
+      "notes": "11 chat and 20 notebook unit tests; focused types; all 21 notebook browser cases and one canonical fractional reader case pass. Public reader closure unchanged. Final storage release is idempotent across overlapping Vite hooks."
+    },
+    {
+      "command": "npm run test:project-vision; npm run check:tooling-configs; npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "Strategic sources and tooling",
+      "checkedAt": "2026-11-25T10:50:28.512Z",
+      "notes": "75 project tests, five tooling tests, 72 Playwright configs with 173 projects, 14 Vite configs in both modes, 15 TypeScript projects and workspace validation pass. Broad full-repo release gates not run for this focused exemplar."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews Chat at the fraction editor URL and a real model turn."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "run-contract.kp.persistent-chat-20261125",
+  "kind": "run-contract",
+  "title": "Persistent chat in the KP editor",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 2/2 implementation packages checked. Awaiting the single conversation exemplar judgment and explicit real Send before promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.persistent-chat-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-kp-persistent-chat.md"
+    }
+  ],
+  "verification": [
+    "Focused protocol and recovery tests, installed handshake, types, browser exemplar and notebook/public reader preservation"
+  ],
+  "revisitWhen": [
+    "User completes the persistent Chat review in the fraction editor."
+  ],
+  "allowedWork": [
+    "Scoped browser chat, local app-server adapter and recovery tests"
+  ],
+  "disallowedWork": [
+    "Automatic document edits, publication, native profile migration, broad chat platform and hidden inference"
+  ],
+  "goal": "One durable general chat with streaming and explicit resume in the existing fraction editor",
+  "target": "task.kp.persistent-chat-20261125",
+  "slices": [
+    {
+      "id": "session",
+      "title": "Local Codex transport and recovery boundary",
+      "summary": "User explicitly selects persistent general chat in KP; adapt the existing workbench lifecycle to a bounded local browser bridge.",
+      "status": "complete"
+    },
+    {
+      "id": "editor",
+      "title": "Persistent Chat panel and integrated exemplar review",
+      "summary": "One themed Chat panel implemented and checked with existing editor and reader preservation. Candidate ready for one human conversation review; no promotion or hidden model inference.",
+      "status": "complete"
+    }
+  ]
+}
