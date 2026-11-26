@@ -137,3 +137,22 @@ the pre-experiment theater/layout behavior, and scope the ridge to the notebook
 preview. Preserve native math, viewport-independent operation pacing and
 independent annotation corrections. Review the [single reset exemplar](reviews/2026-11-26-fraction-original-ridge.md)
 before any further choreography or generalization.
+
+## Approved object-origin comment exemplar
+
+The user proposes commentary emerging directly from its mathematical subject:
+gather the relevant objects with a line, signal an approaching comment, then
+raise and scale the prose into its normal reading size. Implement one passage
+first: the additive-inverse pair in the fractional equation. Establish the
+connection before cancellation; retract the connector before those terms move,
+keeping the settled prose readable through the operation. Scroll reversal and
+direct seeks must reconstruct the same state. Reduced motion uses stable prose.
+
+Canonical source remains the fractional-linear article and semantic asset;
+host is the fraction notebook preview iframe; native KaTeX/material rendering
+owns the equation. Preserve saved notebooks, source prose, ordinary readers,
+existing operation travel and the ridge baseline. The notebook-local binding
+and optional annotation presentation are the reversible candidate, not a shared
+authoring protocol. Stop at this exemplar's visual review before extending to
+other comments or object families. The earlier full-block ridge proposal is
+not bundled into this choreography trial.

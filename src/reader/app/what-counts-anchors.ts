@@ -1,5 +1,7 @@
 import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotation.ts";
 import { AnchoredAlgebraGap, type CommentaryStop } from "../document/public-api.ts";
+import type { ObjectCommentPose } from './object-comment-arrival.ts';
+import { prepareObjectCommentPaint } from './object-comment-paint.ts';
 
 /** Endpoint-only projection. Material transit has its own paint authority;
  * this adapter never measures its hidden native source as a moving anchor. */
@@ -8,15 +10,38 @@ export function mountAnchoredLabels(stage: HTMLElement) {
   overlay.className = "anchored-labels kp-annotation-plane"; overlay.setAttribute("aria-hidden", "true");
   stage.append(overlay);
   let renderedKey: string | undefined;
-  const clear = () => { overlay.hidden = true; renderedKey = undefined; delete stage.dataset["anchoredState"]; };
+  let painters: ((pose: ObjectCommentPose) => void)[] = [];
+  const clear = () => { overlay.hidden = true; renderedKey = undefined; painters = []; delete stage.dataset["anchoredState"]; };
   return {
-    render(stop: CommentaryStop | undefined, invalidate = false, presence = 1) {
+    render(stop: CommentaryStop | undefined, invalidate = false, presence = 1, motion?: ObjectCommentPose) {
       if (!Number.isFinite(presence) || presence < 0 || presence > 1)
         throw new AnchoredAlgebraGap('reading.presence', 'Require a finite annotation presence between zero and one.');
       if (!stop || presence === 0) { clear(); return; }
+      if (motion && [motion.emergence, motion.withdrawal].some(value => !Number.isFinite(value) || value < 0 || value > 1))
+        throw new AnchoredAlgebraGap(stop.stateId, 'Require a finite object-comment pose between zero and one.');
+      if (motion && (stop.notes.length !== 1 || stop.notes[0]!.side !== 'above'))
+        throw new AnchoredAlgebraGap(stop.stateId, 'This exemplar supports one upward comment at a time.');
       // Update even when anchors are unchanged. The reader's semantic playhead
       // is the only clock; CSS transitions would lag reversal and direct seeks.
       overlay.style.opacity = String(presence);
+      // Once the connector has retracted, this is settled prose, not a claim
+      // about a moving native anchor. Direct seeks need no cached source ink.
+      if (motion?.released) {
+        const key = `${stop.stateId}:released`;
+        if (!invalidate && renderedKey === key) return;
+        clear();
+        overlay.innerHTML = stop.notes.map(note => renderKpFocusDeckAnnotation({ entityId: note.id, role: 'support', text: note.text, detail: note.detail })).join('');
+        overlay.hidden = false; overlay.dataset['objectComment'] = 'true'; overlay.dataset['commentReleased'] = 'true';
+        overlay.dataset['commentEmergence'] = '1'; overlay.dataset['commentWithdrawal'] = '1';
+        for (const label of overlay.querySelectorAll<HTMLElement>('[data-kp-focus-deck-annotation]')) {
+          const style = getComputedStyle(label), width = parseFloat(style.width), height = parseFloat(style.height);
+          if (!(width > 0 && height > 0) || width > stage.offsetWidth - 32 + 1 / 1024 || height > stage.offsetHeight / 2 - 32)
+            throw new AnchoredAlgebraGap(stop.stateId, 'Reserve room for settled commentary above the equation.');
+          label.style.left = `${(stage.offsetWidth - width) / 2}px`; label.style.top = '16px';
+        }
+        overlay.style.visibility = ''; renderedKey = key; return;
+      }
+      delete overlay.dataset['commentReleased'];
       const owner = stage.querySelector<HTMLElement>("[data-kp-reader-native-endpoint]");
       const side = owner?.dataset["kpReaderNativeEndpoint"];
       if (!owner || (side !== "source" && side !== "target") || owner.dataset["kpReaderNativeEndpointPassed"] !== "true")
@@ -25,11 +50,12 @@ export function mountAnchoredLabels(stage: HTMLElement) {
       const object = endpoint?.querySelector<HTMLElement>("[data-kp-reader-equation-state]");
       const objectId = object?.dataset["kpReaderEquationState"];
       if (!object || !objectId) throw new AnchoredAlgebraGap(stop.stateId, "Resolve the active native endpoint view.");
-      const key = `${stop.stateId}:${objectId}`;
-      if (!invalidate && key === renderedKey) return;
+      const key = `${stop.stateId}:${objectId}:${motion !== undefined}`;
+      if (!invalidate && key === renderedKey) { if (motion) painters.forEach(paint => paint(motion)); return; }
       clear();
       overlay.innerHTML = `<svg class="anchored-leaders" aria-hidden="true"></svg>${stop.notes.map(note => renderKpFocusDeckAnnotation({ entityId: note.id, role: "support", text: note.text, detail: note.detail })).join("")}`;
       overlay.hidden = false; overlay.style.visibility = "hidden";
+      overlay.dataset['objectComment'] = String(motion !== undefined);
       const viewport = stage.getBoundingClientRect(), svg = overlay.querySelector("svg")!;
       try {
         // Labels are positioned in stage-local CSS pixels. A presentation
@@ -58,8 +84,12 @@ export function mountAnchoredLabels(stage: HTMLElement) {
           const size = { width: parseFloat(style.width), height: parseFloat(style.height) }, center = (left + right) / 2;
           if (!(size.width > 0 && size.height > 0) || !Number.isFinite(size.width + size.height))
             throw new AnchoredAlgebraGap(note.id, 'Require measurable annotation text.');
-          const x = Math.max(16, Math.min(width - size.width - 16, center - size.width / 2));
-          const y = note.side === "above" ? top - 32 - size.height : bottom + 32;
+          const x = motion ? (width - size.width) / 2 : Math.max(16, Math.min(width - size.width - 16, center - size.width / 2));
+          // Spend only the actual free space above a complete label. Phones
+          // keep readable text; they do not shrink prose to buy more motion.
+          const gap = motion ? top - size.height - 16 : 32;
+          if (gap < 32 - 1 / 1024) throw new AnchoredAlgebraGap(note.id, 'Reserve room for the comment before connecting it to its subject.');
+          const y = note.side === "above" ? top - gap - size.height : bottom + 32;
           // Client-rect projection/inversion can put an exact-fit width a few
           // millionths of a pixel over its bound. Keep sub-layout-unit slack,
           // not a fit exemption for genuinely overflowing commentary.
@@ -73,6 +103,12 @@ export function mountAnchoredLabels(stage: HTMLElement) {
           const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
           path.setAttribute("d", `M ${left} ${tip} V ${edge} H ${right} V ${tip} M ${center} ${edge} L ${x + size.width / 2} ${labelEdge}`);
           svg.append(path);
+          if (motion) {
+            if (note.side !== 'above') throw new AnchoredAlgebraGap(note.id, 'This candidate supports upward comments only.');
+            const paint = prepareObjectCommentPaint({ overlay, svg, label, bracket: path,
+              left, right, edge, tip, x, y, width: size.width, height: size.height });
+            painters.push(paint); paint(motion);
+          }
         }
         overlay.style.visibility = ""; stage.dataset["anchoredState"] = stop.stateId; renderedKey = key;
       } catch (error) { clear(); throw error; }

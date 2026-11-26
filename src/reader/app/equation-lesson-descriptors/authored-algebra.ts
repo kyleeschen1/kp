@@ -2,6 +2,7 @@ import { compile } from "../../../authoring/algebra/compile.ts";
 import { composedAlgebraEndpointsV2 } from "../algebra-presentation-endpoints.ts";
 import { algebraNativeDescriptor } from "../algebra-native-descriptor.ts";
 import type { KpReaderEquationLessonDescriptor } from "../equation-lesson-descriptor.ts";
+import { projectEquationCheckpointProgress } from '../equation-checkpoint-progress.ts';
 
 export const authoredAlgebraDescriptor: KpReaderEquationLessonDescriptor = {
   id: "authored-algebra", compactTranscriptAvailable: true,
@@ -17,12 +18,7 @@ export const authoredAlgebraDescriptor: KpReaderEquationLessonDescriptor = {
       // Serialized integer checkpoints map exactly to semantic phase boundaries;
       // linear interpolation preserves every interior position without an epsilon.
       projectAnimationProgress(progress) {
-        const p = progress * 1000;
-        for (let i = 1; i <= count; i++) {
-          const start = Math.round((i - 1) * 1000 / count), end = Math.round(i * 1000 / count);
-          if (p <= end) return ((i - 1) + (p - start) / (end - start)) / count;
-        }
-        return 1;
+        return projectEquationCheckpointProgress(progress, count);
       }
     };
   }

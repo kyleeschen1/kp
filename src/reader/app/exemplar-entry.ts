@@ -276,13 +276,16 @@ if (equationProfileSelect !== null) {
 }
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+const objectComment = import.meta.env.DEV && document.body.dataset['kpFractionNotebookPreview'] === 'true'
+  ? (await import('../../fraction-notebook/object-comment.ts')).createFractionObjectComment(beats) : undefined;
 const risingPassages = document.body.dataset["kpReaderLayout"] === "rising-passages"
   ? (await import("./document-theater.ts"))
-      .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample })
+      .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample,
+        projectAnnotation: objectComment?.project, annotationPassageIds: objectComment?.passageIds })
   : undefined;
 const endpointCommentary = document.body.dataset["kpReaderEndpointCommentary"];
 const readerAnnotations = endpointCommentary !== undefined
-  ? (await import("./document-annotations.ts")).mountDocumentAnnotations(story, JSON.parse(endpointCommentary))
+  ? (await import("./document-annotations.ts")).mountDocumentAnnotations(story, JSON.parse(endpointCommentary), undefined, objectComment?.resolve)
   : documentId === "lesson.algebra.what-counts"
   ? (await import("./what-counts-annotations.ts")).mountWhatCountsAnnotations(story, equationSource === undefined ? undefined : JSON.parse(equationSource))
   : undefined;

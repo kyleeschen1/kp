@@ -1,8 +1,14 @@
 import { documentPassageIndex } from './document-theater-scroll.ts';
+import type { ObjectCommentPose } from './object-comment-arrival.ts';
 
 export type DocumentReadingAttention =
   | { readonly kind: 'prose'; readonly presence: number }
-  | { readonly kind: 'annotation'; readonly stateId: string; readonly presence: number };
+  | { readonly kind: 'annotation'; readonly stateId: string; readonly presence: number; readonly objectComment?: ObjectCommentPose };
+
+export type DocumentAnnotationProjector = (sample: {
+  readonly position: number; readonly positions: readonly number[]; readonly holds: readonly number[];
+  readonly readingDocument: boolean; readonly hasSelection: boolean; readonly motionMode: 'full' | 'essential';
+}) => Extract<DocumentReadingAttention, { kind: 'annotation' }> | undefined;
 
 const fadeDistance = 32; // Reading distance in pixels; pausing never expires a note.
 const ease = (value: number) => {

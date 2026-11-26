@@ -4,7 +4,7 @@
   "title": "Review a recessed fraction stage beneath scrolling prose",
   "status": "deferred",
   "domain": "reader",
-  "summary": "HUMAN_CHECKPOINT: original fraction layout with a left ridge; recent depth/frame variants retired. Review docs/project/reviews/2026-11-26-fraction-original-ridge.md.",
+  "summary": "HUMAN_CHECKPOINT: judge one object-origin comment in the fraction notebook. Focused checks pass; review docs/project/reviews/2026-11-26-fraction-object-comment.md before any reuse.",
   "verificationRecords": [
     {
       "command": "npm run visual:recessed-rail -- --project=firefox",
@@ -82,6 +82,13 @@
       "scope": "Original fraction presentation, desktop/phone, Chromium/Firefox",
       "checkedAt": "2026-11-26T19:40:06.866Z",
       "notes": "Four browser cases pass; typecheck and 20 focused unit tests pass. Original theater/layout restored; ridge replaces brackets; retired flags inert."
+    },
+    {
+      "command": "npm run visual:fraction-object-comment -- --project=firefox",
+      "status": "passed",
+      "scope": "One fraction object-comment exemplar, desktop/phone and Chromium/Firefox",
+      "checkedAt": "2026-11-26T21:57:44.106Z",
+      "notes": "Four cases pass, including direct entry, reversal, stable detached prose, reduced motion and native subjects. Two ridge preservation cases, 35 unit tests and scoped notebook typecheck pass. Broader app typecheck blockers recorded in review."
     }
   ],
   "revisitWhen": [

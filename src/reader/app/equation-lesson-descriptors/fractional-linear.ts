@@ -10,11 +10,13 @@ import {
 import type {
   KpReaderEquationLessonDescriptor
 } from "../equation-lesson-descriptor.ts";
+import { projectEquationCheckpointProgress } from '../equation-checkpoint-progress.ts';
 
 export const fractionalLinearDescriptor = {
   id: "fractional-linear",
   focusPaint: 'native-color',
   createAnimation: () => createFractionalLinearEquationAnimationAsset(),
+  projectAnimationProgress: (progress: number) => projectEquationCheckpointProgress(progress, 6),
   canonicalTransitionSelection: [
     fractionalLinearEquationAssetIds.cancelAdditive,
     // Execute the registered evaluation plan instead of the legacy fading

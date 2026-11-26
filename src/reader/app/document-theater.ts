@@ -2,11 +2,13 @@ import { createDocumentTheaterScroll, documentPassageCadence, documentPassageInd
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
-import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
+import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention, type DocumentAnnotationProjector } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
+  readonly projectAnnotation?: DocumentAnnotationProjector | undefined;
+  readonly annotationPassageIds?: readonly string[] | undefined;
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
   readonly onLayout: () => void;
@@ -72,6 +74,8 @@ export function mountDocumentTheater(input: {
   let disposed = false;
   let equationHeight = 82;
   const annotationStates = input.beats.map(beat => beat.dataset['kpAnnotationState']);
+  const projectedPassages = new Set(input.beats.flatMap((beat, index) =>
+    input.annotationPassageIds?.includes(beat.dataset['kpBeat'] ?? '') ? [index] : []));
   let attentionAt = compileDocumentReadingAttention({ states: [], positions: [], holds: [] });
   let annotation: Extract<DocumentReadingAttention, { kind: 'annotation' }> | undefined;
   let motionMode: 'full' | 'essential' = 'full';
@@ -88,7 +92,8 @@ export function mountDocumentTheater(input: {
     const active = readAll ? returnIndex : indexAtPosition();
     const position = window.scrollY + readingLine;
     const opacity = focusAt(position);
-    const attention = attentionAt({ position, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode });
+    const sample = { position, positions, holds, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode };
+    const attention = input.projectAnnotation?.(sample) ?? attentionAt(sample);
     annotation = attention.kind === 'annotation' ? attention : undefined;
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
@@ -103,7 +108,7 @@ export function mountDocumentTheater(input: {
       const front = selectedPassages.has(index) || focus > 0;
       const prose = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
         ? documentPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
-      const alpha = attention.kind === 'annotation' || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
+      const alpha = attention.kind === 'annotation' || ((annotationStates[index] || projectedPassages.has(index)) && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
       const paint = String(alpha);
       const present = String(front);
       const layer = front ? 'front' : 'back';

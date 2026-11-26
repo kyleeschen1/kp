@@ -24,6 +24,7 @@
     "visual:fraction-notebook-scroll": "node --disable-warning=ExperimentalWarning scripts/diagnose-fraction-notebook-scroll.ts",
     "visual:recessed-rail": "playwright test --config config/playwright/playwright.recessed-rail.config.ts --project=chromium --workers=1",
     "visual:fraction-ridge": "npm run visual:recessed-rail --",
+    "visual:fraction-object-comment": "playwright test --config config/playwright/playwright.fraction-object-comment.config.ts --project=chromium --workers=1",
     "visual:notebook-mathematics": "playwright test --config config/playwright/playwright.notebook-mathematics.config.ts --project=chromium --workers=1",
     "visual:workbench-object": "playwright test --config config/playwright/playwright.workbench-object.config.ts --workers=1",
     "test:notebook": "node --disable-warning=ExperimentalWarning --test tests/notebook.test.ts tests/notebook-resolution.test.ts",
