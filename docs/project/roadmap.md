@@ -17,6 +17,8 @@ authoring → adaptation → practice/retrieval → library.
 [Accepted direction](decisions/2026-11-08-authoring-expert-attention.md) records
 the rationale and superseded priorities.
 
+Presentation: [compact vignettes, fine lines, one focal relationship](decisions/2026-11-26-compact-question-led-vignettes.md).
+
 ## Current approved commitment
 
 **Accepted:** [unified notebook](reviews/2026-11-24-unified-notebook-surface.md),
@@ -93,8 +95,8 @@ blocker. Prior completed architecture and maintenance work stays complete.
   recent evidence, proposed successor and the next human judgment.
 - Run `npm run project:orientation` for this briefing and the named Theseus
   contract. Source snapshots are not live monitors.
-- These sources are current in `.worktrees/kp-product`. The parallel checkout
-  still has older direction; integration belongs to its owner, not an implicit merge.
+- Current sources: `.worktrees/kp-product`. Parallel checkout direction is older;
+  its owner controls integration.
 - Read this page, [the active thread](threads/co-creative-practice.md), and the
   charter for rationale. Retrieve only the selected task's sources afterward.
 - At handoff, state capability, uncertainty and direction changes. Reconcile strategy

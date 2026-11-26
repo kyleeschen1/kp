@@ -66,7 +66,7 @@ export const projectVision: ProjectVision = {
     },
     {
       id: "reader", title: "Reader & presentation", horizon: "later",
-      destination: "Rich explanations and precise inspection work together, with prose and annotations each receiving a clear moment of attention.",
+      destination: "Compact vignettes use fine lines and readable notation to make one consequential relationship stand out. Many related views support full explanations and precise return to context.",
       established: "The accepted algebra reader preserves a full explanation, independent readings and a scripted focused return. Physics still uses its separate rail host. Existing authoring and return foundations were integrated or rechecked, not newly invented; live conversation and learning outcomes remain unproved.",
       evidence: { label: "Accepted explanation and preservation evidence", href: "docs/project/reviews/2026-11-08-explanation-first.md" },
       outcome: {
@@ -617,6 +617,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves narrowing the visible y interval from both sides toward y=c, retaining the shape and paint of surviving surface regions and the original red section.",
       reason: "Rotation projects depth but does not select a cross-section. Clipping communicates restriction without suggesting that the surface deforms. Preserve the prior mathematical, camera and lifecycle guarantees.",
       source: { label: "Geometric clipping approval and scope", href: "docs/project/2026-11-26-graph-section-clipping.md" }
+    },
+    {
+      id: "prefer-compact-question-led-vignettes", on: "2026-11-26",
+      before: "Reusable-stage discussion follows the graph experiments; the established product aim is teaching people what to notice.",
+      after: "The user specifies compact graphs, thin 1px lines and many small vignettes per topic. Trigonometric geometry and a one-page Halmos syntax companion are candidate material. Each vignette makes one consequential relationship or distinction stand out.",
+      reason: "Small, focused visual explanations should fit naturally into reading and revisiting a topic. Record the direction while preserving readable notation, full reasoning and current scope; no global style migration or content campaign begins.",
+      source: { label: "Compact vignette direction and scope", href: "docs/project/decisions/2026-11-26-compact-question-led-vignettes.md" }
     }
   ]
 };

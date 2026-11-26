@@ -20,6 +20,7 @@ The notebook detour is current.
 
 ## Retrieve for a named question
 
+- **Vignette direction:** [compact figures, 1px lines and focal relationships](../decisions/2026-11-26-compact-question-led-vignettes.md).
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
   and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is
@@ -66,13 +67,13 @@ The notebook detour is current.
   [Trial evidence](../reviews/2026-11-09-fractional-reading.md) separates support
   engineering, source-only revision, automated preservation and editorial judgment.
 - **Parallel ownership:** [parallel-development skill](../../../.agents/skills/kp-parallel-development/SKILL.md).
-  Coordinate shared boundaries; do not edit another session's checkout or UI.
+  Coordinate boundaries; preserve other checkouts and UI ownership.
 - **Vocabulary:** [system terms](../principles/system-vocabulary.md) and
   [passage terms](../principles/motion-passage-vocabulary.md).
 - **Earlier practice rationale:** [October practice decision](../decisions/2026-10-28-co-creative-practice-priority.md).
   Retained aspiration, with authoring now the first product center.
 - **Historical commitments:** [prior thread](co-creative-practice.history-2026-11-08.md).
-  No old run resumes merely because it is linked here.
+  Links do not resume old runs.
 
 ## Coordination and handoff
 
