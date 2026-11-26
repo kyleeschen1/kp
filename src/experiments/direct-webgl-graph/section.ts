@@ -66,13 +66,18 @@ export function resolveSectionFrame(state: SectionState, camera: { readonly azim
   const progress = state.inspection, turn = progress * progress * (3 - 2 * progress);
   // Exemplar choreography: withdraw faces, then their wire trace, leaving time
   // for the exposed section to settle. Reverse and direct seek sample this too.
-  const surfacePresence = { fill: withdraw(progress, 0, .35), wire: withdraw(progress, .35, .7) };
+  const stagedPresence = { fill: withdraw(progress, 0, .35), wire: withdraw(progress, .35, .7) };
   const normalized = ((camera.azimuth % 360) + 360) % 360;
   const delta = ((90 - normalized + 540) % 360) - 180;
   // Head-on to y=c is azimuth 90°, elevation 0° in the shared Graph3D projector.
   // The saved camera never changes. Endpoints are exact, including unwrapped azimuths.
   const projectedCamera = progress === 0 ? camera : progress === 1 ? { azimuth: 90, elevation: 0 }
     : { azimuth: camera.azimuth + delta * turn, elevation: camera.elevation * (1 - turn) };
+  // Presence follows the actual camera, including manual rotation. A 1° cone
+  // around either plane normal admits keyboard steps without drawing any mesh.
+  const azimuth = (((projectedCamera.azimuth % 360) + 360) % 360) * Math.PI / 180;
+  const alignment = Math.abs(Math.sin(azimuth) * Math.cos(projectedCamera.elevation * Math.PI / 180));
+  const surfacePresence = alignment >= Math.cos(Math.PI / 180) - 1e-12 ? { fill: 0, wire: 0 } : stagedPresence;
   const entities = SECTION_ATTENTION.intents.flatMap<SectionEntitySample>((intent) => intent.kind === "notice"
     ? intent.targetEntityIds.map((id) => ({ id, salience: "focus" as const, present: true }))
     : intent.kind === "supporting-context" ? intent.contextEntityIds.map((id) => ({

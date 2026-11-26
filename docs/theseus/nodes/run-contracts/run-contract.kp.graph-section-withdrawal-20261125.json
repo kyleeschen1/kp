@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Staged saddle withdrawal exemplar",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 1/1 bounded delivery package complete; no shared promotion or reusable-player scope authorized.",
+  "summary": "HUMAN_CHECKPOINT: 1 of 1 implementation slices complete. Front-facing mesh omission verified in Firefox and Chromium; inspect the existing exemplar. No remaining approved implementation or successor selected.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,7 +25,8 @@
     "npm run test:project-vision"
   ],
   "revisitWhen": [
-    "User accepts or revises the canonical withdrawal treatment"
+    "User accepts or revises the canonical withdrawal treatment",
+    "User accepts or revises the canonical section withdrawal exemplar after the head-on correction"
   ],
   "allowedWork": [
     "Experiment-local projection, WebGL paint/depth, focused tests and review evidence"
@@ -47,7 +48,7 @@
     {
       "id": "exemplar",
       "title": "Staged fill and wireframe withdrawal with independent section visibility",
-      "summary": "Checked candidate and review packet delivered: faces then wire withdraw, section foreground stays visible, source and saved camera preserved. 10 unit, 13 browser, 42 preservation and 75 vision checks pass; types and full production closure measured.",
+      "summary": "Checked correction: front-facing effective camera omits every saddle surface submission; turning away restores staged presence. Unit 11, browser 28 in Chromium and Firefox, Graph3D 42, vision 75, scoped types and production measurement pass. Source and GPU resources preserved.",
       "status": "complete"
     }
   ]

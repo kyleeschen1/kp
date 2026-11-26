@@ -9,11 +9,11 @@ export const projectVision: ProjectVision = {
     title: "Reveal the section as fill and wireframe withdraw",
     approval: "approved",
     contractId: "run-contract.kp.graph-section-withdrawal-20261125",
-    finish: "Surface faces fade first, wireframe second, while the red section and x/z grid remain visible through the camera turn. Reverse and direct seek retain the same projection and exact saved-camera return. Stop at one visual review before promotion.",
+    finish: "Surface faces fade first, wireframe second, while the red section and x/z grid remain visible. Head-on views omit the entire mesh, including manual rotation. Reverse and direct seek retain the same projection and saved-camera return. Stop at one visual review before promotion.",
     source: { label: "Approved staged-withdrawal refinement", href: "docs/project/2026-11-25-graph-section-withdrawal.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review fill-then-wire withdrawal and the section's foreground clarity during rotation. The broader reusable-stage discussion remains proposed: prepared token layouts, selectable sequences and versioned updates still need host and renderer choices. Matrix authoring remains a proposed return path.",
+  nextJudgment: "Review the head-on section with no saddle mesh, including manual rotation in Firefox, and the existing fill-then-wire withdrawal. The broader reusable-stage discussion remains proposed: prepared token layouts, selectable sequences and versioned updates still need host and renderer choices. Matrix authoring remains a proposed return path.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },

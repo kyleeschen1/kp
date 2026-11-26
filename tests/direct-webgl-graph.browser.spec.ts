@@ -198,7 +198,7 @@ for (const action of ["close", "section"] as const) test(`${action} during a loa
   expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().pool.active)).toBe(1);
 });
 
-declare global { interface Window { __pilotBufferUploads?: number; __pilotSkipSurface?: boolean } }
+declare global { interface Window { __pilotBufferUploads?: number; __pilotSkipSurface?: boolean; __pilotSurfaceDraws?: number } }
 
 async function setRange(page: Page, selector: string, value: number) {
   await page.locator(selector).evaluate((element, next) => {
@@ -211,6 +211,42 @@ async function openSection(page: Page) {
   await expect(page.locator("#direct-stage")).toHaveAttribute("data-status", "ready");
   await expect(page.locator("#section-controls")).toBeVisible();
 }
+
+test("manual front-facing inspection omits every surface draw without relying on opacity or SVG", async ({ page }, info) => {
+  await page.addInitScript(() => {
+    window.__pilotSurfaceDraws = 0;
+    WebGL2RenderingContext.prototype.drawElements = new Proxy(WebGL2RenderingContext.prototype.drawElements, {
+      apply(target, receiver, args) { window.__pilotSurfaceDraws! += 1; return Reflect.apply(target, receiver, args); }
+    });
+  });
+  await page.setViewportSize({ width: 1280, height: 1100 });
+  await openSection(page);
+  await page.locator("#direct-canvas").focus();
+  for (let i = 0; i < 14; i++) await page.keyboard.press("ArrowRight");
+  for (let i = 0; i < 9; i++) await page.keyboard.press("ArrowDown");
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-azimuth", "90");
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0");
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().view.elevation)).toBe(1);
+  await page.locator("#section-y").focus();
+  await page.evaluate(() => { window.__pilotSurfaceDraws = 0; });
+  await setRange(page, "#section-y", 1.5);
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-section-y", "1.5");
+  expect(await page.evaluate(() => window.__pilotSurfaceDraws)).toBe(0);
+  const before = await page.locator("#direct-canvas").screenshot();
+  await page.getByLabel("Surface grid", { exact: true }).uncheck();
+  expect((await page.locator("#direct-canvas").screenshot()).equals(before)).toBe(true);
+  expect(await paintedPixels(page)).toBeGreaterThan(600);
+  await expect(page.locator(".static-view")).toBeHidden();
+  await page.screenshot({ path: info.outputPath("manual-front-no-mesh.png"), fullPage: true });
+  await page.getByLabel("Surface grid", { exact: true }).check();
+  await page.locator("#direct-canvas").focus();
+  await page.keyboard.press("ArrowUp");
+  await setRange(page, "#section-y", 1.6);
+  await expect.poll(async () => Number(await page.locator("#direct-stage").getAttribute("data-section-y"))).toBeCloseTo(1.6, 8);
+  expect(await page.evaluate(() => window.__pilotSurfaceDraws)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().stats!.uploads)).toBe(3);
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0");
+});
 
 test("section visual journey keeps one curve through the planar turn and restores the saved camera", async ({ page }, info) => {
   const errors: string[] = [], requests: string[] = [];

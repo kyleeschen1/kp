@@ -1,6 +1,7 @@
 # Staged saddle withdrawal: visual checkpoint
 
 Date: 2026-11-25
+Updated: 2026-11-26 — head-on presence clarification
 Outcome: HUMAN_CHECKPOINT — implemented and checked; timing and foreground
 treatment await user judgment.
 Authority: [approved refinement](../2026-11-25-graph-section-withdrawal.md).
@@ -21,6 +22,41 @@ over progress 0–0.35, wire over 0.35–0.7, leaving the last 30% for clear pla
 settling. At about 40% only the saddle's wire trace remains. Check whether this
 order makes the curve easy to follow, and whether the foreground section/plane
 feels clear in both themes. These timing numbers are local, unpromoted aesthetics.
+
+The November 26 correction also covers manual rotation with inspection at zero.
+Reload in Firefox, focus the canvas, press Right 14 times and Down 9 times from
+the initial camera. This reaches azimuth 90°, elevation 1°: the saddle fill and
+wireframe must be absent, while the section and coordinates remain. Toggling
+**Surface grid** must change no pixels there. One Up press leaves the head-on
+region and restores the mesh. **Inspect in 2D** still reaches the exact planar
+endpoint with no surface submissions.
+
+## November 26 clarification and owning boundary
+
+The user clarified that the mesh should be completely absent when facing the
+front. The earlier projection only withdrew it according to inspection progress;
+a manually aligned camera at progress zero still drew the whole saddle. The new
+regression reproduced that state before repair.
+
+`resolveSectionFrame` now derives surface presence from the effective camera as
+well as the existing withdrawal phases. Within a local 1° cone around either
+normal to the section plane, fill and wire presence are both zero. The existing
+entity-presence gate then skips every surface submission, including its depth
+pass. This is hard omission, independent of opacity settings. Wrapped azimuths
+and the opposite face agree; leaving that cone restores the staged state. The
+tolerance accommodates the existing keyboard step without changing controls.
+
+The section curve and grid still use the same WebGL canvas. The SVG is only the
+existing unavailable-context fallback. No shader, renderer, geometry, saved
+camera, source identity or shared Graph3D changes were needed for this correction.
+The rollback unit is the experiment's camera-to-presence rule and its regression.
+
+An earlier interpretation of “blank” prompted speculative draw-portability and
+error-fallback work. Current test browsers already painted, and the user clarified
+unwanted mesh visibility. That hypothesis and its injected diagnostic tests were
+withdrawn together; their recorded failures are not evidence for this defect or a
+claim of a Firefox driver repair. Firefox is now included in the existing scoped
+visual command because it is the user's browser.
 
 ## Cause and responsible repair
 
@@ -43,7 +79,7 @@ they cannot inherit invisible surface occlusion. Every next frame re-establishes
 the surface's depth state. This is an instructional foreground treatment, not
 general order-independent transparency or physical clipping.
 
-## Evidence
+## Original candidate evidence
 
 - `npm run test:direct-webgl-graph`: 10 passed. Canonical heights/gradients,
   section intersections, IDs, projection, saved-camera return and invalid inputs
@@ -74,7 +110,7 @@ The first project-vision run passed 74/75: the updated thread was 454 words agai
 its existing 450-word entrypoint budget. Existing prose was compressed without
 removing links or raising the limit; the complete check was rerun.
 
-## Costs and limits
+## Original candidate costs and limits
 
 Geometry remains 302,944 bytes, 9,409 vertices, 18,432 triangles and three uploads.
 No framebuffer, texture, new GPU program or geometry buffer was added. Only
@@ -102,3 +138,37 @@ by the existing experiment and direct WebGL adapter. The saddle evaluator,
 Graph3D projector, scene/salience plan and reader clock retain semantic authority.
 No other shape, reusable stage, catalogue migration or shared motif is promoted.
 The rollback unit is this experiment's withdrawal projection/paint and evidence.
+
+## November 26 verification
+
+- `npm run test:direct-webgl-graph`: 11 passed. The new head-on regression failed
+  before the change, then passed for both plane normals, wrapped azimuths and
+  nearby elevations. Leaving the cone restores the staged surface state.
+- `npm run visual:direct-webgl-graph`: 28 passed, 14 each in Chromium and Firefox.
+  The manual-rotation check counts zero actual indexed surface submissions,
+  checks unchanged pixels when toggling the wireframe, verifies that the WebGL
+  section remains visible with SVG hidden, then verifies resumed drawing after
+  turning away. Existing reversal, seek, exact camera return, loss/retry,
+  fallback, disposal, reduced-motion, phone and theme checks remain green.
+  The Firefox head-on capture was inspected: only the section and coordinates
+  remain. These are automated browser results, not a claim about every driver.
+- The first run passed 26/28; both new tests reached their final return check
+  after confirming absence, but compared `1.6` to its floating representation
+  `1.5999999999999996` as text. The wait now compares numbers within precision;
+  the complete browser command passed afterward without another runtime edit.
+- `npm run typecheck:direct-webgl-graph`: passed on the final harness.
+- `npm run test:graph-3d-runtime`: 42 passed.
+- `npm run test:project-vision`: 75 passed; entrypoint budgets are unchanged.
+- `theseus workspace validate`: valid, 1,339 nodes / 34,952 events. The resumed
+  context receipt is closed; the single slice is complete and the contract is
+  deferred at the existing visual checkpoint.
+- `npm run measure:direct-webgl-graph`: initial JavaScript 95,009 raw / 30,307
+  gzip bytes (+147 / +53 from the preceding candidate). Lazy comparison
+  528,195 / 131,670; CSS 4,685 / 1,695; complete emitted closure
+  672,514 / 208,140. The one-byte comparison gzip difference is build-output
+  variation; its raw size and implementation are unchanged. Geometry remains
+  302,944 bytes and three retained uploads; this correction adds no GPU resource.
+
+The original timing/foreground judgment remains open. This correction implements
+the clarified presence invariant in the existing exemplar; it does not promote
+the treatment or start the reusable-player proposal.

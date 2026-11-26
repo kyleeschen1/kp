@@ -1,6 +1,6 @@
 # KP roadmap
 
-Last Updated: 2026-11-25
+Last Updated: 2026-11-26
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-graph-section-withdrawal`
@@ -39,7 +39,7 @@ quiet beige modeline and neutral pane edge. **Accepted:**
 [M0 quadratic loop](reviews/2026-11-25-quadratic-authoring.md).
 **Accepted:** [direct WebGL grid/saddle](reviews/2026-11-25-direct-webgl-graph.md).
 **Accepted:** [section/2D return](reviews/2026-11-25-graph-sections-planar.md).
-**Checked, awaiting judgment:** [fill then wire withdrawal](reviews/2026-11-25-graph-section-withdrawal.md).
+**Checked, awaiting judgment:** [withdrawal and head-on mesh removal](reviews/2026-11-25-graph-section-withdrawal.md).
 Reusable-stage discussion and matrix reuse remain proposed; renderer replacement undecided. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and

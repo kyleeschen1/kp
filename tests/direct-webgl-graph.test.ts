@@ -159,6 +159,22 @@ test("withdrawal removes fill before wire while preserving section identity thro
   }
 });
 
+test("a front-facing camera omits the entire saddle independently of inspection progress", () => {
+  for (const azimuth of [90, 270, 450, -90, 810]) for (const elevation of [-1, -.5, 0, .5, 1]) {
+    const frame = resolveSectionFrame({ y: 1.5, inspection: 0 }, { azimuth, elevation });
+    assert.deepEqual(frame.surfacePresence, { fill: 0, wire: 0 });
+    assert.equal(frame.entities.find((entity) => entity.id === SECTION_IDS.surface)!.present, false);
+    for (const id of [SECTION_IDS.curve, SECTION_IDS.basis, SECTION_IDS.plane]) {
+      assert.equal(frame.entities.find((entity) => entity.id === id)!.present, true);
+    }
+  }
+  for (const camera of [{ azimuth: 84, elevation: 0 }, { azimuth: 96, elevation: 0 },
+    { azimuth: 90, elevation: 5 }, { azimuth: 90, elevation: -5 }]) {
+    assert.deepEqual(resolveSectionFrame(INITIAL_SECTION, camera).surfacePresence, { fill: 1, wire: 1 });
+    assert.deepEqual(resolveSectionFrame({ y: 1, inspection: 1 }, camera).surfacePresence, { fill: 0, wire: 0 });
+  }
+});
+
 test("section boundaries reject invalid samples instead of producing undefined shader or camera state", () => {
   for (const y of [-3.1, 3.1, NaN, Infinity]) assert.throws(() => validateSection({ y, inspection: 0 }));
   for (const inspection of [-.1, 1.1, NaN, Infinity]) assert.throws(() => validateSection({ y: 0, inspection }));

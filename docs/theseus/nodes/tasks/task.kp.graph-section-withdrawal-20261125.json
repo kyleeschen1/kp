@@ -4,7 +4,7 @@
   "title": "Fade saddle fill before its wireframe during planar inspection",
   "status": "deferred",
   "domain": "rendering",
-  "summary": "HUMAN_CHECKPOINT: staged withdrawal is checked; judge timing, foreground plane/curve clarity and real-device smoothness at the canonical section URL.",
+  "summary": "HUMAN_CHECKPOINT: clarified front-facing mesh absence is implemented and regression checked. Existing withdrawal timing and foreground treatment await canonical exemplar judgment; broader reusable stage remains proposed.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -64,9 +64,80 @@
       "scope": "Staged saddle withdrawal exemplar",
       "checkedAt": "2026-11-26T07:33:34.646Z",
       "notes": "Complete rerun 75 passed after compressing thread prose below unchanged 450-word limit. Approval boundary, source links and finite successor scope preserved."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph -- --grep \"portable draw paths|rejected GPU draw\"",
+      "status": "failed",
+      "scope": "Blank-view regression before repair",
+      "checkedAt": "2026-11-26T08:35:39.515Z",
+      "notes": "Both new checks fail on the existing code: strict legacy attribute validation rejects plane drawArrays and line drawArraysInstanced; a real INVALID_ENUM leaves the host ready with fallback hidden. Current unmodified Firefox, Chromium and WebKit journey tests paint, so the exact user driver failure remains unconfirmed."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "failed",
+      "scope": "Endpoint draw-rejection safeguard",
+      "checkedAt": "2026-11-26T08:46:39.598Z",
+      "notes": "30 of 32 passed. Initial draw rejection and portability guards pass in Firefox and Chromium, but the exact endpoint rejection escaped the cached planar-path check because that path was first checked at progress 0.7. Separate the exact endpoint from the clear-turn path and rerun. User clarified unwanted visibility; target layer is pending clarification, not visual acceptance."
+    },
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "failed",
+      "scope": "Clarified front-facing mesh presence regression before the fix",
+      "checkedAt": "2026-11-26T08:57:15.701Z",
+      "notes": "The new camera-orientation regression failed with fill=1 and wire=1 at azimuth 90 and elevation -1 while inspection was zero. Existing ten tests passed. Earlier injected GPU portability and rejected-draw tests were a withdrawn diagnostic hypothesis, not evidence for the clarified defect."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "failed",
+      "scope": "Front-facing presence regression and existing browser workflows",
+      "checkedAt": "2026-11-26T08:59:36.913Z",
+      "notes": "26 of 28 passed. Both new head-on checks confirmed zero indexed surface draws, unchanged pixels when toggling surface grid, hidden SVG fallback and visible section. Their return-path wait compared a floating numeric attribute as exact text: 1.5999999999999996 versus 1.6. Compare the numeric attribute within precision instead; runtime behavior did not need another change."
+    },
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Front-facing mesh omission in the existing section exemplar",
+      "checkedAt": "2026-11-26T09:02:02.555Z",
+      "notes": "11 passed. Reproducing head-on regression now passes for front/rear normals, wrapped azimuths and the local one-degree cone; neighboring cameras restore staged presence. Existing math, camera, identities and withdrawal invariants pass."
+    },
+    {
+      "command": "npm run typecheck:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Front-facing mesh omission in the existing section exemplar",
+      "checkedAt": "2026-11-26T09:02:03.426Z",
+      "notes": "Passed on final runtime and browser harness."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Front-facing mesh omission in the existing section exemplar",
+      "checkedAt": "2026-11-26T09:02:04.055Z",
+      "notes": "28 passed, 14 each in Chromium and Firefox. Manual head-on rotation produces zero surface drawElements submissions, wireframe toggles leave identical pixels, section remains painted with SVG hidden, and turning away resumes drawing. Final complete rerun after numerical test-wait correction. Existing lifecycle, exact return, interruption, seek, reduced motion, themes and phone checks pass."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "Front-facing mesh omission in the existing section exemplar",
+      "checkedAt": "2026-11-26T09:02:04.740Z",
+      "notes": "42 passed; shared Graph3D and Three consumers remain unchanged."
+    },
+    {
+      "command": "npm run measure:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Front-facing mesh omission in the existing section exemplar",
+      "checkedAt": "2026-11-26T09:02:05.568Z",
+      "notes": "Initial JS 95009 raw/30307 gzip bytes, +147/+53 from prior candidate. Lazy comparison 528195/131670; CSS 4685/1695; complete emitted closure 672514/208140. Three retained uploads and 302944 geometry bytes unchanged; no new GPU resource."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Front-facing mesh omission in the existing section exemplar",
+      "checkedAt": "2026-11-26T09:02:06.248Z",
+      "notes": "75 passed with head-on clarification reflected in plan, roadmap, thread and source-linked vision. Existing startup budgets and approval boundaries preserved."
     }
   ],
   "revisitWhen": [
-    "User reviews the staged saddle withdrawal exemplar"
+    "User reviews the staged saddle withdrawal exemplar",
+    "User accepts or revises the canonical section withdrawal exemplar after the head-on correction"
   ]
 }

@@ -36,3 +36,14 @@ retain the existing scoped tier for this unpromoted experiment.
 Stop at the checked exemplar for visual review. One recoverable implementation
 and evidence checkpoint, hourly backup if needed. Two-hour ceiling with the last
 30 minutes reserved for verification and closeout. Theseus owns execution.
+
+## Front-facing clarification — November 26
+
+The user clarifies that none of the saddle mesh should remain when facing the
+section head-on. This is complete absence, independent of inspection progress;
+manual camera rotation must reach the same state. The section frame owns that
+decision and the existing renderer skips the absent surface entirely. Preserve
+the earlier fill/wire withdrawal during the animated turn, the section and its
+coordinates, and saved-camera return. Add Firefox to the scoped browser check
+because it is the user's reported browser; this does not promote a shared motif
+or authorize a broader renderer migration.
