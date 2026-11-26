@@ -61,6 +61,19 @@ test("a sequence shares one fit transform across transition envelopes", () => {
   assert.deepEqual(fit.measurementIdentity, measurementIdentity);
 });
 
+test("start alignment keeps the complete sequence inside the gutter without changing scale", () => {
+  for (const viewportWidth of [180, 440]) {
+    const input = { id: 'start-fit', alignments: [alignment], viewportWidth, horizontalPadding: 18 };
+    const centered = planKpReaderEquationSequenceResponsiveFit(input);
+    const start = planKpReaderEquationSequenceResponsiveFit({ ...input, horizontalAlignment: 'start' });
+    assert.equal(start.scale, centered.scale);
+    assert.equal(start.status, centered.status);
+    assert.equal(start.translateY, centered.translateY);
+    assert.equal(start.contentBounds.left * start.scale + start.translateX, 18);
+    assert.ok((start.contentBounds.left + start.contentBounds.width) * start.scale + start.translateX <= viewportWidth - 18);
+  }
+});
+
 test("responsive fit rejects stale revisions and mixed coordinate spaces", () => {
   for (const mismatched of [
     { revision: 3, coordinateSpaceId: measurementIdentity.coordinateSpaceId },

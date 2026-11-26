@@ -7,6 +7,8 @@ import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
+  /** Keep upcoming prose in the scroll flow instead of exchanging it for notes. */
+  readonly flowingProse?: boolean;
   readonly projectAnnotation?: DocumentAnnotationProjector | undefined;
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
@@ -90,7 +92,8 @@ export function mountDocumentTheater(input: {
     const position = window.scrollY + readingLine;
     const opacity = focusAt(position);
     const sample = { position, positions, holds, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode };
-    const attention = input.projectAnnotation?.(sample) ?? attentionAt(sample);
+    const attention: DocumentReadingAttention = input.flowingProse
+      ? { kind: 'prose', presence: 1 } : input.projectAnnotation?.(sample) ?? attentionAt(sample);
     annotation = attention.kind === 'annotation' ? attention : undefined;
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
@@ -102,10 +105,10 @@ export function mountDocumentTheater(input: {
       if (passage === undefined) continue;
       const activeValue = String(index === active);
       const focus = opacity.get(index) ?? 0;
-      const front = selectedPassages.has(index) || focus > 0;
+      const front = input.flowingProse || selectedPassages.has(index) || focus > 0;
       const prose = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
         ? documentPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
-      const alpha = attention.kind === 'annotation' || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
+      const alpha = input.flowingProse ? 1 : attention.kind === 'annotation' || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
       const paint = String(alpha);
       const present = String(front);
       const layer = front ? 'front' : 'back';

@@ -132,6 +132,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
   /** Single-operation hosts must not schedule unrelated compilation during playback. */
   readonly prewarmAdjacentTransitions?: boolean;
   readonly reserveViewportHeight?: ((minimumHeight: number) => boolean) | undefined;
+  readonly horizontalAlignment?: 'start' | 'center' | undefined;
   /** Opt-in compiler authority for the existing certified ink treatment. */
   readonly evaluationCertificates?: readonly KpVerifiedEquationEvaluationFamilyCertificateV2[];
   readonly createStageLayoutIntent: (input: {
@@ -343,6 +344,7 @@ export async function createKpChromeFreeCanonicalEquationSession(input: {
       layoutReadCount += 1;
       layout = measureKpCanonicalEquationStageLayout({
         reserveViewportHeight: input.reserveViewportHeight,
+        horizontalAlignment: input.horizontalAlignment,
         ...(input.endpointHandoffs ? { nativeHandoffs: { handoffs: input.endpointHandoffs, fontRevision: fontReadiness.revision } } : {}),
         animationId: input.animation.id,
         revision: layoutRevision,

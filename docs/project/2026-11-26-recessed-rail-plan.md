@@ -167,3 +167,12 @@ and the original paragraph moves with the document. Preserve its ID, text,
 geometry reservation and accessibility. Reverse scroll, outline navigation and
 a passage bookmark must restore the same source state and tooltip. Keep this
 limited to additive cancellation; do not extend to every note before review.
+# Flowing prose revision — 2026-11-26
+
+User rejected the tooltip and reverted the later uncommitted scroll-stop trial
+as slow. Approved replacement: ordinary scrolling prose with visible upcoming
+items; no symbol-attached explanation or additional scroll manipulation. Keep
+the original equation animation clock and test an equation inset near the left
+rail. Preserve mathematical sources, saved notebook data, native endpoints,
+operation distances and all other readers. One reversible candidate ends at
+[visual review](reviews/2026-11-26-fraction-flow.md); no broader promotion.

@@ -106,6 +106,12 @@
       "title": "Nearby tooltip and a returning scroll passage",
       "summary": "HUMAN_CHECKPOINT: nearby tooltip, real scrolling paragraph and exact return by scroll, outline or bookmark. Focused checks pass; review fraction-object-comment.md.",
       "status": "complete"
+    },
+    {
+      "id": "flowing-prose",
+      "title": "Flowing prose beside an indented equation",
+      "summary": "HUMAN_CHECKPOINT: flowing prose and indented equation candidate checked. Focused checks pass; unrelated architecture gate failure recorded. Review docs/project/reviews/2026-11-26-fraction-flow.md.",
+      "status": "complete"
     }
   ]
 }

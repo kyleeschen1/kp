@@ -88,6 +88,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
   readonly stageLayoutCompiler?: KpReaderEquationStageLayoutCompiler | undefined;
   /** A document host may reserve more block space; it cannot waive fit laws. */
   readonly reserveViewportHeight?: ((minimumHeight: number) => boolean) | undefined;
+  readonly horizontalAlignment?: 'start' | 'center' | undefined;
 }): KpCanonicalEquationStageLayout {
   if (
     (input.stageLayoutIntent === undefined) !==
@@ -257,6 +258,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
   ));
   const nativeHandoffs = measureHandoffs(measured, input.phaseCohorts, input.nativeHandoffs);
   const sequenceFit = planKpReaderEquationSequenceResponsiveFit({
+    horizontalAlignment: input.horizontalAlignment,
     id: `${input.animationId}.r${input.revision}`,
     alignments: measured.map((context) => context.alignment),
     viewportWidth: input.viewport.clientWidth,
@@ -272,6 +274,7 @@ export function measureKpCanonicalEquationStageLayout(input: {
   const certifiedSequenceFit = certifiedLayouts.length === 0
     ? undefined
     : planKpReaderCertifiedEquationStageSequenceResponsiveFit({
+        horizontalAlignment: input.horizontalAlignment,
         id: `${input.animationId}.r${input.revision}`,
         layouts: certifiedLayouts,
         viewportWidth: input.viewport.clientWidth,

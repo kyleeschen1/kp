@@ -1,5 +1,8 @@
 # A nearby tooltip with a returning scroll passage
 
+Superseded: the tooltip and subsequent uncommitted attention-stop trial were
+rejected. Current candidate: [ordinary flowing prose](2026-11-26-fraction-flow.md).
+
 Outcome: HUMAN_CHECKPOINT. One candidate in the fraction notebook, not a
 catalogue-wide change.
 

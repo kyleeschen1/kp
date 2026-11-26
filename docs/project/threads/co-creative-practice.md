@@ -27,10 +27,11 @@ The notebook detour is current.
   checked on desktop/phone widths in Chromium and Firefox; awaiting visual review.
   The recessed-rail and frame/depth experiments are retired. Original math and
   scroll behavior remain; only the bracket frame becomes a thin left ridge.
-- **Object-origin commentary:** [one fraction passage](../reviews/2026-11-26-fraction-object-comment.md)
-  now tests a nearby tooltip and its original scrolling paragraph. Reverse
-  scroll, outline navigation and a passage bookmark restore the explanation.
-  Await visual review before reuse; the ridge and other passages are unchanged.
+- **Fraction flowing prose:** [visible upcoming paragraphs and indented equation](../reviews/2026-11-26-fraction-flow.md).
+  Symbol-attached commentary and deliberate scroll stops were rejected. Keep
+  text in ordinary document flow with upcoming items visible; retain the existing
+  mathematical scroll clock. This preview tests start alignment near the rail.
+  Other readers retain their accepted presentation; review before reuse.
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
   and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is

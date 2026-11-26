@@ -276,16 +276,15 @@ if (equationProfileSelect !== null) {
 }
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
-const objectComment = import.meta.env.DEV && document.body.dataset['kpFractionNotebookPreview'] === 'true'
-  ? (await import('../../fraction-notebook/object-comment.ts')).createFractionObjectComment(beats) : undefined;
+const fractionFlow = import.meta.env.DEV && document.body.dataset['kpFractionNotebookPreview'] === 'true';
 const risingPassages = document.body.dataset["kpReaderLayout"] === "rising-passages"
   ? (await import("./document-theater.ts"))
       .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample,
-        projectAnnotation: objectComment?.project })
+        flowingProse: fractionFlow })
   : undefined;
 const endpointCommentary = document.body.dataset["kpReaderEndpointCommentary"];
 const readerAnnotations = endpointCommentary !== undefined
-  ? (await import("./document-annotations.ts")).mountDocumentAnnotations(story, JSON.parse(endpointCommentary), undefined, objectComment?.resolve)
+  ? (await import("./document-annotations.ts")).mountDocumentAnnotations(story, JSON.parse(endpointCommentary))
   : documentId === "lesson.algebra.what-counts"
   ? (await import("./what-counts-annotations.ts")).mountWhatCountsAnnotations(story, equationSource === undefined ? undefined : JSON.parse(equationSource))
   : undefined;
@@ -385,6 +384,7 @@ const chromeFreeCanonicalEquationSession:
         createKpChromeFreeCanonicalEquationSession({
           ...lessonDescriptor.canonicalSession,
           reserveViewportHeight: risingPassages?.reserveEquationHeight,
+          horizontalAlignment: fractionFlow ? 'start' : 'center',
           shell: stageShell,
           animation,
           descriptor: lessonDescriptor,
@@ -832,6 +832,7 @@ function measureLayout(revision: number): LayoutState {
       viewport: window.innerWidth > 880 ? "wide" : "phone"
     });
   lastMeasuredLayout = measureKpCanonicalEquationStageLayout({
+    horizontalAlignment: fractionFlow ? 'start' : 'center',
     animationId: animation.id,
     revision,
     viewport,
@@ -1812,7 +1813,6 @@ function dispose(): void {
   window.removeEventListener("resize", onResize);
   risingPassages?.dispose();
   readerAnnotations?.dispose();
-  objectComment?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   printMedia.removeEventListener("change", onPrintChange);

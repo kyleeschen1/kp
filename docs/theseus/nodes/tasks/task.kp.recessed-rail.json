@@ -4,7 +4,7 @@
   "title": "Review a recessed fraction stage beneath scrolling prose",
   "status": "deferred",
   "domain": "reader",
-  "summary": "HUMAN_CHECKPOINT: review the close-tooltip and scroll-return revision at the fraction notebook beat.cancel-additive bookmark. Evidence: docs/project/reviews/2026-11-26-fraction-object-comment.md.",
+  "summary": "HUMAN_CHECKPOINT: review ordinary scrolling prose, visible upcoming items and start-aligned equation in docs/project/reviews/2026-11-26-fraction-flow.md. Tooltip and scroll-stop trial retired.",
   "verificationRecords": [
     {
       "command": "npm run visual:recessed-rail -- --project=firefox",
@@ -96,6 +96,20 @@
       "scope": "Close tooltip and real scroll-passage return",
       "checkedAt": "2026-11-26T22:24:10.830Z",
       "notes": "Four Chromium/Firefox desktop/phone cases pass: 16px subject clearance, real paragraph scroll, exclusive tooltip/prose, bookmark and outline return, reverse, reduced motion and Read all. Two ridge cases, 35 unit tests and notebook typecheck also pass."
+    },
+    {
+      "command": "npm run visual:fraction-object-comment -- --project=firefox",
+      "status": "passed",
+      "scope": "Flowing prose and start alignment, Chromium/Firefox desktop and phone widths",
+      "checkedAt": "2026-11-26T23:21:37.877Z",
+      "notes": "Four browser cases pass, plus two ridge cases, 21 focused units, 11 equation-preservation tests and notebook typecheck. Review docs/project/reviews/2026-11-26-fraction-flow.md; human judgment pending."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "failed",
+      "scope": "Repository dependency-direction gate",
+      "checkedAt": "2026-11-26T23:21:38.720Z",
+      "notes": "Existing unowned editor-chat/editor-commands/editor-rows modules and notebook-to-experiment imports block the first gate. These files and imports are unchanged. Later subchecks did not run; see fraction-flow review."
     }
   ],
   "revisitWhen": [

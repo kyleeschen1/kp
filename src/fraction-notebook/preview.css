@@ -17,26 +17,21 @@ body[data-kp-fraction-notebook-preview] .kp-caption-frame::before {
   background: var(--fn-stage-ridge);
 }
 body[data-kp-fraction-notebook-preview] .kp-caption-frame::after { display: none; }
-/* A quiet prospective mark, never a second copy of the arriving prose. */
-body[data-kp-fraction-notebook-preview] .anchored-labels[data-object-comment=true] {
-  --kp-comment-thread: var(--fn-text); --kp-comment-cue: var(--fn-text);
-}
-body[data-kp-fraction-notebook-preview] .anchored-labels[data-object-comment=true] path {
-  stroke: var(--kp-comment-thread); stroke-width: 1;
-}
-.kp-object-comment-cue {
-  position: absolute; width: 36px; height: 3px; border-radius: 50%;
-  background: var(--kp-comment-cue); box-shadow: 0 1px 7px 2px var(--kp-comment-cue);
-  pointer-events: none;
-}
-/* The tooltip borrows this passage's text only during its native-state hold.
-   Outside that window the original paragraph travels with the document. */
-body[data-kp-fraction-notebook-preview][data-kp-caption-mode=captions] .kp-rising-passage[data-kp-object-comment-source] {
+/* The notebook keeps every explanation in the document: no symbol-attached
+   tooltip, sticky paragraph, or attention-driven concealment of the next item. */
+body[data-kp-fraction-notebook-preview][data-kp-caption-mode=captions] .kp-rising-passage {
   position: relative; top: auto;
+  opacity: 1; z-index: 2; pointer-events: auto;
 }
-@media (forced-colors: active) {
-  .kp-object-comment-cue { background: CanvasText; box-shadow: none; }
-  body[data-kp-fraction-notebook-preview] .anchored-labels[data-object-comment=true] path { stroke: CanvasText; }
+body[data-kp-fraction-notebook-preview] {
+  --fn-stage-indent: 1.5rem;
+}
+/* The fit planner supplies its own 18px safe gutter, inside this one indent. */
+html body[data-kp-fraction-notebook-preview][data-kp-reader-layout] .kp-reader-equation-stage {
+  padding-inline: max(0px, calc(var(--fn-stage-indent) - 18px));
+}
+body[data-kp-fraction-notebook-preview][data-kp-reader-layout] .kp-rising-passage p {
+  text-indent: 0;
 }
 body[data-kp-fraction-notebook-preview] .kp-reader-masthead {
   height: 0; min-height: 0; padding: 0; border: 0; position: relative;

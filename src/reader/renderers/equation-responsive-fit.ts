@@ -96,6 +96,7 @@ export function planKpReaderEquationResponsiveFit(input: {
 }
 
 export function planKpReaderEquationSequenceResponsiveFit(input: {
+  readonly horizontalAlignment?: 'start' | 'center' | undefined;
   readonly id: string;
   readonly alignments: readonly KpReaderEquationPerceptualAlignmentPlan[];
   readonly viewportWidth: number;
@@ -110,6 +111,7 @@ export function planKpReaderEquationSequenceResponsiveFit(input: {
   }
   return planFit({
     id: `fit.sequence.${input.id}.${input.viewportWidth}`,
+    horizontalAlignment: input.horizontalAlignment,
     alignmentPlanId: `sequence.${input.id}`,
     geometrySource: "alignment-envelope",
     alignments: input.alignments,
@@ -180,6 +182,7 @@ export function planKpReaderCertifiedEquationStageResponsiveFit(input: {
  * transition becomes active.
  */
 export function planKpReaderCertifiedEquationStageSequenceResponsiveFit(input: {
+  readonly horizontalAlignment?: 'start' | 'center' | undefined;
   readonly id: string;
   readonly layouts: readonly KpCorridorCertifiedEquationStageLayout[];
   readonly viewportWidth: number;
@@ -203,6 +206,7 @@ export function planKpReaderCertifiedEquationStageSequenceResponsiveFit(input: {
   }
   return planFit({
     id: `fit.stage-sequence.${input.id}.${input.viewportWidth}`,
+    horizontalAlignment: input.horizontalAlignment,
     alignmentPlanId: `certified-stage-sequence.${input.id}`,
     geometrySource: "certified-stage-swept-envelope",
     alignments: [],
@@ -219,6 +223,7 @@ export function planKpReaderCertifiedEquationStageSequenceResponsiveFit(input: {
 }
 
 function planFit(input: {
+  readonly horizontalAlignment?: 'start' | 'center' | undefined;
   readonly id: string;
   readonly alignmentPlanId: string;
   readonly geometrySource: KpReaderEquationResponsiveFitPlan["geometrySource"];
@@ -305,9 +310,11 @@ function planFit(input: {
         ? "contained" as const
         : "overflow" as const;
   const scale = status === "overflow" ? minScale : requiredScale;
-  const desiredTranslateX =
-    input.viewportWidth / 2 -
-    (centeringBounds.left + centeringBounds.width / 2) * scale;
+  // Align the whole sequence envelope once, including its motion corridors.
+  // Per-endpoint left alignment would make shared symbols jump between acts.
+  const desiredTranslateX = input.horizontalAlignment === 'start'
+    ? horizontalPadding - contentBounds.left * scale
+    : input.viewportWidth / 2 - (centeringBounds.left + centeringBounds.width / 2) * scale;
   const translateX = clamp(
     desiredTranslateX,
     horizontalPadding - contentBounds.left * scale,
