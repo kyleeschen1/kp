@@ -1,12 +1,27 @@
-.kp-modeline { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 4px 12px calc(4px + env(safe-area-inset-bottom)); border-top: 1px solid var(--fn-border); background: var(--kp-modeline-background); color: var(--kp-modeline-color); font: 400 max(1rem, var(--kp-document-body-size), var(--kp-modeline-size))/1.4 var(--fn-font); }
+/* The frame participates in the browser top layer, above the active picker.
+   Its transparent center never intercepts editor or dialog input. */
+#app { padding-top: var(--kp-workspace-rim); }
+.kp-workspace-frame { position: fixed; inset: 0; width: auto; height: auto; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; border-top: var(--kp-workspace-rim) solid var(--kp-workspace-frame-color); border-inline: var(--kp-workspace-rim) solid var(--kp-workspace-frame-color); background: transparent; color: var(--fn-text); box-shadow: var(--kp-workspace-frame-shadow); pointer-events: none; overflow: visible; }
+.kp-workspace-frame:popover-open { display: flex; flex-direction: column; justify-content: flex-end; }
+.kp-workspace-frame::backdrop { background: transparent; pointer-events: none; }
+.kp-modeline-space { flex: 0 0 auto; pointer-events: none; }
+.kp-workspace-frame .kp-modeline { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; min-width: 0; min-height: var(--kp-modeline-min-height); margin-inline: calc(-1 * var(--kp-workspace-rim)); padding: var(--kp-modeline-padding-block) var(--kp-modeline-padding-inline); padding-bottom: calc(var(--kp-modeline-padding-block) + env(safe-area-inset-bottom)); border-top: 1px solid var(--fn-border); background: var(--kp-modeline-background); color: var(--kp-modeline-color); box-shadow: var(--kp-modeline-shadow); font: 400 max(1rem, var(--kp-document-body-size), var(--kp-modeline-size))/1.4 var(--fn-font); pointer-events: auto; letter-spacing: normal; }
 .kp-modeline-mode { flex: 0 0 auto; min-width: 3ch; color: var(--fn-focus); }
 .kp-modeline-surface { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.kp-modeline nav { display: flex; gap: 6px; margin-inline: auto; }
-.kp-modeline button { padding: 1px 7px; font: inherit; border-color: transparent; border-radius: 2px; }
+.kp-modeline nav { display: flex; gap: 6px; }
+.kp-workspace-frame .kp-modeline button { padding: 1px 7px; font: inherit; color: inherit; border: 1px solid transparent; background: transparent; border-radius: 2px; }
+.kp-workspace-frame .kp-modeline button:hover, .kp-workspace-frame .kp-modeline button:focus-visible { background: var(--fn-selection); }
 .kp-modeline button[hidden] { display: none; }
-.kp-modeline button[aria-pressed=true] { color: var(--fn-text); background: var(--fn-selection); text-decoration: underline; text-underline-offset: .2em; }
+.kp-workspace-frame .kp-modeline button[aria-pressed=true] { color: var(--fn-text); background: var(--fn-selection); text-decoration: underline; text-underline-offset: .2em; }
+.kp-modeline-actions { display: flex; }
 .kp-modeline-time { flex: 0 0 auto; margin-left: auto; white-space: nowrap; font-variant-numeric: tabular-nums; }
-@media (max-width: 520px) {
-  .kp-modeline { gap: 6px 8px; padding-inline: 8px; }
+.kp-workspace-frame .kp-modeline .fn-status { display: block; flex: 1 1 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 0; padding: 0; text-align: right; font: inherit; color: var(--kp-modeline-color); }
+.kp-workspace-frame .kp-modeline .fn-status[data-state=invalid] { order: 1; flex-basis: 100%; color: var(--fn-warning); white-space: normal; overflow-wrap: anywhere; max-height: 25dvh; overflow-y: auto; text-align: left; }
+@media (max-width: 720px) {
+  .kp-workspace-frame .kp-modeline { gap: 6px; }
   .kp-modeline-surface { display: none; }
+  .kp-workspace-frame .kp-modeline .fn-status:is([data-state=valid], [data-state=checking]) { display: none; }
+}
+@media (forced-colors: active) {
+  .kp-workspace-frame { border-color: CanvasText; }
 }

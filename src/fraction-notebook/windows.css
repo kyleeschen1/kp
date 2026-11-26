@@ -5,7 +5,14 @@
   --kp-window-active-shadow: 0 0 18px 2px var(--color-raised-shadow);
   --kp-modeline-background: var(--fn-background);
   --kp-modeline-color: var(--fn-muted);
-  --kp-modeline-size: max(1rem, var(--kp-document-body-size));
+  --kp-modeline-size: max(1.125rem, var(--kp-document-body-size));
+  --kp-modeline-padding-block: 8px;
+  --kp-modeline-padding-inline: 16px;
+  --kp-modeline-min-height: 48px;
+  --kp-modeline-shadow: 0 -5px 18px var(--color-raised-shadow);
+  --kp-workspace-rim: 4px;
+  --kp-workspace-frame-color: var(--fn-background);
+  --kp-workspace-frame-shadow: inset 0 0 8px var(--color-raised-shadow);
 }
 .kp-editor-body { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); flex: 1; min-width: 0; min-height: 0; isolation: isolate; }
 .kp-editor-body:not(.kp-chat-open) { grid-template-columns: minmax(0, min(var(--kp-window-width), 100%)); justify-content: center; }

@@ -3,10 +3,10 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-row-picker`
-Execution Contract: `run-contract.kp.row-picker-20261125`
+Current Commitment: `kp-workspace-frame`
+Execution Contract: `run-contract.kp.workspace-frame-20261125`
 Next Product Milestone: `workspace-frame`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -34,7 +34,7 @@ the pinned reference and per-editor support.
 **Checked:** [floating row picker](reviews/2026-11-25-row-picker.md): annotated
 Vim rows, intentional matching and C-h tag filters with query/context return.
 Review this exemplar before M-x adoption. New Vim behavior remains separate.
-Proposed next: [workspace frame](reviews/2026-11-25-next-step-review.md), then
+Approved: [workspace frame](reviews/2026-11-25-next-step-review.md), then review before
 [mathematics](2026-11-25-mathematical-authoring-programme.md). Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and

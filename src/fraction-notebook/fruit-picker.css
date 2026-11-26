@@ -1,6 +1,7 @@
 :root { --kp-picker-background: var(--fn-background); --kp-picker-selected: var(--kp-active-line-background); --kp-picker-match: var(--fn-focus); --kp-picker-shadow: 0 8px 32px var(--color-raised-shadow); }
 .kp-fruit-picker { position: fixed; inset: min(18dvh, 140px) auto auto 50%; transform: translateX(-50%); margin: 0; padding: 0; box-sizing: border-box; width: min(380px, calc(100vw - 32px)); max-width: none; max-height: calc(82dvh - 16px); overflow: hidden; border: 1px solid var(--fn-border); border-radius: 7px; box-shadow: var(--kp-picker-shadow); background: var(--kp-picker-background); color: var(--fn-text); font: var(--kp-document-body-weight) max(1rem, var(--kp-document-body-size))/1.7 var(--fn-font); }
 .kp-fruit-picker[open] { display: flex; flex-direction: column; }
+.kp-fruit-picker { max-height: calc(100dvh - var(--kp-modeline-height, 48px) - min(18dvh, 140px) - 12px); }
 .kp-fruit-picker::backdrop { background: transparent; }
 .kp-fruit-picker [hidden] { display: none; }
 .kp-picker-query { flex: 0 0 auto; padding: 10px 14px; }

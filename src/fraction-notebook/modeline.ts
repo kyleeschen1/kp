@@ -1,17 +1,19 @@
 import type { mountWindows, WindowId } from './windows.ts';
 import type { CommandRegistry } from '../editor-commands/registry.ts';
+import { mountWorkspaceFrame } from './frame.ts';
 
 interface Surface { mode: string; name: string; description: string }
 const modes: Record<string, readonly [string, string]> = { normal: ['N', 'Normal'], insert: ['I', 'Insert'], visual: ['V', 'Visual'] };
 
 /** Observe the focused editor's own mode. Streaming into a different editor
  * must never turn the modeline into a report about that background surface. */
-export function mountModeline(root: HTMLElement, windows: ReturnType<typeof mountWindows>, registry: CommandRegistry) {
+export function mountModeline(root: HTMLElement, windows: ReturnType<typeof mountWindows>, registry: CommandRegistry, status: HTMLElement) {
   const bar = document.createElement('footer'); bar.className = 'kp-modeline'; bar.setAttribute('aria-label', 'Workspace modeline');
   const mode = document.createElement('span'); mode.className = 'kp-modeline-mode';
   const surface = document.createElement('span'); surface.className = 'kp-modeline-surface';
   const navigation = document.createElement('nav'); navigation.setAttribute('aria-label', 'Workspace panes');
   const clock = document.createElement('time'); clock.className = 'kp-modeline-time';
+  const actions = document.createElement('div'); actions.className = 'kp-modeline-actions';
   const buttons = new Map<WindowId, HTMLButtonElement>();
   for (const [id, label] of [['chat', 'Chat'], ['page', 'KP']] as const) {
     const button = document.createElement('button'); button.type = 'button'; button.textContent = label;
@@ -19,7 +21,8 @@ export function mountModeline(root: HTMLElement, windows: ReturnType<typeof moun
     button.dataset['commandId'] = `workspace.focus-${id}`;
     button.onclick = () => { void registry.invoke(`workspace.focus-${id}`); }; navigation.append(button); buttons.set(id, button);
   }
-  bar.append(mode, surface, navigation, clock); root.append(bar);
+  bar.append(mode, surface, navigation, actions, status, clock); root.append(bar);
+  const frame = mountWorkspaceFrame(root, bar);
   const remembered = new Map<WindowId, Surface>();
   let pending = 0, timer: ReturnType<typeof setTimeout> | undefined, disposed = false;
   function describe(target: Element, id: WindowId): Surface {
@@ -72,8 +75,8 @@ export function mountModeline(root: HTMLElement, windows: ReturnType<typeof moun
     timer = setTimeout(tick, 60000 - now.getTime() % 60000);
   }
   document.addEventListener('visibilitychange', tick); render(); tick();
-  return { dispose() {
+  return { element: bar, actions, dispose() {
     disposed = true; cancelAnimationFrame(pending); clearTimeout(timer); observer.disconnect(); unsubscribe();
-    document.removeEventListener('focusin', schedule); document.removeEventListener('visibilitychange', tick); bar.remove();
+    document.removeEventListener('focusin', schedule); document.removeEventListener('visibilitychange', tick); frame.dispose(); bar.remove();
   } };
 }

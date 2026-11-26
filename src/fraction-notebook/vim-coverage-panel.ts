@@ -62,6 +62,8 @@ export function mountVimCoverage(root: HTMLElement, registry: CommandRegistry,
     if (event.key === 'Escape' && !event.isComposing) { event.preventDefault(); event.stopPropagation(); close(); }
   }, true);
   dialog.addEventListener('cancel', event => { event.preventDefault(); if (!view?.back()) close(); });
-  const observer = new ResizeObserver(() => { if (dialog.open) place(); }); observer.observe(root);
+  // Available pane height changes when the modeline grows, even though the
+  // viewport-sized app root is unchanged. Geometry belongs to that usable area.
+  const observer = new ResizeObserver(() => { if (dialog.open) place(); }); observer.observe(root.querySelector('.kp-editor-body') ?? root);
   return { dispose() { disposed = true; close(false); observer.disconnect(); open.dispose(); closing.dispose(); retry.dispose(); dialog.remove(); } };
 }

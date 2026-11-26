@@ -84,6 +84,7 @@
 .kp-rich .fn-empty-cursor { display: inline-block; width: .55em; height: 1.15em; vertical-align: -.15em; }
 .kp-chat-transient { position: fixed; inset: auto; margin: 0; box-sizing: border-box; max-width: calc(100vw - 16px); max-height: min(72vh, 720px); overflow: auto; padding: 16px; border: 1px solid var(--fn-border); border-radius: 6px; box-shadow: 0 8px 32px var(--fn-shadow); background: var(--fn-background); color: var(--fn-text); font: var(--kp-document-body-weight) .875rem/1.5 var(--fn-font); letter-spacing: normal; }
 .kp-chat-transient::backdrop { background: transparent; }
+.kp-chat-transient { max-height: min(72dvh, 720px, calc(100dvh - var(--kp-modeline-height, 48px) - 24px)); }
 .kp-transient-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
 .kp-transient-heading strong { font-weight: var(--fn-object-weight); }
 .kp-transient-heading button { padding: 2px 8px; font: inherit; }

@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-row-picker",
-    title: "Find annotated rows without losing the query or context",
+    id: "kp-workspace-frame",
+    title: "Enclose the workspace with an elevated modeline and frame",
     approval: "approved",
-    contractId: "run-contract.kp.row-picker-20261125",
-    finish: "The Vim reference becomes a floating row picker with declared search fields, exact highlights and orthogonal tags. C-h opens filters; q returns to the preserved query. Keep support evidence and native editor context; review this exemplar before M-x adoption.",
-    source: { label: "Approved floating row exemplar", href: "docs/project/reviews/2026-11-25-row-picker.md" }
+    contractId: "run-contract.kp.workspace-frame-20261125",
+    finish: "The larger modeline/frame sits above native pickers, the editor header is hidden, and commands, status, editor focus and history remain accessible. Review the enclosing frame, height and shadow in the stationary split before returning to mathematical authoring.",
+    source: { label: "Approved frame outcome and preservation boundary", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Proposed next: a larger modeline and surrounding frame above the pickers, with the editor header hidden. Preserve the picker placement the user finds contained. After implementation, inspect M-x in the fixed split, modeline visibility and Escape return. The current row/filter exemplar still needs its broader interaction review before M-x adoption.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, inspect the headerless split and open M-x from Commands. Judge the modeline height and enclosing shadow; it should stay above pickers, with Escape returning to the original editor. The row/filter exemplar retains its separate broader interaction review before M-x adoption.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook, persistent conversation and fruit-picker presentation are accepted; the equal split, joined chat/folding and modeline are checked. Pane/line focus, workspace commands, Vim coverage and the floating row/filter exemplar have checked candidates awaiting judgment. Native data and independent Spindle ownership remain foundations.",
+      established: "The notebook, persistent conversation and fruit-picker presentation are accepted; the equal split, joined chat/folding and modeline are checked. Pane/line focus, workspace commands, Vim coverage, floating row/filter exemplar and enclosing workspace frame have checked candidates awaiting judgment. Native data and independent Spindle ownership remain foundations.",
       evidence: { label: "Requested frame refinement and mathematical return path", href: "docs/project/reviews/2026-11-25-next-step-review.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "workspace-frame", title: "Enclose the workspace with a clear modeline and frame",
         finish: "The larger modeline/frame sits above application pickers, the editor header is hidden, commands and save/error status remain accessible, and modal focus/return survives. Preserve the fixed split and picker placement; review before returning to the quadratic authoring proof.",
         excludes: "Popup redesign, moving windows, storage migration, new Vim behavior, mathematical implementation within this presentation slice, and publication. The checked row-picker contract retains its own review boundary.",
-        source: { label: "Proposed frame outcome and review cues", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+        source: { label: "Approved frame outcome and review cues", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
       }
     },
     {
@@ -508,6 +508,13 @@ export const projectVision: ProjectVision = {
       after: "The user endorses that direction and requests a larger elevated modeline and temporary editor-header removal first. Recommend one bounded workspace-frame pass, then the saved quadratic and matrix authoring callers. Picker containment already feels right; preserve its placement.",
       reason: "Finish the immediate workspace refinement while keeping the mathematical return path explicit. This records a next-step recommendation, not an implementation result or permission to resume old runs. Broader row/filter acceptance and promotion gates remain separate.",
       source: { label: "Frame request, clarification and recommended sequence", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+    },
+    {
+      id: "approve-workspace-frame", on: "2026-11-25",
+      before: "The workspace frame is the proposed immediate refinement, with the quadratic authoring workflow as the return path.",
+      after: "The user approves implementation. Select one frame/header package and a visual checkpoint, preserving the native editor/session owners and picker placement. The older row-picker contract retains its completed implementation and separate review boundary.",
+      reason: "Make the workspace boundary and status legible, then resume the mathematical sequence without expanding this presentation slice into a new window system.",
+      source: { label: "Approval and bounded implementation", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
     }
   ]
 };

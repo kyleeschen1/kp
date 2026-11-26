@@ -1,0 +1,43 @@
+{
+  "id": "run-contract.kp.workspace-frame-20261125",
+  "kind": "run-contract",
+  "title": "Workspace frame and modeline",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: one implementation package checked; stop at the approved visual checkpoint before the quadratic workflow.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.workspace-frame-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-next-step-review.md",
+      "summary": "User approved the recorded frame pass and visual checkpoint with go"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:editor-chat",
+    "npm run visual:vim-coverage"
+  ],
+  "revisitWhen": [
+    "User accepts or revises the workspace frame at the canonical fraction notebook URL."
+  ],
+  "allowedWork": [
+    "Approved frame exemplar, style variables, command and status access, native dialog layering, focused verification and evidence; three-hour ceiling with final quarter for verification and closeout; commit at the checked rollback boundary; stop for visual judgment"
+  ],
+  "disallowedWork": [
+    "Mathematical implementation before frame review, popup redesign, new window system, storage migration, live model calls or publication"
+  ],
+  "goal": "Enlarge and elevate the enclosing frame above pickers, hide the editor header, and preserve commands, status and native modal focus",
+  "target": "task.kp.workspace-frame-20261125",
+  "slices": [
+    {
+      "id": "workspace-frame",
+      "title": "Frame, modeline and header integration",
+      "summary": "Checked reversible frame/header candidate delivered. Complete chat suite: 35 passed; affected notebook group: seven passed; dedicated Vim coverage passed. Human visual judgment pending; no mathematics or promotion.",
+      "status": "complete"
+    }
+  ]
+}

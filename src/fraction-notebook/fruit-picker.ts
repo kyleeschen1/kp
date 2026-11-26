@@ -6,7 +6,7 @@ import type { CommandRegistry } from '../editor-commands/registry.ts';
 
 /** One reversible exemplar. The host restores its own editors; fruit selection
  * and DOM geometry never become notebook content or a Codex conversation. */
-export function mountFruitPicker(root: HTMLElement, actions: HTMLElement, captureReturn: () => () => void, registry: CommandRegistry) {
+export function mountFruitPicker(root: HTMLElement, actions: HTMLElement, captureReturn: () => () => void, registry: CommandRegistry, report: (message: string) => void) {
   const launcher = document.createElement('button'); launcher.type = 'button'; launcher.textContent = 'Picker';
   launcher.setAttribute('aria-controls', 'kp-fruit-picker'); launcher.setAttribute('aria-haspopup', 'dialog');
   launcher.setAttribute('aria-expanded', 'false'); launcher.dataset['workspaceCommand'] = '';
@@ -59,7 +59,8 @@ export function mountFruitPicker(root: HTMLElement, actions: HTMLElement, captur
   }
   function accept() {
     if (!selected || query?.composing) return;
-    chosen.textContent = `Selected: ${selected.label}`; chosen.hidden = false; close();
+    const message = `Selected: ${selected.label}`;
+    chosen.textContent = message; chosen.hidden = false; close(); report(message);
   }
   function move(delta: number) {
     if (!matches.length) return;

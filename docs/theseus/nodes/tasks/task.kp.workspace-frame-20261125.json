@@ -1,0 +1,131 @@
+{
+  "id": "task.kp.workspace-frame-20261125",
+  "kind": "task",
+  "title": "Enclose the editor with an elevated modeline and frame",
+  "status": "deferred",
+  "domain": "authoring",
+  "summary": "HUMAN_CHECKPOINT: checked workspace frame candidate ready for judgment of enclosing layer, modeline height and shadow. Implementation complete; aesthetic acceptance pending.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-next-step-review.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:23:38.303Z",
+      "notes": "Initial added test accessed inert on an HTMLElement-or-SVGElement locator. Replaced with the DOM attribute assertion; complete consumer typecheck now passes."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep workspace-frame",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:23:40.048Z",
+      "notes": "Initial exemplar check used the wrong accessible name for the Vim query. Corrected to Search Vim bindings; the headerless frame cases passed, including modal focus, overlap, phone layout and large-text errors."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:23:41.046Z",
+      "notes": "Initial full suite: 31 passed, three multi-tab cases timed out looking for the retained Chat toolbar button. The compatibility fixture set header visibility only on the first page. Moved it to the browser context so all tabs use the same explicit layout; full rerun in progress."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'workspace frame'",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:24:58.234Z",
+      "notes": "Correction to the earlier grep-spelling record: this was the actual initial exemplar invocation. It failed on the test-only wrong Vim-query label, then passed after correcting the accessible name."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:24:59.745Z",
+      "notes": "Complete notebook and chat consumer, including browser cases, passes after the test locator type repair."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:25:01.216Z",
+      "notes": "All 28 existing notebook, object, command, picker and reader correctness cases passed."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:25:02.964Z",
+      "notes": "All 25 chat state, persistence, annotation, delivery and transport cases passed."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:25:04.296Z",
+      "notes": "All 75 dashboard and orientation checks passed with the approved frame contract selected and existing startup budgets unchanged."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'workspace frame reserves'",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:28:26.945Z",
+      "notes": "The pressure case reproduced a real boundary defect: Vim coverage observed the fixed-height root, so enlarging the modeline did not update its available height. Changed the observer to the pane area and added growth/reversal coverage."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'workspace frame'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:28:29.119Z",
+      "notes": "All three headerless cases pass after the repair: forced modal overlap; query focus and draft caret; fruit feedback; visible preview and persistence errors in narrow reading mode; larger text; and growth/reversal while Vim coverage is open."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:28:30.795Z",
+      "notes": "Complete consumer typecheck passes after the final pane-height observer repair."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:31:15.994Z",
+      "notes": "Final clean suite: all 35 Chromium cases passed. Includes three headerless frame cases, forced real modal overlap, grow/reverse sizing, visible persistent errors after successful preview, draft focus/history/streaming, multi-tab branches and notes, fixed panes and native reader preservation. Earlier fixture failures and geometry regression are retained with their repairs."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'focused source|modal cursors|help, Ex|Styles compares|light canvas|phone focused'",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:35:05.417Z",
+      "notes": "Initial affected group: six passed and source-reload acknowledgement timed out at five seconds, remaining at Preview checked / waiting for the reading. The exact isolated case passed unchanged in 5.3 seconds total. No deterministic source defect identified; final group rerun retains all assertions and timeouts."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'focused source|modal cursors|help, Ex|Styles compares|light canvas|phone focused'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:36:37.269Z",
+      "notes": "Final complete affected group: all seven Chromium cases passed unchanged. Source reload/Run also passed in isolation after one acknowledgement timeout. Retain that intermittent observation; no deterministic cause was established and no timeout or assertion was relaxed. Native player/moment, cursors, Ex, style references, light spacing and phone source/result checks passed."
+    },
+    {
+      "command": "npm run visual:vim-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:41:20.188Z",
+      "notes": "Dedicated Chromium Vim coverage command completed successfully; its last-run result records passed with no failed tests. Native modal focus, rows and filters retain their scoped coverage."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:41:39.620Z",
+      "notes": "Final source-linked checked-candidate update: all 75 checks passed; frame visual acceptance remains pending."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the fraction notebook split with M-x and accepts the frame or requests a bounded revision."
+  ]
+}

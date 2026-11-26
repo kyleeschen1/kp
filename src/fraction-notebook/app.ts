@@ -34,7 +34,7 @@ import './fruit-picker.css';
 const root = document.querySelector<HTMLElement>('#app')!;
 const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text?: string) => { const node = document.createElement(tag); node.className = className; if (text) node.textContent = text; return node; };
 const registry = new CommandRegistry(() => ({ scope: root.querySelector('.kp-editor-body')?.getAttribute('data-active-window') === 'chat' ? 'chat' : 'notebook',
-  element: document.activeElement instanceof HTMLElement ? document.activeElement : null }), message => { const status = root.querySelector('.fn-status'); if (status) status.textContent = message; });
+  element: document.activeElement instanceof HTMLElement ? document.activeElement : null }), message => reportStatus(message, 'invalid'));
 const commandKeys: Readonly<Record<string, string[]>> = { 'notebook.bold': ['Ctrl/⌘-b'], 'notebook.italic': ['Ctrl/⌘-i'], 'notebook.undo': ['Ctrl/⌘-z'], 'notebook.redo': ['Ctrl/⌘-Shift-z'], 'animation.run': ['Shift-Enter', ':run'], 'animation.close-source': ['Ctrl/⌘-Enter'], 'workspace.help': [':h'] };
 const button = (text: string, action: () => unknown, id: string, scope: CommandScope = 'notebook', state?: () => Availability) => {
   const node = el('button', '', text); node.type = 'button';
@@ -65,9 +65,19 @@ let timer: ReturnType<typeof setTimeout> | undefined, selected: string | undefin
 let inspector: ReturnType<typeof mountInspector> | undefined;
 let structure: ReturnType<typeof mountStructureControls> | undefined;
 const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
+header.hidden = sessionStorage.getItem('kp.workspace.header') !== 'true';
+registry.add({ id: 'workspace.toggle-header', title: 'Toggle site header', category: 'Workspace', scope: 'workspace',
+  state: () => available(!header.hidden), run: () => { header.hidden = !header.hidden; sessionStorage.setItem('kp.workspace.header', String(!header.hidden)); } });
 const wordmark = el('a', 'fn-wordmark', 'Kinetic Press'); wordmark.href = '/'; branding.append(wordmark);
 const editToggle = button('Edit', () => setEditing(!root.classList.contains('fn-editing')), 'notebook.toggle-editing', 'notebook', () => available(root.classList.contains('fn-editing'))); editToggle.setAttribute('aria-pressed', 'false'); branding.append(editToggle);
 const actions = el('div', 'fn-header-actions'), status = el('p', 'fn-status', storedError ?? 'Opening your local notebook…'); status.setAttribute('role', 'status');
+function reportStatus(message: string, state: 'checking' | 'pending' | 'valid' | 'invalid' | 'notice' = 'notice') {
+  // Persistent-save failures remain visible even if a later preview succeeds.
+  status.textContent = storedError ?? message;
+  status.dataset['state'] = storedError ? 'invalid' : state;
+  status.title = status.textContent;
+}
+reportStatus('Opening your local notebook…', 'checking');
 const writing = el('details', 'fn-menu fn-writing fn-edit-control'), writingSummary = el('summary', '', 'Writing');
 const writingPanel = el('div', 'fn-menu-panel'); writing.append(writingSummary, writingPanel);
 const readingOptions = button('Reading options', () => {
@@ -104,6 +114,7 @@ split.onkeydown = event => { if (event.key === 'ArrowLeft' || event.key === 'Arr
 left.append(editorHost); right.append(resultStatus, frame); writingPanel.prepend(tools); writingPanel.append(previewTools);
 const editorBody = el('div', 'kp-editor-body');
 const pageWindow = el('section', 'kp-page-window'); pageWindow.setAttribute('aria-label', 'KP page');
+pageWindow.tabIndex = -1;
 workspace.append(left, sourcePane, split, right); pageWindow.append(workspace); editorBody.append(pageWindow); root.append(header, editorBody);
 const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); registry.notify(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, undefined, {
   host: sourceHost, run: runSource,
@@ -121,7 +132,8 @@ windows.register('page', pageWindow, () => {
   else if (root.classList.contains('fn-editing')) editor.view.focus();
   // Until the iframe installs its keyboard bridge, keep shortcuts in the host.
   else if (frameReady) frame.focus({ preventScroll: true });
-  else editToggle.focus({ preventScroll: true });
+  else if (!header.hidden) editToggle.focus({ preventScroll: true });
+  else pageWindow.focus({ preventScroll: true });
 });
 const chat = mountChat(editorBody, actions, () => layout.refresh(), {
   attach: (element, focus) => windows.register('chat', element, focus),
@@ -129,11 +141,11 @@ const chat = mountChat(editorBody, actions, () => layout.refresh(), {
   activate: () => windows.activate('chat'), cycle: () => windows.cycle(), closed: () => windows.activate('page')
 }, registry);
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); }, registry);
-const modeline = mountModeline(root, windows, registry);
+const modeline = mountModeline(root, windows, registry, status);
 const captureReturn = () => {
   const { active, windows: panes } = windows.snapshot(), pane = panes.find(entry => entry.id === active)?.element;
   const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-  const previous = activeElement && header.contains(activeElement) ? focused.get(active) ?? null : activeElement;
+  const previous = activeElement && (header.contains(activeElement) || modeline.element.contains(activeElement)) ? focused.get(active) ?? null : activeElement;
   const chatReturn = active === 'chat' ? chat.capture(previous) : undefined;
   const scroll = [...(pane?.querySelectorAll<HTMLElement>('.fn-editor, .cm-scroller, .kp-chat-history, .kp-chat-draft, .kp-chat-notes') ?? [])]
     .map(element => ({ element, top: element.scrollTop, left: element.scrollLeft }));
@@ -145,8 +157,8 @@ const captureReturn = () => {
     for (const { element, top, left } of scroll) if (element.isConnected) { element.scrollTop = top; element.scrollLeft = left; }
   } };
 };
-const picker = mountFruitPicker(root, actions, () => captureReturn().restore, registry);
-const commandPicker = mountCommandPicker(root, actions, registry, captureReturn);
+const picker = mountFruitPicker(root, actions, () => captureReturn().restore, registry, message => reportStatus(message));
+const commandPicker = mountCommandPicker(root, modeline.actions, registry, captureReturn);
 const vimCoverage = mountVimCoverage(root, registry, captureReturn);
 actions.append(button('Styles', () => styles.toggle(), 'workspace.open-styles', 'workspace'));
 const numbers = mountLineNumbers(editorHost, editor.view);
@@ -154,17 +166,17 @@ const commands = mountCommands(workspace, editor.view, {
   async save() {
     await saving;
     if (storedError || !store) throw new Error(storedError ?? 'Persistent storage is unavailable; download JSON to retain this draft.');
-    status.textContent = pendingSource() ? 'Saved locally · source changes need Run' : 'Saved locally · preview up to date';
+    reportStatus(pendingSource() ? 'Saved locally · source changes need Run' : 'Saved locally · preview up to date', pendingSource() ? 'pending' : 'valid');
   },
   close() { if (editor.sourceOpen()) editor.closeSource(); else setEditing(false); }, run: runSource,
-  numbers(value) { numbers.set(value); editor.numbers(value); }, message(text) { status.textContent = text; }
+  numbers(value) { numbers.set(value); editor.numbers(value); }, message(text) { reportStatus(text); }
 }, registry);
 actions.append(button('Help', () => commands.help(), 'workspace.help', 'workspace'));
 tools.append(button('Bold', () => editor.mark('strong'), 'notebook.bold', 'notebook', () => editor.canMark('strong') ? available() : unavailable('Select editable prose')), button('Italic', () => editor.mark('em'), 'notebook.italic', 'notebook', () => editor.canMark('em') ? available() : unavailable('Select editable prose')), button('Code', () => editor.mark('code'), 'notebook.code', 'notebook', () => editor.canMark('code') ? available() : unavailable('Select editable prose')),
   button('Undo', () => editor.undo(), 'notebook.undo', 'notebook', () => editor.canUndo() ? available() : unavailable('Nothing to undo')), button('Redo', () => editor.redo(), 'notebook.redo', 'notebook', () => editor.canRedo() ? available() : unavailable('Nothing to redo')), button('Add author', () => { addAuthor(editor.view); editor.run(setVimMode('insert')); }, 'notebook.add-author'),
   button('Annotate', () => { details(true, annotateSelection(editor.view)); }, 'notebook.annotate', 'notebook', () => editor.view.state.selection.empty ? unavailable('Select text to annotate') : available()));
 inspector = mountInspector(left, editor.view, registry);
-structure = mountStructureControls(actions, editor.view, message => { status.textContent = message; }, registry);
+structure = mountStructureControls(actions, editor.view, message => reportStatus(message), registry);
 actions.querySelector('.fn-structure')!.classList.add('fn-menu', 'fn-edit-control');
 actions.querySelector('.fn-structure-controls')!.classList.add('fn-menu-panel');
 // Tools belong to the single masthead. Their actions retain the editor's
@@ -192,7 +204,7 @@ function setEditing(enabled: boolean) {
   split.inert = true; left.setAttribute('aria-hidden', String(!enabled));
   sessionStorage.setItem('kp.fraction-editing', String(enabled));
   if (enabled) { editor.normal(); editor.view.focus(); }
-  else { details(false); writing.open = false; actions.querySelector('details.fn-structure')?.removeAttribute('open'); editToggle.focus(); }
+  else { details(false); writing.open = false; actions.querySelector('details.fn-structure')?.removeAttribute('open'); if (!header.hidden) editToggle.focus(); else if (frameReady) frame.focus({ preventScroll: true }); else pageWindow.focus({ preventScroll: true }); }
   send({ kind: 'presentation', animationOnly: enabled }); layout.refresh();
 }
 setEditing(sessionStorage.getItem('kp.fraction-editing') !== 'false');
@@ -203,7 +215,7 @@ function pendingSource() { return sourceOf(notebook) !== sourceOf(lastValid); }
 function runSource() { clearTimeout(timer); void prepare(); }
 function pendingMessage() {
   resultStatus.textContent = 'Previous result · source changes have not run';
-  status.textContent = storedError ?? 'Draft retained · source changes need Run'; status.dataset['state'] = 'pending';
+  reportStatus('Draft retained · source changes need Run', 'pending');
 }
 function changed(doc: ProseNode) {
   registry.notify();
@@ -215,8 +227,8 @@ function changed(doc: ProseNode) {
       if (!store || storedError) return;
       await store.save(basis, draft);
       if (draft.revision === notebook.revision) sessionStorage.removeItem(storageKey);
-    }).catch(error => { storedError = String(error); status.textContent = storedError; });
-    status.textContent = storedError ?? 'Saving draft · checking preview…'; status.dataset['state'] = 'checking';
+    }).catch(error => { storedError = String(error); reportStatus(storedError, 'invalid'); });
+    reportStatus('Saving draft · checking preview…', 'checking');
     if (pendingSource()) {
       pendingMessage();
       // Text/caption edits can update against the last admitted source. This
@@ -224,7 +236,7 @@ function changed(doc: ProseNode) {
       const source = sourceOf(lastValid);
       if (source !== undefined && previousSource === sourceOf(draft)) timer = setTimeout(() => { void prepare({ ...notebook, cells: notebook.cells.map(cell => cell.type === 'story' ? { ...cell, source } : cell) }, false, false); }, 300);
     } else timer = setTimeout(() => { void prepare(); }, 300);
-  } catch (error) { status.textContent = `${String(error)} Last valid preview retained. Undo to recover the supported structure.`; status.dataset['state'] = 'invalid'; }
+  } catch (error) { reportStatus(`${String(error)} Last valid preview retained. Undo to recover the supported structure.`, 'invalid'); }
 }
 async function prepare(value: FractionNotebook = notebook, restoration = false, accept = true) {
   const token = ++generation; request?.abort(); request = new AbortController();
@@ -241,11 +253,11 @@ async function prepare(value: FractionNotebook = notebook, restoration = false, 
     latest = { value: data, revision: checked.revision };
     if (accept && !restoration) lastValid = checked;
     if (frameReady) send({ kind: 'apply', value: latest.value });
-    if (!restoration) { status.textContent = storedError ?? 'Preview checked · waiting for the reading'; status.dataset['state'] = 'checking'; }
+    if (!restoration) reportStatus('Preview checked · waiting for the reading', 'checking');
     if (pendingSource()) pendingMessage();
   } catch (error) {
     if (disposed || token !== generation || (error instanceof DOMException && error.name === 'AbortError')) return;
-    status.textContent = `${error instanceof Error ? error.message : String(error)} Last valid preview retained.`; status.dataset['state'] = 'invalid';
+    reportStatus(`${error instanceof Error ? error.message : String(error)} Last valid preview retained.`, 'invalid');
     resultStatus.textContent = `Previous result · ${error instanceof Error ? error.message : String(error)}`;
   }
 }
@@ -257,9 +269,9 @@ const onMessage = (event: MessageEvent) => {
   if (data.kind === 'ready') { frameReady = true; readingOptions.disabled = false; registry.notify(); send({ kind: 'styles', settings: styles.settings() }); send({ kind: 'presentation', animationOnly: root.classList.contains('fn-editing') }); if (latest) send({ kind: 'apply', value: latest.value }); }
   if (data.kind === 'applied' && latest?.revision === data.revision && notebook.revision === data.revision) {
     if (pendingSource()) pendingMessage();
-    else { status.textContent = storedError ?? 'Saved in this browser · preview up to date'; status.dataset['state'] = 'valid'; resultStatus.textContent = ''; }
+    else { reportStatus('Saved in this browser · preview up to date', 'valid'); resultStatus.textContent = ''; }
   }
-  if (data.kind === 'error') { status.textContent = String(data.message); status.dataset['state'] = 'invalid'; }
+  if (data.kind === 'error') reportStatus(String(data.message), 'invalid');
   if (data.kind === 'options-state') readingOptions.setAttribute('aria-expanded', String(data.open === true));
   if (data.kind === 'window-focus') windows.activate('page');
   if (data.kind === 'window-cycle') windows.cycle(data.reverse === true);

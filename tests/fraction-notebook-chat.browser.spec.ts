@@ -8,6 +8,18 @@ import { readChatSnapshot } from '../src/editor-chat/protocol.ts';
 import { passageTarget } from '../src/editor-chat/annotation-target.ts';
 
 const url = '/experiments/fraction-notebook/';
+// Existing interaction cases also cover the retained site-header layout. The
+// workspace-frame cases below exercise the actual headerless editor default.
+test.beforeEach(async ({ context }, info) => {
+  if (!info.title.startsWith('workspace frame')) await context.addInitScript(() => sessionStorage.setItem('kp.workspace.header', 'true'));
+});
+
+async function workspaceCommand(page: Page, title: string) {
+  await page.getByRole('button', { name: 'Commands', exact: true }).click();
+  const query = page.getByRole('combobox', { name: 'Search commands' }); await query.fill(title);
+  await page.getByRole('dialog', { name: 'Commands', exact: true }).getByRole('option', { name: title, exact: true }).click();
+}
+
 async function fixture(context: BrowserContext) {
   const peer = new ChatPeer(), store = new MemoryChatStore();
   let service = new ChatService(store, peer.factory, process.cwd());
@@ -421,6 +433,121 @@ test('fruit picker restores chat selection and source caret while streaming cann
     await source.press('ControlOrMeta+z'); await expect(firstLine).toHaveText(original!);
     expect(errors).toEqual([]);
   } finally { await f.close(); }
+});
+
+test('workspace frame stays above native pickers, retains modal focus and preserves the headerless split', async ({ page, context }, info) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  try {
+    await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url);
+    await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
+    await expect(page.locator('.fn-header')).toBeHidden(); await workspaceCommand(page, 'Open chat'); await connect(page);
+    const frame = page.locator('.kp-workspace-frame'), bar = page.locator('.kp-modeline'), prose = page.locator('.fn-editor .ProseMirror');
+    await expect(frame).toHaveCount(1); await expect(bar).toHaveCount(1);
+    expect((await bar.boundingBox())!.height).toBeGreaterThanOrEqual(48);
+    await write(page, 'Keep my draft'); await input(page).press('ArrowLeft');
+    const draft = await input(page).elementHandle();
+    // Keyboard activation of the modeline launcher must capture the prior
+    // editor, not treat the launcher as the conversation's return surface.
+    await page.getByRole('button', { name: 'Commands', exact: true }).focus(); await page.keyboard.press('Enter');
+    const commands = page.getByRole('dialog', { name: 'Commands', exact: true });
+    const query = page.getByRole('combobox', { name: 'Search commands' });
+    await expect(query).toBeFocused(); await expect(commands.locator('.kp-workspace-frame')).toHaveCount(1);
+    expect(await commands.evaluate(node => node.matches(':modal'))).toBe(true);
+    expect(await frame.evaluate(node => node.matches(':popover-open'))).toBe(true);
+    await expect(bar).toHaveAttribute('inert', '');
+    await expect(page.locator('.kp-modeline-surface')).toHaveText('Commands › query');
+    const barBox = (await bar.boundingBox())!;
+    expect((await commands.boundingBox())!.y + (await commands.boundingBox())!.height).toBeLessThanOrEqual(barBox.y);
+    await page.screenshot({ path: info.outputPath('workspace-frame-picker-dark.png') });
+    // Force a real overlap to test top-layer paint order, not just placement.
+    const pickerStyle = await commands.getAttribute('style');
+    await commands.evaluate(node => { node.style.top = 'auto'; node.style.bottom = '0'; });
+    expect(await bar.evaluate(node => {
+      if (!(node instanceof HTMLElement)) return false;
+      const box = node.getBoundingClientRect(); node.inert = false;
+      const top = document.elementFromPoint(box.x + box.width / 2, box.y + 10);
+      node.inert = true; return Boolean(top && node.contains(top));
+    })).toBe(true);
+    await commands.evaluate((node, value) => { if (value === null) node.removeAttribute('style'); else node.setAttribute('style', value); }, pickerStyle);
+    await query.press('Tab'); expect(await commands.evaluate(node => node.contains(document.activeElement))).toBe(true);
+    await query.focus(); await query.press('Escape'); await expect(input(page)).toBeFocused();
+    await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('Keep my drafXt');
+    expect(await draft!.evaluate(node => node.isConnected)).toBe(true);
+    await expect(bar).not.toHaveAttribute('inert');
+    await page.getByRole('button', { name: 'Focus KP pane' }).click(); await expect(prose).toBeFocused();
+    const coveragePanel = await coverage(page); await expect(coveragePanel.getByRole('combobox', { name: 'Search Vim bindings' })).toBeFocused();
+    await expect(coveragePanel.locator('.kp-workspace-frame')).toHaveCount(1);
+    await page.keyboard.press('Escape'); await expect(prose).toBeFocused();
+    await workspaceCommand(page, 'Fruit picker');
+    const fruit = page.getByRole('combobox', { name: 'Find a fruit' }); await fruit.fill('apricot'); await fruit.press('Enter');
+    await expect(page.locator('.kp-modeline .fn-status')).toHaveText('Selected: Apricot'); await expect(prose).toBeFocused();
+    await workspaceCommand(page, 'Styles'); await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+    await page.getByRole('button', { name: 'Close styles', exact: true }).click();
+    await page.screenshot({ path: info.outputPath('workspace-frame-light.png') });
+    for (const height of [844, 380]) {
+      await page.setViewportSize({ width: 390, height });
+      const box = (await bar.boundingBox())!, composer = (await page.locator('.kp-chat-draft').boundingBox())!;
+      expect(Math.abs(box.y + box.height - height)).toBeLessThan(1);
+      expect(composer.y + composer.height).toBeLessThanOrEqual(box.y + 1);
+      expect((await page.locator('.kp-chat-history').boundingBox())!.height).toBeGreaterThan(0);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole('button', { name: 'Commands', exact: true }).click(); await query.fill('Styles');
+    await page.screenshot({ path: info.outputPath('workspace-frame-phone.png') }); await query.press('Escape');
+    // Header recovery is an explicit command, not a second always-visible toolbar.
+    await workspaceCommand(page, 'Toggle site header'); await expect(page.locator('.fn-header')).toBeVisible();
+    await workspaceCommand(page, 'Toggle site header'); await expect(page.locator('.fn-header')).toBeHidden();
+    await page.reload(); await expect(bar).toHaveCount(1); await expect(frame).toHaveCount(1);
+    await expect(page.locator('.fn-header')).toBeHidden(); expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
+test('workspace frame keeps errors readable in a narrow reading view and scales with text', async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 520 });
+  await page.route('**/api/dev/fraction-notebook', route => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ error: 'Preview unavailable. Your draft is retained.' }) }));
+  await page.goto(url);
+  const status = page.locator('.kp-modeline .fn-status'), bar = page.locator('.kp-modeline');
+  await expect(status).toHaveAttribute('data-state', 'invalid'); await expect(status).toBeVisible();
+  await expect(status).toContainText('Your draft is retained');
+  await workspaceCommand(page, 'Edit'); await expect(page.locator('#app')).not.toHaveClass(/fn-editing/);
+  await expect(status).toBeVisible(); await expect(page.locator('.fn-header')).toBeHidden();
+  await page.locator('html').evaluate(node => { node.style.fontSize = '24px'; });
+  const box = (await bar.boundingBox())!;
+  expect(box.height).toBeGreaterThan(48); expect(box.y).toBeGreaterThan(100);
+  expect(await status.evaluate(node => parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(24);
+  expect((await page.locator('.kp-editor-body').boundingBox())!.height).toBeGreaterThan(0);
+  await page.getByRole('button', { name: 'Commands', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Commands', exact: true });
+  await expect(dialog.getByRole('combobox', { name: 'Search commands' })).toBeFocused();
+  const popup = (await dialog.boundingBox())!;
+  expect(popup.y + popup.height).toBeLessThanOrEqual((await bar.boundingBox())!.y);
+  await page.screenshot({ path: info.outputPath('workspace-frame-large-text-error.png') });
+  await page.keyboard.press('Escape'); await expect(status).toBeVisible();
+  // A successful preview must not hide an independent persistence/recovery error.
+  await page.unrouteAll();
+  await page.addInitScript(() => sessionStorage.setItem('kp.fraction-notebook.v3', '{broken'));
+  await page.reload();
+  await expect(page.frameLocator('iframe').locator('body')).toHaveAttribute('data-kp-reader-hydrated', 'true');
+  await expect(status).toHaveAttribute('data-state', 'invalid');
+  await expect(status).toContainText('Saved content has not been overwritten'); await expect(status).toBeVisible();
+});
+
+test('workspace frame reserves changed modeline height for an already-open Vim picker', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 520 }); await page.goto(url);
+  await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
+  const prose = page.locator('.fn-editor .ProseMirror'); await prose.focus();
+  const panel = await coverage(page), query = panel.getByRole('combobox', { name: 'Search Vim bindings' });
+  await expect(query).toBeFocused();
+  await page.locator('html').evaluate(node => node.style.setProperty('--kp-modeline-min-height', '240px'));
+  await expect.poll(async () => {
+    const popup = (await panel.boundingBox())!, bar = (await page.locator('.kp-modeline').boundingBox())!;
+    return popup.y + popup.height <= bar.y;
+  }).toBe(true);
+  const constrained = (await panel.boundingBox())!.height;
+  await page.locator('html').evaluate(node => node.style.removeProperty('--kp-modeline-min-height'));
+  await expect.poll(async () => (await panel.boundingBox())!.height).toBeGreaterThan(constrained);
+  await expect(query).toBeFocused(); await page.keyboard.press('Escape'); await expect(prose).toBeFocused();
 });
 
 test('workspace modeline follows actual editor modes, pane focus and reading spacing without covering the composer', async ({ page, context }, info) => {

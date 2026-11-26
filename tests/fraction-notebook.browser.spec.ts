@@ -8,6 +8,12 @@ import { migrateV1 } from '../src/fraction-notebook/migration.ts';
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 const seed = importFractionReading(canonical).notebook;
 const url = '/experiments/fraction-notebook/';
+// This suite retains the optional site toolbar while exercising native reader,
+// formatting and source controls. Headerless workspace behavior lives in the
+// workspace-frame cases of fraction-notebook-chat.browser.spec.ts.
+test.beforeEach(async ({ context }) => {
+  await context.addInitScript(() => sessionStorage.setItem('kp.workspace.header', 'true'));
+});
 const preview = (page: Page) => page.frameLocator('iframe');
 test('saved theme and palette reach first paint before delayed notebook or preview modules', async ({ page }) => {
   await page.addInitScript(() => {
