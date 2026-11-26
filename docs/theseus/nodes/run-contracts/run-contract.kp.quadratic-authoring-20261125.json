@@ -1,0 +1,52 @@
+{
+  "id": "run-contract.kp.quadratic-authoring-20261125",
+  "kind": "run-contract",
+  "title": "Quadratic authoring exemplar",
+  "status": "active",
+  "summary": "Approved M0 only; exact new contract supersedes the finished frame as active execution, without resuming historical runs.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.quadratic-authoring-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-mathematical-authoring-programme.md",
+      "summary": "User approved the recommended M0 quadratic loop with please do it for me; scope is the first exemplar only"
+    }
+  ],
+  "verification": [
+    "npm run typecheck:fraction-notebook",
+    "npm run test:fraction-notebook"
+  ],
+  "allowedWork": [
+    "Approved M0 quadratic only; narrow notebook and command adapters, registered operations, domain-native rendering, persistence, measured costs and preservation checks"
+  ],
+  "disallowedWork": [
+    "M1 or broader mathematical families, broad Vim parity, generic window framework, publication, model spending, historical run resumption or visual promotion before G1"
+  ],
+  "goal": "Create, discover, edit and reload one persistent quadratic with linked equation, graph, derivative and tangent views in the existing notebook",
+  "target": "task.kp.quadratic-authoring-20261125",
+  "runMode": "run",
+  "maxSlices": 2,
+  "commitCadence": "Verified resource and integrated exemplar boundaries; hourly backup",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "One working quadratic exemplar at G1 for human visual and interaction judgment",
+    "Six-hour ceiling from start with final ninety minutes reserved for verification and backup"
+  ],
+  "slices": [
+    {
+      "id": "resources",
+      "title": "Persistent resource and derived operations",
+      "summary": "Validated persistent resources and recipes, declared dependencies, bounded cache/history, 2D-only render entry and relevant checks complete. Integrated UI follows.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Notebook commands and linked graphical exemplar",
+      "status": "planned"
+    }
+  ]
+}

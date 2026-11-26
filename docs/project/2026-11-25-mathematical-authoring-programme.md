@@ -1,10 +1,38 @@
 # Discoverable mathematical objects and major animations
 
 Date: 2026-11-25
-Status: rigorous programme proposal for review; implementation not approved
+Status: M0 quadratic exemplar approved; remaining programme is proposed
 Source: the user's mathematical-object, autocomplete, multiplication and linear-algebra discussion
 Inspection basis: product worktree at `8143b42594108ce0d1dde672480d1c47f4549558`
 Companion: [Vim and semantic-command design](2026-11-25-vim-semantic-command-design.md)
+
+## M0 implementation approval
+
+The user says "please do it for me" after the saved quadratic workflow was
+recommended following acceptance of the workspace frame. Execute M0 only through
+`run-contract.kp.quadratic-authoring-20261125`; M1 and the remaining portfolio
+retain their gates. Two recoverable packages cover the resource/operation boundary
+and its integrated notebook exemplar. Six hours is the ceiling, with the final
+ninety minutes reserved for verification and closeout; stop at G1 visual review.
+
+Canonical artifact: a selected mathematical notebook fixture in the existing
+`/experiments/fraction-notebook/?notebook=quadratic` workspace. The existing
+expression/differentiation and semantic-state graph/cache owners supply truth;
+KaTeX and the existing Graph2D scene/SVG path supply representations. The graph's
+2D paint entry must stay independent of 3D imports. No hardcoded quadratic
+branching presentation is treated as an arbitrary polynomial renderer.
+
+Preserve fraction drafts and their native reader, chat sessions/composer history,
+fixed split, accepted frame, modal command ownership, and distinct copy/derive/
+transclude semantics. Use explicit resource UUIDs, registered versioned recipes
+and occurrence references. Narrow optional document data and a selected-fixture
+adapter avoid migrating the existing fraction source. Rollback units are the
+resource adapter with its tests and the integrated exemplar with its fixtures,
+commands and preservation evidence. No shared visual promotion before G1.
+
+The earlier row-picker commitment below describes the inspection date. The frame
+is now accepted; this explicit M0 successor owns current execution. The tabled
+matrix Pour treatment and historical runs remain unaccepted and unresumed.
 
 ## 1. Outcome and finite finish line
 

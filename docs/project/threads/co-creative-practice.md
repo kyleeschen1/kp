@@ -46,7 +46,7 @@ workbench latency remain unproved. The notebook detour is current.
   retaining targets and histories. Checked: [Vim coverage](../reviews/2026-11-25-vim-binding-coverage.md).
   Checked: [floating rows and C-h filters](../reviews/2026-11-25-row-picker.md);
   review before M-x adoption. Accepted:
-  [workspace frame](../reviews/2026-11-25-next-step-review.md). Next proposed: M0 quadratic, then matrix. The
+  [workspace frame](../reviews/2026-11-25-next-step-review.md). Approved: M0 quadratic; review before matrix. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and
   [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain separate.

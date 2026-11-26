@@ -9,6 +9,7 @@
   "scripts": {
     "test:fraction-notebook": "node --disable-warning=ExperimentalWarning --test tests/fraction-notebook.test.ts tests/fractional-reading.test.ts tests/fraction-notebook-object.test.ts tests/fraction-notebook-picker.test.ts tests/fraction-notebook-commands.test.ts",
     "typecheck:fraction-notebook": "tsc --project config/typescript/tsconfig.fraction-notebook.json",
+    "test:notebook-mathematics": "node --disable-warning=ExperimentalWarning --test tests/notebook-mathematics.test.ts",
     "test:editor-chat": "node --disable-warning=ExperimentalWarning --test tests/fraction-notebook-chat.test.ts",
     "test:vim-coverage": "node --disable-warning=ExperimentalWarning --test tests/fraction-notebook-vim-coverage.test.ts tests/fraction-notebook-rows.test.ts",
     "check:editor-chat:codex": "node --disable-warning=ExperimentalWarning scripts/check-editor-chat-codex.ts",

@@ -1,0 +1,55 @@
+{
+  "id": "task.kp.quadratic-authoring-20261125",
+  "kind": "task",
+  "title": "Author one persistent quadratic with linked symbolic and graphical views",
+  "status": "active",
+  "domain": "authoring",
+  "summary": "User approved M0 quadratic workflow; preserve frame, fraction drafts, chat, command ownership and native math.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-mathematical-authoring-programme.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-quadratic-authoring.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:notebook-mathematics",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:39:06.573Z",
+      "notes": "Initial pressure test exposed retained cache fingerprints without a capacity. Added opt-in LRU capacity at the existing cache boundary and bounded temporary notebook snapshots. Subsequent strip-only syntax issue repaired."
+    },
+    {
+      "command": "npm run test:notebook-mathematics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:39:07.230Z",
+      "notes": "Six tests pass: analytic identities, degeneracy, recipe validation, invalid draft retention, dependency reuse, isolated owners and 300 edits across bounded rebasing."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/rendering.test.ts tests/semantic-state-derived-cache.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:39:07.854Z",
+      "notes": "All 33 tests pass, preserving existing 2D/3D output and cache guarantees while extracting the 2D-only import entry and adding opt-in cache capacity."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:39:08.469Z",
+      "notes": "Complete affected consumer types pass including new math resource/runtime and existing rendering/cache tests."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:39:09.109Z",
+      "notes": "All 75 pass after shortening the active thread within its unchanged budget; M0 approval and selected contract agree."
+    }
+  ]
+}

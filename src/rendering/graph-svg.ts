@@ -36,20 +36,12 @@ import {
 import {
   surfaceQuadFill as surfaceQuadLightingFill
 } from "./surface-lighting.ts";
-import {
-  catmullRomToBezierPathCommands,
-  type SmoothPathCommand
-} from "./graph-smoothing.ts";
-import {
-  createGraph2DSceneModel,
-  type Graph2DSceneAxis,
-  type Graph2DSceneCurve
-} from "./graph-2d-scene.ts";
+import { pointsToSmoothPathData } from "./graph-2d-svg.ts";
+export { renderGraphToSvg } from "./graph-2d-svg.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Axis3DObject,
   type Curve3DObject,
-  type Graph2DObject,
   type Graph3DObject,
   type Graph3DSurfaceMode,
   type GraphPoint3D,
@@ -265,21 +257,6 @@ function sampleSurfaceGrid(
   );
 }
 
-export function renderGraphToSvg(
-  objects: readonly KpSemanticObject[],
-  graph: Graph2DObject
-): string {
-  const model = createGraph2DSceneModel(objects, graph);
-
-  return `
-    <svg class="graph-svg" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-2d" viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
-      <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
-      ${model.axes.map(renderAxis).join("")}
-      ${model.curves.map(renderCurve).join("")}
-    </svg>
-  `;
-}
-
 export function renderGraph3DToSvg(
   objects: readonly KpSemanticObject[],
   graph: Graph3DObject
@@ -491,17 +468,6 @@ function renderDepthDebugCell3D(
   return `<rect class="graph-debug-overlay__cell" x="${formatNumber(x)}" y="${formatNumber(y)}" width="${formatNumber(cellWidth)}" height="${formatNumber(cellHeight)}" data-kp-debug-cell="${rowIndex},${columnIndex}" data-kp-depth="${formatNumber(depth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" fill="#e4572e" opacity="${formatNumber(opacity)}" />`;
 }
 
-function renderAxis(sceneAxis: Graph2DSceneAxis): string {
-  const { axis, labelPoint, line } = sceneAxis;
-
-  return `
-    <g class="graph-axis graph-axis--${axis.orientation}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="${escapeHtml(sceneAxis.renderNodeId)}" data-kp-type="axis-2d">
-      <line x1="${formatNumber(line.from.x)}" y1="${formatNumber(line.from.y)}" x2="${formatNumber(line.to.x)}" y2="${formatNumber(line.to.y)}" />
-      <text x="${formatNumber(labelPoint.x)}" y="${formatNumber(labelPoint.y)}">${escapeHtml(axis.label)}</text>
-    </g>
-  `;
-}
-
 function renderAxis3D(
   axis: Axis3DObject,
   graph: Graph3DObject,
@@ -700,22 +666,6 @@ function axisArrowLength(
   return visibility === "hidden"
     ? 8 + depthWeight * 5
     : 9 + depthWeight * 6;
-}
-
-function renderCurve(sceneCurve: Graph2DSceneCurve): string {
-  const { curve } = sceneCurve;
-  const pathData = pointsToSmoothPathData(sceneCurve.projectedPoints);
-
-  if (pathData.length === 0) {
-    return "";
-  }
-
-  return `
-    <g class="graph-curve" data-kp-object="${escapeHtml(curve.id)}" data-kp-render-node="${escapeHtml(sceneCurve.renderNodeId)}" data-kp-type="curve-2d">
-      <path d="${pathData}" data-kp-smoothing="catmull-rom" />
-      <text x="18" y="26">${escapeHtml(curve.label)}</text>
-    </g>
-  `;
 }
 
 function renderCurve3D(
@@ -2227,25 +2177,6 @@ function pointsToPathData(points: readonly GraphPoint[]): string {
       (point) => `L ${formatNumber(point.x)} ${formatNumber(point.y)}`
     )
   ].join(" ");
-}
-
-function pointsToSmoothPathData(points: readonly GraphPoint[]): string {
-  return smoothPathCommandsToPathData(catmullRomToBezierPathCommands(points));
-}
-
-function smoothPathCommandsToPathData(
-  commands: readonly SmoothPathCommand[]
-): string {
-  return commands
-    .map((command) => {
-      switch (command.kind) {
-        case "move":
-          return `M ${formatNumber(command.point.x)} ${formatNumber(command.point.y)}`;
-        case "cubic":
-          return `C ${formatNumber(command.control1.x)} ${formatNumber(command.control1.y)} ${formatNumber(command.control2.x)} ${formatNumber(command.control2.y)} ${formatNumber(command.point.x)} ${formatNumber(command.point.y)}`;
-      }
-    })
-    .join(" ");
 }
 
 function formatPoints(points: readonly GraphPoint[]): string {

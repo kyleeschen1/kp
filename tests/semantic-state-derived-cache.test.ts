@@ -109,6 +109,22 @@ test("cache instances isolate values and reset locally", () => {
   });
 });
 
+test("bounded caller caches evict old revisions without changing graph results", () => {
+  const fixture = createFixture("lesson.derived-cache-bounded");
+  const cache = createKpSemanticDerivedValueCache({ maxEntries: 1 });
+  const input = { graph: fixture.graph, target: fixture.handles.refs.total };
+  const first = cache.evaluate({ ...input, snapshot: fixture.initial });
+  assert.equal(cache.evaluate({ ...input, snapshot: fixture.unrelatedBranch }), first);
+  const edit = defineKpSemanticStateTransform({ compiled: fixture.compiled, handles: fixture.handles,
+    id: 'change-base', author(state) { state.base.update(() => ({ amount: 4 })); } });
+  assert.deepEqual(cache.evaluate({ ...input, snapshot: edit.apply(fixture.initial, 'edit').commit.after }), { amount: 8 });
+  assert.deepEqual(cache.evaluate({ ...input, snapshot: fixture.initial }), first);
+  assert.equal(fixture.calls.total, 3);
+  assert.equal(cache.inspect().entries, 1);
+  cache.dispose();
+  for (const maxEntries of [0, -1, 0.5, NaN]) assert.throws(() => createKpSemanticDerivedValueCache({ maxEntries }));
+});
+
 test("disposing a cache clears it and expires its capability", () => {
   const fixture = createFixture("lesson.derived-cache-disposal");
   const cache = createKpSemanticDerivedValueCache();

@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-workspace-frame",
-    title: "Enclose the workspace with an elevated modeline and frame",
+    id: "kp-quadratic-authoring",
+    title: "Author one persistent quadratic with linked representations",
     approval: "approved",
-    contractId: "run-contract.kp.workspace-frame-20261125",
-    finish: "The accepted frame has a quiet padded beige modeline above pickers, a hidden editor header and a neutral pane edge. Commands, error visibility, editor focus and histories remain accessible. Its bounded outcome is closed; mathematical authoring is a proposed successor.",
-    source: { label: "Accepted frame outcome and successor recommendation", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+    contractId: "run-contract.kp.quadratic-authoring-20261125",
+    finish: "One saved quadratic exposes graph, derivative and tangent commands; edits, reload and another occurrence retain its relationships. Deliver this exemplar in the existing notebook and stop at G1 before the matrix caller or broader animation portfolio.",
+    source: { label: "Approved M0 scope and preservation boundary", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Select the proposed M0 quadratic loop: one saved polynomial exposes graph, derivative and tangent commands; coefficient edits and tangent motion stay connected through reload. Its first working exemplar precedes matrix reuse and broader animation coverage. The mathematical fixture is not implemented yet; broader row/filter promotion retains its separate review.",
+  nextJudgment: "At G1, inspect coefficient edits and tangent motion in the selected mathematical notebook, then reload and inspect shared occurrences. M0 is approved and in development; no working mathematical fixture is claimed yet. Matrix reuse and broader row/filter promotion retain their separate gates.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -44,11 +44,11 @@ export const projectVision: ProjectVision = {
       established: "The notebook, persistent conversation, fruit-picker presentation and refined workspace frame are accepted. The equal split and joined chat/folding are checked. Pane/line focus, commands, Vim coverage and floating row/filter exemplar retain their distinct evidence and review boundaries. Native data and independent Spindle ownership remain foundations.",
       evidence: { label: "Accepted frame and mathematical successor", href: "docs/project/reviews/2026-11-25-next-step-review.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "quadratic-authoring-pilot", title: "Create and revise one linked quadratic explanation",
         finish: "One saved quadratic exposes graph, derivative and tangent commands. Source edits update declared dependents; identity, relationships and separate occurrences survive reload. Review coefficient changes and tangent motion before the matrix caller tests reuse.",
         excludes: "The full animation portfolio, arbitrary CAS, new window infrastructure, exhaustive Vim parity, automatic visual promotion and publication. Existing row/filter review remains separate.",
-        source: { label: "M0 recommendation and finite finish", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+        source: { label: "Approved M0 and finite finish", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
       }
     },
     {
@@ -534,6 +534,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the repaired frame and asks what comes next. Close that bounded outcome and recommend M0: a persistent quadratic with discoverable graph, derivative and tangent operations, followed by a matrix reuse proof.",
       reason: "Return from workspace refinement to useful mathematical authoring. Prove one complete editable relationship before generalizing adapters or expanding the animation portfolio; no mathematical implementation starts with this recommendation.",
       source: { label: "Accepted frame and next-step review", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+    },
+    {
+      id: "approve-quadratic-exemplar", on: "2026-11-25",
+      before: "The frame is accepted and M0 quadratic authoring is the recommended successor.",
+      after: "The user approves implementing M0 in the existing notebook: persistent resource, applicable operations, linked equation/graph/derivative/tangent and reload. Keep the matrix caller behind G1 and the wider programme proposed.",
+      reason: "Prove the discoverable mathematical object through one complete authoring workflow while preserving the accepted workspace and domain owners.",
+      source: { label: "M0 approval and delivery boundary", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
     }
   ]
 };

@@ -3,10 +3,10 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-workspace-frame`
-Execution Contract: `run-contract.kp.workspace-frame-20261125`
+Current Commitment: `kp-quadratic-authoring`
+Execution Contract: `run-contract.kp.quadratic-authoring-20261125`
 Next Product Milestone: `quadratic-authoring-pilot`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -35,8 +35,8 @@ the pinned reference and per-editor support.
 Vim rows, intentional matching and C-h tag filters with query/context return.
 Review this exemplar before M-x adoption. New Vim behavior remains separate.
 **Accepted:** [workspace frame](reviews/2026-11-25-next-step-review.md), including
-quiet beige modeline and neutral pane edge. Next proposed: the
-[M0 quadratic loop](2026-11-25-mathematical-authoring-programme.md), then a matrix caller. Preserve
+quiet beige modeline and neutral pane edge. **Approved:**
+[M0 quadratic loop](2026-11-25-mathematical-authoring-programme.md); review before the matrix caller. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.

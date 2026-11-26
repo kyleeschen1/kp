@@ -57,6 +57,9 @@ class KpSemanticDerivedValueCacheState implements KpSemanticDerivedValueCache {
   #misses = 0;
   #disposed = false;
 
+  readonly #maxEntries: number;
+  constructor(maxEntries: number) { this.#maxEntries = maxEntries; }
+
   evaluate<const Result>(input: {
     readonly graph: KpSemanticDerivedGraph;
     readonly snapshot: KpAggregateSemanticSnapshot;
@@ -75,11 +78,20 @@ class KpSemanticDerivedValueCacheState implements KpSemanticDerivedValueCache {
         const key = requireFingerprintKey(keys, slotId);
         const cached = this.#values.get(key);
         if (cached === undefined) this.#misses += 1;
-        else this.#hits += 1;
+        else {
+          this.#hits += 1;
+          this.#values.delete(key); this.#values.set(key, cached);
+        }
         return cached;
       },
       write: (slotId: KpSemanticSlotId, value: KpPersistentSemanticValue) => {
         this.#values.set(requireFingerprintKey(keys, slotId), value);
+        // Interactive owners may bound retained revisions. Eviction changes
+        // reuse cost only; the graph remains the authority for recomputation.
+        while (this.#values.size > this.#maxEntries) {
+          const oldest = this.#values.keys().next();
+          if (!oldest.done) this.#values.delete(oldest.value);
+        }
       }
     });
     return evaluateKpSemanticDerivedValueWithMemo({ ...input, memo });
@@ -118,10 +130,13 @@ class KpSemanticDerivedValueCacheState implements KpSemanticDerivedValueCache {
   }
 }
 
-export function createKpSemanticDerivedValueCache():
+export function createKpSemanticDerivedValueCache(options: { readonly maxEntries?: number } = {}):
 KpSemanticDerivedValueCache {
+  const maxEntries = options.maxEntries ?? Infinity;
+  if (maxEntries !== Infinity && (!Number.isSafeInteger(maxEntries) || maxEntries < 1))
+    throw new Error('A derived cache capacity must be a positive safe integer.');
   // Freezing the capability surface does not freeze its caller-owned storage.
-  return Object.freeze(new KpSemanticDerivedValueCacheState());
+  return Object.freeze(new KpSemanticDerivedValueCacheState(maxEntries));
 }
 
 function indexFingerprintKeys(
