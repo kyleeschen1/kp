@@ -2,9 +2,9 @@
   "id": "task.kp.direct-webgl-graph-20261125",
   "kind": "task",
   "title": "Inspect a direct WebGL coordinate grid and saddle",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "rendering",
-  "summary": "HUMAN_CHECKPOINT: inspect the live grid and saddle; candidate checks pass and existing notebook/renderer remain intact.",
+  "summary": "User accepts the grid/saddle pilot; reported label backing corrected and checked. Shapes, cross-sections, planar return and renderer replacement remain discussion or proposed successors.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -92,6 +92,27 @@
       "scope": "focused",
       "checkedAt": "2026-11-26T05:52:07.058Z",
       "notes": "All 75 tests pass after review evidence and approved detour alignment."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph -- --grep \"grid and saddle paint\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T06:04:20.306Z",
+      "notes": "User-requested label backing removed at CSS owner. Existing light/dark/phone paint workflow passes; screenshots inspected. GPU and mathematical behavior unchanged."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T06:04:53.679Z",
+      "notes": "Acceptance update reached 451 words against the 450-word active-thread budget. Condensed handoff wording while retaining all source links; complete rerun required."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T06:06:00.788Z",
+      "notes": "All 75 checks pass after acceptance, finite successor proposal and thread budget correction. No successor implementation approved."
     }
   ],
   "revisitWhen": [

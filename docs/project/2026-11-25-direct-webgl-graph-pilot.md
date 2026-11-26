@@ -2,7 +2,7 @@
 
 Date: 2026-11-25
 Authority: user requests “let's try it with a 3d grid, and also with a the saddle surface.”
-Status: checked candidate awaiting visual review; no renderer replacement or promotion.
+Status: user accepted the pilot; label backing corrected. No renderer replacement or promotion.
 Review: [working exemplar, evidence and limits](reviews/2026-11-25-direct-webgl-graph.md).
 
 ## Outcome and reference

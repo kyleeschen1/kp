@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-direct-webgl-graph`
 Execution Contract: `run-contract.kp.direct-webgl-graph-20261125`
-Next Product Milestone: `direct-webgl-graph-pilot`
-Milestone Authority: approved
+Next Product Milestone: `graph-sections-planar-pilot`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -37,7 +37,7 @@ Review this exemplar before M-x adoption. New Vim behavior remains separate.
 **Accepted:** [workspace frame](reviews/2026-11-25-next-step-review.md), including
 quiet beige modeline and neutral pane edge. **Accepted:**
 [M0 quadratic loop](reviews/2026-11-25-quadratic-authoring.md).
-**Checked detour:** [direct WebGL grid/saddle](reviews/2026-11-25-direct-webgl-graph.md); review before promotion. Matrix reuse remains proposed. Preserve
+**Accepted detour:** [direct WebGL grid/saddle](reviews/2026-11-25-direct-webgl-graph.md). Sections/2D return proposed; renderer replacement undecided. Matrix reuse remains proposed. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.

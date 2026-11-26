@@ -2,8 +2,8 @@
   "id": "run-contract.kp.direct-webgl-graph-20261125",
   "kind": "run-contract",
   "title": "Direct WebGL grid and saddle",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: one checked exemplar package delivered; visual acceptance and any promotion remain separate.",
+  "status": "resolved",
+  "summary": "COMPLETE: accepted bounded grid/saddle exemplar and checked label correction. One package complete; no renderer promotion or successor implementation authorized.",
   "sourceRefs": [
     {
       "kind": "file",

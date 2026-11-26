@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved grid/saddle experiment", href: "docs/project/2026-11-25-direct-webgl-graph-pilot.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Judge the isolated direct WebGL grid and saddle for clarity, smoothness and visual consistency. This does not authorize replacing the shared 3D renderer. G1 remains accepted; matrix reuse is the proposed return path, with its scope still unapproved.",
+  nextJudgment: "The grid/saddle pilot is accepted and the label backing is removed. Discuss one linked saddle section, planar view and exact 3D return before selecting its scope. Shapes and shared renderer replacement remain unapproved; matrix reuse remains the proposed authoring return path.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -93,18 +93,23 @@ export const projectVision: ProjectVision = {
     {
       id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "An isolated grid/saddle now uses retained direct GPU geometry with existing mathematical, camera, clock and lease owners. Numeric, browser and loading checks pass; visual acceptance remains pending. The separate workbench proposal retains its original horizon; no renderer migration or live inference is implied.",
+      established: "The user accepts the isolated direct GPU grid/saddle; its label backing is corrected. Existing mathematical, camera, clock and lease owners remain intact. Numeric, browser and loading evidence is bounded to the pilot; neither broad device performance nor a renderer migration is established.",
       evidence: { label: "Grid/saddle review and measured limits", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" },
       outcome: {
-        authority: "approved",
-        id: "direct-webgl-graph-pilot", title: "Compare a direct GPU grid and saddle",
-        finish: "Inspect an isolated grid/saddle with smooth shading, camera interaction, retained buffers and explicit comparison against the existing Three adapter. Measure complete loading and runtime cost and stop for human review.",
-        excludes: "Shared renderer replacement, broad surfaces, publication and matrix authoring. The independent workbench horizon remains recorded in its original proposal.",
-        source: { label: "Approved experiment and preservation boundary", href: "docs/project/2026-11-25-direct-webgl-graph-pilot.md" }
+        authority: "proposed",
+        id: "graph-sections-planar-pilot", title: "Inspect one cross-section in 3D and 2D",
+        finish: "One saddle section retains its equation and identity as it is inspected head-on in 2D and returned to its saved 3D camera. Keep source, projection and display deformation distinct; select bounded scope before implementation.",
+        excludes: "Implicit implementation approval, shared renderer replacement, general solid clipping/capping, broad shape families and matrix authoring. Preserve the accepted grid/saddle and existing Three path.",
+        source: { label: "Accepted pilot and exploratory successor", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" }
       }
     }
   ],
   completed: [
+    {
+      title: "Direct GPU grid and saddle accepted",
+      scope: "The user accepts one isolated coordinate grid and shaded saddle with retained geometry, reversible curvature and explicit Three comparison. Label backing is removed. Shapes, sections, exact planar endpoints and shared renderer promotion remain separate.",
+      source: { label: "Pilot acceptance and measured limits", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" }
+    },
     {
       title: "Linked quadratic authoring accepted",
       scope: "G1 accepts one persistent quadratic with discoverable graph, derivative and tangent operations, reversible tangent motion, local views and reload. This closes M0; matrix reuse, cross-notebook imports, broad mathematical support and LLM-driven editing remain separate work.",
@@ -567,6 +572,13 @@ export const projectVision: ProjectVision = {
       after: "The user requests a direct WebGL coordinate grid and saddle experiment before returning to the mathematical programme. One isolated host tests appearance and cost against the current renderer; promotion requires visual review.",
       reason: "A bounded rendering experiment can test smooth lighting and retained GPU computation without changing semantic owners or presuming a full renderer replacement is worthwhile.",
       source: { label: "User-authorized grid and saddle pilot", href: "docs/project/2026-11-25-direct-webgl-graph-pilot.md" }
+    },
+    {
+      id: "accept-direct-grid-saddle", on: "2026-11-25",
+      before: "The isolated grid/saddle is checked and awaiting visual judgment; matrix reuse remains proposed.",
+      after: "The user accepts the appearance with a label-background correction and asks about metrics, shapes, sections and 2D return. Close the bounded pilot and propose a linked section/planar-view proof without starting it or retiring Three.",
+      reason: "The first visual result is accepted. Different geometry and reversible planar inspection would test whether a bounded direct renderer serves the mathematical programme before accumulating a general rendering engine.",
+      source: { label: "Acceptance, label correction and discussion", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" }
     }
   ]
 };

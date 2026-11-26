@@ -1,8 +1,45 @@
-# Direct WebGL grid and saddle: review candidate
+# Direct WebGL grid and saddle: accepted pilot
 
 Date: 2026-11-25
-Outcome: HUMAN_CHECKPOINT — one checked experiment, visual acceptance pending.
+Outcome: COMPLETE — user accepts the pilot; label backing corrected. Shared renderer promotion remains separate.
 Authority and preservation boundary: [approved pilot](../2026-11-25-direct-webgl-graph-pilot.md).
+
+## Acceptance and follow-up discussion
+
+The user says “it looks great!” and identifies the labels' visible background.
+Remove the paper-colored background, circular corners and padding from the existing
+axis-label CSS owner; keep glyph colors, projection and mathematical state intact.
+The existing scoped browser paint/theme/phone workflow passes after this correction.
+This is a local presentation preference, checked with the existing visual captures;
+it does not introduce a reusable attention motif or require renewed pilot approval.
+
+The user asks about metrics, losing Three.js, shapes, sections and 3D/2D return.
+The measurements below support this small scene. The brief headless software-rendered
+sample does not measure GPU completion, mobile hardware or general superiority.
+Original production byte counts were recorded at `e0dad595f`; the label-only CSS
+correction changes stylesheet bytes, not mathematical or JavaScript behavior.
+
+Keep renderer replacement undecided. Retained geometry and custom shading are also
+possible through [Three BufferGeometry](https://threejs.org/docs/pages/BufferGeometry.html)
+and [ShaderMaterial](https://threejs.org/docs/pages/ShaderMaterial.html). Three supplies
+object transforms, picking, materials and clipping support; a custom renderer owns
+those costs when they become necessary. Transparency and application resource
+disposal still require deliberate handling with Three.
+
+Proposed successor, not implementation approval: one saddle cross-section becomes
+a linked 2D curve and returns to its saved 3D view. At y=c the curve is
+z=(x²−c²)/d; at z=c the contour satisfies x²−y²=dc. Keep projection, cross-section
+and display flattening distinct. The existing `createGraph3DTo2DTransitionDescriptor`
+and camera-up handling are foundations; the direct pilot currently clamps elevation
+to ±75° and does not expose an exact planar endpoint. Do not silently reduce source
+dimension when rotating a view.
+
+Basic shape meshes are feasible through the same position/index/normal pipeline;
+they are not yet implemented in this pilot. A sphere or cone would later pressure
+different topology. Clipping paint, constructing an intersection curve, and capping
+a sliced solid are separate capabilities. Preserve mathematical identities and
+geometry outside either renderer; avoid promising duplicate feature parity.
+Matrix authoring remains the proposed return path after this exploration.
 
 ## Inspect
 
@@ -89,9 +126,9 @@ and line treatment are choices that can also be implemented through Three.
   unrelated metadata gaps; use the explicitly selected pilot context below.
 
 Screenshots and cost/runtime reports are disposable outputs of these stable commands,
-not approved visual goldens. Human review is required before promoting the treatment.
+not approved visual goldens. Pilot acceptance does not promote a shared renderer.
 
 Execution owner: `run-contract.kp.direct-webgl-graph-20261125`, one delivery package.
 Resume context with `theseus work start task.kp.direct-webgl-graph-20261125 --mode brief`
-after feedback. Acceptance of this pilot does not select a renderer migration or
+for bounded follow-up context. Acceptance of this pilot does not select a renderer migration or
 authorize matrix authoring; either successor needs a bounded scope decision.
