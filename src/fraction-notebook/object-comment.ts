@@ -10,19 +10,18 @@ export function createFractionObjectComment(beats: readonly HTMLElement[]) {
   const stateId = 'equation.fractional-linear.after-subtract';
   if (!beat || beat.dataset['kpOperationStart'] !== '167')
     throw new AnchoredAlgebraGap('beat.cancel-additive', 'Require the checked additive-cancellation source.');
+  const passage = beat.querySelector<HTMLElement>('.kp-rising-passage');
+  if (!passage) throw new AnchoredAlgebraGap(beat.id, 'Keep a real scroll passage for this explanation.');
+  passage.dataset['kpObjectCommentSource'] = 'true';
   const project: DocumentAnnotationProjector = input => {
     if (input.readingDocument || input.hasSelection) return undefined;
     const arrival = input.positions[index]!;
     const priorEnd = input.positions[index - 1]! + input.holds[index - 1]!;
     const approach = Math.min(180, arrival - priorEnd - 16);
     const offset = input.position - arrival;
-    const releaseEnd = input.positions[index + 1]! - arrival - 24;
-    const released = offset >= 100 && offset < releaseEnd;
-    const pose = released ? { emergence: 1, withdrawal: 1, released: true }
-      : objectCommentArrival(offset, approach, input.motionMode === 'essential');
+    const pose = objectCommentArrival(offset, approach, input.motionMode === 'essential');
     if (!pose) return undefined;
-    const presence = released ? Math.min(1, (releaseEnd - offset) / 32) : 1;
-    return { kind: 'annotation', stateId, presence, objectComment: pose };
+    return { kind: 'annotation', stateId, presence: 1, objectComment: pose };
   };
   const resolve = (id: string): CommentaryStop | undefined => {
     if (id !== stateId) return undefined;
@@ -31,5 +30,5 @@ export function createFractionObjectComment(beats: readonly HTMLElement[]) {
     return { stateId, notes: [{ id: 'comment.cancel-additive', text, detail: '', side: 'above',
       views: { [stateId]: [`${stateId}.lhs.plus3`, `${stateId}.lhs.minus3`] } }] };
   };
-  return { project, resolve, passageIds: ['beat.cancel-additive'] };
+  return { project, resolve, dispose: () => { delete passage.dataset['kpObjectCommentSource']; } };
 }

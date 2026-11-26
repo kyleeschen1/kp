@@ -29,6 +29,11 @@ body[data-kp-fraction-notebook-preview] .anchored-labels[data-object-comment=tru
   background: var(--kp-comment-cue); box-shadow: 0 1px 7px 2px var(--kp-comment-cue);
   pointer-events: none;
 }
+/* The tooltip borrows this passage's text only during its native-state hold.
+   Outside that window the original paragraph travels with the document. */
+body[data-kp-fraction-notebook-preview][data-kp-caption-mode=captions] .kp-rising-passage[data-kp-object-comment-source] {
+  position: relative; top: auto;
+}
 @media (forced-colors: active) {
   .kp-object-comment-cue { background: CanvasText; box-shadow: none; }
   body[data-kp-fraction-notebook-preview] .anchored-labels[data-object-comment=true] path { stroke: CanvasText; }

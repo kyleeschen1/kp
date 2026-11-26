@@ -3,7 +3,6 @@
 export interface ObjectCommentPose {
   readonly emergence: number;
   readonly withdrawal: number;
-  readonly released?: boolean;
 }
 const unit = (value: number) => Math.max(0, Math.min(1, value));
 export function objectCommentArrival(offset: number, approach: number, essential: boolean): ObjectCommentPose | undefined {

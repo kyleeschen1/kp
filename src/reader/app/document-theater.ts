@@ -8,7 +8,6 @@ import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
   readonly projectAnnotation?: DocumentAnnotationProjector | undefined;
-  readonly annotationPassageIds?: readonly string[] | undefined;
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
   readonly onLayout: () => void;
@@ -74,8 +73,6 @@ export function mountDocumentTheater(input: {
   let disposed = false;
   let equationHeight = 82;
   const annotationStates = input.beats.map(beat => beat.dataset['kpAnnotationState']);
-  const projectedPassages = new Set(input.beats.flatMap((beat, index) =>
-    input.annotationPassageIds?.includes(beat.dataset['kpBeat'] ?? '') ? [index] : []));
   let attentionAt = compileDocumentReadingAttention({ states: [], positions: [], holds: [] });
   let annotation: Extract<DocumentReadingAttention, { kind: 'annotation' }> | undefined;
   let motionMode: 'full' | 'essential' = 'full';
@@ -108,7 +105,7 @@ export function mountDocumentTheater(input: {
       const front = selectedPassages.has(index) || focus > 0;
       const prose = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
         ? documentPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
-      const alpha = attention.kind === 'annotation' || ((annotationStates[index] || projectedPassages.has(index)) && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
+      const alpha = attention.kind === 'annotation' || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
       const paint = String(alpha);
       const present = String(front);
       const layer = front ? 'front' : 'back';

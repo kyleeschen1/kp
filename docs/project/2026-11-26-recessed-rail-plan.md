@@ -156,3 +156,14 @@ and optional annotation presentation are the reversible candidate, not a shared
 authoring protocol. Stop at this exemplar's visual review before extending to
 other comments or object families. The earlier full-block ridge proposal is
 not bundled into this choreography trial.
+
+## Approved nearby-tooltip and scroll-return revision
+
+The user prefers a tooltip as close to its subject as practical, with its text
+also present in the scroll so the explanation can be revisited. Replace the long
+ascent with a small reveal beside the checked source terms. During that native
+hold the tooltip presents the original passage's text; afterward it withdraws
+and the original paragraph moves with the document. Preserve its ID, text,
+geometry reservation and accessibility. Reverse scroll, outline navigation and
+a passage bookmark must restore the same source state and tooltip. Keep this
+limited to additive cancellation; do not extend to every note before review.

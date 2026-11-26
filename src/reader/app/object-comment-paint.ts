@@ -20,14 +20,18 @@ export function prepareObjectCommentPaint(input: {
   bracket.setAttribute('pathLength', '1'); bracket.style.strokeDasharray = '1';
   return (pose: ObjectCommentPose) => {
     const arrival = ease(pose.emergence), departure = ease(pose.withdrawal);
-    const scale = .68 + .32 * arrival;
-    const dx = (center - x - width / 2) * (1 - arrival);
-    const dy = (edge - 8 - y - height) * (1 - arrival);
+    // The explanation stays beside its subject rather than travelling to a
+    // remote reading shelf. Its text wraps at the final width throughout.
+    const scale = .98 + .02 * arrival;
+    const dx = 0;
+    const dy = 4 * (1 - arrival);
     label.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
-    label.style.opacity = String(ease((pose.emergence - .12) / .5));
+    label.style.opacity = String(ease((pose.emergence - .12) / .5) * (1 - departure));
     bracket.style.strokeDashoffset = String(1 - ease(pose.emergence * 4));
     bracket.style.opacity = String(1 - departure);
-    const targetX = x + width / 2 + dx, targetY = y + height + dy + 5;
+    // A tooltip clamped at the viewport edge can be off-center from its subject.
+    // Connect to the closest point on the text edge, not a long diagonal.
+    const targetX = Math.max(x + 8, Math.min(x + width - 8, center)), targetY = y + height + dy + 5;
     stem.setAttribute('d', `M ${center} ${edge} L ${targetX} ${edge + (targetY - edge) * (1 - departure)}`);
     stem.style.opacity = String(arrival * (1 - departure));
     cue.style.opacity = String(.24 * (1 - ease(pose.emergence / .6)));

@@ -100,6 +100,12 @@
       "title": "One comment emerges from its cancellation subjects",
       "summary": "HUMAN_CHECKPOINT: one comment emerges from additive-inverse subjects, settles, then remains through cancellation. Focused checks pass; review docs/project/reviews/2026-11-26-fraction-object-comment.md.",
       "status": "complete"
+    },
+    {
+      "id": "close-tooltip-return",
+      "title": "Nearby tooltip and a returning scroll passage",
+      "summary": "HUMAN_CHECKPOINT: nearby tooltip, real scrolling paragraph and exact return by scroll, outline or bookmark. Focused checks pass; review fraction-object-comment.md.",
+      "status": "complete"
     }
   ]
 }

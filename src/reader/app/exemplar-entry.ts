@@ -281,7 +281,7 @@ const objectComment = import.meta.env.DEV && document.body.dataset['kpFractionNo
 const risingPassages = document.body.dataset["kpReaderLayout"] === "rising-passages"
   ? (await import("./document-theater.ts"))
       .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample,
-        projectAnnotation: objectComment?.project, annotationPassageIds: objectComment?.passageIds })
+        projectAnnotation: objectComment?.project })
   : undefined;
 const endpointCommentary = document.body.dataset["kpReaderEndpointCommentary"];
 const readerAnnotations = endpointCommentary !== undefined
@@ -1812,6 +1812,7 @@ function dispose(): void {
   window.removeEventListener("resize", onResize);
   risingPassages?.dispose();
   readerAnnotations?.dispose();
+  objectComment?.dispose();
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   printMedia.removeEventListener("change", onPrintChange);

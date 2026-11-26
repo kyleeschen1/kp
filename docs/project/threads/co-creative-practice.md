@@ -28,9 +28,9 @@ The notebook detour is current.
   The recessed-rail and frame/depth experiments are retired. Original math and
   scroll behavior remain; only the bracket frame becomes a thin left ridge.
 - **Object-origin commentary:** [one fraction passage](../reviews/2026-11-26-fraction-object-comment.md)
-  tests prose rising from a line gathering the additive-inverse pair, with a
-  quiet arrival cue and stable reading hold. Await visual review before reuse;
-  the underlying ridge layout and other passages remain unchanged.
+  now tests a nearby tooltip and its original scrolling paragraph. Reverse
+  scroll, outline navigation and a passage bookmark restore the explanation.
+  Await visual review before reuse; the ridge and other passages are unchanged.
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
   and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is

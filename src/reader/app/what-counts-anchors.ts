@@ -24,24 +24,6 @@ export function mountAnchoredLabels(stage: HTMLElement) {
       // Update even when anchors are unchanged. The reader's semantic playhead
       // is the only clock; CSS transitions would lag reversal and direct seeks.
       overlay.style.opacity = String(presence);
-      // Once the connector has retracted, this is settled prose, not a claim
-      // about a moving native anchor. Direct seeks need no cached source ink.
-      if (motion?.released) {
-        const key = `${stop.stateId}:released`;
-        if (!invalidate && renderedKey === key) return;
-        clear();
-        overlay.innerHTML = stop.notes.map(note => renderKpFocusDeckAnnotation({ entityId: note.id, role: 'support', text: note.text, detail: note.detail })).join('');
-        overlay.hidden = false; overlay.dataset['objectComment'] = 'true'; overlay.dataset['commentReleased'] = 'true';
-        overlay.dataset['commentEmergence'] = '1'; overlay.dataset['commentWithdrawal'] = '1';
-        for (const label of overlay.querySelectorAll<HTMLElement>('[data-kp-focus-deck-annotation]')) {
-          const style = getComputedStyle(label), width = parseFloat(style.width), height = parseFloat(style.height);
-          if (!(width > 0 && height > 0) || width > stage.offsetWidth - 32 + 1 / 1024 || height > stage.offsetHeight / 2 - 32)
-            throw new AnchoredAlgebraGap(stop.stateId, 'Reserve room for settled commentary above the equation.');
-          label.style.left = `${(stage.offsetWidth - width) / 2}px`; label.style.top = '16px';
-        }
-        overlay.style.visibility = ''; renderedKey = key; return;
-      }
-      delete overlay.dataset['commentReleased'];
       const owner = stage.querySelector<HTMLElement>("[data-kp-reader-native-endpoint]");
       const side = owner?.dataset["kpReaderNativeEndpoint"];
       if (!owner || (side !== "source" && side !== "target") || owner.dataset["kpReaderNativeEndpointPassed"] !== "true")
@@ -84,11 +66,8 @@ export function mountAnchoredLabels(stage: HTMLElement) {
           const size = { width: parseFloat(style.width), height: parseFloat(style.height) }, center = (left + right) / 2;
           if (!(size.width > 0 && size.height > 0) || !Number.isFinite(size.width + size.height))
             throw new AnchoredAlgebraGap(note.id, 'Require measurable annotation text.');
-          const x = motion ? (width - size.width) / 2 : Math.max(16, Math.min(width - size.width - 16, center - size.width / 2));
-          // Spend only the actual free space above a complete label. Phones
-          // keep readable text; they do not shrink prose to buy more motion.
-          const gap = motion ? top - size.height - 16 : 32;
-          if (gap < 32 - 1 / 1024) throw new AnchoredAlgebraGap(note.id, 'Reserve room for the comment before connecting it to its subject.');
+          const x = Math.max(16, Math.min(width - size.width - 16, center - size.width / 2));
+          const gap = motion ? 16 : 32;
           const y = note.side === "above" ? top - gap - size.height : bottom + 32;
           // Client-rect projection/inversion can put an exact-fit width a few
           // millionths of a pixel over its bound. Keep sub-layout-unit slack,
