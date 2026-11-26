@@ -92,3 +92,14 @@ Switch stacking order while frame edges are separated, keep prose foremost
 through the overlap, then return prominence to the stage. Reversal must sample
 the same result. Subsequent passages keep their previous treatment until this
 exchange receives human review. No renderer or semantic changes are authorized.
+
+## Approved continuous-frame clarification
+
+The user clarified that both frames should span the entire stage section: one
+continuous prose surface and one continuous stage surface. This supersedes the
+first-passage cards. Keep the equation sticky inside the full-length stage
+container; exchange the two shared frames' foreground priority at every passage
+crossing. Remove local paragraph frames and the separate rail. Retain the opt-in
+`frames=1` switch, stationary native ink, translucent backgrounds, modest
+background-only lift, deterministic reversal and the single-exemplar review
+boundary. This does not authorize adoption beyond the fraction notebook.

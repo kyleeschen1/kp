@@ -70,6 +70,12 @@
       "title": "One passage exchanges frame prominence with the stationary stage",
       "summary": "First-crossing trial checked. HUMAN_CHECKPOINT: judge the frame handoff before extending to other passages.",
       "status": "complete"
+    },
+    {
+      "id": "continuous-frames",
+      "title": "Two full-section frames exchange foreground prominence",
+      "summary": "HUMAN_CHECKPOINT: two continuous frames implemented. Typecheck, 23 focused tests and eight Chromium/Firefox desktop/phone browser checks pass. Annotation reserve repaired; see docs/project/reviews/2026-11-26-frame-exchange.md for review URL and evidence.",
+      "status": "complete"
     }
   ]
 }

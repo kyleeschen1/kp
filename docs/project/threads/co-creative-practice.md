@@ -25,8 +25,8 @@ The notebook detour is current.
   and [viewport-independent cadence](../reviews/2026-11-26-viewport-independent-scroll.md).
 - **Recessed text rail:** [opt-in fraction exemplar](../reviews/2026-11-26-recessed-rail.md),
   checked on desktop/phone widths; depth and rhythm await visual review before reuse.
-  Latest alternative: [two-frame first crossing](../reviews/2026-11-26-frame-exchange.md),
-  separately opt-in and awaiting judgment before extending to other passages.
+  Latest alternative: [two continuous section-long frames](../reviews/2026-11-26-frame-exchange.md),
+  separately opt-in and awaiting judgment before reuse beyond this exemplar.
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
   and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is

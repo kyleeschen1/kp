@@ -16,3 +16,11 @@ export function documentFrameExchange(stageTop: number, stageHeight: number, tex
     * smooth((textBottom + 48 - stageTop) / 24);
   return { prose, front: prose >= .5 ? 'prose' : 'stage' } as const;
 }
+
+/** The two frames are persistent; any passage crossing the stage gives the
+ * shared prose frame priority. Empty intervals return it to the stage. */
+export function documentFrameSequenceExchange(stageTop: number, stageHeight: number, passages: readonly { top: number; bottom: number }[]) {
+  const prose = passages.reduce((focus, passage) => Math.max(focus,
+    documentFrameExchange(stageTop, stageHeight, passage.top, passage.bottom).prose), 0);
+  return { prose, front: prose >= .5 ? 'prose' : 'stage' } as const;
+}

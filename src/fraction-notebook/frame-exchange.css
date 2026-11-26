@@ -1,30 +1,40 @@
-/* A bounded first-passage experiment. Background planes move; native text and
-   mathematical paint keep their exact geometry and opacity. */
+/* Two persistent full-section planes. Native ink keeps its geometry; only the
+   continuous backgrounds lift, and each owning layer changes stacking order. */
+.kp-caption-stage-layer { display: contents; }
 @media screen {
   body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
     --kp-frame-prose-focus: 0;
     --kp-frame-stage-focus: 1;
     --kp-frame-prose-layer: 2;
     --kp-frame-lift: 2px;
-    --kp-frame-stage-paper: color-mix(in srgb, var(--fn-background) 90%, transparent);
-    --kp-frame-prose-paper: color-mix(in srgb, var(--fn-background) 94%, transparent);
+    --kp-frame-stage-paper: color-mix(in srgb, var(--fn-background) 30%, transparent);
+    --kp-frame-prose-paper: color-mix(in srgb, var(--fn-background) 72%, transparent);
     --kp-frame-shadow: color-mix(in srgb, var(--fn-text) 16%, transparent);
+    --kp-frame-edge: color-mix(in srgb, var(--fn-text) 14%, transparent);
   }
   body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-lesson::before,
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-sequence::after { display: none; }
-  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats { z-index: auto; }
-  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage { z-index: 4; }
-  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats > li:first-child .kp-rising-passage { z-index: var(--kp-frame-prose-layer); }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-pin { z-index: 3; transform: none; }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-frame {
-    inset: 0 24px;
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-sequence::after,
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-frame,
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy::before { display: none; }
+  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats {
+    position: relative; z-index: var(--kp-frame-prose-layer); isolation: isolate;
+  }
+  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage { z-index: auto; }
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-stage-layer {
+    display: block; grid-area: 1 / 1; align-self: stretch;
+    position: relative; isolation: isolate; z-index: 3; pointer-events: none;
+  }
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-pin { z-index: auto; transform: none; }
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-stage-layer::before,
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats::before {
+    content: ''; position: absolute; inset: 0 12px 0 20px;
+    z-index: -1; pointer-events: none; border: 1px solid var(--kp-frame-edge);
     background: var(--kp-frame-stage-paper);
-    border-left: 1px solid var(--kp-rail-ink);
     transform: translateY(calc(-1 * var(--kp-frame-lift) * var(--kp-frame-stage-focus)));
     box-shadow: 0 3px 12px color-mix(in srgb, var(--kp-frame-shadow) calc(var(--kp-frame-stage-focus) * 100%), transparent);
   }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats > li:first-child .kp-caption-copy::before {
-    inset: -12px -16px; border-radius: 0;
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats::before {
+    inset: 0 20px 0 12px;
     background: var(--kp-frame-prose-paper);
     transform: translateY(calc(-1 * var(--kp-frame-lift) * var(--kp-frame-prose-focus)));
     box-shadow: 0 3px 12px color-mix(in srgb, var(--kp-frame-shadow) calc(var(--kp-frame-prose-focus) * 100%), transparent);
@@ -35,7 +45,8 @@
   }
   @media (forced-colors: active) {
     body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
-      --kp-frame-stage-paper: Canvas; --kp-frame-prose-paper: Canvas; --kp-frame-shadow: transparent; --kp-frame-lift: 0px;
+      --kp-frame-stage-paper: transparent; --kp-frame-prose-paper: transparent;
+      --kp-frame-edge: CanvasText; --kp-frame-shadow: transparent; --kp-frame-lift: 0px;
     }
   }
 }

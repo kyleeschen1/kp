@@ -4,7 +4,7 @@ import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
-import { documentFrameExchange, documentTheaterExitPresence } from './document-theater-depth.ts';
+import { documentFrameSequenceExchange, documentTheaterExitPresence } from './document-theater-depth.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -64,7 +64,7 @@ export function mountDocumentTheater(input: {
   let readingLine = 0;
   let positions: readonly number[] = [];
   let heights: readonly number[] = [];
-  let frameText = { top: 0, bottom: 0 };
+  let frameText: readonly { top: number; bottom: number }[] = [];
   let holds: readonly number[] = [];
   let frameTop = 0, frameBottom = 0;
   let focusAt = compileDocumentTheaterFocus({ positions: [], holds: [] });
@@ -98,7 +98,7 @@ export function mountDocumentTheater(input: {
     // annotation adapter still owns all authored labels on the stage.
     if (recessed && !readAll) {
       if (frameExchange) {
-        const exchange = documentFrameExchange(position, frameBottom, frameText.top, frameText.bottom);
+        const exchange = documentFrameSequenceExchange(position, frameBottom, frameText);
         document.body.style.setProperty('--kp-frame-prose-focus', String(exchange.prose));
         document.body.style.setProperty('--kp-frame-stage-focus', String(1 - exchange.prose));
         document.body.style.setProperty('--kp-frame-prose-layer', exchange.front === 'prose' ? '4' : '2');
@@ -143,10 +143,10 @@ export function mountDocumentTheater(input: {
       measureDocumentTheaterLayout(document, equationHeight,
         documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
-    if (frameExchange) {
-      const box = passages[0]!.querySelector<HTMLElement>('.kp-caption-copy')!.getBoundingClientRect();
-      frameText = { top: window.scrollY + box.top, bottom: window.scrollY + box.bottom };
-    }
+    if (frameExchange) frameText = passages.map(passage => {
+      const box = passage.querySelector<HTMLElement>('.kp-caption-copy')!.getBoundingClientRect();
+      return { top: window.scrollY + box.top, bottom: window.scrollY + box.bottom };
+    });
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };
   measure();

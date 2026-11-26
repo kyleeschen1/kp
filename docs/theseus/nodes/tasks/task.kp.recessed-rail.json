@@ -54,6 +54,13 @@
       "scope": "Frame-exchange trial and preceding rail candidate, desktop and phone widths",
       "checkedAt": "2026-11-26T17:09:53.398Z",
       "notes": "Eight Chromium/Firefox cases, typecheck and 22 focused tests pass. First crossing holds semantic progress zero, preserves opaque ink and reverses deterministically."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Continuous-frame candidate and preceding rail treatment at desktop and phone widths",
+      "checkedAt": "2026-11-26T17:24:56.020Z",
+      "notes": "Eight browser cases pass. Typecheck and 23 focused tests also pass. Full-length frame ownership, native ink, reverse, later passages, reduced motion and annotation reserve are checked. Human visual acceptance remains pending."
     }
   ],
   "revisitWhen": [

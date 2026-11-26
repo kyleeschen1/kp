@@ -9,6 +9,7 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
   await expect(frame.locator('body')).toHaveAttribute('data-kp-reader-hydrated', 'true');
   await expect(frame.locator('body')).toHaveAttribute('data-kp-recessed-rail', 'true');
   await frame.evaluate(() => document.fonts.ready);
+  await expect(frame.locator('[data-anchored-error]:visible')).toHaveCount(0);
   const surface = await frame.evaluate(() => {
     const sequence = document.querySelector<HTMLElement>('.kp-caption-sequence')!;
     const style = getComputedStyle(sequence), rail = getComputedStyle(sequence, '::after');
@@ -110,15 +111,18 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
     const passage = document.querySelectorAll<HTMLElement>('.kp-rising-passage')[3]!;
     const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
     const top = parseFloat(getComputedStyle(pin).top);
-    dispatchEvent(new WheelEvent('wheel')); scrollTo(0, scrollY + passage.getBoundingClientRect().top - top);
+    const copy = passage.querySelector('.kp-caption-copy')!;
+    // Align actual ink, not the reserved passage box: commentary can increase
+    // stage clearance without changing the paper's responsibility at contact.
+    dispatchEvent(new WheelEvent('wheel'));
+    scrollTo(0, scrollY + copy.getBoundingClientRect().top + copy.getBoundingClientRect().height / 2 - top - pin.offsetHeight / 2);
     await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
     const p = passage.getBoundingClientRect(), s = pin.querySelector<HTMLElement>('.kp-animation-static')!.getBoundingClientRect();
-    const copy = passage.querySelector('.kp-caption-copy')!;
     const text = copy.getBoundingClientRect(), backing = getComputedStyle(copy, '::before');
     return { overlap: s.top < text.bottom && s.bottom > text.top,
       backing: backing.backgroundColor, feather: backing.boxShadow,
       railX: p.left + 28.5, textTop: text.top,
-      railCovered: passage.contains(document.elementFromPoint(p.left + 28.5, p.top + p.height / 2)),
+      railCovered: passage.contains(document.elementFromPoint(p.left + 28.5, text.top + text.height / 2)),
       background: getComputedStyle(passage).backgroundColor };
   });
   expect(covered.overlap).toBe(true);
