@@ -53,7 +53,7 @@ export function mountFractionNotebookPreview(input: {
       el.append(node);
     }
   };
-  const prose = (cell: Exclude<Cell, { type: 'story' }>): HTMLElement => {
+  const prose = (cell: Exclude<Cell, { type: 'story' | 'mathObject' }>): HTMLElement => {
     const el = document.createElement(cell.type === 'articleHeader' ? 'header' : 'section');
     el.dataset['notebookCell'] = cell.id; el.id = cell.id;
     if (cell.type === 'articleHeader') {
@@ -131,7 +131,10 @@ export function mountFractionNotebookPreview(input: {
       const story = document.querySelector<HTMLElement>('.kp-animation-story');
       if (!intro || !after || !story) throw new Error('Preview host is unavailable.');
       const storyIndex = notebook.cells.findIndex(cell => cell.type === 'story');
-      const elements = notebook.cells.map(cell => cell.type === 'story' ? null : prose(cell));
+      const elements = notebook.cells.map(cell => {
+        if (cell.type === 'mathObject') throw new Error('Use the mathematical notebook preview for mathematical objects.');
+        return cell.type === 'story' ? null : prose(cell);
+      });
       const beforeNodes = elements.slice(0, storyIndex).filter((el): el is HTMLElement => el !== null);
       input.replaceAnnotations(notes);
       intro.replaceChildren(...beforeNodes); after.replaceChildren(...elements.slice(storyIndex + 1).filter((el): el is HTMLElement => el !== null));

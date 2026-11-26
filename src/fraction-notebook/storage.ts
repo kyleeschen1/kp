@@ -24,9 +24,9 @@ async function readExisting(name: string): Promise<unknown> {
     };
   });
 }
-export async function openFractionDraft(seed: FractionNotebook, name = 'kp-fraction-notebook-v3', legacyName = 'kp-fraction-notebook-v2') {
+export async function openFractionDraft(seed: FractionNotebook, name = 'kp-fraction-notebook-v3', legacyName: string | null = 'kp-fraction-notebook-v2') {
   const existing = await readExisting(name);
-  const source = existing ?? await readExisting(legacyName) ?? await readExisting('kp-fraction-notebook-v1');
+  const source = existing ?? (legacyName === null ? undefined : await readExisting(legacyName) ?? await readExisting('kp-fraction-notebook-v1'));
   const initial = source === undefined ? { draft: seed, lastValid: seed } : parse(source);
   const record = await openAtomicRecord(name, parse, initial);
   return {

@@ -1,5 +1,5 @@
 import { uuid, newId, NotebookGap, type UUID } from './model.ts';
-import { coefficientLimit, tangentLimit, type QuadraticCoefficients } from '../math/authoring/quadratic.ts';
+import { coefficientLimit, tangentLimit, type QuadraticCoefficients } from '../math/authoring/quadratic-contract.ts';
 
 export type CoefficientDraft = Readonly<Record<keyof QuadraticCoefficients, string>>;
 interface Resource { readonly id: UUID; readonly revision: number; readonly name: string }

@@ -7,6 +7,10 @@
     "sha256": "b7f86de99bdaaf4c1ed381b379a9cdc49192f6cd5adb13a680b6fb916df1a582",
     "projects": 3
   },
+  "playwright.notebook-mathematics.config.ts": {
+    "sha256": "f53b72c7e9524b39f2c57395d981c4ba65138befa7b53f181619ad2c296f48a8",
+    "projects": 3
+  },
   "playwright.reader-preparation.config.ts": {
     "sha256": "0acd8318f53aed64e5ec279c6d322065f93442f505b69d365c57b7ebbdb8cb6b",
     "projects": 3

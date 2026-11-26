@@ -2,9 +2,9 @@
   "id": "task.kp.quadratic-authoring-20261125",
   "kind": "task",
   "title": "Author one persistent quadratic with linked symbolic and graphical views",
-  "status": "active",
+  "status": "deferred",
   "domain": "authoring",
-  "summary": "User approved M0 quadratic workflow; preserve frame, fraction drafts, chat, command ownership and native math.",
+  "summary": "Implementation and checks complete; HUMAN_CHECKPOINT at G1 for quadratic controls and relationship clarity. No matrix or shared promotion authority.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -50,6 +50,93 @@
       "scope": "focused",
       "checkedAt": "2026-11-26T03:39:09.109Z",
       "notes": "All 75 pass after shortening the active thread within its unchanged budget; M0 approval and selected contract agree."
+    },
+    {
+      "command": "npm run visual:notebook-mathematics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:06:08.116Z",
+      "notes": "Seven Chromium cases pass: linked identities and reload, local graph zoom, invalid draft recovery, independent copy, tangent drag undo/cancel/reverse, stale commands and measured latency. Focus regression repaired by moving mutable resources out of document-root attributes. Native reader bundle unchanged; production and type comparison recorded separately."
+    },
+    {
+      "command": "npm run test:notebook-mathematics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:21:12.047Z",
+      "notes": "Final eight tests pass, including analytic oracles, bounded evaluation, contact and slope truth, native undo, UUID round trips and removal of stale serialized resources."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:21:14.735Z",
+      "notes": "Final complete 28-test preservation suite passes after the integration and serialization closeout."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:21:16.185Z",
+      "notes": "Initial 23 passed and two failed: obsolete dark border expectation in accepted light UI, and reader response timing measured before iframe hydration. Baseline CSS was unchanged; isolated reruns passed. Repaired test ownership and readiness without widening runtime response budget."
+    },
+    {
+      "command": "npm run visual:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:21:17.336Z",
+      "notes": "Final complete 25-case Chromium suite passes after the diagnosed test-only repairs. Native fraction reading build and workspace behavior preserved."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:34:12.401Z",
+      "notes": "Initial run passed 36 existing cases; the added switch test invoked a notebook-scoped command from the active Chat pane. Corrected the test to select the KP pane, preserving command ownership."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:34:13.347Z",
+      "notes": "Final complete Chromium run passes all 37 cases, including mathematical and fraction notebook switches with retained unsent chat drafts and fixed split layout. Fake local chat service only; no live model calls."
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:34:14.014Z",
+      "notes": "New scoped visual entry lacked a baseline policy hash. Inspected its exact single spec, inherited browser definitions, timeout, output directory and absent server launcher. Added only that configuration hash; existing policies unchanged."
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:34:14.657Z",
+      "notes": "Final gate passes all 74 configurations and 179 project definitions after the explicit new-entry registration."
+    },
+    {
+      "command": "npm run visual:notebook-mathematics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:34:15.314Z",
+      "notes": "Final seven-case Chromium run passes after closeout changes; last-run state passed with no failures. Covers live related views, focus and SVG identity, persistence, clipboard copy, local view settings, stale commands, interrupted playback, dark startup and narrow layout. Earlier measured p95 edit-to-next-frame 17.5 ms and playback 17.4 ms on Apple M2; not cross-browser certification."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:34:15.948Z",
+      "notes": "All 75 final checks pass after recording the checked M0 candidate and next G1 judgment in roadmap, active thread and source-linked vision. No visual acceptance or matrix scope claimed."
+    },
+    {
+      "command": "npm run measure:notebook-mathematics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T04:35:00.006Z",
+      "notes": "Final independent production builds and both complete scoped typechecks pass against accepted 1c1e8791. Notebook initial gzip 466189 to 470920 bytes; complete JS/CSS 519265 to 549119. Native reader unchanged. Mathematical reader excludes 3D/catalogue/MathJS. Types 122443 to 156061; instantiations 131357 to 174302 including expanded consumers. Full qualifications and figures in review."
     }
+  ],
+  "revisitWhen": [
+    "User reviews the canonical quadratic notebook and provides G1 visual and interaction judgment."
   ]
 }

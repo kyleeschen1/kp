@@ -1,8 +1,7 @@
 import { add, constant, multiply, power, variable, differentiate, compileExpression, type MathExpression } from '../expression.ts';
 
-export interface QuadraticCoefficients { readonly a: number; readonly b: number; readonly c: number }
-export const coefficientLimit = 10;
-export const tangentLimit = 4;
+import { coefficientLimit, tangentLimit, type QuadraticCoefficients } from './quadratic-contract.ts';
+export { coefficientLimit, tangentLimit, type QuadraticCoefficients } from './quadratic-contract.ts';
 
 /** This pilot admits real polynomials of degree at most two, including the
  * linear and constant boundaries. The expression owner performs all algebra. */

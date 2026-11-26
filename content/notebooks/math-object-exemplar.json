@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 3,
+  "id": "90000000-0000-4000-8000-000000000001",
+  "revision": 0,
+  "mathematics": {
+    "schemaVersion": 1,
+    "resources": [{ "id": "90000000-0000-4000-8000-000000000002", "revision": 0, "name": "f", "kind": "quadratic", "coefficients": { "a": 1, "b": 0, "c": 0 }, "draft": { "a": "1", "b": "0", "c": "0" } }]
+  },
+  "cells": [
+    {
+      "type": "articleHeader", "id": "90000000-0000-4000-8000-000000000010", "metadata": {},
+      "title": { "type": "title", "id": "90000000-0000-4000-8000-000000000011", "metadata": {}, "content": [{ "type": "text", "text": "One function, several views", "marks": [], "annotations": [] }] },
+      "authors": [{ "type": "authorCredit", "id": "90000000-0000-4000-8000-000000000012", "metadata": {}, "name": "Kinetic Press", "role": "author" }]
+    },
+    {
+      "type": "block", "id": "90000000-0000-4000-8000-000000000013", "metadata": {}, "kind": "paragraph", "title": null,
+      "content": [{ "type": "text", "text": "What changes when we shift a curve upward? Change c below, then create its derivative and a tangent. The equation and graph share one function; each new relationship stays connected to it.", "marks": [], "annotations": [] }],
+      "children": [], "layout": "flow", "folded": false
+    },
+    { "type": "mathObject", "id": "90000000-0000-4000-8000-000000000020", "metadata": {}, "resource": "90000000-0000-4000-8000-000000000002", "view": "equation", "viewport": { "x": [-4, 4], "y": [-5, 10] }, "folded": false },
+    { "type": "mathObject", "id": "90000000-0000-4000-8000-000000000021", "metadata": {}, "resource": "90000000-0000-4000-8000-000000000002", "view": "graph", "viewport": { "x": [-4, 4], "y": [-5, 10] }, "folded": false },
+    {
+      "type": "block", "id": "90000000-0000-4000-8000-000000000014", "metadata": {}, "kind": "paragraph", "title": null,
+      "content": [{ "type": "text", "text": "Select an object and use M-x or C-x C-x to explore its commands. Try another graph with its own zoom, move the tangent point, or undo an edit. Your notebook is saved in this browser.", "marks": [], "annotations": [] }],
+      "children": [], "layout": "flow", "folded": false
+    }
+  ]
+}

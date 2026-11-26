@@ -1,6 +1,6 @@
 import { type Node as ProseNode } from 'prosemirror-model';
 import { EditorState, Plugin, TextSelection, NodeSelection, Selection, type Command, type SelectionBookmark } from 'prosemirror-state';
-import { EditorView, type NodeView } from 'prosemirror-view';
+import { EditorView, type NodeView, type DirectEditorProps } from 'prosemirror-view';
 import { baseKeymap, toggleMark } from 'prosemirror-commands';
 import { history, undo, redo } from 'prosemirror-history';
 import { keymap } from 'prosemirror-keymap';
@@ -62,7 +62,14 @@ export interface SourceWorkspace {
   close: () => void;
   run: () => void;
 }
-export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, onChange: (node: ProseNode) => void, onSelect: (id: string) => void, onMode: (mode: string) => void = () => {}, workspace?: SourceWorkspace, registry?: CommandRegistry, fold?: (id: string) => void) {
+export interface NotebookEditorExtension {
+  readonly plugins: readonly Plugin[];
+  readonly nodeViews: DirectEditorProps['nodeViews'];
+  readonly label: string;
+  readonly paste?: (view: EditorView, slice: import('prosemirror-model').Slice) => boolean;
+  readonly beforeRender?: (doc: ProseNode, previous: ProseNode) => void;
+}
+export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, onChange: (node: ProseNode) => void, onSelect: (id: string) => void, onMode: (mode: string) => void = () => {}, workspace?: SourceWorkspace, registry?: CommandRegistry, fold?: (id: string) => void, extension?: NotebookEditorExtension) {
   let source: SpecificationView | undefined, bookmark: SelectionBookmark | undefined, scrollTop = 0;
   const closeSource = () => { source?.close(); };
   const sourceWorkspace = workspace && { ...workspace,
@@ -74,20 +81,24 @@ export function mountFractionEditor(root: HTMLElement, doc: FractionNotebook, on
     void registry.invoke(id, { scope: 'notebook', element: view.dom }); return true;
   };
   const view = new EditorView(root, {
-    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), proseVim(), activeLine(), createInlinePlugin(), keymap({ 'Mod-z': registered('notebook.undo', undo), 'Mod-Shift-z': registered('notebook.redo', redo), 'Mod-y': registered('notebook.redo', redo),
+    state: EditorState.create({ doc: toProse(doc), plugins: [identities, history(), ...(extension?.plugins ?? []), proseVim(), activeLine(), createInlinePlugin(), keymap({ 'Mod-z': registered('notebook.undo', undo), 'Mod-Shift-z': registered('notebook.redo', redo), 'Mod-y': registered('notebook.redo', redo),
       'Mod-b': registered('notebook.bold', toggleMark(schema.marks['strong']!)), 'Mod-i': registered('notebook.italic', toggleMark(schema.marks['em']!)), Enter: enterField,
       Tab: registered('notebook.block.nest', nestBlock), 'Shift-Tab': registered('notebook.block.outdent', outdentBlock), 'Alt-ArrowUp': registered('notebook.block.move-up', moveBlock(-1)), 'Alt-ArrowDown': registered('notebook.block.move-down', moveBlock(1)),
       ArrowLeft: enterInline(-1), ArrowRight: enterInline(1), Backspace: enterInline(-1) }), keymap(baseKeymap)] }),
-    attributes: { 'aria-label': 'Fraction notebook', spellcheck: 'true' },
+    attributes: { 'aria-label': extension?.label ?? 'Fraction notebook', spellcheck: 'true' },
     nodeViews: { block: node => new BlockView(node, id => { if (fold) fold(id); else { toggleBlockFold(id)(view.state, view.dispatch); view.focus(); } }), specification: (node, outer, getPos) => (source = new SpecificationView(node, outer, getPos, onMode, sourceWorkspace, registry)),
-      link: (node, outer, getPos) => new InlineSourceView(node, outer, getPos), math: (node, outer, getPos) => new InlineSourceView(node, outer, getPos) },
+      link: (node, outer, getPos) => new InlineSourceView(node, outer, getPos), math: (node, outer, getPos) => new InlineSourceView(node, outer, getPos), ...extension?.nodeViews },
     handlePaste(view, _event, slice) {
       if (vimKey.getState(view.state) !== 'insert') return true;
+      if (extension?.paste?.(view, slice)) return true;
       view.dispatch(view.state.tr.replaceSelection(preparePastedSlice(view.state.doc, slice)).setMeta('paste', true).setMeta('uiEvent', 'paste').scrollIntoView()); return true;
     },
     handleDOMEvents: { focus: view => { onMode(vimKey.getState(view.state) ?? 'normal'); return false; } },
     dispatchTransaction(transaction) {
-      const next = view.state.applyTransaction(transaction); view.updateState(next.state);
+      const next = view.state.applyTransaction(transaction);
+      // Resource projections must see the new document before its NodeViews
+      // render. The editor document still owns persistent state and history.
+      extension?.beforeRender?.(next.state.doc, view.state.doc); view.updateState(next.state);
       for (const tr of next.transactions) bookmark = bookmark?.map(tr.mapping);
       onMode(vimKey.getState(next.state) ?? 'normal');
       if (next.transactions.some(tr => tr.docChanged)) onChange(next.state.doc);

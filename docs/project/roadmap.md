@@ -35,8 +35,8 @@ the pinned reference and per-editor support.
 Vim rows, intentional matching and C-h tag filters with query/context return.
 Review this exemplar before M-x adoption. New Vim behavior remains separate.
 **Accepted:** [workspace frame](reviews/2026-11-25-next-step-review.md), including
-quiet beige modeline and neutral pane edge. **Approved:**
-[M0 quadratic loop](2026-11-25-mathematical-authoring-programme.md); review before the matrix caller. Preserve
+quiet beige modeline and neutral pane edge. **Checked:**
+[M0 quadratic loop](reviews/2026-11-25-quadratic-authoring.md), awaiting G1 before the matrix caller. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.

@@ -2,6 +2,7 @@ import { Schema, type Node as ProseNode } from 'prosemirror-model';
 import { readNotebook, type FractionNotebook, type Inline } from './model.ts';
 import { metadata } from './json.ts';
 import { uuid } from '../notebook/model.ts';
+import { defaultMathViewport, readMathViewport, readNotebookMathematics } from '../notebook/math-model.ts';
 
 const identity = { id: { default: null }, metadata: { default: {} } };
 const attrs = (n: ProseNode) => ({ 'data-cell-id': n.attrs['id'], 'data-kp-meta': JSON.stringify(n.attrs['metadata']) });
@@ -11,7 +12,21 @@ const parse = (el: HTMLElement) => {
 };
 export const schema = new Schema({
   nodes: {
-    doc: { content: 'articleHeader? (block | story)*' },
+    doc: { content: 'mathematics? articleHeader? (block | story | mathObject)*' },
+    // Root attribute changes recreate ProseMirror's entire document view. A
+    // nonselectable data node keeps resource edits in native undo history
+    // without replacing focused controls or persisting a second source of truth.
+    mathematics: { attrs: { value: {} }, atom: true, selectable: false,
+      toDOM: () => ['div', { hidden: '', 'data-mathematics-store': '', contenteditable: 'false' }] },
+    mathObject: { attrs: { ...identity, resource: {}, view: { default: 'equation' }, viewport: { default: defaultMathViewport }, folded: { default: false } }, atom: true, selectable: true, isolating: true,
+      toDOM: n => ['section', { ...attrs(n), class: 'fn-math-object', 'data-math-resource': n.attrs['resource'], 'data-math-view': n.attrs['view'],
+        'data-math-viewport': JSON.stringify(n.attrs['viewport']), 'data-folded': String(n.attrs['folded']) }],
+      parseDOM: [{ tag: 'section[data-math-resource]', getAttrs: el => {
+        try { const a = parse(el), view = el.dataset['mathView'];
+          return a && (view === 'equation' || view === 'graph') ? { ...a, resource: uuid(el.dataset['mathResource']), view,
+            viewport: readMathViewport(JSON.parse(el.dataset['mathViewport'] ?? '{}')), folded: el.dataset['folded'] === 'true' } : false;
+        } catch { return false; }
+      } }] },
     articleHeader: { attrs: identity, content: 'title authorCredit{1,8}', isolating: true, defining: true,
       toDOM: n => ['header', { ...attrs(n), class: 'fn-article-header' }, 0], parseDOM: [{ tag: 'header.fn-article-header', getAttrs: parse }] },
     title: { attrs: identity, content: 'inline*', defining: true,
@@ -72,8 +87,9 @@ export function toProse(doc: FractionNotebook): ProseNode {
       ...(cell.title ? [schema.node('blockTitle', { id: cell.title.id, metadata: cell.title.metadata }, inlineNodes(cell.title.content))] : []),
       schema.node('paragraph', null, inlineNodes(cell.content)), ...cell.children.map(block)
     ]);
-  return schema.node('doc', null, doc.cells.map(cell => {
+  return schema.node('doc', null, [...(doc.mathematics ? [schema.node('mathematics', { value: doc.mathematics })] : []), ...doc.cells.map(cell => {
     const attrs = { id: cell.id, metadata: cell.metadata };
+    if (cell.type === 'mathObject') return schema.node('mathObject', { ...attrs, resource: cell.resource, view: cell.view, viewport: cell.viewport, folded: cell.folded });
     if (cell.type === 'articleHeader') return schema.node('articleHeader', attrs, [
       schema.node('title', { id: cell.title.id, metadata: cell.title.metadata }, inlineNodes(cell.title.content)),
       ...cell.authors.map(a => schema.node('authorCredit', { id: a.id, metadata: a.metadata, role: a.role }, textNode(a.name)))
@@ -83,7 +99,11 @@ export function toProse(doc: FractionNotebook): ProseNode {
       schema.node('specification', null, textNode(cell.source))
     ]);
     return block(cell);
-  }));
+  })]);
+}
+export function mathematicsIn(doc: ProseNode) {
+  if (doc.firstChild?.type.name !== 'mathematics') throw new Error('The mathematical resource store is missing. Undo to restore it.');
+  return readNotebookMathematics(doc.firstChild.attrs['value']);
 }
 export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNotebook {
   const identified = (n: ProseNode) => ({ id: n.attrs['id'], metadata: n.attrs['metadata'] });
@@ -104,12 +124,15 @@ export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNote
       content: content(node.child(titled ? 1 : 0)), children };
   };
   doc.forEach(node => {
-    if (node.type.name === 'articleHeader') {
+    if (node.type.name === 'mathematics') return;
+    if (node.type.name === 'mathObject') cells.push({ ...identified(node), type: 'mathObject', resource: node.attrs['resource'], view: node.attrs['view'], viewport: node.attrs['viewport'], folded: node.attrs['folded'] });
+    else if (node.type.name === 'articleHeader') {
       const authors: unknown[] = []; node.forEach((a, _pos, index) => { if (index) authors.push({ ...identified(a), type: 'authorCredit', name: a.textContent, role: a.attrs['role'] }); });
       cells.push({ ...identified(node), type: 'articleHeader', title: { ...identified(node.child(0)), type: 'title', content: content(node.child(0)) }, authors });
     } else if (node.type.name === 'story') cells.push({ ...identified(node), type: 'story', source: node.child(1).textContent,
       caption: { ...identified(node.child(0)), type: 'caption', text: node.child(0).textContent } });
     else cells.push(block(node));
   });
-  return readNotebook({ ...basis, revision: basis.revision + 1, cells });
+  return readNotebook({ schemaVersion: 3, id: basis.id, revision: basis.revision + 1, cells,
+    ...(doc.firstChild?.type.name === 'mathematics' ? { mathematics: mathematicsIn(doc) } : {}) });
 }

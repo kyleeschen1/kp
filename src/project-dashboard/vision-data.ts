@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved M0 scope and preservation boundary", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At G1, inspect coefficient edits and tangent motion in the selected mathematical notebook, then reload and inspect shared occurrences. M0 is approved and in development; no working mathematical fixture is claimed yet. Matrix reuse and broader row/filter promotion retain their separate gates.",
+  nextJudgment: "G1 candidate: open /experiments/fraction-notebook/?notebook=quadratic. Change c, create a derivative and tangent, move the tangent point, then reload and inspect shared graphs with local zoom. Automated checks and measured costs support this bounded exemplar; visual acceptance, matrix reuse and broader row/filter promotion retain separate gates.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,8 +41,8 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook, persistent conversation, fruit-picker presentation and refined workspace frame are accepted. The equal split and joined chat/folding are checked. Pane/line focus, commands, Vim coverage and floating row/filter exemplar retain their distinct evidence and review boundaries. Native data and independent Spindle ownership remain foundations.",
-      evidence: { label: "Accepted frame and mathematical successor", href: "docs/project/reviews/2026-11-25-next-step-review.md" },
+      established: "The notebook, persistent conversation, fruit-picker presentation and workspace frame are accepted. One persistent quadratic now exposes linked equation, graph, derivative and tangent editing with reload, local views and measured costs; it awaits G1. Existing split, focus, command and row/filter work retains its distinct review boundaries.",
+      evidence: { label: "Quadratic authoring candidate and bounded evidence", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" },
       outcome: {
         authority: "approved",
         id: "quadratic-authoring-pilot", title: "Create and revise one linked quadratic explanation",
@@ -54,7 +54,7 @@ export const projectVision: ProjectVision = {
     {
       id: "representations", title: "Domain representations", horizon: "later",
       destination: "Refer precisely to domain objects and relationships across explanations, transformations and questions. Each domain retains its own meaning and validity rules.",
-      established: "Matrix selections retain entry identity and product provenance. Typed spaces, basis-aware maps, derivatives and versioned dependency caches provide foundations; a general notebook-to-operation-to-view workflow remains unproved. Mathematical and presentation coverage stay distinct.",
+      established: "Matrix selections retain entry identity and product provenance. Typed spaces, basis-aware maps, derivatives and versioned caches provide foundations. The quadratic notebook demonstrates one bounded operation-to-view workflow; cross-family reuse remains unproved. Mathematical support and visual acceptance stay distinct.",
       evidence: { label: "Matrix identity and scope", href: "docs/project/authoring/concise-domain-api.md" },
       outcome: {
         authority: "proposed",
@@ -541,6 +541,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves implementing M0 in the existing notebook: persistent resource, applicable operations, linked equation/graph/derivative/tangent and reload. Keep the matrix caller behind G1 and the wider programme proposed.",
       reason: "Prove the discoverable mathematical object through one complete authoring workflow while preserving the accepted workspace and domain owners.",
       source: { label: "M0 approval and delivery boundary", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
+    },
+    {
+      id: "quadratic-ready-for-g1", on: "2026-11-25",
+      before: "M0 is approved while mathematical resources are not yet integrated into the notebook.",
+      after: "A selected quadratic notebook now exposes persistent source/derived objects, native symbolic and 2D views, captured commands, tangent playback and local occurrences. Deliver the checked candidate for G1 without promoting the adapter or opening M1.",
+      reason: "The complete first workflow is now inspectable. Human judgment should select its interaction and visual direction before a matrix caller tests whether the boundary generalizes.",
+      source: { label: "G1 exemplar, verification and measured limits", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" }
     }
   ]
 };

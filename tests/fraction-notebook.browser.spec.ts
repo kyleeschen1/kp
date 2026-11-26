@@ -402,7 +402,8 @@ test('Edit opens in Normal mode; split, nest, titles and folding preserve the na
   await blockOption(page, 'Block type', 'note');
   await body.click(); await blockOption(page, 'Children display', 'outline');
   await expect(child).toHaveCSS('border-left-width', '1px');
-  await expect(child).toHaveCSS('border-left-color', 'rgb(88, 97, 90)');
+  // The accepted light workspace uses the neutral named border palette.
+  await expect(child).toHaveCSS('border-left-color', 'rgb(164, 170, 169)');
   await blockOption(page, 'Children display', 'bullets');
   await expect(first).toHaveAttribute('data-layout', 'bullets');
   const player = await preview(page).locator('.kp-reader-equation-stage').elementHandle();
@@ -547,7 +548,12 @@ test('focused source separates save from run, survives reload, and returns to it
   expect(await stage!.evaluate(el => el.isConnected)).toBe(true);
   await page.reload(); await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'pending');
   await replaceSpec(page, '{broken', false); await expect(page.locator('.cm-content')).toHaveText('{broken');
-  await replaceSpec(page, source); await expect(page.locator('.fn-status')).toContainText('preview up to date');
+  await replaceSpec(page, source);
+  // A recovered draft can be edited before the iframe finishes its first
+  // hydration. Use the same startup readiness budget as ready(), then require
+  // the queued revision to be acknowledged with the normal response budget.
+  await expect(preview(page).locator('body')).toHaveAttribute('data-kp-reader-hydrated', 'true', { timeout: 45000 });
+  await expect(page.locator('.fn-status')).toContainText('preview up to date');
   await page.screenshot({ caret: 'initial', path: info.outputPath('focused-run.png') });
   expect(errors).toEqual([]);
 });

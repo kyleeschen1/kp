@@ -1322,3 +1322,31 @@ test('live dev server keeps chat recovery files private', async ({ request }) =>
     expect((await request.get(path)).status(), path).toBe(403);
   }
 });
+
+test('mathematical notebook preserves the joined chat, draft and original fraction across notebook switches', async ({ page, context }, info) => {
+  const app = await fixture(context);
+  try {
+    await open(page); await connect(page); await write(page, 'Keep this unsent thought while I examine the derivative.');
+    await page.getByLabel('Fraction notebook', { exact: true }).focus();
+    await workspaceCommand(page, 'Open mathematical notebook');
+    await expect(page).toHaveURL(/notebook=quadratic/);
+    const equation = page.locator('[data-math-kind=quadratic][data-math-view=equation]');
+    await expect(equation).toBeVisible();
+    await expect(input(page)).toContainText('Keep this unsent thought');
+    await equation.getByRole('textbox', { name: 'c', exact: true }).fill('3');
+    await equation.getByRole('button', { name: 'Tangent', exact: true }).click();
+    const chatBox = await page.locator('.kp-chat').boundingBox(), pageBox = await page.locator('.kp-page-window').boundingBox();
+    expect(chatBox!.x + chatBox!.width).toBeLessThanOrEqual(pageBox!.x + 1);
+    await page.screenshot({ path: info.outputPath('quadratic-chat-split.png') });
+    await workspaceCommand(page, 'Open fraction notebook');
+    await expect(page).not.toHaveURL(/notebook=quadratic/);
+    await expect(page.locator('.fn-story')).toBeVisible();
+    await expect(input(page)).toContainText('Keep this unsent thought');
+    await expect(page.locator('.fn-status')).toContainText('preview up to date');
+    await page.getByLabel('Fraction notebook', { exact: true }).focus();
+    await workspaceCommand(page, 'Open mathematical notebook');
+    await expect(equation.getByRole('textbox', { name: 'c', exact: true })).toHaveValue('3');
+    await expect(page.locator('[data-math-kind=tangent]')).toHaveCount(1);
+    expect(app.peer.sends()).toEqual([]);
+  } finally { await app.close(); }
+});

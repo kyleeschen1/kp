@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
+import { EditorState } from 'prosemirror-state';
+import { history, undo, redo } from 'prosemirror-history';
+import { readNotebook } from '../src/fraction-notebook/model.ts';
+import { schema, toProse, fromProse, mathematicsIn } from '../src/fraction-notebook/schema.ts';
 import { compileExpression } from '../src/math/expression.ts';
 import { quadraticExpression, quadraticDerivative, tangentExpression } from '../src/math/authoring/quadratic.ts';
 import { uuid } from '../src/notebook/model.ts';
@@ -95,5 +100,36 @@ test('repeated parameter edits have bounded runtime retention and retain correct
     assert.equal(compileExpression(runtime.expression(d.id))({ x: 0 }), b);
     assert.ok(runtime.inspect()[0]!.cache.entries <= 3); assert.ok(runtime.inspect()[0]!.retainedEdits <= 128);
   }
+  runtime.dispose();
+});
+
+test('persistent resources round trip independently from occurrences and participate in native undo', () => {
+  const seed = readNotebook(JSON.parse(readFileSync(new URL('../content/notebooks/math-object-exemplar.json', import.meta.url), 'utf8')));
+  const doc = toProse(seed), mathematics = mathematicsIn(doc), f = mathematics.resources[0]!;
+  assert.equal(f.kind, 'quadratic'); if (f.kind !== 'quadratic') throw new Error('Expected fixture source');
+  assert.deepEqual(fromProse(doc, seed), { ...seed, revision: seed.revision + 1 });
+  assert.equal(fromProse(schema.node('doc'), seed).mathematics, undefined, 'serialization uses document data, not a stale basis store');
+  let state = EditorState.create({ doc, plugins: [history()] });
+  const updated = { ...mathematics, resources: [editCoefficient(f, 'c', '4')] };
+  state = state.apply(state.tr.setNodeAttribute(0, 'value', updated));
+  assert.equal(state.doc.child(3), doc.child(3), 'source occurrence remains the same node');
+  assert.equal(state.doc.child(4), doc.child(4), 'graph occurrence remains the same node');
+  assert.deepEqual(mathematicsIn(state.doc), updated);
+  assert.equal(undo(state, tr => { state = state.apply(tr); }), true);
+  assert.deepEqual(mathematicsIn(state.doc), mathematics);
+  assert.equal(redo(state, tr => { state = state.apply(tr); }), true);
+  assert.deepEqual(mathematicsIn(state.doc), updated);
+  const invalid = { ...seed, mathematics: { ...mathematics, resources: [] } };
+  assert.throws(() => readNotebook(invalid), /resource/);
+  assert.throws(() => readNotebook({ ...seed, mathematics: { ...mathematics, resources: [{ ...f, id: seed.cells[0]!.id }] } }), /UUID/);
+});
+
+test('tangent contact and slope come from the same domain-owned expressions as the views', () => {
+  const runtime = createNotebookMathRuntime(notebook);
+  const f = editCoefficient(editCoefficient(source(), 'a', '-2'), 'b', '3');
+  const t = deriveMathResource(f, 'tangent', id(4)); if (t.kind !== 'tangent') throw new Error('Expected tangent');
+  runtime.update({ schemaVersion: 1, resources: [f, editTangent(t, '-1.5')] });
+  assert.deepEqual(runtime.tangentSample(t.id), { x: -1.5, y: -9, slope: 9 });
+  assert.throws(() => runtime.tangentSample(f.id), /tangent/);
   runtime.dispose();
 });

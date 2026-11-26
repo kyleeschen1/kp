@@ -3,7 +3,7 @@ import { kpStateDerived, kpStateGroup, kpStateValue } from '../semantic-state/au
 import { defineKpSemanticStateTransform } from '../semantic-state/authoring-state-transform.ts';
 import { createKpSemanticDerivedValueCache } from '../semantic-state/derived-cache.ts';
 import { quadraticExpression, quadraticDerivative, tangentExpression, type QuadraticCoefficients } from '../math/authoring/quadratic.ts';
-import { type MathExpression } from '../math/expression.ts';
+import { compileExpression, type MathExpression } from '../math/expression.ts';
 import { readNotebookMathematics, type MathResource, type NotebookMathematics } from './math-model.ts';
 import { type UUID, NotebookGap } from './model.ts';
 
@@ -55,6 +55,13 @@ export function createNotebookMathRuntime(notebook: UUID) {
     active(); const value = document.resources.find(item => item.id === id);
     if (!value) throw new NotebookGap('missing-math-resource', id, 'Restore the referenced mathematical resource.'); return value;
   };
+  const resolve = (id: UUID) => {
+    const requested = resource(id), source = requested.kind === 'quadratic' ? requested : resource(requested.source);
+    if (source.kind !== 'quadratic') throw new NotebookGap('invalid-math-dependency', id, 'Expected a source quadratic.');
+    let kernel = kernels.get(source.id);
+    if (!kernel) { kernel = createQuadraticKernel(notebook, source.id); kernels.set(source.id, kernel); }
+    return { requested, source, kernel };
+  };
   return {
     update(value: NotebookMathematics) {
       active(); document = readNotebookMathematics(value);
@@ -63,11 +70,15 @@ export function createNotebookMathRuntime(notebook: UUID) {
     },
     resource,
     expression(id: UUID): MathExpression {
-      const requested = resource(id), source = requested.kind === 'quadratic' ? requested : resource(requested.source);
-      if (source.kind !== 'quadratic') throw new NotebookGap('invalid-math-dependency', id, 'Expected a source quadratic.');
-      let kernel = kernels.get(source.id);
-      if (!kernel) { kernel = createQuadraticKernel(notebook, source.id); kernels.set(source.id, kernel); }
+      const { requested, source, kernel } = resolve(id);
       return kernel.read(source.coefficients, requested.kind, requested.kind === 'tangent' ? requested.at : undefined);
+    },
+    tangentSample(id: UUID) {
+      const { requested, source, kernel } = resolve(id);
+      if (requested.kind !== 'tangent') throw new NotebookGap('not-a-tangent', id, 'A contact sample requires a tangent resource.');
+      const point = { x: requested.at };
+      return { x: point.x, y: compileExpression(kernel.read(source.coefficients, 'quadratic'))(point),
+        slope: compileExpression(kernel.read(source.coefficients, 'derivative'))(point) };
     },
     inspect: () => [...kernels].map(([id, kernel]) => ({ id, ...kernel.inspect() })),
     dispose() { if (disposed) return; disposed = true; for (const kernel of kernels.values()) kernel.dispose(); kernels.clear(); }

@@ -28,6 +28,9 @@ export interface CommandHandle extends CommandDescription {
 export interface TargetedCommand<T> extends CommandHandle {
   forTarget(value: T, origin?: CommandOrigin): PreparedCommand;
   bindTarget(button: HTMLButtonElement, value: T): void;
+  /** A mounted object's button resolves its current revision at invocation;
+   * picker snapshots continue to hold their originally captured revision. */
+  bindResolvedTarget(button: HTMLButtonElement, resolve: () => Target<T>): void;
 }
 type Registration = { description: CommandDescription; prepare(origin: CommandOrigin): PreparedCommand };
 
@@ -89,7 +92,7 @@ export class CommandRegistry {
     const registration: Registration = { description, prepare };
     this.entries.set(spec.id, registration);
     const buttonOrigin = (): CommandOrigin => ({ ...this.origin(), scope: spec.scope === 'workspace' ? this.origin().scope : spec.scope ?? this.origin().scope });
-    const bind = (button: HTMLButtonElement, selection?: Target<T>) => {
+    const bind = (button: HTMLButtonElement, selection?: Target<T> | (() => Target<T>)) => {
       button.dataset['commandId'] = spec.id;
       let mounted = button.isConnected;
       let unsubscribe = () => {};
@@ -97,12 +100,12 @@ export class CommandRegistry {
       const refresh = () => {
         if (mounted && !button.isConnected) { release(); return; }
         mounted ||= button.isConnected;
-        const value = prepare(buttonOrigin(), selection).state(); button.disabled = !value.enabled;
+        const value = prepare(buttonOrigin(), typeof selection === 'function' ? selection() : selection).state(); button.disabled = !value.enabled;
         button.title = value.enabled ? spec.description ?? spec.keys?.join(' · ') ?? '' : value.reason;
         if (value.enabled && value.checked !== undefined) button.setAttribute('aria-pressed', String(value.checked));
       };
       button.onmousedown = event => event.preventDefault();
-      button.onclick = () => { void prepare(buttonOrigin(), selection).execute(); };
+      button.onclick = () => { void prepare(buttonOrigin(), typeof selection === 'function' ? selection() : selection).execute(); };
       // Object rows need live availability too (e.g. a save has just finished).
       // Release rebuilt rows and abandoned mounts instead of retaining their DOM.
       unsubscribe = this.subscribe(refresh); cleanups.add(release);
@@ -114,6 +117,7 @@ export class CommandRegistry {
       invoke: (origin = this.origin()) => prepare(origin).execute(),
       forTarget: (value, origin = this.origin()) => prepare(origin, target(value)),
       bind: button => bind(button), bindTarget: (button, value) => bind(button, target(value)),
+      bindResolvedTarget: (button, resolve) => bind(button, resolve),
       dispose: () => { if (this.entries.get(spec.id) !== registration) return;
         this.entries.delete(spec.id); cleanups.forEach(cleanup => cleanup()); this.notify(); }
     };

@@ -42,18 +42,20 @@ const button = (text: string, action: () => unknown, id: string, scope: CommandS
     keys: commandKeys[id] ?? [],
     ...(state ? { state } : {}), run: action }).bind(node); return node;
 };
-const storageKey = 'kp.fraction-notebook.v3';
-let notebook = importFractionReading(canonical).notebook;
+const mathModule = new URLSearchParams(location.search).get('notebook') === 'quadratic' ? await import('./math-notebook.ts') : undefined;
+const storageKey = mathModule ? 'kp.mathematical-notebook.v1' : 'kp.fraction-notebook.v3';
+let notebook = mathModule?.seed ?? importFractionReading(canonical).notebook;
 let lastValid = notebook;
 let store: Awaited<ReturnType<typeof openFractionDraft>> | undefined;
 let storedError: string | undefined;
 try {
-  store = await openFractionDraft(notebook);
+  store = mathModule ? await openFractionDraft(notebook, 'kp-mathematical-notebook-v1', null) : await openFractionDraft(notebook);
   const saved = await store.read(); notebook = saved.draft; lastValid = saved.lastValid;
-  const recovery = sessionStorage.getItem(storageKey) ?? sessionStorage.getItem('kp.fraction-notebook.v2') ?? sessionStorage.getItem('kp.fraction-notebook.v1');
+  const recovery = sessionStorage.getItem(storageKey) ?? (mathModule ? null : sessionStorage.getItem('kp.fraction-notebook.v2') ?? sessionStorage.getItem('kp.fraction-notebook.v1'));
   if (recovery) {
     const draft = readNotebook(JSON.parse(recovery));
-    sessionStorage.setItem(storageKey, JSON.stringify(draft)); sessionStorage.removeItem('kp.fraction-notebook.v1'); sessionStorage.removeItem('kp.fraction-notebook.v2');
+    sessionStorage.setItem(storageKey, JSON.stringify(draft));
+    if (!mathModule) { sessionStorage.removeItem('kp.fraction-notebook.v1'); sessionStorage.removeItem('kp.fraction-notebook.v2'); }
     if (JSON.stringify(draft) !== JSON.stringify(notebook)) {
       notebook = draft; storedError = 'Recovered a separate unsaved draft. Download it before reloading to reconcile with saved content.';
     } else sessionStorage.removeItem(storageKey);
@@ -65,6 +67,8 @@ let timer: ReturnType<typeof setTimeout> | undefined, selected: string | undefin
 let inspector: ReturnType<typeof mountInspector> | undefined;
 let structure: ReturnType<typeof mountStructureControls> | undefined;
 const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
+registry.add({ id: 'notebook.open-mathematics', title: mathModule ? 'Open fraction notebook' : 'Open mathematical notebook', category: 'Notebook', scope: 'notebook', keywords: ['quadratic', 'polynomial', 'graph'],
+  run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign(mathModule ? '/experiments/fraction-notebook/' : '/experiments/fraction-notebook/?notebook=quadratic'); } });
 header.hidden = sessionStorage.getItem('kp.workspace.header') !== 'true';
 registry.add({ id: 'workspace.toggle-header', title: 'Toggle site header', category: 'Workspace', scope: 'workspace',
   state: () => available(!header.hidden), run: () => { header.hidden = !header.hidden; sessionStorage.setItem('kp.workspace.header', String(!header.hidden)); } });
@@ -83,9 +87,9 @@ const writingPanel = el('div', 'fn-menu-panel'); writing.append(writingSummary, 
 const readingOptions = button('Reading options', () => {
   if (root.classList.contains('fn-editing') && !editor.sourceOpen()) { editorHost.querySelector('.fn-animation-slot')?.scrollIntoView({ block: 'center' }); layout.refresh(); }
   send({ kind: 'options', open: readingOptions.getAttribute('aria-expanded') !== 'true' });
-}, 'notebook.reading-options', 'notebook', () => frameReady ? available(readingOptions.getAttribute('aria-expanded') === 'true') : unavailable('Reading is loading'));
+}, 'notebook.reading-options', 'notebook', () => mathModule ? unavailable('Use each mathematical object’s controls') : frameReady ? available(readingOptions.getAttribute('aria-expanded') === 'true') : unavailable('Reading is loading'));
 readingOptions.setAttribute('aria-expanded', 'false'); readingOptions.disabled = true;
-const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }, 'notebook.export-json');
+const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = mathModule ? 'mathematical-notebook.json' : 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }, 'notebook.export-json');
 const details = (show: boolean, id?: string) => { root.classList.toggle('fn-details', show); metadata.setAttribute('aria-pressed', String(show)); metadata.textContent = show ? 'Hide details' : 'Show details'; inspector?.show(show, id); };
 const metadata = button('Show details', () => details(!root.classList.contains('fn-details')), 'notebook.toggle-details', 'notebook', () => available(root.classList.contains('fn-details'))); metadata.setAttribute('aria-pressed', 'false');
 const reference = el('a', '', 'Original reading ↗'); reference.href = '/reader/solve-fractional-linear/?reading=reasoning'; reference.target = '_blank'; reference.rel = 'noopener';
@@ -93,7 +97,7 @@ writingPanel.append(metadata, download, reference); actions.append(writing, read
 const workspace = el('div', 'fn-workspace'), left = el('section', 'fn-left'), right = el('section', 'fn-right');
 const sourcePane = el('section', 'fn-source-pane'); sourcePane.setAttribute('aria-label', 'Animation source buffer');
 const sourceTools = el('div', 'fn-source-tools'), sourceHost = el('div', 'fn-source-host');
-const runButton = button('Run · Shift-Enter', () => runSource(), 'animation.run'), closeBuffer = button('Close buffer', () => editor.closeSource(), 'animation.close-source', 'notebook', () => root.classList.contains('fn-focus') ? available() : unavailable('Animation source is closed'));
+const runButton = button('Run · Shift-Enter', () => runSource(), 'animation.run', 'notebook', () => mathModule ? unavailable('Mathematical fields update directly') : available()), closeBuffer = button('Close buffer', () => editor.closeSource(), 'animation.close-source', 'notebook', () => root.classList.contains('fn-focus') ? available() : unavailable('Animation source is closed'));
 const resultStatus = el('p', 'fn-result-status'); resultStatus.setAttribute('role', 'status');
 sourceTools.append(runButton, closeBuffer); sourcePane.append(sourceTools, sourceHost);
 left.setAttribute('aria-label', 'Editable notebook'); right.setAttribute('aria-label', 'Reading preview');
@@ -102,7 +106,8 @@ const editorHost = el('div', 'fn-editor');
 const previewTools = el('div', 'fn-tools');
 const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; const followLabel = el('label', 'fn-follow', 'Follow selection'); followLabel.prepend(follow);
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }, 'notebook.reveal-selection', 'notebook', () => selected ? available() : unavailable('Select a passage')); previewTools.append(reveal, followLabel);
-const frame = el('iframe', 'fn-preview'); frame.title = 'Fraction reading preview'; frame.src = '/reader/fraction-notebook-preview/?surface=window';
+const frame = el('iframe', 'fn-preview'); frame.title = mathModule ? 'Mathematical reading preview' : 'Fraction reading preview';
+frame.src = mathModule ? '/experiments/fraction-notebook/math-preview.html' : '/reader/fraction-notebook-preview/?surface=window';
 const split = el('div', 'fn-divider'); split.tabIndex = 0; split.setAttribute('role', 'separator'); split.setAttribute('aria-orientation', 'vertical'); split.setAttribute('aria-label', 'Notebook width');
 split.setAttribute('aria-valuemin', '30'); split.setAttribute('aria-valuemax', '70'); split.setAttribute('aria-valuenow', '50');
 let splitPercent = 50;
@@ -116,12 +121,13 @@ const editorBody = el('div', 'kp-editor-body');
 const pageWindow = el('section', 'kp-page-window'); pageWindow.setAttribute('aria-label', 'KP page');
 pageWindow.tabIndex = -1;
 workspace.append(left, sourcePane, split, right); pageWindow.append(workspace); editorBody.append(pageWindow); root.append(header, editorBody);
+const mathematics = mathModule?.createMathematicalExtension(notebook, registry, message => reportStatus(message, 'invalid'));
 const editor = mountFractionEditor(editorHost, notebook, changed, id => { const moved = selected !== id; selected = id; inspector?.refresh(); structure?.refresh(); registry.notify(); if (moved && follow.checked) send({ kind: 'reveal', id }); }, undefined, {
   host: sourceHost, run: runSource,
   open() { root.classList.add('fn-focus'); split.inert = false; layout.refresh(); registry.notify(); },
   close() { root.classList.remove('fn-focus'); split.inert = true; layout.refresh(); registry.notify(); }
-}, registry, id => structure?.fold(id));
-registry.add({ id: 'animation.toggle-source', title: 'Edit animation source', category: 'Notebook', scope: 'notebook', keywords: ['JSON', 'specification'], state: () => available(editor.sourceOpen()), run: () => { if (!root.classList.contains('fn-editing')) setEditing(true); editor.toggleSource(); } });
+}, registry, id => structure?.fold(id), mathematics?.extension);
+registry.add({ id: 'animation.toggle-source', title: 'Edit animation source', category: 'Notebook', scope: 'notebook', keywords: ['JSON', 'specification'], state: () => mathModule ? unavailable('Use the mathematical object’s fields') : available(editor.sourceOpen()), run: () => { if (!root.classList.contains('fn-editing')) setEditing(true); editor.toggleSource(); } });
 const layout = mountWorkspace(root, workspace, left, editorHost, right);
 const windows = mountWindows(editorBody, registry);
 const focused = new Map<string, HTMLElement>();
@@ -246,10 +252,14 @@ function changed(doc: ProseNode) {
 async function prepare(value: FractionNotebook = notebook, restoration = false, accept = true) {
   const token = ++generation; request?.abort(); request = new AbortController();
   try {
-    const response = await fetch('/api/dev/fraction-notebook', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(value), signal: request.signal });
-    const data: unknown = await response.json();
-    if (disposed || token !== generation) return;
-    if (!response.ok) throw new Error(String(object(data)['error'] ?? 'Preview could not be prepared.'));
+    let data: unknown;
+    if (mathModule) data = mathModule.prepare(value);
+    else {
+      const response = await fetch('/api/dev/fraction-notebook', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(value), signal: request.signal });
+      data = await response.json();
+      if (disposed || token !== generation) return;
+      if (!response.ok) throw new Error(String(object(data)['error'] ?? 'Preview could not be prepared.'));
+    }
     const valid = object(data), checked = readNotebook(valid['notebook']);
     await saving;
     if (disposed || token !== generation) return;
@@ -258,7 +268,7 @@ async function prepare(value: FractionNotebook = notebook, restoration = false, 
     latest = { value: data, revision: checked.revision };
     if (accept && !restoration) lastValid = checked;
     if (frameReady) send({ kind: 'apply', value: latest.value });
-    if (!restoration) reportStatus('Preview checked · waiting for the reading', 'checking');
+    if (!restoration) reportStatus(mathModule ? 'Saved locally · mathematical views up to date' : 'Preview checked · waiting for the reading', mathModule ? 'valid' : 'checking');
     if (pendingSource()) pendingMessage();
   } catch (error) {
     if (disposed || token !== generation || (error instanceof DOMException && error.name === 'AbortError')) return;
@@ -284,8 +294,8 @@ const onMessage = (event: MessageEvent) => {
   if (data.kind === 'select' && typeof data.id === 'string') editor.reveal(data.id);
 };
 window.addEventListener('message', onMessage);
-cellDetails.textContent = `Notebook ${notebook.id} · source: fractional-linear-reasoning · local draft; original reading unchanged`;
+cellDetails.textContent = `Notebook ${notebook.id} · source: ${mathModule ? 'mathematical objects' : 'fractional-linear-reasoning'} · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); vimCoverage.dispose(); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); vimCoverage.dispose(); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); mathematics?.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

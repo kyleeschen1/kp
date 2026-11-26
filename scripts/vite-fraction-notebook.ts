@@ -12,6 +12,7 @@ export function kpViteFractionNotebook(): Plugin {
     transformIndexHtml: { order: 'post', handler(html, context) {
       const path = context.path.split('?')[0];
       return path === '/experiments/fraction-notebook/' || path === '/experiments/fraction-notebook/index.html'
+        || path === '/experiments/fraction-notebook/math-preview.html'
         || path === '/reader/fraction-notebook-preview/' ? theme.inject(html) : html;
     } },
     handleHotUpdate(context) {

@@ -1,4 +1,5 @@
 import type { Metadata, UUID } from '../notebook/model.ts';
+import type { MathView, MathViewport, NotebookMathematics } from '../notebook/math-model.ts';
 export type Mark = 'strong' | 'em' | 'code';
 export interface Identified { readonly id: UUID; readonly metadata: Metadata }
 export interface Annotation extends Identified {}
@@ -17,8 +18,12 @@ export interface ContentBlock extends Identified {
   readonly content: readonly Inline[]; readonly children: readonly ContentBlock[];
   readonly layout: ChildLayout; readonly folded: boolean;
 }
-export type Cell = ArticleHeader | ContentBlock | Story;
-export interface FractionNotebook { readonly schemaVersion: 3; readonly id: UUID; readonly revision: number; readonly cells: readonly Cell[] }
+export interface MathObjectCell extends Identified {
+  readonly type: 'mathObject'; readonly resource: UUID; readonly view: MathView;
+  readonly viewport: MathViewport; readonly folded: boolean;
+}
+export type Cell = ArticleHeader | ContentBlock | Story | MathObjectCell;
+export interface FractionNotebook { readonly schemaVersion: 3; readonly id: UUID; readonly revision: number; readonly cells: readonly Cell[]; readonly mathematics?: NotebookMathematics }
 export interface Step { readonly title: string; readonly content: string; readonly focusRefs: readonly string[] }
 export interface Definition { readonly id: string; readonly asset: { readonly id: string; readonly version: string }; readonly presentation: string;
   readonly beats: readonly (Step & { readonly id: string; readonly progressPermille: number })[] }

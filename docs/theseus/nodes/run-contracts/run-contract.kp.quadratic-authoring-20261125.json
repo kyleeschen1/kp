@@ -2,8 +2,8 @@
   "id": "run-contract.kp.quadratic-authoring-20261125",
   "kind": "run-contract",
   "title": "Quadratic authoring exemplar",
-  "status": "active",
-  "summary": "Approved M0 only; exact new contract supersedes the finished frame as active execution, without resuming historical runs.",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: both implementation packages complete; canonical quadratic exemplar awaits G1 judgment before any broader mathematical work.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -19,6 +19,9 @@
   "verification": [
     "npm run typecheck:fraction-notebook",
     "npm run test:fraction-notebook"
+  ],
+  "revisitWhen": [
+    "G1 review of the quadratic notebook supplies concrete acceptance or bounded corrections."
   ],
   "allowedWork": [
     "Approved M0 quadratic only; narrow notebook and command adapters, registered operations, domain-native rendering, persistence, measured costs and preservation checks"
@@ -46,7 +49,8 @@
     {
       "id": "exemplar",
       "title": "Notebook commands and linked graphical exemplar",
-      "status": "planned"
+      "summary": "Checked quadratic notebook with linked graph, derivative and tangent, saved UUIDs, command discovery and preserved chat/fraction workflows. Costs and failures recorded; canonical G1 review prepared.",
+      "status": "complete"
     }
   ]
 }

@@ -1,0 +1,37 @@
+:root { --fn-graph-curve: var(--color-green-light); --fn-graph-derived: var(--color-red-light); --fn-graph-axis: var(--fn-muted); }
+.fn-math-object { min-width: 0; font: inherit; color: var(--fn-text); }
+.fn-math-object:focus-visible { outline: 1px solid var(--fn-focus); outline-offset: 5px; }
+.fn-math-object.ProseMirror-selectednode { background: var(--kp-active-line-background); outline: 1px solid var(--fn-border); }
+.fn-math-heading { display: flex; gap: .5em; align-items: center; font-size: .8em; color: var(--fn-muted); }
+.fn-math-heading button { border: 0; padding: 0; color: inherit; font: inherit; }
+.fn-math-relation { margin-left: auto; }
+.fn-math-body { display: flex; flex-direction: column; gap: .7em; }
+.fn-math-body[hidden] { display: none; }
+.fn-math-equation { display: flex; align-items: baseline; gap: .35em; flex-wrap: wrap; color: var(--fn-math); overflow-wrap: anywhere; }
+.fn-math-equation .katex { font-size: 1.05em; }
+.fn-math-controls { display: flex; flex-wrap: wrap; align-items: center; gap: .7em; }
+.fn-math-controls:empty, .fn-math-actions:empty, .fn-math-diagnostic:empty, .fn-math-legend:empty { display: none; }
+.fn-math-controls label { display: flex; align-items: baseline; gap: .3em; }
+.fn-math-controls input[type=text] { width: 4em; min-width: 0; padding: .15em .3em; border: 0; border-bottom: 1px solid var(--fn-border); color: inherit; background: transparent; font: inherit; }
+.fn-math-controls input:focus-visible, .fn-math-object button:focus-visible { outline: 1px solid var(--fn-focus); outline-offset: 2px; }
+.fn-math-controls input[type=range] { min-width: 8em; flex: 1; accent-color: var(--fn-graph-derived); }
+.fn-math-actions { display: flex; flex-wrap: wrap; gap: .4em; }
+.fn-math-actions button { font-family: inherit; font-size: .75em; padding: .15em .5em; }
+.fn-math-object button:disabled { opacity: .5; cursor: default; }
+.fn-math-legend, .fn-math-diagnostic { font: inherit; font-size: .75em; line-height: 1.5; margin: 0; }
+.fn-math-legend { color: var(--fn-muted); }
+.fn-math-diagnostic { color: var(--fn-warning); }
+.fn-math-graph { min-width: 0; }
+.fn-math-graph[hidden] { display: none; }
+.fn-math-graph .graph-svg { display: block; width: 100%; height: auto; overflow: hidden; }
+.fn-math-graph .graph-svg__background { fill: var(--fn-surface); }
+.fn-math-graph .graph-axis line { stroke: var(--fn-graph-axis); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.fn-math-graph .graph-axis text { fill: var(--fn-graph-axis); font-family: var(--fn-font); font-size: 18px; }
+.fn-math-graph .graph-curve path { fill: none; stroke: var(--fn-graph-curve); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.fn-math-graph .graph-curve[data-math-role=derivative] path, .fn-math-graph .graph-curve[data-math-role=tangent] path { stroke: var(--fn-graph-derived); }
+.fn-math-graph .graph-curve text { display: none; }
+.fn-math-contact { fill: var(--fn-graph-derived); stroke: var(--fn-background); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.fn-math-reading { overflow: auto; }
+.fn-math-reading > .fn-editor { min-height: 100%; overflow: visible; }
+.fn-math-reading .ProseMirror { min-height: 100vh; }
+@media (forced-colors: active) { .fn-math-graph .graph-curve path { stroke: CanvasText; } .fn-math-graph .graph-curve[data-math-role=tangent] path { stroke-dasharray: 7 4; } }

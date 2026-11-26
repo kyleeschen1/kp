@@ -2,6 +2,7 @@ import { uuid, type UUID } from '../notebook/model.ts';
 import { array, exact, fail, metadata, object, text } from './json.ts';
 import { migrateV1, migrateV2 } from './migration.ts';
 import { projectionText } from './inline-source.ts';
+import { readNotebookMathematics, readMathViewport } from '../notebook/math-model.ts';
 import type { Annotation, AuthorCredit, Cell, ContentBlock, Definition, FractionNotebook, Inline, Mark, Step } from './types.ts';
 export * from './types.ts';
 export { FractionNotebookGap, object, exact } from './json.ts';
@@ -20,9 +21,13 @@ export function readSteps(source: string, count: number, openingCaption?: string
 export function readNotebook(value: unknown): FractionNotebook {
   const input = object(value), v2 = input['schemaVersion'] === 1 ? object(migrateV1(input)) : input;
   const data = v2['schemaVersion'] === 2 ? object(migrateV2(v2)) : v2;
-  exact(data, ['schemaVersion', 'id', 'revision', 'cells']);
+  exact(data, ['schemaVersion', 'id', 'revision', 'cells', 'mathematics']);
   if (data['schemaVersion'] !== 3 || !Number.isSafeInteger(data['revision']) || Number(data['revision']) < 0) return fail('Unsupported notebook version or revision.');
   const seen = new Set<string>([uuid(data['id'])]), annotations = new Map<UUID, Annotation>();
+  const mathematics = data['mathematics'] === undefined ? undefined : readNotebookMathematics(data['mathematics']);
+  for (const resource of mathematics?.resources ?? []) {
+    if (seen.has(resource.id)) fail('A resource UUID cannot also belong to the notebook.'); seen.add(resource.id);
+  }
   const identity = (v: Record<string, unknown>) => {
     const id = uuid(v['id']); if (seen.has(id) || annotations.has(id)) fail('UUID already belongs to another object.'); seen.add(id);
     return { id, metadata: metadata(v['metadata']) };
@@ -61,6 +66,13 @@ export function readNotebook(value: unknown): FractionNotebook {
   const cells: Cell[] = array(data['cells'], 200).map(raw => {
     if (object(raw)['type'] === 'block') return block(raw, 1);
     const c = object(raw), base = identity(c);
+    if (c['type'] === 'mathObject') {
+      exact(c, ['type', 'id', 'metadata', 'resource', 'view', 'viewport', 'folded']);
+      const resource = uuid(c['resource']), view = c['view'];
+      if (!mathematics?.resources.some(r => r.id === resource)) return fail('Restore the mathematical resource referenced by this occurrence.');
+      if ((view !== 'equation' && view !== 'graph') || typeof c['folded'] !== 'boolean') return fail('Unsupported mathematical view.');
+      return { ...base, type: 'mathObject', resource, view, viewport: readMathViewport(c['viewport']), folded: c['folded'] };
+    }
     if (c['type'] === 'articleHeader') {
       exact(c, ['type', 'id', 'metadata', 'title', 'authors']);
       const title = object(c['title']); exact(title, ['type', 'id', 'metadata', 'content']);
@@ -85,7 +97,7 @@ export function readNotebook(value: unknown): FractionNotebook {
   });
   if (cells.filter(c => c.type === 'story').length > 1) return fail('This exemplar supports at most one fractional animation.');
   if (cells.filter(c => c.type === 'articleHeader').length > 1 || cells.some((c, i) => c.type === 'articleHeader' && i !== 0)) return fail('An optional article header belongs at the beginning.');
-  return { schemaVersion: 3, id: uuid(data['id']), revision: Number(data['revision']), cells };
+  return { schemaVersion: 3, id: uuid(data['id']), revision: Number(data['revision']), cells, ...(mathematics ? { mathematics } : {}) };
 }
 export function importFractionReading(markdown: string): { notebook: FractionNotebook; definition: Definition } {
   const match = /```kp-animation-story\s*\n([\s\S]*?)\n```/.exec(markdown);
@@ -112,6 +124,7 @@ export function projectReading(doc: FractionNotebook, definition: Definition): s
   };
   const projectBlock = (b: ContentBlock): string => [b.title ? prose(b.title.content) : '', prose(b.content), ...b.children.map(projectBlock)].filter(Boolean).join('\n\n');
   const cells = doc.cells.map(cell => {
+    if (cell.type === 'mathObject') return fail('Mathematical objects use the selected mathematical notebook preview.');
     if (cell.type === 'story') {
       const steps = readSteps(cell.source, definition.beats.length, cell.caption.text);
       const story = { ...definition, beats: definition.beats.map((beat, index) => ({ ...beat, ...steps[index] })) };
