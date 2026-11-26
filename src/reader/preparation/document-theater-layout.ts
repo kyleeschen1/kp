@@ -18,7 +18,7 @@ export function measureDocumentTheaterLayout(
   const headerHeight = masthead.getBoundingClientRect().height;
   const recessed = document.body.dataset['kpRecessedRail'] === 'true';
   if (recessed) {
-    // Opaque prose fully covers the stage between openings. The spacer must
+    // Foreground prose covers the stage between openings. The spacer must
     // include the complete stage height as well as the operation's travel.
     const stageHeight = Math.max(180, equationHeight + 96);
     const top = headerHeight + Math.max(16, (window.innerHeight - headerHeight - stageHeight) / 2);
@@ -28,7 +28,8 @@ export function measureDocumentTheaterLayout(
     style.setProperty('--kp-caption-card-top', `${top}px`);
     style.setProperty('--kp-flow-line-in-card', `${(stageHeight - equationHeight) / 2 - 14}px`);
     style.setProperty('--kp-flow-line', `${top}px`);
-    style.setProperty('--kp-flow-leading', '0px');
+    // Let the expression appear at the page surface before the first sheet.
+    style.setProperty('--kp-flow-leading', `${stageHeight + cadence.read}px`);
     style.setProperty('--kp-flow-tail', '0px');
     style.setProperty('--kp-flow-gap', '0px');
     const holds = beats.map(beat => beat.dataset['kpOperationId'] ? cadence.hold : cadence.read);

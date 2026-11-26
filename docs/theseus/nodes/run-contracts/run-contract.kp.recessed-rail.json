@@ -34,6 +34,12 @@
       "id": "exemplar",
       "summary": "Candidate implementation and focused verification complete. HUMAN_CHECKPOINT: visual acceptance pending in review packet.",
       "status": "complete"
+    },
+    {
+      "id": "quiet-revision",
+      "title": "Quiet left rail with shallow passage coverage",
+      "summary": "Quiet candidate implemented and checked; HUMAN_CHECKPOINT for translucency and first descent.",
+      "status": "complete"
     }
   ]
 }

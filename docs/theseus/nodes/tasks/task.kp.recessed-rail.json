@@ -12,6 +12,13 @@
       "scope": "Fraction exemplar, Chromium and Firefox, desktop and phone widths",
       "checkedAt": "2026-11-26T16:07:07.912Z",
       "notes": "Four cases passed. Typecheck and 20 focused unit tests also passed; see docs/project/reviews/2026-11-26-recessed-rail.md. Visual judgment pending."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Quiet revision: Chromium and Firefox, desktop and phone widths",
+      "checkedAt": "2026-11-26T16:20:07.254Z",
+      "notes": "Four cases pass after reduced-motion specificity repair and documented 0.025 CSS-pixel geometry tolerance. Typecheck and 20 preservation tests pass."
     }
   ],
   "revisitWhen": [

@@ -25,3 +25,15 @@ links and supported-browser cases; integrate notebook preferences; pressure a
 second existing visual caller before extracting common presentation machinery.
 Stage-only iframe control from ProseMirror, global adoption and preparation-cost
 repair remain separate. Existing historical run contracts are not resumed.
+
+## Approved visual revision
+
+The user found the shaded recess too flamboyant. On November 26, approved moving
+the rail left, using the same beige throughout, removing recess shadows and
+letting mostly opaque prose pass over a subtly dipping expression. An exposed
+opening establishes the expression before the first passage. Depth is sampled
+from measured reading position, with no independent animation timer or renderer
+change. Keep reduced-motion behavior and reverse deterministic; retain the
+existing motion clearance and concealed final release. Review this candidate
+before promotion. The original right rail/deep opening is superseded, not an
+accepted reference.

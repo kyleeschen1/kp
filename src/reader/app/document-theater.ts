@@ -4,6 +4,7 @@ import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
+import { documentTheaterDepth } from './document-theater-depth.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -94,6 +95,8 @@ export function mountDocumentTheater(input: {
     // The foreground prose keeps ordinary document presence. The existing
     // annotation adapter still owns all authored labels on the stage.
     if (recessed && !readAll) {
+      const depth = documentTheaterDepth(position + frameBottom / 2, positions, heights);
+      document.body.style.setProperty('--kp-rail-depth', String(depth));
       selected = active;
       return;
     }
