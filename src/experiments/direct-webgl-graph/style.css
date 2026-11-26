@@ -1,0 +1,62 @@
+@import '@fontsource/source-serif-4/latin-400.css';
+@import '../../fraction-notebook/palette.css';
+
+:root {
+  font-family: 'Source Serif 4', Georgia, serif; font-size: 18px; line-height: 1.55;
+  color: var(--color-ink); background: var(--color-paper); color-scheme: dark;
+  --graph-surface: var(--color-green-light); --graph-grid: var(--color-muted);
+  --graph-x: var(--color-red-light); --graph-y: var(--color-blue-light); --graph-z: var(--color-yellow-light);
+}
+:root[data-notebook-theme=light] { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1120px; margin: 0 auto; padding: 28px clamp(16px, 4vw, 48px) 50px; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.1rem); font-weight: 400; margin: 0; letter-spacing: -.025em; }
+p { margin: .6rem 0; }
+.intro, .hint, .reference-note, .diagnostics { color: var(--color-muted); }
+.intro { max-width: 42rem; }
+.toolbar, .controls { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .8rem; }
+.toolbar { justify-content: space-between; margin: 1.2rem 0 .8rem; }
+.tabs { display: inline-flex; gap: .3rem; }
+button, input { font: inherit; color: inherit; accent-color: var(--color-green-light); }
+button { background: transparent; border: 1px solid var(--color-border); border-radius: 5px; padding: .3rem .7rem; cursor: pointer; }
+button:hover, button[aria-pressed=true] { background: var(--color-selection); }
+button:focus-visible, canvas:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--color-red-light); outline-offset: 4px; }
+button:disabled { opacity: .45; cursor: default; }
+.stage { position: relative; width: 100%; height: clamp(320px, 57vh, 560px); border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; background: var(--color-paper); }
+.stage > canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+.stage > canvas:active { cursor: grabbing; }
+.stage > canvas:focus-visible { outline-offset: -5px; }
+.axis-label { position: absolute; pointer-events: none; transform: translate(-50%, -50%); font-style: italic; font-size: 1.05rem; background: var(--color-paper); border-radius: 50%; padding: 0 .12rem; }
+.axis-label[data-axis=x] { color: var(--graph-x); }
+.axis-label[data-axis=y] { color: var(--graph-y); }
+.axis-label[data-axis=z] { color: var(--graph-z); }
+.stage-note { position: absolute; left: 16px; top: 10px; color: var(--color-muted); font-size: .8rem; pointer-events: none; }
+.hint { font-size: .85rem; margin-top: .5rem; }
+.controls { padding: .8rem 0; }
+.controls label { display: inline-flex; align-items: center; gap: .45rem; }
+.controls input[type=range] { width: clamp(120px, 22vw, 250px); }
+output { font-variant-numeric: tabular-nums; min-width: 3.7ch; }
+.formula { font-size: 1.2rem; }
+.options { margin: .3rem 0 1rem; }
+.reference { margin-top: 1.4rem; }
+.reference h2 { font-size: 1.3rem; font-weight: 400; margin: 0 0 .3rem; }
+.reference-note { font-size: .85rem; }
+.graph-webgl { position: relative; width: 100%; height: 100%; }
+.graph-webgl__canvas, .graph-webgl__fallback, .static-view { width: 100%; height: 100%; }
+.graph-webgl__canvas { display: none; }
+.graph-webgl[data-kp-webgl-status=ready] .graph-webgl__canvas { display: block; }
+.graph-webgl[data-kp-webgl-status=ready] .graph-webgl__fallback { display: none; }
+.graph-webgl__fallback svg, .static-view svg { width: 100%; height: 100%; }
+.graph-webgl__accessible-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.diagnostics { border-top: 1px solid var(--color-border); padding-top: .8rem; font-size: .85rem; margin-top: 1rem; }
+.diagnostics summary { cursor: pointer; }
+.diagnostics p { max-width: 50rem; }
+.error { color: var(--color-warning); }
+[hidden] { display: none !important; }
+@media (max-width: 520px) {
+  :root { font-size: 16px; }
+  main { padding-top: 20px; }
+  .controls { gap: .6rem; }
+  .toolbar { align-items: start; }
+}

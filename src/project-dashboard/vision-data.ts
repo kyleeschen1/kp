@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-quadratic-authoring",
-    title: "Author one persistent quadratic with linked representations",
+    id: "kp-direct-webgl-graph",
+    title: "Inspect a direct WebGL grid and saddle",
     approval: "approved",
-    contractId: "run-contract.kp.quadratic-authoring-20261125",
-    finish: "One saved quadratic exposes graph, derivative and tangent commands; edits, reload and another occurrence retain its relationships. Deliver this exemplar in the existing notebook and stop at G1 before the matrix caller or broader animation portfolio.",
-    source: { label: "Approved M0 scope and preservation boundary", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
+    contractId: "run-contract.kp.direct-webgl-graph-20261125",
+    finish: "One isolated grid/saddle experiment shares mathematical and camera sources with the existing renderer, measures retained GPU geometry and loading cost, and stops for visual review before renderer promotion.",
+    source: { label: "Approved grid/saddle experiment", href: "docs/project/2026-11-25-direct-webgl-graph-pilot.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "G1 is accepted for the quadratic notebook. The proposed successor is M1: one matrix/vector caller through the same resource, command and persistence boundary, preserving the quadratic. Select its bounded scope before implementation; broader row/filter and shared adapter promotion remain separate.",
+  nextJudgment: "Judge the isolated direct WebGL grid and saddle for clarity, smoothness and visual consistency. This does not authorize replacing the shared 3D renderer. G1 remains accepted; matrix reuse is the proposed return path, with its scope still unapproved.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -39,7 +39,7 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
+      id: "authoring", title: "Authoring & the LLM loop", horizon: "later",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
       established: "The notebook, persistent conversation, fruit-picker presentation and workspace frame are accepted. G1 now accepts the quadratic's linked equation, graph, derivative and tangent editing with reload, local views and measured costs. Existing split, focus, command and row/filter work retains its distinct review boundaries.",
       evidence: { label: "Accepted quadratic authoring and bounded evidence", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" },
@@ -91,16 +91,16 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "learning", title: "Experiments & workbench", horizon: "later",
+      id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "Source inspection finds an editor-owned native-conversation, exact-response capture, quoted follow-up and website-preview candidate. Its recorded end-to-end human acceptance remains pending; no live inference was run by this inspection. KP retains its independent source/compiler/reader.",
-      evidence: { label: "Source inspection and handoff", href: "docs/project/reviews/2026-11-08-project-orientation.md" },
+      established: "An isolated grid/saddle now uses retained direct GPU geometry with existing mathematical, camera, clock and lease owners. Numeric, browser and loading checks pass; visual acceptance remains pending. The separate workbench proposal retains its original horizon; no renderer migration or live inference is implied.",
+      evidence: { label: "Grid/saddle review and measured limits", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" },
       outcome: {
-        authority: "proposed",
-        id: "independent-workbench-v1", title: "Preserve exact discussion and practice return in the independently owned workbench",
-        finish: "Save anchored commentary and a question/attempt at exact source revisions, compare a candidate, export assistant context, and return after reload. One live KP adapter and isolated fixtures pass bounded failure/recovery checks; review the complete workflow before expansion.",
-        excludes: "A repository split, new renderer, full GTD platform, scheduler algorithm, embedded model service or autonomous background agents.",
-        source: { label: "Retained horizon; host and sequence superseded", href: "docs/project/2026-10-30-independent-workbench-v1.md" }
+        authority: "approved",
+        id: "direct-webgl-graph-pilot", title: "Compare a direct GPU grid and saddle",
+        finish: "Inspect an isolated grid/saddle with smooth shading, camera interaction, retained buffers and explicit comparison against the existing Three adapter. Measure complete loading and runtime cost and stop for human review.",
+        excludes: "Shared renderer replacement, broad surfaces, publication and matrix authoring. The independent workbench horizon remains recorded in its original proposal.",
+        source: { label: "Approved experiment and preservation boundary", href: "docs/project/2026-11-25-direct-webgl-graph-pilot.md" }
       }
     }
   ],
@@ -560,6 +560,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the exemplar and asks what it accomplishes. Close M0 and retain its finite finish; propose the existing M1 matrix/vector caller as a separate successor without starting it.",
       reason: "The first complete object-to-operation-to-view loop now has human acceptance. A structurally different caller is the next useful test of reuse before broader mathematical families or shared adapter promotion.",
       source: { label: "User acceptance and preserved scope", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" }
+    },
+    {
+      id: "try-direct-webgl-grid-saddle", on: "2026-11-25",
+      before: "M0 is accepted and matrix reuse is proposed. The independently owned workbench remains a later horizon in its original proposal.",
+      after: "The user requests a direct WebGL coordinate grid and saddle experiment before returning to the mathematical programme. One isolated host tests appearance and cost against the current renderer; promotion requires visual review.",
+      reason: "A bounded rendering experiment can test smooth lighting and retained GPU computation without changing semantic owners or presuming a full renderer replacement is worthwhile.",
+      source: { label: "User-authorized grid and saddle pilot", href: "docs/project/2026-11-25-direct-webgl-graph-pilot.md" }
     }
   ]
 };

@@ -1,0 +1,50 @@
+{
+  "id": "run-contract.kp.direct-webgl-graph-20261125",
+  "kind": "run-contract",
+  "title": "Direct WebGL grid and saddle",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: one checked exemplar package delivered; visual acceptance and any promotion remain separate.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.direct-webgl-graph-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-direct-webgl-graph-pilot.md",
+      "summary": "User explicitly approved the grid and saddle experiment; shared renderer replacement is excluded"
+    }
+  ],
+  "verification": [
+    "npm run test:direct-webgl-graph",
+    "npm run visual:direct-webgl-graph"
+  ],
+  "revisitWhen": [
+    "User reviews the live direct WebGL grid/saddle comparison."
+  ],
+  "allowedWork": [
+    "Isolated WebGL2 grid and saddle, existing mathematical and camera owners, scoped controls, preservation and measured costs"
+  ],
+  "disallowedWork": [
+    "Shared renderer replacement, general shader compiler, matrix authoring, publication, paid calls or parallel workers"
+  ],
+  "goal": "Inspect smooth grid and saddle rendering without Three before considering replacement",
+  "target": "task.kp.direct-webgl-graph-20261125",
+  "runMode": "run",
+  "maxSlices": 1,
+  "commitCadence": "One checked exemplar; hourly recoverable backup",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "One working grid and saddle visual review packet",
+    "Three-hour ceiling with final 45 minutes reserved for checks and closeout"
+  ],
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Direct GPU grid and saddle comparison",
+      "summary": "Checked isolated grid/saddle, controls, comparison and measured costs delivered. Stop at the planned human visual checkpoint; no renderer promotion.",
+      "status": "complete"
+    }
+  ]
+}

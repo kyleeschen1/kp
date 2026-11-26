@@ -1,4 +1,8 @@
 {
+  "playwright.direct-webgl-graph.config.ts": {
+    "sha256": "7b3f5de5fea96bf41563ddde52bf709ccc90bb8e414e5bb81bdbc50193c55270",
+    "projects": 3
+  },
   "playwright.editor-chat.config.ts": {
     "sha256": "93e65c17b711a3a052f6b82dac7b5a0f3a23bf5043339b32a9e1b6fcfd044bfd",
     "projects": 3

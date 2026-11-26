@@ -3,10 +3,10 @@
 Last Updated: 2026-11-25
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-quadratic-authoring`
-Execution Contract: `run-contract.kp.quadratic-authoring-20261125`
-Next Product Milestone: `matrix-authoring-reuse`
-Milestone Authority: proposed
+Current Commitment: `kp-direct-webgl-graph`
+Execution Contract: `run-contract.kp.direct-webgl-graph-20261125`
+Next Product Milestone: `direct-webgl-graph-pilot`
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -36,7 +36,8 @@ Vim rows, intentional matching and C-h tag filters with query/context return.
 Review this exemplar before M-x adoption. New Vim behavior remains separate.
 **Accepted:** [workspace frame](reviews/2026-11-25-next-step-review.md), including
 quiet beige modeline and neutral pane edge. **Accepted:**
-[M0 quadratic loop](reviews/2026-11-25-quadratic-authoring.md). Matrix reuse remains proposed. Preserve
+[M0 quadratic loop](reviews/2026-11-25-quadratic-authoring.md).
+**Checked detour:** [direct WebGL grid/saddle](reviews/2026-11-25-direct-webgl-graph.md); review before promotion. Matrix reuse remains proposed. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
@@ -83,9 +84,7 @@ blocker. Prior completed architecture and maintenance work stays complete.
 
 ## How to stay oriented
 
-- **November 13 reboot handoff:** To resume the Codex latency/flow investigation,
-  read [the saved analysis and restart cue](reviews/2026-11-10-agent-flow-baseline.md#restart-handoff--november-13-2026).
-  This is a discussion handoff, not a product pivot or a new implementation run.
+- **Codex flow:** [saved restart cue](reviews/2026-11-10-agent-flow-baseline.md#restart-handoff--november-13-2026), discussion only.
 - Open `/?view=dashboard#project-vision` for direction, approval boundaries,
   recent evidence, proposed successor and the next human judgment.
 - Run `npm run project:orientation` for this briefing and the named Theseus

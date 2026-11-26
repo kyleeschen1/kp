@@ -16,8 +16,7 @@ The [handoff](../reviews/2026-11-08-project-orientation.md) bounds the conversat
 candidate. [Saved reading and motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md)
 separates repaired startup and reuse from cold preparation cost. What counts
 remains the technical reference; fractional reasoning awaits editorial review. Preserve the
-[accepted reading defaults](../principles/document-theater-reading.md), original
-version links and completed orientation. Fresh generation and integrated
+[accepted reading defaults](../principles/document-theater-reading.md) and completed orientation. Fresh generation and integrated
 workbench latency remain unproved. The notebook detour is current.
 
 ## Retrieve for a named question
@@ -46,13 +45,12 @@ workbench latency remain unproved. The notebook detour is current.
   retaining targets and histories. Checked: [Vim coverage](../reviews/2026-11-25-vim-binding-coverage.md).
   Checked: [floating rows and C-h filters](../reviews/2026-11-25-row-picker.md);
   review before M-x adoption. Accepted:
-  [workspace frame](../reviews/2026-11-25-next-step-review.md) and [quadratic](../reviews/2026-11-25-quadratic-authoring.md). Matrix reuse remains proposed. The
+  [workspace frame](../reviews/2026-11-25-next-step-review.md) and [quadratic](../reviews/2026-11-25-quadratic-authoring.md).
+  Checked detour: [direct WebGL grid/saddle](../reviews/2026-11-25-direct-webgl-graph.md), isolated until visual review. Matrix reuse remains proposed. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and
   [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain separate.
-  Preserve native history and domain ownership.
-  Motions/text objects remain parked; MathML declined.
-  Review before generalizing.
+  Preserve native history/domain ownership. Motions remain parked; MathML declined.
 - **Accepted reading/attention:** [reader evidence](../reviews/2026-11-08-reader-attention.md).
   Preserve the existing document reader, rich prose and separate annotation moments.
 - **What was actually gained:** [explanation-first evidence](../reviews/2026-11-08-explanation-first.md).

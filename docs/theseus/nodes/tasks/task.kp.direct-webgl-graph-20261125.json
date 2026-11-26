@@ -1,0 +1,100 @@
+{
+  "id": "task.kp.direct-webgl-graph-20261125",
+  "kind": "task",
+  "title": "Inspect a direct WebGL coordinate grid and saddle",
+  "status": "deferred",
+  "domain": "rendering",
+  "summary": "HUMAN_CHECKPOINT: inspect the live grid and saddle; candidate checks pass and existing notebook/renderer remain intact.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-direct-webgl-graph-pilot.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-direct-webgl-graph.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:40.886Z",
+      "notes": "Initial active-thread startup budget 453 words exceeded 450; condensed wording without dropping sources."
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:41.704Z",
+      "notes": "New scoped config was not yet inventoried; reviewed only its resolved behavior and added its hash."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:42.326Z",
+      "notes": "Six checks passed; delayed-import harness timed out because its route omitted Vite revision queries. Repaired pathname matching."
+    },
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:42.940Z",
+      "notes": "Six tests: canonical saddle/gradient agreement, topology, camera projection, identity, grid ownership and invalid inputs."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:43.572Z",
+      "notes": "Seven Chromium workflows including actual paint, responsive/theme, uniform-only motion, comparison, loss/retry, disposal, unavailable GPU and delayed-import cancellation."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:44.180Z",
+      "notes": "42 existing graph-runtime, source/renderer and context-lease checks passed."
+    },
+    {
+      "command": "npm run measure:direct-webgl-graph",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:44.786Z",
+      "notes": "Complete HTML production closure: initial JS 76452 raw / 25048 gzip bytes; comparison 528195 / 131670; no eager Three."
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:45.400Z",
+      "notes": "75 configs / 182 projects checked; only the new scope hash was added."
+    },
+    {
+      "command": "npm run check:typescript-configs",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:51:46.033Z",
+      "notes": "16 configs parsed; all explicit inputs and references exist."
+    },
+    {
+      "command": "npm run typecheck:direct-webgl-graph",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-26T05:52:06.281Z",
+      "notes": "Final complete experiment, browser tests, reference and measurement imports pass TypeScript."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:52:07.058Z",
+      "notes": "All 75 tests pass after review evidence and approved detour alignment."
+    }
+  ],
+  "revisitWhen": [
+    "User judges the grid/saddle treatment and selects any bounded follow-up."
+  ]
+}
