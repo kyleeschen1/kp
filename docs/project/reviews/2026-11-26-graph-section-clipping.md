@@ -2,7 +2,9 @@
 
 Date: 2026-11-26
 Outcome: HUMAN_CHECKPOINT — one implemented and checked exemplar; choreography
-awaits judgment. [Approved scope](../2026-11-26-graph-section-clipping.md).
+awaits judgment. A reported persistent faint curved outline is not yet reproduced;
+the reopened slice needs a user screenshot before a targeted repair.
+[Approved scope](../2026-11-26-graph-section-clipping.md).
 The [accepted head-on correction](2026-11-25-graph-section-withdrawal.md) remains
 preserved. Reusable-player design and shared renderer promotion remain separate.
 
@@ -93,3 +95,30 @@ remain separate from these checks.
 
 The rollback unit is the experiment-local clipping projection, shader binding
 and evidence. No second caller, catalogue rollout or reusable stage is authorized.
+
+## Faint curved outline: unresolved diagnostic
+
+The user reports a faint second curved outline behind the red section, explicitly
+distinguishes it from the straight x-axis, and confirms it remains in settled 2D.
+Do not dismiss this as the axis or claim it is repaired.
+
+The existing visual journey passes in Firefox and Chromium, and its captured
+settled view shows one curve. Source inspection finds one retained curve, one
+line submission, a frame clear on every redraw and a hidden SVG fallback. Those
+facts do not establish what the user's browser displays.
+
+Added a focused realized-pixel safeguard to the existing browser entrypoint:
+`npm run visual:direct-webgl-graph -- --grep 'settled section has one curved stroke'`.
+All four checks pass (two browsers at 1× and 2× density), each changing among
+three slice/denominator pairs after reaching 2D. Excluding reference axes, the
+detected red stroke has one connected run per column and stays within 3.018 CSS
+pixels of the current parabola; no displaced curved trace is detected. The test
+also verifies one active canvas and a hidden fallback. This does not exclude a
+very faint fringe below the detection threshold or a browser-specific artifact.
+
+`npm run typecheck:direct-webgl-graph` passes with the new harness. The earlier
+scoped journey command passes 2/2. The complete expanded browser suite was not
+rerun: runtime code is unchanged, and these focused checks cover the added test.
+No cause or runtime fix is claimed. Next evidence: a screenshot of the user's
+settled 2D view showing the faint outline, so its position and shape can be
+compared directly. Preserve the geometric clipping while resolving this report.

@@ -212,6 +212,65 @@ async function openSection(page: Page) {
   await expect(page.locator("#section-controls")).toBeVisible();
 }
 
+for (const density of [1, 2]) test.describe(`section stroke at ${density}x density`, () => {
+  test.use({ deviceScaleFactor: density });
+  test("settled section has one curved stroke at the current mathematical position", async ({ page }, info) => {
+    await page.setViewportSize({ width: 1280, height: 1100 });
+    await openSection(page);
+    await setRange(page, "#section-inspection", 1);
+    await page.locator("#section-y").focus();
+    for (const [y, denominator] of [[1, 4], [2, 8], [-1.5, 4]]) {
+      await setRange(page, "#section-y", y!);
+      await setRange(page, "#denominator", denominator!);
+      await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "1");
+      const canvas = page.locator("#direct-canvas");
+      const cssWidth = await canvas.evaluate((element) => element.getBoundingClientRect().width);
+      const shot = await canvas.screenshot();
+      await writeFile(info.outputPath(`stroke-${y}-${denominator}.png`), shot);
+      const measured = await page.evaluate(async ({ base64, cssWidth, y, denominator }) => {
+        const bitmap = await createImageBitmap(await (await fetch(`data:image/png;base64,${base64}`)).blob());
+        const context = new OffscreenCanvas(bitmap.width, bitmap.height).getContext("2d");
+        if (!context) throw new Error("Missing stroke inspection context");
+        context.drawImage(bitmap, 0, 0); bitmap.close();
+        const { width, height } = context.canvas;
+        const pixels = context.getImageData(0, 0, width, height).data;
+        const ratio = width / cssWidth, scale = Math.min(width, height) / 9.3;
+        let maxDistance = 0, maxRuns = 0, count = 0;
+        const outliers: number[][] = [];
+        for (let px = 0; px < width; px++) {
+          if (Math.abs(px + .5 - width / 2) < 4 * ratio) continue;
+          const x = (px + .5 - width / 2) / scale;
+          if (Math.abs(x) > 3) continue;
+          const expected = height / 2 - (x * x - y * y) / denominator * scale;
+          let runs = 0, previousRed = false;
+          for (let py = 0; py < height; py++) {
+            const i = (py * width + px) * 4;
+            const red = Math.abs(py + .5 - height / 2) > 4 * ratio
+              && pixels[i]! - pixels[i + 1]! > 8 && pixels[i]! - pixels[i + 2]! > 8
+              && pixels[i + 1]! - pixels[i + 2]! < 8;
+            if (red) {
+              if (!previousRed) runs++;
+              count++;
+              const distance = Math.abs(py + .5 - expected) / Math.hypot(1, 2 * x / denominator) / ratio;
+              maxDistance = Math.max(maxDistance, distance);
+              if (distance > 4 && outliers.length < 8) outliers.push([px, py, distance]);
+            }
+            previousRed = red;
+          }
+          maxRuns = Math.max(maxRuns, runs);
+        }
+        return { count, maxDistance, maxRuns, outliers };
+      }, { base64: shot.toString("base64"), cssWidth, y: y!, denominator: denominator! });
+      console.log(`Section stroke ${density}x y=${y} d=${denominator}: ${JSON.stringify(measured)}`);
+      expect(measured.count).toBeGreaterThan(200);
+      expect(measured.maxDistance, JSON.stringify(measured)).toBeLessThan(4);
+      expect(measured.maxRuns, JSON.stringify(measured)).toBe(1);
+    }
+    await expect(page.locator(".static-view")).toBeHidden();
+    await expect(page.locator("#direct-stage canvas")).toHaveCount(1);
+  });
+});
+
 test("manual front-facing inspection omits every surface draw without relying on opacity or SVG", async ({ page }, info) => {
   await page.addInitScript(() => {
     window.__pilotSurfaceDraws = 0;

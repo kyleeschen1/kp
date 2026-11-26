@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Geometric section restriction exemplar",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 1 of 1 slices complete. Canonical clipping exemplar awaits visual judgment; no approved generalization or successor remains.",
+  "summary": "HUMAN_CHECKPOINT: exemplar reopened for an unresolved faint curved outline. Diagnostic safeguard checked; runtime unchanged. Need user screenshot before a targeted repair. No additional scope selected.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -24,7 +24,8 @@
     "npm run test:project-vision"
   ],
   "revisitWhen": [
-    "User accepts or revises the geometric restriction exemplar"
+    "User accepts or revises the geometric restriction exemplar",
+    "User supplies a screenshot of the settled 2D view with the faint curved outline"
   ],
   "allowedWork": [
     "Experiment-local clipping projection, retained WebGL paint, copy, focused tests and review evidence"
@@ -46,8 +47,8 @@
     {
       "id": "exemplar",
       "title": "Reversible surface clipping toward the selected section",
-      "summary": "Checked geometric restriction exemplar: two clipping bounds retain y=c, opaque surviving paint, exact head-on absence and reversible saved-camera return. Unit 11, browser 28, Graph3D 42 and vision 75 pass; types and complete production closure measured.",
-      "status": "complete"
+      "summary": "Clipping implementation remains checked, but faint second-curve feedback is unresolved. Focused journey and normal/Retina stroke checks pass without reproducing it. Runtime unchanged; await user screenshot before targeted repair or visual acceptance.",
+      "status": "in-progress"
     }
   ]
 }

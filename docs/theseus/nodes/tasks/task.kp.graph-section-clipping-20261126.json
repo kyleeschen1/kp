@@ -4,7 +4,7 @@
   "title": "Narrow the visible saddle to its selected section",
   "status": "deferred",
   "domain": "rendering",
-  "summary": "HUMAN_CHECKPOINT: implementation and preservation checks complete. Review the two-sided retreat and pacing with camera rotation in the canonical section demo.",
+  "summary": "HUMAN_CHECKPOINT: faint curved outline in settled 2D not reproduced. User rules out x-axis. Diagnostic checks show one stroke; request screenshot, preserve rendering until paint source is identified.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -67,9 +67,31 @@
       "scope": "Final review links and deferred exemplar boundary",
       "checkedAt": "2026-11-26T09:29:15.087Z",
       "notes": "14 passed after linking the completed review packet. One approved commitment, bounded source context and approval distinctions remain consistent."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph -- --grep 'section visual journey'",
+      "status": "passed",
+      "scope": "Faint curved outline investigation; reproduction remains unresolved",
+      "checkedAt": "2026-11-26T11:38:43.987Z",
+      "notes": "2 passed in Firefox and Chromium. Settled capture shows one curved stroke; SVG fallback remains hidden. This does not reproduce the user-reported faint curved outline."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph -- --grep 'settled section has one curved stroke'",
+      "status": "passed",
+      "scope": "Faint curved outline investigation; reproduction remains unresolved",
+      "checkedAt": "2026-11-26T11:38:44.979Z",
+      "notes": "4 passed: Firefox and Chromium at 1x and 2x density, three changing slice/denominator pairs each. One detected red run per column; maximum measured distance 3.018 CSS px from current parabola. A faint fringe below threshold or browser-specific display artifact is not excluded. No runtime edits or claimed repair."
+    },
+    {
+      "command": "npm run typecheck:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Faint curved outline investigation; reproduction remains unresolved",
+      "checkedAt": "2026-11-26T11:38:45.589Z",
+      "notes": "Passed with the focused stroke inspection harness."
     }
   ],
   "revisitWhen": [
-    "User accepts or revises the geometric restriction exemplar"
+    "User accepts or revises the geometric restriction exemplar",
+    "User supplies a screenshot of the settled 2D view with the faint curved outline"
   ]
 }
