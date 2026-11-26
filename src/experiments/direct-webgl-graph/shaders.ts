@@ -23,6 +23,8 @@ uniform bool lit;
 uniform bool mesh;
 uniform vec3 background;
 uniform float strength;
+uniform float fillPresence;
+uniform float wirePresence;
 out vec4 color;
 void main() {
   vec3 n = normalize(normal);
@@ -32,12 +34,17 @@ void main() {
   float diffuse = max(0.0, dot(n, normalize(vec3(-0.35, -0.55, 1.0))));
   float light = lit ? 0.43 + 0.57 * diffuse : 1.0;
   vec3 paint = pow(pow(surfaceColor, vec3(2.2)) * light, vec3(1.0 / 2.2));
+  float wireAlpha = 0.0;
   if (mesh) {
     vec2 distanceToLine = abs(fract(domain - 0.5) - 0.5) / max(fwidth(domain), vec2(0.00001));
     float coverage = 1.0 - smoothstep(0.35, 1.2, min(distanceToLine.x, distanceToLine.y));
-    paint = mix(paint, inkColor, coverage * 0.38);
+    wireAlpha = coverage * 0.38 * wirePresence;
   }
-  color = vec4(mix(background, paint, strength), 1.0);
+  // Premultiplied wire-over-fill keeps them independently transparent, including
+  // empty faces. Color mixing alone would leave an opaque, depth-writing sheet.
+  vec3 fill = mix(background, paint, strength) * fillPresence;
+  vec3 wire = mix(background, inkColor, strength);
+  color = vec4(mix(fill, wire, wireAlpha), fillPresence * (1.0 - wireAlpha) + wireAlpha);
 }`;
 
 // Native WebGL line width is implementation-dependent. These instanced quads

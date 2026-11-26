@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-graph-sections-planar",
-    title: "Follow one saddle section into 2D and back",
+    id: "kp-graph-section-withdrawal",
+    title: "Reveal the section as fill and wireframe withdraw",
     approval: "approved",
-    contractId: "run-contract.kp.graph-sections-planar-20261125",
-    finish: "A moving saddle section retains its equation and curve identity through planar inspection and exact return to the saved camera. Stop at one visual review packet before another shape or shared renderer promotion.",
-    source: { label: "Approved section/planar exemplar", href: "docs/project/2026-11-25-graph-sections-planar-pilot.md" }
+    contractId: "run-contract.kp.graph-section-withdrawal-20261125",
+    finish: "Surface faces fade first, wireframe second, while the red section and x/z grid remain visible through the camera turn. Reverse and direct seek retain the same projection and exact saved-camera return. Stop at one visual review before promotion.",
+    source: { label: "Approved staged-withdrawal refinement", href: "docs/project/2026-11-25-graph-section-withdrawal.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "The section and camera return are accepted. Discuss a reusable animation stage with prepared token layouts, selectable sequences and versioned asset updates. Host isolation and WebGL-versus-native text remain design choices; select bounded scope before implementation. Matrix authoring remains a proposed return path.",
+  nextJudgment: "Review fill-then-wire withdrawal and the section's foreground clarity during rotation. The broader reusable-stage discussion remains proposed: prepared token layouts, selectable sequences and versioned updates still need host and renderer choices. Matrix authoring remains a proposed return path.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -107,7 +107,7 @@ export const projectVision: ProjectVision = {
   completed: [
     {
       title: "Saddle section and planar return accepted",
-      scope: "One moving y=c section stays linked to its equation, can be inspected in x/z coordinates and returns to the saved 3D camera. The user accepts its presentation. Reusable player design, true transparency and shared renderer promotion remain separate.",
+      scope: "One moving y=c section stays linked to its equation, can be inspected in x/z coordinates and returns to the saved 3D camera. The user accepts that bounded presentation. Staged transparency is a separately approved successor; reusable player design and shared renderer promotion remain separate.",
       source: { label: "Section acceptance and evidence", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" }
     },
     {
@@ -598,6 +598,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the exemplar and proposes controlled reusable stages, prepared token positions, WebGL relationships and selective versioned asset imports. Preserve this as design exploration without starting a renderer migration.",
       reason: "Reuse in articles, flashcards and contextual returns should reduce repeated configuration and preparation. Existing measured native scenes and compiled assets are foundations; iframe ownership and text rendering need separate judgment.",
       source: { label: "Acceptance and new design discussion", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" }
+    },
+    {
+      id: "approve-section-staged-withdrawal", on: "2026-11-25",
+      before: "The accepted section still uses a color-only surface fade, whose opaque depth can hide the planar curve and grid until the endpoint.",
+      after: "The user approves fading faces before wireframe as rotation begins. Add actual transparency and independent section visibility in this exemplar, then review the timing and foreground treatment.",
+      reason: "The section should become clear progressively rather than appear when an invisible surface finally stops occluding it. Keep the source and saved camera; this does not start the reusable-player proposal.",
+      source: { label: "Approved withdrawal scope", href: "docs/project/2026-11-25-graph-section-withdrawal.md" }
     }
   ]
 };

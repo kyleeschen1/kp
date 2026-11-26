@@ -112,7 +112,8 @@ test("inspection is a reversible camera projection with exact x/z coordinates an
       const frame = resolveSectionFrame({ ...INITIAL_SECTION, inspection }, view);
       assert.deepEqual(frame.entities.map((entity) => entity.id).sort(), Object.values(SECTION_IDS).sort());
       assert.equal(frame.entities.find((entity) => entity.id === SECTION_IDS.curve)!.present, true);
-      assert.equal(frame.entities.find((entity) => entity.id === SECTION_IDS.surface)!.present, inspection !== 1);
+      assert.equal(frame.entities.find((entity) => entity.id === SECTION_IDS.surface)!.present,
+        frame.surfacePresence.fill > 0 || frame.surfacePresence.wire > 0);
       const current = { ...view, section: { y: 1, inspection } };
       assert.deepEqual(createPilotObjects(current, 800, 560).find((object) => object.type === "surface-3d"), source);
       if (inspection === 0) {
@@ -132,6 +133,30 @@ test("inspection is a reversible camera projection with exact x/z coordinates an
     }
   }
   assert.deepEqual(validateKpAnimationSaliencePlan(SECTION_ATTENTION, [SECTION_SCENE]), []);
+});
+
+test("withdrawal removes fill before wire while preserving section identity through seek and reverse", () => {
+  const frames = Array.from({ length: 101 }, (_, index) =>
+    resolveSectionFrame({ y: -2, inspection: index / 100 }, INITIAL_VIEW));
+  assert.deepEqual(frames[0]!.surfacePresence, { fill: 1, wire: 1 });
+  assert.deepEqual(frames.at(-1)!.surfacePresence, { fill: 0, wire: 0 });
+  assert.ok(frames.some(({ surfacePresence: { fill, wire }, turn }) => fill > 0 && fill < 1 && wire === 1 && turn > 0));
+  assert.ok(frames.some(({ surfacePresence: { fill, wire } }) => fill === 0 && wire > 0 && wire < 1));
+  assert.ok(frames.some(({ surfacePresence: { fill, wire }, turn }) => fill === 0 && wire === 0 && turn < 1));
+  frames.forEach((frame, index) => {
+    const { fill, wire } = frame.surfacePresence;
+    assert.ok(fill >= 0 && fill <= wire && wire <= 1);
+    if (index > 0) {
+      assert.ok(fill <= frames[index - 1]!.surfacePresence.fill);
+      assert.ok(wire <= frames[index - 1]!.surfacePresence.wire);
+    }
+    for (const entity of frame.entities) {
+      if (entity.id !== SECTION_IDS.surface) assert.equal(entity.present, true);
+    }
+  });
+  for (const index of [100, 66, 45, 0, 23, 80, 45, 100, 0]) {
+    assert.deepEqual(resolveSectionFrame({ y: -2, inspection: index / 100 }, INITIAL_VIEW), frames[index]);
+  }
 });
 
 test("section boundaries reject invalid samples instead of producing undefined shader or camera state", () => {

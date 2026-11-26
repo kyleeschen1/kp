@@ -90,7 +90,7 @@ export function createPilotRenderer(canvas: HTMLCanvasElement, onLost: () => voi
       if (location === null) throw new Error(`Missing shader uniform: ${name}`);
       return [name, location];
     }));
-    const surface = uniforms(surfaceProgram, ["projection", "heightScale", "surfaceColor", "inkColor", "eye", "lit", "mesh", "background", "strength"]);
+    const surface = uniforms(surfaceProgram, ["projection", "heightScale", "surfaceColor", "inkColor", "eye", "lit", "mesh", "background", "strength", "fillPresence", "wirePresence"]);
     const lines = uniforms(lineProgram, ["projection", "viewport", "gridColor", "xColor", "yColor", "zColor", "planes", "section", "context", "sectionY", "heightOffset", "heightScale", "sectionColor", "planeColor"]);
     const plane = uniforms(planeProgram, ["projection", "sectionY", "planeColor", "context"]);
     const rgb = (location: WebGLUniformLocation, value: RGB) => gl.uniform3f(location, ...value);
@@ -123,11 +123,25 @@ export function createPilotRenderer(canvas: HTMLCanvasElement, onLost: () => voi
           gl.uniform3fv(surface.get("eye")!, projection.eye);
           gl.uniform1i(surface.get("lit")!, Number(view.lit)); gl.uniform1i(surface.get("mesh")!, Number(view.mesh));
           rgb(surface.get("background")!, colors.background);
-          gl.uniform1f(surface.get("strength")!, inspecting ? 0.7 * section.context : 1);
+          gl.uniform1f(surface.get("strength")!, inspecting ? 0.7 : 1);
+          gl.uniform1f(surface.get("fillPresence")!, inspecting ? section.surfacePresence.fill : 1);
+          gl.uniform1f(surface.get("wirePresence")!, inspecting ? section.surfacePresence.wire : 1);
+          if (inspecting && section.surfacePresence.fill < 1) {
+            // Resolve the nearest surface once before blending. Otherwise
+            // overlapping triangles accumulate opacity in index-buffer order.
+            // Opaque endpoints already resolve depth in their single paint pass.
+            gl.colorMask(false, false, false, false);
+            gl.drawElements(gl.TRIANGLES, geometry.indices.length, gl.UNSIGNED_SHORT, 0);
+            gl.colorMask(true, true, true, true); gl.depthMask(false);
+            gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+          }
           gl.drawElements(gl.TRIANGLES, geometry.indices.length, gl.UNSIGNED_SHORT, 0);
         }
         gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
         if (inspecting) {
+          // The focal section and its coordinates own the foreground throughout
+          // inspection. Surface-only depth must never occlude them as ink fades.
+          gl.disable(gl.DEPTH_TEST);
           gl.useProgram(planeProgram); gl.bindVertexArray(planeArray);
           gl.uniformMatrix4fv(plane.get("projection")!, false, projection.matrix);
           gl.uniform1f(plane.get("sectionY")!, view.section.y);

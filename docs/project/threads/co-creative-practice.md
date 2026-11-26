@@ -10,14 +10,13 @@ and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rat
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
-Preserve parallel editor ownership; the old workbench
-proposal is historical.
-The [handoff](../reviews/2026-11-08-project-orientation.md) bounds the conversation/preview
-candidate. [Saved reading and motion evidence](../reviews/2026-11-08-saved-reading-and-motion.md)
-separates repaired startup and reuse from cold preparation cost. What counts
-remains the technical reference; fractional reasoning awaits editorial review. Preserve the
-[accepted reading defaults](../principles/document-theater-reading.md) and completed orientation. Fresh generation and integrated
-workbench latency remain unproved. The notebook detour is current.
+Preserve parallel editor ownership; the old workbench proposal is historical.
+The [handoff](../reviews/2026-11-08-project-orientation.md) bounds conversation/preview.
+[Saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) separates startup/reuse
+from cold preparation. What counts remains the technical reference; fractional
+reasoning awaits review. Preserve [reading defaults](../principles/document-theater-reading.md)
+and completed orientation. Fresh generation and integrated latency remain unproved.
+The notebook detour is current.
 
 ## Retrieve for a named question
 
@@ -47,7 +46,9 @@ workbench latency remain unproved. The notebook detour is current.
   review before M-x adoption. Accepted:
   [workspace frame](../reviews/2026-11-25-next-step-review.md) and [quadratic](../reviews/2026-11-25-quadratic-authoring.md).
   Accepted: [direct WebGL grid/saddle](../reviews/2026-11-25-direct-webgl-graph.md).
-  Accepted: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md). Reusable-stage discussion proposed; replacement undecided. Matrix reuse remains proposed. The
+  Accepted: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md).
+  Checked, awaiting judgment: [fill then wire withdrawal](../reviews/2026-11-25-graph-section-withdrawal.md).
+  Reusable-stage discussion and matrix reuse remain proposed; replacement undecided. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and
   [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain separate.

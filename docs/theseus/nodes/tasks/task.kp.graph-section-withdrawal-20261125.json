@@ -1,0 +1,72 @@
+{
+  "id": "task.kp.graph-section-withdrawal-20261125",
+  "kind": "task",
+  "title": "Fade saddle fill before its wireframe during planar inspection",
+  "status": "deferred",
+  "domain": "rendering",
+  "summary": "HUMAN_CHECKPOINT: staged withdrawal is checked; judge timing, foreground plane/curve clarity and real-device smoothness at the canonical section URL.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-graph-section-withdrawal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-graph-section-withdrawal.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "Source-linked project orientation",
+      "checkedAt": "2026-11-26T07:31:27.816Z",
+      "notes": "74 of 75 passed; active thread reached 454 words against its unchanged 450-word startup budget. Compressing existing prose while preserving source links and approval boundaries."
+    },
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Staged saddle withdrawal exemplar",
+      "checkedAt": "2026-11-26T07:33:31.159Z",
+      "notes": "10 passed: canonical math, exact camera/source preservation, ordered deterministic withdrawal and bounds."
+    },
+    {
+      "command": "npm run typecheck:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Staged saddle withdrawal exemplar",
+      "checkedAt": "2026-11-26T07:33:32.020Z",
+      "notes": "Passed after final browser harness changes; experiment, unit/browser tests and cost script checked."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Staged saddle withdrawal exemplar",
+      "checkedAt": "2026-11-26T07:33:32.641Z",
+      "notes": "13 Chromium workflows passed on final code. Real-pixel transparent-depth regression, light/dark, exact saved-camera return, direct seek/reversal, loss/retry, disposal, fallback and phone layout. Withdrawal RAF median/p95/max 16.7/33.4/83.8 ms on SwiftShader; not physical-GPU evidence."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "Staged saddle withdrawal exemplar",
+      "checkedAt": "2026-11-26T07:33:33.281Z",
+      "notes": "42 passed. Existing Graph3D/Three and context lease consumers preserved."
+    },
+    {
+      "command": "npm run measure:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Staged saddle withdrawal exemplar",
+      "checkedAt": "2026-11-26T07:33:33.902Z",
+      "notes": "Initial JS 94862 raw/30254 gzip bytes; lazy comparison 528195/131669 unchanged; complete emitted closure 672367/208087. Retained geometry 302944 bytes and 3 uploads unchanged. No new GPU buffers, textures or programs."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Staged saddle withdrawal exemplar",
+      "checkedAt": "2026-11-26T07:33:34.646Z",
+      "notes": "Complete rerun 75 passed after compressing thread prose below unchanged 450-word limit. Approval boundary, source links and finite successor scope preserved."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the staged saddle withdrawal exemplar"
+  ]
+}

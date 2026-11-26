@@ -18,11 +18,13 @@ and contextual returns. Consumers should select sequences without importing the
 whole mathematics library. Updating an asset should reach subscribers on their
 next page load. This is design exploration, not implementation or migration approval.
 
-The current surface blends its color toward the stage background and stops
-drawing at the endpoint; it remains opaque in the depth buffer until then. Plane
-fill uses alpha. Actual translucency and whole-layer fading are available design
+At this acceptance checkpoint, the surface blended its color toward the stage
+background and stopped drawing at the endpoint; it remained opaque in the depth
+buffer until then. Plane fill used alpha. Actual translucency and whole-layer fading were design
 choices, but require explicit depth/compositing ownership. A residual endpoint
 change in occlusion is distinct from the gradual color withdrawal.
+The user subsequently approved [staged fill/wire withdrawal](../2026-11-25-graph-section-withdrawal.md)
+as a bounded successor; the accepted section/camera milestone stays closed.
 
 Recommended boundary for discussion: one reusable player per active stage, with
 retained geometry, native HTML/KaTeX text and one semantic clock. An iframe can

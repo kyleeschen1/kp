@@ -198,7 +198,7 @@ for (const action of ["close", "section"] as const) test(`${action} during a loa
   expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().pool.active)).toBe(1);
 });
 
-declare global { interface Window { __pilotBufferUploads?: number } }
+declare global { interface Window { __pilotBufferUploads?: number; __pilotSkipSurface?: boolean } }
 
 async function setRange(page: Page, selector: string, value: number) {
   await page.locator(selector).evaluate((element, next) => {
@@ -241,9 +241,11 @@ test("section visual journey keeps one curve through the planar turn and restore
   const after = await page.locator("#direct-canvas").screenshot();
   await writeFile(info.outputPath("section-return.png"), after);
   expect(after.equals(before)).toBe(true);
-  await setRange(page, "#section-inspection", .5);
-  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0.5");
-  await page.screenshot({ path: info.outputPath("section-midpoint.png"), fullPage: true });
+  for (const [phase, progress] of [["fill-fading", .18], ["wire-only", .4], ["wire-fading", .55], ["clear-turn", .75]] as const) {
+    await setRange(page, "#section-inspection", progress);
+    await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", String(progress));
+    await page.screenshot({ path: info.outputPath(`section-${phase}.png`), fullPage: true });
+  }
   await setRange(page, "#section-inspection", 1);
   await setRange(page, "#section-y", -2);
   await setRange(page, "#denominator", 8);
@@ -258,6 +260,50 @@ test("section visual journey keeps one curve through the planar turn and restore
   }
   expect(requests.some((request) => /(?:graph-webgl-three|\/reference\.ts|\/three[._/])/.test(request))).toBe(false);
   expect(errors).toEqual([]);
+});
+
+test("withdrawn faces cannot occlude the section and its grid, including interrupted return", async ({ page }, info) => {
+  await page.addInitScript(() => {
+    // A reference with the actual surface submissions omitted detects depth
+    // occlusion, even when a transparent surface is still submitted for its wire.
+    WebGL2RenderingContext.prototype.drawElements = new Proxy(WebGL2RenderingContext.prototype.drawElements, {
+      apply(target, receiver, args) {
+        if (!window.__pilotSkipSurface) return Reflect.apply(target, receiver, args);
+      }
+    });
+  });
+  await page.setViewportSize({ width: 1280, height: 1100 });
+  await openSection(page);
+  await page.getByLabel("Surface grid", { exact: true }).uncheck();
+  const canvas = page.locator("#direct-canvas");
+  for (const [theme, y] of [["light", 1.5], ["dark", -2]] as const) {
+    if (theme === "dark") await page.getByRole("button", { name: "Dark theme" }).click();
+    await setRange(page, "#section-y", y);
+    await setRange(page, "#section-inspection", .45);
+    const before = await canvas.screenshot();
+    await writeFile(info.outputPath(`unoccluded-${theme}.png`), before);
+    // A round trip through the fill phase must not retain depth or stale paint.
+    await setRange(page, "#section-inspection", .12);
+    expect((await canvas.screenshot()).equals(before)).toBe(false);
+    await setRange(page, "#section-inspection", .45);
+    expect((await canvas.screenshot()).equals(before)).toBe(true);
+    await page.evaluate(() => { window.__pilotSkipSurface = true; });
+    await setRange(page, "#section-inspection", .45);
+    expect((await canvas.screenshot()).equals(before)).toBe(true);
+    await page.evaluate(() => { window.__pilotSkipSurface = false; });
+    await setRange(page, "#section-inspection", .45);
+    await page.getByLabel("Surface grid", { exact: true }).check();
+    // The same frame still has a real wire trace; we have not hidden the whole
+    // surface early merely to make the zero-fill comparison pass.
+    expect((await canvas.screenshot()).equals(before)).toBe(false);
+    await page.screenshot({ path: info.outputPath(`wire-only-${theme}.png`), fullPage: true });
+    await page.getByLabel("Surface grid", { exact: true }).uncheck();
+    await setRange(page, "#section-inspection", .8);
+    const settled = await canvas.screenshot();
+    await page.getByLabel("Surface grid", { exact: true }).check();
+    expect((await canvas.screenshot()).equals(settled)).toBe(true);
+    await page.getByLabel("Surface grid", { exact: true }).uncheck();
+  }
 });
 
 test("section playback reverses, scrubs, switches mode and recovers without geometry uploads or stale clocks", async ({ page }, info) => {
@@ -279,6 +325,17 @@ test("section playback reverses, scrubs, switches mode and recovers without geom
   });
   expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().view.section.y)).toBeGreaterThan(-2.8);
   await page.getByRole("button", { name: "Inspect in 2D", exact: true }).click();
+  const turnIntervals = await page.evaluate(async () => {
+    const samples: number[] = []; let previous = performance.now();
+    // Sample the actual translucent interval, then interrupt before 2D settles.
+    for (let i = 0; i < 120; i++) {
+      await new Promise<void>((resolve) => requestAnimationFrame((now) => {
+        samples.push(Math.max(0, now - previous)); previous = now; resolve();
+      }));
+      if (window.__kpGraphPilot!.inspect().view.section.inspection >= .65) break;
+    }
+    return samples.slice(1).sort((a, b) => a - b);
+  });
   await expect.poll(() => page.evaluate(() => window.__kpGraphPilot!.inspect().view.section.inspection)).toBeGreaterThan(.1);
   expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().sectionClocks.scan)).toBe("paused");
   await page.getByRole("button", { name: "Return to 3D", exact: true }).click();
@@ -292,9 +349,12 @@ test("section playback reverses, scrubs, switches mode and recovers without geom
   expect(await page.evaluate(() => window.__pilotBufferUploads)).toBe(3);
   const stats = await page.evaluate(() => window.__kpGraphPilot!.inspect().stats);
   const runtime = { sample: "saddle section sweep", rafP50Ms: intervals[Math.floor(intervals.length * .5)],
-    rafP95Ms: intervals[Math.ceil(intervals.length * .95) - 1], rafMaxMs: intervals.at(-1), stats };
+    rafP95Ms: intervals[Math.ceil(intervals.length * .95) - 1], rafMaxMs: intervals.at(-1), stats,
+    withdrawal: { samples: turnIntervals.length, rafP50Ms: turnIntervals[Math.floor(turnIntervals.length * .5)],
+      rafP95Ms: turnIntervals[Math.ceil(turnIntervals.length * .95) - 1], rafMaxMs: turnIntervals.at(-1) } };
   await writeFile(info.outputPath("section-runtime.json"), JSON.stringify(runtime, null, 2));
   console.log(`Section sweep: p95 RAF ${runtime.rafP95Ms?.toFixed(2)}ms; p95 JS submission ${stats?.submitP95Ms.toFixed(2)}ms; ${stats?.uploads} retained uploads.`);
+  console.log(`Section withdrawal: p95 RAF ${runtime.withdrawal.rafP95Ms?.toFixed(2)}ms from ${turnIntervals.length} intervals.`);
   await page.locator("#direct-canvas").evaluate((element) => {
     if (!(element instanceof HTMLCanvasElement)) throw new Error("Missing canvas");
     const extension = element.getContext("webgl2")?.getExtension("WEBGL_lose_context");

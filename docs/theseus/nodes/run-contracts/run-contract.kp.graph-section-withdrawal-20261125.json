@@ -1,0 +1,54 @@
+{
+  "id": "run-contract.kp.graph-section-withdrawal-20261125",
+  "kind": "run-contract",
+  "title": "Staged saddle withdrawal exemplar",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1/1 bounded delivery package complete; no shared promotion or reusable-player scope authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.graph-section-withdrawal-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-graph-section-withdrawal.md",
+      "summary": "User-approved successor to the accepted section, preserving its source and saved camera"
+    }
+  ],
+  "verification": [
+    "npm run test:direct-webgl-graph",
+    "npm run typecheck:direct-webgl-graph",
+    "npm run visual:direct-webgl-graph",
+    "npm run test:graph-3d-runtime",
+    "npm run measure:direct-webgl-graph",
+    "npm run test:project-vision"
+  ],
+  "revisitWhen": [
+    "User accepts or revises the canonical withdrawal treatment"
+  ],
+  "allowedWork": [
+    "Experiment-local projection, WebGL paint/depth, focused tests and review evidence"
+  ],
+  "disallowedWork": [
+    "Shared motif promotion, reusable player, other shapes, renderer replacement, publication, parallel agents"
+  ],
+  "goal": "Keep the section visible while fill then wireframe withdraw during the planar turn",
+  "target": "task.kp.graph-section-withdrawal-20261125",
+  "runMode": "run",
+  "maxSlices": 1,
+  "commitCadence": "One checked implementation and evidence checkpoint; hourly recoverable backup if needed",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Checked exemplar requires human judgment of timing and foreground treatment",
+    "Two-hour ceiling with final 30 minutes for verification and closeout"
+  ],
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Staged fill and wireframe withdrawal with independent section visibility",
+      "summary": "Checked candidate and review packet delivered: faces then wire withdraw, section foreground stays visible, source and saved camera preserved. 10 unit, 13 browser, 42 preservation and 75 vision checks pass; types and full production closure measured.",
+      "status": "complete"
+    }
+  ]
+}
