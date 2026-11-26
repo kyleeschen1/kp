@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-graph-sections-planar`
 Execution Contract: `run-contract.kp.graph-sections-planar-20261125`
-Next Product Milestone: `graph-sections-planar-pilot`
-Milestone Authority: approved
+Next Product Milestone: `reusable-animation-stage`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -38,7 +38,7 @@ Review this exemplar before M-x adoption. New Vim behavior remains separate.
 quiet beige modeline and neutral pane edge. **Accepted:**
 [M0 quadratic loop](reviews/2026-11-25-quadratic-authoring.md).
 **Accepted:** [direct WebGL grid/saddle](reviews/2026-11-25-direct-webgl-graph.md).
-**Review:** [section/2D return](reviews/2026-11-25-graph-sections-planar.md); renderer replacement undecided. Matrix reuse remains proposed. Preserve
+**Accepted:** [section/2D return](reviews/2026-11-25-graph-sections-planar.md). Reusable-stage discussion proposed; renderer replacement undecided. Matrix reuse remains proposed. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.

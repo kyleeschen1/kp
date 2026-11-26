@@ -1,11 +1,63 @@
 # Saddle section and planar return: visual checkpoint
 
 Date: 2026-11-25
-Outcome: HUMAN_CHECKPOINT — the bounded implementation and checks are complete;
-the plane treatment and camera choreography await the user's judgment.
+Outcome: COMPLETE — the user says “this looks great!” and accepts the bounded
+section and planar-return exemplar. Shared renderer promotion remains separate.
 Authority: [approved section exemplar](../2026-11-25-graph-sections-planar-pilot.md).
 Preserve the [accepted grid/saddle](2026-11-25-direct-webgl-graph.md), including
 plain axis labels. This does not replace Three.js or promote a shared renderer.
+
+## Acceptance and reusable-player discussion
+
+The user accepts this exemplar, then proposes a controlled animation stage with
+only the current scene visible; hidden HTML could prepare token positions and
+sizes ahead of animation. They suggest an iframe for layout/CSS isolation, strict
+stage dimensions, WebGL for graphs and relationships, and symbols/text that tell
+the story. The same assets should be inexpensive to reuse in articles, flashcards
+and contextual returns. Consumers should select sequences without importing the
+whole mathematics library. Updating an asset should reach subscribers on their
+next page load. This is design exploration, not implementation or migration approval.
+
+The current surface blends its color toward the stage background and stops
+drawing at the endpoint; it remains opaque in the depth buffer until then. Plane
+fill uses alpha. Actual translucency and whole-layer fading are available design
+choices, but require explicit depth/compositing ownership. A residual endpoint
+change in occlusion is distinct from the gradual color withdrawal.
+
+Recommended boundary for discussion: one reusable player per active stage, with
+retained geometry, native HTML/KaTeX text and one semantic clock. An iframe can
+host it for document isolation; a trusted in-app host could use Shadow DOM and
+layout containment. Avoid binding mathematical assets to either embedding choice.
+WebGL text would need an ink representation as well as measured rectangles; do
+not infer that glyph capture, shaping, selection or accessible meaning is solved
+by having positions. Preserve the existing native notation and semantic owners.
+
+Measure after fonts and layout settle, cache by source/style/layout identity,
+then animate prepared transforms/geometry. A blank visible stage still needs a
+laid-out measurement subtree; `display:none` cannot provide usable geometry.
+Responsive profiles and changed text/font metrics can require new preparation.
+Fixed endpoints do not imply that every interactive parameter state can be baked
+in advance. Keep authored compilation, local preparation and per-frame work separate.
+
+Existing foundations include the reader's measured equation anchors and bounded
+prepared-scene reuse, `kp-compiled-publication-artifact.ts`, dependency phases in
+`dependency-planner.ts`, and iframe export manifests. These are ingredients, not
+evidence that the proposed unified player or arbitrary sequence splitting exists.
+A selected sequence needs its own entry state and complete declared dependencies;
+an arbitrary time interval may depend on earlier material. Stable entity/beat IDs
+must survive the rendering choice so semantic links and direct return still work.
+
+Proposed distribution: stable asset and sequence IDs resolve a freshly validated
+manifest to an immutable revision and only the needed chunks. Publish revisions
+atomically; keep one revision coherent within a playing session. Normal embeds
+may follow current compatible releases, while saved attempts/exact returns retain
+their revision. Offline/history restores and live-update notifications need explicit
+semantics; next-load refresh does not itself update already-open players.
+
+The next possible proof is reuse of one existing animation in article and compact
+card contexts with selected sequences, measured preparation and bounded imports.
+Host choice and renderer responsibilities remain open. Matrix authoring remains
+the proposed return path; no general WebGL conversion or platform project starts.
 
 ## Inspect
 

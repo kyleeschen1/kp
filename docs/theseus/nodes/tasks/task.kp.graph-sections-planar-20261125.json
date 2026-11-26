@@ -2,9 +2,9 @@
   "id": "task.kp.graph-sections-planar-20261125",
   "kind": "task",
   "title": "Follow a saddle section into 2D and back",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "rendering",
-  "summary": "HUMAN_CHECKPOINT: one implemented and checked exemplar awaits plane and camera-choreography judgment; no broader shape or renderer work is authorized.",
+  "summary": "User accepts the section and planar-return exemplar: this looks great. Reusable iframe/player, measured token layout and selective asset updates are subsequent design exploration, not migration approval.",
   "sourceRefs": [
     {
       "kind": "file",

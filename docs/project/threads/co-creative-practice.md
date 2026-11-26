@@ -47,7 +47,7 @@ workbench latency remain unproved. The notebook detour is current.
   review before M-x adoption. Accepted:
   [workspace frame](../reviews/2026-11-25-next-step-review.md) and [quadratic](../reviews/2026-11-25-quadratic-authoring.md).
   Accepted: [direct WebGL grid/saddle](../reviews/2026-11-25-direct-webgl-graph.md).
-  Review: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md); replacement undecided. Matrix reuse remains proposed. The
+  Accepted: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md). Reusable-stage discussion proposed; replacement undecided. Matrix reuse remains proposed. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and
   [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain separate.

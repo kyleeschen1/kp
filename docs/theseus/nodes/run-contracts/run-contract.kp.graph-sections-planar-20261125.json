@@ -2,8 +2,8 @@
   "id": "run-contract.kp.graph-sections-planar-20261125",
   "kind": "run-contract",
   "title": "Saddle section and planar return",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 1/1 implementation package complete. Stop at the approved canonical review; no generalization.",
+  "status": "resolved",
+  "summary": "COMPLETE: user accepts the canonical section and reversible planar-return exemplar. One of one package completed; successor player architecture remains discussion only.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,7 +59,7 @@
     {
       "id": "exemplar",
       "title": "Linked section and reversible planar inspection",
-      "summary": "Checked exemplar and review packet delivered: linked moving section, exact planar inspection, saved-camera return, preserved grid/saddle, bounded costs and lifecycle checks. Visual judgment remains pending.",
+      "summary": "Implementation, scoped checks and the canonical visual checkpoint are complete. The user accepts the plane, linked section and saved-camera return; shared renderer and reusable-player work remain separate.",
       "status": "complete"
     }
   ]

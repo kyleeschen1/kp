@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved section/planar exemplar", href: "docs/project/2026-11-25-graph-sections-planar-pilot.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review the checked saddle section's plane treatment, continuity and camera turn. The equation link, exact planar endpoint and saved-camera return have executable evidence. Preserve the accepted grid/saddle; other shapes, shared renderer replacement and matrix authoring remain separate successors.",
+  nextJudgment: "The section and camera return are accepted. Discuss a reusable animation stage with prepared token layouts, selectable sequences and versioned asset updates. Host isolation and WebGL-versus-native text remain design choices; select bounded scope before implementation. Matrix authoring remains a proposed return path.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -93,18 +93,23 @@ export const projectVision: ProjectVision = {
     {
       id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "The grid/saddle is accepted and plain labels are preserved. Its checked successor links a moving section to its equation and planar view with a pixel-identical camera return. The source, projector, clocks and lease owners remain intact. Visual acceptance, device performance and shared renderer promotion remain separate.",
-      evidence: { label: "Section checkpoint and bounded evidence", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" },
+      established: "The grid/saddle and linked section/planar-return exemplars are accepted. Exact mathematical and camera return, retained uploads and lifecycle behavior have bounded evidence. Prepared native notation, compiled publication artifacts and dependency manifests already exist; a unified reusable player and broad device performance remain unproved.",
+      evidence: { label: "Section acceptance and reusable-player discussion", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" },
       outcome: {
-        authority: "approved",
-        id: "graph-sections-planar-pilot", title: "Inspect one cross-section in 3D and 2D",
-        finish: "One saddle section retains its equation and identity as it is inspected head-on in 2D and returned to its saved 3D camera. Keep source, projection and display deformation distinct and stop for visual review.",
-        excludes: "Shared renderer replacement, general solid clipping/capping, broad shape families and matrix authoring. Preserve the accepted grid/saddle and existing Three path.",
-        source: { label: "Approved bounded successor", href: "docs/project/2026-11-25-graph-sections-planar-pilot.md" }
+        authority: "proposed",
+        id: "reusable-animation-stage", title: "Reuse one prepared animation across contexts",
+        finish: "After selecting scope and host/renderer boundaries, one existing animation plays chosen sequences in article and compact-card contexts, retains direct returns and measures preparation and loading costs. Reuse existing source, measurement, clock and dependency owners.",
+        excludes: "Implicit implementation approval, universal WebGL text or graph conversion, a replacement semantic model, broad iframe rollout, general clipping, matrix authoring and publication.",
+        source: { label: "Reusable-stage exploration after acceptance", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" }
       }
     }
   ],
   completed: [
+    {
+      title: "Saddle section and planar return accepted",
+      scope: "One moving y=c section stays linked to its equation, can be inspected in x/z coordinates and returns to the saved 3D camera. The user accepts its presentation. Reusable player design, true transparency and shared renderer promotion remain separate.",
+      source: { label: "Section acceptance and evidence", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" }
+    },
     {
       title: "Direct GPU grid and saddle accepted",
       scope: "The user accepts one isolated coordinate grid and shaded saddle with retained geometry, reversible curvature and explicit Three comparison. Label backing is removed. Shapes, sections, exact planar endpoints and shared renderer promotion remain separate.",
@@ -586,6 +591,13 @@ export const projectVision: ProjectVision = {
       after: "The user agrees and authorizes that bounded proof. Extend the isolated experiment with a moving section, linked equation, reversible planar inspection and exact saved-camera return, then stop for visual review.",
       reason: "This tests a useful mathematical explanation workflow while preserving numerical authority and renderer optionality. Other shape families and a Three replacement remain unapproved.",
       source: { label: "Section/2D approval and scope", href: "docs/project/2026-11-25-graph-sections-planar-pilot.md" }
+    },
+    {
+      id: "accept-section-explore-reusable-stage", on: "2026-11-25",
+      before: "The bounded saddle section and reversible planar inspection await visual judgment.",
+      after: "The user accepts the exemplar and proposes controlled reusable stages, prepared token positions, WebGL relationships and selective versioned asset imports. Preserve this as design exploration without starting a renderer migration.",
+      reason: "Reuse in articles, flashcards and contextual returns should reduce repeated configuration and preparation. Existing measured native scenes and compiled assets are foundations; iframe ownership and text rendering need separate judgment.",
+      source: { label: "Acceptance and new design discussion", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" }
     }
   ]
 };
