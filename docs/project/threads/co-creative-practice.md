@@ -44,11 +44,12 @@ workbench latency remain unproved. The notebook detour is current.
   is checked, awaiting visual judgment. Accepted: [fruit picker](../reviews/2026-11-25-fruit-picker.md)
   presentation. Checked, awaiting judgment: [workspace commands](../reviews/2026-11-25-workspace-commands.md),
   retaining targets and histories. Checked: [Vim coverage](../reviews/2026-11-25-vim-binding-coverage.md).
-  Checked: [floating rows and C-h filters](../reviews/2026-11-25-row-picker.md),
-  with query continuity; review before M-x adoption. New Vim behavior is separate. The
+  Checked: [floating rows and C-h filters](../reviews/2026-11-25-row-picker.md);
+  review before M-x adoption. Proposed next:
+  [workspace frame](../reviews/2026-11-25-next-step-review.md), then mathematics. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and
-  [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain proposed horizons.
+  [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain separate.
   Preserve native history and domain ownership.
   Motions/text objects remain parked; MathML declined.
   Review before generalizing.

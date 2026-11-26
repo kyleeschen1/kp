@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved floating row exemplar", href: "docs/project/reviews/2026-11-25-row-picker.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, choose Vim binding coverage from M-x. Search diw, press C-h, isolate tags with Shift plus their key, then q to resume typing. Inspect with Enter; Escape returns one level. Judge row density, tag vocabulary and continuity before M-x adoption.",
+  nextJudgment: "Proposed next: a larger modeline and surrounding frame above the pickers, with the editor header hidden. Preserve the picker placement the user finds contained. After implementation, inspect M-x in the fixed split, modeline visibility and Escape return. The current row/filter exemplar still needs its broader interaction review before M-x adoption.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -42,13 +42,13 @@ export const projectVision: ProjectVision = {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
       established: "The notebook, persistent conversation and fruit-picker presentation are accepted; the equal split, joined chat/folding and modeline are checked. Pane/line focus, workspace commands, Vim coverage and the floating row/filter exemplar have checked candidates awaiting judgment. Native data and independent Spindle ownership remain foundations.",
-      evidence: { label: "Recorded multiplexer vision and boundaries", href: "docs/project/2026-11-25-multiplexer-vision.md" },
+      evidence: { label: "Requested frame refinement and mathematical return path", href: "docs/project/reviews/2026-11-25-next-step-review.md" },
       outcome: {
-        authority: "approved",
-        id: "row-picker", title: "Filter compact rows while preserving the editing context",
-        finish: "One floating Vim picker displays structured rows with stable identity, explicit match fields and role/invocation/domain/support facets. C-h and q retain the query editor, selection and undo; support claims remain unchanged.",
-        excludes: "New Vim behavior, storage or framework migration, general picker rollout before exemplar review, and production publication.",
-        source: { label: "Approved row model and filter transient", href: "docs/project/reviews/2026-11-25-row-picker.md" }
+        authority: "proposed",
+        id: "workspace-frame", title: "Enclose the workspace with a clear modeline and frame",
+        finish: "The larger modeline/frame sits above application pickers, the editor header is hidden, commands and save/error status remain accessible, and modal focus/return survives. Preserve the fixed split and picker placement; review before returning to the quadratic authoring proof.",
+        excludes: "Popup redesign, moving windows, storage migration, new Vim behavior, mathematical implementation within this presentation slice, and publication. The checked row-picker contract retains its own review boundary.",
+        source: { label: "Proposed frame outcome and review cues", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
       }
     },
     {
@@ -501,6 +501,13 @@ export const projectVision: ProjectVision = {
       after: "Document the Vim design and accept conventional core plus semantic commands, keeping parity gaps visible. Propose linked mathematical authoring and a finite animation portfolio; retain the row-picker review and earlier practice reuse as separate commitments and horizons.",
       reason: "The user wants major symbolic and graphical capabilities to compose through autocomplete without an exhaustive editor rebuild. Source inspection finds reusable foundations but missing integration. A quadratic and matrix caller must establish the workflow before broad promotion; no mathematical implementation run is approved.",
       source: { label: "Accepted priority and linked review proposals", href: "docs/project/decisions/2026-11-25-vim-core-and-semantic-commands.md" }
+    },
+    {
+      id: "workspace-frame-before-mathematics", on: "2026-11-25",
+      before: "The Vim and mathematical programme are documented; the checked row-picker candidate retains its review boundary.",
+      after: "The user endorses that direction and requests a larger elevated modeline and temporary editor-header removal first. Recommend one bounded workspace-frame pass, then the saved quadratic and matrix authoring callers. Picker containment already feels right; preserve its placement.",
+      reason: "Finish the immediate workspace refinement while keeping the mathematical return path explicit. This records a next-step recommendation, not an implementation result or permission to resume old runs. Broader row/filter acceptance and promotion gates remain separate.",
+      source: { label: "Frame request, clarification and recommended sequence", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
     }
   ]
 };

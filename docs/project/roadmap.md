@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-row-picker`
 Execution Contract: `run-contract.kp.row-picker-20261125`
-Next Product Milestone: `row-picker`
-Milestone Authority: approved
+Next Product Milestone: `workspace-frame`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -34,9 +34,9 @@ the pinned reference and per-editor support.
 **Checked:** [floating row picker](reviews/2026-11-25-row-picker.md): annotated
 Vim rows, intentional matching and C-h tag filters with query/context return.
 Review this exemplar before M-x adoption. New Vim behavior remains separate.
-Future scope: [multiplexer](2026-11-25-multiplexer-vision.md),
-[Vim](2026-11-25-vim-semantic-command-design.md),
-[mathematics](2026-11-25-mathematical-authoring-programme.md); planning only.
+Proposed next: [workspace frame](reviews/2026-11-25-next-step-review.md), then
+[mathematics](2026-11-25-mathematical-authoring-programme.md). Preserve
+[Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
 Retain the 440px column, persistent composition, data and native rendering.
@@ -48,8 +48,8 @@ and search remain parked; MathML declined.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md) retains composition
 evidence; its inspector was unaccepted. Fractional editorial review remains parked.
 
-Return to the approved [authoring-to-practice programme](2026-11-08-authoring-to-practice-loops.md)
-after this bounded checkpoint. Its dependencies and human gates remain intact.
+The mathematical proposal serves [authoring-to-practice](2026-11-08-authoring-to-practice-loops.md);
+preserve its dependencies and human gates.
 [Orientation delivery](2026-11-08-project-orientation-delivery.md) stays complete.
 
 What counts remains the technical reference. Preserve the
