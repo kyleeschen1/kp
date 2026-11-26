@@ -126,3 +126,14 @@ fixed and the prose's left edge anchored. No tilt or bounce; use the existing
 scroll clock for exact reverse and direct seeks. Replace the same opt-in
 candidate and stop for visual judgment; native math and other lessons remain
 outside the change.
+
+## Approved original-layout reset
+
+The user rejected the accumulated presentation treatments, then narrowed a
+possible physics-drag rewrite to restoring the original fraction presentation
+and replacing its bracket frame with a black left ridge. This supersedes all
+rail/depth/frame variants above. Remove their flags and implementation, restore
+the pre-experiment theater/layout behavior, and scope the ridge to the notebook
+preview. Preserve native math, viewport-independent operation pacing and
+independent annotation corrections. Review the [single reset exemplar](reviews/2026-11-26-fraction-original-ridge.md)
+before any further choreography or generalization.

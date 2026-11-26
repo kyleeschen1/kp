@@ -21,6 +21,5 @@ export function compileFractionNotebook(value: unknown, canonical: string) {
 export function fractionPreviewPage(canonical: string): string {
   return compileKpFractionalLinearEquationLesson(canonical).html
     .replace('</head>', '<link rel="stylesheet" href="/src/fraction-notebook/preview.css">\n</head>')
-    .replace('<body', '<body data-kp-fraction-notebook-preview="true"')
-    .replace('<header class="kp-reader-masthead">', '<script>if(new URL(location.href).searchParams.get("rail")==="1"){document.body.dataset.kpRecessedRail="true";if(new URL(location.href).searchParams.get("frames")==="1")document.body.dataset.kpFrameExchange="true";}</script><header class="kp-reader-masthead">');
+    .replace('<body', '<body data-kp-fraction-notebook-preview="true"');
 }

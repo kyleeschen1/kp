@@ -5,11 +5,18 @@
 /* The rendered document must have the workspace palette before its deferred
    editing bridge loads, including the native reader's stage and ink tokens. */
 @import './theme.css';
-@import './recessed-rail.css';
-@import './frame-exchange.css';
 /* Only the development notebook preview loads this presentation. The native
  * masthead remains a zero-height control owner for the existing reader runtime. */
 body[data-kp-fraction-notebook-preview] { --kp-reader-masthead-height: 0px; }
+/* Only replace the original stage punctuation. The reader still owns all
+   placement, attention, annotation and mathematical animation behavior. */
+body[data-kp-fraction-notebook-preview] { --fn-stage-ridge: #000; }
+html[data-notebook-theme=dark] body[data-kp-fraction-notebook-preview] { --fn-stage-ridge: var(--fn-text); }
+body[data-kp-fraction-notebook-preview] .kp-caption-frame::before {
+  left: 0; width: 1px; border: 0; border-radius: 0;
+  background: var(--fn-stage-ridge);
+}
+body[data-kp-fraction-notebook-preview] .kp-caption-frame::after { display: none; }
 body[data-kp-fraction-notebook-preview] .kp-reader-masthead {
   height: 0; min-height: 0; padding: 0; border: 0; position: relative;
   z-index: 100; background: transparent; box-shadow: none; backdrop-filter: none;

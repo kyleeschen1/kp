@@ -4,7 +4,7 @@
   "title": "Review a recessed fraction stage beneath scrolling prose",
   "status": "deferred",
   "domain": "reader",
-  "summary": "HUMAN_CHECKPOINT: review the opt-in fraction rail before hardening or reuse.",
+  "summary": "HUMAN_CHECKPOINT: original fraction layout with a left ridge; recent depth/frame variants retired. Review docs/project/reviews/2026-11-26-fraction-original-ridge.md.",
   "verificationRecords": [
     {
       "command": "npm run visual:recessed-rail -- --project=firefox",
@@ -75,6 +75,13 @@
       "scope": "Raised-prose handoff and prior rail treatment, desktop and phone, Chromium and Firefox",
       "checkedAt": "2026-11-26T18:09:19.939Z",
       "notes": "Final eight cases pass. Typecheck and 24 focused tests pass. Tests cover opaque stage ordering, raised reading shelf, reverse, stage scale, label gap, reduced motion and preserved math travel. Earlier exact-boundary sampling, Firefox label sizing and one startup timeout are recorded in the review packet."
+    },
+    {
+      "command": "npm run visual:fraction-ridge -- --project=firefox",
+      "status": "passed",
+      "scope": "Original fraction presentation, desktop/phone, Chromium/Firefox",
+      "checkedAt": "2026-11-26T19:40:06.866Z",
+      "notes": "Four browser cases pass; typecheck and 20 focused unit tests pass. Original theater/layout restored; ridge replaces brackets; retired flags inert."
     }
   ],
   "revisitWhen": [

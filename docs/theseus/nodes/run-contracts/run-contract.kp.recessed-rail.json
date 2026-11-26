@@ -88,6 +88,12 @@
       "title": "Stage and prose exchange elevated reading positions",
       "summary": "HUMAN_CHECKPOINT: stage and prose exchange elevation with an upper-edge reveal. Candidate checked; review the same frames=1 fraction URL.",
       "status": "complete"
+    },
+    {
+      "id": "original-black-ridge",
+      "title": "Restore original fraction presentation with a single left ridge",
+      "summary": "HUMAN_CHECKPOINT: original fraction layout restored; brackets replaced by a thin left ridge. Typecheck, 20 unit tests and four Chromium/Firefox cases pass. See fraction-original-ridge review.",
+      "status": "complete"
     }
   ]
 }

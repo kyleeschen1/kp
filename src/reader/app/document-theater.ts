@@ -4,7 +4,6 @@ import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
-import { documentRailEmergence, documentTheaterExitPresence } from './document-theater-depth.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -15,8 +14,6 @@ export function mountDocumentTheater(input: {
 }) {
   const document = input.story.ownerDocument;
   const window = document.defaultView!;
-  const recessed = document.body.dataset['kpRecessedRail'] === 'true';
-  const frameExchange = recessed && document.body.dataset['kpFrameExchange'] === 'true';
   const passages = input.beats.map((beat) => {
     const passage = beat.querySelector<HTMLElement>('.kp-rising-passage');
     if (passage === null) throw new Error('Document passage requires its compiled prose.');
@@ -64,7 +61,6 @@ export function mountDocumentTheater(input: {
   let readingLine = 0;
   let positions: readonly number[] = [];
   let heights: readonly number[] = [];
-  let frameText: readonly { top: number; bottom: number }[] = [];
   let holds: readonly number[] = [];
   let frameTop = 0, frameBottom = 0;
   let focusAt = compileDocumentTheaterFocus({ positions: [], holds: [] });
@@ -94,31 +90,6 @@ export function mountDocumentTheater(input: {
     const opacity = focusAt(position);
     const attention = attentionAt({ position, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode });
     annotation = attention.kind === 'annotation' ? attention : undefined;
-    // The foreground prose keeps ordinary document presence. The existing
-    // annotation adapter still owns all authored labels on the stage.
-    if (recessed && !readAll) {
-      if (frameExchange) {
-        const exchange = documentRailEmergence(position, frameBottom, frameText);
-        document.body.style.setProperty('--kp-frame-stage-focus', String(exchange.stage));
-        document.body.dataset['kpFrameFront'] = exchange.stage >= .5 ? 'stage' : 'prose';
-        // The same authored cue also has a stage annotation. Yield that
-        // rendering during the prose turn instead of showing both at once.
-        if (exchange.prose.some(state => state.active)) annotation = undefined;
-        exchange.prose.forEach((state, index) => {
-          const copy = passages[index]!.querySelector<HTMLElement>('.kp-caption-copy')!;
-          copy.style.setProperty('--kp-prose-presence', String(state.presence));
-          copy.style.setProperty('--kp-prose-lift', String(state.lift));
-          copy.style.setProperty('--kp-prose-offset', `${state.offset}px`);
-          passages[index]!.style.setProperty('--kp-prose-layer', state.front ? '3' : '1');
-          passages[index]!.dataset['kpProseSelected'] = String(selectedPassages.has(index));
-        });
-      }
-      const presence = documentTheaterExitPresence(position, positions.at(-1)!, holds.at(-1)!, frameBottom);
-      document.body.style.setProperty('--kp-rail-depth', String(1 - presence));
-      document.body.style.setProperty('--kp-rail-presence', String(presence));
-      selected = active;
-      return;
-    }
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
     const neighbors = [active - 1, active, active + 1];
@@ -152,13 +123,6 @@ export function mountDocumentTheater(input: {
       measureDocumentTheaterLayout(document, equationHeight,
         documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
-    if (frameExchange) frameText = passages.map(passage => {
-      const copy = passage.querySelector<HTMLElement>('.kp-caption-copy')!;
-      // The flex-end passage keeps its intrinsic layout box while its child
-      // scales. Never measure the animated child's client rect as source data.
-      const bottom = window.scrollY + passage.getBoundingClientRect().bottom - parseFloat(window.getComputedStyle(passage).paddingBottom);
-      return { top: bottom - copy.offsetHeight, bottom };
-    });
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };
   measure();

@@ -1,5 +1,9 @@
 # Raised prose handoff — fraction checkpoint
 
+Retired at the user's request. See the [original-layout reset with a left
+ridge](2026-11-26-fraction-original-ridge.md). The following records historical
+experiments; their flags and presentation code have been removed.
+
 ## Current raised-prose revision
 
 Outcome: HUMAN_CHECKPOINT. Approved in the
