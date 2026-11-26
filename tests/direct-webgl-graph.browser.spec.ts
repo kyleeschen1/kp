@@ -198,7 +198,7 @@ for (const action of ["close", "section"] as const) test(`${action} during a loa
   expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().pool.active)).toBe(1);
 });
 
-declare global { interface Window { __pilotBufferUploads?: number; __pilotSkipSurface?: boolean; __pilotSurfaceDraws?: number } }
+declare global { interface Window { __pilotBufferUploads?: number; __pilotSkipSurface?: boolean; __pilotFullSurface?: boolean; __pilotSurfaceDraws?: number } }
 
 async function setRange(page: Page, selector: string, value: number) {
   await page.locator(selector).evaluate((element, next) => {
@@ -277,7 +277,7 @@ test("section visual journey keeps one curve through the planar turn and restore
   const after = await page.locator("#direct-canvas").screenshot();
   await writeFile(info.outputPath("section-return.png"), after);
   expect(after.equals(before)).toBe(true);
-  for (const [phase, progress] of [["fill-fading", .18], ["wire-only", .4], ["wire-fading", .55], ["clear-turn", .75]] as const) {
+  for (const [phase, progress] of [["clip-wide", .25], ["clip-half", .5], ["clip-narrow", .75], ["clip-final", .9]] as const) {
     await setRange(page, "#section-inspection", progress);
     await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", String(progress));
     await page.screenshot({ path: info.outputPath(`section-${phase}.png`), fullPage: true });
@@ -298,10 +298,21 @@ test("section visual journey keeps one curve through the planar turn and restore
   expect(errors).toEqual([]);
 });
 
-test("withdrawn faces cannot occlude the section and its grid, including interrupted return", async ({ page }, info) => {
+test("clipping removes surface regions while retained paint stays opaque through seek and return", async ({ page }, info) => {
   await page.addInitScript(() => {
-    // A reference with the actual surface submissions omitted detects depth
-    // occlusion, even when a transparent surface is still submitted for its wire.
+    const bounds = new Set<WebGLUniformLocation>();
+    WebGL2RenderingContext.prototype.getUniformLocation = new Proxy(WebGL2RenderingContext.prototype.getUniformLocation, {
+      apply(target, receiver, args) {
+        const location = Reflect.apply(target, receiver, args);
+        if (args[1] === "yBounds" && location) bounds.add(location);
+        return location;
+      }
+    });
+    WebGL2RenderingContext.prototype.uniform2f = new Proxy(WebGL2RenderingContext.prototype.uniform2f, {
+      apply(target, receiver, args) {
+        return Reflect.apply(target, receiver, window.__pilotFullSurface && bounds.has(args[0]) ? [args[0], -3, 3] : args);
+      }
+    });
     WebGL2RenderingContext.prototype.drawElements = new Proxy(WebGL2RenderingContext.prototype.drawElements, {
       apply(target, receiver, args) {
         if (!window.__pilotSkipSurface) return Reflect.apply(target, receiver, args);
@@ -311,34 +322,51 @@ test("withdrawn faces cannot occlude the section and its grid, including interru
   await page.setViewportSize({ width: 1280, height: 1100 });
   await openSection(page);
   await page.getByLabel("Surface grid", { exact: true }).uncheck();
+  await page.getByLabel("Smooth lighting", { exact: true }).uncheck();
   const canvas = page.locator("#direct-canvas");
   for (const [theme, y] of [["light", 1.5], ["dark", -2]] as const) {
     if (theme === "dark") await page.getByRole("button", { name: "Dark theme" }).click();
     await setRange(page, "#section-y", y);
-    await setRange(page, "#section-inspection", .45);
-    const before = await canvas.screenshot();
-    await writeFile(info.outputPath(`unoccluded-${theme}.png`), before);
-    // A round trip through the fill phase must not retain depth or stale paint.
-    await setRange(page, "#section-inspection", .12);
-    expect((await canvas.screenshot()).equals(before)).toBe(false);
-    await setRange(page, "#section-inspection", .45);
-    expect((await canvas.screenshot()).equals(before)).toBe(true);
+    await setRange(page, "#section-inspection", .6);
+    const clipped = await canvas.screenshot();
+    await writeFile(info.outputPath(`clipped-${theme}.png`), clipped);
+    await page.evaluate(() => { window.__pilotFullSurface = true; });
+    await setRange(page, "#section-inspection", .6);
+    const full = await canvas.screenshot();
     await page.evaluate(() => { window.__pilotSkipSurface = true; });
-    await setRange(page, "#section-inspection", .45);
-    expect((await canvas.screenshot()).equals(before)).toBe(true);
-    await page.evaluate(() => { window.__pilotSkipSurface = false; });
-    await setRange(page, "#section-inspection", .45);
-    await page.getByLabel("Surface grid", { exact: true }).check();
-    // The same frame still has a real wire trace; we have not hidden the whole
-    // surface early merely to make the zero-fill comparison pass.
-    expect((await canvas.screenshot()).equals(before)).toBe(false);
-    await page.screenshot({ path: info.outputPath(`wire-only-${theme}.png`), fullPage: true });
-    await page.getByLabel("Surface grid", { exact: true }).uncheck();
-    await setRange(page, "#section-inspection", .8);
-    const settled = await canvas.screenshot();
-    await page.getByLabel("Surface grid", { exact: true }).check();
-    expect((await canvas.screenshot()).equals(settled)).toBe(true);
-    await page.getByLabel("Surface grid", { exact: true }).uncheck();
+    await setRange(page, "#section-inspection", .6);
+    const empty = await canvas.screenshot();
+    // With flat lighting, clipping either preserves the full surface's paint or
+    // removes it. A global fade, total disappearance or unchanged mesh fails.
+    const pixels = await page.evaluate(async (images) => {
+      const [clipped, full, empty] = await Promise.all(images.map(async (base64) => {
+        const bitmap = await createImageBitmap(await (await fetch(`data:image/png;base64,${base64}`)).blob());
+        const context = new OffscreenCanvas(bitmap.width, bitmap.height).getContext("2d");
+        if (!context) throw new Error("Missing pixel inspection context");
+        context.drawImage(bitmap, 0, 0); bitmap.close();
+        return context.getImageData(0, 0, context.canvas.width, context.canvas.height).data;
+      }));
+      let retained = 0, removed = 0, total = 0;
+      const difference = (a: Uint8ClampedArray, b: Uint8ClampedArray, i: number) =>
+        Math.max(...[0, 1, 2].map((c) => Math.abs(a[i + c]! - b[i + c]!)));
+      for (let i = 0; i < full!.length; i += 4) {
+        if (difference(full!, empty!, i) <= 12) continue;
+        total++;
+        if (difference(clipped!, full!, i) <= 3) retained++;
+        else if (difference(clipped!, empty!, i) <= 3) removed++;
+      }
+      return { retained, removed, total };
+    }, [clipped, full, empty].map((image) => image.toString("base64")));
+    expect(pixels.retained).toBeGreaterThan(100);
+    expect(pixels.removed).toBeGreaterThan(100);
+    expect(pixels.retained + pixels.removed).toBeGreaterThan(pixels.total * .95);
+    await page.evaluate(() => { window.__pilotSkipSurface = false; window.__pilotFullSurface = false; });
+    await setRange(page, "#section-inspection", 1);
+    expect(await paintedPixels(page)).toBeGreaterThan(600);
+    await setRange(page, "#section-inspection", .2);
+    expect((await canvas.screenshot()).equals(clipped)).toBe(false);
+    await setRange(page, "#section-inspection", .6);
+    expect((await canvas.screenshot()).equals(clipped)).toBe(true);
   }
 });
 

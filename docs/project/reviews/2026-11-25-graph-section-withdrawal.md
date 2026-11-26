@@ -2,8 +2,10 @@
 
 Date: 2026-11-25
 Updated: 2026-11-26 — head-on presence clarification
-Outcome: HUMAN_CHECKPOINT — implemented and checked; timing and foreground
-treatment await user judgment.
+Outcome: head-on mesh correction accepted on November 26. The user then approves
+[geometric restriction](../2026-11-26-graph-section-clipping.md) as a separate
+successor to the fade treatment. The original candidate evidence below remains
+historical; the live demo will use the selected successor.
 Authority: [approved refinement](../2026-11-25-graph-section-withdrawal.md).
 The [accepted section/camera milestone](2026-11-25-graph-sections-planar.md) stays
 closed. The reusable-player proposal remains separate.
@@ -169,6 +171,6 @@ The rollback unit is this experiment's withdrawal projection/paint and evidence.
   variation; its raw size and implementation are unchanged. Geometry remains
   302,944 bytes and three retained uploads; this correction adds no GPU resource.
 
-The original timing/foreground judgment remains open. This correction implements
-the clarified presence invariant in the existing exemplar; it does not promote
-the treatment or start the reusable-player proposal.
+The user responds “great” to the correction, then discusses and approves geometric
+clipping toward y=c. That successor replaces the provisional fading treatment;
+neither candidate promotes a shared motif or starts the reusable-player proposal.

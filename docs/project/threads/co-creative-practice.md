@@ -47,7 +47,8 @@ The notebook detour is current.
   [workspace frame](../reviews/2026-11-25-next-step-review.md) and [quadratic](../reviews/2026-11-25-quadratic-authoring.md).
   Accepted: [direct WebGL grid/saddle](../reviews/2026-11-25-direct-webgl-graph.md).
   Accepted: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md).
-  Checked, awaiting judgment: [withdrawal/head-on mesh removal](../reviews/2026-11-25-graph-section-withdrawal.md).
+  Accepted: [head-on absence](../reviews/2026-11-25-graph-section-withdrawal.md).
+  Checked: [geometric restriction](../reviews/2026-11-26-graph-section-clipping.md).
   Reusable-stage discussion and matrix reuse remain proposed; replacement undecided. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and

@@ -2,9 +2,9 @@
   "id": "task.kp.graph-section-withdrawal-20261125",
   "kind": "task",
   "title": "Fade saddle fill before its wireframe during planar inspection",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "rendering",
-  "summary": "HUMAN_CHECKPOINT: clarified front-facing mesh absence is implemented and regression checked. Existing withdrawal timing and foreground treatment await canonical exemplar judgment; broader reusable stage remains proposed.",
+  "summary": "User accepts the head-on mesh correction with great and approves a separate successor: restrict the visible surface toward y=c from both sides. Preserve this completed candidate as provenance.",
   "sourceRefs": [
     {
       "kind": "file",

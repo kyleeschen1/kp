@@ -12,7 +12,7 @@ export const SECTION_CONTROLS = `
     <p class="section-equation" data-entity-id="${SECTION_IDS.equation}"><span>On this plane, </span><output id="section-equation"></output></p>
     <div class="controls inspection-control">
       <label><span>3D</span><input id="section-inspection" type="range" min="0" max="1" step="0.001" value="0" aria-label="Planar inspection progress"><span>2D</span></label>
-      <span id="section-description">Follow the highlighted curve into its own plane.</span>
+      <span id="section-description">Narrow the surface toward the highlighted section.</span>
     </div>
   </section>`;
 
@@ -45,8 +45,8 @@ export function createSectionControls(options: {
     inspect.textContent = (turn.getStatus() === "playing" ? destination === 1 : section.inspection > 0) ? "Return to 3D" : "Inspect in 2D";
     find("#section-description").textContent = section.inspection === 1
       ? "Same curve, x and z coordinates. Return restores your camera angle."
-      : section.inspection === 0 ? "Follow the highlighted curve into its own plane."
-      : "The source stays fixed while we turn toward its section.";
+      : section.inspection === 0 ? "Narrow the surface toward the highlighted section."
+      : "Both boundaries approach y = c; the remaining surface keeps its shape.";
     progress.setAttribute("aria-valuetext", section.inspection === 1 ? "2D section" : section.inspection === 0 ? "Saved 3D view" : `${Math.round(section.inspection * 100)}% toward 2D`);
   }
   const update = (part: Partial<SectionState>) => { options.update({ ...options.read().section, ...part }); sync(); };

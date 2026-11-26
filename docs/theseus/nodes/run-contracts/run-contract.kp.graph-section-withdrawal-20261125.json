@@ -2,8 +2,8 @@
   "id": "run-contract.kp.graph-section-withdrawal-20261125",
   "kind": "run-contract",
   "title": "Staged saddle withdrawal exemplar",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 1 of 1 implementation slices complete. Front-facing mesh omission verified in Firefox and Chromium; inspect the existing exemplar. No remaining approved implementation or successor selected.",
+  "status": "resolved",
+  "summary": "Accepted bounded withdrawal and head-on correction. Complete at one slice; geometric clipping is a separately approved successor.",
   "sourceRefs": [
     {
       "kind": "file",

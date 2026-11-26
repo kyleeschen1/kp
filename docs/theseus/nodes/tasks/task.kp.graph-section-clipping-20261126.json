@@ -1,0 +1,75 @@
+{
+  "id": "task.kp.graph-section-clipping-20261126",
+  "kind": "task",
+  "title": "Narrow the visible saddle to its selected section",
+  "status": "deferred",
+  "domain": "rendering",
+  "summary": "HUMAN_CHECKPOINT: implementation and preservation checks complete. Review the two-sided retreat and pacing with camera rotation in the canonical section demo.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-26-graph-section-clipping.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "Source-linked orientation after clipping approval",
+      "checkedAt": "2026-11-26T09:25:04.293Z",
+      "notes": "31 of 75 passed. All 44 failures share the chronology invariant: a new November 26 decision was added while the snapshot retained its November 25 review date. Reconcile the snapshot date after checking current roadmap, thread, charter and selected source evidence; rerun the complete command. No animation or browser failure."
+    },
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Geometric section restriction exemplar",
+      "checkedAt": "2026-11-26T09:27:52.620Z",
+      "notes": "11 passed. The pure interval is bounded, ordered, retains y=c, handles edge sections, and samples seek/reversal without history. Existing source, gradients, projection, identity and manual head-on absence remain covered."
+    },
+    {
+      "command": "npm run typecheck:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Geometric section restriction exemplar",
+      "checkedAt": "2026-11-26T09:27:53.526Z",
+      "notes": "Passed for final experiment and browser harness."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Geometric section restriction exemplar",
+      "checkedAt": "2026-11-26T09:27:54.127Z",
+      "notes": "28 passed, 14 each in Chromium and Firefox. Real-pixel clipped/full/omitted comparison confirms removed regions and unchanged surviving paint in light/dark with seek return. Existing exact camera return, manual zero-draw head-on, equation identity, interruption, fallback, reduced motion, offscreen, loss/retry, disposal and three-upload checks pass. Firefox 3D, halfway and narrow-strip captures inspected."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "Geometric section restriction exemplar",
+      "checkedAt": "2026-11-26T09:27:54.750Z",
+      "notes": "42 passed; shared Graph3D and Three consumers remain unchanged."
+    },
+    {
+      "command": "npm run measure:direct-webgl-graph",
+      "status": "passed",
+      "scope": "Geometric section restriction exemplar",
+      "checkedAt": "2026-11-26T09:27:55.363Z",
+      "notes": "Initial JS 94592 raw/30207 gzip bytes, down 417/100 from prior candidate. Lazy comparison 528195/131669; CSS 4685/1695; emitted closure 672097/208041. Geometry 302944 bytes and three uploads retained. One opaque surface submission replaces translucent prepass plus color; clipping adds no GPU resource."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "Geometric section restriction exemplar",
+      "checkedAt": "2026-11-26T09:27:55.986Z",
+      "notes": "Complete rerun 75 passed after reconciling the reviewed snapshot date with the new November 26 approval. Current roadmap, thread, charter and selected sources checked; no validation or startup budget changes."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-orientation.test.ts tests/project-vision.test.ts",
+      "status": "passed",
+      "scope": "Final review links and deferred exemplar boundary",
+      "checkedAt": "2026-11-26T09:29:15.087Z",
+      "notes": "14 passed after linking the completed review packet. One approved commitment, bounded source context and approval distinctions remain consistent."
+    }
+  ],
+  "revisitWhen": [
+    "User accepts or revises the geometric restriction exemplar"
+  ]
+}

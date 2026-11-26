@@ -5,22 +5,22 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-graph-section-withdrawal",
-    title: "Reveal the section as fill and wireframe withdraw",
+    id: "kp-graph-section-clipping",
+    title: "Narrow the surface to its selected section",
     approval: "approved",
-    contractId: "run-contract.kp.graph-section-withdrawal-20261125",
-    finish: "Surface faces fade first, wireframe second, while the red section and x/z grid remain visible. Head-on views omit the entire mesh, including manual rotation. Reverse and direct seek retain the same projection and saved-camera return. Stop at one visual review before promotion.",
-    source: { label: "Approved staged-withdrawal refinement", href: "docs/project/2026-11-25-graph-section-withdrawal.md" }
+    contractId: "run-contract.kp.graph-section-clipping-20261126",
+    finish: "Two clipping boundaries close toward y=c during the camera turn. The surviving surface keeps its shape and opaque paint; the red section persists. Reverse and direct seek preserve the same restriction, head-on absence and exact camera return. Stop at one exemplar review before promotion.",
+    source: { label: "Approved geometric restriction exemplar", href: "docs/project/2026-11-26-graph-section-clipping.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review the head-on section with no saddle mesh, including manual rotation in Firefox, and the existing fill-then-wire withdrawal. The broader reusable-stage discussion remains proposed: prepared token layouts, selectable sequences and versioned updates still need host and renderer choices. Matrix authoring remains a proposed return path.",
+  nextJudgment: "Review whether the mesh retreating from both sides reads clearly as selecting y=c, with the curve remaining easy to follow during rotation and return. Reusable-stage design and matrix authoring remain proposed; this does not select a universal renderer or player.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
     { title: "Practice and retrieve", outcome: "Connected problems, feedback and flashcards develop the same instructional distinctions." },
     { title: "Grow the library", outcome: "Curated adaptive material becomes easier to reuse, embed and maintain across domains." }
   ],
-  reviewedOn: "2026-11-25",
+  reviewedOn: "2026-11-26",
   northStar: "Help authors create extraordinary explanations that teach people what to notice.",
   productProof: "Learners can question, adapt, practice and revisit that material while preserving its important reasoning and relationships. Exceptional featured content demonstrates the medium; authoring is the first product center.",
   productSource: { label: "Product charter", href: "docs/project/strategy.md" },
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Head-on mesh absence accepted",
+      scope: "The user accepts complete saddle removal when facing its section, including manual rotation. Firefox and Chromium verify zero surface submissions and restoration. Geometric restriction is a separately approved successor to provisional opacity withdrawal; shared promotion remains separate.",
+      source: { label: "Head-on correction and successor", href: "docs/project/reviews/2026-11-25-graph-section-withdrawal.md" }
+    },
     {
       title: "Saddle section and planar return accepted",
       scope: "One moving y=c section stays linked to its equation, can be inspected in x/z coordinates and returns to the saved 3D camera. The user accepts that bounded presentation. Staged transparency is a separately approved successor; reusable player design and shared renderer promotion remain separate.",
@@ -605,6 +610,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves fading faces before wireframe as rotation begins. Add actual transparency and independent section visibility in this exemplar, then review the timing and foreground treatment.",
       reason: "The section should become clear progressively rather than appear when an invisible surface finally stops occluding it. Keep the source and saved camera; this does not start the reusable-player proposal.",
       source: { label: "Approved withdrawal scope", href: "docs/project/2026-11-25-graph-section-withdrawal.md" }
+    },
+    {
+      id: "approve-section-geometric-restriction", on: "2026-11-26",
+      before: "The head-on absence correction is accepted; the surface withdraws through provisional opacity phases during the camera turn.",
+      after: "The user approves narrowing the visible y interval from both sides toward y=c, retaining the shape and paint of surviving surface regions and the original red section.",
+      reason: "Rotation projects depth but does not select a cross-section. Clipping communicates restriction without suggesting that the surface deforms. Preserve the prior mathematical, camera and lifecycle guarantees.",
+      source: { label: "Geometric clipping approval and scope", href: "docs/project/2026-11-26-graph-section-clipping.md" }
     }
   ]
 };

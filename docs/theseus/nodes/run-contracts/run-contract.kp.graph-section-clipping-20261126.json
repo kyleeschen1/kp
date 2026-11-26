@@ -1,0 +1,53 @@
+{
+  "id": "run-contract.kp.graph-section-clipping-20261126",
+  "kind": "run-contract",
+  "title": "Geometric section restriction exemplar",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1 of 1 slices complete. Canonical clipping exemplar awaits visual judgment; no approved generalization or successor remains.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.graph-section-clipping-20261126.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-26-graph-section-clipping.md"
+    }
+  ],
+  "verification": [
+    "npm run test:direct-webgl-graph",
+    "npm run typecheck:direct-webgl-graph",
+    "npm run visual:direct-webgl-graph",
+    "npm run test:graph-3d-runtime",
+    "npm run measure:direct-webgl-graph",
+    "npm run test:project-vision"
+  ],
+  "revisitWhen": [
+    "User accepts or revises the geometric restriction exemplar"
+  ],
+  "allowedWork": [
+    "Experiment-local clipping projection, retained WebGL paint, copy, focused tests and review evidence"
+  ],
+  "disallowedWork": [
+    "Shared motif promotion, other surfaces, new player or iframe, publication, parallel agents"
+  ],
+  "goal": "Show the unchanged saddle retreat toward y=c from both sides without opacity animation",
+  "target": "task.kp.graph-section-clipping-20261126",
+  "runMode": "run",
+  "maxSlices": 1,
+  "commitCadence": "One verified implementation and evidence checkpoint, with hourly recoverable backup if needed",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Checked canonical exemplar requires human judgment before promotion",
+    "Two-hour ceiling with final 30 minutes reserved for verification and closeout"
+  ],
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Reversible surface clipping toward the selected section",
+      "summary": "Checked geometric restriction exemplar: two clipping bounds retain y=c, opaque surviving paint, exact head-on absence and reversible saved-camera return. Unit 11, browser 28, Graph3D 42 and vision 75 pass; types and complete production closure measured.",
+      "status": "complete"
+    }
+  ]
+}

@@ -35,6 +35,8 @@ export const SECTION_ATTENTION = createKpAnimationSaliencePlan({
   ]
 });
 export interface SectionState { readonly y: number; readonly inspection: number }
+type SectionSurface = { readonly kind: "absent" }
+  | { readonly kind: "slab"; readonly lower: number; readonly upper: number };
 interface SectionEntitySample { readonly id: string; readonly salience: "focus" | "context"; readonly present: boolean }
 export const INITIAL_SECTION: SectionState = Object.freeze({ y: 1, inspection: 0 });
 export function validateSection(state: SectionState): void {
@@ -53,20 +55,12 @@ export function sectionHeight(x: number, y: number, denominator: number): number
   return evaluateSaddleSurface({ x, y }) * 4 / denominator;
 }
 
-const withdraw = (progress: number, start: number, end: number) => {
-  const phase = Math.min(1, Math.max(0, (progress - start) / (end - start)));
-  return 1 - phase * phase * (3 - 2 * phase);
-};
-
 export function resolveSectionFrame(state: SectionState, camera: { readonly azimuth: number; readonly elevation: number }) {
   validateSection(state);
   if (!Number.isFinite(camera.azimuth) || !Number.isFinite(camera.elevation) || Math.abs(camera.elevation) > 75) {
     throw new Error("Section inspection needs a finite saved camera with elevation ±75°.");
   }
   const progress = state.inspection, turn = progress * progress * (3 - 2 * progress);
-  // Exemplar choreography: withdraw faces, then their wire trace, leaving time
-  // for the exposed section to settle. Reverse and direct seek sample this too.
-  const stagedPresence = { fill: withdraw(progress, 0, .35), wire: withdraw(progress, .35, .7) };
   const normalized = ((camera.azimuth % 360) + 360) % 360;
   const delta = ((90 - normalized + 540) % 360) - 180;
   // Head-on to y=c is azimuth 90°, elevation 0° in the shared Graph3D projector.
@@ -77,13 +71,17 @@ export function resolveSectionFrame(state: SectionState, camera: { readonly azim
   // around either plane normal admits keyboard steps without drawing any mesh.
   const azimuth = (((projectedCamera.azimuth % 360) + 360) % 360) * Math.PI / 180;
   const alignment = Math.abs(Math.sin(azimuth) * Math.cos(projectedCamera.elevation * Math.PI / 180));
-  const surfacePresence = alignment >= Math.cos(Math.PI / 180) - 1e-12 ? { fill: 0, wire: 0 } : stagedPresence;
+  // Restrict the original surface's domain; never squeeze vertices or project
+  // other heights onto the section. Both boundaries retain y=c through reversal.
+  const surface: SectionSurface = progress === 1 || alignment >= Math.cos(Math.PI / 180) - 1e-12
+    ? { kind: "absent" }
+    : { kind: "slab", lower: -3 + (state.y + 3) * turn, upper: 3 + (state.y - 3) * turn };
   const entities = SECTION_ATTENTION.intents.flatMap<SectionEntitySample>((intent) => intent.kind === "notice"
     ? intent.targetEntityIds.map((id) => ({ id, salience: "focus" as const, present: true }))
     : intent.kind === "supporting-context" ? intent.contextEntityIds.map((id) => ({
-      id, salience: "context" as const, present: id !== SECTION_IDS.surface || surfacePresence.fill > 0 || surfacePresence.wire > 0
+      id, salience: "context" as const, present: id !== SECTION_IDS.surface || surface.kind === "slab"
     })) : []);
-  return { camera: projectedCamera, entities, turn, context: 1 - turn, surfacePresence,
+  return { camera: projectedCamera, entities, turn, context: 1 - turn, surface,
     heightOffset: evaluateSaddleSurface({ x: 0, y: state.y }) };
 }
 
