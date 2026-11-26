@@ -6,9 +6,9 @@
   --kp-modeline-background: var(--fn-background);
   --kp-modeline-color: var(--fn-muted);
   --kp-modeline-size: max(1.125rem, var(--kp-document-body-size));
-  --kp-modeline-padding-block: 8px;
-  --kp-modeline-padding-inline: 16px;
-  --kp-modeline-min-height: 48px;
+  --kp-modeline-padding-block: 16px;
+  --kp-modeline-padding-inline: 32px;
+  --kp-modeline-min-height: 64px;
   --kp-modeline-shadow: 0 -5px 18px var(--color-raised-shadow);
   --kp-workspace-rim: 4px;
   --kp-workspace-frame-color: var(--fn-background);

@@ -4,7 +4,7 @@
   "title": "Enclose the editor with an elevated modeline and frame",
   "status": "deferred",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: checked workspace frame candidate ready for judgment of enclosing layer, modeline height and shadow. Implementation complete; aesthetic acceptance pending.",
+  "summary": "HUMAN_CHECKPOINT: requested modeline and beige startup revision is checked; judge spacing and matching reader surface at the canonical notebook.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -123,9 +123,87 @@
       "scope": "focused",
       "checkedAt": "2026-11-26T02:41:39.620Z",
       "notes": "Final source-linked checked-candidate update: all 75 checks passed; frame visual acceptance remains pending."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep \"default beige reaches\"",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:56:17.432Z",
+      "notes": "Intentional regression reproduction with the old deferred-only preview stylesheet: parent default was light but embedded native body remained dark while preview.ts was blocked. The first-paint theme invariant fails before its editing bridge. Reapply the early render-blocking theme import and rerun unchanged assertions."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep \"theme|default beige|light canvas|Styles compares\"",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T02:58:22.307Z",
+      "notes": "First revised-theme group: five passed, two failed. Early reader color assertions pass, but a fixed 150ms iframe paint sample found no frames; use observable frame arrival. The existing custom-color correction case remained at its previous green after Tab; isolate to distinguish a reproducible interaction defect."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep \"default beige|Styles compares\"",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:01:02.197Z",
+      "notes": "Isolation reproduced invalid-style correction failure. Event trace showed synchronous reportValidity during blur reentered focus; the next fill never reached the input. Replace that popup with accessible inline validation. Reader paint sampling now runs from the parent render loop, avoiding throttled iframe callbacks; unchanged paper/ink/scheme assertions pass."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep \"theme|default beige|light canvas|Styles compares|focused source|help, Ex|phone focused\"",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:02:02.815Z",
+      "notes": "Nine passed, including default/saved/corrupt startup and corrected style entry. Two legacy expectations still assumed a visible Saved locally message and dark default green. Update the save case to the actionable Source changes need Run notice, preserving its reload/run assertions; select dark explicitly in the inherited-color switching case."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:03:51.181Z",
+      "notes": "All 35 Chromium cases passed on the quiet padded modeline revision, including headerless commands, modal overlap and caret return, phone/large text, streaming, independent editors and multi-tab recovery."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:03:52.066Z",
+      "notes": "Affected complete consumer typecheck passed after modeline simplification, early preview stylesheet and inline style-validation repair."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:03:52.754Z",
+      "notes": "All 28 focused notebook, compiler, row, command and object checks passed."
+    },
+    {
+      "command": "npm run test:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:03:53.450Z",
+      "notes": "All 25 native session, persistence, transcript and recovery checks passed."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:03:54.109Z",
+      "notes": "All 75 source-linked vision, orientation and dashboard checks passed after recording the requested revision."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep \"theme|default beige|light canvas|Styles compares|focused source|help, Ex|phone focused\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:04:32.227Z",
+      "notes": "All 11 affected Chromium cases pass: default beige before the delayed bridge, explicit dark and saved custom first paint, corrupt preferences preserved, invalid-style correction, native source/Run/reload, cursors, Ex, phone and light canvas. No timeout was relaxed."
+    },
+    {
+      "command": "npm run visual:vim-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:05:23.104Z",
+      "notes": "All six scoped Chromium cases pass, preserving reference search, native focus/carets, lazy-load cancellation/recovery and filter state."
     }
   ],
   "revisitWhen": [
-    "User reviews the fraction notebook split with M-x and accepts the frame or requests a bounded revision."
+    "User reviews the fraction notebook split with M-x and accepts the frame or requests a bounded revision.",
+    "User accepts the quiet padded beige workspace or requests a bounded visual revision."
   ]
 }

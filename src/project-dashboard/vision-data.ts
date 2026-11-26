@@ -13,7 +13,7 @@ export const projectVision: ProjectVision = {
     source: { label: "Approved frame outcome and preservation boundary", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, inspect the headerless split and open M-x from Commands. Judge the modeline height and enclosing shadow; it should stay above pickers, with Escape returning to the original editor. The row/filter exemplar retains its separate broader interaction review before M-x adoption.",
+  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, judge the quiet modeline with more padding, mode and time, and no routine save or toolbar labels. Reload the rendered reading to check matching beige from startup. Open M-x with Alt-x or C-x C-x; the frame stays above it and Escape returns to the editor. Broader row/filter promotion retains its separate review.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -515,6 +515,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves implementation. Select one frame/header package and a visual checkpoint, preserving the native editor/session owners and picker placement. The older row-picker contract retains its completed implementation and separate review boundary.",
       reason: "Make the workspace boundary and status legible, then resume the mathematical sequence without expanding this presentation slice into a new window system.",
       source: { label: "Approval and bounded implementation", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+    },
+    {
+      id: "refine-workspace-frame", on: "2026-11-25",
+      before: "The first checked frame candidate places pane buttons, Commands and routine save status in an elevated modeline. It still defaults to the dark palette.",
+      after: "The user requests a quieter bar with more spacing and end padding, removing those labels and routine save messages. Restore the prior beige surface and correct the rendered reader's startup color before the mathematical return.",
+      reason: "Keep workspace orientation through mode, time and keyboard commands without crowding the frame. Reader and editor theme ownership must agree before the delayed editing bridge loads.",
+      source: { label: "Requested quiet modeline and beige startup revision", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
     }
   ]
 };

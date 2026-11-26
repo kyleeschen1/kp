@@ -4,9 +4,9 @@ export { styleFields } from './style-catalog.ts';
 export interface StyleSettings { theme: 'dark' | 'light'; values: Record<string, string> }
 const validValue = (property: string, value: string) => value.length < 160 && !/[;{}]|url\s*\(/i.test(value) && CSS.supports(property, value);
 export function readStyleSettings(raw: unknown): StyleSettings {
-  const settings: StyleSettings = { theme: 'dark', values: {} };
+  const settings: StyleSettings = { theme: 'light', values: {} };
   if (!raw || typeof raw !== 'object' || !('values' in raw)) return settings;
-  settings.theme = 'theme' in raw && raw.theme === 'light' ? 'light' : 'dark';
+  settings.theme = 'theme' in raw && raw.theme === 'dark' ? 'dark' : 'light';
   if (!raw.values || typeof raw.values !== 'object') return settings;
   for (const { key, property } of styleFields) {
     const value: unknown = Reflect.get(raw.values, key);
@@ -32,7 +32,7 @@ function select(name: string, options: readonly (readonly [string, string])[]) {
   return element;
 }
 export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings) => void, registry: CommandRegistry) {
-  let settings: StyleSettings = { theme: 'dark', values: {} };
+  let settings = readStyleSettings(null);
   try { settings = readStyleSettings(JSON.parse(localStorage.getItem('kp.notebook.styles.v1') ?? 'null')); } catch { /* Invalid preferences do not block editing. */ }
   const panel = document.createElement('aside'); panel.className = 'fn-side-panel fn-styles'; panel.hidden = true; panel.setAttribute('aria-label', 'Styles');
   const title = document.createElement('h2'); title.textContent = 'Styles';
@@ -65,10 +65,15 @@ export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings
     const name = document.createElement('span'); name.textContent = label;
     const objectName = document.createElement('small'); objectName.textContent = field.object; heading.append(name, objectName);
     const input = document.createElement('input'); input.name = key; input.setAttribute('aria-label', label);
-    const effective = document.createElement('small'); effective.className = 'fn-style-effective';
+    const effective = document.createElement('small'); effective.className = 'fn-style-effective'; effective.id = `style-${key}-status`; input.setAttribute('aria-describedby', effective.id);
     const commit = (value: string) => {
       const values = { ...settings.values }; if (value) values[key] = value; else delete values[key];
-      if ((value && !validValue(cssProperty, value)) || hasStyleCycle(values)) { input.setCustomValidity('Use a valid CSS value without circular references.'); input.reportValidity(); return false; }
+      if ((value && !validValue(cssProperty, value)) || hasStyleCycle(values)) {
+        // A native validation popup during blur reenters focus and can divert
+        // the next edit. Inline feedback leaves the user's next target intact.
+        input.setCustomValidity('Use a valid CSS value without circular references.'); input.setAttribute('aria-invalid', 'true');
+        effective.textContent = input.validationMessage; effective.setAttribute('role', 'alert'); return false;
+      }
       input.setCustomValidity(''); settings.values = values; publish(); return true;
     };
     input.onchange = () => { commit(input.value.trim()); };
@@ -90,7 +95,7 @@ export function mountStyles(host: HTMLElement, changed: (settings: StyleSettings
     } else row.append(input, effective);
     refreshers.push(() => {
       const value = settings.values[key] ?? '';
-      input.value = value;
+      input.value = value; input.setCustomValidity(''); input.removeAttribute('aria-invalid'); effective.removeAttribute('role');
       const resolved = getComputedStyle(document.documentElement).getPropertyValue(key).trim();
       const reference = value.match(/^var\((--[\w-]+)\)$/)?.[1] ?? (!value ? field.reference : undefined);
       const description = reference ? referenceName(reference) : cssProperty === 'color' ? (value ? 'Custom color' : 'Theme palette') : resolved;

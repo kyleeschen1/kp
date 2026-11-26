@@ -39,11 +39,57 @@ test('saved theme and palette reach first paint before delayed notebook or previ
 test('corrupt theme storage remains intact and has a valid first-paint fallback', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('kp.notebook.styles.v1', '{broken'));
   await page.route('**/src/fraction-notebook/app.ts*', route => route.abort());
-  await page.goto(url); await expect(page.locator('html')).toHaveAttribute('data-notebook-theme', 'dark');
-  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(18, 24, 38)');
+  await page.goto(url); await expect(page.locator('html')).toHaveAttribute('data-notebook-theme', 'light');
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
   expect(await page.evaluate(() => localStorage.getItem('kp.notebook.styles.v1'))).toBe('{broken');
   await page.unrouteAll(); await page.reload(); await expect(page.locator('.fn-status')).toContainText('preview up to date');
   expect(await page.evaluate(() => localStorage.getItem('kp.notebook.styles.v1'))).toBe('{broken');
+});
+test('default beige reaches the embedded reader before its deferred notebook bridge', async ({ page }, info) => {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('kp.fraction-editing', 'false');
+    const paints: { scheme: string; ink: string; paper: string }[] = [];
+    Object.defineProperty(window, 'readerPaints', { value: paints });
+    // Observe displayed child paint without depending on the iframe's own
+    // animation clock, which can be throttled while the host is being laid out.
+    const sample = () => {
+      const frame = document.querySelector<HTMLIFrameElement>('iframe'), body = frame?.contentDocument?.body;
+      if (body?.hasAttribute('data-kp-fraction-notebook-preview') && frame?.contentWindow) {
+        const css = frame.contentWindow.getComputedStyle(body);
+        paints.push({ scheme: css.colorScheme, ink: css.color, paper: css.getPropertyValue('--kp-paper').trim() });
+      }
+      requestAnimationFrame(sample);
+    }; requestAnimationFrame(sample);
+  });
+  let release!: () => void; const gate = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/src/fraction-notebook/preview.ts*', async route => { await gate; await route.continue(); });
+  try {
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('html')).toHaveAttribute('data-notebook-theme', 'light');
+    await expect(page.locator('.kp-modeline')).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+    const body = preview(page).locator('body');
+    await expect(body).toHaveCSS('color-scheme', 'light');
+    await expect(body).toHaveCSS('color', 'rgb(36, 43, 53)');
+    await expect(body).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+    await expect(preview(page).locator('.kp-caption-document-intro')).toBeVisible();
+    await expect.poll(() => body.evaluate(node => getComputedStyle(node).getPropertyValue('--kp-paper').trim())).toBe('#eeefe9');
+    await page.screenshot({ path: info.outputPath('beige-reader-before-bridge.png') });
+    await expect.poll(() => page.evaluate(() => Reflect.get(window, 'readerPaints').length)).toBeGreaterThan(0);
+    const paints = await page.evaluate(() => Reflect.get(window, 'readerPaints'));
+    expect(paints.every((paint: { scheme: string; ink: string; paper: string }) => paint.scheme === 'light' && paint.ink === 'rgb(36, 43, 53)' && paint.paper === '#eeefe9')).toBe(true);
+  } finally { release(); await page.unrouteAll({ behavior: 'wait' }); }
+  await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
+  await expect(preview(page).locator('body')).toHaveCSS('color-scheme', 'light');
+  await expect(preview(page).locator('body')).toHaveCSS('color', 'rgb(36, 43, 53)');
+  expect(await page.evaluate(() => localStorage.getItem('kp.notebook.styles.v1'))).toBeNull();
+});
+test('explicit saved dark theme still reaches notebook and native reader from startup', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('kp.notebook.styles.v1', JSON.stringify({ theme: 'dark', values: {} })));
+  await ready(page);
+  await expect(page.locator('html')).toHaveAttribute('data-notebook-theme', 'dark');
+  await expect(page.locator('.kp-modeline')).toHaveCSS('background-color', 'rgb(18, 24, 38)');
+  await expect(preview(page).locator('body')).toHaveCSS('color-scheme', 'dark');
+  await expect(preview(page).locator('body')).toHaveCSS('color', 'rgb(226, 226, 217)');
 });
 async function ready(page: Page) {
   await page.goto(url);
@@ -436,7 +482,7 @@ test('theme-variable modal cursors preserve text at graphemes, empty blocks and 
   await body.click({ clickCount: 3 }); await page.keyboard.insertText('A 👩‍🔬 note.');
   await page.keyboard.press('Escape'); await page.keyboard.press('0');
   const blockCursor = prose.locator('.fn-normal-cursor');
-  await expect(blockCursor).toHaveText('A'); await expect(blockCursor).toHaveCSS('background-color', 'rgb(240, 112, 112)');
+  await expect(blockCursor).toHaveText('A'); await expect(blockCursor).toHaveCSS('background-color', 'rgb(184, 36, 54)');
   await expect(prose).toHaveCSS('caret-color', 'rgba(0, 0, 0, 0)');
   await page.keyboard.press('l'); await page.keyboard.press('l'); await expect(blockCursor).toHaveText('👩‍🔬');
   await page.evaluate(() => document.documentElement.style.setProperty('--kp-editor-cursor', '#ff4444'));
@@ -488,7 +534,7 @@ test('focused source separates save from run, survives reload, and returns to it
   await replaceSpec(page, source, false);
   await expect(page.locator('.fn-result-status')).toContainText('have not run');
   await expect(preview(page).locator('.anchored-labels')).toContainText(old);
-  await ex(page, 'w'); await expect(page.locator('.fn-status')).toContainText('Saved locally');
+  await ex(page, 'w'); await expect(page.locator('.fn-status')).toHaveText('Source changes need Run');
   await expect(preview(page).locator('.anchored-labels')).toContainText(old);
   await ex(page, 'run'); await expect(preview(page).locator('.anchored-labels')).toContainText('Inspect this saved draft');
   await expect(preview(page).locator('.kp-caption-pin')).toHaveAttribute('data-anchored-state', 'equation.fractional-linear.right-simplified');
@@ -515,6 +561,7 @@ test('help, Ex line numbers and inherited styles work in document and JSON', asy
   await ex(page, 'set relativenumber'); await expect(page.locator('.fn-line-gutter span').first()).toBeVisible();
   await jump(page, 'equation.fractional-linear.right-simplified');
   await page.getByRole('button', { name: 'Styles', exact: true }).click();
+  await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('dark');
   await page.getByRole('combobox', { name: 'Body color color', exact: true }).selectOption('var(--color-green-light)');
   await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(182, 213, 163)');
   await expect(preview(page).locator('body')).toHaveCSS('color', 'rgb(182, 213, 163)');
@@ -568,8 +615,12 @@ test('Styles compares properties across objects and preserves named references',
   // Math defaults to body color, so pointing body back at math must be rejected.
   await raw.fill('var(--fn-math)'); await raw.press('Tab');
   await expect(raw).toHaveJSProperty('validationMessage', 'Use a valid CSS value without circular references.');
+  await expect(raw).toHaveAttribute('aria-invalid', 'true');
+  await expect(panel.getByRole('alert')).toHaveText('Use a valid CSS value without circular references.');
   await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(56, 108, 54)');
   await raw.fill('#345678'); await raw.press('Tab');
+  await expect(raw).toHaveValue('#345678'); await expect(raw).toHaveJSProperty('validationMessage', '');
+  await expect(raw).not.toHaveAttribute('aria-invalid'); await expect(panel.getByRole('alert')).toHaveCount(0);
   await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(52, 86, 120)');
   await page.reload(); await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(52, 86, 120)');
   await page.getByRole('button', { name: 'Styles', exact: true }).click();

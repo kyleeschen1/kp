@@ -15,7 +15,7 @@ test.beforeEach(async ({ context }, info) => {
 });
 
 async function workspaceCommand(page: Page, title: string) {
-  await page.getByRole('button', { name: 'Commands', exact: true }).click();
+  await page.keyboard.press('Control+x'); await page.keyboard.press('Control+x');
   const query = page.getByRole('combobox', { name: 'Search commands' }); await query.fill(title);
   await page.getByRole('dialog', { name: 'Commands', exact: true }).getByRole('option', { name: title, exact: true }).click();
 }
@@ -339,7 +339,7 @@ test('fruit picker keeps one query buffer while fuzzy rows narrow, reverse and a
   const options = dialog.getByRole('option'), selected = dialog.getByRole('option', { selected: true });
   const mode = page.locator('.kp-modeline-mode');
   await launcher.click(); await expect(query).toBeFocused(); await expect(query).toHaveAttribute('data-vim-mode', 'insert');
-  await expect(mode).toHaveText('[I]'); await expect(page.locator('.kp-modeline-surface')).toHaveText('Picker › query');
+  await expect(mode).toHaveText('[I]'); await expect(mode).toHaveAttribute('aria-label', 'Insert · Picker › query');
   await expect(options).toHaveCount(0); const emptyBox = (await dialog.boundingBox())!;
   const editor = await query.elementHandle();
   await query.fill('ap'); await expect(options).toHaveText(['Apple', 'Apricot', 'Grape', 'Grapefruit', 'Papaya']);
@@ -418,7 +418,7 @@ test('fruit picker restores chat selection and source caret while streaming cann
     await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('before aftXer');
     expect(f.peer.sends()).toHaveLength(1); f.peer.finish('Output arriving while the picker owns focus.');
     await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
-    await page.getByRole('button', { name: 'Focus KP pane' }).click();
+    await workspaceCommand(page, 'Focus KP pane');
     await page.getByText('Edit animation specification', { exact: true }).click();
     const source = page.locator('.fn-source-host .cm-content'); await expect(source).toBeFocused();
     await source.press('g'); await source.press('g'); await source.press('0');
@@ -443,22 +443,26 @@ test('workspace frame stays above native pickers, retains modal focus and preser
     await expect(page.locator('.fn-header')).toBeHidden(); await workspaceCommand(page, 'Open chat'); await connect(page);
     const frame = page.locator('.kp-workspace-frame'), bar = page.locator('.kp-modeline'), prose = page.locator('.fn-editor .ProseMirror');
     await expect(frame).toHaveCount(1); await expect(bar).toHaveCount(1);
-    expect((await bar.boundingBox())!.height).toBeGreaterThanOrEqual(48);
+    expect((await bar.boundingBox())!.height).toBeGreaterThanOrEqual(64);
+    await expect(bar).toHaveCSS('padding-left', '32px'); await expect(bar).toHaveCSS('padding-right', '32px');
+    await expect(bar).toHaveCSS('padding-top', '16px'); await expect(bar).toHaveCSS('background-color', 'rgb(238, 239, 233)');
+    await expect(bar.locator('button, nav')).toHaveCount(0); await expect(bar.locator('.fn-status')).toBeHidden();
+    await expect(bar.locator('.kp-modeline-surface')).toBeHidden();
     await write(page, 'Keep my draft'); await input(page).press('ArrowLeft');
     const draft = await input(page).elementHandle();
-    // Keyboard activation of the modeline launcher must capture the prior
-    // editor, not treat the launcher as the conversation's return surface.
-    await page.getByRole('button', { name: 'Commands', exact: true }).focus(); await page.keyboard.press('Enter');
+    // The quiet bar leaves command entry to the chord without moving the draft
+    // caret or introducing another focusable toolbar.
+    await page.keyboard.press('Control+x'); await page.keyboard.press('Control+x');
     const commands = page.getByRole('dialog', { name: 'Commands', exact: true });
     const query = page.getByRole('combobox', { name: 'Search commands' });
     await expect(query).toBeFocused(); await expect(commands.locator('.kp-workspace-frame')).toHaveCount(1);
     expect(await commands.evaluate(node => node.matches(':modal'))).toBe(true);
     expect(await frame.evaluate(node => node.matches(':popover-open'))).toBe(true);
     await expect(bar).toHaveAttribute('inert', '');
-    await expect(page.locator('.kp-modeline-surface')).toHaveText('Commands › query');
+    await expect(page.locator('.kp-modeline-mode')).toHaveAttribute('aria-label', 'Insert · Commands › query');
     const barBox = (await bar.boundingBox())!;
     expect((await commands.boundingBox())!.y + (await commands.boundingBox())!.height).toBeLessThanOrEqual(barBox.y);
-    await page.screenshot({ path: info.outputPath('workspace-frame-picker-dark.png') });
+    await page.screenshot({ path: info.outputPath('workspace-frame-picker-beige.png') });
     // Force a real overlap to test top-layer paint order, not just placement.
     const pickerStyle = await commands.getAttribute('style');
     await commands.evaluate(node => { node.style.top = 'auto'; node.style.bottom = '0'; });
@@ -474,14 +478,16 @@ test('workspace frame stays above native pickers, retains modal focus and preser
     await input(page).pressSequentially('X'); await expect(input(page)).toHaveText('Keep my drafXt');
     expect(await draft!.evaluate(node => node.isConnected)).toBe(true);
     await expect(bar).not.toHaveAttribute('inert');
-    await page.getByRole('button', { name: 'Focus KP pane' }).click(); await expect(prose).toBeFocused();
+    await page.keyboard.press('Control+Backquote'); await expect(prose).toBeFocused();
     const coveragePanel = await coverage(page); await expect(coveragePanel.getByRole('combobox', { name: 'Search Vim bindings' })).toBeFocused();
     await expect(coveragePanel.locator('.kp-workspace-frame')).toHaveCount(1);
     await page.keyboard.press('Escape'); await expect(prose).toBeFocused();
     await workspaceCommand(page, 'Fruit picker');
     const fruit = page.getByRole('combobox', { name: 'Find a fruit' }); await fruit.fill('apricot'); await fruit.press('Enter');
     await expect(page.locator('.kp-modeline .fn-status')).toHaveText('Selected: Apricot'); await expect(prose).toBeFocused();
-    await workspaceCommand(page, 'Styles'); await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
+    await workspaceCommand(page, 'Styles'); await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('dark');
+    await expect(bar).toHaveCSS('background-color', 'rgb(18, 24, 38)');
+    await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
     await page.getByRole('button', { name: 'Close styles', exact: true }).click();
     await page.screenshot({ path: info.outputPath('workspace-frame-light.png') });
     for (const height of [844, 380]) {
@@ -493,7 +499,7 @@ test('workspace frame stays above native pickers, retains modal focus and preser
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.getByRole('button', { name: 'Commands', exact: true }).click(); await query.fill('Styles');
+    await page.keyboard.press('Alt+x'); await query.fill('Styles');
     await page.screenshot({ path: info.outputPath('workspace-frame-phone.png') }); await query.press('Escape');
     // Header recovery is an explicit command, not a second always-visible toolbar.
     await workspaceCommand(page, 'Toggle site header'); await expect(page.locator('.fn-header')).toBeVisible();
@@ -517,7 +523,7 @@ test('workspace frame keeps errors readable in a narrow reading view and scales 
   expect(box.height).toBeGreaterThan(48); expect(box.y).toBeGreaterThan(100);
   expect(await status.evaluate(node => parseFloat(getComputedStyle(node).fontSize))).toBeGreaterThanOrEqual(24);
   expect((await page.locator('.kp-editor-body').boundingBox())!.height).toBeGreaterThan(0);
-  await page.getByRole('button', { name: 'Commands', exact: true }).click();
+  await page.keyboard.press('Control+x'); await page.keyboard.press('Control+x');
   const dialog = page.getByRole('dialog', { name: 'Commands', exact: true });
   await expect(dialog.getByRole('combobox', { name: 'Search commands' })).toBeFocused();
   const popup = (await dialog.boundingBox())!;
@@ -560,7 +566,8 @@ test('workspace modeline follows actual editor modes, pane focus and reading spa
     const chat = page.locator('[data-kp-window=chat]'), kp = page.locator('[data-kp-window=page]');
     const shadow = (pane: typeof chat) => pane.evaluate(node => getComputedStyle(node).boxShadow);
     const barSize = () => bar.evaluate(node => ({ size: parseFloat(getComputedStyle(node).fontSize), defaultSize: parseFloat(getComputedStyle(document.documentElement).fontSize) }));
-    await expect(bar).toHaveCount(1); await expect(mode).toHaveText('[N]'); await expect(label).toHaveText('Chat › transcript');
+    await expect(bar).toHaveCount(1); await expect(mode).toHaveText('[N]'); await expect(mode).toHaveAttribute('aria-label', 'Normal · Chat › transcript');
+    await expect(label).toBeHidden();
     await expect(bar.locator('time')).toHaveText(/^[A-Z][a-z]{2}, [A-Z][a-z]{2} \d{1,2} \d{2}:\d{2}$/);
     await expect(page.locator('.fn-line-gutter span, .cm-lineNumbers')).toHaveCount(0);
     expect((await transcript.boundingBox())!.width).toBe(440); expect((await input(page).boundingBox())!.width).toBe(440);
@@ -572,24 +579,24 @@ test('workspace modeline follows actual editor modes, pane focus and reading spa
     await expect(page.locator('.kp-chat-output')).toHaveCSS('border-bottom-width', '1px');
     expect(await page.locator('.kp-editor-body').evaluate(node => ({ width: getComputedStyle(node, '::after').width, pointer: getComputedStyle(node, '::after').pointerEvents }))).toEqual({ width: '1px', pointer: 'none' });
     expect((await barSize()).size).toBeGreaterThanOrEqual((await barSize()).defaultSize);
-    await page.getByRole('button', { name: 'Focus KP pane' }).click(); await expect(prose).toBeFocused();
-    await expect(label).toHaveText('KP › document'); await prose.press('i'); await expect(mode).toHaveText('[I]');
+    await page.keyboard.press('Control+Backquote'); await expect(prose).toBeFocused();
+    await expect(mode).toHaveAttribute('aria-label', 'Normal · KP › document'); await prose.press('i'); await expect(mode).toHaveText('[I]');
     await prose.press('Escape'); await prose.press('v'); await expect(mode).toHaveText('[V]'); await prose.press('Escape');
     expect(await shadow(kp)).not.toBe('none'); expect(await shadow(chat)).toBe('none');
     await page.getByText('Edit animation specification', { exact: true }).click();
     const source = page.locator('.fn-source-host .cm-content'); await expect(source).toBeFocused();
-    await expect(label).toHaveText('KP › animation source'); await expect(mode).toHaveText('[N]');
+    await expect(mode).toHaveAttribute('aria-label', 'Normal · KP › animation source'); await expect(mode).toHaveText('[N]');
     await source.press('i'); await expect(mode).toHaveText('[I]'); await source.press('Escape'); await expect(mode).toHaveText('[N]');
-    await page.getByRole('button', { name: 'Close buffer', exact: true }).click(); await expect(label).toHaveText('KP › document');
-    await page.getByRole('button', { name: 'Focus Chat pane' }).click(); await transcript.press('i');
-    await expect(label).toHaveText('Chat › draft'); await expect(mode).toHaveText('[I]');
+    await page.getByRole('button', { name: 'Close buffer', exact: true }).click(); await expect(mode).toHaveAttribute('aria-label', 'Normal · KP › document');
+    await page.keyboard.press('Control+Backquote'); await transcript.press('i');
+    await expect(mode).toHaveAttribute('aria-label', 'Insert · Chat › draft'); await expect(mode).toHaveText('[I]');
     await input(page).pressSequentially('Continue'); await send(page); await expect(chat).toHaveAttribute('data-phase', 'running');
     await input(page).pressSequentially('Keep this draft'); f.peer.delta('A result arriving in the background.');
     await expect(transcript).toContainText('result arriving'); await expect(mode).toHaveText('[I]'); await expect(input(page)).toBeFocused();
     f.peer.finish('A result arriving in the background.'); await expect(chat).toHaveAttribute('data-phase', 'ready');
     await command(page, 'Markdown source');
     const markdown = page.getByRole('textbox', { name: 'Your message Markdown' });
-    await expect(label).toHaveText('Chat › draft source'); await markdown.press('i'); await expect(mode).toHaveText('[I]');
+    await expect(mode).toHaveAttribute('aria-label', 'Normal · Chat › draft source'); await markdown.press('i'); await expect(mode).toHaveText('[I]');
     await markdown.press('Escape'); await expect(mode).toHaveText('[N]');
     await expect(page.locator('.fn-line-gutter span, .cm-lineNumbers')).toHaveCount(0);
     await command(page, 'Rich text');
@@ -600,17 +607,17 @@ test('workspace modeline follows actual editor modes, pane focus and reading spa
     for (const region of ['.kp-chat-output', '.kp-chat-draft']) {
       await expect(page.locator(region)).toHaveCSS('padding-top', readingPad.top); await expect(page.locator(region)).toHaveCSS('padding-bottom', readingPad.bottom);
     }
-    await rendered.click(); await expect(mode).toHaveText('[R]'); await expect(label).toHaveText('KP › reading');
+    await rendered.click(); await expect(mode).toHaveText('[R]'); await expect(mode).toHaveAttribute('aria-label', 'Reading · KP › reading');
     await page.keyboard.press('Control+Backquote'); await expect(chat).toHaveAttribute('data-window-active', 'true');
-    await page.screenshot({ path: info.outputPath('workspace-modeline-dark.png') });
+    await page.screenshot({ path: info.outputPath('workspace-modeline-default.png') });
     await page.getByRole('button', { name: 'Styles', exact: true }).click();
     await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('light');
     await page.getByRole('button', { name: 'Close styles', exact: true }).click();
-    await page.getByRole('button', { name: 'Focus Chat pane' }).click();
+    await transcript.focus();
     expect(await shadow(chat)).not.toBe('none'); expect(await shadow(kp)).toBe('none');
     await page.screenshot({ path: info.outputPath('workspace-modeline-light.png') });
     await page.emulateMedia({ forcedColors: 'active' }); await expect(chat).toHaveCSS('outline-style', 'solid');
-    await expect(page.getByRole('button', { name: 'Focus Chat pane' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(chat).toHaveAttribute('data-window-active', 'true');
     await page.emulateMedia({ forcedColors: 'none' });
     for (const height of [844, 380]) {
       await page.setViewportSize({ width: 390, height });
@@ -747,7 +754,7 @@ test('current-line paint follows wrapped prose, source and real focus without en
     await page.getByRole('button', { name: 'Chat', exact: true }).click();
     await expect(transcript).toBeVisible(); await transcript.focus(); await expect(visibleLines).toHaveCount(1);
     await expect.poll(() => f.store.data.draft).toBe(text);
-    await page.getByRole('button', { name: 'Focus KP pane' }).click();
+    await workspaceCommand(page, 'Focus KP pane');
     const prose = page.locator('.fn-editor .ProseMirror'), body = prose.locator('.fn-block-content > p').first();
     const blockId = await body.locator('..').locator('..').getAttribute('data-cell-id');
     await body.click({ position: { x: 70, y: 12 } }); await prose.press('0');

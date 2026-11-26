@@ -141,7 +141,7 @@ const chat = mountChat(editorBody, actions, () => layout.refresh(), {
   activate: () => windows.activate('chat'), cycle: () => windows.cycle(), closed: () => windows.activate('page')
 }, registry);
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); }, registry);
-const modeline = mountModeline(root, windows, registry, status);
+const modeline = mountModeline(root, windows, status);
 const captureReturn = () => {
   const { active, windows: panes } = windows.snapshot(), pane = panes.find(entry => entry.id === active)?.element;
   const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -158,7 +158,7 @@ const captureReturn = () => {
   } };
 };
 const picker = mountFruitPicker(root, actions, () => captureReturn().restore, registry, message => reportStatus(message));
-const commandPicker = mountCommandPicker(root, modeline.actions, registry, captureReturn);
+const commandPicker = mountCommandPicker(root, actions, registry, captureReturn);
 const vimCoverage = mountVimCoverage(root, registry, captureReturn);
 actions.append(button('Styles', () => styles.toggle(), 'workspace.open-styles', 'workspace'));
 const numbers = mountLineNumbers(editorHost, editor.view);
@@ -166,7 +166,7 @@ const commands = mountCommands(workspace, editor.view, {
   async save() {
     await saving;
     if (storedError || !store) throw new Error(storedError ?? 'Persistent storage is unavailable; download JSON to retain this draft.');
-    reportStatus(pendingSource() ? 'Saved locally · source changes need Run' : 'Saved locally · preview up to date', pendingSource() ? 'pending' : 'valid');
+    reportStatus(pendingSource() ? 'Source changes need Run' : 'Saved locally · preview up to date', pendingSource() ? 'pending' : 'valid');
   },
   close() { if (editor.sourceOpen()) editor.closeSource(); else setEditing(false); }, run: runSource,
   numbers(value) { numbers.set(value); editor.numbers(value); }, message(text) { reportStatus(text); }

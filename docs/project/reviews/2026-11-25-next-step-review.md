@@ -120,9 +120,10 @@ workspace-frame cases exercise the headerless default, modal overlap, focus,
 large text and error visibility. Keep the general row promotion and later
 cross-browser release boundaries separate from this exemplar's visual judgment.
 
-## Checked candidate and review packet
+## Initial checked candidate and review packet
 
-The editor now opens without its header. A single modeline forms the bottom
+This first candidate is superseded by the requested revision below. The editor
+opens without its header. A single modeline forms the bottom
 edge of a thin surrounding frame, with a 48px minimum height, larger text and
 theme-linked shadow. Styles exposes its size, padding, colors, height and shadow,
 plus the frame width/color/shadow. The equal split, document measure and picker
@@ -177,3 +178,68 @@ placement, with the frame above it. Escape should return to the same editor and
 caret. Try light mode or larger text through Styles if useful; the composer stays
 above the bar. Visual acceptance remains the next decision before the quadratic
 authoring workflow; no mathematical or broad row-picker promotion was started.
+
+## Requested visual revision
+
+The user requests more modeline spacing and end padding, removal of routine save
+messages and the Chat/KP/Commands controls, and the former beige background. They
+also report a wrong initial color and blue background in the rendered KP page.
+This authorizes the `quiet-modeline` successor package in the existing contract;
+it does not accept the preceding candidate or begin mathematical work.
+
+Keep the same canonical notebook, native reader and semantic owners. The bar
+shows mode and time, with transient command-prefix feedback and actionable
+notices/errors only. Keep context in accessible labels/tooltips and commands in
+M-x / C-x C-x; the optional header can retain its launcher. Start with 16px block
+padding, 32px end padding and a 64px minimum height. Restore the accepted light
+paper as the default while retaining an explicit saved dark theme. Load the
+preview's notebook palette before first paint, not only with its deferred editing
+bridge. Preserve split measure, native animation, drafts, history and picker
+focus. The rollback unit is this presentation/startup revision plus its checks.
+
+Use the existing focused-check exception above: affected consumer types and unit
+checks, the complete chat browser suite, native Vim coverage, and theme/startup
+plus affected reader checks. Pressure delayed modules, default/saved/corrupt
+preferences, transparent embedded preview and explicit theme switching. Judge
+spacing and the matching beige at the same URL before the mathematical return.
+
+The revised candidate implements those defaults. Normal operation displays only
+mode and time; mode context remains available to assistive technology and in the
+tooltip. Routine checking/success status is hidden at every width. Pending source
+work and errors remain visible without a save acknowledgement. Commands remains
+in the optional header, and both keyboard launchers and pane-switch commands work
+without it. No modeline button or pane label remains.
+
+The startup regression was reproduced with the old deferred-only stylesheet:
+the parent was already light while the embedded reader retained its native dark
+color scheme, ink and stage tokens until `preview.ts` arrived. The existing
+render-blocking preview stylesheet now imports the same notebook theme. Browser
+checks delay that bridge and sample paper, ink and scheme from the parent render
+loop before release, then verify the hydrated result. The accepted `#eeefe9`
+paper is the default; saved dark/custom choices still work and unreadable stored
+preferences are preserved. No new dependency or reader/animation owner was added;
+the already-required stylesheet loads earlier.
+
+Style comparison also exposed a real focus-boundary defect: calling native
+`reportValidity()` from a blur-triggered change handler could divert the next
+edit. The field now retains its custom validity and shows associated inline alert
+text without reentering focus. Correction and reset clear that feedback. The
+existing invalid-cycle → valid-color → reload test now also checks the accessible
+error and its removal. This is a browser regression safeguard, not static proof
+of focus behavior across all engines.
+
+Final revised checks: complete consumer typecheck; notebook/chat unit checks
+(28/25); `npm run visual:editor-chat` (35 Chromium cases);
+`npm run visual:fraction-notebook -- --grep 'theme|default beige|light canvas|Styles compares|focused source|help, Ex|phone focused'`
+(11 Chromium cases); `npm run visual:vim-coverage` (six Chromium cases); and
+project-vision checks (75) pass. The selected source
+reload case passed in this run. Initial failures and repairs remain in Theseus,
+including the deliberate old-stylesheet reproduction, parent-frame paint-sampling
+correction and updated expectations for the requested light/no-save defaults.
+
+Latest review cue: reload the canonical notebook and inspect the 32px end padding,
+16px vertical padding and matching beige. The bar should read as mode at the left
+and time at the right, without the prior labels or routine save message. Use
+Alt-x or C-x C-x for M-x, and `Edit` there to inspect the rendered reading from
+startup. Escape returns to the previous editor. The existing frame's modal paint
+ownership and fixed split remain intact; mathematics still follows this review.
