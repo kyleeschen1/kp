@@ -12,11 +12,13 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
   const surface = await frame.evaluate(() => {
     const sequence = document.querySelector<HTMLElement>('.kp-caption-sequence')!;
     const style = getComputedStyle(sequence), rail = getComputedStyle(sequence, '::after');
-    return { left: rail.left, right: rail.right, shadow: style.boxShadow,
+    return { left: rail.left, right: rail.right, shadow: style.boxShadow, railLayer: Number(rail.zIndex),
+      paperLayer: Number(getComputedStyle(document.querySelector('.kp-animation-beats')!).zIndex),
       background: style.backgroundColor, page: getComputedStyle(document.querySelector('.kp-caption-document-intro')!).backgroundColor };
   });
   expect(surface.left).toBe('0px'); expect(surface.shadow).toBe('none');
   expect(surface.background).toBe(surface.page);
+  expect(surface.railLayer).toBeLessThan(surface.paperLayer);
   // Entry and reversal sample the same shallow depth without a timer. The
   // native paint owner remains mounted while the paper passes in front.
   const depths = [];
@@ -25,17 +27,23 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
       const passage = document.querySelector<HTMLElement>('.kp-rising-passage')!;
       const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
       const center = parseFloat(getComputedStyle(pin).top) + pin.offsetHeight / 2;
+      const halfEquation = parseFloat(getComputedStyle(document.body).getPropertyValue('--kp-document-equation-height')) / 2;
       dispatchEvent(new WheelEvent('wheel'));
-      scrollTo(0, scrollY + passage.getBoundingClientRect().top - center + offset);
+      scrollTo(0, scrollY + passage.getBoundingClientRect().top - center - halfEquation + offset);
       await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
       return { depth: Number(document.body.style.getPropertyValue('--kp-rail-depth')),
-        transform: getComputedStyle(pin).transform };
+        z: new DOMMatrixReadOnly(getComputedStyle(pin).transform).m43,
+        opacity: getComputedStyle(pin).opacity };
     }, offset));
     if (offset === -12) await page.screenshot({ path: info.outputPath(`dip-${width}.png`) });
   }
   expect(depths[0]!.depth).toBeCloseTo(0, 1);
   expect(depths[1]!.depth).toBeCloseTo(.5, 1);
   expect(depths[2]!.depth).toBeCloseTo(1, 1);
+  expect(depths[0]!.z).toBeCloseTo(0, 1);
+  expect(depths[2]!.z).toBeLessThan(depths[1]!.z);
+  expect(depths[1]!.z).toBeLessThan(0);
+  expect(depths.every(sample => sample.opacity === '1')).toBe(true);
   expect(depths[1]).toEqual(depths[3]); expect(depths[0]).toEqual(depths[4]);
   const geometry = await frame.evaluate(() => {
     const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
@@ -88,7 +96,7 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
       owner.pixels.forEach((value, pixel) => expect(Math.abs(value - b[index]!.pixels[pixel]!)).toBeLessThan(.025));
     });
   }
-  // Mostly opaque paper covers the equation, leaving only a faint trace.
+  // Opaque paper covers the equation and the underlying wall together.
   const covered = await frame.evaluate(async () => {
     const passage = document.querySelectorAll<HTMLElement>('.kp-rising-passage')[3]!;
     const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
@@ -98,13 +106,15 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
     const p = passage.getBoundingClientRect(), s = pin.querySelector<HTMLElement>('.kp-animation-static')!.getBoundingClientRect();
     return { covered: p.top <= s.top + 1 && p.bottom >= s.bottom - 1,
       front: passage.contains(document.elementFromPoint(s.left + s.width / 2, s.top + s.height / 2)),
+      railCovered: passage.contains(document.elementFromPoint(p.left + .5, p.top + p.height / 2)),
       background: getComputedStyle(passage).backgroundColor };
   });
   expect(covered.covered).toBe(true); expect(covered.front).toBe(true);
-  expect(covered.background).not.toBe('rgba(0, 0, 0, 0)');
+  expect(covered.background).toBe(surface.page);
+  expect(covered.railCovered).toBe(true);
   await page.screenshot({ path: info.outputPath(`covered-${width}.png`) });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  expect(await frame.locator('.kp-caption-pin').evaluate(pin => getComputedStyle(pin).transform)).toBe('matrix(1, 0, 0, 1, 0, 0)');
+  expect(await frame.locator('.kp-caption-pin').evaluate(pin => new DOMMatrixReadOnly(getComputedStyle(pin).transform).m43)).toBe(0);
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   // The bounded sticky owner may move at the end only behind the last sheet.
   const exit = await frame.evaluate(async () => {

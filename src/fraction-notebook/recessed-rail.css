@@ -2,8 +2,9 @@
 @media screen {
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
     --kp-rail-ink: var(--fn-text);
-    --kp-rail-paper: color-mix(in srgb, var(--fn-background) 94%, transparent);
-    --kp-rail-dip: 6px;
+    --kp-rail-paper: var(--fn-background);
+    --kp-rail-dip: 24px;
+    --kp-rail-perspective: 800px;
   }
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-sequence {
     position: relative;
@@ -12,13 +13,16 @@
   }
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-sequence::after {
     content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 1px; background: var(--kp-rail-ink); z-index: 3; pointer-events: none;
+    /* The wall belongs to the stage, so foreground paper interrupts it. */
+    width: 1px; background: var(--kp-rail-ink); z-index: 0; pointer-events: none;
   }
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-pin {
     z-index: 0;
     background: transparent;
-    transform: translateY(calc(var(--kp-rail-depth, 0) * var(--kp-rail-dip)));
-    opacity: calc(1 - var(--kp-rail-depth, 0) * .25);
+    /* Flatten this local perspective below the prose stacking context. Even
+       at the surface the equation must never jump in front of a paragraph. */
+    transform: perspective(var(--kp-rail-perspective)) translateZ(calc(-1 * var(--kp-rail-depth, 0) * var(--kp-rail-dip)));
+    opacity: 1;
   }
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-frame {
     background: transparent;

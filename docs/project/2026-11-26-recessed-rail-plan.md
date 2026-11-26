@@ -37,3 +37,14 @@ change. Keep reduced-motion behavior and reverse deterministic; retain the
 existing motion clearance and concealed final release. Review this candidate
 before promotion. The original right rail/deep opening is superseded, not an
 accepted reference.
+
+## Approved opaque depth revision
+
+The user clarified that the rail is the wall of the lower stage, not a marginal
+rule: prose must cross and conceal it. Replace translucent paper with the exact
+opaque page background. Keep the rail and equation below the prose stacking
+context; use local perspective and negative translateZ for the expression's
+descent, without opacity or vertical displacement. Descend before contact with
+the complete equation box and resurface after it clears. Preserve reversible
+scroll sampling, annotation ownership, operation travel and reduced motion.
+This supersedes the translucent treatment and remains an opt-in visual review.

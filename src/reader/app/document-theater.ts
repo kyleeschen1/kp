@@ -95,7 +95,7 @@ export function mountDocumentTheater(input: {
     // The foreground prose keeps ordinary document presence. The existing
     // annotation adapter still owns all authored labels on the stage.
     if (recessed && !readAll) {
-      const depth = documentTheaterDepth(position + frameBottom / 2, positions, heights);
+      const depth = documentTheaterDepth(position + frameBottom / 2, positions, heights, equationHeight);
       document.body.style.setProperty('--kp-rail-depth', String(depth));
       selected = active;
       return;

@@ -40,6 +40,12 @@
       "title": "Quiet left rail with shallow passage coverage",
       "summary": "Quiet candidate implemented and checked; HUMAN_CHECKPOINT for translucency and first descent.",
       "status": "complete"
+    },
+    {
+      "id": "opaque-depth",
+      "title": "Opaque prose crosses the underlying rail and depth stage",
+      "summary": "Opaque depth candidate checked. HUMAN_CHECKPOINT: judge rail intersection, burial and resurfacing.",
+      "status": "complete"
     }
   ]
 }

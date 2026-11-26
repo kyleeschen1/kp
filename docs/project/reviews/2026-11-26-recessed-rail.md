@@ -61,3 +61,29 @@ strings. This is a bounded geometry tolerance, not omitted paint evidence.
 Human review should focus on the first descent and a following uncovering. The
 previous shaded candidate was checked but not accepted. Physical phone testing
 and reuse remain outside this revision.
+
+## Opaque paper and actual depth — current candidate
+
+The user's clarification supersedes translucency: the rail is the wall of the
+underlying stage. Opaque prose with the exact page background now covers both
+the rail and equation. The rail has a lower stacking level than the paper, so
+each paragraph visibly interrupts it. The equation stays below the foreground
+throughout; a local perspective transform moves the retained stage into negative
+Z before contact and back to its surface after clearance. Opacity stays at one,
+and there is no vertical translation. Native math and annotations remain in the
+same transformed plane, without changing their semantic model or paint owner.
+
+Depth sampling now accounts for the whole reserved equation box, not just its
+center. The browser checks verify negative Z, unchanged opacity, depth reversal,
+opaque page-color paper, rail ordering/coverage, reduced-motion suppression,
+operation clearance and concealed exit. Chromium and Firefox passed at both
+1280px and 390px. Typecheck and the 20 preservation tests passed; the additional
+`node --disable-warning=ExperimentalWarning --test tests/document-theater-depth.test.ts`
+passed the full-box entry/exit and bounded sampling checks. Its first run caught
+an arithmetic error in two expected fixture positions; those positions were
+corrected without changing implementation.
+
+At the review URL, watch a paragraph cross the rail: the line and equation should
+be buried together, then the expression should rise in the clear opening.
+Reverse through this boundary. The depth amount remains provisional and this is
+still HUMAN_CHECKPOINT, not promotion across other lessons.
