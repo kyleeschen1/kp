@@ -1,0 +1,100 @@
+{
+  "id": "task.kp.graph-sections-planar-20261125",
+  "kind": "task",
+  "title": "Follow a saddle section into 2D and back",
+  "status": "deferred",
+  "domain": "rendering",
+  "summary": "HUMAN_CHECKPOINT: one implemented and checked exemplar awaits plane and camera-choreography judgment; no broader shape or renderer work is authorized.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-graph-sections-planar-pilot.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-25-graph-sections-planar.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "failed",
+      "scope": "discovery",
+      "checkedAt": "2026-11-26T06:36:07.033Z",
+      "notes": "Initial signed-zero assertion mismatch; repaired numeric tolerance. Final complete suite passes."
+    },
+    {
+      "command": "npm run typecheck:direct-webgl-graph",
+      "status": "failed",
+      "scope": "discovery",
+      "checkedAt": "2026-11-26T06:36:07.970Z",
+      "notes": "Initial flatMap union inference rejected focus/context variants; repaired explicit local type without casts."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph -- --grep 'section visual journey'",
+      "status": "failed",
+      "scope": "discovery",
+      "checkedAt": "2026-11-26T06:36:08.635Z",
+      "notes": "Initial pixel comparison differed only in native focus state; buffer diff formatter stalled and was interrupted. Bounded equality with matched focus repaired the harness."
+    },
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T06:36:09.264Z",
+      "notes": "All 9 numeric, retained topology, section source, identity and exact projection/return checks passed."
+    },
+    {
+      "command": "npm run typecheck:direct-webgl-graph",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-26T06:36:09.895Z",
+      "notes": "Complete experiment, reference, unit/browser tests and production measurement entrypoint passed."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-26T06:36:10.508Z",
+      "notes": "All 12 Chromium workflows passed, including actual paint, exact saved-camera pixels, interruption, mode switch, loss/retry, reduced motion and canceled comparison acquisition."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "preservation",
+      "checkedAt": "2026-11-26T06:36:11.119Z",
+      "notes": "All 42 existing Graph3D host, adapter, source, camera and lease checks passed."
+    },
+    {
+      "command": "npm run measure:direct-webgl-graph",
+      "status": "passed",
+      "scope": "cost",
+      "checkedAt": "2026-11-26T06:36:11.748Z",
+      "notes": "Complete emitted closure: initial JS 29938 gzip bytes; Three remains lazy; geometry 302944 bytes and 3 retained uploads."
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "passed",
+      "scope": "configuration",
+      "checkedAt": "2026-11-26T06:36:12.389Z",
+      "notes": "75 scoped configurations and 182 projects checked."
+    },
+    {
+      "command": "npm run check:typescript-configs",
+      "status": "passed",
+      "scope": "configuration",
+      "checkedAt": "2026-11-26T06:36:13.021Z",
+      "notes": "16 projects parsed and explicit inputs/references checked."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "orientation",
+      "checkedAt": "2026-11-26T06:36:38.445Z",
+      "notes": "All 75 checks passed after linking the checked exemplar and preserving approval boundaries."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the section at /experiments/direct-webgl-graph/?example=section."
+  ]
+}

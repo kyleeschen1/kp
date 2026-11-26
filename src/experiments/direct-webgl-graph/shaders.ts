@@ -21,6 +21,8 @@ uniform vec3 inkColor;
 uniform vec3 eye;
 uniform bool lit;
 uniform bool mesh;
+uniform vec3 background;
+uniform float strength;
 out vec4 color;
 void main() {
   vec3 n = normalize(normal);
@@ -35,7 +37,7 @@ void main() {
     float coverage = 1.0 - smoothstep(0.35, 1.2, min(distanceToLine.x, distanceToLine.y));
     paint = mix(paint, inkColor, coverage * 0.38);
   }
-  color = vec4(paint, 1.0);
+  color = vec4(mix(background, paint, strength), 1.0);
 }`;
 
 // Native WebGL line width is implementation-dependent. These instanced quads
@@ -47,18 +49,29 @@ layout(location=1) in vec3 end;
 layout(location=2) in float role;
 uniform mat4 projection;
 uniform vec2 viewport;
+uniform float sectionY;
+uniform float heightOffset;
+uniform float heightScale;
 out float edge;
 flat out int colorRole;
 void main() {
   vec2 corners[6] = vec2[6](vec2(0,-1), vec2(1,-1), vec2(0,1), vec2(0,1), vec2(1,-1), vec2(1,1));
   vec2 corner = corners[gl_VertexID];
-  vec4 a = projection * vec4(start, 1.0);
-  vec4 b = projection * vec4(end, 1.0);
+  vec3 from = start, to = end;
+  if (role > 3.5) { from.y = sectionY; to.y = sectionY; }
+  if (role > 3.5 && role < 4.5) {
+    from.z = (from.z + heightOffset) * heightScale;
+    to.z = (to.z + heightOffset) * heightScale;
+  }
+  vec4 a = projection * vec4(from, 1.0);
+  vec4 b = projection * vec4(to, 1.0);
   vec2 delta = (b.xy - a.xy) * viewport;
   vec2 perpendicular = vec2(-delta.y, delta.x) / max(length(delta), 0.0001);
-  float halfWidth = role > 0.5 ? 1.25 : 0.85;
+  float halfWidth = role > 3.5 && role < 4.5 ? 2.8 : role == 0.0 || role == 6.0 ? 0.85 : 1.25;
   gl_Position = mix(a, b, corner.x);
   gl_Position.xy += perpendicular * corner.y * halfWidth * 2.0 / viewport;
+  // Resolve coincident section/surface ink without changing the source geometry.
+  if (role > 3.5) gl_Position.z -= 0.0002;
   edge = corner.y;
   colorRole = int(role);
 }`;
@@ -72,10 +85,37 @@ uniform vec3 xColor;
 uniform vec3 yColor;
 uniform vec3 zColor;
 uniform bool planes;
+uniform bool section;
+uniform float context;
+uniform vec3 sectionColor;
+uniform vec3 planeColor;
 out vec4 color;
 void main() {
+  if ((!section && colorRole > 3) || (section && colorRole < 4)) discard;
   if (!planes && colorRole == 0) discard;
   vec3 paint = colorRole == 1 ? xColor : colorRole == 2 ? yColor : colorRole == 3 ? zColor : gridColor;
+  if (colorRole == 4) paint = sectionColor;
+  if (colorRole == 5) paint = planeColor;
+  if (colorRole == 7) paint = xColor;
+  if (colorRole == 8) paint = zColor;
   float coverage = 1.0 - smoothstep(0.45, 1.0, abs(edge));
-  color = vec4(paint, coverage * (colorRole == 0 ? 0.34 : 1.0));
+  float alpha = colorRole == 0 ? 0.34 : colorRole == 6 ? 0.28 : colorRole == 5 ? 0.3 + 0.2 * context : 1.0;
+  color = vec4(paint, coverage * alpha);
 }`;
+
+export const planeVertex = `#version 300 es
+precision highp float;
+uniform mat4 projection;
+uniform float sectionY;
+void main() {
+  vec2 corners[6] = vec2[6](vec2(-3,-3), vec2(3,-3), vec2(-3,3), vec2(-3,3), vec2(3,-3), vec2(3,3));
+  vec2 point = corners[gl_VertexID];
+  gl_Position = projection * vec4(point.x, sectionY, point.y, 1.0);
+}`;
+export const planeFragment = `#version 300 es
+precision highp float;
+uniform vec3 planeColor;
+uniform float context;
+out vec4 color;
+void main() { color = vec4(planeColor, 0.09 * context); }
+`;

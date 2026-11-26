@@ -6,6 +6,7 @@
   color: var(--color-ink); background: var(--color-paper); color-scheme: dark;
   --graph-surface: var(--color-green-light); --graph-grid: var(--color-muted);
   --graph-x: var(--color-red-light); --graph-y: var(--color-blue-light); --graph-z: var(--color-yellow-light);
+  --graph-section: var(--color-red-light); --graph-section-plane: var(--color-blue-light);
 }
 :root[data-notebook-theme=light] { color-scheme: light; }
 * { box-sizing: border-box; }
@@ -17,7 +18,7 @@ p { margin: .6rem 0; }
 .intro { max-width: 42rem; }
 .toolbar, .controls { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .8rem; }
 .toolbar { justify-content: space-between; margin: 1.2rem 0 .8rem; }
-.tabs { display: inline-flex; gap: .3rem; }
+.tabs { display: inline-flex; flex-wrap: wrap; gap: .3rem; }
 button, input { font: inherit; color: inherit; accent-color: var(--color-green-light); }
 button { background: transparent; border: 1px solid var(--color-border); border-radius: 5px; padding: .3rem .7rem; cursor: pointer; }
 button:hover, button[aria-pressed=true] { background: var(--color-selection); }
@@ -26,6 +27,7 @@ button:disabled { opacity: .45; cursor: default; }
 .stage { position: relative; width: 100%; height: clamp(320px, 57vh, 560px); border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; background: var(--color-paper); }
 .stage > canvas { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
 .stage > canvas:active { cursor: grabbing; }
+.stage[data-camera-locked=true] > canvas { cursor: default; }
 .stage > canvas:focus-visible { outline-offset: -5px; }
 .axis-label { position: absolute; pointer-events: none; transform: translate(-50%, -50%); font-style: italic; font-size: 1.05rem; }
 .axis-label[data-axis=x] { color: var(--graph-x); }
@@ -38,6 +40,9 @@ button:disabled { opacity: .45; cursor: default; }
 .controls input[type=range] { width: clamp(120px, 22vw, 250px); }
 output { font-variant-numeric: tabular-nums; min-width: 3.7ch; }
 .formula { font-size: 1.2rem; }
+.section-equation { margin: .2rem 0; }
+.section-equation output { color: var(--graph-section); }
+.inspection-control { font-size: .85rem; color: var(--color-muted); padding-top: .4rem; }
 .options { margin: .3rem 0 1rem; }
 .reference { margin-top: 1.4rem; }
 .reference h2 { font-size: 1.3rem; font-weight: 400; margin: 0 0 .3rem; }

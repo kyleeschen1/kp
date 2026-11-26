@@ -1,0 +1,66 @@
+{
+  "id": "run-contract.kp.graph-sections-planar-20261125",
+  "kind": "run-contract",
+  "title": "Saddle section and planar return",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1/1 implementation package complete. Stop at the approved canonical review; no generalization.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.graph-sections-planar-20261125.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-25-graph-sections-planar-pilot.md",
+      "summary": "User agrees to the section to 2D to saved 3D proof and says go"
+    }
+  ],
+  "verification": [
+    "npm run test:direct-webgl-graph",
+    "npm run visual:direct-webgl-graph"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T06:36:39.324Z",
+      "notes": "All 9 checks passed; details and prior repaired failures are recorded on the target task."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-26T06:36:40.114Z",
+      "notes": "All 12 workflows passed. Exact source, camera return, retained uploads and lifecycle evidence recorded in the review."
+    }
+  ],
+  "revisitWhen": [
+    "User judges the plane, section continuity and reversible camera turn."
+  ],
+  "allowedWork": [
+    "One isolated saddle section, source/projection/retained paint/controls, scoped checks and evidence"
+  ],
+  "disallowedWork": [
+    "Shared renderer promotion, generic solids, notebook migration, matrix authoring, publication or parallel workers"
+  ],
+  "goal": "Inspect a moving saddle section as a linked 2D curve and return to the saved camera",
+  "target": "task.kp.graph-sections-planar-20261125",
+  "runMode": "run",
+  "maxSlices": 1,
+  "commitCadence": "One checked exemplar; hourly recoverable backup",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "One working section and planar-return visual review packet",
+    "Three-hour ceiling with final 45 minutes reserved for verification and closeout"
+  ],
+  "slices": [
+    {
+      "id": "exemplar",
+      "title": "Linked section and reversible planar inspection",
+      "summary": "Checked exemplar and review packet delivered: linked moving section, exact planar inspection, saved-camera return, preserved grid/saddle, bounded costs and lifecycle checks. Visual judgment remains pending.",
+      "status": "complete"
+    }
+  ]
+}

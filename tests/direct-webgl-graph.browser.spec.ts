@@ -178,7 +178,7 @@ test("unavailable WebGL has a static source view and explicit retry without an a
   expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().pool.active)).toBe(0);
 });
 
-test("closing a loading comparison prevents late renderer acquisition", async ({ page }) => {
+for (const action of ["close", "section"] as const) test(`${action} during a loading comparison prevents late renderer acquisition`, async ({ page }) => {
   let unblock!: () => void, acknowledge!: () => void;
   const blocked = new Promise<void>((resolve) => { unblock = resolve; });
   const requested = new Promise<void>((resolve) => { acknowledge = resolve; });
@@ -190,7 +190,7 @@ test("closing a loading comparison prevents late renderer acquisition", async ({
   await open(page);
   await page.getByRole("button", { name: "Compare current renderer" }).click();
   await requested;
-  await page.getByRole("button", { name: "Close comparison" }).click();
+  await page.getByRole("button", { name: action === "section" ? "Cross-section" : "Close comparison", exact: true }).click();
   const loaded = page.waitForResponse((response) => new URL(response.url()).pathname === referencePath);
   unblock(); await loaded;
   await page.waitForLoadState("networkidle");
@@ -199,3 +199,153 @@ test("closing a loading comparison prevents late renderer acquisition", async ({
 });
 
 declare global { interface Window { __pilotBufferUploads?: number } }
+
+async function setRange(page: Page, selector: string, value: number) {
+  await page.locator(selector).evaluate((element, next) => {
+    if (!(element instanceof HTMLInputElement)) throw new Error("Missing range control");
+    element.value = String(next); element.dispatchEvent(new Event("input", { bubbles: true }));
+  }, value);
+}
+async function openSection(page: Page) {
+  await page.goto(`${url}?example=section`);
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-status", "ready");
+  await expect(page.locator("#section-controls")).toBeVisible();
+}
+
+test("section visual journey keeps one curve through the planar turn and restores the saved camera", async ({ page }, info) => {
+  const errors: string[] = [], requests: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("request", (request) => requests.push(request.url()));
+  await page.setViewportSize({ width: 1280, height: 1100 });
+  await openSection(page);
+  await page.locator("#direct-canvas").focus(); await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowUp");
+  await setRange(page, "#section-y", 1.5);
+  await expect(page.locator("#section-equation")).toContainText("x² − 2.25");
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-section-y", "1.5");
+  const saved = await page.evaluate(() => window.__kpGraphPilot!.inspect().view);
+  await page.locator("#section-y").focus();
+  const before = await page.locator("#direct-canvas").screenshot();
+  await page.screenshot({ path: info.outputPath("section-3d.png"), fullPage: true });
+  await page.getByRole("button", { name: "Inspect in 2D", exact: true }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "1");
+  expect(await paintedPixels(page)).toBeGreaterThan(600);
+  await page.screenshot({ path: info.outputPath("section-planar.png"), fullPage: true });
+  await page.locator("#direct-canvas").focus(); await page.keyboard.press("ArrowRight");
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().view.azimuth)).toBe(saved.azimuth);
+  await page.getByRole("button", { name: "Return to 3D", exact: true }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0");
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().view)).toEqual(saved);
+  // Compare the same unfocused canvas; native focus-visible follows input modality.
+  await page.locator("#section-y").focus();
+  const after = await page.locator("#direct-canvas").screenshot();
+  await writeFile(info.outputPath("section-return.png"), after);
+  expect(after.equals(before)).toBe(true);
+  await setRange(page, "#section-inspection", .5);
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0.5");
+  await page.screenshot({ path: info.outputPath("section-midpoint.png"), fullPage: true });
+  await setRange(page, "#section-inspection", 1);
+  await setRange(page, "#section-y", -2);
+  await setRange(page, "#denominator", 8);
+  await expect(page.locator("#section-equation")).toHaveText("z = (x² − 4) / 8 · vertex (0, -0.5)");
+  await page.getByRole("button", { name: "Dark theme" }).click();
+  await page.screenshot({ path: info.outputPath("section-dark.png"), fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: info.outputPath("section-phone.png"), fullPage: true });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  for (const label of await page.locator(".axis-label").all()) {
+    expect(await label.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgba(0, 0, 0, 0)");
+  }
+  expect(requests.some((request) => /(?:graph-webgl-three|\/reference\.ts|\/three[._/])/.test(request))).toBe(false);
+  expect(errors).toEqual([]);
+});
+
+test("section playback reverses, scrubs, switches mode and recovers without geometry uploads or stale clocks", async ({ page }, info) => {
+  await page.addInitScript(() => {
+    window.__pilotBufferUploads = 0;
+    WebGL2RenderingContext.prototype.bufferData = new Proxy(WebGL2RenderingContext.prototype.bufferData, {
+      apply(target, receiver, args) { window.__pilotBufferUploads! += 1; return Reflect.apply(target, receiver, args); }
+    });
+  });
+  await openSection(page);
+  await setRange(page, "#section-y", -2.8);
+  await page.getByRole("button", { name: "Sweep slice", exact: true }).click();
+  const intervals = await page.evaluate(async () => {
+    const samples: number[] = []; let previous = performance.now();
+    for (let i = 0; i < 60; i++) await new Promise<void>((resolve) => requestAnimationFrame((now) => {
+      samples.push(now - previous); previous = now; resolve();
+    }));
+    return samples.slice(1).sort((a, b) => a - b);
+  });
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().view.section.y)).toBeGreaterThan(-2.8);
+  await page.getByRole("button", { name: "Inspect in 2D", exact: true }).click();
+  await expect.poll(() => page.evaluate(() => window.__kpGraphPilot!.inspect().view.section.inspection)).toBeGreaterThan(.1);
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().sectionClocks.scan)).toBe("paused");
+  await page.getByRole("button", { name: "Return to 3D", exact: true }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0");
+  await setRange(page, "#section-inspection", .73);
+  await page.getByRole("button", { name: "Saddle surface", exact: true }).click();
+  await expect(page.locator("#section-controls")).toBeHidden();
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().sectionClocks)).toEqual({ scan: "paused", turn: "paused" });
+  await page.getByRole("button", { name: "Cross-section", exact: true }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0.73");
+  expect(await page.evaluate(() => window.__pilotBufferUploads)).toBe(3);
+  const stats = await page.evaluate(() => window.__kpGraphPilot!.inspect().stats);
+  const runtime = { sample: "saddle section sweep", rafP50Ms: intervals[Math.floor(intervals.length * .5)],
+    rafP95Ms: intervals[Math.ceil(intervals.length * .95) - 1], rafMaxMs: intervals.at(-1), stats };
+  await writeFile(info.outputPath("section-runtime.json"), JSON.stringify(runtime, null, 2));
+  console.log(`Section sweep: p95 RAF ${runtime.rafP95Ms?.toFixed(2)}ms; p95 JS submission ${stats?.submitP95Ms.toFixed(2)}ms; ${stats?.uploads} retained uploads.`);
+  await page.locator("#direct-canvas").evaluate((element) => {
+    if (!(element instanceof HTMLCanvasElement)) throw new Error("Missing canvas");
+    const extension = element.getContext("webgl2")?.getExtension("WEBGL_lose_context");
+    if (!extension) throw new Error("Need context loss extension for this check");
+    extension.loseContext();
+  });
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-status", "fallback");
+  await expect(page.locator(".static-view svg[data-entity-id='saddle-section:curve']")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sweep slice", exact: true })).toBeDisabled();
+  const lost = await page.evaluate(() => window.__kpGraphPilot!.inspect().view);
+  await page.getByRole("button", { name: "Retry graphics" }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-status", "ready");
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().view)).toEqual(lost);
+  await page.getByRole("button", { name: "Return to 3D", exact: true }).click();
+  await page.evaluate(() => window.__kpGraphPilot!.dispose());
+  const disposed = await page.evaluate(() => window.__kpGraphPilot!.inspect());
+  await page.waitForTimeout(120);
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().stats!.frames)).toBe(disposed.stats!.frames);
+  expect(disposed.pool.active).toBe(0);
+});
+
+test("section playback pauses offscreen and reduced motion still exposes both exact endpoints", async ({ page }) => {
+  await openSection(page);
+  await page.getByRole("button", { name: "Inspect in 2D", exact: true }).click();
+  await page.evaluate(() => { document.body.style.paddingBottom = "2000px"; scrollTo(0, document.body.scrollHeight); });
+  await expect.poll(() => page.evaluate(() => window.__kpGraphPilot!.inspect().sectionClocks.turn)).toBe("paused");
+  const paused = await page.evaluate(() => window.__kpGraphPilot!.inspect());
+  await page.waitForTimeout(120);
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().stats!.frames)).toBe(paused.stats!.frames);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await setRange(page, "#section-inspection", 0);
+  await page.getByRole("button", { name: "Inspect in 2D", exact: true }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "1");
+  await page.getByRole("button", { name: "Return to 3D", exact: true }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "0");
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().view.azimuth)).toBe(48);
+});
+
+test("section fallback keeps its equation and projection editable without GPU or autoplay", async ({ page }) => {
+  await page.addInitScript(() => {
+    HTMLCanvasElement.prototype.getContext = new Proxy(HTMLCanvasElement.prototype.getContext, {
+      apply(target, receiver, args) { return args[0] === "webgl2" ? null : Reflect.apply(target, receiver, args); }
+    });
+  });
+  await page.goto(`${url}?example=section`);
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-status", "fallback");
+  await page.getByRole("button", { name: "Inspect in 2D", exact: true }).click();
+  await expect(page.locator("#direct-stage")).toHaveAttribute("data-inspection", "1");
+  await setRange(page, "#section-y", -3);
+  await expect(page.locator("#section-equation")).toContainText("x² − 9");
+  await expect(page.locator(".static-view svg")).toBeVisible();
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().pool.active)).toBe(0);
+  expect(await page.evaluate(() => window.__kpGraphPilot!.inspect().sectionClocks)).toEqual({ scan: "paused", turn: "paused" });
+});

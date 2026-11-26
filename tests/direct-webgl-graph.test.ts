@@ -4,6 +4,8 @@ import { compileExpression, compileGradient } from "../src/math/expression.ts";
 import { createSaddleSurfaceExpression } from "../src/math/surface-examples.ts";
 import { projectGraphPoints3DToWebGLScreen } from "../src/rendering/graph-webgl.ts";
 import { createGridGeometry, createPilotGraph, createPilotObjects, createPilotProjection, createSaddleGeometry, INITIAL_VIEW, validateView } from "../src/experiments/direct-webgl-graph/model.ts";
+import { createSectionGeometry, INITIAL_SECTION, resolveSectionFrame, SECTION_ATTENTION, SECTION_IDS, SECTION_ROLE, SECTION_SCENE, sectionHeight, validateSection } from "../src/experiments/direct-webgl-graph/section.ts";
+import { validateKpAnimationSaliencePlan } from "../src/animation/salience-plan.ts";
 
 test("retained heights and gradients agree with the canonical saddle throughout the parameter range", () => {
   const geometry = createSaddleGeometry(17);
@@ -78,4 +80,64 @@ test("invalid geometry, view and viewport inputs fail at the experiment boundary
   assert.throws(() => validateView({ ...INITIAL_VIEW, elevation: 90 }));
   assert.throws(() => validateView({ ...INITIAL_VIEW, azimuth: NaN }));
   for (const width of [0, -1, Infinity, NaN, 8193]) assert.throws(() => createPilotGraph(INITIAL_VIEW, width, 400));
+});
+
+test("retained section vertices lie on both the canonical saddle and the plane for every sampled parameter", () => {
+  const geometry = createSectionGeometry();
+  for (const y of [-3, -2.37, -1, 0, 1.65, 3]) for (const denominator of [4, 4.25, 6.7, 8]) {
+    const evaluate = compileExpression(createSaddleSurfaceExpression(denominator));
+    const section = resolveSectionFrame({ y, inspection: 0 }, INITIAL_VIEW);
+    let count = 0;
+    for (let i = 0; i < geometry.length; i += 7) {
+      if (geometry[i + 6] !== SECTION_ROLE.curve) continue;
+      count += 1;
+      for (const offset of [0, 3]) {
+        const x = geometry[i + offset]!;
+        const shaderHeight = (geometry[i + offset + 2]! + section.heightOffset) * 4 / denominator;
+        assert.ok(Math.abs(shaderHeight - evaluate({ x, y })) < 1e-6);
+        assert.ok(Math.abs(sectionHeight(x, y, denominator) - evaluate({ x, y })) < 1e-12);
+      }
+    }
+    assert.equal(count, 96);
+    assert.ok(Math.abs(sectionHeight(0, y, denominator) + y * y / denominator) < 1e-12);
+  }
+});
+
+test("inspection is a reversible camera projection with exact x/z coordinates and unchanged source", () => {
+  for (const azimuth of [-720, 0, 48, 270, 359, 850]) for (const elevation of [-75, 0, 28, 75]) {
+    const view = { ...INITIAL_VIEW, example: "section" as const, azimuth, elevation };
+    const saved = createPilotProjection(view, 800, 560);
+    const source = createPilotObjects(view, 800, 560).find((object) => object.type === "surface-3d");
+    for (const inspection of [0, .7, .2, 1, .45, 0]) {
+      const frame = resolveSectionFrame({ ...INITIAL_SECTION, inspection }, view);
+      assert.deepEqual(frame.entities.map((entity) => entity.id).sort(), Object.values(SECTION_IDS).sort());
+      assert.equal(frame.entities.find((entity) => entity.id === SECTION_IDS.curve)!.present, true);
+      assert.equal(frame.entities.find((entity) => entity.id === SECTION_IDS.surface)!.present, inspection !== 1);
+      const current = { ...view, section: { y: 1, inspection } };
+      assert.deepEqual(createPilotObjects(current, 800, 560).find((object) => object.type === "surface-3d"), source);
+      if (inspection === 0) {
+        assert.equal(frame.camera, view);
+        assert.deepEqual(createPilotProjection(current, 800, 560).matrix, saved.matrix);
+      }
+      if (inspection === 1) {
+        assert.deepEqual(frame.camera, { azimuth: 90, elevation: 0 });
+        const graph = createPilotGraph(current, 800, 560);
+        const [origin, right, up, otherPlane] = projectGraphPoints3DToWebGLScreen(graph, [
+          { x: 0, y: 1, z: 0 }, { x: 1, y: 1, z: 0 }, { x: 0, y: 1, z: 1 }, { x: 0, y: -2, z: 0 }
+        ]);
+        assert.ok(right!.x > origin!.x && up!.y < origin!.y);
+        assert.ok(Math.abs(origin!.x - otherPlane!.x) < 1e-10 && Math.abs(origin!.y - otherPlane!.y) < 1e-10);
+        assert.ok(Math.abs((right!.x - origin!.x) - (origin!.y - up!.y)) < 1e-10);
+      }
+    }
+  }
+  assert.deepEqual(validateKpAnimationSaliencePlan(SECTION_ATTENTION, [SECTION_SCENE]), []);
+});
+
+test("section boundaries reject invalid samples instead of producing undefined shader or camera state", () => {
+  for (const y of [-3.1, 3.1, NaN, Infinity]) assert.throws(() => validateSection({ y, inspection: 0 }));
+  for (const inspection of [-.1, 1.1, NaN, Infinity]) assert.throws(() => validateSection({ y: 0, inspection }));
+  for (const x of [-4, 4, NaN, Infinity]) assert.throws(() => sectionHeight(x, 0, 4));
+  for (const denominator of [0, 3.9, 8.1, NaN]) assert.throws(() => sectionHeight(0, 0, denominator));
+  assert.throws(() => resolveSectionFrame(INITIAL_SECTION, { azimuth: 0, elevation: 90 }));
 });

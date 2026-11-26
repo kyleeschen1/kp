@@ -1,11 +1,13 @@
 import { acquireKpWebglContextLease } from "../../rendering/webgl-context-lease-pool.ts";
 import { createGridGeometry, createPilotProjection, createSaddleGeometry, type PilotView } from "./model.ts";
-import { lineFragment, lineVertex, surfaceFragment, surfaceVertex } from "./shaders.ts";
+import { lineFragment, lineVertex, surfaceFragment, surfaceVertex, planeFragment, planeVertex } from "./shaders.ts";
+import { createSectionGeometry, resolveSectionFrame, SECTION_IDS } from "./section.ts";
 
 export type RGB = readonly [number, number, number];
 export interface PilotColors {
   readonly background: RGB; readonly ink: RGB; readonly grid: RGB;
   readonly surface: RGB; readonly x: RGB; readonly y: RGB; readonly z: RGB;
+  readonly section: RGB; readonly plane: RGB;
 }
 export interface PilotRenderer {
   draw(view: PilotView, width: number, height: number, colors: PilotColors): void;
@@ -73,21 +75,24 @@ export function createPilotRenderer(canvas: HTMLCanvasElement, onLost: () => voi
     };
     const surfaceProgram = program(surfaceVertex, surfaceFragment);
     const lineProgram = program(lineVertex, lineFragment);
+    const planeProgram = program(planeVertex, planeFragment);
     const geometry = createSaddleGeometry();
-    const grid = createGridGeometry();
+    const grid = new Float32Array([...createGridGeometry(), ...createSectionGeometry()]);
     const surfaceArray = vao();
     upload(gl.ARRAY_BUFFER, geometry.vertices); upload(gl.ELEMENT_ARRAY_BUFFER, geometry.indices);
     attr(0, 3, 20, 0); attr(1, 2, 20, 12);
     const lineArray = vao(); upload(gl.ARRAY_BUFFER, grid);
     attr(0, 3, 28, 0, 1); attr(1, 3, 28, 12, 1); attr(2, 1, 28, 24, 1);
+    const planeArray = vao();
     gl.bindVertexArray(null);
     const uniforms = (owner: WebGLProgram, names: readonly string[]) => new Map(names.map((name) => {
       const location = gl.getUniformLocation(owner, name);
       if (location === null) throw new Error(`Missing shader uniform: ${name}`);
       return [name, location];
     }));
-    const surface = uniforms(surfaceProgram, ["projection", "heightScale", "surfaceColor", "inkColor", "eye", "lit", "mesh"]);
-    const lines = uniforms(lineProgram, ["projection", "viewport", "gridColor", "xColor", "yColor", "zColor", "planes"]);
+    const surface = uniforms(surfaceProgram, ["projection", "heightScale", "surfaceColor", "inkColor", "eye", "lit", "mesh", "background", "strength"]);
+    const lines = uniforms(lineProgram, ["projection", "viewport", "gridColor", "xColor", "yColor", "zColor", "planes", "section", "context", "sectionY", "heightOffset", "heightScale", "sectionColor", "planeColor"]);
+    const plane = uniforms(planeProgram, ["projection", "sectionY", "planeColor", "context"]);
     const rgb = (location: WebGLUniformLocation, value: RGB) => gl.uniform3f(location, ...value);
     const costs: number[] = [];
     let frames = 0;
@@ -97,6 +102,8 @@ export function createPilotRenderer(canvas: HTMLCanvasElement, onLost: () => voi
         if (dead) return;
         const start = performance.now();
         const projection = createPilotProjection(view, width, height);
+        const section = resolveSectionFrame(view.section, view);
+        const inspecting = view.example === "section";
         const ratio = Math.min(window.devicePixelRatio || 1, 2, 4096 / Math.max(width, height));
         const pixelWidth = Math.max(1, Math.round(width * ratio));
         const pixelHeight = Math.max(1, Math.round(height * ratio));
@@ -108,14 +115,25 @@ export function createPilotRenderer(canvas: HTMLCanvasElement, onLost: () => voi
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL); gl.disable(gl.CULL_FACE);
         gl.disable(gl.BLEND);
-        if (view.example === "saddle") {
+        if (view.example === "saddle" || (inspecting && section.entities.some((entity) => entity.id === SECTION_IDS.surface && entity.present))) {
           gl.useProgram(surfaceProgram); gl.bindVertexArray(surfaceArray);
           gl.uniformMatrix4fv(surface.get("projection")!, false, projection.matrix);
           gl.uniform1f(surface.get("heightScale")!, 4 / view.denominator);
           rgb(surface.get("surfaceColor")!, colors.surface); rgb(surface.get("inkColor")!, colors.ink);
           gl.uniform3fv(surface.get("eye")!, projection.eye);
           gl.uniform1i(surface.get("lit")!, Number(view.lit)); gl.uniform1i(surface.get("mesh")!, Number(view.mesh));
+          rgb(surface.get("background")!, colors.background);
+          gl.uniform1f(surface.get("strength")!, inspecting ? 0.7 * section.context : 1);
           gl.drawElements(gl.TRIANGLES, geometry.indices.length, gl.UNSIGNED_SHORT, 0);
+        }
+        gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
+        if (inspecting) {
+          gl.useProgram(planeProgram); gl.bindVertexArray(planeArray);
+          gl.uniformMatrix4fv(plane.get("projection")!, false, projection.matrix);
+          gl.uniform1f(plane.get("sectionY")!, view.section.y);
+          gl.uniform1f(plane.get("context")!, section.context);
+          rgb(plane.get("planeColor")!, colors.plane);
+          gl.drawArrays(gl.TRIANGLES, 0, 6);
         }
         gl.useProgram(lineProgram); gl.bindVertexArray(lineArray);
         gl.uniformMatrix4fv(lines.get("projection")!, false, projection.matrix);
@@ -123,7 +141,12 @@ export function createPilotRenderer(canvas: HTMLCanvasElement, onLost: () => voi
         gl.uniform1i(lines.get("planes")!, Number(view.example === "grid" || view.planes));
         rgb(lines.get("gridColor")!, colors.grid); rgb(lines.get("xColor")!, colors.x);
         rgb(lines.get("yColor")!, colors.y); rgb(lines.get("zColor")!, colors.z);
-        gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); gl.depthMask(false);
+        rgb(lines.get("sectionColor")!, colors.section); rgb(lines.get("planeColor")!, colors.plane);
+        gl.uniform1i(lines.get("section")!, Number(inspecting));
+        gl.uniform1f(lines.get("context")!, section.context);
+        gl.uniform1f(lines.get("sectionY")!, view.section.y);
+        gl.uniform1f(lines.get("heightOffset")!, section.heightOffset);
+        gl.uniform1f(lines.get("heightScale")!, 4 / view.denominator);
         gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, grid.length / 7);
         gl.depthMask(true); gl.bindVertexArray(null);
         frames += 1; costs.push(performance.now() - start);

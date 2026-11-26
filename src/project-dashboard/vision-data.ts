@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-direct-webgl-graph",
-    title: "Inspect a direct WebGL grid and saddle",
+    id: "kp-graph-sections-planar",
+    title: "Follow one saddle section into 2D and back",
     approval: "approved",
-    contractId: "run-contract.kp.direct-webgl-graph-20261125",
-    finish: "One isolated grid/saddle experiment shares mathematical and camera sources with the existing renderer, measures retained GPU geometry and loading cost, and stops for visual review before renderer promotion.",
-    source: { label: "Approved grid/saddle experiment", href: "docs/project/2026-11-25-direct-webgl-graph-pilot.md" }
+    contractId: "run-contract.kp.graph-sections-planar-20261125",
+    finish: "A moving saddle section retains its equation and curve identity through planar inspection and exact return to the saved camera. Stop at one visual review packet before another shape or shared renderer promotion.",
+    source: { label: "Approved section/planar exemplar", href: "docs/project/2026-11-25-graph-sections-planar-pilot.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "The grid/saddle pilot is accepted and the label backing is removed. Discuss one linked saddle section, planar view and exact 3D return before selecting its scope. Shapes and shared renderer replacement remain unapproved; matrix reuse remains the proposed authoring return path.",
+  nextJudgment: "Review the checked saddle section's plane treatment, continuity and camera turn. The equation link, exact planar endpoint and saved-camera return have executable evidence. Preserve the accepted grid/saddle; other shapes, shared renderer replacement and matrix authoring remain separate successors.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -93,14 +93,14 @@ export const projectVision: ProjectVision = {
     {
       id: "learning", title: "Experiments & workbench", horizon: "next",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
-      established: "The user accepts the isolated direct GPU grid/saddle; its label backing is corrected. Existing mathematical, camera, clock and lease owners remain intact. Numeric, browser and loading evidence is bounded to the pilot; neither broad device performance nor a renderer migration is established.",
-      evidence: { label: "Grid/saddle review and measured limits", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" },
+      established: "The grid/saddle is accepted and plain labels are preserved. Its checked successor links a moving section to its equation and planar view with a pixel-identical camera return. The source, projector, clocks and lease owners remain intact. Visual acceptance, device performance and shared renderer promotion remain separate.",
+      evidence: { label: "Section checkpoint and bounded evidence", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "graph-sections-planar-pilot", title: "Inspect one cross-section in 3D and 2D",
-        finish: "One saddle section retains its equation and identity as it is inspected head-on in 2D and returned to its saved 3D camera. Keep source, projection and display deformation distinct; select bounded scope before implementation.",
-        excludes: "Implicit implementation approval, shared renderer replacement, general solid clipping/capping, broad shape families and matrix authoring. Preserve the accepted grid/saddle and existing Three path.",
-        source: { label: "Accepted pilot and exploratory successor", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" }
+        finish: "One saddle section retains its equation and identity as it is inspected head-on in 2D and returned to its saved 3D camera. Keep source, projection and display deformation distinct and stop for visual review.",
+        excludes: "Shared renderer replacement, general solid clipping/capping, broad shape families and matrix authoring. Preserve the accepted grid/saddle and existing Three path.",
+        source: { label: "Approved bounded successor", href: "docs/project/2026-11-25-graph-sections-planar-pilot.md" }
       }
     }
   ],
@@ -579,6 +579,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the appearance with a label-background correction and asks about metrics, shapes, sections and 2D return. Close the bounded pilot and propose a linked section/planar-view proof without starting it or retiring Three.",
       reason: "The first visual result is accepted. Different geometry and reversible planar inspection would test whether a bounded direct renderer serves the mathematical programme before accumulating a general rendering engine.",
       source: { label: "Acceptance, label correction and discussion", href: "docs/project/reviews/2026-11-25-direct-webgl-graph.md" }
+    },
+    {
+      id: "approve-saddle-section-return", on: "2026-11-25",
+      before: "The accepted grid/saddle suggests a linked cross-section and planar return proof; its implementation is proposed.",
+      after: "The user agrees and authorizes that bounded proof. Extend the isolated experiment with a moving section, linked equation, reversible planar inspection and exact saved-camera return, then stop for visual review.",
+      reason: "This tests a useful mathematical explanation workflow while preserving numerical authority and renderer optionality. Other shape families and a Three replacement remain unapproved.",
+      source: { label: "Section/2D approval and scope", href: "docs/project/2026-11-25-graph-sections-planar-pilot.md" }
     }
   ]
 };
