@@ -1,0 +1,49 @@
+{
+  "id": "task.kp.viewport-independent-scroll",
+  "kind": "task",
+  "title": "Keep fraction scroll pacing consistent in notebook and phone layouts",
+  "status": "resolved",
+  "domain": "reader",
+  "summary": "Shared document reader preserves scroll distance across viewport sizes; focused checks pass. Exact pacing remains available for subjective refinement, and first-entry compositor preparation is a separate issue.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-26-viewport-independent-scroll.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T15:32:38.762Z"
+    },
+    {
+      "command": "npm run visual:fraction-notebook-scroll -- --browser=firefox --phone",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T15:32:39.399Z",
+      "notes": "All three hosts preserve operation distance and semantic position across height changes; phone viewport evidence, not physical touch testing."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fractional-rising-scroll.test.ts tests/fractional-passage-progress.test.ts tests/semantic-reader-page-shell.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T15:33:35.353Z",
+      "notes": "Nine checks cover viewport-independent cadence, embedded pre-hydration behavior, endpoints, reverse and invalid geometry."
+    },
+    {
+      "command": "npm run visual:fraction-notebook-scroll -- --browser=chromium",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T15:33:36.291Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation -- --base-url=http://127.0.0.1:8000 --continuity",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T15:33:37.001Z",
+      "notes": "Three moving portions preserve one-pixel changes and exact reversal."
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium, firefox, type Frame, type Page } from 'playwright';
-import { createDocumentTheaterScroll } from '../src/reader/app/document-theater-scroll.ts';
+import { createDocumentTheaterScroll, documentPassageCadence } from '../src/reader/app/document-theater-scroll.ts';
 import { sampleKpReaderScrollPosition } from '../src/reader/runtime/continuous-scroll-clock.ts';
 import type { KpReaderRuntimeMetricsSnapshot } from '../src/reader/runtime/reader-runtime-metrics.ts';
 
@@ -10,13 +10,15 @@ import type { KpReaderRuntimeMetricsSnapshot } from '../src/reader/runtime/reade
 const browserName = process.argv.find(arg => arg.startsWith('--browser='))?.slice(10) ?? 'chromium';
 assert.ok(browserName === 'chromium' || browserName === 'firefox', 'Expected chromium or firefox');
 const baseURL = process.argv.find(arg => arg.startsWith('--base-url='))?.slice(11) ?? 'http://127.0.0.1:8000';
+const phone = process.argv.includes('--phone');
+const viewport = phone ? { width: 390, height: 844 } : { width: 1280, height: 900 };
 const output = 'tmp/codex/fraction-notebook-scroll';
 await mkdir(output, { recursive: true });
 const browser = await (browserName === 'firefox' ? firefox : chromium).launch({ headless: true });
 const reports = [];
 try {
   for (const host of ['reader', 'notebook-reading', 'notebook-editing'] as const) {
-    const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'no-preference' });
+    const context = await browser.newContext({ viewport, reducedMotion: 'no-preference' });
     try {
       await context.addInitScript(editing => {
         sessionStorage.setItem('kp.fraction-editing', String(editing));
@@ -50,24 +52,33 @@ try {
         for (const [operation, start, end] of [['cancellation', .237, .265], ['evaluation', .39, .42], ['denominator', .737, .765]] as const) {
           const from = sampleKpReaderScrollPosition(start, geometry) - measured.anchor;
           const to = sampleKpReaderScrollPosition(end, geometry) - measured.anchor;
-          const result = await sweep(surface, from, to);
+          const result = await sweep(surface, from, to, start * 1000);
           assert.ok(result.changedScroll > 0 && result.changedPaint > 0, 'Expected changing scroll and material paint');
           samples.push({ visit, operation, scrollSpanPx: to - from, ...result });
         }
       }
       assert.deepEqual(errors, [], 'No browser runtime errors');
-      const report = { host, viewport: measured.viewport, operationScrollPx: measured.available * .32, samples };
+      const beforeResize = Number(await surface.locator('body').getAttribute('data-kp-reader-progress'));
+      await page.setViewportSize({ width: viewport.width, height: viewport.height - 100 });
+      await surface.evaluate(async () => { await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame); });
+      const afterResize = Number(await surface.locator('body').getAttribute('data-kp-reader-progress'));
+      assert.ok(Math.abs(afterResize - beforeResize) <= 1, 'Height changes must preserve the semantic reading position');
+      await page.setViewportSize(viewport);
+      await surface.evaluate(async () => { await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame); });
+      if (phone) await page.screenshot({ path: `${output}/${browserName}-${host}-phone.png` });
+      const report = { host, viewport: measured.viewport, operationScrollPx: documentPassageCadence(measured.available).act,
+        resize: { beforeResize, afterResize }, samples };
       reports.push(report);
       console.log(JSON.stringify(report));
     } finally { await context.close(); }
   }
-  await writeFile(`${output}/${browserName}.json`, JSON.stringify({ browserName,
+  await writeFile(`${output}/${browserName}${phone ? '-phone' : ''}.json`, JSON.stringify({ browserName,
     note: 'Local development, headless, no CPU throttling. Controlled scroll sweeps measure RAF callback cadence and existing reader counters, not presented frames or physical input. First visits may benefit from idle preparation.',
     reports }, null, 2));
 } finally { await browser.close(); }
 
-async function sweep(surface: Page | Frame, from: number, to: number) {
-  return surface.evaluate(async ({ from, to }) => {
+async function sweep(surface: Page | Frame, from: number, to: number, expectedProgress: number) {
+  return surface.evaluate(async ({ from, to, expectedProgress }) => {
     const url = '/src/reader/runtime/reader-runtime-metrics.ts';
     const inspect: (view: Window) => KpReaderRuntimeMetricsSnapshot =
       (await import(/* @vite-ignore */ url)).inspectKpReaderRuntimeMetrics;
@@ -76,6 +87,8 @@ async function sweep(surface: Page | Frame, from: number, to: number) {
     dispatchEvent(new WheelEvent('wheel'));
     scrollTo(0, from);
     await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
+    if (Math.abs(Number(document.body.dataset['kpReaderProgress']) - expectedProgress) > 1)
+      throw new Error('The hydrated reader must use the same scroll geometry as its compiled layout');
     const entered = inspect(window);
     const entryElapsedMs = performance.now() - startTime;
     const owners = [...document.querySelectorAll<HTMLElement>(
@@ -115,5 +128,5 @@ async function sweep(surface: Page | Frame, from: number, to: number) {
       callbacks: frames.length, changedScroll: frames.slice(1).filter((frame, i) => frame.scroll !== frames[i]!.scroll).length,
       changedPaint: frames.filter(frame => frame.changed).length, p95Ms: intervals[Math.floor(intervals.length * .95)],
       maxMs: intervals.at(-1), over33ms: frames.filter(frame => frame.interval > 33.4) };
-  }, { from, to });
+  }, { from, to, expectedProgress });
 }

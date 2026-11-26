@@ -38,6 +38,15 @@ individual articles. Headings, bylines, controls and anchored labels keep their
 own alignment; an annotation is not an indented body paragraph merely because
 it uses the prose font. Headings remain modest under the accepted reader style.
 
+## Preserve scroll pacing across display sizes
+
+User direction: 2026-11-26. A shorter embed or phone layout must not compress
+the scroll distance allocated to an explanatory operation. Keep gesture-to-progress
+sensitivity independent of display height; let prose and stage layout reflow
+while preserving the semantic reading position. The shared document reader now
+uses fixed CSS-pixel distances, with the current values subject to exemplar
+review. See [implementation and bounded phone evidence](../reviews/2026-11-26-viewport-independent-scroll.md).
+
 ## Exemplar roles
 
 A technical exemplar proves authoring, rendering or lifecycle behavior. A

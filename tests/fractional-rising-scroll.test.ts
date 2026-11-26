@@ -3,6 +3,33 @@ import test from 'node:test';
 import { createDocumentTheaterScroll, documentPassageCadence, documentPassageIndex } from '../src/reader/app/document-theater-scroll.ts';
 import { sampleKpReaderScrollProgress, sampleKpReaderScrollPosition } from '../src/reader/runtime/continuous-scroll-clock.ts';
 
+test('phone, embedded and desktop layouts preserve the same scroll sensitivity in both directions', () => {
+  const reference = documentPassageCadence(840);
+  const sensitivities = [];
+  for (const height of [160, 320, 440, 480, 740, 844, 1100, 1600]) {
+    const cadence = documentPassageCadence(height);
+    assert.deepEqual(cadence, reference, 'Display size must not compress reading or animation travel');
+    const arrival = height * 2;
+    const geometry = createDocumentTheaterScroll({ stops: [
+      { positionPx: height, progressPermille: 0 },
+      { positionPx: arrival, progressPermille: 1000 }
+    ] }, height);
+    const position = (progress: number) => sampleKpReaderScrollPosition(progress, geometry);
+    sensitivities.push(position(.75) - position(.25));
+    for (const progress of [.1, .25, .5, .75, 1, .75, .5, .25, .1]) {
+      const expected = (position(progress) - arrival - cadence.read) / cadence.act;
+      assert.ok(Math.abs(sampleKpReaderScrollProgress(position(progress), geometry) - expected) < 1e-9);
+    }
+  }
+  assert.ok(sensitivities.every(distance => distance === sensitivities[0]));
+});
+
+test('the compiler-embedded cadence has the same viewport-independent contract before hydration', () => {
+  const embedded = new Function(`return (${documentPassageCadence.toString()});`)() as typeof documentPassageCadence;
+  assert.deepEqual(embedded(320), documentPassageCadence(900));
+  for (const invalid of [0, -1, NaN, Infinity]) assert.throws(() => embedded(invalid), /positive available height/);
+});
+
 test('measured unequal passages hold their equation through arrival, reading, inspection and release', () => {
   for (const height of [400, 800, 1100]) {
     const cadence = documentPassageCadence(height);
