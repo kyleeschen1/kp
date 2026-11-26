@@ -1,6 +1,51 @@
-# Left rail and emerging prose — fraction checkpoint
+# Raised prose handoff — fraction checkpoint
 
-## Current rail-emergence revision
+## Current raised-prose revision
+
+Outcome: HUMAN_CHECKPOINT. Approved in the
+[fraction plan](../2026-11-26-recessed-rail-plan.md#approved-raised-prose-handoff).
+
+Open http://127.0.0.1:8000/experiments/fraction-notebook/?rail=1&frames=1&reading=1.
+Scroll slowly through one passage and the following mathematical operation,
+then reverse. Look for text physically emerging behind the stage's upper edge,
+clearing it, then lifting into a slightly enlarged resting position. The stage
+recedes for that reading turn and rises again before mathematical motion.
+Judge the depth separation, the position of the reading hold, and the handoff.
+
+The canonical model/article, notebook iframe and native KaTeX/material renderer
+remain the source and paint authorities. The same opt-in presentation adapter
+is the rollback unit. Prose now has a lower paint layer during emergence and
+crosses to the foreground only after its complete text box clears the stage.
+Stage depth increases from 12px to 48px; prose holds at 24px depth with a small
+additional scale. A fixed shadow layer reinforces each surface's attention.
+No tilt, bounce, extra clock or semantic timing changes are introduced.
+
+The pure projection uses intrinsic paragraph geometry. The reading shelf holds
+the paragraph bottom 24px above the stage's layout top, then lets natural scroll
+resume. Its elevation releases before the existing 280px mathematical act.
+Reduced motion restores ordinary untransformed prose in the foreground.
+
+Focused checks cover exact layer-switch clearance, long paragraphs, elevated
+reading holds, release before math, reverse, scaled annotation anchors and
+unchanged operation travel. Initial browser checks sampled exactly at the
+96px boundary and landed fractionally before it because scroll offsets round;
+browser samples now sit just inside phases while unit checks retain exact
+boundary assertions. Human visual acceptance remains pending.
+
+Verification: `npm run typecheck:fraction-notebook` and the four focused test
+files (`document-theater-depth`, `fractional-rising-scroll`, `fraction-notebook`,
+`semantic-reader-page-shell`) pass, 24 tests. The final
+`npm run visual:recessed-rail -- --project=firefox` run passes eight cases.
+Desktop and phone captures were inspected. One earlier comparison-page startup
+timed out; the managed services remained running and the final clean run
+loaded it without a server-code change. Firefox exposed a separate label-fit
+failure at the stronger perspective: inverse screen measurement made a 326px
+label appear 326.009px wide. Labels now declare border-box sizing and use their
+intrinsic computed dimensions, retaining runtime fit guards and the measured
+anchor-gap regression. This supersedes relying on rounding slack for label
+width in the preceding trial.
+
+## Superseded rail-emergence revision
 
 Outcome: HUMAN_CHECKPOINT. The user rejected the continuous frames and approved
 the simpler rail handoff in the [fraction plan](../2026-11-26-recessed-rail-plan.md).

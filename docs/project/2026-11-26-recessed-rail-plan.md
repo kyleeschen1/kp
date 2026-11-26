@@ -114,3 +114,15 @@ settled left edge stable, and all projection reversible from scroll position.
 No tilt is included in this round. Replace the `frames=1` candidate in place;
 retain the `rail=1` comparison, native math authority and operation pacing.
 Stop for one fraction-exemplar review before reuse.
+
+## Approved raised-prose handoff
+
+The user approved stronger stage depth and an actual exchange of elevation.
+Prose starts behind the opaque stage, progressively clears its upper edge,
+then rises into a slightly enlarged reading position above the stage while
+the stage recedes. Hold the prose there briefly, then return attention to the
+stage before the existing mathematical motion corridor. Keep the left rail
+fixed and the prose's left edge anchored. No tilt or bounce; use the existing
+scroll clock for exact reverse and direct seeks. Replace the same opt-in
+candidate and stop for visual judgment; native math and other lessons remain
+outside the change.

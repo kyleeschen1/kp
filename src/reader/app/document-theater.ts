@@ -103,11 +103,13 @@ export function mountDocumentTheater(input: {
         document.body.dataset['kpFrameFront'] = exchange.stage >= .5 ? 'stage' : 'prose';
         // The same authored cue also has a stage annotation. Yield that
         // rendering during the prose turn instead of showing both at once.
-        if (exchange.stage < 1) annotation = undefined;
+        if (exchange.prose.some(state => state.active)) annotation = undefined;
         exchange.prose.forEach((state, index) => {
           const copy = passages[index]!.querySelector<HTMLElement>('.kp-caption-copy')!;
           copy.style.setProperty('--kp-prose-presence', String(state.presence));
           copy.style.setProperty('--kp-prose-lift', String(state.lift));
+          copy.style.setProperty('--kp-prose-offset', `${state.offset}px`);
+          passages[index]!.style.setProperty('--kp-prose-layer', state.front ? '3' : '1');
           passages[index]!.dataset['kpProseSelected'] = String(selectedPassages.has(index));
         });
       }

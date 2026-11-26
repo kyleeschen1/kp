@@ -82,6 +82,12 @@
       "title": "Left rail with elevated stage and settling prose",
       "summary": "HUMAN_CHECKPOINT: left rail, stage lift and settling prose implemented and checked. Review the same frames=1 fraction URL; evidence in docs/project/reviews/2026-11-26-frame-exchange.md.",
       "status": "complete"
+    },
+    {
+      "id": "raised-prose-handoff",
+      "title": "Stage and prose exchange elevated reading positions",
+      "summary": "HUMAN_CHECKPOINT: stage and prose exchange elevation with an upper-edge reveal. Candidate checked; review the same frames=1 fraction URL.",
+      "status": "complete"
     }
   ]
 }

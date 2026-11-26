@@ -68,6 +68,13 @@
       "scope": "Rail emergence and comparison treatment, Chromium/Firefox desktop and phone widths",
       "checkedAt": "2026-11-26T17:51:44.398Z",
       "notes": "Eight cases pass after repairing inverse-scale annotation rounding. Typecheck and 23 focused tests pass. Emergence/settle/reverse, fixed rail, native material travel, annotation gap, reduced motion and resize checked. Visual judgment pending."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Raised-prose handoff and prior rail treatment, desktop and phone, Chromium and Firefox",
+      "checkedAt": "2026-11-26T18:09:19.939Z",
+      "notes": "Final eight cases pass. Typecheck and 24 focused tests pass. Tests cover opaque stage ordering, raised reading shelf, reverse, stage scale, label gap, reduced motion and preserved math travel. Earlier exact-boundary sampling, Firefox label sizing and one startup timeout are recorded in the review packet."
     }
   ],
   "revisitWhen": [

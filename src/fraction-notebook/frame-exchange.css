@@ -3,19 +3,22 @@
 @media screen {
   body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
     --kp-frame-stage-focus: 1;
-    --kp-frame-depth: 12px;
-    --kp-frame-scale: .012;
-    --kp-prose-depth: 18px;
-    --kp-prose-scale: .025;
+    --kp-frame-depth: 48px;
+    --kp-frame-scale: .016;
+    --kp-prose-depth: 24px;
+    --kp-prose-scale: .012;
     --kp-rail-inset: 24px;
     --kp-frame-shadow: color-mix(in srgb, var(--fn-text) 12%, transparent);
   }
   body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-lesson::before { display: none; }
   body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-sequence::after { z-index: 4; }
-  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats { z-index: 3; }
+  /* Let individual passages cross the stage's paint plane. A stacking
+     context around the entire list would keep hidden tails in front. */
+  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats { z-index: auto; }
+  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage { z-index: var(--kp-prose-layer, 1); }
   body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-pin {
     z-index: 2;
-    transform-origin: center;
+    transform-origin: center top;
     transform: perspective(900px) translateZ(calc(var(--kp-frame-depth) * var(--kp-frame-stage-focus)))
       scale(calc(1 + var(--kp-frame-scale) * var(--kp-frame-stage-focus)));
   }
@@ -30,21 +33,31 @@
     opacity: var(--kp-frame-stage-focus); pointer-events: none;
   }
   body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy {
-    transform-origin: left top;
-    transform: perspective(900px) translateZ(calc(var(--kp-prose-depth) * var(--kp-prose-lift, 0)))
+    transform-origin: left bottom;
+    transform: translateY(var(--kp-prose-offset, 0px)) perspective(900px) translateZ(calc(var(--kp-prose-depth) * var(--kp-prose-lift, 0)))
       scale(calc(1 + var(--kp-prose-scale) * var(--kp-prose-lift, 0)));
     opacity: var(--kp-prose-presence, 1);
+  }
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy::after {
+    content: ''; position: absolute; inset: -.2em -.35em; z-index: -1;
+    box-shadow: 0 4px 12px var(--kp-frame-shadow);
+    opacity: var(--kp-prose-lift, 0); pointer-events: none;
   }
   /* A selection or focused link must remain available outside its story beat. */
   body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage[data-kp-prose-selected=true] .kp-caption-copy,
   body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy:focus-within { opacity: 1; transform: none; }
+  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage:is([data-kp-prose-selected=true], :focus-within) { z-index: 3; }
   body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-reader-motion-preference=reduced] {
     --kp-frame-depth: 0px; --kp-frame-scale: 0; --kp-prose-depth: 0px; --kp-prose-scale: 0;
   }
+  body[data-kp-frame-exchange=true][data-kp-reader-motion-preference=reduced] .kp-caption-copy { transform: none; opacity: 1; }
+  html body[data-kp-frame-exchange=true][data-kp-reader-motion-preference=reduced] .kp-rising-passage { z-index: 3; }
   @media (prefers-reduced-motion: reduce) {
     body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
       --kp-frame-depth: 0px; --kp-frame-scale: 0; --kp-prose-depth: 0px; --kp-prose-scale: 0;
     }
+    body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy { transform: none; opacity: 1; }
+    html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage { z-index: 3; }
   }
   @media (forced-colors: active) {
     body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {

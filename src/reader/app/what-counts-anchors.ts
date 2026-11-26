@@ -51,7 +51,13 @@ export function mountAnchoredLabels(stage: HTMLElement) {
           const left = (Math.min(...bounds.map(b => b.left)) - viewport.left) / scaleX, right = (Math.max(...bounds.map(b => b.right)) - viewport.left) / scaleX;
           const top = (Math.min(...bounds.map(b => b.top)) - viewport.top) / scaleY, bottom = (Math.max(...bounds.map(b => b.bottom)) - viewport.top) / scaleY;
           const label = overlay.querySelector<HTMLElement>(`[data-kp-focus-deck-annotation="${CSS.escape(note.id)}"]`)!;
-          const rect = label.getBoundingClientRect(), size = { width: rect.width / scaleX, height: rect.height / scaleY }, center = (left + right) / 2;
+          // This adapter owns border-box labels. Read their intrinsic CSS
+          // dimensions: inverse-projecting a rounded screen rect can falsely
+          // enlarge an exactly fitting label (notably Firefox at higher depth).
+          const style = getComputedStyle(label);
+          const size = { width: parseFloat(style.width), height: parseFloat(style.height) }, center = (left + right) / 2;
+          if (!(size.width > 0 && size.height > 0) || !Number.isFinite(size.width + size.height))
+            throw new AnchoredAlgebraGap(note.id, 'Require measurable annotation text.');
           const x = Math.max(16, Math.min(width - size.width - 16, center - size.width / 2));
           const y = note.side === "above" ? top - 32 - size.height : bottom + 32;
           // Client-rect projection/inversion can put an exact-fit width a few

@@ -10,18 +10,25 @@ const smooth = (value: number) => {
   return t * t * (3 - 2 * t);
 };
 
-/** Natural, untransformed text bounds own the handoff. The leading edge
- * emerges at stage center, settles, then scrolls away at ordinary scale.
- * Sampling never reads the transformed paint back into its own geometry. */
+/** Reveal behind the stage, clear its top, then exchange depth. The raised
+ * reading shelf ends before the existing mathematical operation corridor.
+ * Geometry is always intrinsic: transformed paint cannot advance this clock. */
 export function documentRailEmergence(stageTop: number, stageHeight: number,
   passages: readonly { top: number; bottom: number }[]) {
   const center = stageTop + stageHeight / 2;
   const prose = passages.map(passage => {
     const travel = center - passage.top;
-    const presence = smooth(travel / 24);
-    const settle = smooth(travel / 96);
-    const attention = presence * smooth((passage.bottom - stageTop + 24) / 48);
-    return { presence, lift: 1 - settle, attention };
+    const height = passage.bottom - passage.top;
+    const shelf = stageTop - height - 24;
+    const holdEnd = stageHeight / 2 + height + 24;
+    const rise = smooth(travel / 96);
+    const targetTop = travel < 96
+      ? stageTop + 32 + (shelf - stageTop - 32) * rise
+      : Math.min(shelf, passage.top);
+    const attention = smooth((travel - 96) / 48) * (1 - smooth((travel - holdEnd) / 48));
+    return { presence: travel < 0 ? 0 : 1, lift: attention, attention,
+      offset: targetTop - passage.top, front: travel >= 96,
+      active: travel > 0 && travel < holdEnd + 48 };
   });
   return { prose, stage: 1 - Math.max(0, ...prose.map(passage => passage.attention)) };
 }
