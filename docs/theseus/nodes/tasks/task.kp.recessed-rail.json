@@ -40,6 +40,13 @@
       "scope": "Text-avoidance revision: Chromium and Firefox, desktop and phone widths",
       "checkedAt": "2026-11-26T16:45:57.274Z",
       "notes": "Four browser cases, typecheck and 22 focused tests pass. Full passage opacity, text clearance, rail inset and reversal verified."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Soft-backing revision: Chromium and Firefox, desktop and phone widths",
+      "checkedAt": "2026-11-26T16:54:54.412Z",
+      "notes": "Four browser cases pass, including stationary crossing and realized rail pixel comparison. Typecheck and 21 focused tests pass; obsolete repositioning behavior and its test removed."
     }
   ],
   "revisitWhen": [

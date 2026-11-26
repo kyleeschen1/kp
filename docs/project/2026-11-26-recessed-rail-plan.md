@@ -69,3 +69,13 @@ scroll position for direct seek and reversal. Keep full stage opacity during
 passages, the fixed translucent sheet, mathematical timing and separate final
 exit withdrawal. Reduced motion snaps to the clear position. Review this single
 fraction candidate before reusing the choreography.
+
+## Approved soft-backing revision
+
+The user found the repositioning too conspicuous and approved a stationary
+equation with soft page-colored backing around prose. Keep the common translucent
+sheet and unindented text; let the denser local paper obscure both equation and
+rail with feathered edges. Remove the text-avoidance sampler and measurements.
+Do not dim the stage during passage crossings. Retain the final exit withdrawal,
+semantic timing and native math/annotation owners. Judge the one exemplar before
+promoting the treatment.

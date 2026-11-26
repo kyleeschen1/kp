@@ -4,6 +4,7 @@
     --kp-rail-ink: var(--fn-text);
     --kp-rail-paper: color-mix(in srgb, var(--fn-background) 18%, transparent);
     --kp-rail-floor: var(--fn-background);
+    --kp-rail-prose-backing: color-mix(in srgb, var(--fn-background) 98%, transparent);
     --kp-rail-inset: 28px;
     --kp-rail-dip: 24px;
     --kp-rail-perspective: 800px;
@@ -31,7 +32,7 @@
     background: transparent;
     /* Flatten this local perspective below the prose stacking context. Even
        at the surface the equation must never jump in front of a paragraph. */
-    transform: translateY(var(--kp-rail-offset, 0px)) perspective(var(--kp-rail-perspective)) translateZ(calc(-1 * var(--kp-rail-depth, 0) * var(--kp-rail-dip)));
+    transform: perspective(var(--kp-rail-perspective)) translateZ(calc(-1 * var(--kp-rail-depth, 0) * var(--kp-rail-dip)));
     opacity: var(--kp-rail-presence, 1);
   }
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-frame {
@@ -57,6 +58,17 @@
     position: relative; z-index: 2; background: transparent;
   }
   html body[data-kp-recessed-rail=true] .kp-lesson p { text-indent: 0; }
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-copy {
+    position: relative; isolation: isolate;
+  }
+  /* Denser paper follows the real prose, not its reserved scroll spacer. The
+     page-colored feather obscures both equation and rail without moving them. */
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-copy::before {
+    content: ''; position: absolute; inset: -.2em -.35em; z-index: -1;
+    background: var(--kp-rail-prose-backing); border-radius: .25em;
+    box-shadow: 0 0 .7em .35em var(--kp-rail-prose-backing);
+    pointer-events: none;
+  }
   body[data-kp-recessed-rail=true][data-kp-reader-motion-preference=reduced] { --kp-rail-dip: 0px; }
   @media (prefers-reduced-motion: reduce) {
     body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] { --kp-rail-dip: 0px; }
@@ -64,6 +76,7 @@
   @media (forced-colors: active) {
     body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] { --kp-rail-paper: transparent; --kp-rail-floor: Canvas; --kp-rail-dip: 0px; }
     body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-rising-passage { background: Canvas; }
+    body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-copy::before { background: Canvas; box-shadow: none; }
     body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-pin { opacity: var(--kp-rail-presence, 1); }
   }
 }

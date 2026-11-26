@@ -140,3 +140,27 @@ passed in Chromium/Firefox at desktop and phone widths; typecheck and 22 focused
 tests passed. Checks cover unindented text, inset rail, full stage opacity,
 post-transition clearance, reversal, native paint and unchanged operation travel.
 Physical phone input and multi-lesson reuse remain outside this checkpoint.
+
+## Soft paper backing — current candidate
+
+The evasive movement was rejected. The equation now remains stationary at full
+opacity during passage crossings. The removed avoidance sampler, its text-bound
+measurements and its obsolete unit test are replaced by browser assertions of
+stationary placement through forward/reverse crossing. Final exit withdrawal is
+unchanged and remains separate from passage behavior.
+
+Each real caption-copy has a page-colored backing behind its text, with a dense
+center and soft feather. This is CSS background paint, not text opacity, a dark
+shadow or a glyph-sized replacement paint owner. It obscures the existing rail
+with the same edges as the equation, leaving interrupted views through the clear
+intervals. There is no independent rail animation and no layout-size change.
+The common translucent sheet, floor, unindented prose and native mathematics
+remain intact. The feather strength is provisional.
+
+At the same review URL, scroll a paragraph across the stationary expression and
+reverse. Judge the softness of the rail's interruption and whether the prose has
+enough backing without looking like a panel. Desktop and phone-width captures
+were inspected. All four Chromium/Firefox cases pass, including a realized-pixel
+comparison of the backed rail against the exposed rail. Typecheck and 21 focused
+tests pass; the retired repositioning test accounts for the reduced count.
+Human aesthetic acceptance and physical phone testing remain pending.

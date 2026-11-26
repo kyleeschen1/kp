@@ -33,7 +33,7 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
   expect(surface.sheetHeight).toBeCloseTo(surface.articleHeight, 0);
   expect(surface.sheetBackground).toContain('0.18');
   expect(surface.prose.every(prose => prose.background === 'rgba(0, 0, 0, 0)' && prose.opacity === '1')).toBe(true);
-  // Repositioning is sampled from actual text bounds, without a timer or fade.
+  // Text may cross the stage, but neither stage placement nor opacity changes.
   const depths = [];
   for (const offset of [-2, 16, 34, 16, -2]) {
     depths.push(await frame.evaluate(async offset => {
@@ -49,12 +49,9 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
         clearance: equation.top - passage.getBoundingClientRect().bottom,
         opacity: getComputedStyle(pin).opacity };
     }, offset));
-    if (offset === 34) await page.screenshot({ path: info.outputPath(`tuck-${width}.png`) });
+    if (offset === 34) await page.screenshot({ path: info.outputPath(`crossing-${width}.png`) });
   }
-  expect(depths[0]!.offset).toBe(0);
-  expect(depths[1]!.offset).toBeGreaterThan(0);
-  expect(depths[2]!.offset).toBeGreaterThan(depths[1]!.offset);
-  expect(depths[2]!.clearance).toBeGreaterThanOrEqual(11);
+  expect(depths.every(sample => sample.offset === 0)).toBe(true);
   expect(depths.every(sample => sample.opacity === '1')).toBe(true);
   expect(depths[1]).toEqual(depths[3]); expect(depths[0]).toEqual(depths[4]);
   const geometry = await frame.evaluate(() => {
@@ -108,8 +105,7 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
       owner.pixels.forEach((value, pixel) => expect(Math.abs(value - b[index]!.pixels[pixel]!)).toBeLessThan(.025));
     });
   }
-  // Prose stays opaque above a transparent paragraph box; only the continuous
-  // sheet veils the rail and the recessed equation.
+  // The local paper backing follows the real text and obscures the rail too.
   const covered = await frame.evaluate(async () => {
     const passage = document.querySelectorAll<HTMLElement>('.kp-rising-passage')[3]!;
     const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
@@ -117,14 +113,35 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
     dispatchEvent(new WheelEvent('wheel')); scrollTo(0, scrollY + passage.getBoundingClientRect().top - top);
     await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
     const p = passage.getBoundingClientRect(), s = pin.querySelector<HTMLElement>('.kp-animation-static')!.getBoundingClientRect();
-    return { clearance: s.top - passage.querySelector('.kp-caption-copy')!.getBoundingClientRect().bottom,
+    const copy = passage.querySelector('.kp-caption-copy')!;
+    const text = copy.getBoundingClientRect(), backing = getComputedStyle(copy, '::before');
+    return { overlap: s.top < text.bottom && s.bottom > text.top,
+      backing: backing.backgroundColor, feather: backing.boxShadow,
+      railX: p.left + 28.5, textTop: text.top,
       railCovered: passage.contains(document.elementFromPoint(p.left + 28.5, p.top + p.height / 2)),
       background: getComputedStyle(passage).backgroundColor };
   });
-  expect(covered.clearance).toBeGreaterThanOrEqual(11);
+  expect(covered.overlap).toBe(true);
+  expect(covered.backing).toContain('0.98');
+  expect(covered.feather).not.toBe('none');
   expect(covered.background).toBe('rgba(0, 0, 0, 0)');
   expect(covered.railCovered).toBe(true);
   await page.screenshot({ path: info.outputPath(`covered-${width}.png`) });
+  // Read realized pixels, not just z-index declarations: the same rail must
+  // be nearly paper-colored beside the prose and dark in the clear interval.
+  const host = await (await frame.frameElement()).boundingBox();
+  const capture = await page.screenshot();
+  const railPaint = await page.evaluate(async ({ png, x, y }) => {
+    const img = new Image(); img.src = `data:image/png;base64,${png}`; await img.decode();
+    const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
+    const context = canvas.getContext('2d')!; context.drawImage(img, 0, 0);
+    const darkest = (sampleY: number) => {
+      const pixels = context.getImageData(Math.floor(x) - 1, Math.floor(sampleY), 3, 1).data;
+      return Math.min(...[0, 4, 8].map(i => (pixels[i]! + pixels[i + 1]! + pixels[i + 2]!) / 3));
+    };
+    return { backed: darkest(y - 1), open: darkest(y - 48) };
+  }, { png: capture.toString('base64'), x: host!.x + covered.railX, y: host!.y + covered.textTop });
+  expect(railPaint.backed - railPaint.open).toBeGreaterThan(70);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   expect(await frame.locator('.kp-caption-pin').evaluate(pin => new DOMMatrixReadOnly(getComputedStyle(pin).transform).m43)).toBe(0);
   await page.emulateMedia({ reducedMotion: 'no-preference' });

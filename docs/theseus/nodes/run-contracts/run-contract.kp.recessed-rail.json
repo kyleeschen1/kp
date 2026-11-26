@@ -58,6 +58,12 @@
       "title": "Unindented prose and equation repositioning beneath incoming text",
       "summary": "Checked candidate ready. HUMAN_CHECKPOINT: judge the rapid reposition beneath incoming prose.",
       "status": "complete"
+    },
+    {
+      "id": "soft-prose-backing",
+      "title": "Stationary stage beneath softly backed prose and interrupted rail",
+      "summary": "Checked stationary-stage candidate ready. HUMAN_CHECKPOINT: judge prose backing and interrupted rail.",
+      "status": "complete"
     }
   ]
 }
