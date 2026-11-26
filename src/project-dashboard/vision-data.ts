@@ -66,7 +66,7 @@ export const projectVision: ProjectVision = {
     },
     {
       id: "reader", title: "Reader & presentation", horizon: "later",
-      destination: "Compact vignettes use fine lines and readable notation to make one consequential relationship stand out. Many related views support full explanations and precise return to context.",
+      destination: "Organized mathematical reference pages reveal relationships among rules. Clicking a rule opens a reusable derivation that readers can replay and compose while retaining their place in the whole. Compact figures and fine lines support that experience.",
       established: "The accepted algebra reader preserves a full explanation, independent readings and a scripted focused return. Physics still uses its separate rail host. Existing authoring and return foundations were integrated or rechecked, not newly invented; live conversation and learning outcomes remain unproved.",
       evidence: { label: "Accepted explanation and preservation evidence", href: "docs/project/reviews/2026-11-08-explanation-first.md" },
       outcome: {
@@ -624,6 +624,13 @@ export const projectVision: ProjectVision = {
       after: "The user specifies compact graphs, thin 1px lines and many small vignettes per topic. Trigonometric geometry and a one-page Halmos syntax companion are candidate material. Each vignette makes one consequential relationship or distinction stand out.",
       reason: "Small, focused visual explanations should fit naturally into reading and revisiting a topic. Record the direction while preserving readable notation, full reasoning and current scope; no global style migration or content campaign begins.",
       source: { label: "Compact vignette direction and scope", href: "docs/project/decisions/2026-11-26-compact-question-led-vignettes.md" }
+    },
+    {
+      id: "clarify-reference-gestalt-and-composition", on: "2026-11-26",
+      before: "The assistant emphasized compact, question-led vignettes and small teaching moments.",
+      after: "The user clarifies that gestalt, composability and repeat visits are primary: organized pages of trig identities, calculus rules and practical mathematics open derivation animations when a rule is selected.",
+      reason: "The reference page supplies the whole; reusable derivations explain its parts on demand. Preserve compact styling and semantic identity without making a linear lesson or required quiz the default. This is a product clarification, not a new implementation approval.",
+      source: { label: "Reference-first clarification", href: "docs/project/decisions/2026-11-26-compact-question-led-vignettes.md" }
     }
   ]
 };

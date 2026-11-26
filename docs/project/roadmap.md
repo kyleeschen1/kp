@@ -17,7 +17,7 @@ authoring → adaptation → practice/retrieval → library.
 [Accepted direction](decisions/2026-11-08-authoring-expert-attention.md) records
 the rationale and superseded priorities.
 
-Presentation: [compact vignettes, fine lines, one focal relationship](decisions/2026-11-26-compact-question-led-vignettes.md).
+Reference experience: [organized rules with reusable, replayable derivations](decisions/2026-11-26-compact-question-led-vignettes.md).
 
 ## Current approved commitment
 

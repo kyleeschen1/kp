@@ -20,7 +20,7 @@ The notebook detour is current.
 
 ## Retrieve for a named question
 
-- **Vignette direction:** [compact figures, 1px lines and focal relationships](../decisions/2026-11-26-compact-question-led-vignettes.md).
+- **Reference direction:** [organized rules, composable derivations and repeated return](../decisions/2026-11-26-compact-question-led-vignettes.md).
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
   and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is
