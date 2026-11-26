@@ -2,8 +2,8 @@
   "id": "run-contract.kp.quadratic-authoring-20261125",
   "kind": "run-contract",
   "title": "Quadratic authoring exemplar",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: both implementation packages complete; canonical quadratic exemplar awaits G1 judgment before any broader mathematical work.",
+  "status": "resolved",
+  "summary": "COMPLETE: both M0 packages checked and the quadratic exemplar accepted at G1. No matrix implementation, broad mathematical portfolio or shared adapter promotion is authorized by this feedback.",
   "sourceRefs": [
     {
       "kind": "file",

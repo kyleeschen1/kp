@@ -1,7 +1,7 @@
 # Discoverable mathematical objects and major animations
 
 Date: 2026-11-25
-Status: M0 quadratic exemplar approved; remaining programme is proposed
+Status: M0 quadratic exemplar accepted at G1; remaining programme is proposed
 Source: the user's mathematical-object, autocomplete, multiplication and linear-algebra discussion
 Inspection basis: product worktree at `8143b42594108ce0d1dde672480d1c47f4549558`
 Companion: [Vim and semantic-command design](2026-11-25-vim-semantic-command-design.md)
@@ -33,6 +33,15 @@ commands and preservation evidence. No shared visual promotion before G1.
 The earlier row-picker commitment below describes the inspection date. The frame
 is now accepted; this explicit M0 successor owns current execution. The tabled
 matrix Pour treatment and historical runs remain unaccepted and unresumed.
+
+### G1 acceptance
+
+After inspecting the implemented exemplar, the user says "this looks great!"
+and requests an accomplishment summary. This accepts the bounded quadratic
+presentation and interaction delivered in `9b1b8c908`, closing M0. Its
+[evidence](reviews/2026-11-25-quadratic-authoring.md) retains verification and
+measured limits. Recommend M1 as the next distinct caller; this feedback does
+not approve starting M1, the full portfolio or shared adapter promotion.
 
 ## 1. Outcome and finite finish line
 

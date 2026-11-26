@@ -4,6 +4,20 @@ Date: 2026-11-25
 Scope: approved M0 in [the mathematical programme](../2026-11-25-mathematical-authoring-programme.md).
 Execution: `run-contract.kp.quadratic-authoring-20261125`.
 
+## Accepted result
+
+The user reviewed the exemplar and said "this looks great!", then asked for an
+accomplishment summary. Record G1 accepted for the bounded quadratic authoring
+presentation and interaction at `9b1b8c908`. M0 is complete. Matrix reuse is the
+recommended successor, still proposed; neither the wider mathematical programme
+nor shared adapter promotion is approved by this feedback. The measurements and
+limits below remain unchanged.
+
+Acceptance reconciliation: all 75 vision/orientation checks pass. The initial
+record made the roadmap 651 words; shortening it restored the unchanged 650-word
+budget. Theseus validation passes. This update records acceptance and the proposed
+successor without changing the mathematical implementation.
+
 ## Mathematical resource boundary
 
 The notebook adapter now has validated quadratic, derivative and tangent resources,
@@ -53,7 +67,7 @@ From the KP pane, `M-x` / `C-x C-x` → **Open mathematical notebook** opens it;
 **Open fraction notebook** returns. Both retain separate saved documents and the
 existing project chat. The process-managed dev service remains the host.
 
-Review these observable checkpoints:
+Reproduce these accepted checkpoints:
 
 1. Change **c** from 0 to 3. The equation and graph move together. Create a
    **Derivative**: it remains 2x when only c changes; changing a or b updates it.
@@ -69,7 +83,7 @@ Review these observable checkpoints:
    remain. Judge whether these object controls and the relationship cues make the
    mathematical editing loop understandable, including in reading mode.
 
-This is a checked candidate awaiting G1, not visual acceptance or shared promotion.
+G1 is now accepted for this exemplar; shared promotion still needs a distinct caller.
 M1 matrix reuse and the 24-outcome portfolio remain outside this run. The seed is a
 repository-authored example, not evidence of autonomous LLM generation or learning.
 
@@ -188,8 +202,9 @@ derivative chain, general concept catalogue or 3D notebook authoring is claimed.
 
 ### Review handoff
 
-Stop state: **HUMAN_CHECKPOINT**, the planned G1 review. The selected task and run
-contract are deferred for that judgment; implementation packages are complete.
+Initial stop state: **HUMAN_CHECKPOINT**, the planned G1 review. The selected task
+and run contract were deferred for that judgment with implementation complete.
+Subsequent user acceptance above closes this bounded run as **COMPLETE**.
 `theseus workspace validate` passes (1,333 nodes / 34,848 events). The final
 orientation/vision suite also passes after recording this stop state.
 

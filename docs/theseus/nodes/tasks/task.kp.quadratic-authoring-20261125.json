@@ -2,9 +2,9 @@
   "id": "task.kp.quadratic-authoring-20261125",
   "kind": "task",
   "title": "Author one persistent quadratic with linked symbolic and graphical views",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "Implementation and checks complete; HUMAN_CHECKPOINT at G1 for quadratic controls and relationship clarity. No matrix or shared promotion authority.",
+  "summary": "User accepts the quadratic exemplar at G1 and asks for an accomplishment summary. M0 complete at checked commit 9b1b8c908; matrix reuse remains a separate proposal.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -134,6 +134,20 @@
       "scope": "focused",
       "checkedAt": "2026-11-26T04:35:00.006Z",
       "notes": "Final independent production builds and both complete scoped typechecks pass against accepted 1c1e8791. Notebook initial gzip 466189 to 470920 bytes; complete JS/CSS 519265 to 549119. Native reader unchanged. Mathematical reader excludes 3D/catalogue/MathJS. Types 122443 to 156061; instantiations 131357 to 174302 including expanded consumers. Full qualifications and figures in review."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:10:27.454Z",
+      "notes": "Acceptance bookkeeping initially made the roadmap 651 words against its existing 650-word bound. Shortened the new successor sentence; no budget change."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T05:10:28.322Z",
+      "notes": "All 75 checks pass after recording G1 acceptance, preserving completed M0 scope, and selecting matrix reuse as a separate proposed milestone. No mathematical implementation changes."
     }
   ],
   "revisitWhen": [

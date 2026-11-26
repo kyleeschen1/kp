@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "One saved quadratic exposes graph, derivative and tangent commands; edits, reload and another occurrence retain its relationships. Deliver this exemplar in the existing notebook and stop at G1 before the matrix caller or broader animation portfolio.",
     source: { label: "Approved M0 scope and preservation boundary", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
   },
-  uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "G1 candidate: open /experiments/fraction-notebook/?notebook=quadratic. Change c, create a derivative and tangent, move the tangent point, then reload and inspect shared graphs with local zoom. Automated checks and measured costs support this bounded exemplar; visual acceptance, matrix reuse and broader row/filter promotion retain separate gates.",
+  uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
+  nextJudgment: "G1 is accepted for the quadratic notebook. The proposed successor is M1: one matrix/vector caller through the same resource, command and persistence boundary, preserving the quadratic. Select its bounded scope before implementation; broader row/filter and shared adapter promotion remain separate.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook, persistent conversation, fruit-picker presentation and workspace frame are accepted. One persistent quadratic now exposes linked equation, graph, derivative and tangent editing with reload, local views and measured costs; it awaits G1. Existing split, focus, command and row/filter work retains its distinct review boundaries.",
-      evidence: { label: "Quadratic authoring candidate and bounded evidence", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" },
+      established: "The notebook, persistent conversation, fruit-picker presentation and workspace frame are accepted. G1 now accepts the quadratic's linked equation, graph, derivative and tangent editing with reload, local views and measured costs. Existing split, focus, command and row/filter work retains its distinct review boundaries.",
+      evidence: { label: "Accepted quadratic authoring and bounded evidence", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" },
       outcome: {
-        authority: "approved",
-        id: "quadratic-authoring-pilot", title: "Create and revise one linked quadratic explanation",
-        finish: "One saved quadratic exposes graph, derivative and tangent commands. Source edits update declared dependents; identity, relationships and separate occurrences survive reload. Review coefficient changes and tangent motion before the matrix caller tests reuse.",
-        excludes: "The full animation portfolio, arbitrary CAS, new window infrastructure, exhaustive Vim parity, automatic visual promotion and publication. Existing row/filter review remains separate.",
-        source: { label: "Approved M0 and finite finish", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
+        authority: "proposed",
+        id: "matrix-authoring-reuse", title: "Reuse the authoring boundary for one matrix and vector",
+        finish: "One matrix/vector caller uses discoverable operations, linked symbolic/geometric views and saved identities through the existing resource, command and persistence boundary. Source edits affect its dependents while preserving the accepted quadratic; review it at G2 before promoting demonstrated common adapters.",
+        excludes: "Implementation before bounded scope approval, the full animation portfolio, arbitrary CAS, the tabled matrix Pour treatment, new window infrastructure, exhaustive Vim parity and publication. Existing row/filter review remains separate.",
+        source: { label: "Proposed M1 after accepted G1", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
       }
     },
     {
@@ -59,7 +59,7 @@ export const projectVision: ProjectVision = {
       outcome: {
         authority: "proposed",
         id: "linked-mathematical-authoring", title: "Author linked symbolic and graphical objects",
-        finish: "A saved quadratic exposes valid graph, derivative and tangent commands; edits, reload and another occurrence preserve its relationships. A matrix caller then proves reuse before the proposed 24-outcome mathematical portfolio expands.",
+        finish: "The accepted quadratic is the first caller. A matrix caller must establish reuse before the proposed 24-outcome mathematical portfolio expands; each new family retains its declared support and review gates.",
         excludes: "Implementation before scope review, exhaustive Vim parity, arbitrary CAS or implicit graphing, and automatic visual promotion. The earlier explanation/practice reuse proof remains a later application.",
         source: { label: "Proposed mathematical programme and acceptance gates", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
       }
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Linked quadratic authoring accepted",
+      scope: "G1 accepts one persistent quadratic with discoverable graph, derivative and tangent operations, reversible tangent motion, local views and reload. This closes M0; matrix reuse, cross-notebook imports, broad mathematical support and LLM-driven editing remain separate work.",
+      source: { label: "G1 acceptance, evidence and limits", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" }
+    },
     {
       title: "Refined workspace frame accepted",
       scope: "The quiet padded beige modeline sits above pickers, the editor header is hidden, and the pane retains a neutral edge with accessible focus cues. This closes the bounded frame refinement; mathematical authoring and broader row/filter promotion remain separate successors.",
@@ -548,6 +553,13 @@ export const projectVision: ProjectVision = {
       after: "A selected quadratic notebook now exposes persistent source/derived objects, native symbolic and 2D views, captured commands, tangent playback and local occurrences. Deliver the checked candidate for G1 without promoting the adapter or opening M1.",
       reason: "The complete first workflow is now inspectable. Human judgment should select its interaction and visual direction before a matrix caller tests whether the boundary generalizes.",
       source: { label: "G1 exemplar, verification and measured limits", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" }
+    },
+    {
+      id: "accept-quadratic-propose-matrix-reuse", on: "2026-11-25",
+      before: "The checked quadratic authoring exemplar awaits G1 visual and interaction judgment.",
+      after: "The user accepts the exemplar and asks what it accomplishes. Close M0 and retain its finite finish; propose the existing M1 matrix/vector caller as a separate successor without starting it.",
+      reason: "The first complete object-to-operation-to-view loop now has human acceptance. A structurally different caller is the next useful test of reuse before broader mathematical families or shared adapter promotion.",
+      source: { label: "User acceptance and preserved scope", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" }
     }
   ]
 };
