@@ -2,8 +2,8 @@
   "id": "run-contract.kp.workspace-frame-20261125",
   "kind": "run-contract",
   "title": "Workspace frame and modeline",
-  "status": "deferred",
-  "summary": "All three bounded frame slices complete; no further implementation before the existing broader frame visual review.",
+  "status": "resolved",
+  "summary": "COMPLETE: all three frame packages checked and the final refinements accepted. Preserve row-filter review separately; no mathematical implementation scope started.",
   "sourceRefs": [
     {
       "kind": "file",

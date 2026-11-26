@@ -1,7 +1,7 @@
 # Next step: workspace frame, then mathematical authoring
 
 Date: 2026-11-25
-Status: workspace-frame implementation approved; visual judgment pending
+Status: workspace frame accepted; M0 quadratic authoring is the proposed successor
 
 ## Direction and current evidence
 
@@ -276,3 +276,38 @@ repaired without weakening assertions. The canonical host responds HTTP 200.
 Reload <http://127.0.0.1:8000/experiments/fraction-notebook/> in reading mode,
 open/dismiss M-x, and return to Edit. The pane edge should stay neutral while
 the editor receives keyboard focus; text inputs retain their own focus rings.
+
+## Accepted frame and next recommendation
+
+After the neutral-edge repair, the user says "great! what's next". This accepts
+the bounded frame refinements and closes their review checkpoint. It does not
+accept every earlier row/filter interaction or approve the full mathematical
+programme. Keep those distinct review boundaries and the rejected moving stacks.
+
+The candidate comparison above now selects **M0: complete quadratic authoring
+loop**. Begin with one saved object such as `f(x) = x² + c`; select it to discover
+Graph, Derivative and Tangent in the existing command/row interface. Changing
+`c` updates its declared symbolic and graphical dependents. Moving the tangent
+point exposes the relationship between `f`, `f′` and slope. IDs, dependency
+recipes and separate occurrence settings must survive save/reload; invalid or
+superseded drafts must preserve the last valid result.
+
+This is the first product proof of the proposed mathematical programme, not a
+claim that the fixture or commands already exist. The programme owns its exact
+family limits, operation contracts, performance baseline, M0 sequence and G1
+checkpoint. Use the existing notebook host and domain renderers. After G1, a
+vector/matrix caller tests whether discovery, persistence and dependencies are
+actually reusable before expanding the remaining animation families.
+
+The finite conventional Vim core remains worthwhile alongside this work; broad
+parity is not a prerequisite. Copy, Derive and Transclude retain their accepted
+distinct meanings. Current recommendation: M0 only with the proposed six-hour
+ceiling, reserving the final quarter for checks and handoff; it is a ceiling,
+not an effort estimate. This turn records the handoff and recommendation without
+starting mathematical implementation or resuming historical runs.
+
+Handoff verification: all 75 `npm run test:project-vision` checks pass;
+`npm run project:orientation` reports the resolved frame contract and proposed
+quadratic successor. The first check caught 661 words against the roadmap's
+650-word limit; shortening its charter pointer restored the existing budget.
+This is direction/record verification, not mathematical feature evidence.

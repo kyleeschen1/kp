@@ -2,9 +2,9 @@
   "id": "task.kp.workspace-frame-20261125",
   "kind": "task",
   "title": "Enclose the editor with an elevated modeline and frame",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "authoring",
-  "summary": "Exact pane-edge repair complete and checked; existing broader frame visual review remains open.",
+  "summary": "User accepted the repaired workspace frame and asked for the next step. Bounded frame outcome complete; M0 quadratic authoring remains a separate proposal.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -242,6 +242,27 @@
       "scope": "focused",
       "checkedAt": "2026-11-26T03:19:30.138Z",
       "notes": "All 36 chat browser cases passed, including pane startup focus, picker dismissal, both themes, forced colors and edit focus restoration."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:23:55.141Z",
+      "notes": "Acceptance handoff exceeded the 650-word roadmap budget at 661 words; shortened the charter pointer while preserving priorities and boundaries. No budget increase."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:24:38.345Z",
+      "notes": "All 75 checks pass after shortening the roadmap within its unchanged 650-word ceiling. Accepted frame closure and proposed mathematical successor agree across sources."
+    },
+    {
+      "command": "npm run project:orientation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:24:39.269Z",
+      "notes": "Reports resolved frame at three of three packages and M0 quadratic authoring as proposed next; no new implementation approval inferred."
     }
   ],
   "revisitWhen": [

@@ -9,11 +9,11 @@ export const projectVision: ProjectVision = {
     title: "Enclose the workspace with an elevated modeline and frame",
     approval: "approved",
     contractId: "run-contract.kp.workspace-frame-20261125",
-    finish: "The larger modeline/frame sits above native pickers, the editor header is hidden, and commands, status, editor focus and history remain accessible. Review the enclosing frame, height and shadow in the stationary split before returning to mathematical authoring.",
-    source: { label: "Approved frame outcome and preservation boundary", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+    finish: "The accepted frame has a quiet padded beige modeline above pickers, a hidden editor header and a neutral pane edge. Commands, error visibility, editor focus and histories remain accessible. Its bounded outcome is closed; mathematical authoring is a proposed successor.",
+    source: { label: "Accepted frame outcome and successor recommendation", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
   },
   uncertainty: "We have accepted explanations and bounded reuse. A live, fast authoring-and-revision loop and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At http://127.0.0.1:8000/experiments/fraction-notebook/, judge the quiet modeline with more padding, mode and time, and no routine save or toolbar labels. Reload the rendered reading to check matching beige from startup. Open M-x with Alt-x or C-x C-x; the frame stays above it and Escape returns to the editor. Broader row/filter promotion retains its separate review.",
+  nextJudgment: "Select the proposed M0 quadratic loop: one saved polynomial exposes graph, derivative and tangent commands; coefficient edits and tangent motion stay connected through reload. Its first working exemplar precedes matrix reuse and broader animation coverage. The mathematical fixture is not implemented yet; broader row/filter promotion retains its separate review.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook, persistent conversation and fruit-picker presentation are accepted; the equal split, joined chat/folding and modeline are checked. Pane/line focus, workspace commands, Vim coverage, floating row/filter exemplar and enclosing workspace frame have checked candidates awaiting judgment. Native data and independent Spindle ownership remain foundations.",
-      evidence: { label: "Requested frame refinement and mathematical return path", href: "docs/project/reviews/2026-11-25-next-step-review.md" },
+      established: "The notebook, persistent conversation, fruit-picker presentation and refined workspace frame are accepted. The equal split and joined chat/folding are checked. Pane/line focus, commands, Vim coverage and floating row/filter exemplar retain their distinct evidence and review boundaries. Native data and independent Spindle ownership remain foundations.",
+      evidence: { label: "Accepted frame and mathematical successor", href: "docs/project/reviews/2026-11-25-next-step-review.md" },
       outcome: {
-        authority: "approved",
-        id: "workspace-frame", title: "Enclose the workspace with a clear modeline and frame",
-        finish: "The larger modeline/frame sits above application pickers, the editor header is hidden, commands and save/error status remain accessible, and modal focus/return survives. Preserve the fixed split and picker placement; review before returning to the quadratic authoring proof.",
-        excludes: "Popup redesign, moving windows, storage migration, new Vim behavior, mathematical implementation within this presentation slice, and publication. The checked row-picker contract retains its own review boundary.",
-        source: { label: "Approved frame outcome and review cues", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+        authority: "proposed",
+        id: "quadratic-authoring-pilot", title: "Create and revise one linked quadratic explanation",
+        finish: "One saved quadratic exposes graph, derivative and tangent commands. Source edits update declared dependents; identity, relationships and separate occurrences survive reload. Review coefficient changes and tangent motion before the matrix caller tests reuse.",
+        excludes: "The full animation portfolio, arbitrary CAS, new window infrastructure, exhaustive Vim parity, automatic visual promotion and publication. Existing row/filter review remains separate.",
+        source: { label: "M0 recommendation and finite finish", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Refined workspace frame accepted",
+      scope: "The quiet padded beige modeline sits above pickers, the editor header is hidden, and the pane retains a neutral edge with accessible focus cues. This closes the bounded frame refinement; mathematical authoring and broader row/filter promotion remain separate successors.",
+      source: { label: "Frame acceptance and preservation evidence", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+    },
     {
       title: "Persistent conversation in the KP editor accepted",
       scope: "The user confirmed the local Codex conversation works. Its saved thread, drafts, streaming and explicit recovery remain the foundation. Rich editing and passage notes are a separate successor milestone.",
@@ -522,6 +527,13 @@ export const projectVision: ProjectVision = {
       after: "The user requests a quieter bar with more spacing and end padding, removing those labels and routine save messages. Restore the prior beige surface and correct the rendered reader's startup color before the mathematical return.",
       reason: "Keep workspace orientation through mode, time and keyboard commands without crowding the frame. Reader and editor theme ownership must agree before the delayed editing bridge loads.",
       source: { label: "Requested quiet modeline and beige startup revision", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
+    },
+    {
+      id: "accept-frame-propose-quadratic", on: "2026-11-25",
+      before: "The checked frame refinements await review while mathematical authoring remains the intended return path.",
+      after: "The user accepts the repaired frame and asks what comes next. Close that bounded outcome and recommend M0: a persistent quadratic with discoverable graph, derivative and tangent operations, followed by a matrix reuse proof.",
+      reason: "Return from workspace refinement to useful mathematical authoring. Prove one complete editable relationship before generalizing adapters or expanding the animation portfolio; no mathematical implementation starts with this recommendation.",
+      source: { label: "Accepted frame and next-step review", href: "docs/project/reviews/2026-11-25-next-step-review.md" }
     }
   ]
 };

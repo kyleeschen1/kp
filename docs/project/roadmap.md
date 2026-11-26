@@ -5,17 +5,17 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-workspace-frame`
 Execution Contract: `run-contract.kp.workspace-frame-20261125`
-Next Product Milestone: `workspace-frame`
-Milestone Authority: approved
+Next Product Milestone: `quadratic-authoring-pilot`
+Milestone Authority: proposed
 
 ## Where we are going
 
 **Help authors create extraordinary explanations that teach people what to
 notice, then let learners adapt, practice and revisit them.**
-The [product charter](strategy.md) owns the durable thesis, quality commitments
-and progression: authoring → learner adaptation → practice/retrieval → library.
-[The accepted decision](decisions/2026-11-08-authoring-expert-attention.md) records
-why this becomes the organizing direction and what it supersedes.
+The [charter](strategy.md) owns the thesis and progression:
+authoring → adaptation → practice/retrieval → library.
+[Accepted direction](decisions/2026-11-08-authoring-expert-attention.md) records
+the rationale and superseded priorities.
 
 ## Current approved commitment
 
@@ -34,8 +34,9 @@ the pinned reference and per-editor support.
 **Checked:** [floating row picker](reviews/2026-11-25-row-picker.md): annotated
 Vim rows, intentional matching and C-h tag filters with query/context return.
 Review this exemplar before M-x adoption. New Vim behavior remains separate.
-Approved: [workspace frame](reviews/2026-11-25-next-step-review.md), then review before
-[mathematics](2026-11-25-mathematical-authoring-programme.md). Preserve
+**Accepted:** [workspace frame](reviews/2026-11-25-next-step-review.md), including
+quiet beige modeline and neutral pane edge. Next proposed: the
+[M0 quadratic loop](2026-11-25-mathematical-authoring-programme.md), then a matrix caller. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
