@@ -34,7 +34,9 @@ the pinned reference and per-editor support.
 **Checked:** [floating row picker](reviews/2026-11-25-row-picker.md): annotated
 Vim rows, intentional matching and C-h tag filters with query/context return.
 Review this exemplar before M-x adoption. New Vim behavior remains separate.
-The [multiplexer vision](2026-11-25-multiplexer-vision.md) records future scope.
+Future scope: [multiplexer](2026-11-25-multiplexer-vision.md),
+[Vim](2026-11-25-vim-semantic-command-design.md),
+[mathematics](2026-11-25-mathematical-authoring-programme.md); planning only.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
 Retain the 440px column, persistent composition, data and native rendering.

@@ -54,14 +54,14 @@ export const projectVision: ProjectVision = {
     {
       id: "representations", title: "Domain representations", horizon: "later",
       destination: "Refer precisely to domain objects and relationships across explanations, transformations and questions. Each domain retains its own meaning and validity rules.",
-      established: "Matrix selections retain entry identity and product provenance. Mathematical coverage and presentation coverage remain distinct.",
+      established: "Matrix selections retain entry identity and product provenance. Typed spaces, basis-aware maps, derivatives and versioned dependency caches provide foundations; a general notebook-to-operation-to-view workflow remains unproved. Mathematical and presentation coverage stay distinct.",
       evidence: { label: "Matrix identity and scope", href: "docs/project/authoring/concise-domain-api.md" },
       outcome: {
         authority: "proposed",
-        id: "reuse-math-in-practice", title: "Reuse one checked presentation in explanation and practice",
-        finish: "Both uses refer to the same mathematical source and checked presentation, with exact return to its context and no copied mathematical or animation implementation.",
-        excludes: "A universal knowledge graph or automatic coverage of every mathematical domain.",
-        source: { label: "Repair roadmap · practice proof", href: "docs/project/reviews/2026-10-29-next-step-review.md" }
+        id: "linked-mathematical-authoring", title: "Author linked symbolic and graphical objects",
+        finish: "A saved quadratic exposes valid graph, derivative and tangent commands; edits, reload and another occurrence preserve its relationships. A matrix caller then proves reuse before the proposed 24-outcome mathematical portfolio expands.",
+        excludes: "Implementation before scope review, exhaustive Vim parity, arbitrary CAS or implicit graphing, and automatic visual promotion. The earlier explanation/practice reuse proof remains a later application.",
+        source: { label: "Proposed mathematical programme and acceptance gates", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
       }
     },
     {
@@ -494,6 +494,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves a floating Vim exemplar with structured rows, explicit matching fields and a C-h tag-filter transient, followed by human review before M-x adoption.",
       reason: "Make richly annotated results compact and navigable while preserving their metadata, ownership and exact return context. Retain the prior reference and support evidence; replace only its presentation. This does not approve new Vim behavior or a universal domain schema.",
       source: { label: "Approved floating rows and filters", href: "docs/project/reviews/2026-11-25-row-picker.md" }
+    },
+    {
+      id: "vim-priority-and-mathematical-programme-proposal", on: "2026-11-25",
+      before: "The floating Vim picker has a checked candidate; broader modal editing and connected mathematical-object authoring were discussion. Representation reuse in explanation and practice was a later proposal.",
+      after: "Document the Vim design and accept conventional core plus semantic commands, keeping parity gaps visible. Propose linked mathematical authoring and a finite animation portfolio; retain the row-picker review and earlier practice reuse as separate commitments and horizons.",
+      reason: "The user wants major symbolic and graphical capabilities to compose through autocomplete without an exhaustive editor rebuild. Source inspection finds reusable foundations but missing integration. A quadratic and matrix caller must establish the workflow before broad promotion; no mathematical implementation run is approved.",
+      source: { label: "Accepted priority and linked review proposals", href: "docs/project/decisions/2026-11-25-vim-core-and-semantic-commands.md" }
     }
   ]
 };
