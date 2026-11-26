@@ -16,8 +16,9 @@
 }
 .kp-editor-body { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); flex: 1; min-width: 0; min-height: 0; isolation: isolate; }
 .kp-editor-body:not(.kp-chat-open) { grid-template-columns: minmax(0, min(var(--kp-window-width), 100%)); justify-content: center; }
-/* Fixed grid slots own geometry. Focus changes only the keyboard destination. */
-.kp-window { position: relative; min-height: 0; min-width: 0; background: transparent; isolation: isolate; }
+/* Fixed grid slots own geometry. Pane focus uses the shared elevation below,
+   not a second browser outline; descendant controls keep their own focus cues. */
+.kp-window { position: relative; min-height: 0; min-width: 0; background: transparent; isolation: isolate; outline: none; }
 /* Alpha belongs to the paper alone; text remains opaque. The opacity property
    accepts both decimal and percentage values from the shared style editor. */
 .kp-window::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--kp-window-background); opacity: var(--kp-window-alpha); }

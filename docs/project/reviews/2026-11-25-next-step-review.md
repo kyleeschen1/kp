@@ -243,3 +243,36 @@ and time at the right, without the prior labels or routine save message. Use
 Alt-x or C-x C-x for M-x, and `Edit` there to inspect the rendered reading from
 startup. Escape returns to the previous editor. The existing frame's modal paint
 ownership and fixed split remain intact; mathematics still follows this review.
+
+## Remaining blue pane edge
+
+The user's follow-up identifies a blue line on the KP pane's left edge. The
+canonical headerless notebook reproduces it when the pane container owns focus
+before its reader bridge is ready: Chromium applies an `auto 1px` outline in
+`rgb(0, 95, 204)`. The top/right/bottom are covered by the enclosing frame, leaving
+the left edge visible. The normal iframe and themed pane divider do not own it.
+
+The shared window wrapper now suppresses only its duplicate native outline.
+Existing active-pane shadow, child control focus rings and the explicit
+forced-colors outline retain focus indication. The rollback unit is the
+container style, focus-order correction and browser regression; no theme palette, pane geometry,
+selection, reader model or animation is changed. This is an exact paint-owner
+repair, with no new motif or additional aesthetic approval gate. The broader
+frame's existing review boundary remains open.
+
+The same regression pressures startup, picker dismissal, both themes,
+forced-colors and returning to editing. It also exposed a focus ordering defect:
+`setEditing` requested document focus before the layout owner cleared the
+reading-only `inert` state. It now applies that layout transition before choosing
+the keyboard destination, so the document actually receives focus on return.
+This preserves the existing layout/focus owners and adds no new state store.
+
+Verification: `npm run typecheck:fraction-notebook`, the focused pane-edge
+regression, the complete `npm run visual:editor-chat` suite (36 passed), and
+`npm run visual:vim-coverage` (six passed). The regression first reproduced the
+native blue outline, then exposed the inert/focus ordering failure; both were
+repaired without weakening assertions. The canonical host responds HTTP 200.
+
+Reload <http://127.0.0.1:8000/experiments/fraction-notebook/> in reading mode,
+open/dismiss M-x, and return to Edit. The pane edge should stay neutral while
+the editor receives keyboard focus; text inputs retain their own focus rings.

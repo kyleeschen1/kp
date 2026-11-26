@@ -4,7 +4,7 @@
   "title": "Enclose the editor with an elevated modeline and frame",
   "status": "deferred",
   "domain": "authoring",
-  "summary": "HUMAN_CHECKPOINT: requested modeline and beige startup revision is checked; judge spacing and matching reader surface at the canonical notebook.",
+  "summary": "Exact pane-edge repair complete and checked; existing broader frame visual review remains open.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -200,10 +200,53 @@
       "scope": "focused",
       "checkedAt": "2026-11-26T03:05:23.104Z",
       "notes": "All six scoped Chromium cases pass, preserving reference search, native focus/carets, lazy-load cancellation/recovery and filter state."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep \"workspace frame pane focus\"",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:10:57.072Z",
+      "notes": "Reproduced before repair: focused KP section paints a native auto 1px rgb(0,95,204) outline; screenshot shows the reported blue left edge. The iframe itself has no outline. Host shadow and border are otherwise the named theme tokens."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep \"workspace frame pane focus\"",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:13:36.292Z",
+      "notes": "After outline repair, delayed startup, modal return, both themes, child input focus and forced-colors checks passed. Returning to editing exposed an existing ordering defect: focus was requested while the document was still inert. Move the existing layout transition before the focus request and retain the regression."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep \"workspace frame pane focus\"",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:15:03.152Z",
+      "notes": "Regression passes after reproducing the native blue outline. Covers delayed reading startup, picker return, light/dark, child input focus, forced-colors, stable pane geometry and actual document focus on returning to editing."
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:15:05.702Z",
+      "notes": "Complete affected consumer typecheck passes after the pane paint and inert-before-focus ordering repair."
+    },
+    {
+      "command": "npm run visual:vim-coverage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:16:57.709Z",
+      "notes": "All six Chromium Vim reference and focus-return cases pass after the pane outline and editing-focus repair."
+    },
+    {
+      "command": "npm run visual:editor-chat",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-26T03:19:30.138Z",
+      "notes": "All 36 chat browser cases passed, including pane startup focus, picker dismissal, both themes, forced colors and edit focus restoration."
     }
   ],
   "revisitWhen": [
     "User reviews the fraction notebook split with M-x and accepts the frame or requests a bounded revision.",
-    "User accepts the quiet padded beige workspace or requests a bounded visual revision."
+    "User accepts the quiet padded beige workspace or requests a bounded visual revision.",
+    "User accepts or revises the broader workspace frame at the canonical fraction notebook URL."
   ]
 }

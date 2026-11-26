@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Workspace frame and modeline",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: two checked frame packages, including requested quiet modeline revision; mathematical work remains after visual review.",
+  "summary": "All three bounded frame slices complete; no further implementation before the existing broader frame visual review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -23,7 +23,8 @@
   ],
   "revisitWhen": [
     "User accepts or revises the workspace frame at the canonical fraction notebook URL.",
-    "User accepts or revises the quiet modeline and beige reader startup."
+    "User accepts or revises the quiet modeline and beige reader startup.",
+    "User accepts or revises the broader workspace frame at the canonical fraction notebook URL."
   ],
   "allowedWork": [
     "Approved frame exemplar, style variables, command and status access, native dialog layering, focused verification and evidence; three-hour ceiling with final quarter for verification and closeout; commit at the checked rollback boundary; stop for visual judgment"
@@ -44,6 +45,12 @@
       "id": "quiet-modeline",
       "title": "Quiet padded modeline and beige reader startup",
       "summary": "Quiet 64px modeline with 16px vertical and 32px end padding, no pane/Commands labels or routine save status; beige default and early preview palette. Full chat 35, affected notebook 11 and Vim six pass.",
+      "status": "complete"
+    },
+    {
+      "id": "pane-focus-edge",
+      "title": "Remove duplicate native pane focus ring",
+      "summary": "Removed duplicate native pane outline while preserving child and forced-colors cues; fixed editing focus after inert clears. Types, 36 chat and six Vim cases pass.",
       "status": "complete"
     }
   ]

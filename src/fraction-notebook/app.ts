@@ -203,9 +203,14 @@ function setEditing(enabled: boolean) {
   root.classList.toggle('fn-editing', enabled); editToggle.setAttribute('aria-pressed', String(enabled));
   split.inert = true; left.setAttribute('aria-hidden', String(!enabled));
   sessionStorage.setItem('kp.fraction-editing', String(enabled));
-  if (enabled) { editor.normal(); editor.view.focus(); }
-  else { details(false); writing.open = false; actions.querySelector('details.fn-structure')?.removeAttribute('open'); if (!header.hidden) editToggle.focus(); else if (frameReady) frame.focus({ preventScroll: true }); else pageWindow.focus({ preventScroll: true }); }
+  if (!enabled) { details(false); writing.open = false; actions.querySelector('details.fn-structure')?.removeAttribute('open'); }
+  // Layout clears the document's inert state before it can receive focus.
+  // Requesting focus first leaves keyboard input on the reading container.
   send({ kind: 'presentation', animationOnly: enabled }); layout.refresh();
+  if (enabled) { editor.normal(); editor.view.focus(); }
+  else if (!header.hidden) editToggle.focus();
+  else if (frameReady) frame.focus({ preventScroll: true });
+  else pageWindow.focus({ preventScroll: true });
 }
 setEditing(sessionStorage.getItem('kp.fraction-editing') !== 'false');
 windows.restore();

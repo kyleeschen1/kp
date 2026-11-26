@@ -556,6 +556,45 @@ test('workspace frame reserves changed modeline height for an already-open Vim p
   await expect(query).toBeFocused(); await page.keyboard.press('Escape'); await expect(prose).toBeFocused();
 });
 
+test('workspace frame pane focus keeps one themed edge in reading and editing', async ({ page, context }, info) => {
+  const f = await fixture(context);
+  let release!: () => void; const gate = new Promise<void>(resolve => { release = resolve; });
+  try {
+    await page.addInitScript(() => sessionStorage.setItem('kp.fraction-editing', 'false'));
+    await page.route('**/src/fraction-notebook/preview.ts*', async route => { await gate; await route.continue(); });
+    await page.setViewportSize({ width: 1440, height: 960 }); await page.goto(url, { waitUntil: 'domcontentloaded' });
+    const pane = page.locator('.kp-page-window'), frame = page.locator('iframe');
+    // The headerless reading host temporarily owns keyboard focus before its
+    // iframe bridge is ready. That real startup state exposed the blue edge.
+    await expect(pane).toBeFocused(); await expect(pane).toHaveCSS('outline-style', 'none');
+    await expect(pane).not.toHaveCSS('box-shadow', 'none');
+    await page.keyboard.press('Control+x'); await page.keyboard.press('Control+x');
+    await page.getByRole('combobox', { name: 'Search commands' }).press('Escape');
+    await expect(pane).toBeFocused(); await expect(pane).toHaveCSS('outline-style', 'none');
+    release(); await page.unrouteAll({ behavior: 'wait' });
+    await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
+    await workspaceCommand(page, 'Open chat'); await workspaceCommand(page, 'Focus KP pane');
+    await expect(frame).toBeFocused(); await expect(frame).toHaveCSS('outline-style', 'none');
+    const box = (await pane.boundingBox())!;
+    for (const theme of ['dark', 'light']) {
+      await workspaceCommand(page, 'Styles');
+      await expect(page.getByRole('searchbox', { name: 'Search styles' })).not.toHaveCSS('outline-style', 'none');
+      await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption(theme);
+      await page.getByRole('button', { name: 'Close styles', exact: true }).click(); await pane.focus();
+      await expect(pane).toHaveCSS('outline-style', 'none'); await expect(pane).not.toHaveCSS('box-shadow', 'none');
+    }
+    await page.screenshot({ path: info.outputPath('pane-edge-container-focus.png') });
+    await page.emulateMedia({ forcedColors: 'active' });
+    await expect(pane).toHaveCSS('outline-style', 'solid'); await expect(pane).toHaveCSS('outline-width', '1px');
+    expect(await pane.boundingBox()).toEqual(box);
+    await page.emulateMedia({ forcedColors: 'none' });
+    await workspaceCommand(page, 'Edit'); await expect(page.locator('#app')).toHaveClass(/fn-editing/);
+    await expect(page.locator('.fn-left')).not.toHaveAttribute('inert'); await expect(page.locator('.fn-editor .ProseMirror')).toBeFocused();
+    await expect(pane).toHaveCSS('outline-style', 'none');
+    expect(await pane.boundingBox()).toEqual(box);
+  } finally { release(); await page.unrouteAll({ behavior: 'wait' }); await f.close(); }
+});
+
 test('workspace modeline follows actual editor modes, pane focus and reading spacing without covering the composer', async ({ page, context }, info) => {
   const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'modeline-reply', text: '## Keep the whole in view\n\nA saved return point keeps the question connected to the broader plan.\n\n```js\nconst next = "inspect";\n```' }] }];
