@@ -14,6 +14,7 @@ export function mountDocumentTheater(input: {
 }) {
   const document = input.story.ownerDocument;
   const window = document.defaultView!;
+  const recessed = document.body.dataset['kpRecessedRail'] === 'true';
   const passages = input.beats.map((beat) => {
     const passage = beat.querySelector<HTMLElement>('.kp-rising-passage');
     if (passage === null) throw new Error('Document passage requires its compiled prose.');
@@ -90,6 +91,12 @@ export function mountDocumentTheater(input: {
     const opacity = focusAt(position);
     const attention = attentionAt({ position, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode });
     annotation = attention.kind === 'annotation' ? attention : undefined;
+    // The foreground prose keeps ordinary document presence. The existing
+    // annotation adapter still owns all authored labels on the stage.
+    if (recessed && !readAll) {
+      selected = active;
+      return;
+    }
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
     const neighbors = [active - 1, active, active + 1];

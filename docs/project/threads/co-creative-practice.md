@@ -23,6 +23,8 @@ The notebook detour is current.
 - **Reference direction:** [organized rules, composable derivations and repeated return](../decisions/2026-11-26-compact-question-led-vignettes.md).
 - **Scroll pacing on phones and embeds:** [fraction diagnosis](../reviews/2026-11-26-fraction-notebook-scroll-diagnosis.md)
   and [viewport-independent cadence](../reviews/2026-11-26-viewport-independent-scroll.md).
+- **Recessed text rail:** [opt-in fraction exemplar](../reviews/2026-11-26-recessed-rail.md),
+  checked on desktop/phone widths; depth and rhythm await visual review before reuse.
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
   and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is

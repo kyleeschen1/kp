@@ -1,0 +1,43 @@
+/* Local projection: opaque document above one retained native stage. */
+@media screen {
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
+    --kp-rail-ink: var(--fn-text);
+    --kp-rail-recess: color-mix(in srgb, var(--fn-background) 95%, var(--fn-text));
+    --kp-rail-shadow: var(--color-shadow);
+  }
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-sequence {
+    position: relative;
+    background: var(--kp-rail-recess);
+    box-shadow: inset -10px 0 16px -15px var(--kp-rail-shadow);
+  }
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-sequence::after {
+    content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+    width: 1px; background: var(--kp-rail-ink); z-index: 3; pointer-events: none;
+  }
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-pin {
+    z-index: 0;
+    background: transparent;
+  }
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-frame {
+    background: transparent;
+  }
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-frame::before,
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-frame::after { display: none; }
+  html body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-animation-beats { z-index: 1; }
+  /* Cover the whole retained stage before sticky containment releases it. */
+  html body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-animation-beats::after {
+    content: ''; display: block; height: var(--kp-caption-card-height);
+    background: var(--fn-background); pointer-events: auto;
+    box-shadow: 0 -14px 18px -15px var(--kp-rail-shadow);
+  }
+  html body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-rising-passage {
+    position: relative; top: auto; z-index: 2; opacity: 1;
+    box-sizing: border-box; min-height: var(--kp-caption-card-height);
+    display: flex; align-items: flex-end; padding: 28px 24px;
+    background: var(--fn-background); pointer-events: auto;
+    box-shadow: 0 14px 18px -15px var(--kp-rail-shadow), 0 -14px 18px -15px var(--kp-rail-shadow);
+  }
+  body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] :is(.kp-caption-document-intro,.kp-caption-document-after) {
+    position: relative; z-index: 2; background: var(--fn-background);
+  }
+}

@@ -5,6 +5,7 @@
 /* The rendered document must have the workspace palette before its deferred
    editing bridge loads, including the native reader's stage and ink tokens. */
 @import './theme.css';
+@import './recessed-rail.css';
 /* Only the development notebook preview loads this presentation. The native
  * masthead remains a zero-height control owner for the existing reader runtime. */
 body[data-kp-fraction-notebook-preview] { --kp-reader-masthead-height: 0px; }

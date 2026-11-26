@@ -1,0 +1,39 @@
+{
+  "id": "run-contract.kp.recessed-rail",
+  "kind": "run-contract",
+  "title": "Recessed fraction rail visual checkpoint",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.recessed-rail.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-26-recessed-rail-plan.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:recessed-rail"
+  ],
+  "revisitWhen": [
+    "User accepts or revises the recessed fraction exemplar."
+  ],
+  "allowedWork": [
+    "Opt-in fraction presentation and focused checks"
+  ],
+  "disallowedWork": [
+    "Renderer migration or broad editor protocol"
+  ],
+  "goal": "Review one fraction passage beneath scrolling prose on desktop and phone",
+  "target": "task.kp.recessed-rail",
+  "slices": [
+    {
+      "id": "exemplar",
+      "summary": "Candidate implementation and focused verification complete. HUMAN_CHECKPOINT: visual acceptance pending in review packet.",
+      "status": "complete"
+    }
+  ]
+}

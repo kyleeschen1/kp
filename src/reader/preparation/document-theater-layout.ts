@@ -16,6 +16,27 @@ export function measureDocumentTheaterLayout(
   if (!masthead || !beats.length || passages.some(passage => !passage))
     throw new Error('Document layout requires its compiled masthead and passages.');
   const headerHeight = masthead.getBoundingClientRect().height;
+  const recessed = document.body.dataset['kpRecessedRail'] === 'true';
+  if (recessed) {
+    // Opaque prose fully covers the stage between openings. The spacer must
+    // include the complete stage height as well as the operation's travel.
+    const stageHeight = Math.max(180, equationHeight + 96);
+    const top = headerHeight + Math.max(16, (window.innerHeight - headerHeight - stageHeight) / 2);
+    const style = document.body.style;
+    style.setProperty('--kp-document-equation-height', `${equationHeight}px`);
+    style.setProperty('--kp-caption-card-height', `${stageHeight}px`);
+    style.setProperty('--kp-caption-card-top', `${top}px`);
+    style.setProperty('--kp-flow-line-in-card', `${(stageHeight - equationHeight) / 2 - 14}px`);
+    style.setProperty('--kp-flow-line', `${top}px`);
+    style.setProperty('--kp-flow-leading', '0px');
+    style.setProperty('--kp-flow-tail', '0px');
+    style.setProperty('--kp-flow-gap', '0px');
+    const holds = beats.map(beat => beat.dataset['kpOperationId'] ? cadence.hold : cadence.read);
+    beats.forEach((beat, index) => beat.style.setProperty('--kp-flow-hold', `${stageHeight + holds[index]!}px`));
+    const heights = passages.map(passage => passage!.getBoundingClientRect().height);
+    const positions = beats.map((beat, index) => window.scrollY + beat.getBoundingClientRect().top + heights[index]!);
+    return { headerHeight, heights, holds, positions, readingLine: top, frameTop: 0, frameBottom: stageHeight };
+  }
   const heights = passages.map(passage => passage!.getBoundingClientRect().height);
   const maxHeight = Math.max(...heights);
   const annotations = beats.some(beat => beat.dataset['kpAnnotationState']);

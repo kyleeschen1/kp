@@ -1,0 +1,20 @@
+{
+  "id": "task.kp.recessed-rail",
+  "kind": "task",
+  "title": "Review a recessed fraction stage beneath scrolling prose",
+  "status": "deferred",
+  "domain": "reader",
+  "summary": "HUMAN_CHECKPOINT: review the opt-in fraction rail before hardening or reuse.",
+  "verificationRecords": [
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Fraction exemplar, Chromium and Firefox, desktop and phone widths",
+      "checkedAt": "2026-11-26T16:07:07.912Z",
+      "notes": "Four cases passed. Typecheck and 20 focused unit tests also passed; see docs/project/reviews/2026-11-26-recessed-rail.md. Visual judgment pending."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews docs/project/reviews/2026-11-26-recessed-rail.md exemplar."
+  ]
+}
