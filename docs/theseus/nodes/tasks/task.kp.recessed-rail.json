@@ -61,6 +61,13 @@
       "scope": "Continuous-frame candidate and preceding rail treatment at desktop and phone widths",
       "checkedAt": "2026-11-26T17:24:56.020Z",
       "notes": "Eight browser cases pass. Typecheck and 23 focused tests also pass. Full-length frame ownership, native ink, reverse, later passages, reduced motion and annotation reserve are checked. Human visual acceptance remains pending."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Rail emergence and comparison treatment, Chromium/Firefox desktop and phone widths",
+      "checkedAt": "2026-11-26T17:51:44.398Z",
+      "notes": "Eight cases pass after repairing inverse-scale annotation rounding. Typecheck and 23 focused tests pass. Emergence/settle/reverse, fixed rail, native material travel, annotation gap, reduced motion and resize checked. Visual judgment pending."
     }
   ],
   "revisitWhen": [

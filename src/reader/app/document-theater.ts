@@ -4,7 +4,7 @@ import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
-import { documentFrameSequenceExchange, documentTheaterExitPresence } from './document-theater-depth.ts';
+import { documentRailEmergence, documentTheaterExitPresence } from './document-theater-depth.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -98,11 +98,18 @@ export function mountDocumentTheater(input: {
     // annotation adapter still owns all authored labels on the stage.
     if (recessed && !readAll) {
       if (frameExchange) {
-        const exchange = documentFrameSequenceExchange(position, frameBottom, frameText);
-        document.body.style.setProperty('--kp-frame-prose-focus', String(exchange.prose));
-        document.body.style.setProperty('--kp-frame-stage-focus', String(1 - exchange.prose));
-        document.body.style.setProperty('--kp-frame-prose-layer', exchange.front === 'prose' ? '4' : '2');
-        document.body.dataset['kpFrameFront'] = exchange.front;
+        const exchange = documentRailEmergence(position, frameBottom, frameText);
+        document.body.style.setProperty('--kp-frame-stage-focus', String(exchange.stage));
+        document.body.dataset['kpFrameFront'] = exchange.stage >= .5 ? 'stage' : 'prose';
+        // The same authored cue also has a stage annotation. Yield that
+        // rendering during the prose turn instead of showing both at once.
+        if (exchange.stage < 1) annotation = undefined;
+        exchange.prose.forEach((state, index) => {
+          const copy = passages[index]!.querySelector<HTMLElement>('.kp-caption-copy')!;
+          copy.style.setProperty('--kp-prose-presence', String(state.presence));
+          copy.style.setProperty('--kp-prose-lift', String(state.lift));
+          passages[index]!.dataset['kpProseSelected'] = String(selectedPassages.has(index));
+        });
       }
       const presence = documentTheaterExitPresence(position, positions.at(-1)!, holds.at(-1)!, frameBottom);
       document.body.style.setProperty('--kp-rail-depth', String(1 - presence));
@@ -144,8 +151,11 @@ export function mountDocumentTheater(input: {
         documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
     if (frameExchange) frameText = passages.map(passage => {
-      const box = passage.querySelector<HTMLElement>('.kp-caption-copy')!.getBoundingClientRect();
-      return { top: window.scrollY + box.top, bottom: window.scrollY + box.bottom };
+      const copy = passage.querySelector<HTMLElement>('.kp-caption-copy')!;
+      // The flex-end passage keeps its intrinsic layout box while its child
+      // scales. Never measure the animated child's client rect as source data.
+      const bottom = window.scrollY + passage.getBoundingClientRect().bottom - parseFloat(window.getComputedStyle(passage).paddingBottom);
+      return { top: bottom - copy.offsetHeight, bottom };
     });
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };

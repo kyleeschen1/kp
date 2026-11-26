@@ -1,52 +1,55 @@
-/* Two persistent full-section planes. Native ink keeps its geometry; only the
-   continuous backgrounds lift, and each owning layer changes stacking order. */
-.kp-caption-stage-layer { display: contents; }
+/* Exemplar-local rail handoff. Layout remains ordinary scroll geometry;
+   depth and scale belong to paint and settle before sustained reading. */
 @media screen {
   body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
-    --kp-frame-prose-focus: 0;
     --kp-frame-stage-focus: 1;
-    --kp-frame-prose-layer: 2;
-    --kp-frame-lift: 2px;
-    --kp-frame-stage-paper: color-mix(in srgb, var(--fn-background) 30%, transparent);
-    --kp-frame-prose-paper: color-mix(in srgb, var(--fn-background) 72%, transparent);
-    --kp-frame-shadow: color-mix(in srgb, var(--fn-text) 16%, transparent);
-    --kp-frame-edge: color-mix(in srgb, var(--fn-text) 14%, transparent);
+    --kp-frame-depth: 12px;
+    --kp-frame-scale: .012;
+    --kp-prose-depth: 18px;
+    --kp-prose-scale: .025;
+    --kp-rail-inset: 24px;
+    --kp-frame-shadow: color-mix(in srgb, var(--fn-text) 12%, transparent);
   }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-lesson::before,
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-sequence::after,
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-frame,
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy::before { display: none; }
-  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats {
-    position: relative; z-index: var(--kp-frame-prose-layer); isolation: isolate;
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-lesson::before { display: none; }
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-sequence::after { z-index: 4; }
+  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats { z-index: 3; }
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-pin {
+    z-index: 2;
+    transform-origin: center;
+    transform: perspective(900px) translateZ(calc(var(--kp-frame-depth) * var(--kp-frame-stage-focus)))
+      scale(calc(1 + var(--kp-frame-scale) * var(--kp-frame-stage-focus)));
   }
-  html body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage { z-index: auto; }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-stage-layer {
-    display: block; grid-area: 1 / 1; align-self: stretch;
-    position: relative; isolation: isolate; z-index: 3; pointer-events: none;
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-frame {
+    inset: 16px 24px;
+    background: var(--fn-background);
   }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-pin { z-index: auto; transform: none; }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-stage-layer::before,
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats::before {
-    content: ''; position: absolute; inset: 0 12px 0 20px;
-    z-index: -1; pointer-events: none; border: 1px solid var(--kp-frame-edge);
-    background: var(--kp-frame-stage-paper);
-    transform: translateY(calc(-1 * var(--kp-frame-lift) * var(--kp-frame-stage-focus)));
-    box-shadow: 0 3px 12px color-mix(in srgb, var(--kp-frame-shadow) calc(var(--kp-frame-stage-focus) * 100%), transparent);
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-frame::after {
+    display: block; content: ''; position: absolute; inset: 0;
+    width: auto; border: 0; border-radius: 0;
+    box-shadow: 0 5px 18px var(--kp-frame-shadow);
+    opacity: var(--kp-frame-stage-focus); pointer-events: none;
   }
-  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-animation-beats::before {
-    inset: 0 20px 0 12px;
-    background: var(--kp-frame-prose-paper);
-    transform: translateY(calc(-1 * var(--kp-frame-lift) * var(--kp-frame-prose-focus)));
-    box-shadow: 0 3px 12px color-mix(in srgb, var(--kp-frame-shadow) calc(var(--kp-frame-prose-focus) * 100%), transparent);
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy {
+    transform-origin: left top;
+    transform: perspective(900px) translateZ(calc(var(--kp-prose-depth) * var(--kp-prose-lift, 0)))
+      scale(calc(1 + var(--kp-prose-scale) * var(--kp-prose-lift, 0)));
+    opacity: var(--kp-prose-presence, 1);
   }
-  body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-reader-motion-preference=reduced] { --kp-frame-lift: 0px; }
+  /* A selection or focused link must remain available outside its story beat. */
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-rising-passage[data-kp-prose-selected=true] .kp-caption-copy,
+  body[data-kp-frame-exchange=true][data-kp-caption-mode=captions] .kp-caption-copy:focus-within { opacity: 1; transform: none; }
+  body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-reader-motion-preference=reduced] {
+    --kp-frame-depth: 0px; --kp-frame-scale: 0; --kp-prose-depth: 0px; --kp-prose-scale: 0;
+  }
   @media (prefers-reduced-motion: reduce) {
-    body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] { --kp-frame-lift: 0px; }
+    body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
+      --kp-frame-depth: 0px; --kp-frame-scale: 0; --kp-prose-depth: 0px; --kp-prose-scale: 0;
+    }
   }
   @media (forced-colors: active) {
     body[data-kp-frame-exchange=true][data-kp-recessed-rail=true][data-kp-caption-mode=captions] {
-      --kp-frame-stage-paper: transparent; --kp-frame-prose-paper: transparent;
-      --kp-frame-edge: CanvasText; --kp-frame-shadow: transparent; --kp-frame-lift: 0px;
+      --kp-frame-depth: 0px; --kp-frame-scale: 0; --kp-prose-depth: 0px; --kp-prose-scale: 0;
+      --kp-frame-shadow: transparent;
     }
   }
 }

@@ -1,6 +1,47 @@
-# Two continuous frames — fraction checkpoint
+# Left rail and emerging prose — fraction checkpoint
 
-## Current continuous-frame revision
+## Current rail-emergence revision
+
+Outcome: HUMAN_CHECKPOINT. The user rejected the continuous frames and approved
+the simpler rail handoff in the [fraction plan](../2026-11-26-recessed-rail-plan.md).
+
+Open http://127.0.0.1:8000/experiments/fraction-notebook/?rail=1&frames=1&reading=1.
+Scroll through the first cue, a mathematical operation and the next cue, then
+reverse. The left rail stays fixed. The stage lifts and scales slightly while
+it owns attention. New prose emerges at the stage center, settles to ordinary
+size along the rail, then scrolls upward. Judge the emergence location, scale
+and transfer of attention. Removing `frames=1` retains the soft-backing comparison.
+
+Canonical artifact and semantic source remain the fractional-linear model and
+article, hosted in the notebook reading iframe with the native KaTeX/material
+compositor. The opt-in presentation adapter is the rollback unit. The failed
+full-section frame wrapper and exchange projection are removed. This trial
+uses the existing scroll clock and intrinsic paragraph bounds; transformed
+paint is never fed back into layout measurement. Stage and prose use modest
+perspective depth and scale, with left-anchored prose settling. No tilt or new
+renderer is added. Reduced motion removes scale and depth; Read all and print
+retain ordinary prose. Selection and focused links remain visible.
+
+The stage annotation yields during the prose attention turn so the same cue
+does not appear twice. Scaling also exposed a coordinate-space requirement in
+the annotation adapter: viewport measurements must be converted to stage-local
+CSS pixels before positioning labels. The adapter now normalizes those bounds
+and rejects unmeasurable planes. A browser check measures the actual label gap
+under perspective scaling; native material transit retains its 280-pixel travel.
+
+Verification and visual acceptance are separate. Typecheck and 23 focused unit
+tests pass. The browser checks exercise desktop/phone widths, emergence and
+settling, reversal, later passages, unchanged mathematical progress, full
+operation travel, annotation alignment, reduced motion and resize. One initial
+Chromium phone run exposed a 0.000014px overflow after inverse scaling of an
+exactly fitting annotation. The fit guard now permits only 1/1024px rounding
+slack while preserving rejection of real overflow. The final
+`npm run visual:recessed-rail -- --project=firefox` run passes all eight cases
+in Chromium and Firefox. Desktop and phone captures were inspected. Results
+are recorded in the rail-emergence Theseus slice. This remains a single-exemplar
+candidate; physical phone input and broader reuse are not established.
+
+## Rejected continuous-frame revision
 
 Outcome: HUMAN_CHECKPOINT. Approved scope follows the continuous-frame
 clarification in the [fraction rail plan](../2026-11-26-recessed-rail-plan.md).

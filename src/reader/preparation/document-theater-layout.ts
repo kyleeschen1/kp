@@ -18,21 +18,12 @@ export function measureDocumentTheaterLayout(
   const headerHeight = masthead.getBoundingClientRect().height;
   const recessed = document.body.dataset['kpRecessedRail'] === 'true';
   if (recessed) {
-    if (document.body.dataset['kpFrameExchange'] === 'true' && !document.querySelector('.kp-caption-stage-layer')) {
-      // Install before first measurement/hydration. Keep the sole stage inside
-      // its story, with a full-length sticky owner alongside the prose frame.
-      const pin = document.querySelector<HTMLElement>('.kp-caption-pin');
-      if (!pin) throw new Error('Frame exchange requires the compiled stage.');
-      const layer = document.createElement('div');
-      layer.className = 'kp-caption-stage-layer';
-      pin.before(layer); layer.append(pin);
-    }
     // Foreground prose covers the stage between openings. The spacer must
     // include the complete stage height as well as the operation's travel.
     // The annotation adapter bounds complete labels against the stage. Reuse
     // the document reader's commentary reserve even in the compact rail view.
     const commentaryHeight = beats.some(beat => beat.dataset['kpAnnotationState'])
-      ? Math.max(...passages.map(passage => passage!.querySelector('.kp-caption-copy')!.getBoundingClientRect().height)) * 2 + 210 : 0;
+      ? Math.max(...passages.map(passage => passage!.querySelector<HTMLElement>('.kp-caption-copy')!.offsetHeight)) * 2 + 210 : 0;
     const stageHeight = Math.max(180, equationHeight + 96, commentaryHeight);
     const top = headerHeight + Math.max(16, (window.innerHeight - headerHeight - stageHeight) / 2);
     const style = document.body.style;

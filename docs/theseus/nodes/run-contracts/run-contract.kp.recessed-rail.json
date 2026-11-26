@@ -76,6 +76,12 @@
       "title": "Two full-section frames exchange foreground prominence",
       "summary": "HUMAN_CHECKPOINT: two continuous frames implemented. Typecheck, 23 focused tests and eight Chromium/Firefox desktop/phone browser checks pass. Annotation reserve repaired; see docs/project/reviews/2026-11-26-frame-exchange.md for review URL and evidence.",
       "status": "complete"
+    },
+    {
+      "id": "rail-emergence",
+      "title": "Left rail with elevated stage and settling prose",
+      "summary": "HUMAN_CHECKPOINT: left rail, stage lift and settling prose implemented and checked. Review the same frames=1 fraction URL; evidence in docs/project/reviews/2026-11-26-frame-exchange.md.",
+      "status": "complete"
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { documentFrameExchange, documentFrameSequenceExchange, documentTheaterExitPresence } from '../src/reader/app/document-theater-depth.ts';
+import { documentRailEmergence, documentTheaterExitPresence } from '../src/reader/app/document-theater-depth.ts';
 
 test('the final stage withdraws before sticky release and restores on reverse', () => {
   const sample = (position: number) => documentTheaterExitPresence(position, 1000, 100, 180);
@@ -11,23 +11,26 @@ test('the final stage withdraws before sticky release and restores on reverse', 
   assert.deepEqual([1100, 1190, 1280, 1190, 1100].map(sample), [1, .5, 0, .5, 1]);
 });
 
-test('one persistent prose frame responds to all passages and yields in clear intervals', () => {
-  const passages = [{ top: 500, bottom: 580 }, { top: 1200, bottom: 1300 }];
-  const sample = (top: number) => documentFrameSequenceExchange(top, 180, passages);
-  assert.equal(sample(420).front, 'prose');
-  assert.equal(sample(800).front, 'stage');
-  assert.equal(sample(1100).front, 'prose');
-  assert.equal(sample(1400).front, 'stage');
-  assert.deepEqual([420, 800, 1100, 800, 420].map(top => sample(top).front), ['prose', 'stage', 'prose', 'stage', 'prose']);
-  assert.equal(documentFrameSequenceExchange(0, 180, []).front, 'stage');
+test('prose emerges at stage center and settles before leaving its reading interval', () => {
+  const sample = (travel: number) => documentRailEmergence(400 + travel, 200, [{ top: 500, bottom: 580 }]);
+  assert.deepEqual(sample(-1), { stage: 1, prose: [{ presence: 0, lift: 1, attention: 0 }] });
+  assert.equal(sample(12).prose[0]!.presence, .5);
+  assert.equal(sample(48).prose[0]!.lift, .5);
+  assert.equal(sample(96).prose[0]!.lift, 0);
+  assert.equal(sample(96).stage, 0);
+  assert.equal(sample(250).stage, 1);
+  assert.equal(sample(250).prose[0]!.presence, 1);
+  assert.equal(documentRailEmergence(0, 200, []).stage, 1);
 });
 
-test('frame prominence is reversible and prose owns the entire overlap', () => {
-  const sample = (top: number) => documentFrameExchange(top, 180, 500, 580);
-  assert.equal(sample(260).front, 'stage');
-  assert.equal(sample(308).front, 'prose');
-  for (let top = 320; top <= 580; top++) assert.equal(sample(top).prose, 1);
-  assert.equal(sample(640).front, 'stage');
-  const positions = [260, 284, 308, 420, 604, 616, 640];
+test('direct seeks and reverse preserve both distant passages and bounded attention', () => {
+  const sample = (top: number) => documentRailEmergence(top, 200, [{ top: 500, bottom: 580 }, { top: 1200, bottom: 1800 }]);
+  const positions = [0, 412, 448, 496, 800, 1112, 1196, 1700, 1900];
   assert.deepEqual(positions.map(sample), [...positions].reverse().map(sample).reverse());
+  for (const position of positions) {
+    const state = sample(position);
+    assert.ok(state.stage >= 0 && state.stage <= 1);
+    for (const prose of state.prose) assert.ok(prose.presence >= 0 && prose.presence <= 1 && prose.lift >= 0 && prose.lift <= 1);
+  }
+  assert.equal(sample(1700).stage, 0); // a long paragraph retains its reading turn
 });

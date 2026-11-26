@@ -103,3 +103,14 @@ crossing. Remove local paragraph frames and the separate rail. Retain the opt-in
 `frames=1` switch, stationary native ink, translucent backgrounds, modest
 background-only lift, deterministic reversal and the single-exemplar review
 boundary. This does not authorize adoption beyond the fraction notebook.
+
+## Approved rail-emergence simplification
+
+The user rejected the continuous-frame presentation and approved a simpler
+sequence: a left rail aligned with prose, a slightly elevated/scaled stage
+during its attention turn, and incoming text emerging from the stage's middle
+before scaling down to its ordinary reading size. Keep the rail fixed, the
+settled left edge stable, and all projection reversible from scroll position.
+No tilt is included in this round. Replace the `frames=1` candidate in place;
+retain the `rail=1` comparison, native math authority and operation pacing.
+Stop for one fraction-exemplar review before reuse.
