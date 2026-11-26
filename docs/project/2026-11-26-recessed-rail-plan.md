@@ -48,3 +48,14 @@ descent, without opacity or vertical displacement. Descend before contact with
 the complete equation box and resurface after it clears. Preserve reversible
 scroll sampling, annotation ownership, operation travel and reduced motion.
 This supersedes the translucent treatment and remains an opt-in visual review.
+
+## Approved continuous-sheet revision
+
+The user refined the geometry again: all prose belongs to one continuous,
+translucent reading surface; the rail and stage occupy the interior above a
+solid floor. This supersedes individual opaque paragraph covers. Use the
+existing article as the common container, with one background-only sheet so text
+remains opaque. Preserve its intro, paragraphs, gaps and afterword. The equation
+rises toward the underside in clear intervals and retreats with softer contrast
+behind prose. Withdraw before sticky release instead of using an opaque exit
+cover. Keep the existing semantic/renderer owners and opt-in review boundary.

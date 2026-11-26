@@ -87,3 +87,33 @@ At the review URL, watch a paragraph cross the rail: the line and equation shoul
 be buried together, then the expression should rise in the clear opening.
 Reverse through this boundary. The depth amount remains provisional and this is
 still HUMAN_CHECKPOINT, not promotion across other lessons.
+
+## Continuous reading sheet — current candidate
+
+The user's latest refinement supersedes individual opaque paragraph covers.
+All prose remains in the existing article container. Its one background-only
+pseudo-element spans the intro, paragraph gaps and afterword; the text paints
+above it at full opacity. The solid beige floor is the article background. The
+rail and retained equation/annotation plane sit between floor and sheet. There
+are no separate paragraph backgrounds in ordinary color mode. Forced colors
+uses opaque prose backing for legibility.
+
+The equation rises toward the sheet's underside in clear intervals and retreats
+with softer contrast behind prose. Neither the rail nor the paper is removed at
+paragraph boundaries. The exit reserve is transparent too: explicit, reversible
+presence withdrawal finishes before sticky release, preserving the invariant
+that the stage does not visibly drift away at the end. This changes presentation
+only; semantic math and operation travel remain unchanged.
+
+The sheet's 18% background alpha and the recessed contrast are provisional local
+values. Inspect a paragraph moving across the equation, then the clear interval:
+does it feel like mathematical content inside a continuous reading surface?
+Reverse through the same boundary and continue past the end.
+
+Checks cover the one sheet spanning the entire article, transparent paragraph
+boxes, fully opaque prose, explicit floor/sheet/text order, depth and withdrawal
+reversal, reduced motion, native paint and scroll clearance. The initial Firefox
+run found that the endpoint sample landed fractionally inside the descent due
+to scroll rounding; the test now samples two pixels outside that boundary,
+retaining exact surface opacity assertions. Physical phone interaction and
+broader reuse still await separate validation and human acceptance.

@@ -26,6 +26,13 @@
       "scope": "Opaque-depth revision: desktop and phone widths, Chromium and Firefox",
       "checkedAt": "2026-11-26T16:28:05.983Z",
       "notes": "Four browser cases pass; typecheck, 20 preservation tests and full-box depth unit check pass. Review packet records coverage and remaining human judgment."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Continuous-sheet revision: desktop and phone widths, Chromium and Firefox",
+      "checkedAt": "2026-11-26T16:36:48.436Z",
+      "notes": "Four browser cases pass; typecheck and 22 focused tests pass. Verified continuous background, opaque text, depth reversal and withdrawal before sticky release."
     }
   ],
   "revisitWhen": [

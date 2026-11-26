@@ -46,6 +46,12 @@
       "title": "Opaque prose crosses the underlying rail and depth stage",
       "summary": "Opaque depth candidate checked. HUMAN_CHECKPOINT: judge rail intersection, burial and resurfacing.",
       "status": "complete"
+    },
+    {
+      "id": "continuous-sheet",
+      "title": "Continuous translucent reading sheet above the stage interior",
+      "summary": "Continuous-sheet candidate checked. HUMAN_CHECKPOINT: judge the interior depth and translucency.",
+      "status": "complete"
     }
   ]
 }
