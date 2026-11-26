@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Geometric section restriction exemplar",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: exemplar reopened for an unresolved faint curved outline. Diagnostic safeguard checked; runtime unchanged. Need user screenshot before a targeted repair. No additional scope selected.",
+  "summary": "HUMAN_CHECKPOINT: 1 of 1 implementation slices complete. User reports the faint outline is gone; no cause or runtime repair established. Overall choreography review remains separate; no new scope selected.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,7 +25,8 @@
   ],
   "revisitWhen": [
     "User accepts or revises the geometric restriction exemplar",
-    "User supplies a screenshot of the settled 2D view with the faint curved outline"
+    "User supplies a screenshot of the settled 2D view with the faint curved outline",
+    "User accepts or revises the clipping choreography, or the faint outline recurs with captured state"
   ],
   "allowedWork": [
     "Experiment-local clipping projection, retained WebGL paint, copy, focused tests and review evidence"
@@ -47,8 +48,8 @@
     {
       "id": "exemplar",
       "title": "Reversible surface clipping toward the selected section",
-      "summary": "Clipping implementation remains checked, but faint second-curve feedback is unresolved. Focused journey and normal/Retina stroke checks pass without reproducing it. Runtime unchanged; await user screenshot before targeted repair or visual acceptance.",
-      "status": "in-progress"
+      "summary": "Checked clipping candidate and diagnostic safeguard complete. User now reports the faint second outline is gone. Cause remains unknown; no runtime repair was made. Choreography review and shared promotion remain separate.",
+      "status": "complete"
     }
   ]
 }

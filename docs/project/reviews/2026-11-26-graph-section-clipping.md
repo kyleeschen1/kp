@@ -2,8 +2,9 @@
 
 Date: 2026-11-26
 Outcome: HUMAN_CHECKPOINT — one implemented and checked exemplar; choreography
-awaits judgment. A reported persistent faint curved outline is not yet reproduced;
-the reopened slice needs a user screenshot before a targeted repair.
+awaits judgment. The user now reports that the faint curved outline is gone.
+Its cause remains unknown; the diagnostic pass made no runtime repair. A
+screenshot is no longer pending unless the symptom recurs.
 [Approved scope](../2026-11-26-graph-section-clipping.md).
 The [accepted head-on correction](2026-11-25-graph-section-withdrawal.md) remains
 preserved. Reusable-player design and shared renderer promotion remain separate.
@@ -96,10 +97,10 @@ remain separate from these checks.
 The rollback unit is the experiment-local clipping projection, shader binding
 and evidence. No second caller, catalogue rollout or reusable stage is authorized.
 
-## Faint curved outline: unresolved diagnostic
+## Faint curved outline: no longer observed, cause unknown
 
-The user reports a faint second curved outline behind the red section, explicitly
-distinguishes it from the straight x-axis, and confirms it remains in settled 2D.
+The user reported a faint second curved outline behind the red section, explicitly
+distinguished it from the straight x-axis, and confirmed it remained in settled 2D.
 Do not dismiss this as the axis or claim it is repaired.
 
 The existing visual journey passes in Firefox and Chromium, and its captured
@@ -119,6 +120,32 @@ very faint fringe below the detection threshold or a browser-specific artifact.
 `npm run typecheck:direct-webgl-graph` passes with the new harness. The earlier
 scoped journey command passes 2/2. The complete expanded browser suite was not
 rerun: runtime code is unchanged, and these focused checks cover the added test.
-No cause or runtime fix is claimed. Next evidence: a screenshot of the user's
-settled 2D view showing the faint outline, so its position and shape can be
-compared directly. Preserve the geometric clipping while resolving this report.
+No cause or runtime fix is claimed. The user subsequently says "its gone now."
+This removes the immediate reproduction request, but does not establish a cause
+or prove a repair. If it recurs, capture the visible frame and its c/d, inspection,
+camera and pixel-density state before changing anything. The diagnostic checks
+remain useful safeguards for displaced or duplicate curve paint above their
+threshold. This feedback does not by itself select another exemplar or promote
+the clipping treatment into shared infrastructure.
+
+## Lessons from the exemplar
+
+- Projection, restriction to y=c and geometric deformation are different
+  mathematical operations. The camera supplies the view; narrowing a visible
+  interval selects context around the section without changing the saddle.
+- Presence and depth ownership must be explicit. A context surface can be
+  omitted at the planar endpoint, with the section retained as the same object;
+  a color change toward the background alone does not guarantee visibility.
+- Retained geometry makes this motion inexpensive to update. Camera, denominator
+  and clipping bounds are uniforms; no per-frame mesh rebuild or upload is
+  required. Visible vertices still cost GPU work, so clipping is not free.
+- A small direct renderer has demonstrated this grid, saddle and linked section
+  with native labels. It has not established arbitrary intersections, solid caps,
+  complex transparency, mobile hardware performance or superiority over Three.
+- Tests can establish mathematical and paint invariants without reproducing
+  every display artifact. User disappearance is observational evidence, not a
+  substitute for identifying a failure mechanism.
+
+The current focus remains the bounded graph exemplar. Reusable-stage and
+symbol/graph composition remain proposed discussion, with no new implementation
+scope selected here. Existing roadmap, thread and earlier plans remain unchanged.

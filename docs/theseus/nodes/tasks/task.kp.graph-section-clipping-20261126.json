@@ -4,7 +4,7 @@
   "title": "Narrow the visible saddle to its selected section",
   "status": "deferred",
   "domain": "rendering",
-  "summary": "HUMAN_CHECKPOINT: faint curved outline in settled 2D not reproduced. User rules out x-axis. Diagnostic checks show one stroke; request screenshot, preserve rendering until paint source is identified.",
+  "summary": "HUMAN_CHECKPOINT: checked clipping candidate awaits overall choreography judgment. User reports the faint outline is gone; no screenshot is pending unless it recurs. Cause unknown, runtime unchanged by diagnosis.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -92,6 +92,7 @@
   ],
   "revisitWhen": [
     "User accepts or revises the geometric restriction exemplar",
-    "User supplies a screenshot of the settled 2D view with the faint curved outline"
+    "User supplies a screenshot of the settled 2D view with the faint curved outline",
+    "User accepts or revises the clipping choreography, or the faint outline recurs with captured state"
   ]
 }
