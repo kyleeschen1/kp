@@ -109,6 +109,7 @@ const reveal = button('Show selected passage', () => { if (selected) send({ kind
 const frame = el('iframe', 'fn-preview'); frame.title = mathModule ? 'Mathematical reading preview' : 'Fraction reading preview';
 frame.src = mathModule ? '/experiments/fraction-notebook/math-preview.html' : '/reader/fraction-notebook-preview/?surface=window';
 if (!mathModule && new URL(location.href).searchParams.get('rail') === '1') frame.src += '&rail=1';
+if (!mathModule && new URL(location.href).searchParams.get('frames') === '1') frame.src += '&frames=1';
 const split = el('div', 'fn-divider'); split.tabIndex = 0; split.setAttribute('role', 'separator'); split.setAttribute('aria-orientation', 'vertical'); split.setAttribute('aria-label', 'Notebook width');
 split.setAttribute('aria-valuemin', '30'); split.setAttribute('aria-valuemax', '70'); split.setAttribute('aria-valuenow', '50');
 let splitPercent = 50;

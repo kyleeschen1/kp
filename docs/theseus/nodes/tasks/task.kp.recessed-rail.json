@@ -47,6 +47,13 @@
       "scope": "Soft-backing revision: Chromium and Firefox, desktop and phone widths",
       "checkedAt": "2026-11-26T16:54:54.412Z",
       "notes": "Four browser cases pass, including stationary crossing and realized rail pixel comparison. Typecheck and 21 focused tests pass; obsolete repositioning behavior and its test removed."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Frame-exchange trial and preceding rail candidate, desktop and phone widths",
+      "checkedAt": "2026-11-26T17:09:53.398Z",
+      "notes": "Eight Chromium/Firefox cases, typecheck and 22 focused tests pass. First crossing holds semantic progress zero, preserves opaque ink and reverses deterministically."
     }
   ],
   "revisitWhen": [

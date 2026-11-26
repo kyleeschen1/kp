@@ -4,7 +4,7 @@ import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
-import { documentTheaterExitPresence } from './document-theater-depth.ts';
+import { documentFrameExchange, documentTheaterExitPresence } from './document-theater-depth.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -16,6 +16,7 @@ export function mountDocumentTheater(input: {
   const document = input.story.ownerDocument;
   const window = document.defaultView!;
   const recessed = document.body.dataset['kpRecessedRail'] === 'true';
+  const frameExchange = recessed && document.body.dataset['kpFrameExchange'] === 'true';
   const passages = input.beats.map((beat) => {
     const passage = beat.querySelector<HTMLElement>('.kp-rising-passage');
     if (passage === null) throw new Error('Document passage requires its compiled prose.');
@@ -63,6 +64,7 @@ export function mountDocumentTheater(input: {
   let readingLine = 0;
   let positions: readonly number[] = [];
   let heights: readonly number[] = [];
+  let frameText = { top: 0, bottom: 0 };
   let holds: readonly number[] = [];
   let frameTop = 0, frameBottom = 0;
   let focusAt = compileDocumentTheaterFocus({ positions: [], holds: [] });
@@ -95,6 +97,13 @@ export function mountDocumentTheater(input: {
     // The foreground prose keeps ordinary document presence. The existing
     // annotation adapter still owns all authored labels on the stage.
     if (recessed && !readAll) {
+      if (frameExchange) {
+        const exchange = documentFrameExchange(position, frameBottom, frameText.top, frameText.bottom);
+        document.body.style.setProperty('--kp-frame-prose-focus', String(exchange.prose));
+        document.body.style.setProperty('--kp-frame-stage-focus', String(1 - exchange.prose));
+        document.body.style.setProperty('--kp-frame-prose-layer', exchange.front === 'prose' ? '4' : '2');
+        document.body.dataset['kpFrameFront'] = exchange.front;
+      }
       const presence = documentTheaterExitPresence(position, positions.at(-1)!, holds.at(-1)!, frameBottom);
       document.body.style.setProperty('--kp-rail-depth', String(1 - presence));
       document.body.style.setProperty('--kp-rail-presence', String(presence));
@@ -134,6 +143,10 @@ export function mountDocumentTheater(input: {
       measureDocumentTheaterLayout(document, equationHeight,
         documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
+    if (frameExchange) {
+      const box = passages[0]!.querySelector<HTMLElement>('.kp-caption-copy')!.getBoundingClientRect();
+      frameText = { top: window.scrollY + box.top, bottom: window.scrollY + box.bottom };
+    }
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };
   measure();

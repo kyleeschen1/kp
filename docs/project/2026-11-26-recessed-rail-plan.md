@@ -79,3 +79,16 @@ rail with feathered edges. Remove the text-avoidance sampler and measurements.
 Do not dim the stage during passage crossings. Retain the final exit withdrawal,
 semantic timing and native math/annotation owners. Judge the one exemplar before
 promoting the treatment.
+
+## Approved two-frame trial
+
+The user proposed two translucent frames exchanging foreground prominence at
+crossings. Trial the first fraction passage only, with the existing equation
+stationary and unchanged during the handoff. Use an additional `frames=1` switch
+to preserve the soft-backing candidate. A local prose frame replaces the first
+halo; the stage frame owns a short left rail. Background lift and shadow express
+elevation, while prose and mathematical paint keep exact geometry and opacity.
+Switch stacking order while frame edges are separated, keep prose foremost
+through the overlap, then return prominence to the stage. Reversal must sample
+the same result. Subsequent passages keep their previous treatment until this
+exchange receives human review. No renderer or semantic changes are authorized.

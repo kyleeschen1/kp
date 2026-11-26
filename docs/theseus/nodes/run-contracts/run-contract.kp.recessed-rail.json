@@ -64,6 +64,12 @@
       "title": "Stationary stage beneath softly backed prose and interrupted rail",
       "summary": "Checked stationary-stage candidate ready. HUMAN_CHECKPOINT: judge prose backing and interrupted rail.",
       "status": "complete"
+    },
+    {
+      "id": "frame-exchange",
+      "title": "One passage exchanges frame prominence with the stationary stage",
+      "summary": "First-crossing trial checked. HUMAN_CHECKPOINT: judge the frame handoff before extending to other passages.",
+      "status": "complete"
     }
   ]
 }
