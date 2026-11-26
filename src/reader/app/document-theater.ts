@@ -4,7 +4,7 @@ import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
 import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
-import { documentTheaterDepth, documentTheaterExitPresence } from './document-theater-depth.ts';
+import { documentTheaterOffset, documentTheaterExitPresence } from './document-theater-depth.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
@@ -63,6 +63,7 @@ export function mountDocumentTheater(input: {
   let readingLine = 0;
   let positions: readonly number[] = [];
   let heights: readonly number[] = [];
+  let railText: readonly { top: number; bottom: number }[] = [];
   let holds: readonly number[] = [];
   let frameTop = 0, frameBottom = 0;
   let focusAt = compileDocumentTheaterFocus({ positions: [], holds: [] });
@@ -95,9 +96,10 @@ export function mountDocumentTheater(input: {
     // The foreground prose keeps ordinary document presence. The existing
     // annotation adapter still owns all authored labels on the stage.
     if (recessed && !readAll) {
-      const depth = documentTheaterDepth(position + frameBottom / 2, positions, heights, equationHeight);
+      const offset = documentTheaterOffset(position + frameBottom / 2, railText, equationHeight, mode === 'essential');
       const presence = documentTheaterExitPresence(position, positions.at(-1)!, holds.at(-1)!, frameBottom);
-      document.body.style.setProperty('--kp-rail-depth', String(Math.max(depth, 1 - presence)));
+      document.body.style.setProperty('--kp-rail-offset', `${offset}px`);
+      document.body.style.setProperty('--kp-rail-depth', String(1 - presence));
       document.body.style.setProperty('--kp-rail-presence', String(presence));
       selected = active;
       return;
@@ -135,6 +137,10 @@ export function mountDocumentTheater(input: {
       measureDocumentTheaterLayout(document, equationHeight,
         documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
+    if (recessed) railText = passages.map(passage => {
+      const box = passage.querySelector<HTMLElement>('.kp-caption-copy')!.getBoundingClientRect();
+      return { top: window.scrollY + box.top, bottom: window.scrollY + box.bottom };
+    });
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };
   measure();

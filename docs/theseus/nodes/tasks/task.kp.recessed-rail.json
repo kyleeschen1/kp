@@ -33,6 +33,13 @@
       "scope": "Continuous-sheet revision: desktop and phone widths, Chromium and Firefox",
       "checkedAt": "2026-11-26T16:36:48.436Z",
       "notes": "Four browser cases pass; typecheck and 22 focused tests pass. Verified continuous background, opaque text, depth reversal and withdrawal before sticky release."
+    },
+    {
+      "command": "npm run visual:recessed-rail -- --project=firefox",
+      "status": "passed",
+      "scope": "Text-avoidance revision: Chromium and Firefox, desktop and phone widths",
+      "checkedAt": "2026-11-26T16:45:57.274Z",
+      "notes": "Four browser cases, typecheck and 22 focused tests pass. Full passage opacity, text clearance, rail inset and reversal verified."
     }
   ],
   "revisitWhen": [

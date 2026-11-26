@@ -1,25 +1,17 @@
-import { documentPassageIndex } from './document-theater-scroll.ts';
-
-/** Presentation-only depth, sampled from the measured document clock. Never
- * infer it from transformed DOM bounds: that would feed paint back into motion. */
-export function documentTheaterDepth(position: number, bottoms: readonly number[], heights: readonly number[], equationHeight: number) {
-  const nearby = documentPassageIndex(bottoms, position);
-  const smooth = (value: number) => {
-    const t = Math.min(1, Math.max(0, value));
-    return t * t * (3 - 2 * t);
-  };
-  let depth = 0;
-  for (const index of [nearby, nearby + 1]) {
-    const bottom = bottoms[index], height = heights[index];
-    if (bottom === undefined || height === undefined) continue;
-    // Descend before the paper reaches any part of the reserved equation box;
-    // resurface only after the entire box clears, in either scroll direction.
-    const clearance = equationHeight / 2 + 24;
-    const entry = smooth((position - (bottom - height) + clearance) / 24);
-    const exit = smooth((bottom + clearance - position) / 24);
-    depth = Math.max(depth, entry * exit);
+/** Measured text bounds are cached at layout, never read from transformed
+ * stage paint. This keeps a scroll reversal or direct seek history-independent. */
+export function documentTheaterOffset(center: number, text: readonly { top: number; bottom: number }[], equationHeight: number, reduced = false) {
+  const equationTop = center - equationHeight / 2;
+  let offset = 0;
+  for (const bounds of text) {
+    const contact = equationTop + equationHeight + 12 - bounds.top;
+    if (contact <= 0 || bounds.bottom + 12 <= equationTop) continue;
+    // Use a short scroll interval to tuck below the incoming text, then follow
+    // its lower edge until the normal stage position has room again.
+    const t = reduced ? 1 : Math.min(1, contact / 32);
+    offset = Math.max(offset, (bounds.bottom + 12 - equationTop) * t * t * (3 - 2 * t));
   }
-  return depth;
+  return offset;
 }
 
 /** A translucent sheet cannot conceal sticky release. Withdraw during the

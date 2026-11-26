@@ -19,45 +19,43 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
       sheetLayer: Number(sheet.zIndex), sheetBackground: sheet.backgroundColor,
       sheetHeight: parseFloat(sheet.height), articleHeight: article.getBoundingClientRect().height,
       sequenceIsolation: style.isolation,
+      indents: [...article.querySelectorAll('p')].map(node => getComputedStyle(node).textIndent),
+      textInset: document.querySelector('.kp-caption-copy')!.getBoundingClientRect().left - sequence.getBoundingClientRect().left,
       prose: [...article.querySelectorAll('.kp-rising-passage, .kp-caption-document-intro, .kp-caption-document-after')]
         .map(node => ({ background: getComputedStyle(node).backgroundColor, opacity: getComputedStyle(node).opacity })) };
   });
-  expect(surface.left).toBe('0px'); expect(surface.shadow).toBe('none');
+  expect(parseFloat(surface.left) - surface.textInset).toBe(4);
+  expect(surface.indents.every(indent => indent === '0px')).toBe(true);
+  expect(surface.shadow).toBe('none');
   expect(surface.railLayer).toBeLessThan(surface.sheetLayer);
   expect(surface.sheetLayer).toBeLessThan(surface.paperLayer);
   expect(surface.sequenceIsolation).toBe('auto');
   expect(surface.sheetHeight).toBeCloseTo(surface.articleHeight, 0);
   expect(surface.sheetBackground).toContain('0.18');
   expect(surface.prose.every(prose => prose.background === 'rgba(0, 0, 0, 0)' && prose.opacity === '1')).toBe(true);
-  // Entry and reversal sample the same shallow depth without a timer. The
-  // native paint owner remains mounted while the paper passes in front.
+  // Repositioning is sampled from actual text bounds, without a timer or fade.
   const depths = [];
-  // Sample the surface two pixels before the boundary so integer scroll
-  // rounding cannot place the endpoint fractionally inside the descent.
-  for (const offset of [-26, -12, 0, -12, -26]) {
+  for (const offset of [-2, 16, 34, 16, -2]) {
     depths.push(await frame.evaluate(async offset => {
-      const passage = document.querySelector<HTMLElement>('.kp-rising-passage')!;
+      const passage = document.querySelector<HTMLElement>('.kp-caption-copy')!;
       const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
       const center = parseFloat(getComputedStyle(pin).top) + pin.offsetHeight / 2;
       const halfEquation = parseFloat(getComputedStyle(document.body).getPropertyValue('--kp-document-equation-height')) / 2;
       dispatchEvent(new WheelEvent('wheel'));
-      scrollTo(0, scrollY + passage.getBoundingClientRect().top - center - halfEquation + offset);
+      scrollTo(0, scrollY + passage.getBoundingClientRect().top - center - halfEquation - 12 + offset);
       await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
-      return { depth: Number(document.body.style.getPropertyValue('--kp-rail-depth')),
-        z: new DOMMatrixReadOnly(getComputedStyle(pin).transform).m43,
+      const equation = pin.querySelector<HTMLElement>('.kp-animation-static')!.getBoundingClientRect();
+      return { offset: new DOMMatrixReadOnly(getComputedStyle(pin).transform).m42,
+        clearance: equation.top - passage.getBoundingClientRect().bottom,
         opacity: getComputedStyle(pin).opacity };
     }, offset));
-    if (offset === -12) await page.screenshot({ path: info.outputPath(`dip-${width}.png`) });
+    if (offset === 34) await page.screenshot({ path: info.outputPath(`tuck-${width}.png`) });
   }
-  expect(depths[0]!.depth).toBeCloseTo(0, 1);
-  expect(depths[1]!.depth).toBeCloseTo(.5, 1);
-  expect(depths[2]!.depth).toBeCloseTo(1, 1);
-  expect(depths[0]!.z).toBeCloseTo(0, 1);
-  expect(depths[2]!.z).toBeLessThan(depths[1]!.z);
-  expect(depths[1]!.z).toBeLessThan(0);
-  expect(Number(depths[0]!.opacity)).toBe(1);
-  expect(Number(depths[2]!.opacity)).toBeGreaterThan(0);
-  expect(Number(depths[2]!.opacity)).toBeLessThan(.3);
+  expect(depths[0]!.offset).toBe(0);
+  expect(depths[1]!.offset).toBeGreaterThan(0);
+  expect(depths[2]!.offset).toBeGreaterThan(depths[1]!.offset);
+  expect(depths[2]!.clearance).toBeGreaterThanOrEqual(11);
+  expect(depths.every(sample => sample.opacity === '1')).toBe(true);
   expect(depths[1]).toEqual(depths[3]); expect(depths[0]).toEqual(depths[4]);
   const geometry = await frame.evaluate(() => {
     const pin = document.querySelector<HTMLElement>('.kp-caption-pin')!;
@@ -119,12 +117,11 @@ for (const width of [1280, 390]) test(`recessed rail keeps clearance and reversi
     dispatchEvent(new WheelEvent('wheel')); scrollTo(0, scrollY + passage.getBoundingClientRect().top - top);
     await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
     const p = passage.getBoundingClientRect(), s = pin.querySelector<HTMLElement>('.kp-animation-static')!.getBoundingClientRect();
-    return { covered: p.top <= s.top + 1 && p.bottom >= s.bottom - 1,
-      front: passage.contains(document.elementFromPoint(s.left + s.width / 2, s.top + s.height / 2)),
-      railCovered: passage.contains(document.elementFromPoint(p.left + .5, p.top + p.height / 2)),
+    return { clearance: s.top - passage.querySelector('.kp-caption-copy')!.getBoundingClientRect().bottom,
+      railCovered: passage.contains(document.elementFromPoint(p.left + 28.5, p.top + p.height / 2)),
       background: getComputedStyle(passage).backgroundColor };
   });
-  expect(covered.covered).toBe(true); expect(covered.front).toBe(true);
+  expect(covered.clearance).toBeGreaterThanOrEqual(11);
   expect(covered.background).toBe('rgba(0, 0, 0, 0)');
   expect(covered.railCovered).toBe(true);
   await page.screenshot({ path: info.outputPath(`covered-${width}.png`) });

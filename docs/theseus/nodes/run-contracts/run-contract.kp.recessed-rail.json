@@ -52,6 +52,12 @@
       "title": "Continuous translucent reading sheet above the stage interior",
       "summary": "Continuous-sheet candidate checked. HUMAN_CHECKPOINT: judge the interior depth and translucency.",
       "status": "complete"
+    },
+    {
+      "id": "text-avoidance",
+      "title": "Unindented prose and equation repositioning beneath incoming text",
+      "summary": "Checked candidate ready. HUMAN_CHECKPOINT: judge the rapid reposition beneath incoming prose.",
+      "status": "complete"
     }
   ]
 }

@@ -4,7 +4,7 @@
     --kp-rail-ink: var(--fn-text);
     --kp-rail-paper: color-mix(in srgb, var(--fn-background) 18%, transparent);
     --kp-rail-floor: var(--fn-background);
-    --kp-rail-context-contrast: .18;
+    --kp-rail-inset: 28px;
     --kp-rail-dip: 24px;
     --kp-rail-perspective: 800px;
   }
@@ -22,7 +22,7 @@
     box-shadow: none;
   }
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-sequence::after {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    content: ''; position: absolute; left: var(--kp-rail-inset); top: 0; bottom: 0;
     /* The wall stays inside the continuous sheet, including behind prose. */
     width: 1px; background: var(--kp-rail-ink); z-index: 0; pointer-events: none;
   }
@@ -31,8 +31,8 @@
     background: transparent;
     /* Flatten this local perspective below the prose stacking context. Even
        at the surface the equation must never jump in front of a paragraph. */
-    transform: perspective(var(--kp-rail-perspective)) translateZ(calc(-1 * var(--kp-rail-depth, 0) * var(--kp-rail-dip)));
-    opacity: calc(var(--kp-rail-presence, 1) * (1 - var(--kp-rail-depth, 0) * (1 - var(--kp-rail-context-contrast))));
+    transform: translateY(var(--kp-rail-offset, 0px)) perspective(var(--kp-rail-perspective)) translateZ(calc(-1 * var(--kp-rail-depth, 0) * var(--kp-rail-dip)));
+    opacity: var(--kp-rail-presence, 1);
   }
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] .kp-caption-frame {
     background: transparent;
@@ -56,6 +56,7 @@
   body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] :is(.kp-caption-document-intro,.kp-caption-document-after) {
     position: relative; z-index: 2; background: transparent;
   }
+  html body[data-kp-recessed-rail=true] .kp-lesson p { text-indent: 0; }
   body[data-kp-recessed-rail=true][data-kp-reader-motion-preference=reduced] { --kp-rail-dip: 0px; }
   @media (prefers-reduced-motion: reduce) {
     body[data-kp-recessed-rail=true][data-kp-caption-mode=captions] { --kp-rail-dip: 0px; }

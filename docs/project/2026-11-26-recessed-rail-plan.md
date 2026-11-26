@@ -59,3 +59,13 @@ remains opaque. Preserve its intro, paragraphs, gaps and afterword. The equation
 rises toward the underside in clear intervals and retreats with softer contrast
 behind prose. Withdraw before sticky release instead of using an opaque exit
 cover. Keep the existing semantic/renderer owners and opt-in review boundary.
+
+## Approved text-avoidance revision
+
+Remove paragraph indentation, inset the rail slightly beneath the text's left
+edge, and replace passage-triggered stage dimming with rapid repositioning below
+the approaching text. Measure real text bounds at layout; sample movement from
+scroll position for direct seek and reversal. Keep full stage opacity during
+passages, the fixed translucent sheet, mathematical timing and separate final
+exit withdrawal. Reduced motion snaps to the clear position. Review this single
+fraction candidate before reusing the choreography.

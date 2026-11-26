@@ -117,3 +117,26 @@ run found that the endpoint sample landed fractionally inside the descent due
 to scroll rounding; the test now samples two pixels outside that boundary,
 retaining exact surface opacity assertions. Physical phone interaction and
 broader reuse still await separate validation and human acceptance.
+
+## Reposition below text — current candidate
+
+The user rejected passage dimming. Stage opacity now stays at one while prose
+crosses its resting position; only the fixed 18% sheet affects its contrast.
+The separate final exit withdrawal remains. Paragraph indentation is removed in
+this opt-in article. The rail is four pixels inside the text's left edge, beneath
+the common sheet and text layer.
+
+The stage moves below approaching text over 32 scroll pixels, follows its lower
+edge with a 12px reserved-box gap, and returns to its resting position when clear.
+Measurements come from real caption-copy bounds during layout, not the larger
+paragraph spacer or transformed equation. Native math and annotations move
+together; no additional timer or semantic clock was introduced. Reduced motion
+uses immediate positioning rather than the short transition. Rapid movement may
+briefly cross the text while relocating; its visual quality remains unaccepted.
+
+At the same review URL, scroll until a paragraph approaches the equation, watch
+it relocate beneath the text without fading, then reverse. Four browser cases
+passed in Chromium/Firefox at desktop and phone widths; typecheck and 22 focused
+tests passed. Checks cover unindented text, inset rail, full stage opacity,
+post-transition clearance, reversal, native paint and unchanged operation travel.
+Physical phone input and multi-lesson reuse remain outside this checkpoint.
