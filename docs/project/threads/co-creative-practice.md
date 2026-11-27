@@ -11,7 +11,9 @@ and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rat
 G2 accepted: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-adapter.md).
 Accepted: [connected explanation](../reviews/2026-11-27-matrix-notebook-explanation.md).
 Completed contract: `run-contract.kp.matrix-notebook-explanation-20261127.v1`.
-Proposed next: [saved reference card](../reviews/2026-11-27-matrix-reference-card-next-step.md).
+Approved: [reference card](../reviews/2026-11-27-matrix-reference-card-next-step.md).
+Execution: `run-contract.kp.matrix-reference-card-20261127`.
+[Checked workflow; review pending](../reviews/2026-11-27-matrix-reference-card.md).
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

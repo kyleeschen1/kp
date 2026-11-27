@@ -49,7 +49,7 @@ const rendererInferencePaths = paths([
 ]);
 
 const privateClockPaths = paths([
-  // The editor debounces compilation requests and revokes a download URL.
+  // The editor debounces compilation requests.
   // It never samples animation time; the retained reader owns its playhead.
   "src/fraction-notebook/app.ts",
   // Single pending RAFs coalesce DOM measurements for the prose gutter and

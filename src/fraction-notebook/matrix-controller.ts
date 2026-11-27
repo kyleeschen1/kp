@@ -10,6 +10,8 @@ import { schema, matrixResourcesIn } from './schema.ts';
 import { createMatrixNotebookRuntime } from './matrix-runtime.ts';
 import { createMatrixNodeView, readMatrixCell, type MatrixViewOwner } from './matrix-view.ts';
 import { copyMatrixResource, matrixOccurrence } from './matrix-data.ts';
+import { serializeMatrixSnapshot } from '../math-resources/data-api.ts';
+import { downloadJson } from '../notebook/download.ts';
 import { selectedObject } from './inspector.ts';
 import { preparePastedSlice } from './clipboard.ts';
 import type { NotebookEditorExtension } from './editor.ts';
@@ -67,6 +69,16 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
     });
     return found;
   };
+  register(registry.targeted({ id: 'matrix.export-resource', title: 'Export matrix resource', category: 'Mathematics', scope: 'notebook',
+    keywords: ['snapshot', 'reference', 'download', 'json'], target: () => localTarget(),
+    state: c => { const ready = readiness(c); if (!ready.enabled) return ready;
+      return invalidResourceFields(matrixOccurrence(current, c.cell.resource, c.cell.occurrence).document).length
+        ? unavailable('Correct the numeric draft first') : available(); },
+    run: c => {
+      const source = matrixOccurrence(current, c.cell.resource, c.cell.occurrence).document;
+      downloadJson(serializeMatrixSnapshot(source), `matrix-resource-${source.id}.json`);
+      report('Exported a pinned matrix snapshot. Open it at /experiments/matrix-reference/.');
+    } }));
   register(registry.targeted({ id: 'matrix.return-to-source', title: 'Return to matrix inputs', category: 'Mathematics', scope: 'notebook',
     keywords: ['source', 'inputs', 'return', 'matrix', 'vector'], target: () => localTarget(),
     state: c => { const ready = readiness(c); if (!ready.enabled) return ready;

@@ -1,4 +1,8 @@
 {
+  "playwright.matrix-reference.config.ts": {
+    "sha256": "4571cbca7fa6f8fd16b375253a55bfb6596591101d915c9a7cfa38cc7a0c1a9b",
+    "projects": 3
+  },
   "playwright.direct-webgl-graph.config.ts": {
     "sha256": "7b3f5de5fea96bf41563ddde52bf709ccc90bb8e414e5bb81bdbc50193c55270",
     "projects": 3

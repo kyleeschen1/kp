@@ -1,0 +1,85 @@
+{
+  "id": "task.kp.matrix-reference-card-20261127",
+  "kind": "task",
+  "title": "Reuse a saved matrix explanation in a reference card",
+  "status": "deferred",
+  "summary": "Reference card implemented and checked; stop before promotion for human exemplar review",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-matrix-reference-card.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-reference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:37:32.965Z",
+      "notes": "Seven admission, identity and asynchronous lifecycle checks"
+    },
+    {
+      "command": "npm run visual:matrix-reference -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:37:33.915Z",
+      "notes": "All six Chromium and Firefox workflow cases pass; export journey rechecked after download consolidation"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:37:34.796Z",
+      "notes": "Full app, node, test, Svelte and domain compilation; final host edits also checked with scoped commands"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:37:35.633Z",
+      "notes": "Full chain passes after moving browser export cleanup to shared host owner; no added dependency exceptions"
+    },
+    {
+      "command": "npm run test:library-boundaries",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:37:36.546Z",
+      "notes": "Eight checks including independent reference host transitive closure"
+    },
+    {
+      "command": "npm run measure:matrix-reference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:37:57.188Z",
+      "notes": "Complete reader HTML build: 133049 gzip JS/CSS bytes; all emitted assets accounted; no editor/chat/3D closure"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:37:58.120Z",
+      "notes": "75 checks after final source-linked review update"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "failed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:38:18.810Z",
+      "notes": "Correction to preceding premature pass record: final thread addition exceeded its startup word budget at 458; shortened entrypoint without removing linked evidence; rerun pending"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:39:11.061Z",
+      "notes": "Final rerun passes all 75 after shortening the thread within its existing startup budget"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the standalone card"
+  ]
+}

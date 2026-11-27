@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.fraction-notebook.json",
+  "include": ["../../src/matrix-reference", "../../tests/matrix-reference*.ts", "../../scripts/measure-matrix-reference.ts"]
+}

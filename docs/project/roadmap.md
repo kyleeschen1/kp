@@ -3,10 +3,10 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-matrix-notebook-explanation`
-Execution Contract: `run-contract.kp.matrix-notebook-explanation-20261127.v1`
+Current Commitment: `kp-matrix-reference-card`
+Execution Contract: `run-contract.kp.matrix-reference-card-20261127`
 Next Product Milestone: `matrix-reference-card`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -23,7 +23,8 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 
 **Complete, G2 accepted:** [matrix notebook adapter](reviews/2026-11-27-matrix-notebook-adapter.md).
 **Complete, accepted:** [notebook matrix explanation](reviews/2026-11-27-matrix-notebook-explanation.md).
-**Proposed next:** [saved explanation in a reference card](reviews/2026-11-27-matrix-reference-card-next-step.md).
+**Approved:** [saved explanation in a reference card](reviews/2026-11-27-matrix-reference-card-next-step.md).
+**Checked, awaiting card review:** [independent import/reload workflow](reviews/2026-11-27-matrix-reference-card.md).
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 

@@ -1,0 +1,60 @@
+{
+  "id": "run-contract.kp.matrix-reference-card-20261127",
+  "kind": "run-contract",
+  "title": "Matrix reference card",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: two implementation packages checked; awaiting one card presentation judgment",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-reference-card-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md"
+    }
+  ],
+  "verification": [
+    "Focused unit and browser tests; affected types; reader production closure; project vision"
+  ],
+  "revisitWhen": [
+    "User reviews the reference card and accepts it or requests corrections"
+  ],
+  "allowedWork": [
+    "Selected resource export; standalone reference host; persistence and lifecycle; focused verification"
+  ],
+  "disallowedWork": [
+    "Publication; live subscriptions; new mathematics; choreography redesign; general SDK"
+  ],
+  "goal": "Export a matrix resource and replay it in an independent persisted reference card",
+  "target": "task.kp.matrix-reference-card-20261127",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Checked rollback units; backup before handoff and hourly",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human review of one reference card before promotion",
+    "Four-hour ceiling with final 45 minutes reserved for verification"
+  ],
+  "slices": [
+    {
+      "id": "source",
+      "title": "Export-and-admission",
+      "summary": "Validated source export preserves IDs and values; roundtrip and notebook download journey pass",
+      "status": "complete"
+    },
+    {
+      "id": "reader",
+      "title": "Standalone-reference-workflow",
+      "summary": "Standalone import, atomic persistence, reversal, failure recovery and complete production closure checked; browser evidence in review packet",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Human-exemplar-review",
+      "summary": "HUMAN_CHECKPOINT: review the standalone card at http://127.0.0.1:8000/experiments/matrix-reference/",
+      "status": "in-progress"
+    }
+  ]
+}

@@ -11,6 +11,7 @@ import canonical from '../../content/authoring/algebra/fractional-linear-reasoni
 import { importFractionReading, readNotebook, object, type FractionNotebook } from './model.ts';
 import { fromProse, mountFractionEditor } from './editor.ts';
 import { openFractionDraft } from './storage.ts';
+import { downloadJson } from '../notebook/download.ts';
 import { addAuthor, annotateSelection, mountInspector } from './inspector.ts';
 import type { Node as ProseNode } from 'prosemirror-model';
 import { mountStructureControls } from './structure-controls.ts';
@@ -95,7 +96,7 @@ const readingOptions = button('Reading options', () => {
   send({ kind: 'options', open: readingOptions.getAttribute('aria-expanded') !== 'true' });
 }, 'notebook.reading-options', 'notebook', () => mathModule ? unavailable('Use each mathematical object’s controls') : frameReady ? available(readingOptions.getAttribute('aria-expanded') === 'true') : unavailable('Reading is loading'));
 readingOptions.setAttribute('aria-expanded', 'false'); readingOptions.disabled = true;
-const download = button('Download JSON', () => { const url = URL.createObjectURL(new Blob([JSON.stringify(notebook, null, 2)], { type: 'application/json' })); const a = el('a'); a.href = url; a.download = mathModule ? 'mathematical-notebook.json' : 'fraction-notebook.json'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000); }, 'notebook.export-json');
+const download = button('Download JSON', () => downloadJson(JSON.stringify(notebook, null, 2), mathModule ? 'mathematical-notebook.json' : 'fraction-notebook.json'), 'notebook.export-json');
 const details = (show: boolean, id?: string) => { root.classList.toggle('fn-details', show); metadata.setAttribute('aria-pressed', String(show)); metadata.textContent = show ? 'Hide details' : 'Show details'; inspector?.show(show, id); };
 const metadata = button('Show details', () => details(!root.classList.contains('fn-details')), 'notebook.toggle-details', 'notebook', () => available(root.classList.contains('fn-details'))); metadata.setAttribute('aria-pressed', 'false');
 const reference = el('a', '', 'Original reading ↗'); reference.href = '/reader/solve-fractional-linear/?reading=reasoning'; reference.target = '_blank'; reference.rel = 'noopener';

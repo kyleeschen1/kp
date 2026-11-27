@@ -1,7 +1,14 @@
 # Next step: reuse a saved matrix explanation outside the notebook
 
 Date: 2026-11-27
-Status: proposed successor, not started.
+Status: implemented and checked; awaiting the single reference-card review.
+Execution: `run-contract.kp.matrix-reference-card-20261127`.
+Evidence and review: [reference-card workflow](2026-11-27-matrix-reference-card.md).
+
+The approved outcome has three packages: export/admission, standalone reference
+workflow, then one human exemplar review. Allow up to four hours with the last
+45 minutes reserved for verification and closeout; finish sooner when ready.
+Checkpoint checked rollback units and back up before handoff and hourly.
 
 The user's “go resume” accepts the connected notebook explanation and completes
 its three-package contract. No implementation package remains in that run.

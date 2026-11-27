@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Matrix reference · Kinetic Press</title>
+  </head>
+  <body>
+    <main>
+      <h1>How does a matrix move a vector?</h1>
+      <p>Weight each column by the corresponding entry of the vector, then add.</p>
+      <div class="reference-tools">
+        <label class="reference-open">Open matrix snapshot<input type="file" accept=".json,application/json" aria-label="Open matrix snapshot" disabled /></label>
+        <a href="/experiments/fraction-notebook/?notebook=matrix">Edit in the notebook</a>
+      </div>
+      <p class="reference-message" role="status">Opening the saved card…</p>
+      <section class="reference-stage" aria-label="Matrix explanation" aria-busy="true"></section>
+      <details class="reference-source">
+        <summary>Source snapshot</summary>
+        <p data-filename></p>
+        <p>This card keeps a local copy. Later notebook edits do not change it; export and open a new snapshot to update it.</p>
+        <dl></dl>
+        <p>In the notebook, select a matrix object, press C-x C-x, and run <strong>Export matrix resource</strong>.</p>
+      </details>
+    </main>
+    <script type="module" src="/src/matrix-reference/app.ts"></script>
+  </body>
+</html>
