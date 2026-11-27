@@ -1,7 +1,7 @@
 # Return to several saved explanations
 
 Date: 2026-11-27
-Status: implemented and checked; awaiting the three-card shelf review.
+Status: complete; user accepted the shelf with “good. go”.
 Execution: `run-contract.kp.matrix-reference-shelf-20261127`.
 Evidence: [checked shelf](2026-11-27-reference-shelf.md).
 

@@ -1,7 +1,7 @@
 # Saved matrix reference shelf
 
 Date: 2026-11-27
-Status: checked candidate; HUMAN_CHECKPOINT for one three-card shelf.
+Status: accepted by the user's “good. go”; bounded outcome COMPLETE.
 Scope: [approved successor](2026-11-27-reference-shelf-next-step.md).
 Execution: `run-contract.kp.matrix-reference-shelf-20261127`.
 
@@ -99,4 +99,6 @@ published library. Source JSON remains the portable backup; names and positions
 are local preferences. Deletion, collection export, live subscriptions, new
 mathematics, flashcard scheduling and LLM mutation are outside this outcome.
 The preserved legacy record enables reverting shelf code without destroying the
-previous single-card state. No wider promotion is claimed before this review.
+previous single-card state. The shelf is accepted; broader promotion remains
+separate. [Linked column geometry](2026-11-27-matrix-geometry-next-step.md) is the
+recommended successor and has not started.

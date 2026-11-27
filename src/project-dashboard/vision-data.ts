@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "Import three distinct snapshots, name/filter/select them, and resume each saved position after reload. Preserve the original card and require explicit same-source updates. Stop at one shelf review before promotion.",
     source: { label: "Approved reference-shelf scope", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
   },
-  uncertainty: "The notebook explanation and independent reference card are accepted. The multi-card shelf workflow is checked but its naming/find/return presentation awaits judgment. Shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
-  nextJudgment: "Review naming, filtering and returning among three saved matrix cards, each with its own playback position. Broader player promotion and section-clipping judgment remain separate.",
+  uncertainty: "The notebook explanation, independent reference card and multi-card shelf are accepted. Linked symbolic/geometric playback, shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
+  nextJudgment: "Consider the bounded column-geometry successor: one saved source and playhead drive the symbolic explanation and a compact graph. The shelf is complete; broader player promotion and section-clipping judgment remain separate.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Quadratic authoring, the matrix notebook, connected explanation and independent reference card are accepted. A local shelf now preserves named snapshots and per-card playback, reuses the shared row picker and migrates the prior card; its interaction is checked and awaits review.",
-      evidence: { label: "Checked shelf workflow and limits", href: "docs/project/reviews/2026-11-27-reference-shelf.md" },
+      established: "Quadratic authoring, the matrix notebook, connected explanation, independent reference card and local shelf are accepted. Named snapshots retain per-card playback through the shared row picker; migration preserves the prior saved card.",
+      evidence: { label: "Accepted shelf workflow and limits", href: "docs/project/reviews/2026-11-27-reference-shelf.md" },
       outcome: {
-        authority: "approved",
-        id: "matrix-reference-shelf", title: "Return to several named reference cards",
-        finish: "Import three distinct matrix snapshots, name/filter/select them, and resume each saved playback position after reload. Preserve the existing card and guarded reader closure; review one shelf before promotion.",
-        excludes: "Live subscriptions, cross-device sync, new choreography or mathematics, LLM edits, flashcard scheduling and publication.",
-        source: { label: "Approved reference shelf", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
+        authority: "proposed",
+        id: "matrix-column-geometry", title: "Connect column algebra to geometry",
+        finish: "One saved matrix source drives the accepted column explanation and a compact graph through one playhead, including signed/zero contributions, seeking and reload. Review one opt-in combined exemplar before promotion.",
+        excludes: "New mathematical families, a universal renderer, broad SVG/WebGL migration, 3D, arbitrary CAS, LLM edits and publication.",
+        source: { label: "Proposed column geometry", href: "docs/project/reviews/2026-11-27-matrix-geometry-next-step.md" }
       }
     },
     {
@@ -737,6 +737,13 @@ export const projectVision: ProjectVision = {
       after: "Named snapshots now retain independent playback and use the existing floating picker. Explicit update/copy decisions and atomic migration pass Chromium/Firefox checks; stop at the three-card review.",
       reason: "This makes repeated return practical while preserving source identity, the accepted player and the small reader dependency boundary.",
       source: { label: "Shelf evidence and review", href: "docs/project/reviews/2026-11-27-reference-shelf.md" }
+    },
+    {
+      id: "accept-reference-shelf-propose-geometry", on: "2026-11-27",
+      before: "The checked shelf awaited its three-card interaction review.",
+      after: "The user accepts it and asks to continue. Close the shelf contract and propose linking the existing symbolic column explanation to a source-driven 2D graph as a separate outcome.",
+      reason: "Source authoring, reuse and repeated return now work. The next larger benefit is expressing the same mathematical relationships geometrically, rather than extending shelf management indefinitely.",
+      source: { label: "Shelf acceptance and geometry proposal", href: "docs/project/reviews/2026-11-27-matrix-geometry-next-step.md" }
     }
   ]
 };

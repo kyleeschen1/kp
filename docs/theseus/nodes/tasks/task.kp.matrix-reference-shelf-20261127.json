@@ -2,8 +2,8 @@
   "id": "task.kp.matrix-reference-shelf-20261127",
   "kind": "task",
   "title": "Return to several saved matrix explanations",
-  "status": "deferred",
-  "summary": "Shelf implemented and checked; pause at the approved exemplar review before promotion",
+  "status": "resolved",
+  "summary": "COMPLETE: shelf accepted; no approved implementation packages remain",
   "sourceRefs": [
     {
       "kind": "file",
@@ -70,6 +70,13 @@
       "scope": "standard",
       "checkedAt": "2026-11-27T10:59:57.638Z",
       "notes": "Twelve Chromium/Firefox workflows pass; final example-download and same-source targeted reruns pass both browsers"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T11:05:51.998Z",
+      "notes": "All 75 checks pass after shelf acceptance and separate geometry proposal"
     }
   ],
   "revisitWhen": [

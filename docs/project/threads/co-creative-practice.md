@@ -12,9 +12,9 @@ G2 accepted: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-ada
 Accepted: [connected explanation](../reviews/2026-11-27-matrix-notebook-explanation.md).
 Accepted: [reference card](../reviews/2026-11-27-matrix-reference-card.md).
 Completed: `run-contract.kp.matrix-reference-card-20261127`.
-Approved: [reference shelf](../reviews/2026-11-27-reference-shelf-next-step.md).
-Execution: `run-contract.kp.matrix-reference-shelf-20261127`.
-[Checked shelf; review pending](../reviews/2026-11-27-reference-shelf.md).
+Accepted: [reference shelf](../reviews/2026-11-27-reference-shelf.md).
+Completed: `run-contract.kp.matrix-reference-shelf-20261127`.
+Proposed: [column geometry](../reviews/2026-11-27-matrix-geometry-next-step.md).
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
