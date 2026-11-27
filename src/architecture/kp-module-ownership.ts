@@ -165,6 +165,23 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     ownershipRule("src/interaction/", "renderer", "Independent browser picker over the existing row and command owners."),
     ownershipRule("src/math-resources/", "neutral-core", "Validated persistent resources and derivations have no host or renderer ownership."),
     ownershipRule("src/animation-player/", "renderer", "Reusable retained rendering and lifecycle adapters consume existing semantic and clock owners."),
+    // The notebook reuses this inspected mount closure, not the experiment's
+    // page/author/route hosts. Exact paths retain that distinction until a
+    // separately approved physical extraction; no directory-wide promotion.
+    ownershipRule("src/experiments/matrix-column-combinations/embed.ts", "renderer", "Bounded connected-host column player with no page ownership."),
+    ownershipRule("src/experiments/matrix-column-combinations/embed.css", "renderer", "Scoped notebook theme adaptation for the column mount."),
+    ownershipRule("src/experiments/matrix-column-combinations/style.css", "renderer", "Existing column stage geometry shared by its hosts."),
+    ownershipRule("src/experiments/matrix-player.css", "renderer", "Shared embedded-player controls, with no document layout ownership."),
+    ownershipRule("src/experiments/matrix-theme.css", "renderer", "Scoped matrix-player theme; does not retheme the host document."),
+    ownershipRule("src/experiments/matrix-column-combinations/model.ts", "experience", "Column interpretation and editorial cues over existing typed mathematics."),
+    ownershipRule("src/experiments/matrix-column-combinations/player.ts", "renderer", "Disposable column controls, measurement and existing clock; no page routing."),
+    ownershipRule("src/experiments/matrix-column-combinations/presentation.ts", "renderer", "Native column realization shared by the original host and notebook."),
+    ownershipRule("src/experiments/matrix-column-combinations/continuity.ts", "renderer", "Existing local native-paint projection; classification does not certify a new motif."),
+    ownershipRule("src/experiments/matrix-column-combinations/view.ts", "renderer", "Pure HTML projection; hosts own mounting and navigation."),
+    ownershipRule("src/experiments/matrix-column-combinations/fonts.ts", "renderer", "Requests the existing math faces before native endpoint measurement."),
+    ownershipRule("src/experiments/matrix-column-product/environment.ts", "neutral-core", "Typed numeric source/selector projection with no DOM or route state."),
+    ownershipRule("src/experiments/matrix-examples/config.ts", "renderer", "Document-scoped presentation preferences and disposable subscription."),
+    ownershipRule("src/experiments/dot-product-passage/fusion.ts", "renderer", "DOM adapter over the canonical optical sampler; no lesson host ownership."),
     ownershipRule("src/notebook/model.ts", "neutral-core", "Persistent notebook identity and JSON data have no host dependencies."),
     ownershipRule("src/notebook/math-model.ts", "neutral-core", "Validated quadratic resources are portable data, independent of the original matrix experiment."),
     ownershipRule("src/notebook/math-runtime.ts", "neutral-core", "Quadratic resource evaluation composes existing math and semantic-state kernels without a host."),

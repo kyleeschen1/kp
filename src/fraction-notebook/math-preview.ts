@@ -47,7 +47,13 @@ const message = (event: MessageEvent) => {
   try {
     const data = event.data;
     if (data.kind === 'styles') applyStyles(readStyleSettings(data.settings));
-    if (data.kind === 'presentation') { active = data.animationOnly === false; render(); }
+    if (data.kind === 'presentation') {
+      active = data.animationOnly === false;
+      // A hidden matrix reading must not keep a player/clock alive or publish
+      // obsolete playback state while its editable counterpart is in use.
+      if (!active) { matrixReading?.dispose(); matrixReading = undefined; }
+      render();
+    }
     if (data.kind === 'apply') { latest = readNotebook(data.value.notebook); render(); }
     if (data.kind === 'reveal' && typeof data.id === 'string') [...host.querySelectorAll<HTMLElement>('[data-cell-id]')].find(el => el.dataset['cellId'] === data.id)?.scrollIntoView({ block: 'center' });
   } catch (error) { send({ kind: 'error', message: String(error) }); }

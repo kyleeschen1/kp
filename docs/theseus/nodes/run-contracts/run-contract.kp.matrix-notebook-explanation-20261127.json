@@ -1,0 +1,48 @@
+{
+  "id": "run-contract.kp.matrix-notebook-explanation-20261127",
+  "kind": "run-contract",
+  "title": "Matrix notebook explanation",
+  "status": "superseded",
+  "summary": "Setup correction: compact CLI help omitted governance fields; replacement .v1 records same approved scope with explicit cadence ceiling and stops. No completed slices or scope change.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-notebook-explanation-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook-mathematics",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:notebook-mathematics"
+  ],
+  "allowedWork": [
+    "Bounded adapters, contextual commands, notebook mounting, lifecycle and preservation checks"
+  ],
+  "disallowedWork": [
+    "New choreography, broad player promotion, new mathematical families, publication or model spending"
+  ],
+  "goal": "Explain one notebook matrix-vector result using its actual source and the existing column presentation; stop at exemplar review",
+  "target": "task.kp.matrix-notebook-explanation-20261127",
+  "slices": [
+    {
+      "id": "source",
+      "title": "Checked-source-explanation",
+      "status": "in-progress"
+    },
+    {
+      "id": "notebook",
+      "title": "Integrated-notebook-explanation",
+      "status": "planned"
+    },
+    {
+      "id": "review",
+      "title": "Human-exemplar-review",
+      "status": "planned"
+    }
+  ]
+}

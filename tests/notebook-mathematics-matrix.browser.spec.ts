@@ -11,6 +11,85 @@ async function command(page: Page, query: string) {
   const picker = page.getByRole('dialog', { name: 'Commands', exact: true }); await expect(picker).toBeVisible();
   await picker.locator('.ProseMirror').fill(query); await page.keyboard.press('Enter'); await expect(picker).toBeHidden();
 }
+test('matrix explanation follows its source, keeps playback out of history and survives fold and reload', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1440, height: 1000 }); await ready(page);
+  const source = equation(page), field = source.getByRole('textbox', { name: 'A11', exact: true });
+  await field.fill('3'); await source.locator('.fn-math-heading').click(); await command(page, 'matrix.explain');
+  const explanation = page.locator('.fn-matrix-object[data-math-view=columns]');
+  const stage = explanation.locator('.comb-stage'), slider = explanation.getByRole('slider', { name: 'Animation position' });
+  await expect(stage).toHaveCount(1);
+  const id = await explanation.getAttribute('data-matrix-occurrence');
+  await expect(explanation).toHaveAttribute('data-matrix-resource', (await source.getAttribute('data-matrix-resource'))!);
+  await expect(stage.locator('.comb-equation [data-kp-comb-key^="b-"]')).toHaveCount(2);
+  await expect(stage.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('5');
+  await explanation.getByLabel('Milestone', { exact: true }).selectOption('6'); await expect(slider).toHaveValue('1');
+  await explanation.getByRole('button', { name: 'Previous milestone', exact: true }).click();
+  await expect(slider).toHaveValue('0.8333');
+  await explanation.getByRole('button', { name: 'Next milestone', exact: true }).click(); await expect(slider).toHaveValue('1');
+  await explanation.getByRole('button', { name: 'Return to inputs', exact: true }).click();
+  await expect(source).toHaveClass(/ProseMirror-selectednode/);
+  const editor = page.getByLabel('Matrix notebook', { exact: true });
+  // Seeking and navigation must not become document undo entries.
+  await editor.press('ControlOrMeta+z'); await expect(explanation).toHaveCount(0);
+  await editor.press('ControlOrMeta+Shift+z'); await expect(stage).toHaveCount(1);
+  await expect(explanation).toHaveAttribute('data-matrix-occurrence', id!); await expect(slider).toHaveValue('1');
+  const fieldNode = await field.elementHandle(); await field.fill('4'); await expect(field).toBeFocused();
+  await expect(stage.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('6'); await expect(slider).toHaveValue('1');
+  expect(await fieldNode!.evaluate(node => node.isConnected)).toBe(true);
+  const validStage = await stage.elementHandle(); await field.fill('-');
+  await expect(explanation.locator('.fn-math-diagnostic')).toContainText('Complete valid source');
+  await expect(source.getByRole('button', { name: 'Explain', exact: true })).toBeDisabled();
+  expect(await validStage!.evaluate(node => node.isConnected)).toBe(true);
+  await expect(stage.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('6');
+  await field.fill('2'); await expect(stage.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('4');
+  await field.fill('0.00000001'); await expect(explanation.locator('.fn-math-diagnostic')).toContainText('Showing the previous explanation');
+  await expect(explanation.locator('.fn-math-diagnostic')).toContainText('scientific notation');
+  await expect(stage.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('4');
+  await field.fill('2'); await expect(explanation.locator('.fn-math-diagnostic')).toBeEmpty();
+  await explanation.getByLabel('Milestone', { exact: true }).selectOption('2');
+  await expect(slider).toHaveValue('0.3333');
+  await explanation.getByRole('button', { name: 'Fold mathematical object', exact: true }).click(); await expect(stage).toHaveCount(0);
+  await explanation.getByRole('button', { name: 'Fold mathematical object', exact: true }).click(); await expect(stage).toHaveCount(1);
+  await expect(slider).toHaveValue('0.3333');
+  await page.reload(); await expect(stage).toHaveCount(1); await expect(field).toHaveValue('2');
+  await expect(slider).toHaveValue('0.3333'); await expect(explanation).toHaveAttribute('data-matrix-occurrence', id!);
+  await page.screenshot({ path: info.outputPath('matrix-column-notebook.png') });
+  await source.locator('.fn-math-heading').click(); await command(page, 'notebook.toggle-editing');
+  const reader = page.frameLocator('iframe').locator('.fn-matrix-object[data-math-view=columns]');
+  await expect(reader.locator('.comb-stage')).toHaveCount(1);
+  await reader.getByLabel('Milestone', { exact: true }).selectOption('6');
+  await expect(reader.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('4');
+  await expect(stage).toHaveCount(0); // The hidden editor has no live player.
+  await command(page, 'notebook.toggle-editing'); await expect(stage).toHaveCount(1);
+  await expect(reader.locator('.comb-stage')).toHaveCount(0);
+  await expect(slider).toHaveValue('0.3333'); // Reader controls cannot overwrite editor position.
+  await page.reload(); await expect(slider).toHaveValue('0.3333');
+  expect(errors).toEqual([]);
+});
+test('matrix explanation loads on demand and removal cancels pending mount in a narrow pane', async ({ page }, info) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  let release: () => void = () => {}, requested: () => void = () => {};
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  const seen = new Promise<void>(resolve => { requested = resolve; });
+  let loads = 0;
+  await page.route('**/src/experiments/matrix-column-combinations/embed.ts*', async route => {
+    loads++; requested(); await gate; await route.continue();
+  });
+  await ready(page); expect(loads).toBe(0);
+  await equation(page).getByRole('button', { name: 'Explain', exact: true }).click(); await seen;
+  const editor = page.getByLabel('Matrix notebook', { exact: true }); await editor.press('ControlOrMeta+z');
+  await expect(page.locator('[data-math-view=columns]')).toHaveCount(0); release();
+  await editor.press('ControlOrMeta+Shift+z');
+  const explanation = page.locator('.fn-matrix-object[data-math-view=columns]');
+  await expect(explanation.locator('.comb-stage')).toHaveCount(1);
+  await explanation.getByLabel('Milestone', { exact: true }).selectOption('6');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await expect(explanation.getByRole('region', { name: 'Column combination; scroll horizontally on narrow screens', exact: true })).toBeVisible();
+  await page.screenshot({ path: info.outputPath('matrix-column-notebook-narrow.png') });
+  await explanation.getByRole('button', { name: 'Fold mathematical object', exact: true }).click();
+  await expect(explanation.locator('.comb-stage')).toHaveCount(0);
+});
 test('matrix source editing preserves focus, graph mounts, native history and independent view extents across reload', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.setViewportSize({ width: 1440, height: 1000 }); await ready(page);

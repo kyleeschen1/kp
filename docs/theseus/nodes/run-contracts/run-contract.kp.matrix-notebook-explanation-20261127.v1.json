@@ -1,0 +1,62 @@
+{
+  "id": "run-contract.kp.matrix-notebook-explanation-20261127.v1",
+  "kind": "run-contract",
+  "title": "Matrix notebook explanation",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 2/3 packages complete; canonical exemplar review required before promotion.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-notebook-explanation-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-next-step-review.md"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook-mathematics",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:notebook-mathematics"
+  ],
+  "revisitWhen": [
+    "User reviews the connected matrix notebook explanation"
+  ],
+  "allowedWork": [
+    "Bounded adapters, contextual commands, notebook mounting, lifecycle and preservation checks"
+  ],
+  "disallowedWork": [
+    "New choreography, broad player promotion, new families, publication or model spending"
+  ],
+  "goal": "Explain one notebook matrix-vector result using its actual source and existing column presentation; stop at exemplar review",
+  "target": "task.kp.matrix-notebook-explanation-20261127",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Checked rollback units; backup before handoff and hourly",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human review of one connected matrix exemplar before promotion",
+    "Four-hour ceiling; final 45 minutes reserved for checks and closeout"
+  ],
+  "slices": [
+    {
+      "id": "source",
+      "title": "Checked-source-explanation",
+      "summary": "27 mathematical and adapter checks pass; genuine 2x1 source references, cached explanation and explicit result correspondence. Independent worker checks and scoped types pass.",
+      "status": "complete"
+    },
+    {
+      "id": "notebook",
+      "title": "Integrated-notebook-explanation",
+      "summary": "Connected notebook workflow checked: native history and commands, lazy genuine-vector playback, source revision preservation, invalid recovery and independent host positions. Complete types, boundaries, production measurement and original-player preservation pass; final explanation cases pass Chromium and Firefox.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Human-exemplar-review",
+      "summary": "HUMAN_CHECKPOINT: inspect Explain in matrix notebook, source updates, reverse and return, inherited card size and narrow horizontal stage.",
+      "status": "in-progress"
+    }
+  ]
+}

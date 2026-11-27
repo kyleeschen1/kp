@@ -56,3 +56,15 @@ test('quadratic data and evaluators are core; notebook application and chat rema
     assert.equal(resolveKpModuleOwnershipZone(path)?.id, 'application');
   assert.equal(resolveKpModuleOwnershipZone('src/notebook/view.ts')?.id, 'experiment');
 });
+test('the bounded column embed cannot pull experiment hosts or notebook state into playback', () => {
+  const graph = collectKpTypescriptImportGraph(root), seen = new Set<string>();
+  const queue = ['src/experiments/matrix-column-combinations/embed.ts'];
+  while (queue.length) {
+    const path = queue.pop()!; if (seen.has(path)) continue; seen.add(path);
+    assert.notEqual(resolveKpModuleOwnershipZone(path)?.id, 'experiment', path);
+    assert.doesNotMatch(path, /src\/(fraction-notebook|editor-chat|math-resources|animation-player)\//, path);
+    queue.push(...graph.localEdges.filter(edge => edge.importer === path).map(edge => edge.target));
+  }
+  for (const host of ['entry.ts', 'reader.ts', 'author.ts', 'page.ts'])
+    assert.equal(resolveKpModuleOwnershipZone(`src/experiments/matrix-column-combinations/${host}`)?.id, 'experiment');
+});

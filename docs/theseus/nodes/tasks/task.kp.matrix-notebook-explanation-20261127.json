@@ -1,0 +1,106 @@
+{
+  "id": "task.kp.matrix-notebook-explanation-20261127",
+  "kind": "task",
+  "title": "Explain the notebook matrix result",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: implementation checked; connected explanation presentation awaits user judgment.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-next-step-review.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook-mathematics",
+    "npm run visual:notebook-mathematics"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:notebook-mathematics",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:15:11.738Z"
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:13.320Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:14.185Z"
+    },
+    {
+      "command": "npm run test:library-boundaries",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:14.809Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:15.441Z"
+    },
+    {
+      "command": "npm run visual:notebook-mathematics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:16.062Z"
+    },
+    {
+      "command": "npm run visual:notebook-mathematics -- --grep 'matrix explanation' --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:16.693Z"
+    },
+    {
+      "command": "npm run visual:matrix-interpretations -- --grep 'columns and coefficients|reduced-motion controls|shared configuration'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:17.343Z"
+    },
+    {
+      "command": "npm run measure:notebook-mathematics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:17.977Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:18:58.280Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the connected matrix notebook explanation"
+  ],
+  "allowedWork": [
+    "One source-backed matrix explanation through existing player and notebook commands"
+  ],
+  "disallowedWork": [
+    "Broad promotion, publication, new choreography"
+  ],
+  "criteria": [
+    {
+      "id": "connected-source",
+      "weight": "high"
+    },
+    {
+      "id": "preserved-history",
+      "weight": "high"
+    },
+    {
+      "id": "exemplar-review",
+      "weight": "high"
+    }
+  ]
+}

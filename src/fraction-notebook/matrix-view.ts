@@ -6,6 +6,7 @@ import { invalidResourceFields, matrixFields, vectorFields, type ResourceEdit } 
 import type { MatrixObjectCell } from './types.ts';
 import type { MatrixNotebookRuntime } from './matrix-runtime.ts';
 import { mountMatrixGraph } from './matrix-graph.ts';
+import { createMatrixExplanation } from './matrix-explanation.ts';
 
 export interface MatrixViewOwner {
   readonly runtime: MatrixNotebookRuntime;
@@ -27,12 +28,14 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
   const host = el('div', 'fn-math-graph'), legend = el('p', 'fn-math-legend'), diagnostic = el('p', 'fn-math-diagnostic'), toolbar = el('div', 'fn-math-actions');
   diagnostic.setAttribute('role', 'status');
   let graph: ReturnType<typeof mountMatrixGraph> | undefined;
+  const explanationHost = el('div', 'fn-matrix-explanation');
+  let explanation: ReturnType<typeof createMatrixExplanation> | undefined, explanationDiagnostic = '';
   const fields: { input: HTMLInputElement; edit: (text: string) => ResourceEdit; key: string }[] = [];
   const button = (title: string, command: string, parent = toolbar) => {
     const b = el('button'); b.type = 'button'; b.textContent = title; owner.bind(b, command, cell.id); parent.append(b); return b;
   };
   if (editable) button('▾', 'matrix.fold', heading).setAttribute('aria-label', 'Fold mathematical object');
-  heading.append(title); body.append(formula, controls, host, legend, diagnostic, toolbar); dom.append(heading, body);
+  heading.append(title); body.append(formula, controls, host, explanationHost, legend, diagnostic, toolbar); dom.append(heading, body);
   const initialView = owner.runtime.read(cell).view;
   if (editable) {
     if (initialView.view === 'equation') {
@@ -45,13 +48,15 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
       vectorFields.forEach(field => add(`v${field === 'x' ? '1' : '2'}`, `vector.${field}`, text => ({ kind: 'vector', field, text })));
     }
     button('Graph', 'matrix.graph');
+    button('Explain', 'matrix.explain');
+    if (initialView.view === 'columns') button('Return to inputs', 'matrix.return-to-source');
     if (initialView.view === 'graph') { button('Zoom in', 'matrix.zoom-in'); button('Zoom out', 'matrix.zoom-out'); }
   }
   const render = () => {
     const { document: d, view } = owner.runtime.read(cell);
     dom.dataset['matrixResource'] = cell.resource; dom.dataset['matrixOccurrence'] = cell.occurrence; dom.dataset['mathView'] = view.view;
-    title.textContent = view.view === 'equation' ? 'A · v = Av' : 'v → Av · linked graph'; body.hidden = cell.folded;
-    if (cell.folded) return;
+    title.textContent = view.view === 'equation' ? 'A · v = Av' : view.view === 'columns' ? 'Av · column combination' : 'v → Av · linked graph'; body.hidden = cell.folded;
+    if (cell.folded) { explanation?.dispose(); explanation = undefined; return; }
     const sample = owner.runtime.sample(d.id);
     if (sample.latex !== lastLatex) { katex.render(sample.latex, formula, { throwOnError: true }); lastLatex = sample.latex; }
     const invalid = invalidResourceFields(d);
@@ -60,8 +65,15 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
       if (field.input.value !== value) field.input.value = value;
       field.input.setAttribute('aria-invalid', String(invalid.includes(field.key)));
     }
-    diagnostic.textContent = invalid.length ? 'Incomplete or out-of-range input. Showing the last valid values (−10 to 10).' : '';
+    diagnostic.textContent = invalid.length ? 'Incomplete or out-of-range input. Showing the last valid values (−10 to 10).' : explanationDiagnostic;
     host.hidden = view.view !== 'graph';
+    explanationHost.hidden = view.view !== 'columns';
+    if (view.view === 'columns') {
+      explanation ??= createMatrixExplanation(explanationHost, cell.occurrence, editable ? 'editor' : 'reader', () => owner.runtime.explanation(cell.resource), message => {
+        explanationDiagnostic = message; diagnostic.textContent = message;
+      });
+      void explanation.update();
+    }
     legend.textContent = `Av = (${sample.result.join(', ')})`;
     if (view.view === 'graph') {
       graph ??= mountMatrixGraph(host, cell.id); graph.update(view.extent, sample.input, sample.result);
@@ -78,5 +90,5 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
     if (next.type !== node.type || next.attrs['id'] !== cell.id || next.attrs['resource'] !== cell.resource || next.attrs['occurrence'] !== cell.occurrence) return false;
     node = next; cell = readMatrixCell(next); render(); return true;
   }, selectNode() { dom.classList.add('ProseMirror-selectednode'); }, deselectNode() { dom.classList.remove('ProseMirror-selectednode'); },
-  stopEvent: () => true, ignoreMutation: () => true, destroy() { unsubscribe(); graph?.dispose(); } };
+  stopEvent: () => true, ignoreMutation: () => true, destroy() { unsubscribe(); graph?.dispose(); explanation?.dispose(); } };
 }

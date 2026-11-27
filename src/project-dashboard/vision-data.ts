@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-matrix-notebook-adapter",
-    title: "Edit matrix resources in the notebook",
+    id: "kp-matrix-notebook-explanation",
+    title: "Explain the notebook matrix result",
     approval: "approved",
-    contractId: "run-contract.kp.matrix-notebook-adapter-20261127",
-    finish: "One matrix/vector notebook reuses the resource API through native history, linked symbolic/geometric views, local view settings and saved identities. Preserve quadratic/fraction workflows and stop at G2 review before promotion.",
-    source: { label: "Approved matrix adapter", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
+    contractId: "run-contract.kp.matrix-notebook-explanation-20261127.v1",
+    finish: "One notebook object opens the existing column explanation against its actual source, preserves identity, native history and occurrence-local playback, and survives source edits and reload. Stop at exemplar review before promotion.",
+    source: { label: "Approved explanation integration", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
   },
-  uncertainty: "G2 accepts the bounded matrix notebook. Connecting its source to existing animation and promoting a shared adapter remain unproved. Broad object extensibility, LLM-driven revision and learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Select the proposed notebook column-combination explanation scope. G2 is accepted; section-clipping choreography retains its separate review. No successor implementation or new motion treatment is approved.",
+  uncertainty: "G2 accepts the static matrix notebook. Source-backed column explanation now passes bounded integration checks; its connected presentation awaits judgment. Shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
+  nextJudgment: "In the matrix notebook, choose Explain, change an input, seek backward and return to inputs. Judge the inherited card's size, cues and connection to the source. Section-clipping judgment and broad promotion remain separate.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "G1 accepts quadratic authoring and G2 accepts the bounded matrix notebook, reusing the independent API through linked views, native history, separate copies and saved drafts. Existing notebook, chat, frame and row/filter review boundaries remain distinct.",
-      evidence: { label: "Accepted matrix notebook", href: "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md" },
+      established: "G1 accepts quadratic authoring and G2 accepts the static matrix notebook. A checked contextual command now opens the existing column explanation from that same source, with revision-safe replacement and local playback. Presentation review remains pending.",
+      evidence: { label: "Connected explanation review and limits", href: "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "matrix-notebook-explanation", title: "Explain the notebook matrix result",
         finish: "One contextual command opens the existing column-combination presentation against the actual notebook source through a checked adapter. Preserve identities, history, source revision and playback lifecycle; review one exemplar before promotion.",
         excludes: "New motion choreography, a universal player or notebook adapter, broader mathematical families, LLM edits, publication and automatic approval of unrelated visual candidates.",
-        source: { label: "Proposed explanation successor", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
+        source: { label: "Approved explanation successor", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
       }
     },
     {
@@ -676,6 +676,20 @@ export const projectVision: ProjectVision = {
       after: "The user accepts it and asks what comes next. Close that outcome and propose connecting the notebook source to the existing column-combination explanation; successor implementation remains unapproved.",
       reason: "A useful product consumer now exercises the separated mathematics API. The next concrete authoring gap is reusable explanation from that same source, rather than more disconnected fixtures or speculative generalization.",
       source: { label: "Acceptance and next-step review", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
+    },
+    {
+      id: "approve-matrix-explanation", on: "2026-11-27",
+      before: "The accepted notebook had linked static views; connecting its source to the existing column explanation was proposed.",
+      after: "The user approves the bounded parallel implementation, with one notebook exemplar and a human review before promotion.",
+      reason: "Connect authored mathematical objects to reusable explanations while retaining their source identities and existing renderer owners.",
+      source: { label: "Approved scope and ownership", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
+    },
+    {
+      id: "matrix-explanation-checked", on: "2026-11-27",
+      before: "The accepted notebook source and existing column animation were separate consumers.",
+      after: "A genuine single-vector adapter connects them through saved occurrences, contextual commands and lazy playback. Combined source, lifecycle, browser and loading checks pass; stop for presentation judgment.",
+      reason: "This exercises reusable explanation from the actual authored object without a fabricated second vector, new choreography or a universal player. Explicit module ownership and lifecycle repairs preserve the boundary.",
+      source: { label: "Checked explanation and review instructions", href: "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md" }
     }
   ]
 };

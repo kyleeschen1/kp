@@ -7,6 +7,7 @@ import { kpStateDerived, kpStateGroup, kpStateValue } from '../semantic-state/au
 import { defineKpSemanticStateTransform } from '../semantic-state/authoring-state-transform.ts';
 import { createKpSemanticDerivedValueCache } from '../semantic-state/derived-cache.ts';
 import { MathResourceGap, readMatrixVectorDocument, type MatrixVectorDocument, type Vector2 } from './model.ts';
+import { createMatrixResourceExplanationOwner } from './explanation.ts';
 
 /** Source UUIDs survive remounts; a runtime owns only disposable derived state.
  * The existing typed-math owner supplies multiplication, values and notation. */
@@ -34,7 +35,14 @@ export function createMatrixVectorRuntime(initial: MatrixVectorDocument) {
     ] });
   let snapshot = model.initial, previous: readonly number[] = [1, 0, 0, 1, 0, 0];
   const cache = createKpSemanticDerivedValueCache({ maxEntries: 3 });
+  const explanationOwner = createMatrixResourceExplanationOwner();
   const active = () => { if (disposed) throw new MathResourceGap('owner-closed', identity.document, 'This evaluator is disposed.'); };
+  const values = () => {
+    active();
+    return { matrix: cache.evaluate({ graph: model.graph, snapshot, target: model.handles.refs.matrix }),
+      vector: cache.evaluate({ graph: model.graph, snapshot, target: model.handles.refs.vector }),
+      product: cache.evaluate({ graph: model.graph, snapshot, target: model.handles.refs.product }) };
+  };
   function update(raw: MatrixVectorDocument) {
     active(); const next = readMatrixVectorDocument(raw);
     if (next.id !== identity.document || next.matrix.id !== identity.matrix || next.vector.id !== identity.vector || next.result.id !== identity.result)
@@ -56,15 +64,17 @@ export function createMatrixVectorRuntime(initial: MatrixVectorDocument) {
   return {
     update,
     sample() {
-      active(); const matrix = cache.evaluate({ graph: model.graph, snapshot, target: model.handles.refs.matrix });
-      const vector = cache.evaluate({ graph: model.graph, snapshot, target: model.handles.refs.vector });
-      const product = cache.evaluate({ graph: model.graph, snapshot, target: model.handles.refs.product });
+      const { matrix, vector, product } = values();
       const rows = evaluateKpTypedMatrix(product, {}), result: Vector2 = Object.freeze([rows[0]![0]!, rows[1]![0]!]);
       return { matrix, vector, product, input: document.vector.entries, result,
         latex: `${projectKpTypedMathToLatex(matrix)}${projectKpTypedMathToLatex(vector)}=${projectKpTypedMathToLatex(product)}` };
     },
-    inspect() { return { calls: { ...calls }, retainedEdits: edits, cache: cache.inspect(), disposed }; },
-    dispose() { if (disposed) return; disposed = true; cache.dispose(); }
+    explanation() {
+      const { matrix, vector, product } = values();
+      return explanationOwner.read(document, matrix, vector, product);
+    },
+    inspect() { return { calls: { ...calls }, retainedEdits: edits, cache: cache.inspect(), explanation: explanationOwner.inspect(), disposed }; },
+    dispose() { if (disposed) return; disposed = true; cache.dispose(); explanationOwner.dispose(); }
   };
 }
 export type MatrixVectorRuntime = ReturnType<typeof createMatrixVectorRuntime>;

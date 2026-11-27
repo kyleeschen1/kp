@@ -27,6 +27,7 @@ export function createMatrixNotebookRuntime(initial: readonly MatrixVectorDocume
   update(documents);
   return { update, read(cell: MatrixObjectCell) { active(); return matrixOccurrence(documents, cell.resource, cell.occurrence); },
     sample(id: string) { active(); const runtime = runtimes.get(id); if (!runtime) throw new Error('The matrix resource was removed.'); return runtime.sample(); },
+    explanation(id: string) { active(); const runtime = runtimes.get(id); if (!runtime) throw new Error('The matrix resource was removed.'); return runtime.explanation(); },
     inspect() { return [...runtimes].map(([id, runtime]) => ({ id, ...runtime.inspect() })); },
     dispose() { if (disposed) return; disposed = true; runtimes.forEach(r => r.dispose()); runtimes.clear(); }
   };

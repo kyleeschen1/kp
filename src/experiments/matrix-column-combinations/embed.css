@@ -1,0 +1,23 @@
+@import "../matrix-player.css";
+@import "./style.css";
+
+/* Theme and framing belong to this occurrence; never retheme the host page. */
+.kp-column-explanation {
+  color-scheme: inherit;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  --kp-st-paper: var(--fn-surface, var(--color-paper, #f6f1e6));
+  --kp-st-header: var(--kp-st-paper);
+  --kp-st-header-ink: var(--fn-text, var(--color-ink, #30332e));
+  --kp-st-rule: var(--fn-border, var(--color-border, #bdb6a8));
+  --kp-st-strong: var(--fn-text, var(--color-ink, #30332e));
+  --kp-st-ink: var(--kp-st-strong);
+  --kp-st-muted: var(--fn-muted, var(--color-muted, #625d53));
+  --kp-st-focus: var(--fn-focus, var(--color-emphasis, #11110f));
+}
+.kp-column-explanation .matrix-card { max-inline-size: 100%; box-shadow: none; }
+.kp-column-explanation .matrix-scroll { max-inline-size: 100%; overflow-x: auto; overscroll-behavior-inline: contain; }
+.kp-column-explanation .comb-stage { font-size: var(--kp-equation-type-size, 1em); }
+.kp-column-explanation .matrix-controls :is(button, input, select) { font: inherit; }
+.kp-column-explanation > details { max-inline-size: 100%; }
+.kp-column-explanation .comb-static { max-inline-size: 100%; overflow-x: auto; }
