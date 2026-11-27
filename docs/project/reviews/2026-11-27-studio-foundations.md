@@ -121,3 +121,6 @@ clock, evaluation engine, source store or generic JSON patch protocol. More
 mathematical families, theme/graph promotion and general revision remain gated.
 Resume through `theseus work start task.kp.studio-foundations-20261127 --mode brief`
 after review; the approved horizon and finite contract remain intact.
+The generic Theseus handoff still selects the historical authoring-to-practice
+run and reports its hygiene findings. Use the roadmap's named studio contract;
+this delivery does not resume or repair that older run.

@@ -4,6 +4,16 @@
   "title": "Link mathematical views and make capabilities discoverable and revisable",
   "status": "deferred",
   "summary": "HUMAN_CHECKPOINT: implementation and preservation checks are ready; the bounded tranche still requires visual judgment and an actual model usefulness trial. No independent implementation package remains before those gates.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-twelve-loop-horizon.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-studio-foundations.md"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run test:matrix-reference",
