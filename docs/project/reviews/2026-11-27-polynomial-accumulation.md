@@ -1,7 +1,7 @@
 # Signed polynomial accumulation
 
 Date: 2026-11-27
-Status: implemented and checked; canonical visual review pending.
+Status: implemented, checked and accepted by the user ("approve! resume").
 Authority: studio horizon outcome 9, resumed after circle-reference acceptance.
 Execution: `run-contract.kp.polynomial-accumulation-20261127`.
 
@@ -137,6 +137,7 @@ the KaTeX renderer. Existing notebook/reader routes do not import this exemplar.
 
 No repository-wide unit run, root production build, WebKit or performance
 profile was run. Tests establish bounded truth and lifecycle, not learner
-understanding or reusable authoring. This reaches HUMAN_CHECKPOINT before reuse;
-the actual-model annotation trial and 3D clipping judgment remain separate.
-Resume with `theseus work context task.kp.polynomial-accumulation-20261127 --mode brief`.
+understanding or reusable authoring. User acceptance closes this reference at
+4/4. Continue with [saddle/section reuse](2026-11-27-saddle-section-reuse.md),
+retaining its prerequisite clipping review. Accumulation reuse and the
+actual-model annotation trial remain separate.

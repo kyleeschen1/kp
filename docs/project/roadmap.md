@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-polynomial-accumulation`
-Execution Contract: `run-contract.kp.polynomial-accumulation-20261127`
-Next Product Milestone: `polynomial-accumulation`
+Current Commitment: `kp-saddle-section-reuse`
+Execution Contract: `run-contract.kp.saddle-section-reuse-20261127`
+Next Product Milestone: `saddle-section-reuse`
 Milestone Authority: approved
 
 ## Where we are going
@@ -32,8 +32,9 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [composition and signed area](reviews/2026-11-27-composition-area.md).
 **Accepted:** [composition notebook](reviews/2026-11-27-composition-notebook-reuse.md).
 **Accepted:** [circle/trig reference](reviews/2026-11-27-circle-trig.md).
-**Approved:** [polynomial accumulation](reviews/2026-11-27-polynomial-accumulation.md):
-signed and geometric area; review before reuse.
+**Accepted:** [accumulation](reviews/2026-11-27-polynomial-accumulation.md).
+**Approved:** [saddle/section reuse](reviews/2026-11-27-saddle-section-reuse.md):
+clipping review precedes extraction and independent-host delivery.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 

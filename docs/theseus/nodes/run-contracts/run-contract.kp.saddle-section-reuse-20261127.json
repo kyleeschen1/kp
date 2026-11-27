@@ -1,0 +1,62 @@
+{
+  "id": "run-contract.kp.saddle-section-reuse-20261127",
+  "kind": "run-contract",
+  "title": "Reusable saddle section",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 1 of 5 packages complete; prerequisite clipping judgment precedes extraction.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.saddle-section-reuse-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-saddle-section-reuse.md"
+    }
+  ],
+  "verification": [
+    "npm run test:direct-webgl-graph",
+    "npm run check:library-lanes"
+  ],
+  "revisitWhen": [
+    "User answers the canonical clipping review."
+  ],
+  "allowedWork": [
+    "Approved studio outcome 10; six-hour ceiling and final hour for verification and backup"
+  ],
+  "disallowedWork": [
+    "No extraction before clipping approval; no arbitrary surfaces, renderer replacement, notebook integration, model spending or publication"
+  ],
+  "goal": "One checked saddle-section source reused outside the experiment with independent local state",
+  "target": "task.kp.saddle-section-reuse-20261127",
+  "slices": [
+    {
+      "id": "audit",
+      "title": "Ownership-and-review-readiness",
+      "summary": "Audited shared GPU versus experiment-owned section policy and lifecycle. Canonical route is healthy; 11 unit and eight browser checks pass. Reuse plan and prerequisite review recorded.",
+      "status": "complete"
+    },
+    {
+      "id": "clipping-review",
+      "title": "Prerequisite-clipping-judgment",
+      "summary": "HUMAN_CHECKPOINT: specific prior clipping approval requested asynchronously; do not extract or build its second host until answered.",
+      "status": "in-progress"
+    },
+    {
+      "id": "reuse",
+      "title": "Source-and-independent-reference",
+      "status": "planned"
+    },
+    {
+      "id": "verification",
+      "title": "Integrated-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "host-review",
+      "title": "Independent-host-review",
+      "status": "planned"
+    }
+  ]
+}

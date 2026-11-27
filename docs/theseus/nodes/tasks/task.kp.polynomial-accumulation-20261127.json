@@ -2,9 +2,9 @@
   "id": "task.kp.polynomial-accumulation-20261127",
   "kind": "task",
   "title": "Explain signed polynomial accumulation",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: verified reference awaiting canonical visual judgment.",
+  "summary": "All four packages complete; the exact accumulation reference is accepted.",
   "sourceRefs": [
     {
       "kind": "file",

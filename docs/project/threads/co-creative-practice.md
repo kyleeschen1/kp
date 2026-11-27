@@ -14,15 +14,15 @@ Accepted: [matrix adapter](../reviews/2026-11-27-matrix-notebook-adapter.md),
 [shelf](../reviews/2026-11-27-reference-shelf.md).
 Approved: [studio horizon](../reviews/2026-11-27-twelve-loop-horizon.md).
 [Foundations](../reviews/2026-11-27-studio-foundations.md): visuals accepted;
-actual-model trial pending. [Linked views](../reviews/2026-11-27-linked-math-views.md)
-are accepted; default adoption closes their milestone.
+actual-model trial pending. Accepted: [linked views](../reviews/2026-11-27-linked-math-views.md).
 Accepted: [editable R2 projection](../reviews/2026-11-27-inner-product-projection.md).
 Accepted: [projection notebook](../reviews/2026-11-27-projection-notebook-reuse.md).
 Accepted: [composition exemplar](../reviews/2026-11-27-composition-area.md).
 Accepted: [composition notebook](../reviews/2026-11-27-composition-notebook-reuse.md).
 Accepted: [circle/trig](../reviews/2026-11-27-circle-trig.md).
-Approved: [accumulation](../reviews/2026-11-27-polynomial-accumulation.md).
-Execution: `run-contract.kp.polynomial-accumulation-20261127`.
+Accepted: [accumulation](../reviews/2026-11-27-polynomial-accumulation.md).
+Approved: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md); clipping review first.
+Execution: `run-contract.kp.saddle-section-reuse-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

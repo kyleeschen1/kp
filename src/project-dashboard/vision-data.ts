@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-polynomial-accumulation",
-    title: "Connect signed accumulation and antiderivatives",
+    id: "kp-saddle-section-reuse",
+    title: "Reuse one source-linked saddle section",
     approval: "approved",
-    contractId: "run-contract.kp.polynomial-accumulation-20261127",
-    finish: "One bounded polynomial reference links shaded contributions to exact signed totals and an accumulation graph, distinguishing geometric area and reversed bounds. Review before reuse.",
-    source: { label: "Approved accumulation scope", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" }
+    contractId: "run-contract.kp.saddle-section-reuse-20261127",
+    finish: "After the prerequisite clipping review, bind supported saddle/section parameters to a checked source and reuse the explanation in one independent reference with local playback and exact return.",
+    source: { label: "Approved section reuse and prerequisite", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "The circle reference is accepted. Review whether the area treatment distinguishes signed totals from geometric area and connects the moving endpoint to accumulation. The actual-response annotation revision trial remains pending.",
+  nextJudgment: "Accumulation is accepted. Review the existing saddle surface retreat toward its section before extracting that treatment for reuse. The actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry, quadratic forms, R2 projection, composition and circle/trig are accepted. Projection and composition have accepted saved notebook hosts. Trig reuse and actual model usefulness remain unproved.",
-      evidence: { label: "Circle reference evidence and limits", href: "docs/project/reviews/2026-11-27-circle-trig.md" },
+      established: "Matrix geometry, quadratic forms, R2 projection, composition, circle/trig and bounded accumulation are accepted. Projection and composition have accepted notebook hosts. General reuse and actual model usefulness remain unproved.",
+      evidence: { label: "Accumulation evidence and limits", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" },
       outcome: {
         authority: "approved",
-        id: "polynomial-accumulation", title: "Explain accumulation",
-        finish: "Inspect signed and geometric area for six exact polynomial cases; connect a moving endpoint to its accumulation graph and reverse the bounds. Human review judges the presentation.",
-        excludes: "General integration or root solvers, coefficient editing, notebook reuse, shared renderer promotion, paid model calls and publication.",
-        source: { label: "Approved accumulation reference", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" }
+        id: "saddle-section-reuse", title: "Reuse a saddle-section explanation",
+        finish: "Resolve clipping judgment, then reuse one checked source through the existing player boundary in an independent host. Preserve local state, parameter editing and exact return; review the second host.",
+        excludes: "Other surfaces, arbitrary meshing or intersections, renderer replacement, notebook integration, paid model calls and publication.",
+        source: { label: "Approved section reuse", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
       }
     },
     {
@@ -822,6 +822,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts it and resumes. Close the circle reference; continue studio outcome 9 with one exact polynomial accumulation reference.",
       reason: "Extend the reference collection from pointwise values to signed contributions and totals, retaining separate semantic owners and a fresh visual gate.",
       source: { label: "Accumulation scope and preservation", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" }
+    },
+    {
+      id: "accept-accumulation-review-section-reuse", on: "2026-11-27",
+      before: "The bounded accumulation reference awaited visual judgment; saddle clipping retained a separate earlier review gate.",
+      after: "The user accepts accumulation and resumes studio outcome 10. Audit the existing saddle/player boundaries and ask for the outstanding clipping judgment before extraction.",
+      reason: "Move from isolated 3D demonstration toward author-controlled reuse while preserving the approved prerequisite and existing mathematical/rendering owners.",
+      source: { label: "Section reuse audit and review boundary", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
     }
   ]
 };

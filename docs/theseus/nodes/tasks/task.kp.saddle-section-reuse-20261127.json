@@ -1,0 +1,40 @@
+{
+  "id": "task.kp.saddle-section-reuse-20261127",
+  "kind": "task",
+  "title": "Reuse a source-linked saddle section",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: prerequisite clipping question pending; audit complete.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-saddle-section-reuse.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:direct-webgl-graph",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T15:55:05.116Z",
+      "notes": "11 passed; existing canonical mathematical and clipping laws unchanged."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph -- --grep 'section visual journey|clipping removes|settled section has one curved stroke'",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T15:55:06.147Z",
+      "notes": "Eight Chromium/Firefox checks passed; unchanged candidate, not a new visual approval or full-suite run."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T15:55:06.798Z",
+      "notes": "75 passed after trimming redundant thread history to preserve its reading budget."
+    }
+  ],
+  "revisitWhen": [
+    "User accepts clipping treatment or supplies revisions."
+  ]
+}
