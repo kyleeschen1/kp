@@ -16,10 +16,14 @@ export const schema = new Schema({
     doc: { content: '(mathematics | matrixResources)? articleHeader? (block | story | mathObject | matrixObject)*' },
     matrixResources: { attrs: { value: {} }, atom: true, selectable: false,
       toDOM: () => ['div', { hidden: '', 'data-matrix-store': '', contenteditable: 'false' }] },
-    matrixObject: { attrs: { ...identity, resource: {}, occurrence: {}, folded: { default: false } }, atom: true, selectable: true, isolating: true,
-      toDOM: n => ['section', { ...attrs(n), 'data-matrix-resource': n.attrs['resource'], 'data-matrix-occurrence': n.attrs['occurrence'], 'data-folded': String(n.attrs['folded']) }],
+    matrixObject: { attrs: { ...identity, resource: {}, occurrence: {}, folded: { default: false }, clipboardOccurrence: { default: null } }, atom: true, selectable: true, isolating: true,
+      toDOM: n => ['section', { ...attrs(n), 'data-matrix-resource': n.attrs['resource'], 'data-matrix-occurrence': n.attrs['occurrence'], 'data-folded': String(n.attrs['folded']),
+        ...(n.attrs['clipboardOccurrence'] === null ? {} : { 'data-matrix-clipboard-occurrence': JSON.stringify(n.attrs['clipboardOccurrence']) }) }],
       parseDOM: [{ tag: 'section[data-matrix-resource]', getAttrs: el => {
-        try { const a = parse(el); return a ? { ...a, resource: uuid(el.dataset['matrixResource']), occurrence: uuid(el.dataset['matrixOccurrence']), folded: el.dataset['folded'] === 'true' } : false; }
+        try { const a = parse(el), clipboard = el.dataset['matrixClipboardOccurrence'];
+          if (clipboard && clipboard.length > 1024) return false;
+          return a ? { ...a, resource: uuid(el.dataset['matrixResource']), occurrence: uuid(el.dataset['matrixOccurrence']), folded: el.dataset['folded'] === 'true',
+            clipboardOccurrence: clipboard ? JSON.parse(clipboard) : null } : false; }
         catch { return false; }
       } }] },
     // Root attribute changes recreate ProseMirror's entire document view. A
