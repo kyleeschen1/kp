@@ -5,8 +5,8 @@ Last Updated: 2026-11-27
 
 ## Current boundary
 
-The [roadmap](../roadmap.md) owns direction; the [charter](../strategy.md)
-and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rationale.
+[Roadmap](../roadmap.md) owns direction; [charter](../strategy.md)
+and [decision](../decisions/2026-11-08-authoring-expert-attention.md) explain why.
 
 G2 accepted: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-adapter.md).
 Accepted: [connected explanation](../reviews/2026-11-27-matrix-notebook-explanation.md).
@@ -15,11 +15,11 @@ Completed: `run-contract.kp.matrix-reference-card-20261127`.
 Accepted: [reference shelf](../reviews/2026-11-27-reference-shelf.md).
 Completed: `run-contract.kp.matrix-reference-shelf-20261127`.
 Approved: [studio foundations](../reviews/2026-11-27-twelve-loop-horizon.md):
-theme, geometry, discovery and revision. Execution: `run-contract.kp.studio-foundations-20261127`.
+[Candidate and limits](../reviews/2026-11-27-studio-foundations.md): geometry,
+discovery and revision; visual/model review pending. Execution: `run-contract.kp.studio-foundations-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
-Generation latency remains unproved.
 
 ## Retrieve for a named question
 

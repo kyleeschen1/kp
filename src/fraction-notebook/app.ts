@@ -26,7 +26,6 @@ import { mountModeline } from './modeline.ts';
 import { mountFruitPicker } from './fruit-picker.ts';
 import { mountCommandPicker } from './command-picker.ts';
 import { mountVimCoverage } from './vim-coverage-panel.ts';
-import { mountMathematicalDiscovery } from './math-discovery.ts';
 import { CommandRegistry, available, unavailable, type Availability, type CommandScope } from '../editor-commands/registry.ts';
 import './windows.css';
 import './modeline.css';
@@ -180,6 +179,7 @@ if (!mathModule && new URLSearchParams(location.search).get('revision') === '1')
       send({ kind: 'apply', value }); send({ kind: 'reveal-moment', id: beatId });
     },
     restorePreview() { if (!disposed && latest) send({ kind: 'apply', value: latest.value }); },
+    inspect() { frame.scrollIntoView({ block: 'start', behavior: 'instant' }); },
     accepted() { clearTimeout(timer); void prepare(); }
   });
 }
@@ -202,7 +202,7 @@ const captureReturn = () => {
 };
 const picker = mountFruitPicker(root, actions, () => captureReturn().restore, registry, message => reportStatus(message));
 const commandPicker = mountCommandPicker(root, actions, registry, captureReturn);
-const mathDiscovery = mathModule ? mountMathematicalDiscovery(root, editor.view, registry, message => reportStatus(message)) : undefined;
+const mathDiscovery = mathModule ? (await import('./math-discovery.ts')).mountMathematicalDiscovery(root, editor.view, registry, message => reportStatus(message)) : undefined;
 const vimCoverage = mountVimCoverage(root, registry, captureReturn);
 actions.append(button('Styles', () => styles.toggle(), 'workspace.open-styles', 'workspace'));
 const numbers = mountLineNumbers(editorHost, editor.view);

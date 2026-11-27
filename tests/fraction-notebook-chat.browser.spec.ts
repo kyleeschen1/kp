@@ -79,7 +79,7 @@ test('contextual revision stages without sending, previews a native chat respons
     await expect(input(page)).toContainText('Response shape'); expect(f.peer.sends()).toHaveLength(0);
     const prompt = await input(page).innerText();
     const shape = prompt.split('Response shape (replace title/content as needed):')[1]?.trim(); expect(shape).toBeTruthy();
-    const response = { ...JSON.parse(shape!), title: 'Notice the denominator', content: 'First identify the denominator before changing either side.' };
+    const response = { ...JSON.parse(shape!), title: 'Undo addition first', content: 'Undo the final addition by subtracting three from both sides.' };
     await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
     f.peer.finish(JSON.stringify(response)); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
     const messages = panel.getByLabel('Completed model response'); await expect(messages.locator('option')).toHaveCount(2);
@@ -89,11 +89,20 @@ test('contextual revision stages without sending, previews a native chat respons
     const preview = page.frameLocator('iframe.fn-preview');
     await expect(preview.locator('[data-kp-beat]').first()).toContainText(response.content);
     await page.screenshot({ path: info.outputPath('contextual-annotation-proposal.png') });
+    await panel.getByRole('button', { name: 'Inspect animation' }).click(); await expect(panel).toBeHidden();
+    await expect(page.locator('iframe.fn-preview')).toBeInViewport();
+    await page.screenshot({ path: info.outputPath('contextual-annotation-preview.png') });
+    await page.getByRole('button', { name: 'Return to proposal' }).click();
+    await expect(panel.getByRole('button', { name: 'Accept annotation' })).toBeEnabled();
     await panel.getByRole('button', { name: 'Accept annotation' }).click(); await expect(caption).toHaveText(response.content);
     await expect(page.locator('.fn-status')).toContainText('preview up to date');
     await panel.getByRole('button', { name: 'Close', exact: true }).click();
     await page.locator('.fn-editor .ProseMirror').focus(); await workspaceCommand(page, 'Undo'); await expect(caption).toHaveText(original!);
+    await workspaceCommand(page, 'Run');
+    await expect(preview.locator('[data-kp-beat]').first()).toContainText(original!);
     await workspaceCommand(page, 'Redo'); await expect(caption).toHaveText(response.content);
+    await workspaceCommand(page, 'Run');
+    await expect(preview.locator('[data-kp-beat]').first()).toContainText(response.content);
     expect(f.peer.sends()).toHaveLength(1); expect(errors).toEqual([]);
   } finally { await f.close(); }
 });

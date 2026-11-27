@@ -2,7 +2,8 @@
   "id": "task.kp.studio-foundations-20261127",
   "kind": "task",
   "title": "Link mathematical views and make capabilities discoverable and revisable",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: implementation and preservation checks are ready; the bounded tranche still requires visual judgment and an actual model usefulness trial. No independent implementation package remains before those gates.",
   "verificationRecords": [
     {
       "command": "npm run test:matrix-reference",
@@ -24,6 +25,65 @@
       "scope": "focused",
       "checkedAt": "2026-11-27T12:34:33.353Z",
       "notes": "Both Chromium and Firefox pass matrix/quadratic discovery, retained selection, stale-source rejection, and derivative command selection. Query ranking and the derivative alias were repaired with unit regressions."
+    },
+    {
+      "command": "npm run test:studio-foundations",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:41.936Z",
+      "notes": "38 tests pass, including post-accept typing history isolation, strict transport, cancellation/staleness, operation ranking and theme snapshots."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:42.873Z",
+      "notes": "Full app, node, tests, Svelte and domain type checks pass. Final lazy import change separately passed scoped notebook types."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:43.529Z",
+      "notes": "Dependency, neutral-entrypoint, semantic/reader/compiler authority and cross-domain gateway checks pass; zero exact retiring dependency exceptions."
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'contextual revision|another tab changing branches|keyboard.*chat' --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:44.192Z",
+      "notes": "8 Chromium/Firefox cases pass. Deterministic RPC peer only; no claim of real inference or pedagogical usefulness."
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'saved theme|explicit saved dark|Styles compares|source typing' --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:44.854Z",
+      "notes": "Final full 8-case cohort passes. Earlier Firefox validation assertion traced to no blur/change from Tab; test now explicitly changes focus. No production style logic changed."
+    },
+    {
+      "command": "npm run measure:notebook-mathematics -- --baseline cf0c81c723736005b36265a0c98c8be4b9d39668",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:45.520Z",
+      "notes": "Complete notebook JS/CSS gzip estimate 596960 to 612649; initial JS 473370 to 475202. Native reader unchanged 340792. All lazy chunks/assets and full type cohorts retained; no ceilings raised."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:46.159Z",
+      "notes": "75 pass after shortening startup prose to existing word limits; candidate evidence linked without claiming human acceptance."
+    },
+    {
+      "command": "npm run test:library-boundaries",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T12:45:46.776Z",
+      "notes": "8 pass, including editor-free reference and independent library consumers."
     }
+  ],
+  "revisitWhen": [
+    "User reviews the linked matrix/shared theme and tries a supported annotation revision through the existing chat; then resume the named contract without new routine approval."
   ]
 }

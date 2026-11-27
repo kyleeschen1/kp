@@ -11,3 +11,14 @@
 .fn-contextual-revision button { margin-block: .25em; }
 .fn-contextual-revision [data-revision-before],
 .fn-contextual-revision [data-revision-after] { white-space: pre-wrap; }
+.fn-revision-return {
+  position: absolute;
+  inset-block-start: .5rem;
+  inset-inline-end: .5rem;
+  z-index: 9;
+  color: var(--fn-text);
+  background: var(--fn-background);
+  font: inherit;
+  padding: .4em .6em;
+  border: 1px solid var(--fn-border);
+}

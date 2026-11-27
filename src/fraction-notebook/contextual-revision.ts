@@ -27,6 +27,7 @@ export interface NotebookRevisionHost {
   compile(candidate: FractionNotebook, signal: AbortSignal): Promise<CompiledFractionRevision>;
   preview(value: CompiledFractionRevision, beatId: string): void;
   restorePreview(): void;
+  inspect?(): void;
   selectedBeat?(): string | undefined;
   accepted?(value: CompiledFractionRevision): void;
 }
@@ -111,20 +112,24 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
   const pasted = element('textarea'); pasted.setAttribute('aria-label', 'Paste annotation proposal JSON'); pasted.rows = 4; pasted.maxLength = 65536;
   const manual = element('details'), manualTitle = element('summary', 'Paste a proposal instead'); manual.append(manualTitle, pasted);
   const preview = element('button', 'Preview proposal'), accept = element('button', 'Accept annotation'), reject = element('button', 'Reject proposal');
+  const inspect = element('button', 'Inspect animation'), resume = element('button', 'Return to proposal');
+  resume.className = 'fn-revision-return'; resume.hidden = true;
   const comparison = element('section'); comparison.hidden = true; comparison.setAttribute('aria-label', 'Annotation comparison');
   const before = element('p'), after = element('p'); before.dataset['revisionBefore'] = ''; after.dataset['revisionAfter'] = '';
   comparison.append(element('h3', 'Current'), before, element('h3', 'Proposed'), after);
   const field = (text: string, control: HTMLElement) => { const label = element('label', text); label.append(control); return label; };
   panel.append(title, close, notice, field('Moment', moment), field('What should improve?', instruction), stage,
-    field('Response to inspect', messages), manual, preview, comparison, accept, reject);
-  host.append(panel);
+    field('Response to inspect', messages), manual, preview, comparison, inspect, accept, reject);
+  host.append(panel, resume);
   const owner = createContextualRevisionSession(crypto.randomUUID());
   let generation = 0, controller: AbortController | undefined, disposed = false, ownApplying = false, previewing = false, busy = false;
   let checked: CompiledFractionRevision | undefined, descriptor: ObjectDescriptor | undefined;
   let request: ContextualRevisionRequest | undefined, candidate: CompiledFractionRevision | undefined;
   let returnFocus: HTMLElement | null = null;
-  const buttons = () => { stage.disabled = busy || !checked; preview.disabled = busy || !request || !!candidate; accept.disabled = busy || !candidate; reject.disabled = !request; };
+  const buttons = () => { stage.disabled = busy || !checked; preview.disabled = busy || !request || !!candidate; accept.disabled = busy || !candidate; reject.disabled = !request; inspect.disabled = busy || !candidate; };
+  const showPanel = () => { resume.hidden = true; panel.hidden = false; panel.inert = false; };
   const invalidate = (message?: string) => {
+    if (!resume.hidden) showPanel();
     ++generation; controller?.abort(); controller = undefined; owner.cancel(); request = undefined; candidate = undefined; busy = false;
     pasted.value = ''; messages.value = '';
     if (previewing) { previewing = false; options.restorePreview(); }
@@ -225,7 +230,7 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
       ownApplying = true;
       try { applyAnnotationRevision(options.view, transaction); } finally { ownApplying = false; }
       previewing = false; candidate = undefined; request = undefined; checked = undefined; busy = false;
-      notice.textContent = 'Annotation accepted. Undo in the notebook restores the previous wording.'; buttons();
+      notice.textContent = 'Annotation accepted. Undo restores the notebook draft; Run refreshes the animation after source undo.'; buttons();
       options.accepted?.(accepted);
     } catch (error) { if (!disposed && token === generation) { invalidate(); fail(error); } }
   }
@@ -237,6 +242,11 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
     run() { returnFocus = doc.activeElement instanceof HTMLElement ? doc.activeElement : null;
       panel.hidden = false; panel.inert = false; instruction.focus(); return load(); } });
   close.onclick = hide;
+  inspect.onclick = () => {
+    if (!candidate || busy) return;
+    panel.hidden = true; panel.inert = true; resume.hidden = false; options.inspect?.(); resume.focus({ preventScroll: true });
+  };
+  resume.onclick = () => { showPanel(); accept.focus({ preventScroll: true }); };
   panel.onkeydown = event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); hide(); } };
   moment.onchange = () => invalidate('Moment changed. Prepare a request for this annotation.');
   // Choosing a response is explicit; a hidden earlier paste cannot override it.
@@ -255,7 +265,7 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
     dispose() {
       if (disposed) return;
       try { invalidate(); }
-      finally { disposed = true; checked = undefined; descriptor = undefined; owner.dispose(); unsubscribe(); command.dispose(); panel.remove(); }
+      finally { disposed = true; checked = undefined; descriptor = undefined; owner.dispose(); unsubscribe(); command.dispose(); panel.remove(); resume.remove(); }
     }
   };
 }

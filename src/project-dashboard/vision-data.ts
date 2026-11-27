@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "Review one coherent opt-in matrix equation/graph exemplar; independently deliver bounded capability discovery and contextual revision, preserving source identity and local human gates. Keep the completed shelf intact.",
     source: { label: "Approved studio foundation tranche", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
   },
-  uncertainty: "The notebook explanation, independent reference card and multi-card shelf are accepted. Linked symbolic/geometric playback, shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
-  nextJudgment: "Review the opt-in linked matrix exemplar for geometric clarity and visual coherence before promotion. Independent discovery and contextual revision may proceed; model usefulness still needs a real trial.",
+  uncertainty: "The notebook explanation, independent reference card and shelf are accepted. Linked playback and bounded chat proposals have integration evidence; visual promotion, actual model usefulness, broad extensibility and learner transfer remain unproved.",
+  nextJudgment: "Review the linked matrix graph and shared theme, then try one annotation revision through existing chat. Decide whether the graph clarifies the equation and whether the real response improves the explanation before widening reuse.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,8 +41,8 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Quadratic authoring, the matrix notebook, connected explanation, independent reference card and local shelf are accepted. Named snapshots retain per-card playback through the shared row picker; migration preserves the prior saved card.",
-      evidence: { label: "Accepted shelf workflow and limits", href: "docs/project/reviews/2026-11-27-reference-shelf.md" },
+      established: "Quadratic/matrix notebooks, connected explanation and shelf are accepted. The opt-in matrix graph shares one clock; capability discovery retains its source; bounded chat annotation proposals preview before acceptance. Integration tests pass; visual quality and real model usefulness need review.",
+      evidence: { label: "Studio candidate evidence and review", href: "docs/project/reviews/2026-11-27-studio-foundations.md" },
       outcome: {
         authority: "approved",
         id: "matrix-column-geometry", title: "Connect column algebra to geometry",

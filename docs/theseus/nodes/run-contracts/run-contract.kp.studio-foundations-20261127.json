@@ -2,7 +2,8 @@
   "id": "run-contract.kp.studio-foundations-20261127",
   "kind": "run-contract",
   "title": "Mathematical studio foundations",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 3 of 5 packages complete; revision implementation is checked but real-response usefulness and combined visual review remain open. Approved independent work is exhausted before these gates.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +21,9 @@
     "npm run typecheck:matrix-reference",
     "npm run measure:matrix-reference",
     "npm run visual:matrix-reference"
+  ],
+  "revisitWhen": [
+    "Resume the named contract after the user judges the opt-in matrix/theme and completes one contextual annotation trial."
   ],
   "allowedWork": [
     "Named tranche and worker boundaries; local review may park only dependent work"
@@ -59,13 +63,14 @@
     {
       "id": "revision",
       "title": "Contextual-revision",
-      "summary": "Annotation proposal boundary tested; chat and notebook integration preparing an opt-in review flow",
+      "summary": "Proposal transport, native chat staging, preview, inspection, accept/reject and isolated undo are integrated and checked. Package remains open until an actual model response demonstrates usefulness; no model call was made.",
       "status": "in-progress"
     },
     {
       "id": "review",
       "title": "Combined-human-review",
-      "status": "planned"
+      "summary": "Combined canonical URLs and inspection instructions delivered. Automated preservation and cost checks pass; human visual judgment and a real response trial remain pending.",
+      "status": "in-progress"
     }
   ]
 }

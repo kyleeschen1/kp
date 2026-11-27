@@ -619,12 +619,14 @@ test('Styles compares properties across objects and preserves named references',
   await choice.selectOption('custom');
   const raw = panel.getByRole('textbox', { name: 'Body color', exact: true });
   // Math defaults to body color, so pointing body back at math must be rejected.
-  await raw.fill('var(--fn-math)'); await raw.press('Tab');
+  // Explicitly leave the last filtered input: Firefox's Tab can retain focus
+  // there without delivering change/blur, which is not a style commit.
+  await raw.fill('var(--fn-math)'); await search.click();
   await expect(raw).toHaveJSProperty('validationMessage', 'Use a valid CSS value without circular references.');
   await expect(raw).toHaveAttribute('aria-invalid', 'true');
   await expect(panel.getByRole('alert')).toHaveText('Use a valid CSS value without circular references.');
   await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(56, 108, 54)');
-  await raw.fill('#345678'); await raw.press('Tab');
+  await raw.fill('#345678'); await search.click();
   await expect(raw).toHaveValue('#345678'); await expect(raw).toHaveJSProperty('validationMessage', '');
   await expect(raw).not.toHaveAttribute('aria-invalid'); await expect(panel.getByRole('alert')).toHaveCount(0);
   await expect(page.locator('.ProseMirror')).toHaveCSS('color', 'rgb(52, 86, 120)');
@@ -635,11 +637,11 @@ test('Styles compares properties across objects and preserves named references',
   await search.fill('window opacity');
   const alpha = page.getByRole('textbox', { name: 'Window opacity', exact: true });
   for (const value of ['0.8', '80%']) {
-    await alpha.fill(value); await alpha.press('Tab');
+    await alpha.fill(value); await search.click();
     expect(await page.locator('.kp-page-window').evaluate(node => getComputedStyle(node, '::before').opacity)).toBe('0.8');
     await expect(page.locator('.kp-page-window')).toHaveCSS('opacity', '1');
   }
-  await alpha.fill(''); await alpha.press('Tab');
+  await alpha.fill(''); await search.click();
   expect(await page.locator('.kp-page-window').evaluate(node => getComputedStyle(node, '::before').opacity)).toBe('0.96');
   await page.setViewportSize({ width: 390, height: 844 });
   await search.fill('weight');

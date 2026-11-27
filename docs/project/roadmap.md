@@ -25,9 +25,9 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 **Complete, accepted:** [notebook matrix explanation](reviews/2026-11-27-matrix-notebook-explanation.md).
 **Complete, accepted:** [independent reference card](reviews/2026-11-27-matrix-reference-card.md).
 **Complete, accepted:** [three-card shelf](reviews/2026-11-27-reference-shelf.md).
-**Approved next:** [studio foundations](reviews/2026-11-27-twelve-loop-horizon.md):
-coherent visual defaults and linked column geometry, with independent discovery
-and contextual-revision work. One opt-in combined exemplar precedes visual promotion.
+**Approved:** [studio foundations](reviews/2026-11-27-twelve-loop-horizon.md).
+[Checked candidate](reviews/2026-11-27-studio-foundations.md): linked geometry,
+shared defaults, discovery and revision. Visual review and real-model judgment remain.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 

@@ -9,7 +9,10 @@ import ts from 'typescript';
 const root = fileURLToPath(new URL('..', import.meta.url));
 // Accepted workspace immediately before M0; comparison reads Git objects and
 // never checks out, rewrites or measures a reduced surrogate application.
-const baseline = '1c1e8791c06f106f7237a2a92666309bf9b6ece5';
+const args = process.argv.slice(2);
+if (args.length && (args.length !== 2 || args[0] !== '--baseline' || !/^[a-f0-9]{40}$/.test(args[1]!)))
+  throw new Error('Use --baseline followed by a full commit ID, or omit it for the accepted pre-M0 baseline.');
+const baseline = args[1] ?? '1c1e8791c06f106f7237a2a92666309bf9b6ece5';
 const sources = [
   ['notebook', 'src/fraction-notebook/app.ts'],
   ['native-reader', 'src/reader/app/exemplar-entry.ts'],
@@ -49,7 +52,7 @@ async function measure(label: string, entry: string, before: boolean) {
   }
   const total = (selected: typeof files) => ({ files: selected.length, raw: selected.reduce((sum, f) => sum + f.raw, 0), gzip: selected.reduce((sum, f) => sum + f.gzip, 0) });
   const initialModules = chunks.filter(chunk => initial.has(chunk.file)).flatMap(chunk => chunk.modules);
-  if (label === 'notebook' && !before && initialModules.some(module => /math-runtime|math-controller|matrix-runtime|matrix-controller|math-resources\/runtime|matrix-column-combinations\/(embed|player|presentation)|graph-2d-svg|graph-3d/.test(module)))
+  if (label === 'notebook' && !before && initialModules.some(module => /math-runtime|math-controller|matrix-runtime|matrix-controller|math-discovery\/|fraction-notebook\/(math-discovery|contextual-revision|revision-transport)\.ts|math-resources\/runtime|matrix-column-combinations\/(embed|player|presentation)|graph-2d-svg|graph-3d/.test(module)))
     throw new Error('The ordinary notebook acquired a mathematical runtime or renderer eagerly.');
   if (label === 'mathematical-reading' && chunks.some(chunk => chunk.modules.some(module => /graph-3d|animation-catalogue|mathjs/.test(module))))
     throw new Error('The mathematical reading acquired an unrelated 3D/catalogue runtime.');
