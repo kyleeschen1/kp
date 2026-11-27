@@ -1,0 +1,16 @@
+:root {
+  color-scheme: light; --paper: #f6f1e6; --ink: #30332e; --rule: #bdb6a8;
+  font-family: ui-serif, Georgia, serif; color: var(--ink); background: var(--paper); line-height: 1.5;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1100px; margin: auto; padding: 32px 24px; }
+h1, h2 { font-weight: 400; line-height: 1.2; }
+.layouts { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.stage { width: 100%; border: 1px solid var(--rule); }
+.article { height: 390px; } .compact { height: 240px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 0; }
+button { font: inherit; color: inherit; background: transparent; border: 1px solid var(--rule); padding: 4px 10px; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+input[type=range] { min-width: 100px; width: 100%; accent-color: var(--ink); }
+@media (max-width: 700px) { .layouts { grid-template-columns: 1fr; } .article { height: 300px; } }

@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reusable saddle player</title></head><body><main>
+<h1>One animation, two places</h1>
+<p>The same prepared saddle appears in an article and a reference card. Each view has its own controls.</p>
+<div class="layouts"><section aria-labelledby="article-title"><h2 id="article-title">Article</h2>
+<p>Increasing the denominator halves the saddle’s heights and depths while keeping the same surface and camera.</p>
+<div class="stage article" id="article"></div><div class="controls" data-for="article"></div></section>
+<aside aria-labelledby="card-title"><h2 id="card-title">Reference card</h2><p>What changes when d doubles?</p>
+<div class="stage compact" id="compact"></div><div class="controls" data-for="compact"></div></aside></div>
+<button id="remount">Remount both players</button><p id="mount-status" role="status"></p>
+</main><script type="module" src="./main.ts"></script></body></html>
