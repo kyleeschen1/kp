@@ -39,6 +39,8 @@ and shared defaults; discovery and actual-model revision are accepted.
 **Complete, accepted:** [actual-response trial](reviews/2026-11-27-contextual-revision-trial.md).
 [Horizon audit](reviews/2026-11-27-twelve-loop-review.md): ten complete, two partial.
 Approved: [finish reuse and studio proof](reviews/2026-11-27-studio-finish.md).
+[Combined candidate](reviews/2026-11-27-studio-finish-review.md): deliberate matrix
+reuse and the actual-response journey are implemented; final human judgment remains.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion remains separate.
 

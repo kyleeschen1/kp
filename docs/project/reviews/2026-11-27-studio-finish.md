@@ -81,3 +81,8 @@ shows command listeners traversing the previous editor during pagehide disposal.
 This checkpoint is recoverable, **not a clean final browser gate**. Repair that
 lifecycle boundary and rerun before the combined review handoff. No budget was
 raised. Live execution remains in Theseus, not this checkpoint note.
+
+The subsequent [combined review packet](2026-11-27-studio-finish-review.md)
+records the lifecycle repair, harness fixes and clean final eight-case browser
+rerun. Saved actual-output recovery also passes after those changes. The initial
+checkpoint above is retained as provenance; human judgment is the remaining gate.

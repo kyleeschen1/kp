@@ -9,7 +9,7 @@ import { ChatPeer, MemoryChatStore } from './fixtures/editor-chat.ts';
 const url = (id: string) => `/experiments/fraction-notebook/?notebook=matrix&document=${id}`;
 const equations = (page: Page) => page.locator('.fn-editor .fn-matrix-object[data-math-view=equation]');
 async function ready(page: Page, id: string) {
-  await page.goto(url(id)); await expect(equations(page)).toHaveCount(1);
+  await page.goto(url(id), { waitUntil: 'domcontentloaded' }); await expect(equations(page)).toHaveCount(1);
   await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'valid');
   await expect(page.locator('[data-matrix-studio=ready]')).toHaveCount(1);
 }
@@ -74,7 +74,7 @@ test('matrix reuse keeps live transclusion, local derivation and independent cop
   await transcluded.getByRole('button', { name: 'Explain', exact: true }).click();
   await expect(other.locator('.fn-editor .comb-stage')).toHaveCount(1);
   await other.screenshot({ path: info.outputPath('matrix-reuse-linked.png') });
-  await other.reload(); await expect(equations(other)).toHaveCount(4);
+  await other.reload({ waitUntil: 'domcontentloaded' }); await expect(equations(other)).toHaveCount(4);
   await expect(equations(other).nth(2).getByLabel('v2', { exact: true })).toHaveValue('7');
   await expect(equations(other).nth(1).getByLabel('A11', { exact: true })).toHaveValue('4');
   const returned = await equations(other).nth(1).getAttribute('data-cell-id');
@@ -95,11 +95,22 @@ test('matrix reuse pins updates, preserves undo and retains withdrawn snapshots'
   await expect(imported.getByLabel('A11', { exact: true })).toHaveValue('8');
   await imported.getByLabel('A11', { exact: true }).press('ControlOrMeta+z');
   await expect(imported.getByLabel('A11', { exact: true })).toHaveValue(original);
+  await expect(other.locator('.fn-status')).toContainText('mathematical views up to date');
   await equations(page).first().locator('.fn-math-heading').click(); await command(page, 'matrix.withdraw');
+  // Picker dismissal does not await the publication commit. A refresh before
+  // the tombstone exists correctly sees the previous, still-live revision.
+  const resource = await equations(page).first().getAttribute('data-matrix-resource');
+  await expect.poll(() => page.evaluate(id => new Promise<boolean>((resolve, reject) => {
+    const open = indexedDB.open('kp-matrix-publications-v1'); open.onerror = () => reject(open.error);
+    open.onsuccess = () => { const db = open.result, tx = db.transaction('workspace', 'readonly');
+      const read = tx.objectStore('workspace').get('documents');
+      read.onsuccess = () => resolve((read.result as { document: { id: string }; withdrawn: boolean }[]).find(p => p.document.id === id)?.withdrawn ?? false);
+      read.onerror = () => reject(read.error); tx.oncomplete = () => db.close(); };
+  }), resource)).toBe(true);
   await imported.locator('.fn-math-heading').click(); await command(other, 'matrix.refresh-sources');
   await expect(other.locator('.fn-status')).toContainText('unavailable');
   await expect(imported.getByLabel('A11', { exact: true })).toHaveValue(original);
-  await other.reload(); await expect(equations(other).nth(1).getByLabel('A11', { exact: true })).toHaveValue(original);
+  await other.reload({ waitUntil: 'domcontentloaded' }); await expect(equations(other).nth(1).getByLabel('A11', { exact: true })).toHaveValue(original);
 });
 test('matrix reuse integrates a source-pinned chat note, explicit acceptance, undo and publication', async ({ page, context, browser }, info) => {
   const peer = new ChatPeer(), store = new MemoryChatStore();
@@ -148,7 +159,7 @@ test('matrix reuse integrates a source-pinned chat note, explicit acceptance, un
     await publish(page);
     const other = await context.newPage(); await ready(other, randomUUID()); await reuse(other, 'transclude');
     await expect(equations(other).nth(1).locator('.fn-matrix-note')).toContainText(content);
-    await other.reload(); await expect(equations(other).nth(1).locator('.fn-matrix-note')).toContainText(content);
+    await other.reload({ waitUntil: 'domcontentloaded' }); await expect(equations(other).nth(1).locator('.fn-matrix-note')).toContainText(content);
     await page.screenshot({ path: info.outputPath('matrix-note-accepted.png') });
     await source.locator('.fn-math-heading').click();
     const downloading = page.waitForEvent('download'); await command(page, 'notebook.export-json');

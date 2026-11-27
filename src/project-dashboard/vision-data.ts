@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "One matrix family supports deliberate cross-notebook Copy, Derive and Transclude, and one fresh artifact completes the conversational authoring and reuse journey with evidence and human review.",
     source: { label: "Approved finish scope", href: "docs/project/reviews/2026-11-27-studio-finish.md" }
   },
-  uncertainty: "Ten horizon outcomes have bounded accepted evidence; deliberate cross-notebook reuse and the integrated studio proof remain partial. One accepted model response establishes neither general model reliability nor learner transfer.",
-  nextJudgment: "Review the combined matrix reuse and contextual-note exemplar once its independent-copy, dependency, update and complete authoring workflow checks pass.",
+  uncertainty: "Ten horizon outcomes have bounded accepted evidence. Deliberate matrix reuse and a single-artifact actual-response journey are implemented and await the combined human checkpoint. Two bounded model responses do not establish general reliability or learner transfer.",
+  nextJudgment: "Review the actual matrix note and Copy/Derive/Transclude choices using the combined studio-finish review packet; preserve its explicit publication and snapshot boundaries.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,12 +41,12 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Seven accepted references form one lightweight index. A fresh matrix contrast exports and reopens, and one real fraction annotation is accepted. General reuse and a single-artifact conversational authoring journey remain partial.",
-      evidence: { label: "Accepted collection and authoring evidence", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" },
+      established: "Seven accepted references form one lightweight index. Deliberate matrix Copy/Derive/Transclude and one actual model-revised matrix artifact now traverse export, reuse, reopening and exact return. Their combined candidate awaits human judgment; the earlier fraction annotation remains accepted.",
+      evidence: { label: "Actual studio candidate and remaining judgment", href: "docs/project/reviews/2026-11-27-studio-finish-review.md" },
       outcome: {
         authority: "approved",
         id: "deliberate-mathematical-reuse", title: "Finish deliberate reuse in one mathematical family",
-        finish: "Independent Copy, dependency-preserving Derive and shared-source Transclude work across two notebooks with explicit pinned/live updates, local view state, reload and undo. Then scope one integrated studio proof.",
+        finish: "Independent Copy, dependency-preserving Derive and shared-source Transclude work across two notebooks with explicit pinned/live updates, local view state, reload and undo. One actual model-revised artifact completes the integrated journey and passes human review.",
         excludes: "A universal content database, new mathematics, changing shared chat drafts, unbounded model spending and publication.",
         source: { label: "Approved finish and preservation boundary", href: "docs/project/reviews/2026-11-27-studio-finish.md" }
       }
@@ -884,6 +884,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the annotation. Close the foundation contract and identify ten bounded outcomes complete with deliberate reuse and integrated studio proof partial.",
       reason: "Preserve original finish lines and make the remaining product integration visible before adding mathematical breadth. The next bounded reuse scope is proposed, not silently authorized.",
       source: { label: "Twelve-loop evidence audit", href: "docs/project/reviews/2026-11-27-twelve-loop-review.md" }
+    },
+    {
+      id: "approve-finish-deliberate-reuse-and-studio-proof", on: "2026-11-27",
+      before: "The twelve-outcome audit retained deliberate reuse and one integrated authoring artifact as partial.",
+      after: "The user says go all the way, approving a bounded matrix-family finish, then authorizes one additional isolated read-only model turn. The combined candidate retains human review before closing the horizon.",
+      reason: "Connect the existing authoring and mathematical capabilities before adding families. Retain explicit Copy/Derive/Transclude semantics, publication boundaries, actual response evidence and the original preservation limits.",
+      source: { label: "Approved finish and actual review artifact", href: "docs/project/reviews/2026-11-27-studio-finish-review.md" }
     }
   ]
 };

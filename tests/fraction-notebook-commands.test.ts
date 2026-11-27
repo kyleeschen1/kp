@@ -54,6 +54,20 @@ test('a disposed async owner cannot block or record history for its replacement'
   assert.equal((await replacement.invoke()).ok, true); assert.deepEqual(registry.recent(), ['owner']);
 });
 
+test('notification membership is bounded and a closed registry cannot resolve retiring owners', () => {
+  const registry = new CommandRegistry(() => ({ scope: 'notebook' }), () => {});
+  let calls = 0, remove = () => {};
+  const refresh = () => { calls++; remove(); if (calls < 100) remove = registry.subscribe(refresh); };
+  remove = registry.subscribe(refresh); registry.notify(); assert.equal(calls, 1);
+  remove();
+  let resolutions = 0;
+  const command = registry.targeted({ id: 'closing', title: 'Closing', category: 'Notebook', target: () => { resolutions++; return target('source'); }, run() {} });
+  registry.subscribe(() => command.prepare()); registry.dispose(); registry.notify(); command.prepare(); command.dispose();
+  assert.equal(resolutions, 0);
+  registry.subscribe(() => { calls++; }); registry.notify(); assert.equal(calls, 1);
+  assert.throws(() => registry.add({ id: 'late', title: 'Late', category: 'Notebook', run() {} }), /closed/);
+});
+
 test('launch shortcuts handle interruption, repeat, timeout, composition and Option-generated characters', () => {
   const chord = new CommandShortcut(), base: ShortcutKey = { key: 'x', code: 'KeyX', ctrlKey: true, altKey: false, metaKey: false, shiftKey: false, repeat: false, isComposing: false };
   assert.equal(chord.next(base, 0), 'prefix');

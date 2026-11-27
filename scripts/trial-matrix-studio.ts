@@ -42,7 +42,7 @@ const address = server.address(); if (!address || typeof address === 'string') t
 const backend = `http://127.0.0.1:${address.port}`;
 const equation = (page: Page) => page.locator('.fn-editor .fn-matrix-object[data-math-view=equation]').first();
 async function ready(page: Page, id = randomUUID()) {
-  await page.goto(`${origin}/experiments/fraction-notebook/?notebook=matrix&document=${id}`);
+  await page.goto(`${origin}/experiments/fraction-notebook/?notebook=matrix&document=${id}`, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('[data-matrix-studio=ready]')).toHaveCount(1, { timeout: 45000 });
   await expect(equation(page)).toBeVisible();
 }
@@ -81,7 +81,7 @@ async function verifyReuse(page: Page, context: BrowserContext, browser: Browser
   await expect(other.locator('[data-matrix-studio=ready]')).toHaveCount(1, { timeout: 45000 });
   await command(other, 'matrix.return-to-notebook');
   await expect(other.locator('.fn-editor .ProseMirror-selectednode')).toHaveAttribute('data-cell-id', linkedCell!, { timeout: 45000 });
-  await other.reload(); await expect(linked.locator('.fn-matrix-note')).toContainText(content, { timeout: 45000 });
+  await other.reload({ waitUntil: 'domcontentloaded' }); await expect(linked.locator('.fn-matrix-note')).toContainText(content, { timeout: 45000 });
   await linked.scrollIntoViewIfNeeded(); await other.screenshot({ path: `${captures}/reused.png` });
   const restoredContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   try {
@@ -169,7 +169,8 @@ try {
 finally {
   try { if ((await service.snapshot()).phase === 'running') await service.action({ kind: 'interrupt' }); } catch (error) { result['cleanupNotice'] = String(error); }
   await browser?.close(); await service.close(); await new Promise<void>(resolve => server.close(() => resolve()));
-  result['inferenceAttempts'] = sends; result['sharedConversationUnchanged'] = sharedBefore === await sharedFingerprint(); await save(mode === '--prepare' ? 'preparation' : mode === '--resume' ? 'recovery' : 'result', result);
+  result['inferenceAttempts'] = sends; result['sharedConversationUnchanged'] = sharedBefore === await sharedFingerprint();
+  await save(mode === '--prepare' ? 'preparation' : mode === '--resume' ? failure ? 'recovery-latest-failure' : 'recovery' : 'result', result);
 }
 console.log(JSON.stringify(result, null, 2));
 if (failure) throw failure;

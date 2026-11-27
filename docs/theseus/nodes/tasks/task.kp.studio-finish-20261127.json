@@ -2,8 +2,9 @@
   "id": "task.kp.studio-finish-20261127",
   "kind": "task",
   "title": "Finish deliberate mathematical reuse and integrated studio journey",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: implementation and final gates complete; await combined matrix reuse and actual explanatory-note judgment.",
   "verificationRecords": [
     {
       "command": "npm run visual:matrix-reuse -- --project=firefox",
@@ -11,6 +12,58 @@
       "scope": "broad",
       "checkedAt": "2026-11-27T21:40:53.623Z",
       "notes": "Final expanded run: seven passed, one Firefox page-setup timeout. Browser trace identifies previous pagehide registry disposal invoking matrix target resolution. Preserve failure and repair lifecycle before final gate; earlier six-case run passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T21:56:25.223Z",
+      "notes": "Complete app, node, tests, Svelte and domains pass after command lifecycle repair; no skipped consumers."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T21:56:26.369Z",
+      "notes": "Dependency direction, neutral entrypoints, concept/reader/animation/operation/compiler/governance and cross-domain gateways pass."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T21:56:27.592Z",
+      "notes": "75 pass after shortening the thread from 460 words to within its unchanged 450-word budget."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-notebook-commands.test.ts tests/math-discovery.test.ts tests/interaction-lane.test.ts tests/matrix-reuse.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T21:56:50.865Z",
+      "notes": "29 pass, including deterministic subscription churn, terminal registry shutdown, stale target authority, CAS/identity and source-pinned note tests."
+    },
+    {
+      "command": "npm run measure:notebook-mathematics -- --baseline 6d9be476c3b2e0d1720e4e9b5046f618c64f74b9",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T21:56:52.156Z",
+      "notes": "Complete notebook gzip initial 477359 to 481343; complete JS/CSS 646108 to 656764. Native fraction reader unchanged. Type instantiations 206834 to 208062; no budgets raised or consumers removed."
+    },
+    {
+      "command": "npm run visual:matrix-reuse -- --project=firefox",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T21:57:37.067Z",
+      "notes": "Final full rerun: eight passed in 53.9 seconds, Chromium and Firefox. Phone picker, independent/live/derived/pinned reuse, withdrawal, native undo, exact source/occurrence return, contextual note preview and acceptance, export and conflict-safe fresh import. Earlier failures retained; no skipped tests."
+    },
+    {
+      "command": "npm run visual:matrix-studio-trial -- --resume",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T21:58:13.458Z",
+      "notes": "Final serial check 4.143 seconds: retained actual model note imported, published, transcluded, source/occurrence return verified, reloaded and imported into a fresh browser. Zero inference; zero browser errors; shared conversation unchanged. Original one-turn and failed harness evidence retained."
     }
+  ],
+  "revisitWhen": [
+    "User reviews the actual exported matrix notebook and Copy/Derive/Transclude interaction in the studio-finish-review packet."
   ]
 }

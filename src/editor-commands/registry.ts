@@ -37,6 +37,7 @@ type Registration = { description: CommandDescription; prepare(origin: CommandOr
 /** Descriptions are shared by every UI; execution stays in the registering owner.
  * Captured invocations cannot survive disposal or silently change their target. */
 export class CommandRegistry {
+  private disposed = false;
   private readonly entries = new Map<string, Registration>();
   private readonly running = new Set<Registration>();
   private readonly listeners = new Set<() => void>();
@@ -56,12 +57,13 @@ export class CommandRegistry {
     state?: (value: T, origin: CommandOrigin) => Availability;
     run: (value: T, origin: CommandOrigin) => unknown | Promise<unknown>;
   }): TargetedCommand<T> {
+    if (this.disposed) throw new Error('The command registry has closed');
     if (this.entries.has(spec.id)) throw new Error(`Command already registered: ${spec.id}`);
     const description: CommandDescription = { id: spec.id, title: spec.title, category: spec.category,
       ...(spec.scope ? { scope: spec.scope } : {}), ...(spec.keywords ? { keywords: spec.keywords } : {}),
       ...(spec.keys ? { keys: spec.keys } : {}), ...(spec.description ? { description: spec.description } : {}) };
     const cleanups = new Set<() => void>();
-    const prepare = (origin: CommandOrigin, selected = spec.target(origin)): PreparedCommand => {
+    const prepare = (origin: CommandOrigin, selected: Target<T> = this.entries.get(spec.id) === registration ? spec.target(origin) : { found: false, reason: 'This command owner has closed' }): PreparedCommand => {
       const state = (): Availability => {
         if (this.entries.get(spec.id) !== registration) return unavailable('This command owner has closed');
         const invalid = spec.scope === 'workspace' ? undefined : origin.valid?.(); if (invalid) return unavailable(invalid);
@@ -98,6 +100,7 @@ export class CommandRegistry {
       let unsubscribe = () => {};
       const release = () => { unsubscribe(); cleanups.delete(release); };
       const refresh = () => {
+        if (this.entries.get(spec.id) !== registration) { button.disabled = true; release(); return; }
         if (mounted && !button.isConnected) { release(); return; }
         mounted ||= button.isConnected;
         const value = prepare(buttonOrigin(), typeof selection === 'function' ? selection() : selection).state(); button.disabled = !value.enabled;
@@ -105,7 +108,7 @@ export class CommandRegistry {
         if (value.enabled && value.checked !== undefined) button.setAttribute('aria-pressed', String(value.checked));
       };
       button.onmousedown = event => event.preventDefault();
-      button.onclick = () => { void prepare(buttonOrigin(), typeof selection === 'function' ? selection() : selection).execute(); };
+      button.onclick = () => { if (this.entries.get(spec.id) === registration) void prepare(buttonOrigin(), typeof selection === 'function' ? selection() : selection).execute(); };
       // Object rows need live availability too (e.g. a save has just finished).
       // Release rebuilt rows and abandoned mounts instead of retaining their DOM.
       unsubscribe = this.subscribe(refresh); cleanups.add(release);
@@ -130,7 +133,12 @@ export class CommandRegistry {
     const reason = `Command unavailable: ${id}`; this.report(reason); return Promise.resolve({ ok: false, reason });
   }
   recent(): readonly string[] { return this.history; }
-  subscribe(listener: () => void) { this.listeners.add(listener); return () => { this.listeners.delete(listener); }; }
-  notify() { for (const listener of this.listeners) listener(); }
-  dispose() { this.entries.clear(); this.running.clear(); this.notify(); this.listeners.clear(); }
+  subscribe(listener: () => void) { if (!this.disposed) this.listeners.add(listener); return () => { this.listeners.delete(listener); }; }
+  notify() {
+    if (this.disposed) return;
+    // Refreshing a surface can replace its subscriptions. A live Set iterator
+    // would revisit those new subscriptions indefinitely during teardown.
+    for (const listener of [...this.listeners]) if (!this.disposed && this.listeners.has(listener)) listener();
+  }
+  dispose() { this.disposed = true; this.entries.clear(); this.running.clear(); this.listeners.clear(); }
 }

@@ -50,13 +50,14 @@
     {
       "id": "journey",
       "title": "Integrated-authoring-proof",
-      "summary": "Authorized one actual read-only model turn completed in 12.356 seconds with zero tool messages; proposal preview, acceptance and export succeeded. Native source return hit a five-second harness readiness timeout; recovering from the exported actual notebook without further inference.",
-      "status": "in-progress"
+      "summary": "One authorized actual Codex response was admitted, previewed, accepted and exported. Saved actual artifact then passed independent publication/transclusion, exact source and occurrence return, reload and fresh-context import; zero new inference on recovery and unchanged shared chat. Initial harness failures retained explicitly. Human judgment remains pending.",
+      "status": "complete"
     },
     {
       "id": "review",
       "title": "Combined-exemplar-review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: final eight-case Chromium/Firefox suite, actual saved-artifact journey, full types, architecture and measured consumers pass. Combined packet and actual JSON ready at docs/project/reviews/2026-11-27-studio-finish-review.md. Await judgment of generated note and reuse choices before marking horizon items four and twelve complete.",
+      "status": "in-progress"
     }
   ]
 }

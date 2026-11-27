@@ -6,6 +6,6 @@
   "content": "Each column is weighted by its corresponding input coordinate, so the horizontal contributions cancel and the vertical contributions add to five.",
   "integratedJourney": true,
   "browserErrors": [],
-  "totalMs": 5082,
+  "totalMs": 4143,
   "sharedConversationUnchanged": true
 }
