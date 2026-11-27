@@ -1,15 +1,15 @@
 # Authoring, adaptation and co-creative practice
 
 Status: active context index; execution lives in Theseus
-Last Updated: 2026-11-26
+Last Updated: 2026-11-27
 
 ## Current boundary
 
 The [roadmap](../roadmap.md) owns direction; the [charter](../strategy.md)
 and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rationale.
 
-Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
-Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
+Approved delivery: [three library lanes](../2026-11-27-parallel-library-lanes.md).
+Theseus: `run-contract.kp.parallel-library-lanes-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
@@ -54,7 +54,7 @@ The notebook detour is current; fresh generation and integrated latency remain u
   Accepted: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md).
   Accepted: [head-on absence](../reviews/2026-11-25-graph-section-withdrawal.md).
   Checked: [geometric restriction](../reviews/2026-11-26-graph-section-clipping.md).
-  Reusable-stage discussion and matrix reuse remain proposed; replacement undecided. The
+  Wider stage/matrix promotion remains separate; replacement undecided. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and
   [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain separate.

@@ -1,12 +1,12 @@
 # KP roadmap
 
-Last Updated: 2026-11-26
+Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-graph-section-clipping`
-Execution Contract: `run-contract.kp.graph-section-clipping-20261126`
-Next Product Milestone: `reusable-animation-stage`
-Milestone Authority: proposed
+Current Commitment: `kp-parallel-library-lanes`
+Execution Contract: `run-contract.kp.parallel-library-lanes-20261127`
+Next Product Milestone: `independent-library-lanes`
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -20,6 +20,11 @@ the rationale and superseded priorities.
 Reference experience: [organized rules with reusable, replayable derivations](decisions/2026-11-26-compact-question-led-vignettes.md).
 
 ## Current approved commitment
+
+**Approved:** [three independent library lanes](2026-11-27-parallel-library-lanes.md):
+interaction, mathematical objects and an existing animation player. Separate
+worktrees, runnable fixtures, owned contracts and enforced boundaries; one integrator.
+Section-clipping judgment remains deferred; preserve existing notebook behavior.
 
 **Accepted:** [unified notebook](reviews/2026-11-24-unified-notebook-surface.md),
 [focused editing/styles](reviews/2026-11-24-notebook-style-comparison.md) and
@@ -43,11 +48,10 @@ quiet beige modeline and neutral pane edge. **Accepted:**
 **Accepted:** [section/2D return](reviews/2026-11-25-graph-sections-planar.md).
 **Accepted:** [head-on mesh removal](reviews/2026-11-25-graph-section-withdrawal.md).
 **Checked, awaiting judgment:** [geometric restriction](reviews/2026-11-26-graph-section-clipping.md).
-Reusable-stage discussion and matrix reuse remain proposed; renderer replacement undecided. Preserve
+Wider player/matrix promotion remains separate; renderer replacement undecided. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and
-[sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected.
-Retain the 440px column, persistent composition, data and native rendering.
+[sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected; preserve data and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
 is deferred behind persistent conversation; automatic document edits remain excluded.
@@ -55,10 +59,6 @@ Exclude publication and general editor promotion. Custom motions, transclusion
 and search remain parked; MathML declined.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md) retains composition
 evidence; its inspector was unaccepted. Fractional editorial review remains parked.
-
-The mathematical proposal serves [authoring-to-practice](2026-11-08-authoring-to-practice-loops.md);
-preserve its dependencies and human gates.
-[Orientation delivery](2026-11-08-project-orientation-delivery.md) stays complete.
 
 What counts remains the technical reference. Preserve the
 [accepted reading defaults](principles/document-theater-reading.md).
@@ -90,13 +90,11 @@ blocker. Prior completed architecture and maintenance work stays complete.
 
 ## How to stay oriented
 
-- **Codex flow:** [saved restart cue](reviews/2026-11-10-agent-flow-baseline.md#restart-handoff--november-13-2026), discussion only.
 - Open `/?view=dashboard#project-vision` for direction, approval boundaries,
   recent evidence, proposed successor and the next human judgment.
 - Run `npm run project:orientation` for this briefing and the named Theseus
   contract. Source snapshots are not live monitors.
-- Current sources: `.worktrees/kp-product`. Parallel checkout direction is older;
-  its owner controls integration.
+- Integration checkout: `.worktrees/kp-product`; lane ownership is in the approved plan.
 - Read this page, [the active thread](threads/co-creative-practice.md), and the
   charter for rationale. Retrieve only the selected task's sources afterward.
 - At handoff, state capability, uncertainty and direction changes. Reconcile strategy

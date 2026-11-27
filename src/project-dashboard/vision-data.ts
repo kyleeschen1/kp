@@ -5,37 +5,37 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-graph-section-clipping",
-    title: "Narrow the surface to its selected section",
+    id: "kp-parallel-library-lanes",
+    title: "Develop three library lanes independently",
     approval: "approved",
-    contractId: "run-contract.kp.graph-section-clipping-20261126",
-    finish: "Two clipping boundaries close toward y=c during the camera turn. The surviving surface keeps its shape and opaque paint; the red section persists. Reverse and direct seek preserve the same restriction, head-on absence and exact camera return. Stop at one exemplar review before promotion.",
-    source: { label: "Approved geometric restriction exemplar", href: "docs/project/2026-11-26-graph-section-clipping.md" }
+    contractId: "run-contract.kp.parallel-library-lanes-20261127",
+    finish: "Interaction, mathematical-object and existing-animation fixtures run, build and test independently. Documented entrypoints, separate worker ownership and executable import boundaries preserve the notebook and graph consumers. Stop before broader product promotion.",
+    source: { label: "Approved parallel library lanes", href: "docs/project/2026-11-27-parallel-library-lanes.md" }
   },
   uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Review whether the mesh retreating from both sides reads clearly as selecting y=c, with the curve remaining easy to follow during rotation and return. Reusable-stage design and matrix authoring remain proposed; this does not select a universal renderer or player.",
+  nextJudgment: "Inspect the three standalone labs and whether their contracts make independent development practical. Existing section-clipping choreography still has its own pending review; these fixtures do not promote it or select a universal renderer.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
     { title: "Practice and retrieve", outcome: "Connected problems, feedback and flashcards develop the same instructional distinctions." },
     { title: "Grow the library", outcome: "Curated adaptive material becomes easier to reuse, embed and maintain across domains." }
   ],
-  reviewedOn: "2026-11-26",
+  reviewedOn: "2026-11-27",
   northStar: "Help authors create extraordinary explanations that teach people what to notice.",
   productProof: "Learners can question, adapt, practice and revisit that material while preserving its important reasoning and relationships. Exceptional featured content demonstrates the medium; authoring is the first product center.",
   productSource: { label: "Product charter", href: "docs/project/strategy.md" },
   areas: [
     {
-      id: "architecture", title: "Architecture & retirement", horizon: "later",
+      id: "architecture", title: "Architecture & retirement", horizon: "next",
       destination: "Replace a part without rebuilding its neighbors. Finish migrations and remove obsolete paths.",
       established: "Specialized configs and selected algebra styles have explicit owners. The shared algebra card now releases browser callbacks before disposing its clock; native and edition lifecycle checks pass. Broader consolidation remains separate.",
       evidence: { label: "Teardown repair and preservation evidence", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" },
       outcome: {
-        authority: "proposed",
-        id: "remove-authoring-blocker", title: "Remove a demonstrated obstacle to authoring",
-        finish: "The selected authoring proof identifies a concrete boundary or cost; a bounded repair removes it and preserves complete existing consumers.",
-        excludes: "A speculative architecture campaign, new task queue or unrelated CSS rollout.",
-        source: { label: "Infrastructure admission criteria", href: "docs/project/strategy.md" }
+        authority: "approved",
+        id: "independent-library-lanes", title: "Three independently runnable development lanes",
+        finish: "Three standalone fixtures have documented APIs, separate worker paths, build/type/unit checks and executable dependency boundaries. One integrator verifies the combined result without changing the accepted notebook experience.",
+        excludes: "Separate release repositories, a universal object framework, new scrolling, broad Vim work, renderer replacement and publication.",
+        source: { label: "Approved three-lane delivery", href: "docs/project/2026-11-27-parallel-library-lanes.md" }
       }
     },
     {
@@ -91,7 +91,7 @@ export const projectVision: ProjectVision = {
       }
     },
     {
-      id: "learning", title: "Experiments & workbench", horizon: "next",
+      id: "learning", title: "Experiments & workbench", horizon: "later",
       destination: "Learn systematically from examples, recover useful findings, and keep unfinished commitments visible.",
       established: "The grid/saddle and linked section/planar-return exemplars are accepted. Exact mathematical and camera return, retained uploads and lifecycle behavior have bounded evidence. Prepared native notation, compiled publication artifacts and dependency manifests already exist; a unified reusable player and broad device performance remain unproved.",
       evidence: { label: "Section acceptance and reusable-player discussion", href: "docs/project/reviews/2026-11-25-graph-sections-planar.md" },
@@ -631,6 +631,13 @@ export const projectVision: ProjectVision = {
       after: "The user clarifies that gestalt, composability and repeat visits are primary: organized pages of trig identities, calculus rules and practical mathematics open derivation animations when a rule is selected.",
       reason: "The reference page supplies the whole; reusable derivations explain its parts on demand. Preserve compact styling and semantic identity without making a linear lesson or required quiz the default. This is a product clarification, not a new implementation approval.",
       source: { label: "Reference-first clarification", href: "docs/project/decisions/2026-11-26-compact-question-led-vignettes.md" }
+    },
+    {
+      id: "approve-independent-library-lanes", on: "2026-11-27",
+      before: "The graph clipping candidate awaits judgment; reusable stages and matrix authoring remain proposed after restoring default fraction scrolling.",
+      after: "The user approves three independently runnable development lanes: interaction primitives, mathematical objects and an existing animation player, with one integration owner. Preserve the current product and defer broader promotion.",
+      reason: "Parallel development needs enforceable boundaries and small independent fixtures. Existing ownership gaps and editor-to-notebook dependencies make separation concrete work; separate repositories would add premature release coordination.",
+      source: { label: "Approved parallel scope and ownership", href: "docs/project/2026-11-27-parallel-library-lanes.md" }
     }
   ]
 };

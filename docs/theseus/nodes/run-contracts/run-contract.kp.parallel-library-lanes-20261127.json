@@ -1,0 +1,70 @@
+{
+  "id": "run-contract.kp.parallel-library-lanes-20261127",
+  "kind": "run-contract",
+  "title": "Parallel library development lanes",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.parallel-library-lanes-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-27-parallel-library-lanes.md"
+    }
+  ],
+  "verification": [
+    "npm run check:library-lanes",
+    "npm run visual:library-lanes",
+    "npm run check:architecture",
+    "npm run test:project-vision"
+  ],
+  "allowedWork": [
+    "Three scoped library facades and fixtures, responsible boundary repairs, tests, documentation and feature-branch integration"
+  ],
+  "disallowedWork": [
+    "New scrolling, universal object framework, publication, new dependencies, broad Vim parity or existing visual gate promotion"
+  ],
+  "goal": "Run and verify interaction, mathematical-object and animation-player fixtures independently while preserving KP",
+  "target": "task.kp.parallel-library-lanes-20261127",
+  "runMode": "run",
+  "maxSlices": 5,
+  "commitCadence": "Commit verified lane and integration outcomes; backup at least hourly and before handoff",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Four-hour ceiling with final 45 minutes reserved for verification and backup",
+    "Required visual judgment before broad promotion"
+  ],
+  "slices": [
+    {
+      "id": "setup",
+      "title": "Own contracts and isolated worktrees",
+      "summary": "Three separate worktrees, fixed path ownership, local dependency copies and documented contracts established; orientation suite passes 75 checks.",
+      "status": "complete"
+    },
+    {
+      "id": "interaction",
+      "title": "Independent commands and row picker",
+      "summary": "Isolated worker implementing the fixed lane packet; root owns shared contracts and integration.",
+      "status": "in-progress"
+    },
+    {
+      "id": "mathematics",
+      "title": "Independent matrix-vector resource fixture",
+      "summary": "Isolated worker implementing the fixed lane packet; root owns shared contracts and integration.",
+      "status": "in-progress"
+    },
+    {
+      "id": "player",
+      "title": "Independent existing animation in two sizes",
+      "summary": "Isolated worker implementing the fixed lane packet; root owns shared contracts and integration.",
+      "status": "in-progress"
+    },
+    {
+      "id": "integration",
+      "title": "Verify boundaries and hand off runnable lanes",
+      "status": "planned"
+    }
+  ]
+}

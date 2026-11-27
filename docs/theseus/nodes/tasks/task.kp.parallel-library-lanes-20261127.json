@@ -1,0 +1,12 @@
+{
+  "id": "task.kp.parallel-library-lanes-20261127",
+  "kind": "task",
+  "title": "Three independently runnable technical-interface lanes",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-27-parallel-library-lanes.md"
+    }
+  ]
+}
