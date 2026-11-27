@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-inner-product-projection",
-    title: "Author an editable inner-product and projection explanation",
+    id: "kp-projection-notebook-reuse",
+    title: "Reuse projection in a persistent notebook",
     approval: "approved",
-    contractId: "run-contract.kp.inner-product-projection-20261127",
-    finish: "One editable Euclidean R2 vector pair links native notation to signed projection and a perpendicular residual, including orthogonal and zero cases. The independent exemplar is accepted, closing this finite commitment; notebook reuse remains a separate successor.",
-    source: { label: "Approved projection exemplar", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
+    contractId: "run-contract.kp.projection-notebook-reuse-20261127",
+    finish: "Save integer vector pairs in the notebook, discover their explanation, and reuse the accepted player. Native undo/reload preserve sources; linked occurrences have independent playback and ordinary copies have independent sources. Finish with the second-host review before broader promotion.",
+    source: { label: "Approved notebook reuse and review", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Scope persistent notebook reuse of the accepted projection as its second host. The separate actual-response annotation revision trial remains pending.",
+  nextJudgment: "Review editing, linked occurrences and reading in the projection notebook. The separate actual-response annotation revision trial remains pending; composition and signed area remain the next mathematical family in the studio horizon.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry, quadratic forms and the editable R2 projection are accepted. The independent projection reuses existing mathematics and sampling with signed/zero cases, native notation and local discovery. Persistent vector-pair notebook reuse and actual model usefulness remain unproved.",
-      evidence: { label: "Projection acceptance and limits", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" },
+      established: "Linked matrix geometry, quadratic forms and the editable R2 projection are accepted. Projection now reuses one player in reference and notebook, with persistent sources, native history, independent copies and local playback. The second-host presentation awaits judgment; actual model usefulness remains unproved.",
+      evidence: { label: "Projection notebook evidence and limits", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "projection-notebook-reuse", title: "Reuse the accepted projection in a saved notebook",
-        finish: "Scope a persistent vector pair with discoverable relationships and the accepted explanation in the notebook. Native history and reload preserve source identity; occurrences retain local playback and ordinary copies remain independent. Pressure the second host before broader promotion.",
-        excludes: "Implementation before bounded approval, decimal support, cross-notebook Derive/Transclude, arbitrary inner-product spaces, new animation families, paid model calls and publication.",
-        source: { label: "Accepted exemplar and proposed second host", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
+        finish: "Persistent vector pairs expose the accepted explanation in the notebook. Native history and reload preserve source identity; occurrences retain local playback and ordinary copies remain independent. Review the second host before broader promotion.",
+        excludes: "Decimal support, mixed-family notebooks, cross-notebook Derive/Transclude, arbitrary inner-product spaces, new animation families, paid model calls and publication.",
+        source: { label: "Approved second-host scope", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" }
       }
     },
     {
@@ -787,6 +787,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the presentation. Close the bounded exemplar and recommend separately scoped notebook reuse through persistent source identity, native history and occurrence-local playback.",
       reason: "A second real host would make the accepted relationship reusable in authored explanations while keeping completion, product usefulness and broader promotion distinct.",
       source: { label: "Acceptance and successor boundary", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
+    },
+    {
+      id: "approve-projection-notebook-reuse", on: "2026-11-27",
+      before: "The accepted independent projection had URL restoration but no persistent notebook resource.",
+      after: "The user asks to continue as long as possible along the prior recommendations. Add the bounded persistent notebook host, sharing the accepted renderer, with native history, linked views and independent copies; stop at its second-host review.",
+      reason: "Connect the new mathematical family to the earlier reuse recommendation instead of accumulating isolated demonstrations. Preserve the broader studio horizon and the unresolved actual-model trial.",
+      source: { label: "Notebook reuse scope and evidence", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" }
     }
   ]
 };

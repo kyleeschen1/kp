@@ -1,6 +1,14 @@
 {
+  "playwright.inner-product-projection.config.ts": {
+    "sha256": "84654ed5964e06dfe2862b7cf7ac81fb2e7b437718e9940c16960d7dd49892e6",
+    "projects": 3
+  },
+  "playwright.projection-notebook.config.ts": {
+    "sha256": "825dff879d12f93b9cd6216bc69044a79cb54cbf7602b6434ae2da21686243a1",
+    "projects": 3
+  },
   "playwright.matrix-reference.config.ts": {
-    "sha256": "4571cbca7fa6f8fd16b375253a55bfb6596591101d915c9a7cfa38cc7a0c1a9b",
+    "sha256": "f3ed1fd29fa173e0d4cec02a70e9a7db4b2f5e66965e883d2e2afd2a116c83d3",
     "projects": 3
   },
   "playwright.direct-webgl-graph.config.ts": {

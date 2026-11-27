@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 3,
+  "id": "27000000-0000-4000-8000-000000000001",
+  "revision": 0,
+  "projectionResources": [
+    {
+      "id": "27000000-0000-4000-8000-000000000002",
+      "revision": 0,
+      "draft": [
+        "4",
+        "2",
+        "1",
+        "1"
+      ],
+      "admitted": [
+        "4",
+        "2",
+        "1",
+        "1"
+      ]
+    }
+  ],
+  "cells": [
+    {
+      "type": "articleHeader",
+      "id": "27000000-0000-4000-8000-000000000003",
+      "metadata": {},
+      "title": {
+        "type": "title",
+        "id": "27000000-0000-4000-8000-000000000004",
+        "metadata": {},
+        "content": [
+          {
+            "type": "text",
+            "text": "How much of one vector lies along another?",
+            "marks": [],
+            "annotations": []
+          }
+        ]
+      },
+      "authors": [
+        {
+          "type": "authorCredit",
+          "id": "27000000-0000-4000-8000-000000000005",
+          "metadata": {},
+          "name": "Kinetic Press",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "type": "block",
+      "id": "27000000-0000-4000-8000-000000000006",
+      "metadata": {},
+      "kind": "paragraph",
+      "title": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "Find a multiple of b that leaves a perpendicular remainder. Edit the vector pair below; its linked explanation follows the same saved source.",
+          "marks": [],
+          "annotations": []
+        }
+      ],
+      "children": [],
+      "layout": "flow",
+      "folded": false
+    },
+    {
+      "type": "projectionObject",
+      "id": "27000000-0000-4000-8000-000000000007",
+      "metadata": {},
+      "resource": "27000000-0000-4000-8000-000000000002",
+      "view": "inputs",
+      "folded": false
+    },
+    {
+      "type": "projectionObject",
+      "id": "27000000-0000-4000-8000-000000000008",
+      "metadata": {},
+      "resource": "27000000-0000-4000-8000-000000000002",
+      "view": "explanation",
+      "folded": false
+    },
+    {
+      "type": "block",
+      "id": "27000000-0000-4000-8000-000000000009",
+      "metadata": {},
+      "kind": "paragraph",
+      "title": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "Write the parallel part as p = αb. Requiring the remainder r = a − αb to be perpendicular to b gives α = (a · b)/(b · b), provided b is nonzero. Try reversing b: α changes sign, but the projected vector stays the same.",
+          "marks": [],
+          "annotations": []
+        }
+      ],
+      "children": [],
+      "layout": "flow",
+      "folded": false
+    }
+  ]
+}

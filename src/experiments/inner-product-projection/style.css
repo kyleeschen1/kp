@@ -22,28 +22,4 @@ button, summary { cursor: pointer; } :focus-visible { outline: 2px solid var(--c
 fieldset + fieldset { margin-inline-start: 1.25rem; } legend { color: var(--color-muted); }
 fieldset input { inline-size: 5rem; } fieldset label + label { margin-inline-start: .5rem; }
 .input-help { color: var(--color-muted); font-size: .85em; }
-[data-diagnostic]:empty { display: none; } [data-diagnostic] { color: var(--color-red-light); }
-[data-cue] { min-block-size: 2em; margin-block: 1.1rem .3rem; }
-.comparison { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: 1rem; align-items: center; }
-.evidence { min-inline-size: 0; } [data-notation] { min-block-size: 7rem; display: grid; align-content: center; gap: .6rem; }
-[data-notation] .katex { font-size: 1.1em; } .key { display: grid; gap: .25em; }
-[data-role=source] { color: var(--color-green-light); } [data-role=target] { color: var(--color-blue-light); }
-[data-role=parallel] { color: var(--color-red-light); } [data-role=residual] { color: var(--color-ink); }
-[data-graph] { margin: 0; min-inline-size: 0; } [data-graph] svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
-.graph-svg__background { fill: var(--color-paper); } .graph-axis line { stroke: var(--color-border); stroke-width: 1; }
-.graph-axis text { fill: var(--color-muted); font: inherit; }
-[data-graph] [data-role] { stroke: currentColor; fill: none; stroke-width: 1; }
-[data-graph] [data-role] > * { vector-effect: non-scaling-stroke; }
-[data-graph] [data-role=target] line { stroke-dasharray: 5 3; }
-[data-graph] [data-role=residual] line { stroke-dasharray: 2 3; }
-[data-graph] [data-role=parallel] { stroke-width: 1.5; }
-[data-graph] [data-role=guide] { color: var(--color-border); } [data-role=guide] :is(path, circle) { display: none; }
-[data-graph] [data-role=drop] { stroke: var(--color-red-light); fill: var(--color-paper); }
-[data-graph] [data-role=right-angle] { stroke: var(--color-ink); }
-[data-graph] [data-role=drop-guide] { stroke: var(--color-ink); stroke-dasharray: 2 3; vector-effect: non-scaling-stroke; }
-.playback input { flex: 1 1 10rem; min-inline-size: 5rem; accent-color: var(--color-red-light); }
-.playback label { min-inline-size: 0; inline-size: min(100%, 27rem); }
-.playback select { inline-size: 100%; }
 details { margin-block-start: 1.5rem; } .kp-row-picker { box-shadow: 0 .5rem 2rem var(--color-raised-shadow); }
-@media (max-width: 650px) { .comparison { grid-template-columns: minmax(0, 1fr); gap: 0; } [data-graph] { inline-size: min(100%, 300px); } [data-notation] { min-block-size: 0; } .key { grid-template-columns: 1fr 1fr; } }
-@media (forced-colors: active) { [data-graph] [data-role], [data-graph] [data-role=drop], [data-graph] [data-role=right-angle] { stroke: CanvasText; } }

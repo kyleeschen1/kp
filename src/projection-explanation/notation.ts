@@ -1,5 +1,5 @@
-import { renderLatexToHtml } from '../../rendering/katex-adapter.ts';
-import type { KpVectorDotProjectionSemanticModel } from '../../animation/vector-dot-projection-semantic-model.ts';
+import { renderLatexToHtml } from '../rendering/katex-adapter.ts';
+import type { KpVectorDotProjectionSemanticModel } from '../animation/vector-dot-projection-semantic-model.ts';
 import { vectorLatex, numberText, type ProjectionBeat } from './model.ts';
 
 const number = (n: number) => n < 0 ? `(${numberText(n)})` : numberText(n);

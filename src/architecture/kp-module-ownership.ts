@@ -165,6 +165,10 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     ownershipRule("src/interaction/", "renderer", "Independent browser picker over the existing row and command owners."),
     ownershipRule("src/math-discovery/", "renderer", "Metadata rows capture existing host commands without importing mathematical evaluators or product hosts."),
     ownershipRule("src/math-resources/", "neutral-core", "Validated persistent resources and derivations have no host or renderer ownership."),
+    ownershipRule("src/projection-explanation/draft.ts", "neutral-core", "Bounded integer coordinate admission without a renderer or evaluator."),
+    ownershipRule("src/projection-explanation/resource.ts", "neutral-core", "Persistent vector pairs and independent-copy identities; no host or playback ownership."),
+    ownershipRule("src/projection-explanation/model.ts", "experience", "Editable vector-pair preparation and accepted cues over the existing semantic compiler."),
+    ownershipRule("src/projection-explanation/", "renderer", "Accepted projection notation, graph and clock mount shared by reference and notebook; hosts retain persistence and routing."),
     ownershipRule("src/animation-player/", "renderer", "Reusable retained rendering and lifecycle adapters consume existing semantic and clock owners."),
     // The notebook reuses this inspected mount closure, not the experiment's
     // page/author/route hosts. Exact paths retain that distinction until a

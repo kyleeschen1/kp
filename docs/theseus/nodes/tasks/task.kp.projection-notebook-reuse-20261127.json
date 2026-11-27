@@ -1,0 +1,82 @@
+{
+  "id": "task.kp.projection-notebook-reuse-20261127",
+  "kind": "task",
+  "title": "Reuse the accepted projection in a persistent notebook",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: persistent projection notebook implemented and checked; second-host presentation review remains.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-projection-notebook-reuse.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:projection-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T14:26:26.278Z",
+      "notes": "38 passed after explicitly adding two owned discovery commands to the inventory. Native history, copying, cache, invalid drafts and matrix/quadratic preservation."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T14:26:27.368Z",
+      "notes": "28 passed; original fraction and structure editing boundaries preserved."
+    },
+    {
+      "command": "npm run visual:projection-notebook -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:26:28.008Z",
+      "notes": "Final 14 Chromium and Firefox workflows pass without retries after documented whitespace and test-harness repairs. Delayed import, cut capacity recovery, local playback, source persistence and real theme commands checked."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:26:28.628Z",
+      "notes": "Full application, node, tests, Svelte and domains passed. Final scoped notebook and test checks also pass after refinements."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:26:29.258Z",
+      "notes": "New pure source, preparation and renderer modules have explicit layer ownership; all gates pass with no new retiring exceptions."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:26:29.881Z",
+      "notes": "Pass after source-reviewed reconciliation of two projection suites, existing matrix linked-embed inclusion, and existing notebook theme plugin hooks. No consumer omitted."
+    },
+    {
+      "command": "npm run measure:notebook-mathematics -- --baseline 794ba3eb7351324035478a5d310cd1709809039b",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:26:30.500Z",
+      "notes": "Complete notebook JS/CSS gzip 619318 to 633651; initial JS 475511 to 476678; native reader unchanged. Projection evaluator/player lazy gate passes. Type instantiations 202334 to 204793."
+    },
+    {
+      "command": "npm run build:inner-product-projection",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:26:31.124Z",
+      "notes": "Shared player reference build passes; JS/CSS gzip 103020, total emitted gzip 1014618 across64files including fonts."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T14:26:31.751Z",
+      "notes": "75 passed after shortening startup summaries under unchanged word budgets; approval and review boundary aligned."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews /experiments/fraction-notebook/?notebook=projection."
+  ]
+}

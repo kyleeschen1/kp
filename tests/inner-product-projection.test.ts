@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { compileKpVectorDotProjectionSemanticModel } from '../src/animation/vector-dot-projection-semantic-model.ts';
 import { sampleDotProjectionModel } from '../src/animation/dot-projection-model-frame.ts';
-import { examples, prepareProjection, readProjectionUrl, beatIds } from '../src/experiments/inner-product-projection/model.ts';
-import { notation, mathHtml } from '../src/experiments/inner-product-projection/notation.ts';
+import { examples, prepareProjection, readProjectionUrl, beatIds } from '../src/projection-explanation/model.ts';
+import { notation, mathHtml } from '../src/projection-explanation/notation.ts';
 
 test('editable examples preserve signed projection, zero source and undefined direction', () => {
   for (const example of examples) {

@@ -18,7 +18,8 @@ actual-model trial pending. [Linked views](../reviews/2026-11-27-linked-math-vie
 are accepted; default adoption closes their milestone.
 Accepted: [editable R2 projection](../reviews/2026-11-27-inner-product-projection.md).
 Closed record: `run-contract.kp.inner-product-projection-20261127`.
-Proposed next: persistent notebook reuse.
+Approved: [projection notebook](../reviews/2026-11-27-projection-notebook-reuse.md),
+awaiting second-host review. Execution: `run-contract.kp.projection-notebook-reuse-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
@@ -88,5 +89,4 @@ Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.m
 
 ## Coordination and handoff
 
-Handoffs name capability, finish, evidence and artifact.
-Visual acceptance does not approve broader architecture or delivery.
+Theseus owns execution; visual acceptance does not approve broader delivery.

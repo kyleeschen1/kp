@@ -1,0 +1,59 @@
+{
+  "id": "run-contract.kp.projection-notebook-reuse-20261127",
+  "kind": "run-contract",
+  "title": "Persistent projection notebook",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: three of four packages complete; awaiting the required second-host presentation review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.projection-notebook-reuse-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-projection-notebook-reuse.md"
+    }
+  ],
+  "verification": [
+    "npm run test:projection-notebook",
+    "npm run visual:projection-notebook"
+  ],
+  "revisitWhen": [
+    "User reviews the persistent projection notebook."
+  ],
+  "allowedWork": [
+    "Approved projection notebook reuse and demonstrated owner repairs; six-hour ceiling with final hour reserved for verification"
+  ],
+  "disallowedWork": [
+    "New animation families, mixed notebooks, general CAS, paid calls, publication, broad promotion"
+  ],
+  "goal": "Saved vector pairs and independent occurrences reuse the accepted projection through native history and reload",
+  "target": "task.kp.projection-notebook-reuse-20261127",
+  "slices": [
+    {
+      "id": "source",
+      "title": "Persistent-source",
+      "summary": "Strict vector-pair admission, last-valid draft persistence, native history, shared calculation cache, independent copies and cut identity pass focused checks; existing matrix and quadratic persistence preserved.",
+      "status": "complete"
+    },
+    {
+      "id": "host",
+      "title": "Notebook-and-reference",
+      "summary": "Notebook and independent reference share the accepted projection player. Commands, discovery, linked occurrences, local playback, folding and reader/editor cleanup pass Chromium and Firefox; final whitespace repair being rechecked.",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "title": "Integration-checks",
+      "summary": "Focused preservation, full types, architecture, tooling inventories, complete consumer costs and final14Chromium/Firefox checks pass. Source-linked review record documents repaired failures and limits.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Second-host-review",
+      "summary": "HUMAN_CHECKPOINT: judge edit/reuse clarity and narrow reading in the second host. Implementation and verification packages complete; review packet and working URL recorded.",
+      "status": "in-progress"
+    }
+  ]
+}

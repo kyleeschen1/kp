@@ -116,7 +116,12 @@
         {
           "apply": "serve",
           "configureServer": "<hook>",
-          "name": "kp-fraction-notebook"
+          "handleHotUpdate": "<hook>",
+          "name": "kp-fraction-notebook",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "post"
+          }
         },
         {
           "apply": "serve",
@@ -469,7 +474,12 @@
         {
           "apply": "serve",
           "configureServer": "<hook>",
-          "name": "kp-fraction-notebook"
+          "handleHotUpdate": "<hook>",
+          "name": "kp-fraction-notebook",
+          "transformIndexHtml": {
+            "handler": "<hook>",
+            "order": "post"
+          }
         },
         {
           "apply": "serve",

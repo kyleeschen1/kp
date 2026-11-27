@@ -1,0 +1,47 @@
+/* Scoped accepted projection paint. Host typography and palette remain inherited. */
+/* ProseMirror preserves authored whitespace. This renderer owns generated
+ * markup, whose indentation must not become extra document lines. */
+.kp-projection { white-space: normal; container-type: inline-size; min-inline-size: 0; --kp-focus-card-passage-font: var(--kp-document-font); --kp-focus-card-ui-font: var(--kp-document-font); }
+.kp-projection [hidden] { display: none !important; }
+.kp-projection button, .kp-projection input, .kp-projection select { font: inherit; color: inherit; background: var(--color-paper); border: 1px solid var(--color-border); padding: .3em .55em; border-radius: 3px; max-inline-size: 100%; }
+.kp-projection button { cursor: pointer; }
+.kp-projection :focus-visible { outline: 2px solid var(--color-emphasis); outline-offset: 2px; }
+.kp-projection .input-help { color: var(--color-muted); font-size: .85em; }
+.kp-projection [data-diagnostic]:empty { display: none; }
+.kp-projection [data-diagnostic] { color: var(--color-red-light); }
+.kp-projection [data-cue] { min-block-size: 2em; margin-block: 1.1rem .3rem; }
+.kp-projection .comparison { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: 1rem; align-items: center; }
+.kp-projection .evidence { min-inline-size: 0; }
+.kp-projection [data-notation] { min-block-size: 7rem; display: grid; align-content: center; gap: .6rem; overflow-x: auto; }
+.kp-projection [data-notation] .katex { font-size: 1.1em; }
+.kp-projection .key { display: grid; gap: .25em; }
+.kp-projection [data-role=source] { color: var(--color-green-light); }
+.kp-projection [data-role=target] { color: var(--color-blue-light); }
+.kp-projection [data-role=parallel] { color: var(--color-red-light); }
+.kp-projection [data-role=residual] { color: var(--color-ink); }
+.kp-projection [data-graph] { margin: 0; min-inline-size: 0; }
+.kp-projection [data-graph] svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
+.kp-projection .graph-svg__background { fill: var(--color-paper); }
+.kp-projection .graph-axis line { stroke: var(--color-border); stroke-width: 1; }
+.kp-projection .graph-axis text { fill: var(--color-muted); font: inherit; }
+.kp-projection [data-graph] [data-role] { stroke: currentColor; fill: none; stroke-width: 1; }
+.kp-projection [data-graph] [data-role] > * { vector-effect: non-scaling-stroke; }
+.kp-projection [data-graph] [data-role=target] line { stroke-dasharray: 5 3; }
+.kp-projection [data-graph] [data-role=residual] line { stroke-dasharray: 2 3; }
+.kp-projection [data-graph] [data-role=parallel] { stroke-width: 1.5; }
+.kp-projection [data-graph] [data-role=guide] { color: var(--color-border); }
+.kp-projection [data-role=guide] :is(path, circle) { display: none; }
+.kp-projection [data-graph] [data-role=drop] { stroke: var(--color-red-light); fill: var(--color-paper); }
+.kp-projection [data-graph] [data-role=right-angle] { stroke: var(--color-ink); }
+.kp-projection [data-graph] [data-role=drop-guide] { stroke: var(--color-ink); stroke-dasharray: 2 3; vector-effect: non-scaling-stroke; }
+.kp-projection .playback { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+.kp-projection .playback input { flex: 1 1 10rem; min-inline-size: 5rem; accent-color: var(--color-red-light); }
+.kp-projection .playback label { min-inline-size: 0; inline-size: min(100%, 27rem); }
+.kp-projection .playback select { inline-size: 100%; }
+@container (max-width: 650px) {
+  .kp-projection .comparison { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .kp-projection [data-graph] { inline-size: min(100%, 300px); }
+  .kp-projection [data-notation] { min-block-size: 0; }
+  .kp-projection .key { grid-template-columns: 1fr 1fr; }
+}
+@media (forced-colors: active) { .kp-projection [data-graph] [data-role] { stroke: CanvasText; } }

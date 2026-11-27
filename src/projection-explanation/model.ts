@@ -1,6 +1,9 @@
-import { compileKpVectorDotProjectionSemanticModel } from '../../animation/vector-dot-projection-semantic-model.ts';
-import { kpVectorDotProjectionExemplarContract } from '../../animation/vector-dot-projection-exemplar-contract.ts';
-import type { KpVector2 } from '../../animation/vector-dot-projection-exemplar-contract.ts';
+import { compileKpVectorDotProjectionSemanticModel } from '../animation/vector-dot-projection-semantic-model.ts';
+import { kpVectorDotProjectionExemplarContract } from '../animation/vector-dot-projection-exemplar-contract.ts';
+import type { KpVector2 } from '../animation/vector-dot-projection-exemplar-contract.ts';
+import { coordinate, type ProjectionDraft } from './draft.ts';
+export type { ProjectionDraft } from './draft.ts';
+export { coordinate } from './draft.ts';
 
 export const cues = {
   'source-pose': 'How much of a lies along b?',
@@ -26,16 +29,15 @@ export const examples = [
   { id: 'zero-target', title: 'Zero b', a: [4, 2], b: [0, 0] }
 ] as const satisfies readonly { id: string; title: string; a: KpVector2; b: KpVector2 }[];
 
-export type ProjectionDraft = readonly [string, string, string, string];
-const coordinate = (text: string) => /^[+-]?\d+$/.test(text.trim()) && Math.abs(Number(text)) <= 1000;
-export function prepareProjection(draft: ProjectionDraft) {
+export function prepareProjection(draft: ProjectionDraft, id = 'projection.editable') {
   const bad = draft.findIndex(value => !coordinate(value));
   if (bad !== -1) return { status: 'invalid' as const, index: bad,
     message: 'Use integer coordinates from −1000 to 1000. The last valid view is retained.' };
   const a: KpVector2 = [Number(draft[0]), Number(draft[1])], b: KpVector2 = [Number(draft[2]), Number(draft[3])];
-  const result = compileKpVectorDotProjectionSemanticModel({ id: 'projection.editable',
-    sourceVectorId: 'projection.a', targetVectorId: 'projection.b',
-    projectionVectorId: 'projection.parallel', residualVectorId: 'projection.residual', sourceVector: a, targetVector: b });
+  const prefix = id === 'projection.editable' ? 'projection' : id;
+  const result = compileKpVectorDotProjectionSemanticModel({ id,
+    sourceVectorId: `${prefix}.a`, targetVectorId: `${prefix}.b`,
+    projectionVectorId: `${prefix}.parallel`, residualVectorId: `${prefix}.residual`, sourceVector: a, targetVector: b });
   if (result.status === 'rejected') return { status: 'undefined' as const, a, b,
     diagnostics: result.diagnostics, message: result.diagnostics.map(item => item.message).join(' ') };
   return { status: 'ready' as const, model: result.model, a, b };

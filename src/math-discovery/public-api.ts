@@ -52,7 +52,7 @@ export function captureMathematicalDiscovery(registry: Pick<CommandRegistry, 'sn
     return undefined;
   };
   const commands = new Map(registry.snapshot({ ...options.origin, valid }).map(command => [command.id, command]));
-  const family = selected.kind === 'none' ? undefined : selected.kind === 'matrix-vector' ? 'matrix-vector' : 'quadratic';
+  const family = selected.kind === 'none' ? undefined : selected.kind === 'matrix-vector' ? 'matrix-vector' : selected.kind === 'vector-pair' ? 'vector-pair' : 'quadratic';
   return mathCapabilityCatalog.flatMap(metadata => {
     if (family && metadata.family !== family) return [];
     const command = commands.get(metadata.id);

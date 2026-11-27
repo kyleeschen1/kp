@@ -1,7 +1,7 @@
-export type DiscoverableMathKind = 'matrix-vector' | 'quadratic' | 'derivative' | 'tangent';
+export type DiscoverableMathKind = 'matrix-vector' | 'quadratic' | 'derivative' | 'tangent' | 'vector-pair';
 export interface MathCapabilityMetadata {
   readonly id: string;
-  readonly family: 'matrix-vector' | 'quadratic';
+  readonly family: 'matrix-vector' | 'quadratic' | 'vector-pair';
   readonly operation: 'view' | 'derive' | 'explain';
   readonly accepts: readonly DiscoverableMathKind[];
   readonly requirements: readonly string[];
@@ -11,6 +11,12 @@ export interface MathCapabilityMetadata {
 /** Discovery adds examples and facets to existing command IDs. Mathematical
  * applicability and execution still belong to each registered command owner. */
 const entries = [
+  { id: 'projection.explain', family: 'vector-pair', operation: 'explain', accepts: ['vector-pair'],
+    requirements: ['A selected integer R2 vector pair', 'Complete coordinate inputs'],
+    example: 'Inspect the dot product, signed parallel projection and perpendicular remainder.' },
+  { id: 'projection.linked', family: 'vector-pair', operation: 'view', accepts: ['vector-pair'],
+    requirements: ['A selected integer R2 vector pair', 'Complete coordinate inputs'],
+    example: 'Add another input view sharing the same saved vector pair.' },
   { id: 'matrix.graph', family: 'matrix-vector', operation: 'view', accepts: ['matrix-vector'],
     requirements: ['A selected 2×2 matrix-vector object', 'Complete numeric inputs'],
     example: 'See the input vector and its image under the matrix.' },

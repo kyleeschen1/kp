@@ -4,6 +4,7 @@ import { migrateV1, migrateV2 } from './migration.ts';
 import { projectionText } from './inline-source.ts';
 import { readNotebookMathematics, readMathViewport } from '../notebook/math-model.ts';
 import { readMatrixResources, matrixOccurrence } from './matrix-data.ts';
+import { readProjectionResources } from '../projection-explanation/resource.ts';
 import type { Annotation, AuthorCredit, Cell, ContentBlock, Definition, FractionNotebook, Inline, Mark, Step } from './types.ts';
 export * from './types.ts';
 export { FractionNotebookGap, object, exact } from './json.ts';
@@ -22,16 +23,21 @@ export function readSteps(source: string, count: number, openingCaption?: string
 export function readNotebook(value: unknown): FractionNotebook {
   const input = object(value), v2 = input['schemaVersion'] === 1 ? object(migrateV1(input)) : input;
   const data = v2['schemaVersion'] === 2 ? object(migrateV2(v2)) : v2;
-  exact(data, ['schemaVersion', 'id', 'revision', 'cells', 'mathematics', 'matrixResources']);
+  exact(data, ['schemaVersion', 'id', 'revision', 'cells', 'mathematics', 'matrixResources', 'projectionResources']);
   if (data['schemaVersion'] !== 3 || !Number.isSafeInteger(data['revision']) || Number(data['revision']) < 0) return fail('Unsupported notebook version or revision.');
   const seen = new Set<string>([uuid(data['id'])]), annotations = new Map<UUID, Annotation>();
   const mathematics = data['mathematics'] === undefined ? undefined : readNotebookMathematics(data['mathematics']);
   const matrixResources = data['matrixResources'] === undefined ? undefined : readMatrixResources(data['matrixResources']);
-  if (mathematics && matrixResources) return fail('Choose one mathematical family for this notebook exemplar.');
+  const projectionResources = data['projectionResources'] === undefined ? undefined : readProjectionResources(data['projectionResources']);
+  if ([mathematics, matrixResources, projectionResources].filter(Boolean).length > 1) return fail('Choose one mathematical family for this notebook exemplar.');
+  for (const resource of projectionResources ?? []) {
+    if (seen.has(resource.id)) return fail('Vector-pair identities must be unique across the notebook.'); seen.add(resource.id);
+  }
   for (const d of matrixResources ?? []) for (const id of [d.id, d.matrix.id, d.vector.id, d.result.id, ...d.occurrences.map(o => o.id)]) {
     if (seen.has(id)) return fail('Matrix resource and occurrence identities must be unique across the notebook.'); seen.add(id);
   }
   const usedMatrixViews = new Set<UUID>();
+  const projectionViews = new Map<UUID, number>();
   for (const resource of mathematics?.resources ?? []) {
     if (seen.has(resource.id)) fail('A resource UUID cannot also belong to the notebook.'); seen.add(resource.id);
   }
@@ -73,6 +79,15 @@ export function readNotebook(value: unknown): FractionNotebook {
   const cells: Cell[] = array(data['cells'], 200).map(raw => {
     if (object(raw)['type'] === 'block') return block(raw, 1);
     const c = object(raw), base = identity(c);
+    if (c['type'] === 'projectionObject') {
+      exact(c, ['type', 'id', 'metadata', 'resource', 'view', 'folded']);
+      const resource = uuid(c['resource']), view = c['view'];
+      if (!projectionResources?.some(r => r.id === resource)) return fail('Restore the vector pair referenced by this view.');
+      if ((view !== 'inputs' && view !== 'explanation') || typeof c['folded'] !== 'boolean') return fail('Unsupported projection view.');
+      const count = (projectionViews.get(resource) ?? 0) + 1; projectionViews.set(resource, count);
+      if (count > 8) return fail('This vector pair supports eight visible occurrences.');
+      return { ...base, type: 'projectionObject', resource, view, folded: c['folded'] };
+    }
     if (c['type'] === 'matrixObject') {
       exact(c, ['type', 'id', 'metadata', 'resource', 'occurrence', 'folded']);
       const resource = uuid(c['resource']), occurrence = uuid(c['occurrence']);
@@ -112,7 +127,7 @@ export function readNotebook(value: unknown): FractionNotebook {
   });
   if (cells.filter(c => c.type === 'story').length > 1) return fail('This exemplar supports at most one fractional animation.');
   if (cells.filter(c => c.type === 'articleHeader').length > 1 || cells.some((c, i) => c.type === 'articleHeader' && i !== 0)) return fail('An optional article header belongs at the beginning.');
-  return { schemaVersion: 3, id: uuid(data['id']), revision: Number(data['revision']), cells, ...(mathematics ? { mathematics } : {}), ...(matrixResources ? { matrixResources } : {}) };
+  return { schemaVersion: 3, id: uuid(data['id']), revision: Number(data['revision']), cells, ...(mathematics ? { mathematics } : {}), ...(matrixResources ? { matrixResources } : {}), ...(projectionResources ? { projectionResources } : {}) };
 }
 export function importFractionReading(markdown: string): { notebook: FractionNotebook; definition: Definition } {
   const match = /```kp-animation-story\s*\n([\s\S]*?)\n```/.exec(markdown);
@@ -139,7 +154,7 @@ export function projectReading(doc: FractionNotebook, definition: Definition): s
   };
   const projectBlock = (b: ContentBlock): string => [b.title ? prose(b.title.content) : '', prose(b.content), ...b.children.map(projectBlock)].filter(Boolean).join('\n\n');
   const cells = doc.cells.map(cell => {
-    if (cell.type === 'mathObject' || cell.type === 'matrixObject') return fail('Mathematical objects use the selected mathematical notebook preview.');
+    if (cell.type === 'mathObject' || cell.type === 'matrixObject' || cell.type === 'projectionObject') return fail('Mathematical objects use the selected mathematical notebook preview.');
     if (cell.type === 'story') {
       const steps = readSteps(cell.source, definition.beats.length, cell.caption.text);
       const story = { ...definition, beats: definition.beats.map((beat, index) => ({ ...beat, ...steps[index] })) };

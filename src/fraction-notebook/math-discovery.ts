@@ -4,7 +4,7 @@ import { available, unavailable, target, type CommandRegistry, type Target, type
 import type { Row } from '../editor-rows/model.ts';
 import { mountRowPicker } from '../interaction/row-picker.ts';
 import { captureMathematicalDiscovery, mathCapabilityState, type MathCapability, type MathDiscoverySelection } from '../math-discovery/public-api.ts';
-import { mathematicsIn, matrixResourcesIn } from './schema.ts';
+import { mathematicsIn, matrixResourcesIn, projectionResourcesIn } from './schema.ts';
 import { selectedObject } from './inspector.ts';
 import '../interaction/style.css';
 
@@ -19,6 +19,10 @@ export function mountMathematicalDiscovery(host: HTMLElement, view: EditorView, 
   function identify(node: ProseNode | undefined): MathDiscoverySelection {
     if (disposed || view.isDestroyed || !node || typeof node.attrs['id'] !== 'string') return { kind: 'none' };
     const doc = view.state.doc, occurrenceId = node.attrs['id'];
+    if (node.type.name === 'projectionObject' && doc.firstChild?.type.name === 'projectionResources') {
+      const resource = projectionResourcesIn(doc).find(resource => resource.id === node.attrs['resource']);
+      if (resource) return { kind: 'vector-pair', id: resource.id, occurrenceId, revision: doc };
+    }
     if (node.type.name === 'matrixObject' && doc.firstChild?.type.name === 'matrixResources') {
       const resource = matrixResourcesIn(doc).find(resource => resource.id === node.attrs['resource']);
       if (resource?.occurrences.some(occurrence => occurrence.id === node.attrs['occurrence']))
@@ -39,7 +43,7 @@ export function mountMathematicalDiscovery(host: HTMLElement, view: EditorView, 
   const capture = (): Target<Captured> => {
     if (disposed || view.isDestroyed) return { found: false, reason: 'The notebook has closed.' };
     const selection = identify(selectedObject(view.state)?.node);
-    return selection.kind === 'none' ? { found: false, reason: 'Select a matrix or quadratic-family object first.' }
+    return selection.kind === 'none' ? { found: false, reason: 'Select a supported mathematical object first.' }
       : target({ doc: view.state.doc, selection });
   };
   const readiness = (captured: Captured) => {

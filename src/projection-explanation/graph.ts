@@ -1,9 +1,9 @@
-import { createGraph2DObject, createAxis2DObject } from '../../semantic/graph.ts';
-import { projectGraphPoint } from '../../rendering/graph-2d-scene.ts';
-import { renderGraphToSvg } from '../../rendering/graph-2d-svg.ts';
-import type { KpVectorDotProjectionSemanticModel } from '../../animation/vector-dot-projection-semantic-model.ts';
-import type { sampleDotProjectionModel } from '../../animation/dot-projection-model-frame.ts';
-import type { KpVector2 } from '../../animation/vector-dot-projection-exemplar-contract.ts';
+import { createGraph2DObject, createAxis2DObject } from '../semantic/graph.ts';
+import { projectGraphPoint } from '../rendering/graph-2d-scene.ts';
+import { renderGraphToSvg } from '../rendering/graph-2d-svg.ts';
+import type { KpVectorDotProjectionSemanticModel } from '../animation/vector-dot-projection-semantic-model.ts';
+import type { sampleDotProjectionModel } from '../animation/dot-projection-model-frame.ts';
+import type { KpVector2 } from '../animation/vector-dot-projection-exemplar-contract.ts';
 
 /** Coordinates come only from the prepared semantic model and its sampler.
  * Equal scales preserve angles; framing includes all endpoints before motion. */
