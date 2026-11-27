@@ -1,0 +1,27 @@
+/* This occurrence owns layout and graph paint, never host typography or theme.
+ * Container sizing lets a split notebook use the same accepted reference view. */
+.kp-linked-column { container: kp-linked-column / inline-size; min-inline-size: 0; }
+.kp-linked-column .reference-comparison { display: grid; grid-template-columns: minmax(0, 1fr) minmax(230px, .6fr); gap: 1rem; align-items: start; }
+.kp-linked-column .reference-symbols { min-inline-size: 0; }
+.kp-linked-column .reference-geometry { margin: 0; min-inline-size: 0; }
+.kp-linked-column .reference-geometry svg { display: block; inline-size: 100%; aspect-ratio: 1; overflow: visible; }
+.kp-linked-column .graph-svg__background { fill: var(--fn-surface); }
+.kp-linked-column .graph-axis line { stroke: var(--color-border); stroke-width: 1; }
+.kp-linked-column .graph-axis text { fill: var(--color-muted); font: inherit; }
+.kp-linked-column .reference-vector { stroke: var(--color-ink); stroke-width: 1; vector-effect: non-scaling-stroke; fill: none; }
+.kp-linked-column .reference-vector[data-term="0"] { stroke: var(--color-green-light); }
+.kp-linked-column .reference-vector[data-term="1"] { stroke: var(--color-blue-light); stroke-dasharray: 4 3; }
+.kp-linked-column .reference-vector[data-role=result] { stroke: var(--color-red-light); stroke-width: 1.5; }
+.kp-linked-column figcaption { margin-block-start: var(--fn-block-gap); }
+.kp-linked-column .reference-geometry ul { margin-block: .5rem; padding-inline-start: 1.1rem; }
+.kp-linked-column .reference-geometry [data-term="0"] { color: var(--color-green-light); }
+.kp-linked-column .reference-geometry [data-term="1"] { color: var(--color-blue-light); }
+.kp-linked-column [data-result-label] { color: var(--color-red-light); }
+@container kp-linked-column (max-width: 820px) {
+  .kp-linked-column .reference-comparison { grid-template-columns: minmax(0, 1fr); }
+  .kp-linked-column .reference-geometry { inline-size: min(100%, 340px); justify-self: start; }
+}
+@media (forced-colors: active) {
+  .kp-linked-column .reference-vector, .kp-linked-column .reference-vector[data-term],
+  .kp-linked-column .reference-vector[data-role=result] { stroke: CanvasText; }
+}

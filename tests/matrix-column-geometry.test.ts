@@ -5,7 +5,8 @@ import { createKpScalarExpression, createKpTypedMatrixFromRows } from '../src/ma
 import { matrixProduct } from '../src/math/matrix-product.ts';
 import { MatrixColumnGap } from '../src/experiments/matrix-column-product/environment.ts';
 import { numberOf } from '../src/experiments/matrix-column-combinations/model.ts';
-import { prepareColumnGeometry, sampleColumnGeometry, type ColumnPoint } from '../src/matrix-reference/column-geometry.ts';
+import { prepareColumnGeometry, sampleColumnGeometry, type ColumnPoint } from '../src/experiments/matrix-column-combinations/column-geometry.ts';
+import { prepareColumnGeometry as referencePrepare, sampleColumnGeometry as referenceSample } from '../src/matrix-reference/column-geometry.ts';
 
 const matrix = (id: string, rows: readonly (readonly number[])[]) => createKpTypedMatrixFromRows({ id,
   rows: rows.map((row, i) => row.map((value, j) => createKpScalarExpression({ id: `${id}.${i}.${j}`, expression: constant(value) }))),
@@ -15,6 +16,10 @@ const product = (left = [[1, 2], [3, 4]], right = [[2], [1]]) => matrixProduct({
 });
 const near = (actual: ColumnPoint, expected: ColumnPoint) => actual.forEach((value, index) =>
   assert.ok(Math.abs(value - expected[index]!) < 1e-10, `${actual} differs from ${expected}`));
+
+test('reference compatibility exports retain the exact shared geometry owner', () => {
+  assert.equal(referencePrepare, prepareColumnGeometry); assert.equal(referenceSample, sampleColumnGeometry);
+});
 
 test('geometry retains original column, coefficient, contribution and result identities', () => {
   const source = product(), prepared = prepareColumnGeometry(source);
