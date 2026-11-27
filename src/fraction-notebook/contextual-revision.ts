@@ -119,6 +119,7 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
   const buttons = () => { stage.disabled = busy || !checked; preview.disabled = busy || !request || !!candidate; accept.disabled = busy || !candidate; reject.disabled = !request; };
   const invalidate = (message?: string) => {
     ++generation; controller?.abort(); controller = undefined; owner.cancel(); request = undefined; candidate = undefined; busy = false;
+    pasted.value = ''; messages.value = '';
     if (previewing) { previewing = false; options.restorePreview(); }
     comparison.hidden = true; if (message) notice.textContent = message; buttons();
   };
@@ -167,8 +168,11 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
   async function prepareRequest() {
     invalidate(); options.chat.open();
     try {
-      chat(); if (!await load()) return;
+      const intended = chat(); if (!await load()) return;
       if (disposed || panel.hidden || !checked || !descriptor) return;
+      const current = chat();
+      if (current.branchId !== intended.branchId || current.threadId !== intended.threadId)
+        throw new Error('The conversation changed while checking the annotation. Prepare a new request in the intended thread.');
       request = owner.begin(context(descriptor), instruction.value);
       options.chat.stageDraft(revisionPrompt(request), { branchId: request.branchId, threadId: request.threadId });
       notice.textContent = 'Request is in chat. Send it there, then choose the completed response and preview it here.'; buttons();
@@ -228,6 +232,9 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
   close.onclick = hide;
   panel.onkeydown = event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); hide(); } };
   moment.onchange = () => invalidate('Moment changed. Prepare a request for this annotation.');
+  // Choosing a response is explicit; a hidden earlier paste cannot override it.
+  messages.onchange = () => { pasted.value = ''; };
+  pasted.oninput = () => { if (pasted.value.trim()) messages.value = ''; };
   stage.onclick = () => { void prepareRequest(); }; preview.onclick = () => { void previewProposal(); }; accept.onclick = () => { void acceptProposal(); };
   reject.onclick = () => invalidate('Proposal rejected. Your notebook is unchanged.');
   const unsubscribe = options.chat.subscribe(snapshot => {

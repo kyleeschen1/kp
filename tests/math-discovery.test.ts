@@ -145,6 +145,18 @@ test('rows work in the existing fuzzy session with metadata search and current a
   picker.close(); assert.equal(picker.snapshot().visible.length, 0); picker.dispose();
 });
 
+test('the operation noun outranks an incidental mention in another command requirement', () => {
+  const registry = new CommandRegistry(() => ({ scope: 'notebook' }), () => {});
+  for (const operation of mathematicalOperations) registry.add({ ...operation, category: 'Mathematics', scope: 'notebook', run() {} });
+  const selected = selection();
+  const picker = createRowPickerSession<MathCapability>({ execute: () => ({ ok: true }) });
+  picker.open(captureMathematicalDiscovery(registry, { origin: { scope: 'notebook' }, selection: selected, currentSelection: () => selected }));
+  for (const [query, id] of [['derivative', 'math.derivative'], ['tangent', 'math.tangent'], ['graph', 'math.graph']]) {
+    picker.query(query!); assert.equal(picker.snapshot().selected, id);
+  }
+  picker.dispose(); registry.dispose();
+});
+
 test('discovery transitive imports contain no evaluator, host, DOM renderer or generated catalogue', () => {
   const graph = collectKpTypescriptImportGraph(resolve(import.meta.dirname, '..'));
   const seen = new Set<string>(), pending = ['src/math-discovery/public-api.ts'];

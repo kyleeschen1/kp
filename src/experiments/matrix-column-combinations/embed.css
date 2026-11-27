@@ -2,7 +2,7 @@
 @import "./style.css";
 
 /* Theme and framing belong to this occurrence; never retheme the host page. */
-.kp-column-explanation {
+.matrix-player.kp-column-explanation {
   color-scheme: inherit;
   min-inline-size: 0;
   max-inline-size: 100%;

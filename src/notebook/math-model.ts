@@ -115,7 +115,7 @@ export function editTangent(resource: TangentResource, draftAt: string): Tangent
 
 export const mathematicalOperations = [
   { id: 'math.graph', title: 'Graph selected mathematical object', kind: 'graph', description: 'Another graph of the same source; its viewport stays local.', keywords: ['plot', 'curve', 'representation'] },
-  { id: 'math.derivative', title: 'Differentiate selected quadratic', kind: 'derivative', description: 'Create a dependent derivative using quadratic.derivative@1.', keywords: ['derive', 'calculus', 'slope'] },
+  { id: 'math.derivative', title: 'Differentiate selected quadratic', kind: 'derivative', description: 'Create a dependent derivative using quadratic.derivative@1.', keywords: ['derivative', 'derive', 'calculus', 'slope'] },
   { id: 'math.tangent', title: 'Create tangent to selected quadratic', kind: 'tangent', description: 'Create a dependent tangent at x = 1; adjust its contact point afterward.', keywords: ['derive', 'calculus', 'line', 'contact'] }
 ] as const;
 export type MathOperation = typeof mathematicalOperations[number]['kind'];

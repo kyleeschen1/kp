@@ -1,0 +1,71 @@
+{
+  "id": "run-contract.kp.studio-foundations-20261127",
+  "kind": "run-contract",
+  "title": "Mathematical studio foundations",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.studio-foundations-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-twelve-loop-horizon.md"
+    }
+  ],
+  "verification": [
+    "npm run test:project-vision",
+    "npm run test:library-boundaries",
+    "npm run typecheck:matrix-reference",
+    "npm run measure:matrix-reference",
+    "npm run visual:matrix-reference"
+  ],
+  "allowedWork": [
+    "Named tranche and worker boundaries; local review may park only dependent work"
+  ],
+  "disallowedWork": [
+    "No visual rollout before review, new transports, model spending, deployment or arbitrary mathematical families"
+  ],
+  "goal": "Deliver a coherent linked matrix exemplar and advance independent discovery and contextual revision without unreviewed promotion",
+  "target": "task.kp.studio-foundations-20261127",
+  "runMode": "run",
+  "maxSlices": 5,
+  "commitCadence": "Checked rollback units; back up before handoff and at least hourly",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Six-hour ceiling with final hour reserved for verification and closeout",
+    "Stop when no approved independent work remains before local human visual or live-model judgment"
+  ],
+  "slices": [
+    {
+      "id": "theme",
+      "title": "Shared-visual-defaults",
+      "summary": "Shared notebook palette/document token ownership extracted without changing saved settings; opt-in reference and picker bindings plus opaque renderer color adapter checked. Visual adoption is deferred to the separate review package.",
+      "status": "complete"
+    },
+    {
+      "id": "geometry",
+      "title": "Linked-column-geometry",
+      "summary": "Prepared source-linked column vectors render beside the accepted equation using one frame observer and clock. Signed, zero, cancellation, seek/reload/theme/browser checks pass. Candidate remains opt-in pending review.",
+      "status": "complete"
+    },
+    {
+      "id": "discovery",
+      "title": "Discoverable-object-capabilities",
+      "summary": "Existing matrix and quadratic capabilities appear through a bounded shared row picker; captured source validation and search ranking are checked in unit and Chromium/Firefox integration tests. No new evaluator or operation authority.",
+      "status": "complete"
+    },
+    {
+      "id": "revision",
+      "title": "Contextual-revision",
+      "summary": "Annotation proposal boundary tested; chat and notebook integration preparing an opt-in review flow",
+      "status": "in-progress"
+    },
+    {
+      "id": "review",
+      "title": "Combined-human-review",
+      "status": "planned"
+    }
+  ]
+}

@@ -17,7 +17,7 @@ test.beforeEach(async ({ context }, info) => {
 async function workspaceCommand(page: Page, title: string) {
   await page.keyboard.press('Control+x'); await page.keyboard.press('Control+x');
   const query = page.getByRole('combobox', { name: 'Search commands' }); await query.fill(title);
-  await page.getByRole('dialog', { name: 'Commands', exact: true }).getByRole('option', { name: title, exact: true }).click();
+  await page.getByRole('dialog', { name: 'Commands', exact: true }).getByRole('option', { name: title, exact: true }).and(page.locator('[aria-disabled=false]')).click();
 }
 
 async function fixture(context: BrowserContext) {
@@ -37,8 +37,8 @@ async function fixture(context: BrowserContext) {
     async close() { await context.unrouteAll({ behavior: 'wait' }); await service.close(); await new Promise<void>(resolve => server.close(() => resolve())); }
   };
 }
-async function open(page: Page) {
-  await page.goto(url); await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
+async function open(page: Page, destination = url) {
+  await page.goto(destination); await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
   const toggle = page.getByRole('button', { name: 'Chat', exact: true });
   if (await toggle.getAttribute('aria-expanded') !== 'true') await toggle.click();
   await expect(page.locator('.kp-chat')).not.toHaveAttribute('data-phase', 'loading');
@@ -65,6 +65,91 @@ async function write(page: Page, text: string) {
   await editor.fill(text);
 }
 async function send(page: Page) { await input(page).press('ControlOrMeta+Enter'); }
+
+test('contextual revision stages without sending, previews a native chat response and accepts one undoable annotation', async ({ page, context }, info) => {
+  const f = await fixture(context), errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  try {
+    await page.setViewportSize({ width: 1440, height: 1000 }); await open(page, url + '?revision=1'); await connect(page);
+    const caption = page.locator('.fn-caption p'), original = await caption.textContent();
+    await page.locator('.fn-editor .ProseMirror').focus(); await workspaceCommand(page, 'Revise fraction annotation in chat');
+    const panel = page.getByRole('complementary', { name: 'Revise annotation' });
+    await panel.getByLabel('Requested annotation change').fill('Make the first observation more direct without changing its reasoning.');
+    await expect(panel.getByRole('button', { name: 'Prepare request in chat' })).toBeEnabled();
+    await panel.getByRole('button', { name: 'Prepare request in chat' }).click();
+    await expect(input(page)).toContainText('Response shape'); expect(f.peer.sends()).toHaveLength(0);
+    const prompt = await input(page).innerText();
+    const shape = prompt.split('Response shape (replace title/content as needed):')[1]?.trim(); expect(shape).toBeTruthy();
+    const response = { ...JSON.parse(shape!), title: 'Notice the denominator', content: 'First identify the denominator before changing either side.' };
+    await send(page); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'running');
+    f.peer.finish(JSON.stringify(response)); await expect(page.locator('.kp-chat')).toHaveAttribute('data-phase', 'ready');
+    const messages = panel.getByLabel('Completed model response'); await expect(messages.locator('option')).toHaveCount(2);
+    await messages.selectOption({ index: 1 }); await panel.getByRole('button', { name: 'Preview proposal' }).click();
+    await expect(panel.getByRole('button', { name: 'Accept annotation' })).toBeEnabled();
+    await expect(caption).toHaveText(original!);
+    const preview = page.frameLocator('iframe.fn-preview');
+    await expect(preview.locator('[data-kp-beat]').first()).toContainText(response.content);
+    await page.screenshot({ path: info.outputPath('contextual-annotation-proposal.png') });
+    await panel.getByRole('button', { name: 'Accept annotation' }).click(); await expect(caption).toHaveText(response.content);
+    await expect(page.locator('.fn-status')).toContainText('preview up to date');
+    await panel.getByRole('button', { name: 'Close', exact: true }).click();
+    await page.locator('.fn-editor .ProseMirror').focus(); await workspaceCommand(page, 'Undo'); await expect(caption).toHaveText(original!);
+    await workspaceCommand(page, 'Redo'); await expect(caption).toHaveText(response.content);
+    expect(f.peer.sends()).toHaveLength(1); expect(errors).toEqual([]);
+  } finally { await f.close(); }
+});
+
+test('contextual revision protects existing chat drafts and rejection leaves the notebook untouched', async ({ page, context }) => {
+  const f = await fixture(context);
+  try {
+    await open(page, url + '?revision=1'); await connect(page); await write(page, 'Keep this unfinished thought');
+    const caption = page.locator('.fn-caption p'), original = await caption.textContent();
+    await page.locator('.fn-editor .ProseMirror').focus(); await workspaceCommand(page, 'Revise fraction annotation in chat');
+    const panel = page.getByRole('complementary', { name: 'Revise annotation' });
+    await panel.getByLabel('Requested annotation change').fill('Make the opening shorter.');
+    await expect(panel.getByRole('button', { name: 'Prepare request in chat' })).toBeEnabled();
+    await panel.getByRole('button', { name: 'Prepare request in chat' }).click();
+    await expect(panel.getByRole('status')).toContainText('existing chat draft');
+    await expect(input(page)).toHaveText('Keep this unfinished thought'); expect(f.peer.sends()).toHaveLength(0);
+    await write(page, ''); await expect.poll(() => f.store.data.draft).toBe('');
+    await panel.getByRole('button', { name: 'Prepare request in chat' }).click();
+    await expect(input(page)).toContainText('Response shape');
+    const prompt = await input(page).innerText(), shape = prompt.split('Response shape (replace title/content as needed):')[1]?.trim();
+    const response = { ...JSON.parse(shape!), title: 'Proposal to reject', content: 'This proposal must never replace the saved annotation.' };
+    await panel.getByText('Paste a proposal instead', { exact: true }).click();
+    await panel.getByLabel('Paste annotation proposal JSON').fill(JSON.stringify(response));
+    await panel.getByRole('button', { name: 'Preview proposal' }).click();
+    await expect(panel.getByRole('button', { name: 'Accept annotation' })).toBeEnabled();
+    await panel.getByRole('button', { name: 'Reject proposal' }).click();
+    await expect(panel.getByLabel('Paste annotation proposal JSON')).toHaveValue('');
+    await expect(panel.getByRole('button', { name: 'Accept annotation' })).toBeDisabled();
+    await expect(caption).toHaveText(original!);
+    await expect(page.frameLocator('iframe.fn-preview').locator('[data-kp-beat]').first()).toContainText(original!);
+    expect(f.peer.sends()).toHaveLength(0);
+  } finally { await f.close(); }
+});
+
+test('contextual revision cannot redirect an asynchronously prepared request into a different thread', async ({ page, context }) => {
+  const f = await fixture(context);
+  f.peer.turns = [{ id: 'turn-1', status: 'completed', items: [{ type: 'agentMessage', id: 'reply-1', text: 'A stable passage for the original thread.' }] }];
+  let release = () => {}, entered = () => {};
+  const gate = new Promise<void>(resolve => { release = resolve; }), pending = new Promise<void>(resolve => { entered = resolve; });
+  try {
+    await open(page, url + '?revision=1'); await connect(page);
+    await page.locator('.fn-editor .ProseMirror').focus(); await workspaceCommand(page, 'Revise fraction annotation in chat');
+    const panel = page.getByRole('complementary', { name: 'Revise annotation' });
+    await expect(panel.getByRole('button', { name: 'Prepare request in chat' })).toBeEnabled();
+    await panel.getByLabel('Requested annotation change').fill('Shorten the opening.');
+    await page.route('**/api/dev/fraction-object', async route => { entered(); await gate; await route.continue(); });
+    await panel.getByRole('button', { name: 'Prepare request in chat' }).click(); await pending;
+    await selectPassage(page, 'stable passage', 'reply-1');
+    await command(page, 'Branch here'); await page.getByRole('textbox', { name: 'Branch name' }).fill('Different conversation');
+    await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.locator('.kp-chat')).not.toHaveAttribute('data-branch-id', 'main');
+    release(); await expect(panel.getByRole('status')).toContainText('conversation changed');
+    await expect(input(page)).toBeEmpty(); expect(f.peer.sends()).toHaveLength(0);
+    await expect(panel.getByRole('button', { name: 'Preview proposal' })).toBeDisabled();
+  } finally { release(); await f.close(); }
+});
 async function selectPassage(page: Page, text: string, message?: string) {
   await (message ? page.locator(`[data-message-id="${message}"] .kp-chat-text`) : page.locator('.kp-chat-message .kp-chat-text').last()).evaluate((root, phrase) => {
     root.closest<HTMLElement>('[role=textbox]')!.focus();

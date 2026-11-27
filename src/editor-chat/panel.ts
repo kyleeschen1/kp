@@ -22,12 +22,27 @@ const node = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', tex
 export function mountChat(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost, registry: CommandRegistry) {
   const launcher = node('button', '', 'Chat'); launcher.type = 'button'; launcher.setAttribute('aria-expanded', 'false'); launcher.setAttribute('aria-controls', 'kp-chat'); actions.append(launcher);
   let panel: ReturnType<typeof mountChatPanel> | undefined;
-  const open = () => { launcher.remove(); panel ??= mountChatPanel(body, actions, layout, windowHost, registry); panel.open(); };
+  let closed = false;
+  const listeners = new Set<(snapshot: ChatAuthoringSnapshot) => void>();
+  const publish = (snapshot: ChatAuthoringSnapshot) => { for (const listener of listeners) listener(snapshot); };
+  const open = () => { if (closed) throw new Error('The chat has closed.'); launcher.remove(); panel ??= mountChatPanel(body, actions, layout, windowHost, registry, publish); panel.open(); };
   const command = registry.add({ id: 'workspace.open-chat', title: 'Open chat', category: 'Workspace', scope: 'workspace', run: open }); command.bind(launcher);
   try { if (sessionStorage.getItem('kp.editor-chat.open') === 'true') open(); } catch { /* Optional preference. */ }
-  return { capture: (element?: HTMLElement | null) => panel?.capture(element), dispose() { command.dispose(); panel?.dispose(); launcher.remove(); } };
+  return { open, snapshot: () => panel?.snapshot(),
+    stageDraft(text: string, expected: { branchId: string; threadId: string }) {
+      if (closed || !panel) throw new Error('Open chat and connect before staging a revision request.');
+      panel.stageDraft(text, expected);
+    },
+    subscribe(listener: (snapshot: ChatAuthoringSnapshot) => void) {
+      if (closed) throw new Error('The chat has closed.'); listeners.add(listener);
+      return () => { listeners.delete(listener); };
+    },
+    capture: (element?: HTMLElement | null) => panel?.capture(element),
+    dispose() { closed = true; listeners.clear(); command.dispose(); panel?.dispose(); launcher.remove(); } };
 }
-function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost, registry: CommandRegistry) {
+export type ChatAuthoringSnapshot = Readonly<Pick<ChatSnapshot, 'branchId' | 'threadId' | 'phase' | 'messages'>>;
+function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => void, windowHost: ChatWindowHost, registry: CommandRegistry,
+  notifyAuthoring: (snapshot: ChatAuthoringSnapshot) => void) {
   const toggle = node('button', '', 'Chat'); toggle.type = 'button'; toggle.setAttribute('aria-expanded', 'false');
   const panel = node('aside', 'kp-chat'); panel.id = 'kp-chat'; panel.hidden = true; panel.setAttribute('aria-label', 'Persistent chat');
   toggle.setAttribute('aria-controls', panel.id);
@@ -45,6 +60,11 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
 
   type Mode = 'reading' | 'compose' | 'notes';
   let mode: Mode = 'reading', current: ChatSnapshot | undefined, remote: ChatSnapshot | undefined;
+  // The authoring port excludes transport credentials and mutable references
+  // into the native conversation owner's state.
+  const authoringValue = (value: ChatSnapshot): ChatAuthoringSnapshot => ({ branchId: value.branchId,
+    threadId: value.threadId, phase: value.phase, messages: value.messages.map(message => ({ ...message })) });
+  const authoringSnapshot = (): ChatAuthoringSnapshot | undefined => current && !branchChanged() ? authoringValue(current) : undefined;
   let dirty = false, conflict = false, disposed = false, hydrated = false, operationCount = 0;
   let generation = 0, baseRevision = 0, mutation = 0, pollingGeneration = 0, localNotice = '', etag = '';
   let following = true, restoring = false, lastOutput = '', pendingMotion = '';
@@ -125,7 +145,8 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
     if (disposed) return;
     remote = snapshot;
     if (current && current.branchId !== snapshot.branchId && !switchAllowed) {
-      localNotice = 'Another tab changed branches. Your place and draft are retained. C-c s returns to this branch.'; paint(); return;
+      localNotice = 'Another tab changed branches. Your place and draft are retained. C-c s returns to this branch.';
+      paint(); notifyAuthoring(authoringValue(snapshot)); return;
     }
     const switching = !current || current.branchId !== snapshot.branchId;
     if (switching) {
@@ -147,6 +168,7 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
       else if (!commands.isOpen() && !panel.hidden && windowHost.active()) transcript.surface.focus();
       following = history.scrollHeight - history.scrollTop - history.clientHeight < 50;
     }
+    const authoring = authoringSnapshot(); if (authoring) notifyAuthoring(authoring);
   }
   function paint() {
     if (disposed) return;
@@ -386,7 +408,14 @@ function mountChatPanel(body: HTMLElement, actions: HTMLElement, layout: () => v
   const detachWindow = windowHost.attach(panel, () => {
     if (mode === 'compose') composer.focus(); else if (mode === 'notes') notes.focus(); else transcript.surface.focus();
   });
-  return { open() { setOpen(true); }, capture(element?: HTMLElement | null) {
+  return { open() { setOpen(true); }, snapshot: authoringSnapshot,
+    stageDraft(text: string, expected: { branchId: string; threadId: string }) {
+      if (disposed || !current || current.phase !== 'ready' || branchChanged()) throw new Error('Connect this conversation and finish its current response first.');
+      if (current.branchId !== expected.branchId || current.threadId !== expected.threadId) throw new Error('The conversation changed; start the revision request again.');
+      if (conflict || composer.value().length || current.draft.length) throw new Error('Retain or send the existing chat draft before staging this request.');
+      if (!text.trim() || text.length > draftLimit) throw new Error('The revision request exceeds the chat draft limit.');
+      composer.setText(text); draftChanged(); setOpen(true); compose();
+    }, capture(element?: HTMLElement | null) {
     const branch = current?.branchId, savedMode = mode, reading = transcript.capture();
     const focus = element ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     const valid = () => disposed || panel.hidden ? 'The chat pane has closed' : current?.branchId !== branch ? 'The conversation changed; reopen Commands' : undefined;

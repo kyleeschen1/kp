@@ -1,0 +1,13 @@
+.fn-contextual-revision textarea {
+  display: block;
+  width: 100%;
+  resize: vertical;
+  padding: .4em;
+  color: inherit;
+  background: inherit;
+  border: 1px solid var(--fn-border);
+  font: inherit;
+}
+.fn-contextual-revision button { margin-block: .25em; }
+.fn-contextual-revision [data-revision-before],
+.fn-contextual-revision [data-revision-after] { white-space: pre-wrap; }

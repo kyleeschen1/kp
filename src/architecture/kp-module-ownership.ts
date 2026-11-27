@@ -163,6 +163,7 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     ownershipRule("src/editor-commands/", "renderer", "Shared commands include DOM button binding but do not own product hosts."),
     ownershipRule("src/editor-rows/", "renderer", "Portable resource rows, matching and browser rendering stay outside product applications."),
     ownershipRule("src/interaction/", "renderer", "Independent browser picker over the existing row and command owners."),
+    ownershipRule("src/math-discovery/", "renderer", "Metadata rows capture existing host commands without importing mathematical evaluators or product hosts."),
     ownershipRule("src/math-resources/", "neutral-core", "Validated persistent resources and derivations have no host or renderer ownership."),
     ownershipRule("src/animation-player/", "renderer", "Reusable retained rendering and lifecycle adapters consume existing semantic and clock owners."),
     // The notebook reuses this inspected mount closure, not the experiment's

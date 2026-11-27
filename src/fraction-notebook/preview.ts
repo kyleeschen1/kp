@@ -95,6 +95,13 @@ export function mountFractionNotebookPreview(input: {
         if (navigation.open) navigation.querySelector<HTMLElement>('button,a,input')?.focus({ preventScroll: true });
         return;
       }
+      if (message['kind'] === 'reveal-moment' && typeof message['id'] === 'string') {
+        // Reuse the reader's semantic navigation; a proposal cannot supply a
+        // playhead, geometry, or an arbitrary selector for the embedded page.
+        const beat = [...document.querySelectorAll<HTMLElement>('[data-kp-beat]')].find(node => node.dataset['kpBeat'] === message['id']);
+        if (beat) [...document.querySelectorAll<HTMLAnchorElement>('.kp-lesson-toc a')].find(link => link.hash.slice(1) === beat.id)?.click();
+        return;
+      }
       if (message['kind'] === 'reveal' && typeof message['id'] === 'string') {
         selected = message['id'];
         const target = [...document.querySelectorAll<HTMLElement>('[data-notebook-cell]')].find(el => el.dataset['notebookCell'] === selected);

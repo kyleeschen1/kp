@@ -1,0 +1,16 @@
+/* Shared palette only: hosts retain layout, settings persistence and typography.
+ * The notebook attribute remains supported so saved preferences need no migration. */
+:root {
+  --color-paper: #121826; --color-ink: #e2e2d9; --color-muted: #b0b9b1; --color-border: #58615a;
+  --color-stage: #1b2535; --color-selection: #53614d; --color-warning: #f0c59c;
+  --color-red-light: #f07070; --color-green-light: #b6d5a3; --color-blue-light: #b9d8df; --color-yellow-light: #d8c59b;
+  --color-emphasis: #f2c14e; --color-cursor-ink: #121826; --color-shadow: #0005;
+  --color-raised-shadow: #0009; --color-active-line: #b6d5a31f;
+}
+:root:is([data-notebook-theme=light], [data-kp-theme=light]) {
+  --color-paper: #eeefe9; --color-ink: #242b35; --color-muted: #58616c; --color-border: #a4aaa9;
+  --color-stage: #eeefe9; --color-selection: #c9ded1; --color-warning: #8d4d13;
+  --color-red-light: #b82436; --color-green-light: #386c36; --color-blue-light: #215f80; --color-yellow-light: #80600a;
+  --color-emphasis: #80600a; --color-cursor-ink: #fff; --color-shadow: #242b351a;
+  --color-raised-shadow: #242b3540; --color-active-line: #386c3614;
+}

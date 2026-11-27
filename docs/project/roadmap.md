@@ -3,10 +3,10 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-matrix-reference-shelf`
-Execution Contract: `run-contract.kp.matrix-reference-shelf-20261127`
+Current Commitment: `kp-studio-foundations`
+Execution Contract: `run-contract.kp.studio-foundations-20261127`
 Next Product Milestone: `matrix-column-geometry`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -25,7 +25,9 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 **Complete, accepted:** [notebook matrix explanation](reviews/2026-11-27-matrix-notebook-explanation.md).
 **Complete, accepted:** [independent reference card](reviews/2026-11-27-matrix-reference-card.md).
 **Complete, accepted:** [three-card shelf](reviews/2026-11-27-reference-shelf.md).
-**Proposed next:** [linked column geometry](reviews/2026-11-27-matrix-geometry-next-step.md).
+**Approved next:** [studio foundations](reviews/2026-11-27-twelve-loop-horizon.md):
+coherent visual defaults and linked column geometry, with independent discovery
+and contextual-revision work. One opt-in combined exemplar precedes visual promotion.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 
@@ -57,13 +59,13 @@ Wider player/matrix promotion remains separate; renderer replacement undecided. 
 [sliding overlays](reviews/2026-11-25-overlay-chat.md) remain rejected; preserve data and native rendering.
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
-is deferred behind persistent conversation; automatic document edits remain excluded.
+now informs the bounded approved revision tranche; automatic document edits remain excluded.
 Exclude publication and general editor promotion. Custom motions, transclusion
 and search remain parked; MathML declined.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md) retains composition
 evidence; its inspector was unaccepted. Fractional editorial review remains parked.
 
-What counts remains the technical reference. Preserve the
+Preserve the technical reference and
 [accepted reading defaults](principles/document-theater-reading.md).
 
 ## First product proof — approved
@@ -87,9 +89,7 @@ preserved. Two independent algebra readings and a scripted exact-context return
 work in that reader. The physics case reused its existing compiler/rail; it did
 not establish a new generation capability. See [bounded evidence](reviews/2026-11-08-explanation-first.md).
 
-The proposal to move physics into this reader is **deferred as an automatic next
-step**. It earns priority only if it removes a demonstrated authoring/adaptation
-blocker. Prior completed architecture and maintenance work stays complete.
+Physics migration remains **deferred** unless it removes an authoring blocker.
 
 ## How to stay oriented
 

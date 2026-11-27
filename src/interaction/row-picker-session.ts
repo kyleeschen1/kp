@@ -25,6 +25,7 @@ export function createRowPickerSession<T>(actions: RowPickerActions<T>) {
     throw new Error('A picker shows between 1 and 50 rows at a time.');
   let rows: readonly Row<T>[] = [], matches: readonly RowMatch<T>[] = [];
   let open = false, disposed = false, query = '', filters: RowFilters = {}, selected: string | undefined, offset = 0;
+  let explicitSelection = false;
   const listeners = new Set<() => void>();
   const notify = () => { for (const listener of listeners) listener(); };
   const snapshot = (): RowPickerSnapshot<T> => ({ open, query, filters, total: matches.length, selected, offset, visible: matches.slice(offset, offset + maxVisible) });
@@ -36,6 +37,7 @@ export function createRowPickerSession<T>(actions: RowPickerActions<T>) {
   };
   const refresh = () => {
     matches = matchRows(rows, query).filter(match => matchesFacets(match.row, filters));
+    if (!matches.some(match => match.row.id === selected)) explicitSelection = false;
     selected = retainRow(matches, selected); positionWindow(); notify();
   };
   const close = () => {
@@ -52,10 +54,16 @@ export function createRowPickerSession<T>(actions: RowPickerActions<T>) {
         if (!row.id.trim() || ids.has(row.id)) throw new Error('Picker rows need unique nonempty identities.');
         ids.add(row.id);
       }
-      rows = [...next]; open = true; query = ''; filters = {}; selected = undefined; offset = 0; refresh();
+      rows = [...next]; open = true; query = ''; filters = {}; selected = undefined; explicitSelection = false; offset = 0; refresh();
     },
     close,
-    query(value: string) { if (open && !disposed) { query = value; refresh(); } },
+    query(value: string) {
+      if (!open || disposed) return;
+      // An automatic choice follows ranking as the query changes. Preserve a
+      // deliberate navigation choice while it remains a matching resource.
+      if (value !== query && !explicitSelection) selected = undefined;
+      query = value; refresh();
+    },
     filter(value: RowFilters) {
       if (!open || disposed) return;
       filters = Object.fromEntries(Object.entries(value).map(([key, values]) => [key, [...values]])); refresh();
@@ -64,11 +72,12 @@ export function createRowPickerSession<T>(actions: RowPickerActions<T>) {
       if (!open || disposed || !Number.isSafeInteger(delta) || !matches.length) return;
       const previous = matches.findIndex(match => match.row.id === selected);
       selected = matches[Math.max(0, Math.min(matches.length - 1, previous + delta))]?.row.id;
+      explicitSelection = true;
       positionWindow(); notify();
     },
     select(id: string) {
       if (!open || disposed || !matches.some(match => match.row.id === id)) return;
-      selected = id; positionWindow(); notify();
+      selected = id; explicitSelection = true; positionWindow(); notify();
     },
     refresh() { if (open && !disposed) refresh(); },
     async accept(): Promise<CommandResult> {

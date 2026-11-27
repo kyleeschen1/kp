@@ -6,6 +6,64 @@ import zero from '../content/math-resources/reference-zero.json' with { type: 'j
 
 const url = '/experiments/matrix-reference/';
 const position = (page: Page) => page.getByRole('slider', { name: 'Animation position' });
+test('linked geometry follows the equation clock, saved position and shared theme', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1200, height: 900 });
+  await page.goto(`${url}?geometry=1`);
+  await expect(page.locator('.reference-stage')).toHaveAttribute('aria-busy', 'false');
+  const graph = page.locator('.reference-geometry');
+  await expect(graph).toHaveCount(1);
+  for (const step of ['4', '5', '2', '6']) {
+    await page.getByLabel('Milestone', { exact: true }).selectOption(step);
+    await expect(graph).toHaveAttribute('data-progress', String(Number(step) / 6));
+    expect(await graph.getAttribute('data-milestone')).toBe(await page.locator('.kp-column-explanation').getAttribute('data-milestone'));
+  }
+  await expect(graph.locator('[data-result-label]')).toHaveText('Sum: (3, 2)');
+  const before = await graph.locator('g[data-role=contribution]').evaluateAll(nodes => nodes.map(n => n.getAttribute('data-end')));
+  await page.getByRole('button', { name: 'Dark theme', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-kp-theme', 'dark');
+  const graphics = await page.evaluate(async () => {
+    const modulePath = '/src/rendering/theme-colors.ts';
+    const { readThemeColors } = await import(modulePath);
+    const host = document.createElement('div'); document.body.append(host);
+    host.style.setProperty('--custom-color', 'hsl(120 100% 25%)');
+    const count = host.childNodes.length;
+    const colors = readThemeColors(host, { paper: '--color-paper', custom: '--custom-color' });
+    host.style.setProperty('--custom-color', 'rgb(20 30 40 / .5)');
+    let gap: string | undefined;
+    try { readThemeColors(host, { custom: '--custom-color' }); } catch (error) { gap = (error as { code: string }).code; }
+    const cleaned = host.childNodes.length === count; host.remove();
+    return { colors, gap, cleaned };
+  });
+  expect(graphics.colors.paper).toEqual([18 / 255, 24 / 255, 38 / 255]);
+  expect(graphics.colors.custom).toEqual([0, 128 / 255, 0]);
+  expect(graphics.gap).toBe('translucent-color'); expect(graphics.cleaned).toBe(true);
+  const palette = await page.evaluate(() => {
+    const graph = document.querySelector('.reference-geometry .graph-svg__background')!;
+    return [getComputedStyle(document.body).backgroundColor, getComputedStyle(document.documentElement).backgroundColor, getComputedStyle(graph).fill];
+  });
+  expect(await page.locator('.matrix-card').evaluate(node => getComputedStyle(node).backgroundColor)).toBe(palette[2]);
+  expect(await graph.locator('g[data-role=contribution]').evaluateAll(nodes => nodes.map(n => n.getAttribute('data-end')))).toEqual(before);
+  await page.getByRole('button', { name: 'Find a card', exact: true }).click();
+  const picker = page.getByRole('dialog', { name: 'Saved cards' });
+  await expect(picker).toBeVisible();
+  expect(await picker.evaluate(node => getComputedStyle(node).backgroundColor)).toBe(palette[1]);
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Light theme', exact: true }).click();
+  await page.screenshot({ path: info.outputPath('matrix-linked-light.png') });
+  await page.reload(); await expect(graph).toHaveAttribute('data-progress', '1');
+  await page.getByRole('button', { name: 'Previous milestone', exact: true }).click();
+  await expect(graph).toHaveAttribute('data-progress', String(5 / 6));
+  await expect(page.locator('.reference-stage')).toHaveAttribute('data-saved-progress', String(5 / 6));
+  await upload(page, zero, 'zero-geometry.json');
+  await expect(graph).toHaveCount(1); await expect(page.locator('[data-filename]')).toHaveText('zero-geometry.json');
+  await page.getByLabel('Milestone', { exact: true }).selectOption('6');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(graph).toHaveAttribute('data-progress', '1');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('matrix-linked-narrow.png'), fullPage: true });
+  expect(errors).toEqual([]);
+});
 async function open(page: Page) {
   await page.goto(url); await expect(page.locator('.reference-stage')).toHaveAttribute('aria-busy', 'false');
   await expect(page.locator('.comb-stage')).toHaveCount(1);

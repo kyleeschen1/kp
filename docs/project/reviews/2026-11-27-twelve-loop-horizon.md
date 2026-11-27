@@ -1,7 +1,70 @@
 # Twelve-loop horizon: a usable mathematical explanation studio
 
 Date: 2026-11-27
-Status: proposed planning horizon, not an approved execution contract.
+Status: direction and continued delivery approved by the user's “go on your recs for as long as possible”; execute the bounded first tranche below, retaining local visual gates.
+
+## Approved first delivery tranche
+
+The user accepts the recommendations on style, ownership, parallel development
+and the twelve-loop horizon. Start with shared visual defaults and linked matrix
+geometry; independently advance object discovery and bounded contextual revision.
+This approval permits separate worker worktrees and integration on the product
+feature branch. It does not waive human visual review or authorize model spending,
+deployment, generic protocols or catalogue-wide visual promotion.
+
+Use a six-hour execution ceiling, reserving the final hour for verification,
+recoverable commits and closeout. This is a resource limit, not an estimate or
+an obligation to fill the time. Continue independent approved work while a local
+visual decision is pending; do not build on its unaccepted aesthetics. Reassess
+the next tranche after these finite outcomes rather than widening this contract.
+
+| Package | Outcome / dependency | Acceptance and verification | Rollback / gate |
+|---|---|---|---|
+| theme | Remove duplicated defaults for the opt-in matrix reference and picker using existing notebook roles; prepare a renderer color adapter. | Existing notebook defaults and saved overrides remain intact; one theme feeds the candidate's HTML/SVG. Focused token/lifecycle checks and candidate browser smoke. | Shared token extraction plus opt-in bindings; aesthetic adoption remains at review. |
+| geometry | Show weighted columns and their sum beside the accepted calculation. | Pure source-linked sample, same clock, signed/zero/cancellation cases, direct seek/reverse and teardown; scoped types, unit and browser checks. | Opt-in `?geometry=1` graph and optional player subscription; no plain-route migration. |
+| discovery | Find applicable operations for matrix/vector and quadratic objects. | Existing command and domain owners, no solvers during search, captured-source revalidation, focused tests and a bounded picker integration. | Additive provider/host command adapter; retain existing command behavior. |
+| revision | Make a supported annotation revision reviewable from chat context. | Inspect current chat/object APIs first; implement a bounded context/proposal validator and preview/accept/reject integration where supported. Test stale sources/drafts, cancellation and invalid targets. A real model trial is required to complete the outcome and cannot be replaced by mocks. | Additive opt-in revision path; no autonomous document mutation or new transport. |
+| review | Assess the combined candidate and record the next eligible work. | Small Chromium/Firefox smoke, affected types, architecture, complete reader payload, one batched human review packet. | Do not mark complete without human visual judgment; retain the later horizon. |
+
+Canonical visual source: the saved `MatrixVectorDocument` selected in the shelf.
+Host: `/experiments/matrix-reference/?geometry=1`. Semantic owners: existing typed
+matrix product and column combinations. Renderers: native KaTeX and Graph2D/SVG;
+existing column player owns time. Review whether the graph explains the weights
+and sum without competing with the equation, and whether typography/palette feel
+coherent with the notebook. Preserve accepted fraction scrolling, plain reference,
+saved IDs and source schemas. The first graph uses the original shear fixture;
+signed/zero examples pressure correctness without claiming motif promotion.
+
+Parallel packet base: `cf0c81c723736005b36265a0c98c8be4b9d39668`.
+Integrator: product checkout, shared contracts, theme, player observation, host,
+root scripts/configuration, strategic records and Theseus. Workers may edit only
+their listed new modules/tests, use checkout-local dependencies, and hand off
+focused checks/commits to the integrator. No worker changes global styles, lockfile,
+root package/configuration, task state or product hosts. Preview stays on the
+integration server; workers have no authority to replace a listener.
+
+- Geometry worker: `.worktrees/studio-geometry`, branch
+  `feature/20261127-studio-geometry`; owns `src/matrix-reference/column-geometry.ts`
+  and `tests/matrix-column-geometry.test.ts`. Pure source-linked sampler only,
+  built on existing column model/authority; no DOM, clock or local arithmetic owner.
+- Discovery worker: `.worktrees/studio-discovery`, branch
+  `feature/20261127-studio-discovery`; owns new `src/math-discovery/` modules and
+  `tests/math-discovery.test.ts`. Inspect/reuse existing operation descriptors and
+  row/command contracts; provider and invocation guard, no competing evaluator.
+- Revision worker: `.worktrees/studio-revision`, branch
+  `feature/20261127-studio-revision`; inspect current chat/object seams and own
+  new `src/editor-chat/contextual-revision.ts` plus
+  `tests/contextual-revision.test.ts` only. Report exact viable integration and
+  implement the bounded headless context/proposal boundary after checking existing
+  owners; no external model calls, UI or new generic patch engine.
+
+Integrator extensions within these packages: geometry also owns the new renderer
+theme adapter/tests; discovery supplies the notebook command adapter; revision
+supplies its notebook review controller, strict transport decoder and tests.
+Shared hosts, styling and browser integration remain with the integrator.
+Each worker reports source/API limitations and meaningful focused test evidence.
+Integration rechecks combined consumers. Later reuse/family packages remain in
+the approved horizon but are not hidden completion obligations of this tranche.
 
 ## Goal and evidence
 
@@ -21,9 +84,9 @@ mathematical support. This proposal connects those foundations to author work.
 This is a planning sequence of outcome-sized loops, not twelve equal-duration
 tasks or a promise to finish every row in one execution session. Near-term scope
 is firmer; later rows should be revised using actual reuse cost. Each selected
-loop needs its finite execution scope and existing visual gates. The proposed
-column-geometry successor remains the immediate next action; no priority changes
-or implementation are authorized by recording this horizon.
+loop needs its finite execution scope and existing visual gates. Recording the
+original horizon alone did not authorize implementation; the subsequent user
+approval and bounded tranche above now authorize its near-term work.
 
 ## Proposed sequence
 
@@ -66,7 +129,7 @@ work can use the existing lanes: interaction owns picker/commands and review UI;
 mathematics owns admissible objects, operations and derivations; player owns
 projection and lifecycle. Each worker needs a separate worktree and explicit
 ownership; one integrator owns shared contracts and the combined exemplar.
-This document neither starts agents nor grants a parallel implementation run.
+The first delivery tranche above now authorizes its named parallel workers.
 
 Preserve accepted fraction scrolling, plain reference playback, persisted source
 identities, editor history, current chat sessions and domain validation. Keep
@@ -105,5 +168,5 @@ human evidence. No calendar completion estimate is asserted from loop count.
 - [Contextual revision proposal](2026-11-25-llm-authoring-next-step.md): prior bounded proposal; its native-host assumptions must be rechecked against current accepted KP chat, not copied as current constraints.
 
 The shelf remains complete. Older unaccepted visual treatments and historical
-contracts remain parked. This review adds one planning artifact; roadmap,
-project vision and live execution status are unchanged.
+contracts remain parked. Theseus owns execution of the approved tranche; the
+roadmap and vision summarize its new commitment without tracking slice status.

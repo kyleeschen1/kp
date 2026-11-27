@@ -14,11 +14,12 @@ Accepted: [reference card](../reviews/2026-11-27-matrix-reference-card.md).
 Completed: `run-contract.kp.matrix-reference-card-20261127`.
 Accepted: [reference shelf](../reviews/2026-11-27-reference-shelf.md).
 Completed: `run-contract.kp.matrix-reference-shelf-20261127`.
-Proposed: [column geometry](../reviews/2026-11-27-matrix-geometry-next-step.md).
+Approved: [studio foundations](../reviews/2026-11-27-twelve-loop-horizon.md):
+theme, geometry, discovery and revision. Execution: `run-contract.kp.studio-foundations-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
-Fresh generation and integrated latency remain unproved.
+Generation latency remains unproved.
 
 ## Retrieve for a named question
 
@@ -85,5 +86,5 @@ Fresh generation and integrated latency remain unproved.
 
 ## Coordination and handoff
 
-At handoff, name the capability, finish line, evidence and artifact.
+Handoffs name capability, finish, evidence and artifact.
 Visual acceptance does not approve broader architecture or delivery.

@@ -8,7 +8,7 @@ import { renderKpFocusDeckAnnotation } from "../../tutorial/focus-deck-annotatio
 /** One selected scene owns one clock, view and observer set. Navigation owns
  * replacement and history; the player owns only controls and sampled paint. */
 export function mountColumnPlayer(root: HTMLElement, scene: ColumnExample,
-  progress: number, onSettled: (progress: number) => void) {
+  progress: number, onSettled: (progress: number) => void, onFrame?: (progress: number) => void) {
   const { beats } = scene;
   let config = readMatrixConfig(document);
   const stepsOnly = () => reduced.matches || config.motion === "steps";
@@ -32,6 +32,9 @@ export function mountColumnPlayer(root: HTMLElement, scene: ColumnExample,
       lastBeat = frame.beat.id;
     }
     root.dataset["milestone"] = frame.beat.id;
+    // Other representations observe this clock; settled persistence remains
+    // separate so an animated graph never writes a saved record every frame.
+    onFrame?.(frame.progress);
     if (clock.getStatus() !== "playing") onSettled(frame.progress);
   };
   const go = (index: number, animate = true) => {

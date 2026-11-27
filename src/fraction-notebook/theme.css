@@ -3,7 +3,7 @@
 @import './rhythm.css';
 @import './style-panel.css';
 :root {
-  --fn-font: 'Source Serif 4', Georgia, serif;
+  --fn-font: var(--kp-document-font, 'Source Serif 4', Georgia, serif);
   --fn-text: var(--color-ink); --fn-background: var(--color-paper); --fn-muted: var(--color-muted); --fn-border: var(--color-border);
   --fn-surface: var(--color-stage); --fn-focus: var(--color-emphasis); --fn-shadow: var(--color-shadow);
   --fn-link: var(--color-blue-light); --fn-math: var(--fn-text); --fn-annotation: var(--fn-muted);

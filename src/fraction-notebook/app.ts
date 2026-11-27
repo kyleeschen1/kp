@@ -26,6 +26,7 @@ import { mountModeline } from './modeline.ts';
 import { mountFruitPicker } from './fruit-picker.ts';
 import { mountCommandPicker } from './command-picker.ts';
 import { mountVimCoverage } from './vim-coverage-panel.ts';
+import { mountMathematicalDiscovery } from './math-discovery.ts';
 import { CommandRegistry, available, unavailable, type Availability, type CommandScope } from '../editor-commands/registry.ts';
 import './windows.css';
 import './modeline.css';
@@ -68,6 +69,7 @@ let generation = 0, disposed = false, frameReady = false, latest: { value: unkno
 let timer: ReturnType<typeof setTimeout> | undefined, selected: string | undefined;
 let inspector: ReturnType<typeof mountInspector> | undefined;
 let structure: ReturnType<typeof mountStructureControls> | undefined;
+let revision: ReturnType<typeof import('./contextual-revision.ts').mountContextualRevision> | undefined;
 const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
 registry.add({ id: 'notebook.open-mathematics', title: mathModule ? 'Open fraction notebook' : 'Open mathematical notebook', category: 'Notebook', scope: 'notebook', keywords: ['quadratic', 'polynomial', 'graph'],
   run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign(mathModule ? '/experiments/fraction-notebook/' : '/experiments/fraction-notebook/?notebook=quadratic'); } });
@@ -156,6 +158,31 @@ const chat = mountChat(editorBody, actions, () => layout.refresh(), {
   active: () => windows.active('chat'),
   activate: () => windows.activate('chat'), cycle: () => windows.cycle(), closed: () => windows.activate('page')
 }, registry);
+if (!mathModule && new URLSearchParams(location.search).get('revision') === '1') {
+  const [{ mountContextualRevision }, { readRevisionDescriptor, readCompiledRevision }] = await Promise.all([
+    import('./contextual-revision.ts'), import('./revision-transport.ts'), import('./revision.css')
+  ]);
+  const responseValue = async (response: Response) => {
+    const data: unknown = await response.json();
+    if (!response.ok) throw new Error(String(object(data)['error'] ?? 'The annotation could not be checked.'));
+    return data;
+  };
+  revision = mountContextualRevision(workspace, registry, {
+    view: editor.view, chat, getNotebook: () => notebook,
+    describe: async signal => readRevisionDescriptor(await responseValue(await fetch('/api/dev/fraction-object', { signal }))),
+    compile: async (candidate, signal) => readCompiledRevision(await responseValue(await fetch('/api/dev/fraction-notebook', {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(candidate), signal
+    }))),
+    preview(value, beatId) {
+      // A temporary proposal cannot race a pending normal preview or become the
+      // saved draft. Rejection restores the host's last admitted projection.
+      generation++; request?.abort(); clearTimeout(timer);
+      send({ kind: 'apply', value }); send({ kind: 'reveal-moment', id: beatId });
+    },
+    restorePreview() { if (!disposed && latest) send({ kind: 'apply', value: latest.value }); },
+    accepted() { clearTimeout(timer); void prepare(); }
+  });
+}
 const styles = mountStyles(workspace, settings => { send({ kind: 'styles', settings }); layout.refresh(); }, registry);
 const modeline = mountModeline(root, windows, status);
 const captureReturn = () => {
@@ -175,6 +202,7 @@ const captureReturn = () => {
 };
 const picker = mountFruitPicker(root, actions, () => captureReturn().restore, registry, message => reportStatus(message));
 const commandPicker = mountCommandPicker(root, actions, registry, captureReturn);
+const mathDiscovery = mathModule ? mountMathematicalDiscovery(root, editor.view, registry, message => reportStatus(message)) : undefined;
 const vimCoverage = mountVimCoverage(root, registry, captureReturn);
 actions.append(button('Styles', () => styles.toggle(), 'workspace.open-styles', 'workspace'));
 const numbers = mountLineNumbers(editorHost, editor.view);
@@ -243,6 +271,7 @@ function changed(doc: ProseNode) {
   generation++; request?.abort(); clearTimeout(timer);
   try {
     const basis = notebook.revision, previousSource = sourceOf(notebook); notebook = fromProse(doc, notebook); const draft = notebook;
+    revision?.changed();
     try { sessionStorage.setItem(storageKey, JSON.stringify(draft)); } catch { /* The persistent save still runs. */ }
     saving = saving.then(async () => {
       if (!store || storedError) return;
@@ -306,6 +335,6 @@ const onMessage = (event: MessageEvent) => {
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: ${mathModule ? 'mathematical objects' : 'fractional-linear-reasoning'} · local draft; original reading unchanged`;
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); vimCoverage.dispose(); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); mathematics?.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); revision?.dispose(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); mathDiscovery?.dispose(); vimCoverage.dispose(); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); mathematics?.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
 if (import.meta.hot) import.meta.hot.dispose(dispose);

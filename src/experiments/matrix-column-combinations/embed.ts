@@ -14,7 +14,7 @@ const mounts = new WeakSet<HTMLElement>();
 /** Hosts load fonts before mounting connected native endpoints. Revision,
  * persistence and replacement remain with the caller, not this presentation. */
 export function mountColumnExplanation(root: HTMLElement, product: ReturnType<typeof matrixProduct>,
-  progress: number, onSettled: (progress: number) => void): ReturnType<typeof mountColumnPlayer> {
+  progress: number, onSettled: (progress: number) => void, onFrame?: (progress: number) => void): ReturnType<typeof mountColumnPlayer> {
   if (!root.isConnected) throw new MatrixColumnGap("Attach the explanation host before measuring native endpoints.");
   if (mounts.has(root)) throw new MatrixColumnGap("Dispose this host's explanation before replacing it.");
   if (!Number.isFinite(progress) || progress < 0 || progress > 1) throw new MatrixColumnGap("Explanation progress must be between 0 and 1.");
@@ -28,7 +28,7 @@ export function mountColumnExplanation(root: HTMLElement, product: ReturnType<ty
   root.append(container);
   mounts.add(root);
   let player: ReturnType<typeof mountColumnPlayer>;
-  try { player = mountColumnPlayer(container, scene, progress, onSettled); }
+  try { player = mountColumnPlayer(container, scene, progress, onSettled, onFrame); }
   catch (error) { container.remove(); mounts.delete(root); throw error; }
   let disposed = false;
   const live = () => { if (disposed) throw new MatrixColumnGap("This explanation has been disposed."); };

@@ -36,6 +36,21 @@ test('command rows retain captured targets and revalidate current command owners
   assert.equal(picker.snapshot().open, true); picker.dispose(); registry.dispose();
 });
 
+test('automatic selection follows better query matches while deliberate choices survive refresh', () => {
+  const picker = createRowPickerSession({ execute: () => ({ ok: true }) });
+  picker.open(rows);
+  picker.query('pe'); assert.equal(picker.snapshot().selected, 'fruit-10');
+  picker.query(''); assert.equal(picker.snapshot().selected, 'fruit-0');
+  picker.query('a'); assert.equal(picker.snapshot().selected, 'fruit-0');
+  picker.query('apricot'); assert.equal(picker.snapshot().selected, 'fruit-1');
+  picker.query('a'); picker.move(1); const chosen = picker.snapshot().selected;
+  picker.refresh(); assert.equal(picker.snapshot().selected, chosen);
+  picker.query(''); assert.equal(picker.snapshot().selected, chosen);
+  picker.query('pear'); assert.equal(picker.snapshot().selected, 'fruit-11');
+  picker.query('a'); assert.equal(picker.snapshot().selected, 'fruit-0');
+  picker.dispose();
+});
+
 test('disabled targets stay open; accepting closes before execution and cannot duplicate the action', async () => {
   let ready = false, calls = 0, release: (() => void) | undefined;
   const picker = createRowPickerSession({ state: () => ready ? available() : unavailable('Wait for source'), execute: async () => {

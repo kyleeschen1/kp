@@ -9,6 +9,10 @@ import { mountShelfControls } from './shelf-ui.ts';
 import { createReferenceSession, type MountReference } from './session.ts';
 import './style.css';
 
+const geometry = new URLSearchParams(location.search).get('geometry') === '1'
+  ? await import('./geometry-view.ts') : undefined;
+const disposeTheme = geometry?.mountReferenceTheme();
+
 const stage = document.querySelector<HTMLElement>('.reference-stage')!;
 const message = document.querySelector<HTMLElement>('.reference-message')!;
 const input = document.querySelector<HTMLInputElement>('input[type=file]')!;
@@ -37,7 +41,9 @@ const mount: MountReference = (record, settled) => {
   const root = document.createElement('div'); root.className = 'reference-candidate';
   root.setAttribute('aria-hidden', 'true'); root.inert = true; stage.append(root);
   try {
-    const player = mountColumnExplanation(root, runtime.explanation().product, record.view.progress, settled);
+    const product = runtime.explanation().product;
+    const player = geometry ? geometry.mountGeometryExplanation(root, product, record.view.progress, settled, `geometry-${record.id}`)
+      : mountColumnExplanation(root, product, record.view.progress, settled);
     return {
       reveal() { root.classList.remove('reference-candidate'); root.removeAttribute('aria-hidden'); root.inert = false; },
       pause: player.pause,
@@ -51,7 +57,7 @@ const controls = mountShelfControls(document.querySelector<HTMLElement>('.refere
   select: async id => { await session?.select(id); }, rename: async (id, name) => { await session?.rename(id, name); },
   confirm: async choice => { await session?.confirmImport(choice); }, cancel: () => session?.cancelImport()
 });
-const cleanup = () => { disposed = true; input.onchange = null; controls.dispose(); session?.dispose(); };
+const cleanup = () => { disposed = true; input.onchange = null; controls.dispose(); session?.dispose(); disposeTheme?.(); };
 window.addEventListener('pagehide', cleanup, { once: true });
 // A bfcache restoration must reopen its closed storage and disposed player.
 window.addEventListener('pageshow', event => { if (event.persisted) location.reload(); });

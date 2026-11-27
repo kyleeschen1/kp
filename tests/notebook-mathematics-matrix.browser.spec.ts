@@ -11,6 +11,34 @@ async function command(page: Page, query: string) {
   const picker = page.getByRole('dialog', { name: 'Commands', exact: true }); await expect(picker).toBeVisible();
   await picker.locator('.ProseMirror').fill(query); await page.keyboard.press('Enter'); await expect(picker).toBeHidden();
 }
+test('object discovery uses captured matrix and quadratic commands without losing selection', async ({ page }, info) => {
+  await page.setViewportSize({ width: 1440, height: 1000 }); await ready(page);
+  const source = equation(page); await source.locator('.fn-math-heading').click();
+  await command(page, 'math.discover');
+  const picker = page.getByRole('dialog', { name: 'Mathematical capabilities', exact: true });
+  await expect(picker.getByRole('option')).toHaveCount(2);
+  await page.keyboard.press('Escape'); await expect(picker).toBeHidden();
+  await command(page, 'math.discover');
+  const query = picker.getByRole('combobox'); await query.fill('Graph');
+  await page.keyboard.press('Enter'); await expect(graphs(page)).toHaveCount(2);
+  await source.locator('.fn-math-heading').click(); await command(page, 'math.discover');
+  await source.getByRole('textbox', { name: 'A11', exact: true }).evaluate(node => {
+    const input = node as HTMLInputElement; input.value = '2'; input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  await query.fill('Graph'); await page.keyboard.press('Enter');
+  await expect(graphs(page)).toHaveCount(2); await expect(picker).toBeVisible();
+  await expect(picker).toContainText('changed');
+  await page.keyboard.press('Escape');
+  await source.locator('.fn-math-heading').click(); await command(page, 'notebook.open-quadratic');
+  const quadratic = page.locator('[data-math-kind=quadratic]').first();
+  await quadratic.locator('.fn-math-heading').click(); await command(page, 'math.discover');
+  await expect(picker.getByRole('option')).toHaveCount(3);
+  await page.screenshot({ path: info.outputPath('mathematical-discovery.png') });
+  await picker.getByRole('combobox').fill('derivative');
+  await expect(picker.getByRole('option', { selected: true })).toContainText('Differentiate');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('[data-math-kind=derivative]')).toHaveCount(1);
+});
 test('matrix explanation follows its source, keeps playback out of history and survives fold and reload', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 1000 }); await ready(page);

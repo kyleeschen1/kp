@@ -1,0 +1,29 @@
+{
+  "id": "task.kp.studio-foundations-20261127",
+  "kind": "task",
+  "title": "Link mathematical views and make capabilities discoverable and revisable",
+  "status": "ready",
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-reference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T12:29:58.915Z",
+      "notes": "16 tests passed: saved reference state plus signed, zero and cancellation geometry from existing product authority."
+    },
+    {
+      "command": "npm run visual:matrix-reference -- --project=firefox",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T12:30:00.447Z",
+      "notes": "14 Chromium and Firefox cases passed, covering plain-route preservation, shelf state and opt-in linked geometry. A later focused rerun also passed after the theme adapter browser smoke was added. Aesthetic judgment remains pending."
+    },
+    {
+      "command": "npm run visual:notebook-mathematics -- --grep \"object discovery\" --project=firefox",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T12:34:33.353Z",
+      "notes": "Both Chromium and Firefox pass matrix/quadratic discovery, retained selection, stale-source rejection, and derivative command selection. Query ranking and the derivative alias were repaired with unit regressions."
+    }
+  ]
+}

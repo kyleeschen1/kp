@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-matrix-reference-shelf",
-    title: "Return to saved matrix explanations",
+    id: "kp-studio-foundations",
+    title: "Connect mathematical views, discovery and revision",
     approval: "approved",
-    contractId: "run-contract.kp.matrix-reference-shelf-20261127",
-    finish: "Import three distinct snapshots, name/filter/select them, and resume each saved position after reload. Preserve the original card and require explicit same-source updates. Stop at one shelf review before promotion.",
-    source: { label: "Approved reference-shelf scope", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
+    contractId: "run-contract.kp.studio-foundations-20261127",
+    finish: "Review one coherent opt-in matrix equation/graph exemplar; independently deliver bounded capability discovery and contextual revision, preserving source identity and local human gates. Keep the completed shelf intact.",
+    source: { label: "Approved studio foundation tranche", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
   },
   uncertainty: "The notebook explanation, independent reference card and multi-card shelf are accepted. Linked symbolic/geometric playback, shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
-  nextJudgment: "Consider the bounded column-geometry successor: one saved source and playhead drive the symbolic explanation and a compact graph. The shelf is complete; broader player promotion and section-clipping judgment remain separate.",
+  nextJudgment: "Review the opt-in linked matrix exemplar for geometric clarity and visual coherence before promotion. Independent discovery and contextual revision may proceed; model usefulness still needs a real trial.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -44,11 +44,11 @@ export const projectVision: ProjectVision = {
       established: "Quadratic authoring, the matrix notebook, connected explanation, independent reference card and local shelf are accepted. Named snapshots retain per-card playback through the shared row picker; migration preserves the prior saved card.",
       evidence: { label: "Accepted shelf workflow and limits", href: "docs/project/reviews/2026-11-27-reference-shelf.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "matrix-column-geometry", title: "Connect column algebra to geometry",
         finish: "One saved matrix source drives the accepted column explanation and a compact graph through one playhead, including signed/zero contributions, seeking and reload. Review one opt-in combined exemplar before promotion.",
         excludes: "New mathematical families, a universal renderer, broad SVG/WebGL migration, 3D, arbitrary CAS, LLM edits and publication.",
-        source: { label: "Proposed column geometry", href: "docs/project/reviews/2026-11-27-matrix-geometry-next-step.md" }
+        source: { label: "Approved tranche and geometry boundary", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
       }
     },
     {
@@ -744,6 +744,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts it and asks to continue. Close the shelf contract and propose linking the existing symbolic column explanation to a source-driven 2D graph as a separate outcome.",
       reason: "Source authoring, reuse and repeated return now work. The next larger benefit is expressing the same mathematical relationships geometrically, rather than extending shelf management indefinitely.",
       source: { label: "Shelf acceptance and geometry proposal", href: "docs/project/reviews/2026-11-27-matrix-geometry-next-step.md" }
+    },
+    {
+      id: "approve-studio-foundation-tranche", on: "2026-11-27",
+      before: "The shelf is accepted; the user reviews a twelve-loop horizon and an assessment of style and architectural independence.",
+      after: "The user approves continued work on the recommendations, including parallel ownership. Begin coherent visual defaults and linked matrix geometry, with independent discovery and bounded contextual revision.",
+      reason: "Make new explanations cheaper to author and reuse while preventing independent workers from multiplying visual defaults. Keep visual judgments local and the completed shelf intact.",
+      source: { label: "Approved delivery boundaries and horizon", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
     }
   ]
 };
