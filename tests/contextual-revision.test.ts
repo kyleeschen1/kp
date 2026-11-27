@@ -8,6 +8,11 @@ import { contextualRevisionProtocol, ContextualRevisionGap, createContextualRevi
 import { fractionObjectId } from '../src/fraction-notebook/object-protocol.ts';
 import { importFractionReading, readSteps } from '../src/fraction-notebook/model.ts';
 import { compileFractionNotebook } from '../src/fraction-notebook/compile.ts';
+import { annotationRevisionTransaction, readRevisionResponse, revisedAnnotationNotebook, revisionPrompt } from '../src/fraction-notebook/contextual-revision.ts';
+import { toProse, fromProse } from '../src/fraction-notebook/schema.ts';
+import { EditorState } from 'prosemirror-state';
+import { history, undo, redo } from 'prosemirror-history';
+import { draftLimit } from '../src/editor-chat/protocol.ts';
 
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 const { notebook, definition } = importFractionReading(canonical);
@@ -184,4 +189,57 @@ test('disposal is idempotent, clears retained proposals, and prevents late respo
   rejects(() => session.receive(proposal(request), snapshot), 'owner-closed');
   rejects(() => session.accept(snapshot), 'owner-closed');
   rejects(() => session.begin(snapshot, 'Improve.'), 'owner-closed');
+});
+
+test('preview revalidation does not consume a proposal and rejects edits made during preparation', () => {
+  const snapshot = current(), session = createContextualRevisionSession('review-1');
+  const request = session.begin(snapshot, 'Improve this wording.'), ready = session.receive(proposal(request), snapshot);
+  assert.equal(session.review(snapshot), ready); assert.equal(session.pending(), ready);
+  rejects(() => session.review({ ...snapshot, draftSource: snapshot.draftSource + ' ' }), 'stale-draft');
+  assert.equal(session.accept(snapshot), ready);
+});
+
+test('one annotation edit preserves every other notebook cell and is one shared undo/redo event', () => {
+  const snapshot = current(), session = createContextualRevisionSession('review-1');
+  const request = session.begin(snapshot, 'Improve this wording.'), change = session.receive(proposal(request), snapshot);
+  const candidate = revisedAnnotationNotebook(notebook, definition.beats, change);
+  assert.equal(candidate.revision, notebook.revision + 1);
+  assert.deepEqual(candidate.cells.filter(cell => cell.type !== 'story'), notebook.cells.filter(cell => cell.type !== 'story'));
+  assert.deepEqual(candidate.cells.map(cell => cell.id), notebook.cells.map(cell => cell.id));
+  let state = EditorState.create({ doc: toProse(notebook), plugins: [history()] });
+  const original = state.doc;
+  state = state.apply(annotationRevisionTransaction(state, candidate));
+  assert.deepEqual(fromProse(state.doc, notebook), candidate);
+  assert.equal(undo(state, transaction => { state = state.apply(transaction); }), true);
+  assert.equal(state.doc.eq(original), true);
+  assert.equal(redo(state, transaction => { state = state.apply(transaction); }), true);
+  assert.deepEqual(fromProse(state.doc, notebook), candidate);
+  assert.throws(() => revisedAnnotationNotebook({ ...notebook, revision: 5 }, definition.beats, change), /notebook changed/);
+});
+
+test('the opening annotation updates its caption slot without inventing a JSON content field', () => {
+  const first = definition.beats[0]!, steps = readSteps(story.source, definition.beats.length, story.caption.text);
+  const snapshot = { ...current(), annotation: { id: first.id, ...steps[0]! }, availableTargets: first.focusRefs };
+  const session = createContextualRevisionSession('review-1'), request = session.begin(snapshot, 'Make the first observation clearer.');
+  const change = session.receive({ ...proposal(request), title: 'Find the final operation', content: 'Notice that three was added after taking the half.' }, snapshot);
+  const candidate = revisedAnnotationNotebook(notebook, definition.beats, change), nextStory = candidate.cells.find(cell => cell.type === 'story')!;
+  assert.equal(nextStory.caption.id, story.caption.id); assert.equal(nextStory.caption.text, change.after.content);
+  assert.equal(Object.hasOwn(JSON.parse(nextStory.source).steps[0], 'content'), false);
+  assert.deepEqual(readSteps(nextStory.source, definition.beats.length, nextStory.caption.text).slice(1), steps.slice(1));
+  const state = EditorState.create({ doc: toProse(notebook), plugins: [history()] });
+  assert.deepEqual(fromProse(state.apply(annotationRevisionTransaction(state, candidate)).doc, notebook), candidate);
+  assert.equal(compileFractionNotebook(candidate, canonical).notes[0]!.notes[0]!.text, change.after.content);
+});
+
+test('prompts expose only selected revision context and response parsing never guesses through prose or tool code', () => {
+  const session = createContextualRevisionSession('review-1'), request = session.begin(current(), 'Make the relationship clearer.');
+  const prompt = revisionPrompt(request);
+  assert.ok(prompt.length <= draftLimit); assert.match(prompt, /not permission to edit a file/);
+  assert.doesNotMatch(prompt, /draftSource|"token"|"project"|"messages"/);
+  const raw = proposal(request), serialized = JSON.stringify(raw);
+  assert.deepEqual(readRevisionResponse(serialized), raw);
+  assert.deepEqual(readRevisionResponse('```json\n' + serialized + '\n```'), raw);
+  assert.throws(() => readRevisionResponse('I suggest:\n' + serialized));
+  assert.throws(() => readRevisionResponse('```javascript\n' + serialized + '\n```'));
+  assert.throws(() => readRevisionResponse(serialized + '\n' + serialized));
 });
