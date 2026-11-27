@@ -8,9 +8,9 @@ import { contextualRevisionProtocol, ContextualRevisionGap, createContextualRevi
 import { fractionObjectId } from '../src/fraction-notebook/object-protocol.ts';
 import { importFractionReading, readSteps } from '../src/fraction-notebook/model.ts';
 import { compileFractionNotebook } from '../src/fraction-notebook/compile.ts';
-import { annotationRevisionTransaction, readRevisionResponse, revisedAnnotationNotebook, revisionPrompt } from '../src/fraction-notebook/contextual-revision.ts';
+import { annotationRevisionTransaction, applyAnnotationRevision, readRevisionResponse, revisedAnnotationNotebook, revisionPrompt } from '../src/fraction-notebook/contextual-revision.ts';
 import { toProse, fromProse } from '../src/fraction-notebook/schema.ts';
-import { EditorState } from 'prosemirror-state';
+import { EditorState, type Transaction } from 'prosemirror-state';
 import { history, undo, redo } from 'prosemirror-history';
 import { draftLimit } from '../src/editor-chat/protocol.ts';
 import { readCompiledRevision, readRevisionDescriptor } from '../src/fraction-notebook/revision-transport.ts';
@@ -278,6 +278,28 @@ test('the opening annotation updates its caption slot without inventing a JSON c
   const state = EditorState.create({ doc: toProse(notebook), plugins: [history()] });
   assert.deepEqual(fromProse(state.apply(annotationRevisionTransaction(state, candidate)).doc, notebook), candidate);
   assert.equal(compileFractionNotebook(candidate, canonical).notes[0]!.notes[0]!.text, change.after.content);
+});
+
+test('typing immediately after acceptance has a separate undo event and both edits redo independently', () => {
+  const snapshot = current(), session = createContextualRevisionSession('review-1');
+  const request = session.begin(snapshot, 'Improve this wording.'), change = session.receive(proposal(request), snapshot);
+  const candidate = revisedAnnotationNotebook(notebook, definition.beats, change);
+  let state = EditorState.create({ doc: toProse(notebook), plugins: [history()] });
+  const original = state.doc;
+  const dispatch = (transaction: Transaction) => { state = state.apply(transaction); };
+  applyAnnotationRevision({ get state() { return state; }, dispatch }, annotationRevisionTransaction(state, candidate).setTime(1000));
+  const accepted = state.doc;
+  let position: number | undefined;
+  state.doc.descendants((node, pos) => { if (node.type.name === 'caption') position = pos + node.nodeSize - 1; });
+  assert.notEqual(position, undefined);
+  dispatch(state.tr.insertText(' More detail.', position!).setTime(1001));
+  const typed = state.doc;
+  assert.equal(undo(state, dispatch), true); assert.ok(state.doc.eq(accepted));
+  assert.equal(undo(state, dispatch), true); assert.ok(state.doc.eq(original));
+  assert.equal(undo(state, dispatch), false);
+  assert.equal(redo(state, dispatch), true); assert.ok(state.doc.eq(accepted));
+  assert.equal(redo(state, dispatch), true); assert.ok(state.doc.eq(typed));
+  assert.equal(redo(state, dispatch), false);
 });
 
 test('prompts expose only selected revision context and response parsing never guesses through prose or tool code', () => {

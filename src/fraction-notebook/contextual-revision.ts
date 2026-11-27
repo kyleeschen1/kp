@@ -1,5 +1,5 @@
 import type { EditorView } from 'prosemirror-view';
-import type { EditorState } from 'prosemirror-state';
+import type { EditorState, Transaction } from 'prosemirror-state';
 import { closeHistory } from 'prosemirror-history';
 import { CommandRegistry } from '../editor-commands/registry.ts';
 import { sha256 } from '../kernel/sha256.ts';
@@ -64,6 +64,13 @@ export function annotationRevisionTransaction(state: EditorState, candidate: Fra
   return closeHistory(state.tr)
     .replaceWith(sourcePos + 1, sourcePos + sourceSize - 1, story.source ? schema.text(story.source) : [])
     .replaceWith(captionPos + 1, captionPos + captionSize - 1, story.caption.text ? schema.text(story.caption.text) : []);
+}
+
+export function applyAnnotationRevision(view: Pick<EditorView, 'state' | 'dispatch'>, transaction: Transaction): void {
+  view.dispatch(closeHistory(transaction));
+  // An accepted proposal is its own undo event on both sides: closing before
+  // insertion alone still lets immediately adjacent typing join that event.
+  view.dispatch(closeHistory(view.state.tr));
 }
 
 export function revisionPrompt(request: ContextualRevisionRequest): string {
@@ -212,7 +219,7 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
       owner.accept(current);
       const accepted = candidate;
       ownApplying = true;
-      try { options.view.dispatch(transaction); } finally { ownApplying = false; }
+      try { applyAnnotationRevision(options.view, transaction); } finally { ownApplying = false; }
       previewing = false; candidate = undefined; request = undefined; checked = undefined; busy = false;
       notice.textContent = 'Annotation accepted. Undo in the notebook restores the previous wording.'; buttons();
       options.accepted?.(accepted);
