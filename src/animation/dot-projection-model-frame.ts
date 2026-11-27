@@ -107,4 +107,3 @@ function interpolate(left: Vector2, right: Vector2, progress: number): Vector2 {
     left[1] + (right[1] - left[1]) * progress
   ];
 }
-
