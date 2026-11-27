@@ -1,0 +1,32 @@
+:root { color-scheme: light; --paper: #f4eddf; --ink: #302e29; --muted: #706b60; --line: #b8b0a0; --input: #51736d; --result: #a3413b; --panel: #faf6ed; font: 18px/1.5 Georgia, serif; color: var(--ink); background: var(--paper); }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 940px; margin: auto; padding: 2rem clamp(1rem, 4vw, 3rem); }
+h1 { font-weight: 400; font-size: 1.8rem; line-height: 1.2; }
+h2, legend { font-weight: 400; font-size: 1rem; }
+.eyebrow, footer, .legend { color: var(--muted); font-size: .85rem; }
+.controls { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+fieldset { border: 1px solid var(--line); padding: .8rem; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; max-width: 440px; }
+label { display: flex; gap: .4rem; align-items: center; font-size: .8rem; }
+input, select, button { font: inherit; color: inherit; border: 1px solid var(--line); background: var(--panel); padding: .35rem; border-radius: 3px; }
+input { width: 4rem; min-width: 0; }
+input[aria-invalid=true] { border-color: var(--result); }
+input:focus-visible, select:focus-visible, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+#draft-status { color: var(--result); font-size: .85rem; min-height: 1.4em; }
+#equation { overflow-x: auto; }
+#result { display: block; text-align: center; color: var(--result); }
+.views { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+.graph-svg { width: 100%; overflow: hidden; }
+.graph-svg__background { fill: var(--panel); }
+.graph-axis line { stroke: var(--line); stroke-width: 1; }
+.graph-axis text { fill: var(--muted); font: 12px Georgia, serif; }
+.vector { stroke-width: 1; vector-effect: non-scaling-stroke; }
+.vector--input { stroke: var(--input); stroke-dasharray: 4 3; }
+.vector--result { stroke: var(--result); }
+.vector-end--input { stroke: var(--input); fill: var(--panel); }
+.vector-end--result { fill: var(--result); }
+.input-key { color: var(--input); margin-right: 1rem; }
+.result-key { color: var(--result); }
+pre { overflow: auto; font: .7rem/1.5 monospace; }
+details { margin-top: 1rem; }
+@media (max-width: 650px) { .views { grid-template-columns: 1fr; } fieldset { width: 100%; } label { flex-wrap: wrap; } }

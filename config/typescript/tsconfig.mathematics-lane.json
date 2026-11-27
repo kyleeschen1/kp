@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": { "incremental": false, "types": ["vite/client", "node"] },
+  "include": ["../../src/math-resources", "../../apps/mathematics-lab", "../../tests/mathematics-lane.test.ts", "../../tests/mathematics-lane.browser.spec.ts"]
+}

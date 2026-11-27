@@ -1,0 +1,41 @@
+import { test, expect } from '@playwright/test';
+
+const url = process.env['KP_MATHEMATICS_LAB_URL'] ?? 'http://127.0.0.1:8012/';
+const storageKey = 'kp.lab.mathematics.matrix-vector.v1';
+test('matrix lane preserves live identities, invalid drafts and independent view ranges across reload', async ({ page }) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.goto(url);
+  await expect(page.getByRole('heading', { name: 'A matrix acts on a vector' })).toBeVisible();
+  await expect(page.getByLabel('Result vector')).toHaveText('Av = (3, 2)');
+  const original = await page.locator('#identities').textContent();
+  const ids = JSON.parse(original!).result;
+  await page.getByLabel('Matrix row 1, column 1', { exact: true }).fill('3');
+  await expect(page.getByLabel('Result vector')).toHaveText('Av = (5, 2)');
+  await page.getByLabel('Matrix row 1, column 1', { exact: true }).fill('-');
+  await expect(page.getByLabel('Result vector')).toHaveText('Av = (5, 2)');
+  await expect(page.locator('#draft-status')).toContainText('last valid mathematics');
+  await page.getByLabel('View 1 range', { exact: true }).selectOption('25');
+  await expect(page.getByLabel('View 2 range', { exact: true })).toHaveValue('10');
+  await page.reload();
+  await expect(page.getByLabel('Matrix row 1, column 1', { exact: true })).toHaveValue('-');
+  await expect(page.getByLabel('View 1 range', { exact: true })).toHaveValue('25');
+  await expect(page.getByLabel('View 2 range', { exact: true })).toHaveValue('10');
+  await expect(page.getByLabel('Result vector')).toHaveText('Av = (5, 2)');
+  expect(JSON.parse((await page.locator('#identities').textContent())!).result).toEqual(ids);
+  await page.getByLabel('Matrix row 1, column 1', { exact: true }).fill('2');
+  await expect(page.getByLabel('Result vector')).toHaveText('Av = (4, 2)');
+  await expect(page.locator('#equation .katex')).toBeVisible();
+  await expect(page.locator('.graph svg')).toHaveCount(2);
+  expect(errors).toEqual([]);
+});
+test('invalid stored JSON is retained until an explicit reset', async ({ page }) => {
+  await page.goto(url);
+  await page.evaluate(key => localStorage.setItem(key, '{invalid'), storageKey);
+  await page.reload();
+  await expect(page.locator('#persistence')).toContainText('remains in storage');
+  await page.getByLabel('Vector x', { exact: true }).fill('4');
+  expect(await page.evaluate(key => localStorage.getItem(key), storageKey)).toBe('{invalid');
+  await page.getByRole('button', { name: 'Reset example', exact: true }).click();
+  await expect(page.getByLabel('Result vector')).toHaveText('Av = (3, 2)');
+  await expect(page.locator('#persistence')).toContainText('Saved in this browser');
+});

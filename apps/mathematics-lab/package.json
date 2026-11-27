@@ -1,0 +1,11 @@
+{
+  "name": "@kp/mathematics-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 8012 --strictPort",
+    "build": "vite build",
+    "test": "node --disable-warning=ExperimentalWarning --test ../../tests/mathematics-lane.test.ts",
+    "typecheck": "tsc --project ../../config/typescript/tsconfig.mathematics-lane.json"
+  }
+}
