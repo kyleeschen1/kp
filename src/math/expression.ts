@@ -317,8 +317,16 @@ export function compileGradient(
   );
 }
 
-export function expressionToLatex(expression: MathExpression): string {
-  return expressionToLatexWithPrecedence(expression, 0);
+type NumberFormat = 'legacy' | 'round-trip';
+
+/** Existing presentations retain their six-place formatting by default.
+ * Authoring surfaces can opt in when displaying the represented coefficients
+ * faithfully matters more than compact decimal labels. */
+export function expressionToLatex(
+  expression: MathExpression,
+  options: { readonly numbers?: 'round-trip' } = {}
+): string {
+  return expressionToLatexWithPrecedence(expression, 0, options.numbers ?? 'legacy');
 }
 
 function evaluateConstantExpressionValue(
@@ -393,59 +401,67 @@ function evaluateConstantList(
 
 function expressionToLatexWithPrecedence(
   expression: MathExpression,
-  parentPrecedence: number
+  parentPrecedence: number,
+  numbers: NumberFormat
 ): string {
-  const precedence = expressionPrecedence(expression);
-  const rendered = renderExpressionBody(expression, precedence);
+  const precedence = expressionPrecedence(expression, numbers);
+  const rendered = renderExpressionBody(expression, precedence, numbers);
 
   return precedence < parentPrecedence ? `\\left(${rendered}\\right)` : rendered;
 }
 
 function renderExpressionBody(
   expression: MathExpression,
-  precedence: number
+  precedence: number,
+  numbers: NumberFormat
 ): string {
   switch (expression.kind) {
     case "constant":
-      return formatNumber(expression.value);
+      return formatNumber(expression.value, numbers);
     case "variable":
       return expression.name;
     case "add":
-      return renderAddExpression(expression);
+      return renderAddExpression(expression, numbers);
     case "multiply":
       return expression.factors
-        .map((factor) => expressionToLatexWithPrecedence(factor, precedence))
+        .map((factor) => expressionToLatexWithPrecedence(factor, precedence, numbers))
         .join(" ");
     case "divide":
-      return `\\frac{${expressionToLatex(expression.numerator)}}{${expressionToLatex(expression.denominator)}}`;
+      return `\\frac{${expressionToLatexWithPrecedence(expression.numerator, 0, numbers)}}{${expressionToLatexWithPrecedence(expression.denominator, 0, numbers)}}`;
     case "power":
-      return `${expressionToLatexWithPrecedence(expression.base, precedence)}^{${formatNumber(expression.exponent)}}`;
+      return `${expressionToLatexWithPrecedence(expression.base, precedence, numbers)}^{${formatNumber(expression.exponent, numbers)}}`;
     case "negate":
-      return `-${expressionToLatexWithPrecedence(expression.value, precedence)}`;
+      return `-${expressionToLatexWithPrecedence(expression.value, precedence, numbers)}`;
     case "sin":
-      return `\\sin\\left(${expressionToLatex(expression.value)}\\right)`;
+      return `\\sin\\left(${expressionToLatexWithPrecedence(expression.value, 0, numbers)}\\right)`;
     case "cos":
-      return `\\cos\\left(${expressionToLatex(expression.value)}\\right)`;
+      return `\\cos\\left(${expressionToLatexWithPrecedence(expression.value, 0, numbers)}\\right)`;
   }
 }
 
-function renderAddExpression(expression: AddExpression): string {
+function renderAddExpression(expression: AddExpression, numbers: NumberFormat): string {
   return expression.terms
     .map((term, index) => {
       if (term.kind === "negate") {
-        return `${index === 0 ? "-" : " - "}${expressionToLatexWithPrecedence(term.value, 1)}`;
+        return `${index === 0 ? "-" : " - "}${expressionToLatexWithPrecedence(term.value, 1, numbers)}`;
       }
 
       if (term.kind === "constant" && term.value < 0) {
-        return `${index === 0 ? "-" : " - "}${formatNumber(Math.abs(term.value))}`;
+        return `${index === 0 ? "-" : " - "}${formatNumber(Math.abs(term.value), numbers)}`;
       }
 
-      return `${index === 0 ? "" : " + "}${expressionToLatexWithPrecedence(term, 1)}`;
+      return `${index === 0 ? "" : " + "}${expressionToLatexWithPrecedence(term, 1, numbers)}`;
     })
     .join("");
 }
 
-function expressionPrecedence(expression: MathExpression): number {
+function expressionPrecedence(expression: MathExpression, numbers: NumberFormat): number {
+  // Scientific notation is a product, not an atomic token. Its mantissa and
+  // exponent must stay grouped when the entire numeric value is raised to a power.
+  if (numbers === 'round-trip' && expression.kind === 'constant') {
+    if (expression.value < 0) return 2;
+    if (String(expression.value).includes('e')) return 3;
+  }
   switch (expression.kind) {
     case "add":
       return 1;
@@ -468,6 +484,11 @@ function isConstant(expression: MathExpression, value: number): boolean {
   return expression.kind === "constant" && expression.value === value;
 }
 
-function formatNumber(value: number): string {
+function formatNumber(value: number, numbers: NumberFormat): string {
+  if (numbers === 'round-trip') {
+    if (!Number.isFinite(value)) throw new RangeError('Round-trip LaTeX requires finite numbers.');
+    const [mantissa = '0', exponent] = String(value).split('e');
+    return exponent === undefined ? mantissa : `${mantissa} \\times 10^{${Number(exponent)}}`;
+  }
   return Number.isInteger(value) ? value.toString() : value.toFixed(6).replace(/0+$/, "").replace(/\.$/, "");
 }
