@@ -276,11 +276,9 @@ if (equationProfileSelect !== null) {
 }
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
-const fractionFlow = import.meta.env.DEV && document.body.dataset['kpFractionNotebookPreview'] === 'true';
 const risingPassages = document.body.dataset["kpReaderLayout"] === "rising-passages"
   ? (await import("./document-theater.ts"))
-      .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample,
-        flowingProse: fractionFlow })
+      .mountDocumentTheater({ story, beats, onLayout: onResize, onReadingChange: renderCurrentSample })
   : undefined;
 const endpointCommentary = document.body.dataset["kpReaderEndpointCommentary"];
 const readerAnnotations = endpointCommentary !== undefined

@@ -2,14 +2,11 @@ import { createDocumentTheaterScroll, documentPassageCadence, documentPassageInd
 import { sampleKpReaderScrollProgress, type KpReaderPiecewiseScrollGeometry } from '../runtime/learner-public-api.ts';
 import { documentPassageOperation } from './document-passage-progress.ts';
 import { documentPassageTrace, compileDocumentTheaterFocus } from './document-theater-focus.ts';
-import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention, type DocumentAnnotationProjector } from './document-theater-attention.ts';
+import { compileDocumentReadingAttention, documentStoryFocusActive, type DocumentReadingAttention } from './document-theater-attention.ts';
 import { measureDocumentTheaterLayout } from '../preparation/public-api.ts';
 
 /** The document projection owns real prose, sticky holds and reading geometry. */
 export function mountDocumentTheater(input: {
-  /** Keep upcoming prose in the scroll flow instead of exchanging it for notes. */
-  readonly flowingProse?: boolean;
-  readonly projectAnnotation?: DocumentAnnotationProjector | undefined;
   readonly story: HTMLElement;
   readonly beats: readonly HTMLElement[];
   readonly onLayout: () => void;
@@ -90,22 +87,8 @@ export function mountDocumentTheater(input: {
     motionMode = mode;
     const active = readAll ? returnIndex : indexAtPosition();
     const position = window.scrollY + readingLine;
-    if (input.flowingProse && !readAll) {
-      // The pin reserves the tallest passage once, but the visible brackets
-      // enclose this local group. Paint-only sizing cannot move the scroll clock.
-      const height = heights[active] ?? 0;
-      const top = -frameTop - height - 16;
-      const style = document.body.style;
-      const frameHeight = `${height + 14 + equationHeight + 32}px`;
-      if (style.getPropertyValue('--kp-caption-local-height') !== frameHeight)
-        style.setProperty('--kp-caption-local-height', frameHeight);
-      if (style.getPropertyValue('--kp-caption-local-top') !== `${top}px`)
-        style.setProperty('--kp-caption-local-top', `${top}px`);
-    }
     const opacity = focusAt(position);
-    const sample = { position, positions, holds, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode };
-    const attention: DocumentReadingAttention = input.flowingProse
-      ? { kind: 'prose', presence: 1 } : input.projectAnnotation?.(sample) ?? attentionAt(sample);
+    const attention = attentionAt({ position, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode });
     annotation = attention.kind === 'annotation' ? attention : undefined;
     // Only adjacent traces can approach the theater. A distant seek clears the
     // last painted set and samples the new neighborhood without replaying it.
@@ -117,10 +100,10 @@ export function mountDocumentTheater(input: {
       if (passage === undefined) continue;
       const activeValue = String(index === active);
       const focus = opacity.get(index) ?? 0;
-      const front = input.flowingProse || selectedPassages.has(index) || focus > 0;
+      const front = selectedPassages.has(index) || focus > 0;
       const prose = selectedPassages.has(index) ? 1 : focus > 0 ? focus : neighbors.includes(index)
         ? documentPassageTrace({ position, arrival: positions[index]!, hold: holds[index]!, height: heights[index]!, frameTop, frameBottom }) : 0;
-      const alpha = input.flowingProse ? 1 : attention.kind === 'annotation' || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
+      const alpha = attention.kind === 'annotation' || (annotationStates[index] && !selectedPassages.has(index)) ? 0 : prose * attention.presence;
       const paint = String(alpha);
       const present = String(front);
       const layer = front ? 'front' : 'back';
@@ -138,7 +121,7 @@ export function mountDocumentTheater(input: {
     if (readAll) return;
     ({ headerHeight, heights, holds, positions, readingLine, frameTop, frameBottom } =
       measureDocumentTheaterLayout(document, equationHeight,
-        documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height, input.flowingProse ? 'animation-only' : 'standard')));
+        documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };
@@ -196,11 +179,11 @@ export function mountDocumentTheater(input: {
       return true;
     },
     annotation: () => annotation,
-    storyFocusActive: () => !readAll && (input.flowingProse || documentStoryFocusActive(window.scrollY + readingLine,
-      positions[indexAtPosition()]!, holds[indexAtPosition()]!)),
+    storyFocusActive: () => !readAll && documentStoryFocusActive(window.scrollY + readingLine,
+      positions[indexAtPosition()]!, holds[indexAtPosition()]!),
     readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
-      geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight, input.flowingProse ? 'animation-only' : 'standard');
+      geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight);
       return geometry;
     },
     activeBeat: () => input.beats[readAll ? returnIndex : indexAtPosition()],

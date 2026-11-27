@@ -27,24 +27,7 @@ test('phone, embedded and desktop layouts preserve the same scroll sensitivity i
 test('the compiler-embedded cadence has the same viewport-independent contract before hydration', () => {
   const embedded = new Function(`return (${documentPassageCadence.toString()});`)() as typeof documentPassageCadence;
   assert.deepEqual(embedded(320), documentPassageCadence(900));
-  assert.deepEqual(embedded(320, 'animation-only'), documentPassageCadence(900, 'animation-only'));
   for (const invalid of [0, -1, NaN, Infinity]) assert.throws(() => embedded(invalid), /positive available height/);
-});
-
-test('animation-only preview begins at arrival and keeps the full motion distance on every viewport', () => {
-  for (const height of [320, 440, 480, 844]) {
-    const cadence = documentPassageCadence(height, 'animation-only');
-    assert.deepEqual(cadence, { read: 0, act: 280, inspect: 0, hold: 280 });
-    const geometry = createDocumentTheaterScroll({ stops: [
-      { positionPx: 0, progressPermille: 0 }, { positionPx: 100, progressPermille: 500 },
-      { positionPx: 420, progressPermille: 500 }, { positionPx: 480, progressPermille: 1000 }
-    ] }, height, 'animation-only');
-    for (const delta of [0, 28, 140, 252, 280, 140, 0]) {
-      assert.ok(Math.abs(sampleKpReaderScrollProgress(100 + delta, geometry) - delta / 280 * .5) < 1e-9);
-    }
-    assert.equal(sampleKpReaderScrollProgress(450, geometry), .5);
-    assert.ok(geometry.stops.every((stop, index) => !index || stop.positionPx > geometry.stops[index - 1]!.positionPx));
-  }
 });
 
 test('measured unequal passages hold their equation through arrival, reading, inspection and release', () => {

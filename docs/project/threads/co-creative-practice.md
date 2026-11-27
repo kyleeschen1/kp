@@ -27,13 +27,11 @@ The notebook detour is current.
   checked on desktop/phone widths in Chromium and Firefox; awaiting visual review.
   The recessed-rail and frame/depth experiments are retired. Original math and
   scroll behavior remain; only the bracket frame becomes a thin left ridge.
-- **Fraction notebook:** [compact classic brackets](../reviews/2026-11-26-fraction-compact-brackets.md)
-  restore the centered equation and enclose the local text/equation group.
-  Reading/focus-only steps have ordinary spacing; only mathematical operations
-  reserve animation travel. Default cues are shorter; saved drafts remain intact.
-  This supersedes [indented flowing prose](../reviews/2026-11-26-fraction-flow.md).
-  Symbol-attached commentary and deliberate scroll stops remain rejected.
-  Other readers retain their accepted presentation; review before reuse.
+- **Fraction notebook:** [default scrolling restored](../reviews/2026-11-26-fraction-default-restored.md)
+  from `7b545a9ba`, including the original bracket layout, centered stage and
+  reading/animation spacing. Compact framing and subsequent scroll-distance
+  repair were rejected. Authored text and saved drafts remain intact. Rail,
+  floating commentary, scroll stops and flowing-prose experiments are retired.
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
   Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
   and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is

@@ -25,7 +25,7 @@ for (const width of [1280, 390]) test(`classic fraction brackets preserve mathem
   const operation = await frame.evaluate(() => {
     const beat = document.querySelectorAll<HTMLElement>('[data-kp-operation-id]')[1]!;
     const line = parseFloat(getComputedStyle(document.body).getPropertyValue('--kp-flow-line'));
-    return { from: scrollY + beat.getBoundingClientRect().top + beat.querySelector<HTMLElement>('.kp-rising-passage')!.offsetHeight - line,
+    return { from: scrollY + beat.getBoundingClientRect().top + beat.querySelector<HTMLElement>('.kp-rising-passage')!.offsetHeight - line + 100,
       start: Number(beat.dataset['kpOperationStart']), end: Number(beat.dataset['kpOperationEnd']) };
   });
   const samples = [];

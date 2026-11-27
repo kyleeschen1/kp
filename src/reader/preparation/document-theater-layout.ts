@@ -18,10 +18,9 @@ export function measureDocumentTheaterLayout(
   const headerHeight = masthead.getBoundingClientRect().height;
   const heights = passages.map(passage => passage!.getBoundingClientRect().height);
   const maxHeight = Math.max(...heights);
-  const compact = document.body.dataset['kpFractionNotebookPreview'] === 'true';
-  const annotations = !compact && beats.some(beat => beat.dataset['kpAnnotationState']);
+  const annotations = beats.some(beat => beat.dataset['kpAnnotationState']);
   const groupHeight = maxHeight + 14 + equationHeight;
-  const cardHeight = compact ? groupHeight + 32 : Math.max(320, groupHeight + 64, annotations ? maxHeight * 2 + 210 : 0);
+  const cardHeight = Math.max(320, groupHeight + 64, annotations ? maxHeight * 2 + 210 : 0);
   const cardTop = headerHeight + Math.max(16, (window.innerHeight - headerHeight - cardHeight) / 2);
   const lineWithinCard = annotations ? cardHeight / 2 - 14 - equationHeight / 2 : (cardHeight - groupHeight) / 2 + maxHeight;
   const readingLine = cardTop + lineWithinCard;
@@ -33,19 +32,11 @@ export function measureDocumentTheaterLayout(
   style.setProperty('--kp-flow-line', `${readingLine}px`);
   style.setProperty('--kp-flow-line-in-card', `${lineWithinCard}px`);
   // Preserve room beyond both semantic endpoints for the real prose to retreat.
-  style.setProperty('--kp-flow-leading', `${lineWithinCard - heights[0]! + (compact ? 16 : 48)}px`);
-  const visualTail = cardHeight - lineWithinCard + (compact ? 16 : 48);
-  // An embedded animation hides the article's trailing prose. Its final
-  // endpoint must still be scrollable to the reading line; otherwise native
-  // scroll clamping silently truncates the last mathematical transformation.
-  const tail = compact && document.body.dataset['notebookAnimationOnly'] === 'true'
-    ? Math.max(visualTail, window.innerHeight - readingLine) : visualTail;
-  style.setProperty('--kp-flow-tail', `${tail}px`);
+  style.setProperty('--kp-flow-leading', `${lineWithinCard - heights[0]! + 48}px`);
+  style.setProperty('--kp-flow-tail', `${cardHeight - lineWithinCard + 48}px`);
   style.setProperty('--kp-flow-hold', `${cadence.hold}px`);
-  style.setProperty('--kp-flow-gap', compact ? '16px' : `${cardHeight - lineWithinCard + 4}px`);
-  // Only actual mathematical operations reserve scroll runway. Reading and
-  // focus changes use the paragraphs' natural heights and normal spacing.
-  const holds = beats.map(beat => beat.dataset['kpOperationId'] ? cadence.hold : compact ? 0 : cadence.read);
+  style.setProperty('--kp-flow-gap', `${cardHeight - lineWithinCard + 4}px`);
+  const holds = beats.map(beat => beat.dataset['kpOperationId'] ? cadence.hold : cadence.read);
   passages.forEach((passage, index) => {
     passage!.style.setProperty('--kp-passage-top', `${Math.max(headerHeight + 12, readingLine - heights[index]!)}px`);
     beats[index]!.style.setProperty('--kp-flow-hold', `${holds[index]}px`);

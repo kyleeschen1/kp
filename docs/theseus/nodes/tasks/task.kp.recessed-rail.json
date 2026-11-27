@@ -4,7 +4,7 @@
   "title": "Review a recessed fraction stage beneath scrolling prose",
   "status": "deferred",
   "domain": "reader",
-  "summary": "HUMAN_CHECKPOINT: review compact classic brackets and animation-only scroll reserves at docs/project/reviews/2026-11-26-fraction-compact-brackets.md.",
+  "summary": "Default fraction scrolling restored at user request. Experimental compact/frame/commentary directions retired; see docs/project/reviews/2026-11-26-fraction-default-restored.md.",
   "verificationRecords": [
     {
       "command": "npm run visual:recessed-rail -- --project=firefox",
@@ -124,6 +124,13 @@
       "scope": "Preview pacing and terminal scroll reach",
       "checkedAt": "2026-11-27T00:25:28.837Z",
       "notes": "Eight Chromium/Firefox embedded/reading desktop/phone cases pass, including exact final endpoint and reverse. Two motion preservation cases, 21 units and notebook typecheck pass. Reproduced native scroll clamping at 968/1000 and repaired terminal layout; removed notebook-only 100px idle lead. See fraction-preview-scroll-repair review."
+    },
+    {
+      "command": "npm run visual:fraction-flow -- --project=firefox",
+      "status": "passed",
+      "scope": "Original fraction scrolling restored from 7b545a9ba",
+      "checkedAt": "2026-11-27T00:34:09.509Z",
+      "notes": "Eight Chromium/Firefox desktop/phone editing/reading cases pass, two bracket/motion cases pass, 23 focused units and notebook typecheck pass. Seven presentation files match reference commit exactly. Content and saved drafts untouched; see fraction-default-restored review."
     }
   ],
   "revisitWhen": [
