@@ -1,0 +1,12 @@
+{
+  "name": "@kp/interaction-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "build": "vite build --config vite.config.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test ../../tests/interaction-lane.test.ts ../../tests/fraction-notebook-commands.test.ts ../../tests/fraction-notebook-rows.test.ts",
+    "typecheck": "tsc --project ../../config/typescript/tsconfig.interaction-lane.json",
+    "visual:interaction": "playwright test --config playwright.config.ts"
+  }
+}

@@ -1,0 +1,9 @@
+:root { color-scheme: light; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #292824; background: #f4f0e7; font-size: 17px; line-height: 1.55; }
+body { margin: 0; }
+main { box-sizing: border-box; max-width: 44rem; margin-inline: auto; padding: clamp(1.2rem, 6vw, 4rem); }
+h1 { font-size: 1.6rem; line-height: 1.25; font-weight: 450; }
+.eyebrow, .hint, #mount-status { font-size: .85rem; }
+.actions { display: flex; flex-wrap: wrap; gap: .7rem; }
+main button { font: inherit; color: inherit; background: transparent; border: 1px solid #777169; border-radius: .2rem; padding: .45rem .75rem; cursor: pointer; }
+main button:focus-visible { outline: 2px solid #8b3d32; outline-offset: 3px; }
+#selection { min-block-size: 3em; border-inline-start: 1px solid #777169; padding-inline-start: 1rem; }
