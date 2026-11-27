@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interaction lab · Kinetic Press</title>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Kinetic Press · interaction lab</p>
+      <h1>One picker, different kinds of rows.</h1>
+      <p>Search fruit resources and commands together. Each row keeps its own identity and action.</p>
+      <div class="actions">
+        <button id="open-picker" type="button">Open picker</button>
+        <button id="remount-picker" type="button">Remount picker</button>
+      </div>
+      <p>Type a name, or choose Tags to narrow by kind. Arrow keys reach every match; only five rows are mounted at a time.</p>
+      <p id="selection" role="status">Nothing selected yet.</p>
+      <p id="mount-status">Picker mount 1</p>
+      <p class="hint">Escape closes and returns focus. Ctrl-h opens tags; q returns to the query. Alt-x also opens this lab's picker.</p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
