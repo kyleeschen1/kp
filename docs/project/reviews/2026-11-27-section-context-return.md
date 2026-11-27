@@ -1,7 +1,7 @@
 # Leave a section explanation and return precisely
 
 Date: 2026-11-27
-Status: approved horizon continuation; canonical candidate pending.
+Status: checked canonical candidate; awaiting human orientation review.
 Authority: studio outcome 11, resumed by “approve! resume” after accepting the
 independent saddle-section reference. Execution: `run-contract.kp.section-context-return-20261127`.
 
@@ -70,3 +70,50 @@ package status; this proposal owns rationale and boundaries.
 Resume with `theseus work context task.kp.section-context-return-20261127 --mode brief`.
 The old saddle reuse milestone is accepted and complete. The actual-response
 annotation trial remains pending; outcome 12's reference collection is later.
+
+## Candidate and evidence
+
+Both reference copies now open the question with immutable source/view snapshots,
+an occurrence and curve target, viewport offset and disclosure state. Prediction,
+reveal, comparison and the question's own camera survive reload independently.
+Return links above and below the explanation restore the origin. Native history
+uses the same pinned state. Leaving either document disposes its players; a
+BFCache restoration remounts from URL authority instead of retaining GPU leases.
+The question creates no player until reveal. Static reasoning and SVG fallback
+remain usable without WebGL. The shared renderer and mathematical model did not
+need changes.
+
+An initial phone check exposed a missing invariant: source disclosures affect
+return geometry. Saving their open state fixes the resulting scroll clamp.
+Both browsers now preserve source, camera and progress exactly; viewport offset
+allows one CSS pixel for native scroll rounding. Restoration runs once and is
+cancelled by intentional input, with no continuous scroll manipulation. Invalid
+drafts, forged targets and unsupported context fail explicitly before navigation
+or player creation. These are local host guarantees, not a general detour stack.
+
+Checks on the final candidate:
+
+- `npm run test:saddle-section`: 7 passed, including malformed-context admission,
+  detached snapshots and opposite-plane symmetry across supported samples.
+- `npm run visual:saddle-section`: all 16 passed in Chromium and Firefox,
+  including reload, Back/Forward, phone disclosure return, remount, invalid
+  drafts, WebGL loss/unavailability and existing two-copy behavior. Desktop and
+  phone question captures inspected. This verifies behavior, not learning value.
+- `npm run typecheck:saddle-section`, `npm run typecheck`,
+  `npm run check:architecture`, `npm run check:tooling-configs` and
+  `npm run test:project-vision`: passed (75 vision checks).
+- `npm run measure:saddle-section`: complete two-entry production closure is
+  58,268 bytes raw / 20,540 gzip JavaScript across three chunks; CSS is
+  3,382 / 1,318; all eight emitted HTML/chunk/style/font files total
+  106,945 / 66,733. Gzip sums estimate files, not actual transfer or runtime.
+  The earlier single-reference baseline was 47,344 / 16,303 JavaScript;
+  this measurement additionally includes the complete question host. Both fit
+  the unchanged 60,000 raw / 21,000 gzip JavaScript ceiling. No Three.js, KaTeX,
+  editor or original experiment enters the emitted module closure.
+
+Open http://127.0.0.1:8000/experiments/saddle-section-reference/, adjust a section
+and its view, then choose **What if the plane moves to the other side?** Make a
+prediction, reveal the reasoning, compare the planes, reload, and choose
+**Return to your saved view**. Judge whether the question feels connected to the
+selected curve and whether return restores your sense of place. Human approval
+of this new interaction is still required before collection rollout.

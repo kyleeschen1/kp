@@ -31,23 +31,26 @@
     {
       "id": "context",
       "title": "Checked-context",
-      "summary": "Admit pinned source, occurrence and prediction state before navigating",
-      "status": "in-progress"
+      "summary": "Pinned snapshots, occurrence/object return and prediction/view admission pass deterministic guards and symmetry checks",
+      "status": "complete"
     },
     {
       "id": "detour",
       "title": "Question-and-return",
-      "status": "planned"
+      "summary": "Question flow, prediction/reveal, comparison and source/view/object return work in both browsers; preserve disclosures to prevent phone scroll clamping",
+      "status": "complete"
     },
     {
       "id": "verification",
       "title": "Integrated-preservation",
-      "status": "planned"
+      "summary": "Final 7 unit and 16 Chromium/Firefox tests, full types, configuration, architecture, vision and complete two-host production payload gates pass",
+      "status": "complete"
     },
     {
       "id": "review",
       "title": "Canonical-review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: judge question connection and sense of place after exact source/view return on the shared saddle reference",
+      "status": "in-progress"
     }
   ]
 }

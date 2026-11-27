@@ -14,7 +14,7 @@
     "lanes:stop": "node --disable-warning=ExperimentalWarning scripts/library-lanes-service.ts stop",
     "lanes:status": "node --disable-warning=ExperimentalWarning scripts/library-lanes-service.ts status",
     "measure:saddle-section": "node --disable-warning=ExperimentalWarning scripts/measure-saddle-section.ts",
-    "test:saddle-section": "node --disable-warning=ExperimentalWarning --test tests/saddle-section.test.ts",
+    "test:saddle-section": "node --disable-warning=ExperimentalWarning --test tests/saddle-section.test.ts tests/section-context-return.test.ts",
     "typecheck:saddle-section": "tsc --project config/typescript/tsconfig.saddle-section.json",
     "visual:saddle-section": "playwright test --config config/playwright/playwright.saddle-section.config.ts --project=chromium --project=firefox --workers=1",
     "test:direct-webgl-graph": "node --disable-warning=ExperimentalWarning --test tests/direct-webgl-graph.test.ts",

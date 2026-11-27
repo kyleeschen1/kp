@@ -1,8 +1,11 @@
 import { mountSaddleSection, prepareSaddleSection, readSaddleSectionSource, describeSaddleSection,
-  type SaddleSectionPlayer, type SaddleColors } from "../../animation-player/public-api.ts";
+  type SaddleSectionPlayer } from "../../animation-player/public-api.ts";
 import { readReferenceState, type ReferenceOccurrence } from "./state.ts";
+import { sectionReferenceColors as colors } from "./theme.ts";
+import { installSectionDetours } from "./navigation.ts";
 import "./style.css";
 
+document.documentElement.dataset["kpTheme"] = new URL(location.href).searchParams.get("theme") === "dark" ? "dark" : "light";
 const app = document.querySelector<HTMLElement>("#app")!;
 app.innerHTML = `<nav><a href="/experiments/direct-webgl-graph/?example=section">Original experiment</a><button id="theme">Dark theme</button></nav>
   <h1>What remains when we fix one coordinate?</h1>
@@ -11,18 +14,6 @@ app.innerHTML = `<nav><a href="/experiments/direct-webgl-graph/?example=section"
   <p id="error" role="alert"></p><div class="references"></div>`;
 export const players: SaddleSectionPlayer[] = [];
 const restored = readReferenceState(new URL(location.href).searchParams.get("sections"));
-function colors(): SaddleColors {
-  const style = getComputedStyle(document.documentElement);
-  const read = (name: string): readonly [number, number, number] => {
-    const raw = style.getPropertyValue(name).trim();
-    if (!/^#[0-9a-f]{6}$/i.test(raw)) throw new Error(`Expected palette color ${name}.`);
-    return [parseInt(raw.slice(1, 3), 16) / 255, parseInt(raw.slice(3, 5), 16) / 255, parseInt(raw.slice(5, 7), 16) / 255];
-  };
-  const background = read("--color-paper"), accent = read("--color-green-light");
-  return { background, surface: [accent[0] * .68 + background[0] * .32, accent[1] * .68 + background[1] * .32, accent[2] * .68 + background[2] * .32],
-    ink: read("--color-ink"), grid: read("--color-muted"), x: read("--color-red-light"), y: read("--color-blue-light"),
-    z: read("--color-yellow-light"), section: read("--color-red-light"), plane: read("--color-blue-light") };
-}
 let saveTimer: ReturnType<typeof setTimeout> | undefined;
 function save() {
   if (players.length !== 2) return;
@@ -77,13 +68,20 @@ if (restored.status === "ready") restored.occurrences.forEach(addOccurrence);
 else {
   document.querySelector("#error")!.textContent = `${restored.message} No substituted source was loaded. Remove the sections parameter to open the starting example.`;
 }
+const removeDetours = players.length === 2 ? installSectionDetours(app, players) : () => {};
+document.querySelector("#theme")!.textContent = document.documentElement.dataset["kpTheme"] === "dark" ? "Light theme" : "Dark theme";
 document.querySelector("#theme")!.addEventListener("click", () => {
   const dark = document.documentElement.dataset["kpTheme"] !== "dark";
   document.documentElement.dataset["kpTheme"] = dark ? "dark" : "light";
   document.querySelector("#theme")!.textContent = dark ? "Light theme" : "Dark theme";
   const palette = colors(); for (const player of players) player.setColors(palette);
 });
-const pagehide = () => { clearTimeout(saveTimer); save(); for (const player of players) player.pause(); clearTimeout(saveTimer); };
-const dispose = () => { clearTimeout(saveTimer); save(); window.removeEventListener("pagehide", pagehide); for (const player of players) player.dispose(); };
+let left = false;
+const pagehide = () => { if (left) return; clearTimeout(saveTimer); save(); left = true; removeDetours(); for (const player of players) player.dispose(); };
+// A frozen history document must not retain GPU leases while its question is open.
+// Its URL is the complete restore authority, including when the browser uses BFCache.
+const pageshow = (event: PageTransitionEvent) => { if (event.persisted && left) location.reload(); };
+const dispose = () => { pagehide(); window.removeEventListener("pagehide", pagehide); window.removeEventListener("pageshow", pageshow); };
 window.addEventListener("pagehide", pagehide);
+window.addEventListener("pageshow", pageshow);
 import.meta.hot?.dispose(dispose);

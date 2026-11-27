@@ -2,13 +2,67 @@
   "id": "task.kp.section-context-return-20261127",
   "kind": "task",
   "title": "Leave and return to a section explanation",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "Approved studio outcome 11: one source-pinned detour, prediction and exact return",
+  "summary": "HUMAN_CHECKPOINT: checked source-pinned question and return candidate; awaiting orientation review",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-11-27-section-context-return.md"
     }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:saddle-section",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T16:45:56.117Z",
+      "notes": "7 passed; immutable context, fail-closed admission, symmetry and existing player laws"
+    },
+    {
+      "command": "npm run visual:saddle-section",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T16:45:57.044Z",
+      "notes": "Final complete suite: 16 passed across Chromium and Firefox; source/view identity, reload, history, phone disclosure return, fallback and remount. Initial missing-disclosure regression repaired; native scroll rounding bounded to one CSS pixel."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T16:45:57.684Z",
+      "notes": "Full app, node, test, Svelte and domain types passed with zero Svelte warnings; focused section types also passed."
+    },
+    {
+      "command": "npm run measure:saddle-section",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:45:58.351Z",
+      "notes": "Complete two-host closure: JS 58268 raw / 20540 gzip; CSS 3382 / 1318; all emitted 106945 / 66733. Existing ceilings unchanged."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:45:58.987Z",
+      "notes": "5 configuration tests and complete Playwright, Vite and TypeScript configuration checks passed"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:45:59.626Z",
+      "notes": "Architecture checks passed for final host implementation; renderer unchanged"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:46:00.302Z",
+      "notes": "75 passed after acceptance and next-outcome routing"
+    }
+  ],
+  "revisitWhen": [
+    "User accepts or supplies feedback on the saddle reference question and return"
   ]
 }

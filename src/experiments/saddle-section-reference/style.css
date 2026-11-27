@@ -22,4 +22,8 @@ button, summary { cursor: pointer; } :focus-visible { outline: 2px solid var(--c
 [role=alert] { color: var(--color-red-light); } [role=alert]:empty { display: none; }
 pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8em; }
 [hidden] { display: none !important; }
+.detour { max-width: 760px; } .detour [data-answer] { margin-block: 1.2em; }
+.detour .stage { max-width: 440px; margin-inline: auto; }
+button[aria-pressed=true] { background: var(--color-selection); }
+[data-detour] { margin-block: .5em 1em; }
 @media (max-width: 640px) { .references { grid-template-columns: minmax(0, 1fr); gap: 1em; } }

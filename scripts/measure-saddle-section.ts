@@ -6,7 +6,8 @@ import { build } from "vite";
 const root = resolve(import.meta.dirname, "..");
 const output = await build({ root, configFile: false, publicDir: false, logLevel: "silent", base: "./",
   build: { write: false, minify: true, target: "esnext", cssCodeSplit: true,
-    rolldownOptions: { input: resolve(root, "experiments/saddle-section-reference/index.html") } } });
+    rolldownOptions: { input: { reference: resolve(root, "experiments/saddle-section-reference/index.html"),
+      question: resolve(root, "experiments/saddle-section-reference/why/index.html") } } } });
 const files: { file: string; raw: number; gzip: number }[] = [], modules: string[] = [];
 for (const result of Array.isArray(output) ? output : [output]) {
   if (!("output" in result)) throw new Error("Expected completed production build.");
@@ -23,4 +24,4 @@ const javascript = sum(files.filter(f => f.file.endsWith(".js")));
 // Bounded initial allowance for the complete real host, not a reduced library surrogate.
 assert.ok(javascript.raw < 60_000 && javascript.gzip < 21_000, "Section reference exceeds its measured-host allowance.");
 console.log(JSON.stringify({ javascript, css: sum(files.filter(f => f.file.endsWith(".css"))), completeEmitted: sum(files) }, null, 2));
-console.log("Complete reference HTML build, including emitted styles and font formats. Gzip sums estimate files, not network transfer or GPU execution time.");
+console.log("Complete reference and question HTML build, including every emitted chunk, style and font format. Gzip sums estimate files, not network transfer or GPU execution time.");
