@@ -1,0 +1,12 @@
+{
+  "name": "@kp/player-lab",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.ts --host 127.0.0.1 --port 8013 --strictPort",
+    "build": "vite build --config vite.config.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test ../../tests/player-lane.test.ts ../../tests/direct-webgl-graph.test.ts",
+    "typecheck": "tsc --project ../../config/typescript/tsconfig.player-lane.json",
+    "visual": "playwright test --config playwright.config.ts"
+  }
+}
