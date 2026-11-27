@@ -15,69 +15,71 @@ Follow the same unknown through those changes. Look for the operation being undo
     {
       "id": "equation.fractional-linear.initial",
       "title": "Notice the last operation",
-      "content": "Three was added after x was halved. Start by undoing that addition.",
+      "content": "Undo the last operation: adding three.",
       "progressPermille": 0,
       "focusRefs": ["equation.fractional-linear.initial.lhs.plus3"]
     },
     {
       "id": "beat.read",
       "title": "Keep the condition true",
-      "content": "Our goal is to uncover x while keeping exactly the same solutions. Change both sides together.",
+      "content": "Keep the equality true. Change both sides together.",
       "progressPermille": 0,
       "focusRefs": ["equation.fractional-linear.initial"]
     },
     {
       "id": "beat.subtract",
       "title": "Undo the addition",
-      "content": "Subtract three from each side. Equal values remain equal after the same subtraction; adding three back would recover the original condition.",
+      "content": "Subtract three from both sides.",
       "progressPermille": 167,
       "focusRefs": ["equation.fractional-linear.after-subtract.lhs.minus3", "equation.fractional-linear.after-subtract.rhs.3"]
     },
     {
       "id": "beat.cancel-additive",
       "title": "See what remains",
-      "content": "On the left, adding three and then subtracting three leaves just half of x. The unknown itself has not changed.",
+      "content": "Adding and subtracting three cancel. Half of x remains.",
       "progressPermille": 333,
       "focusRefs": ["equation.fractional-linear.additive-cancelled.fraction.numerator.x"]
     },
     {
       "id": "beat.simplify-difference",
       "title": "Read the remaining equality",
-      "content": "Seven minus three is four. We now know that half of x is four.",
+      "content": "Seven minus three is four.",
       "progressPermille": 500,
       "focusRefs": ["equation.fractional-linear.right-simplified.rhs.4"]
     },
     {
       "id": "equation.fractional-linear.right-simplified",
       "title": "Predict how to uncover x",
-      "content": "Four is half of x. Predict the whole before revealing the next move.",
+      "content": "Half of x is four. What is the whole?",
       "progressPermille": 500,
       "focusRefs": ["equation.fractional-linear.right-simplified.rhs.4"]
     },
     {
       "id": "beat.multiply",
       "title": "Undo the halving",
-      "content": "Double both sides. Two halves make the whole unknown, and doubling four gives its value. Dividing by two would reverse this move.",
+      "content": "Double both sides.",
       "progressPermille": 667,
       "focusRefs": ["equation.fractional-linear.multiplied.lhs.multiplier.2", "equation.fractional-linear.multiplied.rhs.multiplier.2"]
     },
     {
       "id": "beat.cancel-denominator",
       "title": "The whole unknown remains",
-      "content": "Multiplying by two undoes division by two. The left side is now x; the right side still records the same doubling.",
+      "content": "Two halves make the whole: x.",
       "progressPermille": 833,
       "focusRefs": ["equation.fractional-linear.multiplied.lhs.multiplier.2", "equation.fractional-linear.multiplied.fraction.denominator.2"]
     },
     {
       "id": "beat.solve",
       "title": "Read and check the answer",
-      "content": "Two times four is eight. Check it in the original equation: half of eight is four, and four plus three is seven.",
+      "content": "x is eight. Check: half of eight, plus three, is seven.",
       "progressPermille": 1000,
       "focusRefs": ["equation.fractional-linear.solved"]
     }
   ]
 }
 ```
+
+Doubling both sides is reversible too: dividing by two recovers the preceding equality. Throughout the calculation, x names the same unknown; we change the condition's form without changing its solutions.
 
 Subtracting first was a convenient choice, not the only legal one. We could double both sides at the start, but then we must double the entire left side, including the added three. That would give x plus six equal to fourteen. Subtracting six would still give eight. The first route exposes the half more directly; both routes preserve the solutions.
 

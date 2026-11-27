@@ -176,3 +176,12 @@ the original equation animation clock and test an equation inset near the left
 rail. Preserve mathematical sources, saved notebook data, native endpoints,
 operation distances and all other readers. One reversible candidate ends at
 [visual review](reviews/2026-11-26-fraction-flow.md); no broader promotion.
+
+## Approved successor: compact classic brackets
+
+Restore the original bracket pair and centered equation. Bound the visible
+frame by the local text/equation group. Remove reading/focus-only holds and
+stage-derived gaps, preserving mathematical animation distance. Shorten default
+cues while retaining the reasoning in ordinary prose and preserving saved
+drafts. One notebook exemplar ends at
+[visual review](reviews/2026-11-26-fraction-compact-brackets.md); no rollout.

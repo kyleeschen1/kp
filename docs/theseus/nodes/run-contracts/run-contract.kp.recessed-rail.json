@@ -112,6 +112,12 @@
       "title": "Flowing prose beside an indented equation",
       "summary": "HUMAN_CHECKPOINT: flowing prose and indented equation candidate checked. Focused checks pass; unrelated architecture gate failure recorded. Review docs/project/reviews/2026-11-26-fraction-flow.md.",
       "status": "complete"
+    },
+    {
+      "id": "compact-brackets",
+      "title": "Compact classic brackets and animation-only scroll reserves",
+      "summary": "HUMAN_CHECKPOINT: compact brackets, normal reading spacing, centered equation and concise default cues. Checked candidate in fraction-compact-brackets review.",
+      "status": "complete"
     }
   ]
 }

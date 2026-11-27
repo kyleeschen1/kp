@@ -4,7 +4,7 @@
   "title": "Review a recessed fraction stage beneath scrolling prose",
   "status": "deferred",
   "domain": "reader",
-  "summary": "HUMAN_CHECKPOINT: review ordinary scrolling prose, visible upcoming items and start-aligned equation in docs/project/reviews/2026-11-26-fraction-flow.md. Tooltip and scroll-stop trial retired.",
+  "summary": "HUMAN_CHECKPOINT: review compact classic brackets and animation-only scroll reserves at docs/project/reviews/2026-11-26-fraction-compact-brackets.md.",
   "verificationRecords": [
     {
       "command": "npm run visual:recessed-rail -- --project=firefox",
@@ -110,6 +110,13 @@
       "scope": "Repository dependency-direction gate",
       "checkedAt": "2026-11-26T23:21:38.720Z",
       "notes": "Existing unowned editor-chat/editor-commands/editor-rows modules and notebook-to-experiment imports block the first gate. These files and imports are unchanged. Later subchecks did not run; see fraction-flow review."
+    },
+    {
+      "command": "npm run visual:fraction-flow -- --project=firefox",
+      "status": "passed",
+      "scope": "Compact classic bracket notebook, desktop and phone widths",
+      "checkedAt": "2026-11-27T00:15:35.599Z",
+      "notes": "Four Chromium/Firefox cases pass; final added reading-flow assertions pass in two Chromium cases. Two mathematical preservation cases, 23 units, notebook typecheck and source authoring check pass. Initial test-assumption repairs documented in docs/project/reviews/2026-11-26-fraction-compact-brackets.md."
     }
   ],
   "revisitWhen": [

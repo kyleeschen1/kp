@@ -384,7 +384,6 @@ const chromeFreeCanonicalEquationSession:
         createKpChromeFreeCanonicalEquationSession({
           ...lessonDescriptor.canonicalSession,
           reserveViewportHeight: risingPassages?.reserveEquationHeight,
-          horizontalAlignment: fractionFlow ? 'start' : 'center',
           shell: stageShell,
           animation,
           descriptor: lessonDescriptor,
@@ -832,7 +831,6 @@ function measureLayout(revision: number): LayoutState {
       viewport: window.innerWidth > 880 ? "wide" : "phone"
     });
   lastMeasuredLayout = measureKpCanonicalEquationStageLayout({
-    horizontalAlignment: fractionFlow ? 'start' : 'center',
     animationId: animation.id,
     revision,
     viewport,

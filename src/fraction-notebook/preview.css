@@ -8,27 +8,22 @@
 /* Only the development notebook preview loads this presentation. The native
  * masthead remains a zero-height control owner for the existing reader runtime. */
 body[data-kp-fraction-notebook-preview] { --kp-reader-masthead-height: 0px; }
-/* Only replace the original stage punctuation. The reader still owns all
-   placement, attention, annotation and mathematical animation behavior. */
-body[data-kp-fraction-notebook-preview] { --fn-stage-ridge: #000; }
-html[data-notebook-theme=dark] body[data-kp-fraction-notebook-preview] { --fn-stage-ridge: var(--fn-text); }
-body[data-kp-fraction-notebook-preview] .kp-caption-frame::before {
-  left: 0; width: 1px; border: 0; border-radius: 0;
-  background: var(--fn-stage-ridge);
+/* Restore the native bracket pair, sized to the current explanatory group.
+   The larger sticky reserve is layout infrastructure, not its visible border. */
+body[data-kp-fraction-notebook-preview] .kp-caption-frame {
+  top: var(--kp-caption-local-top, 0px); bottom: auto;
+  height: var(--kp-caption-local-height, var(--kp-caption-card-height));
 }
-body[data-kp-fraction-notebook-preview] .kp-caption-frame::after { display: none; }
-/* The notebook keeps every explanation in the document: no symbol-attached
-   tooltip, sticky paragraph, or attention-driven concealment of the next item. */
+/* Every explanation stays in the document, with upcoming prose visible.
+   Only operation passages opt into the bounded sticky hold below. */
 body[data-kp-fraction-notebook-preview][data-kp-caption-mode=captions] .kp-rising-passage {
   position: relative; top: auto;
   opacity: 1; z-index: 2; pointer-events: auto;
 }
-body[data-kp-fraction-notebook-preview] {
-  --fn-stage-indent: 1.5rem;
-}
-/* The fit planner supplies its own 18px safe gutter, inside this one indent. */
-html body[data-kp-fraction-notebook-preview][data-kp-reader-layout] .kp-reader-equation-stage {
-  padding-inline: max(0px, calc(var(--fn-stage-indent) - 18px));
+/* Only a mathematical transformation holds its cue alongside the equation.
+   Ordinary reading and focus-only passages keep moving with the document. */
+body[data-kp-fraction-notebook-preview][data-kp-caption-mode=captions] [data-kp-operation-id] .kp-rising-passage {
+  position: sticky; top: var(--kp-passage-top);
 }
 body[data-kp-fraction-notebook-preview][data-kp-reader-layout] .kp-rising-passage p {
   text-indent: 0;

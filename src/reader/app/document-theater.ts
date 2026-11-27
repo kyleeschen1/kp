@@ -90,6 +90,18 @@ export function mountDocumentTheater(input: {
     motionMode = mode;
     const active = readAll ? returnIndex : indexAtPosition();
     const position = window.scrollY + readingLine;
+    if (input.flowingProse && !readAll) {
+      // The pin reserves the tallest passage once, but the visible brackets
+      // enclose this local group. Paint-only sizing cannot move the scroll clock.
+      const height = heights[active] ?? 0;
+      const top = -frameTop - height - 16;
+      const style = document.body.style;
+      const frameHeight = `${height + 14 + equationHeight + 32}px`;
+      if (style.getPropertyValue('--kp-caption-local-height') !== frameHeight)
+        style.setProperty('--kp-caption-local-height', frameHeight);
+      if (style.getPropertyValue('--kp-caption-local-top') !== `${top}px`)
+        style.setProperty('--kp-caption-local-top', `${top}px`);
+    }
     const opacity = focusAt(position);
     const sample = { position, positions, holds, readingDocument: readAll, hasSelection: selectedPassages.size > 0, motionMode };
     const attention: DocumentReadingAttention = input.flowingProse
@@ -184,8 +196,8 @@ export function mountDocumentTheater(input: {
       return true;
     },
     annotation: () => annotation,
-    storyFocusActive: () => !readAll && documentStoryFocusActive(window.scrollY + readingLine,
-      positions[indexAtPosition()]!, holds[indexAtPosition()]!),
+    storyFocusActive: () => !readAll && (input.flowingProse || documentStoryFocusActive(window.scrollY + readingLine,
+      positions[indexAtPosition()]!, holds[indexAtPosition()]!)),
     readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
       geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight);

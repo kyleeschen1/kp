@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-for (const width of [1280, 390]) test(`original fraction presentation with left ridge at ${width}px`, async ({ page }, info) => {
+for (const width of [1280, 390]) test(`classic fraction brackets preserve mathematical motion at ${width}px`, async ({ page }, info) => {
   await page.setViewportSize({ width, height: 844 });
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
   // Old review links must no longer select any retired presentation behavior.
@@ -18,8 +18,9 @@ for (const width of [1280, 390]) test(`original fraction presentation with left 
       pinTransform: getComputedStyle(node.parentElement!).transform,
       copyTransforms: [...document.querySelectorAll('.kp-caption-copy')].map(copy => getComputedStyle(copy).transform) };
   });
-  expect(appearance).toMatchObject({ width: '1px', left: '0px', border: '0px', ink: 'rgb(0, 0, 0)', right: 'none', pinTransform: 'none' });
-  expect(appearance.height).toBeCloseTo(appearance.stageHeight, 0);
+  expect(appearance).toMatchObject({ width: '10px', left: '0px', pinTransform: 'none' });
+  expect(appearance.right).not.toBe('none');
+  expect(Math.abs(appearance.height - appearance.stageHeight)).toBeLessThanOrEqual(2);
   expect(appearance.copyTransforms.every(value => value === 'none')).toBe(true);
   const operation = await frame.evaluate(() => {
     const beat = document.querySelectorAll<HTMLElement>('[data-kp-operation-id]')[1]!;

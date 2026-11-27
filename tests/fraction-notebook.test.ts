@@ -57,7 +57,8 @@ test('v1 migration preserves existing identities, edits and invalid source witho
   if (header.type !== 'articleHeader') throw new Error('Header missing');
   assert.equal(header.title.id, old.cells[0]!.id); assert.equal(header.authors[0]!.name, 'Codex');
   assert.deepEqual(migrated.cells.slice(1).map(c => c.id), old.cells.slice(1).map(c => c.id));
-  assert.equal(compileFractionNotebook(migrated, canonical).notes[0]!.notes[0]!.text, 'Three was added after x was halved. Start by undoing that addition.');
+  const originalStory = old.cells.find(cell => 'source' in cell)!;
+  assert.equal(compileFractionNotebook(migrated, canonical).notes[0]!.notes[0]!.text, JSON.parse(originalStory.source).steps[0].content);
   const invalid = { ...old, cells: old.cells.map(c => c.type === 'story' ? { ...c, source: '{ unfinished' } : c) };
   assert.equal(readNotebook(invalid).cells.find(c => c.type === 'story')?.source, '{ unfinished');
   assert.throws(() => readNotebook({ ...old, cells: [...old.cells, old.cells[1]] }));
