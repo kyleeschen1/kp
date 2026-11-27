@@ -61,6 +61,7 @@ test("round-trip number printing is opt-in and default nested output stays uncha
   );
   const legacy = '\\frac{\\sin\\left(0 x\\right) + \\cos\\left(y - 0\\right)}{\\left(z + 1.234568\\right)^{-0}}';
   assert.equal(expressionToLatex(expression), legacy);
+  assert.deepEqual([expression, expression].map(expressionToLatex), [legacy, legacy]);
   assert.equal(expressionToLatex(expression, {}), legacy);
   const precise = '\\frac{\\sin\\left(1 \\times 10^{-8} x\\right) + \\cos\\left(y - 1 \\times 10^{-8}\\right)}{\\left(z + 1.23456789\\right)^{-1 \\times 10^{-8}}}';
   assert.equal(expressionToLatex(expression, { numbers: 'round-trip' }), precise);

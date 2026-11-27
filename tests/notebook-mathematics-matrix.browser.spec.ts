@@ -47,11 +47,15 @@ test('matrix explanation follows its source, keeps playback out of history and s
   const explanation = page.locator('.fn-matrix-object[data-math-view=columns]');
   const stage = explanation.locator('.comb-stage'), slider = explanation.getByRole('slider', { name: 'Animation position' });
   await expect(stage).toHaveCount(1);
+  const geometry = explanation.locator('.reference-geometry');
+  await expect(geometry).toHaveCount(1);
   const id = await explanation.getAttribute('data-matrix-occurrence');
   await expect(explanation).toHaveAttribute('data-matrix-resource', (await source.getAttribute('data-matrix-resource'))!);
   await expect(stage.locator('.comb-equation [data-kp-comb-key^="b-"]')).toHaveCount(2);
   await expect(stage.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('5');
   await explanation.getByLabel('Milestone', { exact: true }).selectOption('6'); await expect(slider).toHaveValue('1');
+  await expect(geometry).toHaveAttribute('data-progress', '1');
+  await expect(geometry.locator('[data-result-label]')).toHaveText('Sum: (5, 2)');
   await explanation.getByRole('button', { name: 'Previous milestone', exact: true }).click();
   await expect(slider).toHaveValue('0.8333');
   await explanation.getByRole('button', { name: 'Next milestone', exact: true }).click(); await expect(slider).toHaveValue('1');
@@ -64,6 +68,7 @@ test('matrix explanation follows its source, keeps playback out of history and s
   await expect(explanation).toHaveAttribute('data-matrix-occurrence', id!); await expect(slider).toHaveValue('1');
   const fieldNode = await field.elementHandle(); await field.fill('4'); await expect(field).toBeFocused();
   await expect(stage.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('6'); await expect(slider).toHaveValue('1');
+  await expect(geometry.locator('[data-result-label]')).toHaveText('Sum: (6, 2)');
   expect(await fieldNode!.evaluate(node => node.isConnected)).toBe(true);
   const validStage = await stage.elementHandle(); await field.fill('-');
   await expect(explanation.locator('.fn-math-diagnostic')).toContainText('Complete valid source');
@@ -83,12 +88,20 @@ test('matrix explanation follows its source, keeps playback out of history and s
   await page.reload(); await expect(stage).toHaveCount(1); await expect(field).toHaveValue('2');
   await expect(slider).toHaveValue('0.3333'); await expect(explanation).toHaveAttribute('data-matrix-occurrence', id!);
   await page.screenshot({ path: info.outputPath('matrix-column-notebook.png') });
+  await geometry.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: info.outputPath('matrix-column-notebook-linked.png') });
   await source.locator('.fn-math-heading').click(); await command(page, 'notebook.toggle-editing');
   const reader = page.frameLocator('iframe').locator('.fn-matrix-object[data-math-view=columns]');
   await expect(reader.locator('.comb-stage')).toHaveCount(1);
+  await expect(reader.locator('.reference-geometry')).toHaveCount(1);
   await reader.getByLabel('Milestone', { exact: true }).selectOption('6');
   await expect(reader.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('4');
+  await page.frameLocator('iframe').locator('body').evaluate(() => window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: true })));
+  await expect(reader).toHaveCount(0);
+  await page.frameLocator('iframe').locator('body').evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+  await expect(reader.locator('.reference-geometry')).toHaveAttribute('data-progress', '1');
   await expect(stage).toHaveCount(0); // The hidden editor has no live player.
+  await expect(geometry).toHaveCount(0);
   await command(page, 'notebook.toggle-editing'); await expect(stage).toHaveCount(1);
   await expect(reader.locator('.comb-stage')).toHaveCount(0);
   await expect(slider).toHaveValue('0.3333'); // Reader controls cannot overwrite editor position.
@@ -111,6 +124,9 @@ test('matrix explanation loads on demand and removal cancels pending mount in a 
   await editor.press('ControlOrMeta+Shift+z');
   const explanation = page.locator('.fn-matrix-object[data-math-view=columns]');
   await expect(explanation.locator('.comb-stage')).toHaveCount(1);
+  const geometry = explanation.locator('.reference-geometry'); await expect(geometry).toHaveCount(1);
+  const graphBounds = await geometry.boundingBox(), equationBounds = await explanation.locator('.reference-symbols').boundingBox();
+  expect(graphBounds!.y).toBeGreaterThanOrEqual(equationBounds!.y + equationBounds!.height);
   await explanation.getByLabel('Milestone', { exact: true }).selectOption('6');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await expect(explanation.getByRole('region', { name: 'Column combination; scroll horizontally on narrow screens', exact: true })).toBeVisible();
@@ -184,6 +200,41 @@ test('matrix commands reject stale targets and ordinary clipboard copy owns inde
   await copy.getByRole('textbox', { name: 'v1', exact: true }).fill('4');
   await expect(source.getByRole('textbox', { name: 'v1', exact: true })).toHaveValue('1');
   await expect(graphs(page).locator('.fn-math-legend')).toContainText('(4, 2)');
+  await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'valid');
+});
+test('deleted matrix views release capacity and cut clipboard restores settings after reclamation and reload', async ({ page }) => {
+  await ready(page);
+  for (let i = 0; i < 6; i++) await equation(page).getByRole('button', { name: 'Graph', exact: true }).click();
+  await expect(graphs(page)).toHaveCount(7);
+  await expect(equation(page).getByRole('button', { name: 'Graph', exact: true })).toBeDisabled();
+  const first = graphs(page).first(), id = await first.getAttribute('data-cell-id'), occurrence = await first.getAttribute('data-matrix-occurrence');
+  await first.getByRole('button', { name: 'Zoom out', exact: true }).click();
+  const cut = async () => {
+    await graphs(page).first().locator('.fn-math-heading').click();
+    const editor = page.getByLabel('Matrix notebook', { exact: true }); await editor.focus();
+    return editor.evaluate(el => {
+      const event = new ClipboardEvent('cut', { bubbles: true, cancelable: true, clipboardData: new DataTransfer() });
+      el.dispatchEvent(event);
+      return { html: event.clipboardData?.getData('text/html') ?? '', text: event.clipboardData?.getData('text/plain') ?? '' };
+    });
+  };
+  const clipboard = await cut(); expect(clipboard.html).toContain('data-matrix-clipboard-occurrence');
+  await expect(graphs(page)).toHaveCount(6);
+  await expect(equation(page).getByRole('button', { name: 'Graph', exact: true })).toBeEnabled();
+  await equation(page).getByRole('button', { name: 'Graph', exact: true }).click();
+  await expect(graphs(page)).toHaveCount(7); await page.reload(); await expect(graphs(page)).toHaveCount(7);
+  await cut(); await expect(graphs(page)).toHaveCount(6);
+  const editor = page.getByLabel('Matrix notebook', { exact: true }); await editor.focus(); await editor.press('G'); await editor.press('o');
+  await editor.evaluate((el, clipboard) => {
+    const event = new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: new DataTransfer() });
+    if (!event.clipboardData) throw new Error('Missing clipboard transfer');
+    event.clipboardData.setData('text/html', clipboard.html); event.clipboardData.setData('text/plain', clipboard.text); el.dispatchEvent(event);
+  }, clipboard);
+  await expect(graphs(page)).toHaveCount(7);
+  const restored = page.locator(`[data-cell-id="${id}"]`);
+  await expect(restored).toHaveAttribute('data-matrix-occurrence', occurrence!);
+  await expect(restored.locator('.fn-math-legend')).toContainText('range ±10');
+  await expect(restored).not.toHaveAttribute('data-matrix-clipboard-occurrence');
   await expect(page.locator('.fn-status')).toHaveAttribute('data-state', 'valid');
 });
 test('matrix notebook stays within a narrow pane and switches without overwriting quadratic drafts', async ({ page }, info) => {

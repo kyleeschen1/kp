@@ -16,7 +16,9 @@ export function notebookThemeBootstrap() {
     if (!bundle || !('output' in bundle)) throw new Error('Notebook theme bootstrap did not produce a bundle.');
     const chunk = bundle.output.find(part => part.type === 'chunk');
     if (!chunk) throw new Error('Notebook theme bootstrap is missing its script.');
-    const palette = await readFile(new URL('../src/fraction-notebook/palette.css', import.meta.url), 'utf8');
+    // Inline the canonical tokens, not the legacy @import wrapper: relative
+    // CSS imports in a style tag resolve against the preview URL, not this file.
+    const palette = await readFile(new URL('../src/ui-theme/palette.css', import.meta.url), 'utf8');
     return `<style data-notebook-startup>${palette}\nhtml[data-notebook-theme],html[data-notebook-theme]>body{background:var(--fn-background,var(--color-paper))!important;color:var(--fn-text,var(--color-ink))}html[data-notebook-theme=light]{color-scheme:light}html[data-notebook-theme=dark]{color-scheme:dark}html[data-notebook-window-surface],html[data-notebook-window-surface]>body{background:transparent!important}</style><script data-notebook-startup>${chunk.code.replaceAll('</script', '<\\/script')}</script>`;
   };
   return {

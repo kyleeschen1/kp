@@ -1,0 +1,10 @@
+.fn-quadratic-forms[hidden], .fn-quadratic-forms:empty { display: none; }
+.fn-quadratic-forms { min-inline-size: 0; }
+.fn-quadratic-forms .fn-forms-title { margin: 0; font: inherit; }
+.fn-quadratic-forms dl { margin: .6em 0; display: grid; gap: .7em; }
+.fn-quadratic-forms dl > div { border-inline-start: 1px solid var(--fn-border); padding-inline-start: .75em; min-inline-size: 0; }
+.fn-quadratic-forms dt { font: inherit; color: var(--fn-muted); font-size: .8em; }
+.fn-quadratic-forms dd { margin: 0; }
+.fn-form-equation { color: var(--fn-math); overflow-x: auto; padding-block: .2em; }
+.fn-form-equation .katex { font-size: 1.05em; }
+.fn-quadratic-forms .fn-form-note { margin: 0; font: inherit; font-size: .75em; color: var(--fn-muted); }

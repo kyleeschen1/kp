@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { compileExpression, type MathExpression } from '../src/math/expression.ts';
-import { quadraticExpression, type QuadraticCoefficients } from '../src/math/authoring/quadratic.ts';
+import { quadraticExpression } from '../src/math/authoring/quadratic.ts';
 import { prepareQuadraticForms, type QuadraticForms } from '../src/math/authoring/quadratic-forms.ts';
 
 test('one validated coefficient source prepares expanded, vertex, and real factored forms', () => {

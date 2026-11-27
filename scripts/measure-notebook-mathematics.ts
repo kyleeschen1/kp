@@ -52,7 +52,7 @@ async function measure(label: string, entry: string, before: boolean) {
   }
   const total = (selected: typeof files) => ({ files: selected.length, raw: selected.reduce((sum, f) => sum + f.raw, 0), gzip: selected.reduce((sum, f) => sum + f.gzip, 0) });
   const initialModules = chunks.filter(chunk => initial.has(chunk.file)).flatMap(chunk => chunk.modules);
-  if (label === 'notebook' && !before && initialModules.some(module => /math-runtime|math-controller|matrix-runtime|matrix-controller|math-discovery\/|fraction-notebook\/(math-discovery|contextual-revision|revision-transport)\.ts|math-resources\/runtime|matrix-column-combinations\/(embed|player|presentation)|graph-2d-svg|graph-3d/.test(module)))
+  if (label === 'notebook' && !before && initialModules.some(module => /math-runtime|math-controller|matrix-runtime|matrix-controller|math-discovery\/|quadratic-forms|fraction-notebook\/(math-discovery|contextual-revision|revision-transport)\.ts|math-resources\/runtime|matrix-column-combinations\/(embed|linked-embed|column-graph|column-geometry|player|presentation)|graph-2d-svg|graph-3d/.test(module)))
     throw new Error('The ordinary notebook acquired a mathematical runtime or renderer eagerly.');
   if (label === 'mathematical-reading' && chunks.some(chunk => chunk.modules.some(module => /graph-3d|animation-catalogue|mathjs/.test(module))))
     throw new Error('The mathematical reading acquired an unrelated 3D/catalogue runtime.');

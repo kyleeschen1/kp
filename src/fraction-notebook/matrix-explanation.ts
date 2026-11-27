@@ -1,8 +1,8 @@
 import type { MatrixNotebookRuntime } from './matrix-runtime.ts';
 
 type Explanation = ReturnType<MatrixNotebookRuntime['explanation']>;
-type Embed = typeof import('../experiments/matrix-column-combinations/embed.ts');
-type Player = ReturnType<Embed['mountColumnExplanation']>;
+type Embed = typeof import('../experiments/matrix-column-combinations/linked-embed.ts');
+type Player = ReturnType<Embed['mountLinkedColumnExplanation']>;
 const storagePrefix = 'kp-matrix-column-position-v1:';
 
 /** Playback is occurrence-local UI state, never a document transaction. A
@@ -44,7 +44,7 @@ export function createMatrixExplanation(host: HTMLElement, occurrence: string, s
     catch (error) { failure(error); return; }
     if (revision === explanation.sourceRevision && player) { report(''); return; }
     try {
-      module ??= await import('../experiments/matrix-column-combinations/embed.ts');
+      module ??= await import('../experiments/matrix-column-combinations/linked-embed.ts');
       await module.prepareColumnExplanationFonts();
       // Import/font completion can arrive after removal, folding or another edit.
       if (disposed || attempt !== request || !host.isConnected || hidden()) return;
@@ -54,9 +54,9 @@ export function createMatrixExplanation(host: HTMLElement, occurrence: string, s
       // the old revision usable if admission or mounting the candidate fails.
       candidate.style.visibility = 'hidden'; host.append(candidate);
       let next: Player;
-      try { next = module.mountColumnExplanation(candidate, explanation.product, progress, value => {
+      try { next = module.mountLinkedColumnExplanation(candidate, explanation.product, progress, value => {
         if (revision === explanation.sourceRevision) save(value);
-      }); }
+      }, `${surface}-${occurrence}`); }
       catch (error) { candidate.remove(); throw error; }
       stop(); host.replaceChildren(candidate); candidate.style.visibility = '';
       revision = explanation.sourceRevision; player = next;

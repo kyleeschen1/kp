@@ -1,7 +1,7 @@
 # Mathematical studio foundations
 
 Date: 2026-11-27
-Status: checked candidate; human visual review and actual model trial pending.
+Status: visuals accepted by “looks great! go as long as possible”; actual model trial pending.
 Scope and rationale: [approved tranche](2026-11-27-twelve-loop-horizon.md).
 Execution authority: `run-contract.kp.studio-foundations-20261127`.
 

@@ -17,6 +17,51 @@ async function command(page: Page, query: string) {
   await page.keyboard.press('Enter');
   await expect(picker).toBeHidden();
 }
+test('quadratic forms are lazy source projections with honest degree and real-root limits', async ({ page }, info) => {
+  const errors: string[] = [], formLoads: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('request', request => { if (request.url().includes('quadratic-forms-view')) formLoads.push(request.url()); });
+  await page.setViewportSize({ width: 1280, height: 1000 }); await ready(page);
+  expect(formLoads).toEqual([]);
+  await page.goto(`${url}&forms=1`);
+  const equation = source(page), graph = page.locator('[data-math-kind=quadratic][data-math-view=graph]');
+  const forms = graph.locator('.fn-quadratic-forms');
+  await expect(forms.locator('[data-form]')).toHaveCount(3);
+  const field = (key: string) => equation.getByRole('textbox', { name: key, exact: true });
+  await field('a').fill('0.00000001'); await field('b').fill('1'); await field('c').fill('1');
+  await expect(equation.locator('.fn-math-equation annotation')).toContainText('10^{-8}');
+  await expect(forms.locator('[data-form=expanded] annotation')).toContainText('10^{-8}');
+  await field('a').fill('1'); await field('b').fill('-2'); await field('c').fill('1');
+  await expect(forms).toHaveAttribute('data-degree', '2');
+  await expect(forms.locator('[data-form=factored]')).toHaveAttribute('data-state', 'available');
+  const path = await graph.locator('.graph-curve path').elementHandle();
+  const validForms = await forms.textContent();
+  await field('c').fill('-'); await expect(field('c')).toBeFocused();
+  await expect(forms).toHaveText(validForms!);
+  await expect(graph.locator('.fn-math-diagnostic')).not.toBeEmpty();
+  await field('c').fill('2');
+  await expect(forms.locator('[data-form=factored]')).toHaveAttribute('data-state', 'unavailable');
+  await expect(forms.locator('[data-form=factored]')).toContainText(/real/i);
+  expect(await path!.evaluate(node => node.isConnected)).toBe(true);
+  await field('a').fill('0');
+  await expect(forms).toHaveAttribute('data-degree', '1');
+  await expect(forms.locator('[data-form=vertex]')).toHaveAttribute('data-state', 'unavailable');
+  await expect(forms.locator('[data-form=factored]')).toHaveAttribute('data-state', 'available');
+  await field('b').fill('0'); await expect(forms).toHaveAttribute('data-degree', '0');
+  await field('a').fill('1'); await field('b').fill('-2'); await field('c').fill('-3');
+  await expect(forms.locator('[data-form=factored]')).toHaveAttribute('data-state', 'available');
+  await forms.scrollIntoViewIfNeeded(); await page.screenshot({ path: info.outputPath('quadratic-forms.png') });
+  await page.reload(); await expect(forms).toHaveAttribute('data-degree', '2');
+  await expect(field('c')).toHaveValue('-3');
+  await equation.locator('.fn-math-heading').click(); await command(page, 'notebook.toggle-editing');
+  const readerForms = page.frameLocator('iframe').locator('.fn-quadratic-forms');
+  await expect(readerForms.locator('[data-form=factored]')).toHaveAttribute('data-state', 'available');
+  await command(page, 'notebook.toggle-editing');
+  await page.setViewportSize({ width: 390, height: 844 }); await forms.scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('quadratic-forms-phone.png') });
+  expect(errors).toEqual([]);
+});
 test('quadratic editing, derived views and persistent identities work in the existing workspace', async ({ page }, info) => {
   const errors: string[] = []; page.on('pageerror', error => { errors.push(error.message); console.error(error.message); });
   await page.setViewportSize({ width: 1440, height: 1000 }); await ready(page);
@@ -112,14 +157,16 @@ test('copy creates an independent source, while Graph preserves the original res
   await source(page).locator('.fn-math-heading').click();
   const editor = page.getByLabel('Mathematical notebook', { exact: true }); await editor.focus();
   const copied = await editor.evaluate(el => {
-    const data = new DataTransfer(); el.dispatchEvent(new ClipboardEvent('copy', { bubbles: true, cancelable: true, clipboardData: data }));
-    return { html: data.getData('text/html'), text: data.getData('text/plain') };
+    const event = new ClipboardEvent('copy', { bubbles: true, cancelable: true, clipboardData: new DataTransfer() }); el.dispatchEvent(event);
+    return { html: event.clipboardData?.getData('text/html') ?? '', text: event.clipboardData?.getData('text/plain') ?? '' };
   });
   expect(copied.html).toContain('data-math-resource');
   await editor.press('G'); await editor.press('A');
   await editor.evaluate((el, copied) => {
-    const data = new DataTransfer(); data.setData('text/html', copied.html); data.setData('text/plain', copied.text);
-    el.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: data }));
+    // Firefox supplies its own transfer object for synthetic clipboard events.
+    const event = new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: new DataTransfer() });
+    if (!event.clipboardData) throw new Error('Missing clipboard transfer');
+    event.clipboardData.setData('text/html', copied.html); event.clipboardData.setData('text/plain', copied.text); el.dispatchEvent(event);
   }, copied);
   const equations = page.locator('[data-math-kind=quadratic][data-math-view=equation]'); await expect(equations).toHaveCount(2);
   expect(await equations.last().getAttribute('data-math-resource')).not.toBe(original);

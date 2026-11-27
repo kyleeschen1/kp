@@ -33,9 +33,28 @@ export function createMathNodeView(initial: ProseNode, owner: MathViewOwner, edi
   const body = el('div', 'fn-math-body'), controls = el('div', 'fn-math-controls'), graphHost = el('div', 'fn-math-graph');
   const legend = el('p', 'fn-math-legend'), diagnostics = el('p', 'fn-math-diagnostic'), toolbar = el('div', 'fn-math-actions'); diagnostics.setAttribute('role', 'status');
   const fields = new Map<string, HTMLInputElement>(); let graph: ReturnType<typeof mountMathGraph> | undefined;
+  const formsHost = el('div', 'fn-quadratic-forms');
+  const formsEnabled = new URLSearchParams(location.search).get('forms') === '1';
+  let forms: ReturnType<typeof import('./quadratic-forms-view.ts').mountQuadraticForms> | undefined;
+  let loadingForms = false, disposed = false;
+  let formsSource: QuadraticCoefficients | undefined;
+  const updateForms = () => {
+    if (!formsSource || disposed) return;
+    if (forms) { forms.update(formsSource); return; }
+    if (loadingForms) return;
+    loadingForms = true;
+    // Alternate forms are a lazy projection of the source, never the evaluator
+    // used to draw the curve or another persisted mathematical resource.
+    void import('./quadratic-forms-view.ts').then(module => {
+      if (disposed) return;
+      forms = module.mountQuadraticForms(formsHost);
+      if (formsSource) forms.update(formsSource);
+    }).catch(error => { if (!disposed) formsHost.textContent = `Forms unavailable: ${String(error)}`; })
+      .finally(() => { loadingForms = false; });
+  };
   const button = (title: string, command: string, parent = toolbar) => { const button = el('button'); button.type = 'button'; button.textContent = title; owner.bind(button, command, cell.id); parent.append(button); return button; };
   if (editable) button('▾', 'math.fold', heading).setAttribute('aria-label', 'Fold mathematical object');
-  heading.append(label, relation); body.append(formula, controls, graphHost, legend, diagnostics, toolbar); dom.append(heading, body);
+  heading.append(label, relation); body.append(formula, controls, graphHost, formsHost, legend, diagnostics, toolbar); dom.append(heading, body);
   const select = () => owner.select(cell.id);
   dom.addEventListener('pointerdown', select, true); dom.addEventListener('focusin', select);
   dom.addEventListener('keydown', event => {
@@ -56,8 +75,11 @@ export function createMathNodeView(initial: ProseNode, owner: MathViewOwner, edi
     const error = mathDraftError(resource) ?? mathDraftError(source); diagnostics.textContent = error ?? '';
     const fold = heading.querySelector('button'); if (fold) { fold.textContent = cell.folded ? '▸' : '▾'; fold.setAttribute('aria-expanded', String(!cell.folded)); }
     body.hidden = cell.folded;
+    formsHost.hidden = !formsEnabled || resource.kind !== 'quadratic' || cell.view !== 'graph';
+    formsSource = !formsHost.hidden && resource.kind === 'quadratic' ? resource.coefficients : undefined;
     if (cell.folded) return;
-    const latex = expressionToLatex(owner.runtime.expression(resource.id));
+    updateForms();
+    const latex = expressionToLatex(owner.runtime.expression(resource.id), { numbers: 'round-trip' });
     name.textContent = `${resource.name}(x) = `;
     if (latex !== lastExpression) { katex.render(latex, notation, { throwOnError: true, trust: false, output: 'htmlAndMathml' }); lastExpression = latex; }
     const nextControls = `${resource.id}:${resource.kind}:${cell.view}`;
@@ -97,5 +119,5 @@ export function createMathNodeView(initial: ProseNode, owner: MathViewOwner, edi
   return { dom, update(next) { if (next.type !== node.type || next.attrs['id'] !== cell.id) return false; node = next; cell = readMathCell(next); draw(); return true; },
     selectNode() { dom.classList.add('ProseMirror-selectednode'); }, deselectNode() { dom.classList.remove('ProseMirror-selectednode'); },
     stopEvent: event => event.target instanceof Element && Boolean(event.target.closest('input, button')),
-    ignoreMutation: () => true, destroy() { unsubscribe(); graph?.dispose(); } };
+    ignoreMutation: () => true, destroy() { disposed = true; unsubscribe(); graph?.dispose(); forms?.dispose(); } };
 }

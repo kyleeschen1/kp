@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-studio-foundations",
-    title: "Connect mathematical views, discovery and revision",
+    id: "kp-linked-math-views",
+    title: "Reuse linked mathematics and inspect algebraic forms",
     approval: "approved",
-    contractId: "run-contract.kp.studio-foundations-20261127",
-    finish: "Review one coherent opt-in matrix equation/graph exemplar; independently deliver bounded capability discovery and contextual revision, preserving source identity and local human gates. Keep the completed shelf intact.",
-    source: { label: "Approved studio foundation tranche", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
+    contractId: "run-contract.kp.linked-math-views-20261127",
+    finish: "Reuse the accepted linked matrix explanation in notebook and reference; inspect bounded quadratic forms beside the original curve. Preserve source identity, local playback and history; review the opt-in forms before default adoption.",
+    source: { label: "Approved linked-views continuation", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
   },
-  uncertainty: "The notebook explanation, independent reference card and shelf are accepted. Linked playback and bounded chat proposals have integration evidence; visual promotion, actual model usefulness, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Review the linked matrix graph and shared theme, then try one annotation revision through existing chat. Decide whether the graph clarifies the equation and whether the real response improves the explanation before widening reuse.",
+  uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
+  nextJudgment: "Review the quadratic forms candidate and notebook reuse. A separate actual-response annotation revision trial remains pending; automated fixtures do not establish model usefulness.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,13 +41,13 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Quadratic/matrix notebooks, connected explanation and shelf are accepted. The opt-in matrix graph shares one clock; capability discovery retains its source; bounded chat annotation proposals preview before acceptance. Integration tests pass; visual quality and real model usefulness need review.",
-      evidence: { label: "Studio candidate evidence and review", href: "docs/project/reviews/2026-11-27-studio-foundations.md" },
+      established: "Linked matrix geometry is accepted and now reused by notebook/reference through one player. Quadratic forms, occurrence reclamation and reader lifecycle are checked; the forms presentation awaits review. Capability discovery and bounded chat proposals are integrated; actual model usefulness remains pending.",
+      evidence: { label: "Linked views evidence and review", href: "docs/project/reviews/2026-11-27-linked-math-views.md" },
       outcome: {
         authority: "approved",
-        id: "matrix-column-geometry", title: "Connect column algebra to geometry",
-        finish: "One saved matrix source drives the accepted column explanation and a compact graph through one playhead, including signed/zero contributions, seeking and reload. Review one opt-in combined exemplar before promotion.",
-        excludes: "New mathematical families, a universal renderer, broad SVG/WebGL migration, 3D, arbitrary CAS, LLM edits and publication.",
+        id: "linked-math-views", title: "Reuse linked views and compare quadratic forms",
+        finish: "The notebook reuses accepted matrix geometry through one player; supported quadratics expose expanded, vertex and real-factored forms beside the original curve, with honest degree-reduction and numerical gaps. Review the new candidate before default adoption.",
+        excludes: "General CAS, complex roots, cross-notebook live subscription, universal schema, broad renderer migration, paid model calls and publication.",
         source: { label: "Approved tranche and geometry boundary", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
       }
     },
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Linked matrix geometry and shared theme accepted",
+      scope: "One source and one playhead link weighted columns to their sum beside the equation. Signed/zero cases, seek, reload and theme checks passed. Acceptance permits bounded notebook reuse; contextual revision still needs a real-response usefulness trial.",
+      source: { label: "Studio visual acceptance and limits", href: "docs/project/reviews/2026-11-27-studio-foundations.md" }
+    },
     {
       title: "Connected matrix explanation accepted",
       scope: "The actual notebook matrix and single vector drive the existing column-combination explanation. Native history, invalid-draft recovery, lazy loading, disposal and independent occurrence playback are checked. Acceptance closes this exemplar; saved reference reuse is a separate successor.",

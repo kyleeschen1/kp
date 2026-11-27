@@ -1,0 +1,53 @@
+{
+  "id": "run-contract.kp.linked-math-views-20261127",
+  "kind": "run-contract",
+  "title": "Linked mathematical views",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: 2 of 3 packages complete. Checked matrix reuse and opt-in quadratic forms; all independent implementation work in this continuation is finished, combined visual review remains.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.linked-math-views-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-twelve-loop-horizon.md"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook-mathematics",
+    "npm run check:architecture"
+  ],
+  "revisitWhen": [
+    "User reviews quadratic forms and notebook linked composition at the recorded URLs."
+  ],
+  "allowedWork": [
+    "Approved linked mathematical views continuation in twelve-loop horizon"
+  ],
+  "disallowedWork": [
+    "Paid model calls, publication, general CAS, unrelated visual changes"
+  ],
+  "goal": "Reuse accepted matrix explanation in notebook and prepare quadratic forms alongside one curve",
+  "target": "task.kp.linked-math-views-20261127",
+  "slices": [
+    {
+      "id": "matrix-reuse",
+      "title": "Matrix second host",
+      "summary": "Accepted linked player now serves notebook and reference through one clock; lifecycle, source changes, occurrence capacity and cut-reclaim-reload-paste pass Chromium/Firefox checks.",
+      "status": "complete"
+    },
+    {
+      "id": "quadratic-forms",
+      "title": "Quadratic forms",
+      "summary": "Opt-in graph occurrence renders domain-owned expanded, vertex and real-factored forms; numerical limits, zero/linear cases, full-precision notation, lazy loading, draft preservation and reader forwarding are checked. Default adoption awaits integration review.",
+      "status": "complete"
+    },
+    {
+      "id": "integration",
+      "title": "Combined checks and review",
+      "summary": "All technical checks and complete payload measurements pass. Review packet ready; human judgment of quadratic presentation and notebook composition remains required before default adoption or further promotion.",
+      "status": "in-progress"
+    }
+  ]
+}

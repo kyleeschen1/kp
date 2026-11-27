@@ -1,7 +1,7 @@
 # Twelve-loop horizon: a usable mathematical explanation studio
 
 Date: 2026-11-27
-Status: direction and continued delivery approved by the user's “go on your recs for as long as possible”; execute the bounded first tranche below, retaining local visual gates.
+Status: direction and continued delivery approved; the first tranche and subsequent linked-views continuation below retain local visual gates.
 
 ## Approved first delivery tranche
 
@@ -65,6 +65,56 @@ Shared hosts, styling and browser integration remain with the integrator.
 Each worker reports source/API limitations and meaningful focused test evidence.
 Integration rechecks combined consumers. Later reuse/family packages remain in
 the approved horizon but are not hidden completion obligations of this tranche.
+
+## Approved continuation: linked mathematical views
+
+The user's subsequent “looks great! go as long as possible” accepts the studio
+visual candidate and authorizes the next bounded tranche. It does not establish
+that a real Codex response was tried. That revision outcome remains locally
+parked pending actual-model evidence; independent mathematical work continues.
+
+This tranche delivers the accepted linked matrix explanation in the notebook
+and one opt-in quadratic forms candidate. These are useful now because an author
+can reuse the same mathematical source across an editing host and a reference,
+then inspect different algebraic representations of one curve. It does not claim
+full loop-4 cross-notebook Derive/Transclude support. Audit that existing boundary
+before choosing a later persistence change.
+
+- **matrix-reuse:** extract the accepted graph/player composition into the existing
+  column-explanation boundary; use it in notebook editor/reader and reference.
+  Preserve source/result IDs, revision pins, occurrence-local playback, last valid
+  output, folding, undo and lazy loading. The existing matrix product/column model
+  owns arithmetic, the column player owns time, KaTeX and Graph2D own paint.
+  Canonical second host: `/experiments/fraction-notebook/?notebook=matrix`.
+- **quadratic-forms:** domain-owned expanded/vertex/real-factored representations
+  from the existing validated degree-at-most-two coefficient source, with explicit
+  unavailable/degree-reduced states. Add an opt-in view beside the existing
+  quadratic graph at `?notebook=quadratic&forms=1`. Keep the original curve evaluator
+  authoritative; no new animation choreography, general solver or complex roots.
+  Human review selects this presentation before default adoption.
+- **integration:** source-change, invalid-draft, reload/history, responsive and
+  supported-browser checks; affected types/architecture and complete payload costs.
+  Record concrete reuse semantics and a combined review packet.
+
+Rollback units are the shared column composition/host admission and the additive
+quadratic forms module/opt-in view. Saved schemas, fraction scrolling, chat state
+and existing plain reference routes stay intact. Use a six-hour ceiling with the
+last hour reserved for verification/backup; finish earlier when eligible outcomes
+are complete or require visual judgment. No paid model calls or publication.
+
+Workers use fresh worktrees from `05bb7622ecb6e053dddde722f84052a66a13352a`:
+`studio-matrix-reuse` owns the neutral column composition and reference adapter;
+`studio-quadratic-forms` owns pure quadratic form preparation and tests. Product
+integration owns notebook hosts, root configuration, strategic records and
+Theseus. A third worker audits reuse read-only. Existing ownership and backup
+rules apply; no worker replaces the shared server.
+
+The reuse audit reproduced an occurrence-capacity leak after deleting notebook
+views. Repair it at the matrix controller/clipboard boundary in a third isolated
+`studio-matrix-occurrences` worktree. Reclaim unused records atomically on insertion,
+retain exact cut/paste configuration through a validated clipboard-only payload,
+and preserve native history and reload. This is an observed reuse blocker, not
+permission for a new general clipboard or persistence protocol.
 
 ## Goal and evidence
 

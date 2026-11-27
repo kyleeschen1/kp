@@ -170,6 +170,10 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     // page/author/route hosts. Exact paths retain that distinction until a
     // separately approved physical extraction; no directory-wide promotion.
     ownershipRule("src/experiments/matrix-column-combinations/embed.ts", "renderer", "Bounded connected-host column player with no page ownership."),
+    ownershipRule("src/experiments/matrix-column-combinations/column-geometry.ts", "experience", "Pure source-linked column projection shared by notebook and reference."),
+    ownershipRule("src/experiments/matrix-column-combinations/column-graph.ts", "renderer", "Graph2D paint adapter for the shared column projection."),
+    ownershipRule("src/experiments/matrix-column-combinations/linked-embed.ts", "renderer", "Combined symbolic and graph mount using the existing column clock."),
+    ownershipRule("src/experiments/matrix-column-combinations/linked-embed.css", "renderer", "Host-sized linked column layout and theme roles."),
     ownershipRule("src/experiments/matrix-column-combinations/embed.css", "renderer", "Scoped notebook theme adaptation for the column mount."),
     ownershipRule("src/experiments/matrix-column-combinations/style.css", "renderer", "Existing column stage geometry shared by its hosts."),
     ownershipRule("src/experiments/matrix-player.css", "renderer", "Shared embedded-player controls, with no document layout ownership."),

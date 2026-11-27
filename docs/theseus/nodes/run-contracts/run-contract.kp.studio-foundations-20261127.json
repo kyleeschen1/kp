@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Mathematical studio foundations",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 3 of 5 packages complete; revision implementation is checked but real-response usefulness and combined visual review remain open. Approved independent work is exhausted before these gates.",
+  "summary": "Visuals accepted; 4 of 5 packages complete. Only actual-response annotation usefulness remains pending; linked mathematical views continue independently.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -23,7 +23,8 @@
     "npm run visual:matrix-reference"
   ],
   "revisitWhen": [
-    "Resume the named contract after the user judges the opt-in matrix/theme and completes one contextual annotation trial."
+    "Resume the named contract after the user judges the opt-in matrix/theme and completes one contextual annotation trial.",
+    "User completes or reports a real Codex annotation revision trial."
   ],
   "allowedWork": [
     "Named tranche and worker boundaries; local review may park only dependent work"
@@ -69,8 +70,8 @@
     {
       "id": "review",
       "title": "Combined-human-review",
-      "summary": "Combined canonical URLs and inspection instructions delivered. Automated preservation and cost checks pass; human visual judgment and a real response trial remain pending.",
-      "status": "in-progress"
+      "summary": "User accepted visual candidate and authorized continuation; actual-model revision trial remains separately pending.",
+      "status": "complete"
     }
   ]
 }

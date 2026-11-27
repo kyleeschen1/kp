@@ -16,7 +16,8 @@ export function kpViteFractionNotebook(): Plugin {
         || path === '/reader/fraction-notebook-preview/' ? theme.inject(html) : html;
     } },
     handleHotUpdate(context) {
-      if (/\/fraction-notebook\/(styles|style-catalog|theme-startup|palette)\.(ts|css)$/.test(context.file)) theme.invalidate();
+      if (/\/fraction-notebook\/(styles|style-catalog|theme-startup|palette)\.(ts|css)$/.test(context.file)
+        || /\/ui-theme\/palette\.css$/.test(context.file)) theme.invalidate();
     },
     configureServer(server) {
     server.middlewares.use((request, response, next) => {

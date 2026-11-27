@@ -109,6 +109,9 @@ const runButton = button('Run · Shift-Enter', () => runSource(), 'animation.run
 const resultStatus = el('p', 'fn-result-status'); resultStatus.setAttribute('role', 'status');
 sourceTools.append(runButton, closeBuffer); sourcePane.append(sourceTools, sourceHost);
 left.setAttribute('aria-label', 'Editable notebook'); right.setAttribute('aria-label', 'Reading preview');
+// NodeViews subscribe before asynchronous workspace setup finishes. Establish
+// their visibility owner now; setEditing admits playback once the pane is ready.
+left.setAttribute('aria-hidden', 'true');
 const tools = el('div', 'fn-tools');
 const editorHost = el('div', 'fn-editor');
 const previewTools = el('div', 'fn-tools');
@@ -116,6 +119,7 @@ const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; co
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }, 'notebook.reveal-selection', 'notebook', () => selected ? available() : unavailable('Select a passage')); previewTools.append(reveal, followLabel);
 const frame = el('iframe', 'fn-preview'); frame.title = mathModule ? 'Mathematical reading preview' : 'Fraction reading preview';
 frame.src = mathModule ? `/experiments/fraction-notebook/math-preview.html${notebookKind === 'matrix' ? '?notebook=matrix' : ''}` : '/reader/fraction-notebook-preview/?surface=window';
+if (notebookKind === 'quadratic' && new URLSearchParams(location.search).get('forms') === '1') frame.src += '?forms=1';
 // A bookmark names the real passage. Let the reader restore its native state
 // and commentary instead of treating the iframe as a separate address space.
 if (!mathModule && window.location.hash) frame.src += window.location.hash;

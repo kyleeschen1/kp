@@ -322,6 +322,9 @@ type NumberFormat = 'legacy' | 'round-trip';
 /** Existing presentations retain their six-place formatting by default.
  * Authoring surfaces can opt in when displaying the represented coefficients
  * faithfully matters more than compact decimal labels. */
+// Retain the unary callback contract used by Array.map in existing consumers.
+export function expressionToLatex(expression: MathExpression): string;
+export function expressionToLatex(expression: MathExpression, options: { readonly numbers?: 'round-trip' }): string;
 export function expressionToLatex(
   expression: MathExpression,
   options: { readonly numbers?: 'round-trip' } = {}

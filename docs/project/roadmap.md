@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-studio-foundations`
-Execution Contract: `run-contract.kp.studio-foundations-20261127`
-Next Product Milestone: `matrix-column-geometry`
+Current Commitment: `kp-linked-math-views`
+Execution Contract: `run-contract.kp.linked-math-views-20261127`
+Next Product Milestone: `linked-math-views`
 Milestone Authority: approved
 
 ## Where we are going
@@ -26,8 +26,10 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 **Complete, accepted:** [independent reference card](reviews/2026-11-27-matrix-reference-card.md).
 **Complete, accepted:** [three-card shelf](reviews/2026-11-27-reference-shelf.md).
 **Approved:** [studio foundations](reviews/2026-11-27-twelve-loop-horizon.md).
-[Checked candidate](reviews/2026-11-27-studio-foundations.md): linked geometry,
-shared defaults, discovery and revision. Visual review and real-model judgment remain.
+[Accepted visuals](reviews/2026-11-27-studio-foundations.md): linked geometry
+and shared defaults; discovery/revision are checked. Actual-model judgment remains.
+**Checked continuation:** [notebook reuse and quadratic forms](reviews/2026-11-27-linked-math-views.md);
+presentation review remains in the approved [horizon](reviews/2026-11-27-twelve-loop-horizon.md).
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 

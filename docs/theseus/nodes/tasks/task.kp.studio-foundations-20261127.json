@@ -3,7 +3,7 @@
   "kind": "task",
   "title": "Link mathematical views and make capabilities discoverable and revisable",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: implementation and preservation checks are ready; the bounded tranche still requires visual judgment and an actual model usefulness trial. No independent implementation package remains before those gates.",
+  "summary": "Visuals accepted; actual-model revision trial remains unproved and is locally parked.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -94,6 +94,7 @@
     }
   ],
   "revisitWhen": [
-    "User reviews the linked matrix/shared theme and tries a supported annotation revision through the existing chat; then resume the named contract without new routine approval."
+    "User reviews the linked matrix/shared theme and tries a supported annotation revision through the existing chat; then resume the named contract without new routine approval.",
+    "Actual response trial evidence is available."
   ]
 }

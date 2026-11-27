@@ -21,10 +21,10 @@ const host = document.querySelector<HTMLElement>('#math-reading')!;
 const matrixModule = new URLSearchParams(location.search).get('notebook') === 'matrix' ? await import('./matrix-reading.ts') : undefined;
 let matrixReading: ReturnType<NonNullable<typeof matrixModule>['mountMatrixReading']> | undefined;
 const send = (data: object) => window.parent.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin);
-let view: EditorView | undefined, runtime: NotebookMathRuntime | undefined, latest: FractionNotebook | undefined, active = false;
+let view: EditorView | undefined, runtime: NotebookMathRuntime | undefined, latest: FractionNotebook | undefined, active = false, disposed = false;
 const listeners = new Set<() => void>(), shortcut = new CommandShortcut();
 const render = () => {
-  if (!active || !latest) return;
+  if (disposed || !active || !latest) return;
   if (matrixModule) {
     if (!latest.matrixResources) throw new Error('The matrix reading requires matrix resources.');
     if (!matrixReading) matrixReading = matrixModule.mountMatrixReading(host, latest, id => send({ kind: 'select', id }));
@@ -65,7 +65,19 @@ const key = (event: KeyboardEvent) => {
   else if (event.ctrlKey && event.code === 'Backquote') { event.preventDefault(); send({ kind: 'window-cycle', reverse: event.shiftKey }); }
 };
 window.addEventListener('message', message); document.addEventListener('pointerdown', focus); document.addEventListener('keydown', key, true);
-const dispose = () => { window.removeEventListener('message', message); document.removeEventListener('pointerdown', focus); document.removeEventListener('keydown', key, true); view?.destroy(); runtime?.dispose(); matrixReading?.dispose(); listeners.clear(); };
-window.addEventListener('pagehide', dispose, { once: true });
+const dispose = () => {
+  if (disposed) return; disposed = true;
+  window.removeEventListener('pagehide', leaving); window.removeEventListener('pageshow', returning);
+  window.removeEventListener('message', message); document.removeEventListener('pointerdown', focus); document.removeEventListener('keydown', key, true);
+  view?.destroy(); runtime?.dispose(); matrixReading?.dispose(); listeners.clear();
+};
+const leaving = (event: PageTransitionEvent) => {
+  if (!event.persisted) { dispose(); return; }
+  // A frozen page releases active playback but retains its message owner. The
+  // parent also survives BFCache, so restore from the latest admitted notebook.
+  matrixReading?.dispose(); matrixReading = undefined;
+};
+const returning = (event: PageTransitionEvent) => { if (event.persisted) render(); };
+window.addEventListener('pagehide', leaving); window.addEventListener('pageshow', returning);
 if (import.meta.hot) import.meta.hot.dispose(dispose);
 send({ kind: 'ready' });

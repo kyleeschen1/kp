@@ -8,15 +8,14 @@ Last Updated: 2026-11-27
 [Roadmap](../roadmap.md) owns direction; [charter](../strategy.md)
 and [decision](../decisions/2026-11-08-authoring-expert-attention.md) explain why.
 
-G2 accepted: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-adapter.md).
-Accepted: [connected explanation](../reviews/2026-11-27-matrix-notebook-explanation.md).
-Accepted: [reference card](../reviews/2026-11-27-matrix-reference-card.md).
-Completed: `run-contract.kp.matrix-reference-card-20261127`.
-Accepted: [reference shelf](../reviews/2026-11-27-reference-shelf.md).
-Completed: `run-contract.kp.matrix-reference-shelf-20261127`.
-Approved: [studio foundations](../reviews/2026-11-27-twelve-loop-horizon.md):
-[Candidate and limits](../reviews/2026-11-27-studio-foundations.md): geometry,
-discovery and revision; visual/model review pending. Execution: `run-contract.kp.studio-foundations-20261127`.
+Accepted: [matrix adapter](../reviews/2026-11-27-matrix-notebook-adapter.md),
+[explanation](../reviews/2026-11-27-matrix-notebook-explanation.md),
+[card](../reviews/2026-11-27-matrix-reference-card.md) and
+[shelf](../reviews/2026-11-27-reference-shelf.md).
+Approved: [studio horizon](../reviews/2026-11-27-twelve-loop-horizon.md).
+[Foundations](../reviews/2026-11-27-studio-foundations.md): visuals accepted;
+actual-model trial pending. Continuing notebook matrix reuse and quadratic forms.
+Execution: `run-contract.kp.linked-math-views-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
