@@ -9,11 +9,11 @@ export const projectVision: ProjectVision = {
     title: "Author an editable inner-product and projection explanation",
     approval: "approved",
     contractId: "run-contract.kp.inner-product-projection-20261127",
-    finish: "One editable Euclidean R2 vector pair links native notation to signed projection and a perpendicular residual, including orthogonal and zero cases. Reuse the existing compiler and sampler; stop at the independent exemplar review before notebook or library promotion.",
+    finish: "One editable Euclidean R2 vector pair links native notation to signed projection and a perpendicular residual, including orthogonal and zero cases. The independent exemplar is accepted, closing this finite commitment; notebook reuse remains a separate successor.",
     source: { label: "Approved projection exemplar", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Review the editable R2 projection: is the scalar/vector distinction, signed direction and perpendicular remainder clear? The separate actual-response annotation revision trial remains pending.",
+  nextJudgment: "Scope persistent notebook reuse of the accepted projection as its second host. The separate actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry and quadratic forms are accepted. The editable R2 projection candidate reuses the existing compiler and sampler with signed/zero cases, native notation and local discovery; its presentation awaits review. Notebook/reference matrix reuse remains intact. Actual model usefulness remains pending.",
-      evidence: { label: "Linked views evidence and review", href: "docs/project/reviews/2026-11-27-linked-math-views.md" },
+      established: "Linked matrix geometry, quadratic forms and the editable R2 projection are accepted. The independent projection reuses existing mathematics and sampling with signed/zero cases, native notation and local discovery. Persistent vector-pair notebook reuse and actual model usefulness remain unproved.",
+      evidence: { label: "Projection acceptance and limits", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" },
       outcome: {
-        authority: "approved",
-        id: "inner-product-projection", title: "Link inner products to geometric projection",
-        finish: "Review one independent R2 exemplar whose editable integer vectors drive notation, signed projection and a perpendicular residual, including positive, negative, orthogonal and zero cases. The existing sampler and compiler remain authoritative; local discovery exposes supported inspections.",
-        excludes: "Notebook persistence changes, decimal coordinates in this first exemplar, arbitrary inner-product spaces, general CAS, broad curriculum, paid model calls and publication.",
-        source: { label: "Approved editable projection boundary", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
+        authority: "proposed",
+        id: "projection-notebook-reuse", title: "Reuse the accepted projection in a saved notebook",
+        finish: "Scope a persistent vector pair with discoverable relationships and the accepted explanation in the notebook. Native history and reload preserve source identity; occurrences retain local playback and ordinary copies remain independent. Pressure the second host before broader promotion.",
+        excludes: "Implementation before bounded approval, decimal support, cross-notebook Derive/Transclude, arbitrary inner-product spaces, new animation families, paid model calls and publication.",
+        source: { label: "Accepted exemplar and proposed second host", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Editable R2 projection accepted",
+      scope: "Integer vector inputs drive linked native notation and projection geometry through the existing compiler and eight-step sampler. Signed, orthogonal and zero cases, URL return and local discovery are checked; the user accepts the presentation. Persistent notebook reuse and broad promotion remain separate.",
+      source: { label: "Projection acceptance and evidence", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
+    },
     {
       title: "Notebook linked views and quadratic forms accepted",
       scope: "Notebook and reference reuse the accepted linked matrix player. Quadratic graphs expose expanded, vertex and real-factored forms from the same source coefficients; numerical gaps remain explicit. Default adoption preserves native history and lazy boundaries. Cross-notebook live subscription and actual model usefulness remain separate.",
@@ -775,6 +780,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves implementation. Reuse the earlier projection compiler and reversible sampler in one editable independent reference, with integer inputs, explicit zero cases and a local relationship picker.",
       reason: "Make another important relationship authorable while preserving the old fixed catalogue artifact and deferring broader integration until the new exemplar is reviewed.",
       source: { label: "Approved projection and preservation boundary", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
+    },
+    {
+      id: "accept-projection-propose-notebook-reuse", on: "2026-11-27",
+      before: "The independent editable R2 projection was checked and awaiting its visual judgment.",
+      after: "The user accepts the presentation. Close the bounded exemplar and recommend separately scoped notebook reuse through persistent source identity, native history and occurrence-local playback.",
+      reason: "A second real host would make the accepted relationship reusable in authored explanations while keeping completion, product usefulness and broader promotion distinct.",
+      source: { label: "Acceptance and successor boundary", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
     }
   ]
 };

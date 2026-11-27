@@ -1,7 +1,7 @@
 # Editable inner product and projection
 
 Date: 2026-11-27
-Status: checked candidate; HUMAN_CHECKPOINT for the first editable presentation.
+Status: accepted by “looks great@”; bounded exemplar complete.
 Execution: `run-contract.kp.inner-product-projection-20261127`.
 
 ## Outcome and boundary
@@ -130,6 +130,25 @@ No failing check was suppressed or runtime error filtered out.
   The isolated build transformed 38 modules. It adds no editor, model client,
   Three.js or new package dependency. The shared clock runs only during playback.
 
-The new source route and presentation are a reversible exemplar, not a promoted
-library API. Existing notebook schemas and catalogue source values are unchanged.
-Resume with `theseus work context task.kp.inner-product-projection-20261127 --mode brief`.
+## Acceptance and proposed successor
+
+The user's “looks great@” accepts this first editable presentation and closes its
+review gate. All three packages are complete; no implementation remains in this
+bounded contract. The accepted artifact is still an independent reference with
+integer inputs, URL restoration and the existing semantic/compiler authority.
+Acceptance does not establish learner transfer, a general library API, decimal
+support or the separate actual-model revision trial.
+
+Recommended next: scope notebook reuse of this accepted vector-pair explanation.
+An author should create a persistent vector pair, discover its supported
+relationships, and reopen the same explanation through native notebook history
+and reload. Occurrences should retain independent playback while observing their
+shared source; ordinary copy should remain independent. This would pressure the
+accepted presentation in a second host before wider promotion. Preserve the
+reference, integer support boundary and existing matrix/quadratic documents.
+Decimal arithmetic, cross-notebook Derive/Transclude, arbitrary inner-product
+spaces and new animation families remain outside that proposed successor.
+No successor implementation is authorized by presentation acceptance alone.
+
+Inspect the closed record with
+`theseus work context task.kp.inner-product-projection-20261127 --mode brief`.

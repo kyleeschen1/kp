@@ -2,8 +2,8 @@
   "id": "run-contract.kp.inner-product-projection-20261127",
   "kind": "run-contract",
   "title": "Editable inner product and projection",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT 2/3: implementation and checks complete; review the canonical independent projection before broader integration.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,8 +46,8 @@
     {
       "id": "review",
       "title": "Verification and human review",
-      "summary": "Technical checks and desktop/phone captures ready. Human judgment of compact graph, scalar/vector distinction and eight-step presentation required before promotion.",
-      "status": "in-progress"
+      "summary": "User says looks great: presentation accepted. Prior mathematical, browser, type and architecture evidence retained; roadmap and vision record completed exemplar and proposed notebook successor.",
+      "status": "complete"
     }
   ]
 }

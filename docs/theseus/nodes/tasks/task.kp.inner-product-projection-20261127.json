@@ -2,8 +2,8 @@
   "id": "task.kp.inner-product-projection-20261127",
   "kind": "task",
   "title": "Author an editable R2 projection explanation",
-  "status": "deferred",
-  "summary": "Checked editable vector-pair explanation is ready; presentation acceptance remains. No notebook or library promotion inferred.",
+  "status": "resolved",
+  "summary": "COMPLETE: user accepts the independent editable projection. All bounded implementation, verification and review requirements satisfied; notebook reuse is proposed separately.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -52,6 +52,13 @@
       "scope": "focused",
       "checkedAt": "2026-11-27T13:57:29.764Z",
       "notes": "75 tests pass after reconciling current approval, review boundary and retained completed milestone."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T14:00:56.165Z",
+      "notes": "75 tests pass after recording acceptance, finite closure and proposed persistent notebook reuse. Runtime unchanged."
     }
   ],
   "revisitWhen": [
