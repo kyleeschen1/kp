@@ -4,7 +4,7 @@
   "title": "Reuse a source-linked saddle section",
   "status": "deferred",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: prerequisite clipping question pending; audit complete.",
+  "summary": "HUMAN_CHECKPOINT: independent reference checked; awaiting host judgment",
   "sourceRefs": [
     {
       "kind": "file",
@@ -32,9 +32,87 @@
       "scope": "focused",
       "checkedAt": "2026-11-27T15:55:06.798Z",
       "notes": "75 passed after trimming redundant thread history to preserve its reading budget."
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T16:13:42.301Z",
+      "notes": "32 Chromium and Firefox checks passed after extraction, including realized clipping and single-curve paint."
+    },
+    {
+      "command": "npm run check:library-lanes",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T16:13:43.912Z",
+      "notes": "Host-free public API audit and all three independent lane unit/type/build checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T16:13:44.721Z",
+      "notes": "Full application, node, test, Svelte and domain types passed. Svelte reported zero errors and warnings."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:13:45.726Z",
+      "notes": "Dependency direction, neutral entrypoints, semantic and compiler boundaries passed."
+    },
+    {
+      "command": "npm run test:graph-3d-runtime",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:13:46.520Z",
+      "notes": "42 existing protocol, adapter, paint and lease tests passed."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:13:47.377Z",
+      "notes": "All tooling checks pass after adding only the inspected saddle-section suite policy to the configuration inventory."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:13:48.152Z",
+      "notes": "75 checks passed; clipping acceptance and next-host review agree across strategic sources."
+    },
+    {
+      "command": "npm run test:saddle-section",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T16:15:08.380Z",
+      "notes": "Four tests pass, covering exact source descriptions, private authority, independent playback, invalid data and source-view URL return."
+    },
+    {
+      "command": "npm run typecheck:saddle-section",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:15:09.257Z",
+      "notes": "Final scoped sources, browser/unit tests and production measurement typecheck passed."
+    },
+    {
+      "command": "npm run visual:saddle-section",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T16:15:09.909Z",
+      "notes": "Final ten Chromium and Firefox checks pass. Initial notification and test-entry reload failures were diagnosed and repaired; exact source substitution and fallback checked."
+    },
+    {
+      "command": "npm run measure:saddle-section",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T16:15:10.551Z",
+      "notes": "Complete standalone closure: JS 47344 raw and 16303 gzip; all emitted assets 95133 and 62021. No Three, KaTeX, editor or original-host modules. Bounded 60000 raw and 21000 gzip JS allowance."
     }
   ],
   "revisitWhen": [
-    "User accepts clipping treatment or supplies revisions."
+    "User accepts clipping treatment or supplies revisions.",
+    "User accepts or revises the independent saddle-section reference."
   ]
 }

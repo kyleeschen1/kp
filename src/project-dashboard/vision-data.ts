@@ -9,11 +9,11 @@ export const projectVision: ProjectVision = {
     title: "Reuse one source-linked saddle section",
     approval: "approved",
     contractId: "run-contract.kp.saddle-section-reuse-20261127",
-    finish: "After the prerequisite clipping review, bind supported saddle/section parameters to a checked source and reuse the explanation in one independent reference with local playback and exact return.",
+    finish: "With clipping accepted, bind supported saddle/section parameters to a checked source and reuse the explanation in one independent reference with local playback and exact return.",
     source: { label: "Approved section reuse and prerequisite", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Accumulation is accepted. Review the existing saddle surface retreat toward its section before extracting that treatment for reuse. The actual-response annotation revision trial remains pending.",
+  nextJudgment: "Clipping is accepted. Next, review the independent saddle-section reference: edit supported parameters, inspect either occurrence and return to its saved camera. The actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -46,7 +46,7 @@ export const projectVision: ProjectVision = {
       outcome: {
         authority: "approved",
         id: "saddle-section-reuse", title: "Reuse a saddle-section explanation",
-        finish: "Resolve clipping judgment, then reuse one checked source through the existing player boundary in an independent host. Preserve local state, parameter editing and exact return; review the second host.",
+        finish: "Reuse the accepted clipping treatment and one checked source through the existing player boundary in an independent host. Preserve local state, parameter editing and exact return; review the second host.",
         excludes: "Other surfaces, arbitrary meshing or intersections, renderer replacement, notebook integration, paid model calls and publication.",
         source: { label: "Approved section reuse", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
       }
@@ -829,6 +829,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts accumulation and resumes studio outcome 10. Audit the existing saddle/player boundaries and ask for the outstanding clipping judgment before extraction.",
       reason: "Move from isolated 3D demonstration toward author-controlled reuse while preserving the approved prerequisite and existing mathematical/rendering owners.",
       source: { label: "Section reuse audit and review boundary", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
+    },
+    {
+      id: "accept-clipping-resume-section-reuse", on: "2026-11-27",
+      before: "Section reuse waited for the original clipping treatment to be accepted.",
+      after: "The user approves that treatment and resumes checked-source extraction and the independent reference. The new host retains a separate visual checkpoint.",
+      reason: "Reuse preserves an accepted treatment while testing parameter edits and independent occurrence ownership.",
+      source: { label: "Clipping acceptance and bounded reuse", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
     }
   ]
 };

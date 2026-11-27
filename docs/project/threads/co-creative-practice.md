@@ -21,7 +21,7 @@ Accepted: [composition exemplar](../reviews/2026-11-27-composition-area.md).
 Accepted: [composition notebook](../reviews/2026-11-27-composition-notebook-reuse.md).
 Accepted: [circle/trig](../reviews/2026-11-27-circle-trig.md).
 Accepted: [accumulation](../reviews/2026-11-27-polynomial-accumulation.md).
-Approved: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md); clipping review first.
+Approved: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md); clipping accepted.
 Execution: `run-contract.kp.saddle-section-reuse-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
@@ -64,7 +64,7 @@ Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.m
   Accepted: [direct WebGL grid/saddle](../reviews/2026-11-25-direct-webgl-graph.md).
   Accepted: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md).
   Accepted: [head-on absence](../reviews/2026-11-25-graph-section-withdrawal.md).
-  Checked: [geometric restriction](../reviews/2026-11-26-graph-section-clipping.md).
+  Accepted: [geometric restriction](../reviews/2026-11-26-graph-section-clipping.md).
   Wider promotion remains separate. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and

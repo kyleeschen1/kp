@@ -1,0 +1,25 @@
+@import '@fontsource/source-serif-4/latin-400.css';
+@import '../../ui-theme/palette.css';
+@import '../../ui-theme/document-tokens.css';
+:root { color: var(--color-ink); background: var(--color-paper); color-scheme: light; }
+:root[data-kp-theme=dark] { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 400 var(--kp-document-body-size)/var(--kp-document-body-leading) var(--kp-document-font); letter-spacing: var(--kp-document-letter-spacing); }
+main { max-width: 1120px; margin-inline: auto; padding: clamp(16px, 4vw, 40px); }
+h1 { font-size: var(--kp-document-title-size); font-weight: var(--kp-document-heading-weight); }
+h2 { font-size: var(--kp-document-heading-size); font-weight: var(--kp-document-heading-weight); }
+p { margin-block: .6em; } nav, .controls { display: flex; flex-wrap: wrap; gap: .5em 1em; align-items: center; }
+nav { justify-content: space-between; } a { color: var(--color-green-light); }
+button, input { font: inherit; color: inherit; background: var(--color-paper); border: 1px solid var(--color-border); padding: .25em .5em; border-radius: 3px; }
+button, summary { cursor: pointer; } :focus-visible { outline: 2px solid var(--color-emphasis); outline-offset: 2px; }
+.references { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2em; }
+.references > section { min-width: 0; } .controls input { width: 4.5em; }
+.stage { height: clamp(270px, 38vw, 380px); width: 100%; }
+[data-equation] { color: var(--color-red-light); min-height: 2lh; }
+.scrub { display: flex; flex-wrap: wrap; align-items: center; gap: .5em; }
+.scrub input { flex: 1; min-width: 100px; accent-color: var(--color-emphasis); }
+.hint { color: var(--color-muted); } [data-status] { min-height: 2lh; }
+[role=alert] { color: var(--color-red-light); } [role=alert]:empty { display: none; }
+pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8em; }
+[hidden] { display: none !important; }
+@media (max-width: 640px) { .references { grid-template-columns: minmax(0, 1fr); gap: 1em; } }

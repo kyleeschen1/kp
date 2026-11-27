@@ -34,9 +34,9 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [circle/trig reference](reviews/2026-11-27-circle-trig.md).
 **Accepted:** [accumulation](reviews/2026-11-27-polynomial-accumulation.md).
 **Approved:** [saddle/section reuse](reviews/2026-11-27-saddle-section-reuse.md):
-clipping review precedes extraction and independent-host delivery.
+clipping is accepted; independent-host delivery and review follow.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
-broader promotion and section-clipping judgment remain separate.
+broader promotion remains separate.
 
 **Accepted:** [unified notebook](reviews/2026-11-24-unified-notebook-surface.md),
 [focused editing/styles](reviews/2026-11-24-notebook-style-comparison.md) and
@@ -59,7 +59,7 @@ quiet beige modeline and neutral pane edge. **Accepted:**
 **Accepted:** [direct WebGL grid/saddle](reviews/2026-11-25-direct-webgl-graph.md).
 **Accepted:** [section/2D return](reviews/2026-11-25-graph-sections-planar.md).
 **Accepted:** [head-on mesh removal](reviews/2026-11-25-graph-section-withdrawal.md).
-**Checked, awaiting judgment:** [geometric restriction](reviews/2026-11-26-graph-section-clipping.md).
+**Accepted:** [geometric restriction](reviews/2026-11-26-graph-section-clipping.md).
 Wider player/matrix promotion remains separate; renderer replacement undecided. Preserve
 [Vim](2026-11-25-vim-semantic-command-design.md) and [multiplexer](2026-11-25-multiplexer-vision.md) horizons.
 [Moving stacks](reviews/2026-11-25-recency-window-stack.md) and

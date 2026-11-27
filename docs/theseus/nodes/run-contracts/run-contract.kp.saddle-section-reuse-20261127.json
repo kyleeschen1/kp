@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Reusable saddle section",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 1 of 5 packages complete; prerequisite clipping judgment precedes extraction.",
+  "summary": "HUMAN_CHECKPOINT: 4 of 5 packages complete; independent host review pending",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,7 +20,8 @@
     "npm run check:library-lanes"
   ],
   "revisitWhen": [
-    "User answers the canonical clipping review."
+    "User answers the canonical clipping review.",
+    "User answers the independent saddle-section reference review."
   ],
   "allowedWork": [
     "Approved studio outcome 10; six-hour ceiling and final hour for verification and backup"
@@ -40,23 +41,26 @@
     {
       "id": "clipping-review",
       "title": "Prerequisite-clipping-judgment",
-      "summary": "HUMAN_CHECKPOINT: specific prior clipping approval requested asynchronously; do not extract or build its second host until answered.",
-      "status": "in-progress"
+      "summary": "User approved canonical clipping and return behavior",
+      "status": "complete"
     },
     {
       "id": "reuse",
       "title": "Source-and-independent-reference",
-      "status": "planned"
+      "summary": "Checked source, shared section model, independent playback and two-occurrence reference with exact URL return implemented; browser lifecycle regression repaired",
+      "status": "complete"
     },
     {
       "id": "verification",
       "title": "Integrated-preservation",
-      "status": "planned"
+      "summary": "Source, original graph, full types, boundaries, standalone payload and Chromium/Firefox lifecycle checks pass; repaired failures documented",
+      "status": "complete"
     },
     {
       "id": "host-review",
       "title": "Independent-host-review",
-      "status": "planned"
+      "summary": "HUMAN_CHECKPOINT: review independent reference editing, paired local playback and return at /experiments/saddle-section-reference/",
+      "status": "in-progress"
     }
   ]
 }

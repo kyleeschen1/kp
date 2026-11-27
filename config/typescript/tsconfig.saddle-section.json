@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": { "incremental": false, "types": ["vite/client", "node"] },
+  "include": ["../../src/animation-player", "../../src/experiments/saddle-section-reference", "../../tests/saddle-section.test.ts", "../../tests/saddle-section.browser.spec.ts", "../../scripts/measure-saddle-section.ts"]
+}

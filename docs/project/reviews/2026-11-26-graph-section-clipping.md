@@ -128,6 +128,15 @@ remain useful safeguards for displaced or duplicate curve paint above their
 threshold. This feedback does not by itself select another exemplar or promote
 the clipping treatment into shared infrastructure.
 
+## Acceptance, 2026-11-27
+
+After the explicit prerequisite review request in the
+[section reuse plan](2026-11-27-saddle-section-reuse.md), the user said
+“approve! resume”. The clipping treatment is accepted for that bounded reuse.
+This supersedes the pending-judgment status above, without resolving the unknown
+cause of the earlier faint outline or authorizing arbitrary clipping families.
+The independent reference retains its own host review.
+
 ## Lessons from the exemplar
 
 - Projection, restriction to y=c and geometric deformation are different
