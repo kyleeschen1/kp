@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-studio-reference-collection`
-Execution Contract: `run-contract.kp.studio-reference-collection-20261127`
-Next Product Milestone: `studio-reference-collection`
+Current Commitment: `kp-contextual-revision-trial`
+Execution Contract: `run-contract.kp.studio-foundations-20261127`
+Next Product Milestone: `contextual-revision-trial`
 Milestone Authority: approved
 
 ## Where we are going
@@ -35,8 +35,10 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [accumulation](reviews/2026-11-27-polynomial-accumulation.md).
 **Accepted:** [saddle/section reuse](reviews/2026-11-27-saddle-section-reuse.md).
 **Accepted:** [context return](reviews/2026-11-27-section-context-return.md).
-**Approved:** [reference collection](reviews/2026-11-27-studio-reference-collection.md):
-organized accepted examples and a fresh product-authored revision/export proof.
+**Accepted:** [reference collection](reviews/2026-11-27-studio-reference-collection.md).
+**Resume existing scope:** [actual-response trial](reviews/2026-11-27-contextual-revision-trial.md).
+One real model turn needs explicit authorization under the existing spending
+exclusion; preserve the shared chat's unsent draft. No new family or framework.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion remains separate.
 
@@ -93,10 +95,9 @@ integrated workbench latency remain unproved.
 
 ## What already exists
 
-Accepted reader typography, annotation moments, fades and focus release are
-preserved. Two independent algebra readings and a scripted exact-context return
-work in that reader. The physics case reused its existing compiler/rail; it did
-not establish a new generation capability. See [bounded evidence](reviews/2026-11-08-explanation-first.md).
+Preserve accepted reader typography and attention. Two algebra readings and
+scripted exact-context return work; physics reused its existing compiler/rail.
+See [bounded evidence](reviews/2026-11-08-explanation-first.md).
 
 Physics migration remains **deferred** unless it removes an authoring blocker.
 

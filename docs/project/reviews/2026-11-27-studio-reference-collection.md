@@ -1,7 +1,7 @@
 # A question-led reference collection and an authoring proof
 
 Date: 2026-11-27
-Status: checked candidate; awaiting collection and authored-contrast review.
+Status: accepted by the user's “approve! resume”; bounded outcome complete.
 Authority: outcome 12 of the approved twelve-loop horizon, resumed after the user
 accepted the section question and return. Execution:
 `run-contract.kp.studio-reference-collection-20261127`.
@@ -144,9 +144,10 @@ choose **Save as separate card** for the second. At the final milestone compare
 horizontal cancellation with reinforcement in the graph and column calculation.
 Phone equation panning is the existing accepted behavior, not a new compact layout.
 
-This closes the engineering proof for a bounded reference index and numerical
-revision, pending human review. It does not establish an end-to-end conversational
+The user accepts the bounded reference index and numerical revision. It does not establish an end-to-end conversational
 authoring studio: actual-model annotation revision remains untried, cross-family
 saved collections are not implemented, and general Copy/Derive/Transclude remains
 partial. Those gaps must be considered explicitly when choosing a successor;
 the twelve-row horizon must not be called fully complete on this evidence.
+Continue with the already-scoped [actual-response trial](2026-11-27-contextual-revision-trial.md),
+retaining its explicit model-spending boundary and the user's existing chat draft.

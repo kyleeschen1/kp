@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-studio-reference-collection",
-    title: "Find explanations and author a reusable contrast",
+    id: "kp-contextual-revision-trial",
+    title: "Test one actual conversational annotation revision",
     approval: "approved",
-    contractId: "run-contract.kp.studio-reference-collection-20261127",
-    finish: "Organize accepted examples and demonstrate a fresh matrix example, substantive revision, export and reopening through existing product controls.",
-    source: { label: "Approved reference collection", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" }
+    contractId: "run-contract.kp.studio-foundations-20261127",
+    finish: "Complete the existing annotation-revision package with one actual response, checked preview and human usefulness judgment; real inference requires explicit authorization under the retained spending exclusion.",
+    source: { label: "Approved studio scope and retained exclusions", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "The section question and exact return are accepted. Next, judge the question-led collection and the authored cancellation/reinforcement contrast. The actual-response annotation revision trial remains pending.",
+  nextJudgment: "The collection and authored contrast are accepted. Authorize one isolated read-only Codex turn, then judge whether its annotation improves the reasoning. The shared chat draft stays untouched; actual model usefulness is still unproved.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Matrix geometry, quadratic forms, R2 projection, composition, circle/trig and bounded accumulation are accepted. Projection and composition have accepted notebook hosts. General reuse and actual model usefulness remain unproved.",
-      evidence: { label: "Accumulation evidence and limits", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" },
+      established: "Seven accepted mathematical references are organized in one lightweight index. A fresh matrix copy and conceptual revision export and reopen through existing controls; one preview lifecycle defect required repair. General reuse and actual model usefulness remain unproved.",
+      evidence: { label: "Accepted collection and authoring evidence", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" },
       outcome: {
         authority: "approved",
-        id: "studio-reference-collection", title: "Organize explanations and prove product authoring",
-        finish: "One lightweight collection links accepted hosts; a fresh matrix example and substantive revision survive product export, independent reference import and reload without new renderer or host code.",
-        excludes: "A universal collection database, new mathematics or renderer, model calls, learning claims and publication.",
-        source: { label: "Approved collection and authoring proof", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" }
+        id: "contextual-revision-trial", title: "Finish the actual-response revision proof",
+        finish: "One genuine model proposal reaches the existing annotation preview and receives a human usefulness judgment; retain source pins, rejection, undo and the explicit inference authorization boundary.",
+        excludes: "Model spending before explicit authorization, changing the shared chat draft, automatic file edits, new mathematics, a generic revision framework and publication.",
+        source: { label: "Prepared trial and retained authority boundary", href: "docs/project/reviews/2026-11-27-contextual-revision-trial.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Question-led mathematical reference collection accepted",
+      scope: "A static index organizes seven accepted hosts. A fresh matrix example and signed-weight revision were authored through product controls, exported and reopened with independent saved positions. A shared loading defect needed repair; actual-model revision and general reuse remain incomplete.",
+      source: { label: "Collection acceptance and bounded evidence", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" }
+    },
     {
       title: "Section question and exact return accepted",
       scope: "A source-pinned question preserves prediction, reveal and local comparison across reload, returning to the original source, camera, progress, object and disclosures. The user accepts orientation; nested detours and learning efficacy remain unproved.",
@@ -860,6 +865,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the interaction and resumes outcome 12: organize accepted references and measure one fresh product-authored mathematical contrast.",
       reason: "Test how the existing parts support useful author work and repeated retrieval without adding another mathematical family or eager renderer gallery.",
       source: { label: "Collection scope and proof boundaries", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" }
+    },
+    {
+      id: "accept-collection-return-to-actual-model-trial", on: "2026-11-27",
+      before: "The collection and fresh authored contrast awaited visual acceptance; actual-model revision remained parked.",
+      after: "The user accepts the collection and resumes. Close its finite contract and return to the existing foundation revision package, with one concrete request prepared and the model-spending exclusion retained.",
+      reason: "Resolve the central authoring uncertainty before adding another demonstration; preserve the existing shared chat draft and do not call the twelve-loop vision fully complete.",
+      source: { label: "Actual-response trial readiness and authorization", href: "docs/project/reviews/2026-11-27-contextual-revision-trial.md" }
     }
   ]
 };

@@ -3,7 +3,7 @@
   "kind": "task",
   "title": "Link mathematical views and make capabilities discoverable and revisable",
   "status": "deferred",
-  "summary": "Visuals accepted; actual-model revision trial remains unproved and is locally parked.",
+  "summary": "HUMAN_CHECKPOINT: exact annotation request and isolated single-turn plan ready; await explicit inference authorization or actual response evidence; preserve shared draft",
   "sourceRefs": [
     {
       "kind": "file",
@@ -91,10 +91,39 @@
       "scope": "standard",
       "checkedAt": "2026-11-27T12:45:46.776Z",
       "notes": "8 pass, including editor-free reference and independent library consumers."
+    },
+    {
+      "command": "npm run test:studio-foundations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T17:13:11.129Z",
+      "notes": "38 current checks passed during actual-response trial preparation; no real inference performed"
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep contextual --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:13:12.049Z",
+      "notes": "All 6 contextual revision Chromium/Firefox cases pass using deterministic RPC peer; draft protection, source/thread pins, preview and reversible acceptance verified; not actual-model evidence"
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'contextual revision' --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:13:43.768Z",
+      "notes": "Exact executed selector; preceding verification abbreviated it to contextual. All six cases passed with deterministic peer, not actual inference."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:13:44.890Z",
+      "notes": "75 checks passed after tying resumed commitment to original approved contract source and shortening roadmap to its unchanged startup limit"
     }
   ],
   "revisitWhen": [
     "User reviews the linked matrix/shared theme and tries a supported annotation revision through the existing chat; then resume the named contract without new routine approval.",
-    "Actual response trial evidence is available."
+    "Actual response trial evidence is available.",
+    "User explicitly authorizes one real read-only Codex turn in an isolated session or supplies actual trial evidence"
   ]
 }
