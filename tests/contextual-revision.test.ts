@@ -13,6 +13,8 @@ import { toProse, fromProse } from '../src/fraction-notebook/schema.ts';
 import { EditorState } from 'prosemirror-state';
 import { history, undo, redo } from 'prosemirror-history';
 import { draftLimit } from '../src/editor-chat/protocol.ts';
+import { readCompiledRevision, readRevisionDescriptor } from '../src/fraction-notebook/revision-transport.ts';
+import { fractionObject } from '../src/fraction-notebook/object-compile.ts';
 
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 const { notebook, definition } = importFractionReading(canonical);
@@ -35,6 +37,53 @@ function proposal(request: ContextualRevisionRequest): ContextualRevisionProposa
 }
 const rejects = (operation: () => unknown, code: ContextualRevisionGapCode) => assert.throws(operation,
   (error: unknown) => error instanceof ContextualRevisionGap && error.code === code);
+
+test('revision transport admits actual server output without retaining mutable response aliases', () => {
+  const descriptor = fractionObject(canonical), compiled = compileFractionNotebook(notebook, canonical);
+  assert.deepEqual(readRevisionDescriptor(JSON.parse(JSON.stringify(descriptor))), descriptor);
+  const raw = JSON.parse(JSON.stringify(compiled)), decoded = readCompiledRevision(raw);
+  assert.deepEqual(decoded, compiled);
+  raw.beats[0].focusRefs.length = 0;
+  const first = raw.notes[0].notes[0], view = Object.keys(first.views)[0]!;
+  first.views[view].length = 0;
+  assert.ok(decoded.beats[0]!.focusRefs.length);
+  assert.ok(Object.values(decoded.notes[0]!.notes[0]!.views)[0]!.length);
+});
+
+test('revision transport rejects unsupported descriptors and unbounded or hidden fields', () => {
+  const descriptor = fractionObject(canonical);
+  for (const patch of [{ id: 'other-object' }, { language: 'javascript' }, { capabilities: ['preview', 'write'] },
+    { revision: 'not-a-source-digest' }, { title: '' }, { source: 'x'.repeat(100001) }, { token: 'secret' }])
+    assert.throws(() => readRevisionDescriptor({ ...descriptor, ...patch }));
+  const hidden = { ...descriptor }; Object.defineProperty(hidden, 'token', { value: 'secret' });
+  assert.throws(() => readRevisionDescriptor(hidden));
+  assert.throws(() => readCompiledRevision({ notebook, beats: [], notes: [] }));
+});
+
+test('revision transport rejects corrupted compiler payloads before they can enter proposal context', () => {
+  const compiled = compileFractionNotebook(notebook, canonical);
+  const mutations: ((raw: any) => void)[] = [
+    raw => { raw.extra = true; },
+    raw => { raw.beats[0].id = raw.beats[1].id; },
+    raw => { raw.beats[0].progressPermille = NaN; },
+    raw => { raw.beats[0].progressPermille = 1001; },
+    raw => { raw.beats[1].progressPermille = -1; },
+    raw => { raw.beats[0].content = 'A response inconsistent with its source.'; },
+    raw => { raw.beats[0].focusRefs = []; },
+    raw => { raw.beats[0].focusRefs.push(raw.beats[0].focusRefs[0]); },
+    raw => { raw.beats[0].timing = 0; },
+    raw => { raw.notes[0].stateId = 'unknown-moment'; },
+    raw => { raw.notes.push(raw.notes[0]); },
+    raw => { raw.notes[0].notes[0].side = 'left'; },
+    raw => { raw.notes[0].notes[0].views = {}; },
+    raw => { raw.notes[0].notes[0].html = '<script>'; },
+    raw => { raw.notes[0].notes[0].text = 'x'.repeat(30001); },
+  ];
+  for (const mutate of mutations) {
+    const raw = JSON.parse(JSON.stringify(compiled)); mutate(raw);
+    assert.throws(() => readCompiledRevision(raw));
+  }
+});
 
 test('a bounded request captures exact draft identity and selected context without exposing the whole notebook', () => {
   const snapshot = current(), session = createContextualRevisionSession('review-1');

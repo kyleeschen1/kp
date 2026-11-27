@@ -9,7 +9,8 @@ import { draftLimit, type ChatSnapshot } from '../editor-chat/protocol.ts';
 import { readNotebook, readSteps, type FractionNotebook, type Step } from './model.ts';
 import { schema } from './schema.ts';
 import type { ObjectDescriptor } from './object-protocol.ts';
-import type { compileFractionNotebook } from './compile.ts';
+import type { CompiledFractionRevision } from './revision-transport.ts';
+export type { CompiledFractionRevision } from './revision-transport.ts';
 
 export type RevisionChatSnapshot = Readonly<Pick<ChatSnapshot, 'branchId' | 'threadId' | 'phase' | 'messages'>>;
 export interface RevisionChatPort {
@@ -18,7 +19,6 @@ export interface RevisionChatPort {
   stageDraft(text: string, expected: { branchId: string; threadId: string }): void;
   subscribe(listener: (snapshot: RevisionChatSnapshot) => void): () => void;
 }
-export type CompiledFractionRevision = ReturnType<typeof compileFractionNotebook>;
 export interface NotebookRevisionHost {
   readonly view: EditorView;
   readonly chat: RevisionChatPort;
@@ -28,6 +28,7 @@ export interface NotebookRevisionHost {
   preview(value: CompiledFractionRevision, beatId: string): void;
   restorePreview(): void;
   selectedBeat?(): string | undefined;
+  accepted?(value: CompiledFractionRevision): void;
 }
 
 /** Reconstruct only the selected annotation; first-step content belongs to its
@@ -209,10 +210,12 @@ export function mountContextualRevision(host: HTMLElement, registry: CommandRegi
       const next = revisedAnnotationNotebook(options.getNotebook(), checked!.beats, change);
       const transaction = annotationRevisionTransaction(options.view.state, next);
       owner.accept(current);
+      const accepted = candidate;
       ownApplying = true;
       try { options.view.dispatch(transaction); } finally { ownApplying = false; }
       previewing = false; candidate = undefined; request = undefined; checked = undefined; busy = false;
       notice.textContent = 'Annotation accepted. Undo in the notebook restores the previous wording.'; buttons();
+      options.accepted?.(accepted);
     } catch (error) { if (!disposed && token === generation) { invalidate(); fail(error); } }
   }
   const hide = () => {
