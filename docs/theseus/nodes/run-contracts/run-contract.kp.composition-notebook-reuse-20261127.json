@@ -2,8 +2,8 @@
   "id": "run-contract.kp.composition-notebook-reuse-20261127",
   "kind": "run-contract",
   "title": "Persistent composition notebook",
-  "status": "deferred",
-  "summary": "Three of four packages complete; second-host visual judgment remains.",
+  "status": "resolved",
+  "summary": "All four packages complete; user accepted the notebook host.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -52,8 +52,8 @@
     {
       "id": "review",
       "title": "Second-host-review",
-      "summary": "HUMAN_CHECKPOINT: judge controls, notation and stacked diagrams in the saved notebook host.",
-      "status": "in-progress"
+      "summary": "User approved the notebook host and requested resumption.",
+      "status": "complete"
     }
   ]
 }

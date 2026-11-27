@@ -17,11 +17,11 @@ Approved: [studio horizon](../reviews/2026-11-27-twelve-loop-horizon.md).
 actual-model trial pending. [Linked views](../reviews/2026-11-27-linked-math-views.md)
 are accepted; default adoption closes their milestone.
 Accepted: [editable R2 projection](../reviews/2026-11-27-inner-product-projection.md).
-Closed record: `run-contract.kp.inner-product-projection-20261127`.
 Accepted: [projection notebook](../reviews/2026-11-27-projection-notebook-reuse.md).
 Accepted: [composition exemplar](../reviews/2026-11-27-composition-area.md).
-Approved: [composition notebook reuse](../reviews/2026-11-27-composition-notebook-reuse.md).
-Execution: `run-contract.kp.composition-notebook-reuse-20261127`.
+Accepted: [composition notebook](../reviews/2026-11-27-composition-notebook-reuse.md).
+Approved: [circle/trig reference](../reviews/2026-11-27-circle-trig.md).
+Execution: `run-contract.kp.circle-trig-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

@@ -1,0 +1,49 @@
+@import '@fontsource/source-serif-4/latin-400.css';
+@import '../../ui-theme/palette.css';
+@import '../../ui-theme/document-tokens.css';
+@import '../../tutorial/focus-deck-scaffold.css';
+@import 'katex/dist/katex.min.css';
+:root { color-scheme: light; color: var(--color-ink); background: var(--color-paper); --kp-focus-card-passage-font: var(--kp-document-font); --kp-focus-card-ui-font: var(--kp-document-font); }
+:root[data-kp-theme=dark] { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 400 var(--kp-document-body-size)/var(--kp-document-body-leading) var(--kp-document-font); letter-spacing: var(--kp-document-letter-spacing); }
+main { max-inline-size: 900px; margin-inline: auto; padding: clamp(16px, 4vw, 40px); }
+h1 { font-size: var(--kp-document-title-size); font-weight: var(--kp-document-heading-weight); }
+h2 { font-size: var(--kp-document-heading-size); font-weight: var(--kp-document-heading-weight); margin-block: .5em; }
+button, input { font: inherit; color: inherit; background: var(--color-paper); border: 1px solid var(--color-border); padding: .25em .5em; border-radius: 3px; }
+button, summary { cursor: pointer; } :focus-visible { outline: 2px solid var(--color-emphasis); outline-offset: 2px; }
+.tools, .controls, .readouts { display: flex; flex-wrap: wrap; gap: .5em 1em; align-items: center; }
+.tools { margin-block: 1em; } a { color: var(--color-green-light); }
+.controls input[data-angle] { inline-size: 6em; min-inline-size: 0; }
+.controls input[type=range] { flex: 1 1 15em; min-inline-size: 0; accent-color: var(--color-emphasis); }
+[data-play] { min-inline-size: 7em; }
+[data-diagnostic]:empty { display: none; } [data-diagnostic] { color: var(--color-red-light); }
+.instruction .kp-focus-deck__annotation { position: static; }
+.figures { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 1.5em; align-items: start; }
+.figures section { min-inline-size: 0; }
+figure { margin: .5em 0; max-inline-size: 100%; }
+[data-circle] { inline-size: min(100%, 240px); }
+[data-functions] { inline-size: min(100%, 360px); margin-block-start: 1em; }
+svg { display: block; width: 100%; overflow: visible; }
+.graph-svg__background { fill: var(--color-paper); }
+.graph-axis line { stroke: var(--color-border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.graph-axis text, .graph-curve text { display: none; }
+svg :is(path, line, circle, rect) { vector-effect: non-scaling-stroke; }
+.unit { fill: none; stroke: var(--color-muted); stroke-width: 1; }
+[data-part=radius] { stroke: var(--color-ink); stroke-width: 1; }
+[data-part=cosine], [data-kp-object="circle-trig.cosine"] path { stroke: var(--color-green-light); fill: none; stroke-width: 1; }
+[data-part=sine], [data-kp-object="circle-trig.sine"] path { stroke: var(--color-blue-light); fill: none; stroke-dasharray: 4 3; stroke-width: 1; }
+[data-part=point] { fill: var(--color-ink); }
+[data-part=cosine-marker] { fill: var(--color-green-light); }
+[data-part=sine-marker] { fill: var(--color-blue-light); }
+[data-part=cursor] { stroke: var(--color-muted); stroke-dasharray: 2 4; stroke-width: 1; }
+.cosine { color: var(--color-green-light); } .sine { color: var(--color-blue-light); }
+.key { display: flex; flex-direction: column; } .ticks { display: flex; justify-content: space-between; }
+.readouts { margin-block: .75em; }
+[data-number] { display: inline-block; inline-size: calc(var(--digits) * 1ch); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+[data-region] { min-block-size: 2lh; }
+.wrap-note { color: var(--color-muted); }
+table { width: 100%; border-collapse: collapse; } th, td { padding: .3em; text-align: left; border-bottom: 1px solid var(--color-border); }
+.definition { overflow-x: auto; } .definition .katex { font-size: 1.1em; }
+@media (max-width: 560px) { .figures { grid-template-columns: minmax(0, 1fr); gap: .3em; } [data-circle] { inline-size: min(100%, 200px); } [data-region] { min-block-size: 1lh; } }
+@media (forced-colors: active) { svg :is(path, line, circle) { stroke: CanvasText; } [data-part=point], [data-part=cosine-marker], [data-part=sine-marker] { fill: CanvasText; } }

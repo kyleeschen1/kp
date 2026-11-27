@@ -2,9 +2,9 @@
   "id": "task.kp.composition-notebook-reuse-20261127",
   "kind": "task",
   "title": "Reuse composition in a persistent notebook",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Implementation verified; HUMAN_CHECKPOINT for notebook-host readability and interaction.",
+  "summary": "Saved notebook implementation and second-host review complete; accepted by user.",
   "sourceRefs": [
     {
       "kind": "file",

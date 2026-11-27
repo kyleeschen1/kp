@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-composition-notebook-reuse",
-    title: "Reuse saved matrix pairs in notebook explanations",
+    id: "kp-circle-trig",
+    title: "Connect circle coordinates and trigonometric graphs",
     approval: "approved",
-    contractId: "run-contract.kp.composition-notebook-reuse-20261127",
-    finish: "Saved integer 2×2 matrix pairs reuse the accepted composition player with native history, independent copies and occurrence-local playback. Review the notebook host before broader integration.",
-    source: { label: "Approved composition notebook", href: "docs/project/reviews/2026-11-27-composition-notebook-reuse.md" }
+    contractId: "run-contract.kp.circle-trig-20261127",
+    finish: "One compact reference links a unit-circle point to cosine/x and sine/y function values, preserving quadrant signs, negative angles and full turns. Review before notebook reuse or further derivations.",
+    source: { label: "Approved circle/trig scope", href: "docs/project/reviews/2026-11-27-circle-trig.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "The composition reference is accepted. Review editing, discovery and readability in its narrower notebook host. The separate actual-response annotation revision trial remains pending.",
+  nextJudgment: "Composition notebook reuse is accepted. Review whether the circle-to-wave correspondence and wrapped-angle explanation are clear. The separate actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry, quadratic forms, R2 projection and composition/signed area are accepted. Projection notebook reuse is accepted; composition now shares its accepted player with a saved notebook host awaiting review. Actual model usefulness remains unproved.",
+      established: "Linked matrix geometry, quadratic forms, R2 projection and composition/signed area are accepted. Projection and composition share their accepted players with accepted saved notebook hosts. Actual model usefulness remains unproved.",
       evidence: { label: "Composition notebook evidence and limits", href: "docs/project/reviews/2026-11-27-composition-notebook-reuse.md" },
       outcome: {
         authority: "approved",
-        id: "composition-notebook-reuse", title: "Reuse composition in a saved notebook",
-        finish: "Edit saved matrix pairs, discover their explanation and reuse linked views with native undo and local playback. Human review judges this second host.",
-        excludes: "Mixed-family documents, cross-notebook import, new animations, generic schemas, paid model calls and publication.",
-        source: { label: "Approved notebook scope", href: "docs/project/reviews/2026-11-27-composition-notebook-reuse.md" }
+        id: "circle-trig", title: "Connect circle coordinates and trig",
+        finish: "Inspect a real angle through one circle point and its sine/cosine graphs. Check signs, wrapping and exact return; human review judges correspondence and compactness.",
+        excludes: "Notebook integration, angle addition, general trig solvers, shared renderer promotion, paid model calls and publication.",
+        source: { label: "Approved trig reference", href: "docs/project/reviews/2026-11-27-circle-trig.md" }
       }
     },
     {
@@ -808,6 +808,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts it and resumes the recommended saved notebook reuse. Close the reference milestone; share its accepted player with persistent matrix-pair resources and local occurrences.",
       reason: "Make the mathematical explanation reusable within authored prose before adding another isolated family. Preserve the second-host review and pending actual-model trial.",
       source: { label: "Accepted reference and bounded successor", href: "docs/project/reviews/2026-11-27-composition-notebook-reuse.md" }
+    },
+    {
+      id: "accept-composition-notebook-continue-trig", on: "2026-11-27",
+      before: "Persistent matrix pairs and linked explanations awaited notebook-host judgment.",
+      after: "The user approves and resumes. Close notebook reuse; continue studio outcome 8 with one circle-coordinate and sine/cosine reference.",
+      reason: "Test a periodic relationship through existing expression and graph owners, retaining a fresh exemplar gate rather than widening completed matrix work.",
+      source: { label: "Circle/trig scope and preservation", href: "docs/project/reviews/2026-11-27-circle-trig.md" }
     }
   ]
 };

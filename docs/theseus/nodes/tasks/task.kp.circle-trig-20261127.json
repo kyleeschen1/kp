@@ -1,0 +1,82 @@
+{
+  "id": "task.kp.circle-trig-20261127",
+  "kind": "task",
+  "title": "Connect circle coordinates and trigonometric graphs",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: implementation and verification complete; canonical circle reference needs visual judgment before reuse.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-circle-trig.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:circle-trig",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:52.869Z",
+      "notes": "16 passed; mathematical laws and expression preservation."
+    },
+    {
+      "command": "npm run author:circle-trig -- --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:53.714Z",
+      "notes": "Generated static HTML matches source."
+    },
+    {
+      "command": "npm run visual:circle-trig -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:54.339Z",
+      "notes": "Eight Chromium/Firefox checks passed; exact source reload, lifecycle, responsive and no-JavaScript reading. Screenshots inspected."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:55.012Z",
+      "notes": "Full repository types passed before final source-pin refinement; final scoped check covers that refinement."
+    },
+    {
+      "command": "npm run typecheck:circle-trig",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:55.653Z",
+      "notes": "Final scoped types passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:56.281Z",
+      "notes": "Ownership and conformance passed."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:56.900Z",
+      "notes": "84 Playwright configs and 23 TypeScript projects passed; prior snapshots preserved."
+    },
+    {
+      "command": "npm run build:circle-trig",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:57.553Z",
+      "notes": "Passed after entry-path repair; 17067 gzip bytes JS/CSS, 934336 all assets. Estimates, not transferred bytes."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:20:58.222Z",
+      "notes": "75 passed; active thread remains within reading budget."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews circle-to-wave correspondence, wrapped turns and phone layout."
+  ]
+}

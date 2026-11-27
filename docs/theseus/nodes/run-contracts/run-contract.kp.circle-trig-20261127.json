@@ -1,0 +1,59 @@
+{
+  "id": "run-contract.kp.circle-trig-20261127",
+  "kind": "run-contract",
+  "title": "Circle coordinates and trig",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: implementation and verification complete; canonical circle reference needs visual judgment before reuse.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.circle-trig-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-circle-trig.md"
+    }
+  ],
+  "verification": [
+    "npm run test:circle-trig",
+    "npm run visual:circle-trig"
+  ],
+  "revisitWhen": [
+    "User reviews circle-to-wave correspondence, wrapped turns and phone layout."
+  ],
+  "allowedWork": [
+    "Bounded studio outcome 8; six-hour ceiling with final hour for verification and backup"
+  ],
+  "disallowedWork": [
+    "Notebook integration, angle addition, general trig solver, shared renderer promotion, paid model calls, publication"
+  ],
+  "goal": "One editable circle point and sine/cosine function reference with shared mathematical truth and exact return",
+  "target": "task.kp.circle-trig-20261127",
+  "slices": [
+    {
+      "id": "semantics",
+      "title": "Angle-semantics",
+      "summary": "Bounded angles, shared expression evaluation, exact axes, periodicity, signed tiny angles and deterministic seeks pass 16 focused/preservation tests.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Circle-and-function-reference",
+      "summary": "Static circle and wave reference, source editing, native math, URL return, stable readouts and lifecycle implemented; first eight browser checks pass.",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "title": "Focused-integration",
+      "summary": "Focused laws, eight browser checks, full and scoped types, architecture, tooling, static build and project vision passed. Evidence and limitations recorded in the review.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Canonical-visual-review",
+      "summary": "HUMAN_CHECKPOINT: inspect coordinate correspondence and wrapped-angle behavior on desktop and stacked phone diagrams before notebook reuse or promotion.",
+      "status": "in-progress"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # Persistent composition notebook
 
 Date: 2026-11-27
-Status: implemented and checked; second-host visual review pending.
+Status: complete; user approved the notebook host on 2026-11-27 and resumed delivery.
 Authority: “great! resume” accepts the reference and resumes this bounded successor.
 Execution: `run-contract.kp.composition-notebook-reuse-20261127`.
 
@@ -148,7 +148,8 @@ The impact selector has no focused rule and suggested its broad fallback.
 The approved bounded verification uses the preservation suites, full types,
 architecture, complete-consumer builds and two-browser checks above.
 Repository-wide unit tests, root production build and WebKit were not run.
-Human layout judgment, learning outcomes, mixed-family reuse and the actual-model
-revision trial remain unproved. Stop at HUMAN_CHECKPOINT; do not start another
-family. Resume with `theseus work context task.kp.composition-notebook-reuse-20261127 --mode brief`
-after notebook-host feedback.
+The notebook layout is now accepted. Learning outcomes, mixed-family reuse and
+the actual-model revision trial remain unproved. This contract closes at 4/4.
+The resumed studio horizon proceeds through the separately bounded
+[circle/trigonometry reference](2026-11-27-circle-trig.md), preserving its own
+canonical visual checkpoint.

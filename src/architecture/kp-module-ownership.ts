@@ -178,6 +178,9 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     // page/author/route hosts. Exact paths retain that distinction until a
     // separately approved physical extraction; no directory-wide promotion.
     ownershipRule("src/experiments/matrix-column-combinations/embed.ts", "renderer", "Bounded connected-host column player with no page ownership."),
+    ownershipRule("src/experiments/circle-trig/model.ts", "experience", "Bounded angle projection through existing expression evaluation."),
+    ownershipRule("src/experiments/circle-trig/graph.ts", "renderer", "Circle and function Graph2D paint for the reference."),
+    ownershipRule("src/experiments/circle-trig/view.ts", "renderer", "Static reference markup from the same angle and graph source."),
     ownershipRule("src/experiments/matrix-column-combinations/column-geometry.ts", "experience", "Pure source-linked column projection shared by notebook and reference."),
     ownershipRule("src/experiments/matrix-column-combinations/column-graph.ts", "renderer", "Graph2D paint adapter for the shared column projection."),
     ownershipRule("src/experiments/matrix-column-combinations/linked-embed.ts", "renderer", "Combined symbolic and graph mount using the existing column clock."),

@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-composition-notebook-reuse`
-Execution Contract: `run-contract.kp.composition-notebook-reuse-20261127`
-Next Product Milestone: `composition-notebook-reuse`
+Current Commitment: `kp-circle-trig`
+Execution Contract: `run-contract.kp.circle-trig-20261127`
+Next Product Milestone: `circle-trig`
 Milestone Authority: approved
 
 ## Where we are going
@@ -30,8 +30,9 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Complete, accepted:** [editable R2 projection](reviews/2026-11-27-inner-product-projection.md).
 **Accepted:** [persistent projection notebook](reviews/2026-11-27-projection-notebook-reuse.md).
 **Accepted:** [composition and signed area](reviews/2026-11-27-composition-area.md).
-**Approved:** [composition notebook reuse](reviews/2026-11-27-composition-notebook-reuse.md):
-saved pairs, shared player and local playback; review the notebook host.
+**Accepted:** [composition notebook](reviews/2026-11-27-composition-notebook-reuse.md).
+**Approved:** [circle/trigonometry reference](reviews/2026-11-27-circle-trig.md):
+linked coordinates and waves; review before reuse.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 
