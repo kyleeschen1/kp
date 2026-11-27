@@ -44,14 +44,14 @@ const button = (text: string, action: () => unknown, id: string, scope: CommandS
     ...(state ? { state } : {}), run: action }).bind(node); return node;
 };
 const notebookKind = new URLSearchParams(location.search).get('notebook');
-const mathModule = notebookKind === 'projection' ? await import('./projection-notebook.ts') : notebookKind === 'matrix' ? await import('./matrix-notebook.ts') : notebookKind === 'quadratic' ? await import('./math-notebook.ts') : undefined;
-const storageKey = notebookKind === 'projection' ? 'kp.projection-notebook.v1' : notebookKind === 'matrix' ? 'kp.matrix-notebook.v1' : mathModule ? 'kp.mathematical-notebook.v1' : 'kp.fraction-notebook.v3';
+const mathModule = notebookKind === 'composition' ? await import('./composition-notebook.ts') : notebookKind === 'projection' ? await import('./projection-notebook.ts') : notebookKind === 'matrix' ? await import('./matrix-notebook.ts') : notebookKind === 'quadratic' ? await import('./math-notebook.ts') : undefined;
+const storageKey = notebookKind === 'composition' ? 'kp.composition-notebook.v1' : notebookKind === 'projection' ? 'kp.projection-notebook.v1' : notebookKind === 'matrix' ? 'kp.matrix-notebook.v1' : mathModule ? 'kp.mathematical-notebook.v1' : 'kp.fraction-notebook.v3';
 let notebook = mathModule?.seed ?? importFractionReading(canonical).notebook;
 let lastValid = notebook;
 let store: Awaited<ReturnType<typeof openFractionDraft>> | undefined;
 let storedError: string | undefined;
 try {
-  store = mathModule ? await openFractionDraft(notebook, notebookKind === 'projection' ? 'kp-projection-notebook-v1' : notebookKind === 'matrix' ? 'kp-matrix-notebook-v1' : 'kp-mathematical-notebook-v1', null) : await openFractionDraft(notebook);
+  store = mathModule ? await openFractionDraft(notebook, notebookKind === 'composition' ? 'kp-composition-notebook-v1' : notebookKind === 'projection' ? 'kp-projection-notebook-v1' : notebookKind === 'matrix' ? 'kp-matrix-notebook-v1' : 'kp-mathematical-notebook-v1', null) : await openFractionDraft(notebook);
   const saved = await store.read(); notebook = saved.draft; lastValid = saved.lastValid;
   const recovery = sessionStorage.getItem(storageKey) ?? (mathModule ? null : sessionStorage.getItem('kp.fraction-notebook.v2') ?? sessionStorage.getItem('kp.fraction-notebook.v1'));
   if (recovery) {
@@ -78,7 +78,10 @@ registry.add({ id: 'notebook.open-matrix', title: 'Open matrix notebook', catego
 registry.add({ id: 'notebook.open-projection', title: 'Open projection notebook', category: 'Notebook', scope: 'notebook', keywords: ['vector pair', 'inner product', 'dot product'],
   state: () => notebookKind === 'projection' ? unavailable('This notebook is already open') : available(),
   run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign('/experiments/fraction-notebook/?notebook=projection'); } });
-if (notebookKind === 'matrix' || notebookKind === 'projection') registry.add({ id: 'notebook.open-quadratic', title: 'Open quadratic notebook', category: 'Notebook', scope: 'notebook', keywords: ['polynomial', 'tangent'],
+registry.add({ id: 'notebook.open-composition', title: 'Open composition notebook', category: 'Notebook', scope: 'notebook', keywords: ['matrix pair', 'signed area', 'ordered maps'],
+  state: () => notebookKind === 'composition' ? unavailable('This notebook is already open') : available(),
+  run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign('/experiments/fraction-notebook/?notebook=composition'); } });
+if (notebookKind === 'matrix' || notebookKind === 'projection' || notebookKind === 'composition') registry.add({ id: 'notebook.open-quadratic', title: 'Open quadratic notebook', category: 'Notebook', scope: 'notebook', keywords: ['polynomial', 'tangent'],
   run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign('/experiments/fraction-notebook/?notebook=quadratic'); } });
 header.hidden = sessionStorage.getItem('kp.workspace.header') !== 'true';
 registry.add({ id: 'workspace.toggle-header', title: 'Toggle site header', category: 'Workspace', scope: 'workspace',

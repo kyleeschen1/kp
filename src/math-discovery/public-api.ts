@@ -4,6 +4,13 @@ import { mathCapabilityCatalog, type DiscoverableMathKind, type MathCapabilityMe
 
 export { mathCapabilityCatalog, type DiscoverableMathKind, type MathCapabilityMetadata } from './catalog.ts';
 
+// Every admitted kind must choose its family explicitly. New kinds cannot
+// silently inherit quadratic operations while their catalogue is incomplete.
+const families: Readonly<Record<DiscoverableMathKind, MathCapabilityMetadata['family']>> = {
+  'matrix-vector': 'matrix-vector', 'vector-pair': 'vector-pair', 'matrix-pair': 'matrix-pair',
+  quadratic: 'quadratic', derivative: 'quadratic', tangent: 'quadratic'
+};
+
 export type MathDiscoverySelection = { readonly kind: 'none' } | {
   readonly kind: DiscoverableMathKind;
   readonly id: string;
@@ -52,7 +59,7 @@ export function captureMathematicalDiscovery(registry: Pick<CommandRegistry, 'sn
     return undefined;
   };
   const commands = new Map(registry.snapshot({ ...options.origin, valid }).map(command => [command.id, command]));
-  const family = selected.kind === 'none' ? undefined : selected.kind === 'matrix-vector' ? 'matrix-vector' : selected.kind === 'vector-pair' ? 'vector-pair' : 'quadratic';
+  const family = selected.kind === 'none' ? undefined : families[selected.kind];
   return mathCapabilityCatalog.flatMap(metadata => {
     if (family && metadata.family !== family) return [];
     const command = commands.get(metadata.id);

@@ -10,26 +10,8 @@
     <form aria-label="Transformation matrices"><fieldset><legend>A</legend><div data-inputs="A"></div></fieldset>
       <fieldset><legend>B</legend><div data-inputs="B"></div></fieldset></form>
     <p class="input-help">Integer entries, −5 to 5. Columns show where the two basis vectors go.</p>
-    <p data-diagnostic role="status"></p>
-    <div class="playback"><button data-back aria-label="Previous step">←</button><button data-play>Play</button><button data-next aria-label="Next step">→</button>
-      <label>Step <select aria-label="Explanation step"></select></label>
-      <input type="range" min="0" max="1" step="0.001" value="0" aria-label="Explanation progress" /></div>
-    <p data-cue class="kp-annotation-plane" aria-live="polite"></p>
-    <div class="comparison">
-      <section aria-label="A then B"><h2>A then B · BA</h2><div data-notation="left"></div><figure data-graph="left"></figure><p data-area="left"></p></section>
-      <section aria-label="B then A"><h2>B then A · AB</h2><div data-notation="right"></div><figure data-graph="right"></figure><p data-area="right"></p></section>
-    </div>
-    <p class="key"><span data-role="basis-1">e₁ · solid</span><span data-role="basis-2">e₂ · dashed</span><span>● image of (1, 1)</span><span>Dashed outline · original square</span></p>
-    <p data-conclusion></p>
-    <details><summary>Why can the shapes differ but the areas agree?</summary>
-      <p>A linear map scales every signed area by its determinant. Applying A then B multiplies the scale factors: det(BA) = det(B) det(A).
-        The scalar factors commute, even when the matrices do not. Equal determinants therefore do not imply equal transformations.</p>
-      <p>A negative determinant reverses orientation. Geometric area is the absolute value of signed area.
-        A zero determinant collapses the square to a line or point; a later linear map cannot restore the lost area.</p>
-      <p>The animation interpolates corresponding corners between the exact endpoint maps. It is not physical motion or a promise of invertibility in between.
-        Use the three named steps to inspect the actual maps. During motion, area readouts describe the destination.</p>
-      <p>Try the reflection: can you predict the final orientation in both orders? Then try collapse: can changing the second map restore area?</p>
-    </details>
+    <p data-host-diagnostic role="status"></p>
+    <div data-player></div>
     <noscript><p>The editable diagrams require JavaScript; the explanation above remains available.</p></noscript>
   </main><script type="module" src="/src/experiments/composition-area/app.ts"></script></body>
 </html>

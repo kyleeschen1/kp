@@ -1,0 +1,96 @@
+{
+  "id": "task.kp.composition-notebook-reuse-20261127",
+  "kind": "task",
+  "title": "Reuse composition in a persistent notebook",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Implementation verified; HUMAN_CHECKPOINT for notebook-host readability and interaction.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-composition-notebook-reuse.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:composition-notebook",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:21.855Z",
+      "notes": "45 passed after repairing exhaustive discovery family routing."
+    },
+    {
+      "command": "npm run test:composition-area",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:22.932Z",
+      "notes": "49 passed; matrix product and semantic owners preserved."
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:23.568Z",
+      "notes": "28 passed; original source, rich prose, clipboard and command boundaries preserved."
+    },
+    {
+      "command": "npm run visual:composition-notebook -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:24.200Z",
+      "notes": "16 Chromium and Firefox checks passed on complete rerun after discovery repair; original reference and new host."
+    },
+    {
+      "command": "npm run visual:projection-notebook -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:24.857Z",
+      "notes": "14 Chromium and Firefox preservation checks passed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:25.490Z",
+      "notes": "Full app, node, tests, Svelte and domains passed; final scoped notebook check and measurement include latest admission/map changes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:26.135Z",
+      "notes": "Architecture and eight conformance gateway tests passed."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:26.811Z",
+      "notes": "Passed after adding only the new resolved suite entry; all previous policy entries unchanged."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:27.445Z",
+      "notes": "75 passed after shortening roadmap under existing startup ceiling."
+    },
+    {
+      "command": "npm run build:composition-area",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:28.062Z",
+      "notes": "99039 gzip JS/CSS, 1010369 all emitted;64 assets."
+    },
+    {
+      "command": "npm run measure:notebook-mathematics -- --baseline 76ba6e7760abbb579065abc6fbe3d22f92e98e78",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:04:28.683Z",
+      "notes": "Initial notebook JS +681 gzip bytes; complete JS/CSS +12457; native reader unchanged; lazy-owner gates passed. Types/instantiations recorded in review."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the composition notebook host."
+  ]
+}

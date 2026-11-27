@@ -23,6 +23,8 @@
     "test:matrix-reference": "node --disable-warning=ExperimentalWarning --test tests/matrix-reference.test.ts tests/matrix-column-geometry.test.ts",
     "test:studio-foundations": "node --disable-warning=ExperimentalWarning --test tests/math-discovery.test.ts tests/contextual-revision.test.ts tests/theme-colors.test.ts",
     "test:composition-area": "node --disable-warning=ExperimentalWarning --test tests/composition-area.test.ts tests/matrix-product.test.ts tests/semantic.test.ts",
+    "test:composition-notebook": "node --disable-warning=ExperimentalWarning --test tests/composition-notebook.test.ts tests/composition-area.test.ts tests/projection-notebook.test.ts tests/notebook-mathematics-matrix.test.ts tests/notebook-mathematics.test.ts tests/math-discovery.test.ts",
+    "visual:composition-notebook": "playwright test --config config/playwright/playwright.composition-notebook.config.ts --project=chromium --workers=1",
     "typecheck:composition-area": "tsc --project config/typescript/tsconfig.composition-area.json",
     "visual:composition-area": "playwright test --config config/playwright/playwright.composition-area.config.ts --project=chromium --workers=1",
     "build:composition-area": "vite build --config config/vite.composition-area.ts",

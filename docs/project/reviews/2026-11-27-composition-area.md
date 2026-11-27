@@ -1,7 +1,7 @@
 # Composition and signed area
 
 Date: 2026-11-27
-Status: approved continuation implemented and checked; canonical visual review pending.
+Status: complete; user accepted the canonical exemplar with “great! resume” on 2026-11-27.
 Execution: `run-contract.kp.composition-area-20261127`.
 
 ## Outcome and finite scope
@@ -139,8 +139,8 @@ full types, architecture, standalone build and small two-browser smoke instead.
 Repository-wide unit tests, the root production build and WebKit were not run;
 this is a reviewable candidate, not a general release or renderer certification.
 
-The projection notebook is now accepted and its finite contract is complete.
-Composition pauses at HUMAN_CHECKPOINT with the review package remaining.
-After acceptance, separately scope persistent notebook reuse before moving to
-the circle/trigonometry family in the studio horizon. The actual-model contextual
-revision trial is still pending and was not replaced by this mathematical work.
+The projection notebook and this composition reference are accepted; both finite
+contracts are complete. The user's “great! resume” approves the bounded
+[persistent notebook successor](2026-11-27-composition-notebook-reuse.md).
+It preserves the accepted choreography and stops at second-host review.
+Circle/trigonometry and the actual-model contextual revision trial remain separate.

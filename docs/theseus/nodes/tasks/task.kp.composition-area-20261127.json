@@ -2,9 +2,9 @@
   "id": "task.kp.composition-area-20261127",
   "kind": "task",
   "title": "Compare ordered transformations and signed area",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Checked composition and signed-area candidate awaiting human visual review.",
+  "summary": "Accepted editable composition and signed-area reference; semantic and browser evidence retained at 76ba6e776.",
   "sourceRefs": [
     {
       "kind": "file",

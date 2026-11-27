@@ -19,30 +19,4 @@ button, summary { cursor: pointer; } :focus-visible { outline: 2px solid var(--c
 form { gap: 2rem; margin-block-start: .75rem; } fieldset { border: 0; padding: 0; margin: 0; min-inline-size: 0; }
 [data-inputs] { display: grid; grid-template-columns: repeat(2, 3.8em); gap: .2em; } input { min-inline-size: 0; inline-size: 100%; }
 .input-help { color: var(--color-muted); font-size: .85em; }
-[data-diagnostic]:empty { display: none; } [data-diagnostic] { color: var(--color-red-light); }
-.playback { margin-block: 1rem .4rem; } .playback input { flex: 1 1 12rem; accent-color: var(--color-red-light); }
-.playback label { min-inline-size: 0; max-inline-size: 100%; }
-[data-cue] { min-block-size: 3.5em; margin-block: .5em; }
-/* The shared helper can overlay graphs; this host places its cue in document
- * flow so wrapped instructions reserve their real height on narrow screens. */
-[data-cue] .kp-focus-deck__annotation { position: static; }
-.comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
-.comparison section { min-inline-size: 0; }
-[data-notation] { min-block-size: 3.5em; overflow-x: auto; }
-[data-notation] .katex { font-size: 1.1em; }
-figure { margin: .25em 0; inline-size: min(100%, 320px); }
-svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
-.graph-svg__background { fill: var(--color-paper); }
-.graph-axis line { stroke: var(--color-border); stroke-width: 1; }
-.graph-axis text { fill: var(--color-muted); font: inherit; }
-svg [data-role] { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; fill: none; }
-[data-role=basis-1] { color: var(--color-green-light); }
-[data-role=basis-2] { color: var(--color-blue-light); stroke-dasharray: 4 3; }
-[data-role=unit] { color: var(--color-muted); stroke-dasharray: 2 4; }
-svg [data-role=image] { color: var(--color-emphasis); fill: var(--color-emphasis); fill-opacity: .08; }
-svg [data-role=corner] { fill: var(--color-ink); color: var(--color-ink); }
-[data-area] { min-block-size: 3em; margin-block: .4em; }
-.key { color: var(--color-muted); font-size: .85em; gap: .4em 1em; }
-details { margin-block-start: 1rem; }
-@media (max-width: 560px) { .comparison { grid-template-columns: minmax(0, 1fr); gap: .7rem; } [data-cue], [data-area] { min-block-size: 0; } }
-@media (forced-colors: active) { svg [data-role] { stroke: CanvasText; } svg [data-role=corner] { fill: CanvasText; } }
+[data-host-diagnostic]:empty { display: none; } [data-host-diagnostic] { color: var(--color-red-light); }

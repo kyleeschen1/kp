@@ -3,6 +3,10 @@
     "sha256": "84654ed5964e06dfe2862b7cf7ac81fb2e7b437718e9940c16960d7dd49892e6",
     "projects": 3
   },
+  "playwright.composition-notebook.config.ts": {
+    "sha256": "a5a38b707718b907743223962002877f56168f607cef44b252a365f5a7fafee4",
+    "projects": 3
+  },
   "playwright.projection-notebook.config.ts": {
     "sha256": "825dff879d12f93b9cd6216bc69044a79cb54cbf7602b6434ae2da21686243a1",
     "projects": 3

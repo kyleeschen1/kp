@@ -49,11 +49,13 @@ test('discovery enriches existing command descriptions without invoking them or 
   assert.deepEqual(f.capture().map(row => row.id), ['matrix.graph', 'matrix.explain']);
   f.change(selection('vector-pair'));
   assert.deepEqual(f.capture().map(row => row.id), ['projection.explain', 'projection.linked']);
+  f.change(selection('matrix-pair'));
+  assert.deepEqual(f.capture().map(row => row.id), ['composition.explain', 'composition.linked']);
 });
 
 test('missing input and incompatible derived objects have no executable placeholder', () => {
   const f = fixture({ kind: 'none' }), missing = f.capture();
-  assert.equal(missing.length, 7);
+  assert.equal(missing.length, 9);
   for (const row of missing) {
     assert.equal(row.resource.kind, 'needs-input'); assert.equal('command' in row.resource, false);
     assert.deepEqual(row.actions, []); assert.equal(mathCapabilityState(row.resource).enabled, false);
@@ -170,5 +172,5 @@ test('discovery transitive imports contain no evaluator, host, DOM renderer or g
     pending.push(...graph.localEdges.filter(edge => edge.importer === path).map(edge => edge.target));
   }
   assert.ok(seen.has('src/math-discovery/catalog.ts'));
-  assert.equal(mathCapabilityCatalog.length, 7);
+  assert.equal(mathCapabilityCatalog.length, 9);
 });

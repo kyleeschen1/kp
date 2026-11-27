@@ -4,7 +4,7 @@ import { available, unavailable, target, type CommandRegistry, type Target, type
 import type { Row } from '../editor-rows/model.ts';
 import { mountRowPicker } from '../interaction/row-picker.ts';
 import { captureMathematicalDiscovery, mathCapabilityState, type MathCapability, type MathDiscoverySelection } from '../math-discovery/public-api.ts';
-import { mathematicsIn, matrixResourcesIn, projectionResourcesIn } from './schema.ts';
+import { mathematicsIn, matrixResourcesIn, projectionResourcesIn, compositionResourcesIn } from './schema.ts';
 import { selectedObject } from './inspector.ts';
 import '../interaction/style.css';
 
@@ -22,6 +22,10 @@ export function mountMathematicalDiscovery(host: HTMLElement, view: EditorView, 
     if (node.type.name === 'projectionObject' && doc.firstChild?.type.name === 'projectionResources') {
       const resource = projectionResourcesIn(doc).find(resource => resource.id === node.attrs['resource']);
       if (resource) return { kind: 'vector-pair', id: resource.id, occurrenceId, revision: doc };
+    }
+    if (node.type.name === 'compositionObject' && doc.firstChild?.type.name === 'compositionResources') {
+      const resource = compositionResourcesIn(doc).find(resource => resource.id === node.attrs['resource']);
+      if (resource) return { kind: 'matrix-pair', id: resource.id, occurrenceId, revision: doc };
     }
     if (node.type.name === 'matrixObject' && doc.firstChild?.type.name === 'matrixResources') {
       const resource = matrixResourcesIn(doc).find(resource => resource.id === node.attrs['resource']);

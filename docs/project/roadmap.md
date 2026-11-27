@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-composition-area`
-Execution Contract: `run-contract.kp.composition-area-20261127`
-Next Product Milestone: `composition-area`
+Current Commitment: `kp-composition-notebook-reuse`
+Execution Contract: `run-contract.kp.composition-notebook-reuse-20261127`
+Next Product Milestone: `composition-notebook-reuse`
 Milestone Authority: approved
 
 ## Where we are going
@@ -16,8 +16,6 @@ The [charter](strategy.md) owns the thesis and progression:
 authoring → adaptation → practice/retrieval → library.
 [Accepted direction](decisions/2026-11-08-authoring-expert-attention.md) records
 the rationale and superseded priorities.
-
-Reference: [organized rules with replayable derivations](decisions/2026-11-26-compact-question-led-vignettes.md).
 
 ## Current approved commitment
 
@@ -31,8 +29,9 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [notebook reuse and quadratic forms](reviews/2026-11-27-linked-math-views.md).
 **Complete, accepted:** [editable R2 projection](reviews/2026-11-27-inner-product-projection.md).
 **Accepted:** [persistent projection notebook](reviews/2026-11-27-projection-notebook-reuse.md).
-**Approved:** [composition and signed area](reviews/2026-11-27-composition-area.md):
-editable map-order, orientation and collapse reference; review before reuse.
+**Accepted:** [composition and signed area](reviews/2026-11-27-composition-area.md).
+**Approved:** [composition notebook reuse](reviews/2026-11-27-composition-notebook-reuse.md):
+saved pairs, shared player and local playback; review the notebook host.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 
@@ -115,7 +114,6 @@ editor ownership. Exclude publication, model spending, broad curriculum,
 universal schema and historical run resumption.
 
 The [historical roadmap](roadmap.history-2026-11-08.md) preserves earlier
-commitments, pauses, foundations and supporting-thread links. It is provenance,
-not another queue. [Agent instructions](../../AGENTS.md) retain execution rules.
+commitments as provenance. [Agent instructions](../../AGENTS.md) retain execution rules.
 The [promotion ledger](threads/animation-library-promotion.md) still tables
 `Apply a 2 × 2 matrix to a vector`; its rank and evidence remain preserved.

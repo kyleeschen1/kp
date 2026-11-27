@@ -1,0 +1,37 @@
+/* Accepted renderer paint is scoped; hosts keep their own chrome and fonts. */
+.kp-composition { white-space: normal; container-type: inline-size; min-inline-size: 0; --kp-focus-card-passage-font: var(--kp-document-font); --kp-focus-card-ui-font: var(--kp-document-font); }
+.kp-composition [hidden] { display: none !important; }
+.kp-composition button, .kp-composition input, .kp-composition select { font: inherit; color: inherit; background: var(--color-paper); border: 1px solid var(--color-border); padding: .3em .5em; border-radius: 3px; max-inline-size: 100%; }
+.kp-composition button, .kp-composition summary { cursor: pointer; }
+.kp-composition :focus-visible { outline: 2px solid var(--color-emphasis); outline-offset: 2px; }
+.kp-composition h2 { font-size: var(--kp-document-heading-size); font-weight: var(--kp-document-heading-weight); margin-block: .4em; }
+.kp-composition [data-diagnostic]:empty { display: none; }
+.kp-composition [data-diagnostic] { color: var(--color-red-light); }
+.kp-composition .playback, .kp-composition .key { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+.kp-composition input { min-inline-size: 0; inline-size: 100%; }
+.kp-composition .playback { margin-block: 1rem .4rem; } .kp-composition .playback input { flex: 1 1 12rem; accent-color: var(--color-red-light); }
+.kp-composition .playback label { min-inline-size: 0; max-inline-size: 100%; }
+.kp-composition [data-cue] { min-block-size: 3.5em; margin-block: .5em; }
+/* The shared helper can overlay graphs; this host places its cue in document
+ * flow so wrapped instructions reserve their real height on narrow screens. */
+.kp-composition [data-cue] .kp-focus-deck__annotation { position: static; }
+.kp-composition .comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.kp-composition .comparison section { min-inline-size: 0; }
+.kp-composition [data-notation] { min-block-size: 3.5em; overflow-x: auto; }
+.kp-composition [data-notation] .katex { font-size: 1.1em; }
+.kp-composition figure { margin: .25em 0; inline-size: min(100%, 320px); }
+.kp-composition svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
+.kp-composition .graph-svg__background { fill: var(--color-paper); }
+.kp-composition .graph-axis line { stroke: var(--color-border); stroke-width: 1; }
+.kp-composition .graph-axis text { fill: var(--color-muted); font: inherit; }
+.kp-composition svg [data-role] { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; fill: none; }
+.kp-composition [data-role=basis-1] { color: var(--color-green-light); }
+.kp-composition [data-role=basis-2] { color: var(--color-blue-light); stroke-dasharray: 4 3; }
+.kp-composition [data-role=unit] { color: var(--color-muted); stroke-dasharray: 2 4; }
+.kp-composition svg [data-role=image] { color: var(--color-emphasis); fill: var(--color-emphasis); fill-opacity: .08; }
+.kp-composition svg [data-role=corner] { fill: var(--color-ink); color: var(--color-ink); }
+.kp-composition [data-area] { min-block-size: 3em; margin-block: .4em; }
+.kp-composition .key { color: var(--color-muted); font-size: .85em; gap: .4em 1em; }
+.kp-composition details { margin-block-start: 1rem; }
+@container (max-width: 560px) { .kp-composition .comparison { grid-template-columns: minmax(0, 1fr); gap: .7rem; } .kp-composition [data-cue], .kp-composition [data-area] { min-block-size: 0; } }
+@media (forced-colors: active) { .kp-composition svg [data-role] { stroke: CanvasText; } .kp-composition svg [data-role=corner] { fill: CanvasText; } }

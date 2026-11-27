@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 3,
+  "id": "28000000-0000-4000-8000-000000000001",
+  "revision": 0,
+  "compositionResources": [
+    {
+      "id": "28000000-0000-4000-8000-000000000002",
+      "revision": 0,
+      "draft": [
+        "1",
+        "1",
+        "0",
+        "1",
+        "2",
+        "0",
+        "0",
+        "1"
+      ],
+      "admitted": [
+        "1",
+        "1",
+        "0",
+        "1",
+        "2",
+        "0",
+        "0",
+        "1"
+      ]
+    }
+  ],
+  "cells": [
+    {
+      "type": "articleHeader",
+      "id": "28000000-0000-4000-8000-000000000003",
+      "metadata": {},
+      "title": {
+        "type": "title",
+        "id": "28000000-0000-4000-8000-000000000004",
+        "metadata": {},
+        "content": [
+          {
+            "type": "text",
+            "text": "Does the order change the picture?",
+            "marks": [],
+            "annotations": []
+          }
+        ]
+      },
+      "authors": [
+        {
+          "type": "authorCredit",
+          "id": "28000000-0000-4000-8000-000000000005",
+          "metadata": {},
+          "name": "Kinetic Press",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "type": "block",
+      "id": "28000000-0000-4000-8000-000000000006",
+      "metadata": {},
+      "kind": "paragraph",
+      "title": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "Read BA as A first, then B. Edit the saved matrix pair, compare both orders and track signed area.",
+          "marks": [],
+          "annotations": []
+        }
+      ],
+      "children": [],
+      "layout": "flow",
+      "folded": false
+    },
+    {
+      "type": "compositionObject",
+      "id": "28000000-0000-4000-8000-000000000007",
+      "metadata": {},
+      "resource": "28000000-0000-4000-8000-000000000002",
+      "view": "inputs",
+      "folded": false
+    },
+    {
+      "type": "compositionObject",
+      "id": "28000000-0000-4000-8000-000000000008",
+      "metadata": {},
+      "resource": "28000000-0000-4000-8000-000000000002",
+      "view": "explanation",
+      "folded": false
+    },
+    {
+      "type": "block",
+      "id": "28000000-0000-4000-8000-000000000009",
+      "metadata": {},
+      "kind": "paragraph",
+      "title": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "Try a reflection or a singular matrix. How do the two orders differ, and what does the signed area retain?",
+          "marks": [],
+          "annotations": []
+        }
+      ],
+      "children": [],
+      "layout": "flow",
+      "folded": false
+    }
+  ]
+}

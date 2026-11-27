@@ -1,6 +1,6 @@
-import { createGraph2DObject, createAxis2DObject } from '../../semantic/graph.ts';
-import { projectGraphPoint } from '../../rendering/graph-2d-scene.ts';
-import { renderGraphToSvg } from '../../rendering/graph-2d-svg.ts';
+import { createGraph2DObject, createAxis2DObject } from '../semantic/graph.ts';
+import { projectGraphPoint } from '../rendering/graph-2d-scene.ts';
+import { renderGraphToSvg } from '../rendering/graph-2d-svg.ts';
 import type { Point, CompositionModel } from './model.ts';
 
 /** Fixed common framing makes both orders comparable. SVG only paints the

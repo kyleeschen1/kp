@@ -1,0 +1,59 @@
+{
+  "id": "run-contract.kp.composition-notebook-reuse-20261127",
+  "kind": "run-contract",
+  "title": "Persistent composition notebook",
+  "status": "deferred",
+  "summary": "Three of four packages complete; second-host visual judgment remains.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.composition-notebook-reuse-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-composition-notebook-reuse.md"
+    }
+  ],
+  "verification": [
+    "npm run test:composition-notebook",
+    "npm run visual:composition-notebook"
+  ],
+  "revisitWhen": [
+    "User accepts or provides feedback on the notebook host."
+  ],
+  "allowedWork": [
+    "Bounded composition notebook reuse and demonstrated owner repairs; six-hour ceiling with final hour for checks and backup"
+  ],
+  "disallowedWork": [
+    "Mixed families, decimals, new animations, generic framework, cross-notebook import, paid calls, publication"
+  ],
+  "goal": "Saved matrix pairs and linked occurrences share the accepted composition player with native history and independent playback",
+  "target": "task.kp.composition-notebook-reuse-20261127",
+  "slices": [
+    {
+      "id": "source",
+      "title": "Persistent-source",
+      "summary": "Persistent matrix pairs, native history, independent copy and shared source cache pass focused laws; 45 tests passed.",
+      "status": "complete"
+    },
+    {
+      "id": "host",
+      "title": "Shared-player-and-notebook",
+      "summary": "Shared editor and reading player, local playheads, discovery, copy and fold lifecycle pass 16 Chromium/Firefox checks including the original reference.",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "title": "Integration-checks",
+      "summary": "Focused preservation, full types, architecture, 30 Chromium/Firefox checks, complete-consumer builds and tooling/vision checks pass. Costs and repaired failures recorded in review.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Second-host-review",
+      "summary": "HUMAN_CHECKPOINT: judge controls, notation and stacked diagrams in the saved notebook host.",
+      "status": "in-progress"
+    }
+  ]
+}

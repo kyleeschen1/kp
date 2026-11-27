@@ -2,8 +2,8 @@
   "id": "run-contract.kp.composition-area-20261127",
   "kind": "run-contract",
   "title": "Composition and signed area",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: implemented and checked canonical composition exemplar; visual judgment remains.",
+  "status": "resolved",
+  "summary": "COMPLETE: four packages including visual acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -52,8 +52,8 @@
     {
       "id": "review",
       "title": "Human-exemplar-review",
-      "summary": "HUMAN_CHECKPOINT: judge ordered maps, orientation, area readouts and small paired diagrams before notebook reuse.",
-      "status": "in-progress"
+      "summary": "User accepts composition presentation with great, resume; notebook reuse follows in a separately bounded continuation.",
+      "status": "complete"
     }
   ]
 }

@@ -20,13 +20,21 @@ import { CommandShortcut } from '../editor-commands/shortcut.ts';
 const host = document.querySelector<HTMLElement>('#math-reading')!;
 const matrixModule = new URLSearchParams(location.search).get('notebook') === 'matrix' ? await import('./matrix-reading.ts') : undefined;
 const projectionModule = new URLSearchParams(location.search).get('notebook') === 'projection' ? await import('./projection-reading.ts') : undefined;
+const compositionModule = new URLSearchParams(location.search).get('notebook') === 'composition' ? await import('./composition-reading.ts') : undefined;
 let projectionReading: ReturnType<NonNullable<typeof projectionModule>['mountProjectionReading']> | undefined;
+let compositionReading: ReturnType<NonNullable<typeof compositionModule>['mountCompositionReading']> | undefined;
 let matrixReading: ReturnType<NonNullable<typeof matrixModule>['mountMatrixReading']> | undefined;
 const send = (data: object) => window.parent.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin);
 let view: EditorView | undefined, runtime: NotebookMathRuntime | undefined, latest: FractionNotebook | undefined, active = false, disposed = false;
 const listeners = new Set<() => void>(), shortcut = new CommandShortcut();
 const render = () => {
   if (disposed || !active || !latest) return;
+  if (compositionModule) {
+    if (!latest.compositionResources) throw new Error('The composition reading requires matrix pairs.');
+    if (!compositionReading) compositionReading = compositionModule.mountCompositionReading(host, latest, id => send({ kind: 'select', id }));
+    else compositionReading.update(latest);
+    send({ kind: 'applied', revision: latest.revision }); return;
+  }
   if (projectionModule) {
     if (!latest.projectionResources) throw new Error('The projection reading requires vector pairs.');
     if (!projectionReading) projectionReading = projectionModule.mountProjectionReading(host, latest, id => send({ kind: 'select', id }));
@@ -59,7 +67,7 @@ const message = (event: MessageEvent) => {
       active = data.animationOnly === false;
       // A hidden matrix reading must not keep a player/clock alive or publish
       // obsolete playback state while its editable counterpart is in use.
-      if (!active) { matrixReading?.dispose(); matrixReading = undefined; projectionReading?.dispose(); projectionReading = undefined; }
+      if (!active) { matrixReading?.dispose(); matrixReading = undefined; projectionReading?.dispose(); projectionReading = undefined; compositionReading?.dispose(); compositionReading = undefined; }
       render();
     }
     if (data.kind === 'apply') { latest = readNotebook(data.value.notebook); render(); }
@@ -77,14 +85,14 @@ const dispose = () => {
   if (disposed) return; disposed = true;
   window.removeEventListener('pagehide', leaving); window.removeEventListener('pageshow', returning);
   window.removeEventListener('message', message); document.removeEventListener('pointerdown', focus); document.removeEventListener('keydown', key, true);
-  view?.destroy(); runtime?.dispose(); matrixReading?.dispose(); projectionReading?.dispose(); listeners.clear();
+  view?.destroy(); runtime?.dispose(); matrixReading?.dispose(); projectionReading?.dispose(); compositionReading?.dispose(); listeners.clear();
 };
 const leaving = (event: PageTransitionEvent) => {
   if (!event.persisted) { dispose(); return; }
   // A frozen page releases active playback but retains its message owner. The
   // parent also survives BFCache, so restore from the latest admitted notebook.
   matrixReading?.dispose(); matrixReading = undefined;
-  projectionReading?.dispose(); projectionReading = undefined;
+  projectionReading?.dispose(); projectionReading = undefined; compositionReading?.dispose(); compositionReading = undefined;
 };
 const returning = (event: PageTransitionEvent) => { if (event.persisted) render(); };
 window.addEventListener('pagehide', leaving); window.addEventListener('pageshow', returning);

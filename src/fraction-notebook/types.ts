@@ -2,6 +2,7 @@ import type { Metadata, UUID } from '../notebook/model.ts';
 import type { MathView, MathViewport, NotebookMathematics } from '../notebook/math-model.ts';
 import type { MatrixVectorDocument } from '../math-resources/public-api.ts';
 import type { ProjectionResource } from '../projection-explanation/resource.ts';
+import type { CompositionResource } from '../composition-explanation/resource.ts';
 export type Mark = 'strong' | 'em' | 'code';
 export interface Identified { readonly id: UUID; readonly metadata: Metadata }
 export interface Annotation extends Identified {}
@@ -30,8 +31,11 @@ export interface MatrixObjectCell extends Identified {
 export interface ProjectionObjectCell extends Identified {
   readonly type: 'projectionObject'; readonly resource: UUID; readonly view: 'inputs' | 'explanation'; readonly folded: boolean;
 }
-export type Cell = ArticleHeader | ContentBlock | Story | MathObjectCell | MatrixObjectCell | ProjectionObjectCell;
-export interface FractionNotebook { readonly schemaVersion: 3; readonly id: UUID; readonly revision: number; readonly cells: readonly Cell[]; readonly mathematics?: NotebookMathematics; readonly matrixResources?: readonly MatrixVectorDocument[]; readonly projectionResources?: readonly ProjectionResource[] }
+export interface CompositionObjectCell extends Identified {
+  readonly type: 'compositionObject'; readonly resource: UUID; readonly view: 'inputs' | 'explanation'; readonly folded: boolean;
+}
+export type Cell = ArticleHeader | ContentBlock | Story | MathObjectCell | MatrixObjectCell | ProjectionObjectCell | CompositionObjectCell;
+export interface FractionNotebook { readonly schemaVersion: 3; readonly id: UUID; readonly revision: number; readonly cells: readonly Cell[]; readonly mathematics?: NotebookMathematics; readonly matrixResources?: readonly MatrixVectorDocument[]; readonly compositionResources?: readonly CompositionResource[]; readonly projectionResources?: readonly ProjectionResource[] }
 export interface Step { readonly title: string; readonly content: string; readonly focusRefs: readonly string[] }
 export interface Definition { readonly id: string; readonly asset: { readonly id: string; readonly version: string }; readonly presentation: string;
   readonly beats: readonly (Step & { readonly id: string; readonly progressPermille: number })[] }
