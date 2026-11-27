@@ -1,7 +1,7 @@
 # Next step: reuse a saved matrix explanation outside the notebook
 
 Date: 2026-11-27
-Status: implemented and checked; awaiting the single reference-card review.
+Status: complete; user accepted the reference card with “good”.
 Execution: `run-contract.kp.matrix-reference-card-20261127`.
 Evidence and review: [reference-card workflow](2026-11-27-matrix-reference-card.md).
 

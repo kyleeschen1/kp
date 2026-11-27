@@ -2,8 +2,8 @@
   "id": "task.kp.matrix-reference-card-20261127",
   "kind": "task",
   "title": "Reuse a saved matrix explanation in a reference card",
-  "status": "deferred",
-  "summary": "Reference card implemented and checked; stop before promotion for human exemplar review",
+  "status": "resolved",
+  "summary": "COMPLETE: user accepted the checked independent reference card; shelf remains a separate unapproved proposal",
   "sourceRefs": [
     {
       "kind": "file",
@@ -77,6 +77,13 @@
       "scope": "focused",
       "checkedAt": "2026-11-27T10:39:11.061Z",
       "notes": "Final rerun passes all 75 after shortening the thread within its existing startup budget"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:43:38.150Z",
+      "notes": "Acceptance closeout: all 75 checks pass with completed card and separately proposed shelf"
     }
   ],
   "revisitWhen": [

@@ -1,7 +1,7 @@
 # Matrix resource → independent reference card
 
 Date: 2026-11-27
-Status: checked candidate; HUMAN_CHECKPOINT before promotion.
+Status: accepted by the user's “good”; bounded outcome COMPLETE.
 Scope: [approved successor](2026-11-27-matrix-reference-card-next-step.md).
 Execution: `run-contract.kp.matrix-reference-card-20261127`.
 
@@ -94,12 +94,13 @@ are unchanged; these tests establish the host workflow, not new paint mechanisms
 
 ## Remaining boundary
 
-Human judgment is pending. Local persistence is one pinned card per browser
+The standalone card is accepted. Local persistence is one pinned card per browser
 origin; it is not a server backup or live subscription. Source files remain the
 portable backup. Unsupported scientific-notation paint produces the existing
 typed gap. No new choreography, mathematical families, universal asset schema,
 publication, LLM mutation or broad shared-player promotion was added.
 
 Rollback unit: source export plus the independent reference host. The accepted
-notebook explanation and restored fraction scrolling remain intact. After review,
-resume the named contract's review package; do not expand this outcome implicitly.
+notebook explanation and restored fraction scrolling remain intact. This contract
+is complete; [a small reference shelf](2026-11-27-reference-shelf-next-step.md)
+is a separate proposal, not an expansion of the accepted card.

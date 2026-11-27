@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "Export a validated matrix resource and replay it in an independent reference card; preserve source IDs, values and playback across reload, reject invalid imports and exclude editor/chat dependencies. Stop at one card review before promotion.",
     source: { label: "Approved reference-card scope", href: "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md" }
   },
-  uncertainty: "The connected matrix notebook explanation is accepted. The independent saved-source reference workflow is checked, but its presentation awaits judgment. Shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
-  nextJudgment: "Review the independent reference card: import an authored matrix, seek and reload, then judge whether it is clear and useful to revisit. Broader player promotion and section-clipping judgment remain separate.",
+  uncertainty: "The notebook explanation and independent reference card are accepted. Returning among several saved explanations, shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
+  nextJudgment: "Consider a small reference shelf: retain and find several named matrix snapshots, each with its own saved playback. This is a proposed successor; broader player promotion and section-clipping judgment remain separate.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "G1 accepts quadratic authoring, G2 accepts the static matrix notebook, and the connected column explanation is accepted. Exported source snapshots now replay in an independent reference card with checked identity, reload, reversal and import recovery; the card awaits human review.",
-      evidence: { label: "Checked reference-card workflow and limits", href: "docs/project/reviews/2026-11-27-matrix-reference-card.md" },
+      established: "G1 accepts quadratic authoring, G2 accepts the static matrix notebook, and the connected column explanation and independent reference card are accepted. Exported source snapshots retain identity, reload, reversal and import recovery without editor dependencies.",
+      evidence: { label: "Accepted reference-card workflow and limits", href: "docs/project/reviews/2026-11-27-matrix-reference-card.md" },
       outcome: {
-        authority: "approved",
-        id: "matrix-reference-card", title: "Reuse a saved explanation in a reference card",
-        finish: "Export one validated matrix resource and open it in a separate reference host using the same mathematical runtime and column player. Preserve source IDs and values, reload and reverse playback; exclude editor/chat from the reader closure and review one card before promotion.",
-        excludes: "Live subscriptions, a universal asset schema or player, new choreography, broader mathematical families, LLM edits, flashcard scheduling and publication.",
-        source: { label: "Approved saved-reference successor", href: "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md" }
+        authority: "proposed",
+        id: "matrix-reference-shelf", title: "Return to several named reference cards",
+        finish: "Import three distinct matrix snapshots, name/filter/select them, and resume each saved playback position after reload. Preserve the existing card and guarded reader closure; review one shelf before promotion.",
+        excludes: "Live subscriptions, cross-device sync, new choreography or mathematics, LLM edits, flashcard scheduling and publication.",
+        source: { label: "Proposed reference shelf", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
       }
     },
     {
@@ -716,6 +716,13 @@ export const projectVision: ProjectVision = {
       after: "The exported source now opens in a standalone reference card with atomic local persistence and revision-safe playback. Chromium/Firefox workflow and complete production closure checks pass; stop at the card review.",
       reason: "A real second host demonstrates source reuse without loading the editor or inventing another player, while keeping visual promotion and live subscriptions separate.",
       source: { label: "Reference-card evidence and review", href: "docs/project/reviews/2026-11-27-matrix-reference-card.md" }
+    },
+    {
+      id: "accept-matrix-reference-card", on: "2026-11-27",
+      before: "The independent reference card was checked and awaiting its presentation review.",
+      after: "The user says good; accept the card and close its finite contract. Recommend a separate small shelf for several named snapshots, without starting implementation.",
+      reason: "The accepted authoring-to-reference workflow now supports one saved card. Keeping several examples addresses a concrete return limitation while preserving this completed milestone.",
+      source: { label: "Accepted card and proposed shelf", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
     }
   ]
 };

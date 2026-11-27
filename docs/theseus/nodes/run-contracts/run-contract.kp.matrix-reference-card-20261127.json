@@ -2,8 +2,8 @@
   "id": "run-contract.kp.matrix-reference-card-20261127",
   "kind": "run-contract",
   "title": "Matrix reference card",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: two implementation packages checked; awaiting one card presentation judgment",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -53,8 +53,8 @@
     {
       "id": "review",
       "title": "Human-exemplar-review",
-      "summary": "HUMAN_CHECKPOINT: review the standalone card at http://127.0.0.1:8000/experiments/matrix-reference/",
-      "status": "in-progress"
+      "summary": "User accepted the reference card with good; finite exemplar review complete",
+      "status": "complete"
     }
   ]
 }
