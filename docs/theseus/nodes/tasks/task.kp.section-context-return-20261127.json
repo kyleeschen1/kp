@@ -1,0 +1,14 @@
+{
+  "id": "task.kp.section-context-return-20261127",
+  "kind": "task",
+  "title": "Leave and return to a section explanation",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Approved studio outcome 11: one source-pinned detour, prediction and exact return",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-section-context-return.md"
+    }
+  ]
+}

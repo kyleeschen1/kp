@@ -1,7 +1,7 @@
 # Reuse one saddle-section explanation
 
 Date: 2026-11-27
-Status: clipping accepted; independent reference checked, awaiting host review.
+Status: independent reference accepted by “approve! resume”; complete.
 Authority: studio outcome 10, resumed after accumulation acceptance.
 Execution: `run-contract.kp.saddle-section-reuse-20261127`.
 
@@ -97,6 +97,10 @@ the actual-model annotation trial remains separate. Resume with
 `theseus work context task.kp.saddle-section-reuse-20261127 --mode brief`.
 
 ## Independent reference candidate
+
+The user accepted this host on 2026-11-27. The bounded reuse milestone is complete.
+Continue studio outcome 11 through the separate
+[context-return plan](2026-11-27-section-context-return.md); do not expand this finish line.
 
 Open http://127.0.0.1:8000/experiments/saddle-section-reference/ in Firefox.
 Change **Plane c** and **Denominator d** in the first copy. Click **Inspect in 2D**,

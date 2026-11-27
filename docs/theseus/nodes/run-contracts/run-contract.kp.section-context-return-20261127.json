@@ -1,0 +1,53 @@
+{
+  "id": "run-contract.kp.section-context-return-20261127",
+  "kind": "run-contract",
+  "title": "Section context and return",
+  "status": "ready",
+  "summary": "User resumed approved studio horizon after accepting outcome 10",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.section-context-return-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-section-context-return.md"
+    }
+  ],
+  "verification": [
+    "npm run test:saddle-section",
+    "npm run visual:saddle-section"
+  ],
+  "allowedWork": [
+    "Approved studio outcome 11; four-hour ceiling with final 45 minutes reserved for checks and backup"
+  ],
+  "disallowedWork": [
+    "No new renderer, universal navigation, nested detour stack, notebook migration, model calls or publication"
+  ],
+  "goal": "Explore one deeper relationship and return to the exact source and view after reload",
+  "target": "task.kp.section-context-return-20261127",
+  "slices": [
+    {
+      "id": "context",
+      "title": "Checked-context",
+      "summary": "Admit pinned source, occurrence and prediction state before navigating",
+      "status": "in-progress"
+    },
+    {
+      "id": "detour",
+      "title": "Question-and-return",
+      "status": "planned"
+    },
+    {
+      "id": "verification",
+      "title": "Integrated-preservation",
+      "status": "planned"
+    },
+    {
+      "id": "review",
+      "title": "Canonical-review",
+      "status": "planned"
+    }
+  ]
+}

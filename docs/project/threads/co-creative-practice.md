@@ -21,8 +21,9 @@ Accepted: [composition exemplar](../reviews/2026-11-27-composition-area.md).
 Accepted: [composition notebook](../reviews/2026-11-27-composition-notebook-reuse.md).
 Accepted: [circle/trig](../reviews/2026-11-27-circle-trig.md).
 Accepted: [accumulation](../reviews/2026-11-27-polynomial-accumulation.md).
-Approved: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md); clipping accepted.
-Execution: `run-contract.kp.saddle-section-reuse-20261127`.
+Accepted: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md).
+Approved: [context return](../reviews/2026-11-27-section-context-return.md).
+Execution: `run-contract.kp.section-context-return-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

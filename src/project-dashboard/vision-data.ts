@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-saddle-section-reuse",
-    title: "Reuse one source-linked saddle section",
+    id: "kp-section-context-return",
+    title: "Explore a question and return to its exact context",
     approval: "approved",
-    contractId: "run-contract.kp.saddle-section-reuse-20261127",
-    finish: "With clipping accepted, bind supported saddle/section parameters to a checked source and reuse the explanation in one independent reference with local playback and exact return.",
-    source: { label: "Approved section reuse and prerequisite", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
+    contractId: "run-contract.kp.section-context-return-20261127",
+    finish: "Open one source-pinned question from an exact section occurrence, predict and reveal, then return to the same source and view across reload.",
+    source: { label: "Approved context return", href: "docs/project/reviews/2026-11-27-section-context-return.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Clipping is accepted. Next, review the independent saddle-section reference: edit supported parameters, inspect either occurrence and return to its saved camera. The actual-response annotation revision trial remains pending.",
+  nextJudgment: "The independent section reference is accepted. Next, judge whether its question detour, prediction and exact return preserve orientation. The actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -45,10 +45,10 @@ export const projectVision: ProjectVision = {
       evidence: { label: "Accumulation evidence and limits", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" },
       outcome: {
         authority: "approved",
-        id: "saddle-section-reuse", title: "Reuse a saddle-section explanation",
-        finish: "Reuse the accepted clipping treatment and one checked source through the existing player boundary in an independent host. Preserve local state, parameter editing and exact return; review the second host.",
-        excludes: "Other surfaces, arbitrary meshing or intersections, renderer replacement, notebook integration, paid model calls and publication.",
-        source: { label: "Approved section reuse", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
+        id: "section-context-return", title: "Leave and return without losing context",
+        finish: "One authored question opens from the accepted section reference, retains a prediction/reveal and restores the source, camera, inspection position and object after reload.",
+        excludes: "Nested detour stacks, a universal navigation library, new renderers, notebook migration, model calls, learning claims and publication.",
+        source: { label: "Approved question and return", href: "docs/project/reviews/2026-11-27-section-context-return.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Independent saddle-section reference accepted",
+      scope: "A checked saddle source mounts outside the experiment with independent editing, camera/playback and URL restoration. Existing renderer, single-curve paint and fallback are preserved. Arbitrary surfaces, shared-context rendering and notebook integration remain separate.",
+      source: { label: "Accepted reusable section", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
+    },
     {
       title: "Editable R2 projection accepted",
       scope: "Integer vector inputs drive linked native notation and projection geometry through the existing compiler and eight-step sampler. Signed, orthogonal and zero cases, URL return and local discovery are checked; the user accepts the presentation. Persistent notebook reuse and broad promotion remain separate.",
@@ -836,6 +841,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves that treatment and resumes checked-source extraction and the independent reference. The new host retains a separate visual checkpoint.",
       reason: "Reuse preserves an accepted treatment while testing parameter edits and independent occurrence ownership.",
       source: { label: "Clipping acceptance and bounded reuse", href: "docs/project/reviews/2026-11-27-saddle-section-reuse.md" }
+    },
+    {
+      id: "accept-section-reference-continue-return", on: "2026-11-27",
+      before: "The independent section reference awaited its host review.",
+      after: "The user accepts it and resumes the studio horizon. Close reuse and continue outcome 11 with one authored question, prediction/reveal and pinned return context.",
+      reason: "Make exploratory reading preserve its place in the larger explanation, using the accepted player rather than another mathematical family.",
+      source: { label: "Context-return scope and review", href: "docs/project/reviews/2026-11-27-section-context-return.md" }
     }
   ]
 };

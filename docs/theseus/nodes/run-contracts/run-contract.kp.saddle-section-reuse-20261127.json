@@ -2,8 +2,8 @@
   "id": "run-contract.kp.saddle-section-reuse-20261127",
   "kind": "run-contract",
   "title": "Reusable saddle section",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 4 of 5 packages complete; independent host review pending",
+  "status": "resolved",
+  "summary": "COMPLETE: all five packages accepted and checked",
   "sourceRefs": [
     {
       "kind": "file",
@@ -59,8 +59,8 @@
     {
       "id": "host-review",
       "title": "Independent-host-review",
-      "summary": "HUMAN_CHECKPOINT: review independent reference editing, paired local playback and return at /experiments/saddle-section-reference/",
-      "status": "in-progress"
+      "summary": "User approves independent reference and resumes studio horizon",
+      "status": "complete"
     }
   ]
 }

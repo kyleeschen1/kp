@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-saddle-section-reuse`
-Execution Contract: `run-contract.kp.saddle-section-reuse-20261127`
-Next Product Milestone: `saddle-section-reuse`
+Current Commitment: `kp-section-context-return`
+Execution Contract: `run-contract.kp.section-context-return-20261127`
+Next Product Milestone: `section-context-return`
 Milestone Authority: approved
 
 ## Where we are going
@@ -33,8 +33,9 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [composition notebook](reviews/2026-11-27-composition-notebook-reuse.md).
 **Accepted:** [circle/trig reference](reviews/2026-11-27-circle-trig.md).
 **Accepted:** [accumulation](reviews/2026-11-27-polynomial-accumulation.md).
-**Approved:** [saddle/section reuse](reviews/2026-11-27-saddle-section-reuse.md):
-clipping is accepted; independent-host delivery and review follow.
+**Accepted:** [saddle/section reuse](reviews/2026-11-27-saddle-section-reuse.md).
+**Approved:** [context return](reviews/2026-11-27-section-context-return.md):
+one deeper question, prediction/reveal and exact return after reload.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion remains separate.
 

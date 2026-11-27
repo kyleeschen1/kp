@@ -2,9 +2,9 @@
   "id": "task.kp.saddle-section-reuse-20261127",
   "kind": "task",
   "title": "Reuse a source-linked saddle section",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: independent reference checked; awaiting host judgment",
+  "summary": "Accepted independent source-driven reference, local playback and reloadable views",
   "sourceRefs": [
     {
       "kind": "file",
