@@ -9,9 +9,10 @@ export { documentPassageCadence } from '../preparation/public-api.ts';
 /** Narrative anchors are natural bottoms of the actual paragraph blocks. */
 export function createDocumentTheaterScroll(
   narrative: KpReaderPiecewiseScrollGeometry,
-  availableHeight: number
+  availableHeight: number,
+  mode: 'standard' | 'animation-only' = 'standard'
 ): KpReaderPiecewiseScrollGeometry {
-  const cadence = documentPassageCadence(availableHeight);
+  const cadence = documentPassageCadence(availableHeight, mode);
   sampleKpReaderScrollProgress(0, narrative);
   const stops = [narrative.stops[0]!];
   for (let index = 1; index < narrative.stops.length; index++) {
@@ -28,7 +29,9 @@ export function createDocumentTheaterScroll(
     }
     stops.push(
       { positionPx: passage.positionPx, progressPermille: previous.progressPermille },
-      { positionPx: start, progressPermille: previous.progressPermille },
+      // A zero reading hold shares the arrival stop; duplicate positions would
+      // violate the clock's strictly increasing geometry contract.
+      ...(start > passage.positionPx ? [{ positionPx: start, progressPermille: previous.progressPermille }] : []),
       { positionPx: end, progressPermille: passage.progressPermille }
     );
   }

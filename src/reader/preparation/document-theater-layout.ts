@@ -34,7 +34,13 @@ export function measureDocumentTheaterLayout(
   style.setProperty('--kp-flow-line-in-card', `${lineWithinCard}px`);
   // Preserve room beyond both semantic endpoints for the real prose to retreat.
   style.setProperty('--kp-flow-leading', `${lineWithinCard - heights[0]! + (compact ? 16 : 48)}px`);
-  style.setProperty('--kp-flow-tail', `${cardHeight - lineWithinCard + (compact ? 16 : 48)}px`);
+  const visualTail = cardHeight - lineWithinCard + (compact ? 16 : 48);
+  // An embedded animation hides the article's trailing prose. Its final
+  // endpoint must still be scrollable to the reading line; otherwise native
+  // scroll clamping silently truncates the last mathematical transformation.
+  const tail = compact && document.body.dataset['notebookAnimationOnly'] === 'true'
+    ? Math.max(visualTail, window.innerHeight - readingLine) : visualTail;
+  style.setProperty('--kp-flow-tail', `${tail}px`);
   style.setProperty('--kp-flow-hold', `${cadence.hold}px`);
   style.setProperty('--kp-flow-gap', compact ? '16px' : `${cardHeight - lineWithinCard + 4}px`);
   // Only actual mathematical operations reserve scroll runway. Reading and

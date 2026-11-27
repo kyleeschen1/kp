@@ -138,7 +138,7 @@ export function mountDocumentTheater(input: {
     if (readAll) return;
     ({ headerHeight, heights, holds, positions, readingLine, frameTop, frameBottom } =
       measureDocumentTheaterLayout(document, equationHeight,
-        documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height)));
+        documentPassageCadence(window.innerHeight - masthead.getBoundingClientRect().height, input.flowingProse ? 'animation-only' : 'standard')));
     focusAt = compileDocumentTheaterFocus({ positions, holds });
     attentionAt = compileDocumentReadingAttention({ states: annotationStates, positions, holds });
   };
@@ -200,7 +200,7 @@ export function mountDocumentTheater(input: {
       positions[indexAtPosition()]!, holds[indexAtPosition()]!)),
     readingDocument: () => readAll,
     scrollGeometry(narrative: KpReaderPiecewiseScrollGeometry) {
-      geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight);
+      geometry = createDocumentTheaterScroll(narrative, window.innerHeight - headerHeight, input.flowingProse ? 'animation-only' : 'standard');
       return geometry;
     },
     activeBeat: () => input.beats[readAll ? returnIndex : indexAtPosition()],

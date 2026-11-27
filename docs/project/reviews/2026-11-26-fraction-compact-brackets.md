@@ -2,6 +2,11 @@
 
 Outcome: HUMAN_CHECKPOINT. One bounded notebook candidate.
 
+Subsequent correction: [preview scroll distances and endpoint reach](2026-11-26-fraction-preview-scroll-repair.md)
+remove the retained 100px pre-animation hold and repair insufficient terminal
+scroll space in the inline preview. The original candidate evidence below is
+retained as history.
+
 Open http://127.0.0.1:8000/experiments/fraction-notebook/?reading=1#beat.read.
 Scroll through the opening reading cues, subtraction and cancellation; reverse.
 Look for the original bracket pair and centered equation, a border around the

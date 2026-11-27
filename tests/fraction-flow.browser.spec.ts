@@ -1,5 +1,44 @@
 import { test, expect } from '@playwright/test';
 
+for (const width of [1280, 390]) test(`embedded preview geometry at ${width}px`, async ({ page }, info) => {
+  await page.setViewportSize({ width, height: 844 });
+  await page.goto('/experiments/fraction-notebook/#beat.cancel-additive');
+  await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
+  await page.locator('.fn-animation-slot').scrollIntoViewIfNeeded();
+  const frame = page.frames().find(frame => frame.url().includes('/reader/fraction-notebook-preview/'))!;
+  await expect(frame.locator('body')).toHaveAttribute('data-kp-reader-hydrated', 'true');
+  for (const beat of ['beat.read', 'beat.cancel-additive', 'beat.solve']) {
+    await frame.locator(`.kp-lesson-toc a[href="#${beat}"]`).evaluate((link: HTMLAnchorElement) => link.click());
+    await frame.evaluate(async () => { await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame); });
+    const sample = await frame.evaluate(() => {
+      const rect = (selector: string) => { const r = document.querySelector(selector)!.getBoundingClientRect(); return { top: r.top, bottom: r.bottom, height: r.height, width: r.width }; };
+      return { viewport: [innerWidth, innerHeight], progress: document.body.dataset['kpReaderProgress'], scroll: scrollY,
+        frame: rect('.kp-caption-frame'), equation: rect('.kp-reader-equation-viewport'),
+        text: rect('.kp-rising-passage[data-kp-caption-active=true]'), bodyHeight: document.body.scrollHeight };
+    });
+    await page.screenshot({ path: info.outputPath(`embedded-${width}-${beat}.png`) });
+    expect(sample.equation.bottom).toBeLessThanOrEqual(sample.viewport[1]!);
+    if (beat === 'beat.read') continue;
+    const operation = await frame.locator(`[data-kp-beat="${beat}"]`).evaluate(node => ({
+      arrival: scrollY + node.getBoundingClientRect().top + node.querySelector<HTMLElement>('.kp-rising-passage')!.offsetHeight
+        - parseFloat(getComputedStyle(document.body).getPropertyValue('--kp-flow-line')),
+      start: Number((node as HTMLElement).dataset['kpOperationStart']), end: Number((node as HTMLElement).dataset['kpOperationEnd']),
+      hold: parseFloat(getComputedStyle(node).getPropertyValue('--kp-flow-hold'))
+    }));
+    expect(operation.hold).toBe(280);
+    for (const delta of [28, 140, 252, 280, 140, 28]) {
+      const state = await frame.evaluate(async top => {
+        dispatchEvent(new WheelEvent('wheel')); scrollTo({ top, behavior: 'instant' });
+        await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame);
+        return { progress: Number(document.body.dataset['kpReaderProgress']), scroll: scrollY, top, max: document.documentElement.scrollHeight - innerHeight };
+      }, operation.arrival + delta);
+      expect(Math.abs(state.progress - (operation.start + (operation.end - operation.start) * delta / 280)), JSON.stringify({ beat, delta, ...state })).toBeLessThanOrEqual(2);
+      expect(state.scroll).toBeCloseTo(state.top, 0);
+      if (delta === 280) expect(state.progress).toBe(operation.end);
+    }
+  }
+});
+
 for (const width of [1280, 390]) test(`compact bracket groups reserve scrolling only for animation at ${width}px`, async ({ page }, info) => {
   await page.setViewportSize({ width, height: 844 });
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));

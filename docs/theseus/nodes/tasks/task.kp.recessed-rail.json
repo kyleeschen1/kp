@@ -117,6 +117,13 @@
       "scope": "Compact classic bracket notebook, desktop and phone widths",
       "checkedAt": "2026-11-27T00:15:35.599Z",
       "notes": "Four Chromium/Firefox cases pass; final added reading-flow assertions pass in two Chromium cases. Two mathematical preservation cases, 23 units, notebook typecheck and source authoring check pass. Initial test-assumption repairs documented in docs/project/reviews/2026-11-26-fraction-compact-brackets.md."
+    },
+    {
+      "command": "npm run visual:fraction-flow -- --project=firefox",
+      "status": "passed",
+      "scope": "Preview pacing and terminal scroll reach",
+      "checkedAt": "2026-11-27T00:25:28.837Z",
+      "notes": "Eight Chromium/Firefox embedded/reading desktop/phone cases pass, including exact final endpoint and reverse. Two motion preservation cases, 21 units and notebook typecheck pass. Reproduced native scroll clamping at 968/1000 and repaired terminal layout; removed notebook-only 100px idle lead. See fraction-preview-scroll-repair review."
     }
   ],
   "revisitWhen": [
