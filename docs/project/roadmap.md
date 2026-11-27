@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-projection-notebook-reuse`
-Execution Contract: `run-contract.kp.projection-notebook-reuse-20261127`
-Next Product Milestone: `projection-notebook-reuse`
+Current Commitment: `kp-composition-area`
+Execution Contract: `run-contract.kp.composition-area-20261127`
+Next Product Milestone: `composition-area`
 Milestone Authority: approved
 
 ## Where we are going
@@ -30,8 +30,9 @@ Reference: [organized rules with replayable derivations](decisions/2026-11-26-co
 and shared defaults; discovery/revision are checked. Actual-model judgment remains.
 **Accepted:** [notebook reuse and quadratic forms](reviews/2026-11-27-linked-math-views.md).
 **Complete, accepted:** [editable R2 projection](reviews/2026-11-27-inner-product-projection.md).
-**Approved, awaiting review:** [projection notebook](reviews/2026-11-27-projection-notebook-reuse.md):
-saved pairs, independent copies, linked views and local playback.
+**Accepted:** [persistent projection notebook](reviews/2026-11-27-projection-notebook-reuse.md).
+**Approved:** [composition and signed area](reviews/2026-11-27-composition-area.md):
+editable map-order, orientation and collapse reference; review before reuse.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 

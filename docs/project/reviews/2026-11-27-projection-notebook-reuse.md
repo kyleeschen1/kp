@@ -1,7 +1,7 @@
 # Persistent projection notebook
 
 Date: 2026-11-27
-Status: implementation approved by “go as long as possible”; implemented second-host candidate, human review pending.
+Status: complete; the user accepted the second host with “good! continue”.
 Execution: `run-contract.kp.projection-notebook-reuse-20261127`.
 
 ## Outcome and authority
@@ -173,7 +173,8 @@ Final verification:
   limits, preserving linked evidence and without raising either budget.
 - Both complete-consumer measurement and independent projection production build
   passed. Theseus workspace validation passed (1,363 nodes, 35,385 events), as did
-  Git whitespace checks. Contract state is HUMAN_CHECKPOINT, 3/4 packages complete.
+  Git whitespace checks. At that handoff the contract was HUMAN_CHECKPOINT;
+  subsequent user acceptance closes the fourth package.
 
 The impact selector had no focused notebook-schema rule and suggested its broad
 fallback. This bounded candidate uses the declared domain/persistence suites,

@@ -2,9 +2,9 @@
   "id": "task.kp.projection-notebook-reuse-20261127",
   "kind": "task",
   "title": "Reuse the accepted projection in a persistent notebook",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: persistent projection notebook implemented and checked; second-host presentation review remains.",
+  "summary": "Accepted saved projection notebook, independent playback, copy and linked-view workflow; verification retained at 12b1f9c41.",
   "sourceRefs": [
     {
       "kind": "file",

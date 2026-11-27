@@ -1,0 +1,48 @@
+@import '@fontsource/source-serif-4/latin-400.css';
+@import '../../ui-theme/palette.css';
+@import '../../ui-theme/document-tokens.css';
+@import '../../tutorial/focus-deck-scaffold.css';
+@import 'katex/dist/katex.min.css';
+
+:root { color-scheme: light; color: var(--color-ink); background: var(--color-paper);
+  --kp-focus-card-passage-font: var(--kp-document-font); --kp-focus-card-ui-font: var(--kp-document-font); }
+:root[data-kp-theme=dark] { color-scheme: dark; }
+* { box-sizing: border-box; }
+main [hidden] { display: none !important; }
+body { margin: 0; font: 400 var(--kp-document-body-size)/var(--kp-document-body-leading) var(--kp-document-font); letter-spacing: var(--kp-document-letter-spacing); }
+main { max-inline-size: 960px; margin-inline: auto; padding: clamp(16px, 4vw, 40px); }
+h1 { font-size: var(--kp-document-title-size); font-weight: var(--kp-document-heading-weight); }
+h2 { font-size: var(--kp-document-heading-size); font-weight: var(--kp-document-heading-weight); margin-block: .4em; }
+button, input, select { font: inherit; color: inherit; background: var(--color-paper); border: 1px solid var(--color-border); padding: .3em .5em; border-radius: 3px; max-inline-size: 100%; }
+button, summary { cursor: pointer; } :focus-visible { outline: 2px solid var(--color-emphasis); outline-offset: 2px; }
+.tools, .playback, form, .key { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; }
+form { gap: 2rem; margin-block-start: .75rem; } fieldset { border: 0; padding: 0; margin: 0; min-inline-size: 0; }
+[data-inputs] { display: grid; grid-template-columns: repeat(2, 3.8em); gap: .2em; } input { min-inline-size: 0; inline-size: 100%; }
+.input-help { color: var(--color-muted); font-size: .85em; }
+[data-diagnostic]:empty { display: none; } [data-diagnostic] { color: var(--color-red-light); }
+.playback { margin-block: 1rem .4rem; } .playback input { flex: 1 1 12rem; accent-color: var(--color-red-light); }
+.playback label { min-inline-size: 0; max-inline-size: 100%; }
+[data-cue] { min-block-size: 3.5em; margin-block: .5em; }
+/* The shared helper can overlay graphs; this host places its cue in document
+ * flow so wrapped instructions reserve their real height on narrow screens. */
+[data-cue] .kp-focus-deck__annotation { position: static; }
+.comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.comparison section { min-inline-size: 0; }
+[data-notation] { min-block-size: 3.5em; overflow-x: auto; }
+[data-notation] .katex { font-size: 1.1em; }
+figure { margin: .25em 0; inline-size: min(100%, 320px); }
+svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
+.graph-svg__background { fill: var(--color-paper); }
+.graph-axis line { stroke: var(--color-border); stroke-width: 1; }
+.graph-axis text { fill: var(--color-muted); font: inherit; }
+svg [data-role] { stroke: currentColor; stroke-width: 1; vector-effect: non-scaling-stroke; fill: none; }
+[data-role=basis-1] { color: var(--color-green-light); }
+[data-role=basis-2] { color: var(--color-blue-light); stroke-dasharray: 4 3; }
+[data-role=unit] { color: var(--color-muted); stroke-dasharray: 2 4; }
+svg [data-role=image] { color: var(--color-emphasis); fill: var(--color-emphasis); fill-opacity: .08; }
+svg [data-role=corner] { fill: var(--color-ink); color: var(--color-ink); }
+[data-area] { min-block-size: 3em; margin-block: .4em; }
+.key { color: var(--color-muted); font-size: .85em; gap: .4em 1em; }
+details { margin-block-start: 1rem; }
+@media (max-width: 560px) { .comparison { grid-template-columns: minmax(0, 1fr); gap: .7rem; } [data-cue], [data-area] { min-block-size: 0; } }
+@media (forced-colors: active) { svg [data-role] { stroke: CanvasText; } svg [data-role=corner] { fill: CanvasText; } }

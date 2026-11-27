@@ -18,8 +18,9 @@ actual-model trial pending. [Linked views](../reviews/2026-11-27-linked-math-vie
 are accepted; default adoption closes their milestone.
 Accepted: [editable R2 projection](../reviews/2026-11-27-inner-product-projection.md).
 Closed record: `run-contract.kp.inner-product-projection-20261127`.
-Approved: [projection notebook](../reviews/2026-11-27-projection-notebook-reuse.md),
-awaiting second-host review. Execution: `run-contract.kp.projection-notebook-reuse-20261127`.
+Accepted: [projection notebook](../reviews/2026-11-27-projection-notebook-reuse.md).
+Approved: [composition and signed area exemplar](../reviews/2026-11-27-composition-area.md).
+Execution: `run-contract.kp.composition-area-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

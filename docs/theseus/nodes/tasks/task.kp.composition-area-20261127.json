@@ -1,0 +1,68 @@
+{
+  "id": "task.kp.composition-area-20261127",
+  "kind": "task",
+  "title": "Compare ordered transformations and signed area",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "Checked composition and signed-area candidate awaiting human visual review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-composition-area.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:composition-area",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:43:52.839Z",
+      "notes": "49 passed including existing product and semantic determinant owner checks."
+    },
+    {
+      "command": "npm run visual:composition-area -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:43:53.944Z",
+      "notes": "Final eight Chromium and Firefox checks passed without retries. Phone annotation flow, hidden-player pause, theme, drafts, endpoints and URL reload checked; earlier harness and host failures repaired."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:43:54.684Z",
+      "notes": "Full application, node, tests, Svelte and domains passed. Final scoped composition typecheck also passed after lifecycle refinements."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:43:55.419Z",
+      "notes": "Passed with no new ownership exceptions or arithmetic-owner edits."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:43:56.094Z",
+      "notes": "Passed after reviewed addition of one scoped three-project browser configuration. Existing policies unchanged."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:43:56.759Z",
+      "notes": "75 passed after shortening startup summaries within unchanged word budgets."
+    },
+    {
+      "command": "npm run build:composition-area",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T14:43:57.459Z",
+      "notes": "Complete standalone JS/CSS gzip97435 bytes; all64emitted assets gzip1009555 bytes including all font formats. No network, memory or frame-time claim."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews /experiments/composition-area/."
+  ]
+}

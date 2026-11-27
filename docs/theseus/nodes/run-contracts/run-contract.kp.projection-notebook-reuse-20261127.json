@@ -2,8 +2,8 @@
   "id": "run-contract.kp.projection-notebook-reuse-20261127",
   "kind": "run-contract",
   "title": "Persistent projection notebook",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: three of four packages complete; awaiting the required second-host presentation review.",
+  "status": "resolved",
+  "summary": "COMPLETE: four packages including user second-host acceptance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -52,8 +52,8 @@
     {
       "id": "review",
       "title": "Second-host-review",
-      "summary": "HUMAN_CHECKPOINT: judge edit/reuse clarity and narrow reading in the second host. Implementation and verification packages complete; review packet and working URL recorded.",
-      "status": "in-progress"
+      "summary": "User accepted the projection notebook with good, continue; second-host review is complete. New composition exemplar is scoped separately.",
+      "status": "complete"
     }
   ]
 }

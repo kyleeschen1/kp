@@ -1,0 +1,59 @@
+{
+  "id": "run-contract.kp.composition-area-20261127",
+  "kind": "run-contract",
+  "title": "Composition and signed area",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: implemented and checked canonical composition exemplar; visual judgment remains.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.composition-area-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-composition-area.md"
+    }
+  ],
+  "verification": [
+    "npm run test:composition-area",
+    "npm run visual:composition-area"
+  ],
+  "revisitWhen": [
+    "User reviews the composition-area reference."
+  ],
+  "allowedWork": [
+    "Bounded exemplar and demonstrated owner repairs; six-hour ceiling with final hour reserved for verification and backup"
+  ],
+  "disallowedWork": [
+    "Notebook integration, new generic schema, eigenvalues, paid calls, publication, broad promotion"
+  ],
+  "goal": "One editable reference compares ordered 2D maps and distinguishes signed area from shape",
+  "target": "task.kp.composition-area-20261127",
+  "slices": [
+    {
+      "id": "semantics",
+      "title": "Checked-matrix-traces",
+      "summary": "Bounded matrix pairs, both ordered products, determinant law, singular/reflection cases and deterministic endpoints pass focused checks through existing arithmetic owners.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Editable-reference",
+      "summary": "Editable reference ready with paired diagrams, native notation, common framing, exact URL return, inherited theme and bounded clock lifecycle.",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "title": "Focused-integration",
+      "summary": "Final49unit and8Chromium/Firefox checks pass with full types, architecture, tooling inventories, vision and complete standalone build. Screenshots inspected; documented earlier repairs and test limits.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Human-exemplar-review",
+      "summary": "HUMAN_CHECKPOINT: judge ordered maps, orientation, area readouts and small paired diagrams before notebook reuse.",
+      "status": "in-progress"
+    }
+  ]
+}

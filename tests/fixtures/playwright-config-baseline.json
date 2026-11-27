@@ -115,6 +115,10 @@
     "sha256": "0e86c49d47ab9a700b06eaeb25f01ffcc6848bbfe21ace0011352d6e56578ab8",
     "projects": 3
   },
+  "playwright.composition-area.config.ts": {
+    "sha256": "dff1ead02647fcd0ef2157d8aed07ea9d053b23b4d17abdd29864279066c5da7",
+    "projects": 3
+  },
   "playwright.config.ts": {
     "sha256": "f66d04ed40a33b1b003f16d7c0cf77cfc114c84d9c264c746dc19b2f56652bd4",
     "projects": 3

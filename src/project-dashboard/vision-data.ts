@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-projection-notebook-reuse",
-    title: "Reuse projection in a persistent notebook",
+    id: "kp-composition-area",
+    title: "Compare transformation order and signed area",
     approval: "approved",
-    contractId: "run-contract.kp.projection-notebook-reuse-20261127",
-    finish: "Save integer vector pairs in the notebook, discover their explanation, and reuse the accepted player. Native undo/reload preserve sources; linked occurrences have independent playback and ordinary copies have independent sources. Finish with the second-host review before broader promotion.",
-    source: { label: "Approved notebook reuse and review", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" }
+    contractId: "run-contract.kp.composition-area-20261127",
+    finish: "One editable integer 2×2 reference compares A then B with B then A, preserving checked products and signed areas. Review noncommuting, reflection and collapse examples before notebook reuse or broader promotion.",
+    source: { label: "Approved composition exemplar", href: "docs/project/reviews/2026-11-27-composition-area.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Review editing, linked occurrences and reading in the projection notebook. The separate actual-response annotation revision trial remains pending; composition and signed area remain the next mathematical family in the studio horizon.",
+  nextJudgment: "Review whether paired transformation images make order, signed area and orientation clear. The projection notebook is accepted. The separate actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry, quadratic forms and the editable R2 projection are accepted. Projection now reuses one player in reference and notebook, with persistent sources, native history, independent copies and local playback. The second-host presentation awaits judgment; actual model usefulness remains unproved.",
+      established: "Linked matrix geometry, quadratic forms and the editable R2 projection are accepted. The accepted projection notebook shares its player with the reference, retaining persistent sources, native history, independent copies and local playback. Actual model usefulness remains unproved.",
       evidence: { label: "Projection notebook evidence and limits", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" },
       outcome: {
         authority: "approved",
-        id: "projection-notebook-reuse", title: "Reuse the accepted projection in a saved notebook",
-        finish: "Persistent vector pairs expose the accepted explanation in the notebook. Native history and reload preserve source identity; occurrences retain local playback and ordinary copies remain independent. Review the second host before broader promotion.",
-        excludes: "Decimal support, mixed-family notebooks, cross-notebook Derive/Transclude, arbitrary inner-product spaces, new animation families, paid model calls and publication.",
-        source: { label: "Approved second-host scope", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" }
+        id: "composition-area", title: "Explain composition and signed area",
+        finish: "Compare two ordered integer 2×2 transformations in one checked reference with independent endpoint truth and reversible playback. Human review judges whether shape, orientation and area are distinguishable.",
+        excludes: "Notebook integration, generic schemas, eigenvalues, paid model calls, publication and catalogue promotion.",
+        source: { label: "Approved composition scope", href: "docs/project/reviews/2026-11-27-composition-area.md" }
       }
     },
     {
@@ -794,6 +794,13 @@ export const projectVision: ProjectVision = {
       after: "The user asks to continue as long as possible along the prior recommendations. Add the bounded persistent notebook host, sharing the accepted renderer, with native history, linked views and independent copies; stop at its second-host review.",
       reason: "Connect the new mathematical family to the earlier reuse recommendation instead of accumulating isolated demonstrations. Preserve the broader studio horizon and the unresolved actual-model trial.",
       source: { label: "Notebook reuse scope and evidence", href: "docs/project/reviews/2026-11-27-projection-notebook-reuse.md" }
+    },
+    {
+      id: "accept-projection-notebook-continue-composition", on: "2026-11-27",
+      before: "The saved projection notebook awaited second-host judgment.",
+      after: "The user accepts it and continues the studio horizon. Close notebook reuse; scope one editable composition and signed-area reference with its own exemplar gate.",
+      reason: "Reuse now works for projection. A different mathematical relationship tests ordered maps and orientation without enlarging the completed notebook milestone.",
+      source: { label: "Composition scope and preservation", href: "docs/project/reviews/2026-11-27-composition-area.md" }
     }
   ]
 };
