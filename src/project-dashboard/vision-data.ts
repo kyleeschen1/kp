@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "One notebook object opens the existing column explanation against its actual source, preserves identity, native history and occurrence-local playback, and survives source edits and reload. Stop at exemplar review before promotion.",
     source: { label: "Approved explanation integration", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
   },
-  uncertainty: "G2 accepts the static matrix notebook. Source-backed column explanation now passes bounded integration checks; its connected presentation awaits judgment. Shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
-  nextJudgment: "In the matrix notebook, choose Explain, change an input, seek backward and return to inputs. Judge the inherited card's size, cues and connection to the source. Section-clipping judgment and broad promotion remain separate.",
+  uncertainty: "The connected matrix notebook explanation is accepted. Saved-source reuse in an independent reference card, shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
+  nextJudgment: "Select the proposed saved-resource reference-card successor. The connected notebook presentation is accepted; section-clipping judgment and broader player promotion remain separate.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "G1 accepts quadratic authoring and G2 accepts the static matrix notebook. A checked contextual command now opens the existing column explanation from that same source, with revision-safe replacement and local playback. Presentation review remains pending.",
-      evidence: { label: "Connected explanation review and limits", href: "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md" },
+      established: "G1 accepts quadratic authoring, G2 accepts the static matrix notebook, and the connected column explanation is now accepted. Contextual commands reuse its actual source, with revision-safe replacement, native history and local playback.",
+      evidence: { label: "Accepted connected explanation and limits", href: "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md" },
       outcome: {
-        authority: "approved",
-        id: "matrix-notebook-explanation", title: "Explain the notebook matrix result",
-        finish: "One contextual command opens the existing column-combination presentation against the actual notebook source through a checked adapter. Preserve identities, history, source revision and playback lifecycle; review one exemplar before promotion.",
-        excludes: "New motion choreography, a universal player or notebook adapter, broader mathematical families, LLM edits, publication and automatic approval of unrelated visual candidates.",
-        source: { label: "Approved explanation successor", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
+        authority: "proposed",
+        id: "matrix-reference-card", title: "Reuse a saved explanation in a reference card",
+        finish: "Export one validated matrix resource and open it in a separate reference host using the same mathematical runtime and column player. Preserve source IDs and values, reload and reverse playback; exclude editor/chat from the reader closure and review one card before promotion.",
+        excludes: "Live subscriptions, a universal asset schema or player, new choreography, broader mathematical families, LLM edits, flashcard scheduling and publication.",
+        source: { label: "Proposed saved-reference successor", href: "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Connected matrix explanation accepted",
+      scope: "The actual notebook matrix and single vector drive the existing column-combination explanation. Native history, invalid-draft recovery, lazy loading, disposal and independent occurrence playback are checked. Acceptance closes this exemplar; saved reference reuse is a separate successor.",
+      source: { label: "Acceptance and preservation evidence", href: "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md" }
+    },
     {
       title: "Matrix notebook G2 accepted",
       scope: "One bounded matrix/vector resource supports native editing/history, linked symbolic and graphical views, local view settings, independent copies and saved drafts. Animation integration and shared-adapter promotion remain separate.",
@@ -690,6 +695,13 @@ export const projectVision: ProjectVision = {
       after: "A genuine single-vector adapter connects them through saved occurrences, contextual commands and lazy playback. Combined source, lifecycle, browser and loading checks pass; stop for presentation judgment.",
       reason: "This exercises reusable explanation from the actual authored object without a fabricated second vector, new choreography or a universal player. Explicit module ownership and lifecycle repairs preserve the boundary.",
       source: { label: "Checked explanation and review instructions", href: "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md" }
+    },
+    {
+      id: "accept-connected-matrix-explanation", on: "2026-11-27",
+      before: "The connected notebook explanation was checked and paused at its human review boundary.",
+      after: "The user says go resume; record acceptance and close the three-package outcome. Propose saved-resource reuse in an independent reference card as a separate finite successor.",
+      reason: "The resumed contract had only its review remaining. Preserve its completion and test the reference-page reuse goal without expanding the completed milestone or automatically starting the larger mathematical programme.",
+      source: { label: "Acceptance and reference-card recommendation", href: "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md" }
     }
   ]
 };

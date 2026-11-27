@@ -9,9 +9,9 @@ The [roadmap](../roadmap.md) owns direction; the [charter](../strategy.md)
 and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rationale.
 
 G2 accepted: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-adapter.md).
-Checked successor: [explain its result](../reviews/2026-11-27-matrix-notebook-explanation.md)
-through the existing column presentation; awaiting exemplar review.
-Contract: `run-contract.kp.matrix-notebook-explanation-20261127.v1`.
+Accepted: [connected explanation](../reviews/2026-11-27-matrix-notebook-explanation.md).
+Completed contract: `run-contract.kp.matrix-notebook-explanation-20261127.v1`.
+Proposed next: [saved reference card](../reviews/2026-11-27-matrix-reference-card-next-step.md).
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

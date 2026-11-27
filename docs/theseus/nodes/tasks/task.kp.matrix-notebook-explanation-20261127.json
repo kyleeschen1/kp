@@ -2,8 +2,8 @@
   "id": "task.kp.matrix-notebook-explanation-20261127",
   "kind": "task",
   "title": "Explain the notebook matrix result",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: implementation checked; connected explanation presentation awaits user judgment.",
+  "status": "resolved",
+  "summary": "COMPLETE: connected matrix explanation accepted; all three contract packages finished. Saved-reference successor remains separate scope.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -12,6 +12,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-11-27-matrix-notebook-explanation.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md"
     }
   ],
   "verification": [
@@ -78,6 +82,12 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-11-27T10:18:58.280Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:23:30.289Z"
     }
   ],
   "revisitWhen": [

@@ -1,9 +1,10 @@
-# Matrix notebook explanation — review candidate
+# Matrix notebook explanation — accepted
 
 Date: 2026-11-27
 Authority: [approved scope and worker packet](2026-11-27-next-step-review.md).
 Contract: `run-contract.kp.matrix-notebook-explanation-20261127.v1`.
-Presentation acceptance remains pending; the accepted G2 static notebook stays accepted.
+The user's subsequent “go resume” accepts this bounded connected presentation.
+The accepted G2 static notebook stays accepted; wider promotion remains separate.
 
 ## Inspect the connected example
 
@@ -126,9 +127,14 @@ retains their branches. No protected branch merge or publication occurred.
 Smallest rollback unit: the explanation occurrence/command adapter and its mount;
 preserve accepted static matrix, quadratic and fraction authoring.
 
-Stop at **HUMAN_CHECKPOINT**: two of three contract packages are checked; the
-connected exemplar awaits judgment. Resume this boundary with
+The implementation stopped at **HUMAN_CHECKPOINT** with two of three packages
+checked. The subsequent “go resume” supplies the pending acceptance, closing
+the bounded contract at **COMPLETE**, three of three. Retrieve its evidence with
 `theseus work context task.kp.matrix-notebook-explanation-20261127 --mode brief`.
 The short-lived initial contract lacking execution fields was superseded by
 the explicit `.v1` record through the CLI; its scope was unchanged. Other
 historical contracts were not resumed or rewritten.
+
+The [proposed reference-card successor](2026-11-27-matrix-reference-card-next-step.md)
+tests saved-source reuse outside the notebook. It is distinct scope; this
+acceptance does not authorize universal player promotion or the larger programme.
