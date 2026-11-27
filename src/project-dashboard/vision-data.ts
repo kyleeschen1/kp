@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-matrix-reference-card",
-    title: "Reuse a saved matrix explanation",
+    id: "kp-matrix-reference-shelf",
+    title: "Return to saved matrix explanations",
     approval: "approved",
-    contractId: "run-contract.kp.matrix-reference-card-20261127",
-    finish: "Export a validated matrix resource and replay it in an independent reference card; preserve source IDs, values and playback across reload, reject invalid imports and exclude editor/chat dependencies. Stop at one card review before promotion.",
-    source: { label: "Approved reference-card scope", href: "docs/project/reviews/2026-11-27-matrix-reference-card-next-step.md" }
+    contractId: "run-contract.kp.matrix-reference-shelf-20261127",
+    finish: "Import three distinct snapshots, name/filter/select them, and resume each saved position after reload. Preserve the original card and require explicit same-source updates. Stop at one shelf review before promotion.",
+    source: { label: "Approved reference-shelf scope", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
   },
-  uncertainty: "The notebook explanation and independent reference card are accepted. Returning among several saved explanations, shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
-  nextJudgment: "Consider a small reference shelf: retain and find several named matrix snapshots, each with its own saved playback. This is a proposed successor; broader player promotion and section-clipping judgment remain separate.",
+  uncertainty: "The notebook explanation and independent reference card are accepted. The multi-card shelf workflow is checked but its naming/find/return presentation awaits judgment. Shared-adapter promotion, broad object extensibility, LLM-driven revision and learner transfer remain unproved.",
+  nextJudgment: "Review naming, filtering and returning among three saved matrix cards, each with its own playback position. Broader player promotion and section-clipping judgment remain separate.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "G1 accepts quadratic authoring, G2 accepts the static matrix notebook, and the connected column explanation and independent reference card are accepted. Exported source snapshots retain identity, reload, reversal and import recovery without editor dependencies.",
-      evidence: { label: "Accepted reference-card workflow and limits", href: "docs/project/reviews/2026-11-27-matrix-reference-card.md" },
+      established: "Quadratic authoring, the matrix notebook, connected explanation and independent reference card are accepted. A local shelf now preserves named snapshots and per-card playback, reuses the shared row picker and migrates the prior card; its interaction is checked and awaits review.",
+      evidence: { label: "Checked shelf workflow and limits", href: "docs/project/reviews/2026-11-27-reference-shelf.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "matrix-reference-shelf", title: "Return to several named reference cards",
         finish: "Import three distinct matrix snapshots, name/filter/select them, and resume each saved playback position after reload. Preserve the existing card and guarded reader closure; review one shelf before promotion.",
         excludes: "Live subscriptions, cross-device sync, new choreography or mathematics, LLM edits, flashcard scheduling and publication.",
-        source: { label: "Proposed reference shelf", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
+        source: { label: "Approved reference shelf", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
       }
     },
     {
@@ -723,6 +723,20 @@ export const projectVision: ProjectVision = {
       after: "The user says good; accept the card and close its finite contract. Recommend a separate small shelf for several named snapshots, without starting implementation.",
       reason: "The accepted authoring-to-reference workflow now supports one saved card. Keeping several examples addresses a concrete return limitation while preserving this completed milestone.",
       source: { label: "Accepted card and proposed shelf", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
+    },
+    {
+      id: "approve-matrix-reference-shelf", on: "2026-11-27",
+      before: "The independent card was accepted; a shelf for repeated return was proposed separately.",
+      after: "The user approves named snapshots, filtering and per-card playback, preserving the existing saved record and requiring explicit same-source updates.",
+      reason: "Keep authored examples available for return without adding another renderer or mathematical family.",
+      source: { label: "Approved shelf boundary", href: "docs/project/reviews/2026-11-27-reference-shelf-next-step.md" }
+    },
+    {
+      id: "matrix-reference-shelf-checked", on: "2026-11-27",
+      before: "Opening a different source replaced the reader's only saved card.",
+      after: "Named snapshots now retain independent playback and use the existing floating picker. Explicit update/copy decisions and atomic migration pass Chromium/Firefox checks; stop at the three-card review.",
+      reason: "This makes repeated return practical while preserving source identity, the accepted player and the small reader dependency boundary.",
+      source: { label: "Shelf evidence and review", href: "docs/project/reviews/2026-11-27-reference-shelf.md" }
     }
   ]
 };

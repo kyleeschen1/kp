@@ -1,7 +1,13 @@
-# Proposed next step: return to several saved explanations
+# Return to several saved explanations
 
 Date: 2026-11-27
-Status: proposed, not approved or started.
+Status: implemented and checked; awaiting the three-card shelf review.
+Execution: `run-contract.kp.matrix-reference-shelf-20261127`.
+Evidence: [checked shelf](2026-11-27-reference-shelf.md).
+
+Three bounded packages: identity/migration, named selection/playback, then one
+three-card review. Four-hour ceiling with the final 45 minutes reserved for
+verification; checkpoint coherent changes and back up hourly and at handoff.
 
 The user accepted the [independent reference card](2026-11-27-matrix-reference-card.md).
 That finite outcome is complete. Its remaining practical limitation is that
@@ -36,5 +42,8 @@ Rollback unit: shelf selection/storage, preserving the accepted single-card host
 and original stored record. Exclude live subscriptions, cross-device sync,
 publication, flashcard scheduling, new mathematics and LLM mutation.
 
-Approval would start a separate outcome contract. No implementation is authorized
-by the acceptance of the preceding card.
+The user's subsequent “go” approves this separate outcome. The preceding card's
+contract stays complete. The local shelf is bounded to 50 cards, with only the
+selected player active outside a brief validated replacement. Use the existing
+floating row picker; importing the same source offers explicit update or separate
+card creation. An update retains the chosen card's name and playback position.

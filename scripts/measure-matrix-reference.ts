@@ -16,12 +16,13 @@ for (const result of Array.isArray(built) ? built : [built]) {
     files.push({ file: item.fileName, raw: bytes.length, gzip: gzipSync(bytes).length });
     if (item.type === 'chunk') for (const module of Object.keys(item.modules)) {
       const path = relative(root, module); modules.add(path);
-      assert.doesNotMatch(path, /prosemirror|codemirror|src\/(fraction-notebook|editor-chat|interaction|animation-player)\/|graph-3d|three\/|mathjs/,
+      assert.doesNotMatch(path, /prosemirror|codemirror|src\/(fraction-notebook|editor-chat|editor|animation-player)\/|graph-3d|three\/|mathjs/,
         `The standalone reference acquired an editor, chat or unrelated mathematics dependency: ${path}`);
     }
   }
 }
 assert.ok([...modules].some(path => path.endsWith('matrix-column-combinations/embed.ts')));
+assert.ok([...modules].some(path => path.endsWith('interaction/row-picker.ts')), 'Use the existing host-free picker.');
 const total = (selected: typeof files) => ({ files: selected.length, raw: selected.reduce((sum, f) => sum + f.raw, 0),
   gzip: selected.reduce((sum, f) => sum + f.gzip, 0) });
 const jsCss = total(files.filter(f => /\.(js|css)$/.test(f.file)));

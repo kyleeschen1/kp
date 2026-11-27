@@ -72,10 +72,11 @@ test('the independent reference card has no transitive editor, chat or 3D host d
   const graph = collectKpTypescriptImportGraph(root), seen = new Set<string>(), queue = ['src/matrix-reference/app.ts'];
   while (queue.length) {
     const path = queue.pop()!; if (seen.has(path)) continue; seen.add(path);
-    assert.doesNotMatch(path, /src\/(fraction-notebook|editor-chat|interaction|animation-player)\/|graph-3d/, path);
+    assert.doesNotMatch(path, /src\/(fraction-notebook|editor-chat|editor|animation-player)\/|graph-3d/, path);
     assert.notEqual(resolveKpModuleOwnershipZone(path)?.id, 'experiment', path);
     queue.push(...graph.localEdges.filter(edge => edge.importer === path).map(edge => edge.target));
   }
   assert.ok(seen.has('src/notebook/atomic-record.ts'));
+  assert.ok(seen.has('src/interaction/row-picker.ts'));
   assert.ok(seen.has('src/experiments/matrix-column-combinations/embed.ts'));
 });

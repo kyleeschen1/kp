@@ -1,0 +1,78 @@
+{
+  "id": "task.kp.matrix-reference-shelf-20261127",
+  "kind": "task",
+  "title": "Return to several saved matrix explanations",
+  "status": "deferred",
+  "summary": "Shelf implemented and checked; pause at the approved exemplar review before promotion",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-reference-shelf-next-step.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-reference-shelf.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:matrix-reference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:59:26.347Z",
+      "notes": "Ten tests preserve source truth, migration, independent cards, explicit updates, identity conflicts and lifecycle cancellation"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:59:26.985Z",
+      "notes": "Full app/node/test/Svelte/domain checks pass; final source imports and identity guard also checked by typecheck:matrix-reference"
+    },
+    {
+      "command": "npm run typecheck:matrix-reference",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:59:27.615Z",
+      "notes": "Final shelf, UI, storage, scripts and tests compile"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:59:28.252Z",
+      "notes": "Full chain passes; no added dependency-direction exceptions"
+    },
+    {
+      "command": "npm run test:library-boundaries",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:59:28.890Z",
+      "notes": "Eight checks pass; shared row picker deliberately admitted while editor/chat and 3D hosts remain forbidden"
+    },
+    {
+      "command": "npm run measure:matrix-reference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:59:29.526Z",
+      "notes": "Complete emitted reader: JS/CSS gzip 139266 bytes, increase 6217 bytes, unchanged 200000-byte ceiling; includes example assets"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T10:59:30.148Z",
+      "notes": "75 checks pass with approved shelf and completed predecessors"
+    },
+    {
+      "command": "npm run visual:matrix-reference -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:59:57.638Z",
+      "notes": "Twelve Chromium/Firefox workflows pass; final example-download and same-source targeted reruns pass both browsers"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the shelf"
+  ]
+}

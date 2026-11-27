@@ -1,21 +1,28 @@
 import seed from '../../content/notebooks/matrix-object-exemplar.json';
-import { openAtomicRecord } from '../notebook/atomic-record.ts';
+import negativeExample from '../../content/math-resources/reference-negative.json?url';
+import zeroExample from '../../content/math-resources/reference-zero.json?url';
+import { openReferenceShelf } from './storage.ts';
 import { createMatrixVectorRuntime } from '../math-resources/public-api.ts';
 import { mountColumnExplanation, prepareColumnExplanationFonts } from '../experiments/matrix-column-combinations/embed.ts';
-import { readReferenceRecord, referenceSeed, type ReferenceRecord } from './record.ts';
+import { selectedCard, type ReferenceShelf } from './shelf.ts';
+import { mountShelfControls } from './shelf-ui.ts';
 import { createReferenceSession, type MountReference } from './session.ts';
 import './style.css';
 
 const stage = document.querySelector<HTMLElement>('.reference-stage')!;
 const message = document.querySelector<HTMLElement>('.reference-message')!;
 const input = document.querySelector<HTMLInputElement>('input[type=file]')!;
+document.querySelector<HTMLAnchorElement>('[data-example-negative]')!.href = negativeExample;
+document.querySelector<HTMLAnchorElement>('[data-example-zero]')!.href = zeroExample;
 const failed = (error: unknown) => {
   message.textContent = `${error instanceof Error ? error.message : String(error)} The previous saved card is unchanged.`;
   message.dataset['state'] = 'error';
 };
-const changed = (record: ReferenceRecord) => {
+const changed = (shelf: ReferenceShelf) => {
+  const record = selectedCard(shelf); controls.update(shelf);
   message.textContent = ''; delete message.dataset['state'];
   stage.dataset['sourceId'] = record.source.id;
+  stage.dataset['cardId'] = record.id;
   stage.dataset['savedProgress'] = String(record.view.progress);
   document.querySelector('[data-filename]')!.textContent = record.view.filename;
   const list = document.querySelector('dl')!; list.replaceChildren();
@@ -40,16 +47,20 @@ const mount: MountReference = (record, settled) => {
 };
 
 let disposed = false, session: ReturnType<typeof createReferenceSession> | undefined;
-const cleanup = () => { disposed = true; input.onchange = null; session?.dispose(); };
+const controls = mountShelfControls(document.querySelector<HTMLElement>('.reference-shelf')!, {
+  select: async id => { await session?.select(id); }, rename: async (id, name) => { await session?.rename(id, name); },
+  confirm: async choice => { await session?.confirmImport(choice); }, cancel: () => session?.cancelImport()
+});
+const cleanup = () => { disposed = true; input.onchange = null; controls.dispose(); session?.dispose(); };
 window.addEventListener('pagehide', cleanup, { once: true });
 // A bfcache restoration must reopen its closed storage and disposed player.
 window.addEventListener('pageshow', event => { if (event.persisted) location.reload(); });
 async function start() {
-  const store = await openAtomicRecord('kp-matrix-reference-v1', readReferenceRecord, referenceSeed(seed.matrixResources[0]));
+  const store = await openReferenceShelf(seed.matrixResources[0]);
   try {
     const record = await store.read(); await prepareColumnExplanationFonts();
     if (disposed) { store.close(); return; }
-    session = createReferenceSession(store, record, mount, changed, failed);
+    session = createReferenceSession(store, record, mount, changed, failed, controls.offer);
     input.disabled = false; stage.setAttribute('aria-busy', 'false');
     input.onchange = () => {
       const file = input.files?.[0]; input.value = '';

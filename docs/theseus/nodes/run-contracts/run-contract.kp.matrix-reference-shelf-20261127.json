@@ -1,0 +1,60 @@
+{
+  "id": "run-contract.kp.matrix-reference-shelf-20261127",
+  "kind": "run-contract",
+  "title": "Matrix reference shelf",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: two implementation packages checked; awaiting three-card shelf judgment",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-reference-shelf-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-reference-shelf-next-step.md"
+    }
+  ],
+  "verification": [
+    "Source and lifecycle tests; affected types; Chromium and Firefox workflow; reader production closure"
+  ],
+  "revisitWhen": [
+    "User accepts the shelf interaction or requests corrections"
+  ],
+  "allowedWork": [
+    "Bounded local shelf; names and filtering; explicit same-source update; atomic persistence; migration and verification"
+  ],
+  "disallowedWork": [
+    "New mathematics; new choreography; publication; sync; live subscriptions; LLM edits"
+  ],
+  "goal": "Retain named snapshots and resume each independently in the accepted reference player",
+  "target": "task.kp.matrix-reference-shelf-20261127",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Checked rollback units; backup before handoff and hourly",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Human review of one three-card shelf before promotion",
+    "Four-hour ceiling with final 45 minutes reserved for verification"
+  ],
+  "slices": [
+    {
+      "id": "storage",
+      "title": "Identity-and-migration",
+      "summary": "Source/card identities validated; original saved record preserved; atomic migration and concurrent browser opens pass",
+      "status": "complete"
+    },
+    {
+      "id": "shelf",
+      "title": "Named-selection-and-playback",
+      "summary": "Shared picker, names, per-card playback, explicit update/copy, final source checks and production costs verified; review packet ready",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Three-card-human-review",
+      "summary": "HUMAN_CHECKPOINT: three-card naming/find/return review at http://127.0.0.1:8000/experiments/matrix-reference/",
+      "status": "in-progress"
+    }
+  ]
+}

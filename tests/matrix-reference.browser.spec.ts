@@ -1,6 +1,8 @@
 import { readFile } from 'node:fs/promises';
 import { test, expect, type Page } from '@playwright/test';
 import seed from '../content/notebooks/matrix-object-exemplar.json' with { type: 'json' };
+import negative from '../content/math-resources/reference-negative.json' with { type: 'json' };
+import zero from '../content/math-resources/reference-zero.json' with { type: 'json' };
 
 const url = '/experiments/matrix-reference/';
 const position = (page: Page) => page.getByRole('slider', { name: 'Animation position' });
@@ -30,6 +32,7 @@ test('notebook export opens independently with exact source identity and persist
   const imports: string[] = []; page.on('request', request => imports.push(request.url()));
   await open(page);
   await page.getByLabel('Open matrix snapshot', { exact: true }).setInputFiles({ name: download.suggestedFilename(), mimeType: 'application/json', buffer: bytes });
+  await page.getByRole('button', { name: 'Update this card', exact: true }).click();
   await expect(page.locator('[data-filename]')).toHaveText(download.suggestedFilename());
   await expect(page.locator('.reference-stage')).toHaveAttribute('data-source-id', exported.id);
   await expect(page.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('5');
@@ -56,6 +59,7 @@ test('invalid paint, malformed files and repeated replacement preserve a valid c
   for (const source of [{}, { ...seed.matrixResources[0], schemaVersion: 99 },
     { ...seed.matrixResources[0], matrix: { ...seed.matrixResources[0]!.matrix, entries: [[0.00000001, 1], [0, 1]], draft: { a00: '0.00000001', a01: '1', a10: '0', a11: '1' } } }]) {
     await upload(page, source);
+    if ('schemaVersion' in source && source.schemaVersion === 1) await page.getByRole('button', { name: 'Update this card', exact: true }).click();
     await expect(page.getByRole('status')).toContainText('previous saved card is unchanged');
     expect(await initial!.evaluate(node => node.isConnected)).toBe(true);
     await expect(position(page)).toHaveValue('1');
@@ -65,13 +69,15 @@ test('invalid paint, malformed files and repeated replacement preserve a valid c
   await page.reload(); await expect(position(page)).toHaveValue('1');
   const signed = { ...seed.matrixResources[0], vector: { ...seed.matrixResources[0]!.vector, entries: [0, -2], draft: { x: '0', y: '-2' } } };
   await upload(page, signed, 'signed-zero.json');
+  await page.getByRole('button', { name: 'Update this card', exact: true }).click();
   await expect(page.locator('[data-filename]')).toHaveText('signed-zero.json');
-  await expect(position(page)).toHaveValue('0'); await expect(page.locator('.comb-stage')).toHaveCount(1);
+  await expect(position(page)).toHaveValue('1'); await expect(page.locator('.comb-stage')).toHaveCount(1);
   await expect(page.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('−2');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.getByLabel('Milestone', { exact: true }).selectOption('6');
   await page.screenshot({ path: info.outputPath('matrix-reference-narrow.png') });
   await upload(page, seed.matrixResources[0], 'replacement.json');
+  await page.getByRole('button', { name: 'Update this card', exact: true }).click();
   await expect(page.locator('[data-filename]')).toHaveText('replacement.json');
   await expect(page.locator('.comb-stage')).toHaveCount(1);
 });
@@ -85,14 +91,122 @@ test('late file reads and another tab cannot silently replace the chosen card', 
   });
   await open(page); await upload(page, seed.matrixResources[0], 'slow.json');
   await upload(page, seed.matrixResources[0], 'latest.json');
+  await page.getByRole('button', { name: 'Update this card', exact: true }).click();
   await expect(page.locator('[data-filename]')).toHaveText('latest.json');
   await page.evaluate(() => window.dispatchEvent(new Event('release-file-read')));
   const second = await context.newPage(); await open(second);
   await page.getByLabel('Milestone', { exact: true }).selectOption('6');
   await expect(page.locator('.reference-stage')).toHaveAttribute('data-saved-progress', '1');
   await upload(second, seed.matrixResources[0], 'conflict.json');
+  await second.getByRole('button', { name: 'Update this card', exact: true }).click();
   await expect(second.getByRole('status')).toContainText('another tab');
   await expect(second.locator('[data-filename]')).toHaveText('latest.json');
   await second.reload(); await expect(position(second)).toHaveValue('1');
   await expect(second.locator('[data-filename]')).toHaveText('latest.json');
+});
+
+async function choose(page: Page, name: string) {
+  await page.getByRole('button', { name: 'Find a card', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Saved cards', exact: true });
+  await dialog.getByRole('combobox').fill(name);
+  await expect(dialog.getByRole('option')).toHaveCount(1);
+  await dialog.getByRole('combobox').press('Enter'); await expect(dialog).toBeHidden();
+  await expect(page.getByLabel('Card name', { exact: true })).toHaveValue(name);
+}
+async function rename(page: Page, name: string) {
+  await page.getByLabel('Card name', { exact: true }).fill(name);
+  await page.getByRole('button', { name: 'Save name', exact: true }).click();
+  await expect(page.locator('.shelf-current')).toHaveText(`Viewing ${name}`);
+}
+test('three named snapshots filter, retain independent positions and preserve one active player', async ({ page }, info) => {
+  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
+  await page.setViewportSize({ width: 1200, height: 1050 }); await open(page); await rename(page, 'Shear');
+  const originalId = await page.locator('.reference-stage').getAttribute('data-card-id');
+  await page.getByLabel('Milestone', { exact: true }).selectOption('2');
+  await expect(page.locator('.reference-stage')).toHaveAttribute('data-saved-progress', String(2 / 6));
+  await page.getByText('Source snapshot', { exact: true }).click();
+  const requested = page.waitForEvent('download'); await page.getByRole('link', { name: 'Negative contribution', exact: true }).click();
+  const downloaded = await requested, bytes = await readFile((await downloaded.path())!);
+  expect(JSON.parse(bytes.toString())).toEqual(negative);
+  await page.getByLabel('Open matrix snapshot', { exact: true }).setInputFiles({ name: 'Negative.json', mimeType: 'application/json', buffer: bytes });
+  await expect(page.locator('[data-filename]')).toHaveText('Negative.json');
+  await page.getByText('Source snapshot', { exact: true }).click();
+  await rename(page, 'Negative'); await page.getByLabel('Milestone', { exact: true }).selectOption('6');
+  await expect(page.locator('.reference-stage')).toHaveAttribute('data-saved-progress', '1');
+  await upload(page, zero, 'Zero.json'); await expect(page.locator('[data-count]')).toHaveText('3 saved');
+  await page.getByLabel('Milestone', { exact: true }).selectOption('3');
+  await expect(page.locator('.reference-stage')).toHaveAttribute('data-saved-progress', '0.5');
+  await choose(page, 'Shear'); await expect(position(page)).toHaveValue('0.3333');
+  await expect(page.locator('.reference-stage')).toHaveAttribute('data-card-id', originalId!);
+  await choose(page, 'Negative'); await expect(position(page)).toHaveValue('1');
+  await choose(page, 'Zero'); await expect(position(page)).toHaveValue('0.5');
+  await page.reload(); await expect(page.getByLabel('Card name', { exact: true })).toHaveValue('Zero');
+  await expect(position(page)).toHaveValue('0.5'); await expect(page.locator('.comb-stage')).toHaveCount(1);
+  // A playback save must not eat an unfinished rename draft.
+  await page.getByLabel('Card name', { exact: true }).fill('Unsubmitted');
+  await page.getByLabel('Milestone', { exact: true }).selectOption('6');
+  await expect(page.locator('.reference-stage')).toHaveAttribute('data-saved-progress', '1');
+  await expect(page.getByLabel('Card name', { exact: true })).toHaveValue('Unsubmitted');
+  await page.getByLabel('Card name', { exact: true }).fill('Zero');
+  await page.getByRole('button', { name: 'Find a card', exact: true }).click();
+  const picker = page.getByRole('dialog', { name: 'Saved cards', exact: true });
+  await expect(picker.getByRole('option')).toHaveCount(3);
+  await picker.getByRole('combobox').fill('no such card'); await expect(picker.getByRole('option')).toHaveCount(0);
+  await picker.getByRole('combobox').fill(''); await page.screenshot({ path: info.outputPath('reference-shelf-picker.png') });
+  await picker.getByRole('combobox').press('Escape'); await expect(picker).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Find a card', exact: true })).toBeFocused();
+  await page.screenshot({ path: info.outputPath('reference-shelf.png') });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await choose(page, 'Shear'); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.screenshot({ path: info.outputPath('reference-shelf-narrow.png') }); expect(errors).toEqual([]);
+});
+test('same-source decisions preserve siblings and cancellation leaves the selected card', async ({ page }) => {
+  await open(page); await rename(page, 'Original');
+  const original = await page.locator('.reference-stage').getAttribute('data-card-id');
+  await page.getByLabel('Milestone', { exact: true }).selectOption('3');
+  await upload(page, seed.matrixResources[0], 'Copy.json');
+  const decision = page.getByRole('dialog', { name: 'Existing source' });
+  await expect(decision).toBeVisible(); await expect(page.locator('[data-count]')).toHaveText('1 saved');
+  await decision.getByRole('button', { name: 'Cancel', exact: true }).click(); await expect(decision).toBeHidden();
+  await expect(page.locator('.reference-stage')).toHaveAttribute('data-card-id', original!);
+  await upload(page, seed.matrixResources[0], 'Copy.json');
+  await decision.getByRole('button', { name: 'Save as separate card', exact: true }).click();
+  await expect(page.locator('[data-count]')).toHaveText('2 saved'); await rename(page, 'Variation');
+  const copy = await page.locator('.reference-stage').getAttribute('data-card-id'); expect(copy).not.toBe(original);
+  await page.getByLabel('Milestone', { exact: true }).selectOption('6');
+  const updated = structuredClone(seed.matrixResources[0]!); updated.matrix.entries[0]![0] = 3; updated.matrix.draft.a00 = '3';
+  await upload(page, updated, 'Update.json'); await decision.getByLabel('Card to update').selectOption(original!);
+  await decision.getByRole('button', { name: 'Update this card', exact: true }).click();
+  await expect(page.getByLabel('Card name', { exact: true })).toHaveValue('Original'); await expect(position(page)).toHaveValue('0.5');
+  await expect(page.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('5');
+  await choose(page, 'Variation'); await expect(position(page)).toHaveValue('1');
+  await expect(page.locator('[data-kp-comb-key="c-0-0"]')).toHaveText('3');
+  await page.reload(); await expect(page.getByLabel('Card name', { exact: true })).toHaveValue('Variation');
+  await expect(page.locator('[data-count]')).toHaveText('2 saved');
+});
+test('legacy migration keeps original data untouched and concurrent opens share one card identity', async ({ page, context }) => {
+  await open(page);
+  const saved = { schemaVersion: 1, revision: 7, source: seed.matrixResources[0], view: { filename: 'Legacy.json', progress: .5 } };
+  await page.evaluate(async original => {
+    await new Promise<void>((resolve, reject) => {
+      const request = indexedDB.open('kp-matrix-reference-v1'); request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const db = request.result, tx = db.transaction('workspace', 'readwrite');
+        tx.objectStore('workspace').put(original, 'documents'); tx.objectStore('workspace').delete('shelf-v1');
+        tx.oncomplete = () => { db.close(); resolve(); }; tx.onabort = () => { db.close(); reject(tx.error); };
+      };
+    });
+  }, saved);
+  const other = await context.newPage(); await Promise.all([open(page), open(other)]);
+  await expect(position(page)).toHaveValue('0.5'); await expect(position(other)).toHaveValue('0.5');
+  const id = await page.locator('.reference-stage').getAttribute('data-card-id');
+  await expect(other.locator('.reference-stage')).toHaveAttribute('data-card-id', id!);
+  await rename(page, 'Migrated');
+  const retained = await page.evaluate(() => new Promise<unknown>((resolve, reject) => {
+    const request = indexedDB.open('kp-matrix-reference-v1'); request.onerror = () => reject(request.error);
+    request.onsuccess = () => { const db = request.result, get = db.transaction('workspace').objectStore('workspace').get('documents');
+      get.onsuccess = () => { db.close(); resolve(get.result); }; get.onerror = () => { db.close(); reject(get.error); }; };
+  }));
+  expect(retained).toEqual(saved); await page.reload(); await expect(page.getByLabel('Card name', { exact: true })).toHaveValue('Migrated');
+  await expect(page.locator('[data-count]')).toHaveText('1 saved');
 });
