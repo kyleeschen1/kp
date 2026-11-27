@@ -1,0 +1,12 @@
+{
+  "id": "task.kp.matrix-notebook-adapter-20261127",
+  "kind": "task",
+  "title": "Edit matrix resources through the notebook",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-27-matrix-notebook-adapter.md"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "id": "run-contract.kp.matrix-notebook-adapter-20261127",
+  "kind": "run-contract",
+  "title": "Matrix notebook adapter",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.matrix-notebook-adapter-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/2026-11-27-matrix-notebook-adapter.md"
+    }
+  ],
+  "verification": [
+    "npm run test:notebook-mathematics",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:notebook-mathematics"
+  ],
+  "allowedWork": [
+    "Notebook adapter, commands, linked views, preservation checks and bounded repairs"
+  ],
+  "disallowedWork": [
+    "Broad promotion, new animations, arbitrary CAS, imports, publication"
+  ],
+  "goal": "Reuse the matrix resource API in one editable notebook exemplar and stop at G2 review",
+  "target": "task.kp.matrix-notebook-adapter-20261127",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Checked rollback units and backup before handoff",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "G2 human review before promotion",
+    "Four-hour ceiling with final 45 minutes reserved for verification"
+  ],
+  "slices": [
+    {
+      "id": "adapter",
+      "title": "Validated-resource-and-history-adapter",
+      "summary": "Validated source/view references, independent closure copies, native undo and JSON round trips pass 11 math tests; 28 fraction preservation and scoped TypeScript pass.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Linked-notebook-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "review",
+      "title": "G2-human-review",
+      "status": "planned"
+    }
+  ]
+}

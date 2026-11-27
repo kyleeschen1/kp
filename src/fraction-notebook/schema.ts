@@ -3,6 +3,7 @@ import { readNotebook, type FractionNotebook, type Inline } from './model.ts';
 import { metadata } from './json.ts';
 import { uuid } from '../notebook/model.ts';
 import { defaultMathViewport, readMathViewport, readNotebookMathematics } from '../notebook/math-model.ts';
+import { readMatrixResources } from './matrix-data.ts';
 
 const identity = { id: { default: null }, metadata: { default: {} } };
 const attrs = (n: ProseNode) => ({ 'data-cell-id': n.attrs['id'], 'data-kp-meta': JSON.stringify(n.attrs['metadata']) });
@@ -12,7 +13,15 @@ const parse = (el: HTMLElement) => {
 };
 export const schema = new Schema({
   nodes: {
-    doc: { content: 'mathematics? articleHeader? (block | story | mathObject)*' },
+    doc: { content: '(mathematics | matrixResources)? articleHeader? (block | story | mathObject | matrixObject)*' },
+    matrixResources: { attrs: { value: {} }, atom: true, selectable: false,
+      toDOM: () => ['div', { hidden: '', 'data-matrix-store': '', contenteditable: 'false' }] },
+    matrixObject: { attrs: { ...identity, resource: {}, occurrence: {}, folded: { default: false } }, atom: true, selectable: true, isolating: true,
+      toDOM: n => ['section', { ...attrs(n), 'data-matrix-resource': n.attrs['resource'], 'data-matrix-occurrence': n.attrs['occurrence'], 'data-folded': String(n.attrs['folded']) }],
+      parseDOM: [{ tag: 'section[data-matrix-resource]', getAttrs: el => {
+        try { const a = parse(el); return a ? { ...a, resource: uuid(el.dataset['matrixResource']), occurrence: uuid(el.dataset['matrixOccurrence']), folded: el.dataset['folded'] === 'true' } : false; }
+        catch { return false; }
+      } }] },
     // Root attribute changes recreate ProseMirror's entire document view. A
     // nonselectable data node keeps resource edits in native undo history
     // without replacing focused controls or persisting a second source of truth.
@@ -87,8 +96,9 @@ export function toProse(doc: FractionNotebook): ProseNode {
       ...(cell.title ? [schema.node('blockTitle', { id: cell.title.id, metadata: cell.title.metadata }, inlineNodes(cell.title.content))] : []),
       schema.node('paragraph', null, inlineNodes(cell.content)), ...cell.children.map(block)
     ]);
-  return schema.node('doc', null, [...(doc.mathematics ? [schema.node('mathematics', { value: doc.mathematics })] : []), ...doc.cells.map(cell => {
+  return schema.node('doc', null, [...(doc.mathematics ? [schema.node('mathematics', { value: doc.mathematics })] : []), ...(doc.matrixResources ? [schema.node('matrixResources', { value: doc.matrixResources })] : []), ...doc.cells.map(cell => {
     const attrs = { id: cell.id, metadata: cell.metadata };
+    if (cell.type === 'matrixObject') return schema.node('matrixObject', cell);
     if (cell.type === 'mathObject') return schema.node('mathObject', { ...attrs, resource: cell.resource, view: cell.view, viewport: cell.viewport, folded: cell.folded });
     if (cell.type === 'articleHeader') return schema.node('articleHeader', attrs, [
       schema.node('title', { id: cell.title.id, metadata: cell.title.metadata }, inlineNodes(cell.title.content)),
@@ -104,6 +114,10 @@ export function toProse(doc: FractionNotebook): ProseNode {
 export function mathematicsIn(doc: ProseNode) {
   if (doc.firstChild?.type.name !== 'mathematics') throw new Error('The mathematical resource store is missing. Undo to restore it.');
   return readNotebookMathematics(doc.firstChild.attrs['value']);
+}
+export function matrixResourcesIn(doc: ProseNode) {
+  if (doc.firstChild?.type.name !== 'matrixResources') throw new Error('The matrix resource store is missing. Undo to restore it.');
+  return readMatrixResources(doc.firstChild.attrs['value']);
 }
 export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNotebook {
   const identified = (n: ProseNode) => ({ id: n.attrs['id'], metadata: n.attrs['metadata'] });
@@ -124,8 +138,9 @@ export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNote
       content: content(node.child(titled ? 1 : 0)), children };
   };
   doc.forEach(node => {
-    if (node.type.name === 'mathematics') return;
-    if (node.type.name === 'mathObject') cells.push({ ...identified(node), type: 'mathObject', resource: node.attrs['resource'], view: node.attrs['view'], viewport: node.attrs['viewport'], folded: node.attrs['folded'] });
+    if (node.type.name === 'mathematics' || node.type.name === 'matrixResources') return;
+    if (node.type.name === 'matrixObject') cells.push({ ...identified(node), type: 'matrixObject', resource: node.attrs['resource'], occurrence: node.attrs['occurrence'], folded: node.attrs['folded'] });
+    else if (node.type.name === 'mathObject') cells.push({ ...identified(node), type: 'mathObject', resource: node.attrs['resource'], view: node.attrs['view'], viewport: node.attrs['viewport'], folded: node.attrs['folded'] });
     else if (node.type.name === 'articleHeader') {
       const authors: unknown[] = []; node.forEach((a, _pos, index) => { if (index) authors.push({ ...identified(a), type: 'authorCredit', name: a.textContent, role: a.attrs['role'] }); });
       cells.push({ ...identified(node), type: 'articleHeader', title: { ...identified(node.child(0)), type: 'title', content: content(node.child(0)) }, authors });
@@ -134,5 +149,6 @@ export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNote
     else cells.push(block(node));
   });
   return readNotebook({ schemaVersion: 3, id: basis.id, revision: basis.revision + 1, cells,
+    ...(doc.firstChild?.type.name === 'matrixResources' ? { matrixResources: matrixResourcesIn(doc) } : {}),
     ...(doc.firstChild?.type.name === 'mathematics' ? { mathematics: mathematicsIn(doc) } : {}) });
 }

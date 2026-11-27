@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-parallel-library-lanes",
-    title: "Develop three library lanes independently",
+    id: "kp-matrix-notebook-adapter",
+    title: "Edit matrix resources in the notebook",
     approval: "approved",
-    contractId: "run-contract.kp.parallel-library-lanes-20261127",
-    finish: "Interaction, mathematical-object and existing-animation fixtures run, build and test independently. Documented entrypoints, separate worker ownership and executable import boundaries preserve the notebook and graph consumers. Stop before broader product promotion.",
-    source: { label: "Approved parallel library lanes", href: "docs/project/2026-11-27-parallel-library-lanes.md" }
+    contractId: "run-contract.kp.matrix-notebook-adapter-20261127",
+    finish: "One matrix/vector notebook reuses the resource API through native history, linked symbolic/geometric views, local view settings and saved identities. Preserve quadratic/fraction workflows and stop at G2 review before promotion.",
+    source: { label: "Approved matrix adapter", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
   },
   uncertainty: "Quadratic and independent matrix fixtures reuse mathematical/state owners. A shared notebook adapter, broad object extensibility, LLM-driven revision and learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "Inspect the three standalone labs and whether their contracts make independent development practical. Existing section-clipping choreography still has its own pending review; these fixtures do not promote it or select a universal renderer.",
+  nextJudgment: "At G2, inspect matrix edits, linked views, local zoom and persistence in the notebook. Existing section-clipping choreography retains its separate review; no new motion treatment is selected.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -44,11 +44,11 @@ export const projectVision: ProjectVision = {
       established: "The notebook, persistent conversation, fruit-picker presentation and workspace frame are accepted. G1 now accepts the quadratic's linked equation, graph, derivative and tangent editing with reload, local views and measured costs. Existing split, focus, command and row/filter work retains its distinct review boundaries.",
       evidence: { label: "Accepted quadratic authoring and bounded evidence", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "matrix-authoring-reuse", title: "Reuse the authoring boundary for one matrix and vector",
         finish: "Use the checked standalone matrix resource API through a thin notebook adapter, with discoverable operations, linked views and saved identities. Source edits affect dependents while preserving the accepted quadratic; review at G2 before shared notebook-adapter promotion.",
-        excludes: "Implementation before bounded scope approval, the full animation portfolio, arbitrary CAS, the tabled matrix Pour treatment, new window infrastructure, exhaustive Vim parity and publication. Existing row/filter review remains separate.",
-        source: { label: "Proposed M1 after accepted G1", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
+        excludes: "The full animation portfolio, arbitrary CAS, the tabled matrix Pour treatment, new window infrastructure, exhaustive Vim parity and publication. Existing row/filter review remains separate.",
+        source: { label: "Approved bounded matrix adapter", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
       }
     },
     {
@@ -650,6 +650,13 @@ export const projectVision: ProjectVision = {
       after: "Three separately built/tested fixtures and enforced boundaries complete the bounded infrastructure outcome. Propose the existing matrix-notebook successor using the new API; broader workspace and player promotion remain separate.",
       reason: "The independent workers now have concrete APIs and fixtures. Further infrastructure should follow observed needs in a product consumer instead of expanding the completed separation milestone.",
       source: { label: "Checked delivery and bounded successor", href: "docs/project/reviews/2026-11-27-parallel-library-lanes.md" }
+    },
+    {
+      id: "approve-matrix-notebook", on: "2026-11-27",
+      before: "The checked matrix API had only an independent lab consumer.",
+      after: "The user approves a thin notebook adapter with linked views, editing and persistence, stopping at G2.",
+      reason: "Exercise the extracted boundary in a useful product workflow before generalizing it.",
+      source: { label: "Approved matrix notebook scope", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
     }
   ]
 };

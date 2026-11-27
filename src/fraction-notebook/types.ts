@@ -1,5 +1,6 @@
 import type { Metadata, UUID } from '../notebook/model.ts';
 import type { MathView, MathViewport, NotebookMathematics } from '../notebook/math-model.ts';
+import type { MatrixVectorDocument } from '../math-resources/public-api.ts';
 export type Mark = 'strong' | 'em' | 'code';
 export interface Identified { readonly id: UUID; readonly metadata: Metadata }
 export interface Annotation extends Identified {}
@@ -22,8 +23,11 @@ export interface MathObjectCell extends Identified {
   readonly type: 'mathObject'; readonly resource: UUID; readonly view: MathView;
   readonly viewport: MathViewport; readonly folded: boolean;
 }
-export type Cell = ArticleHeader | ContentBlock | Story | MathObjectCell;
-export interface FractionNotebook { readonly schemaVersion: 3; readonly id: UUID; readonly revision: number; readonly cells: readonly Cell[]; readonly mathematics?: NotebookMathematics }
+export interface MatrixObjectCell extends Identified {
+  readonly type: 'matrixObject'; readonly resource: UUID; readonly occurrence: UUID; readonly folded: boolean;
+}
+export type Cell = ArticleHeader | ContentBlock | Story | MathObjectCell | MatrixObjectCell;
+export interface FractionNotebook { readonly schemaVersion: 3; readonly id: UUID; readonly revision: number; readonly cells: readonly Cell[]; readonly mathematics?: NotebookMathematics; readonly matrixResources?: readonly MatrixVectorDocument[] }
 export interface Step { readonly title: string; readonly content: string; readonly focusRefs: readonly string[] }
 export interface Definition { readonly id: string; readonly asset: { readonly id: string; readonly version: string }; readonly presentation: string;
   readonly beats: readonly (Step & { readonly id: string; readonly progressPermille: number })[] }

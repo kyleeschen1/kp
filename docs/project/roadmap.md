@@ -3,10 +3,10 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-parallel-library-lanes`
-Execution Contract: `run-contract.kp.parallel-library-lanes-20261127`
+Current Commitment: `kp-matrix-notebook-adapter`
+Execution Contract: `run-contract.kp.matrix-notebook-adapter-20261127`
 Next Product Milestone: `matrix-authoring-reuse`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -21,10 +21,10 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 
 ## Current approved commitment
 
-**Complete:** [three independent library lanes](reviews/2026-11-27-parallel-library-lanes.md):
-interaction, mathematical objects and an existing player. Separate worktrees,
-runnable fixtures, owned contracts and enforced boundaries. Proposed next: matrix
-notebook integration. Section-clipping judgment remains deferred.
+**Approved:** [matrix notebook adapter](2026-11-27-matrix-notebook-adapter.md),
+reusing the checked resource API through native history, commands and linked views.
+Stop at G2 review. [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md)
+are complete; section-clipping judgment remains deferred.
 
 **Accepted:** [unified notebook](reviews/2026-11-24-unified-notebook-surface.md),
 [focused editing/styles](reviews/2026-11-24-notebook-style-comparison.md) and

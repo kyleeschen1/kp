@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 3,
+  "id": "42000000-0000-4000-8000-000000000001",
+  "revision": 0,
+  "matrixResources": [
+    {
+      "schemaVersion": 1,
+      "id": "42000000-0000-4000-8000-000000000002",
+      "matrix": {
+        "kind": "matrix2",
+        "id": "42000000-0000-4000-8000-000000000003",
+        "revision": 0,
+        "entries": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "draft": {
+          "a00": "1",
+          "a01": "1",
+          "a10": "0",
+          "a11": "1"
+        }
+      },
+      "vector": {
+        "kind": "vector2",
+        "id": "42000000-0000-4000-8000-000000000004",
+        "revision": 0,
+        "entries": [
+          1,
+          2
+        ],
+        "draft": {
+          "x": "1",
+          "y": "2"
+        }
+      },
+      "result": {
+        "kind": "matrix-vector-product",
+        "id": "42000000-0000-4000-8000-000000000005",
+        "recipe": "matrix2.vector2@1",
+        "matrix": "42000000-0000-4000-8000-000000000003",
+        "vector": "42000000-0000-4000-8000-000000000004"
+      },
+      "occurrences": [
+        {
+          "id": "42000000-0000-4000-8000-000000000006",
+          "resource": "42000000-0000-4000-8000-000000000005",
+          "view": "equation",
+          "extent": 5
+        },
+        {
+          "id": "42000000-0000-4000-8000-000000000007",
+          "resource": "42000000-0000-4000-8000-000000000005",
+          "view": "graph",
+          "extent": 5
+        }
+      ]
+    }
+  ],
+  "cells": [
+    {
+      "type": "block",
+      "id": "42000000-0000-4000-8000-000000000008",
+      "metadata": {},
+      "kind": "paragraph",
+      "title": {
+        "type": "title",
+        "id": "42000000-0000-4000-8000-000000000009",
+        "metadata": {},
+        "content": [
+          {
+            "type": "text",
+            "text": "A matrix acts on a vector",
+            "marks": [],
+            "annotations": []
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "What changes when you change the matrix? Edit A or v: the equation and graph share the same product Av. Another graph gives you a separate view of that result.",
+          "marks": [],
+          "annotations": []
+        }
+      ],
+      "children": [],
+      "layout": "flow",
+      "folded": false
+    },
+    {
+      "type": "matrixObject",
+      "id": "42000000-0000-4000-8000-000000000010",
+      "metadata": {},
+      "resource": "42000000-0000-4000-8000-000000000002",
+      "occurrence": "42000000-0000-4000-8000-000000000006",
+      "folded": false
+    },
+    {
+      "type": "matrixObject",
+      "id": "42000000-0000-4000-8000-000000000011",
+      "metadata": {},
+      "resource": "42000000-0000-4000-8000-000000000002",
+      "occurrence": "42000000-0000-4000-8000-000000000007",
+      "folded": false
+    }
+  ]
+}
