@@ -119,7 +119,6 @@ const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; co
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }, 'notebook.reveal-selection', 'notebook', () => selected ? available() : unavailable('Select a passage')); previewTools.append(reveal, followLabel);
 const frame = el('iframe', 'fn-preview'); frame.title = mathModule ? 'Mathematical reading preview' : 'Fraction reading preview';
 frame.src = mathModule ? `/experiments/fraction-notebook/math-preview.html${notebookKind === 'matrix' ? '?notebook=matrix' : ''}` : '/reader/fraction-notebook-preview/?surface=window';
-if (notebookKind === 'quadratic' && new URLSearchParams(location.search).get('forms') === '1') frame.src += '?forms=1';
 // A bookmark names the real passage. Let the reader restore its native state
 // and commentary instead of treating the iframe as a separate address space.
 if (!mathModule && window.location.hash) frame.src += window.location.hash;

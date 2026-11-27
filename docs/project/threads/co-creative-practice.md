@@ -14,8 +14,10 @@ Accepted: [matrix adapter](../reviews/2026-11-27-matrix-notebook-adapter.md),
 [shelf](../reviews/2026-11-27-reference-shelf.md).
 Approved: [studio horizon](../reviews/2026-11-27-twelve-loop-horizon.md).
 [Foundations](../reviews/2026-11-27-studio-foundations.md): visuals accepted;
-actual-model trial pending. Continuing notebook matrix reuse and quadratic forms.
-Execution: `run-contract.kp.linked-math-views-20261127`.
+actual-model trial pending. [Linked views](../reviews/2026-11-27-linked-math-views.md)
+are accepted; default adoption closes their milestone.
+Record: `run-contract.kp.linked-math-views-20261127`.
+Proposed successor: one R2 inner-product/projection exemplar.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
@@ -58,7 +60,7 @@ Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.m
   Accepted: [section/2D return](../reviews/2026-11-25-graph-sections-planar.md).
   Accepted: [head-on absence](../reviews/2026-11-25-graph-section-withdrawal.md).
   Checked: [geometric restriction](../reviews/2026-11-26-graph-section-clipping.md).
-  Wider stage/matrix promotion remains separate; replacement undecided. The
+  Wider promotion remains separate. The
   [Multiplexer](../2026-11-25-multiplexer-vision.md),
   [Vim](../2026-11-25-vim-semantic-command-design.md) and
   [mathematics](../2026-11-25-mathematical-authoring-programme.md) remain separate.

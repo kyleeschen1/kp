@@ -2,8 +2,8 @@
   "id": "run-contract.kp.linked-math-views-20261127",
   "kind": "run-contract",
   "title": "Linked mathematical views",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 2 of 3 packages complete. Checked matrix reuse and opt-in quadratic forms; all independent implementation work in this continuation is finished, combined visual review remains.",
+  "status": "resolved",
+  "summary": "COMPLETE 3/3: accepted linked views adopted by default; no further package admitted in this finite contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,8 +46,8 @@
     {
       "id": "integration",
       "title": "Combined checks and review",
-      "summary": "All technical checks and complete payload measurements pass. Review packet ready; human judgment of quadratic presentation and notebook composition remains required before default adoption or further promotion.",
-      "status": "in-progress"
+      "summary": "User accepted presentation; ordinary-route adoption and discovery pass 30 Chromium/Firefox checks, focused units, types, architecture and complete payload measurement. Roadmap and vision preserve finite closure and proposed successor.",
+      "status": "complete"
     }
   ]
 }

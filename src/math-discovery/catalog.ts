@@ -19,7 +19,7 @@ const entries = [
     example: 'Follow each weighted column into the result vector.' },
   { id: 'math.graph', family: 'quadratic', operation: 'view', accepts: ['quadratic', 'derivative', 'tangent'],
     requirements: ['A selected quadratic, derivative or tangent', 'Complete numeric inputs'],
-    example: 'Add another graph of the same object with its own viewport.' },
+    example: 'Add another graph of the same object with its own viewport. For a quadratic, compare expanded, vertex and real factored forms alongside its curve.' },
   { id: 'math.derivative', family: 'quadratic', operation: 'derive', accepts: ['quadratic'],
     requirements: ['A selected source quadratic', 'Complete coefficient inputs'],
     example: 'Create a derivative that remains dependent on the quadratic.' },

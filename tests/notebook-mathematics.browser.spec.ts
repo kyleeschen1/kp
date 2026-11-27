@@ -17,13 +17,18 @@ async function command(page: Page, query: string) {
   await page.keyboard.press('Enter');
   await expect(picker).toBeHidden();
 }
-test('quadratic forms are lazy source projections with honest degree and real-root limits', async ({ page }, info) => {
+test('ordinary quadratic graphs discover lazy forms with honest degree and real-root limits', async ({ page }, info) => {
   const errors: string[] = [], formLoads: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('request', request => { if (request.url().includes('quadratic-forms-view')) formLoads.push(request.url()); });
-  await page.setViewportSize({ width: 1280, height: 1000 }); await ready(page);
+  await page.setViewportSize({ width: 1280, height: 1000 });
+  await page.goto('/experiments/fraction-notebook/');
+  await expect(page.getByLabel('Fraction notebook', { exact: true })).toBeVisible();
+  // Finish the unrelated preview's lazy hydration before navigating away.
+  await expect(page.locator('.fn-status')).toContainText('preview up to date', { timeout: 45000 });
+  await expect(page.frameLocator('iframe').locator('body')).toHaveAttribute('data-kp-reader-hydrated', 'true');
   expect(formLoads).toEqual([]);
-  await page.goto(`${url}&forms=1`);
+  await ready(page);
   const equation = source(page), graph = page.locator('[data-math-kind=quadratic][data-math-view=graph]');
   const forms = graph.locator('.fn-quadratic-forms');
   await expect(forms.locator('[data-form]')).toHaveCount(3);
@@ -60,6 +65,17 @@ test('quadratic forms are lazy source projections with honest degree and real-ro
   await page.setViewportSize({ width: 390, height: 844 }); await forms.scrollIntoViewIfNeeded();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('quadratic-forms-phone.png') });
+  await equation.locator('.fn-math-heading').click(); await command(page, 'math.discover');
+  const picker = page.getByRole('dialog', { name: 'Mathematical capabilities', exact: true });
+  await picker.getByRole('combobox').fill('vertex');
+  await expect(picker.getByRole('option', { selected: true })).toContainText('Graph');
+  await page.keyboard.press('Enter');
+  await expect(graph).toHaveCount(2);
+  await expect(graph.last().locator('.fn-quadratic-forms [data-form]')).toHaveCount(3);
+  await equation.getByRole('button', { name: 'Derivative', exact: true }).click();
+  const derivative = page.locator('[data-math-kind=derivative]');
+  await derivative.getByRole('button', { name: 'Graph', exact: true }).click();
+  await expect(page.locator('[data-math-kind=derivative][data-math-view=graph] .fn-quadratic-forms')).toBeHidden();
   expect(errors).toEqual([]);
 });
 test('quadratic editing, derived views and persistent identities work in the existing workspace', async ({ page }, info) => {

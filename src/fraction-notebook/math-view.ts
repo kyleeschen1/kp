@@ -34,7 +34,6 @@ export function createMathNodeView(initial: ProseNode, owner: MathViewOwner, edi
   const legend = el('p', 'fn-math-legend'), diagnostics = el('p', 'fn-math-diagnostic'), toolbar = el('div', 'fn-math-actions'); diagnostics.setAttribute('role', 'status');
   const fields = new Map<string, HTMLInputElement>(); let graph: ReturnType<typeof mountMathGraph> | undefined;
   const formsHost = el('div', 'fn-quadratic-forms');
-  const formsEnabled = new URLSearchParams(location.search).get('forms') === '1';
   let forms: ReturnType<typeof import('./quadratic-forms-view.ts').mountQuadraticForms> | undefined;
   let loadingForms = false, disposed = false;
   let formsSource: QuadraticCoefficients | undefined;
@@ -75,7 +74,7 @@ export function createMathNodeView(initial: ProseNode, owner: MathViewOwner, edi
     const error = mathDraftError(resource) ?? mathDraftError(source); diagnostics.textContent = error ?? '';
     const fold = heading.querySelector('button'); if (fold) { fold.textContent = cell.folded ? '▸' : '▾'; fold.setAttribute('aria-expanded', String(!cell.folded)); }
     body.hidden = cell.folded;
-    formsHost.hidden = !formsEnabled || resource.kind !== 'quadratic' || cell.view !== 'graph';
+    formsHost.hidden = resource.kind !== 'quadratic' || cell.view !== 'graph';
     formsSource = !formsHost.hidden && resource.kind === 'quadratic' ? resource.coefficients : undefined;
     if (cell.folded) return;
     updateForms();

@@ -9,11 +9,11 @@ export const projectVision: ProjectVision = {
     title: "Reuse linked mathematics and inspect algebraic forms",
     approval: "approved",
     contractId: "run-contract.kp.linked-math-views-20261127",
-    finish: "Reuse the accepted linked matrix explanation in notebook and reference; inspect bounded quadratic forms beside the original curve. Preserve source identity, local playback and history; review the opt-in forms before default adoption.",
+    finish: "Reuse the accepted linked matrix explanation in notebook and reference; inspect bounded quadratic forms beside the original curve. Preserve source identity, local playback and history. The accepted forms now enter ordinary graph views; promotion checks close this finite commitment.",
     source: { label: "Approved linked-views continuation", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Review the quadratic forms candidate and notebook reuse. A separate actual-response annotation revision trial remains pending; automated fixtures do not establish model usefulness.",
+  nextJudgment: "Scope one R2 inner-product/projection exemplar as the next mathematical family. A separate actual-response annotation revision trial remains pending; automated fixtures do not establish model usefulness.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry is accepted and now reused by notebook/reference through one player. Quadratic forms, occurrence reclamation and reader lifecycle are checked; the forms presentation awaits review. Capability discovery and bounded chat proposals are integrated; actual model usefulness remains pending.",
+      established: "Linked matrix geometry and quadratic forms are accepted. Notebook/reference share one matrix player; ordinary quadratic graphs expose the three forms through existing source authority and discovery. Occurrence reclamation and reader lifecycle are checked. Actual model usefulness remains pending.",
       evidence: { label: "Linked views evidence and review", href: "docs/project/reviews/2026-11-27-linked-math-views.md" },
       outcome: {
-        authority: "approved",
-        id: "linked-math-views", title: "Reuse linked views and compare quadratic forms",
-        finish: "The notebook reuses accepted matrix geometry through one player; supported quadratics expose expanded, vertex and real-factored forms beside the original curve, with honest degree-reduction and numerical gaps. Review the new candidate before default adoption.",
-        excludes: "General CAS, complex roots, cross-notebook live subscription, universal schema, broad renderer migration, paid model calls and publication.",
-        source: { label: "Approved tranche and geometry boundary", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
+        authority: "proposed",
+        id: "inner-product-projection", title: "Link inner products to geometric projection",
+        finish: "Scope and review one R2 exemplar whose source vectors drive notation, signed projection and a perpendicular residual, including positive, negative, orthogonal and zero cases. Demonstrate discoverable authoring before broader promotion.",
+        excludes: "Implementation before bounded scope selection, arbitrary inner-product spaces, general CAS, broad curriculum, universal schema, paid model calls and publication.",
+        source: { label: "Next family in the studio horizon", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Notebook linked views and quadratic forms accepted",
+      scope: "Notebook and reference reuse the accepted linked matrix player. Quadratic graphs expose expanded, vertex and real-factored forms from the same source coefficients; numerical gaps remain explicit. Default adoption preserves native history and lazy boundaries. Cross-notebook live subscription and actual model usefulness remain separate.",
+      source: { label: "Linked views acceptance and promotion", href: "docs/project/reviews/2026-11-27-linked-math-views.md" }
+    },
     {
       title: "Linked matrix geometry and shared theme accepted",
       scope: "One source and one playhead link weighted columns to their sum beside the equation. Signed/zero cases, seek, reload and theme checks passed. Acceptance permits bounded notebook reuse; contextual revision still needs a real-response usefulness trial.",
@@ -756,6 +761,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves continued work on the recommendations, including parallel ownership. Begin coherent visual defaults and linked matrix geometry, with independent discovery and bounded contextual revision.",
       reason: "Make new explanations cheaper to author and reuse while preventing independent workers from multiplying visual defaults. Keep visual judgments local and the completed shelf intact.",
       source: { label: "Approved delivery boundaries and horizon", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
+    },
+    {
+      id: "accept-linked-views-propose-projection", on: "2026-11-27",
+      before: "Notebook reuse and opt-in quadratic forms were checked and awaiting presentation review.",
+      after: "The user accepts the candidate and resumes. Adopt the forms in ordinary quadratic graphs and close the finite linked-views milestone; propose a separately scoped R2 inner-product/projection exemplar.",
+      reason: "The existing matrix and quadratic workflows now demonstrate linked reuse. A new geometric relationship offers more authoring value than extending the completed milestone, while preserving the unresolved actual-model trial.",
+      source: { label: "Linked views acceptance and next boundary", href: "docs/project/reviews/2026-11-27-linked-math-views.md" }
     }
   ]
 };

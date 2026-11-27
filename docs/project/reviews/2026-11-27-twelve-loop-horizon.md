@@ -116,6 +116,18 @@ retain exact cut/paste configuration through a validated clipboard-only payload,
 and preserve native history and reload. This is an observed reuse blocker, not
 permission for a new general clipboard or persistence protocol.
 
+The user's subsequent “good. resume” accepts the linked-views candidate. Finish
+this tranche by making the reviewed quadratic readings available on ordinary
+quadratic graph occurrences in both editor and reader, and by indexing their
+names through the existing Graph command. No new view schema or evaluator is
+needed. Preserve lazy loading outside the mathematical notebook and ensure
+derivative/tangent views do not acquire quadratic-only claims. Check source edits,
+reload, command discovery, types and payload boundaries; then close this finite
+milestone. The next horizon family is R2 inner product/projection, separately
+scoped before implementation. This promotion has a two-hour ceiling with the
+last half-hour reserved for verification and backup; it does not require a new
+visual judgment of the unchanged accepted treatment.
+
 ## Goal and evidence
 
 An author can create a supported mathematical object, discover its available

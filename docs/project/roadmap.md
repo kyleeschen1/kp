@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-linked-math-views`
 Execution Contract: `run-contract.kp.linked-math-views-20261127`
-Next Product Milestone: `linked-math-views`
-Milestone Authority: approved
+Next Product Milestone: `inner-product-projection`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -28,8 +28,9 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 **Approved:** [studio foundations](reviews/2026-11-27-twelve-loop-horizon.md).
 [Accepted visuals](reviews/2026-11-27-studio-foundations.md): linked geometry
 and shared defaults; discovery/revision are checked. Actual-model judgment remains.
-**Checked continuation:** [notebook reuse and quadratic forms](reviews/2026-11-27-linked-math-views.md);
-presentation review remains in the approved [horizon](reviews/2026-11-27-twelve-loop-horizon.md).
+**Accepted:** [notebook reuse and quadratic forms](reviews/2026-11-27-linked-math-views.md).
+Default adoption closes this commitment. Proposed next: R2 inner-product/projection
+in the [horizon](reviews/2026-11-27-twelve-loop-horizon.md).
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 
@@ -107,10 +108,9 @@ Physics migration remains **deferred** unless it removes an authoring blocker.
 
 ## Preserved boundaries and history
 
-Existing semantic/runtime/renderer authority, explicit unsupported gaps,
-exemplar review and separate editor ownership still apply. No public publication,
-model spending, broad curriculum, universal schema or historical run resumption
-is implied. New ideas stay exploratory until selected.
+Preserve semantic/runtime/renderer authority, explicit gaps, exemplar review and
+editor ownership. Exclude publication, model spending, broad curriculum,
+universal schema and historical run resumption.
 
 The [historical roadmap](roadmap.history-2026-11-08.md) preserves earlier
 commitments, pauses, foundations and supporting-thread links. It is provenance,

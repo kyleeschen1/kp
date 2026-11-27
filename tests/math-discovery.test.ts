@@ -139,7 +139,8 @@ test('rows work in the existing fuzzy session with metadata search and current a
     execute: row => row.resource.kind === 'command' ? row.resource.command.execute() : { ok: false, reason: row.resource.reason }
   });
   picker.open(f.capture()); picker.query('contact');
-  assert.equal(picker.snapshot().total, 1); assert.equal(picker.snapshot().selected, 'math.tangent');
+  // Fuzzy metadata can admit secondary matches; the intended operation must rank first.
+  assert.equal(picker.snapshot().selected, 'math.tangent');
   f.change(selection()); assert.equal((await picker.accept()).ok, false);
   assert.equal(picker.snapshot().open, true); assert.deepEqual(f.calls, []);
   picker.close(); assert.equal(picker.snapshot().visible.length, 0); picker.dispose();
@@ -151,7 +152,7 @@ test('the operation noun outranks an incidental mention in another command requi
   const selected = selection();
   const picker = createRowPickerSession<MathCapability>({ execute: () => ({ ok: true }) });
   picker.open(captureMathematicalDiscovery(registry, { origin: { scope: 'notebook' }, selection: selected, currentSelection: () => selected }));
-  for (const [query, id] of [['derivative', 'math.derivative'], ['tangent', 'math.tangent'], ['graph', 'math.graph']]) {
+  for (const [query, id] of [['derivative', 'math.derivative'], ['tangent', 'math.tangent'], ['graph', 'math.graph'], ['vertex', 'math.graph'], ['factored', 'math.graph'], ['expanded', 'math.graph']]) {
     picker.query(query!); assert.equal(picker.snapshot().selected, id);
   }
   picker.dispose(); registry.dispose();

@@ -1,7 +1,7 @@
 # Linked mathematical views
 
 Date: 2026-11-27
-Status: checked candidate; HUMAN_CHECKPOINT for quadratic presentation and notebook composition.
+Status: accepted by “good. resume”; default adoption completes the bounded milestone.
 Plan: [approved continuation](2026-11-27-twelve-loop-horizon.md).
 Execution: `run-contract.kp.linked-math-views-20261127`.
 
@@ -14,7 +14,7 @@ host stacks the graph beneath the equation using its actual container width.
 Source edits, invalid-draft recovery, occurrence-local playback, folding, undo,
 reload and reader/editor switching retain their previous meaning.
 
-The opt-in quadratic candidate adds expanded, vertex and real-factored readings
+Quadratic graph occurrences now include expanded, vertex and real-factored readings
 beside the existing curve. Parameters come from the same admitted coefficients;
 the curve never evaluates a rounded alternate form. Zero, constant and linear
 inputs are explicit. Negative discriminants, unusable floating-point parameters
@@ -57,11 +57,13 @@ proof or symbolic radical engine.
 1. Open `http://127.0.0.1:8000/experiments/fraction-notebook/?notebook=matrix`.
    Choose **Explain** on a source. Seek, reverse, change a coefficient and switch
    to reading mode. The equation and graph should agree, retaining your place.
-2. Open `http://127.0.0.1:8000/experiments/fraction-notebook/?notebook=quadratic&forms=1`.
+2. Open `http://127.0.0.1:8000/experiments/fraction-notebook/?notebook=quadratic`.
    Set `a=1`, `b=-2`, `c=-3`: inspect `(x−1)²−4` and `(x+1)(x−3)` alongside
    the curve. Try `c=1` (repeated root), `c=2` (no real factors), and `a=0`
-   (linear). Judge whether the three readings are compact and useful, including
-   on a phone. This flag changes presentation only; source edits save normally.
+   (linear). All three readings follow the source, including on a phone.
+   Select the source heading, run `math.discover` from M-x (or C-x C-x), then
+   search `vertex`, `expanded` or `factored`. Graph creates another occurrence
+   with those readings. The reader includes them too; no URL flag is needed.
 3. The accepted reference remains at
    `http://127.0.0.1:8000/experiments/matrix-reference/?geometry=1`.
 
@@ -131,7 +133,48 @@ earlier navigation failures coincided with logged Vite restarts after shared
 compiler changes. The final unchanged-source cohort passed without retries.
 
 Browser captures are disposable; stable scoped commands own the evidence.
-Human judgment of the new form presentation and learner usefulness remains
-separate. Two implementation packages are complete; the review package remains
-open. No further independent package is admitted in this bounded continuation.
-Resume with `theseus work context task.kp.linked-math-views-20261127 --mode brief`.
+The user's “good. resume” accepts the form presentation and notebook composition.
+This does not establish learner usefulness or a successful actual-model trial.
+
+## Accepted default adoption
+
+The shared mathematical NodeView now admits forms for source quadratic graphs
+without query routing. Derivative/tangent graphs remain distinct. Existing Graph
+metadata exposes the three form names through capability discovery, with no new
+command, persistent schema or evaluator. Saved source coefficients still own both
+KaTeX notation and Graph2D evaluation. The rollback unit is this admission and
+metadata change; no mathematical data migration is involved.
+
+Promotion verification first found two fixture issues. Expanded fuzzy metadata
+allows secondary matches for `contact`; the intended Tangent still ranks first.
+The test now asserts ranking and stale-selection rejection, not an exact result
+count. Firefox also reported an aborted lazy import when the test navigated away
+from the fraction preview before hydration completed. Waiting for the existing
+preview readiness signal preserves the no-eager-forms assertion. No runtime error
+was suppressed. Project-orientation checks caught overlong entrypoints; prose was
+condensed within the existing budgets, preserving links and approval boundaries.
+
+Measured against `1e6877328f3980ea7a5dfb26a58dc9790df632cf` with
+`npm run measure:notebook-mathematics -- --baseline 1e6877328f3980ea7a5dfb26a58dc9790df632cf`:
+initial notebook JavaScript is 475,511 gzip bytes (+24); all reachable JS/CSS is
+619,318 (+43); all emitted assets total 1,717,994 (+43). The native fraction reader
+is unchanged at 340,792. Notebook type files remain 687; instantiations increase
+by eight to 202,334. These are complete-consumer build estimates, not network or
+runtime memory measurements. No ceilings changed.
+
+Final promotion checks:
+
+- `npm run visual:notebook-mathematics -- --project=firefox`: 30 passed across
+  Chromium and Firefox after the fixture repair, with no retries.
+- `npm run test:studio-foundations`: 38 passed; `npm run test:notebook-mathematics`:
+  43 passed; `npm run test:project-vision`: 75 passed after shortening the entrypoints.
+- `npm run typecheck:fraction-notebook`, `npm run typecheck:tests`,
+  `npm run check:architecture` and the complete-consumer measurement passed.
+  The source promotion changes no rendering styles or mathematical evaluator.
+
+The next recommendation is a separately scoped R2 inner-product/projection
+exemplar: source vectors, signed projection, perpendicular residual and explicit
+zero/orthogonal cases. It is not implementation authority for a new family.
+The earlier studio actual-response trial remains pending, and reference cards
+remain pinned snapshots. Inspect the closed record with
+`theseus work context task.kp.linked-math-views-20261127 --mode brief`.
