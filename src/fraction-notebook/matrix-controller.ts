@@ -17,10 +17,11 @@ import { selectedObject } from './inspector.ts';
 import { preparePastedSlice } from './clipboard.ts';
 import type { NotebookEditorExtension } from './editor.ts';
 import './math.css';
+import { readMatrixBindings, readMatrixNotes } from './matrix-reuse-data.ts';
 
 interface Captured { readonly doc: ProseNode; readonly cell: MatrixObjectCell }
 export function createMatrixExtension(initial: FractionNotebook, registry: CommandRegistry, report: (message: string) => void) {
-  let current = initial.matrixResources!, editor: EditorView | undefined, disposed = false;
+  let current = initial.matrixResources!, bindings = initial.matrixBindings ?? [], notes = initial.matrixNotes ?? [], editor: EditorView | undefined, disposed = false;
   const runtime = createMatrixNotebookRuntime(current), listeners = new Set<() => void>();
   const handles = new Map<string, TargetedCommand<Captured>>();
   const active = () => { if (!editor || disposed) throw new Error('The matrix notebook has closed.'); return editor; };
@@ -100,9 +101,13 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
       const next = editOccurrenceExtent(d, view.id, view.extent * factor), editor = active();
       editor.dispatch(closeHistory(editor.state.tr).setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? next : old))); } }));
   const owner: MatrixViewOwner = { runtime, subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn); },
+    details(id) { return { binding: bindings.find(b => b.resource === id), note: notes.find(n => n.resource === id) }; },
     select(id) { if (!editor || disposed) return; const found = occurrence(id); if (found && (!(editor.state.selection instanceof NodeSelection) || editor.state.selection.from !== found.pos))
       editor.dispatch(editor.state.tr.setSelection(NodeSelection.create(editor.state.doc, found.pos))); },
-    edit(id, edit) { const d = current.find(d => d.id === id); if (!d) throw new Error('The matrix was removed.'); replace(editMatrixVectorDocument(d, edit)); },
+    edit(id, edit) { const d = current.find(d => d.id === id); if (!d) throw new Error('The matrix was removed.');
+      const binding = owner.details?.(id).binding;
+      if (binding && (binding.kind === 'transclude' || edit.kind === 'matrix')) { report('Edit the original source, or Copy to make independent mathematics.'); return; }
+      replace(editMatrixVectorDocument(d, edit)); },
     bind(button, command, id) { handles.get(command)?.bindResolvedTarget(button, () => localTarget(id)); },
     undo(forward) { const view = active(); (forward ? redo : undo)(view.state, view.dispatch); } };
   const containsMatrix = (slice: Slice) => { let found = false; slice.content.descendants(n => { if (n.type.name === 'matrixObject') found = true; }); return found; };
@@ -111,7 +116,9 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
     try {
       const prepared = prepareMatrixPaste(view.state.doc, slice, current);
       const copied = preparePastedSlice(view.state.doc, prepared.slice);
+      const copiedNotes = prepared.copies.flatMap(copy => { const note = notes.find(n => n.resource === copy.source); return note ? [{ ...note, resource: copy.resource }] : []; });
       const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', prepared.resources);
+      if (copiedNotes.length) tr.setNodeAttribute(0, 'notes', [...notes, ...copiedNotes]);
       if (position === undefined) tr.replaceSelection(copied); else tr.replaceRange(position, position, copied);
       view.dispatch(tr.scrollIntoView()); return true;
     } catch (error) { report(String(error)); return true; }
@@ -128,7 +135,7 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
       // ProseMirror splits may temporarily duplicate block IDs; the existing
       // identity plugin repairs those in appendTransaction. Validate this
       // owner's resource/reference invariants here, then serialize afterward.
-      readNotebook({ ...initial, matrixResources: resources, cells: [] });
+      readNotebook({ ...initial, matrixResources: resources, matrixBindings: tr.doc.firstChild!.attrs['bindings'] ?? [], matrixNotes: tr.doc.firstChild!.attrs['notes'] ?? [], cells: [] });
       const occurrences = new Set<string>();
       tr.doc.descendants(node => {
         if (node.type.name === 'story' || node.type.name === 'mathObject') throw new Error('Use this exemplar’s matrix resources.');
@@ -155,6 +162,7 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
     const pos = view.posAtCoords({ left: event.clientX, top: event.clientY }); if (pos) paste(view, slice, pos.pos); return true;
   } } });
   const extension: NotebookEditorExtension = { label: 'Matrix notebook', plugins: [plugin], nodeViews: { matrixObject: node => createMatrixNodeView(node, owner) }, paste,
-    beforeRender(doc, previous) { if (doc === previous) return; current = matrixResourcesIn(doc); runtime.update(current); } };
+    beforeRender(doc, previous) { if (doc === previous) return; current = matrixResourcesIn(doc);
+      bindings = readMatrixBindings(doc.firstChild!.attrs['bindings'] ?? [], current); notes = readMatrixNotes(doc.firstChild!.attrs['notes'] ?? [], current); runtime.update(current); } };
   return { extension, runtime, dispose() { if (disposed) return; disposed = true; handles.forEach(h => h.dispose()); listeners.clear(); runtime.dispose(); editor = undefined; } };
 }

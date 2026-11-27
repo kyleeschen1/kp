@@ -1,0 +1,15 @@
+{
+  "mode": "--live",
+  "inferenceAttempts": 1,
+  "humanAccepted": false,
+  "preparedMs": 12083,
+  "model": "gpt-6-astra",
+  "responseMs": 12356,
+  "threadId": "01a21e25-b5c3-7ae3-93df-571d05a8474c",
+  "responseCount": 1,
+  "toolMessages": 0,
+  "comparison": "Current\n\nWhat do the weights do?\nEach input coordinate weights one matrix column. Add the weighted columns to obtain the result.\n\nProposed\n\nWhy does the result point straight up?\nEach column is weighted by its corresponding input coordinate, so the horizontal contributions cancel and the vertical contributions add to five.",
+  "content": "Each column is weighted by its corresponding input coordinate, so the horizontal contributions cancel and the vertical contributions add to five.",
+  "error": "expect(locator).toHaveCount(expected) failed\n\nLocator:  locator('[data-matrix-studio=ready]')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"to.have.count\" with timeout 5000ms\n  - waiting for locator('[data-matrix-studio=ready]')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+  "sharedConversationUnchanged": true
+}

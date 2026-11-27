@@ -12,6 +12,7 @@ import { importFractionReading, readNotebook, object, type FractionNotebook } fr
 import { fromProse, mountFractionEditor } from './editor.ts';
 import { openFractionDraft } from './storage.ts';
 import { downloadJson } from '../notebook/download.ts';
+import { newId, uuid } from '../notebook/model.ts';
 import { addAuthor, annotateSelection, mountInspector } from './inspector.ts';
 import type { Node as ProseNode } from 'prosemirror-model';
 import { mountStructureControls } from './structure-controls.ts';
@@ -45,13 +46,16 @@ const button = (text: string, action: () => unknown, id: string, scope: CommandS
 };
 const notebookKind = new URLSearchParams(location.search).get('notebook');
 const mathModule = notebookKind === 'composition' ? await import('./composition-notebook.ts') : notebookKind === 'projection' ? await import('./projection-notebook.ts') : notebookKind === 'matrix' ? await import('./matrix-notebook.ts') : notebookKind === 'quadratic' ? await import('./math-notebook.ts') : undefined;
-const storageKey = notebookKind === 'composition' ? 'kp.composition-notebook.v1' : notebookKind === 'projection' ? 'kp.projection-notebook.v1' : notebookKind === 'matrix' ? 'kp.matrix-notebook.v1' : mathModule ? 'kp.mathematical-notebook.v1' : 'kp.fraction-notebook.v3';
+const documentParam = notebookKind === 'matrix' ? new URLSearchParams(location.search).get('document') : null;
+const documentId = documentParam && documentParam !== mathModule?.seed.id ? uuid(documentParam) : undefined;
+const storageKey = (notebookKind === 'composition' ? 'kp.composition-notebook.v1' : notebookKind === 'projection' ? 'kp.projection-notebook.v1' : notebookKind === 'matrix' ? 'kp.matrix-notebook.v1' : mathModule ? 'kp.mathematical-notebook.v1' : 'kp.fraction-notebook.v3') + (documentId ? `:${documentId}` : '');
 let notebook = mathModule?.seed ?? importFractionReading(canonical).notebook;
+if (documentId && mathModule && 'freshMatrixNotebook' in mathModule) notebook = mathModule.freshMatrixNotebook(notebook, documentId);
 let lastValid = notebook;
 let store: Awaited<ReturnType<typeof openFractionDraft>> | undefined;
 let storedError: string | undefined;
 try {
-  store = mathModule ? await openFractionDraft(notebook, notebookKind === 'composition' ? 'kp-composition-notebook-v1' : notebookKind === 'projection' ? 'kp-projection-notebook-v1' : notebookKind === 'matrix' ? 'kp-matrix-notebook-v1' : 'kp-mathematical-notebook-v1', null) : await openFractionDraft(notebook);
+  store = mathModule ? await openFractionDraft(notebook, (notebookKind === 'composition' ? 'kp-composition-notebook-v1' : notebookKind === 'projection' ? 'kp-projection-notebook-v1' : notebookKind === 'matrix' ? 'kp-matrix-notebook-v1' : 'kp-mathematical-notebook-v1') + (documentId ? `:${documentId}` : ''), null) : await openFractionDraft(notebook);
   const saved = await store.read(); notebook = saved.draft; lastValid = saved.lastValid;
   const recovery = sessionStorage.getItem(storageKey) ?? (mathModule ? null : sessionStorage.getItem('kp.fraction-notebook.v2') ?? sessionStorage.getItem('kp.fraction-notebook.v1'));
   if (recovery) {
@@ -69,6 +73,17 @@ let timer: ReturnType<typeof setTimeout> | undefined, selected: string | undefin
 let inspector: ReturnType<typeof mountInspector> | undefined;
 let structure: ReturnType<typeof mountStructureControls> | undefined;
 let revision: ReturnType<typeof import('./contextual-revision.ts').mountContextualRevision> | undefined;
+let matrixReuse: Awaited<ReturnType<typeof import('./matrix-reuse.ts').mountMatrixReuse>> | undefined;
+let matrixRevision: ReturnType<typeof import('./matrix-revision.ts').mountMatrixRevision> | undefined;
+let matrixImport: ReturnType<typeof import('./matrix-notebook-import.ts').mountMatrixImport> | undefined;
+const matrixReuseAbort = new AbortController();
+registry.add({ id: 'notebook.new-matrix', title: 'New independent matrix notebook', category: 'Notebook', scope: 'notebook',
+  run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign(`/experiments/fraction-notebook/?notebook=matrix&document=${newId()}`); } });
+if (notebookKind === 'matrix' && new URLSearchParams(location.search).has('returnNotebook')) registry.add({
+  id: 'matrix.return-to-notebook', title: 'Return to linked matrix occurrence', category: 'Mathematics', scope: 'notebook',
+  run: async () => { const params = new URLSearchParams(location.search), returning = uuid(params.get('returnNotebook')), cell = uuid(params.get('returnCell'));
+    await saving; if (storedError) throw new Error(storedError);
+    location.assign(`/experiments/fraction-notebook/?notebook=matrix&document=${returning}&cell=${cell}`); } });
 const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
 registry.add({ id: 'notebook.open-mathematics', title: mathModule ? 'Open fraction notebook' : 'Open mathematical notebook', category: 'Notebook', scope: 'notebook', keywords: ['quadratic', 'polynomial', 'graph'],
   run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign(mathModule ? '/experiments/fraction-notebook/' : '/experiments/fraction-notebook/?notebook=quadratic'); } });
@@ -343,7 +358,37 @@ const onMessage = (event: MessageEvent) => {
 };
 window.addEventListener('message', onMessage);
 cellDetails.textContent = `Notebook ${notebook.id} · source: ${mathModule ? 'mathematical objects' : 'fractional-linear-reasoning'} · local draft; original reading unchanged`;
+if (notebookKind === 'matrix') {
+  const params = new URLSearchParams(location.search), cell = params.get('cell'), source = params.get('source');
+  if (cell || source) {
+    const target = notebook.cells.find(c => c.type === 'matrixObject' && (cell ? c.id === cell : c.resource === source));
+    if (target) queueMicrotask(() => { if (!disposed) editor.reveal(target.id); });
+    else reportStatus('The linked matrix occurrence is no longer present in this notebook.', 'invalid');
+  }
+}
 void (async () => { if (lastValid.revision !== notebook.revision) await prepare(lastValid, true); if (!disposed) { if (pendingSource()) pendingMessage(); else await prepare(); } })();
-function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); revision?.dispose(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); mathDiscovery?.dispose(); vimCoverage.dispose(); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); mathematics?.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
+if (notebookKind === 'matrix') void import('./matrix-reuse.ts').then(async ({ mountMatrixReuse }) => {
+  if (disposed) return;
+  const owner = await mountMatrixReuse(workspace, editor.view, notebook, registry, async () => { await saving; if (storedError) throw new Error(storedError); }, message => reportStatus(message, 'valid'), matrixReuseAbort.signal);
+  if (disposed) owner.dispose(); else matrixReuse = owner;
+  const { mountMatrixRevision } = await import('./matrix-revision.ts');
+  if (disposed) return;
+  let previewWasEditing: boolean | undefined;
+  matrixRevision = mountMatrixRevision(workspace, registry, { view: editor.view, chat, notebook: () => notebook,
+    preview(candidate) {
+      generation++; request?.abort(); clearTimeout(timer);
+      previewWasEditing ??= root.classList.contains('fn-editing');
+      setEditing(false); send({ kind: 'apply', value: { notebook: candidate } });
+    }, restore() {
+      if (disposed || previewWasEditing === undefined) return;
+      if (latest) send({ kind: 'apply', value: latest.value });
+      setEditing(previewWasEditing); previewWasEditing = undefined;
+    } });
+  const { mountMatrixImport } = await import('./matrix-notebook-import.ts');
+  if (!disposed) { matrixImport = mountMatrixImport(workspace, registry, mathModule!.seed.id, message => reportStatus(message, 'invalid')); workspace.dataset['matrixStudio'] = 'ready'; }
+}).catch(error => { if (!disposed) reportStatus(String(error), 'invalid'); });
+function dispose() { if (disposed) return; disposed = true; clearTimeout(timer); request?.abort(); revision?.dispose(); matrixReuse?.dispose(); window.removeEventListener('message', onMessage); document.removeEventListener('focusin', rememberFocus); document.removeEventListener('pointerdown', dismissMenus); document.removeEventListener('keydown', dismissMenus); mathDiscovery?.dispose(); vimCoverage.dispose(); commandPicker.dispose(); picker.dispose(); modeline.dispose(); chat.dispose(); windows.dispose(); structure?.dispose(); inspector?.dispose(); numbers.dispose(); commands.dispose(); editor.dispose(); mathematics?.dispose(); layout.dispose(); styles.dispose(); registry.dispose(); void saving.finally(() => store?.close()); }
 window.addEventListener('pagehide', event => { if (!event.persisted) dispose(); });
+window.addEventListener('pagehide', event => { if (!event.persisted) { matrixReuseAbort.abort(); matrixRevision?.dispose(); matrixImport?.dispose(); } });
 if (import.meta.hot) import.meta.hot.dispose(dispose);
+if (import.meta.hot) import.meta.hot.dispose(() => { matrixReuseAbort.abort(); matrixRevision?.dispose(); matrixImport?.dispose(); });

@@ -1,0 +1,16 @@
+{
+  "id": "task.kp.studio-finish-20261127",
+  "kind": "task",
+  "title": "Finish deliberate mathematical reuse and integrated studio journey",
+  "status": "ready",
+  "domain": "kp",
+  "verificationRecords": [
+    {
+      "command": "npm run visual:matrix-reuse -- --project=firefox",
+      "status": "failed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T21:40:53.623Z",
+      "notes": "Final expanded run: seven passed, one Firefox page-setup timeout. Browser trace identifies previous pagehide registry disposal invoking matrix target resolution. Preserve failure and repair lifecycle before final gate; earlier six-case run passed."
+    }
+  ]
+}

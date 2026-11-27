@@ -1,0 +1,10 @@
+[
+  {
+    "id": "msg_0166e35b5778cb34016b09c40ee01487d0adee63f57486deac",
+    "role": "assistant",
+    "text": "{\"protocol\":\"kp.annotation-revision.v1\",\"sessionId\":\"5ff95e14-4e3b-47be-a913-fbc256f26a81\",\"request\":1,\"objectId\":\"kp:matrix-note:94c63355-f822-4b75-b1ae-b5f7b567cd62\",\"sourceRevision\":\"29eaf0a05befcf7402f00d7f2cf5cd6b25f0d726403adfbb88144c045173a4c6\",\"draftRevision\":\"cf3b299a9550f214a22d70436deebeab8ce9b0f99cfc72605cbb73e79de2a748\",\"annotationId\":\"94c63355-f822-4b75-b1ae-b5f7b567cd62.note\",\"title\":\"Why does the result point straight up?\",\"content\":\"Each column is weighted by its corresponding input coordinate, so the horizontal contributions cancel and the vertical contributions add to five.\",\"focusRefs\":[\"b455bbd5-c11f-4171-bf37-8ca248854912\"]}",
+    "complete": true,
+    "clipped": false,
+    "turnId": "01a21e25-c305-7282-921e-0084b4a28235"
+  }
+]

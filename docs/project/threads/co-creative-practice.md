@@ -25,8 +25,8 @@ Accepted: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md).
 Accepted: [context return](../reviews/2026-11-27-section-context-return.md).
 Accepted: [reference collection](../reviews/2026-11-27-studio-reference-collection.md).
 Accepted: [actual-response trial](../reviews/2026-11-27-contextual-revision-trial.md).
-Next proposed: [deliberate reuse](../reviews/2026-11-27-twelve-loop-review.md).
-Execution: `run-contract.kp.studio-foundations-20261127`; complete.
+Approved: [studio finish](../reviews/2026-11-27-studio-finish.md).
+Execution: `run-contract.kp.studio-finish-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

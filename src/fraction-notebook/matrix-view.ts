@@ -7,6 +7,7 @@ import type { MatrixObjectCell } from './types.ts';
 import type { MatrixNotebookRuntime } from './matrix-runtime.ts';
 import { mountMatrixGraph } from './matrix-graph.ts';
 import { createMatrixExplanation } from './matrix-explanation.ts';
+import type { MatrixNote, MatrixBinding } from './matrix-reuse-data.ts';
 
 export interface MatrixViewOwner {
   readonly runtime: MatrixNotebookRuntime;
@@ -15,6 +16,7 @@ export interface MatrixViewOwner {
   edit(id: string, edit: ResourceEdit): void;
   bind(button: HTMLButtonElement, command: string, cell: string): void;
   undo(redo: boolean): void;
+  details?(id: string): { readonly note: MatrixNote | undefined; readonly binding: MatrixBinding | undefined };
 }
 export function readMatrixCell(node: ProseNode): MatrixObjectCell {
   return { type: 'matrixObject', id: uuid(node.attrs['id']), metadata: node.attrs['metadata'], resource: uuid(node.attrs['resource']), occurrence: uuid(node.attrs['occurrence']), folded: node.attrs['folded'] === true };
@@ -25,6 +27,8 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
   const dom = el('section', 'fn-math-object fn-matrix-object'), heading = el('div', 'fn-math-heading'), title = el('span');
   dom.contentEditable = 'false'; dom.tabIndex = 0; dom.dataset['cellId'] = cell.id;
   const body = el('div', 'fn-math-body'), formula = el('div', 'fn-math-equation'), controls = el('div', 'fn-math-controls');
+  const note = el('section', 'fn-matrix-note'), noteTitle = el('h3'), noteContent = el('p'), provenance = el('p', 'fn-matrix-provenance');
+  note.append(noteTitle, noteContent); note.setAttribute('aria-label', 'Matrix explanation note');
   const host = el('div', 'fn-math-graph'), legend = el('p', 'fn-math-legend'), diagnostic = el('p', 'fn-math-diagnostic'), toolbar = el('div', 'fn-math-actions');
   diagnostic.setAttribute('role', 'status');
   let graph: ReturnType<typeof mountMatrixGraph> | undefined;
@@ -35,7 +39,7 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
     const b = el('button'); b.type = 'button'; b.textContent = title; owner.bind(b, command, cell.id); parent.append(b); return b;
   };
   if (editable) button('▾', 'matrix.fold', heading).setAttribute('aria-label', 'Fold mathematical object');
-  heading.append(title); body.append(formula, controls, host, explanationHost, legend, diagnostic, toolbar); dom.append(heading, body);
+  heading.append(title); body.append(note, formula, controls, host, explanationHost, legend, provenance, diagnostic, toolbar); dom.append(heading, body);
   const initialView = owner.runtime.read(cell).view;
   if (editable) {
     if (initialView.view === 'equation') {
@@ -54,6 +58,10 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
   }
   const render = () => {
     const { document: d, view } = owner.runtime.read(cell);
+    const details = owner.details?.(cell.resource), binding = details?.binding;
+    note.hidden = !details?.note; noteTitle.textContent = details?.note?.title ?? ''; noteContent.textContent = details?.note?.content ?? '';
+    provenance.textContent = binding ? `${binding.kind === 'derive' ? 'Derived matrix · local vector' : 'Transcluded source'} · ${binding.mode} · revision ${binding.revision}` : '';
+    provenance.hidden = !binding;
     dom.dataset['matrixResource'] = cell.resource; dom.dataset['matrixOccurrence'] = cell.occurrence; dom.dataset['mathView'] = view.view;
     title.textContent = view.view === 'equation' ? 'A · v = Av' : view.view === 'columns' ? 'Av · column combination' : 'v → Av · linked graph'; body.hidden = cell.folded;
     if (cell.folded) { explanation?.dispose(); explanation = undefined; return; }
@@ -64,6 +72,7 @@ export function createMatrixNodeView(initial: ProseNode, owner: MatrixViewOwner,
       const edit = field.edit(''), value = edit.kind === 'matrix' ? d.matrix.draft[edit.field] : d.vector.draft[edit.field];
       if (field.input.value !== value) field.input.value = value;
       field.input.setAttribute('aria-invalid', String(invalid.includes(field.key)));
+      field.input.readOnly = !!binding && (binding.kind === 'transclude' || edit.kind === 'matrix');
     }
     diagnostic.textContent = invalid.length ? 'Incomplete or out-of-range input. Showing the last valid values (−10 to 10).' : explanationDiagnostic;
     host.hidden = view.view !== 'graph';

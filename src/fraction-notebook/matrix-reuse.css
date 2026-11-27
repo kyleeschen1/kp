@@ -1,0 +1,5 @@
+.fn-matrix-reuse-dialog { color: var(--fn-text); background: var(--fn-background); font: inherit; max-width: min(38em, 85vw); padding: 1.5em; border: 1px solid var(--fn-muted); }
+.fn-matrix-reuse-dialog::backdrop { background: color-mix(in srgb, var(--fn-text) 25%, transparent); }
+.fn-matrix-reuse-dialog select { display: block; width: 100%; margin-block: .75em; font: inherit; color: inherit; background: inherit; }
+.fn-matrix-reuse-dialog button { font: inherit; margin-right: .5em; }
+.fn-matrix-provenance { font-size: .85em; color: var(--fn-muted); }

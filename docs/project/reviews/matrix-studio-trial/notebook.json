@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 3,
+  "id": "ee5456c1-eddd-4871-9dc8-57a09049bd5b",
+  "revision": 8,
+  "cells": [
+    {
+      "id": "3813699c-b9c1-44a7-95cd-33c4142f4b33",
+      "metadata": {},
+      "type": "block",
+      "kind": "paragraph",
+      "title": {
+        "id": "e1d29108-7294-4fdf-baac-5c96f7709abe",
+        "metadata": {},
+        "type": "title",
+        "content": [
+          {
+            "type": "text",
+            "text": "A matrix acts on a vector",
+            "marks": [],
+            "annotations": []
+          }
+        ]
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "What changes when you change the matrix? Edit A or v: the equation and graph share the same product Av. Another graph gives you a separate view of that result.",
+          "marks": [],
+          "annotations": []
+        }
+      ],
+      "children": [],
+      "layout": "flow",
+      "folded": false
+    },
+    {
+      "id": "e64b8ad9-9614-451b-8071-c81fe4ff3a95",
+      "metadata": {},
+      "type": "matrixObject",
+      "resource": "94c63355-f822-4b75-b1ae-b5f7b567cd62",
+      "occurrence": "ac13e5aa-7ad8-4841-8034-941010b84830",
+      "folded": false
+    },
+    {
+      "id": "53676f1e-7c18-46f5-89e9-e110d4b78ed0",
+      "metadata": {},
+      "type": "matrixObject",
+      "resource": "94c63355-f822-4b75-b1ae-b5f7b567cd62",
+      "occurrence": "5cbfa640-6930-4c6a-9970-ef5c502af3e9",
+      "folded": false
+    },
+    {
+      "id": "b58b72ef-7c89-4d4e-88aa-b2ea224b5a6e",
+      "metadata": {},
+      "type": "matrixObject",
+      "resource": "94c63355-f822-4b75-b1ae-b5f7b567cd62",
+      "occurrence": "fe438840-e11f-4c3b-920e-08ab7e21b7fe",
+      "folded": false
+    }
+  ],
+  "matrixResources": [
+    {
+      "schemaVersion": 1,
+      "id": "94c63355-f822-4b75-b1ae-b5f7b567cd62",
+      "matrix": {
+        "kind": "matrix2",
+        "id": "414b9b83-64a7-4d40-94a9-2f0565db6cbe",
+        "revision": 4,
+        "entries": [
+          [
+            2,
+            -1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "draft": {
+          "a00": "2",
+          "a01": "-1",
+          "a10": "1",
+          "a11": "2"
+        }
+      },
+      "vector": {
+        "kind": "vector2",
+        "id": "4a1a3076-a33e-4740-8ac1-de161e588098",
+        "revision": 2,
+        "entries": [
+          1,
+          2
+        ],
+        "draft": {
+          "x": "1",
+          "y": "2"
+        }
+      },
+      "result": {
+        "kind": "matrix-vector-product",
+        "id": "b455bbd5-c11f-4171-bf37-8ca248854912",
+        "recipe": "matrix2.vector2@1",
+        "matrix": "414b9b83-64a7-4d40-94a9-2f0565db6cbe",
+        "vector": "4a1a3076-a33e-4740-8ac1-de161e588098"
+      },
+      "occurrences": [
+        {
+          "id": "ac13e5aa-7ad8-4841-8034-941010b84830",
+          "resource": "b455bbd5-c11f-4171-bf37-8ca248854912",
+          "view": "equation",
+          "extent": 5
+        },
+        {
+          "id": "fe438840-e11f-4c3b-920e-08ab7e21b7fe",
+          "resource": "b455bbd5-c11f-4171-bf37-8ca248854912",
+          "view": "graph",
+          "extent": 5
+        },
+        {
+          "id": "5cbfa640-6930-4c6a-9970-ef5c502af3e9",
+          "resource": "b455bbd5-c11f-4171-bf37-8ca248854912",
+          "view": "columns",
+          "extent": 5
+        }
+      ]
+    }
+  ],
+  "matrixNotes": [
+    {
+      "resource": "94c63355-f822-4b75-b1ae-b5f7b567cd62",
+      "title": "Why does the result point straight up?",
+      "content": "Each column is weighted by its corresponding input coordinate, so the horizontal contributions cancel and the vertical contributions add to five."
+    }
+  ]
+}

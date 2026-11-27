@@ -1,0 +1,7 @@
+{
+  "mode": "--resume",
+  "inferenceAttempts": 0,
+  "humanAccepted": false,
+  "error": "expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 3\n\n- Array []\n+ Array [\n+   \"Failed to read the 'sessionStorage' property from 'Window': Access is denied for this document.\",\n+ ]",
+  "sharedConversationUnchanged": true
+}

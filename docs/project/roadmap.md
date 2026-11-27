@@ -3,10 +3,10 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-contextual-revision-trial`
-Execution Contract: `run-contract.kp.studio-foundations-20261127`
+Current Commitment: `kp-studio-finish`
+Execution Contract: `run-contract.kp.studio-finish-20261127`
 Next Product Milestone: `deliberate-mathematical-reuse`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -38,7 +38,7 @@ and shared defaults; discovery and actual-model revision are accepted.
 **Accepted:** [reference collection](reviews/2026-11-27-studio-reference-collection.md).
 **Complete, accepted:** [actual-response trial](reviews/2026-11-27-contextual-revision-trial.md).
 [Horizon audit](reviews/2026-11-27-twelve-loop-review.md): ten complete, two partial.
-Next proposed: deliberate reuse, then integrated studio proof. No further inference.
+Approved: [finish reuse and studio proof](reviews/2026-11-27-studio-finish.md).
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion remains separate.
 

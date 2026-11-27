@@ -4,6 +4,7 @@ import { migrateV1, migrateV2 } from './migration.ts';
 import { projectionText } from './inline-source.ts';
 import { readNotebookMathematics, readMathViewport } from '../notebook/math-model.ts';
 import { readMatrixResources, matrixOccurrence } from './matrix-data.ts';
+import { readMatrixBindings, readMatrixNotes } from './matrix-reuse-data.ts';
 import { readProjectionResources } from '../projection-explanation/resource.ts';
 import type { Annotation, AuthorCredit, Cell, ContentBlock, Definition, FractionNotebook, Inline, Mark, Step } from './types.ts';
 import { readCompositionResources } from '../composition-explanation/resource.ts';
@@ -24,7 +25,7 @@ export function readSteps(source: string, count: number, openingCaption?: string
 export function readNotebook(value: unknown): FractionNotebook {
   const input = object(value), v2 = input['schemaVersion'] === 1 ? object(migrateV1(input)) : input;
   const data = v2['schemaVersion'] === 2 ? object(migrateV2(v2)) : v2;
-  exact(data, ['schemaVersion', 'id', 'revision', 'cells', 'mathematics', 'matrixResources', 'projectionResources', 'compositionResources']);
+  exact(data, ['schemaVersion', 'id', 'revision', 'cells', 'mathematics', 'matrixResources', 'matrixBindings', 'matrixNotes', 'projectionResources', 'compositionResources']);
   if (data['schemaVersion'] !== 3 || !Number.isSafeInteger(data['revision']) || Number(data['revision']) < 0) return fail('Unsupported notebook version or revision.');
   const seen = new Set<string>([uuid(data['id'])]), annotations = new Map<UUID, Annotation>();
   const mathematics = data['mathematics'] === undefined ? undefined : readNotebookMathematics(data['mathematics']);
@@ -142,7 +143,12 @@ export function readNotebook(value: unknown): FractionNotebook {
   });
   if (cells.filter(c => c.type === 'story').length > 1) return fail('This exemplar supports at most one fractional animation.');
   if (cells.filter(c => c.type === 'articleHeader').length > 1 || cells.some((c, i) => c.type === 'articleHeader' && i !== 0)) return fail('An optional article header belongs at the beginning.');
-  return { schemaVersion: 3, id: uuid(data['id']), revision: Number(data['revision']), cells, ...(mathematics ? { mathematics } : {}), ...(matrixResources ? { matrixResources } : {}), ...(projectionResources ? { projectionResources } : {}), ...(compositionResources ? { compositionResources } : {}) };
+  const matrixBindings = data['matrixBindings'] === undefined ? undefined : readMatrixBindings(data['matrixBindings'], matrixResources ?? []);
+  const matrixNotes = data['matrixNotes'] === undefined ? undefined : readMatrixNotes(data['matrixNotes'], matrixResources ?? []);
+  if ((matrixBindings || matrixNotes) && !matrixResources) return fail('Matrix dependencies and notes require matrix resources.');
+  return { schemaVersion: 3, id: uuid(data['id']), revision: Number(data['revision']), cells, ...(mathematics ? { mathematics } : {}), ...(matrixResources ? { matrixResources } : {}),
+    ...(matrixBindings ? { matrixBindings } : {}), ...(matrixNotes ? { matrixNotes } : {}),
+    ...(projectionResources ? { projectionResources } : {}), ...(compositionResources ? { compositionResources } : {}) };
 }
 export function importFractionReading(markdown: string): { notebook: FractionNotebook; definition: Definition } {
   const match = /```kp-animation-story\s*\n([\s\S]*?)\n```/.exec(markdown);

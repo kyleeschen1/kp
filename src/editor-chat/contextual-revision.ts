@@ -2,6 +2,7 @@ import { sha256 } from '../kernel/sha256.ts';
 import { array, exact, object, text } from '../fraction-notebook/json.ts';
 import { fractionObjectId, sourceLimit } from '../fraction-notebook/object-protocol.ts';
 import { draftLimit } from './protocol.ts';
+import { uuid, type UUID } from '../notebook/model.ts';
 
 export const contextualRevisionProtocol = 'kp.annotation-revision.v1';
 export type ContextualRevisionGapCode = 'invalid-context' | 'invalid-proposal' | 'unsupported-object' |
@@ -81,14 +82,14 @@ function annotation(value: unknown): RevisionAnnotation {
   return Object.freeze({ id: identity(v['id']), title: text(v['title'], 300),
     content: text(v['content']), focusRefs: references(v['focusRefs'], 24) });
 }
-function snapshot(value: ContextualRevisionSnapshot) {
+function snapshot(value: ContextualRevisionSnapshot, supportedObject = fractionObjectId) {
   try {
     const v = object(value);
     exact(v, ['objectId', 'objectTitle', 'sourceRevision', 'draftSource', 'branchId', 'threadId', 'annotation', 'availableTargets', 'surroundingContext']);
-    if (v['objectId'] !== fractionObjectId) return gap('unsupported-object', 'This revision path supports the fraction annotation object only.');
+    if (v['objectId'] !== supportedObject) return gap('unsupported-object', 'This revision owner cannot revise another object.');
     const selected = annotation(v['annotation']), targets = references(v['availableTargets'], 256);
     if (!selected.focusRefs.length || selected.focusRefs.some(ref => !targets.includes(ref))) return gap('invalid-target', 'The current annotation needs targets inside this moment. Revalidate its source.');
-    return { objectId: fractionObjectId, objectTitle: text(v['objectTitle'], 300), sourceRevision: identity(v['sourceRevision']),
+    return { objectId: supportedObject, objectTitle: text(v['objectTitle'], 300), sourceRevision: identity(v['sourceRevision']),
       draftRevision: sha256(text(v['draftSource'], sourceLimit)), branchId: identity(v['branchId']), threadId: identity(v['threadId']),
       annotation: selected, availableTargets: targets, surroundingContext: text(v['surroundingContext'], 4096) };
   } catch (error) {
@@ -97,7 +98,7 @@ function snapshot(value: ContextualRevisionSnapshot) {
   }
 }
 function unchanged(request: ContextualRevisionRequest, current: ContextualRevisionSnapshot) {
-  const next = snapshot(current);
+  const next = snapshot(current, request.objectId);
   if (next.objectId !== request.objectId || next.sourceRevision !== request.sourceRevision)
     return gap('stale-source', 'The canonical object changed. Start a new request against the current source.');
   if (next.draftRevision !== request.draftRevision)
@@ -110,8 +111,11 @@ function unchanged(request: ContextualRevisionRequest, current: ContextualRevisi
 /** This owns proposal authority, not native conversation history, editing,
  * persistence or preview resources. Only explicit acceptance yields a one-shot
  * replacement; the caller applies it through its compiler/editor transaction. */
-export function createContextualRevisionSession(sessionId: string) {
+export function createContextualRevisionSession(sessionId: string, scope?: { readonly kind: 'matrix-note'; readonly resource: UUID }) {
   identity(sessionId);
+  // The second caller is explicitly admitted; this is not arbitrary JSON patch authority.
+  if (scope && scope.kind !== 'matrix-note') return gap('unsupported-object', 'Unsupported annotation owner.');
+  const supportedObject = scope ? `kp:matrix-note:${uuid(scope.resource)}` : fractionObjectId;
   let sequence = 0;
   let state: { kind: 'idle' | 'closed' } | { kind: 'requested'; request: ContextualRevisionRequest } |
     { kind: 'ready'; request: ContextualRevisionRequest; change: AnnotationRevisionChange } = { kind: 'idle' };
@@ -125,7 +129,7 @@ export function createContextualRevisionSession(sessionId: string) {
       if (state.kind === 'closed') return gap('owner-closed', 'This revision owner has closed.');
       // Validate before replacing a useful pending proposal. An invalid attempt
       // must not discard the last reviewable result.
-      const context = snapshot(current);
+      const context = snapshot(current, supportedObject);
       let clean: string;
       try { clean = text(instruction, 4096); if (!clean.trim()) throw new Error('Describe the requested revision.'); }
       catch (error) { return gap('invalid-context', error instanceof Error ? error.message : 'Invalid instruction.'); }

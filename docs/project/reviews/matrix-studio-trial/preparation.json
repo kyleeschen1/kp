@@ -1,0 +1,8 @@
+{
+  "mode": "--prepare",
+  "inferenceAttempts": 0,
+  "humanAccepted": false,
+  "preparedMs": 4313,
+  "model": "gpt-6-astra",
+  "sharedConversationUnchanged": true
+}

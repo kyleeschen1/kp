@@ -35,7 +35,7 @@ export const schema = new Schema({
           return a && (view === 'inputs' || view === 'explanation') ? { ...a, resource: uuid(el.dataset['compositionResource']), view, folded: el.dataset['folded'] === 'true' } : false;
         } catch { return false; }
       } }] },
-    matrixResources: { attrs: { value: {} }, atom: true, selectable: false,
+    matrixResources: { attrs: { value: {}, bindings: { default: null }, notes: { default: null } }, atom: true, selectable: false,
       toDOM: () => ['div', { hidden: '', 'data-matrix-store': '', contenteditable: 'false' }] },
     matrixObject: { attrs: { ...identity, resource: {}, occurrence: {}, folded: { default: false }, clipboardOccurrence: { default: null } }, atom: true, selectable: true, isolating: true,
       toDOM: n => ['section', { ...attrs(n), 'data-matrix-resource': n.attrs['resource'], 'data-matrix-occurrence': n.attrs['occurrence'], 'data-folded': String(n.attrs['folded']),
@@ -121,7 +121,7 @@ export function toProse(doc: FractionNotebook): ProseNode {
       ...(cell.title ? [schema.node('blockTitle', { id: cell.title.id, metadata: cell.title.metadata }, inlineNodes(cell.title.content))] : []),
       schema.node('paragraph', null, inlineNodes(cell.content)), ...cell.children.map(block)
     ]);
-  return schema.node('doc', null, [...(doc.mathematics ? [schema.node('mathematics', { value: doc.mathematics })] : []), ...(doc.matrixResources ? [schema.node('matrixResources', { value: doc.matrixResources })] : []), ...(doc.projectionResources ? [schema.node('projectionResources', { value: doc.projectionResources })] : []), ...(doc.compositionResources ? [schema.node('compositionResources', { value: doc.compositionResources })] : []), ...doc.cells.map(cell => {
+  return schema.node('doc', null, [...(doc.mathematics ? [schema.node('mathematics', { value: doc.mathematics })] : []), ...(doc.matrixResources ? [schema.node('matrixResources', { value: doc.matrixResources, bindings: doc.matrixBindings ?? null, notes: doc.matrixNotes ?? null })] : []), ...(doc.projectionResources ? [schema.node('projectionResources', { value: doc.projectionResources })] : []), ...(doc.compositionResources ? [schema.node('compositionResources', { value: doc.compositionResources })] : []), ...doc.cells.map(cell => {
     const attrs = { id: cell.id, metadata: cell.metadata };
     if (cell.type === 'matrixObject') return schema.node('matrixObject', cell);
     if (cell.type === 'projectionObject') return schema.node('projectionObject', cell);
@@ -188,6 +188,8 @@ export function fromProse(doc: ProseNode, basis: FractionNotebook): FractionNote
   return readNotebook({ schemaVersion: 3, id: basis.id, revision: basis.revision + 1, cells,
     ...(doc.firstChild?.type.name === 'projectionResources' ? { projectionResources: projectionResourcesIn(doc) } : {}),
     ...(doc.firstChild?.type.name === 'compositionResources' ? { compositionResources: compositionResourcesIn(doc) } : {}),
-    ...(doc.firstChild?.type.name === 'matrixResources' ? { matrixResources: matrixResourcesIn(doc) } : {}),
+    ...(doc.firstChild?.type.name === 'matrixResources' ? { matrixResources: matrixResourcesIn(doc),
+      ...(doc.firstChild.attrs['bindings'] === null ? {} : { matrixBindings: doc.firstChild.attrs['bindings'] }),
+      ...(doc.firstChild.attrs['notes'] === null ? {} : { matrixNotes: doc.firstChild.attrs['notes'] }) } : {}),
     ...(doc.firstChild?.type.name === 'mathematics' ? { mathematics: mathematicsIn(doc) } : {}) });
 }

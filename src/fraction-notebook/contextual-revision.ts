@@ -74,12 +74,12 @@ export function applyAnnotationRevision(view: Pick<EditorView, 'state' | 'dispat
   view.dispatch(closeHistory(view.state.tr));
 }
 
-export function revisionPrompt(request: ContextualRevisionRequest): string {
+export function revisionPrompt(request: ContextualRevisionRequest, label = 'fraction annotation'): string {
   const response = { protocol: contextualRevisionProtocol, sessionId: request.sessionId, request: request.request,
     objectId: request.objectId, sourceRevision: request.sourceRevision, draftRevision: request.draftRevision,
     annotationId: request.annotation.id, title: 'Replacement title', content: 'Replacement plain-language content',
     focusRefs: request.annotation.focusRefs };
-  const prompt = 'Revise only the selected fraction annotation described below. Preserve the mathematics, moment identity, and reasoning. '
+  const prompt = `Revise only the selected ${label} described below. Preserve the mathematics, moment identity, and reasoning. `
     + 'Use literal plain-language wording; do not add HTML, Markdown formatting, equations, timing, or new fields. '
     + 'Choose at least one focusRefs entry from availableTargets. Return only one JSON object matching the response shape. '
     + 'This is a proposal for the author to review, not permission to edit a file.\n\nContext:\n'

@@ -1,0 +1,62 @@
+{
+  "id": "run-contract.kp.studio-finish-20261127",
+  "kind": "run-contract",
+  "title": "Finish mathematical studio reuse and authoring",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.studio-finish-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-studio-finish.md"
+    }
+  ],
+  "verification": [
+    "npm run test:matrix-reuse",
+    "npm run typecheck:fraction-notebook",
+    "npm run visual:matrix-reuse",
+    "npm run test:project-vision"
+  ],
+  "allowedWork": [
+    "User go all the way authorizes bounded completion documented in studio-finish plan; six-hour ceiling with one-hour closeout reserve"
+  ],
+  "disallowedWork": [
+    "No new renderer, universal schema, deployment, broad mathematics, automatic shared chat mutation or open-ended model calls"
+  ],
+  "goal": "Finish horizon outcomes four and twelve through one matrix family and one integrated authoring artifact",
+  "target": "task.kp.studio-finish-20261127",
+  "slices": [
+    {
+      "id": "source",
+      "title": "Shared-source-boundary",
+      "summary": "Bounded publications preserve owner and closure identity with CAS; Copy, derived local vector and Transclude admit separately. Five focused tests and initial two-tab Chromium reuse checks pass; notes retain source/draft authority.",
+      "status": "complete"
+    },
+    {
+      "id": "notebooks",
+      "title": "Cross-notebook-reuse",
+      "summary": "Six Chromium and Firefox reuse cases pass: deliberate identities, live/pinned updates, source withdrawal, native undo, reload, export/import conflict retention and exact occurrence return.",
+      "status": "complete"
+    },
+    {
+      "id": "revision",
+      "title": "Matrix-contextual-revision",
+      "summary": "Explicitly scoped matrix-note adapter reuses existing proposal authority. Source, draft, thread and result-target pins are checked; preview and native-history acceptance preserve arithmetic. Actual one-turn response admitted and exported; human judgment remains pending.",
+      "status": "complete"
+    },
+    {
+      "id": "journey",
+      "title": "Integrated-authoring-proof",
+      "summary": "Authorized one actual read-only model turn completed in 12.356 seconds with zero tool messages; proposal preview, acceptance and export succeeded. Native source return hit a five-second harness readiness timeout; recovering from the exported actual notebook without further inference.",
+      "status": "in-progress"
+    },
+    {
+      "id": "review",
+      "title": "Combined-exemplar-review",
+      "status": "planned"
+    }
+  ]
+}

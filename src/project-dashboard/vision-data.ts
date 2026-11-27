@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-contextual-revision-trial",
-    title: "Accepted contextual annotation revision",
+    id: "kp-studio-finish",
+    title: "Finish deliberate reuse and the integrated studio proof",
     approval: "approved",
-    contractId: "run-contract.kp.studio-foundations-20261127",
-    finish: "One actual response passed the existing annotation preview and received human acceptance. The bounded foundation contract is complete; further inference remains excluded.",
-    source: { label: "Approved studio scope and retained exclusions", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
+    contractId: "run-contract.kp.studio-finish-20261127",
+    finish: "One matrix family supports deliberate cross-notebook Copy, Derive and Transclude, and one fresh artifact completes the conversational authoring and reuse journey with evidence and human review.",
+    source: { label: "Approved finish scope", href: "docs/project/reviews/2026-11-27-studio-finish.md" }
   },
   uncertainty: "Ten horizon outcomes have bounded accepted evidence; deliberate cross-notebook reuse and the integrated studio proof remain partial. One accepted model response establishes neither general model reliability nor learner transfer.",
-  nextJudgment: "Review the remaining reuse scope: independent Copy, dependency-preserving Derive and shared-source Transclude in one family, followed by one integrated authoring proof. The earlier actual annotation is accepted.",
+  nextJudgment: "Review the combined matrix reuse and contextual-note exemplar once its independent-copy, dependency, update and complete authoring workflow checks pass.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -44,11 +44,11 @@ export const projectVision: ProjectVision = {
       established: "Seven accepted references form one lightweight index. A fresh matrix contrast exports and reopens, and one real fraction annotation is accepted. General reuse and a single-artifact conversational authoring journey remain partial.",
       evidence: { label: "Accepted collection and authoring evidence", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "deliberate-mathematical-reuse", title: "Finish deliberate reuse in one mathematical family",
         finish: "Independent Copy, dependency-preserving Derive and shared-source Transclude work across two notebooks with explicit pinned/live updates, local view state, reload and undo. Then scope one integrated studio proof.",
-        excludes: "Implementation before bounded scope review, additional inference, a universal content database, new mathematics, changing shared chat drafts and publication.",
-        source: { label: "Twelve-loop evidence reconciliation and remaining gaps", href: "docs/project/reviews/2026-11-27-twelve-loop-review.md" }
+        excludes: "A universal content database, new mathematics, changing shared chat drafts, unbounded model spending and publication.",
+        source: { label: "Approved finish and preservation boundary", href: "docs/project/reviews/2026-11-27-studio-finish.md" }
       }
     },
     {

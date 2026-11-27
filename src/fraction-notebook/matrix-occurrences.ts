@@ -92,5 +92,6 @@ export function prepareMatrixPaste(doc: ProseNode, slice: Slice, resources: read
     return node.type.create({ ...node.attrs, clipboardOccurrence: null,
       ...(copy ? { id: newId(), resource: copy.source.id, occurrence: copy.ids.get(record.view.id)! } : {}) }, node.content, node.marks);
   });
-  return { resources: nextResources, slice: nextSlice };
+  return { resources: nextResources, slice: nextSlice,
+    copies: [...copied].map(([source, copy]) => ({ source, resource: copy.source.id })) };
 }
