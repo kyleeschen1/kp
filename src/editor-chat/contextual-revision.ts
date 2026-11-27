@@ -167,6 +167,11 @@ export function createContextualRevisionSession(sessionId: string) {
       unchanged(pending.request, current);
       state = { kind: 'idle' }; return pending.change;
     },
+    review(current: ContextualRevisionSnapshot): AnnotationRevisionChange {
+      const pending = active();
+      if (pending.kind !== 'ready') return gap('proposal-not-ready', 'Wait for a valid proposal before reviewing.');
+      unchanged(pending.request, current); return pending.change;
+    },
     pending: (): AnnotationRevisionChange | undefined => state.kind === 'ready' ? state.change : undefined,
     cancel() { if (state.kind !== 'closed') state = { kind: 'idle' }; },
     dispose() { state = { kind: 'closed' }; }
