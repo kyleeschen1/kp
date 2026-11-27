@@ -36,17 +36,45 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
     const view = active(); view.dispatch(view.state.tr.setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? d : old)));
   };
   const register = (command: TargetedCommand<Captured>) => handles.set(command.id, command);
-  register(registry.targeted({ id: 'matrix.graph', title: 'Graph selected matrix-vector product', category: 'Mathematics', scope: 'notebook', keywords: ['linked', 'representation', 'plot'], target: () => localTarget(),
+  const canInsertView = (c: Captured) => {
+    const ready = readiness(c); if (!ready.enabled) return ready;
+    const { document: d } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
+    return invalidResourceFields(d).length ? unavailable('Correct the numeric draft first') : d.occurrences.length >= 8 ? unavailable('This resource supports eight view occurrences') : available();
+  };
+  const insertView = (c: Captured, kind: 'graph' | 'columns') => {
+    const view = active(), { document: d, view: source } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
+    // A representation is another occurrence of the same source, not a copy
+    // of its mathematics. Both identities enter native history atomically.
+    const next = { ...source, id: newId(), view: kind }, updated = readMatrixVectorDocument({ ...d, occurrences: [...d.occurrences, next] });
+    const found = occurrence(c.cell.id)!, pos = found.pos + found.node.nodeSize;
+    const cell: MatrixObjectCell = { type: 'matrixObject', id: newId(), metadata: {}, resource: d.id, occurrence: next.id, folded: false };
+    const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? updated : old)).insert(pos, schema.node('matrixObject', cell));
+    view.dispatch(tr.setSelection(NodeSelection.create(tr.doc, pos)).scrollIntoView()); view.focus();
+  };
+  for (const command of [
+    { id: 'matrix.graph', title: 'Graph selected matrix-vector product', keywords: ['linked', 'representation', 'plot'], kind: 'graph' },
+    { id: 'matrix.explain', title: 'Explain column combination', keywords: ['explain', 'columns', 'combination', 'linear', 'animation', 'replay'], kind: 'columns' }
+  ] as const) register(registry.targeted({ id: command.id, title: command.title, keywords: command.keywords,
+    category: 'Mathematics', scope: 'notebook', target: () => localTarget(), state: canInsertView, run: c => insertView(c, command.kind) }));
+  const sourceOccurrence = (resource: MatrixObjectCell['resource']) => {
+    const d = current.find(candidate => candidate.id === resource);
+    const equations = new Set(d?.occurrences.filter(view => view.view === 'equation').map(view => view.id));
+    let found: { node: ProseNode; pos: number } | undefined;
+    active().state.doc.descendants((node, pos) => {
+      if (found) return false;
+      if (node.type.name === 'matrixObject' && node.attrs['resource'] === resource && equations.has(node.attrs['occurrence'])) found = { node, pos };
+      return undefined;
+    });
+    return found;
+  };
+  register(registry.targeted({ id: 'matrix.return-to-source', title: 'Return to matrix inputs', category: 'Mathematics', scope: 'notebook',
+    keywords: ['source', 'inputs', 'return', 'matrix', 'vector'], target: () => localTarget(),
     state: c => { const ready = readiness(c); if (!ready.enabled) return ready;
-      const { document: d } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
-      return invalidResourceFields(d).length ? unavailable('Correct the numeric draft first') : d.occurrences.length >= 8 ? unavailable('This resource supports eight view occurrences') : available(); },
+      return sourceOccurrence(c.cell.resource) ? available() : unavailable('This notebook has no matrix input occurrence for this source'); },
     run: c => {
-      const view = active(), { document: d, view: source } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
-      const next = { ...source, id: newId(), view: 'graph' as const }, updated = readMatrixVectorDocument({ ...d, occurrences: [...d.occurrences, next] });
-      const found = occurrence(c.cell.id)!, pos = found.pos + found.node.nodeSize;
-      const cell: MatrixObjectCell = { type: 'matrixObject', id: newId(), metadata: {}, resource: d.id, occurrence: next.id, folded: false };
-      const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? updated : old)).insert(pos, schema.node('matrixObject', cell));
-      view.dispatch(tr.setSelection(NodeSelection.create(tr.doc, pos)).scrollIntoView()); view.focus();
+      const view = active(), source = sourceOccurrence(c.cell.resource)!;
+      // Returning is navigation: preserve the source and its existing history.
+      view.dispatch(view.state.tr.setSelection(NodeSelection.create(view.state.doc, source.pos)).setMeta('addToHistory', false).scrollIntoView()); view.focus();
     } }));
   register(registry.targeted({ id: 'matrix.fold', title: 'Fold or unfold matrix object', category: 'Mathematics', scope: 'notebook', target: () => localTarget(), state: readiness,
     run: c => { const view = active(), found = occurrence(c.cell.id)!;
