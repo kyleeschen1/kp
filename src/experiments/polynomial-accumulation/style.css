@@ -1,0 +1,49 @@
+@import '@fontsource/source-serif-4/latin-400.css';
+@import '../../ui-theme/palette.css';
+@import '../../ui-theme/document-tokens.css';
+@import '../../tutorial/focus-deck-scaffold.css';
+@import 'katex/dist/katex.min.css';
+:root { color-scheme: light; color: var(--color-ink); background: var(--color-paper); --kp-focus-card-passage-font: var(--kp-document-font); --kp-focus-card-ui-font: var(--kp-document-font); }
+:root[data-kp-theme=dark] { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 400 var(--kp-document-body-size)/var(--kp-document-body-leading) var(--kp-document-font); letter-spacing: var(--kp-document-letter-spacing); }
+main { max-inline-size: 900px; margin-inline: auto; padding: clamp(16px, 4vw, 40px); }
+h1 { font-size: var(--kp-document-title-size); font-weight: var(--kp-document-heading-weight); }
+h2 { font-size: var(--kp-document-heading-size); font-weight: var(--kp-document-heading-weight); margin-block: .5em; }
+button, input, select { font: inherit; color: inherit; background: var(--color-paper); border: 1px solid var(--color-border); padding: .25em .5em; border-radius: 3px; }
+button, summary { cursor: pointer; } :focus-visible { outline: 2px solid var(--color-emphasis); outline-offset: 2px; }
+.tools, .controls, .playback, .readouts, .definitions { display: flex; flex-wrap: wrap; gap: .5em 1em; align-items: center; }
+.tools, .definitions { margin-block: 1em; } a { color: var(--color-green-light); }
+.controls input { inline-size: 4.5em; min-inline-size: 0; }
+.playback input[type=range] { flex: 1 1 12em; min-inline-size: 0; accent-color: var(--color-emphasis); }
+[data-play] { min-inline-size: 6em; }
+[data-diagnostic]:empty { display: none; } [data-diagnostic] { color: var(--color-red-light); }
+.instruction .kp-focus-deck__annotation { position: static; }
+.figures { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.5em; align-items: start; }
+.figures section { min-inline-size: 0; }
+figure { margin: .5em 0 0; max-inline-size: 100%; }
+svg { display: block; width: 100%; overflow: visible; }
+.graph-svg__background { fill: var(--color-paper); }
+.graph-axis line { stroke: var(--color-border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.graph-axis text, .graph-curve text { display: none; }
+svg :is(path, line, circle, rect) { vector-effect: non-scaling-stroke; }
+.graph-curve path { stroke: var(--color-ink); fill: none; stroke-width: 1; }
+[data-part=above] { fill: var(--color-green-light); fill-opacity: .22; stroke: none; }
+[data-part=below] { fill: url(#area-hatch); stroke: none; }
+#area-hatch path { stroke: var(--color-blue-light); stroke-width: 1; stroke-opacity: .6; }
+.point { fill: var(--color-ink); }
+.cursor { stroke: var(--color-ink); stroke-width: 1; }
+.anchor { stroke: var(--color-muted); stroke-dasharray: 3 4; stroke-width: 1; }
+.above { color: var(--color-green-light); } .below { color: var(--color-blue-light); }
+.key { display: flex; flex-direction: column; }
+/* Label anchors share the graph domain; text widths must not move zero. */
+.ticks { position: relative; block-size: 1.6em; }
+.ticks span { position: absolute; transform: translateX(-50%); }
+.ticks span:first-child { transform: none; } .ticks span:last-child { transform: translateX(-100%); }
+.readouts { margin-block: .75em; }
+[data-number] { display: inline-block; inline-size: calc(var(--digits) * 1ch); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.direction { min-block-size: 2lh; } .axis-note { color: var(--color-muted); }
+.definitions > span { max-inline-size: 100%; overflow-x: auto; } .definitions .katex { font-size: 1.1em; }
+dd { margin-inline-start: 0; min-block-size: 1lh; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; } details { margin-block: .7em; }
+@media (max-width: 560px) { .figures { grid-template-columns: minmax(0, 1fr); gap: .3em; } figure { max-inline-size: 320px; } .ticks { max-inline-size: 320px; } }
+@media (forced-colors: active) { .graph-curve path, .cursor, .anchor, #area-hatch path { stroke: CanvasText; } [data-part=above], .point { fill: CanvasText; } }

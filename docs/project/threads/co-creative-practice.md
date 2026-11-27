@@ -20,8 +20,9 @@ Accepted: [editable R2 projection](../reviews/2026-11-27-inner-product-projectio
 Accepted: [projection notebook](../reviews/2026-11-27-projection-notebook-reuse.md).
 Accepted: [composition exemplar](../reviews/2026-11-27-composition-area.md).
 Accepted: [composition notebook](../reviews/2026-11-27-composition-notebook-reuse.md).
-Approved: [circle/trig reference](../reviews/2026-11-27-circle-trig.md).
-Execution: `run-contract.kp.circle-trig-20261127`.
+Accepted: [circle/trig](../reviews/2026-11-27-circle-trig.md).
+Approved: [accumulation](../reviews/2026-11-27-polynomial-accumulation.md).
+Execution: `run-contract.kp.polynomial-accumulation-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

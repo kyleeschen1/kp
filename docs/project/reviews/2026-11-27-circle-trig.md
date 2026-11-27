@@ -1,7 +1,7 @@
 # Circle coordinates and trigonometric graphs
 
 Date: 2026-11-27
-Status: implemented and checked; canonical visual judgment pending.
+Status: implemented, checked and accepted by the user ("beautiful.resume").
 Authority: approved studio outcome 8, resumed after composition-notebook acceptance.
 Execution: `run-contract.kp.circle-trig-20261127`.
 
@@ -143,7 +143,7 @@ full types/architecture, standalone build and small two-browser smoke. Root
 production build, repository-wide unit suite, WebKit and a performance profile
 were not run. Learner understanding and reusable authoring remain unproved.
 
-The accepted composition notebook closes at 4/4. This circle reference stops
-at HUMAN_CHECKPOINT before a second host or angle-addition work. The actual-model
-annotation revision trial remains pending. Resume from
-`theseus work context task.kp.circle-trig-20261127 --mode brief` after feedback.
+The accepted circle reference closes at 4/4. The user accepts its presentation
+and resumes the approved horizon with [polynomial accumulation](2026-11-27-polynomial-accumulation.md).
+Second-host reuse and angle-addition remain separate; the actual-model
+annotation revision trial remains pending.

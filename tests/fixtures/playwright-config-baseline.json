@@ -7,6 +7,10 @@
     "sha256": "2c03b58b938f7443a79e6d617e3bd42390c9ced734dbca2360778cd43dbccb02",
     "projects": 3
   },
+  "playwright.polynomial-accumulation.config.ts": {
+    "sha256": "a48ee2fa04314101560841b9d29b810bf247d379981c90b6258df5c9db7811c7",
+    "projects": 3
+  },
   "playwright.composition-notebook.config.ts": {
     "sha256": "a5a38b707718b907743223962002877f56168f607cef44b252a365f5a7fafee4",
     "projects": 3

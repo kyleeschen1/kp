@@ -1,0 +1,59 @@
+{
+  "id": "run-contract.kp.polynomial-accumulation-20261127",
+  "kind": "run-contract",
+  "title": "Signed polynomial accumulation",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: three packages complete; canonical visual review remains.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.polynomial-accumulation-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-polynomial-accumulation.md"
+    }
+  ],
+  "verification": [
+    "npm run test:polynomial-accumulation",
+    "npm run visual:polynomial-accumulation"
+  ],
+  "revisitWhen": [
+    "User accepts or supplies feedback on the accumulation exemplar."
+  ],
+  "allowedWork": [
+    "Studio outcome 9; six-hour ceiling with final hour for verification and backup"
+  ],
+  "disallowedWork": [
+    "General solver, notebook reuse, shared motif promotion, model spending or publication"
+  ],
+  "goal": "One exact signed-area reference with geometric area, reversed bounds and linked accumulation graph",
+  "target": "task.kp.polynomial-accumulation-20261127",
+  "slices": [
+    {
+      "id": "semantics",
+      "title": "Exact-polynomial-accumulation",
+      "summary": "Exact rational primitives, orientation, partitioned area, six boundary cases and deterministic return pass focused tests.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Linked-area-reference",
+      "summary": "Static paired graphs, native definitions, source controls, local playback, themes, URL return and disposal implemented. First corrected browser cohort passes.",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "title": "Focused-integration",
+      "summary": "17 focused tests, eight browser checks, full/scoped types, architecture, tooling, static build and vision passed; evidence and limits recorded.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Canonical-visual-review",
+      "summary": "HUMAN_CHECKPOINT: judge signed versus geometric area and linked accumulation, including stacked phone comparison, before reuse.",
+      "status": "in-progress"
+    }
+  ]
+}

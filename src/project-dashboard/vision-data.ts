@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-circle-trig",
-    title: "Connect circle coordinates and trigonometric graphs",
+    id: "kp-polynomial-accumulation",
+    title: "Connect signed accumulation and antiderivatives",
     approval: "approved",
-    contractId: "run-contract.kp.circle-trig-20261127",
-    finish: "One compact reference links a unit-circle point to cosine/x and sine/y function values, preserving quadrant signs, negative angles and full turns. Review before notebook reuse or further derivations.",
-    source: { label: "Approved circle/trig scope", href: "docs/project/reviews/2026-11-27-circle-trig.md" }
+    contractId: "run-contract.kp.polynomial-accumulation-20261127",
+    finish: "One bounded polynomial reference links shaded contributions to exact signed totals and an accumulation graph, distinguishing geometric area and reversed bounds. Review before reuse.",
+    source: { label: "Approved accumulation scope", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Composition notebook reuse is accepted. Review whether the circle-to-wave correspondence and wrapped-angle explanation are clear. The separate actual-response annotation revision trial remains pending.",
+  nextJudgment: "The circle reference is accepted. Review whether the area treatment distinguishes signed totals from geometric area and connects the moving endpoint to accumulation. The actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry, quadratic forms, R2 projection and composition/signed area are accepted. Projection and composition share their accepted players with accepted saved notebook hosts. Actual model usefulness remains unproved.",
-      evidence: { label: "Composition notebook evidence and limits", href: "docs/project/reviews/2026-11-27-composition-notebook-reuse.md" },
+      established: "Linked matrix geometry, quadratic forms, R2 projection, composition and circle/trig are accepted. Projection and composition have accepted saved notebook hosts. Trig reuse and actual model usefulness remain unproved.",
+      evidence: { label: "Circle reference evidence and limits", href: "docs/project/reviews/2026-11-27-circle-trig.md" },
       outcome: {
         authority: "approved",
-        id: "circle-trig", title: "Connect circle coordinates and trig",
-        finish: "Inspect a real angle through one circle point and its sine/cosine graphs. Check signs, wrapping and exact return; human review judges correspondence and compactness.",
-        excludes: "Notebook integration, angle addition, general trig solvers, shared renderer promotion, paid model calls and publication.",
-        source: { label: "Approved trig reference", href: "docs/project/reviews/2026-11-27-circle-trig.md" }
+        id: "polynomial-accumulation", title: "Explain accumulation",
+        finish: "Inspect signed and geometric area for six exact polynomial cases; connect a moving endpoint to its accumulation graph and reverse the bounds. Human review judges the presentation.",
+        excludes: "General integration or root solvers, coefficient editing, notebook reuse, shared renderer promotion, paid model calls and publication.",
+        source: { label: "Approved accumulation reference", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" }
       }
     },
     {
@@ -815,6 +815,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves and resumes. Close notebook reuse; continue studio outcome 8 with one circle-coordinate and sine/cosine reference.",
       reason: "Test a periodic relationship through existing expression and graph owners, retaining a fresh exemplar gate rather than widening completed matrix work.",
       source: { label: "Circle/trig scope and preservation", href: "docs/project/reviews/2026-11-27-circle-trig.md" }
+    },
+    {
+      id: "accept-circle-continue-accumulation", on: "2026-11-27",
+      before: "The circle coordinate and sine/cosine reference awaited canonical visual review.",
+      after: "The user accepts it and resumes. Close the circle reference; continue studio outcome 9 with one exact polynomial accumulation reference.",
+      reason: "Extend the reference collection from pointwise values to signed contributions and totals, retaining separate semantic owners and a fresh visual gate.",
+      source: { label: "Accumulation scope and preservation", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" }
     }
   ]
 };

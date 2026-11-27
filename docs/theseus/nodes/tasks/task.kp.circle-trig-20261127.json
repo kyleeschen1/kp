@@ -2,9 +2,9 @@
   "id": "task.kp.circle-trig-20261127",
   "kind": "task",
   "title": "Connect circle coordinates and trigonometric graphs",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: implementation and verification complete; canonical circle reference needs visual judgment before reuse.",
+  "summary": "Circle-to-wave reference accepted; further reuse remains separate.",
   "sourceRefs": [
     {
       "kind": "file",

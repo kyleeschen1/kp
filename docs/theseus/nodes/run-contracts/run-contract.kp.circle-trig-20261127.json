@@ -2,8 +2,8 @@
   "id": "run-contract.kp.circle-trig-20261127",
   "kind": "run-contract",
   "title": "Circle coordinates and trig",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: implementation and verification complete; canonical circle reference needs visual judgment before reuse.",
+  "status": "resolved",
+  "summary": "All four slices complete; canonical circle reference accepted by the user.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -52,8 +52,8 @@
     {
       "id": "review",
       "title": "Canonical-visual-review",
-      "summary": "HUMAN_CHECKPOINT: inspect coordinate correspondence and wrapped-angle behavior on desktop and stacked phone diagrams before notebook reuse or promotion.",
-      "status": "in-progress"
+      "summary": "User accepts the circle reference: beautiful.resume. Continue approved studio horizon with bounded accumulation.",
+      "status": "complete"
     }
   ]
 }

@@ -1,0 +1,82 @@
+{
+  "id": "task.kp.polynomial-accumulation-20261127",
+  "kind": "task",
+  "title": "Explain signed polynomial accumulation",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: verified reference awaiting canonical visual judgment.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-polynomial-accumulation.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:polynomial-accumulation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:47:58.004Z",
+      "notes": "17 passed; exact laws, bounds, source return, native static artifact and existing expression preservation."
+    },
+    {
+      "command": "npm run author:polynomial-accumulation -- --check",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:47:58.902Z",
+      "notes": "Final generated HTML matches source."
+    },
+    {
+      "command": "npm run visual:polynomial-accumulation -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:47:59.663Z",
+      "notes": "Eight final Chromium/Firefox checks passed after harness selector repair and coordinate-label alignment fix. Inspected screenshots; no WebKit."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:48:00.366Z",
+      "notes": "Full types passed; later static notation and browser assertion additions covered by final scoped types."
+    },
+    {
+      "command": "npm run typecheck:polynomial-accumulation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:48:01.083Z",
+      "notes": "Final scoped types passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:48:01.716Z",
+      "notes": "All ownership and conformance gates passed."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:48:02.352Z",
+      "notes": "85 Playwright configs, 212 projects and 24 TypeScript projects passed; prior snapshots unchanged."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:48:02.975Z",
+      "notes": "75 passed; accepted circle reference and finite accumulation successor aligned."
+    },
+    {
+      "command": "npm run build:polynomial-accumulation",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T15:48:03.618Z",
+      "notes": "Final build passed: 19471 gzip bytes JS/CSS, 942699 total across 64 assets. Estimates, not measured network or memory."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews signed/geometric distinction, linked graphs and narrow layout."
+  ]
+}

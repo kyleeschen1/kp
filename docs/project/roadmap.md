@@ -3,9 +3,9 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-circle-trig`
-Execution Contract: `run-contract.kp.circle-trig-20261127`
-Next Product Milestone: `circle-trig`
+Current Commitment: `kp-polynomial-accumulation`
+Execution Contract: `run-contract.kp.polynomial-accumulation-20261127`
+Next Product Milestone: `polynomial-accumulation`
 Milestone Authority: approved
 
 ## Where we are going
@@ -31,8 +31,9 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [persistent projection notebook](reviews/2026-11-27-projection-notebook-reuse.md).
 **Accepted:** [composition and signed area](reviews/2026-11-27-composition-area.md).
 **Accepted:** [composition notebook](reviews/2026-11-27-composition-notebook-reuse.md).
-**Approved:** [circle/trigonometry reference](reviews/2026-11-27-circle-trig.md):
-linked coordinates and waves; review before reuse.
+**Accepted:** [circle/trig reference](reviews/2026-11-27-circle-trig.md).
+**Approved:** [polynomial accumulation](reviews/2026-11-27-polynomial-accumulation.md):
+signed and geometric area; review before reuse.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 

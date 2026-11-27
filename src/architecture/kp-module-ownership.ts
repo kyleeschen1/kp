@@ -179,6 +179,8 @@ export const kpModuleOwnershipRules: readonly KpModuleOwnershipRule[] =
     // separately approved physical extraction; no directory-wide promotion.
     ownershipRule("src/experiments/matrix-column-combinations/embed.ts", "renderer", "Bounded connected-host column player with no page ownership."),
     ownershipRule("src/experiments/circle-trig/model.ts", "experience", "Bounded angle projection through existing expression evaluation."),
+    ownershipRule("src/experiments/polynomial-accumulation/graph.ts", "renderer", "Graph2D paint of exact oriented accumulation."),
+    ownershipRule("src/experiments/polynomial-accumulation/view.ts", "renderer", "Static accumulation reference from the same mathematical source."),
     ownershipRule("src/experiments/circle-trig/graph.ts", "renderer", "Circle and function Graph2D paint for the reference."),
     ownershipRule("src/experiments/circle-trig/view.ts", "renderer", "Static reference markup from the same angle and graph source."),
     ownershipRule("src/experiments/matrix-column-combinations/column-geometry.ts", "experience", "Pure source-linked column projection shared by notebook and reference."),
