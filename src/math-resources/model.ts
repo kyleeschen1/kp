@@ -18,7 +18,7 @@ export interface ProductResource {
   readonly recipe: 'matrix2.vector2@1'; readonly matrix: UUID; readonly vector: UUID;
 }
 export interface MathOccurrence {
-  readonly id: UUID; readonly resource: UUID; readonly view: 'equation' | 'graph';
+  readonly id: UUID; readonly resource: UUID; readonly view: 'equation' | 'graph' | 'columns';
   readonly extent: number;
 }
 export interface MatrixVectorDocument {
@@ -102,7 +102,8 @@ export function readMatrixVectorDocument(raw: unknown): MatrixVectorDocument {
     const o = record(raw, ['id', 'resource', 'view', 'extent'], 'occurrence'), occurrenceId = uuid(o['id']), resource = uuid(o['resource']);
     if (ids.has(occurrenceId)) return gap('duplicate-id', occurrenceId, 'Occurrence identities must be unique.'); ids.add(occurrenceId);
     if (resource !== result.id) return gap('missing-resource', occurrenceId, 'This occurrence must reference the product.');
-    if (o['view'] !== 'equation' && o['view'] !== 'graph') return gap('unsupported-view', occurrenceId, 'Choose equation or graph.');
+    if (o['view'] !== 'equation' && o['view'] !== 'graph' && o['view'] !== 'columns')
+      return gap('unsupported-view', occurrenceId, 'Choose equation, graph or columns.');
     const extent = numeric(o['extent'], 250, occurrenceId);
     if (extent < 1) return gap('invalid-extent', occurrenceId, 'Use a viewport extent from 1 to 250.');
     return Object.freeze({ id: occurrenceId, resource, view: o['view'], extent });
