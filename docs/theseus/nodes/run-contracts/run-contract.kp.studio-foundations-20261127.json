@@ -2,8 +2,8 @@
   "id": "run-contract.kp.studio-foundations-20261127",
   "kind": "run-contract",
   "title": "Mathematical studio foundations",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: 4/5 accepted; actual-response revision passed technical preview and now awaits human usefulness judgment. Single inference authorization consumed. Shared chat and notebook unchanged.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -65,8 +65,8 @@
     {
       "id": "revision",
       "title": "Contextual-revision",
-      "summary": "Actual single-turn proposal validated and previewed in 9293 ms; shared conversation and notebook preserved, guard blocks additional sends. Human usefulness judgment on captured wording remains; inference authorization consumed.",
-      "status": "in-progress"
+      "summary": "User yes accepts actual Codex annotation and native preview. Single-turn proposal plus existing accept/reject/undo tests complete the bounded revision outcome; no further inference or shared-draft mutation authorized.",
+      "status": "complete"
     },
     {
       "id": "review",

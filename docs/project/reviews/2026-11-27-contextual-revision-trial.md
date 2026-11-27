@@ -1,7 +1,7 @@
 # Resume the actual-response annotation trial
 
 Date: 2026-11-27
-Status: authorized real response validated and previewed; awaiting human usefulness judgment.
+Status: actual response and native preview accepted by the user's “yes”; bounded outcome complete.
 Execution owner: existing `run-contract.kp.studio-foundations-20261127`,
 remaining `revision` package. Do not create a competing run or reopen its four
 accepted packages. The reference collection is accepted and closed.
@@ -151,4 +151,7 @@ broad fallback. Verification is scoped to the real isolated trial, Node types,
 the existing revision tests and project-memory checks: no product implementation,
 renderer, package dependency or build entrypoint changed. The previously recorded
 Chromium/Firefox tests still own deterministic rejection/acceptance/undo evidence;
-this actual trial establishes preview only. Required human judgment remains.
+this actual trial establishes preview only. The user's subsequent “yes” accepts
+the wording and preview, completing the human judgment gate. It does not apply
+the proposal to the shared notebook, authorize another model turn, or establish
+the complete [twelve-loop horizon](2026-11-27-twelve-loop-review.md).

@@ -2,8 +2,8 @@
   "id": "task.kp.studio-foundations-20261127",
   "kind": "task",
   "title": "Link mathematical views and make capabilities discoverable and revisable",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: actual Codex annotation and native preview ready; judge question-led equality wording. Exactly one authorized turn consumed, no further inference authorized; draft untouched. Evidence: docs/project/reviews/2026-11-27-contextual-revision-trial.md.",
+  "status": "resolved",
+  "summary": "COMPLETE: all five foundation packages accepted, including actual-response annotation usefulness by user yes. This closes the bounded foundation tranche, not all twelve horizon outcomes; deliberate cross-notebook reuse and integrated studio proof remain partial.",
   "sourceRefs": [
     {
       "kind": "file",

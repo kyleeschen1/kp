@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-contextual-revision-trial`
 Execution Contract: `run-contract.kp.studio-foundations-20261127`
-Next Product Milestone: `contextual-revision-trial`
-Milestone Authority: approved
+Next Product Milestone: `deliberate-mathematical-reuse`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -25,7 +25,7 @@ the rationale and superseded priorities.
 **Complete, accepted:** [three-card shelf](reviews/2026-11-27-reference-shelf.md).
 **Approved:** [studio foundations](reviews/2026-11-27-twelve-loop-horizon.md).
 [Accepted visuals](reviews/2026-11-27-studio-foundations.md): linked geometry
-and shared defaults; discovery/revision are checked. Actual-model judgment remains.
+and shared defaults; discovery and actual-model revision are accepted.
 **Accepted:** [notebook reuse and quadratic forms](reviews/2026-11-27-linked-math-views.md).
 **Complete, accepted:** [editable R2 projection](reviews/2026-11-27-inner-product-projection.md).
 **Accepted:** [persistent projection notebook](reviews/2026-11-27-projection-notebook-reuse.md).
@@ -36,9 +36,9 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [saddle/section reuse](reviews/2026-11-27-saddle-section-reuse.md).
 **Accepted:** [context return](reviews/2026-11-27-section-context-return.md).
 **Accepted:** [reference collection](reviews/2026-11-27-studio-reference-collection.md).
-**Resume existing scope:** [actual-response trial](reviews/2026-11-27-contextual-revision-trial.md).
-One authorized real response passed preview; judge its usefulness. The shared
-chat draft is intact. No further inference, new family or framework authorized.
+**Complete, accepted:** [actual-response trial](reviews/2026-11-27-contextual-revision-trial.md).
+[Horizon audit](reviews/2026-11-27-twelve-loop-review.md): ten complete, two partial.
+Next proposed: deliberate reuse, then integrated studio proof. No further inference.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion remains separate.
 

@@ -13,8 +13,8 @@ Accepted: [matrix adapter](../reviews/2026-11-27-matrix-notebook-adapter.md),
 [card](../reviews/2026-11-27-matrix-reference-card.md) and
 [shelf](../reviews/2026-11-27-reference-shelf.md).
 Approved: [studio horizon](../reviews/2026-11-27-twelve-loop-horizon.md).
-[Foundations](../reviews/2026-11-27-studio-foundations.md): visuals accepted;
-actual-model trial pending. Accepted: [linked views](../reviews/2026-11-27-linked-math-views.md).
+[Foundations](../reviews/2026-11-27-studio-foundations.md): accepted.
+Accepted: [linked views](../reviews/2026-11-27-linked-math-views.md).
 Accepted: [editable R2 projection](../reviews/2026-11-27-inner-product-projection.md).
 Accepted: [projection notebook](../reviews/2026-11-27-projection-notebook-reuse.md).
 Accepted: [composition exemplar](../reviews/2026-11-27-composition-area.md).
@@ -24,8 +24,9 @@ Accepted: [accumulation](../reviews/2026-11-27-polynomial-accumulation.md).
 Accepted: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md).
 Accepted: [context return](../reviews/2026-11-27-section-context-return.md).
 Accepted: [reference collection](../reviews/2026-11-27-studio-reference-collection.md).
-Next: [actual-response trial](../reviews/2026-11-27-contextual-revision-trial.md).
-Execution: `run-contract.kp.studio-foundations-20261127`; awaiting judgment.
+Accepted: [actual-response trial](../reviews/2026-11-27-contextual-revision-trial.md).
+Next proposed: [deliberate reuse](../reviews/2026-11-27-twelve-loop-review.md).
+Execution: `run-contract.kp.studio-foundations-20261127`; complete.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

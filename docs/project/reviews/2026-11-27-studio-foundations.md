@@ -1,9 +1,14 @@
 # Mathematical studio foundations
 
 Date: 2026-11-27
-Status: visuals accepted by “looks great! go as long as possible”; actual model trial pending.
+Status: complete; visuals and the subsequent actual-response annotation trial are accepted.
 Scope and rationale: [approved tranche](2026-11-27-twelve-loop-horizon.md).
 Execution authority: `run-contract.kp.studio-foundations-20261127`.
+
+The user's “yes” accepts the [actual response](2026-11-27-contextual-revision-trial.md)
+and closes the fifth package. Earlier pending-trial notes below describe the
+original visual handoff. The [twelve-loop assessment](2026-11-27-twelve-loop-review.md)
+retains the broader reuse and integrated-studio gaps.
 
 ## Author-visible changes
 

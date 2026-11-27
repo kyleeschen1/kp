@@ -6,14 +6,14 @@ export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
     id: "kp-contextual-revision-trial",
-    title: "Test one actual conversational annotation revision",
+    title: "Accepted contextual annotation revision",
     approval: "approved",
     contractId: "run-contract.kp.studio-foundations-20261127",
-    finish: "Complete the existing annotation-revision package with one actual response, checked preview and human usefulness judgment. The single explicitly authorized turn is complete; further inference remains excluded.",
+    finish: "One actual response passed the existing annotation preview and received human acceptance. The bounded foundation contract is complete; further inference remains excluded.",
     source: { label: "Approved studio scope and retained exclusions", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
   },
-  uncertainty: "One actual Codex annotation passed the existing validator and native preview in an isolated session. Human usefulness judgment, general model reliability, cross-host live subscription and learner transfer remain unproved.",
-  nextJudgment: "Review the actual two-sentence equality annotation and its native preview: does the question and specific subtraction explanation help? The one authorized turn is complete; the shared draft and notebook are unchanged.",
+  uncertainty: "Ten horizon outcomes have bounded accepted evidence; deliberate cross-notebook reuse and the integrated studio proof remain partial. One accepted model response establishes neither general model reliability nor learner transfer.",
+  nextJudgment: "Review the remaining reuse scope: independent Copy, dependency-preserving Derive and shared-source Transclude in one family, followed by one integrated authoring proof. The earlier actual annotation is accepted.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Seven accepted mathematical references are organized in one lightweight index. A fresh matrix copy and conceptual revision export and reopen through existing controls; one preview lifecycle defect required repair. General reuse and actual model usefulness remain unproved.",
+      established: "Seven accepted references form one lightweight index. A fresh matrix contrast exports and reopens, and one real fraction annotation is accepted. General reuse and a single-artifact conversational authoring journey remain partial.",
       evidence: { label: "Accepted collection and authoring evidence", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" },
       outcome: {
-        authority: "approved",
-        id: "contextual-revision-trial", title: "Finish the actual-response revision proof",
-        finish: "One genuine model proposal reaches the existing annotation preview and receives a human usefulness judgment; retain source pins, rejection, undo and the explicit inference authorization boundary.",
-        excludes: "Further inference beyond the completed single authorized turn, changing the shared chat draft, automatic file edits, new mathematics, a generic revision framework and publication.",
-        source: { label: "Actual response, preview evidence and remaining judgment", href: "docs/project/reviews/2026-11-27-contextual-revision-trial.md" }
+        authority: "proposed",
+        id: "deliberate-mathematical-reuse", title: "Finish deliberate reuse in one mathematical family",
+        finish: "Independent Copy, dependency-preserving Derive and shared-source Transclude work across two notebooks with explicit pinned/live updates, local view state, reload and undo. Then scope one integrated studio proof.",
+        excludes: "Implementation before bounded scope review, additional inference, a universal content database, new mathematics, changing shared chat drafts and publication.",
+        source: { label: "Twelve-loop evidence reconciliation and remaining gaps", href: "docs/project/reviews/2026-11-27-twelve-loop-review.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Accepted actual-response annotation revision",
+      scope: "One explicitly authorized Codex turn produced a valid two-sentence fraction annotation in 9.3 seconds. Native preview and human judgment passed; shared chat and notebook were unchanged. Existing tests cover acceptance, rejection and undo. This closes the bounded foundation outcome, not general conversational authoring.",
+      source: { label: "Actual response and acceptance", href: "docs/project/reviews/2026-11-27-contextual-revision-trial.md" }
+    },
     {
       title: "Question-led mathematical reference collection accepted",
       scope: "A static index organizes seven accepted hosts. A fresh matrix example and signed-weight revision were authored through product controls, exported and reopened with independent saved positions. A shared loading defect needed repair; actual-model revision and general reuse remain incomplete.",
@@ -872,6 +877,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the collection and resumes. Close its finite contract and return to the existing foundation revision package, with one concrete request prepared and the model-spending exclusion retained.",
       reason: "Resolve the central authoring uncertainty before adding another demonstration; preserve the existing shared chat draft and do not call the twelve-loop vision fully complete.",
       source: { label: "Actual-response trial readiness and authorization", href: "docs/project/reviews/2026-11-27-contextual-revision-trial.md" }
+    },
+    {
+      id: "accept-actual-response-audit-twelve-outcomes", on: "2026-11-27",
+      before: "The actual annotation awaited human judgment; the foundation counter did not describe the full twelve-item horizon.",
+      after: "The user accepts the annotation. Close the foundation contract and identify ten bounded outcomes complete with deliberate reuse and integrated studio proof partial.",
+      reason: "Preserve original finish lines and make the remaining product integration visible before adding mathematical breadth. The next bounded reuse scope is proposed, not silently authorized.",
+      source: { label: "Twelve-loop evidence audit", href: "docs/project/reviews/2026-11-27-twelve-loop-review.md" }
     }
   ]
 };
