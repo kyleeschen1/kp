@@ -3,6 +3,7 @@ import type { KpVector2 } from "./vector-dot-projection-exemplar-contract.ts";
 export type KpVectorDotProjectionDiagnosticCode =
   | "vector.component.non-finite"
   | "vector.component.non-integer"
+  | "vector.arithmetic.unsafe"
   | "projection.target.zero";
 
 export interface KpVectorDotProjectionDiagnostic {
@@ -92,6 +93,15 @@ export function compileKpVectorDotProjectionSemanticModel(input: {
 
   const dotProduct = dot(input.sourceVector, input.targetVector);
   const sourceNormSquared = dot(input.sourceVector, input.sourceVector);
+  // Integer inputs alone cannot guarantee exact component products or sums.
+  // Reject at the mathematical owner before a renderer can claim exact values.
+  const products = input.sourceVector.map((value, index) => value * input.targetVector[index]!);
+  if (![dotProduct, sourceNormSquared, targetNormSquared, ...products].every(Number.isSafeInteger)) {
+    return Object.freeze({ status: 'rejected' as const, diagnostics: Object.freeze([
+      Object.freeze({ code: 'vector.arithmetic.unsafe' as const, path: 'vectors',
+        message: 'Vector products and squared lengths must remain safe integers.' })
+    ]) });
+  }
   const projectionScale = dotProduct / targetNormSquared;
   const projectionVector = scale(input.targetVector, projectionScale);
   const residualVector = subtract(input.sourceVector, projectionVector);

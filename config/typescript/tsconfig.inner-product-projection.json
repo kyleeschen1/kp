@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "lib": ["ES2022", "DOM", "DOM.Iterable"], "module": "ESNext", "moduleResolution": "Bundler", "noEmit": true, "types": ["vite/client", "node"] },
+  "include": ["../../src/experiments/inner-product-projection", "../../src/animation/dot-projection-model-frame.ts", "../../src/animation/dot-projection-runtime-frame.ts", "../../tests/inner-product-projection*.ts", "../../tests/vector-dot-projection-semantic-model.test.ts", "../../tests/kp-dot-projection-animation.test.ts", "../../tests/vector-dot-projection-svg.test.ts"]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "task.kp.inner-product-projection-20261127",
+  "kind": "task",
+  "title": "Author an editable R2 projection explanation",
+  "status": "deferred",
+  "summary": "Checked editable vector-pair explanation is ready; presentation acceptance remains. No notebook or library promotion inferred.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-inner-product-projection.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:inner-product-projection",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T13:56:58.542Z",
+      "notes": "17 checks pass, including 484 signed projection cases, typed draft and arithmetic gaps, existing catalogue samples and reverse SVG parity."
+    },
+    {
+      "command": "npm run visual:inner-product-projection -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T13:56:59.563Z",
+      "notes": "Six Chromium/Firefox workflow checks pass without retries after documented control/guide fixes. Includes narrow themes, zero inputs, draft retention, stale picker commands and simulated persisted-page lifecycle."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T13:57:00.277Z",
+      "notes": "Full app, node, test, Svelte and domain checks passed. Final scoped typecheck:inner-product-projection passed after the control and guide changes."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T13:57:00.943Z",
+      "notes": "Shared sampler extraction retains dependency and semantic ownership gates; no exceptions added."
+    },
+    {
+      "command": "npm run build:inner-product-projection",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T13:57:01.690Z",
+      "notes": "Complete JS/CSS 102065 gzip bytes; all emitted assets including HTML and all font formats 1014075 across 64 files. Estimates, not runtime/memory. No new dependency."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T13:57:29.764Z",
+      "notes": "75 tests pass after reconciling current approval, review boundary and retained completed milestone."
+    }
+  ],
+  "revisitWhen": [
+    "User judges signed projection, residual legibility and step cadence."
+  ]
+}

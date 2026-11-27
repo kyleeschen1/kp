@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-linked-math-views",
-    title: "Reuse linked mathematics and inspect algebraic forms",
+    id: "kp-inner-product-projection",
+    title: "Author an editable inner-product and projection explanation",
     approval: "approved",
-    contractId: "run-contract.kp.linked-math-views-20261127",
-    finish: "Reuse the accepted linked matrix explanation in notebook and reference; inspect bounded quadratic forms beside the original curve. Preserve source identity, local playback and history. The accepted forms now enter ordinary graph views; promotion checks close this finite commitment.",
-    source: { label: "Approved linked-views continuation", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
+    contractId: "run-contract.kp.inner-product-projection-20261127",
+    finish: "One editable Euclidean R2 vector pair links native notation to signed projection and a perpendicular residual, including orthogonal and zero cases. Reuse the existing compiler and sampler; stop at the independent exemplar review before notebook or library promotion.",
+    source: { label: "Approved projection exemplar", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "Scope one R2 inner-product/projection exemplar as the next mathematical family. A separate actual-response annotation revision trial remains pending; automated fixtures do not establish model usefulness.",
+  nextJudgment: "Review the editable R2 projection: is the scalar/vector distinction, signed direction and perpendicular remainder clear? The separate actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Linked matrix geometry and quadratic forms are accepted. Notebook/reference share one matrix player; ordinary quadratic graphs expose the three forms through existing source authority and discovery. Occurrence reclamation and reader lifecycle are checked. Actual model usefulness remains pending.",
+      established: "Linked matrix geometry and quadratic forms are accepted. The editable R2 projection candidate reuses the existing compiler and sampler with signed/zero cases, native notation and local discovery; its presentation awaits review. Notebook/reference matrix reuse remains intact. Actual model usefulness remains pending.",
       evidence: { label: "Linked views evidence and review", href: "docs/project/reviews/2026-11-27-linked-math-views.md" },
       outcome: {
-        authority: "proposed",
+        authority: "approved",
         id: "inner-product-projection", title: "Link inner products to geometric projection",
-        finish: "Scope and review one R2 exemplar whose source vectors drive notation, signed projection and a perpendicular residual, including positive, negative, orthogonal and zero cases. Demonstrate discoverable authoring before broader promotion.",
-        excludes: "Implementation before bounded scope selection, arbitrary inner-product spaces, general CAS, broad curriculum, universal schema, paid model calls and publication.",
-        source: { label: "Next family in the studio horizon", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
+        finish: "Review one independent R2 exemplar whose editable integer vectors drive notation, signed projection and a perpendicular residual, including positive, negative, orthogonal and zero cases. The existing sampler and compiler remain authoritative; local discovery exposes supported inspections.",
+        excludes: "Notebook persistence changes, decimal coordinates in this first exemplar, arbitrary inner-product spaces, general CAS, broad curriculum, paid model calls and publication.",
+        source: { label: "Approved editable projection boundary", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
       }
     },
     {
@@ -768,6 +768,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts the candidate and resumes. Adopt the forms in ordinary quadratic graphs and close the finite linked-views milestone; propose a separately scoped R2 inner-product/projection exemplar.",
       reason: "The existing matrix and quadratic workflows now demonstrate linked reuse. A new geometric relationship offers more authoring value than extending the completed milestone, while preserving the unresolved actual-model trial.",
       source: { label: "Linked views acceptance and next boundary", href: "docs/project/reviews/2026-11-27-linked-math-views.md" }
+    },
+    {
+      id: "approve-editable-projection", on: "2026-11-27",
+      before: "Linked views were complete; a separately scoped R2 projection was proposed.",
+      after: "The user approves implementation. Reuse the earlier projection compiler and reversible sampler in one editable independent reference, with integer inputs, explicit zero cases and a local relationship picker.",
+      reason: "Make another important relationship authorable while preserving the old fixed catalogue artifact and deferring broader integration until the new exemplar is reviewed.",
+      source: { label: "Approved projection and preservation boundary", href: "docs/project/reviews/2026-11-27-inner-product-projection.md" }
     }
   ]
 };

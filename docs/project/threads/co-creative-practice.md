@@ -16,8 +16,8 @@ Approved: [studio horizon](../reviews/2026-11-27-twelve-loop-horizon.md).
 [Foundations](../reviews/2026-11-27-studio-foundations.md): visuals accepted;
 actual-model trial pending. [Linked views](../reviews/2026-11-27-linked-math-views.md)
 are accepted; default adoption closes their milestone.
-Record: `run-contract.kp.linked-math-views-20261127`.
-Proposed successor: one R2 inner-product/projection exemplar.
+Approved: [editable R2 projection](../reviews/2026-11-27-inner-product-projection.md).
+Execution: `run-contract.kp.inner-product-projection-20261127`; review before promotion.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).

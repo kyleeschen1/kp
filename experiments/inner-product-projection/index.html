@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" data-kp-theme="light">
+  <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" /><title>Inner product and projection · Kinetic Press</title></head>
+  <body>
+    <main id="projection">
+      <h1>How much of one vector lies along another?</h1>
+      <p>Find a multiple of <strong>b</strong> that leaves a perpendicular remainder.
+        The dot product tells us the signed contribution along that direction.</p>
+      <div class="tools"><label>Example <select aria-label="Example"></select></label>
+        <button data-discover>Explore relationships</button><button data-theme>Dark theme</button></div>
+      <form class="vectors" aria-label="Vector coordinates">
+        <fieldset><legend>a · source</legend><label>x <input aria-label="a x" inputmode="numeric" value="4" /></label><label>y <input aria-label="a y" inputmode="numeric" value="2" /></label></fieldset>
+        <fieldset><legend>b · direction</legend><label>x <input aria-label="b x" inputmode="numeric" value="1" /></label><label>y <input aria-label="b y" inputmode="numeric" value="1" /></label></fieldset>
+      </form>
+      <p class="input-help">Integer coordinates, −1000 to 1000. Decimal input is not supported in this exemplar.</p>
+      <p data-diagnostic role="status"></p>
+      <section data-undefined hidden><h2>No direction to project onto</h2><p>When b is zero, b · b is zero. The formula divides by zero, so this projection is undefined. Choose a nonzero b to continue.</p></section>
+      <section data-view aria-label="Linked projection explanation">
+        <p data-cue aria-live="polite"></p>
+        <div class="comparison"><div class="evidence"><div data-notation></div><p data-interpretation></p>
+          <p class="key"><span data-role="source">a · solid</span><span data-role="target">b · dashed</span><span data-role="parallel">p · parallel part</span><span data-role="residual">r · dotted remainder</span></p>
+        </div><figure data-graph></figure></div>
+        <div class="playback"><button data-back aria-label="Previous step">←</button><button data-play>Play</button><button data-next aria-label="Next step">→</button>
+          <label>Step <select aria-label="Explanation step"></select></label>
+          <input type="range" min="0" max="1" step="0.0001" value="0" aria-label="Explanation progress" />
+        </div>
+        <p class="input-help">Projection coordinates are rounded for display. The diagram uses unrounded values.</p>
+      </section>
+      <details><summary>Why divide by b · b?</summary><p>Write the parallel part as p = αb. The remainder is r = a − αb.
+        Requiring r · b = 0 gives a · b − α(b · b) = 0. Solving for α gives the projection formula, provided b is nonzero.</p>
+        <p>Try reversing b. The scalar α changes sign, but αb—and therefore the projected vector—stays the same.</p></details>
+      <noscript><p>The editable diagram needs JavaScript. The explanation above remains readable.</p></noscript>
+    </main>
+    <script type="module" src="/src/experiments/inner-product-projection/app.ts"></script>
+  </body>
+</html>

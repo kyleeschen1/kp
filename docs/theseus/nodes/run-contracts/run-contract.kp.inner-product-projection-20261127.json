@@ -1,0 +1,53 @@
+{
+  "id": "run-contract.kp.inner-product-projection-20261127",
+  "kind": "run-contract",
+  "title": "Editable inner product and projection",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT 2/3: implementation and checks complete; review the canonical independent projection before broader integration.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.inner-product-projection-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-inner-product-projection.md"
+    }
+  ],
+  "verification": [
+    "npm run test:inner-product-projection",
+    "npm run visual:inner-product-projection"
+  ],
+  "revisitWhen": [
+    "User reviews the editable projection at /experiments/inner-product-projection/."
+  ],
+  "allowedWork": [
+    "Approved bounded R2 projection exemplar and required owner repairs"
+  ],
+  "disallowedWork": [
+    "Notebook migration, general CAS, publication, paid model calls, broad visual promotion"
+  ],
+  "goal": "One editable vector pair links notation to signed projection and residual, with a reviewable first exemplar",
+  "target": "task.kp.inner-product-projection-20261127",
+  "slices": [
+    {
+      "id": "model",
+      "title": "Source and shared sampling",
+      "summary": "Existing compiler and eight-beat sampler reused; signed, zero, geometry, reverse and unsafe-integer boundaries pass focused tests. Catalogue endpoints preserved.",
+      "status": "complete"
+    },
+    {
+      "id": "exemplar",
+      "title": "Editable linked exemplar",
+      "summary": "Independent editable reference implemented and checked: existing math/sampler, native notation, Graph2D, shared clock, themes and row picker. URL restores source and semantic step; notebook persistence unchanged.",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Verification and human review",
+      "summary": "Technical checks and desktop/phone captures ready. Human judgment of compact graph, scalar/vector distinction and eight-step presentation required before promotion.",
+      "status": "in-progress"
+    }
+  ]
+}

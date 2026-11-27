@@ -3,10 +3,10 @@
 Last Updated: 2026-11-27
 Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
-Current Commitment: `kp-linked-math-views`
-Execution Contract: `run-contract.kp.linked-math-views-20261127`
+Current Commitment: `kp-inner-product-projection`
+Execution Contract: `run-contract.kp.inner-product-projection-20261127`
 Next Product Milestone: `inner-product-projection`
-Milestone Authority: proposed
+Milestone Authority: approved
 
 ## Where we are going
 
@@ -29,8 +29,8 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 [Accepted visuals](reviews/2026-11-27-studio-foundations.md): linked geometry
 and shared defaults; discovery/revision are checked. Actual-model judgment remains.
 **Accepted:** [notebook reuse and quadratic forms](reviews/2026-11-27-linked-math-views.md).
-Default adoption closes this commitment. Proposed next: R2 inner-product/projection
-in the [horizon](reviews/2026-11-27-twelve-loop-horizon.md).
+Default adoption closes linked views. **Approved:** [editable R2 projection](reviews/2026-11-27-inner-product-projection.md),
+reusing existing mathematics and sampling; review one exemplar before promotion.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion and section-clipping judgment remain separate.
 

@@ -7,28 +7,14 @@ import {
   type KpAnimationRuntimeFrame
 } from "./runtime-sampler.ts";
 import type { KpLawCheckResult, KpLawFailure } from "../semantic/asset-laws.ts";
-import {
-  kpVectorDotProjectionExemplarContract
-} from "./vector-dot-projection-exemplar-contract.ts";
+import { sampleDotProjectionModel, type DotProjectionComponentPairFrame } from "./dot-projection-model-frame.ts";
+export type { DotProjectionComponentPairFrame } from "./dot-projection-model-frame.ts";
 import {
   compileKpVectorDotProjectionSemanticModel,
-  type KpVectorDotProjectionComponentLineage,
-  type KpVectorDotProjectionSemanticModel
+  type KpVectorDotProjectionComponentLineage
 } from "./vector-dot-projection-semantic-model.ts";
 
 type Vector2 = readonly [number, number];
-
-export interface DotProjectionComponentPairFrame {
-  readonly index: 0 | 1;
-  readonly axis: "x" | "y";
-  readonly product: number;
-  readonly cumulativeDotProduct: number;
-  readonly status: "pending" | "active" | "accumulated";
-  readonly lineageId: string;
-  readonly sourceGeometryId: string;
-  readonly targetGeometryId: string;
-  readonly projectionGeometryId: string;
-}
 
 export interface DotProjectionRuntimeFrame {
   readonly id: string;
@@ -118,10 +104,6 @@ export function sampleDotProjectionRuntimeFrame(input: {
   const graphProgress = input.runtimeFrame.clock.direction === "rewind"
     ? 1 - input.runtimeFrame.clock.progress
     : input.runtimeFrame.clock.progress;
-  const beat = semanticBeat(graphProgress);
-  const projectionDropProgress = intervalProgress(graphProgress, 5 / 8, 6 / 8);
-  const residualRevealProgress = intervalProgress(graphProgress, 6 / 8, 7 / 8);
-
   return {
     id: `dot-projection-frame.${input.runtimeFrame.id}.${target.id}`,
     kind: "dot-projection-runtime-frame",
@@ -129,29 +111,7 @@ export function sampleDotProjectionRuntimeFrame(input: {
     runtimeFrameId: input.runtimeFrame.id,
     renderTargetId: target.id,
     progress: input.runtimeFrame.clock.progress,
-    graphProgress,
-    semanticBeatId: beat.id,
-    semanticBeatProgress: beat.progress,
-    leftVector: left,
-    rightVector: right,
-    sourceNormSquared: model.sourceNormSquared,
-    targetNormSquared: model.targetNormSquared,
-    dotProduct: model.dotProduct,
-    projectionScale: model.projectionScale.value,
-    projectionVector: model.projectionVector,
-    orthogonalVector: model.residualVector,
-    angleRadians: model.angleRadians,
-    dropPoint: interpolate(
-      model.sourceVector,
-      model.projectionVector,
-      projectionDropProgress
-    ),
-    projectionDropProgress,
-    residualRevealProgress,
-    rightAngleVisible: graphProgress >= 7 / 8,
-    componentPairs: componentPairFrames(model, graphProgress),
-    componentLineage: model.componentLineage,
-    accessibleDescription: model.accessibleDescription,
+    ...sampleDotProjectionModel(model, graphProgress),
     activeTransformationIds: [...input.runtimeFrame.activeTransformationIds]
   };
 }
@@ -222,62 +182,6 @@ export function checkDotProjectionRuntimeLaw(input: {
     passed: failures.length === 0,
     failures
   };
-}
-
-function componentPairFrames(
-  model: KpVectorDotProjectionSemanticModel,
-  graphProgress: number
-): readonly DotProjectionComponentPairFrame[] {
-  const activeIndex = graphProgress < 1 / 8
-    ? -1
-    : graphProgress < 2 / 8
-      ? 0
-      : graphProgress < 3 / 8
-        ? 1
-        : 2;
-  return model.componentLineage.map((lineage) => Object.freeze({
-    index: lineage.index,
-    axis: lineage.axis,
-    product: lineage.product,
-    cumulativeDotProduct: lineage.cumulativeDotProduct,
-    status: activeIndex > lineage.index
-      ? "accumulated" as const
-      : activeIndex === lineage.index
-        ? "active" as const
-        : "pending" as const,
-    lineageId: lineage.id,
-    sourceGeometryId: lineage.sourceGeometryId,
-    targetGeometryId: lineage.targetGeometryId,
-    projectionGeometryId: lineage.projectionGeometryId
-  }));
-}
-
-function semanticBeat(progress: number): {
-  readonly id: string;
-  readonly progress: number;
-} {
-  const beatIds = kpVectorDotProjectionExemplarContract.beatIds;
-  if (progress >= 1) {
-    return { id: beatIds[beatIds.length - 1]!, progress: 1 };
-  }
-  const scaled = Math.max(0, progress) * beatIds.length;
-  const index = Math.min(beatIds.length - 1, Math.floor(scaled));
-  return { id: beatIds[index]!, progress: scaled - index };
-}
-
-function intervalProgress(
-  progress: number,
-  start: number,
-  end: number
-): number {
-  return Math.min(1, Math.max(0, (progress - start) / (end - start)));
-}
-
-function interpolate(left: Vector2, right: Vector2, progress: number): Vector2 {
-  return [
-    left[0] + (right[0] - left[0]) * progress,
-    left[1] + (right[1] - left[1]) * progress
-  ];
 }
 
 function sampleAt(
