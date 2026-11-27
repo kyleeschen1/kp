@@ -5,7 +5,7 @@ import { sampleKpReaderScrollProgress, sampleKpReaderScrollPosition } from '../s
 
 test('phone, embedded and desktop layouts preserve the same scroll sensitivity in both directions', () => {
   const reference = documentPassageCadence(840);
-  const sensitivities = [];
+  const sensitivities: number[] = [];
   for (const height of [160, 320, 440, 480, 740, 844, 1100, 1600]) {
     const cadence = documentPassageCadence(height);
     assert.deepEqual(cadence, reference, 'Display size must not compress reading or animation travel');

@@ -56,6 +56,11 @@ const privateClockPaths = paths([
   // iframe slot. Both cancel on disposal; neither samples or advances time.
   "src/fraction-notebook/numbers.ts",
   "src/fraction-notebook/workspace.ts",
+  // These UI schedules measure selection geometry, expire a key prefix and
+  // display wall-clock minutes. None advances mathematical animation time.
+  "src/fraction-notebook/active-line.ts",
+  "src/fraction-notebook/command-picker.ts",
+  "src/fraction-notebook/modeline.ts",
   "src/app-adapters/linear-equation-story-animation-stage.ts",
   "src/app-adapters/linear-equation-story-progress-controller.ts",
   "src/editor/animation-catalogue-interaction-host.ts",

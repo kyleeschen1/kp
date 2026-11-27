@@ -23,6 +23,8 @@ test('standalone picker narrows, navigates beyond five results, restores focus a
   await expect(page.locator('#interaction-picker')).toHaveCount(1);
   await query.fill('orange'); await query.press('Enter'); await expect(page.locator('#selection')).toHaveText('Selected Orange · fruit.orange');
   expect(errors).toEqual([]);
+  await launch.click();
+  await page.screenshot({ path: test.info().outputPath('picker.png'), fullPage: true });
 });
 
 test('tag filters preserve query and return focus without growing past five mounted rows', async ({ page }) => {

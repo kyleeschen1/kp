@@ -1,12 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { fractionObject, previewFractionObject } from '../src/fraction-notebook/object-compile.ts';
 import { allowsObjectParent, objectProtocol, readObjectRequest, sourceLimit } from '../src/fraction-notebook/object-protocol.ts';
 
 const canonical = readFileSync(new URL('../content/authoring/algebra/fractional-linear-reasoning.article.md', import.meta.url), 'utf8');
 test('object descriptor is stable, revisioned, preview-only and uses canonical identities', () => {
   const object = fractionObject(canonical);
+  // Removing a Node-only dependency must not invalidate saved preview bases.
+  assert.equal(object.revision, createHash('sha256').update(canonical).digest('hex'));
   assert.deepEqual(fractionObject(canonical), object);
   assert.deepEqual(object.capabilities, ['preview']);
   assert.notEqual(fractionObject(canonical + '\n').revision, object.revision);

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.parallel-library-lanes-20261127",
   "kind": "run-contract",
   "title": "Parallel library development lanes",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: all five bounded work packages checked; inspectable labs and handoff evidence recorded.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,25 +47,26 @@
     {
       "id": "interaction",
       "title": "Independent commands and row picker",
-      "summary": "Isolated worker implementing the fixed lane packet; root owns shared contracts and integration.",
-      "status": "in-progress"
+      "summary": "Independent picker API and fixture integrated; 17 scoped preservation tests, scoped typecheck/build and Chromium/Firefox browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "mathematics",
       "title": "Independent matrix-vector resource fixture",
-      "summary": "Isolated worker implementing the fixed lane packet; root owns shared contracts and integration.",
-      "status": "in-progress"
+      "summary": "Independent matrix/vector resource API and two-view fixture integrated; seven tests, scoped typecheck/build and Chromium/Firefox persistence checks pass.",
+      "status": "complete"
     },
     {
       "id": "player",
       "title": "Independent existing animation in two sizes",
-      "summary": "Isolated worker implementing the fixed lane packet; root owns shared contracts and integration.",
-      "status": "in-progress"
+      "summary": "Independent existing-saddle player API integrated; 16 scoped tests and build pass, two-host checks pass, unchanged full original graph rerun passes 32 browser checks. Initial optional Three timeout retained in evidence.",
+      "status": "complete"
     },
     {
       "id": "integration",
       "title": "Verify boundaries and hand off runnable lanes",
-      "status": "planned"
+      "summary": "Three fixtures integrated with transitive import guards, persistent localhost services, full type and architecture checks, 14 lane browser checks and 32 original graph checks. Documentation and reviewed successor retained without new approval.",
+      "status": "complete"
     }
   ]
 }

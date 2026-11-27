@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-parallel-library-lanes`
 Execution Contract: `run-contract.kp.parallel-library-lanes-20261127`
-Next Product Milestone: `independent-library-lanes`
-Milestone Authority: approved
+Next Product Milestone: `matrix-authoring-reuse`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -21,10 +21,10 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 
 ## Current approved commitment
 
-**Approved:** [three independent library lanes](2026-11-27-parallel-library-lanes.md):
-interaction, mathematical objects and an existing animation player. Separate
-worktrees, runnable fixtures, owned contracts and enforced boundaries; one integrator.
-Section-clipping judgment remains deferred; preserve existing notebook behavior.
+**Complete:** [three independent library lanes](reviews/2026-11-27-parallel-library-lanes.md):
+interaction, mathematical objects and an existing player. Separate worktrees,
+runnable fixtures, owned contracts and enforced boundaries. Proposed next: matrix
+notebook integration. Section-clipping judgment remains deferred.
 
 **Accepted:** [unified notebook](reviews/2026-11-24-unified-notebook-surface.md),
 [focused editing/styles](reviews/2026-11-24-notebook-style-comparison.md) and

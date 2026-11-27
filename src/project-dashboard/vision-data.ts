@@ -12,7 +12,7 @@ export const projectVision: ProjectVision = {
     finish: "Interaction, mathematical-object and existing-animation fixtures run, build and test independently. Documented entrypoints, separate worker ownership and executable import boundaries preserve the notebook and graph consumers. Stop before broader product promotion.",
     source: { label: "Approved parallel library lanes", href: "docs/project/2026-11-27-parallel-library-lanes.md" }
   },
-  uncertainty: "The accepted quadratic establishes one bounded live mathematical editing loop. Cross-family reuse, LLM-driven substantive revision and independent learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
+  uncertainty: "Quadratic and independent matrix fixtures reuse mathematical/state owners. A shared notebook adapter, broad object extensibility, LLM-driven revision and learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
   nextJudgment: "Inspect the three standalone labs and whether their contracts make independent development practical. Existing section-clipping choreography still has its own pending review; these fixtures do not promote it or select a universal renderer.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
@@ -26,27 +26,27 @@ export const projectVision: ProjectVision = {
   productSource: { label: "Product charter", href: "docs/project/strategy.md" },
   areas: [
     {
-      id: "architecture", title: "Architecture & retirement", horizon: "next",
+      id: "architecture", title: "Architecture & retirement", horizon: "later",
       destination: "Replace a part without rebuilding its neighbors. Finish migrations and remove obsolete paths.",
-      established: "Specialized configs and selected algebra styles have explicit owners. The shared algebra card now releases browser callbacks before disposing its clock; native and edition lifecycle checks pass. Broader consolidation remains separate.",
-      evidence: { label: "Teardown repair and preservation evidence", href: "docs/project/reviews/2026-11-08-algebra-teardown.md" },
+      established: "Three independently runnable libraries/labs have separate worker ownership, guarded import closures and combined verification. The architecture gate passes after bounded classification repairs. Notebook/chat behavior and original graph consumers are preserved; package publication remains separate.",
+      evidence: { label: "Independent lane integration evidence", href: "docs/project/reviews/2026-11-27-parallel-library-lanes.md" },
       outcome: {
-        authority: "approved",
-        id: "independent-library-lanes", title: "Three independently runnable development lanes",
-        finish: "Three standalone fixtures have documented APIs, separate worker paths, build/type/unit checks and executable dependency boundaries. One integrator verifies the combined result without changing the accepted notebook experience.",
-        excludes: "Separate release repositories, a universal object framework, new scrolling, broad Vim work, renderer replacement and publication.",
-        source: { label: "Approved three-lane delivery", href: "docs/project/2026-11-27-parallel-library-lanes.md" }
+        authority: "proposed",
+        id: "remove-authoring-blocker", title: "Remove a demonstrated obstacle to authoring",
+        finish: "A selected product workflow identifies a concrete boundary or cost; a bounded repair removes it while preserving complete existing consumers.",
+        excludes: "A speculative architecture campaign, new task queue or unrelated CSS rollout.",
+        source: { label: "Infrastructure admission criteria", href: "docs/project/strategy.md" }
       }
     },
     {
-      id: "authoring", title: "Authoring & the LLM loop", horizon: "later",
+      id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
       established: "The notebook, persistent conversation, fruit-picker presentation and workspace frame are accepted. G1 now accepts the quadratic's linked equation, graph, derivative and tangent editing with reload, local views and measured costs. Existing split, focus, command and row/filter work retains its distinct review boundaries.",
       evidence: { label: "Accepted quadratic authoring and bounded evidence", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" },
       outcome: {
         authority: "proposed",
         id: "matrix-authoring-reuse", title: "Reuse the authoring boundary for one matrix and vector",
-        finish: "One matrix/vector caller uses discoverable operations, linked symbolic/geometric views and saved identities through the existing resource, command and persistence boundary. Source edits affect its dependents while preserving the accepted quadratic; review it at G2 before promoting demonstrated common adapters.",
+        finish: "Use the checked standalone matrix resource API through a thin notebook adapter, with discoverable operations, linked views and saved identities. Source edits affect dependents while preserving the accepted quadratic; review at G2 before shared notebook-adapter promotion.",
         excludes: "Implementation before bounded scope approval, the full animation portfolio, arbitrary CAS, the tabled matrix Pour treatment, new window infrastructure, exhaustive Vim parity and publication. Existing row/filter review remains separate.",
         source: { label: "Proposed M1 after accepted G1", href: "docs/project/2026-11-25-mathematical-authoring-programme.md" }
       }
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Three independent library lanes checked",
+      scope: "Interaction, matrix/vector resources and an existing saddle player run, build and test independently, with separate worker paths and one integration owner. Browser and dependency checks establish the bounded fixtures; product adoption and general SDK promotion remain separate.",
+      source: { label: "Lane completion and review URLs", href: "docs/project/reviews/2026-11-27-parallel-library-lanes.md" }
+    },
     {
       title: "Head-on mesh absence accepted",
       scope: "The user accepts complete saddle removal when facing its section, including manual rotation. Firefox and Chromium verify zero surface submissions and restoration. Geometric restriction is a separately approved successor to provisional opacity withdrawal; shared promotion remains separate.",
@@ -638,6 +643,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves three independently runnable development lanes: interaction primitives, mathematical objects and an existing animation player, with one integration owner. Preserve the current product and defer broader promotion.",
       reason: "Parallel development needs enforceable boundaries and small independent fixtures. Existing ownership gaps and editor-to-notebook dependencies make separation concrete work; separate repositories would add premature release coordination.",
       source: { label: "Approved parallel scope and ownership", href: "docs/project/2026-11-27-parallel-library-lanes.md" }
+    },
+    {
+      id: "independent-lanes-checked", on: "2026-11-27",
+      before: "Parallel library separation was approved, with existing notebook and graph behavior preserved.",
+      after: "Three separately built/tested fixtures and enforced boundaries complete the bounded infrastructure outcome. Propose the existing matrix-notebook successor using the new API; broader workspace and player promotion remain separate.",
+      reason: "The independent workers now have concrete APIs and fixtures. Further infrastructure should follow observed needs in a product consumer instead of expanding the completed separation milestone.",
+      source: { label: "Checked delivery and bounded successor", href: "docs/project/reviews/2026-11-27-parallel-library-lanes.md" }
     }
   ]
 };

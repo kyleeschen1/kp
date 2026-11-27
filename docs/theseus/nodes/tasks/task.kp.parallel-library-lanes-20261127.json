@@ -2,11 +2,68 @@
   "id": "task.kp.parallel-library-lanes-20261127",
   "kind": "task",
   "title": "Three independently runnable technical-interface lanes",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "COMPLETE: all five bounded work packages checked; inspectable labs and handoff evidence recorded.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-11-27-parallel-library-lanes.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run check:library-lanes",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:43.448Z"
+    },
+    {
+      "command": "npm run visual:library-lanes -- --project=firefox",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:44.234Z"
+    },
+    {
+      "command": "npm run visual:direct-webgl-graph",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:44.861Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:45.459Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:46.066Z"
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:46.681Z"
+    },
+    {
+      "command": "npm run check:typescript-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:47.322Z"
+    },
+    {
+      "command": "npm run test:notebook-mathematics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:47.938Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:28:48.557Z"
     }
   ]
 }

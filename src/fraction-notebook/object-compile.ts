@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { sha256 } from '../kernel/sha256.ts';
 import { importFractionReading } from './model.ts';
 import { compileFractionNotebook } from './compile.ts';
 import { fractionObjectId, sourceLimit, type ObjectDescriptor } from './object-protocol.ts';
@@ -6,7 +6,7 @@ import { fractionObjectId, sourceLimit, type ObjectDescriptor } from './object-p
 export function fractionObject(canonical: string): ObjectDescriptor {
   const story = importFractionReading(canonical).notebook.cells.find(cell => cell.type === 'story');
   if (story?.type !== 'story') throw new Error('Canonical fraction animation is missing.');
-  return { id: fractionObjectId, revision: createHash('sha256').update(canonical).digest('hex'),
+  return { id: fractionObjectId, revision: sha256(canonical),
     title: 'Fraction animation annotations', language: 'json', source: story.source, capabilities: ['preview'] };
 }
 

@@ -27,6 +27,7 @@ test('matrix lane preserves live identities, invalid drafts and independent view
   await expect(page.locator('#equation .katex')).toBeVisible();
   await expect(page.locator('.graph svg')).toHaveCount(2);
   expect(errors).toEqual([]);
+  await page.screenshot({ path: test.info().outputPath('matrix-views.png'), fullPage: true });
 });
 test('invalid stored JSON is retained until an explicit reset', async ({ page }) => {
   await page.goto(url);
