@@ -10,31 +10,24 @@ and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rat
 
 Approved scope: [authoring-to-practice](../2026-11-08-authoring-to-practice-loops.md).
 Theseus contract: `run-contract.kp.authoring-to-practice-20261108`.
-Preserve parallel editor ownership; the old workbench proposal is historical.
-The [handoff](../reviews/2026-11-08-project-orientation.md) bounds conversation/preview.
-[Saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) separates startup/reuse
-from cold preparation. What counts remains the technical reference; fractional
-reasoning awaits review. Preserve [reading defaults](../principles/document-theater-reading.md)
-and completed orientation. Fresh generation and integrated latency remain unproved.
-The notebook detour is current.
+Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
+[saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
+[reading defaults](../principles/document-theater-reading.md).
+The notebook detour is current; fresh generation and integrated latency remain unproved.
 
 ## Retrieve for a named question
 
 - **Reference direction:** [organized rules, composable derivations and repeated return](../decisions/2026-11-26-compact-question-led-vignettes.md).
 - **Scroll pacing on phones and embeds:** [fraction diagnosis](../reviews/2026-11-26-fraction-notebook-scroll-diagnosis.md)
   and [viewport-independent cadence](../reviews/2026-11-26-viewport-independent-scroll.md).
-- **Fraction presentation reset:** [original layout with a left ridge](../reviews/2026-11-26-fraction-original-ridge.md),
-  checked on desktop/phone widths in Chromium and Firefox; awaiting visual review.
-  The recessed-rail and frame/depth experiments are retired. Original math and
-  scroll behavior remain; only the bracket frame becomes a thin left ridge.
+- **Reorientation:** [current capabilities and one proposed authoring walkthrough](../reviews/2026-11-26-next-step-review.md).
+  No implementation selected. The [left-ridge candidate](../reviews/2026-11-26-fraction-original-ridge.md)
+  is superseded below.
 - **Fraction notebook:** [default scrolling restored](../reviews/2026-11-26-fraction-default-restored.md)
-  from `7b545a9ba`, including the original bracket layout, centered stage and
-  reading/animation spacing. Compact framing and subsequent scroll-distance
-  repair were rejected. Authored text and saved drafts remain intact. Rail,
-  floating commentary, scroll stops and flowing-prose experiments are retired.
+  from `7b545a9ba`: original brackets, centered stage and pacing; saved drafts intact.
+  Later scrolling/frame experiments are retired.
 - **Notebook architecture exploration:** [revised next-step review](../reviews/2026-11-24-next-step-review.md).
-  Requirements: UUIDs, metadata, nesting, scope, localized changes, reuse/imports
-  and folding. [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is
+  [Matrix composition](../reviews/2026-11-24-notebook-proof.md) is
   checked; its inspector was unaccepted. Accepted:
   [structure](../reviews/2026-11-24-structure-editor.md) and
   [unified surface](../reviews/2026-11-24-unified-notebook-surface.md).
@@ -88,8 +81,5 @@ The notebook detour is current.
 
 ## Coordination and handoff
 
-Name the capability, finish line and displaced commitments.
-
-At handoff, reconcile direction, record Theseus evidence and show the artifact.
-Visual acceptance covers the named treatment; broader architecture and delivery
-remain separate.
+At handoff, name the capability, finish line, evidence and artifact.
+Visual acceptance does not approve broader architecture or delivery.
