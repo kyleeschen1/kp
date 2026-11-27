@@ -1,0 +1,55 @@
+{
+  "id": "run-contract.kp.studio-reference-collection-20261127",
+  "kind": "run-contract",
+  "title": "Studio reference collection",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/tasks/task.kp.studio-reference-collection-20261127.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-studio-reference-collection.md"
+    }
+  ],
+  "verification": [
+    "npm run visual:math-reference",
+    "npm run measure:math-reference"
+  ],
+  "allowedWork": [
+    "Approved studio outcome 12; four-hour ceiling with final 45 minutes reserved for checks and backup"
+  ],
+  "disallowedWork": [
+    "No renderer or host changes for the fresh example, model calls, new mathematics, collection database or publication"
+  ],
+  "goal": "Find accepted explanations and create revise export and reopen one fresh matrix example through existing product controls",
+  "target": "task.kp.studio-reference-collection-20261127",
+  "slices": [
+    {
+      "id": "collection",
+      "title": "Question-led-index",
+      "summary": "Static question-led index links seven accepted hosts; no player runtime; phone and no-JS smoke passed",
+      "status": "complete"
+    },
+    {
+      "id": "authoring",
+      "title": "Product-authoring-proof",
+      "summary": "Fresh editor copy, signed-weight revision, two actual JSON exports and independent reference cards passed in Chromium and Firefox; one preview-bootstrap lifecycle repair was required",
+      "status": "complete"
+    },
+    {
+      "id": "verification",
+      "title": "Integrated-evidence",
+      "summary": "Eight collection/authoring/cancellation cases and four existing reader cases pass across Chromium and Firefox; types, architecture, tooling, vision and complete consumer measurements pass",
+      "status": "complete"
+    },
+    {
+      "id": "review",
+      "title": "Canonical-review",
+      "summary": "HUMAN_CHECKPOINT: judge question-led organization and cancellation/reinforcement contrast; actual-model trial remains separate",
+      "status": "in-progress"
+    }
+  ]
+}

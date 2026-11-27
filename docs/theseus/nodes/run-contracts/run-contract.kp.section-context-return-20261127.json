@@ -2,8 +2,8 @@
   "id": "run-contract.kp.section-context-return-20261127",
   "kind": "run-contract",
   "title": "Section context and return",
-  "status": "ready",
-  "summary": "User resumed approved studio horizon after accepting outcome 10",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -49,8 +49,8 @@
     {
       "id": "review",
       "title": "Canonical-review",
-      "summary": "HUMAN_CHECKPOINT: judge question connection and sense of place after exact source/view return on the shared saddle reference",
-      "status": "in-progress"
+      "summary": "User accepted the question and exact-context return with approve resume",
+      "status": "complete"
     }
   ]
 }

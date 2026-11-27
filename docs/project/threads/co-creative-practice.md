@@ -1,6 +1,6 @@
 # Authoring, adaptation and co-creative practice
 
-Status: active context index; execution lives in Theseus
+Status: active; execution in Theseus
 Last Updated: 2026-11-27
 
 ## Current boundary
@@ -22,13 +22,14 @@ Accepted: [composition notebook](../reviews/2026-11-27-composition-notebook-reus
 Accepted: [circle/trig](../reviews/2026-11-27-circle-trig.md).
 Accepted: [accumulation](../reviews/2026-11-27-polynomial-accumulation.md).
 Accepted: [section reuse](../reviews/2026-11-27-saddle-section-reuse.md).
-Approved: [context return](../reviews/2026-11-27-section-context-return.md).
-Execution: `run-contract.kp.section-context-return-20261127`.
+Accepted: [context return](../reviews/2026-11-27-section-context-return.md).
+Approved: [reference collection](../reviews/2026-11-27-studio-reference-collection.md).
+Execution: `run-contract.kp.studio-reference-collection-20261127`.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
 
-## Retrieve for a named question
+## Named retrieval
 
 - **Reference direction:** [organized rules, composable derivations and repeated return](../decisions/2026-11-26-compact-question-led-vignettes.md).
 - **Scroll pacing on phones and embeds:** [fraction diagnosis](../reviews/2026-11-26-fraction-notebook-scroll-diagnosis.md)
@@ -93,4 +94,4 @@ Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.m
 
 ## Coordination and handoff
 
-Theseus owns execution; visual acceptance does not approve broader delivery.
+Visual acceptance does not approve broader delivery.

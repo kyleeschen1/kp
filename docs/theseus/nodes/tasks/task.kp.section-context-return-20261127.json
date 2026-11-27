@@ -2,9 +2,9 @@
   "id": "task.kp.section-context-return-20261127",
   "kind": "task",
   "title": "Leave and return to a section explanation",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: checked source-pinned question and return candidate; awaiting orientation review",
+  "summary": "User accepted question and exact return; bounded outcome complete",
   "sourceRefs": [
     {
       "kind": "file",

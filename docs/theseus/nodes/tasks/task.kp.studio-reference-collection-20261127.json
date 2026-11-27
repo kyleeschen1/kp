@@ -1,0 +1,83 @@
+{
+  "id": "task.kp.studio-reference-collection-20261127",
+  "kind": "task",
+  "title": "Organized mathematical reference and product authoring proof",
+  "status": "deferred",
+  "domain": "kp",
+  "summary": "HUMAN_CHECKPOINT: checked collection and authored contrast ready for review",
+  "verificationRecords": [
+    {
+      "command": "npm run visual:math-reference",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T17:00:40.073Z",
+      "notes": "8 final Chromium/Firefox tests pass: static collection, no-JS phone, seven real destinations, independent editor copy, conceptual revision, two exports and saved cards, reload. All three preview imports cover active failure and cancelled rejection/success."
+    },
+    {
+      "command": "npm run visual:projection-notebook -- --project=firefox --grep 'narrow themed reader'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:00:41.123Z",
+      "notes": "2 Chromium/Firefox existing reader, reduced-motion and visibility cases passed after shared bootstrap repair."
+    },
+    {
+      "command": "npm run visual:composition-notebook -- --project=firefox --grep 'narrow themed reader'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:00:41.783Z",
+      "notes": "2 Chromium/Firefox existing reader, reduced-motion and visibility cases passed after shared bootstrap repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T17:00:42.432Z",
+      "notes": "Full application, scripts, tests, Svelte and domain checking passed; final focused test types also passed."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:00:43.064Z",
+      "notes": "Ownership, import direction and conformance gates passed with no new exception."
+    },
+    {
+      "command": "npm run check:tooling-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:00:43.745Z",
+      "notes": "5 tests and complete config checks pass; only one new Playwright policy snapshot; previous hashes unchanged."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:00:44.384Z",
+      "notes": "75 checks pass after source-linked acceptance and successor routing; shortened thread to preserve existing budget."
+    },
+    {
+      "command": "npm run measure:math-reference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:00:45.033Z",
+      "notes": "Zero JS; HTML/CSS 7941 raw / 3046 gzip; all four emitted files with fonts 52049 / 47168."
+    },
+    {
+      "command": "npm run measure:matrix-reference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T17:00:45.757Z",
+      "notes": "Complete JS/CSS 506936 raw / 146788 gzip, existing ceiling passes. Full 68 emitted assets 1625923 / 1058272."
+    },
+    {
+      "command": "npm run measure:notebook-mathematics -- --baseline 83d81c74882826ff56fa86741d4dbc9903a6bb52",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-11-27T17:00:46.395Z",
+      "notes": "Notebook and native reader payload unchanged; math reading complete JS/CSS 819889 raw / 247766 gzip; 716 type files and 206834 instantiations unchanged, 9 additional types. Lazy boundaries pass."
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the mathematical collection and authored contrast"
+  ]
+}

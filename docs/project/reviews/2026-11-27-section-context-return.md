@@ -1,7 +1,7 @@
 # Leave a section explanation and return precisely
 
 Date: 2026-11-27
-Status: checked canonical candidate; awaiting human orientation review.
+Status: accepted by the user's “approve! resume”; bounded outcome complete.
 Authority: studio outcome 11, resumed by “approve! resume” after accepting the
 independent saddle-section reference. Execution: `run-contract.kp.section-context-return-20261127`.
 
@@ -69,7 +69,8 @@ package status; this proposal owns rationale and boundaries.
 
 Resume with `theseus work context task.kp.section-context-return-20261127 --mode brief`.
 The old saddle reuse milestone is accepted and complete. The actual-response
-annotation trial remains pending; outcome 12's reference collection is later.
+annotation trial remains pending. Continue with the bounded
+[reference collection](2026-11-27-studio-reference-collection.md).
 
 ## Candidate and evidence
 
@@ -115,5 +116,5 @@ Open http://127.0.0.1:8000/experiments/saddle-section-reference/, adjust a secti
 and its view, then choose **What if the plane moves to the other side?** Make a
 prediction, reveal the reasoning, compare the planes, reload, and choose
 **Return to your saved view**. Judge whether the question feels connected to the
-selected curve and whether return restores your sense of place. Human approval
-of this new interaction is still required before collection rollout.
+selected curve and whether return restores your sense of place. The user accepts
+this interaction; collection organization retains its own review gate.

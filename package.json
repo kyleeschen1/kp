@@ -7,6 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
+    "visual:math-reference": "playwright test --config config/playwright/playwright.math-reference.config.ts --project=chromium --project=firefox --workers=1",
+    "measure:math-reference": "node --disable-warning=ExperimentalWarning scripts/measure-math-reference.ts",
     "check:library-lanes": "node --disable-warning=ExperimentalWarning scripts/check-library-lanes.ts",
     "test:library-boundaries": "node --disable-warning=ExperimentalWarning --test tests/library-lanes.test.ts tests/library-lanes-service.test.ts",
     "visual:library-lanes": "playwright test --config config/playwright/playwright.library-lanes.config.ts --project=chromium --workers=1",

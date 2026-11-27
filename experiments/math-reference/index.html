@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-kp-theme="light">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mathematical reference · Kinetic Press</title>
+  <link rel="stylesheet" href="/src/math-reference/style.css">
+</head>
+<body>
+<main>
+  <h1>Mathematical reference</h1>
+  <p>Start with a question. Change an example, follow the relationship, and return when you need it again.</p>
+  <nav aria-label="Topics"><a href="#vectors">Vectors &amp; transformations</a><a href="#functions">Functions &amp; change</a><a href="#surfaces">Surfaces &amp; slices</a><a href="#make">Make a contrast</a></nav>
+  <section id="vectors" aria-labelledby="vectors-title">
+    <h2 id="vectors-title">Vectors &amp; transformations</h2>
+    <div class="entries">
+      <article><h3><a data-reference href="/experiments/matrix-reference/?geometry=1">How does a matrix move a vector?</a></h3>
+        <p>Weight each column by an input coordinate, then add. Follow the same contributions in the equation and the graph.</p>
+        <p class="detail">2 × 2 matrices · columns · signed contributions</p></article>
+      <article><h3><a data-reference href="/experiments/inner-product-projection/">How much of one vector points along another?</a></h3>
+        <p>Separate the parallel component from the perpendicular remainder. Try an opposite direction or an orthogonal pair.</p>
+        <p class="detail">Inner product · projection · perpendicularity</p></article>
+      <article><h3><a data-reference href="/experiments/composition-area/">Why does the order of transformations matter?</a></h3>
+        <p>Compare two ordered maps and their effect on signed area. A collapsed shape makes the singular case visible.</p>
+        <p class="detail">Composition · determinant · orientation</p></article>
+    </div>
+  </section>
+  <section id="functions" aria-labelledby="functions-title">
+    <h2 id="functions-title">Functions &amp; change</h2>
+    <div class="entries">
+      <article><h3><a data-reference href="/experiments/fraction-notebook/?notebook=quadratic">What does each form of a quadratic reveal?</a></h3>
+        <p>Read coefficients, a vertex and real roots as different descriptions of the same curve. Edit the coefficients in the notebook.</p>
+        <p class="detail">Expanded · vertex · real-factored form</p></article>
+      <article><h3><a data-reference href="/experiments/circle-trig/">Where do sine and cosine come from?</a></h3>
+        <p>Follow one point around the unit circle. Its coordinates trace the function views, with signs changing by quadrant.</p>
+        <p class="detail">Circle · coordinates · periodicity</p></article>
+      <article><h3><a data-reference href="/experiments/polynomial-accumulation/">Why can area accumulate to zero?</a></h3>
+        <p>Track signed contributions and their total. Compare the integral with geometric area, then reverse the bounds.</p>
+        <p class="detail">Polynomial integrals · cancellation · antiderivatives</p></article>
+    </div>
+  </section>
+  <section id="surfaces" aria-labelledby="surfaces-title">
+    <h2 id="surfaces-title">Surfaces &amp; slices</h2>
+    <div class="entries">
+      <article><h3><a data-reference href="/experiments/saddle-section-reference/">What remains when we fix one coordinate?</a></h3>
+        <p>Inspect a saddle's section head-on, then return to space. Explore the opposite-plane question and come back to your saved view.</p>
+        <p class="detail">Saddle · section plane · 3D ↔ 2D</p></article>
+    </div>
+  </section>
+  <section id="make" aria-labelledby="make-title">
+    <h2 id="make-title">Make a contrast: cancellation and reinforcement</h2>
+    <p>Use columns (2, 1) and (−1, 2). With weights (1, 2), their horizontal contributions cancel: the result is (0, 5). Change the second weight to −2: those contributions reinforce, and the result becomes (4, −3).</p>
+    <p><a href="/experiments/fraction-notebook/?notebook=matrix">Open the matrix notebook</a> · <a href="/experiments/matrix-reference/?geometry=1">Open your saved cards</a></p>
+    <details><summary>Make and save both examples</summary>
+      <ol>
+        <li>In the notebook, select the matrix heading and copy it. Paste into an empty paragraph to make an independent source.</li>
+        <li>Set A11 = 2, A12 = −1, A21 = 1, A22 = 2; set v1 = 1 and v2 = 2. Choose <strong>Explain</strong> to follow the contributions.</li>
+        <li>Select the matrix heading, press <kbd>C-x C-x</kbd>, and run <strong>Export matrix resource</strong>.</li>
+        <li>Open your saved cards, choose <strong>Open matrix snapshot</strong>, and select the exported file. Name it <strong>Cancellation</strong>.</li>
+        <li>Back in the notebook, change v2 to −2 and export again. Import it as <strong>Save as separate card</strong> and name it <strong>Reinforcement</strong>. Use <strong>Find a card</strong> to compare them.</li>
+      </ol>
+      <p>Each exported file is a snapshot. Revising the notebook does not change an older saved card.</p>
+    </details>
+  </section>
+</main>
+</body>
+</html>

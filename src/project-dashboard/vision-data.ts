@@ -5,15 +5,15 @@ import type { ProjectVision } from "./vision-model.ts";
 export const projectVision: ProjectVision = {
   directionId: "authoring-expert-attention-v1",
   commitment: {
-    id: "kp-section-context-return",
-    title: "Explore a question and return to its exact context",
+    id: "kp-studio-reference-collection",
+    title: "Find explanations and author a reusable contrast",
     approval: "approved",
-    contractId: "run-contract.kp.section-context-return-20261127",
-    finish: "Open one source-pinned question from an exact section occurrence, predict and reveal, then return to the same source and view across reload.",
-    source: { label: "Approved context return", href: "docs/project/reviews/2026-11-27-section-context-return.md" }
+    contractId: "run-contract.kp.studio-reference-collection-20261127",
+    finish: "Organize accepted examples and demonstrate a fresh matrix example, substantive revision, export and reopening through existing product controls.",
+    source: { label: "Approved reference collection", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" }
   },
   uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "The independent section reference is accepted. Next, judge whether its question detour, prediction and exact return preserve orientation. The actual-response annotation revision trial remains pending.",
+  nextJudgment: "The section question and exact return are accepted. Next, judge the question-led collection and the authored cancellation/reinforcement contrast. The actual-response annotation revision trial remains pending.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -45,10 +45,10 @@ export const projectVision: ProjectVision = {
       evidence: { label: "Accumulation evidence and limits", href: "docs/project/reviews/2026-11-27-polynomial-accumulation.md" },
       outcome: {
         authority: "approved",
-        id: "section-context-return", title: "Leave and return without losing context",
-        finish: "One authored question opens from the accepted section reference, retains a prediction/reveal and restores the source, camera, inspection position and object after reload.",
-        excludes: "Nested detour stacks, a universal navigation library, new renderers, notebook migration, model calls, learning claims and publication.",
-        source: { label: "Approved question and return", href: "docs/project/reviews/2026-11-27-section-context-return.md" }
+        id: "studio-reference-collection", title: "Organize explanations and prove product authoring",
+        finish: "One lightweight collection links accepted hosts; a fresh matrix example and substantive revision survive product export, independent reference import and reload without new renderer or host code.",
+        excludes: "A universal collection database, new mathematics or renderer, model calls, learning claims and publication.",
+        source: { label: "Approved collection and authoring proof", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Section question and exact return accepted",
+      scope: "A source-pinned question preserves prediction, reveal and local comparison across reload, returning to the original source, camera, progress, object and disclosures. The user accepts orientation; nested detours and learning efficacy remain unproved.",
+      source: { label: "Accepted context return", href: "docs/project/reviews/2026-11-27-section-context-return.md" }
+    },
     {
       title: "Independent saddle-section reference accepted",
       scope: "A checked saddle source mounts outside the experiment with independent editing, camera/playback and URL restoration. Existing renderer, single-curve paint and fallback are preserved. Arbitrary surfaces, shared-context rendering and notebook integration remain separate.",
@@ -848,6 +853,13 @@ export const projectVision: ProjectVision = {
       after: "The user accepts it and resumes the studio horizon. Close reuse and continue outcome 11 with one authored question, prediction/reveal and pinned return context.",
       reason: "Make exploratory reading preserve its place in the larger explanation, using the accepted player rather than another mathematical family.",
       source: { label: "Context-return scope and review", href: "docs/project/reviews/2026-11-27-section-context-return.md" }
+    },
+    {
+      id: "accept-context-return-continue-collection", on: "2026-11-27",
+      before: "The section question and exact-context return awaited orientation review.",
+      after: "The user accepts the interaction and resumes outcome 12: organize accepted references and measure one fresh product-authored mathematical contrast.",
+      reason: "Test how the existing parts support useful author work and repeated retrieval without adding another mathematical family or eager renderer gallery.",
+      source: { label: "Collection scope and proof boundaries", href: "docs/project/reviews/2026-11-27-studio-reference-collection.md" }
     }
   ]
 };

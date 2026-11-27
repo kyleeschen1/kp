@@ -1,4 +1,8 @@
 {
+  "playwright.math-reference.config.ts": {
+    "sha256": "ff7330c10e60e307fb1e284b691ce0ec16c277c1531232e75a7945250241c8fe",
+    "projects": 3
+  },
   "playwright.inner-product-projection.config.ts": {
     "sha256": "84654ed5964e06dfe2862b7cf7ac81fb2e7b437718e9940c16960d7dd49892e6",
     "projects": 3
