@@ -1,9 +1,10 @@
-# Matrix notebook adapter — G2 candidate
+# Matrix notebook adapter — G2 accepted
 
 Date: 2026-11-27
 Authority: [approved bounded adapter](../2026-11-27-matrix-notebook-adapter.md).
 Contract: `run-contract.kp.matrix-notebook-adapter-20261127`.
-Human acceptance and shared adapter promotion remain pending.
+The user accepted this bounded exemplar with “great! what next”. Shared adapter
+promotion and the wider mathematical programme remain separate.
 
 ## Inspect this exemplar
 
@@ -118,8 +119,17 @@ whether to promote any shared notebook adapter or add mathematical operations.
 Do not resume the wider programme automatically. Resume this boundary with
 `theseus work context task.kp.matrix-notebook-adapter-20261127 --mode brief`.
 
-Stop state: **HUMAN_CHECKPOINT**, 2/3 packages complete, G2 pending. The task and
+Implementation handoff state was **HUMAN_CHECKPOINT**, 2/3 packages complete, G2 pending. The task and
 contract are deferred explicitly for that judgment; the global legacy loop
 counter does not select this task. The roadmap-selected orientation does.
 All 75 project vision/orientation checks pass. Theseus validates 1,348 nodes
 before backup. The process-managed port-8000 host remains running.
+
+## Acceptance and successor
+
+The subsequent “great! what next” accepts G2 for this static linked-view
+notebook. This closes the bounded adapter outcome; it does not certify a
+universal adapter or accept new matrix animation. The
+[next-step review](2026-11-27-next-step-review.md) proposes connecting the actual
+notebook source to the existing column-combination explanation. No successor
+implementation is authorized by the next-step question.

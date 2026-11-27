@@ -2,8 +2,8 @@
   "id": "run-contract.kp.matrix-notebook-adapter-20261127",
   "kind": "run-contract",
   "title": "Matrix notebook adapter",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: implementation checked; G2 visual judgment remains.",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -55,8 +55,8 @@
     {
       "id": "review",
       "title": "G2-human-review",
-      "summary": "HUMAN_CHECKPOINT: inspect matrix controls, source/view relationships and narrow layout at the canonical port-8000 notebook. No broad promotion.",
-      "status": "in-progress"
+      "summary": "User accepts bounded G2 matrix notebook with great! what next. Shared-adapter promotion and proposed animation successor remain separate.",
+      "status": "complete"
     }
   ]
 }

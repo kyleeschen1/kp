@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "One matrix/vector notebook reuses the resource API through native history, linked symbolic/geometric views, local view settings and saved identities. Preserve quadratic/fraction workflows and stop at G2 review before promotion.",
     source: { label: "Approved matrix adapter", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
   },
-  uncertainty: "The matrix notebook now consumes the independent resource API; G2 presentation acceptance and shared-adapter promotion remain pending. Broad object extensibility, LLM-driven revision and learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
-  nextJudgment: "At G2, inspect matrix edits, linked views, local zoom and persistence in the notebook. Existing section-clipping choreography retains its separate review; no new motion treatment is selected.",
+  uncertainty: "G2 accepts the bounded matrix notebook. Connecting its source to existing animation and promoting a shared adapter remain unproved. Broad object extensibility, LLM-driven revision and learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
+  nextJudgment: "Select the proposed notebook column-combination explanation scope. G2 is accepted; section-clipping choreography retains its separate review. No successor implementation or new motion treatment is approved.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "G1 accepts quadratic authoring. A checked matrix notebook now reuses the independent API through linked views, native history, separate copies and saved drafts; G2 is pending. Existing notebook, chat, frame and row/filter review boundaries remain distinct.",
-      evidence: { label: "Matrix integration and pending G2", href: "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md" },
+      established: "G1 accepts quadratic authoring and G2 accepts the bounded matrix notebook, reusing the independent API through linked views, native history, separate copies and saved drafts. Existing notebook, chat, frame and row/filter review boundaries remain distinct.",
+      evidence: { label: "Accepted matrix notebook", href: "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md" },
       outcome: {
-        authority: "approved",
-        id: "matrix-authoring-reuse", title: "Reuse the authoring boundary for one matrix and vector",
-        finish: "Use the checked standalone matrix resource API through a thin notebook adapter, with discoverable operations, linked views and saved identities. Source edits affect dependents while preserving the accepted quadratic; review at G2 before shared notebook-adapter promotion.",
-        excludes: "The full animation portfolio, arbitrary CAS, the tabled matrix Pour treatment, new window infrastructure, exhaustive Vim parity and publication. Existing row/filter review remains separate.",
-        source: { label: "Approved bounded matrix adapter", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
+        authority: "proposed",
+        id: "matrix-notebook-explanation", title: "Explain the notebook matrix result",
+        finish: "One contextual command opens the existing column-combination presentation against the actual notebook source through a checked adapter. Preserve identities, history, source revision and playback lifecycle; review one exemplar before promotion.",
+        excludes: "New motion choreography, a universal player or notebook adapter, broader mathematical families, LLM edits, publication and automatic approval of unrelated visual candidates.",
+        source: { label: "Proposed explanation successor", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "Matrix notebook G2 accepted",
+      scope: "One bounded matrix/vector resource supports native editing/history, linked symbolic and graphical views, local view settings, independent copies and saved drafts. Animation integration and shared-adapter promotion remain separate.",
+      source: { label: "G2 acceptance and limits", href: "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md" }
+    },
     {
       title: "Three independent library lanes checked",
       scope: "Interaction, matrix/vector resources and an existing saddle player run, build and test independently, with separate worker paths and one integration owner. Browser and dependency checks establish the bounded fixtures; product adoption and general SDK promotion remain separate.",
@@ -664,6 +669,13 @@ export const projectVision: ProjectVision = {
       after: "The notebook now consumes it through editing, views and history. Stop at G2 judgment; shared-adapter promotion remains separate.",
       reason: "A second mathematical family exercises the product without another evaluator. Production evidence required a data-only entrypoint to preserve lazy loading.",
       source: { label: "Checked matrix workflow and limits", href: "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md" }
+    },
+    {
+      id: "accept-matrix-notebook-propose-explanation", on: "2026-11-27",
+      before: "The bounded matrix notebook was checked and awaiting G2 judgment.",
+      after: "The user accepts it and asks what comes next. Close that outcome and propose connecting the notebook source to the existing column-combination explanation; successor implementation remains unapproved.",
+      reason: "A useful product consumer now exercises the separated mathematics API. The next concrete authoring gap is reusable explanation from that same source, rather than more disconnected fixtures or speculative generalization.",
+      source: { label: "Acceptance and next-step review", href: "docs/project/reviews/2026-11-27-next-step-review.md" }
     }
   ]
 };

@@ -8,21 +8,22 @@ Last Updated: 2026-11-27
 The [roadmap](../roadmap.md) owns direction; the [charter](../strategy.md)
 and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rationale.
 
-Awaiting G2: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-adapter.md).
-Theseus: `run-contract.kp.matrix-notebook-adapter-20261127`; stop at G2.
+G2 accepted: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-adapter.md).
+Completed contract: `run-contract.kp.matrix-notebook-adapter-20261127`.
+Proposed successor: [explain its result](../reviews/2026-11-27-next-step-review.md)
+through the existing column-combination presentation; implementation not yet approved.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and
 [reading defaults](../principles/document-theater-reading.md).
-The notebook detour is current; fresh generation and integrated latency remain unproved.
+Fresh generation and integrated latency remain unproved.
 
 ## Retrieve for a named question
 
 - **Reference direction:** [organized rules, composable derivations and repeated return](../decisions/2026-11-26-compact-question-led-vignettes.md).
 - **Scroll pacing on phones and embeds:** [fraction diagnosis](../reviews/2026-11-26-fraction-notebook-scroll-diagnosis.md)
   and [viewport-independent cadence](../reviews/2026-11-26-viewport-independent-scroll.md).
-- **Reorientation:** [current capabilities and one proposed authoring walkthrough](../reviews/2026-11-26-next-step-review.md).
-  No implementation selected. The [left-ridge candidate](../reviews/2026-11-26-fraction-original-ridge.md)
-  is superseded below.
+- **Prior reorientation:** [authoring walkthrough proposal](../reviews/2026-11-26-next-step-review.md).
+  The [left-ridge candidate](../reviews/2026-11-26-fraction-original-ridge.md) is superseded below.
 - **Fraction notebook:** [default scrolling restored](../reviews/2026-11-26-fraction-default-restored.md)
   from `7b545a9ba`: original brackets, centered stage and pacing; saved drafts intact.
   Later scrolling/frame experiments are retired.

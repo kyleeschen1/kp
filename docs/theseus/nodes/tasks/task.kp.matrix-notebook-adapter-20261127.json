@@ -2,8 +2,8 @@
   "id": "task.kp.matrix-notebook-adapter-20261127",
   "kind": "task",
   "title": "Edit matrix resources through the notebook",
-  "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: implementation checked; G2 visual judgment remains.",
+  "status": "resolved",
+  "summary": "COMPLETE: bounded matrix notebook accepted at G2. Three of three contract packages complete. Column-combination explanation is a proposed successor only.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -12,6 +12,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-next-step-review.md"
     }
   ],
   "verificationRecords": [
@@ -92,6 +96,12 @@
       "status": "passed",
       "scope": "standard",
       "checkedAt": "2026-11-27T09:53:11.333Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T10:00:07.013Z"
     }
   ],
   "revisitWhen": [
