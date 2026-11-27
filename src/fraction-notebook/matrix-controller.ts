@@ -1,15 +1,16 @@
-import { Fragment, Slice, type Node as ProseNode } from 'prosemirror-model';
+import { Slice, type Node as ProseNode } from 'prosemirror-model';
 import { Plugin, NodeSelection } from 'prosemirror-state';
 import { closeHistory, undo, redo } from 'prosemirror-history';
 import type { EditorView } from 'prosemirror-view';
 import { CommandRegistry, available, unavailable, target, type Target, type TargetedCommand } from '../editor-commands/registry.ts';
 import { newId } from '../notebook/model.ts';
-import { editMatrixVectorDocument, editOccurrenceExtent, readMatrixVectorDocument, invalidResourceFields, type MatrixVectorDocument } from '../math-resources/public-api.ts';
+import { editMatrixVectorDocument, editOccurrenceExtent, invalidResourceFields, type MatrixVectorDocument } from '../math-resources/public-api.ts';
 import { readNotebook, type FractionNotebook, type MatrixObjectCell } from './model.ts';
 import { schema, matrixResourcesIn } from './schema.ts';
 import { createMatrixNotebookRuntime } from './matrix-runtime.ts';
 import { createMatrixNodeView, readMatrixCell, type MatrixViewOwner } from './matrix-view.ts';
-import { copyMatrixResource, matrixOccurrence } from './matrix-data.ts';
+import { matrixOccurrence } from './matrix-data.ts';
+import { activeMatrixOccurrences, matrixClipboardSlice, prepareMatrixPaste, withMatrixOccurrences } from './matrix-occurrences.ts';
 import { serializeMatrixSnapshot } from '../math-resources/data-api.ts';
 import { downloadJson } from '../notebook/download.ts';
 import { selectedObject } from './inspector.ts';
@@ -41,13 +42,13 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
   const canInsertView = (c: Captured) => {
     const ready = readiness(c); if (!ready.enabled) return ready;
     const { document: d } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
-    return invalidResourceFields(d).length ? unavailable('Correct the numeric draft first') : d.occurrences.length >= 8 ? unavailable('This resource supports eight view occurrences') : available();
+    return invalidResourceFields(d).length ? unavailable('Correct the numeric draft first') : activeMatrixOccurrences(active().state.doc, d.id).size >= 8 ? unavailable('This resource supports eight view occurrences') : available();
   };
   const insertView = (c: Captured, kind: 'graph' | 'columns') => {
     const view = active(), { document: d, view: source } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
     // A representation is another occurrence of the same source, not a copy
     // of its mathematics. Both identities enter native history atomically.
-    const next = { ...source, id: newId(), view: kind }, updated = readMatrixVectorDocument({ ...d, occurrences: [...d.occurrences, next] });
+    const next = { ...source, id: newId(), view: kind }, updated = withMatrixOccurrences(d, view.state.doc, [next]);
     const found = occurrence(c.cell.id)!, pos = found.pos + found.node.nodeSize;
     const cell: MatrixObjectCell = { type: 'matrixObject', id: newId(), metadata: {}, resource: d.id, occurrence: next.id, folded: false };
     const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? updated : old)).insert(pos, schema.node('matrixObject', cell));
@@ -108,20 +109,9 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
   const paste = (view: EditorView, slice: Slice, position?: number) => {
     if (!containsMatrix(slice)) return false;
     try {
-      const copies = new Map<string, MatrixVectorDocument>();
-      const visit = (node: ProseNode): ProseNode => {
-        if (node.type.name === 'matrixObject') {
-          const cell = readMatrixCell(node), { document: source } = matrixOccurrence(current, cell.resource, cell.occurrence);
-          if (!occurrence(cell.id)) return node; // Cut/move retains its source and occurrence.
-          let copy = copies.get(source.id); if (!copy) { copy = copyMatrixResource(source); copies.set(source.id, copy); }
-          const index = source.occurrences.findIndex(o => o.id === cell.occurrence);
-          return schema.node('matrixObject', { ...cell, id: newId(), resource: copy.id, occurrence: copy.occurrences[index]!.id });
-        }
-        if (node.isText) return node; const children: ProseNode[] = []; node.forEach(n => children.push(visit(n))); return node.copy(Fragment.from(children));
-      };
-      const children: ProseNode[] = []; slice.content.forEach(n => children.push(visit(n)));
-      const copied = preparePastedSlice(view.state.doc, new Slice(Fragment.from(children), slice.openStart, slice.openEnd));
-      const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', [...current, ...copies.values()]);
+      const prepared = prepareMatrixPaste(view.state.doc, slice, current);
+      const copied = preparePastedSlice(view.state.doc, prepared.slice);
+      const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', prepared.resources);
       if (position === undefined) tr.replaceSelection(copied); else tr.replaceRange(position, position, copied);
       view.dispatch(tr.scrollIntoView()); return true;
     } catch (error) { report(String(error)); return true; }
@@ -148,9 +138,19 @@ export function createMatrixExtension(initial: FractionNotebook, registry: Comma
       });
       return true;
     } catch (error) { report(String(error)); return false; }
+  }, appendTransaction(transactions, _old, state) {
+    if (!transactions.some(tr => tr.docChanged)) return null;
+    // Native drag-move bypasses paste. Its serialized helper data must not
+    // become document state; removal joins the move's existing history event.
+    const tr = state.tr;
+    state.doc.descendants((node, pos) => {
+      if (node.type.name === 'matrixObject' && node.attrs['clipboardOccurrence'] !== null)
+        tr.setNodeAttribute(pos, 'clipboardOccurrence', null);
+    });
+    return tr.docChanged ? tr : null;
   }, view(view) { editor = view; return { update(next, before) {
     editor = next; if (next.state.doc !== before.doc) { listeners.forEach(fn => fn()); registry.notify(); }
-  } }; }, props: { handleDrop(view, event, slice, moved) {
+  } }; }, props: { transformCopied: slice => matrixClipboardSlice(slice, current), handleDrop(view, event, slice, moved) {
     if (moved || !containsMatrix(slice)) return false;
     const pos = view.posAtCoords({ left: event.clientX, top: event.clientY }); if (pos) paste(view, slice, pos.pos); return true;
   } } });
