@@ -12,7 +12,7 @@ export const projectVision: ProjectVision = {
     finish: "One matrix/vector notebook reuses the resource API through native history, linked symbolic/geometric views, local view settings and saved identities. Preserve quadratic/fraction workflows and stop at G2 review before promotion.",
     source: { label: "Approved matrix adapter", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
   },
-  uncertainty: "Quadratic and independent matrix fixtures reuse mathematical/state owners. A shared notebook adapter, broad object extensibility, LLM-driven revision and learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
+  uncertainty: "The matrix notebook now consumes the independent resource API; G2 presentation acceptance and shared-adapter promotion remain pending. Broad object extensibility, LLM-driven revision and learner transfer remain unproved. Featured content's marketing value is a hypothesis.",
   nextJudgment: "At G2, inspect matrix edits, linked views, local zoom and persistence in the notebook. Existing section-clipping choreography retains its separate review; no new motion treatment is selected.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
@@ -41,8 +41,8 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "The notebook, persistent conversation, fruit-picker presentation and workspace frame are accepted. G1 now accepts the quadratic's linked equation, graph, derivative and tangent editing with reload, local views and measured costs. Existing split, focus, command and row/filter work retains its distinct review boundaries.",
-      evidence: { label: "Accepted quadratic authoring and bounded evidence", href: "docs/project/reviews/2026-11-25-quadratic-authoring.md" },
+      established: "G1 accepts quadratic authoring. A checked matrix notebook now reuses the independent API through linked views, native history, separate copies and saved drafts; G2 is pending. Existing notebook, chat, frame and row/filter review boundaries remain distinct.",
+      evidence: { label: "Matrix integration and pending G2", href: "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md" },
       outcome: {
         authority: "approved",
         id: "matrix-authoring-reuse", title: "Reuse the authoring boundary for one matrix and vector",
@@ -657,6 +657,13 @@ export const projectVision: ProjectVision = {
       after: "The user approves a thin notebook adapter with linked views, editing and persistence, stopping at G2.",
       reason: "Exercise the extracted boundary in a useful product workflow before generalizing it.",
       source: { label: "Approved matrix notebook scope", href: "docs/project/2026-11-27-matrix-notebook-adapter.md" }
+    },
+    {
+      id: "matrix-notebook-checked", on: "2026-11-27",
+      before: "The independent matrix API needed a product consumer to test its usefulness.",
+      after: "The notebook now consumes it through editing, views and history. Stop at G2 judgment; shared-adapter promotion remains separate.",
+      reason: "A second mathematical family exercises the product without another evaluator. Production evidence required a data-only entrypoint to preserve lazy loading.",
+      source: { label: "Checked matrix workflow and limits", href: "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md" }
     }
   ]
 };

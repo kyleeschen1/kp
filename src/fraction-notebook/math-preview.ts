@@ -18,11 +18,19 @@ import { createMathNodeView, type MathViewOwner } from './math-view.ts';
 import { CommandShortcut } from '../editor-commands/shortcut.ts';
 
 const host = document.querySelector<HTMLElement>('#math-reading')!;
+const matrixModule = new URLSearchParams(location.search).get('notebook') === 'matrix' ? await import('./matrix-reading.ts') : undefined;
+let matrixReading: ReturnType<NonNullable<typeof matrixModule>['mountMatrixReading']> | undefined;
 const send = (data: object) => window.parent.postMessage({ protocol: 'kp.fraction-notebook.v1', ...data }, location.origin);
 let view: EditorView | undefined, runtime: NotebookMathRuntime | undefined, latest: FractionNotebook | undefined, active = false;
 const listeners = new Set<() => void>(), shortcut = new CommandShortcut();
 const render = () => {
   if (!active || !latest) return;
+  if (matrixModule) {
+    if (!latest.matrixResources) throw new Error('The matrix reading requires matrix resources.');
+    if (!matrixReading) matrixReading = matrixModule.mountMatrixReading(host, latest, id => send({ kind: 'select', id }));
+    else matrixReading.update(latest);
+    send({ kind: 'applied', revision: latest.revision }); return;
+  }
   if (!runtime) runtime = createNotebookMathRuntime(latest.id);
   runtime.update(latest.mathematics!);
   if (!view) {
@@ -51,7 +59,7 @@ const key = (event: KeyboardEvent) => {
   else if (event.ctrlKey && event.code === 'Backquote') { event.preventDefault(); send({ kind: 'window-cycle', reverse: event.shiftKey }); }
 };
 window.addEventListener('message', message); document.addEventListener('pointerdown', focus); document.addEventListener('keydown', key, true);
-const dispose = () => { window.removeEventListener('message', message); document.removeEventListener('pointerdown', focus); document.removeEventListener('keydown', key, true); view?.destroy(); runtime?.dispose(); listeners.clear(); };
+const dispose = () => { window.removeEventListener('message', message); document.removeEventListener('pointerdown', focus); document.removeEventListener('keydown', key, true); view?.destroy(); runtime?.dispose(); matrixReading?.dispose(); listeners.clear(); };
 window.addEventListener('pagehide', dispose, { once: true });
 if (import.meta.hot) import.meta.hot.dispose(dispose);
 send({ kind: 'ready' });

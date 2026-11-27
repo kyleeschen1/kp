@@ -10,6 +10,12 @@ import { resolveKpModuleOwnershipZone } from '../src/architecture/kp-module-owne
 const root = resolve(import.meta.dirname, '..');
 test('each lane has standalone commands, strict distinct ports and a host-free transitive API', () => {
   const graph = collectKpTypescriptImportGraph(root);
+  const seen = new Set<string>(), queue = ['src/math-resources/data-api.ts'];
+  while (queue.length) {
+    const path = queue.pop()!; if (seen.has(path)) continue; seen.add(path);
+    assert.doesNotMatch(path, /semantic-state\/|math-resources\/runtime|rendering\//, 'Data admission cannot import evaluation or paint');
+    queue.push(...graph.localEdges.filter(edge => edge.importer === path).map(edge => edge.target));
+  }
   assert.equal(new Set(libraryLanes.map(lane => lane.port)).size, libraryLanes.length);
   for (const lane of libraryLanes) {
     assert.deepEqual(auditLibraryLane(graph, lane), [], lane.id);

@@ -34,4 +34,8 @@
 .fn-math-reading { overflow: auto; }
 .fn-math-reading > .fn-editor { min-height: 100%; overflow: visible; }
 .fn-math-reading .ProseMirror { min-height: 100vh; }
+.fn-matrix-vector { stroke: var(--fn-graph-derived); fill: var(--fn-graph-derived); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.fn-matrix-object .fn-math-graph { width: 100%; max-width: 20rem; }
+.fn-matrix-vector[data-role=input] { stroke: var(--fn-graph-curve); fill: var(--fn-surface); }
+.fn-matrix-vector[data-role=input]:is(line) { stroke-dasharray: 4 3; }
 @media (forced-colors: active) { .fn-math-graph .graph-curve path { stroke: CanvasText; } .fn-math-graph .graph-curve[data-math-role=tangent] path { stroke-dasharray: 7 4; } }

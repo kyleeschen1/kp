@@ -8,7 +8,7 @@ Last Updated: 2026-11-27
 The [roadmap](../roadmap.md) owns direction; the [charter](../strategy.md)
 and [decision](../decisions/2026-11-08-authoring-expert-attention.md) retain rationale.
 
-Approved: [matrix notebook adapter](../2026-11-27-matrix-notebook-adapter.md).
+Awaiting G2: [matrix notebook adapter](../reviews/2026-11-27-matrix-notebook-adapter.md).
 Theseus: `run-contract.kp.matrix-notebook-adapter-20261127`; stop at G2.
 Preserve editor ownership, [handoff](../reviews/2026-11-08-project-orientation.md),
 [saved evidence](../reviews/2026-11-08-saved-reading-and-motion.md) and

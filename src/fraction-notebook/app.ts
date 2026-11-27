@@ -42,14 +42,15 @@ const button = (text: string, action: () => unknown, id: string, scope: CommandS
     keys: commandKeys[id] ?? [],
     ...(state ? { state } : {}), run: action }).bind(node); return node;
 };
-const mathModule = new URLSearchParams(location.search).get('notebook') === 'quadratic' ? await import('./math-notebook.ts') : undefined;
-const storageKey = mathModule ? 'kp.mathematical-notebook.v1' : 'kp.fraction-notebook.v3';
+const notebookKind = new URLSearchParams(location.search).get('notebook');
+const mathModule = notebookKind === 'matrix' ? await import('./matrix-notebook.ts') : notebookKind === 'quadratic' ? await import('./math-notebook.ts') : undefined;
+const storageKey = notebookKind === 'matrix' ? 'kp.matrix-notebook.v1' : mathModule ? 'kp.mathematical-notebook.v1' : 'kp.fraction-notebook.v3';
 let notebook = mathModule?.seed ?? importFractionReading(canonical).notebook;
 let lastValid = notebook;
 let store: Awaited<ReturnType<typeof openFractionDraft>> | undefined;
 let storedError: string | undefined;
 try {
-  store = mathModule ? await openFractionDraft(notebook, 'kp-mathematical-notebook-v1', null) : await openFractionDraft(notebook);
+  store = mathModule ? await openFractionDraft(notebook, notebookKind === 'matrix' ? 'kp-matrix-notebook-v1' : 'kp-mathematical-notebook-v1', null) : await openFractionDraft(notebook);
   const saved = await store.read(); notebook = saved.draft; lastValid = saved.lastValid;
   const recovery = sessionStorage.getItem(storageKey) ?? (mathModule ? null : sessionStorage.getItem('kp.fraction-notebook.v2') ?? sessionStorage.getItem('kp.fraction-notebook.v1'));
   if (recovery) {
@@ -69,6 +70,11 @@ let structure: ReturnType<typeof mountStructureControls> | undefined;
 const header = el('header', 'fn-header'), branding = el('div', 'fn-branding');
 registry.add({ id: 'notebook.open-mathematics', title: mathModule ? 'Open fraction notebook' : 'Open mathematical notebook', category: 'Notebook', scope: 'notebook', keywords: ['quadratic', 'polynomial', 'graph'],
   run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign(mathModule ? '/experiments/fraction-notebook/' : '/experiments/fraction-notebook/?notebook=quadratic'); } });
+registry.add({ id: 'notebook.open-matrix', title: 'Open matrix notebook', category: 'Notebook', scope: 'notebook', keywords: ['linear algebra', 'vector', 'product'],
+  state: () => notebookKind === 'matrix' ? unavailable('This notebook is already open') : available(),
+  run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign('/experiments/fraction-notebook/?notebook=matrix'); } });
+if (notebookKind === 'matrix') registry.add({ id: 'notebook.open-quadratic', title: 'Open quadratic notebook', category: 'Notebook', scope: 'notebook', keywords: ['polynomial', 'tangent'],
+  run: async () => { await saving; if (storedError) throw new Error(storedError); location.assign('/experiments/fraction-notebook/?notebook=quadratic'); } });
 header.hidden = sessionStorage.getItem('kp.workspace.header') !== 'true';
 registry.add({ id: 'workspace.toggle-header', title: 'Toggle site header', category: 'Workspace', scope: 'workspace',
   state: () => available(!header.hidden), run: () => { header.hidden = !header.hidden; sessionStorage.setItem('kp.workspace.header', String(!header.hidden)); } });
@@ -107,7 +113,7 @@ const previewTools = el('div', 'fn-tools');
 const follow = el('input'); follow.type = 'checkbox'; follow.checked = false; const followLabel = el('label', 'fn-follow', 'Follow selection'); followLabel.prepend(follow);
 const reveal = button('Show selected passage', () => { if (selected) send({ kind: 'reveal', id: selected }); }, 'notebook.reveal-selection', 'notebook', () => selected ? available() : unavailable('Select a passage')); previewTools.append(reveal, followLabel);
 const frame = el('iframe', 'fn-preview'); frame.title = mathModule ? 'Mathematical reading preview' : 'Fraction reading preview';
-frame.src = mathModule ? '/experiments/fraction-notebook/math-preview.html' : '/reader/fraction-notebook-preview/?surface=window';
+frame.src = mathModule ? `/experiments/fraction-notebook/math-preview.html${notebookKind === 'matrix' ? '?notebook=matrix' : ''}` : '/reader/fraction-notebook-preview/?surface=window';
 // A bookmark names the real passage. Let the reader restore its native state
 // and commentary instead of treating the iframe as a separate address space.
 if (!mathModule && window.location.hash) frame.src += window.location.hash;

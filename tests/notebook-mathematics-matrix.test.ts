@@ -6,6 +6,7 @@ import { history, undo, redo, closeHistory } from 'prosemirror-history';
 import { readNotebook } from '../src/fraction-notebook/model.ts';
 import { toProse, fromProse, matrixResourcesIn } from '../src/fraction-notebook/schema.ts';
 import { copyMatrixResource } from '../src/fraction-notebook/matrix-data.ts';
+import { createMatrixNotebookRuntime } from '../src/fraction-notebook/matrix-runtime.ts';
 import { editMatrixVectorDocument, editOccurrenceExtent, createMatrixVectorRuntime } from '../src/math-resources/public-api.ts';
 
 const fixture = () => readNotebook(JSON.parse(readFileSync(new URL('../content/notebooks/matrix-object-exemplar.json', import.meta.url), 'utf8')));
@@ -43,4 +44,15 @@ test('independent matrix copies retain values but clone the complete dependency 
   const runtime = createMatrixVectorRuntime(copied); assert.deepEqual(runtime.sample().result, [3, 2]); runtime.dispose();
   const edited = editMatrixVectorDocument(copied, { kind: 'vector', field: 'x', text: '4' });
   assert.deepEqual(edited.vector.entries, [4, 2]); assert.deepEqual(original.vector.entries, [1, 2]);
+});
+test('notebook evaluator shares views, isolates copies and rejects partial identity rewrites atomically', () => {
+  const source = fixture().matrixResources![0]!, copy = copyMatrixResource(source), runtime = createMatrixNotebookRuntime([source, copy]);
+  runtime.sample(source.id); runtime.sample(source.id); assert.equal(runtime.inspect()[0]!.calls.product, 1);
+  const edited = editMatrixVectorDocument(copy, { kind: 'vector', field: 'x', text: '4' });
+  runtime.update([source, edited]); assert.deepEqual(runtime.sample(copy.id).result, [6, 2]); assert.deepEqual(runtime.sample(source.id).result, [3, 2]);
+  const replacement = copyMatrixResource(source);
+  assert.throws(() => runtime.update([editMatrixVectorDocument(source, { kind: 'vector', field: 'x', text: '5' }), { ...replacement, id: copy.id }]), /new identity/);
+  assert.deepEqual(runtime.sample(source.id).result, [3, 2]);
+  runtime.update([source]); assert.equal(runtime.inspect().length, 1); assert.throws(() => runtime.sample(copy.id), /removed/);
+  runtime.dispose(); runtime.dispose(); assert.throws(() => runtime.sample(source.id), /closed/);
 });

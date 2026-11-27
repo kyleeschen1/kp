@@ -1338,6 +1338,13 @@ test('mathematical notebook preserves the joined chat, draft and original fracti
     const chatBox = await page.locator('.kp-chat').boundingBox(), pageBox = await page.locator('.kp-page-window').boundingBox();
     expect(chatBox!.x + chatBox!.width).toBeLessThanOrEqual(pageBox!.x + 1);
     await page.screenshot({ path: info.outputPath('quadratic-chat-split.png') });
+    await equation.locator('.fn-math-heading').click(); await workspaceCommand(page, 'Open matrix notebook');
+    await expect(page).toHaveURL(/notebook=matrix/);
+    const matrix = page.locator('.fn-matrix-object[data-math-view=equation]');
+    await expect(matrix).toBeVisible(); await expect(input(page)).toContainText('Keep this unsent thought');
+    await matrix.getByRole('textbox', { name: 'A11', exact: true }).fill('3');
+    await expect(matrix.locator('.fn-math-legend')).toContainText('(5, 2)');
+    await matrix.locator('.fn-math-heading').click();
     await workspaceCommand(page, 'Open fraction notebook');
     await expect(page).not.toHaveURL(/notebook=quadratic/);
     await expect(page.locator('.fn-story')).toBeVisible();

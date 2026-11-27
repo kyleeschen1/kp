@@ -1,0 +1,120 @@
+import { Fragment, Slice, type Node as ProseNode } from 'prosemirror-model';
+import { Plugin, NodeSelection } from 'prosemirror-state';
+import { closeHistory, undo, redo } from 'prosemirror-history';
+import type { EditorView } from 'prosemirror-view';
+import { CommandRegistry, available, unavailable, target, type Target, type TargetedCommand } from '../editor-commands/registry.ts';
+import { newId } from '../notebook/model.ts';
+import { editMatrixVectorDocument, editOccurrenceExtent, readMatrixVectorDocument, invalidResourceFields, type MatrixVectorDocument } from '../math-resources/public-api.ts';
+import { readNotebook, type FractionNotebook, type MatrixObjectCell } from './model.ts';
+import { schema, matrixResourcesIn } from './schema.ts';
+import { createMatrixNotebookRuntime } from './matrix-runtime.ts';
+import { createMatrixNodeView, readMatrixCell, type MatrixViewOwner } from './matrix-view.ts';
+import { copyMatrixResource, matrixOccurrence } from './matrix-data.ts';
+import { selectedObject } from './inspector.ts';
+import { preparePastedSlice } from './clipboard.ts';
+import type { NotebookEditorExtension } from './editor.ts';
+import './math.css';
+
+interface Captured { readonly doc: ProseNode; readonly cell: MatrixObjectCell }
+export function createMatrixExtension(initial: FractionNotebook, registry: CommandRegistry, report: (message: string) => void) {
+  let current = initial.matrixResources!, editor: EditorView | undefined, disposed = false;
+  const runtime = createMatrixNotebookRuntime(current), listeners = new Set<() => void>();
+  const handles = new Map<string, TargetedCommand<Captured>>();
+  const active = () => { if (!editor || disposed) throw new Error('The matrix notebook has closed.'); return editor; };
+  const occurrence = (id: string) => {
+    let found: { node: ProseNode; pos: number } | undefined;
+    active().state.doc.descendants((node, pos) => { if (node.type.name === 'matrixObject' && node.attrs['id'] === id) found = { node, pos }; }); return found;
+  };
+  const localTarget = (id?: string): Target<Captured> => {
+    if (!editor || disposed) return { found: false, reason: 'The matrix notebook has closed' };
+    const chosen = id ? occurrence(id) : selectedObject(editor.state);
+    return chosen?.node.type.name === 'matrixObject' ? target({ doc: editor.state.doc, cell: readMatrixCell(chosen.node) }) : { found: false, reason: 'Select a matrix object first' };
+  };
+  const readiness = (c: Captured) => !editor || c.doc !== editor.state.doc ? unavailable('The notebook changed; reopen commands')
+    : !occurrence(c.cell.id) ? unavailable('The matrix object was removed') : available();
+  const replace = (d: MatrixVectorDocument) => {
+    const view = active(); view.dispatch(view.state.tr.setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? d : old)));
+  };
+  const register = (command: TargetedCommand<Captured>) => handles.set(command.id, command);
+  register(registry.targeted({ id: 'matrix.graph', title: 'Graph selected matrix-vector product', category: 'Mathematics', scope: 'notebook', keywords: ['linked', 'representation', 'plot'], target: () => localTarget(),
+    state: c => { const ready = readiness(c); if (!ready.enabled) return ready;
+      const { document: d } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
+      return invalidResourceFields(d).length ? unavailable('Correct the numeric draft first') : d.occurrences.length >= 8 ? unavailable('This resource supports eight view occurrences') : available(); },
+    run: c => {
+      const view = active(), { document: d, view: source } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
+      const next = { ...source, id: newId(), view: 'graph' as const }, updated = readMatrixVectorDocument({ ...d, occurrences: [...d.occurrences, next] });
+      const found = occurrence(c.cell.id)!, pos = found.pos + found.node.nodeSize;
+      const cell: MatrixObjectCell = { type: 'matrixObject', id: newId(), metadata: {}, resource: d.id, occurrence: next.id, folded: false };
+      const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? updated : old)).insert(pos, schema.node('matrixObject', cell));
+      view.dispatch(tr.setSelection(NodeSelection.create(tr.doc, pos)).scrollIntoView()); view.focus();
+    } }));
+  register(registry.targeted({ id: 'matrix.fold', title: 'Fold or unfold matrix object', category: 'Mathematics', scope: 'notebook', target: () => localTarget(), state: readiness,
+    run: c => { const view = active(), found = occurrence(c.cell.id)!;
+      view.dispatch(closeHistory(view.state.tr).setNodeAttribute(found.pos, 'folded', !c.cell.folded)); } }));
+  for (const [direction, factor] of [['in', .5], ['out', 2]] as const) register(registry.targeted({ id: `matrix.zoom-${direction}`, title: `Zoom ${direction} selected matrix graph`, category: 'Mathematics', scope: 'notebook', target: () => localTarget(),
+    state: c => { const ready = readiness(c); if (!ready.enabled) return ready;
+      const { view } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence), extent = view.extent * factor;
+      return view.view !== 'graph' ? unavailable('Select a graph') : extent < 1 || extent > 250 ? unavailable('Keep range between 1 and 250') : available(); },
+    run: c => { const { document: d, view } = matrixOccurrence(current, c.cell.resource, c.cell.occurrence);
+      const next = editOccurrenceExtent(d, view.id, view.extent * factor), editor = active();
+      editor.dispatch(closeHistory(editor.state.tr).setNodeAttribute(0, 'value', current.map(old => old.id === d.id ? next : old))); } }));
+  const owner: MatrixViewOwner = { runtime, subscribe(fn) { listeners.add(fn); return () => listeners.delete(fn); },
+    select(id) { if (!editor || disposed) return; const found = occurrence(id); if (found && (!(editor.state.selection instanceof NodeSelection) || editor.state.selection.from !== found.pos))
+      editor.dispatch(editor.state.tr.setSelection(NodeSelection.create(editor.state.doc, found.pos))); },
+    edit(id, edit) { const d = current.find(d => d.id === id); if (!d) throw new Error('The matrix was removed.'); replace(editMatrixVectorDocument(d, edit)); },
+    bind(button, command, id) { handles.get(command)?.bindResolvedTarget(button, () => localTarget(id)); },
+    undo(forward) { const view = active(); (forward ? redo : undo)(view.state, view.dispatch); } };
+  const containsMatrix = (slice: Slice) => { let found = false; slice.content.descendants(n => { if (n.type.name === 'matrixObject') found = true; }); return found; };
+  const paste = (view: EditorView, slice: Slice, position?: number) => {
+    if (!containsMatrix(slice)) return false;
+    try {
+      const copies = new Map<string, MatrixVectorDocument>();
+      const visit = (node: ProseNode): ProseNode => {
+        if (node.type.name === 'matrixObject') {
+          const cell = readMatrixCell(node), { document: source } = matrixOccurrence(current, cell.resource, cell.occurrence);
+          if (!occurrence(cell.id)) return node; // Cut/move retains its source and occurrence.
+          let copy = copies.get(source.id); if (!copy) { copy = copyMatrixResource(source); copies.set(source.id, copy); }
+          const index = source.occurrences.findIndex(o => o.id === cell.occurrence);
+          return schema.node('matrixObject', { ...cell, id: newId(), resource: copy.id, occurrence: copy.occurrences[index]!.id });
+        }
+        if (node.isText) return node; const children: ProseNode[] = []; node.forEach(n => children.push(visit(n))); return node.copy(Fragment.from(children));
+      };
+      const children: ProseNode[] = []; slice.content.forEach(n => children.push(visit(n)));
+      const copied = preparePastedSlice(view.state.doc, new Slice(Fragment.from(children), slice.openStart, slice.openEnd));
+      const tr = closeHistory(view.state.tr).setNodeAttribute(0, 'value', [...current, ...copies.values()]);
+      if (position === undefined) tr.replaceSelection(copied); else tr.replaceRange(position, position, copied);
+      view.dispatch(tr.scrollIntoView()); return true;
+    } catch (error) { report(String(error)); return true; }
+  };
+  const plugin = new Plugin({ filterTransaction(tr) {
+    if (!tr.docChanged) return true;
+    try {
+      const resources = matrixResourcesIn(tr.doc);
+      for (const d of resources) {
+        const previous = current.find(old => old.id === d.id);
+        if (previous && (previous.matrix.id !== d.matrix.id || previous.vector.id !== d.vector.id || previous.result.id !== d.result.id))
+          throw new Error('A replacement matrix closure requires a new identity.');
+      }
+      // ProseMirror splits may temporarily duplicate block IDs; the existing
+      // identity plugin repairs those in appendTransaction. Validate this
+      // owner's resource/reference invariants here, then serialize afterward.
+      readNotebook({ ...initial, matrixResources: resources, cells: [] });
+      const occurrences = new Set<string>();
+      tr.doc.descendants(node => {
+        if (node.type.name === 'story' || node.type.name === 'mathObject') throw new Error('Use this exemplar’s matrix resources.');
+        if (node.type.name !== 'matrixObject') return;
+        const cell = readMatrixCell(node); matrixOccurrence(resources, cell.resource, cell.occurrence);
+        if (occurrences.has(cell.occurrence)) throw new Error('Each matrix cell requires its own view occurrence.'); occurrences.add(cell.occurrence);
+      });
+      return true;
+    } catch (error) { report(String(error)); return false; }
+  }, view(view) { editor = view; return { update(next, before) {
+    editor = next; if (next.state.doc !== before.doc) { listeners.forEach(fn => fn()); registry.notify(); }
+  } }; }, props: { handleDrop(view, event, slice, moved) {
+    if (moved || !containsMatrix(slice)) return false;
+    const pos = view.posAtCoords({ left: event.clientX, top: event.clientY }); if (pos) paste(view, slice, pos.pos); return true;
+  } } });
+  const extension: NotebookEditorExtension = { label: 'Matrix notebook', plugins: [plugin], nodeViews: { matrixObject: node => createMatrixNodeView(node, owner) }, paste,
+    beforeRender(doc, previous) { if (doc === previous) return; current = matrixResourcesIn(doc); runtime.update(current); } };
+  return { extension, runtime, dispose() { if (disposed) return; disposed = true; handles.forEach(h => h.dispose()); listeners.clear(); runtime.dispose(); editor = undefined; } };
+}

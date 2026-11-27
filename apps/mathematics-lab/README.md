@@ -4,6 +4,12 @@ This independent fixture applies a numerical 2×2 matrix to a 2D vector. It uses
 KP's existing typed-math multiplication and semantic-state dependency evaluator;
 it imports no notebook application, editor, chat, or experimental renderer.
 
+`src/math-resources/public-api.ts` supplies the complete resource API. Hosts
+that only need JSON admission can import `src/math-resources/data-api.ts`
+without loading evaluation. The notebook consumer at
+`/experiments/fraction-notebook/?notebook=matrix` exercises the same API through
+native editor history; its G2 presentation review remains separate from this lab.
+
 From the repository root:
 
 ```sh

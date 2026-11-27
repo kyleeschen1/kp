@@ -2,11 +2,99 @@
   "id": "task.kp.matrix-notebook-adapter-20261127",
   "kind": "task",
   "title": "Edit matrix resources through the notebook",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "HUMAN_CHECKPOINT: implementation checked; G2 visual judgment remains.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/2026-11-27-matrix-notebook-adapter.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-11-27-matrix-notebook-adapter.md"
     }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:notebook-mathematics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:36.331Z"
+    },
+    {
+      "command": "npm run test:fraction-notebook",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:37.688Z"
+    },
+    {
+      "command": "npm run typecheck:fraction-notebook",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:38.310Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:38.932Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:39.556Z"
+    },
+    {
+      "command": "npm run test:library-boundaries",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:40.175Z"
+    },
+    {
+      "command": "npm run check:playwright-configs",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:40.828Z"
+    },
+    {
+      "command": "npm run measure:notebook-mathematics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:41.469Z"
+    },
+    {
+      "command": "npm run visual:notebook-mathematics",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:42.104Z"
+    },
+    {
+      "command": "npm run visual:notebook-mathematics -- --project=firefox --grep 'matrix source|matrix commands|matrix notebook stays'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:42.720Z"
+    },
+    {
+      "command": "npm run visual:editor-chat -- --grep 'mathematical notebook preserves'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:43.383Z"
+    },
+    {
+      "command": "npm run visual:fraction-notebook -- --grep 'direct prose|phone stacks|production reader|new paragraphs'",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:52:44.013Z"
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-11-27T09:53:11.333Z"
+    }
+  ],
+  "revisitWhen": [
+    "User reviews the matrix notebook exemplar at G2"
   ]
 }

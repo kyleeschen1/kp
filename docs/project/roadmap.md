@@ -21,9 +21,9 @@ Reference experience: [organized rules with reusable, replayable derivations](de
 
 ## Current approved commitment
 
-**Approved:** [matrix notebook adapter](2026-11-27-matrix-notebook-adapter.md),
-reusing the checked resource API through native history, commands and linked views.
-Stop at G2 review. [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md)
+**Checked, awaiting G2:** [matrix notebook adapter](reviews/2026-11-27-matrix-notebook-adapter.md),
+reusing the resource API through native history, commands and linked views.
+Review before promotion. [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md)
 are complete; section-clipping judgment remains deferred.
 
 **Accepted:** [unified notebook](reviews/2026-11-24-unified-notebook-surface.md),

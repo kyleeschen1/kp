@@ -1,5 +1,5 @@
 import { newId, type UUID } from '../notebook/model.ts';
-import { readMatrixVectorDocument, type MatrixVectorDocument } from '../math-resources/public-api.ts';
+import { readMatrixVectorDocument, type MatrixVectorDocument } from '../math-resources/data-api.ts';
 import { array, fail } from './json.ts';
 
 export function readMatrixResources(raw: unknown): readonly MatrixVectorDocument[] {
