@@ -12,8 +12,8 @@ export const projectVision: ProjectVision = {
     finish: "One matrix family supports deliberate cross-notebook Copy, Derive and Transclude, and one fresh artifact completes the conversational authoring and reuse journey with evidence and human review.",
     source: { label: "Approved finish scope", href: "docs/project/reviews/2026-11-27-studio-finish.md" }
   },
-  uncertainty: "Ten horizon outcomes have bounded accepted evidence. Deliberate matrix reuse and a single-artifact actual-response journey are implemented and await the combined human checkpoint. Two bounded model responses do not establish general reliability or learner transfer.",
-  nextJudgment: "Review the actual matrix note and Copy/Derive/Transclude choices using the combined studio-finish review packet; preserve its explicit publication and snapshot boundaries.",
+  uncertainty: "The first twelve bounded outcomes are accepted. Discovery before object insertion, substantive mathematical chat revision and reuse outside the matrix family remain unproved; two prose responses do not establish general generation reliability or learner transfer.",
+  nextJudgment: "Review the proposed second twelve-loop horizon, starting with library search, guided insertion and one checked mathematical chat revision; no new implementation is authorized yet.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -41,14 +41,14 @@ export const projectVision: ProjectVision = {
     {
       id: "authoring", title: "Authoring & the LLM loop", horizon: "next",
       destination: "Compose useful explanations quickly through a small, discoverable API with precise repair feedback.",
-      established: "Seven accepted references form one lightweight index. Deliberate matrix Copy/Derive/Transclude and one actual model-revised matrix artifact now traverse export, reuse, reopening and exact return. Their combined candidate awaits human judgment; the earlier fraction annotation remains accepted.",
-      evidence: { label: "Actual studio candidate and remaining judgment", href: "docs/project/reviews/2026-11-27-studio-finish-review.md" },
+      established: "The first twelve bounded outcomes are accepted: seven references, selected-object discovery, deliberate matrix reuse and one actual revised artifact traversing export/reopen/return. Existing chat proposals revise prose; broader authoring and other-family reuse remain separate work.",
+      evidence: { label: "Accepted studio finish and preserved limits", href: "docs/project/reviews/2026-11-27-studio-finish-review.md" },
       outcome: {
-        authority: "approved",
-        id: "deliberate-mathematical-reuse", title: "Finish deliberate reuse in one mathematical family",
-        finish: "Independent Copy, dependency-preserving Derive and shared-source Transclude work across two notebooks with explicit pinned/live updates, local view state, reload and undo. One actual model-revised artifact completes the integrated journey and passes human review.",
-        excludes: "A universal content database, new mathematics, changing shared chat drafts, unbounded model spending and publication.",
-        source: { label: "Approved finish and preservation boundary", href: "docs/project/reviews/2026-11-27-studio-finish.md" }
+        authority: "proposed",
+        id: "discoverable-mathematical-authoring", title: "Find, insert and substantively revise mathematical objects",
+        finish: "Search accepted references and capabilities, insert fresh matrix/quadratic objects through typed slots, and explicitly preview/accept one checked matrix operand/view revision from chat. Preserve native history, source pins and a real-response review gate.",
+        excludes: "Implicit implementation or model-call approval, universal schemas, arbitrary patches/code, mixed-book migration, new mathematical families in the first tranche, and deployment.",
+        source: { label: "Proposed first tranche and twelve-loop horizon", href: "docs/project/reviews/2026-11-27-second-twelve-loop-horizon.md" }
       }
     },
     {
@@ -105,6 +105,11 @@ export const projectVision: ProjectVision = {
     }
   ],
   completed: [
+    {
+      title: "First twelve-loop studio horizon accepted",
+      scope: "The final matrix Copy/Derive/Transclude and actual-response authoring journey are accepted, closing the original bounded horizon. Eight final Chromium/Firefox reuse cases pass. One matrix family and short prose trials do not establish arbitrary generation, cross-family reuse or learning efficacy.",
+      source: { label: "Final acceptance and evidence", href: "docs/project/reviews/2026-11-27-studio-finish-review.md" }
+    },
     {
       title: "Accepted actual-response annotation revision",
       scope: "One explicitly authorized Codex turn produced a valid two-sentence fraction annotation in 9.3 seconds. Native preview and human judgment passed; shared chat and notebook were unchanged. Existing tests cover acceptance, rejection and undo. This closes the bounded foundation outcome, not general conversational authoring.",
@@ -891,6 +896,13 @@ export const projectVision: ProjectVision = {
       after: "The user says go all the way, approving a bounded matrix-family finish, then authorizes one additional isolated read-only model turn. The combined candidate retains human review before closing the horizon.",
       reason: "Connect the existing authoring and mathematical capabilities before adding families. Retain explicit Copy/Derive/Transclude semantics, publication boundaries, actual response evidence and the original preservation limits.",
       source: { label: "Approved finish and actual review artifact", href: "docs/project/reviews/2026-11-27-studio-finish-review.md" }
+    },
+    {
+      id: "accept-studio-propose-reusable-mathematical-vocabulary", on: "2026-11-27",
+      before: "The combined matrix reuse and actual-response artifact awaited final human judgment.",
+      after: "The user accepts it and requests the next twelve loops. Close the original finite horizon; propose discoverable authoring, a second reuse family, meaningful-part links, concept recipes and richer linear-map explanations.",
+      reason: "Make supported examples cheaper to author and connect before widening mathematical coverage. The charter and original boundaries remain; this request authorizes planning, not a new delivery run.",
+      source: { label: "Successor horizon and first-tranche recommendation", href: "docs/project/reviews/2026-11-27-second-twelve-loop-horizon.md" }
     }
   ]
 };

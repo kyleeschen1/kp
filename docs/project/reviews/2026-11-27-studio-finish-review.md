@@ -1,7 +1,9 @@
 # Matrix reuse and one complete authoring journey
 
 Date: 2026-11-27
-Status: candidate for the combined human checkpoint; not yet visual acceptance.
+Status: accepted. The user's “it is great! Propose the next 12 loops” accepts
+the combined note/reuse exemplar and closes this finite finish. New work remains
+a [separate proposal](2026-11-27-second-twelve-loop-horizon.md).
 Scope: [approved finish](2026-11-27-studio-finish.md), completing the two gaps in
 the [twelve-outcome audit](2026-11-27-twelve-loop-review.md).
 Execution: `run-contract.kp.studio-finish-20261127` owns live progress.
@@ -22,7 +24,7 @@ Look for the question **Why does the result point straight up?** above the
 matrix. Its weighted columns cancel horizontally and add to five vertically.
 Use the existing Explain controls to follow that relationship. Judge whether
 the question, nearby explanation and mathematical view help direct attention;
-the wording and interaction still need human judgment.
+the wording and interaction are now accepted at this bounded scope.
 
 For reuse, select the matrix and choose **Publish selected matrix source locally**.
 Choose **New independent matrix notebook**, then **Reuse published matrix in this
@@ -95,8 +97,8 @@ notification churn; it is not a claim that every browser timing failure is gone.
 
 The exact checks and their results are recorded in Theseus. Run the saved-output
 workflow without inference with `npm run visual:matrix-studio-trial -- --resume`.
-The combined human checkpoint is the remaining finish condition; do not equate
-checked implementation with acceptance of the final two horizon outcomes.
+The combined human checkpoint was the remaining finish condition at delivery;
+the subsequent explicit acceptance above closes the final two horizon outcomes.
 
 ## Cost and validation
 
@@ -140,4 +142,4 @@ or weaken its mathematical assertions.
 Firefox. The serial actual-artifact recheck passed in 4.143 seconds with zero
 inference, no browser errors and unchanged shared chat. Final node/test types
 also passed after the harness changes. These are scoped integration checks,
-not the entire repository release matrix. The human checkpoint remains open.
+not the entire repository release matrix. The human checkpoint is now accepted.

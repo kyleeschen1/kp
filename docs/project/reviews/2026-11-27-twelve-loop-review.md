@@ -5,6 +5,12 @@ Status: evidence reconciliation after the user's acceptance of the actual Codex
 annotation. This is a source-linked assessment, not a second execution queue.
 Theseus owns each bounded contract's status.
 
+Subsequent closure: the user accepts the [studio finish](2026-11-27-studio-finish-review.md).
+Items 4 and 12 now have implemented, checked and accepted bounded evidence;
+all twelve are complete at their stated scope. The table below records the earlier
+audit, not current unfinished work. The [successor](2026-11-27-second-twelve-loop-horizon.md)
+is a new proposal, not an expansion of those finish lines.
+
 The [original horizon](2026-11-27-twelve-loop-horizon.md) has **ten bounded outcomes
 complete and two partial**. The foundation contract's five packages are a different
 denominator: those are now all accepted. Completing that tranche does not close

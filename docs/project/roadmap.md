@@ -5,8 +5,8 @@ Direction: `authoring-expert-attention-v1`
 Active Thread: `threads/co-creative-practice.md`
 Current Commitment: `kp-studio-finish`
 Execution Contract: `run-contract.kp.studio-finish-20261127`
-Next Product Milestone: `deliberate-mathematical-reuse`
-Milestone Authority: approved
+Next Product Milestone: `discoverable-mathematical-authoring`
+Milestone Authority: proposed
 
 ## Where we are going
 
@@ -37,10 +37,10 @@ and shared defaults; discovery and actual-model revision are accepted.
 **Accepted:** [context return](reviews/2026-11-27-section-context-return.md).
 **Accepted:** [reference collection](reviews/2026-11-27-studio-reference-collection.md).
 **Complete, accepted:** [actual-response trial](reviews/2026-11-27-contextual-revision-trial.md).
-[Horizon audit](reviews/2026-11-27-twelve-loop-review.md): ten complete, two partial.
-Approved: [finish reuse and studio proof](reviews/2026-11-27-studio-finish.md).
-[Combined candidate](reviews/2026-11-27-studio-finish-review.md): deliberate matrix
-reuse and the actual-response journey are implemented; final human judgment remains.
+[Twelve outcomes complete](reviews/2026-11-27-twelve-loop-review.md).
+**Accepted:** [studio finish](reviews/2026-11-27-studio-finish-review.md).
+**Proposed next:** [reusable mathematical vocabulary](reviews/2026-11-27-second-twelve-loop-horizon.md),
+starting with search, guided insertion and substantive chat revision. No new run approved.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion remains separate.
 
@@ -73,8 +73,9 @@ Wider player/matrix promotion remains separate; renderer replacement undecided. 
 The [independent object adapter](reviews/2026-11-25-workbench-kp-object-boundary.md)
 remains a foundation. The [contextual revision proposal](reviews/2026-11-25-llm-authoring-next-step.md)
 now informs the bounded approved revision tranche; automatic document edits remain excluded.
-Exclude publication and general editor promotion. Custom motions, transclusion
-and search remain parked; MathML declined.
+Exclude publication and general editor promotion. Custom motions and general
+content transclusion remain parked; matrix reuse is accepted, library search proposed.
+MathML declined.
 The [two-notebook proof](reviews/2026-11-24-notebook-proof.md) retains composition
 evidence; its inspector was unaccepted. Fractional editorial review remains parked.
 
@@ -89,11 +90,10 @@ promptly, and preserves a reusable result without custom repository engineering
 for each revision. Then pressure one learner-requested adaptation that retains
 the important reasoning and exact context.
 
-The independent editor's conversation/preview integration remains a separate
-[handoff](reviews/2026-11-08-project-orientation.md). The
-[fractional trial](reviews/2026-11-09-fractional-reading.md) measured about 21 seconds
-for a source-only revision after support engineering; fresh generation and
-integrated workbench latency remain unproved.
+The [editor handoff](reviews/2026-11-08-project-orientation.md) remains separate.
+The [fractional trial](reviews/2026-11-09-fractional-reading.md) recorded a
+21-second source revision after engineering. Bounded studio trials now exist;
+general generation and authoring-speed claims remain unproved.
 
 ## What already exists
 

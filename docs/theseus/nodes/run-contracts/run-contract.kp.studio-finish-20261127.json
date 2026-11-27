@@ -2,7 +2,8 @@
   "id": "run-contract.kp.studio-finish-20261127",
   "kind": "run-contract",
   "title": "Finish mathematical studio reuse and authoring",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -56,8 +57,8 @@
     {
       "id": "review",
       "title": "Combined-exemplar-review",
-      "summary": "HUMAN_CHECKPOINT: final eight-case Chromium/Firefox suite, actual saved-artifact journey, full types, architecture and measured consumers pass. Combined packet and actual JSON ready at docs/project/reviews/2026-11-27-studio-finish-review.md. Await judgment of generated note and reuse choices before marking horizon items four and twelve complete.",
-      "status": "in-progress"
+      "summary": "User says it is great and requests the next twelve loops. This accepts the combined matrix reuse interface and actual explanatory-note artifact; existing gates pass. Close the original bounded twelve-outcome horizon without claiming broad mathematical or learner-transfer completion.",
+      "status": "complete"
     }
   ]
 }

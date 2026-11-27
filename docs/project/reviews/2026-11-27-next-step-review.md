@@ -4,6 +4,10 @@ Date: 2026-11-27
 Status: approved by the subsequent “go”; bounded interactive delivery.
 Contract: `run-contract.kp.matrix-notebook-explanation-20261127.v1`.
 
+This recommendation is completed provenance. After the original studio horizon
+was accepted, the [second twelve-loop review](2026-11-27-second-twelve-loop-horizon.md)
+became the proposed next direction; it does not reopen this completed contract.
+
 The user's “great! what next” accepts the bounded
 [G2 matrix notebook](2026-11-27-matrix-notebook-adapter.md). The three independent
 library lanes and this product consumer are complete at their stated scope.

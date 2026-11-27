@@ -2,9 +2,9 @@
   "id": "task.kp.studio-finish-20261127",
   "kind": "task",
   "title": "Finish deliberate mathematical reuse and integrated studio journey",
-  "status": "deferred",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "HUMAN_CHECKPOINT: implementation and final gates complete; await combined matrix reuse and actual explanatory-note judgment.",
+  "summary": "Accepted by user after the checked combined review: deliberate matrix reuse and actual artifact authoring/reopen/return finish the final two bounded horizon outcomes. Next twelve loops are a proposal only.",
   "verificationRecords": [
     {
       "command": "npm run visual:matrix-reuse -- --project=firefox",

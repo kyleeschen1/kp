@@ -1,7 +1,10 @@
 # Twelve-loop horizon: a usable mathematical explanation studio
 
 Date: 2026-11-27
-Status: direction and continued delivery approved; the first tranche and subsequent linked-views continuation below retain local visual gates.
+Status: complete at the twelve bounded outcomes' declared scope. The user's
+acceptance of the [studio finish](2026-11-27-studio-finish-review.md) closes the
+last two outcomes. The approval and delivery history below is retained; the
+[next twelve loops](2026-11-27-second-twelve-loop-horizon.md) are proposed separately.
 
 ## Approved first delivery tranche
 
