@@ -1,17 +1,21 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
+import katex from "katex";
 
 import {
   add,
   compileExpression,
   compileGradient,
   constant,
+  cos,
   differentiate,
   divide,
   evaluateConstantExpression,
   expressionToLatex,
+  multiply,
   negate,
   power,
+  sin,
   variable
 } from "../src/math/expression.ts";
 import {
@@ -48,6 +52,61 @@ test("semantic expressions render to LaTeX and evaluate numerically", () => {
 
   assert.equal(expressionToLatex(expression), "\\frac{x^{2} - y^{2}}{4}");
   assert.equal(evaluate({ x: 2, y: 1 }), 0.75);
+});
+
+test("round-trip number printing is opt-in and default nested output stays unchanged", () => {
+  const expression = divide(
+    add(sin(multiply(constant(1e-8), variable('x'))), cos(add(variable('y'), constant(-1e-8)))),
+    power(add(variable('z'), constant(1.23456789)), -1e-8)
+  );
+  const legacy = '\\frac{\\sin\\left(0 x\\right) + \\cos\\left(y - 0\\right)}{\\left(z + 1.234568\\right)^{-0}}';
+  assert.equal(expressionToLatex(expression), legacy);
+  assert.equal(expressionToLatex(expression, {}), legacy);
+  const precise = '\\frac{\\sin\\left(1 \\times 10^{-8} x\\right) + \\cos\\left(y - 1 \\times 10^{-8}\\right)}{\\left(z + 1.23456789\\right)^{-1 \\times 10^{-8}}}';
+  assert.equal(expressionToLatex(expression, { numbers: 'round-trip' }), precise);
+  assert.doesNotThrow(() => katex.renderToString(precise, { throwOnError: true }));
+  // Choosing a presentation never mutates the expression or future defaults.
+  assert.equal(expressionToLatex(expression), legacy);
+  for (const [value, expected] of [[1e-8, '0'], [-1e-8, '-0'], [1.23456789, '1.234568'], [1e30, '1e+30']] as const) {
+    assert.equal(expressionToLatex(constant(value)), expected);
+  }
+});
+
+test("round-trip constants retain tiny, large, signed, and fractional numeric values", () => {
+  const values = [0, 1, -1, 1e-8, -1e-8, 1e30, -1e30, 1.2345678901234567, Math.PI, Number.MIN_VALUE, -Number.MIN_VALUE, Number.MAX_VALUE];
+  for (const value of values) {
+    const latex = expressionToLatex(constant(value), { numbers: 'round-trip' });
+    const scientific = /^(-?\d+(?:\.\d+)?) \\times 10\^\{(-?\d+)\}$/.exec(latex);
+    const recovered = scientific ? Number(`${scientific[1]}e${scientific[2]}`) : Number(latex);
+    assert.equal(recovered, value, latex);
+    assert.doesNotThrow(() => katex.renderToString(latex, { throwOnError: true }));
+  }
+  assert.equal(expressionToLatex(constant(-0), { numbers: 'round-trip' }), '0');
+});
+
+test("numeric notation has correct grouping in powers, products, and signed nested expressions", () => {
+  const positivePower = { kind: 'power', base: constant(1e-8), exponent: 2 } as const;
+  const negativePower = { kind: 'power', base: constant(-1e30), exponent: -1e-8 } as const;
+  const examples = [
+    [positivePower, '\\left(1 \\times 10^{-8}\\right)^{2}'],
+    [negativePower, '\\left(-1 \\times 10^{30}\\right)^{-1 \\times 10^{-8}}'],
+    [multiply(variable('x'), constant(-1e-8)), '\\left(-1 \\times 10^{-8}\\right) x'],
+    [negate(divide(constant(1e-8), cos(constant(-1e30)))), '-\\frac{1 \\times 10^{-8}}{\\cos\\left(-1 \\times 10^{30}\\right)}'],
+    [add(variable('x'), negate(sin(constant(1e-8)))), 'x - \\sin\\left(1 \\times 10^{-8}\\right)']
+  ] as const;
+  for (const [expression, expected] of examples) {
+    const latex = expressionToLatex(expression, { numbers: 'round-trip' });
+    assert.equal(latex, expected);
+    assert.doesNotThrow(() => katex.renderToString(latex, { throwOnError: true }));
+  }
+});
+
+test("round-trip mode refuses nonfinite constants and exponents at any depth", () => {
+  for (const value of [NaN, Infinity, -Infinity]) {
+    for (const expression of [constant(value), sin(divide(variable('x'), constant(value))), power(variable('x'), value)]) {
+      assert.throws(() => expressionToLatex(expression, { numbers: 'round-trip' }), /finite numbers/);
+    }
+  }
 });
 
 test("symbolic differentiation produces executable partial derivatives", () => {
