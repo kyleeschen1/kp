@@ -3,7 +3,7 @@
   "kind": "task",
   "title": "Link mathematical views and make capabilities discoverable and revisable",
   "status": "deferred",
-  "summary": "HUMAN_CHECKPOINT: exact annotation request and isolated single-turn plan ready; await explicit inference authorization or actual response evidence; preserve shared draft",
+  "summary": "HUMAN_CHECKPOINT: actual Codex annotation and native preview ready; judge question-led equality wording. Exactly one authorized turn consumed, no further inference authorized; draft untouched. Evidence: docs/project/reviews/2026-11-27-contextual-revision-trial.md.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -119,11 +119,40 @@
       "scope": "standard",
       "checkedAt": "2026-11-27T17:13:44.890Z",
       "notes": "75 checks passed after tying resumed commitment to original approved contract source and shortening roadmap to its unchanged startup limit"
+    },
+    {
+      "command": "npm run visual:contextual-revision-trial -- --live",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T17:21:54.252Z",
+      "notes": "Exactly one explicitly authorized gpt-6-astra turn through installed transport: 9293 ms, one actual response, zero tool messages, native annotation preview admitted, notebook/shared chat unchanged. Replay guard then intentionally exited 1 before connection/inference; no second send. Actual wording awaits human judgment. Evidence in docs/project/reviews/contextual-revision-trial."
+    },
+    {
+      "command": "npx tsc --project config/typescript/tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T17:21:55.250Z",
+      "notes": "Node tooling types pass including isolated single-turn browser runner; no production transport or renderer change."
+    },
+    {
+      "command": "npm run test:studio-foundations",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T17:21:55.968Z",
+      "notes": "38 existing checks pass; annotation authority, preservation, undo, discovery and theme boundaries unchanged."
+    },
+    {
+      "command": "npm run test:project-vision",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-11-27T17:22:29.271Z",
+      "notes": "75 passed on final rerun. First run failed only because updated active thread was 452 words against unchanged 450-word startup ceiling; shortened status sentence, no budget increase."
     }
   ],
   "revisitWhen": [
     "User reviews the linked matrix/shared theme and tries a supported annotation revision through the existing chat; then resume the named contract without new routine approval.",
     "Actual response trial evidence is available.",
-    "User explicitly authorizes one real read-only Codex turn in an isolated session or supplies actual trial evidence"
+    "User explicitly authorizes one real read-only Codex turn in an isolated session or supplies actual trial evidence",
+    "User judges the captured actual annotation; then close or correct this bounded trial without inferring another model call."
   ]
 }

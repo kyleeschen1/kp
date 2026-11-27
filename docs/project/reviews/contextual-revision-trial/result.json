@@ -1,0 +1,14 @@
+{
+  "inferenceAttempts": 1,
+  "previewValidated": true,
+  "accepted": false,
+  "model": "gpt-6-astra",
+  "threadId": "01a21e05-245b-70f3-ab25-50743f165ede",
+  "elapsedMs": 9293,
+  "responseCount": 1,
+  "toolMessageCount": 0,
+  "sourceDocumentUnchanged": true,
+  "browserErrors": [],
+  "comparison": "Current\n\nKeep the condition true\nKeep the equality true. Change both sides together.\n\nProposed\n\nKeep the condition true\nWould the sides still be equal if only one changed? Subtracting three from both sides keeps them equal.",
+  "sharedConversationUnchanged": true
+}

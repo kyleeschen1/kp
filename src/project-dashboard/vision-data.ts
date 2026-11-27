@@ -9,11 +9,11 @@ export const projectVision: ProjectVision = {
     title: "Test one actual conversational annotation revision",
     approval: "approved",
     contractId: "run-contract.kp.studio-foundations-20261127",
-    finish: "Complete the existing annotation-revision package with one actual response, checked preview and human usefulness judgment; real inference requires explicit authorization under the retained spending exclusion.",
+    finish: "Complete the existing annotation-revision package with one actual response, checked preview and human usefulness judgment. The single explicitly authorized turn is complete; further inference remains excluded.",
     source: { label: "Approved studio scope and retained exclusions", href: "docs/project/reviews/2026-11-27-twelve-loop-horizon.md" }
   },
-  uncertainty: "The linked matrix graph and shared theme are accepted. Bounded chat proposals have integration evidence; actual model usefulness, cross-host live subscription, broad extensibility and learner transfer remain unproved.",
-  nextJudgment: "The collection and authored contrast are accepted. Authorize one isolated read-only Codex turn, then judge whether its annotation improves the reasoning. The shared chat draft stays untouched; actual model usefulness is still unproved.",
+  uncertainty: "One actual Codex annotation passed the existing validator and native preview in an isolated session. Human usefulness judgment, general model reliability, cross-host live subscription and learner transfer remain unproved.",
+  nextJudgment: "Review the actual two-sentence equality annotation and its native preview: does the question and specific subtraction explanation help? The one authorized turn is complete; the shared draft and notebook are unchanged.",
   progression: [
     { title: "Create and revise", outcome: "Authors develop exceptional explanations and attention choreography through a responsive workflow." },
     { title: "Adapt and interpret", outcome: "Learners customize an explanation and show what they understand with context intact." },
@@ -47,8 +47,8 @@ export const projectVision: ProjectVision = {
         authority: "approved",
         id: "contextual-revision-trial", title: "Finish the actual-response revision proof",
         finish: "One genuine model proposal reaches the existing annotation preview and receives a human usefulness judgment; retain source pins, rejection, undo and the explicit inference authorization boundary.",
-        excludes: "Model spending before explicit authorization, changing the shared chat draft, automatic file edits, new mathematics, a generic revision framework and publication.",
-        source: { label: "Prepared trial and retained authority boundary", href: "docs/project/reviews/2026-11-27-contextual-revision-trial.md" }
+        excludes: "Further inference beyond the completed single authorized turn, changing the shared chat draft, automatic file edits, new mathematics, a generic revision framework and publication.",
+        source: { label: "Actual response, preview evidence and remaining judgment", href: "docs/project/reviews/2026-11-27-contextual-revision-trial.md" }
       }
     },
     {

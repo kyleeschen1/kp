@@ -57,6 +57,7 @@
     "test:editor-chat": "node --disable-warning=ExperimentalWarning --test tests/fraction-notebook-chat.test.ts",
     "test:vim-coverage": "node --disable-warning=ExperimentalWarning --test tests/fraction-notebook-vim-coverage.test.ts tests/fraction-notebook-rows.test.ts",
     "check:editor-chat:codex": "node --disable-warning=ExperimentalWarning scripts/check-editor-chat-codex.ts",
+    "visual:contextual-revision-trial": "node --disable-warning=ExperimentalWarning scripts/trial-contextual-revision.ts",
     "visual:editor-chat": "playwright test --config config/playwright/playwright.editor-chat.config.ts --project=chromium --workers=1",
     "visual:vim-coverage": "playwright test --config config/playwright/playwright.vim-coverage.config.ts --project=chromium --workers=1",
     "visual:fraction-notebook": "playwright test --config config/playwright/playwright.fraction-notebook.config.ts --project=chromium --workers=1",

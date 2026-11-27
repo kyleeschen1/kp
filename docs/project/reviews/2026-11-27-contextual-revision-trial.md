@@ -1,7 +1,7 @@
 # Resume the actual-response annotation trial
 
 Date: 2026-11-27
-Status: preparation within approved scope; one real inference turn needs explicit authorization.
+Status: authorized real response validated and previewed; awaiting human usefulness judgment.
 Execution owner: existing `run-contract.kp.studio-foundations-20261127`,
 remaining `revision` package. Do not create a competing run or reopen its four
 accepted packages. The reference collection is accepted and closed.
@@ -75,11 +75,80 @@ source and shortening roadmap prose to its unchanged startup budget.
 
 The existing run contract expressly excludes **“model spending”**, and the
 approved horizon says **“No paid model calls are authorized by this plan.”**
-Collection approval does not explicitly remove that exclusion. We cannot infer
-the installed account's billing treatment from a saved thread. Request approval
-for exactly one real read-only Codex turn using the isolated session above;
-do not send the user's current draft or start a paid trial before approval.
+The subsequent explicit question requested exactly one real read-only Codex turn
+using the isolated session above. The user replied **“go”**, granting that narrow
+exception. All other spending exclusions remain. The installed account's billing
+treatment is unknown; this is one authorized call, not a claim of free inference.
+The runner's exclusive attempt journal prevents resending after a crash or retry.
 
 Resume context: `theseus work context task.kp.studio-foundations-20261127 --mode brief`.
 The historical authoring-to-practice run remains parked. Broad motion, publication,
 new mathematical families and generalized revision remain outside this trial.
+
+## Actual result and review
+
+The single authorized turn ran through the existing browser panel, HTTP service
+and installed Codex transport. The configured model reported `gpt-6-astra`; no
+model override was supplied. It completed in **9,293 ms**, measured from native
+send reservation until the service exposed a completed response. That figure
+excludes page setup, connection and preview compilation; it is one observation,
+not a latency benchmark. There was one completed response and no tool messages.
+
+Before:
+
+> Keep the equality true. Change both sides together.
+
+Actual proposed wording, with the title unchanged:
+
+> Would the sides still be equal if only one changed? Subtracting three from
+> both sides keeps them equal.
+
+The actual JSON passed the existing source/draft/session checks and compiled into
+the native fraction preview. Its target remains
+`equation.fractional-linear.initial`. The notebook document remained unchanged;
+Accept was never pressed. A before/after fingerprint verified that the shared
+conversation, including its unsent draft, was unchanged. No browser errors were
+observed. The isolated transport and browser were disposed after capture.
+
+Review the [comparison capture](contextual-revision-trial/comparison.png) and
+[native preview capture](contextual-revision-trial/preview.png). These two captures
+are adopted evidence of this one actual response, not visual regression goldens.
+The [canonical notebook](http://127.0.0.1:8000/experiments/fraction-notebook/?revision=1)
+still opens the original source; this isolated proposal has **not** been applied
+to the user's notebook or staged in the shared chat.
+
+**Judgment:** the question makes the invariant more explicit and the second
+sentence grounds it in the specific operation. It meets the two-sentence limit
+without solving the equation. It asserts preservation rather than explaining
+the reversible-operation reasoning; decide whether that is the right amount of
+explanation for this brief annotation. One valid example does not establish
+general model reliability or learner benefit.
+
+Evidence: [request](contextual-revision-trial/request.txt),
+[unaltered response](contextual-revision-trial/responses.json),
+[result](contextual-revision-trial/result.json) and
+[send reservation](contextual-revision-trial/attempt.json). Only test-owned IDs
+and the prepared prompt are retained; no shared chat token or draft is recorded.
+The small runner adds no reader payload or production transport.
+
+Executed checks:
+
+- `npm run visual:contextual-revision-trial -- --live`: one actual turn, valid
+  preview, unchanged notebook/shared conversation, inspect/return controls.
+- The same command invoked again exited **1 before connection or inference**
+  because its exclusive attempt journal already exists. This was an intentional
+  duplicate-send prevention check, not a second model call. Never remove that
+  journal to retry this authorization.
+- `npx tsc --project config/typescript/tsconfig.node.json --noEmit`: passed.
+- `npm run test:studio-foundations`: 38 passed.
+- `npm run test:project-vision`: 75 passed on rerun after shortening the active
+  thread from 452 words to fit its unchanged 450-word budget; first run failed
+  that documentation limit only.
+- `theseus workspace validate`: valid, 1,377 nodes and 35,604 events.
+
+The impact selector has no rule for this one-off opt-in runner and suggests the
+broad fallback. Verification is scoped to the real isolated trial, Node types,
+the existing revision tests and project-memory checks: no product implementation,
+renderer, package dependency or build entrypoint changed. The previously recorded
+Chromium/Firefox tests still own deterministic rejection/acceptance/undo evidence;
+this actual trial establishes preview only. Required human judgment remains.

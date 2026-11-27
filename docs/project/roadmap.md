@@ -37,8 +37,8 @@ and shared defaults; discovery/revision are checked. Actual-model judgment remai
 **Accepted:** [context return](reviews/2026-11-27-section-context-return.md).
 **Accepted:** [reference collection](reviews/2026-11-27-studio-reference-collection.md).
 **Resume existing scope:** [actual-response trial](reviews/2026-11-27-contextual-revision-trial.md).
-One real model turn needs explicit authorization under the existing spending
-exclusion; preserve the shared chat's unsent draft. No new family or framework.
+One authorized real response passed preview; judge its usefulness. The shared
+chat draft is intact. No further inference, new family or framework authorized.
 [Three library lanes](reviews/2026-11-27-parallel-library-lanes.md) are complete;
 broader promotion remains separate.
 

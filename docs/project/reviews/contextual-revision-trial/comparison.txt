@@ -1,0 +1,9 @@
+Current
+
+Keep the condition true
+Keep the equality true. Change both sides together.
+
+Proposed
+
+Keep the condition true
+Would the sides still be equal if only one changed? Subtracting three from both sides keeps them equal.

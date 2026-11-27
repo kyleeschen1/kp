@@ -3,7 +3,7 @@
   "kind": "run-contract",
   "title": "Mathematical studio foundations",
   "status": "deferred",
-  "summary": "Visuals accepted; 4 of 5 packages complete. Only actual-response annotation usefulness remains pending; linked mathematical views continue independently.",
+  "summary": "HUMAN_CHECKPOINT: 4/5 accepted; actual-response revision passed technical preview and now awaits human usefulness judgment. Single inference authorization consumed. Shared chat and notebook unchanged.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -24,7 +24,8 @@
   ],
   "revisitWhen": [
     "Resume the named contract after the user judges the opt-in matrix/theme and completes one contextual annotation trial.",
-    "User completes or reports a real Codex annotation revision trial."
+    "User completes or reports a real Codex annotation revision trial.",
+    "Human reviews actual wording and captured native preview in contextual-revision-trial evidence."
   ],
   "allowedWork": [
     "Named tranche and worker boundaries; local review may park only dependent work"
@@ -64,7 +65,7 @@
     {
       "id": "revision",
       "title": "Contextual-revision",
-      "summary": "Proposal transport, native chat staging, preview, inspection, accept/reject and isolated undo are integrated and checked. Package remains open until an actual model response demonstrates usefulness; no model call was made.",
+      "summary": "Actual single-turn proposal validated and previewed in 9293 ms; shared conversation and notebook preserved, guard blocks additional sends. Human usefulness judgment on captured wording remains; inference authorization consumed.",
       "status": "in-progress"
     },
     {

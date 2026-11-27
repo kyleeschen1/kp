@@ -1,0 +1,10 @@
+[
+  {
+    "id": "msg_05ab97d988e649cc016b09bbb4f62487d0a0283b62b8e079c7",
+    "role": "assistant",
+    "text": "{\"protocol\":\"kp.annotation-revision.v1\",\"sessionId\":\"b258b035-66ca-401f-812f-70e3a8203186\",\"request\":1,\"objectId\":\"kp:algebra:fractional-linear:annotations\",\"sourceRevision\":\"a38782dc9ae78240ad9856ef695cbce0bb3888bc0a2dc17ba8fee70e671694f4\",\"draftRevision\":\"be51959b96d2af6aa6c2881ae8b6e1f2e80c5f5fe26349b73e57aae0205056ba\",\"annotationId\":\"beat.read\",\"title\":\"Keep the condition true\",\"content\":\"Would the sides still be equal if only one changed? Subtracting three from both sides keeps them equal.\",\"focusRefs\":[\"equation.fractional-linear.initial\"]}",
+    "complete": true,
+    "clipped": false,
+    "turnId": "01a21e05-29d9-7b30-83fe-efe4e5096845"
+  }
+]

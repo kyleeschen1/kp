@@ -1,0 +1,16 @@
+{
+  "reservedAt": "2026-11-27T17:19:44.599Z",
+  "authority": "User go after explicit single-turn request, 2026-11-27",
+  "instruction": "Revise “Keep the condition true” to explain why we subtract three from both sides. Lead with a brief question about what would happen if only one side changed, then explain how doing the same subtraction preserves equality. Use at most two short sentences. Do not solve the equation or introduce the next step early. Keep the existing mathematical target and return only the proposal JSON requested by the panel.",
+  "delivery": "Reserved before send; this journal alone does not prove delivery.",
+  "params": {
+    "threadId": "01a21e05-245b-70f3-ab25-50743f165ede",
+    "clientUserMessageId": "9a3ac4ad-9fb1-48f8-b870-4322f3e3aaeb",
+    "input": [
+      {
+        "type": "text",
+        "text": "Revise only the selected fraction annotation described below. Preserve the mathematics, moment identity, and reasoning. Use literal plain-language wording; do not add HTML, Markdown formatting, equations, timing, or new fields. Choose at least one focusRefs entry from availableTargets. Return only one JSON object matching the response shape. This is a proposal for the author to review, not permission to edit a file.\n\nContext:\n{\"objectId\":\"kp:algebra:fractional-linear:annotations\",\"objectTitle\":\"Fraction animation annotations\",\"sourceRevision\":\"a38782dc9ae78240ad9856ef695cbce0bb3888bc0a2dc17ba8fee70e671694f4\",\"draftRevision\":\"be51959b96d2af6aa6c2881ae8b6e1f2e80c5f5fe26349b73e57aae0205056ba\",\"branchId\":\"main\",\"threadId\":\"01a21e05-245b-70f3-ab25-50743f165ede\",\"annotation\":{\"id\":\"beat.read\",\"title\":\"Keep the condition true\",\"content\":\"Keep the equality true. Change both sides together.\",\"focusRefs\":[\"equation.fractional-linear.initial\"]},\"availableTargets\":[\"equation.fractional-linear.initial\"],\"surroundingContext\":\"Notice the last operation: Undo the last operation: adding three.\\nKeep the condition true: Keep the equality true. Change both sides together.\\nUndo the addition: Subtract three from both sides.\",\"protocol\":\"kp.annotation-revision.v1\",\"sessionId\":\"b258b035-66ca-401f-812f-70e3a8203186\",\"request\":1,\"instruction\":\"Revise “Keep the condition true” to explain why we subtract three from both sides. Lead with a brief question about what would happen if only one side changed, then explain how doing the same subtraction preserves equality. Use at most two short sentences. Do not solve the equation or introduce the next step early. Keep the existing mathematical target and return only the proposal JSON requested by the panel.\"}\n\nResponse shape (replace title/content as needed):\n{\"protocol\":\"kp.annotation-revision.v1\",\"sessionId\":\"b258b035-66ca-401f-812f-70e3a8203186\",\"request\":1,\"objectId\":\"kp:algebra:fractional-linear:annotations\",\"sourceRevision\":\"a38782dc9ae78240ad9856ef695cbce0bb3888bc0a2dc17ba8fee70e671694f4\",\"draftRevision\":\"be51959b96d2af6aa6c2881ae8b6e1f2e80c5f5fe26349b73e57aae0205056ba\",\"annotationId\":\"beat.read\",\"title\":\"Replacement title\",\"content\":\"Replacement plain-language content\",\"focusRefs\":[\"equation.fractional-linear.initial\"]}"
+      }
+    ]
+  }
+}
